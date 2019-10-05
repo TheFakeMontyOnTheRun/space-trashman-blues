@@ -4,11 +4,11 @@ project(derelict)
 set(CMAKE_C_STANDARD 90)
 set(CMAKE_CXX_STANDARD 11)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -W -Wall -Wextra -pedantic")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -W -Wall -Wextra -pedantic -ansi")
 
 if (APPLE)
-    add_definitions(-DGTEST_USE_OWN_TR1_TUPLE)
-    add_definitions(-D__GLIBCXX__)
+	add_definitions(-DGTEST_USE_OWN_TR1_TUPLE)
+	add_definitions(-D__GLIBCXX__)
 endif (APPLE)
 
 
@@ -24,4 +24,4 @@ add_executable(derelict src/main.c src/Derelict.c)
 
 add_executable(derelict_test tests/TestMovement.cpp)
 
-target_link_libraries(derelict_test gtest gmock gmock_main )
+target_link_libraries(derelict_test gtest gmock gmock_main)
