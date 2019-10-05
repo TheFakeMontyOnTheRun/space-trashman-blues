@@ -5,11 +5,6 @@ Created by Daniel Monteiro on 2019-07-26.
 #ifndef DERELICT_DERELICT_H
 #define DERELICT_DERELICT_H
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <assert.h>
-
 struct Item {
     char* description;
     int weight;
