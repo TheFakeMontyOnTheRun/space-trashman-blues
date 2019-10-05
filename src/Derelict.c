@@ -13,6 +13,7 @@ struct Room station[10];
 struct Item item[2];
 struct ObjectNode* collectedObject = NULL;
 int playerLocation = 2;
+struct Room* room;
 
 void addObjectToRoom( int roomId, struct Item* item ) {
     struct Room *room = &station[roomId];
@@ -104,6 +105,12 @@ void pickObject( struct Item* item) {
     item->roomId = 0;
 }
 
+void moveBy(int direction){
+  printf("input: %d = %d\n", direction, room->connections[direction ] );
+  playerLocation = room->connections[direction ];
+  room = &station[playerLocation];
+}
+
 void initStation() {
     collectedObject = NULL;
     playerLocation = 2;
@@ -139,4 +146,7 @@ void initStation() {
 
     addObjectToRoom(2, &item[0]);
     addObjectToRoom(2, &item[1]);
+
+    playerLocation = 1;
+    room = &station[playerLocation];
 }

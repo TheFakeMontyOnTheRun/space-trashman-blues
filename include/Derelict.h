@@ -31,5 +31,6 @@ void pickObject( struct Item* item);
 
 void initStation();
 
+void moveBy(int direction);
 
 #endif

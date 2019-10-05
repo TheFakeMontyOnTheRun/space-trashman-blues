@@ -9,6 +9,7 @@ extern struct Room station[10];
 extern struct Item item[2];
 extern struct ObjectNode* collectedObject;
 extern int playerLocation;
+extern struct Room* room;
 
 int main() {
     initStation();
@@ -16,7 +17,6 @@ int main() {
 
     while ( 1 ) {
         int input;
-        struct Room* room = &station[playerLocation];
         struct ObjectNode* head = NULL;
 
         puts("You are at:");
@@ -43,19 +43,21 @@ int main() {
         } while ( (( input  < 0 ) || (3 < input )) && (input != ('a' - '1')) && (input != ('q' - '1')) && (input != ('z' - '1')) );
 
         if (input == ('a' - '1')) {
-            puts("Picking up:");
+
+          puts("Picking up:");
             puts(item[0].description);
             pickObject(&item[0]);
-        } else if (input == ('z' - '1')) {
-            puts("Dropping:");
-            puts(item[0].description);
 
+        } else if (input == ('z' - '1')) {
+
+          puts("Dropping:");
+            puts(item[0].description);
             dropObjectToRoom( playerLocation, &item[0]);
+
         } else if (input == ('q' - '1')) {
             exit(0);
         } else if (room->connections[input ]) {
-            printf("input: %d = %d\n", input, room->connections[input ] );
-            playerLocation = room->connections[input ];
+            moveBy(input);
         }
     }
     return 0;
