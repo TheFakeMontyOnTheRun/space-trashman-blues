@@ -1,0 +1,22 @@
+CFLAGS = -Iinclude -O3 -g -c -std=c89 -ansi  -march=i486
+
+CC = i586-pc-msdosdjgpp-gcc
+CXX = i586-pc-msdosdjgpp-g++
+
+OBJS = src/Derelict.o
+
+MAIN_GAME_OBJ = src/main.o
+
+TARGET = blues.exe
+
+$(TARGET):	$(OBJS) $(MAIN_GAME_OBJ)
+	$(CXX) -o $(TARGET) $(OBJS) $(MAIN_GAME_OBJ) $(LDFLAGS)
+	i586-pc-msdosdjgpp-strip $(TARGET)
+
+all:	$(TARGET)
+
+clean:
+	rm -f $(OBJS) $(TESTTARGET) $(MAIN_GAME_OBJ) $(TESTOBJS) $(TARGET)
+	find . | grep ~ | xargs rm
+	find . | grep gcno | xargs rm
+	find . | grep gcda | xargs rm
