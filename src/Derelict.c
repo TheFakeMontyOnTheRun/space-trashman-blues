@@ -1,6 +1,6 @@
-//
-// Created by Daniel Monteiro on 2019-07-26.
-//
+/*
+Created by Daniel Monteiro on 2019-07-26.
+*/
 
 #include <stdio.h>
 #include <string.h>

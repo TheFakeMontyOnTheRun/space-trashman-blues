@@ -1,13 +1,9 @@
-//
-// Created by Daniel Monteiro on 2019-07-26.
-//
+/*
+Created by Daniel Monteiro on 2019-07-26.
+*/
 
 #ifndef DERELICT_DERELICT_H
 #define DERELICT_DERELICT_H
-
-//
-// Created by Daniel Monteiro on 2019-07-26.
-//
 
 #include <stdio.h>
 #include <string.h>
@@ -41,4 +37,4 @@ void pickObject( struct Item* item);
 void initStation();
 
 
-#endif //DERELICT_DERELICT_H
+#endif
