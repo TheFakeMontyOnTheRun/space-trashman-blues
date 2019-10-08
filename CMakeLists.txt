@@ -3,6 +3,8 @@ project(derelict)
 
 set(CMAKE_C_STANDARD 90)
 set(CMAKE_CXX_STANDARD 11)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+SET(CMAKE_C_STANDARD_REQUIRED ON)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -W -Wall -Wextra -pedantic -ansi")
 
@@ -20,8 +22,17 @@ include_directories(include)
 include_directories(googletest/googletest/include)
 include_directories(googletest/googlemock/include)
 
-add_executable(derelict src/main.c src/Derelict.c)
+set(TEST_SOURCE_FILES
+		tests/TestMovement.cpp
+		tests/TestInventoryManipulation.cpp)
 
-add_executable(derelict_test tests/TestMovement.cpp)
+set(SOURCE_FILES
+		src/Derelict.c
+		src/Parser.c
+		)
 
-target_link_libraries(derelict_test gtest gmock gmock_main)
+add_executable(derelict src/main.c ${SOURCE_FILES} )
+
+add_executable(derelict_test  ${TEST_SOURCE_FILES} ${SOURCE_FILES} )
+
+target_link_libraries(derelict_test gtest gmock gmock_main )

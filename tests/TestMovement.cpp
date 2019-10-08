@@ -5,8 +5,19 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+extern "C" {
 #include "Derelict.h"
+#include "Parser.h"
+}
 
 using testing::Eq;
 
-TEST(TestMovement, canMoveOnlyWhenEnabled) {}
+TEST(TestMovement, canMoveOnlyWhenEnabled) {
+  initStation();
+
+  ASSERT_EQ( getPlayerRoom(), 1 );
+  parseCommand("move", "0");
+  ASSERT_EQ( getPlayerRoom(), 2 );
+  moveBy( 3 );
+  ASSERT_EQ( getPlayerRoom(), 2 );
+}

@@ -15,18 +15,18 @@ struct ObjectNode *collectedObject = NULL;
 int playerLocation = 2;
 struct Room *room;
 
-void addObjectToRoom(int roomId, struct Item *item) {
-  struct Room *room = &station[roomId];
+void addObjectToRoom(int roomId, struct Item *itemToAdd) {
+  struct Room *roomToAddObject = &station[roomId];
   struct ObjectNode *node =
       (struct ObjectNode *)calloc(1, sizeof(struct ObjectNode));
-  struct ObjectNode *tmp = room->itemsPresent;
+  struct ObjectNode *tmp = roomToAddObject->itemsPresent;
 
-  if (item->roomId != 0) {
-    struct ObjectNode *head = station[item->roomId].itemsPresent;
-    struct ObjectNode *previousNode = station[item->roomId].itemsPresent;
+  if (itemToAdd->roomId != 0) {
+    struct ObjectNode *head = station[itemToAdd->roomId].itemsPresent;
+    struct ObjectNode *previousNode = station[itemToAdd->roomId].itemsPresent;
 
     while (head != NULL) {
-      if (head->item == item) {
+      if (head->item == itemToAdd) {
         previousNode->next = head->next;
         free(head);
         goto removed;
@@ -38,21 +38,21 @@ void addObjectToRoom(int roomId, struct Item *item) {
 
 removed:
 
-  room->itemsPresent = node;
+  roomToAddObject->itemsPresent = node;
   node->next = tmp;
-  node->item = item;
-  item->roomId = roomId;
+  node->item = itemToAdd;
+  itemToAdd->roomId = roomId;
 }
 
-void dropObjectToRoom(int roomId, struct Item *item) {
+void dropObjectToRoom(int roomId, struct Item *itemToDrop) {
 
-  assert(item->roomId == 0);
+  assert(itemToDrop->roomId == 0);
 
   {
     struct ObjectNode *head = collectedObject;
     struct ObjectNode *previousNode = collectedObject;
 
-    if (collectedObject != NULL && collectedObject->item == item) {
+    if (collectedObject != NULL && collectedObject->item == itemToDrop) {
       struct ObjectNode *tmp = collectedObject;
       collectedObject = tmp->next;
       free(tmp);
@@ -60,7 +60,7 @@ void dropObjectToRoom(int roomId, struct Item *item) {
     }
 
     while (head != NULL) {
-      if (head->item == item) {
+      if (head->item == itemToDrop) {
         previousNode->next = head->next;
         free(head);
         goto dropped;
@@ -71,27 +71,27 @@ void dropObjectToRoom(int roomId, struct Item *item) {
   }
 
 dropped:
-  addObjectToRoom(roomId, item);
+  addObjectToRoom(roomId, itemToDrop);
 }
 
-void pickObject(struct Item *item) {
+void pickObject(struct Item *itemToPick) {
   struct ObjectNode *node =
       (struct ObjectNode *)calloc(1, sizeof(struct ObjectNode));
   struct ObjectNode *tmp = collectedObject;
 
-  if (item->roomId != 0) {
+  if (itemToPick->roomId != 0) {
 
-    struct ObjectNode *head = station[item->roomId].itemsPresent;
-    struct ObjectNode *previousNode = station[item->roomId].itemsPresent;
+    struct ObjectNode *head = station[itemToPick->roomId].itemsPresent;
+    struct ObjectNode *previousNode = station[itemToPick->roomId].itemsPresent;
 
-    if (previousNode->item == item) {
-      station[item->roomId].itemsPresent = previousNode->next;
+    if (previousNode->item == itemToPick) {
+      station[itemToPick->roomId].itemsPresent = previousNode->next;
       free(previousNode);
       goto taken;
     }
 
     while (head != NULL) {
-      if (head->item == item) {
+      if (head->item == itemToPick) {
         previousNode->next = head->next;
         free(head);
         goto taken;
@@ -103,17 +103,44 @@ void pickObject(struct Item *item) {
 taken:
   collectedObject = node;
   node->next = tmp;
-  node->item = item;
-  item->roomId = 0;
+  node->item = itemToPick;
+  itemToPick->roomId = 0;
 }
 
 void moveBy(int direction) {
-  printf("input: %d = %d\n", direction, room->connections[direction]);
-  playerLocation = room->connections[direction];
-  room = &station[playerLocation];
+  if (room->connections[direction] != 0) {
+    playerLocation = room->connections[direction];
+    room = &station[playerLocation];
+  }
 }
 
-void initStation() {
+void pickObjectByName(const char* objName ) {
+  struct ObjectNode *itemToPick = room->itemsPresent;
+
+  while (itemToPick != NULL) {
+    if (!strcmp(itemToPick->item->description, objName)) {
+      pickObject(itemToPick->item);
+      return;
+    }
+    itemToPick = itemToPick->next;
+  }
+}
+
+void dropObjectByName(const char* objName) {
+  struct ObjectNode *itemToPick = collectedObject;
+
+  while (itemToPick != NULL) {
+    if (!strcmp(itemToPick->item->description, objName)) {
+      dropObjectToRoom( playerLocation, itemToPick->item);
+      return;
+    }
+    itemToPick = itemToPick->next;
+  }
+}
+
+int getPlayerRoom(void) { return playerLocation; }
+
+void initStation(void) {
   collectedObject = NULL;
   playerLocation = 2;
 

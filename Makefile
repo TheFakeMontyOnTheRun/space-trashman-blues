@@ -17,11 +17,12 @@ GTEST_DIR = googletest/googletest
 GMOCK_DIR = googletest/googlemock
 
 TESTOBJS = Tests/TestMovement.o \
+		Tests/TestInventoryManipulation.o \
 		$(GTEST_DIR)/src/gtest-all.o \
 		$(GMOCK_DIR)/src/gmock-all.o \
 		$(GMOCK_DIR)/src/gmock_main.o
 
-OBJS = src/Derelict.o
+OBJS = src/Derelict.o src/Parser.o
 
 MAIN_GAME_OBJ = src/main.o
 

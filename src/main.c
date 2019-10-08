@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "Derelict.h"
+#include "Parser.h"
 
 extern struct Room station[10];
 extern struct Item item[2];
@@ -15,7 +16,8 @@ int main() {
   initStation();
 
   while (1) {
-    int input;
+    char operator[255];
+    char operand[255];
     struct ObjectNode *head = NULL;
 
     puts("You are at:");
@@ -37,28 +39,10 @@ int main() {
       head = head->next;
     }
 
-    do {
-      input = getchar() - '1';
-    } while (((input < 0) || (3 < input)) && (input != ('a' - '1')) &&
-             (input != ('q' - '1')) && (input != ('z' - '1')));
 
-    if (input == ('a' - '1')) {
+    scanf("%s %s", &operator[0], &operand[0]);
+    parseCommand(&operator[0], &operand[0]);
 
-      puts("Picking up:");
-      puts(item[0].description);
-      pickObject(&item[0]);
-
-    } else if (input == ('z' - '1')) {
-
-      puts("Dropping:");
-      puts(item[0].description);
-      dropObjectToRoom(playerLocation, &item[0]);
-
-    } else if (input == ('q' - '1')) {
-      exit(0);
-    } else if (room->connections[input]) {
-      moveBy(input);
-    }
   }
   return 0;
 }
