@@ -32,3 +32,6 @@
 *.app
 
 .idea
+
+coverage
+cmake-build-debug
