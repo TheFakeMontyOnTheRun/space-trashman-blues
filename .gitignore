@@ -35,3 +35,6 @@
 
 coverage
 cmake-build-debug
+*.gcno
+*.gcda
+unittests
