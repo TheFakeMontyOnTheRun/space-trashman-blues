@@ -41,6 +41,7 @@ all:	$(TARGET)
 
 clean:
 	rm -f $(OBJS) $(TESTTARGET) $(MAIN_GAME_OBJ) $(TESTOBJS) $(TARGET)
-	find . | grep ~ | xargs rm
-	find . | grep gcno | xargs rm
-	find . | grep gcda | xargs rm
+	rm -rf coverage
+	find . | grep ~ | xargs rm -f
+	find . | grep gcno | xargs rm -f
+	find . | grep gcda | xargs rm -f
