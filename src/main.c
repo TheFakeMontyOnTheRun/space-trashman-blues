@@ -6,11 +6,7 @@
 #include "Derelict.h"
 #include "Parser.h"
 
-extern struct Room station[10];
-extern struct Item item[2];
 extern struct ObjectNode *collectedObject;
-extern int playerLocation;
-extern struct Room *room;
 
 int main() {
   initStation();
@@ -21,7 +17,7 @@ int main() {
     struct ObjectNode *head = NULL;
 
     puts("You are at:");
-    puts(room->description);
+    puts(getRoomDescription());
 
     head = collectedObject;
     puts("Objects you have:");
@@ -31,7 +27,7 @@ int main() {
       head = head->next;
     }
 
-    head = room->itemsPresent;
+    head = station[getPlayerRoom()].itemsPresent;
     puts("Objects in room:");
 
     while (head != NULL) {

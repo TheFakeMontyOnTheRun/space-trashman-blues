@@ -9,11 +9,11 @@ Created by Daniel Monteiro on 2019-07-26.
 
 #include "Derelict.h"
 
-struct Room station[10];
+#define TOTAL_ROOMS 10
+struct Room station[TOTAL_ROOMS];
 struct Item item[2];
 struct ObjectNode *collectedObject = NULL;
-int playerLocation = 2;
-struct Room *room;
+int playerLocation = 1;
 
 void addObjectToRoom(int roomId, struct Item *itemToAdd) {
   struct Room *roomToAddObject = &station[roomId];
@@ -108,6 +108,7 @@ taken:
 }
 
 void moveBy(int direction) {
+  struct Room *room = &station[playerLocation];
   if (room->connections[direction] != 0) {
     playerLocation = room->connections[direction];
     room = &station[playerLocation];
@@ -115,6 +116,7 @@ void moveBy(int direction) {
 }
 
 void pickObjectByName(const char* objName ) {
+  struct Room *room = &station[playerLocation];
   struct ObjectNode *itemToPick = room->itemsPresent;
 
   while (itemToPick != NULL) {
@@ -138,15 +140,51 @@ void dropObjectByName(const char* objName) {
   }
 }
 
+int hasItemInRoom(const char* roomName, const char* itemName) {
+  int r = 0;
+  for ( r = 1; r < TOTAL_ROOMS; ++r ) {
+    char* desc = station[r].description;
+    if (!strcmp(desc, roomName ) ) {
+      struct ObjectNode *itemToPick = station[r].itemsPresent;
+
+      while (itemToPick != NULL) {
+        if (!strcmp(itemToPick->item->description, itemName)) {
+          return 1;
+        }
+        itemToPick = itemToPick->next;
+      }
+      return 0;
+    }
+  }
+  assert(FALSE);
+  return 0;
+}
+
+int isPlayerAtRoom(const char* roomName ) {
+  struct Room *room = &station[playerLocation];
+  char* name = room->description;
+  int returnValue = !strcmp(name, roomName);
+  return returnValue;
+}
+
+char* getRoomDescription() {
+  struct Room *room = &station[playerLocation];
+  return room->description;
+}
+
+struct Room* getRoom( int index ) {
+  return &station[index];
+}
+
 int getPlayerRoom(void) { return playerLocation; }
 
 void initStation(void) {
   collectedObject = NULL;
-  playerLocation = 2;
+  playerLocation = 1;
 
   memset(&station, 0, 10 * sizeof(struct Room));
   memset(&item, 0, 2 * sizeof(struct Item));
-  station[1].description = "uss-deadalus";
+  station[1].description = "uss-daedalus";
   station[1].connections[0] = 2;
 
   station[2].description = "hangar";
@@ -178,5 +216,4 @@ void initStation(void) {
   addObjectToRoom(2, &item[1]);
 
   playerLocation = 1;
-  room = &station[playerLocation];
 }

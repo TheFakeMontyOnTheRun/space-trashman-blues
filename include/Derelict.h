@@ -42,4 +42,11 @@ void moveBy(int direction);
 
 int getPlayerRoom(void);
 
+int hasItemInRoom(const char* roomName, const char* itemName);
+
+int isPlayerAtRoom(const char* roomName );
+
+char* getRoomDescription();
+
+struct Room* getRoom( int index );
 #endif
