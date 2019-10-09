@@ -146,29 +146,33 @@ void initStation(void) {
 
   memset(&station, 0, 10 * sizeof(struct Room));
   memset(&item, 0, 2 * sizeof(struct Item));
-  station[1].description = "Ship";
+  station[1].description = "uss-deadalus";
   station[1].connections[0] = 2;
 
-  station[2].description = "Hangar";
+  station[2].description = "hangar";
   station[2].connections[2] = 1;
   station[2].connections[0] = 3;
 
-  station[3].description = "Hall 1";
+  station[3].description = "hall-1";
   station[3].connections[2] = 2;
   station[3].connections[0] = 4;
   station[3].connections[1] = 5;
 
-  station[4].description = "Elevator 1";
+  station[4].description = "elevator-level-1";
   station[4].connections[2] = 3;
 
-  station[5].description = "Dorms 1";
+  station[5].description = "dorms-1";
   station[5].connections[3] = 3;
 
-  item[0].description = "Treco";
+  item[0].description = "metal-plate";
   item[0].weight = 5;
 
-  item[1].description = "Bagulho";
+  item[1].description = "boots";
   item[1].weight = 5;
+
+  item[1].description = "key";
+  item[1].weight = 5;
+
 
   addObjectToRoom(2, &item[0]);
   addObjectToRoom(2, &item[1]);

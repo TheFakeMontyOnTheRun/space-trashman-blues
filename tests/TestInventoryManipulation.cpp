@@ -21,8 +21,8 @@ TEST(TestInventoryManipulation, canPickObjects) {
   ASSERT_EQ( getPlayerRoom(), 1 );
   parseCommand( "move", "0" );
   struct Item *item = room->itemsPresent->item;
-  parseCommand( "pick", "Bagulho" );
+  parseCommand( "pick", "key" );
   ASSERT_TRUE( collectedObject->item == item );
-  parseCommand( "drop", "Bagulho" );
+  parseCommand( "drop", "key" );
   ASSERT_TRUE( collectedObject == NULL );
 }
