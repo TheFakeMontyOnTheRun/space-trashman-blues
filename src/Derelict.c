@@ -115,7 +115,7 @@ void moveBy(int direction) {
   }
 }
 
-void pickObjectByName(const char* objName ) {
+void pickObjectByName(const char *objName) {
   struct Room *room = &station[playerLocation];
   struct ObjectNode *itemToPick = room->itemsPresent;
 
@@ -128,23 +128,23 @@ void pickObjectByName(const char* objName ) {
   }
 }
 
-void dropObjectByName(const char* objName) {
+void dropObjectByName(const char *objName) {
   struct ObjectNode *itemToPick = collectedObject;
 
   while (itemToPick != NULL) {
     if (!strcmp(itemToPick->item->description, objName)) {
-      dropObjectToRoom( playerLocation, itemToPick->item);
+      dropObjectToRoom(playerLocation, itemToPick->item);
       return;
     }
     itemToPick = itemToPick->next;
   }
 }
 
-int hasItemInRoom(const char* roomName, const char* itemName) {
+int hasItemInRoom(const char *roomName, const char *itemName) {
   int r = 0;
-  for ( r = 1; r < TOTAL_ROOMS; ++r ) {
-    char* desc = station[r].description;
-    if (!strcmp(desc, roomName ) ) {
+  for (r = 1; r < TOTAL_ROOMS; ++r) {
+    char *desc = station[r].description;
+    if (!strcmp(desc, roomName)) {
       struct ObjectNode *itemToPick = station[r].itemsPresent;
 
       while (itemToPick != NULL) {
@@ -160,19 +160,19 @@ int hasItemInRoom(const char* roomName, const char* itemName) {
   return 0;
 }
 
-int isPlayerAtRoom(const char* roomName ) {
+int isPlayerAtRoom(const char *roomName) {
   struct Room *room = &station[playerLocation];
-  char* name = room->description;
+  char *name = room->description;
   int returnValue = !strcmp(name, roomName);
   return returnValue;
 }
 
-char* getRoomDescription() {
+char *getRoomDescription() {
   struct Room *room = &station[playerLocation];
   return room->description;
 }
 
-struct Room* getRoom( int index ) {
+struct Room *getRoom(int index) {
   return &station[index];
 }
 
@@ -210,7 +210,6 @@ void initStation(void) {
 
   item[1].description = "key";
   item[1].weight = 5;
-
 
   addObjectToRoom(2, &item[0]);
   addObjectToRoom(2, &item[1]);

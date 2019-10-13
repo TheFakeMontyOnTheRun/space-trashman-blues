@@ -18,6 +18,9 @@ TEST(TestMovement, canMoveOnlyWhenEnabled) {
   ASSERT_EQ( getPlayerRoom(), 1 );
   parseCommand("move", "0");
   ASSERT_EQ( getPlayerRoom(), 2 );
-  moveBy( 3 );
+  parseCommand("move", "3");
   ASSERT_EQ( getPlayerRoom(), 2 );
+  parseCommand("move", "1");
+  ASSERT_EQ( getPlayerRoom(), 2 );
+
 }

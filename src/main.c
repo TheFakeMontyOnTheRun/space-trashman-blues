@@ -35,10 +35,8 @@ int main() {
       head = head->next;
     }
 
-
     scanf("%s %s", &operator[0], &operand[0]);
     parseCommand(&operator[0], &operand[0]);
-
   }
   return 0;
 }
