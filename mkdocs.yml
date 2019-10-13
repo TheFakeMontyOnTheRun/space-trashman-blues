@@ -1,0 +1,5 @@
+site_name: Space Trashman Blues
+repo_url: https://github.com/TheFakeMontyOnTheRun/space-trashman-blues
+theme: readthedocs
+pages:
+- Index: index.md
