@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 SET(CMAKE_C_STANDARD_REQUIRED ON)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -W -Wall -Wextra -pedantic -ansi")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -W -Wall -Wextra -pedantic ")
 
 if (APPLE)
 	add_definitions(-DGTEST_USE_OWN_TR1_TUPLE)

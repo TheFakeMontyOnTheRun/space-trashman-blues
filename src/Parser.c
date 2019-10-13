@@ -7,15 +7,16 @@
 #include <stdio.h>
 #include <string.h>
 
-void parseCommand(char *cmd, char *operand) {
-  if (!strcmp(cmd, "pick")) {
-    pickObjectByName(operand);
-  } else if (!strcmp(cmd, "drop")) {
-    dropObjectByName(operand);
-  } else if (!strcmp(cmd, "move")) {
-    printf("direction: %d\n", operand[0] - '0');
-    moveBy(operand[0] - '0');
-  } else {
-    puts("WHAT?!");
-  }
+int parseCommand(char *cmd, char *operand) {
+	if (!strcmp(cmd, "pick")) {
+		pickObjectByName(operand);
+	} else if (!strcmp(cmd, "drop")) {
+		dropObjectByName(operand);
+	} else if (!strcmp(cmd, "move")) {
+		moveBy(operand[0] - '0');
+	} else {
+		return FALSE;
+	}
+
+	return TRUE;
 }

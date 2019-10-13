@@ -4,5 +4,7 @@
 
 #ifndef DERELICT_PARSER_H
 #define DERELICT_PARSER_H
-void parseCommand(char *cmd, char* operand);
+
+int parseCommand(char *cmd, char *operand);
+
 #endif // DERELICT_PARSER_H

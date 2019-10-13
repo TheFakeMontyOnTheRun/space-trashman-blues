@@ -9,34 +9,61 @@
 extern struct ObjectNode *collectedObject;
 
 int main() {
-  initStation();
+	int d;
+	struct Room *currentRoom;
+	initStation();
 
-  while (1) {
-    char operator[255];
-    char operand[255];
-    struct ObjectNode *head = NULL;
+	while (1) {
+		char operator[255];
+		char operand[255];
+		struct ObjectNode *head = NULL;
 
-    puts("You are at:");
-    puts(getRoomDescription());
+		puts("------\nYou are at:");
+		puts(getRoomDescription());
 
-    head = collectedObject;
-    puts("Objects you have:");
+		head = collectedObject;
 
-    while (head != NULL) {
-      puts(head->item->description);
-      head = head->next;
-    }
+		if (head != NULL) {
+			puts("\nObjects you have:");
+		}
 
-    head = station[getPlayerRoom()].itemsPresent;
-    puts("Objects in room:");
+		while (head != NULL) {
+			puts(head->item->description);
+			head = head->next;
+		}
 
-    while (head != NULL) {
-      puts(head->item->description);
-      head = head->next;
-    }
+		head = getRoom(getPlayerRoom())->itemsPresent;
 
-    scanf("%s %s", &operator[0], &operand[0]);
-    parseCommand(&operator[0], &operand[0]);
-  }
-  return 0;
+		if (head != NULL) {
+			puts("\nObjects in room:");
+		}
+
+		while (head != NULL) {
+			puts(head->item->description);
+			head = head->next;
+		}
+
+		puts("\nPlaces you can go:");
+
+		currentRoom = getRoom(getPlayerRoom());
+
+		for (d = 0; d < 6; ++d) {
+
+			int connection = currentRoom->connections[d];
+
+			if (connection) {
+				char buffer[255];
+				struct Room *r;
+				r = getRoom(connection);
+				snprintf(&buffer[0], 255, "%d - %s", d, r->description);
+				puts(buffer);
+			}
+		}
+
+		puts("");
+
+		scanf("%s %s", &operator[0], &operand[0]);
+		parseCommand(&operator[0], &operand[0]);
+	}
+	return 0;
 }
