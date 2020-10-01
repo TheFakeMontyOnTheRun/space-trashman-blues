@@ -1,0 +1,348 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+
+#include <stdint.h>
+#include <unistd.h>
+
+#include "Enums.h"
+#include "FixP.h"
+#include "Vec.h"
+#include "CActor.h"
+#include "MapWithCharKey.h"
+#include "Common.h"
+#include "Vec.h"
+#include "LoadBitmap.h"
+#include "Engine.h"
+#include "MapWithCharKey.h"
+#include "CTile3DProperties.h"
+#include "CRenderer.h"
+#include "VisibilityStrategy.h"
+#include "CPackedFileReader.h"
+#include "Dungeon.h"
+#include "SoundSystem.h"
+
+uint8_t elements[(MAP_SIZE * MAP_SIZE)];
+uint8_t actorsInMap[(MAP_SIZE * MAP_SIZE)];
+uint8_t items[(MAP_SIZE * MAP_SIZE)];
+uint8_t effects[(MAP_SIZE * MAP_SIZE)];
+int x = 0;
+int z = 0;
+int rotation = 0;
+enum CrawlerState shouldContinue = kCrawlerGameInProgress;
+struct CActor actor;
+int eventsDetected = FALSE;
+
+int loopTick(enum ECommand command);
+
+char crawlClueMessage[128];
+
+void clearMapCache() {
+    size_t sizeForSet = sizeof(uint8_t) * (MAP_SIZE * MAP_SIZE);
+    memset (&items[0], '.', sizeForSet);
+    memset (&actorsInMap[0], '.', sizeForSet);
+    memset (&effects[0], '.', sizeForSet);
+}
+
+void onLevelLoaded(int index) {
+    clearMapCache();
+    shouldContinue = kCrawlerGameInProgress;
+    eventsDetected = FALSE;
+    shouldShowDetectedHighlight = FALSE;
+    highlightDisplayTime = 0;
+    clearMap(&tileProperties);
+    loadTexturesForLevel(index);
+    loadTileProperties(index);
+    memset (&revealed[0], FALSE, 40 * 40 * sizeof(int));
+}
+
+void tickMission(enum ECommand cmd) {
+
+    struct GameSnapshot snapshot = dungeon_tick(cmd);
+
+    x = snapshot.camera_x;
+    z = snapshot.camera_z;
+    rotation = snapshot.camera_rotation;
+    eventsDetected = snapshot.detected;
+    shouldContinue = snapshot.should_continue;
+    playerAmmo = snapshot.ammo;
+    covered = snapshot.covered;
+
+    updateCursorForRenderer(snapshot.playerTarget.x, snapshot.playerTarget.y);
+
+    if (playerHealth <= 0) {
+        shouldContinue = kCrawlerGameOver;
+    }
+
+    if (shouldContinue != kCrawlerGameInProgress) {
+        gameTicks = 0;
+    }
+}
+
+void addEffectSprite(const int x, const int y, const int billboard) {
+    effects[(y * MAP_SIZE) + x] = billboard;
+    playSound(ENEMY_FIRING_GUN);
+}
+
+void setElement(const int x, const int y, uint8_t element) {
+    elements[(MAP_SIZE * y) + x] = element;
+}
+
+void setActor(const int x, const int y, uint8_t actor) {
+    actorsInMap[(MAP_SIZE * y) + x] = actor;
+}
+
+void setItem(const int x, const int y, uint8_t item) {
+    items[(MAP_SIZE * y) + x] = item;
+
+    if (item == 'i') {
+        /* sound for finding information on enemy corpse */
+        /* playTune("t300i20o1def"); */
+    } else if (item == 0) {
+        /* sound for picking that information */
+        playSound(INFORMATION_ACQUIRED_SOUND);
+    }
+}
+
+void setDamage() {
+    shouldShowDamageHighlight = TRUE;
+    highlightDisplayTime = 10;
+    /* enemy hit you */
+}
+
+void setDetected() {
+    shouldShowDetectedHighlight = TRUE;
+    highlightDisplayTime = 10;
+    /* enemy detected you */
+    playSound(PLAYER_GOT_DETECTED_SOUND);
+}
+
+uint8_t getItem(int x, int y) {
+    return items[(MAP_SIZE * y) + x];
+}
+
+void loadMap(int map, struct MapWithCharKey *collisionMap) {
+
+    /* all the char keys plus null terminator */
+    char collisions[256 + 1];
+    int c;
+    char nameBuffer[16];
+    uint8_t *buffer;
+
+    collisions[256] = 0;
+    for (c = 0; c < 256; ++c) {
+        collisions[c] = (getFromMap(collisionMap, c) != NULL) ? '1' : '0';
+    }
+
+    /* 16 bytes should be enough here... */
+
+    sprintf (nameBuffer, "map%d.txt", map);
+    buffer = loadBinaryFileFromPath(nameBuffer);
+    dungeon_loadMap(buffer, collisions, map - 1);
+    free(buffer);
+}
+
+int canSeeSpy(const struct Vec2i seer,
+              int direction,
+              const struct Vec2i target,
+              int enemy) {
+    int iX;
+    int iY;
+    char tile;
+    int occluder;
+    int dx = (target.x - seer.x);
+    int dy = (target.y - seer.y);
+    FixP_t x = intToFix(seer.x);
+    FixP_t y = intToFix(seer.y);
+    FixP_t one = intToFix(1);
+    FixP_t zero = 0;
+    FixP_t incX;
+    FixP_t incY;
+    FixP_t targetX = intToFix(target.x);
+    FixP_t targetY = intToFix(target.y);
+
+    /* we must pick the bigger, iterate on each square of it and slowly increment the smaller */
+
+    if (abs(dx) >= abs(dy)) {
+
+        /* ++x, y += incY */
+        FixP_t inc = zero;
+
+        if (dx != 0) {
+            inc = Div(intToFix(abs(dy)), intToFix(abs(dx)));
+
+            if ((direction == 0 || direction == 2)) {
+                return FALSE;
+            }
+
+            if (dy < 0) {
+                inc = -inc;
+            }
+        }
+
+        incY = inc;
+
+        if (dx >= 0) {
+            incX = one;
+        } else {
+            incX = -one;
+        }
+
+        if ((direction == 3) && incX > zero) {
+            return FALSE;
+        }
+        if ((direction == 1) && incX < zero) {
+            return FALSE;
+        }
+
+    } else {
+        /* ++y, x += incX */
+        FixP_t inc = zero;
+
+        if (dy != 0) {
+            inc = Div(intToFix(abs(dx)), intToFix(abs(dy)));
+
+            if ((direction == 1 || direction == 3)) {
+                return FALSE;
+            }
+
+            if (dx < 0) {
+                inc = -inc;
+            }
+        }
+
+        incX = inc;
+
+        if (dy >= 0) {
+            incY = one;
+        } else {
+            incY = -one;
+        }
+
+        if ((direction == 2) && incY < zero) {
+            return FALSE;
+        }
+
+        if ((direction == 0) && incY > zero) {
+            return FALSE;
+        }
+    }
+
+    do {
+        x += incX;
+        y += incY;
+
+        iX = fixToInt(x);
+        iY = fixToInt(y);
+
+        tile = visibleElementsMap[(iY * MAP_SIZE ) + iX];
+
+        if (tile == 0) {
+            /* map is not loaded  yet... */
+            return FALSE;
+        }
+
+        occluder = (getFromMap(&enemySightBlockers, tile) != NULL);
+
+        if (occluder) {
+            return FALSE;
+        }
+
+        if ((abs(x - targetX) < one) && (abs(y - targetY) < one)) {
+            return TRUE;
+        }
+
+        linesOfSight[iY][iX] = TRUE;
+
+    } while (!occluder
+             && (iX < MAP_SIZE && iY < MAP_SIZE && iX >= 0 && iY >= 0));
+
+    return FALSE;
+}
+
+void renderTick(long ms) {
+    render(ms);
+    if (crawlClueMessage[0] != 0) {
+        drawTextAt(2, 22, crawlClueMessage, 37);
+    }
+    drawTextAt(2, 21, eventsDetected ? "Enemy has detected you" : "", 37);
+}
+
+int loopTick(enum ECommand command) {
+
+    int needRedraw = 0;
+    
+    if (command == kCommandBack) {
+        shouldContinue = kCrawlerQuit;
+    } else if (command != kCommandNone || gameTicks == 0) {
+        grabbingDisk = FALSE;
+
+        if (command == kCommandFire1 || command == kCommandFire2
+            || command == kCommandFire3 || command == kCommandFire4) {
+            int showMuzzleFlash = ((playerAmmo > 0) && command == kCommandFire1);
+            visibilityCached = FALSE;
+
+            if (showMuzzleFlash) {
+                /* you firing a shot */
+                playSound(PLAYER_FIRING_GUN);
+            }
+            showGun(showMuzzleFlash);
+        } else if (gunTargetPositionY != YRES) {
+            hideGun();
+        }
+
+        tickMission(command);
+        
+        if (gameTicks != 0 ) {
+            yCameraOffset = ((struct CTile3DProperties *) getFromMap(&tileProperties, elements[ (z * MAP_SIZE) + x]))->mFloorHeight - ((struct CTile3DProperties *) getFromMap(&tileProperties, elements[(actor.mPosition.y * MAP_SIZE) + actor.mPosition.x]))->mFloorHeight;
+        } else {
+            yCameraOffset = 0;
+        }
+        
+        actor.mPosition.x = x;
+        actor.mPosition.y = z;
+        actor.mDirection = (enum EDirection) (rotation);
+
+        needRedraw = 1;
+    }
+
+    if (zCameraOffset != 0 || xCameraOffset != 0 || yCameraOffset != 0) {
+        needRedraw = 1;
+    }
+    
+    
+    if ( needRedraw ) {
+        drawMap(&elements[0], &items[0], &actorsInMap[0], &effects[0],
+                &actor);
+    }
+    return shouldContinue;
+}
+
+void initRoom(int room) {
+    int16_t c;
+
+    hideGun();
+    shouldContinue = kCrawlerGameInProgress;
+    mBufferedCommand = kCommandNone;
+    gameTicks = 0;
+    visibilityCached = FALSE;
+    needsToRedrawVisibleMeshes = TRUE;
+    onLevelLoaded(room + 1);
+
+    for (c = 0; c < 256; ++c) {
+
+        struct CTile3DProperties *tile3DProperties =
+                (struct CTile3DProperties *) getFromMap(&tileProperties, c);
+
+        if (tile3DProperties) {
+            setInMap(&colliders, c,
+                     tile3DProperties->mBlockMovement ? &colliders : NULL);
+        } else {
+            setInMap(&colliders, c, NULL);
+        }
+    }
+
+    loadMap(room + 1, &colliders);
+    crawlClueMessage[0] = 0;
+}

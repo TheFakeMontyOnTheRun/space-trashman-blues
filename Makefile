@@ -1,47 +1,63 @@
-CXXFLAGS = -Iinclude -O3 -g -c -std=c++14  -ferror-limit=1 -Wno-narrowing   \
-		-I$(GTEST_DIR)/include \
-		-I$(GTEST_DIR) \
-		-I$(GTEST_DIR)/include/gtest \
-		-I$(GTEST_DIR)/include/gtest/internal \
-		-I$(GMOCK_DIR)/include \
-		-I$(GMOCK_DIR) \
-		-I$(GMOCK_DIR)/include/gtest \
-		-I$(GMOCK_DIR)/include/gtest/internal
+LDFLAGS=`sdl2-config --libs` -lm
 
-CFLAGS = -Iinclude -O3 -g -c -std=c89 -ansi  -ferror-limit=1
+CFLAGS=-g -c `sdl2-config --cflags `  \
+	-Ibase3d/include                                     \
+	-ISoundSystem                                     \
+	-Imenu/include                                       \
+	$(SDL_INCLUDE)                                       \
+	-DSDLSW                                              \
+	-DVGA                                                \
+	-Wall                                                \
+	-Werror												 \
+	-ansi												 \
+	--pedantic                                           \
+	-fomit-frame-pointer                                 \
+	-fno-exceptions                                      \
+	-ffast-math
 
-CXX = clang++
-CC = clang
+MENU_TARGET=game
 
-GTEST_DIR = googletest/googletest
-GMOCK_DIR = googletest/googlemock
+MENU_OBJ=menu/src/MainMenu.o \
+	menu/src/Interrogation.o \
+	menu/src/Crawler.o \
+	menu/src/UI.o \
+	menu/src/Main.o \
+	base3d/src/SDLVersion/CSDL2Renderer.o \
+	base3d/src/Vec.o \
+	base3d/src/Globals.o \
+	base3d/src/CTile3DProperties.o \
+	base3d/src/LoadBitmap.o \
+	base3d/src/CRenderer.o \
+	base3d/src/VisibilityStrategy.o \
+	base3d/src/FixP.o \
+	base3d/src/Events.o \
+	base3d/src/MapWithCharKey.o \
+	base3d/src/CRenderer_Rasterization.o \
+	base3d/src/CPackedFileReader.o \
+	base3d/src/EDirection_Utils.o \
+	base3d/src/CRenderer_Tesselation.o \
+	SoundSystem/NullMusic.o \
+	menu/src/HelpScreen.o \
+	menu/src/GameMenu.o \
+	menu/src/SpyTravel.o \
+	menu/src/CreditsScreen.o \
+	base3d/src/Dungeon.o
 
-TESTOBJS = Tests/TestMovement.o \
-		Tests/TestInventoryManipulation.o \
-		$(GTEST_DIR)/src/gtest-all.o \
-		$(GMOCK_DIR)/src/gmock-all.o \
-		$(GMOCK_DIR)/src/gmock_main.o
 
-OBJS = src/Derelict.o src/Parser.o
+$(MENU_TARGET):	$(MENU_OBJ)
+	$(CC) -o$(MENU_TARGET) $(MENU_OBJ) $(LDFLAGS)
 
-MAIN_GAME_OBJ = src/main.o
+all:   $(MENU_TARGET)
 
-LDFLAGS = -lncurses
-TESTLDFLAGS = -lpthread
-TARGET = blues
-TESTTARGET = unittests
 
-$(TARGET):	$(OBJS) $(MAIN_GAME_OBJ)
-	$(CXX) -o $(TARGET) $(OBJS) $(MAIN_GAME_OBJ) $(LDFLAGS)
-
-$(TESTTARGET): $(OBJS) $(TESTOBJS)
-	$(CXX) -o $(TESTTARGET) $(OBJS) $(TESTOBJS) $(TESTLDFLAGS) $(LDFLAGS)
-
-all:	$(TARGET)
+menudata: packager
+	rm -f ./menu.pfs
+	ls res/*.*  | xargs ./packer
+	mv ./data.pfs ./menu.pfs
 
 clean:
-	rm -f $(OBJS) $(TESTTARGET) $(MAIN_GAME_OBJ) $(TESTOBJS) $(TARGET)
-	rm -rf coverage
-	find . | grep ~ | xargs rm -f
-	find . | grep gcno | xargs rm -f
-	find . | grep gcda | xargs rm -f
+	rm -f menu/src/*.o
+	rm -f base3d/src/*.o
+	rm -f common/src/*.o
+	rm -f SoundSystem/*.o
+	rm -f base3d/src/SDLVersion/*.o

@@ -1,38 +1,54 @@
-cmake_minimum_required(VERSION 3.14)
-project(derelict)
+cmake_minimum_required(VERSION 3.11)
+project(opal_standoff)
 
-set(CMAKE_C_STANDARD 90)
-set(CMAKE_CXX_STANDARD 11)
-SET(CMAKE_CXX_STANDARD_REQUIRED ON)
-SET(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_STANDARD 11)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -W -Wall -Wextra -pedantic ")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake_find")
 
-if (APPLE)
-	add_definitions(-DGTEST_USE_OWN_TR1_TUPLE)
-	add_definitions(-D__GLIBCXX__)
-endif (APPLE)
+include_directories(
+		${SDL2_INCLUDE_DIR}
+)
 
+include_directories(base3d/include)
+include_directories(common/include)
+include_directories(menu/include)
+include_directories(SoundSystem)
 
-enable_testing()
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -std=c90 -W -pedantic -Wall")
 
-add_subdirectory(googletest)
+find_package(SDL2 REQUIRED)
 
-include_directories(include)
-include_directories(googletest/googletest/include)
-include_directories(googletest/googlemock/include)
-
-set(TEST_SOURCE_FILES
-		tests/TestMovement.cpp
-		tests/TestInventoryManipulation.cpp)
-
-set(SOURCE_FILES
-		src/Derelict.c
-		src/Parser.c
+add_executable(opal_standoff
+		menu/src/MainMenu.c
+		menu/src/Crawler.c
+		menu/src/HelpScreen.c
+		menu/src/CreditsScreen.c
+		menu/src/GameMenu.c
+		menu/src/Main.c
+		menu/src/Engine.c
+		base3d/src/SDLVersion/CSDL2Renderer.c
+		base3d/src/Globals.c
+		base3d/src/Vec.c
+		base3d/src/CTile3DProperties.c
+		base3d/src/LoadBitmap.c
+		base3d/src/CRenderer.c
+		base3d/src/VisibilityStrategy.c
+		base3d/src/FixP.c
+		base3d/src/Events.c
+		base3d/src/CRenderer_Rasterization.c
+		base3d/src/CPackedFileReader.c
+		base3d/src/EDirection_Utils.c
+		base3d/src/CRenderer_Tesselation.c
+		SoundSystem/NullMusic.c
+		base3d/src/MapWithCharKey.c
+		base3d/src/Dungeon.c
+		menu/src/UI.c
+		SoundSystem/PCMAudio.c
 		)
 
-add_executable(derelict src/main.c ${SOURCE_FILES} )
 
-add_executable(derelict_test  ${TEST_SOURCE_FILES} ${SOURCE_FILES} )
+include(FindPkgConfig)
 
-target_link_libraries(derelict_test gtest gmock gmock_main )
+target_include_directories(opal_standoff PUBLIC ${SDL2_INCLUDE_DIR})
+target_link_libraries(opal_standoff LINK_PUBLIC ${SDL2_LIBRARY} m)
+
