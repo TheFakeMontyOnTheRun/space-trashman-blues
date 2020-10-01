@@ -39,3 +39,13 @@ cmake-build-debug
 *.gcda
 unittests
 site
+CWSDPMI.SWP
+game12k
+gm
+Xcode2/Derelict3D.xcodeproj/monty.mode1
+Xcode2/Derelict3D.xcodeproj/monty.pbxuser
+Xcode2/Derelict3D.xcodeproj/project.xcworkspace/xcuserdata/monty.xcuserdatad/IDEFindNavigatorScopes.plist
+Xcode2/Derelict3D.xcodeproj/project.xcworkspace/xcuserdata/monty.xcuserdatad/UserInterfaceState.xcuserstate
+Xcode2/Derelict3D.xcodeproj/project.xcworkspace/xcuserdata/monty.xcuserdatad/xcdebugger/Expressions.xcexplist
+Xcode2/Derelict3D.xcodeproj/xcuserdata/monty.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
+Xcode2/Derelict3D.xcodeproj/xcuserdata/monty.xcuserdatad/xcschemes/xcschememanagement.plist
