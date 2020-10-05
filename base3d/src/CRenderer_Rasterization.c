@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <unistd.h>
+#include <assert.h>
 
 #include "FixP.h"
 #include "Vec.h"
@@ -503,12 +504,7 @@ void drawFrontWall(FixP_t x0,
     *        /             \
     *  x0y1 /______________\ x1y1
     */
-void maskFloor(
-        FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP_t x1y1
-#ifdef FLAT_FLOOR_CEILING
-        , uint8_t pixel
-#endif
-) {
+void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP_t x1y1, uint8_t pixel) {
 
     int32_t y;
     int32_t limit;
@@ -524,9 +520,6 @@ void maskFloor(
     const FixP_t zero = 0;
     FixP_t x0;
     FixP_t x1;
-#ifndef FLAT_FLOOR_CEILING
-    uint8_t pixel = 0;
-#endif
     uint8_t *bufferData = &framebuffer[0];
     int16_t iy;
     /*
@@ -823,11 +816,14 @@ void fillBottomFlat(int *coords, uint8_t colour ) {
     FixP_t fX1 = x0;
      
     for ( ; y < yFinal; ++y ) {
-        
-        int iFX1 = fixToInt(fX1);
-        int iFX0 = fixToInt(fX0);
-        uint8_t *destination = &framebuffer[(320 * y) + min(iFX0, iFX1)];
-        memset( destination, colour, abs(iFX1 - iFX0));
+        if (y >= 200 ) {
+            return;
+        } else if (y >= 0) {
+            int iFX1 = max(min(255, fixToInt(fX1)), 0 );
+            int iFX0 = max(min(255, fixToInt(fX0)), 0 );
+            uint8_t *destination = &framebuffer[(320 * y) + min(iFX0, iFX1)];
+            memset( destination, colour, abs(iFX1 - iFX0));
+        }
         fX0 -= dXDy2;
         fX1 += dXDy1;
         
@@ -864,10 +860,15 @@ void fillTopFloat(int *coords, uint8_t colour) {
     FixP_t fX1 = x0; //p2
     
     for ( ; y >= yFinal; --y ) {
-        int iFX1 = fixToInt(fX1);
-        int iFX0 = fixToInt(fX0);
-        uint8_t *destination = &framebuffer[(320 * y) + min(iFX0, iFX1)];
-        memset( destination, colour, abs(iFX1 - iFX0));
+        if (y < 0 ) {
+            return;
+        } else if ( y < 200 ) {
+            int iFX1 = max(min(255, fixToInt(fX1)), 0 );
+            int iFX0 = max(min(255, fixToInt(fX0)), 0 );
+            uint8_t *destination = &framebuffer[(320 * y) + min(iFX0, iFX1)];
+            memset( destination, colour, abs(iFX1 - iFX0));
+        }
+        
         fX0 += dXDy1;
         fX1 += dXDy2;
     }

@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <assert.h>
 #include <stdint.h>
 #include <unistd.h>
 
@@ -447,10 +448,9 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
     int z = fixToInt(p0.mZ);
         
     if (z >= distanceForDarkness && useDither) {
-        maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX);
+        maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0);
     } else {
-        drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, z,
-                      texture->rotations[cameraDirection]);
+        maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 128);
     }
 }
 
@@ -492,18 +492,10 @@ void drawFloorAt(const struct Vec3 center,
         int z = fixToInt(center.mZ);
 
         if (z >= distanceForDarkness && useDither) {
-            maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX
-#ifdef FLAT_FLOOR_CEILING
-                    , 0
-#endif
-            );
+            maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0);
         } else {
-#ifndef FLAT_FLOOR_CEILING
             drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, z,
                       texture->rotations[cameraDirection]);
-#else
-            maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 254);
-#endif
         }
     }
 }
@@ -546,18 +538,10 @@ void drawCeilingAt(const struct Vec3 center,
         int z = fixToInt(center.mZ);
 
         if (z >= distanceForDarkness && useDither) {
-            maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX
-#ifdef FLAT_FLOOR_CEILING
-                    , 0
-#endif
-            );
+            maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0);
         } else {
-#ifndef FLAT_FLOOR_CEILING
             drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, z,
                       texture->rotations[cameraDirection]);
-#else
-            maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 254);
-#endif
         }
     }
 }

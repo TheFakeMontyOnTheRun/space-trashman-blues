@@ -224,10 +224,8 @@ void maskFloor(
 		FixP_t x0y0,
 		FixP_t x1y0,
 		FixP_t x0y1,
-		FixP_t x1y1
-#ifdef FLAT_FLOOR_CEILING
-		,uint8_t pixel
-#endif
+		FixP_t x1y1,
+        uint8_t pixel
 		);
 
 #endif
