@@ -1,31 +1,27 @@
 CC = emcc
 CXX = em++
 
-LDFLAGS =  -O3 -s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_SDL=1 -s --preload-file ./base.pfs --use-preload-plugins
+LDFLAGS =  -O3 -s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_SDL=2 -s --preload-file ./base.pfs --use-preload-plugins -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0
 
-CFLAGS=-g -c -O3 -std=c90    \
+CFLAGS=-g -c -O3     \
 	-Ibase3d/include                                     \
 	-Imenu/include                                       \
 	-ISoundSystem                                       \
 	$(SDL_INCLUDE)                                       \
 	-DSDLSW                                              \
 	-DVGA                                                \
-	-Wall                                                \
-	-Werror												 \
-	-ansi												 \
-	--pedantic                                           \
 	-fomit-frame-pointer                                 \
 	-fno-exceptions                                      \
-	-ffast-math
+	-ffast-math -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0 
 
 MENU_TARGET=game.html
 
 MENU_OBJ=menu/src/MainMenu.o \
-	menu/src/Interrogation.o \
 	menu/src/Crawler.o \
+	menu/src/Engine.o \
 	menu/src/UI.o \
 	menu/src/Main.o \
-	base3d/src/SDLVersion/SDL1Renderer.o \
+	base3d/src/SDLVersion/CSDL2Renderer.o \
 	base3d/src/Vec.o \
 	base3d/src/Globals.o \
 	base3d/src/CTile3DProperties.o \
@@ -42,7 +38,6 @@ MENU_OBJ=menu/src/MainMenu.o \
 	SoundSystem/NullMusic.o \
 	menu/src/HelpScreen.o \
 	menu/src/GameMenu.o \
-	menu/src/SpyTravel.o \
 	menu/src/CreditsScreen.o \
 	base3d/src/Dungeon.o
 
