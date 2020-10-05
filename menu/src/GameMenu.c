@@ -31,6 +31,8 @@ const int32_t *GameMenu_nextStateNavigation;
 const char *GameMenu_StateTitle;
 struct Bitmap *featuredBitmap = NULL;
 void goTo(int location);
+extern int playerLocation;
+
 
 const char *GameMenu_Main_options[4] = {"Read Dossiers", "Investigate",
 									   "Travel", "End game"};
@@ -91,9 +93,6 @@ void getDossierText(int slot, char* buffer, size_t length) {
 void getLocationName(int slot, char* buffer, size_t length) {
 	sprintf(buffer, "%s %d", "farofinha fofa", slot);
 }
-
-
-int playerLocation;
 
 int getPlayerLocation() {
 	return playerLocation;

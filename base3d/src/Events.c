@@ -328,7 +328,7 @@ void initRoom(int room) {
     gameTicks = 0;
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = TRUE;
-    onLevelLoaded(room + 1);
+    onLevelLoaded(room);
 
     for (c = 0; c < 256; ++c) {
 
@@ -343,6 +343,6 @@ void initRoom(int room) {
         }
     }
 
-    loadMap(room + 1, &colliders);
+    loadMap(room, &colliders);
     crawlClueMessage[0] = 0;
 }
