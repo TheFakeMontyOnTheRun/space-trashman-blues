@@ -295,6 +295,7 @@ void handleSystemEvents() {
 }
 
 void waitVSync() {
+    /*
 	DrawWait:
 	asm
 	{
@@ -303,6 +304,7 @@ void waitVSync() {
 	test al, 00001000b
 	jz DrawWait
 	}
+     */
 }
 
 void flipRenderer() {
