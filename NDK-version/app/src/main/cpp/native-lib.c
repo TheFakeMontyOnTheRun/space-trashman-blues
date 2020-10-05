@@ -204,7 +204,7 @@ void flipRenderer(void) {
 void clearRenderer(void) {}
 
 JNIEXPORT void JNICALL
-Java_pt_b13h_themistralreport_MistralJNI_initAssets(JNIEnv *env, jclass clazz,
+Java_pt_b13h_spacetrashmanblues_MistralJNI_initAssets(JNIEnv *env, jclass clazz,
                                                     jobject assetManager) {
 
     AAssetManager *asset_manager = AAssetManager_fromJava(env, assetManager);
@@ -219,7 +219,7 @@ Java_pt_b13h_themistralreport_MistralJNI_initAssets(JNIEnv *env, jclass clazz,
 }
 
 JNIEXPORT void JNICALL
-Java_pt_b13h_themistralreport_MistralJNI_getPixelsFromNative(JNIEnv *env, jclass clazz,
+Java_pt_b13h_spacetrashmanblues_MistralJNI_getPixelsFromNative(JNIEnv *env, jclass clazz,
                                                              jbyteArray array) {
     menuTick ( 50 );
     jbyte *narr = (*env)->GetByteArrayElements(env, array, NULL);
@@ -241,19 +241,19 @@ void soundTick() {}
 void muteSound() {}
 
     JNIEXPORT jint JNICALL
-    Java_pt_b13h_themistralreport_MistralJNI_getSoundToPlay(JNIEnv *env, jclass clazz) {
+    Java_pt_b13h_spacetrashmanblues_MistralJNI_getSoundToPlay(JNIEnv *env, jclass clazz) {
     int toReturn = soundToPlay;
     soundToPlay = -1;
     return toReturn;
 }
 
     JNIEXPORT jint JNICALL
-    Java_pt_b13h_themistralreport_MistralJNI_isOnMainMenu(JNIEnv *env, jclass clazz) {
+    Java_pt_b13h_spacetrashmanblues_MistralJNI_isOnMainMenu(JNIEnv *env, jclass clazz) {
     return currentGameMenuState == (kMainMenu);
 }
 
 JNIEXPORT void JNICALL
-    Java_pt_b13h_themistralreport_MistralJNI_sendCommand(JNIEnv *env, jclass clazz, jchar cmd) {
+    Java_pt_b13h_spacetrashmanblues_MistralJNI_sendCommand(JNIEnv *env, jclass clazz, jchar cmd) {
     switch (cmd) {
         case 'w':
             mBufferedCommand = kCommandUp;

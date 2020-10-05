@@ -1,4 +1,4 @@
-package pt.b13h.themistralreport;
+package pt.b13h.spacetrashmanblues;
 
 import android.content.res.AssetManager;
 

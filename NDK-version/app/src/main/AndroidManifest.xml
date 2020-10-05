@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
-    package="pt.b13h.themistralreport">
+    package="pt.b13h.spacetrashmanblues">
 
     <application
         android:icon="@drawable/icon"
-        android:name=".MistralApplication"
+        android:name="pt.b13h.spacetrashmanblues.MistralApplication"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
 
-        <activity android:name=".MainActivity">
+        <activity android:name="pt.b13h.spacetrashmanblues.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
