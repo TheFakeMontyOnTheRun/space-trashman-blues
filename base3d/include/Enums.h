@@ -73,7 +73,7 @@ enum EGameMenuState {
 	kVictory,
 	kGameOver,
 	kPrologue,
-	kEpilogue,
+	kEpilogue
 };
 
 enum EPresentationState {
