@@ -88,4 +88,6 @@ void showInventory();
 void notifyError(const char* errorMsg);
 
 void setErrorHandlerCallback(ErrorHandlerCallback callback);
+
+void walkTo(const char* operands);
 #endif

@@ -63,6 +63,20 @@ TEST_F(TestMovement, canMoveOnlyWhenEnabled) {
 
 }
 
+TEST_F(TestMovement, canWalkInsideRooms) {
+
+  char buffer[255];
+  strcpy(&buffer[0], "walkTo 2 3");
+  char *operator1 = strtok( &buffer[0], "\n " );
+  char *operand1 = strtok( NULL, "\n ");
+
+  parseCommand(operator1, operand1);
+
+  auto pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 2);
+  ASSERT_EQ(pos.y, 3);
+}
+
 
 TEST_F(TestMovement, cannotMoveToInvalidDirections) {
 	initStation();

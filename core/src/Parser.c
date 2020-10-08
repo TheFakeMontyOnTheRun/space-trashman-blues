@@ -22,9 +22,10 @@ int parseCommand(char *cmd, char *operand) {
     } else {
       notifyError("Please specify a valid direction");
     }
-
   } else if (!strcmp(cmd, "use")) {
     useObjectNamed(operand);
+  } else if (!strcmp(cmd, "walkTo")) {
+    walkTo(operand);
   } else if (!strcmp(cmd, "use-with")) {
     useObjectsTogether(operand);
   } else {

@@ -229,6 +229,17 @@ void useObjectNamed(const char* operand) {
   }
 }
 
+void walkTo(const char* operands) {
+  struct WorldPosition pos;
+  char *xStr = operands;
+  char *yStr = strtok(NULL, "\n " );
+  int x = atoi(xStr);
+  int y = atoi(yStr);
+  pos.x = x;
+  pos.y = y;
+  setPlayerPosition(pos);
+}
+
 void useObjectsTogether(const char* operands){
 
   struct ObjectNode *object1 = collectedObject;
