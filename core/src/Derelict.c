@@ -276,6 +276,7 @@ void initStation(void) {
 	memset(&item, 0, 2 * sizeof(struct Item));
     
     
+	/*Rooms*/
 	station[1].description = "uss-daedalus";
 	station[1].connections[0] = 2;
 
@@ -294,10 +295,7 @@ void initStation(void) {
 	station[5].description = "dorms-1";
 	station[5].connections[3] = 3;
 
-    
-    
-    
-    
+	/*Items*/    
     
 	item[0].description = "metal-plate";
 	item[0].weight = 5;
