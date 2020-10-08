@@ -21,7 +21,7 @@ public:
 
 class ErrorHandlerMock : public ErrorHandlerInterface {
 public:
-  virtual ~ErrorHandlerInterface() {}
+  virtual ~ErrorHandlerMock() {}
   MOCK_METHOD0(handleError, int());
 };
 
@@ -34,6 +34,7 @@ public:
   static std::shared_ptr<ErrorHandlerMock> mockedObj;
 
   virtual void SetUp() {
+    initStation();
     mockedObj = std::make_shared<ErrorHandlerMock>();
   }
 
@@ -51,7 +52,6 @@ void myErrorHandler(const char* errorMsg) {
 
 
 TEST_F(TestMovement, canMoveOnlyWhenEnabled) {
-	initStation();
 
 	ASSERT_EQ(getPlayerRoom(), 1);
 	parseCommand("move", "0");
@@ -79,7 +79,6 @@ TEST_F(TestMovement, canWalkInsideRooms) {
 
 
 TEST_F(TestMovement, cannotMoveToInvalidDirections) {
-	initStation();
 	ASSERT_EQ(getPlayerRoom(), 1);
 
 	setErrorHandlerCallback(myErrorHandler);
