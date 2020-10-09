@@ -179,9 +179,16 @@ void dropObjectByName(const char *objName) {
 
 int hasItemInRoom(const char *roomName, const char *itemName) {
 	int r = 0;
+	
+	if (roomName == NULL || itemName == NULL || strlen(roomName) == 0 || strlen(itemName) == 0) {
+	  notifyError("Either the object name or the room name are null. Check your stuff");
+	  return 0;
+	}
+
 	for (r = 1; r < TOTAL_ROOMS; ++r) {
 		char *desc = station[r].description;
-		if (!strcmp(desc, roomName)) {
+
+		if (desc != NULL && !strcmp(desc, roomName)) {
 			struct ObjectNode *itemToPick = station[r].itemsPresent;
 
 			while (itemToPick != NULL) {
@@ -193,7 +200,7 @@ int hasItemInRoom(const char *roomName, const char *itemName) {
 			return 0;
 		}
 	}
-	assert(FALSE);
+	notifyError("It was not possible to determine if object is in room");
 	return 0;
 }
 
