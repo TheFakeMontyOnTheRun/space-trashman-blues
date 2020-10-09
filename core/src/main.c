@@ -24,7 +24,7 @@ int main() {
 		puts("------\nYou are at:");
 		puts(getRoomDescription());
 
-		head = collectedObject;
+		head = collectedObject->next;
 
 		if (head != NULL) {
 			puts("\nObjects you have:");
@@ -35,7 +35,7 @@ int main() {
 			head = head->next;
 		}
 
-		head = getRoom(getPlayerRoom())->itemsPresent;
+		head = getRoom(getPlayerRoom())->itemsPresent->next;
 
 		if (head != NULL) {
 			puts("\nObjects in room:");

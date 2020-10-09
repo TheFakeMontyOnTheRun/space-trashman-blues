@@ -79,7 +79,7 @@ TEST_F(TestInventoryManipulation, checkingInvalidRoomForObjectsWillCauseError) {
 }
 
 TEST_F(TestInventoryManipulation, objectsDroppedInRoomStayThere) {
-	ASSERT_TRUE(collectedObject == nullptr);
+	ASSERT_TRUE(collectedObject->next == nullptr);
 
 	ASSERT_TRUE(isPlayerAtRoom("uss-daedalus"));
 	ASSERT_FALSE(hasItemInRoom("uss-daedalus", "key"));
@@ -94,14 +94,14 @@ TEST_F(TestInventoryManipulation, objectsDroppedInRoomStayThere) {
 	ASSERT_FALSE(hasItemInRoom("uss-daedalus", "key"));
 	parseCommand("drop", "key");
 	ASSERT_TRUE(hasItemInRoom("uss-daedalus", "key"));
-	ASSERT_TRUE(collectedObject == NULL);
+	ASSERT_TRUE(collectedObject->next == NULL);
 
 	ASSERT_FALSE(hasItemInRoom("hangar", "key"));
 	ASSERT_TRUE(hasItemInRoom("uss-daedalus", "key"));
 }
 
 TEST_F(TestInventoryManipulation, canPickObjects) {
-	ASSERT_TRUE(collectedObject == nullptr);
+	ASSERT_TRUE(collectedObject->next == nullptr);
 	ASSERT_TRUE(isPlayerAtRoom("uss-daedalus"));
 	parseCommand("move", "0");
 	ASSERT_TRUE(isPlayerAtRoom("hangar"));
@@ -111,6 +111,34 @@ TEST_F(TestInventoryManipulation, canPickObjects) {
 	ASSERT_FALSE(hasItemInRoom("hangar", "key"));
 	ASSERT_TRUE(collectedObject->item == item);
 	parseCommand("drop", "key");
-	ASSERT_TRUE(collectedObject == NULL);
+	ASSERT_TRUE(collectedObject->next == NULL);
 	ASSERT_TRUE(hasItemInRoom("hangar", "key"));
+}
+
+TEST_F(TestInventoryManipulation, objectsCanOnlyExistInOneRoom) {
+
+  struct Item item;
+  memset(&item, 0, sizeof(struct Item));
+
+  item.description = "farofinha";
+
+  initStation();
+
+  addObjectToRoom(1, &item);
+  ASSERT_TRUE(hasItemInRoom("uss-daedalus", "farofinha"));
+  ASSERT_FALSE(hasItemInRoom("hangar", "farofinha"));
+  
+  addObjectToRoom(2, &item);
+  ASSERT_TRUE(hasItemInRoom("hangar", "farofinha"));
+  ASSERT_FALSE(hasItemInRoom("uss-daedalus", "farofinha"));
+  
+  parseCommand("move", "0");
+  parseCommand("pick", "farofinha");
+  ASSERT_FALSE(hasItemInRoom("uss-daedalus", "farofinha"));
+  ASSERT_FALSE(hasItemInRoom("hangar", "farofinha"));
+
+  parseCommand("move", "2");
+  parseCommand("drop", "farofinha");
+  ASSERT_TRUE(hasItemInRoom("uss-daedalus", "farofinha"));
+  ASSERT_FALSE(hasItemInRoom("hangar", "farofinha"));
 }
