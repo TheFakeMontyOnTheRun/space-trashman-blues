@@ -52,14 +52,14 @@ TEST_F(TestInventoryManipulation, checkingForInvalidObjectsInRoomWillCauseError)
 	setErrorHandlerCallback(myErrorHandler);
 
 	EXPECT_CALL(*mockedObj, handleError());
-	hasItemInRoom("hangar", "");
+	ASSERT_FALSE(hasItemInRoom("hangar", ""));
 
 	EXPECT_CALL(*mockedObj, handleError());
-	hasItemInRoom("hangar", NULL);
+	ASSERT_FALSE(hasItemInRoom("hangar", NULL));
 
 	//this is not supposed to cause an error, but simply return false. Objects can have any name.
 	EXPECT_CALL( *mockedObj, handleError()).Times(0);
-	hasItemInRoom("hangar", "farofinha_fofa");
+	ASSERT_FALSE(hasItemInRoom("hangar", "farofinha_fofa"));
 }
 
 TEST_F(TestInventoryManipulation, checkingInvalidRoomForObjectsWillCauseError) {
@@ -67,15 +67,15 @@ TEST_F(TestInventoryManipulation, checkingInvalidRoomForObjectsWillCauseError) {
   	setErrorHandlerCallback(myErrorHandler);
 
 	EXPECT_CALL(*mockedObj, handleError());
-	hasItemInRoom("", "key");
+	ASSERT_FALSE(hasItemInRoom("", "key"));
 
 	EXPECT_CALL(*mockedObj, handleError());
-	hasItemInRoom(NULL, "key");
+	ASSERT_FALSE(hasItemInRoom(NULL, "key"));
 
 
 	//differently from objects, we know very well our rooms. This will cause an error
 	EXPECT_CALL(*mockedObj, handleError());
-	hasItemInRoom("teu_cu", "key");
+	ASSERT_FALSE(hasItemInRoom("teu_cu", "key"));
 }
 
 TEST_F(TestInventoryManipulation, objectsDroppedInRoomStayThere) {
