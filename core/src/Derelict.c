@@ -45,178 +45,158 @@ int isCloseToObject( struct WorldPosition pos, struct Item* item ) {
   return (abs(pos.x - item->position.x) + abs(pos.y + item->position.y) ) <= 1;
 }
 
+void addObjectToList(struct Item* itemToAdd, struct ObjectNode* listHead) {
+  struct ObjectNode *head = listHead;
+
+  while ( head->next != NULL ) {
+    if (head->item == itemToAdd) {
+      /* Object already belongs to the list! */
+      return;
+    }
+
+    head = head->next;
+  }
+
+  head->next = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));  
+  head->next->item = itemToAdd;
+}
+
+void removeObjectFromList(struct Item* itemToRemove, struct ObjectNode* listHead) {
+  struct ObjectNode *head = listHead->next;
+  struct ObjectNode *prev = listHead;
+
+  while ( head != NULL ) {
+    if (head->item == itemToRemove) {
+      prev->next = head->next;
+      free(head);
+      return;
+    }
+
+    prev = head;
+    head = head->next;
+  }
+  /* Object doesn't belongs to the list! */
+}
+
+
+void removeObjectFromRoom(struct Item *itemToRemove) {
+  if (itemToRemove->roomId != 0) {
+    removeObjectFromList(itemToRemove, station[itemToRemove->roomId].itemsPresent);    
+    itemToRemove->roomId = 0;
+  }
+}
+
+
 void addObjectToRoom(int roomId, struct Item *itemToAdd) {
-	struct Room *roomToAddObject = &station[roomId];
-	struct ObjectNode *node =
-			(struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-	struct ObjectNode *tmp = roomToAddObject->itemsPresent;
-
-	if (itemToAdd->roomId != 0) {
-		struct ObjectNode *head = station[itemToAdd->roomId].itemsPresent;
-		struct ObjectNode *previousNode = station[itemToAdd->roomId].itemsPresent;
-
-		while (head != NULL) {
-			if (head->item == itemToAdd) {
-				previousNode->next = head->next;
-				free(head);
-				goto removed;
-			}
-			previousNode = head;
-			head = head->next;
-		}
-	}
-
-	removed:
-
-	roomToAddObject->itemsPresent = node;
-	node->next = tmp;
-	node->item = itemToAdd;
-	itemToAdd->roomId = roomId;
+  struct Room *roomToAddObject = &station[roomId];
+  removeObjectFromRoom(itemToAdd);
+  addObjectToList(itemToAdd, roomToAddObject->itemsPresent);
+  itemToAdd->roomId = roomId;
 }
 
 void dropObjectToRoom(int roomId, struct Item *itemToDrop) {
 
-	assert(itemToDrop->roomId == 0);
+  if(itemToDrop->roomId != 0) {
+    notifyError("Object not present to drop");
+  }
 
-	{
-		struct ObjectNode *head = collectedObject;
-		struct ObjectNode *previousNode = collectedObject;
-
-		if (collectedObject != NULL && collectedObject->item == itemToDrop) {
-			struct ObjectNode *tmp = collectedObject;
-			collectedObject = tmp->next;
-			free(tmp);
-			goto dropped;
-		}
-
-		while (head != NULL) {
-			if (head->item == itemToDrop) {
-				previousNode->next = head->next;
-				free(head);
-				goto dropped;
-			}
-			previousNode = head;
-			head = head->next;
-		}
-	}
-
-	dropped:
-	addObjectToRoom(roomId, itemToDrop);
+  removeObjectFromList(itemToDrop, collectedObject);
+  addObjectToRoom(roomId, itemToDrop);
 }
 
 void pickObject(struct Item *itemToPick) {
-	struct ObjectNode *node =
-			(struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-	struct ObjectNode *tmp = collectedObject;
-
-	if (!isCloseToObject(getPlayerPosition(), itemToPick)) {
-	  return;
-	}
-
-	if (itemToPick->roomId != 0) {
-
-		struct ObjectNode *head = station[itemToPick->roomId].itemsPresent;
-		struct ObjectNode *previousNode = station[itemToPick->roomId].itemsPresent;
-
-		if (previousNode->item == itemToPick) {
-			station[itemToPick->roomId].itemsPresent = previousNode->next;
-			free(previousNode);
-			goto taken;
-		}
-
-		while (head != NULL) {
-			if (head->item == itemToPick) {
-				previousNode->next = head->next;
-				free(head);
-				goto taken;
-			}
-			previousNode = head;
-			head = head->next;
-		}
-	}
-	taken:
-	collectedObject = node;
-	node->next = tmp;
-	node->item = itemToPick;
-	itemToPick->roomId = 0;
+   
+  if (!isCloseToObject(getPlayerPosition(), itemToPick)) {
+    return;
+  }
+  
+  removeObjectFromRoom(itemToPick);
+  addObjectToList(itemToPick, collectedObject);
 }
 
 void moveBy(int direction) {
-	struct Room *room = &station[playerLocation];
-	if (direction >= 0 && direction <= 5 && room->connections[direction] != 0) {
-		playerLocation = room->connections[direction];
-		room = &station[playerLocation];
-	} else {
-	  notifyError("Please specify a valid direction");
-	}
+  struct Room *room = &station[playerLocation];
+  if (direction >= 0 && direction <= 5 && room->connections[direction] != 0) {
+    playerLocation = room->connections[direction];
+    room = &station[playerLocation];
+  } else {
+    notifyError("Please specify a valid direction");
+  }
 }
 
 void pickObjectByName(const char *objName) {
-	struct Room *room = &station[playerLocation];
-	struct ObjectNode *itemToPick = room->itemsPresent;
-
-	while (itemToPick != NULL) {
-		if (!strcmp(itemToPick->item->description, objName)) {
-		  playerPosition = itemToPick->item->position;
-		  pickObject(itemToPick->item);
-		  return;
-		}
-		itemToPick = itemToPick->next;
-	}
+  struct Room *room = &station[playerLocation];
+  struct ObjectNode *itemToPick = room->itemsPresent->next;
+  
+  while (itemToPick != NULL) {
+    if (!strcmp(itemToPick->item->description, objName)) {
+      playerPosition = itemToPick->item->position;
+      pickObject(itemToPick->item);
+      return;
+    }
+    itemToPick = itemToPick->next;
+  }
 }
 
 void dropObjectByName(const char *objName) {
-	struct ObjectNode *itemToPick = collectedObject;
-
-	while (itemToPick != NULL) {
-		if (!strcmp(itemToPick->item->description, objName)) {
-			dropObjectToRoom(playerLocation, itemToPick->item);
-			return;
-		}
-		itemToPick = itemToPick->next;
-	}
+  struct ObjectNode *itemToPick = collectedObject->next;
+  
+  while (itemToPick != NULL) {
+    if (!strcmp(itemToPick->item->description, objName)) {
+      dropObjectToRoom(playerLocation, itemToPick->item);
+      return;
+    }
+    itemToPick = itemToPick->next;
+  }
 }
 
 int hasItemInRoom(const char *roomName, const char *itemName) {
-	int r = 0;
-	for (r = 1; r < TOTAL_ROOMS; ++r) {
-		char *desc = station[r].description;
-		if (!strcmp(desc, roomName)) {
-			struct ObjectNode *itemToPick = station[r].itemsPresent;
-
-			while (itemToPick != NULL) {
-				if (!strcmp(itemToPick->item->description, itemName)) {
-					return 1;
-				}
-				itemToPick = itemToPick->next;
-			}
-			return 0;
-		}
+  int r = 0;
+  
+  if (roomName == NULL || itemName == NULL || strlen(roomName) == 0 || strlen(itemName) == 0) {
+    notifyError("Either the object name or the room name are null. Check your stuff");
+    return 0;
+  }
+  
+  for (r = 1; r < TOTAL_ROOMS; ++r) {
+    char *desc = station[r].description;
+    
+    if (desc != NULL && !strcmp(desc, roomName)) {
+      struct ObjectNode *itemToPick = station[r].itemsPresent->next;
+      
+      while (itemToPick != NULL) {
+	if (!strcmp(itemToPick->item->description, itemName)) {
+	  return 1;
 	}
-	assert(FALSE);
-	return 0;
+	itemToPick = itemToPick->next;
+      }
+      return 0;
+    }
+  }
+  notifyError("It was not possible to determine if object is in room");
+  return 0;
 }
 
 int isPlayerAtRoom(const char *roomName) {
-	struct Room *room = &station[playerLocation];
-	char *name = room->description;
-	int returnValue = !strcmp(name, roomName);
-	return returnValue;
+  struct Room *room = &station[playerLocation];
+  char *name = room->description;
+  int returnValue = !strcmp(name, roomName);
+  return returnValue;
 }
 
 char *getRoomDescription() {
-	struct Room *room = &station[playerLocation];
-	return room->description;
+  struct Room *room = &station[playerLocation];
+  return room->description;
 }
 
 struct Room *getRoom(int index) {
-	return &station[index];
+  return &station[index];
 }
 
 int getPlayerRoom(void) { return playerLocation; }
 
 void useObjectNamed(const char* operand) {
-  struct ObjectNode *itemToPick = collectedObject;
+  struct ObjectNode *itemToPick = collectedObject->next;
   
   while (itemToPick != NULL) {
     if (!strcmp(itemToPick->item->description, operand)) {
@@ -242,9 +222,9 @@ void walkTo(const char* operands) {
 
 void useObjectsTogether(const char* operands){
 
-  struct ObjectNode *object1 = collectedObject;
+  struct ObjectNode *object1 = collectedObject->next;
   struct Room *room = &station[playerLocation];
-  struct ObjectNode *object2 = room->itemsPresent;
+  struct ObjectNode *object2 = room->itemsPresent->next;
 
   char *operand1 = operands;
   char *operand2 = strtok(NULL, "\n " );
@@ -280,7 +260,7 @@ void useObjectsTogether(const char* operands){
 void initStation(void) {
 
 	setErrorHandlerCallback(NULL);
-	collectedObject = NULL;
+	collectedObject = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	playerLocation = 1;
 
 	memset(&station, 0, 21 * sizeof(struct Room));
@@ -290,22 +270,26 @@ void initStation(void) {
 	/*Rooms*/
 	station[1].description = "uss-daedalus";
 	station[1].connections[0] = 2;
+	station[1].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 
 	station[2].description = "hangar";
 	station[2].connections[2] = 1;
 	station[2].connections[0] = 3;
+	station[2].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 
 	station[3].description = "hall-1";
 	station[3].connections[2] = 2;
 	station[3].connections[0] = 4;
 	station[3].connections[1] = 5;
+	station[3].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 
 	station[4].description = "elevator-level-1";
 	station[4].connections[2] = 3;
+	station[4].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 
 	station[5].description = "dorms-1";
 	station[5].connections[3] = 3;
-
+	station[5].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	/*Items*/    
     
 	item[0].description = "metal-plate";
