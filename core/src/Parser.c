@@ -24,6 +24,19 @@ int parseCommand(char *cmd, char *operand) {
     }
   } else if (!strcmp(cmd, "use")) {
     useObjectNamed(operand);
+
+  } else if (!strcmp(cmd, "w")) {
+    walkBy(0);
+  } else if (!strcmp(cmd, "s")) {
+    walkBy(2);
+  } else if (!strcmp(cmd, "a")) {
+    walkBy(3);
+  } else if (!strcmp(cmd, "d")) {
+    walkBy(1);
+  } else if (!strcmp(cmd, "q")) {
+    turnLeft();
+  } else if (!strcmp(cmd, "e")) {
+    turnRight();
   } else if (!strcmp(cmd, "walkTo")) {
     walkTo(operand);
   } else if (!strcmp(cmd, "use-with")) {

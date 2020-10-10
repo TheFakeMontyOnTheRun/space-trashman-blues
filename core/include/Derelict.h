@@ -69,6 +69,8 @@ void dropObjectByName(const char *objName);
 
 void initStation(void);
 
+int getPlayerDirection(void);
+
 void moveBy(int direction);
 
 int getPlayerRoom(void);
@@ -92,4 +94,10 @@ void notifyError(const char* errorMsg);
 void setErrorHandlerCallback(ErrorHandlerCallback callback);
 
 void walkTo(const char* operands);
+
+void turnLeft(void);
+
+void turnRight(void);
+
+void walkBy(int direction);
 #endif

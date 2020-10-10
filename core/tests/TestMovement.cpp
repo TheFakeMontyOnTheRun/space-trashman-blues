@@ -75,6 +75,119 @@ TEST_F(TestMovement, canWalkInsideRooms) {
   auto pos = getPlayerPosition();
   ASSERT_EQ(pos.x, 2);
   ASSERT_EQ(pos.y, 3);
+
+  ASSERT_EQ(getPlayerDirection(), 0);
+
+  parseCommand("w", NULL);
+  pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 2);
+  ASSERT_EQ(pos.y, 2);
+
+  parseCommand("s", NULL);
+  pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 2);
+  ASSERT_EQ(pos.y, 3);
+
+  parseCommand("a", NULL);
+  pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 1);
+  ASSERT_EQ(pos.y, 3);
+
+  parseCommand("d", NULL);
+  pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 2);
+  ASSERT_EQ(pos.y, 3);
+
+
+
+  parseCommand("e", NULL);
+
+  ASSERT_EQ(getPlayerDirection(), 1);
+
+  parseCommand("w", NULL);
+  pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 3);
+  ASSERT_EQ(pos.y, 3);
+
+  parseCommand("s", NULL);
+  pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 2);
+  ASSERT_EQ(pos.y, 3);
+
+  parseCommand("a", NULL);
+  pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 2);
+  ASSERT_EQ(pos.y, 2);
+
+  parseCommand("d", NULL);
+  pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 2);
+  ASSERT_EQ(pos.y, 3);
+
+
+
+  parseCommand("e", NULL);
+
+  ASSERT_EQ(getPlayerDirection(), 2);
+
+  parseCommand("w", NULL);
+  pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 2);
+  ASSERT_EQ(pos.y, 4);
+
+  parseCommand("s", NULL);
+  pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 2);
+  ASSERT_EQ(pos.y, 3);
+
+  parseCommand("a", NULL);
+  pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 3);
+  ASSERT_EQ(pos.y, 3);
+
+  parseCommand("d", NULL);
+  pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 2);
+  ASSERT_EQ(pos.y, 3);
+
+
+  parseCommand("e", NULL);
+
+  ASSERT_EQ(getPlayerDirection(), 3);
+
+  parseCommand("w", NULL);
+  pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 1);
+  ASSERT_EQ(pos.y, 3);
+
+  parseCommand("s", NULL);
+  pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 2);
+  ASSERT_EQ(pos.y, 3);
+
+  parseCommand("a", NULL);
+  pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 2);
+  ASSERT_EQ(pos.y, 4);
+
+  parseCommand("d", NULL);
+  pos = getPlayerPosition();
+  ASSERT_EQ(pos.x, 2);
+  ASSERT_EQ(pos.y, 3);
+
+
+  parseCommand("e", NULL);
+
+  ASSERT_EQ(getPlayerDirection(), 0);
+
+  parseCommand("q", NULL);
+  ASSERT_EQ(getPlayerDirection(), 3);
+  parseCommand("q", NULL);
+  ASSERT_EQ(getPlayerDirection(), 2);
+  parseCommand("q", NULL);
+  ASSERT_EQ(getPlayerDirection(), 1);
+  parseCommand("q", NULL);
+  ASSERT_EQ(getPlayerDirection(), 0);
 }
 
 

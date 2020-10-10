@@ -12,9 +12,10 @@ Created by Daniel Monteiro on 2019-07-26.
 
 #define TOTAL_ROOMS 21
 struct Room station[TOTAL_ROOMS];
-struct Item item[2];
+struct Item item[3];
 struct ObjectNode *collectedObject = NULL;
 int playerLocation = 1;
+int playerDirection;
 struct WorldPosition playerPosition;
 ErrorHandlerCallback errorHandlerCallback = NULL;
 
@@ -257,12 +258,116 @@ void useObjectsTogether(const char* operands){
   }
 }
 
+void turnLeft(void) {
+  playerDirection--;
+
+  while (playerDirection < 0 ) {
+    playerDirection += 4;
+  }
+}
+
+void turnRight(void) {
+  playerDirection++;
+
+  playerDirection = playerDirection & 3;
+}
+
+void walkBy(int direction) {
+  switch ( direction ) {
+  case 0:
+    switch( playerDirection) {
+    case 0:
+      playerPosition.y--;
+      break;
+    case 1:
+      playerPosition.x++;
+      break;
+    case 2:
+      playerPosition.y++;
+      break;
+    case 3:
+      playerPosition.x--;
+      break;
+    }
+    break;
+  case 1:
+    switch( playerDirection) {
+    case 0:
+      playerPosition.x++;
+      break;
+    case 1:
+      playerPosition.y++;
+      break;
+    case 2:
+      playerPosition.x--;
+      break;
+    case 3:
+      playerPosition.y--;
+      break;
+    }
+    break;
+  case 2:
+    switch( playerDirection) {
+    case 0:
+      playerPosition.y++;
+      break;
+    case 1:
+      playerPosition.x--;
+      break;
+    case 2:
+      playerPosition.y--;
+      break;
+    case 3:
+      playerPosition.x++;
+      break;
+    }
+    break;
+  case 3:
+    switch( playerDirection) {
+    case 0:
+      playerPosition.x--;
+      break;
+    case 1:
+      playerPosition.y--;
+      break;
+    case 2:
+      playerPosition.x++;
+      break;
+    case 3:
+      playerPosition.y++;
+      break;
+    }
+    break;
+  }
+
+  if (playerPosition.x < 0 ) {
+    playerPosition.x = 0;
+  }
+
+  if (playerPosition.y < 0 ) {
+    playerPosition.y = 0;
+  }
+
+  
+  if (playerPosition.x >= station[playerLocation].sizeX ) {
+    playerPosition.x = station[playerLocation].sizeX - 1;
+  }
+  
+  if (playerPosition.y >= station[playerLocation].sizeY ) {
+    playerPosition.y = station[playerLocation].sizeY - 1;
+  }
+}
+
+int getPlayerDirection(void) {
+  return playerDirection;
+}
+
 void initStation(void) {
 
 	setErrorHandlerCallback(NULL);
 	collectedObject = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	playerLocation = 1;
-
+	playerDirection = 0;
 	playerPosition.x = playerPosition.y = 3;
 	memset(&station, 0, 21 * sizeof(struct Room));
 	memset(&item, 0, 3 * sizeof(struct Item));

@@ -35,7 +35,20 @@ int main() {
 		    } else {
 
 		      if (x == playerPos.x && y == playerPos.y) {
+			switch(getPlayerDirection()) {
+			case 0:
 			  putchar('^');
+			  break;
+			case 1:
+			  putchar('>');
+			  break;
+			case 2:
+			  putchar('V');
+			  break;
+			case 3:
+			  putchar('<');
+			  break;
+			}		   
 		      } else {
 			int hasObject = 0;
 			head = getRoom(getPlayerRoom())->itemsPresent->next;
