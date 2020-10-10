@@ -120,6 +120,29 @@ void moveBy(int direction) {
   if (direction >= 0 && direction <= 5 && room->connections[direction] != 0) {
     playerLocation = room->connections[direction];
     room = &station[playerLocation];
+
+    switch(direction) {
+    case 0:
+      playerPosition.x = station[playerLocation].sizeX / 2;
+      playerPosition.y = station[playerLocation].sizeY - 1;
+      break;
+
+    case 1:
+      playerPosition.x = 0;
+      playerPosition.y = station[playerLocation].sizeY / 2;
+      break;
+
+    case 2:
+      playerPosition.x = station[playerLocation].sizeX / 2;
+      playerPosition.y = 0;
+      break;
+
+    case 3:
+      playerPosition.x = station[playerLocation].sizeX - 1;
+      playerPosition.y = station[playerLocation].sizeY / 2;
+      break;
+    }
+
   } else {
     notifyError("Please specify a valid direction");
   }
@@ -341,20 +364,36 @@ void walkBy(int direction) {
   }
 
   if (playerPosition.x < 0 ) {
-    playerPosition.x = 0;
+    if (getRoom(playerLocation)->connections[3]) {
+      moveBy(3);
+    } else {
+      playerPosition.x = 0;
+    }
   }
 
   if (playerPosition.y < 0 ) {
-    playerPosition.y = 0;
+    if (getRoom(playerLocation)->connections[0]) {
+      moveBy(0);
+    } else {
+      playerPosition.y = 0;
+    }
   }
 
   
   if (playerPosition.x >= station[playerLocation].sizeX ) {
-    playerPosition.x = station[playerLocation].sizeX - 1;
+    if (getRoom(playerLocation)->connections[1]) {
+      moveBy(1);
+    } else {
+      playerPosition.x = station[playerLocation].sizeX - 1;
+    }
   }
   
   if (playerPosition.y >= station[playerLocation].sizeY ) {
-    playerPosition.y = station[playerLocation].sizeY - 1;
+    if (getRoom(playerLocation)->connections[2]) {
+      moveBy(2);
+    } else {
+      playerPosition.y = station[playerLocation].sizeY - 1;
+    }
   }
 }
 
@@ -368,8 +407,7 @@ void initStation(void) {
 	collectedObject = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	playerLocation = 1;
 	playerDirection = 0;
-	playerPosition.x = playerPosition.y = 3;
-	memset(&station, 0, 21 * sizeof(struct Room));
+	memset(&station, 0, TOTAL_ROOMS * sizeof(struct Room));
 	memset(&item, 0, 3 * sizeof(struct Item));
     
     
@@ -379,7 +417,8 @@ void initStation(void) {
 	station[1].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	station[1].sizeX = 30;
 	station[1].sizeY = 10;
-
+	playerPosition.x = station[playerLocation].sizeX / 2;
+	playerPosition.y = station[playerLocation].sizeY / 2;
 
 	station[2].description = "hangar";
 	station[2].connections[2] = 1;

@@ -192,23 +192,116 @@ TEST_F(TestMovement, canWalkInsideRooms) {
 
 
 TEST_F(TestMovement, cannotMoveToInvalidDirections) {
-	ASSERT_EQ(getPlayerRoom(), 1);
+  ASSERT_EQ(getPlayerRoom(), 1);
 
-	setErrorHandlerCallback(myErrorHandler);
+  setErrorHandlerCallback(myErrorHandler);
+  
+  EXPECT_CALL(*mockedObj, handleError());
+  parseCommand("move", "");
+  ASSERT_EQ(getPlayerRoom(), 1);
+  
+  EXPECT_CALL(*mockedObj, handleError());
+  parseCommand("move", NULL);
+  ASSERT_EQ(getPlayerRoom(), 1);
+  
+  EXPECT_CALL(*mockedObj, handleError());
+  parseCommand("move", "9");
+  ASSERT_EQ(getPlayerRoom(), 1);
+  
+  EXPECT_CALL(*mockedObj, handleError());
+  parseCommand("move", "farofinha");
+  ASSERT_EQ(getPlayerRoom(), 1);
+}
 
-	EXPECT_CALL(*mockedObj, handleError());
-	parseCommand("move", "");
-	ASSERT_EQ(getPlayerRoom(), 1);
 
-	EXPECT_CALL(*mockedObj, handleError());
-	parseCommand("move", NULL);
-	ASSERT_EQ(getPlayerRoom(), 1);
+TEST_F(TestMovement, canWalkBetweenRooms) {
+  ASSERT_EQ(getPlayerRoom(), 1);
 
-	EXPECT_CALL(*mockedObj, handleError());
-	parseCommand("move", "9");
-	ASSERT_EQ(getPlayerRoom(), 1);
+  char buffer[255];
+  char *operator1;
+  char *operand1;
+  
+  strcpy(&buffer[0], "walkTo 0 0");
+  operator1 = strtok( &buffer[0], "\n " );
+  operand1 = strtok( NULL, "\n ");
+  parseCommand(operator1, operand1);
+  ASSERT_EQ(getPlayerRoom(), 1);
 
-	EXPECT_CALL(*mockedObj, handleError());
-	parseCommand("move", "farofinha");
-	ASSERT_EQ(getPlayerRoom(), 1);
+  parseCommand("w", NULL);
+  ASSERT_EQ(getPlayerRoom(), 2);
+
+  parseCommand("s", NULL);
+  ASSERT_EQ(getPlayerRoom(), 1);
+
+  parseCommand("move", "0");
+  ASSERT_EQ(getPlayerRoom(), 2);
+
+  parseCommand("move", "0");
+  ASSERT_EQ(getPlayerRoom(), 3);
+
+  parseCommand("move", "1");
+  ASSERT_EQ(getPlayerRoom(), 5);
+
+  strcpy(&buffer[0], "walkTo 0 0");
+  operator1 = strtok( &buffer[0], "\n " );
+  operand1 = strtok( NULL, "\n ");
+
+  parseCommand("a", NULL);
+  ASSERT_EQ(getPlayerRoom(), 3);
+
+  parseCommand("d", NULL);
+  ASSERT_EQ(getPlayerRoom(), 5);
+
+}
+
+TEST_F(TestMovement, walkingTowardsWallsWillBlockMovement) {
+  ASSERT_EQ(getPlayerRoom(), 1);
+
+  char buffer[255];
+  char *operator1;
+  char *operand1;
+  
+  strcpy(&buffer[0], "walkTo 0 0");
+  operator1 = strtok( &buffer[0], "\n " );
+  operand1 = strtok( NULL, "\n ");
+  parseCommand(operator1, operand1);
+  ASSERT_EQ(getPlayerRoom(), 1);
+
+  parseCommand("a", NULL);
+  ASSERT_EQ(getPlayerRoom(), 1);
+
+  snprintf(&buffer[0], 255, "walkTo %d 0", getRoom(getPlayerRoom())->sizeX - 1);
+  operator1 = strtok( &buffer[0], "\n " );
+  operand1 = strtok( NULL, "\n ");
+  parseCommand(operator1, operand1);
+  ASSERT_EQ(getPlayerRoom(), 1);
+
+  parseCommand("d", NULL);
+  ASSERT_EQ(getPlayerRoom(), 1);
+
+
+  snprintf(&buffer[0], 255, "walkTo 0 %d", getRoom(getPlayerRoom())->sizeY - 1);
+  operator1 = strtok( &buffer[0], "\n " );
+  operand1 = strtok( NULL, "\n ");
+  parseCommand(operator1, operand1);
+  ASSERT_EQ(getPlayerRoom(), 1);
+
+  parseCommand("s", NULL);
+  ASSERT_EQ(getPlayerRoom(), 1);
+
+  parseCommand("move", "0");
+  ASSERT_EQ(getPlayerRoom(), 2);
+
+  parseCommand("move", "0");
+  ASSERT_EQ(getPlayerRoom(), 3);
+
+  parseCommand("move", "0");
+  ASSERT_EQ(getPlayerRoom(), 4);
+
+  strcpy(&buffer[0], "walkTo 0 0");
+  operator1 = strtok( &buffer[0], "\n " );
+  operand1 = strtok( NULL, "\n ");
+
+  parseCommand("w", NULL);
+  ASSERT_EQ(getPlayerRoom(), 4);
 }
