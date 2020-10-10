@@ -25,13 +25,13 @@ int main() {
 		puts(getRoomDescription());
 		
 		for ( y = -1; y <= getRoom(getPlayerRoom())->sizeY; ++y ) {
-		  putchar('|');
+		  putchar( getRoom(getPlayerRoom())->connections[3] ? '|' : '#');
 		  for ( x = 0; x < getRoom(getPlayerRoom())->sizeX; ++x ) {
 
 		    if (y == -1 ) {
-		      putchar('=');
+		      putchar( getRoom(getPlayerRoom())->connections[0] ? '-' : '=');
 		    } else if (y == getRoom(getPlayerRoom())->sizeY) {
-		      putchar('=');
+		      putchar( getRoom(getPlayerRoom())->connections[2] ? '-' : '=');
 		    } else {
 
 		      if (x == playerPos.x && y == playerPos.y) {
@@ -64,7 +64,7 @@ int main() {
 		      }
 		    }
 		  }
-		  puts("|");
+		  puts( getRoom(getPlayerRoom())->connections[1] ? "|" : "#");
 		}
 
 
