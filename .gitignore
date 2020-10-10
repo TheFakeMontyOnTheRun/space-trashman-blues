@@ -49,3 +49,7 @@ Xcode2/Derelict3D.xcodeproj/project.xcworkspace/xcuserdata/monty.xcuserdatad/Use
 Xcode2/Derelict3D.xcodeproj/project.xcworkspace/xcuserdata/monty.xcuserdatad/xcdebugger/Expressions.xcexplist
 Xcode2/Derelict3D.xcodeproj/xcuserdata/monty.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
 Xcode2/Derelict3D.xcodeproj/xcuserdata/monty.xcuserdatad/xcschemes/xcschememanagement.plist
+mx_frontend/game.data
+mx_frontend/game.html
+mx_frontend/game.js
+mx_frontend/game.wasm
