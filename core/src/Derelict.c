@@ -10,7 +10,8 @@ Created by Daniel Monteiro on 2019-07-26.
 
 #include "Derelict.h"
 
-#define TOTAL_ROOMS 21
+#define TOTAL_ROOMS 24
+
 struct Room station[TOTAL_ROOMS];
 struct Item item[3];
 struct ObjectNode *collectedObject = NULL;
@@ -422,6 +423,7 @@ void initStation(void) {
 
 	station[2].description = "hangar";
 	station[2].connections[2] = 1;
+	station[2].connections[1] = 6;
 	station[2].connections[0] = 3;
 	station[2].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	station[2].sizeX = 30;
@@ -438,15 +440,140 @@ void initStation(void) {
 
 	station[4].description = "elevator-level-1";
 	station[4].connections[2] = 3;
+	station[4].connections[5] = 13;
 	station[4].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	station[4].sizeX = 5;
 	station[4].sizeY = 5;
 
 	station[5].description = "dorms-1";
 	station[5].connections[3] = 3;
+	station[5].connections[1] = 9;
+	station[5].connections[0] = 7;
+	station[5].connections[2] = 8;
 	station[5].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	station[5].sizeX = 20;
 	station[5].sizeY = 10;
+
+	station[6].description = "rls-bohr-2";
+	station[6].connections[3] = 2;
+	station[6].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[6].sizeX = 5;
+	station[6].sizeY = 5;
+
+	station[7].description = "pod-1";
+	station[7].connections[2] = 5;
+	station[7].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[7].sizeX = 7;
+	station[7].sizeY = 7;
+
+	station[8].description = "pod-2";
+	station[8].connections[0] = 5;
+	station[8].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[8].sizeX = 7;
+	station[8].sizeY = 7;
+
+	station[9].description = "dorms-2";
+	station[9].connections[1] = 12;
+	station[9].connections[3] = 5;
+	station[9].connections[0] = 10;
+	station[9].connections[2] = 11;
+	station[9].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[9].sizeX = 20;
+	station[9].sizeY = 10;
+
+	station[10].description = "pod-3";
+	station[10].connections[2] = 9;
+	station[10].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[10].sizeX = 7;
+	station[10].sizeY = 7;
+
+	station[11].description = "pod-4";
+	station[11].connections[0] = 9;
+	station[11].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[11].sizeX = 7;
+	station[11].sizeY = 7;
+
+	station[12].description = "lounge";
+	station[12].connections[3] = 9;
+	station[12].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[12].sizeX = 10;
+	station[12].sizeY = 16;
+
+	station[13].description = "elevator-level-2";
+	station[13].connections[5] = 4;
+	station[13].connections[4] = 19;
+	station[13].connections[2] = 14;
+	station[13].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[13].sizeX = 10;
+	station[13].sizeY = 16;
+
+	station[14].description = "hall-2";
+	station[14].connections[0] = 13;
+	station[14].connections[1] = 17;
+	station[14].connections[2] = 16;
+	station[14].connections[3] = 15;
+	station[14].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[14].sizeX = 10;
+	station[14].sizeY = 16;
+
+	station[15].description = "dinner-room";
+	station[15].connections[1] = 14;
+	station[15].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[15].sizeX = 10;
+	station[15].sizeY = 16;
+
+	station[16].description = "control-room";
+	station[16].connections[0] = 14;
+	station[16].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[16].sizeX = 10;
+	station[16].sizeY = 16;
+
+	station[17].description = "gymnasium";
+	station[17].connections[3] = 14;
+	station[17].connections[1] = 18;
+	station[17].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[17].sizeX = 10;
+	station[17].sizeY = 16;
+
+	station[18].description = "restroom";
+	station[18].connections[3] = 17;
+	station[18].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[18].sizeX = 10;
+	station[18].sizeY = 16;
+
+	station[19].description = "elevator-level-3";
+	station[19].connections[2] = 20;
+	station[19].connections[4] = 13;
+	station[19].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[19].sizeX = 5;
+	station[19].sizeY = 5;
+
+	station[20].description = "hall-3";
+	station[20].connections[0] = 19;
+	station[20].connections[1] = 21;
+	station[20].connections[2] = 22;
+	station[20].connections[3] = 23;
+	station[20].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[20].sizeX = 5;
+	station[20].sizeY = 5;
+
+	station[21].description = "lab-1";
+	station[21].connections[3] = 20;
+	station[21].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[21].sizeX = 5;
+	station[21].sizeY = 5;
+
+	station[22].description = "lab-2";
+	station[22].connections[0] = 20;
+	station[22].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[22].sizeX = 5;
+	station[22].sizeY = 5;
+
+	station[23].description = "lab-3";
+	station[23].connections[1] = 20;
+	station[23].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[23].sizeX = 5;
+	station[23].sizeY = 5;
 
 	/*Items*/    
     
