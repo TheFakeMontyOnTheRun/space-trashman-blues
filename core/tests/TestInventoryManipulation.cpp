@@ -62,6 +62,15 @@ TEST_F(TestInventoryManipulation, checkingForInvalidObjectsInRoomWillCauseError)
 	ASSERT_FALSE(hasItemInRoom("hangar", "farofinha_fofa"));
 }
 
+
+TEST_F(TestInventoryManipulation, droppingAnInvalidObjectWillResultInAnError) {
+
+	setErrorHandlerCallback(myErrorHandler);
+
+	EXPECT_CALL(*mockedObj, handleError());
+	ASSERT_FALSE(hasItemInRoom("drop", "farofinha"));
+}
+
 TEST_F(TestInventoryManipulation, checkingInvalidRoomForObjectsWillCauseError) {
 
   	setErrorHandlerCallback(myErrorHandler);
@@ -103,13 +112,17 @@ TEST_F(TestInventoryManipulation, objectsDroppedInRoomStayThere) {
 TEST_F(TestInventoryManipulation, canPickObjects) {
 	ASSERT_TRUE(collectedObject->next == nullptr);
 	ASSERT_TRUE(isPlayerAtRoom("uss-daedalus"));
+
 	parseCommand("move", "0");
 	ASSERT_TRUE(isPlayerAtRoom("hangar"));
+
 	struct Item *item = getRoom(getPlayerRoom())->itemsPresent->item;
+
 	ASSERT_TRUE(hasItemInRoom("hangar", "key"));
 	parseCommand("pick", "key");
 	ASSERT_FALSE(hasItemInRoom("hangar", "key"));
 	ASSERT_TRUE(collectedObject->item == item);
+
 	parseCommand("drop", "key");
 	ASSERT_TRUE(collectedObject->next == NULL);
 	ASSERT_TRUE(hasItemInRoom("hangar", "key"));

@@ -47,6 +47,8 @@ struct Room {
   char *description;
   int connections[6];
   struct ObjectNode *itemsPresent;
+  int sizeX;
+  int sizeY;
 };
 
 struct WorldPosition getPlayerPosition();
@@ -66,6 +68,8 @@ void pickObjectByName(const char *objName);
 void dropObjectByName(const char *objName);
 
 void initStation(void);
+
+int getPlayerDirection(void);
 
 void moveBy(int direction);
 
@@ -90,4 +94,10 @@ void notifyError(const char* errorMsg);
 void setErrorHandlerCallback(ErrorHandlerCallback callback);
 
 void walkTo(const char* operands);
+
+void turnLeft(void);
+
+void turnRight(void);
+
+void walkBy(int direction);
 #endif

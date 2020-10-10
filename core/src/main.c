@@ -14,15 +14,59 @@ int main() {
 	initStation();
 
 	while (1) {
-
+        	int x, y;
 		char buffer[255];
 		char *operator;
 		char *operand;
-
+		struct WorldPosition playerPos = getPlayerPosition();
 		struct ObjectNode *head = NULL;
 
 		puts("------\nYou are at:");
 		puts(getRoomDescription());
+		
+		for ( y = -1; y <= getRoom(getPlayerRoom())->sizeY; ++y ) {
+		  putchar('|');
+		  for ( x = 0; x < getRoom(getPlayerRoom())->sizeX; ++x ) {
+
+		    if (y == -1 ) {
+		      putchar('=');
+		    } else if (y == getRoom(getPlayerRoom())->sizeY) {
+		      putchar('=');
+		    } else {
+
+		      if (x == playerPos.x && y == playerPos.y) {
+			switch(getPlayerDirection()) {
+			case 0:
+			  putchar('^');
+			  break;
+			case 1:
+			  putchar('>');
+			  break;
+			case 2:
+			  putchar('V');
+			  break;
+			case 3:
+			  putchar('<');
+			  break;
+			}		   
+		      } else {
+			int hasObject = 0;
+			head = getRoom(getPlayerRoom())->itemsPresent->next;
+
+			while (head != NULL) {
+			  if (x == head->item->position.x && y == head->item->position.y) {
+			    hasObject = 1;
+			  }
+			  head = head->next;
+			}
+
+			putchar( hasObject ? '*' : '.');
+		      }
+		    }
+		  }
+		  puts("|");
+		}
+
 
 		head = collectedObject->next;
 
@@ -42,7 +86,7 @@ int main() {
 		}
 
 		while (head != NULL) {
-			puts(head->item->description);
+			printf("%s (%d, %d)\n", head->item->description, head->item->position.x, head->item->position.y);
 			head = head->next;
 		}
 
