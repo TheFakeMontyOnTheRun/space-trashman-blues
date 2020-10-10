@@ -49,8 +49,8 @@
 		F1BD0D32236EF697002329C6 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1BD0D30236EF697002329C6 /* Quartz.framework */; };
 		F1BD0D33236EF697002329C6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1BD0D31236EF697002329C6 /* QuartzCore.framework */; };
 		F1CD08C72450E41C00D4794D /* base.pfs in Resources */ = {isa = PBXBuildFile; fileRef = F1CD08C62450E41C00D4794D /* base.pfs */; };
-		F1D01AE2252B116100E249FD /* Derelict.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D01AE0252B116000E249FD /* Derelict.c */; };
-		F1D01AE3252B116100E249FD /* Parser.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D01AE1252B116100E249FD /* Parser.c */; };
+		F1D5B5D42531D2BF0094ED78 /* Derelict.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D5B5D22531D2BF0094ED78 /* Derelict.c */; };
+		F1D5B5D52531D2BF0094ED78 /* Parser.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D5B5D32531D2BF0094ED78 /* Parser.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -123,10 +123,10 @@
 		F1BF22812450F4AF0088A1C4 /* SoundSystem.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SoundSystem.h; path = ../SoundSystem/SoundSystem.h; sourceTree = SOURCE_ROOT; };
 		F1CD088E2450E32D00D4794D /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Globals.h; path = ../base3d/include/Globals.h; sourceTree = SOURCE_ROOT; };
 		F1CD08C62450E41C00D4794D /* base.pfs */ = {isa = PBXFileReference; lastKnownFileType = file; name = base.pfs; path = ../base.pfs; sourceTree = SOURCE_ROOT; };
-		F1D01AE0252B116000E249FD /* Derelict.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Derelict.c; path = ../core/src/Derelict.c; sourceTree = "<group>"; };
-		F1D01AE1252B116100E249FD /* Parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Parser.c; path = ../core/src/Parser.c; sourceTree = "<group>"; };
-		F1D01AE4252B116B00E249FD /* Parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Parser.h; path = ../core/include/Parser.h; sourceTree = "<group>"; };
-		F1D01AE5252B116B00E249FD /* Derelict.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Derelict.h; path = ../core/include/Derelict.h; sourceTree = "<group>"; };
+		F1D5B5D22531D2BF0094ED78 /* Derelict.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Derelict.c; path = ../../core/src/Derelict.c; sourceTree = "<group>"; };
+		F1D5B5D32531D2BF0094ED78 /* Parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Parser.c; path = ../../core/src/Parser.c; sourceTree = "<group>"; };
+		F1D5B5D62531D2C90094ED78 /* Parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Parser.h; path = ../../core/include/Parser.h; sourceTree = "<group>"; };
+		F1D5B5D72531D2CA0094ED78 /* Derelict.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Derelict.h; path = ../../core/include/Derelict.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,10 +200,10 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				F1D01AE5252B116B00E249FD /* Derelict.h */,
-				F1D01AE4252B116B00E249FD /* Parser.h */,
-				F1D01AE0252B116000E249FD /* Derelict.c */,
-				F1D01AE1252B116100E249FD /* Parser.c */,
+				F1D5B5D72531D2CA0094ED78 /* Derelict.h */,
+				F1D5B5D62531D2C90094ED78 /* Parser.h */,
+				F1D5B5D22531D2BF0094ED78 /* Derelict.c */,
+				F1D5B5D32531D2BF0094ED78 /* Parser.c */,
 				F1277A06236DE63700478B2C /* Engine.h */,
 				F1277A08236DE63700478B2C /* UI.h */,
 				F12779F9236DE62100478B2C /* CActor.h */,
@@ -363,9 +363,9 @@
 				F12779EF236DE60800478B2C /* CTile3DProperties.c in Sources */,
 				F12779F0236DE60800478B2C /* MapWithCharKey.c in Sources */,
 				F12779F1236DE60800478B2C /* CRenderer.c in Sources */,
-				F1D01AE2252B116100E249FD /* Derelict.c in Sources */,
+				F1D5B5D42531D2BF0094ED78 /* Derelict.c in Sources */,
 				F12779F2236DE60800478B2C /* Dungeon.c in Sources */,
-				F1D01AE3252B116100E249FD /* Parser.c in Sources */,
+				F1D5B5D52531D2BF0094ED78 /* Parser.c in Sources */,
 				F12779F3236DE60800478B2C /* Globals.c in Sources */,
 				F12779F4236DE60800478B2C /* Events.c in Sources */,
 				F12779F5236DE60800478B2C /* CRenderer_Rasterization.c in Sources */,
