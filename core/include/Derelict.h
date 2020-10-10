@@ -47,6 +47,8 @@ struct Room {
   char *description;
   int connections[6];
   struct ObjectNode *itemsPresent;
+  int sizeX;
+  int sizeY;
 };
 
 struct WorldPosition getPlayerPosition();

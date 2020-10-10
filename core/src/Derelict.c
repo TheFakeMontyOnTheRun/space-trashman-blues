@@ -263,46 +263,67 @@ void initStation(void) {
 	collectedObject = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	playerLocation = 1;
 
+	playerPosition.x = playerPosition.y = 3;
 	memset(&station, 0, 21 * sizeof(struct Room));
-	memset(&item, 0, 2 * sizeof(struct Item));
+	memset(&item, 0, 3 * sizeof(struct Item));
     
     
 	/*Rooms*/
 	station[1].description = "uss-daedalus";
 	station[1].connections[0] = 2;
 	station[1].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[1].sizeX = 30;
+	station[1].sizeY = 10;
+
 
 	station[2].description = "hangar";
 	station[2].connections[2] = 1;
 	station[2].connections[0] = 3;
 	station[2].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[2].sizeX = 30;
+	station[2].sizeY = 20;
 
 	station[3].description = "hall-1";
 	station[3].connections[2] = 2;
 	station[3].connections[0] = 4;
 	station[3].connections[1] = 5;
 	station[3].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[3].sizeX = 10;
+	station[3].sizeY = 20;
+
 
 	station[4].description = "elevator-level-1";
 	station[4].connections[2] = 3;
 	station[4].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[4].sizeX = 5;
+	station[4].sizeY = 5;
 
 	station[5].description = "dorms-1";
 	station[5].connections[3] = 3;
 	station[5].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+	station[5].sizeX = 20;
+	station[5].sizeY = 10;
+
 	/*Items*/    
     
 	item[0].description = "metal-plate";
 	item[0].weight = 5;
+	item[0].position.x = 5;
+	item[0].position.y = 4;
 
 	item[1].description = "boots";
 	item[1].weight = 5;
+	item[1].position.x = 10;
+	item[1].position.y = 7;
 
-	item[1].description = "key";
-	item[1].weight = 5;
+	item[2].description = "key";
+	item[2].weight = 5;
+	item[2].position.x = 17;
+	item[2].position.y = 16;
 
 	addObjectToRoom(2, &item[0]);
 	addObjectToRoom(2, &item[1]);
+	addObjectToRoom(2, &item[2]);
 
 	playerLocation = 1;
 }
