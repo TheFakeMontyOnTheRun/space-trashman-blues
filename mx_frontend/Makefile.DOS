@@ -17,7 +17,8 @@ CFLAGS=-c -O6 -Ofast      \
     -mtune=i486             \
     -flto		    \
     -march=i486             \
-    --pedantic
+    --pedantic		    \
+    -I../core/include
 
 CXXFLAGS=-c -O6 -Ofast      \
     -Ibase3d/include        \
@@ -33,7 +34,8 @@ CXXFLAGS=-c -O6 -Ofast      \
     -march=i486             \
     -fpermissive \
     -Wno-narrowing \
-    --pedantic
+    --pedantic		\
+    -I../core/include
 
 MENU_TARGET=game.exe
 
@@ -63,6 +65,8 @@ MENU_OBJ= menu/src/Main.o \
 	  menu/src/UI.o \
 	  menu/src/HelpScreen.o \
 	  menu/src/CreditsScreen.o \
+	  ../core/src/Derelict.o \
+	  ../core/src/Parser.o \
 	  menu/src/Crawler.o
 
 $(MENU_TARGET):	$(MENU_OBJ)
@@ -73,6 +77,7 @@ all:   $(MENU_TARGET)
 
 clean:
 	rm -f menu/src/*.o
+	rm -f ../core/src/*.o
 	rm -f base3d/src/*.o
 	rm -f common/src/*.o
 	rm -f SoundSystem/*.o

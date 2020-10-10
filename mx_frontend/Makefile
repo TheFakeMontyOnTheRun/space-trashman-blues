@@ -8,17 +8,14 @@ CFLAGS=-g -c `sdl2-config --cflags `  \
 	-DSDLSW                                              \
 	-DVGA                                                \
 	-Wall                                                \
-	-Werror												 \
-	-ansi												 \
-	--pedantic                                           \
 	-fomit-frame-pointer                                 \
 	-fno-exceptions                                      \
-	-ffast-math
+	-ffast-math	\
+	-I../core/include                                       
 
 MENU_TARGET=game
 
 MENU_OBJ=menu/src/MainMenu.o \
-	menu/src/Interrogation.o \
 	menu/src/Crawler.o \
 	menu/src/UI.o \
 	menu/src/Main.o \
@@ -36,10 +33,12 @@ MENU_OBJ=menu/src/MainMenu.o \
 	base3d/src/CPackedFileReader.o \
 	base3d/src/EDirection_Utils.o \
 	base3d/src/CRenderer_Tesselation.o \
+	../core/src/Derelict.o \
+	../core/src/Parser.o \
 	SoundSystem/NullMusic.o \
 	menu/src/HelpScreen.o \
 	menu/src/GameMenu.o \
-	menu/src/SpyTravel.o \
+	menu/src/Engine.o \
 	menu/src/CreditsScreen.o \
 	base3d/src/Dungeon.o
 
@@ -57,6 +56,7 @@ menudata: packager
 
 clean:
 	rm -f menu/src/*.o
+	rm -f ../core/src/*.o
 	rm -f base3d/src/*.o
 	rm -f common/src/*.o
 	rm -f SoundSystem/*.o

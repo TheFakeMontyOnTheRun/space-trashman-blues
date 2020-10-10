@@ -2,7 +2,7 @@ CXX = m68k-amigaos-g++
 CC = m68k-amigaos-gcc
 STRIP=m68k-amigaos-strip
 AS = vasmm68k_mot
-CFLAGS = -DAMIGA -Ibase3d/include -Imenu/include -ISoundSystem -c -m68000 -s -fno-keep-inline-functions -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -O3 -DAGA8BPP
+CFLAGS = -DAMIGA -Ibase3d/include -I../core/include -Imenu/include -ISoundSystem -c -m68000 -s -fno-keep-inline-functions -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -O3 -DAGA8BPP
 LDFLAGS =  -msmall-code -fexpensive-optimizations -O3 -s -fomit-frame-pointer -noixemul
 ASFLAGS = -phxass -Fhunk -m68020 -chklabels -no-fpu -wfail -I/opt/amiga/m68k-amigaos/ndk-include
 
@@ -34,7 +34,9 @@ MENU_OBJ= menu/src/Main.o \
 	base3d/src/Globals.o \
 	menu/src/HelpScreen.o \
 	menu/src/CreditsScreen.o \
-	menu/src/MainMenu.o
+	menu/src/MainMenu.o \
+	../core/src/Derelict.o \
+	../core/src/Parser.o
 
 $(MENU_TARGET):	$(MENU_OBJ)
 	$(CC) -o$(MENU_TARGET) $(MENU_OBJ) $(LDFLAGS)
@@ -49,6 +51,7 @@ adf: $(MENU_TARGET)
 
 clean:
 	rm -f menu/src/*.o
+	rm -f ../core/src/*.o
 	rm -f base3d/src/*.o
 	rm -f base3d/src/AmigaVersion/*.o
 	rm -f common/src/*.o

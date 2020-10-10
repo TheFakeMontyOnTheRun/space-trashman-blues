@@ -12,7 +12,8 @@ CFLAGS=-g -c -O3     \
 	-DVGA                                                \
 	-fomit-frame-pointer                                 \
 	-fno-exceptions                                      \
-	-ffast-math -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0 
+	-ffast-math -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0 \
+	-I../core/include
 
 MENU_TARGET=game.html
 
@@ -39,7 +40,9 @@ MENU_OBJ=menu/src/MainMenu.o \
 	menu/src/HelpScreen.o \
 	menu/src/GameMenu.o \
 	menu/src/CreditsScreen.o \
-	base3d/src/Dungeon.o
+	base3d/src/Dungeon.o \
+	../core/src/Derelict.o \
+	../core/src/Parser.o
 
 
 $(MENU_TARGET):	$(MENU_OBJ)
@@ -55,6 +58,7 @@ menudata: packager
 
 clean:
 	rm -f menu/src/*.o
+	rm -f ../core/src/*.o
 	rm -f base3d/src/*.o
 	rm -f common/src/*.o
 	rm -f SoundSystem/*.o
