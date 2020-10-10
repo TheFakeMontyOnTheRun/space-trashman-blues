@@ -24,13 +24,13 @@ int main() {
 		puts("------\nYou are at:");
 		puts(getRoomDescription());
 		
-		for ( y = 0; y < getRoom(getPlayerRoom())->sizeY; ++y ) {
+		for ( y = -1; y <= getRoom(getPlayerRoom())->sizeY; ++y ) {
 		  putchar('|');
-		  for ( x = 1; x < getRoom(getPlayerRoom())->sizeX - 1; ++x ) {
+		  for ( x = 0; x < getRoom(getPlayerRoom())->sizeX; ++x ) {
 
-		    if (y == 0 ) {
+		    if (y == -1 ) {
 		      putchar('=');
-		    } else if (y == getRoom(getPlayerRoom())->sizeY - 1) {
+		    } else if (y == getRoom(getPlayerRoom())->sizeY) {
 		      putchar('=');
 		    } else {
 
