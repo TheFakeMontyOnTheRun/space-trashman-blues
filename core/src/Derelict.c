@@ -42,7 +42,7 @@ void setPlayerPosition(struct WorldPosition pos) {
 }
 
 int isCloseToObject( struct WorldPosition pos, struct Item* item ) {
-  return (abs(pos.x - item->position.x) + abs(pos.y + item->position.y) ) <= 1;
+  return (abs(pos.x - item->position.x) + abs(pos.y - item->position.y) ) <= 1;
 }
 
 void addObjectToList(struct Item* itemToAdd, struct ObjectNode* listHead) {
