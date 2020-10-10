@@ -11,9 +11,10 @@ Created by Daniel Monteiro on 2019-07-26.
 #include "Derelict.h"
 
 #define TOTAL_ROOMS 24
+#define TOTAL_ITEMS 7
 
 struct Room station[TOTAL_ROOMS];
-struct Item item[3];
+struct Item item[TOTAL_ITEMS];
 struct ObjectNode *collectedObject = NULL;
 int playerLocation = 1;
 int playerDirection;
@@ -402,6 +403,25 @@ int getPlayerDirection(void) {
   return playerDirection;
 }
 
+void addToRoom( const char* roomName, struct Item *itemName ) {
+  int r = 0;
+
+  if (roomName == NULL || itemName == NULL || strlen(roomName) == 0 || strlen(itemName) == 0) {
+    notifyError("Either the object name or the room name are null. Check your stuff");
+    return;
+  }
+  
+  for (r = 1; r < TOTAL_ROOMS; ++r) {
+    char *desc = station[r].description;
+    
+    if (desc != NULL && !strcmp(desc, roomName)) {
+      addObjectToRoom(r, itemName );
+      return;
+    }
+  }
+  notifyError("It was not possible to determine the room to add object");
+}
+
 void initStation(void) {
 
 	setErrorHandlerCallback(NULL);
@@ -409,11 +429,11 @@ void initStation(void) {
 	playerLocation = 1;
 	playerDirection = 0;
 	memset(&station, 0, TOTAL_ROOMS * sizeof(struct Room));
-	memset(&item, 0, 3 * sizeof(struct Item));
+	memset(&item, 0, TOTAL_ITEMS * sizeof(struct Item));
     
     
 	/*Rooms*/
-	station[1].description = "uss-daedalus";
+	station[1].description = "lss-daedalus";
 	station[1].connections[0] = 2;
 	station[1].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	station[1].sizeX = 30;
@@ -575,26 +595,50 @@ void initStation(void) {
 	station[23].sizeX = 5;
 	station[23].sizeY = 5;
 
+	playerLocation = 1;
 	/*Items*/    
     
-	item[0].description = "metal-plate";
+	/* LSS-Daedalus */
+
+	item[0].description = "time-bomb";
 	item[0].weight = 5;
 	item[0].position.x = 5;
 	item[0].position.y = 4;
+	addToRoom("lss-daedalus", &item[0]);
 
-	item[1].description = "boots";
-	item[1].weight = 5;
-	item[1].position.x = 10;
-	item[1].position.y = 7;
+	item[1].description = "time-bomb-controller";
+	item[1].weight = 0;
+	item[1].position.x = 5;
+	item[1].position.y = 4;
+	addToRoom("lss-daedalus", &item[1]);
 
-	item[2].description = "key";
-	item[2].weight = 5;
-	item[2].position.x = 17;
-	item[2].position.y = 16;
+	item[2].description = "blowtorch";
+	item[2].weight = 8;
+	item[2].position.x = 5;
+	item[2].position.y = 4;
+	addToRoom("lss-daedalus", &item[2]);
 
-	addObjectToRoom(2, &item[0]);
-	addObjectToRoom(2, &item[1]);
-	addObjectToRoom(2, &item[2]);
+	item[3].description = "ship-ignition";
+	item[3].weight = 0;
+	item[3].position.x = 5;
+	item[3].position.y = 4;
+	addToRoom("lss-daedalus", &item[3]);
 
-	playerLocation = 1;
+	item[4].description = "plasma-gun";
+	item[4].weight = 1;
+	item[4].position.x = 5;
+	item[4].position.y = 4;
+	addToRoom("lss-daedalus", &item[4]);
+
+	item[5].description = "magnetic-boots";
+	item[5].weight = 5;
+	item[5].position.x = 10;
+	item[5].position.y = 7;
+	addToRoom("lss-daedalus", &item[5]);
+
+	item[6].description = "low-rank-keycard";
+	item[6].weight = 5;
+	item[6].position.x = 17;
+	item[6].position.y = 16;
+	addToRoom("lss-daedalus", &item[6]);
 }
