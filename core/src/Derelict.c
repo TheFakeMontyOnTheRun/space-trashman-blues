@@ -120,6 +120,7 @@ void pickObject(struct Item *itemToPick) {
 
   if (!itemToPick->pickable) {
     notifyError("Can't pick it up");
+    return;
   }
  
   removeObjectFromRoom(itemToPick);
@@ -336,6 +337,16 @@ void useObjectsTogether(const char* operands){
  got_second_object:
   if( object1->item->useWithCallback != NULL) {
     object1->item->useWithCallback(object1->item, object2->item);
+  }
+}
+
+void useBlowtorchWithCallback(struct Item* item1, struct Item* item2) {
+  item2->pickable = TRUE;
+}
+
+void useBootsWithCallback(struct Item* item1, struct Item* item2) {
+  if (item2 == &item[17]) {
+    addToRoom("restroom", &item[25] );
   }
 }
 
@@ -712,6 +723,7 @@ void initStation(void) {
 
 	item[2].description = "blowtorch";
 	item[2].weight = 8;
+	item[2].useWithCallback = useBlowtorchWithCallback;
 	item[2].pickable = TRUE;
 	item[2].position.x = 10;
 	item[2].position.y = 9;
@@ -733,6 +745,7 @@ void initStation(void) {
 
 	item[5].description = "magnetic-boots";
 	item[5].weight = 2;
+	item[5].useWithCallback = useBootsWithCallback;
 	item[5].pickable = TRUE;
 	item[5].position.x = 9;
 	item[5].position.y = 6;
