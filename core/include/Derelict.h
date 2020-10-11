@@ -50,11 +50,14 @@ struct Room {
   struct ObjectNode *itemsPresent;
   int sizeX;
   int sizeY;
+  int rankRequired;
 };
 
 struct WorldPosition getPlayerPosition();
 
 void setPlayerPosition(struct WorldPosition pos);
+
+void addToRoom( const char* roomName, struct Item *itemName );
 
 int isCloseToObject( struct WorldPosition pos, struct Item* item );
 
@@ -101,4 +104,8 @@ void turnLeft(void);
 void turnRight(void);
 
 void walkBy(int direction);
+
+int getPlayerRank();
+
+void setPlayerRank(int newRank);
 #endif

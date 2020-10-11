@@ -18,6 +18,7 @@ struct Item item[TOTAL_ITEMS];
 struct ObjectNode *collectedObject = NULL;
 int playerLocation = 1;
 int playerDirection;
+int playerRank;
 struct WorldPosition playerPosition;
 ErrorHandlerCallback errorHandlerCallback = NULL;
 
@@ -105,6 +106,10 @@ void dropObjectToRoom(int roomId, struct Item *itemToDrop) {
 
   removeObjectFromList(itemToDrop, collectedObject);
   addObjectToRoom(roomId, itemToDrop);
+
+  if (itemToDrop->dropCallback != NULL ) {
+    itemToDrop->dropCallback(itemToDrop);
+  }
 }
 
 void pickObject(struct Item *itemToPick) {
@@ -112,14 +117,36 @@ void pickObject(struct Item *itemToPick) {
   if (!isCloseToObject(getPlayerPosition(), itemToPick)) {
     return;
   }
-  
+
+  if (!itemToPick->pickable) {
+    notifyError("Can't pick it up");
+  }
+ 
   removeObjectFromRoom(itemToPick);
   addObjectToList(itemToPick, collectedObject);
+
+  if (itemToPick->pickCallback != NULL ) {
+    itemToPick->pickCallback(itemToPick);
+  }
+}
+
+int getPlayerRank() {
+  return playerRank;
+}
+
+void setPlayerRank(int newRank) {
+  playerRank = newRank;
 }
 
 void moveBy(int direction) {
   struct Room *room = &station[playerLocation];
   if (direction >= 0 && direction <= 5 && room->connections[direction] != 0) {
+
+    if (station[room->connections[direction]].rankRequired > playerRank ) {
+      notifyError("Insuficient rank to enter room");
+      return;
+    }
+
     playerLocation = room->connections[direction];
     room = &station[playerLocation];
 
@@ -422,16 +449,56 @@ void addToRoom( const char* roomName, struct Item *itemName ) {
   notifyError("It was not possible to determine the room to add object");
 }
 
+
+void updateRankFromKeycards() {
+
+  struct ObjectNode *itemToPick = collectedObject->next;
+  int newRank = 0;
+  while (itemToPick != NULL) {
+    int rank = 0;
+
+    if (itemToPick->item == &item[7]) {
+      rank = 1;
+    }
+
+    if (itemToPick->item == &item[18]) {
+      rank = 2;
+    }
+
+    if (itemToPick->item == &item[25]) {
+      rank = 3;
+    }
+
+    if (newRank < rank ) {
+      newRank = rank;
+    }
+
+    itemToPick = itemToPick->next;
+  }
+
+  setPlayerRank(newRank);
+}
+
+void keycardPickCallback(struct Item* item) {
+  updateRankFromKeycards();
+}
+
+
+void keycardDropCallback(struct Item* item) {
+  updateRankFromKeycards();
+}
+
+
 void initStation(void) {
 
 	setErrorHandlerCallback(NULL);
 	collectedObject = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	playerLocation = 1;
+	playerRank = 0;
 	playerDirection = 0;
 	memset(&station, 0, TOTAL_ROOMS * sizeof(struct Room));
 	memset(&item, 0, TOTAL_ITEMS * sizeof(struct Item));
-    
-    
+        
 	/*Rooms*/
 	station[1].description = "lss-daedalus";
 	station[1].connections[0] = 2;
@@ -453,10 +520,10 @@ void initStation(void) {
 	station[3].connections[2] = 2;
 	station[3].connections[0] = 4;
 	station[3].connections[1] = 5;
+	station[3].rankRequired = 1;
 	station[3].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	station[3].sizeX = 10;
 	station[3].sizeY = 20;
-
 
 	station[4].description = "elevator-level-1";
 	station[4].connections[2] = 3;
@@ -654,6 +721,8 @@ void initStation(void) {
 	item[7].pickable = TRUE;
 	item[7].position.x = 11;
 	item[7].position.y = 6;
+	item[7].pickCallback = keycardPickCallback;
+	item[7].dropCallback = keycardDropCallback;
 	addToRoom("lss-daedalus", &item[7]);
 
 	/* Hangar */
@@ -735,6 +804,8 @@ void initStation(void) {
 	item[18].weight = 0;
 	item[18].pickable = TRUE;
 	item[18].position.x = 7;
+	item[18].pickCallback = keycardPickCallback;
+	item[18].dropCallback = keycardDropCallback;
 	item[18].position.y = 6;
 	addToRoom("dinner-room", &item[18]);
 
@@ -784,6 +855,8 @@ void initStation(void) {
 	/* Not added directly, will be placed on the restroom after you search the pipe */
 	item[25].description = "root-keycard";
 	item[25].weight = 0;
+	item[25].pickCallback = keycardPickCallback;
+	item[25].dropCallback = keycardDropCallback;
 	item[25].pickable = TRUE;
 	item[25].position.x = 7;
 	item[25].position.y = 6;

@@ -126,7 +126,7 @@ TEST_F(TestInventoryManipulation, objectsCanOnlyExistInOneRoom) {
   memset(&item, 0, sizeof(struct Item));
 
   item.description = "farofinha";
-
+  item.pickable = TRUE;
   initStation();
 
   addObjectToRoom(1, &item);
