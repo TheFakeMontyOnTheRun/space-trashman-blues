@@ -44,9 +44,9 @@ TEST(TestObjectManipulation, canUseObjectsTogether) {
   addObjectToRoom(1, &item[2]);
   addObjectToRoom(1, &item[3]);
 
-  ASSERT_TRUE(hasItemInRoom("uss-daedalus", "usableWith"));
-  ASSERT_TRUE(hasItemInRoom("uss-daedalus", "farofinha"));
-  ASSERT_TRUE(isPlayerAtRoom("uss-daedalus"));
+  ASSERT_TRUE(hasItemInRoom("lss-daedalus", "usableWith"));
+  ASSERT_TRUE(hasItemInRoom("lss-daedalus", "farofinha"));
+  ASSERT_TRUE(isPlayerAtRoom("lss-daedalus"));
   parseCommand("pick", "usableWith");
   parseCommand("pick", "cocada");
   ASSERT_FALSE(hasItemInRoom("hangar", "usableWith"));
@@ -61,7 +61,7 @@ TEST(TestObjectManipulation, canUseObjectsTogether) {
 
   parseCommand("drop", "used-twofold");
 
-  ASSERT_TRUE(hasItemInRoom("uss-daedalus", "used-twofold"));
+  ASSERT_TRUE(hasItemInRoom("lss-daedalus", "used-twofold"));
 }
 
 TEST(TestObjectManipulation, canUseObjects) {
@@ -79,13 +79,13 @@ TEST(TestObjectManipulation, canUseObjects) {
   addObjectToRoom(1, &item[0]);
   addObjectToRoom(1, &item[1]);
 
-  ASSERT_TRUE(hasItemInRoom("uss-daedalus", "usable"));
-  ASSERT_TRUE(isPlayerAtRoom("uss-daedalus"));
+  ASSERT_TRUE(hasItemInRoom("lss-daedalus", "usable"));
+  ASSERT_TRUE(isPlayerAtRoom("lss-daedalus"));
   parseCommand("pick", "usable");
   parseCommand("pick", "artificial");
   ASSERT_FALSE(hasItemInRoom("hangar", "usable"));
   parseCommand("use", "usable");
   parseCommand("drop", "used");
 
-  ASSERT_TRUE(hasItemInRoom("uss-daedalus", "used"));
+  ASSERT_TRUE(hasItemInRoom("lss-daedalus", "used"));
 }

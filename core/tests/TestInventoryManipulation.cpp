@@ -76,56 +76,48 @@ TEST_F(TestInventoryManipulation, checkingInvalidRoomForObjectsWillCauseError) {
   	setErrorHandlerCallback(myErrorHandler);
 
 	EXPECT_CALL(*mockedObj, handleError());
-	ASSERT_FALSE(hasItemInRoom("", "key"));
+	ASSERT_FALSE(hasItemInRoom("", "low-rank-keycard"));
 
 	EXPECT_CALL(*mockedObj, handleError());
-	ASSERT_FALSE(hasItemInRoom(NULL, "key"));
+	ASSERT_FALSE(hasItemInRoom(NULL, "low-rank-keycard"));
 
 
 	//differently from objects, we know very well our rooms. This will cause an error
 	EXPECT_CALL(*mockedObj, handleError());
-	ASSERT_FALSE(hasItemInRoom("teu_cu", "key"));
+	ASSERT_FALSE(hasItemInRoom("teu_cu", "low-rank-keycard"));
 }
 
 TEST_F(TestInventoryManipulation, objectsDroppedInRoomStayThere) {
 	ASSERT_TRUE(collectedObject->next == nullptr);
 
-	ASSERT_TRUE(isPlayerAtRoom("uss-daedalus"));
-	ASSERT_FALSE(hasItemInRoom("uss-daedalus", "key"));
+	ASSERT_TRUE(isPlayerAtRoom("lss-daedalus"));
+	ASSERT_TRUE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
+	parseCommand("pick", "low-rank-keycard");
+	ASSERT_FALSE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
+
 	parseCommand("move", "0");
 	ASSERT_TRUE(isPlayerAtRoom("hangar"));
-	ASSERT_TRUE(hasItemInRoom("hangar", "key"));
-	parseCommand("pick", "key");
-	ASSERT_FALSE(hasItemInRoom("hangar", "key"));
-
-	parseCommand("move", "2");
-	ASSERT_TRUE(isPlayerAtRoom("uss-daedalus"));
-	ASSERT_FALSE(hasItemInRoom("uss-daedalus", "key"));
-	parseCommand("drop", "key");
-	ASSERT_TRUE(hasItemInRoom("uss-daedalus", "key"));
+	ASSERT_FALSE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
+	parseCommand("drop", "low-rank-keycard");
+	ASSERT_TRUE(hasItemInRoom("hangar", "low-rank-keycard"));
 	ASSERT_TRUE(collectedObject->next == NULL);
-
-	ASSERT_FALSE(hasItemInRoom("hangar", "key"));
-	ASSERT_TRUE(hasItemInRoom("uss-daedalus", "key"));
+	ASSERT_FALSE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
 }
 
 TEST_F(TestInventoryManipulation, canPickObjects) {
 	ASSERT_TRUE(collectedObject->next == nullptr);
-	ASSERT_TRUE(isPlayerAtRoom("uss-daedalus"));
-
-	parseCommand("move", "0");
-	ASSERT_TRUE(isPlayerAtRoom("hangar"));
+	ASSERT_TRUE(isPlayerAtRoom("lss-daedalus"));
 
 	struct Item *item = getRoom(getPlayerRoom())->itemsPresent->item;
 
-	ASSERT_TRUE(hasItemInRoom("hangar", "key"));
-	parseCommand("pick", "key");
-	ASSERT_FALSE(hasItemInRoom("hangar", "key"));
+	ASSERT_TRUE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
+	parseCommand("pick", "low-rank-keycard");
+	ASSERT_FALSE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
 	ASSERT_TRUE(collectedObject->item == item);
 
-	parseCommand("drop", "key");
+	parseCommand("drop", "low-rank-keycard");
 	ASSERT_TRUE(collectedObject->next == NULL);
-	ASSERT_TRUE(hasItemInRoom("hangar", "key"));
+	ASSERT_TRUE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
 }
 
 TEST_F(TestInventoryManipulation, objectsCanOnlyExistInOneRoom) {
@@ -138,20 +130,20 @@ TEST_F(TestInventoryManipulation, objectsCanOnlyExistInOneRoom) {
   initStation();
 
   addObjectToRoom(1, &item);
-  ASSERT_TRUE(hasItemInRoom("uss-daedalus", "farofinha"));
+  ASSERT_TRUE(hasItemInRoom("lss-daedalus", "farofinha"));
   ASSERT_FALSE(hasItemInRoom("hangar", "farofinha"));
   
   addObjectToRoom(2, &item);
   ASSERT_TRUE(hasItemInRoom("hangar", "farofinha"));
-  ASSERT_FALSE(hasItemInRoom("uss-daedalus", "farofinha"));
+  ASSERT_FALSE(hasItemInRoom("lss-daedalus", "farofinha"));
   
   parseCommand("move", "0");
   parseCommand("pick", "farofinha");
-  ASSERT_FALSE(hasItemInRoom("uss-daedalus", "farofinha"));
+  ASSERT_FALSE(hasItemInRoom("lss-daedalus", "farofinha"));
   ASSERT_FALSE(hasItemInRoom("hangar", "farofinha"));
 
   parseCommand("move", "2");
   parseCommand("drop", "farofinha");
-  ASSERT_TRUE(hasItemInRoom("uss-daedalus", "farofinha"));
+  ASSERT_TRUE(hasItemInRoom("lss-daedalus", "farofinha"));
   ASSERT_FALSE(hasItemInRoom("hangar", "farofinha"));
 }
