@@ -120,6 +120,7 @@ void pickObject(struct Item *itemToPick) {
 
   if (!itemToPick->pickable) {
     notifyError("Can't pick it up");
+    return;
   }
  
   removeObjectFromRoom(itemToPick);
