@@ -112,7 +112,11 @@ void pickObject(struct Item *itemToPick) {
   if (!isCloseToObject(getPlayerPosition(), itemToPick)) {
     return;
   }
-  
+
+  if (!itemToPick->pickable) {
+    notifyError("Can't pick it up");
+  }
+ 
   removeObjectFromRoom(itemToPick);
   addObjectToList(itemToPick, collectedObject);
 }
