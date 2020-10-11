@@ -213,11 +213,13 @@ TEST_F(TestMovement, cannotMoveToInvalidDirections) {
 
 
 TEST_F(TestMovement, canWalkBetweenRooms) {
-  ASSERT_EQ(getPlayerRoom(), 1);
-
   char buffer[255];
   char *operator1;
   char *operand1;
+
+  ASSERT_EQ(getPlayerRoom(), 1);
+
+  parseCommand("pick", "low-rank-keycard");
   
   strcpy(&buffer[0], "walkTo 0 0");
   operator1 = strtok( &buffer[0], "\n " );
@@ -252,12 +254,65 @@ TEST_F(TestMovement, canWalkBetweenRooms) {
 
 }
 
-TEST_F(TestMovement, walkingTowardsWallsWillBlockMovement) {
+TEST_F(TestMovement, roomsCanRequireSpecialRankForAccess) {
   ASSERT_EQ(getPlayerRoom(), 1);
+  parseCommand("move", "0");
+  ASSERT_EQ(getPlayerRoom(), 2);
+  parseCommand("move", "2");
+
+  getRoom(2)->rankRequired = 2;
+  parseCommand("move", "0");
+  ASSERT_EQ(getPlayerRoom(), 1);
+
+  setPlayerRank(2);
+
+  parseCommand("move", "0");
+  ASSERT_EQ(getPlayerRoom(), 2);
+}
+
+extern struct Item item[26];
+
+TEST_F(TestMovement, keycardsCanElevatePlayerRankIfItsHigherThanCurrent) {
+  ASSERT_EQ(getPlayerRoom(), 1);
+  ASSERT_EQ(getPlayerRank(), 0);
+  parseCommand("pick", "low-rank-keycard");
+  ASSERT_EQ(getPlayerRank(), 1);
+  parseCommand("drop", "low-rank-keycard");
+  ASSERT_EQ(getPlayerRank(), 0);
+
+  addToRoom( "lss-daedalus", &item[25]);
+  addToRoom( "lss-daedalus", &item[18]);
+
+  parseCommand("pick", "root-keycard");
+
+  ASSERT_EQ(getPlayerRank(), 3);
+
+  parseCommand("pick", "low-rank-keycard");
+  ASSERT_EQ(getPlayerRank(), 3);
+
+  parseCommand("drop", "low-rank-keycard");
+  ASSERT_EQ(getPlayerRank(), 3);
+
+  parseCommand("pick", "high-rank-keycard");
+  ASSERT_EQ(getPlayerRank(), 3);
+
+  parseCommand("drop", "root-keycard");
+  ASSERT_EQ(getPlayerRank(), 2);
+
+  parseCommand("drop", "high-rank-keycard");
+  ASSERT_EQ(getPlayerRank(), 0);
+}
+
+TEST_F(TestMovement, walkingTowardsWallsWillBlockMovement) {
+
 
   char buffer[255];
   char *operator1;
   char *operand1;
+
+  ASSERT_EQ(getPlayerRoom(), 1);
+
+  parseCommand("pick", "low-rank-keycard");
   
   strcpy(&buffer[0], "walkTo 0 0");
   operator1 = strtok( &buffer[0], "\n " );
