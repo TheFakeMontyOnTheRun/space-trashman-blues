@@ -39,6 +39,8 @@ int parseCommand(char *cmd, char *operand) {
     turnRight();
   } else if (!strcmp(cmd, "walkTo")) {
     walkTo(operand);
+  } else if (!strcmp(cmd, "info")) {
+    infoAboutItemNamed(operand);
   } else if (!strcmp(cmd, "use-with")) {
     useObjectsTogether(operand);
   } else {

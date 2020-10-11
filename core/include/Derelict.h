@@ -32,6 +32,7 @@ struct Item {
   int active;
   int capacity;
   int pickable;
+  char *info;
   struct WorldPosition position;
   UseWithObjectCallback useWithCallback;
   UseObjectCallback useCallback;
@@ -74,6 +75,8 @@ void dropObjectByName(const char *objName);
 void initStation(void);
 
 int getPlayerDirection(void);
+
+void infoAboutItemNamed(const char* itemName);
 
 void moveBy(int direction);
 
