@@ -273,6 +273,35 @@ void walkTo(const char* operands) {
   setPlayerPosition(pos);
 }
 
+void infoAboutItemNamed(const char* itemName) {
+
+  struct ObjectNode *object1 = collectedObject->next;
+  struct Room *room = &station[playerLocation];
+  struct ObjectNode *object2 = room->itemsPresent->next;
+
+  while (object1 != NULL) {
+    assert(object1->item->description != NULL);
+
+    if (!strcmp(object1->item->description, itemName)) {
+      puts(object1->item->info);
+      return;
+    }
+    object1 = object1->next;
+  }
+
+  while (object2 != NULL) {
+    assert(object2->item->description != NULL);
+    
+    if (!strcmp(object2->item->description, itemName)) {
+      puts(object2->item->info);
+      return;
+    }
+    object2 = object2->next;
+  }
+
+  notifyError("No such item could be found");
+}
+
 void useObjectsTogether(const char* operands){
 
   struct ObjectNode *object1 = collectedObject->next;
@@ -711,6 +740,7 @@ void initStation(void) {
 
 	item[6].description = "helmet";
 	item[6].weight = 2;
+	item[6].info = "Atmosphere-contained helmet for safety.";
 	item[6].pickable = TRUE;
 	item[6].position.x = 10;
 	item[6].position.y = 6;
