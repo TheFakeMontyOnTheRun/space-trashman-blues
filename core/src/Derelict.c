@@ -344,6 +344,12 @@ void useBlowtorchWithCallback(struct Item* item1, struct Item* item2) {
   item2->pickable = TRUE;
 }
 
+void useBootsWithCallback(struct Item* item1, struct Item* item2) {
+  if (item2 == &item[17]) {
+    addToRoom("restroom", &item[25] );
+  }
+}
+
 void turnLeft(void) {
   playerDirection--;
 
@@ -739,6 +745,7 @@ void initStation(void) {
 
 	item[5].description = "magnetic-boots";
 	item[5].weight = 2;
+	item[5].useWithCallback = useBootsWithCallback;
 	item[5].pickable = TRUE;
 	item[5].position.x = 9;
 	item[5].position.y = 6;
