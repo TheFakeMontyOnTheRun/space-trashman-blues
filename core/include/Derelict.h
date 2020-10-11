@@ -31,6 +31,7 @@ struct Item {
   int roomId;
   int active;
   int capacity;
+  int pickable;
   struct WorldPosition position;
   UseWithObjectCallback useWithCallback;
   UseObjectCallback useCallback;
