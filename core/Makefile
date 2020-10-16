@@ -19,6 +19,7 @@ GMOCK_DIR = googletest/googlemock
 TESTOBJS = Tests/TestMovement.o \
 		Tests/TestInventoryManipulation.o \
 		Tests/TestObjectManipulation.o \
+		Tests/TestVictoryConditionsAndEndings.o \
 		Tests/TestParser.o \
 		$(GTEST_DIR)/src/gtest-all.o \
 		$(GMOCK_DIR)/src/gmock-all.o \
