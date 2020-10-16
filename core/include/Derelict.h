@@ -8,6 +8,14 @@ Created by Daniel Monteiro on 2019-07-26.
 #define TRUE 1
 #define FALSE 0
 
+enum GameStates {
+  kNormalGameplay,
+  kGoodVictory,
+  kBadVictory,
+  kGoodGameOver,
+  kBadGameOver
+};
+
 struct Item;
 
 typedef void ( *ErrorHandlerCallback )(const char* error);
@@ -47,6 +55,7 @@ struct ObjectNode {
 
 struct Room {
   char *description;
+  char *info;
   int connections[6];
   struct ObjectNode *itemsPresent;
   int sizeX;
@@ -73,6 +82,10 @@ void pickObjectByName(const char *objName);
 void dropObjectByName(const char *objName);
 
 void initStation(void);
+
+int getGameStatus();
+
+void setGameStatus(int newStatus);
 
 int getPlayerDirection(void);
 

@@ -19,6 +19,7 @@ struct ObjectNode *collectedObject = NULL;
 int playerLocation = 1;
 int playerDirection;
 int playerRank;
+int gameStatus;
 struct WorldPosition playerPosition;
 ErrorHandlerCallback errorHandlerCallback = NULL;
 
@@ -47,6 +48,14 @@ void setPlayerPosition(struct WorldPosition pos) {
 
 int isCloseToObject( struct WorldPosition pos, struct Item* item ) {
   return (abs(pos.x - item->position.x) + abs(pos.y - item->position.y) ) <= 1;
+}
+
+int getGameStatus() {
+  return gameStatus;
+}
+
+void setGameStatus(int newStatus) {
+  gameStatus = newStatus;
 }
 
 void addObjectToList(struct Item* itemToAdd, struct ObjectNode* listHead) {
@@ -279,6 +288,11 @@ void infoAboutItemNamed(const char* itemName) {
   struct ObjectNode *object1 = collectedObject->next;
   struct Room *room = &station[playerLocation];
   struct ObjectNode *object2 = room->itemsPresent->next;
+
+  if(itemName == NULL || strlen(itemName) == 0) {
+    puts(room->info);
+    return;
+  }
 
   while (object1 != NULL) {
     assert(object1->item->description != NULL);
@@ -529,18 +543,42 @@ void keycardDropCallback(struct Item* item) {
 }
 
 
+void bombActivatedCallback(struct Item* item) {
+
+  if (!hasItemInRoom("lab-1", "metal-mending")) {
+    if (playerLocation != 1 ) {
+      setGameStatus(kBadVictory);    
+    } else {
+      setGameStatus(kGoodVictory);    
+    }
+  } else {
+    if (playerLocation != 1 ) {
+      setGameStatus(kBadGameOver);
+    } else {
+      setGameStatus(kGoodGameOver);
+    }
+  }
+}
+
+void bombControllerActivatedCallback(struct Item* item) {
+  bombActivatedCallback(NULL);
+}
+
+
 void initStation(void) {
 
 	setErrorHandlerCallback(NULL);
 	collectedObject = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	playerLocation = 1;
 	playerRank = 0;
+	gameStatus = 0;
 	playerDirection = 0;
 	memset(&station, 0, TOTAL_ROOMS * sizeof(struct Room));
 	memset(&item, 0, TOTAL_ITEMS * sizeof(struct Item));
         
 	/*Rooms*/
 	station[1].description = "lss-daedalus";
+	station[1].info = "your trusty old ship that got you of more problems that you can count on";
 	station[1].connections[0] = 2;
 	station[1].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	station[1].sizeX = 30;
@@ -549,6 +587,7 @@ void initStation(void) {
 	playerPosition.y = station[playerLocation].sizeY / 2;
 
 	station[2].description = "hangar";
+	station[2].info = "a relatively organized and clean hangar, despite not being very spacious";
 	station[2].connections[2] = 1;
 	station[2].connections[1] = 6;
 	station[2].connections[0] = 3;
@@ -712,6 +751,7 @@ void initStation(void) {
 	item[0].weight = 5;
 	item[0].position.x = 5;
 	item[0].position.y = 4;
+	item[0].useCallback = bombActivatedCallback;
 	addToRoom("lss-daedalus", &item[0]);
 
 	item[1].description = "time-bomb-controller";
@@ -719,6 +759,7 @@ void initStation(void) {
 	item[1].pickable = TRUE;
 	item[1].position.x = 3;
 	item[1].position.y = 2;
+	item[1].useCallback = bombControllerActivatedCallback;
 	addToRoom("lss-daedalus", &item[1]);
 
 	item[2].description = "blowtorch";
