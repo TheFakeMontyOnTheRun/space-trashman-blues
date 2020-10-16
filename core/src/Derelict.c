@@ -289,6 +289,11 @@ void infoAboutItemNamed(const char* itemName) {
   struct Room *room = &station[playerLocation];
   struct ObjectNode *object2 = room->itemsPresent->next;
 
+  if(itemName == NULL || strlen(itemName) == 0) {
+    puts(room->info);
+    return;
+  }
+
   while (object1 != NULL) {
     assert(object1->item->description != NULL);
 
@@ -573,6 +578,7 @@ void initStation(void) {
         
 	/*Rooms*/
 	station[1].description = "lss-daedalus";
+	station[1].info = "your trusty old ship that got you of more problems that you can count on";
 	station[1].connections[0] = 2;
 	station[1].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	station[1].sizeX = 30;
@@ -581,6 +587,7 @@ void initStation(void) {
 	playerPosition.y = station[playerLocation].sizeY / 2;
 
 	station[2].description = "hangar";
+	station[2].info = "a relatively organized and clean hangar, despite not being very spacious";
 	station[2].connections[2] = 1;
 	station[2].connections[1] = 6;
 	station[2].connections[0] = 3;

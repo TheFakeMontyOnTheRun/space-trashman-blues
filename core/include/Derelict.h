@@ -55,6 +55,7 @@ struct ObjectNode {
 
 struct Room {
   char *description;
+  char *info;
   int connections[6];
   struct ObjectNode *itemsPresent;
   int sizeX;
