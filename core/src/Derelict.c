@@ -655,7 +655,7 @@ void initStation(void) {
 	station[9].sizeY = 10;
 
 	station[10].description = "pod-3";
-	station[10].info = "A young woman's pod. You do recognize a few items, but its badly mixed up. It's hard to make the age of girl, but she was young. From the pictures of the former glory, the carpet matched the curtains";
+	station[10].info = "A young woman's pod. You do recognize a few items, but its badly mixed up. It's hard to make the age of girl, but she was young.";
 	station[10].connections[2] = 9;
 	station[10].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	station[10].sizeX = 7;
@@ -935,7 +935,7 @@ void initStation(void) {
 
 	item[19].description = "computer-rack";
 	item[19].weight = 138;
-	item[19].info = "JACKPOT! A very valuable vintage rare-and-in-working-conditions computer rack!";
+	item[19].info = "A very valuable vintage rare-and-in-working-conditions computer rack!";
 	item[19].pickable = FALSE;
 	item[19].position.x = 1;
 	item[19].position.y = 1;
