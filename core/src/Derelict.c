@@ -20,6 +20,7 @@ int playerLocation = 1;
 int playerDirection;
 int playerRank;
 int gameStatus;
+int playerHealth = 100;
 struct WorldPosition playerPosition;
 ErrorHandlerCallback errorHandlerCallback = NULL;
 
@@ -40,6 +41,14 @@ void setErrorHandlerCallback(ErrorHandlerCallback callback) {
 
 struct WorldPosition getPlayerPosition() {
   return playerPosition;
+}
+
+int getPlayerHealth() {
+  return playerHealth;
+}
+
+void setPlayerHealth(int health) {
+  playerHealth = health;
 }
 
 void setPlayerPosition(struct WorldPosition pos) {
@@ -271,6 +280,10 @@ char *getRoomDescription() {
 
 struct Room *getRoom(int index) {
   return &station[index];
+}
+
+struct Item *getItem(int index) {
+  return &item[index];
 }
 
 int getPlayerRoom(void) { return playerLocation; }
