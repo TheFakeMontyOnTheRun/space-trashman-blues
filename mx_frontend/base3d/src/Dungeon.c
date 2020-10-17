@@ -483,23 +483,6 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
                 setItem(x, y, 'K');
             }
 
-            if (current == 'e' || current == 'f') {
-                struct CrawlerAgent *soldier =
-                        (struct CrawlerAgent *) malloc(sizeof(struct CrawlerAgent));
-                setActor(x, y, current);
-                enemies[enemiesInBase] = soldier;
-                memset (soldier, 0, sizeof(struct CrawlerAgent));
-                soldier->symbol = current;
-                soldier->rotation = 0;
-                soldier->life = 1;
-                soldier->position.x = x;
-                soldier->position.y = y;
-                soldier->target.x = -1;
-                soldier->target.y = -1;
-                actors[y][x] = soldier;
-                enemiesInBase++;
-            }
-
             if (current == 'b') {
                 setItem(x, y, current);
             }
@@ -514,8 +497,6 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
         }
         ++ptr;
     }
-
-    enemyWithInfo = rand() % enemiesInBase;
 
     if (gameStatus.mapIndex < 8) {
         //gameStatus.should_continue = kCrawlerClueAcquired;

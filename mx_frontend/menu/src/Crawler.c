@@ -35,7 +35,7 @@ int getPlayerLocation();
 int isPracticing = FALSE;
 
 const char *missionNames[9] = {
-		"Ribeira de Gaia, Porto", "Boca do Inferno, Lisboa",
+		"Ribeira de Gaia, Porto", "Hangar - Toutatis Station",
 		"Parque de El Retiro, Madrid", "Casa Mila, Barcelona",
 		"Erdolraffinerie, Frankfurt", "Hamburger Hafen, Hamburg",
 		"La maison de maitre, Luxembourg", "Base secrete, Brussels",
