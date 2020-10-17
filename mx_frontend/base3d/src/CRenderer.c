@@ -142,7 +142,7 @@ void showGun(const int showMuzzleFlash) {
             (showMuzzleFlash && cursorX != -1) ? MUZZLE_FLASH_TIME_IN_MS : 0;
     gunTargetPositionY = YRES - pistol->height;
 }
-
+    
 
 void loadTileProperties(const uint8_t levelNumber) {
     char buffer[64];
@@ -1150,78 +1150,17 @@ void render(const long ms) {
         drawRect(256, 0, 64, 128, 0);
 
         fill(0, 0, 320, 8, 0, FALSE);
-        drawTextAt(2, 1, "Agent in the field", 255);
-
-        drawTextAt(34, 1, "Map", 255);
-
+        drawTextAt(2, 1, "Health: 100%", 255);
         fill(256, 8, 320 - 256, 160 - 8, 255, FALSE);
-
-        drawRect(256 + 12, 16, 320 - 256 - 24, 80, 0);
-
-        for (y = 0; y < MAP_SIZE; ++y) {
-            for (x = 0; x < MAP_SIZE; ++x) {
-                uint8_t tile = visibleElementsMap[ (y * MAP_SIZE ) + x];
-
-                if (!revealed[y][x]) {
-                    linesOfSight[y][x] = FALSE;
-                    continue;
-                }
-
-                fill(256 + (x), 16 + (2 * y), 1, 2, 64, FALSE);
-
-                if (getFromMap(&colliders, tile)) {
-                    fill(256 + (x), 16 + (2 * y), 1, 2, 0, FALSE);
-                }
-
-                if (linesOfSight[y][x]) {
-                    fill(256 + (x), 16 + (2 * y), 1, 2, 128, FALSE);
-                }
-
-                if (mActors[y][x] != kNobody) {
-                    fill(256 + (x), 16 + (2 * y), 1, 2, 192, FALSE);
-                }
-
-                if (cursorZ == y && x == cursorX) {
-                    fill(256 + (x), 16 + (2 * y), 1, 2, 255, FALSE);
-                }
-
-                if (tile == 'K' || tile == 'E' || tile == 'i') {
-                    fill(256 + (x), 16 + (2 * y), 1, 2, 128, FALSE);
-                }
-
-                linesOfSight[y][x] = FALSE;
-            }
-        }
-
-        fill(256, 16 + (2 * cameraPosition.y), (cameraPosition.x), 1,
-             (cameraDirection == kWest) ? 48 : 32, FALSE);
-
-        fill(256 + (cameraPosition.x), 16 + (2 * cameraPosition.y),
-             320 - (256 + (cameraPosition.x)), 1,
-             (cameraDirection == kEast) ? 48 : 32, FALSE);
-
-        fill(256 + (cameraPosition.x), 16, 1, (2 * cameraPosition.y),
-             (cameraDirection == kNorth) ? 48 : 32, FALSE);
-
-        fill(256 + (cameraPosition.x), 16 + (2 * cameraPosition.y), 1,
-             96 - (16 + (2 * cameraPosition.y)),
-             (cameraDirection == kSouth) ? 48 : 32, FALSE);
-
-        fill(256 + (cameraPosition.x), 16 + (2 * cameraPosition.y), 1,
-             2, 48, FALSE);
+        drawTextAt(34, 1, "Items", 255);
+        
+        drawTextAt(33, 2, "Magboots", 0);
+        drawTextAt(33, 3, "Blowtorch", 0);
+        drawTextAt(33, 4, "Keycard", 0);
+        drawTextAt(33, 5, "Keycard", 0);
 
 
 
-
-        sprintf (buffer, "HP: %d \nAmmo: %d", playerHealth, playerAmmo);
-        drawTextAt(34, 18, buffer, 15);
-        sprintf (buffer, "Dir: %c", directions[(int) (cameraDirection)]);
-
-
-        drawTextAt(34, 16, buffer, 0);
-        if (covered) {
-            drawTextAt(34, 15, "Covered", 15);
-        }
     }
     /*
     uint8_t uvCoords[6];
