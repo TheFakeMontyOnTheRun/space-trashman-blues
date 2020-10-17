@@ -157,6 +157,10 @@ void moveBy(int direction) {
       return;
     }
 
+    if (!item[5].active || !playerHasObject("magnetic-boots")) {
+      puts("You can't move without your magnetic-boots!");
+    }
+
     playerLocation = room->connections[direction];
     room = &station[playerLocation];
 
@@ -240,6 +244,19 @@ int hasItemInRoom(const char *roomName, const char *itemName) {
   return 0;
 }
 
+int playerHasObject( const char* itemName) {
+  struct ObjectNode *itemToPick = collectedObject->next;
+  
+  while (itemToPick != NULL) {
+    if (!strcmp(itemToPick->item->description, itemName)) {
+      return 1;
+    }
+    itemToPick = itemToPick->next;
+  }
+  return 0;
+}
+
+
 int isPlayerAtRoom(const char *roomName) {
   struct Room *room = &station[playerLocation];
   char *name = room->description;
@@ -273,6 +290,11 @@ void useObjectNamed(const char* operand) {
 }
 
 void walkTo(const char* operands) {
+
+  if (playerLocation != 0 && (!item[5].active || !playerHasObject("magnetic-boots"))) {
+    puts("You can't move without your magnetic-boots!");
+  }
+
   struct WorldPosition pos;
   char *xStr = operands;
   char *yStr = strtok(NULL, "\n " );
@@ -379,6 +401,11 @@ void turnRight(void) {
 }
 
 void walkBy(int direction) {
+
+  if (playerLocation != 0 && (!item[5].active || !playerHasObject("magnetic-boots"))) {
+    puts("You can't move without your magnetic-boots!");
+  }
+
   switch ( direction ) {
   case 0:
     switch( playerDirection) {
