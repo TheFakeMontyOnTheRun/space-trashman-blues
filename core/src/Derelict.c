@@ -572,6 +572,10 @@ void cantBeUsedWithOthersCallback(struct Item* item1, struct Item* item2) {
   puts("Nothing happens.");
 }
 
+void useObjectToggleCallback(struct Item* item) {
+  item->active = !item->active;
+}
+
 void initStation(void) {
 
 	setErrorHandlerCallback(NULL);
@@ -825,6 +829,7 @@ void initStation(void) {
 	item[5].weight = 2;
 	item[5].info = "boots with strong electro-magnets. Ideal for walking on low-gravity situations - as long as the surface in question is metallic (like most of the surfaces here).";
 	item[5].useWithCallback = useBootsWithCallback;
+	item[5].useCallback = useObjectToggleCallback;
 	item[5].pickable = TRUE;
 	item[5].position.x = 9;
 	item[5].position.y = 6;
@@ -835,6 +840,7 @@ void initStation(void) {
 	item[6].info = "makes sure the air entering your gear is the best. Or how that was, 50 years ago, when this was manufactured.";
 	item[6].info = "Atmosphere-contained helmet for safety.";
 	item[6].pickable = TRUE;
+	item[6].useCallback = useObjectToggleCallback;
 	item[6].position.x = 10;
 	item[6].position.y = 6;
 	addToRoom("lss-daedalus", &item[6]);

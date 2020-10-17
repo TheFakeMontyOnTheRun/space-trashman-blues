@@ -75,8 +75,8 @@ int main() {
 		}
 
 		while (head != NULL) {
-			puts(head->item->description);
-			head = head->next;
+		  printf("%s%s\n", head->item->active ? "[*]" : "[ ]" , head->item->description);
+		  head = head->next;
 		}
 
 		head = getRoom(getPlayerRoom())->itemsPresent->next;
@@ -86,8 +86,8 @@ int main() {
 		}
 
 		while (head != NULL) {
-			printf("%s (%d, %d)\n", head->item->description, head->item->position.x, head->item->position.y);
-			head = head->next;
+		  printf("%s%s (%d, %d)\n", head->item->active ? "[*]" : "[ ]" , head->item->description, head->item->position.x, head->item->position.y);
+		  head = head->next;
 		}
 
 		puts("\nPlaces you can go:");
