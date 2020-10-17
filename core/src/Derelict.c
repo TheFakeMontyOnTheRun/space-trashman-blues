@@ -20,6 +20,7 @@ int playerLocation = 1;
 int playerDirection;
 int playerRank;
 int gameStatus;
+int playerHealth = 100;
 struct WorldPosition playerPosition;
 ErrorHandlerCallback errorHandlerCallback = NULL;
 
@@ -40,6 +41,14 @@ void setErrorHandlerCallback(ErrorHandlerCallback callback) {
 
 struct WorldPosition getPlayerPosition() {
   return playerPosition;
+}
+
+int getPlayerHealth() {
+  return playerHealth;
+}
+
+void setPlayerHealth(int health) {
+  playerHealth = health;
 }
 
 void setPlayerPosition(struct WorldPosition pos) {
@@ -157,6 +166,10 @@ void moveBy(int direction) {
       return;
     }
 
+    if (!item[5].active || !playerHasObject("magnetic-boots")) {
+      puts("You can't move without your magnetic-boots!");
+    }
+
     playerLocation = room->connections[direction];
     room = &station[playerLocation];
 
@@ -240,6 +253,19 @@ int hasItemInRoom(const char *roomName, const char *itemName) {
   return 0;
 }
 
+int playerHasObject( const char* itemName) {
+  struct ObjectNode *itemToPick = collectedObject->next;
+  
+  while (itemToPick != NULL) {
+    if (!strcmp(itemToPick->item->description, itemName)) {
+      return 1;
+    }
+    itemToPick = itemToPick->next;
+  }
+  return 0;
+}
+
+
 int isPlayerAtRoom(const char *roomName) {
   struct Room *room = &station[playerLocation];
   char *name = room->description;
@@ -254,6 +280,10 @@ char *getRoomDescription() {
 
 struct Room *getRoom(int index) {
   return &station[index];
+}
+
+struct Item *getItem(int index) {
+  return &item[index];
 }
 
 int getPlayerRoom(void) { return playerLocation; }
@@ -273,6 +303,11 @@ void useObjectNamed(const char* operand) {
 }
 
 void walkTo(const char* operands) {
+
+  if (playerLocation != 0 && (!item[5].active || !playerHasObject("magnetic-boots"))) {
+    puts("You can't move without your magnetic-boots!");
+  }
+
   struct WorldPosition pos;
   char *xStr = operands;
   char *yStr = strtok(NULL, "\n " );
@@ -379,6 +414,11 @@ void turnRight(void) {
 }
 
 void walkBy(int direction) {
+
+  if (playerLocation != 0 && (!item[5].active || !playerHasObject("magnetic-boots"))) {
+    puts("You can't move without your magnetic-boots!");
+  }
+
   switch ( direction ) {
   case 0:
     switch( playerDirection) {
@@ -570,6 +610,10 @@ void cantBeUsedCallback(struct Item* item) {
 
 void cantBeUsedWithOthersCallback(struct Item* item1, struct Item* item2) {
   puts("Nothing happens.");
+}
+
+void useObjectToggleCallback(struct Item* item) {
+  item->active = !item->active;
 }
 
 void initStation(void) {
@@ -825,6 +869,7 @@ void initStation(void) {
 	item[5].weight = 2;
 	item[5].info = "boots with strong electro-magnets. Ideal for walking on low-gravity situations - as long as the surface in question is metallic (like most of the surfaces here).";
 	item[5].useWithCallback = useBootsWithCallback;
+	item[5].useCallback = useObjectToggleCallback;
 	item[5].pickable = TRUE;
 	item[5].position.x = 9;
 	item[5].position.y = 6;
@@ -835,6 +880,7 @@ void initStation(void) {
 	item[6].info = "makes sure the air entering your gear is the best. Or how that was, 50 years ago, when this was manufactured.";
 	item[6].info = "Atmosphere-contained helmet for safety.";
 	item[6].pickable = TRUE;
+	item[6].useCallback = useObjectToggleCallback;
 	item[6].position.x = 10;
 	item[6].position.y = 6;
 	addToRoom("lss-daedalus", &item[6]);
