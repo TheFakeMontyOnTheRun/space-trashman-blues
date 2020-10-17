@@ -361,8 +361,15 @@ void useObjectsTogether(const char* operands){
   char *operand1 = operands;
   char *operand2 = strtok(NULL, "\n " );
 
-  assert(operand1 != NULL);
-  assert(operand2 != NULL);
+  if( !playerHasObject(operand1)) {
+    puts("You do not have this object");
+    return;
+  }
+
+  if( !hasItemInRoom(getRoom(playerLocation)->description, operand2)) {
+    puts("That object is not present in the room");
+    return;
+  }
 
   while (object1 != NULL) {
     assert(object1->item->description != NULL);
