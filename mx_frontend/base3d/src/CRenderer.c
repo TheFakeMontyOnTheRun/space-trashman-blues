@@ -54,12 +54,12 @@ enum EActorsSnapshotElement mActors[MAP_SIZE][MAP_SIZE];
 enum EItemsSnapshotElement mItems[MAP_SIZE][MAP_SIZE];
 enum EItemsSnapshotElement mEffects[MAP_SIZE][MAP_SIZE];
 enum EDirection cameraDirection;
-int playerHealth = 0;
+extern int playerHealth;
 struct Vec3 mCamera;
 long gameTicks = 0;
 
-int distanceForPenumbra = 16;
-int distanceForDarkness = 32;
+int distanceForPenumbra = 24;
+int distanceForDarkness = 48;
 
 int playerAmmo = 0;
 
@@ -1158,9 +1158,6 @@ void render(const long ms) {
         drawTextAt(33, 3, "Blowtorch", 0);
         drawTextAt(33, 4, "Keycard", 0);
         drawTextAt(33, 5, "Keycard", 0);
-
-
-
     }
     /*
     uint8_t uvCoords[6];

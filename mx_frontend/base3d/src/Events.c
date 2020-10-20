@@ -118,7 +118,7 @@ void setDetected() {
     playSound(PLAYER_GOT_DETECTED_SOUND);
 }
 
-uint8_t getItem(int x, int y) {
+uint8_t getItemOnMap(int x, int y) {
     return items[(MAP_SIZE * y) + x];
 }
 
@@ -127,7 +127,7 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
     /* all the char keys plus null terminator */
     char collisions[256 + 1];
     int c;
-    char nameBuffer[16];
+    char nameBuffer[256];
     uint8_t *buffer;
 
     collisions[256] = 0;

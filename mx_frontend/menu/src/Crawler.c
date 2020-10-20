@@ -18,6 +18,8 @@
 #include "VisibilityStrategy.h"
 #include "SoundSystem.h"
 
+#include "Derelict.h"
+
 FixP_t kCameraYDeltaPlayerDeath;
 
 FixP_t kCameraYSpeedPlayerDeath;
@@ -33,13 +35,6 @@ void renderTick(long ms);
 int getPlayerLocation();
 
 int isPracticing = FALSE;
-
-const char *missionNames[9] = {
-		"Ribeira de Gaia, Porto", "Hangar - Toutatis Station",
-		"Parque de El Retiro, Madrid", "Casa Mila, Barcelona",
-		"Erdolraffinerie, Frankfurt", "Hamburger Hafen, Hamburg",
-		"La maison de maitre, Luxembourg", "Base secrete, Brussels",
-		"Camp dentrainement, Charleroi"};
 
 char *thisMissionName;
 int16_t thisMissionNameLen;
@@ -80,7 +75,7 @@ int32_t Crawler_initStateCallback(int32_t tag) {
 		mapIndex = getPlayerLocation();
 	}
 
-	thisMissionName = (char *) missionNames[mapIndex];
+    thisMissionName = getRoomDescription();
 	thisMissionNameLen = (int16_t) (strlen(thisMissionName));
 
 	currentPresentationState = kAppearing;

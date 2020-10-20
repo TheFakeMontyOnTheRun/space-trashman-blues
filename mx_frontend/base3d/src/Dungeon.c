@@ -19,7 +19,7 @@
 
 #include "CRenderer.h"
 
-struct GameSnapshot gameStatus;
+struct GameSnapshot gameSnapshot;
 #define kMaxAgentsInBase 32
 uint8_t map[MAP_SIZE][MAP_SIZE];
 struct CrawlerAgent *actors[MAP_SIZE][MAP_SIZE];
@@ -57,10 +57,10 @@ void update_log() {
     char buffer[128];
     char *keysAndTargets;
 
-    if (gameStatus.keyCollected) {
+    if (gameSnapshot.keyCollected) {
         keysAndTargets = "Key collected.\n ";
     } else {
-        if (gameStatus.targetLocated) {
+        if (gameSnapshot.targetLocated) {
             keysAndTargets = "Target located. Key still pending.\n ";
         } else {
             keysAndTargets = "";
@@ -134,7 +134,7 @@ void tickEnemy(struct CrawlerAgent *actor) {
     struct Vec2i pos0 = actor->position;
     struct Vec2i pos1 = playerCrawler.position;
 
-    int chances = gameStatus.detected || ((!gameStatus.covered) || ((gameStatus.turn % 4) == 0));
+    int chances = gameSnapshot.detected || ((!gameSnapshot.covered) || ((gameSnapshot.turn % 4) == 0));
 
     x = actor->position.x;
     y = actor->position.y;
@@ -150,9 +150,9 @@ void tickEnemy(struct CrawlerAgent *actor) {
         actor->target = playerCrawler.position;
 
         /*First detection*/
-        if (!gameStatus.detected) {
+        if (!gameSnapshot.detected) {
             setDetected();
-            gameStatus.detected = TRUE;
+            gameSnapshot.detected = TRUE;
         }
 
         /*Move towards player*/
@@ -165,13 +165,13 @@ void tickEnemy(struct CrawlerAgent *actor) {
             actor->position.y = y;
         }
 
-        if ((gameStatus.turn % 2) == 0) {
+        if ((gameSnapshot.turn % 2) == 0) {
 
             /*Shooting at player*/
             addEffectSprite(actor->position.x, actor->position.y, '+');
 
             /*Bullseye!*/
-            if (!gameStatus.covered || ((gameStatus.turn % 4) == 0)) {
+            if (!gameSnapshot.covered || ((gameSnapshot.turn % 4) == 0)) {
                 playerCrawler.life--;
                 playerHealth = playerCrawler.life;
                 visibilityCached = FALSE;
@@ -179,7 +179,7 @@ void tickEnemy(struct CrawlerAgent *actor) {
 
                 setDamage();
                 if (playerCrawler.life <= 0) {
-                    gameStatus.should_continue = kCrawlerGameOver;
+                    gameSnapshot.should_continue = kCrawlerGameOver;
                 }
             }
         }
@@ -219,7 +219,7 @@ void tickEnemy(struct CrawlerAgent *actor) {
 
 struct GameSnapshot dungeon_tick(const enum ECommand command) {
     int c = 0;
-    int oldTurn = gameStatus.turn;
+    int oldTurn = gameSnapshot.turn;
     setActor(playerCrawler.position.x, playerCrawler.position.y, '.');
 
     if (playerCrawler.life > 0) {
@@ -234,7 +234,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             case kCommandUp: {
                 struct Vec2i offset = mapOffsetForDirection(
                         playerCrawler.rotation);
-                gameStatus.turn++;
+                gameSnapshot.turn++;
 
                 playerCrawler.position.x += offset.x;
                 playerCrawler.position.y += offset.y;
@@ -251,7 +251,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             case kCommandDown: {
                 struct Vec2i offset = mapOffsetForDirection(
                         playerCrawler.rotation);
-                gameStatus.turn++;
+                gameSnapshot.turn++;
                 playerCrawler.position.x -= offset.x;
                 playerCrawler.position.y -= offset.y;
 
@@ -278,7 +278,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                         }
 
                         enemies[currentTarget]->life = 0;
-                        gameStatus.turn++;
+                        gameSnapshot.turn++;
                         if (enemiesInBase > 0) {
                             selectNextTarget();
                         } else {
@@ -299,9 +299,9 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     && key.present) {
                     playSound(INFORMATION_ACQUIRED_SOUND);
                     key.present = FALSE;
-                    gameStatus.keyCollected = TRUE;
+                    gameSnapshot.keyCollected = TRUE;
                     grabDisk();
-                    gameStatus.turn++;
+                    gameSnapshot.turn++;
                 }
 
                 if (((playerCrawler.position.y + offset.y) == info.position.y)
@@ -311,8 +311,8 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     playSound(INFORMATION_ACQUIRED_SOUND);
                     info.present = FALSE;
                     grabDisk();
-                    gameStatus.infoCollected = TRUE;
-                    gameStatus.turn++;
+                    gameSnapshot.infoCollected = TRUE;
+                    gameSnapshot.turn++;
                 }
             }
 
@@ -326,7 +326,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             case kCommandStrafeLeft: {
                 struct Vec2i offset =
                         mapOffsetForDirection(leftOf(playerCrawler.rotation));
-                gameStatus.turn++;
+                gameSnapshot.turn++;
 
                 playerCrawler.position.x += offset.x;
                 playerCrawler.position.y += offset.y;
@@ -343,7 +343,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             case kCommandStrafeRight: {
                 struct Vec2i offset =
                         mapOffsetForDirection(rightOf(playerCrawler.rotation));
-                gameStatus.turn++;
+                gameSnapshot.turn++;
 
                 playerCrawler.position.x += offset.x;
                 playerCrawler.position.y += offset.y;
@@ -361,16 +361,16 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 break;
         }
     } else {
-        gameStatus.turn++;
+        gameSnapshot.turn++;
     }
 
-    gameStatus.camera_x = playerCrawler.position.x;
-    gameStatus.camera_z = playerCrawler.position.y;
-    gameStatus.camera_rotation = playerCrawler.rotation;
-    gameStatus.ammo = playerCrawler.ammo;
+    gameSnapshot.camera_x = playerCrawler.position.x;
+    gameSnapshot.camera_z = playerCrawler.position.y;
+    gameSnapshot.camera_rotation = playerCrawler.rotation;
+    gameSnapshot.ammo = playerCrawler.ammo;
 
     if (currentTarget != -1) {
-        gameStatus.playerTarget = enemies[currentTarget]->position;
+        gameSnapshot.playerTarget = enemies[currentTarget]->position;
     }
 
     setActor(playerCrawler.position.x, playerCrawler.position.y, '^');
@@ -378,19 +378,19 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
     if (map[playerCrawler.position.y][playerCrawler.position.x] == 'E') {
 
         if (!key.present) {
-            gameStatus.should_continue = kCrawlerClueAcquired;
+            gameSnapshot.should_continue = kCrawlerClueAcquired;
         } else {
-            gameStatus.targetLocated = TRUE;
+            gameSnapshot.targetLocated = TRUE;
         }
     }
 
-    if (oldTurn != gameStatus.turn) {
+    if (oldTurn != gameSnapshot.turn) {
 
         if (currentTarget != -1 &&
             (enemies[currentTarget]->life <= 0 || !canSeeSpy(playerCrawler.position, playerCrawler.rotation,
                                                              enemies[currentTarget]->position, 0))) {
             currentTarget = -1;
-            gameStatus.playerTarget.x = gameStatus.playerTarget.y = 0;
+            gameSnapshot.playerTarget.x = gameSnapshot.playerTarget.y = 0;
         }
 
 
@@ -410,10 +410,10 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             setItem(info.position.x, info.position.y, 'K');
         }
 
-        gameStatus.covered = isCovered(playerCrawler.position);
+        gameSnapshot.covered = isCovered(playerCrawler.position);
     }
 
-    return gameStatus;
+    return gameSnapshot;
 }
 
 void selectNextTarget() {
@@ -440,15 +440,15 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
                      const int mapIndex) {
     int x, y;
     const uint8_t *ptr = mapData;
-    gameStatus.keyCollected = FALSE;
-    gameStatus.targetLocated = FALSE;
-    gameStatus.infoCollected = FALSE;
-    gameStatus.covered = FALSE;
-    gameStatus.detected = FALSE;
-    gameStatus.should_continue = kCrawlerGameInProgress;
-    gameStatus.ammo = 15;
-    gameStatus.mapIndex = mapIndex;
-    gameStatus.camera_rotation = 0;
+    gameSnapshot.keyCollected = FALSE;
+    gameSnapshot.targetLocated = FALSE;
+    gameSnapshot.infoCollected = FALSE;
+    gameSnapshot.covered = FALSE;
+    gameSnapshot.detected = FALSE;
+    gameSnapshot.should_continue = kCrawlerGameInProgress;
+    gameSnapshot.ammo = 15;
+    gameSnapshot.mapIndex = mapIndex;
+    gameSnapshot.camera_rotation = 0;
     enemiesInBase = 0;
     playerCrawler.symbol = '^';
     playerCrawler.rotation = 0;
@@ -498,7 +498,7 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
         ++ptr;
     }
 
-    if (gameStatus.mapIndex < 8) {
+    if (gameSnapshot.mapIndex < 8) {
         //gameStatus.should_continue = kCrawlerClueAcquired;
     }
 }
