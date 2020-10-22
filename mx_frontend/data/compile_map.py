@@ -194,7 +194,7 @@ def compileMap( sourcePath, textureListPath, mapPath, outputPath):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        for i in range(0, 13):
+        for i in range(0, 24):
             iAsString = str(i)
             compileMap("src/tiles" + iAsString + ".prp", "assets/tiles" +
                        iAsString + ".lst", "assets/map" + iAsString + ".txt",
