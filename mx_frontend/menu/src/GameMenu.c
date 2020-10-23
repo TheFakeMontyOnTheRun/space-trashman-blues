@@ -95,7 +95,7 @@ void getLocationName(int slot, char* buffer, size_t length) {
 }
 
 int getPlayerLocation() {
-	return playerLocation;
+    return 23;// playerLocation;
 }
 
 int getTurn() {

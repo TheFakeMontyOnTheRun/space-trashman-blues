@@ -131,7 +131,7 @@ void setMultiplier(CGSize size) {
         srand(time(NULL));
         
         initHW();
-        
+        initStation();
         enterState(kInvestigateMenu);
         
         menuTick(50);
