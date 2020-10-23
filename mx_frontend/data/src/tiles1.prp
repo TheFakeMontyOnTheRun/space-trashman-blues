@@ -1,4 +1,4 @@
-1 0 0 1 1 1 null null null null null bricks2 0 4 4 4
+I 0 0 1 1 1 null null null null null bricks2 0 4 4 4
 F 0 0 1 1 1 ceiling asphalt null null bricks2 null 2 0 2 0
 = 0 0 1 1 1 bricks2 bricks null null null bricks2 0 0 2 0
 # 0 0 1 1 1 null null null null null bricks2 0 2 2 2
@@ -15,4 +15,8 @@ S 0 0 1 1 1 ceiling asphalt bricks2 leftnear null bricks2 0 0 4 0
 Z 0 0 1 1 1 ceiling asphalt bricks2 leftfar null bricks2 0 0 4 0
 4 0 0 0 0 1 ceiling asphalt null null null null 0 0 0 0
 . 0 0 0 0 1 ceiling asphalt null null null null 0 0 4 0
+0 0 0 0 0 1 ceiling asphalt null null null null 0 0 4 0
+1 0 0 0 0 1 ceiling asphalt null null null null 0 0 4 0
+2 0 0 0 0 1 ceiling asphalt null null null null 0 0 4 0
+3 0 0 0 0 1 ceiling asphalt null null null null 0 0 4 0
 ~ 0 0 1 1 1 ceiling asphalt null null null null 0 0 4 0
