@@ -40,6 +40,4 @@ void setItem(const int x, const int y, const uint8_t item);
 void setDamage(void);
 
 void setDetected(void);
-
-void selectNextTarget(void);
 #endif
