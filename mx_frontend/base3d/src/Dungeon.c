@@ -14,6 +14,7 @@
 #include "Engine.h"
 #include "SoundSystem.h"
 #include "Derelict.h"
+#include "Parser.h"
 
 /* This include must be here just to satisfy the .h - your IDE might trick you into thinking this is not needed. And it's not, but ISO requires. */
 #include "CActor.h"
@@ -205,7 +206,7 @@ void tickEnemy(struct CrawlerAgent *actor) {
 }
 
 struct GameSnapshot dungeon_tick(const enum ECommand command) {
-    int c = 0;
+
     int oldTurn = gameSnapshot.turn;
     setActor(playerCrawler.position.x, playerCrawler.position.y, '.');
 
@@ -259,11 +260,46 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             }
                 break;
             case kCommandFire1: {
-                
             } break;
-            case kCommandFire2:
+            case kCommandFire2: {
+                struct ObjectNode* head = getPlayerItems();
+                struct Item *item = NULL;
+                struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
+                offseted.x += playerCrawler.position.x;
+                offseted.y += playerCrawler.position.y;
+                
+                if (head != NULL) {
+                    item = head->item;
+                }
+                
+                if (item != NULL) {
+                    parseCommand("drop", item->description);
+                    item->position.x = offseted.x - origin.x;
+                    item->position.y = offseted.y - origin.y;
+                    setItem(origin.x + item->position.x, origin.y + item->position.y, 'K');
+                }
+
+            }
                 break;
             case kCommandFire3: {
+                struct ObjectNode* head = getRoom(getPlayerRoom())->itemsPresent->next;
+                struct Item *item = NULL;
+                struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
+                offseted.x += playerCrawler.position.x;
+                offseted.y += playerCrawler.position.y;
+                
+                while (head != NULL && item == NULL) {
+                    if (offseted.x == (head->item->position.x + origin.x) && offseted.y == (head->item->position.y + origin.y)) {
+                        item = head->item;
+                    }
+                    head = head->next;
+                }
+                
+                if (item != NULL) {
+                    parseCommand("pick", item->description);
+                    setItem(offseted.x, offseted.y, '.');
+                }
+
             }
 
                 break;
@@ -356,7 +392,14 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             return gameSnapshot;
         }
         
-
+        struct ObjectNode* head = getRoom(getPlayerRoom())->itemsPresent->next;
+        struct Item *item = NULL;
+        
+        while (head != NULL) {
+            setItem(origin.x + head->item->position.x, origin.y + head->item->position.y, 'K');
+            head = head->next;
+        }
+        
         update_log();
 
         gameSnapshot.covered = isCovered(playerCrawler.position);

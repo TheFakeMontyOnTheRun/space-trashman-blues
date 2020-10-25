@@ -67,6 +67,8 @@ struct WorldPosition getPlayerPosition();
 
 struct Item* getItem(int index);
 
+struct ObjectNode* getPlayerItems();
+
 void setPlayerPosition(struct WorldPosition pos);
 
 void addToRoom( const char* roomName, struct Item *itemName );
