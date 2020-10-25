@@ -365,13 +365,6 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     origin.x = 0;
     origin.y = 0;
 
-    
-    parseCommand("pick", "low-rank-keycard");
-    parseCommand("pick", "magnetic-boots");
-    parseCommand("pick", "helmet");
-    parseCommand("use", "helmet");
-    parseCommand("use", "magnetic-boots");
-
     for (y = 0; y < MAP_SIZE; ++y) {
         for (x = 0; x < MAP_SIZE; ++x) {
             char current = *ptr;
