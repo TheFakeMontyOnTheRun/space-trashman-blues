@@ -261,6 +261,35 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 break;
             case kCommandFire1: {
             } break;
+            case kCommandFire4: {
+                struct ObjectNode* head1 = getRoom(getPlayerRoom())->itemsPresent->next;
+                struct Item *item1 = NULL;
+                struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
+                struct ObjectNode* head2 = getPlayerItems();
+                struct Item *item2 = NULL;
+                offseted.x += playerCrawler.position.x;
+                offseted.y += playerCrawler.position.y;
+
+                if (head2 != NULL) {
+                    item2 = head2->item;
+                }
+                
+                while (head1 != NULL && item1 == NULL) {
+                    if (offseted.x == (head1->item->position.x + origin.x) && offseted.y == (head1->item->position.y + origin.y)) {
+                        item1 = head1->item;
+                    }
+                    head1 = head1->next;
+                }
+                
+                if (item1 != NULL && item2 != NULL) {
+                    char buffer[255];
+                    sprintf(&buffer[0], "use-with %s %s", item2->description, item1->description);
+                    char *operator1 = strtok( &buffer[0], "\n " );
+                    char *operand1 = strtok( NULL, "\n ");
+                    parseCommand(operator1, operand1);
+                }
+                
+            } break;
             case kCommandFire2: {
                 struct ObjectNode* head = getPlayerItems();
                 struct Item *item = NULL;
@@ -302,8 +331,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
 
             }
 
-                break;
-            case kCommandFire4:
                 break;
             case kCommandNone:
                 break;

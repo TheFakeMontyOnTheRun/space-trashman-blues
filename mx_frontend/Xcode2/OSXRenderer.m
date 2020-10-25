@@ -104,7 +104,7 @@ void handleSystemEvents() {
     switch (code) {
         case 0: //a
         case 36: //enter
-            mBufferedCommand = kCommandFire1;
+            mBufferedCommand = kCommandFire4;
             break;
         case 1: //s
             mBufferedCommand = kCommandStrafeLeft;
