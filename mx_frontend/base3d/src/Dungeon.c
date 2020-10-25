@@ -14,6 +14,7 @@
 #include "Engine.h"
 #include "SoundSystem.h"
 #include "Derelict.h"
+#include "Parser.h"
 
 /* This include must be here just to satisfy the .h - your IDE might trick you into thinking this is not needed. And it's not, but ISO requires. */
 #include "CActor.h"
@@ -205,7 +206,7 @@ void tickEnemy(struct CrawlerAgent *actor) {
 }
 
 struct GameSnapshot dungeon_tick(const enum ECommand command) {
-    int c = 0;
+
     int oldTurn = gameSnapshot.turn;
     setActor(playerCrawler.position.x, playerCrawler.position.y, '.');
 
