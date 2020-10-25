@@ -213,10 +213,12 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         switch (command) {
             case kCommandRight:
                 playerCrawler.rotation = rightOf(playerCrawler.rotation);
+                turnRight();
                 break;
 
             case kCommandLeft:
                 playerCrawler.rotation = leftOf(playerCrawler.rotation);
+                turnLeft();
                 break;
             case kCommandUp: {
                 struct Vec2i offset = mapOffsetForDirection(
@@ -226,11 +228,14 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 playerCrawler.position.x += offset.x;
                 playerCrawler.position.y += offset.y;
 
+
                 if (collisionMap[map[playerCrawler.position.y]
                 [playerCrawler.position.x]]
                     == '1') {
                     playerCrawler.position.x -= offset.x;
                     playerCrawler.position.y -= offset.y;
+                } else {
+                    walkBy(0);
                 }
                 zCameraOffset = intToFix(2);
             }
@@ -247,17 +252,15 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     == '1') {
                     playerCrawler.position.x += offset.x;
                     playerCrawler.position.y += offset.y;
+                } else {
+                    walkBy(2);
                 }
                 zCameraOffset = -intToFix(2);
             }
                 break;
-            case kCommandFire1:
-                if (playerCrawler.ammo > 0) {
-                    /* fire */
-                    playerCrawler.ammo--;
-                    shootGun();
-                }
-                break;
+            case kCommandFire1: {
+                
+            } break;
             case kCommandFire2:
                 break;
             case kCommandFire3: {
@@ -283,6 +286,8 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     == '1') {
                     playerCrawler.position.x -= offset.x;
                     playerCrawler.position.y -= offset.y;
+                } else {
+                    walkBy(3);
                 }
                 xCameraOffset = -intToFix(2);
             }
@@ -300,6 +305,8 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     == '1') {
                     playerCrawler.position.x -= offset.x;
                     playerCrawler.position.y -= offset.y;
+                } else {
+                    walkBy(1);
                 }
                 xCameraOffset = intToFix(2);
             }
@@ -311,6 +318,14 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         gameSnapshot.turn++;
     }
 
+    struct WorldPosition worldPos = getPlayerPosition();
+    int x = origin.x + worldPos.x;
+    int y = origin.x + worldPos.y;
+    setActor(x, y, '^');
+    playerCrawler.position.x = x;
+    playerCrawler.position.y = y;
+
+    
     gameSnapshot.camera_x = playerCrawler.position.x;
     gameSnapshot.camera_z = playerCrawler.position.y;
     gameSnapshot.camera_rotation = playerCrawler.rotation;
@@ -326,13 +341,14 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         if ( '0' <= cell && cell <= '3') {
             moveBy(cell - '0');
             int room = getPlayerRoom();
-            initRoom(room);
             origin.x = 0;
             origin.y = 0;
 
+            initRoom(room);
+            
             struct WorldPosition worldPos = getPlayerPosition();
-            int x = worldPos.x;
-            int y = worldPos.y;
+            x = worldPos.x + origin.x;
+            y = worldPos.y + origin.y;
             setActor(x, y, '^');
             playerCrawler.position.x = x;
             playerCrawler.position.y = y;
@@ -371,13 +387,6 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     memcpy (&collisionMap, collisions, 256);
     origin.x = 0;
     origin.y = 0;
-
-    
-    parseCommand("pick", "low-rank-keycard");
-    parseCommand("pick", "magnetic-boots");
-    parseCommand("pick", "helmet");
-    parseCommand("use", "helmet");
-    parseCommand("use", "magnetic-boots");
 
     for (y = 0; y < MAP_SIZE; ++y) {
         for (x = 0; x < MAP_SIZE; ++x) {
