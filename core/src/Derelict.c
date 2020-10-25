@@ -67,6 +67,10 @@ void setGameStatus(int newStatus) {
   gameStatus = newStatus;
 }
 
+struct ObjectNode* getPlayerItems() {
+  return collectedObject->next;
+}
+
 void addObjectToList(struct Item* itemToAdd, struct ObjectNode* listHead) {
   struct ObjectNode *head = listHead;
 

@@ -258,7 +258,25 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     shootGun();
                 }
                 break;
-            case kCommandFire2:
+            case kCommandFire2: {
+                struct ObjectNode* head = getPlayerItems();
+                struct Item *item = NULL;
+                struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
+                offseted.x += playerCrawler.position.x;
+                offseted.y += playerCrawler.position.y;
+                
+                if (head != NULL) {
+                    item = head->item;
+                }
+                
+                if (item != NULL) {
+                    parseCommand("drop", item->description);
+                    item->position.x = offseted.x - origin.x;
+                    item->position.y = offseted.y - origin.y;
+                    setItem(origin.x + item->position.x, origin.y + item->position.y, 'K');
+                }
+
+            }
                 break;
             case kCommandFire3: {
                 struct ObjectNode* head = getRoom(getPlayerRoom())->itemsPresent->next;
