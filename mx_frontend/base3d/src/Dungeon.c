@@ -259,8 +259,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 zCameraOffset = -intToFix(2);
             }
                 break;
-            case kCommandFire1: {
-            } break;
             case kCommandFire4: {
                 struct ObjectNode* head1 = getRoom(getPlayerRoom())->itemsPresent->next;
                 struct Item *item1 = NULL;
@@ -307,9 +305,19 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     item->position.y = offseted.y - origin.y;
                     setItem(origin.x + item->position.x, origin.y + item->position.y, 'K');
                 }
-
             }
-                break;
+            case kCommandFire1: {
+                struct ObjectNode* head = getPlayerItems();
+                struct Item *item = NULL;
+                
+                if (head != NULL) {
+                    item = head->item;
+                }
+                
+                if (item != NULL) {
+                    parseCommand("use", item->description);
+                }
+            } break;
             case kCommandFire3: {
                 struct ObjectNode* head = getRoom(getPlayerRoom())->itemsPresent->next;
                 struct Item *item = NULL;
