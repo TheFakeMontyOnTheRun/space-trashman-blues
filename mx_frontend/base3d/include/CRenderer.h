@@ -58,8 +58,6 @@ extern FixP_t playerHeight;
 extern FixP_t walkingBias;
 extern FixP_t playerHeightChangeRate;
 extern FixP_t playerHeightTarget;
-extern int grabbingDisk;
-extern int gunTargetPositionY;
 extern FixP_t xCameraOffset;
 extern FixP_t yCameraOffset;
 extern FixP_t zCameraOffset;
@@ -75,19 +73,9 @@ void flipRenderer(void);
 
 void render(long ms);
 
-void hideGun(void);
-
-void shootGun(void);
-
-void grabDisk(void);
-
-void showGun(const int showMuzzleFlash);
-
 void loadTexturesForLevel(const uint8_t levelNumber);
 
 void loadTileProperties(const uint8_t levelNumber);
-
-void fullHideGun();
 
 void updateCursorForRenderer(const int x, const int y);
 

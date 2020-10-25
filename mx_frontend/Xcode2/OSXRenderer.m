@@ -148,14 +148,12 @@ void handleSystemEvents() {
             mBufferedCommand = kCommandLeft;
             turnStep = 0;
             turnTarget = 256;
-            fullHideGun();
             break;
             
         case 124:
             mBufferedCommand = kCommandRight;
             turnStep = 256;
             turnTarget = 0;
-            fullHideGun();
             break;
         case -1:
             break;
@@ -194,7 +192,6 @@ void handleSystemEvents() {
     if (mBufferedCommand != kCommandLeft && mBufferedCommand != kCommandRight && mBufferedCommand != kCommandNone) {
         turnStep = 0;
         turnTarget = 0;
-        showGun(0);
     }
     
     needsToRedrawVisibleMeshes = TRUE;

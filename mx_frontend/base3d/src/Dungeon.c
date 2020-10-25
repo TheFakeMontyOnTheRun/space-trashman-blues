@@ -251,13 +251,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 zCameraOffset = -intToFix(2);
             }
                 break;
-            case kCommandFire1:
-                if (playerCrawler.ammo > 0) {
-                    /* fire */
-                    playerCrawler.ammo--;
-                    shootGun();
-                }
-                break;
             case kCommandFire2:
                 break;
             case kCommandFire3: {

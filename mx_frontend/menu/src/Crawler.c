@@ -273,7 +273,6 @@ int32_t Crawler_tickCallback(int32_t tag, void *data) {
 		switch (returnCode) {
 			case kCrawlerGameOver: {
 				playerHeightChangeRate = kCameraYSpeedPlayerDeath;
-				hideGun();
 				currentPresentationState = kFade;
 				timeUntilNextState = kDefaultPresentationStateInterval;
 			}
