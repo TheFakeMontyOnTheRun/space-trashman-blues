@@ -340,7 +340,14 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             return gameSnapshot;
         }
         
-
+        struct ObjectNode* head = getRoom(getPlayerRoom())->itemsPresent->next;
+        struct Item *item = NULL;
+        
+        while (head != NULL) {
+            setItem(origin.x + head->item->position.x, origin.y + head->item->position.y, 'K');
+            head = head->next;
+        }
+        
         update_log();
 
         gameSnapshot.covered = isCovered(playerCrawler.position);
