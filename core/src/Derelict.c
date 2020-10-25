@@ -643,11 +643,11 @@ void initStation(void) {
 	station[1].info = "My trusty old scrap ship. Built it myself. Still leaks fuel like a drunken horse, but it's mine, damn it! Well, at least until some of fines I have to pay results in repo men knocking my door.";
 	station[1].connections[0] = 2;
 	station[1].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[1].sizeX = 30;
-	station[1].sizeY = 10;
+	station[1].sizeX = 31;
+	station[1].sizeY = 31;
 
-	playerPosition.x = 20;
-	playerPosition.y = 14;
+	playerPosition.x = 15;
+	playerPosition.y = 15;
 
 	station[2].description = "hangar";
 	station[2].info = "The station main hangar is rather unremarkable. The only thing you notice is a slight yellow tint of the air, as if a mist slides next to the floor. It's very faint. Your ship's computer tells you this is harmless (as if those readings were worth the trust). Unfortunately, no useful tools around here. Around the corner, near the escape pod entrance, there is deactivated ship reactor.";
@@ -835,8 +835,8 @@ void initStation(void) {
 	item[0].info = "time-programmable Halogen bomb.";
 	item[0].useWithCallback = cantBeUsedWithOthersCallback;
 	item[0].weight = 5;
-	item[0].position.x = 5;
-	item[0].position.y = 13;
+	item[0].position.x = 9;
+	item[0].position.y = 14;
 	item[0].useCallback = bombActivatedCallback;
 	addToRoom("lss-daedalus", &item[0]);
 
@@ -845,8 +845,8 @@ void initStation(void) {
 	item[1].weight = 0;
 	item[1].useWithCallback = cantBeUsedWithOthersCallback;
 	item[1].pickable = TRUE;
-	item[1].position.x = 17;
-	item[1].position.y = 13;
+	item[1].position.x = 10;
+	item[1].position.y = 14;
 	item[1].useCallback = bombControllerActivatedCallback;
 	addToRoom("lss-daedalus", &item[1]);
 
@@ -856,8 +856,8 @@ void initStation(void) {
 	item[2].useWithCallback = useBlowtorchWithCallback;
 	item[2].useCallback = cantBeUsedCallback;
 	item[2].pickable = TRUE;
-	item[2].position.x = 18;
-	item[2].position.y = 13;
+	item[2].position.x = 11;
+	item[2].position.y = 14;
 	addToRoom("lss-daedalus", &item[2]);
 
 	item[3].description = "ship-ignition";
@@ -865,16 +865,16 @@ void initStation(void) {
 	item[3].useWithCallback = cantBeUsedWithOthersCallback;
 	item[3].info = "token needed to ignite the ship's computer and thrusters";
 	item[3].pickable = TRUE;
-	item[3].position.x = 19;
-	item[3].position.y = 13;
+	item[3].position.x = 12;
+	item[3].position.y = 14;
 	addToRoom("lss-daedalus", &item[3]);
 
 	item[4].description = "plasma-gun";
 	item[4].info = "A mostly harmless gun. Useful for heating surfaces and light defense.";
 	item[4].weight = 1;
 	item[4].pickable = TRUE;
-	item[4].position.x = 20;
-	item[4].position.y = 13;
+	item[4].position.x = 13;
+	item[4].position.y = 14;
 	addToRoom("lss-daedalus", &item[4]);
 
 	item[5].description = "magnetic-boots";
@@ -883,8 +883,8 @@ void initStation(void) {
 	item[5].useWithCallback = useBootsWithCallback;
 	item[5].useCallback = useObjectToggleCallback;
 	item[5].pickable = TRUE;
-	item[5].position.x = 21;
-	item[5].position.y = 13;
+	item[5].position.x = 14;
+	item[5].position.y = 14;
 	addToRoom("lss-daedalus", &item[5]);
 
 	item[6].description = "helmet";
@@ -893,18 +893,18 @@ void initStation(void) {
 	item[6].info = "Atmosphere-contained helmet for safety.";
 	item[6].pickable = TRUE;
 	item[6].useCallback = useObjectToggleCallback;
-	item[6].position.x = 22;
-	item[6].position.y = 13;
+	item[6].position.x = 15;
+	item[6].position.y = 14;
 	addToRoom("lss-daedalus", &item[6]);
 
 	item[7].description = "low-rank-keycard";
 	item[7].info = "clearance for low rank";
 	item[7].weight = 0;
 	item[7].pickable = TRUE;
-	item[7].position.x = 23;
+	item[7].position.x = 16;
 	item[7].useCallback = cantBeUsedCallback;
 	item[7].useWithCallback = cantBeUsedWithOthersCallback;
-	item[7].position.y = 13;
+	item[7].position.y = 14;
 	item[7].pickCallback = keycardPickCallback;
 	item[7].dropCallback = keycardDropCallback;
 	addToRoom("lss-daedalus", &item[7]);

@@ -276,20 +276,11 @@ int loopTick(enum ECommand command) {
     if (command == kCommandBack) {
         shouldContinue = kCrawlerQuit;
     } else if (command != kCommandNone || gameTicks == 0) {
-        grabbingDisk = FALSE;
 
         if (command == kCommandFire1 || command == kCommandFire2
             || command == kCommandFire3 || command == kCommandFire4) {
-            int showMuzzleFlash = ((playerAmmo > 0) && command == kCommandFire1);
-            visibilityCached = FALSE;
 
-            if (showMuzzleFlash) {
-                /* you firing a shot */
-                playSound(PLAYER_FIRING_GUN);
-            }
-            showGun(showMuzzleFlash);
-        } else if (gunTargetPositionY != YRES) {
-            hideGun();
+            visibilityCached = FALSE;
         }
 
         tickMission(command);
@@ -322,7 +313,6 @@ int loopTick(enum ECommand command) {
 void initRoom(int room) {
     int16_t c;
 
-    hideGun();
     shouldContinue = kCrawlerGameInProgress;
     mBufferedCommand = kCommandNone;
     gameTicks = 0;
