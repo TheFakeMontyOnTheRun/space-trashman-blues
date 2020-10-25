@@ -106,6 +106,10 @@ void handleSystemEvents() {
         case 36: //enter
             mBufferedCommand = kCommandFire4;
             break;
+        case 9: //v
+            mBufferedCommand = kCommandFire5;
+            break;
+
         case 1: //s
             mBufferedCommand = kCommandStrafeLeft;
              coords[(selected * 2)] -= 2;

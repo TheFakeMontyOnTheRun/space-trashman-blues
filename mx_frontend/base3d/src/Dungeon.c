@@ -26,6 +26,8 @@ uint8_t map[MAP_SIZE][MAP_SIZE];
 uint8_t collisionMap[256];
 struct WorldPosition origin;
 
+int currentSelectedItem = 0;
+
 extern int shouldContinue;
 
 extern char crawlClueMessage[128];
@@ -259,6 +261,24 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 zCameraOffset = -intToFix(2);
             }
                 break;
+                
+            case kCommandFire5: {
+                struct ObjectNode* head = getPlayerItems();
+                struct Item *item = NULL;
+                int index = 0;
+                
+                ++currentSelectedItem;
+                
+                while (head != NULL) {
+                    ++index;
+                    head = head->next;
+                }
+                
+                if ( currentSelectedItem > index ) {
+                    currentSelectedItem = 0;
+                }
+            } break;
+                
             case kCommandFire4: {
                 struct ObjectNode* head1 = getRoom(getPlayerRoom())->itemsPresent->next;
                 struct Item *item1 = NULL;
@@ -267,6 +287,13 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 struct Item *item2 = NULL;
                 offseted.x += playerCrawler.position.x;
                 offseted.y += playerCrawler.position.y;
+                
+                int index = 0;
+                
+                while (head2 != NULL && (index < currentSelectedItem)) {
+                    ++index;
+                    head2 = head2->next;
+                }
 
                 if (head2 != NULL) {
                     item2 = head2->item;
@@ -295,6 +322,13 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 offseted.x += playerCrawler.position.x;
                 offseted.y += playerCrawler.position.y;
                 
+                int index = 0;
+                
+                while (head != NULL && (index < currentSelectedItem)) {
+                    ++index;
+                    head = head->next;
+                }
+
                 if (head != NULL) {
                     item = head->item;
                 }
@@ -304,11 +338,18 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     item->position.x = offseted.x - origin.x;
                     item->position.y = offseted.y - origin.y;
                     setItem(origin.x + item->position.x, origin.y + item->position.y, 'K');
+                    currentSelectedItem--;
                 }
             }
             case kCommandFire1: {
                 struct ObjectNode* head = getPlayerItems();
                 struct Item *item = NULL;
+                int index = 0;
+                
+                while (head != NULL && (index < currentSelectedItem)) {
+                    ++index;
+                    head = head->next;
+                }
                 
                 if (head != NULL) {
                     item = head->item;
@@ -318,6 +359,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     parseCommand("use", item->description);
                 }
             } break;
+                
             case kCommandFire3: {
                 struct ObjectNode* head = getRoom(getPlayerRoom())->itemsPresent->next;
                 struct Item *item = NULL;
@@ -335,6 +377,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 if (item != NULL) {
                     parseCommand("pick", item->description);
                     setItem(offseted.x, offseted.y, '.');
+                    currentSelectedItem++;
                 }
 
             }
