@@ -21,23 +21,13 @@
 /*	Div(intToFix(1), intToFix(16));*/
 #define WALKING_BIAS 4096
 
-int gunSpeedY = 0;
 int hasSnapshot = FALSE;
-int gunSpeedX = 0;
 FixP_t playerHeight = 0;
 FixP_t walkingBias = 0;
 FixP_t playerHeightChangeRate = 0;
 FixP_t playerHeightTarget = 0;
 int cursorX = -1;
 int cursorZ = -1;
-#define MUZZLE_FLASH_TIME_IN_MS 5
-int gunPositionY = YRES;
-int gunPositionX = XRES / 4;
-int gunTargetPositionX;
-int gunTargetPositionY;
-int showMuzzleFlashSpriteTime = MUZZLE_FLASH_TIME_IN_MS;
-int grabbingDisk = FALSE;
-
 
 int covered = FALSE;
 int useDither = TRUE;
@@ -95,54 +85,14 @@ struct Bitmap *clue;
 struct Bitmap *barrel;
 struct Bitmap *deadFoe;
 struct Bitmap *pistol;
-struct Bitmap *diskInHand;
 struct Bitmap *blood;
 struct Bitmap *detectedAlert;
-struct Bitmap *muzzleFlash;
-struct Bitmap *myMuzzleFlash;
 
 int coords[6];
 
 enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
 uint8_t intMap[MAP_SIZE * MAP_SIZE];
 struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
-
-void hideGun() {
-    gunTargetPositionY = YRES;
-    showMuzzleFlashSpriteTime = 0;
-}
-
-void fullHideGun() {
-    gunTargetPositionY = gunPositionY = YRES;
-    showMuzzleFlashSpriteTime = 0;
-    gunSpeedY = 0;
-}
-
-void shootGun() {
-    gunTargetPositionY = YRES - pistol->height;
-    gunTargetPositionX = gunPositionX;
-    gunPositionX = gunPositionX - 8;
-
-    if (gunPositionX < 0) {
-        gunPositionX = 0;
-    }
-
-    gunPositionY = (5 * (YRES - pistol->height) ) / 4;
-}
-
-void grabDisk() {
-    grabbingDisk = TRUE;
-    gunPositionY = YRES / 2;
-    gunTargetPositionY = YRES;
-}
-
-void showGun(const int showMuzzleFlash) {
-    grabbingDisk = FALSE;
-    showMuzzleFlashSpriteTime =
-            (showMuzzleFlash && cursorX != -1) ? MUZZLE_FLASH_TIME_IN_MS : 0;
-    gunTargetPositionY = YRES - pistol->height;
-}
-    
 
 void loadTileProperties(const uint8_t levelNumber) {
     char buffer[64];
@@ -153,8 +103,6 @@ void loadTileProperties(const uint8_t levelNumber) {
     clearMap(&occluders);
     clearMap(&colliders);
     clearMap(&enemySightBlockers);
-
-    gunTargetPositionX = gunPositionX;
 
     sprintf (buffer, "props%d.bin", levelNumber);
 
@@ -234,9 +182,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     blood = loadBitmap("blood.img");
     detectedAlert = loadBitmap("detected.img");
     pistol = loadBitmap("pistol.img");
-    diskInHand = loadBitmap("handdisk.img");
-    muzzleFlash = loadBitmap("muzzle.img");
-    myMuzzleFlash = loadBitmap("myflash.img");
     backdrop = loadBitmap("backdrop.img");
 }
 
@@ -245,10 +190,6 @@ void updateCursorForRenderer(const int x, const int z) {
     visibilityCached = FALSE;
     cursorX = x;
     cursorZ = z;
-
-    if (x == -1) {
-        gunTargetPositionX = XRES / 4;
-    }
 }
 
 void drawMap(const uint8_t * __restrict__ elements,
@@ -407,18 +348,6 @@ void render(const long ms) {
 
     if (playerHeight < playerHeightTarget) {
         playerHeight += playerHeightChangeRate;
-    }
-
-    if (abs(gunTargetPositionY - gunPositionY ) > 3 ) {
-        gunSpeedY = (gunTargetPositionY > gunPositionY) ? 4 : -4;
-        gunPositionY += gunSpeedY;
-        needsToRedrawVisibleMeshes = TRUE;
-    }
-
-    if (gunTargetPositionX != gunPositionX) {
-        gunSpeedX = (gunTargetPositionX > gunPositionX) ? 4 : -4;
-        gunPositionX += gunSpeedX;
-        needsToRedrawVisibleMeshes = TRUE;
     }
 
     if (needsToRedrawVisibleMeshes) {
@@ -986,26 +915,6 @@ void render(const long ms) {
 
                         drawBillboardAt(tmp, sprite->data, one, sprite->width);
                     }
-
-                    if (onTarget) {
-                        gunTargetPositionX =
-                                (XRES / 4) + (fixToInt(position.mX) * 4);
-
-                        if (gunTargetPositionX < 0 || gunTargetPositionX > XRES) {
-
-                            gunTargetPositionX = XRES / 4;
-                            hideGun();
-                        }
-
-                        tmp.mX = position.mX;
-                        tmp.mY = position.mY;
-                        tmp.mZ = position.mZ;
-
-                        addToVec3(&tmp, 0,
-                                  (tileProp->mFloorHeight * 2) + standardHeight, 0);
-
-                        drawBillboardAt(tmp, target->data, one, 32);
-                    }
                 }
 
                 if (itemsSnapshotElement != kNoItem) {
@@ -1082,7 +991,6 @@ void render(const long ms) {
                                       ((tileProp->mFloorHeight * 2) + one + halfOne),
                                       0);
 
-                            drawBillboardAt(tmp, muzzleFlash->data, one, 32);
                             break;
                         case kNoItem:
                             break;
@@ -1093,35 +1001,6 @@ void render(const long ms) {
                     }
                 }
             }
-        }
-
-        if (gunTargetPositionY == gunPositionY) {
-            if (grabbingDisk) {
-                showGun(FALSE);
-                grabbingDisk = FALSE;
-            }
-            gunSpeedY = 0;
-        }
-
-        if (gunTargetPositionX == gunPositionX) {
-            gunSpeedX = 0;
-        }
-
-        clippingY1 = 200;
-        if (!grabbingDisk) {
-            if (showMuzzleFlashSpriteTime) {
-                showMuzzleFlashSpriteTime -= ms;
-
-                needsToRedrawVisibleMeshes = TRUE;
-
-                drawBitmap(gunPositionX + pistol->width / 2,
-                           gunPositionY - (pistol->height / 3), myMuzzleFlash,
-                           TRUE);
-            }
-
-            drawBitmap(gunPositionX, gunPositionY, pistol, TRUE);
-        } else {
-            drawBitmap(gunPositionX, gunPositionY, diskInHand, TRUE);
         }
 
         clippingY1 = 200;

@@ -104,8 +104,12 @@ void handleSystemEvents() {
     switch (code) {
         case 0: //a
         case 36: //enter
-            mBufferedCommand = kCommandFire1;
+            mBufferedCommand = kCommandFire4;
             break;
+        case 9: //v
+            mBufferedCommand = kCommandFire5;
+            break;
+
         case 1: //s
             mBufferedCommand = kCommandStrafeLeft;
              coords[(selected * 2)] -= 2;
@@ -148,14 +152,12 @@ void handleSystemEvents() {
             mBufferedCommand = kCommandLeft;
             turnStep = 0;
             turnTarget = 256;
-            fullHideGun();
             break;
             
         case 124:
             mBufferedCommand = kCommandRight;
             turnStep = 256;
             turnTarget = 0;
-            fullHideGun();
             break;
         case -1:
             break;
@@ -194,7 +196,6 @@ void handleSystemEvents() {
     if (mBufferedCommand != kCommandLeft && mBufferedCommand != kCommandRight && mBufferedCommand != kCommandNone) {
         turnStep = 0;
         turnTarget = 0;
-        showGun(0);
     }
     
     needsToRedrawVisibleMeshes = TRUE;
