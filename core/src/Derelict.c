@@ -655,8 +655,8 @@ void initStation(void) {
 	station[2].connections[1] = 6;
 	station[2].connections[0] = 3;
 	station[2].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[2].sizeX = 30;
-	station[2].sizeY = 20;
+	station[2].sizeX = 31;
+	station[2].sizeY = 31;
 
 	station[3].description = "hall-1";
 	station[3].info = "A well lit hall, with doors. It's the main hub of the station. Despite being right next to the hangar and the control room, it's rather quiet.";
@@ -665,8 +665,8 @@ void initStation(void) {
 	station[3].connections[1] = 5;
 	station[3].rankRequired = 1;
 	station[3].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[3].sizeX = 10;
-	station[3].sizeY = 20;
+	station[3].sizeX = 31;
+	station[3].sizeY = 31;
 
 	station[4].description = "elevator-level-1";
 	station[4].info = "Going down? The elevator no longer works. It seems to be stuck in level 3. You have to navegate the shaft by yourself";
