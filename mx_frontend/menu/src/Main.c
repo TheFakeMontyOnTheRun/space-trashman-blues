@@ -181,7 +181,7 @@ int main(int argc, char **argv) {
 
 	srand(time(NULL));
 	initHW();
-
+        initStation();
 	enterState(kInvestigateMenu);
 
 	end_clock = uclock();
