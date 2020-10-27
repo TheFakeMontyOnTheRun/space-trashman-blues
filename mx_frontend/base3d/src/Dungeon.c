@@ -25,6 +25,7 @@ struct GameSnapshot gameSnapshot;
 uint8_t map[MAP_SIZE][MAP_SIZE];
 uint8_t collisionMap[256];
 struct WorldPosition origin;
+extern char* focusItemName;
 
 int currentSelectedItem = 0;
 
@@ -377,7 +378,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 if (item != NULL) {
                     parseCommand("pick", item->description);
                     setItem(offseted.x, offseted.y, '.');
-                    currentSelectedItem++;
                 }
 
             }
@@ -448,6 +448,29 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
     setActor(playerCrawler.position.x, playerCrawler.position.y, '^');
 
     if (oldTurn != gameSnapshot.turn) {
+        
+        
+        {
+            focusItemName = NULL;
+            struct ObjectNode* head = getRoom(getPlayerRoom())->itemsPresent->next;
+            struct Item *item = NULL;
+            struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
+            offseted.x += playerCrawler.position.x;
+            offseted.y += playerCrawler.position.y;
+            
+            int index = 0;
+            
+            while (head != NULL && item == NULL) {
+                if (offseted.x == (head->item->position.x + origin.x) && offseted.y == (head->item->position.y + origin.y)) {
+                    item = head->item;
+                }
+                head = head->next;
+            }
+            
+            if (item != NULL) {
+                focusItemName = item->description;
+            }
+        }
         
         int cell = map[playerCrawler.position.y][playerCrawler.position.x];
         

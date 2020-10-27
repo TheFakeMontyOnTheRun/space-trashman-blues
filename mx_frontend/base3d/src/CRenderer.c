@@ -18,6 +18,8 @@
 #include "VisibilityStrategy.h"
 #include "CPackedFileReader.h"
 
+#include "Derelict.h"
+
 /*	Div(intToFix(1), intToFix(16));*/
 #define WALKING_BIAS 4096
 
@@ -29,6 +31,7 @@ FixP_t playerHeightTarget = 0;
 int cursorX = -1;
 int cursorZ = -1;
 
+extern int currentSelectedItem;
 int covered = FALSE;
 int useDither = TRUE;
 int visibilityCached = FALSE;
@@ -73,6 +76,7 @@ int turnStep = 0;
 FixP_t xCameraOffset;
 FixP_t yCameraOffset;
 FixP_t zCameraOffset;
+char* focusItemName = NULL;
 
 struct Projection projectionVertices[8];
 
@@ -1033,10 +1037,25 @@ void render(const long ms) {
         fill(256, 8, 320 - 256, 160 - 8, 255, FALSE);
         drawTextAt(34, 1, "Items", 255);
         
-        drawTextAt(33, 2, "Magboots", 0);
-        drawTextAt(33, 3, "Blowtorch", 0);
-        drawTextAt(33, 4, "Keycard", 0);
-        drawTextAt(33, 5, "Keycard", 0);
+        
+        int line = 0;
+        struct ObjectNode* head = getPlayerItems();
+        
+        while(head != NULL) {
+            if (head->item != NULL ) {
+                char buffer[255];
+                sprintf( &buffer[0], "%c%c%s", ( line == currentSelectedItem ? '>' : ' ' ), (head->item->active ? '*' : ' '), head->item->description);
+                buffer[7] = 0;
+                drawTextAt(34, 2 + line, &buffer[0], 0);
+                ++line;
+            }
+            head = head->next;
+        }
+
+        
+        if (focusItemName != NULL ) {
+            drawTextAt(2, 20, focusItemName, 255);
+        }
     }
     /*
     uint8_t uvCoords[6];
