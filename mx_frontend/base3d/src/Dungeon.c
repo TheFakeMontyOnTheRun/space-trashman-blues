@@ -24,7 +24,7 @@
 struct GameSnapshot gameSnapshot;
 uint8_t map[MAP_SIZE][MAP_SIZE];
 uint8_t collisionMap[256];
-struct WorldPosition origin;
+int enteredThru = 0;
 extern char* focusItemName;
 
 int currentSelectedItem = 0;
@@ -301,7 +301,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 }
                 
                 while (head1 != NULL && item1 == NULL) {
-                    if (offseted.x == (head1->item->position.x + origin.x) && offseted.y == (head1->item->position.y + origin.y)) {
+                    if (offseted.x == (head1->item->position.x) && offseted.y == (head1->item->position.y)) {
                         item1 = head1->item;
                     }
                     head1 = head1->next;
@@ -336,9 +336,9 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 
                 if (item != NULL) {
                     parseCommand("drop", item->description);
-                    item->position.x = offseted.x - origin.x;
-                    item->position.y = offseted.y - origin.y;
-                    setItem(origin.x + item->position.x, origin.y + item->position.y, 'K');
+                    item->position.x = offseted.x;
+                    item->position.y = offseted.y;
+                    setItem(item->position.x, item->position.y, 'K');
                     currentSelectedItem--;
                 }
             }
@@ -369,7 +369,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 offseted.y += playerCrawler.position.y;
                 
                 while (head != NULL && item == NULL) {
-                    if (offseted.x == (head->item->position.x + origin.x) && offseted.y == (head->item->position.y + origin.y)) {
+                    if (offseted.x == (head->item->position.x) && offseted.y == (head->item->position.y)) {
                         item = head->item;
                     }
                     head = head->next;
@@ -432,13 +432,12 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         gameSnapshot.turn++;
     }
 
-    struct WorldPosition worldPos = getPlayerPosition();
-    int x = origin.x + worldPos.x;
-    int y = origin.x + worldPos.y;
-    setActor(x, y, '^');
-    playerCrawler.position.x = x;
-    playerCrawler.position.y = y;
-
+    struct WorldPosition worldPos;
+    worldPos.x = playerCrawler.position.x;
+    worldPos.y = playerCrawler.position.y;
+    setActor(playerCrawler.position.x, playerCrawler.position.y, '^');
+    setPlayerPosition(worldPos);
+    setPlayerDirection(playerCrawler.rotation);
     
     gameSnapshot.camera_x = playerCrawler.position.x;
     gameSnapshot.camera_z = playerCrawler.position.y;
@@ -461,7 +460,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             int index = 0;
             
             while (head != NULL && item == NULL) {
-                if (offseted.x == (head->item->position.x + origin.x) && offseted.y == (head->item->position.y + origin.y)) {
+                if (offseted.x == (head->item->position.x) && offseted.y == (head->item->position.y)) {
                     item = head->item;
                 }
                 head = head->next;
@@ -478,17 +477,11 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         if ( '0' <= cell && cell <= '3') {
             moveBy(cell - '0');
             int room = getPlayerRoom();
-            origin.x = 0;
-            origin.y = 0;
-
+            enteredThru = cell - '0';
             initRoom(room);
+            setPlayerDirection(enteredThru);
             
-            struct WorldPosition worldPos = getPlayerPosition();
-            x = worldPos.x + origin.x;
-            y = worldPos.y + origin.y;
-            setActor(x, y, '^');
-            playerCrawler.position.x = x;
-            playerCrawler.position.y = y;
+            visibilityCached = FALSE;
             
             return gameSnapshot;
         }
@@ -497,7 +490,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         struct Item *item = NULL;
         
         while (head != NULL) {
-            setItem(origin.x + head->item->position.x, origin.y + head->item->position.y, 'K');
+            setItem(head->item->position.x, head->item->position.y, 'K');
             head = head->next;
         }
         
@@ -529,8 +522,8 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     playerCrawler.ammo = 15;
     playerHealth = playerCrawler.life;
     memcpy (&collisionMap, collisions, 256);
-    origin.x = 0;
-    origin.y = 0;
+    
+    struct WorldPosition worldPos;
 
     for (y = 0; y < MAP_SIZE; ++y) {
         for (x = 0; x < MAP_SIZE; ++x) {
@@ -540,20 +533,27 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
             setActor(x, y, '.');
             setElement(x, y, current);
             
-            if (current == '4') {
-                origin.x = x;
-                origin.y = y;
+            if ((current == 's' && enteredThru == 0) ||
+                (current == 'w' && enteredThru == 1) ||
+                (current == 'n' && enteredThru == 2) ||
+                (current == 'e' && enteredThru == 3)
+                ) {
+                worldPos.x = x;
+                worldPos.y = y;
+                enteredThru = -1;
             }
+
             ++ptr;
         }
         ++ptr;
     }
     
-    struct WorldPosition worldPos = getPlayerPosition();
-    x = worldPos.x + origin.x;
-    y = worldPos.y + origin.y;
+    x = worldPos.x;
+    y = worldPos.y;
     setActor(x, y, '^');
+    setPlayerPosition(worldPos);
     playerCrawler.position.x = x;
     playerCrawler.position.y = y;
+    
 
 }

@@ -93,6 +93,8 @@ void setGameStatus(int newStatus);
 
 int getPlayerDirection(void);
 
+void setPlayerDirection(int direction);
+
 void infoAboutItemNamed(const char* itemName);
 
 void moveBy(int direction);

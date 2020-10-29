@@ -627,6 +627,10 @@ void useObjectToggleCallback(struct Item* item) {
   item->active = !item->active;
 }
 
+void setPlayerDirection(int direction) {
+    playerDirection = direction;
+}
+
 void initStation(void) {
 
 	setErrorHandlerCallback(NULL);
@@ -643,8 +647,8 @@ void initStation(void) {
 	station[1].info = "My trusty old scrap ship. Built it myself. Still leaks fuel like a drunken horse, but it's mine, damn it! Well, at least until some of fines I have to pay results in repo men knocking my door.";
 	station[1].connections[0] = 2;
 	station[1].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[1].sizeX = 31;
-	station[1].sizeY = 31;
+	station[1].sizeX = 64;
+	station[1].sizeY = 64;
 
 	playerPosition.x = 15;
 	playerPosition.y = 15;
@@ -655,8 +659,8 @@ void initStation(void) {
 	station[2].connections[1] = 6;
 	station[2].connections[0] = 3;
 	station[2].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[2].sizeX = 31;
-	station[2].sizeY = 31;
+	station[2].sizeX = 64;
+	station[2].sizeY = 64;
 
 	station[3].description = "hall-1";
 	station[3].info = "A well lit hall, with doors. It's the main hub of the station. Despite being right next to the hangar and the control room, it's rather quiet.";
@@ -665,8 +669,8 @@ void initStation(void) {
 	station[3].connections[1] = 5;
 	station[3].rankRequired = 1;
 	station[3].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[3].sizeX = 31;
-	station[3].sizeY = 31;
+	station[3].sizeX = 64;
+	station[3].sizeY = 64;
 
 	station[4].description = "elevator-level-1";
 	station[4].info = "Going down? The elevator no longer works. It seems to be stuck in level 3. You have to navegate the shaft by yourself";

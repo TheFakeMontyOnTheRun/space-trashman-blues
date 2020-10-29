@@ -13,8 +13,9 @@ E 0 0 1 1 1 table null bricks2 null bricks2 table 0 0 3 2
 T 0 0 1 1 1 null null null null null table 0 3 4 3
 S 0 0 1 1 1 ceiling asphalt bricks2 leftnear null bricks2 0 0 4 0
 Z 0 0 1 1 1 ceiling asphalt bricks2 leftfar null bricks2 0 0 4 0
-4 0 0 0 0 1 ceiling asphalt null null null null 0 0 0 0
 . 0 0 0 0 1 ceiling asphalt null null null null 0 0 4 0
+s 0 0 0 0 1 ceiling asphalt null null null null 0 0 4 0
+n 0 0 0 0 1 ceiling asphalt null null null null 0 0 4 0
 0 0 0 0 0 1 ceiling asphalt null null null null 0 0 4 0
 1 0 0 0 0 1 ceiling asphalt null null null null 0 0 4 0
 2 0 0 0 0 1 ceiling asphalt null null null null 0 0 4 0
