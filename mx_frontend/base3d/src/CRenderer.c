@@ -208,6 +208,10 @@ void drawMap(const uint8_t * __restrict__ elements,
     visibleElementsMap = elements;
     hasSnapshot = TRUE;
 
+    if (!enable3DRendering) {
+        return;
+    }
+    
     if (abs(yCameraOffset) <= 1000 ) {
         yCameraOffset = 0;
     }
@@ -346,6 +350,10 @@ void render(const long ms) {
     const FixP_t halfOne = Div(one, two);
     FixP_t standardHeight = Div(intToFix(195), intToFix(100));
 
+    if (!enable3DRendering) {
+        return;
+    }
+    
     if (!hasSnapshot) {
         return;
     }

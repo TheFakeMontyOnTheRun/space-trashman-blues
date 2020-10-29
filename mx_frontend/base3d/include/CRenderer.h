@@ -61,6 +61,7 @@ extern FixP_t playerHeightTarget;
 extern FixP_t xCameraOffset;
 extern FixP_t yCameraOffset;
 extern FixP_t zCameraOffset;
+extern int enable3DRendering;
 
 
 void graphicsInit(void);

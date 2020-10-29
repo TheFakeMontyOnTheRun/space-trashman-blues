@@ -306,6 +306,10 @@ int loopTick(enum ECommand command) {
     if ( needRedraw ) {
         drawMap(&elements[0], &items[0], &actorsInMap[0], &effects[0],
                 &actor);
+        if (!enable3DRendering) {
+            enable3DRendering = TRUE;
+            visibilityCached = FALSE;
+        }
     }
     return shouldContinue;
 }

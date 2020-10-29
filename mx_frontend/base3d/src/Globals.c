@@ -20,6 +20,7 @@ enum EPresentationState currentPresentationState;
 size_t biggestOption;
 const char *mainText = NULL;
 int isRunning = TRUE;
+int enable3DRendering = TRUE;
 
 int isBigEndian() {
     union {

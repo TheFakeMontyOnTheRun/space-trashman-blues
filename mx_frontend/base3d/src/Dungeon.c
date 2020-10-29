@@ -476,12 +476,11 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
     
         if ( '0' <= cell && cell <= '3') {
             moveBy(cell - '0');
+            enable3DRendering = FALSE;
             int room = getPlayerRoom();
             enteredThru = cell - '0';
-            initRoom(room);
             setPlayerDirection(enteredThru);
-            
-            visibilityCached = FALSE;
+            initRoom(room);
             
             return gameSnapshot;
         }
@@ -556,4 +555,6 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     playerCrawler.position.y = y;
     
 
+    visibilityCached = FALSE;
+    needsToRedrawVisibleMeshes = TRUE;
 }
