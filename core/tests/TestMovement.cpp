@@ -64,6 +64,11 @@ TEST_F(TestMovement, canMoveOnlyWhenEnabled) {
 TEST_F(TestMovement, canWalkInsideRooms) {
 
   char buffer[255];
+
+
+  parseCommand("pick", "magnetic-boots");
+  parseCommand("use", "magnetic-boots");
+
   strcpy(&buffer[0], "walkTo 2 3");
   char *operator1 = strtok( &buffer[0], "\n " );
   char *operand1 = strtok( NULL, "\n ");
@@ -220,6 +225,8 @@ TEST_F(TestMovement, canWalkBetweenRooms) {
   ASSERT_EQ(getPlayerRoom(), 1);
 
   parseCommand("pick", "low-rank-keycard");
+  parseCommand("pick", "magnetic-boots");
+  parseCommand("use", "magnetic-boots");
   
   strcpy(&buffer[0], "walkTo 0 0");
   operator1 = strtok( &buffer[0], "\n " );

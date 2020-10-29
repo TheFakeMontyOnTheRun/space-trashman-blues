@@ -308,7 +308,7 @@ void useObjectNamed(const char* operand) {
 
 void walkTo(const char* operands) {
 
-  if (playerLocation != 0 && (!item[5].active || !playerHasObject("magnetic-boots"))) {
+  if (playerLocation != 1 && (!item[5].active || !playerHasObject("magnetic-boots"))) {
     puts("You can't move without your magnetic-boots!");
   }
 
@@ -426,8 +426,9 @@ void turnRight(void) {
 
 void walkBy(int direction) {
 
-  if (playerLocation != 0 && (!item[5].active || !playerHasObject("magnetic-boots"))) {
-    puts("You can't move without your magnetic-boots!");
+  if (playerLocation != 1 && (!item[5].active || !playerHasObject("magnetic-boots"))) {
+      puts("You can't move without your magnetic-boots!");
+      return;
   }
 
   switch ( direction ) {
