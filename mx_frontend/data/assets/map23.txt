@@ -43,10 +43,10 @@ I.....I........I...I................II........I\I...IFFFI......I
 I.....I...CM...I...I................II........I.XX..IFFFI......I
 I.....I.....T..I...I................II........I.XX..IFFFI......I
 I.....IIIIIIIII/...I................\IIIIIIIIII/F\II/FFF\IIIII/.
-I.....FFFFFFFFF....I.................FFFFFFFFFFFFFFFFFFFFFFFFFFF
-I.....FFFFFFFFF....I.................FFFFFFFFFFFFFFFFFFFFFFFFFFF
-I.....FFFFFFFFF....I.................FFFFFFFFFFFFFFFFFFFFFFFFFFF
-I.....FFFFFFFFF....I............4....FFFFFFFFFFFFFFFFFFFFFFFFFFF
+I.....FFFFFFFFF....I................1FFFFFFFFFFFFFFFFFFFFFFFFFFF
+I.....FFFFFFFFF....I................1FFFFFFFFFFFFFFFFFFFFFFFFFFF
+I.....FFFFFFFFF....I..............e.1FFFFFFFFFFFFFFFFFFFFFFFFFFF
+I.....FFFFFFFFF....I................1FFFFFFFFFFFFFFFFFFFFFFFFFFF
 I.....IIIIIIIII\...I................/IIIIIIIIII\F/II\FFF/IIIII\.
 II....I........I...I................II........II....IFFFI......I
 II....I........IIIIIIIIIIIIIIIIIIIIIII........II....IFFFI......I

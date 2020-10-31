@@ -35,9 +35,9 @@ I......I...I....I..\.....IFFFFI......V.........................I
 IIIIIIII...I....I...I....IFFFFI................................I
 I.....IIIIIIIIIIIIIIIIIIIIFFFFIIIIIIIIIIIIIIIII................I
 I.....I........I...I....\IFFFFI/....III.......I................I
+I.....I........I...I......0000......II........I................I
 I.....I........I...I................II........I................I
-I.....I........I...I................II........I................I
-I.....I........I...I................II........I.....IXXXI......I
+I.....I........I...I.......n........II........I.....IXXXI......I
 I.....I...BF...I...I................II........III...IFFFI.._...I
 I.....I........I...I................II........I\I...IFFFI......I
 I.....I...CM...I...I................II........I.XX..IFFFI......I
@@ -46,7 +46,7 @@ I.....IIIIIIIII/...I................IIIIIIIIIII/F\II/FFF\IIIII/.
 I.....FFFFFFFFF....I................IFFFFFFFFFFFFFFFFFFFFFFFFFFF
 I.....FFFFFFFFF....I................IFFFFFFFFFFFFFFFFFFFFFFFFFFF
 I.....FFFFFFFFF....I................IFFFFFFFFFFFFFFFFFFFFFFFFFFF
-I.....FFFFFFFFF....I............4...IFFFFFFFFFFFFFFFFFFFFFFFFFFF
+I.....FFFFFFFFF....I................IFFFFFFFFFFFFFFFFFFFFFFFFFFF
 I.....IIIIIIIII\...I................IIIIIIIIIII\F/II\FFF/IIIII\.
 II....I........I...I................II........II....IFFFI......I
 II....I........IIIIIIIIIIIIIIIIIIIIIII........II....IFFFI......I
