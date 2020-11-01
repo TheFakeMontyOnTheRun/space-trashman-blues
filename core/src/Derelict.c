@@ -304,6 +304,18 @@ void useObjectNamed(const char* operand) {
     }
     itemToPick = itemToPick->next;
   }
+    
+    itemToPick = getRoom(playerLocation)->itemsPresent->next;
+    
+    while (itemToPick != NULL) {
+        if (!strcmp(itemToPick->item->description, operand)) {
+            if (itemToPick->item->useCallback != NULL) {
+                itemToPick->item->useCallback(itemToPick->item);
+            }
+            return;
+        }
+        itemToPick = itemToPick->next;
+    }
 }
 
 void walkTo(const char* operands) {
