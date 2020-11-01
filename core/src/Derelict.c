@@ -11,7 +11,7 @@ Created by Daniel Monteiro on 2019-07-26.
 #include "Derelict.h"
 
 #define TOTAL_ROOMS 24
-#define TOTAL_ITEMS 26
+#define TOTAL_ITEMS 30
 
 struct Room station[TOTAL_ROOMS];
 struct Item item[TOTAL_ITEMS];
@@ -628,6 +628,15 @@ void bombControllerActivatedCallback(struct Item* item) {
   bombActivatedCallback(NULL);
 }
 
+void elevatorGoDownCallback(struct Item* item) {
+    moveBy(4);
+}
+
+void elevatorGoUpCallback(struct Item* item) {
+    moveBy(5);
+}
+
+
 void cantBeUsedCallback(struct Item* item) {
   puts("You can't use it like this.");
 }
@@ -690,8 +699,9 @@ void initStation(void) {
 	station[4].connections[2] = 3;
 	station[4].connections[4] = 13;
 	station[4].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[4].sizeX = 5;
-	station[4].sizeY = 5;
+	station[4].sizeX = 30;
+	station[4].sizeY = 30;
+    addToRoom("elevator-level-1", &item[26]);
 
 	station[5].description = "dorms-1";
 	station[5].info = "Part of the dorms hallway. There are some (busted) control panels for ejecting the pods. Some pieces of cloth and broken plastic on the floor, but nothing really useful or valuable.";
@@ -761,8 +771,10 @@ void initStation(void) {
 	station[13].connections[4] = 19;
 	station[13].connections[2] = 14;
 	station[13].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[13].sizeX = 10;
-	station[13].sizeY = 16;
+	station[13].sizeX = 30;
+	station[13].sizeY = 30;
+    addToRoom("elevator-level-2", &item[27]);
+    addToRoom("elevator-level-2", &item[28]);
 
 	station[14].description = "hall-2";
 	station[14].info = "Not as imponent as the main hall from Level 1, this hall has a busier feel. Here you see objects thrown all over the place, as if someone was in the middle of a day-to-day routine and had to quickly run.";
@@ -808,8 +820,9 @@ void initStation(void) {
 	station[19].connections[2] = 20;
 	station[19].connections[5] = 13;
 	station[19].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[19].sizeX = 5;
-	station[19].sizeY = 5;
+	station[19].sizeX = 30;
+	station[19].sizeY = 30;
+    addToRoom("elevator-level-3", &item[29]);
 
 	station[20].description = "hall-3";
 	station[20].info = "This was a restricted area, so it's rather sparce. Mostly labs and equipment. A constant hum from the generaters can be heard";
@@ -1115,4 +1128,38 @@ void initStation(void) {
 	item[25].pickable = TRUE;
 	item[25].position.x = 7;
 	item[25].position.y = 6;
+    
+    
+    /* Elevator controls */
+    item[26].description = "elevator-level1-go-down";
+    item[26].info = "Elevator controls - Go down";
+    item[26].useCallback = elevatorGoDownCallback;
+    item[26].useWithCallback = cantBeUsedWithOthersCallback;
+    item[26].pickable = FALSE;
+    item[26].position.x = 27;
+    item[26].position.y = 2;
+    
+    item[27].description = "elevator-level2-go-down";
+    item[27].info = "Elevator controls - Go down";
+    item[27].useCallback = elevatorGoDownCallback;
+    item[27].useWithCallback = cantBeUsedWithOthersCallback;
+    item[27].pickable = FALSE;
+    item[27].position.x = 27;
+    item[27].position.y = 2;
+    
+    item[28].description = "elevator-level2-go-up";
+    item[28].info = "Elevator controls - Go Up";
+    item[28].useCallback = elevatorGoUpCallback;
+    item[28].useWithCallback = cantBeUsedWithOthersCallback;
+    item[28].pickable = FALSE;
+    item[28].position.x = 28;
+    item[28].position.y = 2;
+    
+    item[29].description = "elevator-level3-go-up";
+    item[29].info = "Elevator controls - Go Up";
+    item[29].useCallback = elevatorGoUpCallback;
+    item[29].useWithCallback = cantBeUsedWithOthersCallback;
+    item[29].pickable = FALSE;
+    item[29].position.x = 28;
+    item[29].position.y = 2;
 }
