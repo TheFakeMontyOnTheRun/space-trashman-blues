@@ -688,7 +688,7 @@ void initStation(void) {
 	station[4].description = "elevator-level-1";
 	station[4].info = "Going down? The elevator no longer works. It seems to be stuck in level 3. You have to navegate the shaft by yourself";
 	station[4].connections[2] = 3;
-	station[4].connections[5] = 13;
+	station[4].connections[4] = 13;
 	station[4].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	station[4].sizeX = 5;
 	station[4].sizeY = 5;
@@ -806,7 +806,7 @@ void initStation(void) {
 	station[19].description = "elevator-level-3";
 	station[19].info = "Going up? Fortunately, the escape hatch is open and this allows for access. The cabin itself is unremarkable.";
 	station[19].connections[2] = 20;
-	station[19].connections[4] = 13;
+	station[19].connections[5] = 13;
 	station[19].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	station[19].sizeX = 5;
 	station[19].sizeY = 5;
