@@ -551,7 +551,7 @@ int getPlayerDirection(void) {
 void addToRoom( const char* roomName, struct Item *itemName ) {
   int r = 0;
 
-  if (roomName == NULL || itemName == NULL || strlen(roomName) == 0 || strlen(itemName) == 0) {
+  if (roomName == NULL || itemName == NULL || strlen(roomName) == 0 ) {
     notifyError("Either the object name or the room name are null. Check your stuff");
     return;
   }
