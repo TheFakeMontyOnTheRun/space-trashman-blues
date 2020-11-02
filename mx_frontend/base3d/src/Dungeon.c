@@ -73,7 +73,8 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
 
     int oldTurn = gameSnapshot.turn;
     setActor(playerCrawler.position.x, playerCrawler.position.y, '.');
-
+    int currentPlayerRoom = getPlayerRoom();
+    
     if (playerCrawler.life > 0) {
         switch (command) {
             case kCommandRight:
@@ -334,6 +335,17 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         }
         
         int cell = map[playerCrawler.position.y][playerCrawler.position.x];
+        
+        
+        if (currentPlayerRoom != getPlayerRoom()) {
+            enable3DRendering = FALSE;
+            int room = getPlayerRoom();
+            enteredThru = 0 ;
+            setPlayerDirection(enteredThru);
+            initRoom(getPlayerRoom());
+            
+            return gameSnapshot;
+        }
         
     
         if ( '0' <= cell && cell <= '3') {
