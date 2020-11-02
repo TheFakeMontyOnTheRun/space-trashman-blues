@@ -1137,7 +1137,7 @@ void initStation(void) {
     item[26].useWithCallback = cantBeUsedWithOthersCallback;
     item[26].pickable = FALSE;
     item[26].position.x = 27;
-    item[26].position.y = 2;
+    item[26].position.y = 0;
     
     item[27].description = "elevator-level2-go-down";
     item[27].info = "Elevator controls - Go down";
@@ -1145,7 +1145,7 @@ void initStation(void) {
     item[27].useWithCallback = cantBeUsedWithOthersCallback;
     item[27].pickable = FALSE;
     item[27].position.x = 27;
-    item[27].position.y = 2;
+    item[27].position.y = 0;
     
     item[28].description = "elevator-level2-go-up";
     item[28].info = "Elevator controls - Go Up";
@@ -1153,7 +1153,7 @@ void initStation(void) {
     item[28].useWithCallback = cantBeUsedWithOthersCallback;
     item[28].pickable = FALSE;
     item[28].position.x = 28;
-    item[28].position.y = 2;
+    item[28].position.y = 0;
     
     item[29].description = "elevator-level3-go-up";
     item[29].info = "Elevator controls - Go Up";
@@ -1161,5 +1161,5 @@ void initStation(void) {
     item[29].useWithCallback = cantBeUsedWithOthersCallback;
     item[29].pickable = FALSE;
     item[29].position.x = 28;
-    item[29].position.y = 2;
+    item[29].position.y = 0;
 }
