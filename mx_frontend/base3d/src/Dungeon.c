@@ -175,7 +175,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     char *operand1 = strtok( NULL, "\n ");
                     parseCommand(operator1, operand1);
                 }
-                
+                gameSnapshot.turn++;
             } break;
             case kCommandFire2: {
                 struct ObjectNode* head = getPlayerItems();
@@ -220,6 +220,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 if (item != NULL) {
                     parseCommand("use", item->description);
                 }
+                gameSnapshot.turn++;
             } break;
                 
             case kCommandFire3: {
@@ -242,7 +243,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                         setItem(offseted.x, offseted.y, '.');
                     }
                 }
-
+                gameSnapshot.turn++;
             }
 
                 break;
