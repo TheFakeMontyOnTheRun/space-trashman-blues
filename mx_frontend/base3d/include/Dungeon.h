@@ -9,7 +9,6 @@ struct GameSnapshot {
 	enum CrawlerState should_continue;
 	int ammo;
 	int turn;
-	int covered;
 	int keyCollected;
 	int infoCollected;
 	int mapIndex;

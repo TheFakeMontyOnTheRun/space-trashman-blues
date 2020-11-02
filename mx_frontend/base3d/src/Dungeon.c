@@ -62,150 +62,11 @@ void update_log() {
     sprintf (crawlClueMessage, "%s", &buffer[0]);
 }
 
-void pursue(struct CrawlerAgent *spy, struct Vec2i target) {
-
-    int dx = (target.x - spy->position.x);
-    int dy = (target.y - spy->position.y);
-    int x = spy->position.x;
-    int y = spy->position.y;
-    int incX = 0;
-    int incY = 0;
-    int iX;
-    int iY;
-
-    if (abs(dx) >= abs(dy)) {
-        if (dx >= 0) {
-            incX = 1;
-            spy->rotation = 1;
-        } else {
-            incX = -1;
-            spy->rotation = 3;
-        }
-    } else {
-        if (dy >= 0) {
-            incY = 1;
-            spy->rotation = 2;
-        } else {
-            incY = -1;
-            spy->rotation = 0;
-        }
-    }
-
-    iX = x + incX;
-    iY = y + incY;
-
-
-    spy->position.x = iX;
-    spy->position.y = iY;
-
-
-    if (spy->symbol == 'e') {
-        spy->symbol = 'f';
-    } else {
-        spy->symbol = 'e';
-    }
-}
 
 int isPositionAllowed(int x, int y) {
 
     return (0 <= x) && (x < MAP_SIZE) && (0 <= y) && (y < MAP_SIZE)
            && collisionMap[map[y][x]] != '1';
-}
-
-int isCovered(struct Vec2i position) {
-    return (!isPositionAllowed(position.x, position.y - 1))
-           || (!isPositionAllowed(position.x, position.y + 1))
-           || (!isPositionAllowed(position.x + 1, position.y))
-           || (!isPositionAllowed(position.x - 1, position.y));
-}
-
-void tickEnemy(struct CrawlerAgent *actor) {
-    int x, y;
-
-    struct Vec2i pos0 = actor->position;
-    struct Vec2i pos1 = playerCrawler.position;
-
-    int chances = gameSnapshot.detected || ((!gameSnapshot.covered) || ((gameSnapshot.turn % 4) == 0));
-
-    x = actor->position.x;
-    y = actor->position.y;
-
-    setActor(x, y, '.');
-
-    if (actor->life == 0) {
-        setItem(x, y, '*');
-        return;
-    }
-
-    if (chances && canSeeSpy(pos0, actor->rotation, pos1, 1)) {
-        actor->target = playerCrawler.position;
-
-        /*First detection*/
-        if (!gameSnapshot.detected) {
-            setDetected();
-            gameSnapshot.detected = TRUE;
-        }
-
-        /*Move towards player*/
-        pursue(actor, actor->target);
-
-        if (!isPositionAllowed(actor->position.x, actor->position.y)
-            || (playerCrawler.position.x == actor->target.x &&
-                playerCrawler.position.y == actor->target.y)) {
-            actor->position.x = x;
-            actor->position.y = y;
-        }
-
-        if ((gameSnapshot.turn % 2) == 0) {
-
-            /*Shooting at player*/
-            addEffectSprite(actor->position.x, actor->position.y, '+');
-
-            /*Bullseye!*/
-            if (!gameSnapshot.covered || ((gameSnapshot.turn % 4) == 0)) {
-                playerCrawler.life--;
-                playerHealth = playerCrawler.life;
-                visibilityCached = FALSE;
-                needsToRedrawVisibleMeshes = TRUE;
-
-                setDamage();
-                if (playerCrawler.life <= 0) {
-                    gameSnapshot.should_continue = kCrawlerGameOver;
-                }
-            }
-        }
-    } else if (isPositionAllowed(actor->position.x, actor->position.y) &&
-               isPositionAllowed(actor->target.x, actor->target.y)) {
-
-        if ((actor->target.x != actor->position.x)
-            || (actor->target.y != actor->position.y)) {
-
-            char prevSymbol = actor->symbol;
-
-            pursue(actor, actor->target);
-
-            if (!isPositionAllowed(actor->position.x, actor->position.y) ||
-                ((actor->position.x == playerCrawler.position.x)
-                 && (actor->position.y == playerCrawler.position.y))) {
-                actor->position.x = x;
-                actor->position.y = y;
-                actor->symbol = prevSymbol;
-            }
-
-            if ((abs(actor->position.x - actor->target.x) <= 1)
-                && (abs(actor->position.y - actor->target.y) <= 1)) {
-                actor->target.x = actor->target.y = -1;
-            }
-        } else {
-            actor->symbol = 'g';
-            actor->rotation = rightOf(actor->rotation);
-        }
-    } else {
-        actor->symbol = 'g';
-        actor->rotation = leftOf(actor->rotation);
-    }
-
-    setActor(actor->position.x, actor->position.y, actor->symbol);
 }
 
 struct GameSnapshot dungeon_tick(const enum ECommand command) {
@@ -457,8 +318,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             offseted.x += playerCrawler.position.x;
             offseted.y += playerCrawler.position.y;
             
-            int index = 0;
-            
             while (head != NULL && item == NULL) {
                 if (offseted.x == (head->item->position.x) && offseted.y == (head->item->position.y)) {
                     item = head->item;
@@ -486,7 +345,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         }
         
         struct ObjectNode* head = getRoom(getPlayerRoom())->itemsPresent->next;
-        struct Item *item = NULL;
         
         while (head != NULL) {
             setItem(head->item->position.x, head->item->position.y, 'K');
@@ -494,8 +352,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         }
         
         update_log();
-
-        gameSnapshot.covered = isCovered(playerCrawler.position);
     }
 
     return gameSnapshot;
@@ -509,7 +365,6 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     gameSnapshot.keyCollected = FALSE;
     gameSnapshot.targetLocated = FALSE;
     gameSnapshot.infoCollected = FALSE;
-    gameSnapshot.covered = FALSE;
     gameSnapshot.detected = FALSE;
     gameSnapshot.should_continue = kCrawlerGameInProgress;
     gameSnapshot.ammo = 15;

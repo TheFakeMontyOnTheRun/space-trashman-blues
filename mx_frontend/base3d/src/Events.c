@@ -67,7 +67,6 @@ void tickMission(enum ECommand cmd) {
     eventsDetected = snapshot.detected;
     shouldContinue = snapshot.should_continue;
     playerAmmo = snapshot.ammo;
-    covered = snapshot.covered;
 
     updateCursorForRenderer(snapshot.playerTarget.x, snapshot.playerTarget.y);
 
