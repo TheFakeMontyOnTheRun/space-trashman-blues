@@ -297,12 +297,11 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         gameSnapshot.turn++;
     }
 
-    struct WorldPosition worldPos;
-    worldPos.x = playerCrawler.position.x;
-    worldPos.y = playerCrawler.position.y;
+    struct WorldPosition worldPos = getPlayerPosition();
+    playerCrawler.position.x = worldPos.x;
+    playerCrawler.position.y = worldPos.y;
     setActor(playerCrawler.position.x, playerCrawler.position.y, '^');
-    setPlayerPosition(worldPos);
-    setPlayerDirection(playerCrawler.rotation);
+    playerCrawler.rotation = getPlayerDirection();
     
     gameSnapshot.camera_x = playerCrawler.position.x;
     gameSnapshot.camera_z = playerCrawler.position.y;
