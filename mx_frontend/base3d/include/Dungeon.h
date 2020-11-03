@@ -5,14 +5,9 @@ struct GameSnapshot {
 	uint8_t camera_x;
 	uint8_t camera_z;
 	uint8_t camera_rotation;
-	int detected;
 	enum CrawlerState should_continue;
-	int ammo;
 	int turn;
-	int keyCollected;
-	int infoCollected;
 	int mapIndex;
-	int targetLocated;
 	struct Vec2i playerTarget;
 };
 

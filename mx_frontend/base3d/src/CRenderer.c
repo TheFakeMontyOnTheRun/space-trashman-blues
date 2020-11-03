@@ -54,8 +54,6 @@ long gameTicks = 0;
 int distanceForPenumbra = 24;
 int distanceForDarkness = 48;
 
-int playerAmmo = 0;
-
 #ifdef SDLSW
 int mSlow = FALSE;
 #endif

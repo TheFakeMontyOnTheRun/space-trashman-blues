@@ -32,11 +32,8 @@ int z = 0;
 int rotation = 0;
 enum CrawlerState shouldContinue = kCrawlerGameInProgress;
 struct CActor actor;
-int eventsDetected = FALSE;
 
 int loopTick(enum ECommand command);
-
-char crawlClueMessage[128];
 
 void clearMapCache() {
     size_t sizeForSet = sizeof(uint8_t) * (MAP_SIZE * MAP_SIZE);
@@ -48,7 +45,6 @@ void clearMapCache() {
 void onLevelLoaded(int index) {
     clearMapCache();
     shouldContinue = kCrawlerGameInProgress;
-    eventsDetected = FALSE;
     shouldShowDetectedHighlight = FALSE;
     highlightDisplayTime = 0;
     clearMap(&tileProperties);
@@ -64,9 +60,7 @@ void tickMission(enum ECommand cmd) {
     x = snapshot.camera_x;
     z = snapshot.camera_z;
     rotation = snapshot.camera_rotation;
-    eventsDetected = snapshot.detected;
     shouldContinue = snapshot.should_continue;
-    playerAmmo = snapshot.ammo;
 
     updateCursorForRenderer(snapshot.playerTarget.x, snapshot.playerTarget.y);
 
@@ -262,10 +256,6 @@ int canSeeSpy(const struct Vec2i seer,
 
 void renderTick(long ms) {
     render(ms);
-    if (crawlClueMessage[0] != 0) {
-        drawTextAt(2, 22, crawlClueMessage, 37);
-    }
-    drawTextAt(2, 21, eventsDetected ? "Enemy has detected you" : "", 37);
 }
 
 int loopTick(enum ECommand command) {
@@ -337,5 +327,4 @@ void initRoom(int room) {
     }
 
     loadMap(room, &colliders);
-    crawlClueMessage[0] = 0;
 }

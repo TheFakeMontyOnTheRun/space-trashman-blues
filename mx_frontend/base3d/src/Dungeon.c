@@ -39,29 +39,9 @@ struct CrawlerAgent {
     char symbol;
     uint8_t life;
     struct Vec2i target;
-    uint8_t ammo;
 };
 
 struct CrawlerAgent playerCrawler;
-
-void update_log() {
-    char buffer[128];
-    char *keysAndTargets;
-
-    if (gameSnapshot.keyCollected) {
-        keysAndTargets = "Key collected.\n ";
-    } else {
-        if (gameSnapshot.targetLocated) {
-            keysAndTargets = "Target located. Key still pending.\n ";
-        } else {
-            keysAndTargets = "";
-        }
-    }
-
-    sprintf (&buffer[0], "%s", keysAndTargets);
-    sprintf (crawlClueMessage, "%s", &buffer[0]);
-}
-
 
 int isPositionAllowed(int x, int y) {
 
@@ -306,7 +286,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
     gameSnapshot.camera_x = playerCrawler.position.x;
     gameSnapshot.camera_z = playerCrawler.position.y;
     gameSnapshot.camera_rotation = playerCrawler.rotation;
-    gameSnapshot.ammo = playerCrawler.ammo;
 
     setActor(playerCrawler.position.x, playerCrawler.position.y, '^');
 
@@ -364,8 +343,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             setItem(head->item->position.x, head->item->position.y, 'K');
             head = head->next;
         }
-        
-        update_log();
     }
 
     return gameSnapshot;
@@ -376,18 +353,12 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
                      const int mapIndex) {
     int x, y;
     const uint8_t *ptr = mapData;
-    gameSnapshot.keyCollected = FALSE;
-    gameSnapshot.targetLocated = FALSE;
-    gameSnapshot.infoCollected = FALSE;
-    gameSnapshot.detected = FALSE;
     gameSnapshot.should_continue = kCrawlerGameInProgress;
-    gameSnapshot.ammo = 15;
     gameSnapshot.mapIndex = mapIndex;
     gameSnapshot.camera_rotation = 0;
     playerCrawler.symbol = '^';
     playerCrawler.rotation = 0;
     playerCrawler.life = 5;
-    playerCrawler.ammo = 15;
     playerHealth = playerCrawler.life;
     memcpy (&collisionMap, collisions, 256);
     
