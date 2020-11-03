@@ -36,6 +36,9 @@ TEST(TestVictoryCondition, activatingTheRemoteControlWithTheActiveBombWillExplod
 TEST(TestVictoryCondition, placingTheBombOnLab1WithoutTheMendingWillExplodeStationWhileAtNotAtShipWillCauseYouToGoDownWithIt) {
 
   initStation();
+  parseCommand("pick", "magnetic-boots");
+  parseCommand("use", "magnetic-boots");
+
   parseCommand("move", "0");
   ASSERT_NE(getPlayerRoom(), 1);
 
@@ -83,6 +86,8 @@ TEST(TestVictoryCondition, placingTheBombOnLab1WithTheMendingWillFailToExplodeSt
 TEST(TestVictoryCondition, placingTheBombOnLab1WithTheMendingWillFailToExplodeStationWithYouOutsideTheShipWillCauseYouToGoDownWithIt) {
 
   initStation();
+  parseCommand("pick", "magnetic-boots");
+  parseCommand("use", "magnetic-boots");
   parseCommand("move", "0");
   ASSERT_NE(getPlayerRoom(), 1);
 

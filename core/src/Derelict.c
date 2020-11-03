@@ -171,7 +171,8 @@ void moveBy(int direction) {
     }
 
     if (!item[5].active || !playerHasObject("magnetic-boots")) {
-      puts("You can't move without your magnetic-boots!");
+        puts("You can't move without your magnetic-boots!");
+        return;
     }
 
     playerLocation = room->connections[direction];

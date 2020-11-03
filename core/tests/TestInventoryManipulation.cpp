@@ -95,12 +95,14 @@ TEST_F(TestInventoryManipulation, objectsDroppedInRoomStayThere) {
 	parseCommand("pick", "low-rank-keycard");
 	ASSERT_FALSE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
 
+	parseCommand("pick", "magnetic-boots");
+	parseCommand("use", "magnetic-boots");
+
 	parseCommand("move", "0");
 	ASSERT_TRUE(isPlayerAtRoom("hangar"));
 	ASSERT_FALSE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
 	parseCommand("drop", "low-rank-keycard");
 	ASSERT_TRUE(hasItemInRoom("hangar", "low-rank-keycard"));
-	ASSERT_TRUE(collectedObject->next == NULL);
 	ASSERT_FALSE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
 }
 
@@ -128,6 +130,9 @@ TEST_F(TestInventoryManipulation, objectsCanOnlyExistInOneRoom) {
   item.description = "farofinha";
   item.pickable = TRUE;
   initStation();
+
+  parseCommand("pick", "magnetic-boots");
+  parseCommand("use", "magnetic-boots");
 
   addObjectToRoom(1, &item);
   ASSERT_TRUE(hasItemInRoom("lss-daedalus", "farofinha"));

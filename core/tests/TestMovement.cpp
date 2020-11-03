@@ -262,7 +262,13 @@ TEST_F(TestMovement, canWalkBetweenRooms) {
 }
 
 TEST_F(TestMovement, roomsCanRequireSpecialRankForAccess) {
+
   ASSERT_EQ(getPlayerRoom(), 1);
+
+  parseCommand("pick", "low-rank-keycard");
+  parseCommand("pick", "magnetic-boots");
+  parseCommand("use", "magnetic-boots");
+
   parseCommand("move", "0");
   ASSERT_EQ(getPlayerRoom(), 2);
   parseCommand("move", "2");
@@ -320,6 +326,8 @@ TEST_F(TestMovement, walkingTowardsWallsWillBlockMovement) {
   ASSERT_EQ(getPlayerRoom(), 1);
 
   parseCommand("pick", "low-rank-keycard");
+  parseCommand("pick", "magnetic-boots");
+  parseCommand("use", "magnetic-boots");
   
   strcpy(&buffer[0], "walkTo 0 0");
   operator1 = strtok( &buffer[0], "\n " );

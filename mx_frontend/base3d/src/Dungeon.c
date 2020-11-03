@@ -318,7 +318,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         
         if (currentPlayerRoom != getPlayerRoom()) {
             enable3DRendering = FALSE;
-            int room = getPlayerRoom();
             enteredThru = 0 ;
             setPlayerDirection(enteredThru);
             initRoom(getPlayerRoom());
