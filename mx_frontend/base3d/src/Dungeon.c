@@ -52,6 +52,7 @@ int isPositionAllowed(int x, int y) {
 struct GameSnapshot dungeon_tick(const enum ECommand command) {
 
     int oldTurn = gameSnapshot.turn;
+    struct WorldPosition oldPosition = getPlayerPosition();
     setActor(playerCrawler.position.x, playerCrawler.position.y, '.');
     int currentPlayerRoom = getPlayerRoom();
     
@@ -327,12 +328,24 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         
     
         if ( '0' <= cell && cell <= '3') {
+            
             moveBy(cell - '0');
-            enable3DRendering = FALSE;
-            int room = getPlayerRoom();
-            enteredThru = cell - '0';
-            setPlayerDirection(enteredThru);
-            initRoom(room);
+            
+            if (currentPlayerRoom != getPlayerRoom()) {
+                enable3DRendering = FALSE;
+                int room = getPlayerRoom();
+                enteredThru = cell - '0';
+                setPlayerDirection(enteredThru);
+                initRoom(room);
+            } else {
+                setPlayerPosition(oldPosition);
+                playerCrawler.position.x = oldPosition.x;
+                playerCrawler.position.y = oldPosition.y;
+                setActor(playerCrawler.position.x, playerCrawler.position.y, '^');
+                gameSnapshot.camera_x = playerCrawler.position.x;
+                gameSnapshot.camera_z = playerCrawler.position.y;
+                setActor(playerCrawler.position.x, playerCrawler.position.y, '^');
+            }
             
             return gameSnapshot;
         }
