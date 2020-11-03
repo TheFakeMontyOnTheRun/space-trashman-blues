@@ -699,8 +699,8 @@ void initStation(void) {
 	station[4].connections[2] = 3;
 	station[4].connections[4] = 13;
 	station[4].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[4].sizeX = 30;
-	station[4].sizeY = 30;
+	station[4].sizeX = 64;
+	station[4].sizeY = 64;
     addToRoom("elevator-level-1", &item[26]);
 
 	station[5].description = "dorms-1";
@@ -710,29 +710,29 @@ void initStation(void) {
 	station[5].connections[0] = 7;
 	station[5].connections[2] = 8;
 	station[5].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[5].sizeX = 20;
-	station[5].sizeY = 10;
+	station[5].sizeX = 64;
+	station[5].sizeY = 64;
 
 	station[6].description = "rls-bohr-2";
 	station[6].info = "A rescue lander ship. Only for emergencies. Named after some Niels Bohr scientist guy or whatever. Some drops on the carpet and I don't even want know what it is, but I guess I already know. Ick.";
 	station[6].connections[3] = 2;
 	station[6].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[6].sizeX = 5;
+	station[6].sizeX = 64;
 	station[6].sizeY = 5;
 
 	station[7].description = "pod-1";
 	station[7].info = "A male living pod. Looks like from one of the scientists. It's messy, but as if it's occupant would easily find his belongings in there. There are a few cracks in the glass already.";
 	station[7].connections[2] = 5;
 	station[7].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[7].sizeX = 7;
-	station[7].sizeY = 7;
+	station[7].sizeX = 64;
+	station[7].sizeY = 64;
 
 	station[8].description = "pod-2";
 	station[8].info = "A empty living pod. Looks as if it was never ever used. If can even see some of the factory stickers in it.";
 	station[8].connections[0] = 5;
 	station[8].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[8].sizeX = 7;
-	station[8].sizeY = 7;
+	station[8].sizeX = 64;
+	station[8].sizeY = 64;
 
 	station[9].description = "dorms-2";
 	station[9].info = "Anonther part of the dorms hallway. On those, the panels were visibly well. There is a skylight. These parts of the quarters were probably the luxury ones.";
@@ -741,29 +741,29 @@ void initStation(void) {
 	station[9].connections[0] = 10;
 	station[9].connections[2] = 11;
 	station[9].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[9].sizeX = 20;
-	station[9].sizeY = 10;
+	station[9].sizeX = 64;
+	station[9].sizeY = 64;
 
 	station[10].description = "pod-3";
 	station[10].info = "A young woman's pod. You do recognize a few items, but its badly mixed up. It's hard to make the age of girl, but she was young.";
 	station[10].connections[2] = 9;
 	station[10].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[10].sizeX = 7;
-	station[10].sizeY = 7;
+	station[10].sizeX = 64;
+	station[10].sizeY = 64;
 
 	station[11].description = "pod-4";
 	station[11].info = "A scientists pod, for sure. It's neat, clean and organized. Not much around. He had a strange fixation on redheads.";
 	station[11].connections[0] = 9;
 	station[11].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[11].sizeX = 7;
-	station[11].sizeY = 7;
+	station[11].sizeX = 64;
+	station[11].sizeY = 64;
 
 	station[12].description = "lounge";
 	station[12].info = "Here, it seems like a relaxation place. You gaze at the stars and the planet. Very nice.";
 	station[12].connections[3] = 9;
 	station[12].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[12].sizeX = 10;
-	station[12].sizeY = 16;
+	station[12].sizeX = 64;
+	station[12].sizeY = 64;
 
 	station[13].description = "elevator-level-2";
 	station[13].info = "Going up or down? Looking down, you can clearly see the elevator cabin in level 3.";
@@ -771,8 +771,8 @@ void initStation(void) {
 	station[13].connections[4] = 19;
 	station[13].connections[2] = 14;
 	station[13].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[13].sizeX = 30;
-	station[13].sizeY = 30;
+	station[13].sizeX = 64;
+	station[13].sizeY = 64;
     addToRoom("elevator-level-2", &item[27]);
     addToRoom("elevator-level-2", &item[28]);
 
@@ -783,45 +783,45 @@ void initStation(void) {
 	station[14].connections[2] = 16;
 	station[14].connections[3] = 15;
 	station[14].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[14].sizeX = 10;
-	station[14].sizeY = 16;
+	station[14].sizeX = 64;
+	station[14].sizeY = 64;
 
 	station[15].description = "dinner-room";
 	station[15].info = "Empty stomach makes no science. Those thinkers were really into fancy stuff. Too bad it all went bad a long time ago.";
 	station[15].connections[1] = 14;
 	station[15].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[15].sizeX = 10;
-	station[15].sizeY = 16;
+	station[15].sizeX = 64;
+	station[15].sizeY = 64;
 
 	station[16].description = "control-room";
 	station[16].info = "Lots of old equiptment.";
 	station[16].connections[0] = 14;
 	station[16].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[16].sizeX = 10;
-	station[16].sizeY = 16;
+	station[16].sizeX = 64;
+	station[16].sizeY = 64;
 
 	station[17].description = "gymnasium";
 	station[17].info = "This is where they used to workout to keep their health";
 	station[17].connections[3] = 14;
 	station[17].connections[1] = 18;
 	station[17].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[17].sizeX = 10;
-	station[17].sizeY = 16;
+	station[17].sizeX = 64;
+	station[17].sizeY = 64;
 
 	station[18].description = "restroom";
 	station[18].info = "...and this is where they would stay clean. Smells like dry sweat. Ick.";
 	station[18].connections[3] = 17;
 	station[18].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[18].sizeX = 10;
-	station[18].sizeY = 16;
+	station[18].sizeX = 64;
+	station[18].sizeY = 64;
 
 	station[19].description = "elevator-level-3";
 	station[19].info = "Going up? Fortunately, the escape hatch is open and this allows for access. The cabin itself is unremarkable.";
 	station[19].connections[2] = 20;
 	station[19].connections[5] = 13;
 	station[19].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[19].sizeX = 30;
-	station[19].sizeY = 30;
+	station[19].sizeX = 64;
+	station[19].sizeY = 64;
     addToRoom("elevator-level-3", &item[29]);
 
 	station[20].description = "hall-3";
@@ -831,29 +831,29 @@ void initStation(void) {
 	station[20].connections[2] = 22;
 	station[20].connections[3] = 23;
 	station[20].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[20].sizeX = 5;
-	station[20].sizeY = 5;
+	station[20].sizeX = 64;
+	station[20].sizeY = 64;
 
 	station[21].description = "lab-1";
 	station[21].connections[3] = 20;
 	station[21].info = "A micro-g-hydrostatic lab. Lots of old equipments. There must be something valuable here.";
 	station[21].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[21].sizeX = 5;
-	station[21].sizeY = 5;
+	station[21].sizeX = 64;
+	station[21].sizeY = 64;
 
 	station[22].description = "lab-2";
 	station[22].connections[0] = 20;
 	station[22].info = "A low-atmosphere-electricity lab. Lots of strange equipment. Looks dangerous.";
 	station[22].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[22].sizeX = 5;
-	station[22].sizeY = 5;
+    station[22].sizeX = 64;
+	station[22].sizeY = 64;
 
 	station[23].description = "lab-3";
 	station[23].connections[1] = 20;
 	station[23].info = "Looks like this was a chemistry lab. Looks badly destroyed. I was told this was due to space-trash. That's why they got us! On the left wall, there are remnants of a 3D periodic table. If only this was in once piece, it could make some good cash.";
 	station[23].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
-	station[23].sizeX = 5;
-	station[23].sizeY = 5;
+	station[23].sizeX = 64;
+	station[23].sizeY = 64;
 
 	playerLocation = 1;
 	/*Items*/    
