@@ -56,7 +56,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
     setActor(playerCrawler.position.x, playerCrawler.position.y, '.');
     int currentPlayerRoom = getPlayerRoom();
     
-    if (playerCrawler.life > 0) {
+    {
         switch (command) {
             case kCommandRight:
                 playerCrawler.rotation = rightOf(playerCrawler.rotation);
@@ -274,8 +274,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             default:
                 break;
         }
-    } else {
-        gameSnapshot.turn++;
     }
 
     struct WorldPosition worldPos = getPlayerPosition();
@@ -292,6 +290,9 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
 
     if (oldTurn != gameSnapshot.turn) {
         
+        if (getPlayerRoom() != 1 && (!getItem(6)->active || !playerHasObject("helmet"))) {
+            setPlayerHealth(getPlayerHealth() - 1);
+        }
         
         {
             focusItemName = NULL;
@@ -370,8 +371,6 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     gameSnapshot.camera_rotation = 0;
     playerCrawler.symbol = '^';
     playerCrawler.rotation = 0;
-    playerCrawler.life = 5;
-    playerHealth = playerCrawler.life;
     memcpy (&collisionMap, collisions, 256);
     
     struct WorldPosition worldPos;

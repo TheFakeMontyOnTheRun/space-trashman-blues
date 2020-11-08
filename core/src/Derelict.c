@@ -659,6 +659,7 @@ void initStation(void) {
 	setErrorHandlerCallback(NULL);
 	collectedObject = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	playerLocation = 1;
+    playerHealth = 100;
 	playerRank = 0;
 	gameStatus = 0;
 	playerDirection = 0;
