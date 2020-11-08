@@ -23,6 +23,7 @@
 #include "UI.h"
 #include "Globals.h"
 #include "SoundSystem.h"
+#include "Derelict.h"
 
 #define TEXT_BUFFER_SIZE 40 * 25
 
@@ -145,11 +146,20 @@ int32_t GameMenu_initStateCallback(int32_t tag) {
 		case kInspectItem: {
 			GameMenu_StateTitle = "Dossier";
 			currentBackgroundBitmap = loadBitmap("pattern.img");
+            
+            struct ObjectNode* head = getPlayerItems();
+            struct Item *item = NULL;
+            int index = 0;
+            
+            while (head != NULL && index < currentSelectedItem) {
+                ++index;
+                head = head->next;
+            }
+            
+            mainText = head->item->description;
+            strcpy(&textBuffer[0], head->item->info);
 
-			mainText = &textBuffer[0];
-			getDossierText(0, &textBuffer[0], 40 * 25);
-
-			GameMenu_optionsCount = 1;
+			GameMenu_optionsCount = 2;
 			GameMenu_options = &inspectItem_options[0];
 			GameMenu_nextStateNavigation =
 					&InspectItem_nextStateNavigation[0];
@@ -212,6 +222,10 @@ void GameMenu_repaintCallback(void) {
 	if (drawFilter) {
 		fill(0, 0, 320, 200, 0, TRUE);
 	}
+    
+    if (mainText != NULL ) {
+        drawTextWindow( 1, 1, 38, 20, mainText, textBuffer);
+    }
 
 	drawWindow( 40 - biggestOption - 3, 25 - (optionsHeight / 8) - 3, biggestOption + 2, (optionsHeight / 8) + 2, GameMenu_StateTitle );
 

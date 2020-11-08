@@ -70,6 +70,11 @@ int32_t Crawler_initStateCallback(int32_t tag) {
 	currentPresentationState = kAppearing;
 	timeUntilNextState = kDefaultPresentationStateInterval;
 	currentBackgroundBitmap = loadBitmap("pattern.img");
+    
+    if (tag == kPlayGame) {
+        initRoom(getPlayerRoom());
+    }
+
 	return 0;
 }
 
@@ -89,7 +94,6 @@ void Crawler_initialPaintCallback() {
 
 	needsToRedrawVisibleMeshes = TRUE;
 	flipRenderer();
-	initRoom(getPlayerRoom());
 }
 
 void Crawler_repaintCallback() {

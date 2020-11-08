@@ -98,6 +98,7 @@ void enterState ( enum EGameMenuState newState ) {
 			unloadStateCallback  = CreditsScreen_unloadStateCallback;
 			break;
 		case kPlayGame:
+        case kBackToGame:
             menuStateToReturn = kMainMenu;
 			initStateCallback	   = Crawler_initStateCallback;
 			initialPaintCallback = Crawler_initialPaintCallback;
