@@ -1,18 +1,6 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
-enum EActorsSnapshotElement {
-	kNobody, kEnemy0, kEnemy1, kEnemyBack
-};
-
-enum EItemsSnapshotElement {
-	kNoItem,
-	kFlash,
-	kBarrel,
-	kDeadEnemy,
-	kHostage,
-	kClue
-};
 
 enum EDirection {
 	kNorth, kEast, kSouth, kWest

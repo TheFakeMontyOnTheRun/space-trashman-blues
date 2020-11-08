@@ -33,7 +33,7 @@ int lerpInt(const int v0, const int v1, const long t, const long total) {
                             intToFix(total)));
 }
 
-struct Texture textures[TOTAL_TEXTURES];
+struct Texture textures[2 * TOTAL_TEXTURES];
 uint8_t usedTexture = 0;
 
 void clearTextures() {

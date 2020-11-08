@@ -40,6 +40,7 @@ struct Item {
   int active;
   int capacity;
   int pickable;
+  uint8_t index;
   char *info;
   struct WorldPosition position;
   UseWithObjectCallback useWithCallback;

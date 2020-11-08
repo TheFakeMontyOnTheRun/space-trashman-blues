@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
-
 #include <stdint.h>
 #include <unistd.h>
 
@@ -43,9 +42,9 @@ uint8_t *visibleElementsMap;
 struct Bitmap *defaultFont;
 uint8_t framebuffer[320 * 200];
 uint8_t previousFrame[320 * 200];
-enum EActorsSnapshotElement mActors[MAP_SIZE][MAP_SIZE];
-enum EItemsSnapshotElement mItems[MAP_SIZE][MAP_SIZE];
-enum EItemsSnapshotElement mEffects[MAP_SIZE][MAP_SIZE];
+uint8_t mActors[MAP_SIZE][MAP_SIZE];
+uint8_t mItems[MAP_SIZE][MAP_SIZE];
+uint8_t mEffects[MAP_SIZE][MAP_SIZE];
 enum EDirection cameraDirection;
 extern int playerHealth;
 struct Vec3 mCamera;
@@ -62,13 +61,11 @@ int revealed[MAP_SIZE][MAP_SIZE];
 struct Bitmap *backdrop = NULL;
 struct MapWithCharKey tileProperties;
 struct Vec2i cameraPosition;
-int shouldShowDamageHighlight = 0;
-int shouldShowDetectedHighlight = 0;
-int highlightDisplayTime = 0;
 uint32_t palette[256];
 uint8_t texturesUsed = 0;
 enum ECommand mBufferedCommand = kCommandNone;
 struct Texture *nativeTextures[TOTAL_TEXTURES];
+struct Texture *itemSprites[32];
 int turnTarget = 0;
 int turnStep = 0;
 FixP_t xCameraOffset;
@@ -77,18 +74,6 @@ FixP_t zCameraOffset;
 char* focusItemName = NULL;
 
 struct Projection projectionVertices[8];
-
-struct Bitmap *foe0;
-struct Bitmap *foe1;
-struct Bitmap *hostage;
-struct Bitmap *foeBack;
-struct Bitmap *target;
-struct Bitmap *clue;
-struct Bitmap *barrel;
-struct Bitmap *deadFoe;
-struct Bitmap *pistol;
-struct Bitmap *blood;
-struct Bitmap *detectedAlert;
 
 int coords[6];
 
@@ -173,18 +158,15 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 
     free(data);
 
-    target = loadBitmap("target.img");
-    foe0 = loadBitmap("enemy0.img");
-    foe1 = loadBitmap("enemy1.img");
-    foeBack = loadBitmap("enemyb.img");
-    barrel = loadBitmap("barrel.img");
-    deadFoe = loadBitmap("enemyd.img");
-    clue = loadBitmap("clue.img");
-    hostage = loadBitmap("hostage.img");
-    blood = loadBitmap("blood.img");
-    detectedAlert = loadBitmap("detected.img");
-    pistol = loadBitmap("pistol.img");
     backdrop = loadBitmap("backdrop.img");
+    
+    
+    char buffer[256];
+    
+    for ( int c = 0; c < 30; ++c ) {
+        sprintf( &buffer[0], "%s.img",  getItem(c)->description);
+        itemSprites[c] = (makeTextureFrom(&buffer[0]));
+    }
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -252,46 +234,20 @@ void drawMap(const uint8_t * __restrict__ elements,
             const uint8_t item = items[offset];
             const uint8_t effect = effects[offset];
 
-            mActors[z][x] = kNobody;
-            mItems[z][x] = kNoItem;
-            mEffects[z][x] = kNoItem;
+            mActors[z][x] = 0xFF;
+            mItems[z][x] = 0xFF;
+            mEffects[z][x] = 0xFF;
 
-            if (actor != '.') {
-
-                if (actor != current->mView) {
-                    if (actor == 'e') {
-                        mActors[z][x] = kEnemy0;
-                    } else if (actor == 'f') {
-                        mActors[z][x] = kEnemy1;
-                    } else if (actor == 'g') {
-                        mActors[z][x] = kEnemyBack;
-
-                    } else {
-                        mActors[z][x] = kNobody;
-                    }
-                }
-            } else {
-                mActors[z][x] = kNobody;
+            if (actor != 0xFF) {
+                mActors[z][x] = actor;
             }
 
-            if (item != '.') {
-                if (item == 'b') {
-                    mItems[z][x] = kBarrel;
-                } else if (item == '*') {
-                    mItems[z][x] = kDeadEnemy;
-                } else if (item == '?') {
-                    mItems[z][x] = kHostage;
-                } else if (item == 'v' || item == 'K' || item == 'i') {
-                    mItems[z][x] = kClue;
-                }
+            if (item != 0xFF) {
+                mItems[z][x] = item;
             }
 
-            if (effect == '+') {
-                mEffects[z][x] = kFlash;
-            }
-
-            if (effect != '.') {
-                effects[(MAP_SIZE * z) + x] = '.';
+            if (effect != 0xFF) {
+                mEffects[z][x] = effect;
             }
         }
     }
@@ -361,9 +317,9 @@ void render(const long ms) {
     }
 
     if (needsToRedrawVisibleMeshes) {
-        enum EActorsSnapshotElement actorsSnapshotElement = kNobody;
-        enum EItemsSnapshotElement itemsSnapshotElement = kNoItem;
-        enum EItemsSnapshotElement effectsSnapshotElement = kNoItem;
+        uint8_t actorsSnapshotElement = 0xFF;
+        uint8_t itemsSnapshotElement = 0xFF;
+        uint8_t effectsSnapshotElement = 0xFF;
         char buffer[64];
         char directions[4] = {'N', 'E', 'S', 'W'};
         struct Vec3 tmp, tmp2;
@@ -380,7 +336,6 @@ void render(const long ms) {
         int c;
         uint8_t facesMask;
 
-        highlightDisplayTime -= ms;
         needsToRedrawVisibleMeshes = FALSE;
 #ifdef SDLSW
         clearRenderer();
@@ -898,143 +853,20 @@ void render(const long ms) {
                     }
                 }
 
-                if (actorsSnapshotElement != kNobody) {
-                    struct Bitmap *sprite = NULL;
-                    switch (actorsSnapshotElement) {
-                        case kEnemy0:
-                            sprite = foe0;
-                            break;
-                        case kEnemy1:
-                            sprite = foe1;
-                            break;
-                        case kEnemyBack:
-                            sprite = foeBack;
-                            break;
-                        case kNobody:
-                        default:
-                            assert (FALSE);
-                            break;
-                    }
 
-                    if (sprite) {
-                        tmp.mX = position.mX;
-                        tmp.mY = position.mY;
-                        tmp.mZ = position.mZ;
-
-                        addToVec3(&tmp, 0, ((tileProp->mFloorHeight * 2) + one), 0);
-
-                        drawBillboardAt(tmp, sprite->data, one, sprite->width);
-                    }
-                }
-
-                if (itemsSnapshotElement != kNoItem) {
-                    switch (itemsSnapshotElement) {
-                        case kClue:
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
-
-                            drawBillboardAt(tmp, clue->data, one, 32);
-                            break;
-
-                        case kBarrel:
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
-
-                            drawBillboardAt(tmp, barrel->data, one, 32);
-                            break;
-
-                        case kHostage:
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0,
-                                      (tileProp->mFloorHeight * 2) + Div(one, four)
-                                      + Div(one, two),
-                                      0);
-
-                            drawBillboardAt(tmp, hostage->data, one, hostage->width);
-                            break;
-
-                        case kDeadEnemy:
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0,
-                                      (tileProp->mFloorHeight * 2) + Div(one, four)
-                                      + Div(one, two),
-                                      0);
-
-                            drawBillboardAt(tmp, deadFoe->data, one, deadFoe->width);
-                            break;
-
-                        case kNoItem:
-                            break;
-
-                        case kFlash:
-                        default:
-                            assert (FALSE);
-                            break;
-                    }
-                }
-
-                if (effectsSnapshotElement != kNoItem) {
-                    switch (effectsSnapshotElement) {
-                        case kFlash:
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0,
-                                      ((tileProp->mFloorHeight * 2) + one + halfOne),
-                                      0);
-
-                            break;
-                        case kNoItem:
-                            break;
-                        default:
-                        case kBarrel:
-                            assert (FALSE);
-                            break;
-                    }
+                if (itemsSnapshotElement != 0xFF) {
+                    tmp.mX = position.mX;
+                    tmp.mY = position.mY;
+                    tmp.mZ = position.mZ;
+                    
+                    addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
+                    
+                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement]->rotations[0], one, 32);
                 }
             }
         }
 
         clippingY1 = 200;
-
-        if (shouldShowDamageHighlight) {
-
-            drawBitmap(0, 0, blood, TRUE);
-
-            if (highlightDisplayTime <= 0) {
-                shouldShowDamageHighlight = FALSE;
-            }
-
-            needsToRedrawVisibleMeshes = TRUE;
-        }
-
-        if (shouldShowDetectedHighlight) {
-
-            drawBitmap(0, 0, detectedAlert, TRUE);
-
-            if (highlightDisplayTime <= 0) {
-                shouldShowDetectedHighlight = FALSE;
-            }
-            needsToRedrawVisibleMeshes = TRUE;
-        }
 
         drawRect(256, 0, 64, 128, 0);
 

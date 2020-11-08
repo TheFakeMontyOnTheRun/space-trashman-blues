@@ -53,7 +53,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
 
     int oldTurn = gameSnapshot.turn;
     struct WorldPosition oldPosition = getPlayerPosition();
-    setActor(playerCrawler.position.x, playerCrawler.position.y, '.');
+    setActor(playerCrawler.position.x, playerCrawler.position.y, 0xFF);
     int currentPlayerRoom = getPlayerRoom();
     
     {
@@ -227,7 +227,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 if (item != NULL) {
                     parseCommand( item->pickable ? "pick" : "use", item->description);
                     if (item->pickable) {
-                        setItem(offseted.x, offseted.y, '.');
+                        setItem(offseted.x, offseted.y, 0xFF);
                     }
                 }
                 gameSnapshot.turn++;
@@ -284,14 +284,13 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
     struct WorldPosition worldPos = getPlayerPosition();
     playerCrawler.position.x = worldPos.x;
     playerCrawler.position.y = worldPos.y;
-    setActor(playerCrawler.position.x, playerCrawler.position.y, '^');
     playerCrawler.rotation = getPlayerDirection();
     
     gameSnapshot.camera_x = playerCrawler.position.x;
     gameSnapshot.camera_z = playerCrawler.position.y;
     gameSnapshot.camera_rotation = playerCrawler.rotation;
 
-    setActor(playerCrawler.position.x, playerCrawler.position.y, '^');
+    setActor(playerCrawler.position.x, playerCrawler.position.y, 0xFF);
 
     if (oldTurn != gameSnapshot.turn) {
         
@@ -346,10 +345,9 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 setPlayerPosition(oldPosition);
                 playerCrawler.position.x = oldPosition.x;
                 playerCrawler.position.y = oldPosition.y;
-                setActor(playerCrawler.position.x, playerCrawler.position.y, '^');
+                setActor(playerCrawler.position.x, playerCrawler.position.y, 0xFF);
                 gameSnapshot.camera_x = playerCrawler.position.x;
                 gameSnapshot.camera_z = playerCrawler.position.y;
-                setActor(playerCrawler.position.x, playerCrawler.position.y, '^');
             }
             
             return gameSnapshot;
@@ -358,7 +356,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         struct ObjectNode* head = getRoom(getPlayerRoom())->itemsPresent->next;
         
         while (head != NULL) {
-            setItem(head->item->position.x, head->item->position.y, 'K');
+            setItem(head->item->position.x, head->item->position.y, head->item->index);
             head = head->next;
         }
     }
@@ -384,8 +382,8 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
         for (x = 0; x < MAP_SIZE; ++x) {
             char current = *ptr;
             map[y][x] = current;
-            setItem(x, y, '.');
-            setActor(x, y, '.');
+            setItem(x, y, 0xFF);
+            setActor(x, y, 0xFF);
             setElement(x, y, current);
             
             if ((current == 's' && enteredThru == 0) ||
@@ -405,7 +403,7 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     
     x = worldPos.x;
     y = worldPos.y;
-    setActor(x, y, '^');
+    setActor(x, y, 0xFF);
     setPlayerPosition(worldPos);
     playerCrawler.position.x = x;
     playerCrawler.position.y = y;

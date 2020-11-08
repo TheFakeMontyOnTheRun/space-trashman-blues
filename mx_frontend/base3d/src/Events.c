@@ -37,16 +37,14 @@ int loopTick(enum ECommand command);
 
 void clearMapCache() {
     size_t sizeForSet = sizeof(uint8_t) * (MAP_SIZE * MAP_SIZE);
-    memset (&items[0], '.', sizeForSet);
-    memset (&actorsInMap[0], '.', sizeForSet);
-    memset (&effects[0], '.', sizeForSet);
+    memset (&items[0], 0xFF, sizeForSet);
+    memset (&actorsInMap[0], 0xFF, sizeForSet);
+    memset (&effects[0], 0xFF, sizeForSet);
 }
 
 void onLevelLoaded(int index) {
     clearMapCache();
     shouldContinue = kCrawlerGameInProgress;
-    shouldShowDetectedHighlight = FALSE;
-    highlightDisplayTime = 0;
     clearMap(&tileProperties);
     loadTexturesForLevel(index);
     loadTileProperties(index);
@@ -88,25 +86,13 @@ void setActor(const int x, const int y, uint8_t actor) {
 
 void setItem(const int x, const int y, uint8_t item) {
     items[(MAP_SIZE * y) + x] = item;
-
-    if (item == 'i') {
-        /* sound for finding information on enemy corpse */
-        /* playTune("t300i20o1def"); */
-    } else if (item == 0) {
-        /* sound for picking that information */
-        playSound(INFORMATION_ACQUIRED_SOUND);
-    }
 }
 
 void setDamage() {
     shouldShowDamageHighlight = TRUE;
-    highlightDisplayTime = 10;
-    /* enemy hit you */
 }
 
 void setDetected() {
-    shouldShowDetectedHighlight = TRUE;
-    highlightDisplayTime = 10;
     /* enemy detected you */
     playSound(PLAYER_GOT_DETECTED_SOUND);
 }

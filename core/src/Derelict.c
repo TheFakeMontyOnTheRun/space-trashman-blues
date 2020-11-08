@@ -867,6 +867,7 @@ void initStation(void) {
 	item[0].info = "time-programmable Halogen bomb.";
 	item[0].useWithCallback = cantBeUsedWithOthersCallback;
 	item[0].weight = 5;
+  item[0].index = 0;
 	item[0].position.x = 9;
 	item[0].position.y = 14;
 	item[0].useCallback = bombActivatedCallback;
@@ -875,6 +876,7 @@ void initStation(void) {
 	item[1].description = "time-bomb-controller";
 	item[1].info = "The remote controller allows you to instantly detonate the bomb from very far (empirical evidence tells it works from as far as 0.5AU).";
 	item[1].weight = 0;
+  item[1].index = 1;  
 	item[1].useWithCallback = cantBeUsedWithOthersCallback;
 	item[1].pickable = TRUE;
 	item[1].position.x = 10;
@@ -885,6 +887,7 @@ void initStation(void) {
 	item[2].description = "blowtorch";
 	item[2].info = "precision vintage-but-rather-well-kept metal cutter";
 	item[2].weight = 8;
+  item[2].index = 2;  
 	item[2].useWithCallback = useBlowtorchWithCallback;
 	item[2].useCallback = cantBeUsedCallback;
 	item[2].pickable = TRUE;
@@ -896,6 +899,7 @@ void initStation(void) {
 	item[3].weight = 0;
 	item[3].useWithCallback = cantBeUsedWithOthersCallback;
 	item[3].info = "token needed to ignite the ship's computer and thrusters";
+  item[3].index = 3;
 	item[3].pickable = TRUE;
 	item[3].position.x = 12;
 	item[3].position.y = 14;
@@ -904,6 +908,7 @@ void initStation(void) {
 	item[4].description = "plasma-gun";
 	item[4].info = "A mostly harmless gun. Useful for heating surfaces and light defense.";
 	item[4].weight = 1;
+  item[4].index = 4;
 	item[4].pickable = TRUE;
 	item[4].position.x = 13;
 	item[4].position.y = 14;
@@ -911,6 +916,7 @@ void initStation(void) {
 
 	item[5].description = "magnetic-boots";
 	item[5].weight = 2;
+  item[5].index = 5;
 	item[5].info = "boots with strong electro-magnets. Ideal for walking on low-gravity situations - as long as the surface in question is metallic (like most of the surfaces here).";
 	item[5].useWithCallback = useBootsWithCallback;
 	item[5].useCallback = useObjectToggleCallback;
@@ -921,6 +927,7 @@ void initStation(void) {
 
 	item[6].description = "helmet";
 	item[6].weight = 2;
+  item[6].index = 6;  
 	item[6].info = "makes sure the air entering your gear is the best. Or how that was, 50 years ago, when this was manufactured.";
 	item[6].info = "Atmosphere-contained helmet for safety.";
 	item[6].pickable = TRUE;
@@ -932,6 +939,7 @@ void initStation(void) {
 	item[7].description = "low-rank-keycard";
 	item[7].info = "clearance for low rank";
 	item[7].weight = 0;
+  item[7].index = 7;
 	item[7].pickable = TRUE;
 	item[7].position.x = 16;
 	item[7].useCallback = cantBeUsedCallback;
@@ -946,6 +954,7 @@ void initStation(void) {
 	item[8].description = "gold-pipe";
 	item[8].info = "This seems valuable. One can wonder why it is used here and what would be the consequences of taking it out? Whaever. It looks like paying for dinner.";
 	item[8].weight = 17;
+  item[8].index = 8;
 	item[8].useCallback = cantBeUsedCallback;
 	item[8].useWithCallback = cantBeUsedWithOthersCallback;
 	item[8].pickable = FALSE;
@@ -959,6 +968,7 @@ void initStation(void) {
 	item[9].useCallback = cantBeUsedCallback;
 	item[9].useWithCallback = cantBeUsedWithOthersCallback;
 	item[9].weight = 200;
+  item[9].index = 9;
 	item[9].pickable = FALSE;
 	item[9].position.x = 17;
 	item[9].position.y = 16;
@@ -969,6 +979,7 @@ void initStation(void) {
 	item[10].useCallback = cantBeUsedCallback;
 	item[10].useWithCallback = cantBeUsedWithOthersCallback;
 	item[10].weight = 200;
+  item[10].index = 10;
 	item[10].pickable = FALSE;
 	item[10].position.x = 17;
 	item[10].position.y = 16;
@@ -979,6 +990,7 @@ void initStation(void) {
 	item[11].useCallback = cantBeUsedCallback;
 	item[11].useWithCallback = cantBeUsedWithOthersCallback;
 	item[11].weight = 200;
+  item[11].index = 11;
 	item[11].pickable = FALSE;
 	item[11].position.x = 17;
 	item[11].position.y = 16;
@@ -990,6 +1002,7 @@ void initStation(void) {
 	item[12].useCallback = cantBeUsedCallback;
 	item[12].useWithCallback = cantBeUsedWithOthersCallback;
 	item[12].weight = 0;
+  item[12].index = 12;
 	item[12].pickable = TRUE;
 	item[12].position.x = 5;
 	item[12].position.y = 3;
@@ -1001,6 +1014,7 @@ void initStation(void) {
 	item[13].useCallback = cantBeUsedCallback;
 	item[13].useWithCallback = cantBeUsedWithOthersCallback;
 	item[13].pickable = TRUE;
+  item[13].index = 13;
 	item[13].position.x = 8;
 	item[13].position.y = 4;
 	addToRoom("pod-3", &item[13]);
@@ -1011,6 +1025,7 @@ void initStation(void) {
 	item[14].useCallback = cantBeUsedCallback;
 	item[14].useWithCallback = cantBeUsedWithOthersCallback;
 	item[14].pickable = TRUE;
+  item[14].index = 14;
 	item[14].position.x = 2;
 	item[14].position.y = 2;
 	addToRoom("pod-4", &item[14]);
@@ -1020,6 +1035,7 @@ void initStation(void) {
 	item[15].useCallback = cantBeUsedCallback;
 	item[15].useWithCallback = cantBeUsedWithOthersCallback;
 	item[15].weight = 0;
+  item[15].index = 15;
 	item[15].pickable = TRUE;
 	item[15].position.x = 4;
 	item[15].position.y = 3;
@@ -1030,6 +1046,7 @@ void initStation(void) {
 	item[16].useCallback = cantBeUsedCallback;
 	item[16].useWithCallback = cantBeUsedWithOthersCallback;
 	item[16].weight = 1;
+  item[16].index = 16;
 	item[16].pickable = TRUE;
 	item[16].position.x = 10;
 	item[16].position.y = 10;
@@ -1041,6 +1058,7 @@ void initStation(void) {
 	item[17].useCallback = cantBeUsedCallback;
 	item[17].useWithCallback = cantBeUsedWithOthersCallback;
 	item[17].weight = 3;
+  item[17].index = 17;
 	item[17].pickable = FALSE;
 	item[17].position.x = 17;
 	item[17].position.y = 16;
@@ -1051,6 +1069,7 @@ void initStation(void) {
 	item[18].useCallback = cantBeUsedCallback;
 	item[18].useWithCallback = cantBeUsedWithOthersCallback;
 	item[18].weight = 0;
+  item[18].index = 18;
 	item[18].pickable = TRUE;
 	item[18].position.x = 7;
 	item[18].pickCallback = keycardPickCallback;
@@ -1062,6 +1081,7 @@ void initStation(void) {
 	item[19].useCallback = cantBeUsedCallback;
 	item[19].useWithCallback = cantBeUsedWithOthersCallback;
 	item[19].weight = 138;
+  item[19].index = 19;
 	item[19].info = "A very valuable vintage rare-and-in-working-conditions computer rack!";
 	item[19].pickable = FALSE;
 	item[19].position.x = 1;
@@ -1073,6 +1093,7 @@ void initStation(void) {
 	item[20].useWithCallback = cantBeUsedWithOthersCallback;
 	item[20].info = "...and so you guys could just join in and see whats going on. I hope it is not too instrusive of me. To that, she just gave me a cold stare and...";
 	item[20].weight = 0;
+  item[20].index = 20;
 	item[20].pickable = TRUE;
 	item[20].position.x = 17;
 	item[20].position.y = 6;
@@ -1084,6 +1105,7 @@ void initStation(void) {
 	item[21].useWithCallback = cantBeUsedWithOthersCallback;
 	item[21].info = "A piece of metal that might be valuable.";
 	item[21].weight = 74;
+  item[21].index = 21;
 	item[21].pickable = FALSE;
 	item[21].position.x = 7;
 	item[21].position.y = 6;
@@ -1094,6 +1116,7 @@ void initStation(void) {
 	item[22].useWithCallback = cantBeUsedWithOthersCallback;
 	item[22].info = "Voynich Manuscript - Annottated Translation. Classical edition. It's badly burn't. Can't read it.";
 	item[22].weight = 1;
+  item[22].index = 22;
 	item[22].pickable = TRUE;
 	item[22].position.x = 1;
 	item[22].position.y = 1;
@@ -1104,6 +1127,7 @@ void initStation(void) {
 	item[23].useCallback = cantBeUsedCallback;
 	item[23].useWithCallback = cantBeUsedWithOthersCallback;
 	item[23].weight = 209;
+  item[23].index = 23;
 	item[23].pickable = FALSE;
 	item[23].position.x = 1;
 	item[23].position.y = 1;
@@ -1114,6 +1138,7 @@ void initStation(void) {
 	item[24].useCallback = cantBeUsedCallback;
 	item[24].useWithCallback = cantBeUsedWithOthersCallback;
 	item[24].weight = 62;
+  item[24].index = 24;
 	item[24].pickable = TRUE;
 	item[24].position.x = 1;
 	item[24].position.y = 1;
@@ -1125,6 +1150,7 @@ void initStation(void) {
 	item[25].useCallback = cantBeUsedCallback;
 	item[25].useWithCallback = cantBeUsedWithOthersCallback;
 	item[25].weight = 0;
+  item[25].index = 25;
 	item[25].pickCallback = keycardPickCallback;
 	item[25].dropCallback = keycardDropCallback;
 	item[25].pickable = TRUE;
@@ -1137,6 +1163,7 @@ void initStation(void) {
     item[26].info = "Elevator controls - Go down";
     item[26].useCallback = elevatorGoDownCallback;
     item[26].useWithCallback = cantBeUsedWithOthersCallback;
+    item[26].index = 26;
     item[26].pickable = FALSE;
     item[26].position.x = 27;
     item[26].position.y = 0;
@@ -1148,7 +1175,8 @@ void initStation(void) {
     item[27].pickable = FALSE;
     item[27].position.x = 27;
     item[27].position.y = 0;
-    
+    item[27].index = 27;
+
     item[28].description = "elevator-level2-go-up";
     item[28].info = "Elevator controls - Go Up";
     item[28].useCallback = elevatorGoUpCallback;
@@ -1156,7 +1184,8 @@ void initStation(void) {
     item[28].pickable = FALSE;
     item[28].position.x = 28;
     item[28].position.y = 0;
-    
+    item[28].index = 28;
+
     item[29].description = "elevator-level3-go-up";
     item[29].info = "Elevator controls - Go Up";
     item[29].useCallback = elevatorGoUpCallback;
@@ -1164,4 +1193,5 @@ void initStation(void) {
     item[29].pickable = FALSE;
     item[29].position.x = 28;
     item[29].position.y = 0;
+    item[29].index = 29;
 }
