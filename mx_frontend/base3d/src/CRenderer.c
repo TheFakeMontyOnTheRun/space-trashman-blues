@@ -886,6 +886,11 @@ void render(const long ms) {
                 sprintf( &buffer[0], "%c%c%s", ( line == currentSelectedItem ? '>' : ' ' ), (head->item->active ? '*' : ' '), head->item->description);
                 buffer[7] = 0;
                 drawTextAt(34, 2 + line, &buffer[0], 0);
+                
+                if (line == currentSelectedItem ) {
+                    drawFrontWall(intToFix(0), intToFix(199 - 32), intToFix(31), intToFix(199), itemSprites[head->item->index]->rotations[0], one, 0, 0, 32);
+                }
+
                 ++line;
             }
             head = head->next;
