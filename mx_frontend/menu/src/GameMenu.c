@@ -34,47 +34,21 @@ void goTo(int location);
 extern int playerLocation;
 
 
-const char *GameMenu_Main_options[4] = {"Read Dossiers", "Investigate",
-									   "Travel", "End game"};
+const char *inspectItem_options[2] = {"Back to game", "End game"};
 
-int32_t GameMenu_Main_nextStateNavigation[4] = {
-		kDossiersMenu,
-		kInvestigateMenu, kTravelMenu, kEndGame};
-
-const char *GameMenu_Dossier_options[9] = {"Sofia", "Ricardo", "Lola",
-										  "Pau", "Lina", "Elias",
-										  "Carmen", "Jean", "Back"};
-
-int32_t GameMenu_Travel_nextStateNavigation[9] = {
-		kTravelPorto, kTravelLisbon, kTravelMadrid,
-		kTravelBarcelona, kTravelFrankfurt, kTravelHamburg,
-		kTravelLuxembourg, kTravelBrussels, kGameMenu};
-
-const char *GameMenu_Travel_options[9] = {
-		"Porto", "Lisbon", "Madrid", "Barcelona", "Frankfurt",
-		"Hamburg", "Luxembourg", "Brussels", "Back"};
-
-int32_t GameMenu_Dossier_nextStateNavigation[9] = {
-		kReadDossier_Sofia, kReadDossier_Ricardo, kReadDossier_Lola,
-		kReadDossier_Pau, kReadDossier_Lina, kReadDossier_Elias,
-		kReadDossier_Carmen, kReadDossier_Jean, kGameMenu};
+int32_t InspectItem_nextStateNavigation[2] = {
+		kBackToGame, kEndGame};
 
 
-int32_t GameMenu_EndGame_nextStateNavigation[2] = {kGameMenu, kMainMenu};
+int32_t GameMenu_EndGame_nextStateNavigation[2] = {kInspectItem, kMainMenu};
 
 const char *GameMenu_EndGame_options[2] = {"No", "Yes"};
-
-const char *GameMenu_ReadDossier_options[1] = {"Back"};
-
-int32_t GameMenu_ReadDossier_nextStateNavigation[1] = {
-		kDossiersMenu,
-};
 
 const char *GameMenu_Story_options[1] = {"Continue"};
 
 int32_t GameMenu_Story_nextStateNavigation[1] = {kMainMenu};
 
-int16_t GameMenu_optionsCount = 4;
+int16_t GameMenu_optionsCount = 2;
 extern size_t biggestOption;
 extern char textBuffer[TEXT_BUFFER_SIZE];
 int32_t GameMenu_substate;
@@ -130,37 +104,7 @@ int32_t GameMenu_initStateCallback(int32_t tag) {
 			GameMenu_options = &GameMenu_EndGame_options[0];
 			GameMenu_nextStateNavigation = &GameMenu_EndGame_nextStateNavigation[0];
 			break;
-		case kPlayGame:
-		case kGameMenu:
-			GameMenu_StateTitle = "Investigation";
-			getDisplayStatusText(&textBuffer[0], 40 * 10);
-			mainText = &textBuffer[0];
-			currentBackgroundBitmap = loadBitmap("pattern.img");
-			GameMenu_optionsCount = 4;
-			GameMenu_options = &GameMenu_Main_options[0];
-			GameMenu_nextStateNavigation = &GameMenu_Main_nextStateNavigation[0];
-			break;
 
-		case kDossiersMenu:
-			GameMenu_StateTitle = "Dossiers";
-			getDisplayStatusText(&textBuffer[0], 40 * 10);
-			mainText = &textBuffer[0];
-			currentBackgroundBitmap = loadBitmap("pattern.img");
-			GameMenu_optionsCount = 9;
-			GameMenu_options = &GameMenu_Dossier_options[0];
-			GameMenu_nextStateNavigation = &GameMenu_Dossier_nextStateNavigation[0];
-			break;
-
-
-		case kTravelMenu:
-			GameMenu_StateTitle = "Travel";
-			getDisplayStatusText(&textBuffer[0], 40 * 10);
-			mainText = &textBuffer[0];
-			currentBackgroundBitmap = loadBitmap("pattern.img");
-			GameMenu_optionsCount = 9;
-			GameMenu_options = &GameMenu_Travel_options[0];
-			GameMenu_nextStateNavigation = &GameMenu_Travel_nextStateNavigation[0];
-			break;
 
 		case kVictory:
 			sprintf (textBuffer, "Victory!\n\n\n\n\n\n");
@@ -198,24 +142,17 @@ int32_t GameMenu_initStateCallback(int32_t tag) {
 			GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
 			break;
 
-		case kReadDossier_Sofia:
-		case kReadDossier_Ricardo:
-		case kReadDossier_Lola:
-		case kReadDossier_Pau:
-		case kReadDossier_Lina:
-		case kReadDossier_Elias:
-		case kReadDossier_Carmen:
-		case kReadDossier_Jean: {
+		case kInspectItem: {
 			GameMenu_StateTitle = "Dossier";
 			currentBackgroundBitmap = loadBitmap("pattern.img");
 
 			mainText = &textBuffer[0];
-			getDossierText(tag - kReadDossier_Sofia, &textBuffer[0], 40 * 25);
+			getDossierText(0, &textBuffer[0], 40 * 25);
 
 			GameMenu_optionsCount = 1;
-			GameMenu_options = &GameMenu_ReadDossier_options[0];
+			GameMenu_options = &inspectItem_options[0];
 			GameMenu_nextStateNavigation =
-					&GameMenu_ReadDossier_nextStateNavigation[0];
+					&InspectItem_nextStateNavigation[0];
 		}
 	}
 
@@ -272,72 +209,6 @@ void GameMenu_repaintCallback(void) {
 		return;
 	}
 
-	if (GameMenu_substate == kTravelMenu  ) {
-
-		name = GameMenu_Travel_options[wrappedCursor];
-
-		if (featuredBitmap == NULL ) {
-			sprintf (photoBuffer, "location%d.img", wrappedCursor);
-			featuredBitmap = loadBitmap(photoBuffer);
-		}
-
-		drawImageWindow( 5, 7, 16, 17, name, featuredBitmap);
-
-	} else if (mainText != NULL) {
-
-		int textWidth;
-		int posX;
-		int posY;
-
-		switch (GameMenu_substate) {
-			case kReadDossier_Sofia:
-			case kReadDossier_Ricardo:
-			case kReadDossier_Lola:
-			case kReadDossier_Pau:
-			case kReadDossier_Lina:
-			case kReadDossier_Elias:
-			case kReadDossier_Carmen:
-			case kReadDossier_Jean: {
-				textWidth = 320;
-				posX = 0;
-				posY = 0;
-			}
-			break;
-			default:
-				textWidth = 176;
-				posX = 8;
-				posY = 8;
-		}
-
-		{
-			char turnBuffer[64];
-			char locationBuffer[64];
-
-
-			switch (GameMenu_substate) {
-				case kReadDossier_Sofia:
-				case kReadDossier_Ricardo:
-				case kReadDossier_Lola:
-				case kReadDossier_Pau:
-				case kReadDossier_Lina:
-				case kReadDossier_Elias:
-				case kReadDossier_Carmen:
-				case kReadDossier_Jean: {
-					getLocationName(GameMenu_substate - kReadDossier_Sofia, locationBuffer, 64);
-					sprintf (turnBuffer, "%s", locationBuffer);
-				}
-					break;
-				default:
-					getLocationName(getPlayerLocation(), locationBuffer, 64);
-					sprintf (turnBuffer, "Turn %d: %s", getTurn(),
-							 locationBuffer);
-			}
-
-
-			drawTextWindow( (posX / 8) + 1, ( posY / 8 ) + 1, textWidth / 8, lines + 4, turnBuffer, mainText );
-		}
-	}
-
 	if (drawFilter) {
 		fill(0, 0, 320, 200, 0, TRUE);
 	}
@@ -352,9 +223,8 @@ void GameMenu_repaintCallback(void) {
 						   || (currentPresentationState == kConfirmInputBlink5)
 						   || (currentPresentationState == kWaitingForInput));
 
-		int shouldGreyOut =
-				(GameMenu_substate == kTravelMenu && (c < 8) );
-
+        int shouldGreyOut = FALSE;
+        
 		if (isCursor) {
 			fill(320 - (biggestOption * 8) - 16 - 8 - 8,
 				 (200 - optionsHeight) + (c * 8) - 8 - 8,
@@ -425,9 +295,6 @@ int32_t GameMenu_tickCallback(int32_t tag, void *data) {
 			case kCommandFire2:
 			case kCommandFire3:
 
-				if (GameMenu_substate == kTravelMenu && cursorPosition < 8) {
-					goTo(cursorPosition);
-				}
 				featuredBitmap = NULL;
 				nextNavigationSelection = GameMenu_nextStateNavigation[cursorPosition];
 				currentPresentationState = kConfirmInputBlink1;

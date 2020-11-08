@@ -132,7 +132,7 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
 
     sprintf (nameBuffer, "map%d.txt", map);
     buffer = loadBinaryFileFromPath(nameBuffer);
-    dungeon_loadMap(buffer, collisions, map - 1);
+    dungeon_loadMap(buffer, collisions, map);
     free(buffer);
 }
 

@@ -24,8 +24,6 @@ FixP_t kCameraYDeltaPlayerDeath;
 
 FixP_t kCameraYSpeedPlayerDeath;
 
-int spyHasClue = FALSE;
-
 int loopTick(enum ECommand cmd);
 
 void initRoom(int room);
@@ -33,8 +31,6 @@ void initRoom(int room);
 void renderTick(long ms);
 
 int getPlayerLocation();
-
-int isPracticing = FALSE;
 
 char *thisMissionName;
 int16_t thisMissionNameLen;
@@ -45,17 +41,14 @@ const char* AbandonMission_Title = "Abandon mission?";
 const char *AbandonMission_options[6] = {"Continue", "End game"};
 int AbandonMission_navigation[2] = { -1, kMainMenu};
 int AbandonMission_count = 2;
-int mapIndex = 0;
 
 int32_t Crawler_initStateCallback(int32_t tag) {
 	int c = 0;
-	mapIndex = 8;
-	spyHasClue = FALSE;
+
 	kCameraYDeltaPlayerDeath = Div(intToFix(9), intToFix(10));
 
 	kCameraYSpeedPlayerDeath = Div(intToFix(1), intToFix(10));
 	showPromptToAbandonMission = FALSE;
-	isPracticing = (tag == kPracticeCrawling);
 
 	biggestOption = strlen(AbandonMission_Title);
 
@@ -70,10 +63,6 @@ int32_t Crawler_initStateCallback(int32_t tag) {
 	playerHeight = 0;
 	playerHeightTarget = kCameraYDeltaPlayerDeath;
 	playerHeightChangeRate = 0;
-
-	if (!isPracticing) {
-		mapIndex = getPlayerLocation();
-	}
 
     thisMissionName = getRoomDescription();
 	thisMissionNameLen = (int16_t) (strlen(thisMissionName));
@@ -100,7 +89,7 @@ void Crawler_initialPaintCallback() {
 
 	needsToRedrawVisibleMeshes = TRUE;
 	flipRenderer();
-	initRoom(mapIndex);
+	initRoom(getPlayerRoom());
 }
 
 void Crawler_repaintCallback() {
@@ -168,19 +157,6 @@ void Crawler_repaintCallback() {
 		if (currentPresentationState == kAppearing) {
 			drawTextAt(16 - (thisMissionNameLen / 2), 10, thisMissionName, 255);
 		}
-	}
-}
-
-int32_t Crawler_success(int crawlerCode) {
-	if (isPracticing) {
-		return kMainMenu;
-	} else {
-
-		if (crawlerCode == kCrawlerGameOver) {
-			return kGameOver;
-		}
-
-		return kGameMenu;
 	}
 }
 
@@ -268,7 +244,6 @@ int32_t Crawler_tickCallback(int32_t tag, void *data) {
 
 	if (currentPresentationState != kFade) {
 		returnCode = loopTick(cmd);
-		spyHasClue = (returnCode == kCrawlerClueAcquired);
 
 		switch (returnCode) {
 			case kCrawlerGameOver: {
@@ -277,9 +252,9 @@ int32_t Crawler_tickCallback(int32_t tag, void *data) {
 				timeUntilNextState = kDefaultPresentationStateInterval;
 			}
 				break;
-			case kCrawlerClueAcquired:
-				return Crawler_success(returnCode);
 		}
+        
+        return -1;
 	}
 
 	if (timeUntilNextState <= 0) {

@@ -98,68 +98,22 @@ void enterState ( enum EGameMenuState newState ) {
 			unloadStateCallback  = CreditsScreen_unloadStateCallback;
 			break;
 		case kPlayGame:
-		case kGameMenu:
-			menuStateToReturn = kGameMenu;
-
-		case kTravelPorto:
-		case kTravelLisbon:
-		case kTravelMadrid:
-		case kTravelBarcelona:
-		case kTravelFrankfurt:
-		case kTravelHamburg:
-		case kTravelLuxembourg:
-		case kTravelBrussels:
-			newState = kGameMenu;
-		case kStatusMenu:
-		case kTravelMenu:
-		case kDossiersMenu:
-		case kReadDossier_Sofia:
-		case kReadDossier_Ricardo:
-		case kReadDossier_Lola:
-		case kReadDossier_Pau:
-		case kReadDossier_Lina:
-		case kReadDossier_Elias:
-		case kReadDossier_Carmen:
-		case kVictory:
-		case kGameOver:
-		case kEpilogue:
-		case kReadDossier_Jean:
-			initStateCallback	   = GameMenu_initStateCallback;
-			initialPaintCallback = GameMenu_initialPaintCallback;
-			repaintCallback	   = GameMenu_repaintCallback;
-			tickCallback	   = GameMenu_tickCallback;
-			unloadStateCallback  = GameMenu_unloadStateCallback;
-			break;
-
-		case kPracticeCrawling:
-		case kPrologue:
-			menuStateToReturn	   = kMainMenu;
+            menuStateToReturn = kMainMenu;
 			initStateCallback	   = Crawler_initStateCallback;
 			initialPaintCallback = Crawler_initialPaintCallback;
 			repaintCallback	   = Crawler_repaintCallback;
 			tickCallback	   = Crawler_tickCallback;
 			unloadStateCallback  = Crawler_unloadStateCallback;
 			break;
-
-		case kInvestigateMenu: {
-
-				menuStateToReturn    = kMainMenu;
-				initStateCallback    = Crawler_initStateCallback;
-				initialPaintCallback = Crawler_initialPaintCallback;
-				repaintCallback	     = Crawler_repaintCallback;
-				tickCallback	     = Crawler_tickCallback;
-				unloadStateCallback  = Crawler_unloadStateCallback;
+        case kInspectItem: {
+            initStateCallback       = GameMenu_initStateCallback;
+            initialPaintCallback = GameMenu_initialPaintCallback;
+            repaintCallback       = GameMenu_repaintCallback;
+            tickCallback       = GameMenu_tickCallback;
+            unloadStateCallback  = GameMenu_unloadStateCallback;
 		} break;
 		case kQuit:
 			isRunning = FALSE;
-			break;
-		case kEndGame:
-			menuStateToReturn	   = kGameMenu;
-			initStateCallback	   = GameMenu_initStateCallback;
-			initialPaintCallback = GameMenu_initialPaintCallback;
-			repaintCallback	   = GameMenu_repaintCallback;
-			tickCallback	   = GameMenu_tickCallback;
-			unloadStateCallback  = GameMenu_unloadStateCallback;
 			break;
 	}
 

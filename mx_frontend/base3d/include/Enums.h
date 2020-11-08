@@ -22,7 +22,6 @@ enum CrawlerState {
 	kCrawlerGameOver = -1,
 	kCrawlerQuit = 0,
 	kCrawlerGameInProgress = 1,
-	kCrawlerClueAcquired = 2
 };
 
 enum ECommand {
@@ -44,33 +43,14 @@ enum ECommand {
 
 enum EGameMenuState {
 	kMainMenu,
-	kPracticeCrawling,
 	kPlayGame,
-	kGameMenu,
 	kHelp,
 	kCredits,
 	kQuit,
-	kDossiersMenu,
-	kInvestigateMenu,
-	kTravelMenu,
 	kStatusMenu,
+    kBackToGame,
 	kEndGame,
-	kReadDossier_Sofia,
-	kReadDossier_Ricardo,
-	kReadDossier_Lola,
-	kReadDossier_Pau,
-	kReadDossier_Lina,
-	kReadDossier_Elias,
-	kReadDossier_Carmen,
-	kReadDossier_Jean,
-	kTravelPorto,
-	kTravelLisbon,
-	kTravelMadrid,
-	kTravelBarcelona,
-	kTravelFrankfurt,
-	kTravelHamburg,
-	kTravelLuxembourg,
-	kTravelBrussels,
+    kInspectItem,
 	kVictory,
 	kGameOver,
 	kPrologue,
