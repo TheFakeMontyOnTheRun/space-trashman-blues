@@ -44,7 +44,6 @@ extern int turnStep;
 
 extern struct MapWithCharKey tileProperties;
 extern struct Vec2i cameraPosition;
-extern int shouldShowDamageHighlight;
 extern uint32_t palette[256];
 extern uint8_t texturesUsed;
 extern enum ECommand mBufferedCommand;

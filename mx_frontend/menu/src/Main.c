@@ -62,6 +62,7 @@ long uclock() {
 #include "CRenderer.h"
 #include "VisibilityStrategy.h"
 #include "CPackedFileReader.h"
+#include "Derelict.h"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten/html5.h>
@@ -182,7 +183,7 @@ int main(int argc, char **argv) {
 	srand(time(NULL));
 	initHW();
         initStation();
-	enterState(kInvestigateMenu);
+	enterState(kMainMenu);
 
 	end_clock = uclock();
 	prev = 0;

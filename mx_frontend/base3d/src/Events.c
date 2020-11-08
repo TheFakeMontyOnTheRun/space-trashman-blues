@@ -89,7 +89,6 @@ void setItem(const int x, const int y, uint8_t item) {
 }
 
 void setDamage() {
-    shouldShowDamageHighlight = TRUE;
 }
 
 void setDetected() {
