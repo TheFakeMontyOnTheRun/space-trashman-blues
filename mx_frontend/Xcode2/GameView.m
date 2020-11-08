@@ -132,7 +132,7 @@ void setMultiplier(CGSize size) {
         
         initHW();
         initStation();
-        enterState(kInvestigateMenu);
+        enterState(kMainMenu);
         
         menuTick(50);
         [self initTimer];

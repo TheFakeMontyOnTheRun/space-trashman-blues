@@ -50,7 +50,7 @@ int32_t MainMenu_initStateCallback(int32_t tag) {
 	}
 
 	currentBackgroundBitmap = loadBitmap("pattern.img");
-	logoBitmap = loadBitmap("mistral.img");
+	logoBitmap = loadBitmap("title.img");
 	currentPresentationState = kAppearing;
 	timeUntilNextState = 500;
 
@@ -100,7 +100,7 @@ void MainMenu_repaintCallback(void) {
 		return;
 	}
 
-	drawImageWindow( 2, 2, 21, 22, "The Operative", logoBitmap );
+    drawBitmap( 0, 0, logoBitmap, 0);
 
 	drawWindow( 40 - biggestOption - 3, 25 - 4 - (optionsHeight / 8 ), biggestOption + 2, (optionsHeight / 8 ) + 2, "Play Game" );
 
