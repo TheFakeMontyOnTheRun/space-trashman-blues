@@ -8,4 +8,6 @@ extern const char *mainText;
 #define FIXED 1
 #define LUT 2
 extern int renderingMethod;
+
+extern int currentSelectedItem;
 #endif

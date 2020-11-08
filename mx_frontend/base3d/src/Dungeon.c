@@ -27,7 +27,7 @@ uint8_t collisionMap[256];
 int enteredThru = 0;
 extern char* focusItemName;
 
-int currentSelectedItem = 0;
+extern int currentSelectedItem;
 
 extern int shouldContinue;
 
