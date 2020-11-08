@@ -205,6 +205,11 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 gameSnapshot.turn++;
             } break;
                 
+            case kCommandFire6: {
+                enterState(kInspectItem);
+            }
+                break;
+                
             case kCommandFire3: {
                 struct ObjectNode* head = getRoom(getPlayerRoom())->itemsPresent->next;
                 struct Item *item = NULL;

@@ -33,19 +33,25 @@
 		F1277A1C236DE63E00478B2C /* UI.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A12236DE63E00478B2C /* UI.c */; };
 		F1277A2B236DE6DD00478B2C /* GameView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1277A26236DE6DD00478B2C /* GameView.m */; };
 		F1277A2C236DE6DD00478B2C /* OSXRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = F1277A28236DE6DD00478B2C /* OSXRenderer.m */; };
+		F18B851825581D380012292B /* magbootson.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850725581D370012292B /* magbootson.wav */; };
+		F18B851925581D380012292B /* menu_select.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850825581D370012292B /* menu_select.wav */; };
+		F18B851A25581D380012292B /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850925581D370012292B /* click.wav */; };
+		F18B851B25581D380012292B /* menu_move.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850A25581D370012292B /* menu_move.wav */; };
+		F18B851C25581D380012292B /* enemydead.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850B25581D370012292B /* enemydead.wav */; };
+		F18B851D25581D380012292B /* gotclue.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850C25581D370012292B /* gotclue.wav */; };
+		F18B851E25581D380012292B /* hurt.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850D25581D370012292B /* hurt.wav */; };
+		F18B851F25581D380012292B /* enemyfire.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850E25581D370012292B /* enemyfire.wav */; };
+		F18B852025581D380012292B /* drop.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850F25581D370012292B /* drop.wav */; };
+		F18B852125581D380012292B /* dead.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851025581D370012292B /* dead.wav */; };
+		F18B852225581D380012292B /* bong.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851125581D370012292B /* bong.wav */; };
+		F18B852325581D380012292B /* shot.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851225581D370012292B /* shot.wav */; };
+		F18B852425581D380012292B /* pick.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851325581D370012292B /* pick.wav */; };
+		F18B852525581D380012292B /* detected.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851425581D370012292B /* detected.wav */; };
+		F18B852625581D380012292B /* detected2.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851525581D370012292B /* detected2.wav */; };
+		F18B852725581D380012292B /* bonk.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851625581D370012292B /* bonk.wav */; };
+		F18B852825581D380012292B /* fire.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851725581D380012292B /* fire.wav */; };
 		F1B679BB24E4AA3F00FCEF8E /* Engine.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B679BA24E4AA3F00FCEF8E /* Engine.c */; };
 		F1B679BE24E4AAE400FCEF8E /* GameWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B679BD24E4AAE400FCEF8E /* GameWindow.m */; };
-		F1B679CA24E4AB7100FCEF8E /* gotclue.wav in Resources */ = {isa = PBXBuildFile; fileRef = F1B679BF24E4AB7100FCEF8E /* gotclue.wav */; };
-		F1B679CB24E4AB7100FCEF8E /* menu_select.wav in Resources */ = {isa = PBXBuildFile; fileRef = F1B679C024E4AB7100FCEF8E /* menu_select.wav */; };
-		F1B679CC24E4AB7100FCEF8E /* enemyfire.wav in Resources */ = {isa = PBXBuildFile; fileRef = F1B679C124E4AB7100FCEF8E /* enemyfire.wav */; };
-		F1B679CD24E4AB7100FCEF8E /* fire.wav in Resources */ = {isa = PBXBuildFile; fileRef = F1B679C224E4AB7100FCEF8E /* fire.wav */; };
-		F1B679CE24E4AB7100FCEF8E /* hurt.wav in Resources */ = {isa = PBXBuildFile; fileRef = F1B679C324E4AB7100FCEF8E /* hurt.wav */; };
-		F1B679CF24E4AB7100FCEF8E /* enemydead.wav in Resources */ = {isa = PBXBuildFile; fileRef = F1B679C424E4AB7100FCEF8E /* enemydead.wav */; };
-		F1B679D024E4AB7100FCEF8E /* detected.wav in Resources */ = {isa = PBXBuildFile; fileRef = F1B679C524E4AB7100FCEF8E /* detected.wav */; };
-		F1B679D124E4AB7100FCEF8E /* menu_move.wav in Resources */ = {isa = PBXBuildFile; fileRef = F1B679C624E4AB7100FCEF8E /* menu_move.wav */; };
-		F1B679D224E4AB7100FCEF8E /* dead.wav in Resources */ = {isa = PBXBuildFile; fileRef = F1B679C724E4AB7100FCEF8E /* dead.wav */; };
-		F1B679D324E4AB7100FCEF8E /* bong.wav in Resources */ = {isa = PBXBuildFile; fileRef = F1B679C824E4AB7100FCEF8E /* bong.wav */; };
-		F1B679D424E4AB7100FCEF8E /* detected2.wav in Resources */ = {isa = PBXBuildFile; fileRef = F1B679C924E4AB7100FCEF8E /* detected2.wav */; };
 		F1BD0D32236EF697002329C6 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1BD0D30236EF697002329C6 /* Quartz.framework */; };
 		F1BD0D33236EF697002329C6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1BD0D31236EF697002329C6 /* QuartzCore.framework */; };
 		F1CD08C72450E41C00D4794D /* base.pfs in Resources */ = {isa = PBXBuildFile; fileRef = F1CD08C62450E41C00D4794D /* base.pfs */; };
@@ -104,20 +110,26 @@
 		F1277A27236DE6DD00478B2C /* OSXRenderer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OSXRenderer.h; sourceTree = "<group>"; };
 		F1277A28236DE6DD00478B2C /* OSXRenderer.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OSXRenderer.m; sourceTree = "<group>"; };
 		F1277A29236DE6DD00478B2C /* The Mistral Report OSX_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = "The Mistral Report OSX_Prefix.pch"; sourceTree = "<group>"; };
+		F18B850725581D370012292B /* magbootson.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = magbootson.wav; path = ../data/wavogg/magbootson.wav; sourceTree = "<group>"; };
+		F18B850825581D370012292B /* menu_select.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = menu_select.wav; path = ../data/wavogg/menu_select.wav; sourceTree = "<group>"; };
+		F18B850925581D370012292B /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = click.wav; path = ../data/wavogg/click.wav; sourceTree = "<group>"; };
+		F18B850A25581D370012292B /* menu_move.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = menu_move.wav; path = ../data/wavogg/menu_move.wav; sourceTree = "<group>"; };
+		F18B850B25581D370012292B /* enemydead.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = enemydead.wav; path = ../data/wavogg/enemydead.wav; sourceTree = "<group>"; };
+		F18B850C25581D370012292B /* gotclue.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = gotclue.wav; path = ../data/wavogg/gotclue.wav; sourceTree = "<group>"; };
+		F18B850D25581D370012292B /* hurt.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = hurt.wav; path = ../data/wavogg/hurt.wav; sourceTree = "<group>"; };
+		F18B850E25581D370012292B /* enemyfire.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = enemyfire.wav; path = ../data/wavogg/enemyfire.wav; sourceTree = "<group>"; };
+		F18B850F25581D370012292B /* drop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = drop.wav; path = ../data/wavogg/drop.wav; sourceTree = "<group>"; };
+		F18B851025581D370012292B /* dead.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = dead.wav; path = ../data/wavogg/dead.wav; sourceTree = "<group>"; };
+		F18B851125581D370012292B /* bong.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = bong.wav; path = ../data/wavogg/bong.wav; sourceTree = "<group>"; };
+		F18B851225581D370012292B /* shot.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = shot.wav; path = ../data/wavogg/shot.wav; sourceTree = "<group>"; };
+		F18B851325581D370012292B /* pick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = pick.wav; path = ../data/wavogg/pick.wav; sourceTree = "<group>"; };
+		F18B851425581D370012292B /* detected.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = detected.wav; path = ../data/wavogg/detected.wav; sourceTree = "<group>"; };
+		F18B851525581D370012292B /* detected2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = detected2.wav; path = ../data/wavogg/detected2.wav; sourceTree = "<group>"; };
+		F18B851625581D370012292B /* bonk.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = bonk.wav; path = ../data/wavogg/bonk.wav; sourceTree = "<group>"; };
+		F18B851725581D380012292B /* fire.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = fire.wav; path = ../data/wavogg/fire.wav; sourceTree = "<group>"; };
 		F1B679BA24E4AA3F00FCEF8E /* Engine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Engine.c; path = ../menu/src/Engine.c; sourceTree = "<group>"; };
 		F1B679BC24E4AAE400FCEF8E /* GameWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameWindow.h; sourceTree = "<group>"; };
 		F1B679BD24E4AAE400FCEF8E /* GameWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameWindow.m; sourceTree = "<group>"; };
-		F1B679BF24E4AB7100FCEF8E /* gotclue.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = gotclue.wav; path = ../data/wav/gotclue.wav; sourceTree = "<group>"; };
-		F1B679C024E4AB7100FCEF8E /* menu_select.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = menu_select.wav; path = ../data/wav/menu_select.wav; sourceTree = "<group>"; };
-		F1B679C124E4AB7100FCEF8E /* enemyfire.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = enemyfire.wav; path = ../data/wav/enemyfire.wav; sourceTree = "<group>"; };
-		F1B679C224E4AB7100FCEF8E /* fire.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = fire.wav; path = ../data/wav/fire.wav; sourceTree = "<group>"; };
-		F1B679C324E4AB7100FCEF8E /* hurt.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = hurt.wav; path = ../data/wav/hurt.wav; sourceTree = "<group>"; };
-		F1B679C424E4AB7100FCEF8E /* enemydead.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = enemydead.wav; path = ../data/wav/enemydead.wav; sourceTree = "<group>"; };
-		F1B679C524E4AB7100FCEF8E /* detected.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = detected.wav; path = ../data/wav/detected.wav; sourceTree = "<group>"; };
-		F1B679C624E4AB7100FCEF8E /* menu_move.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = menu_move.wav; path = ../data/wav/menu_move.wav; sourceTree = "<group>"; };
-		F1B679C724E4AB7100FCEF8E /* dead.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = dead.wav; path = ../data/wav/dead.wav; sourceTree = "<group>"; };
-		F1B679C824E4AB7100FCEF8E /* bong.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = bong.wav; path = ../data/wav/bong.wav; sourceTree = "<group>"; };
-		F1B679C924E4AB7100FCEF8E /* detected2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = detected2.wav; path = ../data/wav/detected2.wav; sourceTree = "<group>"; };
 		F1BD0D30236EF697002329C6 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		F1BD0D31236EF697002329C6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		F1BF22812450F4AF0088A1C4 /* SoundSystem.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SoundSystem.h; path = ../SoundSystem/SoundSystem.h; sourceTree = SOURCE_ROOT; };
@@ -251,19 +263,25 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F18B851125581D370012292B /* bong.wav */,
+				F18B851625581D370012292B /* bonk.wav */,
+				F18B850925581D370012292B /* click.wav */,
+				F18B851025581D370012292B /* dead.wav */,
+				F18B851425581D370012292B /* detected.wav */,
+				F18B851525581D370012292B /* detected2.wav */,
+				F18B850F25581D370012292B /* drop.wav */,
+				F18B850B25581D370012292B /* enemydead.wav */,
+				F18B850E25581D370012292B /* enemyfire.wav */,
+				F18B851725581D380012292B /* fire.wav */,
+				F18B850C25581D370012292B /* gotclue.wav */,
+				F18B850D25581D370012292B /* hurt.wav */,
+				F18B850725581D370012292B /* magbootson.wav */,
+				F18B850A25581D370012292B /* menu_move.wav */,
+				F18B850825581D370012292B /* menu_select.wav */,
+				F18B851325581D370012292B /* pick.wav */,
+				F18B851225581D370012292B /* shot.wav */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				F1CD08C62450E41C00D4794D /* base.pfs */,
-				F1B679C824E4AB7100FCEF8E /* bong.wav */,
-				F1B679C724E4AB7100FCEF8E /* dead.wav */,
-				F1B679C524E4AB7100FCEF8E /* detected.wav */,
-				F1B679C924E4AB7100FCEF8E /* detected2.wav */,
-				F1B679C424E4AB7100FCEF8E /* enemydead.wav */,
-				F1B679C124E4AB7100FCEF8E /* enemyfire.wav */,
-				F1B679C224E4AB7100FCEF8E /* fire.wav */,
-				F1B679BF24E4AB7100FCEF8E /* gotclue.wav */,
-				F1B679C324E4AB7100FCEF8E /* hurt.wav */,
-				F1B679C624E4AB7100FCEF8E /* menu_move.wav */,
-				F1B679C024E4AB7100FCEF8E /* menu_select.wav */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 			);
@@ -330,20 +348,26 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F18B852325581D380012292B /* shot.wav in Resources */,
+				F18B852225581D380012292B /* bong.wav in Resources */,
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
-				F1B679CC24E4AB7100FCEF8E /* enemyfire.wav in Resources */,
-				F1B679D024E4AB7100FCEF8E /* detected.wav in Resources */,
-				F1B679CD24E4AB7100FCEF8E /* fire.wav in Resources */,
+				F18B852625581D380012292B /* detected2.wav in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
-				F1B679D124E4AB7100FCEF8E /* menu_move.wav in Resources */,
-				F1B679D224E4AB7100FCEF8E /* dead.wav in Resources */,
-				F1B679CA24E4AB7100FCEF8E /* gotclue.wav in Resources */,
+				F18B852125581D380012292B /* dead.wav in Resources */,
 				F1CD08C72450E41C00D4794D /* base.pfs in Resources */,
-				F1B679D424E4AB7100FCEF8E /* detected2.wav in Resources */,
-				F1B679D324E4AB7100FCEF8E /* bong.wav in Resources */,
-				F1B679CB24E4AB7100FCEF8E /* menu_select.wav in Resources */,
-				F1B679CE24E4AB7100FCEF8E /* hurt.wav in Resources */,
-				F1B679CF24E4AB7100FCEF8E /* enemydead.wav in Resources */,
+				F18B851A25581D380012292B /* click.wav in Resources */,
+				F18B851825581D380012292B /* magbootson.wav in Resources */,
+				F18B851E25581D380012292B /* hurt.wav in Resources */,
+				F18B852825581D380012292B /* fire.wav in Resources */,
+				F18B852725581D380012292B /* bonk.wav in Resources */,
+				F18B851C25581D380012292B /* enemydead.wav in Resources */,
+				F18B851F25581D380012292B /* enemyfire.wav in Resources */,
+				F18B852425581D380012292B /* pick.wav in Resources */,
+				F18B851D25581D380012292B /* gotclue.wav in Resources */,
+				F18B852025581D380012292B /* drop.wav in Resources */,
+				F18B851925581D380012292B /* menu_select.wav in Resources */,
+				F18B852525581D380012292B /* detected.wav in Resources */,
+				F18B851B25581D380012292B /* menu_move.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -118,6 +118,10 @@ void handleSystemEvents() {
             mBufferedCommand = kCommandStrafeRight;
             coords[(selected * 2)] += 2;
             break;
+
+        case 3: //f
+            mBufferedCommand = kCommandFire6;
+            break;
             
         case 53: //esc
             mBufferedCommand = kCommandBack;
