@@ -725,6 +725,7 @@ void initStation(void) {
 	station[7].description = "pod-1";
 	station[7].info = "A male living pod. Looks like from one of the scientists. It's messy, but as if it's occupant would easily find his belongings in there. There are a few cracks in the glass already.";
 	station[7].connections[2] = 5;
+    station[7].rankRequired = 2;
 	station[7].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	station[7].sizeX = 64;
 	station[7].sizeY = 64;
@@ -732,6 +733,7 @@ void initStation(void) {
 	station[8].description = "pod-2";
 	station[8].info = "A empty living pod. Looks as if it was never ever used. If can even see some of the factory stickers in it.";
 	station[8].connections[0] = 5;
+    station[8].rankRequired = 2;
 	station[8].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	station[8].sizeX = 64;
 	station[8].sizeY = 64;
@@ -749,6 +751,7 @@ void initStation(void) {
 	station[10].description = "pod-3";
 	station[10].info = "A young woman's pod. You do recognize a few items, but its badly mixed up. It's hard to make the age of girl, but she was young.";
 	station[10].connections[2] = 9;
+    station[10].rankRequired = 2;
 	station[10].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	station[10].sizeX = 64;
 	station[10].sizeY = 64;
@@ -756,6 +759,7 @@ void initStation(void) {
 	station[11].description = "pod-4";
 	station[11].info = "A scientists pod, for sure. It's neat, clean and organized. Not much around. He had a strange fixation on redheads.";
 	station[11].connections[0] = 9;
+    station[11].rankRequired = 2;
 	station[11].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	station[11].sizeX = 64;
 	station[11].sizeY = 64;
@@ -798,6 +802,7 @@ void initStation(void) {
 	station[16].description = "control-room";
 	station[16].info = "Lots of old equiptment.";
 	station[16].connections[0] = 14;
+    station[16].rankRequired = 2;
 	station[16].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
 	station[16].sizeX = 64;
 	station[16].sizeY = 64;
@@ -840,6 +845,7 @@ void initStation(void) {
 	station[21].connections[3] = 20;
 	station[21].info = "A micro-g-hydrostatic lab. Lots of old equipments. There must be something valuable here.";
 	station[21].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+    station[21].rankRequired = 3;
 	station[21].sizeX = 64;
 	station[21].sizeY = 64;
 
@@ -847,6 +853,7 @@ void initStation(void) {
 	station[22].connections[0] = 20;
 	station[22].info = "A low-atmosphere-electricity lab. Lots of strange equipment. Looks dangerous.";
 	station[22].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+    station[22].rankRequired = 3;
     station[22].sizeX = 64;
 	station[22].sizeY = 64;
 
@@ -854,6 +861,7 @@ void initStation(void) {
 	station[23].connections[1] = 20;
 	station[23].info = "Looks like this was a chemistry lab. Looks badly destroyed. I was told this was due to space-trash. That's why they got us! On the left wall, there are remnants of a 3D periodic table. If only this was in once piece, it could make some good cash.";
 	station[23].itemsPresent = (struct ObjectNode*)calloc(1, sizeof(struct ObjectNode));
+    station[23].rankRequired = 3;
 	station[23].sizeX = 64;
 	station[23].sizeY = 64;
 
@@ -1060,8 +1068,8 @@ void initStation(void) {
 	item[17].weight = 3;
   item[17].index = 17;
 	item[17].pickable = FALSE;
-	item[17].position.x = 17;
-	item[17].position.y = 16;
+	item[17].position.x = 20;
+	item[17].position.y = 40;
 	addToRoom("restroom", &item[17]);
 
 	item[18].description = "high-rank-keycard";
@@ -1154,9 +1162,8 @@ void initStation(void) {
 	item[25].pickCallback = keycardPickCallback;
 	item[25].dropCallback = keycardDropCallback;
 	item[25].pickable = TRUE;
-	item[25].position.x = 7;
-	item[25].position.y = 6;
-    
+	item[25].position.x = 21;
+	item[25].position.y = 41;
     
     /* Elevator controls */
     item[26].description = "elevator-level1-go-down";
