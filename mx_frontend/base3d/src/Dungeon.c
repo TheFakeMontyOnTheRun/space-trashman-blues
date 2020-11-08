@@ -33,6 +33,10 @@ extern int shouldContinue;
 
 extern char crawlClueMessage[128];
 
+extern char *thisMissionName;
+extern int16_t thisMissionNameLen;
+
+
 struct CrawlerAgent {
     struct Vec2i position;
     enum EDirection rotation;
@@ -327,6 +331,10 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             setPlayerDirection(enteredThru);
             initRoom(getPlayerRoom());
             
+            thisMissionName = getRoomDescription();
+            thisMissionNameLen = strlen(getRoomDescription());
+
+            
             return gameSnapshot;
         }
         
@@ -341,6 +349,9 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 enteredThru = cell - '0';
                 setPlayerDirection(enteredThru);
                 initRoom(room);
+                thisMissionName = getRoomDescription();
+                thisMissionNameLen = strlen(getRoomDescription());
+
             } else {
                 setPlayerPosition(oldPosition);
                 playerCrawler.position.x = oldPosition.x;
