@@ -185,7 +185,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     parseCommand("drop", item->description);
                     item->position.x = offseted.x;
                     item->position.y = offseted.y;
-                    setItem(item->position.x, item->position.y, 'K');
+                    setItem(item->position.x, item->position.y, item->index);
                     currentSelectedItem--;
                 }
             }
