@@ -189,6 +189,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     currentSelectedItem--;
                 }
             }
+            break;
             case kCommandFire1: {
                 struct ObjectNode* head = getPlayerItems();
                 struct Item *item = NULL;
