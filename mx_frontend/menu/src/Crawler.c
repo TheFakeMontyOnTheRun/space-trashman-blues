@@ -45,6 +45,10 @@ int AbandonMission_count = 2;
 int32_t Crawler_initStateCallback(int32_t tag) {
 	int c = 0;
 
+    if (tag == kPlayGame) {
+        initStation();
+    }
+    
 	kCameraYDeltaPlayerDeath = Div(intToFix(9), intToFix(10));
 
 	kCameraYSpeedPlayerDeath = Div(intToFix(1), intToFix(10));
