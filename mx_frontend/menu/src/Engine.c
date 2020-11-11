@@ -83,6 +83,16 @@ void enterState ( enum EGameMenuState newState ) {
 			tickCallback	   = MainMenu_tickCallback;
 			unloadStateCallback  = MainMenu_unloadStateCallback;
 			break;
+        case kGoodGameOverEpilogue:
+        case kBadGameOverEpilogue:
+        case kGoodVictoryEpilogue:
+        case kBadVictoryEpilogue:
+            initStateCallback       = GameMenu_initStateCallback;
+            initialPaintCallback = GameMenu_initialPaintCallback;
+            repaintCallback       = GameMenu_repaintCallback;
+            tickCallback       = GameMenu_tickCallback;
+            unloadStateCallback  = GameMenu_unloadStateCallback;
+            break;
 		case kHelp:
 			initStateCallback	   = HelpScreen_initStateCallback;
 			initialPaintCallback = HelpScreen_initialPaintCallback;

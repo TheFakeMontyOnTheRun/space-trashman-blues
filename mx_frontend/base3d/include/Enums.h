@@ -40,8 +40,10 @@ enum EGameMenuState {
     kBackToGame,
 	kEndGame,
     kInspectItem,
-	kVictory,
-	kGameOver,
+	kGoodVictoryEpilogue,
+    kBadVictoryEpilogue,
+    kGoodGameOverEpilogue,
+	kBadGameOverEpilogue,
 	kPrologue,
 	kEpilogue
 };

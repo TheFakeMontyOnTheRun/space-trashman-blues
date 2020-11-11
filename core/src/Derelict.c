@@ -607,22 +607,36 @@ void keycardDropCallback(struct Item* item) {
   updateRankFromKeycards();
 }
 
-
+/*
+ Good victory - you blew the station and escaped
+ Bad victory - you blew the station, but died
+ good game over - you escaped, but failed to blow the station
+ bad game over - you failed to blow the station and died.
+ */
 void bombActivatedCallback(struct Item* item) {
 
-  if (!hasItemInRoom("lab-1", "metal-mending")) {
-    if (playerLocation != 1 ) {
-      setGameStatus(kBadVictory);    
+    int blewTheStation = (!hasItemInRoom("lab-1", "metal-mending") && hasItemInRoom( "lab-1", "time-bomb"));
+    int playerAtShip = (playerLocation == 1);
+    int playerAtSameLocationAsBomb = hasItemInRoom( getRoom( playerLocation)->description, "time-bomb");
+    
+    if (blewTheStation) {
+        if (playerAtShip) {
+            setGameStatus(kGoodVictory);
+        } else {
+            setGameStatus(kBadVictory);
+        }
     } else {
-      setGameStatus(kGoodVictory);    
+        
+        if (playerAtSameLocationAsBomb) {
+            setGameStatus(kBadGameOver);
+        } else {
+            if (playerAtShip  ) {
+                setGameStatus(kGoodGameOver);
+            } else {
+                setGameStatus(kBadGameOver);
+            }
+        }
     }
-  } else {
-    if (playerLocation != 1 ) {
-      setGameStatus(kBadGameOver);
-    } else {
-      setGameStatus(kGoodGameOver);
-    }
-  }
 }
 
 void bombControllerActivatedCallback(struct Item* item) {

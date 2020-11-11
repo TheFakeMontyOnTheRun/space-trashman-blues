@@ -299,6 +299,25 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
 
     if (oldTurn != gameSnapshot.turn) {
         
+        switch (getGameStatus()) {
+            case kBadVictory:
+                enterState(kBadVictoryEpilogue);
+                return gameSnapshot;
+
+            case kBadGameOver:
+                enterState(kBadGameOverEpilogue);
+                return gameSnapshot;
+
+            case kGoodVictory:
+                enterState(kGoodVictoryEpilogue);
+                return gameSnapshot;
+
+            case kGoodGameOver:
+                enterState(kGoodGameOverEpilogue);
+                return gameSnapshot;
+        }
+        
+        
         if (getPlayerRoom() != 1 && (!getItem(6)->active || !playerHasObject("helmet"))) {
             setPlayerHealth(getPlayerHealth() - 1);
         }

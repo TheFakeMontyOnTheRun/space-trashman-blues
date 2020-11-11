@@ -107,7 +107,7 @@ int32_t GameMenu_initStateCallback(int32_t tag) {
 			break;
 
 
-		case kVictory:
+		case kGoodVictoryEpilogue:
 			sprintf (textBuffer, "Victory!\n\n\n\n\n\n");
 			mainText = &textBuffer[0];
 
@@ -118,8 +118,32 @@ int32_t GameMenu_initStateCallback(int32_t tag) {
 			GameMenu_options = &GameMenu_Story_options[0];
 			GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
 			break;
-
-		case kGameOver:
+            
+        case kBadVictoryEpilogue:
+            sprintf (textBuffer, "Victory! But not so good\n\n\n\n\n\n");
+            mainText = &textBuffer[0];
+            
+            GameMenu_StateTitle = "Victory";
+            currentBackgroundBitmap = loadBitmap("pattern.img");
+            
+            GameMenu_optionsCount = 1;
+            GameMenu_options = &GameMenu_Story_options[0];
+            GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
+            break;
+            
+        case kGoodGameOverEpilogue:
+            sprintf (textBuffer, "You're dead! but its not so bad\n\n\n\n\n\n");
+            mainText = &textBuffer[0];
+            
+            GameMenu_StateTitle = "Game Over";
+            currentBackgroundBitmap = loadBitmap("pattern.img");
+            
+            GameMenu_optionsCount = 1;
+            GameMenu_options = &GameMenu_Story_options[0];
+            GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
+            break;
+            
+		case kBadGameOverEpilogue:
 			sprintf (textBuffer, "You're dead!\n\n\n\n\n\n");
 			mainText = &textBuffer[0];
 
