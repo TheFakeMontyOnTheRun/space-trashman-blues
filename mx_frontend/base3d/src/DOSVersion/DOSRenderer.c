@@ -225,7 +225,15 @@ void handleSystemEvents() {
 			case 'b':
 				visibilityCached = FALSE;
 				break;
-
+			case 'a':
+				mBufferedCommand = kCommandFire4;
+				break;
+			case 'v':
+				mBufferedCommand = kCommandFire5;
+				break;
+			case 'f':
+				mBufferedCommand = kCommandFire6;
+				break;
 			case 'j':
 				useDither = FALSE;
 				visibilityCached = FALSE;

@@ -115,6 +115,8 @@ struct NewScreen xnewscreen = {
 
 void openCOM() {}
 
+uint8_t turnBuffer[320 * 200];
+
 uint8_t readByte() {
 	return kCommandNone;
 }
@@ -305,6 +307,8 @@ int xlate_key (UWORD rawkey, UWORD qualifier, APTR eventptr)
 					case '4':
 						mBufferedCommand = kCommandLeft;
 						visibilityCached = FALSE;
+                        turnStep = 0;
+                        turnTarget = 256;
 						break;
 					case '5':
 						mBufferedCommand = kCommandDown;
@@ -313,6 +317,8 @@ int xlate_key (UWORD rawkey, UWORD qualifier, APTR eventptr)
 					case '6':
 						mBufferedCommand = kCommandRight;
 						visibilityCached = FALSE;
+                        turnStep = 256;
+                        turnTarget = 0;
 						break;
 					case '8':
 						mBufferedCommand = kCommandUp;
@@ -333,10 +339,14 @@ int xlate_key (UWORD rawkey, UWORD qualifier, APTR eventptr)
 			case 0x4E:
 				mBufferedCommand = kCommandRight;
 				visibilityCached = FALSE;
-				break;
+                turnStep = 256;
+                turnTarget = 0;
+                break;
 			case 0x4F:
 				mBufferedCommand = kCommandLeft;
 				visibilityCached = FALSE;
+                turnStep = 0;
+                turnTarget = 256;
 				break;
 			case 96:
 			case 97:
@@ -389,12 +399,21 @@ void handleSystemEvents() {
 					mBufferedCommand = kCommandFire1;
 					break;
 
+			    case 'a':
+                    mBufferedCommand = kCommandFire4;
+                    break;
+			    case 'v':
+                    mBufferedCommand = kCommandFire5;
+                    break;
+			    case 'f':
+                    mBufferedCommand = kCommandFire6;
+                    break;
+
 				case 'b':
 					mBufferedCommand = kCommandLeft;
 					visibilityCached = FALSE;
 					turnStep = 0;
 					turnTarget = 256;
-					fullHideGun();
 					break;
 
 				case 'm':
@@ -402,7 +421,6 @@ void handleSystemEvents() {
 					visibilityCached = FALSE;
 					turnStep = 256;
 					turnTarget = 0;
-					fullHideGun();
 					break;
 
 				case 'h':
@@ -440,25 +458,102 @@ void handleSystemEvents() {
 					mBufferedCommand = kCommandFire3;
 					break;
 			}
+
+            if (mBufferedCommand != kCommandLeft && mBufferedCommand != kCommandRight && mBufferedCommand != kCommandNone) {
+                turnStep = 0;
+                turnTarget = 0;
+            }
 		}
 	}
 }
 
 void flipRenderer() {
+
+
+
+    int x, y;
+
+
+
+    if ( turnTarget == turnStep ) {
 #ifdef CD32
-
-    WriteChunkyPixels(my_window->RPort, 0, 0, 320, 200, &framebuffer[0], 320);
-
+        WriteChunkyPixels(my_window->RPort, 0, 0, 320, 200, &framebuffer[0], 320);
 #else
-
 #ifdef AGA8BPP
-	c2p1x1_8_c5_bm(320,200,0,0,&framebuffer[0], my_window->RPort->BitMap);
+        c2p1x1_8_c5_bm(320,200,0,0,&framebuffer[0], my_window->RPort->BitMap);
 #else
-	WriteChunkyPixels(my_window->RPort, 0, 0, 319, 199, &framebuffer[0], 320);
+        WriteChunkyPixels(my_window->RPort, 0, 0, 319, 199, &framebuffer[0], 320);
 #endif
-
 #endif
+        memcpy( previousFrame, framebuffer, 320 * 200);
+    } else if ( turnStep < turnTarget ) {
 
+        uint8_t *bufferPtr = &turnBuffer[0];
+        for ( y = 0; y < 200; ++y ) {
+            for ( x = 0; x < 320; ++x ) {
+                uint8_t index;
+
+                if (x < 256 && y >= 8  ) {
+
+                    if ( x  >= turnStep ) {
+                        index = previousFrame[ (320 * y) - turnStep + x ];
+                    } else {
+                        index = framebuffer[ (320 * y) + x - 64 - turnStep];
+                    }
+                } else {
+                    index = framebuffer[ (320 * y) + x];
+                }
+
+                *bufferPtr = index;
+                ++bufferPtr;
+            }
+        }
+
+        turnStep+= 32;
+#ifdef CD32
+        WriteChunkyPixels(my_window->RPort, 0, 0, 320, 200, &turnBuffer[0], 320);
+#else
+#ifdef AGA8BPP
+        c2p1x1_8_c5_bm(320,200,0,0,&turnBuffer[0], my_window->RPort->BitMap);
+#else
+        WriteChunkyPixels(my_window->RPort, 0, 0, 319, 199, &turnBuffer[0], 320);
+#endif
+#endif
+    } else {
+
+        uint8_t *bufferPtr = &turnBuffer[0];
+        for ( y = 0; y < 200; ++y ) {
+            for ( x = 0; x < 320; ++x ) {
+                uint8_t index;
+
+                if (x < 256 && y >= 8  ) {
+
+                    if ( x  >= turnStep ) {
+                        index = framebuffer[ (320 * y) - turnStep + x ];
+                    } else {
+                        index = previousFrame[ (320 * y) + x - 64 - turnStep];
+                    }
+
+                } else {
+                    index = framebuffer[ (320 * y) + x];
+                }
+
+                *bufferPtr = index;
+                ++bufferPtr;
+            }
+        }
+
+        turnStep-= 32;
+#ifdef CD32
+        WriteChunkyPixels(my_window->RPort, 0, 0, 320, 200, &turnBuffer[0], 320);
+#else
+#ifdef AGA8BPP
+        c2p1x1_8_c5_bm(320,200,0,0,&turnBuffer[0], my_window->RPort->BitMap);
+#else
+        WriteChunkyPixels(my_window->RPort, 0, 0, 319, 199, &turnBuffer[0], 320);
+#endif
+#endif
+    }
 }
 
 void clear() {}
