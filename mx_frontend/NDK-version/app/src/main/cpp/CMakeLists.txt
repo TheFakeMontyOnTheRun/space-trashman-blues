@@ -5,6 +5,7 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
+include_directories(../../../../../../core/include)
 include_directories(../../../../../base3d/include)
 include_directories(../../../../../common/include)
 include_directories(../../../../../menu/include)
@@ -25,6 +26,8 @@ add_library( # Sets the name of the library.
         SHARED
 
         # Provides a relative path to your source file(s).
+        ../../../../../../core/src/Derelict.c
+        ../../../../../../core/src/Parser.c
         ../../../../../menu/src/MainMenu.c
         ../../../../../menu/src/Crawler.c
         ../../../../../menu/src/HelpScreen.c

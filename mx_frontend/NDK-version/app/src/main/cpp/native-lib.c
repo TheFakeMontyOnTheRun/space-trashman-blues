@@ -280,7 +280,6 @@ JNIEXPORT void JNICALL
             mBufferedCommand = kCommandLeft;
             turnStep = 0;
             turnTarget = 256;
-            fullHideGun();
             break;
 
 
@@ -288,7 +287,6 @@ JNIEXPORT void JNICALL
             mBufferedCommand = kCommandRight;
             turnStep = 256;
             turnTarget = 0;
-            fullHideGun();
             break;
 
         case 'q':
