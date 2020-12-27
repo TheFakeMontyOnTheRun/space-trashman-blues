@@ -789,7 +789,7 @@ void drawRect(
     memset (destination + (320 * (y + dy)) + x, pixel, dx);
 }
 
-void fillBottomFlat(int *coords, uint8_t colour ) {
+void fillBottomFlat(int *coords, uint8_t colour) {
     int y = coords[1];
     int yFinal = min(coords[3], coords[5]);
 
@@ -799,134 +799,132 @@ void fillBottomFlat(int *coords, uint8_t colour ) {
     FixP_t y1 = intToFix(coords[3]);
     FixP_t x2 = intToFix(coords[4]);
     FixP_t y2 = intToFix(coords[5]);
-    
-    
+
+
     FixP_t dX1X0 = (x1 - x0);
     FixP_t dX0X2 = (x0 - x2);
     FixP_t dY1Y0 = (y1 - y0);
     FixP_t dY2Y0 = (y2 - y0);
-    
+
     if (dY2Y0 == 0 || dY1Y0 == 0) {
         return;
     }
 
-    FixP_t dXDy2 = Div( dX0X2, dY2Y0 );
-    FixP_t dXDy1 = Div( dX1X0, dY1Y0 );
+    FixP_t dXDy2 = Div(dX0X2, dY2Y0);
+    FixP_t dXDy1 = Div(dX1X0, dY1Y0);
     FixP_t fX0 = x0;
     FixP_t fX1 = x0;
-     
-    for ( ; y < yFinal; ++y ) {
-        if (y >= 200 ) {
+
+    for (; y < yFinal; ++y) {
+        if (y >= 200) {
             return;
         } else if (y >= 0) {
-            int iFX1 = max(min(255, fixToInt(fX1)), 0 );
-            int iFX0 = max(min(255, fixToInt(fX0)), 0 );
+            int iFX1 = max(min(255, fixToInt(fX1)), 0);
+            int iFX0 = max(min(255, fixToInt(fX0)), 0);
             uint8_t *destination = &framebuffer[(320 * y) + min(iFX0, iFX1)];
-            memset( destination, colour, abs(iFX1 - iFX0));
+            memset(destination, colour, abs(iFX1 - iFX0));
         }
         fX0 -= dXDy2;
         fX1 += dXDy1;
-        
+
 
     }
 }
-
 
 
 void fillTopFloat(int *coords, uint8_t colour) {
     int y = coords[1];
     int yFinal = max(coords[3], coords[5]);;
-    
+
     FixP_t x0 = intToFix(coords[0]);
     FixP_t y0 = intToFix(coords[1]);
     FixP_t x1 = intToFix(coords[2]);
     FixP_t y1 = intToFix(coords[3]);
     FixP_t x2 = intToFix(coords[4]);
     FixP_t y2 = intToFix(coords[5]);
-    
-    
+
+
     FixP_t dX1X0 = (x1 - x0);
     FixP_t dX2X0 = (x2 - x0);
     FixP_t dY0Y1 = (y0 - y1);
     FixP_t dY0Y2 = (y0 - y2);
-    
+
     if (dY0Y1 == 0 || dY0Y2 == 0) {
         return;
     }
-    
-    FixP_t dXDy1 = Div( dX1X0, dY0Y1 );
-    FixP_t dXDy2 = Div( dX2X0, dY0Y2 );
+
+    FixP_t dXDy1 = Div(dX1X0, dY0Y1);
+    FixP_t dXDy2 = Div(dX2X0, dY0Y2);
     FixP_t fX0 = x0; //p1
     FixP_t fX1 = x0; //p2
-    
-    for ( ; y >= yFinal; --y ) {
-        if (y < 0 ) {
+
+    for (; y >= yFinal; --y) {
+        if (y < 0) {
             return;
-        } else if ( y < 200 ) {
-            int iFX1 = max(min(255, fixToInt(fX1)), 0 );
-            int iFX0 = max(min(255, fixToInt(fX0)), 0 );
+        } else if (y < 200) {
+            int iFX1 = max(min(255, fixToInt(fX1)), 0);
+            int iFX0 = max(min(255, fixToInt(fX0)), 0);
             uint8_t *destination = &framebuffer[(320 * y) + min(iFX0, iFX1)];
-            memset( destination, colour, abs(iFX1 - iFX0));
+            memset(destination, colour, abs(iFX1 - iFX0));
         }
-        
+
         fX0 += dXDy1;
         fX1 += dXDy2;
     }
 }
 
 
-void fillTriangle( int* coords, uint8_t colour ) {
+void fillTriangle(int *coords, uint8_t colour) {
     int newCoors[6];
     int newCoors2[6];
-    
+
     int upper = -1;
     int lower = -1;
     int other = 0;
-    
-    for ( int c = 0; c < 3; ++c ) {
+
+    for (int c = 0; c < 3; ++c) {
         if (upper == -1 || coords[(2 * c) + 1] < coords[(2 * upper) + 1]) {
             upper = c;
         }
-        
+
         if (lower == -1 || coords[(2 * c) + 1] > coords[(2 * lower) + 1]) {
             lower = c;
         }
     }
-    
+
     if (lower == 0 || upper == 0) {
         other = 1;
     }
-    
+
     if ((lower == 1 || upper == 1) && (other == 1)) {
         other = 2;
     }
 
-    if ((lower == 2 || upper == 2)&& (other == 2)) {
+    if ((lower == 2 || upper == 2) && (other == 2)) {
         other = 0;
     }
-    
+
     newCoors[0] = coords[2 * upper];
     newCoors[1] = coords[(2 * upper) + 1];
     newCoors[2] = coords[2 * lower];
-    newCoors[3] = coords[(2 * lower) +1];
+    newCoors[3] = coords[(2 * lower) + 1];
     newCoors[4] = coords[2 * other];
     newCoors[5] = coords[(2 * other) + 1];
-    
+
     newCoors2[0] = coords[2 * lower];
     newCoors2[1] = coords[(2 * lower) + 1];
     newCoors2[2] = coords[2 * other];
-    newCoors2[3] = coords[(2 * other) +1];
+    newCoors2[3] = coords[(2 * other) + 1];
     newCoors2[4] = coords[2 * upper];
     newCoors2[5] = coords[(2 * upper) + 1];
 
 
-    fillBottomFlat(&newCoors[0], colour );
-    fillTopFloat(&newCoors2[0], colour );
+    fillBottomFlat(&newCoors[0], colour);
+    fillTopFloat(&newCoors2[0], colour);
 }
 
 
-
-void drawTexturedBottomFlatTriangle(int *coords, uint8_t* uvCoords, struct Texture* texture ) {
+void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture) {
     int y = coords[1];
     int x = 0;
     int u, v;
@@ -934,16 +932,16 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t* uvCoords, struct Textu
     FixP_t fDU = intToFix(1);
     FixP_t fDV = intToFix(1);
     FixP_t f32 = intToFix(32);
-    
+
     int yFinal = min(coords[3], coords[5]);
-    
+
     FixP_t x0 = intToFix(coords[0]);
     FixP_t y0 = intToFix(coords[1]);
     FixP_t x1 = intToFix(coords[2]);
     FixP_t y1 = intToFix(coords[3]);
     FixP_t x2 = intToFix(coords[4]);
     FixP_t y2 = intToFix(coords[5]);
-    
+
     FixP_t u0 = intToFix(uvCoords[0]);
     FixP_t v0 = intToFix(uvCoords[1]);
     FixP_t u1 = intToFix(uvCoords[2]);
@@ -955,25 +953,25 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t* uvCoords, struct Textu
     FixP_t dX0X2 = (x0 - x2);
     FixP_t dY1Y0 = (y1 - y0);
     FixP_t dY2Y0 = (y2 - y0);
-    
+
     if (dY2Y0 == 0 || dY1Y0 == 0) {
         return;
     }
-    
-    FixP_t dXDy2 = Div( dX0X2, dY2Y0 );
-    FixP_t dXDy1 = Div( dX1X0, dY1Y0 );
+
+    FixP_t dXDy2 = Div(dX0X2, dY2Y0);
+    FixP_t dXDy1 = Div(dX1X0, dY1Y0);
     FixP_t fX0 = x0;
     FixP_t fX1 = x0;
-    
+
     fV = 0;
-    fDV = Div( f32, intToFix( yFinal - y));
-    
-    
-    for ( ; y < yFinal; ++y ) {
-        
+    fDV = Div(f32, intToFix(yFinal - y));
+
+
+    for (; y < yFinal; ++y) {
+
         int iFX1;
         int iFX0;
-        
+
         if (fX0 > fX1) {
             iFX1 = fixToInt(fX0);
             iFX0 = fixToInt(fX1);
@@ -981,50 +979,49 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t* uvCoords, struct Textu
             iFX1 = fixToInt(fX1);
             iFX0 = fixToInt(fX0);
         }
-        
+
         int limit = iFX1 - iFX0;
-        
-        uint8_t *destination = &framebuffer[(320 * y) + iFX0 ];
+
+        uint8_t *destination = &framebuffer[(320 * y) + iFX0];
         fU = 0;
-        
+
         //far from ideal...but it's the only thing that worked so far...
-        fDU = Div( intToFix( limit),  f32 );
-        
-        if (fDU != 0 ) {
-            fDU = Div( intToFix(1), fDU);
+        fDU = Div(intToFix(limit), f32);
+
+        if (fDU != 0) {
+            fDU = Div(intToFix(1), fDU);
         }
-        
-        
-        if (y >= 0 && y <= 199 ) {
-            
+
+
+        if (y >= 0 && y <= 199) {
+
             int xPos = iFX0;
-            
+
             while (limit--) {
-                
-                if (xPos >= 0 && xPos <= 255 ) {
-                    *destination = *(&texture->rowMajor[0] + (NATIVE_TEXTURE_SIZE * v ) + u);
+
+                if (xPos >= 0 && xPos <= 255) {
+                    *destination = *(&texture->rowMajor[0] + (NATIVE_TEXTURE_SIZE * v) + u);
                 }
                 ++xPos;
                 ++destination;
                 fU += fDU;
-                
+
                 //loop coords
                 u = abs(fixToInt(fU)) % NATIVE_TEXTURE_SIZE;
             }
         }
-        
+
         fX0 -= dXDy2;
         fX1 += dXDy1;
         fV += fDV;
-        
+
         v = abs(fixToInt(fV)) % NATIVE_TEXTURE_SIZE;
-        
+
     }
 }
 
 
-
-void drawTexturedTopFloatTriangle(int *coords, uint8_t* uvCoords, struct Texture* texture) {
+void drawTexturedTopFloatTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture) {
     int y = coords[1];
     int x = 0;
     int u, v;
@@ -1047,28 +1044,28 @@ void drawTexturedTopFloatTriangle(int *coords, uint8_t* uvCoords, struct Texture
     FixP_t u2 = intToFix(uvCoords[4]);
     FixP_t v2 = intToFix(uvCoords[5]);
 
-    
+
     FixP_t dX1X0 = (x1 - x0);
     FixP_t dX2X0 = (x2 - x0);
     FixP_t dY0Y1 = (y0 - y1);
     FixP_t dY0Y2 = (y0 - y2);
-    
+
     if (dY0Y1 == 0 || dY0Y2 == 0) {
         return;
     }
-    
-    FixP_t dXDy1 = Div( dX1X0, dY0Y1 );
-    FixP_t dXDy2 = Div( dX2X0, dY0Y2 );
+
+    FixP_t dXDy1 = Div(dX1X0, dY0Y1);
+    FixP_t dXDy2 = Div(dX2X0, dY0Y2);
     FixP_t fX0 = x0; //p1
     FixP_t fX1 = x0; //p2
-    
+
     fV = 0;
-    fDV = Div( f32, intToFix( y - yFinal));
-    
-    for ( ; y >= yFinal; --y ) {
+    fDV = Div(f32, intToFix(y - yFinal));
+
+    for (; y >= yFinal; --y) {
         int iFX1;
         int iFX0;
-        
+
         if (fX0 > fX1) {
             iFX1 = fixToInt(fX0);
             iFX0 = fixToInt(fX1);
@@ -1076,28 +1073,28 @@ void drawTexturedTopFloatTriangle(int *coords, uint8_t* uvCoords, struct Texture
             iFX1 = fixToInt(fX1);
             iFX0 = fixToInt(fX0);
         }
-        
-        uint8_t *destination = &framebuffer[(320 * y) + iFX0 ];
-        
+
+        uint8_t *destination = &framebuffer[(320 * y) + iFX0];
+
         int limit = iFX1 - iFX0;
         fU = 0;
-        
+
         //far from ideal...but it's the only thing that worked so far...
-        fDU = Div( intToFix( limit),  f32 );
-        
-        if (fDU != 0 ) {
-            fDU = Div( intToFix(1), fDU);
+        fDU = Div(intToFix(limit), f32);
+
+        if (fDU != 0) {
+            fDU = Div(intToFix(1), fDU);
         }
 
-        if (y >= 0 && y <= 199 ) {
-            
+        if (y >= 0 && y <= 199) {
+
             int xPos = iFX0;
 
-        
+
             while (limit--) {
-                
-                if (xPos >= 0 && xPos <= 255 ) {
-                    *destination = *(&texture->rowMajor[0] + (NATIVE_TEXTURE_SIZE * v ) + u);
+
+                if (xPos >= 0 && xPos <= 255) {
+                    *destination = *(&texture->rowMajor[0] + (NATIVE_TEXTURE_SIZE * v) + u);
                 }
                 ++xPos;
                 ++destination;
@@ -1105,7 +1102,7 @@ void drawTexturedTopFloatTriangle(int *coords, uint8_t* uvCoords, struct Texture
                 u = abs(fixToInt(fU)) % NATIVE_TEXTURE_SIZE;
             }
         }
-        
+
         fX0 += dXDy1;
         fX1 += dXDy2;
         fV += fDV;
@@ -1113,67 +1110,67 @@ void drawTexturedTopFloatTriangle(int *coords, uint8_t* uvCoords, struct Texture
     }
 }
 
-void drawTexturedTriangle( int* coords, uint8_t* uvCoords, struct Texture* texture ) {
+void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture) {
     int newCoors[6];
     uint8_t newUV[6];
-    
+
     int upper = -1;
     int lower = -1;
     int other = 0;
-    
-    for ( int c = 0; c < 3; ++c ) {
+
+    for (int c = 0; c < 3; ++c) {
         if (upper == -1 || coords[(2 * c) + 1] < coords[(2 * upper) + 1]) {
             upper = c;
         }
-        
+
         if (lower == -1 || coords[(2 * c) + 1] > coords[(2 * lower) + 1]) {
             lower = c;
         }
     }
-    
+
     if (lower == 0 || upper == 0) {
         other = 1;
     }
-    
+
     if ((lower == 1 || upper == 1) && (other == 1)) {
         other = 2;
     }
-    
-    if ((lower == 2 || upper == 2)&& (other == 2)) {
+
+    if ((lower == 2 || upper == 2) && (other == 2)) {
         other = 0;
     }
-    
+
     newCoors[0] = coords[2 * upper];
     newCoors[1] = coords[(2 * upper) + 1];
     newCoors[2] = coords[2 * lower];
-    newCoors[3] = coords[(2 * lower) +1];
+    newCoors[3] = coords[(2 * lower) + 1];
     newCoors[4] = coords[2 * other];
     newCoors[5] = coords[(2 * other) + 1];
 
     newUV[0] = uvCoords[2 * upper];
     newUV[1] = uvCoords[(2 * upper) + 1];
     newUV[2] = uvCoords[2 * lower];
-    newUV[3] = uvCoords[(2 * lower) +1];
+    newUV[3] = uvCoords[(2 * lower) + 1];
     newUV[4] = uvCoords[2 * other];
     newUV[5] = uvCoords[(2 * other) + 1];
 
-    drawTexturedBottomFlatTriangle(&newCoors[0], &newUV[0], texture );
-    
+    drawTexturedBottomFlatTriangle(&newCoors[0], &newUV[0], texture);
+
     newCoors[0] = coords[2 * lower];
     newCoors[1] = coords[(2 * lower) + 1];
     newCoors[2] = coords[2 * other];
-    newCoors[3] = coords[(2 * other) +1];
+    newCoors[3] = coords[(2 * other) + 1];
     newCoors[4] = coords[2 * upper];
     newCoors[5] = coords[(2 * upper) + 1];
-    
+
     newUV[0] = uvCoords[2 * lower];
     newUV[1] = uvCoords[(2 * lower) + 1];
     newUV[2] = uvCoords[2 * other];
-    newUV[3] = uvCoords[(2 * other) +1];
+    newUV[3] = uvCoords[(2 * other) + 1];
     newUV[4] = uvCoords[2 * upper];
     newUV[5] = uvCoords[(2 * upper) + 1];
-    
-    drawTexturedTopFloatTriangle(&newCoors[0], &newUV[0], texture );
+
+    drawTexturedTopFloatTriangle(&newCoors[0], &newUV[0], texture);
 }
 
 void fill(
