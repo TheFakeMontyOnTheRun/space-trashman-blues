@@ -20,7 +20,7 @@ int parseCommand(char *cmd, char *operand) {
     if (operand != NULL ) {
       moveBy(operand[0] - '0');
     } else {
-      notifyError("Please specify a valid direction");
+      defaultLogger("Please specify a valid direction");
     }
   } else if (!strcmp(cmd, "use")) {
     useObjectNamed(operand);
@@ -44,7 +44,7 @@ int parseCommand(char *cmd, char *operand) {
   } else if (!strcmp(cmd, "use-with")) {
     useObjectsTogether(operand);
   } else {
-    notifyError("Unrecognized command");
+    defaultLogger("Unrecognized command");
     return FALSE;
   }
   

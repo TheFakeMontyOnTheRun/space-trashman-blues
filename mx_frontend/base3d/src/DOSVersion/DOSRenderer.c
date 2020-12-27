@@ -219,9 +219,6 @@ void handleSystemEvents() {
 				visibilityCached = FALSE;
 				break;
 
-			case 'v':
-				visibilityCached = FALSE;
-				break;
 			case 'b':
 				visibilityCached = FALSE;
 				break;

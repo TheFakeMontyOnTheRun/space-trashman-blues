@@ -31,11 +31,8 @@ extern int currentSelectedItem;
 
 extern int shouldContinue;
 
-extern char crawlClueMessage[128];
-
 extern char *thisMissionName;
 extern int16_t thisMissionNameLen;
-
 
 struct CrawlerAgent {
     struct Vec2i position;

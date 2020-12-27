@@ -25,7 +25,7 @@ struct WorldPosition playerPosition;
 ErrorHandlerCallback errorHandlerCallback = NULL;
 
 
-void notifyError(const char* errorMsg) {
+void writeToLog(const char* errorMsg) {
   if (errorHandlerCallback == NULL) {
     puts("-------");
     puts(errorMsg);
@@ -33,7 +33,9 @@ void notifyError(const char* errorMsg) {
   } else {
     errorHandlerCallback(errorMsg);
   }
-} 
+}
+
+LogDelegate defaultLogger = writeToLog;
 
 void setErrorHandlerCallback(ErrorHandlerCallback callback) {
   errorHandlerCallback = callback;
@@ -123,7 +125,7 @@ void addObjectToRoom(int roomId, struct Item *itemToAdd) {
 void dropObjectToRoom(int roomId, struct Item *itemToDrop) {
 
   if(itemToDrop->roomId != 0) {
-    notifyError("Object not present to drop");
+    defaultLogger("Object not present to drop");
   }
 
   removeObjectFromList(itemToDrop, collectedObject);
@@ -141,7 +143,7 @@ void pickObject(struct Item *itemToPick) {
   }
 
   if (!itemToPick->pickable) {
-    notifyError("Can't pick it up");
+    defaultLogger("Can't pick it up");
     return;
   }
  
@@ -166,12 +168,12 @@ void moveBy(int direction) {
   if (direction >= 0 && direction <= 5 && room->connections[direction] != 0) {
 
     if (station[room->connections[direction]].rankRequired > playerRank ) {
-      notifyError("Insuficient rank to enter room");
+      defaultLogger("Insuficient rank to enter room");
       return;
     }
 
     if (!item[5].active || !playerHasObject("magnetic-boots")) {
-        puts("You can't move without your magnetic-boots!");
+        defaultLogger("You can't move without your magnetic-boots!");
         return;
     }
 
@@ -201,7 +203,7 @@ void moveBy(int direction) {
     }
 
   } else {
-    notifyError("Please specify a valid direction");
+    defaultLogger("Please specify a valid direction");
   }
 }
 
@@ -235,7 +237,7 @@ int hasItemInRoom(const char *roomName, const char *itemName) {
   int r = 0;
   
   if (roomName == NULL || itemName == NULL || strlen(roomName) == 0 || strlen(itemName) == 0) {
-    notifyError("Either the object name or the room name are null. Check your stuff");
+    defaultLogger("Either the object name or the room name are null. Check your stuff");
     return 0;
   }
   
@@ -254,7 +256,7 @@ int hasItemInRoom(const char *roomName, const char *itemName) {
       return 0;
     }
   }
-  notifyError("It was not possible to determine if object is in room");
+  defaultLogger("It was not possible to determine if object is in room");
   return 0;
 }
 
@@ -322,7 +324,7 @@ void useObjectNamed(const char* operand) {
 void walkTo(const char* operands) {
 
   if (playerLocation != 1 && (!item[5].active || !playerHasObject("magnetic-boots"))) {
-    puts("You can't move without your magnetic-boots!");
+    defaultLogger("You can't move without your magnetic-boots!");
   }
 
   struct WorldPosition pos;
@@ -342,7 +344,7 @@ void infoAboutItemNamed(const char* itemName) {
   struct ObjectNode *object2 = room->itemsPresent->next;
 
   if(itemName == NULL || strlen(itemName) == 0) {
-    puts(room->info);
+    defaultLogger(room->info);
     return;
   }
 
@@ -350,7 +352,7 @@ void infoAboutItemNamed(const char* itemName) {
     assert(object1->item->description != NULL);
 
     if (!strcmp(object1->item->description, itemName)) {
-      puts(object1->item->info);
+      defaultLogger(object1->item->info);
       return;
     }
     object1 = object1->next;
@@ -360,13 +362,13 @@ void infoAboutItemNamed(const char* itemName) {
     assert(object2->item->description != NULL);
     
     if (!strcmp(object2->item->description, itemName)) {
-      puts(object2->item->info);
+      defaultLogger(object2->item->info);
       return;
     }
     object2 = object2->next;
   }
 
-  notifyError("No such item could be found");
+  defaultLogger("No such item could be found");
 }
 
 void useObjectsTogether(const char* operands){
@@ -379,12 +381,12 @@ void useObjectsTogether(const char* operands){
   char *operand2 = strtok(NULL, "\n " );
 
   if( !playerHasObject(operand1)) {
-    puts("You do not have this object");
+    defaultLogger("You do not have this object");
     return;
   }
 
   if( !hasItemInRoom(getRoom(playerLocation)->description, operand2)) {
-    puts("That object is not present in the room");
+    defaultLogger("That object is not present in the room");
     return;
   }
 
@@ -440,7 +442,7 @@ void turnRight(void) {
 void walkBy(int direction) {
 
   if (playerLocation != 1 && (!item[5].active || !playerHasObject("magnetic-boots"))) {
-      puts("You can't move without your magnetic-boots!");
+      defaultLogger("You can't move without your magnetic-boots!");
       return;
   }
 
@@ -553,7 +555,7 @@ void addToRoom( const char* roomName, struct Item *itemName ) {
   int r = 0;
 
   if (roomName == NULL || itemName == NULL || strlen(roomName) == 0 ) {
-    notifyError("Either the object name or the room name are null. Check your stuff");
+    defaultLogger("Either the object name or the room name are null. Check your stuff");
     return;
   }
   
@@ -565,7 +567,11 @@ void addToRoom( const char* roomName, struct Item *itemName ) {
       return;
     }
   }
-  notifyError("It was not possible to determine the room to add object");
+  defaultLogger("It was not possible to determine the room to add object");
+}
+
+void setLoggerDelegate(LogDelegate newDelegate) {
+    defaultLogger = newDelegate;
 }
 
 
@@ -653,11 +659,11 @@ void elevatorGoUpCallback(struct Item* item) {
 
 
 void cantBeUsedCallback(struct Item* item) {
-  puts("You can't use it like this.");
+  defaultLogger("You can't use it like this.");
 }
 
 void cantBeUsedWithOthersCallback(struct Item* item1, struct Item* item2) {
-  puts("Nothing happens.");
+  defaultLogger("Nothing happens.");
 }
 
 void useObjectToggleCallback(struct Item* item) {

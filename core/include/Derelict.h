@@ -28,6 +28,8 @@ typedef void ( *UseObjectCallback )(struct Item* item);
 
 typedef void ( *UseWithObjectCallback )(struct Item* item, struct Item* otherItem);
 
+typedef void ( *LogDelegate )(const char* item);
+
 struct WorldPosition {
   int16_t x;
   int16_t y;
@@ -122,7 +124,9 @@ void useObjectsTogether(const char* operands);
 
 void showInventory();
 
-void notifyError(const char* errorMsg);
+extern LogDelegate defaultLogger;
+
+void setLoggerDelegate(LogDelegate newDelegate);
 
 void setErrorHandlerCallback(ErrorHandlerCallback callback);
 

@@ -81,10 +81,22 @@ enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
 uint8_t intMap[MAP_SIZE * MAP_SIZE];
 struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
 
+char messageLogBuffer[256];
+
+int messageLogBufferCoolDown = 0;
+
+void printMessageTo3DView(const char* message ) {
+    strcpy(&messageLogBuffer[0], message);
+    messageLogBufferCoolDown = 5000;
+}
+
 void loadTileProperties(const uint8_t levelNumber) {
     char buffer[64];
     uint8_t *data;
     int16_t c;
+    
+    setLoggerDelegate(printMessageTo3DView);
+    
 
     clearMap(&tileProperties);
     clearMap(&occluders);
@@ -303,6 +315,12 @@ void render(const long ms) {
     FixP_t one = intToFix(1);
     const FixP_t halfOne = Div(one, two);
     FixP_t standardHeight = Div(intToFix(195), intToFix(100));
+    
+    if (messageLogBufferCoolDown > 0 ) {
+        messageLogBufferCoolDown -= ms;
+    }
+    
+    
 
     if (!enable3DRendering) {
         return;
@@ -900,6 +918,13 @@ void render(const long ms) {
         if (focusItemName != NULL ) {
             drawTextAt(2, 20, focusItemName, 255);
         }
+        
+        if (messageLogBufferCoolDown > 0 ) {
+            drawTextAt(2, 23, &messageLogBuffer[0], 255);
+        }
+
+        
+        
     }
     /*
     uint8_t uvCoords[6];
