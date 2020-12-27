@@ -108,7 +108,7 @@ int32_t GameMenu_initStateCallback(int32_t tag) {
 
 
 		case kGoodVictoryEpilogue:
-			sprintf (textBuffer, "Victory!\n\n\n\n\n\n");
+			sprintf (textBuffer, "Victory! You managed to destroy the station and get out alive\n\n\n\n\n\n");
 			mainText = &textBuffer[0];
 
 			GameMenu_StateTitle = "Victory";
@@ -120,7 +120,7 @@ int32_t GameMenu_initStateCallback(int32_t tag) {
 			break;
             
         case kBadVictoryEpilogue:
-            sprintf (textBuffer, "Victory! But not so good\n\n\n\n\n\n");
+            sprintf (textBuffer, "Victory! Too bad you didn't survive to tell the story\n\n\n\n\n\n");
             mainText = &textBuffer[0];
             
             GameMenu_StateTitle = "Victory";
@@ -132,7 +132,7 @@ int32_t GameMenu_initStateCallback(int32_t tag) {
             break;
             
         case kGoodGameOverEpilogue:
-            sprintf (textBuffer, "You're dead! but its not so bad\n\n\n\n\n\n");
+            sprintf (textBuffer, "You're dead! The good news is that you managed to avoid a disaster, by destroying the station\n\n\n\n\n\n");
             mainText = &textBuffer[0];
             
             GameMenu_StateTitle = "Game Over";
@@ -144,7 +144,7 @@ int32_t GameMenu_initStateCallback(int32_t tag) {
             break;
             
 		case kBadGameOverEpilogue:
-			sprintf (textBuffer, "You're dead!\n\n\n\n\n\n");
+			sprintf (textBuffer, "You're dead! And so are millions of other people on the path of destruction of the space station\n\n\n\n\n\n");
 			mainText = &textBuffer[0];
 
 			GameMenu_StateTitle = "Game Over";
