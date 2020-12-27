@@ -40,6 +40,7 @@ const int kMainMenuOptionsCount = 3;
 extern size_t biggestOption;
 
 struct Bitmap *logoBitmap;
+struct Bitmap *logo2Bitmap;
 
 int32_t MainMenu_initStateCallback(int32_t tag) {
 	int c;
@@ -51,6 +52,7 @@ int32_t MainMenu_initStateCallback(int32_t tag) {
 
 	currentBackgroundBitmap = loadBitmap("pattern.img");
 	logoBitmap = loadBitmap("title.img");
+    logo2Bitmap = loadBitmap("logo.img");
 	currentPresentationState = kAppearing;
 	timeUntilNextState = 500;
 
@@ -69,7 +71,9 @@ int32_t MainMenu_initStateCallback(int32_t tag) {
 }
 
 void MainMenu_initialPaintCallback() {
-	drawRepeatBitmap(0, 32, 320, 200, currentBackgroundBitmap);
+    
+	//drawRepeatBitmap(0, 32, 320, 200, currentBackgroundBitmap);
+    fill(0, 0, 319, 199, getPaletteEntry( 0xFF6cb1a3), 0);
 }
 
 void MainMenu_repaintCallback(void) {
@@ -90,7 +94,6 @@ void MainMenu_repaintCallback(void) {
 			return;
 		}
 
-		drawRect(8 + 80 - size / 2, 16 + 80 - size / 2, size, size, 0);
 
 		drawRect(320 - movementX - 8 - 24 - ((biggestOption * 8) / 2)
 				 + (sizeX / 2),
@@ -101,6 +104,8 @@ void MainMenu_repaintCallback(void) {
 	}
 
     drawBitmap( 0, 0, logoBitmap, 0);
+    
+    drawBitmap( 118, 45, logo2Bitmap, 1);
 
 	drawWindow( 40 - biggestOption - 3, 25 - 4 - (optionsHeight / 8 ), biggestOption + 2, (optionsHeight / 8 ) + 2, "Play Game" );
 
