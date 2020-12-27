@@ -198,7 +198,7 @@ int main(int argc, char **argv) {
 
 #ifdef AMIGA
 		#ifdef AGA8BPP
-		delta_time = 100;
+		delta_time = 50;
 #else
 		delta_time = 1000;
 #endif
