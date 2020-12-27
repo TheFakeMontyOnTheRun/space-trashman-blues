@@ -160,7 +160,7 @@ void Crawler_repaintCallback() {
 					isCursor ? 200 : 0 );
 		}
 	} else {
-		renderTick(1);
+		renderTick(30);
 
 		if (currentPresentationState == kAppearing) {
 			drawTextAt(16 - (thisMissionNameLen / 2), 10, thisMissionName, 255);
