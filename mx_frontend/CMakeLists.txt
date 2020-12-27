@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
-project(opal_standoff)
+project(derelict3d)
 
 set(CMAKE_C_STANDARD 11)
 
@@ -9,6 +9,7 @@ include_directories(
 		${SDL2_INCLUDE_DIR}
 )
 
+include_directories(../core/include)
 include_directories(base3d/include)
 include_directories(common/include)
 include_directories(menu/include)
@@ -18,7 +19,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -std=c90 -W -pedantic -Wall")
 
 find_package(SDL2 REQUIRED)
 
-add_executable(opal_standoff
+add_executable(derelict3d
 		menu/src/MainMenu.c
 		menu/src/Crawler.c
 		menu/src/HelpScreen.c
@@ -44,11 +45,13 @@ add_executable(opal_standoff
 		base3d/src/Dungeon.c
 		menu/src/UI.c
 		SoundSystem/PCMAudio.c
+		../core/src/Derelict.c
+		../core/src/Parser.c
 		)
 
 
 include(FindPkgConfig)
 
-target_include_directories(opal_standoff PUBLIC ${SDL2_INCLUDE_DIR})
-target_link_libraries(opal_standoff LINK_PUBLIC ${SDL2_LIBRARY} m)
+target_include_directories(derelict3d PUBLIC ${SDL2_INCLUDE_DIR})
+target_link_libraries(derelict3d LINK_PUBLIC ${SDL2_LIBRARY} m)
 
