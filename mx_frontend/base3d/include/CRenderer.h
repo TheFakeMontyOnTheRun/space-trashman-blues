@@ -144,6 +144,18 @@ void drawBitmap(const int16_t x,
 				const struct Bitmap * __restrict__ tile,
 						const int transparent);
 
+void drawSlantedFloor(
+                      FixP_t p0x,
+                      FixP_t p0y,
+                      FixP_t p1x,
+                      FixP_t p1y,
+                      FixP_t p2x,
+                      FixP_t p2y,
+                      FixP_t p3x,
+                      FixP_t p3y,
+                      int z,
+                      const uint8_t *__restrict__ texture);
+
 void drawRepeatBitmap(
 		const int16_t x,
 		const int16_t y,

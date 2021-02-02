@@ -763,6 +763,98 @@ void drawFloor(FixP_t y0,
     }
 }
 
+
+/*
+ *     x0y0 ____________ x1y0
+ *         /            \
+ *        /             \
+ *  x0y1 /______________\ x1y1
+ */
+void drawSlantedFloor(
+                      FixP_t p0x,
+                      FixP_t p0y,
+                      FixP_t p1x,
+                      FixP_t p1y,
+                      FixP_t p2x,
+                      FixP_t p2y,
+                      FixP_t p3x,
+                      FixP_t p3y,
+                      int z,
+                      const uint8_t *__restrict__ texture) {
+    
+    const FixP_t one = intToFix(1);
+    uint8_t pixel = 0;
+    int farEnoughForStipple = (z >= distanceForPenumbra);
+    FixP_t X;
+    FixP_t Y;
+    FixP_t d01X = one;
+    FixP_t d02Y = one;
+    FixP_t d03XdY;
+    FixP_t d12XdY;
+    FixP_t targetDy;
+    FixP_t currDy0 = 0;
+    FixP_t currX0;
+    FixP_t currX1;
+    int cachedVi;
+    /*
+    FixP_t U = 0;
+    FixP_t V = 0;
+    FixP_t dU = one;
+    FixP_t dV = one;
+     */
+    FixP_t textureSizeFP = intToFix(NATIVE_TEXTURE_SIZE - 1);
+    
+    
+    
+    d03XdY = Div( p0x - p3x, p0y - p3y);
+    d12XdY = Div( p2x - p1x, p2y - p1y);
+    targetDy = p1y - p2y;
+    currX0 = p0x;
+    currX1 = p1x;
+    
+    FixP_t fragmentSizeFactor = Div( p2y - p1y, p3y - p0y);
+    
+    for (Y = p0y; Y < p3y; Y += d02Y ) {
+        FixP_t percentile = Div( (Y - p0y), ( p3y - p0y ));
+        FixP_t targetY = Mul( (p2y - p1y), percentile) + p1y;
+        FixP_t dydx = Div(( targetY - Y), currX1 - currX0);
+        currX0 += d03XdY;
+        currX1 = Mul( (p2x - p1x), percentile) + p1x;
+        currDy0 = 0;
+        /*
+        U = 0;
+        dU = Div( intToFix(32), currX1 - currX0 );
+        dV = Div( intToFix(32), p2y - p0y );
+         */
+        cachedVi = ( fixToInt( Mul(percentile, textureSizeFP) ) * NATIVE_TEXTURE_SIZE);
+        
+        for (X = currX0; X <= currX1; X += d01X) {
+            
+            FixP_t percentileX = Div( (X - currX0), ( currX1 - currX0 ));
+            FixP_t sizeY = Mul( percentileX, fragmentSizeFactor );
+            
+            pixel = texture[ cachedVi + (fixToInt(Mul(percentileX, textureSizeFP)))];
+            
+            if (sizeY < one) {
+                framebuffer[ (320 * (fixToInt(Y + currDy0) )) + fixToInt(X)] = pixel;
+            } else {
+                int i = 0;
+                for ( FixP_t frag = 0; frag <= (sizeY); frag += one) {
+                    framebuffer[ (320 * (fixToInt(Y + currDy0) + i++ )) + fixToInt(X)] = pixel;
+                }
+            }
+            
+            currDy0 += dydx;
+            /*
+            U += dU;
+             */
+        }
+        /*
+        V += dV;
+         */
+    }
+}
+
 void drawRect(
         const int16_t x,
         const int16_t y,

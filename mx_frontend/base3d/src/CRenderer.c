@@ -940,4 +940,52 @@ void render(const long ms) {
     fill( coords[2] - 2, coords[3] - 2, 4, 4, 30, 1);
     fill( coords[4] - 2, coords[5] - 2, 4, 4, 255, 1);
      */
+    
+    /*
+     void drawSlantedFloor(
+     FixP_t p0x,
+     FixP_t p0y,
+     FixP_t p1x,
+     FixP_t p1y,
+     FixP_t p2x,
+     FixP_t p2y,
+     FixP_t p3x,
+     FixP_t p3y,
+     int z,
+     const uint8_t *__restrict__ texture)
+     
+     */
+    
+    
+    /*
+    drawSlantedFloor(intToFix(200),intToFix(50),
+                     intToFix(256),intToFix(50),
+                     intToFix(256),intToFix(100),
+                     intToFix(200),intToFix(100),
+                     2,
+                     &nativeTextures[18]->rowMajor[0]
+                     );
+    */
+    
+    drawSlantedFloor(intToFix(100),intToFix(100),
+                     intToFix(156),intToFix(120),
+                     intToFix(200),intToFix(150),
+                     intToFix( 90),intToFix(110),
+                     2,
+                     &nativeTextures[18]->rowMajor[0]
+                     );
+    /*
+    fill( 200, 120, 5, 5, 128, 0);
+    fill( 256, 100, 5, 5, 128, 0);
+    fill( 300, 170, 5, 5, 128, 0);
+    fill( 150, 150, 5, 5, 128, 0);
+    
+    drawSlantedFloor(intToFix(200),intToFix(170),
+                     intToFix(256),intToFix(170),
+                     intToFix(256),intToFix(200),
+                     intToFix(200),intToFix(200),
+                     2,
+                     &nativeTextures[18]->rowMajor[0]
+                     );*/
+
 }
