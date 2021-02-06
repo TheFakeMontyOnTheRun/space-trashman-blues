@@ -130,12 +130,12 @@ void loadTileProperties(const uint8_t levelNumber) {
     
     
     
-    coords[0] =  70;
-    coords[1] =  55;
-    coords[2] =  75;
-    coords[3] = 170;
-    coords[4] =  45;
-    coords[5] =  100;
+    coords[0] =  50;
+    coords[1] =  50;
+    coords[2] = 100;
+    coords[3] = 75;
+    coords[4] = 50;
+    coords[5] = 100;
 }
 
 void loadTexturesForLevel(const uint8_t levelNumber) {
@@ -926,20 +926,25 @@ void render(const long ms) {
         
         
     }
+    
     /*
     uint8_t uvCoords[6];
     uvCoords[0] = 0;
     uvCoords[1] = 0;
-    uvCoords[2] = 0;
-    uvCoords[3] = 255;
-    uvCoords[4] = 255;
-    uvCoords[5] = 255;
+    uvCoords[2] = 32;
+    uvCoords[3] = 16;
+    uvCoords[4] = 0;
+    uvCoords[5] = 32;
     
-    drawTexturedTriangle( &coords[0], &uvCoords[0], nativeTextures[17] );
+    drawFrontWall( intToFix(256 - 64), intToFix(64), intToFix(256), intToFix(64 + 64), &nativeTextures[18]->rowMajor[0], intToFix(1), 2, 0, 32);
+
+    drawTexturedTriangle( &coords[0], &uvCoords[0], nativeTextures[18] );
+    
+    
     fill( coords[0] - 2, coords[1] - 2, 4, 4, 0, 1);
     fill( coords[2] - 2, coords[3] - 2, 4, 4, 30, 1);
     fill( coords[4] - 2, coords[5] - 2, 4, 4, 255, 1);
-     */
+    */
     
     /*
      void drawSlantedFloor(
@@ -956,8 +961,8 @@ void render(const long ms) {
      
      */
     
-    
     /*
+    
     drawSlantedFloor(intToFix(200),intToFix(50),
                      intToFix(256),intToFix(50),
                      intToFix(256),intToFix(100),
@@ -965,15 +970,17 @@ void render(const long ms) {
                      2,
                      &nativeTextures[18]->rowMajor[0]
                      );
-    */
+     */
     
+    /*
     drawSlantedFloor(intToFix(100),intToFix(100),
                      intToFix(156),intToFix(120),
                      intToFix(200),intToFix(150),
-                     intToFix( 90),intToFix(110),
+                     intToFix( 50),intToFix(140),
                      2,
                      &nativeTextures[18]->rowMajor[0]
                      );
+    */
     /*
     fill( 200, 120, 5, 5, 128, 0);
     fill( 256, 100, 5, 5, 128, 0);
