@@ -25,6 +25,36 @@ public class Exports : MonoBehaviour
     };
 
 
+    [MenuItem("Monty/Reset scene")]
+    static void ResetLevel()
+    {
+        var objects = FindObjectsOfType(typeof(GameObject));
+
+        foreach (GameObject child  in objects ) {
+            DestroyImmediate(child.gameObject);
+        }
+
+        GameObject spawner;
+        Material matRef1 = AssetDatabase.LoadAssetAtPath("Assets/Materials/tex1.mat", typeof(Material)) as Material;
+        Material matRef2 = AssetDatabase.LoadAssetAtPath("Assets/Materials/tex2.mat", typeof(Material)) as Material;
+    
+        for ( int y = 0; y < 32; ++y ) {
+            for (int x = 0; x < 32; ++x ) {
+                spawner = new GameObject("tile" + x + "_" + y );
+                
+                spawner.transform.position = new Vector3(x, 0, y);
+                
+
+                spawner.AddComponent<Exportable>();
+                spawner.GetComponent<Exportable>().floorMaterial = matRef1;
+                spawner.GetComponent<Exportable>().ceilingMaterial = matRef1;
+                spawner.GetComponent<Exportable>().ceilingHeight = 1.0f;
+                spawner.GetComponent<Exportable>().Apply();
+            }
+        }
+
+    }
+
     [MenuItem("Monty/Export Level as Data File")]
     static void ExportLevelFile()
     {
