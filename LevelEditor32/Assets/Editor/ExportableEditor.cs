@@ -17,6 +17,7 @@ public class ExportableEditor : Editor
     SerializedProperty ceilingRepetitionsMaterial;
     SerializedProperty floorMaterial;
     SerializedProperty floorRepetitionsMaterial;
+    SerializedProperty representation;
 
     void OnEnable() {
         ceilingHeight = serializedObject.FindProperty("ceilingHeight");
@@ -28,6 +29,7 @@ public class ExportableEditor : Editor
         ceilingRepetitionsMaterial = serializedObject.FindProperty("ceilingRepetitionsMaterial");
         floorMaterial = serializedObject.FindProperty("floorMaterial");
         floorRepetitionsMaterial = serializedObject.FindProperty("floorRepetitionsMaterial");
+        representation = serializedObject.FindProperty("representation");
     }
 
     public override void OnInspectorGUI() {
@@ -42,6 +44,7 @@ public class ExportableEditor : Editor
         EditorGUILayout.PropertyField(ceilingRepetitionsMaterial);
         EditorGUILayout.PropertyField(floorMaterial);
         EditorGUILayout.PropertyField(floorRepetitionsMaterial);
+        EditorGUILayout.PropertyField(representation);
 
         if (GUILayout.Button("Apply")) {
             var tempList = (target as Exportable).transform.Cast<Transform>().ToList();
