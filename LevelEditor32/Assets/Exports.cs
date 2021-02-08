@@ -34,6 +34,7 @@ public class Exports : MonoBehaviour
             DestroyImmediate(child.gameObject);
         }
 
+        GameObject geometryRoot = new GameObject("Geometry");
         GameObject spawner;
         Material matRef1 = AssetDatabase.LoadAssetAtPath("Assets/Materials/tex1.mat", typeof(Material)) as Material;
         Material matRef2 = AssetDatabase.LoadAssetAtPath("Assets/Materials/tex2.mat", typeof(Material)) as Material;
@@ -41,7 +42,7 @@ public class Exports : MonoBehaviour
         for ( int y = 0; y < 32; ++y ) {
             for (int x = 0; x < 32; ++x ) {
                 spawner = new GameObject("tile" + x + "_" + y );
-                
+                spawner.transform.parent = geometryRoot.transform;
                 spawner.transform.position = new Vector3(x, 0, y);
                 
 
