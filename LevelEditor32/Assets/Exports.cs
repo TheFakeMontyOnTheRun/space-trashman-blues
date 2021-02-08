@@ -53,6 +53,9 @@ public class Exports : MonoBehaviour
             }
         }
 
+        GameObject playerSpawner = new GameObject("PlayerSpawner");
+        playerSpawner.AddComponent<PlayerSpawner>();
+        playerSpawner.transform.position = new Vector3( 1, 1  ,1 );
     }
 
     [MenuItem("Monty/Export Level as Data File")]
