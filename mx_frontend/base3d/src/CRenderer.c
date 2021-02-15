@@ -71,6 +71,7 @@ int turnStep = 0;
 FixP_t xCameraOffset;
 FixP_t yCameraOffset;
 FixP_t zCameraOffset;
+uint8_t enableSmoothMovement = FALSE;
 char* focusItemName = NULL;
 
 struct Projection projectionVertices[8];
