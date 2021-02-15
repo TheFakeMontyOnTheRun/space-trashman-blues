@@ -388,9 +388,9 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         }
         
         addToVec3(&projectionVertices[0].first, minusOne, zero, minusOne);
-        addToVec3(&projectionVertices[1].first, one, zero, minusOne);
-        addToVec3(&projectionVertices[2].first, minusOne, zero, one);
-        addToVec3(&projectionVertices[3].first, one, zero, one);
+        addToVec3(&projectionVertices[1].first,      one, zero, minusOne);
+        addToVec3(&projectionVertices[2].first, minusOne, zero,      one);
+        addToVec3(&projectionVertices[3].first,      one, zero,      one);
         
         projectAllVertices(4);
         
@@ -402,30 +402,39 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         uint8_t uvCoords[6];
         int coords[6];
         
-        uvCoords[0] = 0;
+
+        uvCoords[0] = 32;
         uvCoords[1] = 0;
-        uvCoords[2] = 0;
-        uvCoords[3] = 255;
-        uvCoords[4] = 255;
-        uvCoords[5] = 255;
+        uvCoords[2] = 32;
+        uvCoords[3] = 32;
+        uvCoords[4] = 0;
+        uvCoords[5] = 0;
         
-        coords[0] = fixToInt(llz1.mX);
+        coords[0] = fixToInt(llz1.mX); // 2
         coords[1] = fixToInt(llz1.mY);
-        coords[2] = fixToInt(lrz1.mX);
+        coords[2] = fixToInt(lrz1.mX); // 3
         coords[3] = fixToInt(lrz1.mY);
-        coords[4] = fixToInt(llz0.mX);
+        coords[4] = fixToInt(llz0.mX); // 0
         coords[5] = fixToInt(llz0.mY);
         
-        fillTriangle( &coords[0], &uvCoords[0] );
+        drawTexturedTriangle(&coords[0], &uvCoords[0], texture );
 
-        coords[0] = fixToInt(llz0.mX);
+
+        uvCoords[0] = 0;
+        uvCoords[1] = 0;
+        uvCoords[2] = 32;
+        uvCoords[3] = 32;
+        uvCoords[4] = 0;
+        uvCoords[5] = 32;
+
+        coords[0] = fixToInt(llz0.mX); //0
         coords[1] = fixToInt(llz0.mY);
-        coords[2] = fixToInt(lrz1.mX);
+        coords[2] = fixToInt(lrz1.mX); //3
         coords[3] = fixToInt(lrz1.mY);
-        coords[4] = fixToInt(lrz0.mX);
+        coords[4] = fixToInt(lrz0.mX); //1
         coords[5] = fixToInt(lrz0.mY);
 
-        fillTriangle( &coords[0], &uvCoords[0] );
+        drawTexturedTriangle( &coords[0], &uvCoords[0], texture );
 
         return;
     }
@@ -448,9 +457,9 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
     int z = fixToInt(p0.mZ);
         
     if (z >= distanceForDarkness && useDither) {
-        maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0);
+        drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, z, texture->rotations[cameraDirection] );
     } else {
-        maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 128);
+        drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, z, texture->rotations[cameraDirection] );
     }
 }
 
