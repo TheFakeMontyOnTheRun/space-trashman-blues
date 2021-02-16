@@ -890,7 +890,7 @@ void render(const long ms) {
         drawRect(256, 0, 64, 128, 0);
 
         fill(0, 0, 320, 8, 0, FALSE);
-        sprintf(&buffer[0], "Health: %d%", getPlayerHealth());
+        sprintf(&buffer[0], "Health: %d%%", getPlayerHealth());
         drawTextAt(2, 1, &buffer[0], 255);
         fill(256, 8, 320 - 256, 160 - 8, 255, FALSE);
         drawTextAt(34, 1, "Items", 255);
