@@ -182,12 +182,14 @@ void handleSystemEvents() {
             visibilityCached = FALSE;
             break;
         case 21:
-            renderingMethod = LUT;
+//            renderingMethod = LUT;
+            enableSmoothMovement = TRUE;
             needsToRedrawVisibleMeshes = TRUE;
             visibilityCached = FALSE;
             break;
         case 22:
-            renderingMethod = FIXED;
+            enableSmoothMovement = FALSE;
+//            renderingMethod = FIXED;
             needsToRedrawVisibleMeshes = TRUE;
             visibilityCached = FALSE;
             break;

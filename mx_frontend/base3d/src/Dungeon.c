@@ -85,7 +85,10 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 } else {
                     walkBy(0);
                 }
-                zCameraOffset = intToFix(2);
+                
+                if (enableSmoothMovement ) {
+                    zCameraOffset = intToFix(2);
+                }
             }
                 break;
             case kCommandDown: {
@@ -103,7 +106,10 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 } else {
                     walkBy(2);
                 }
-                zCameraOffset = -intToFix(2);
+                
+                if (enableSmoothMovement ) {
+                    zCameraOffset = -intToFix(2);
+                }
             }
                 break;
                 
@@ -256,7 +262,10 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 } else {
                     walkBy(3);
                 }
-                xCameraOffset = -intToFix(2);
+                
+                if (enableSmoothMovement ) {
+                    xCameraOffset = -intToFix(2);
+                }
             }
                 break;
             case kCommandStrafeRight: {
@@ -275,7 +284,11 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 } else {
                     walkBy(1);
                 }
-                xCameraOffset = intToFix(2);
+                
+                if (enableSmoothMovement ) {
+                    xCameraOffset = intToFix(2);
+                }
+                
             }
                 break;
             default:

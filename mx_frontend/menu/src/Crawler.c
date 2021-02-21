@@ -250,7 +250,7 @@ int32_t Crawler_tickCallback(int32_t tag, void *data) {
 		timeUntilNextState -= delta;
 	}
 
-	if (currentPresentationState != kFade) {
+	if (currentPresentationState == kWaitingForInput) {
 		returnCode = loopTick(cmd);
 
 		switch (returnCode) {

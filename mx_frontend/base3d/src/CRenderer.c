@@ -71,6 +71,7 @@ int turnStep = 0;
 FixP_t xCameraOffset;
 FixP_t yCameraOffset;
 FixP_t zCameraOffset;
+uint8_t enableSmoothMovement = FALSE;
 char* focusItemName = NULL;
 
 struct Projection projectionVertices[8];
@@ -130,12 +131,12 @@ void loadTileProperties(const uint8_t levelNumber) {
     
     
     
-    coords[0] =  70;
-    coords[1] =  55;
-    coords[2] =  75;
-    coords[3] = 170;
-    coords[4] =  45;
-    coords[5] =  100;
+    coords[0] =  50;
+    coords[1] =  50;
+    coords[2] = 100;
+    coords[3] = 75;
+    coords[4] = 50;
+    coords[5] = 100;
 }
 
 void loadTexturesForLevel(const uint8_t levelNumber) {
@@ -889,7 +890,7 @@ void render(const long ms) {
         drawRect(256, 0, 64, 128, 0);
 
         fill(0, 0, 320, 8, 0, FALSE);
-        sprintf(&buffer[0], "Health: %d%", getPlayerHealth());
+        sprintf(&buffer[0], "Health: %d%%", getPlayerHealth());
         drawTextAt(2, 1, &buffer[0], 255);
         fill(256, 8, 320 - 256, 160 - 8, 255, FALSE);
         drawTextAt(34, 1, "Items", 255);
@@ -922,22 +923,5 @@ void render(const long ms) {
         if (messageLogBufferCoolDown > 0 ) {
             drawTextAt(2, 23, &messageLogBuffer[0], 255);
         }
-
-        
-        
     }
-    /*
-    uint8_t uvCoords[6];
-    uvCoords[0] = 0;
-    uvCoords[1] = 0;
-    uvCoords[2] = 0;
-    uvCoords[3] = 255;
-    uvCoords[4] = 255;
-    uvCoords[5] = 255;
-    
-    drawTexturedTriangle( &coords[0], &uvCoords[0], nativeTextures[17] );
-    fill( coords[0] - 2, coords[1] - 2, 4, 4, 0, 1);
-    fill( coords[2] - 2, coords[3] - 2, 4, 4, 30, 1);
-    fill( coords[4] - 2, coords[5] - 2, 4, 4, 255, 1);
-     */
 }
