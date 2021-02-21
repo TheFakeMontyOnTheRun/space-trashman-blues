@@ -76,8 +76,6 @@ char* focusItemName = NULL;
 
 struct Projection projectionVertices[8];
 
-int coords[6];
-
 enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
 uint8_t intMap[MAP_SIZE * MAP_SIZE];
 struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
@@ -128,15 +126,6 @@ void loadTileProperties(const uint8_t levelNumber) {
     }
 
     free(data);
-    
-    
-    
-    coords[0] =  50;
-    coords[1] =  50;
-    coords[2] = 100;
-    coords[3] = 75;
-    coords[4] = 50;
-    coords[5] = 100;
 }
 
 void loadTexturesForLevel(const uint8_t levelNumber) {
@@ -924,4 +913,113 @@ void render(const long ms) {
             drawTextAt(2, 23, &messageLogBuffer[0], 255);
         }
     }
+    
+    
+    
+    //// TEST ////
+
+    uint8_t uvCoords[ 96] = {
+        32, 0, 32, 32, 0, 32,
+        32, 0, 0, 32, 0, 0,
+        32, 0, 32, 32, 0, 32,
+        32, 0, 0, 32, 0, 0,
+        20, 8, 12, 16, 12, 8,
+        12, 16, 4, 24, 4, 16,
+        20, 0, 20, 8, 12, 8,
+        20, 0, 12, 8, 12, 0,
+        20, 8, 20, 16, 12, 16,
+        28, 16, 20, 24, 20, 16,
+        28, 16, 28, 24, 20, 24,
+        20, 24, 20, 32, 12, 32,
+        20, 16, 12, 24, 12, 16,
+        12, 16, 12, 24, 4, 24,
+        20, 16, 20, 24, 12, 24,
+        20, 24, 12, 32, 12, 24,
+    };
+    FixP_t bias = Div(intToFix(1), intToFix(128));
+    FixP_t coords[ 144] = {
+        Mul( intToFix(70 ), bias ), /* 0.550554 */ -Mul( intToFix(81 ), bias ), /* -0.640392 */ Mul( intToFix(71 ), bias ), /* 0.55785 */
+        Mul( intToFix(70 ), bias ), /* 0.551615 */ Mul( intToFix(174 ), bias ), /* 1.359605 */ Mul( intToFix(71 ), bias ), /* 0.560761 */
+        -Mul( intToFix(159 ), bias ), /* -1.243771 */ Mul( intToFix(173 ), bias ), /* 1.359276 */ Mul( intToFix(184 ), bias ), /* 1.442003 */
+        
+        Mul( intToFix(70 ), bias ), /* 0.550554 */ -Mul( intToFix(81 ), bias ), /* -0.640392 */ Mul( intToFix(71 ), bias ), /* 0.55785 */
+        -Mul( intToFix(159 ), bias ), /* -1.243771 */ Mul( intToFix(173 ), bias ), /* 1.359276 */ Mul( intToFix(184 ), bias ), /* 1.442003 */
+        -Mul( intToFix(159 ), bias ), /* -1.244833 */ -Mul( intToFix(82 ), bias ), /* -0.640722 */ Mul( intToFix(184 ), bias ), /* 1.439092 */
+        
+        Mul( intToFix(181 ), bias ), /* 1.420177 */ -Mul( intToFix(129 ), bias ), /* -1.011654 */ Mul( intToFix(227 ), bias ), /* 1.775598 */
+        Mul( intToFix(263 ), bias ), /* 2.056899 */ -Mul( intToFix(470 ), bias ), /* -3.67527 */ Mul( intToFix(80 ), bias ), /* 0.62627 */
+        -Mul( intToFix(105 ), bias ), /* -0.827781 */ -Mul( intToFix(528 ), bias ), /* -4.131962 */ Mul( intToFix(11 ), bias ), /* 0.086573 */
+        
+        Mul( intToFix(181 ), bias ), /* 1.420177 */ -Mul( intToFix(129 ), bias ), /* -1.011654 */ Mul( intToFix(227 ), bias ), /* 1.775598 */
+        -Mul( intToFix(105 ), bias ), /* -0.827781 */ -Mul( intToFix(528 ), bias ), /* -4.131962 */ Mul( intToFix(11 ), bias ), /* 0.086573 */
+        -Mul( intToFix(187 ), bias ), /* -1.464504 */ -Mul( intToFix(187 ), bias ), /* -1.468347 */ Mul( intToFix(158 ), bias ), /* 1.235902 */
+        
+        Mul( intToFix(631 ), bias ), /* 4.936838 */ Mul( intToFix(45 ), bias ), /* 0.352405 */ Mul( intToFix(147 ), bias ), /* 1.154803 */
+        Mul( intToFix(883 ), bias ), /* 6.901262 */ -Mul( intToFix(139 ), bias ), /* -1.09323 */ Mul( intToFix(102 ), bias ), /* 0.802566 */
+        Mul( intToFix(671 ), bias ), /* 5.242415 */ -Mul( intToFix(184 ), bias ), /* -1.441092 */ -Mul( intToFix(33 ), bias ), /* -0.25914 */
+        
+        Mul( intToFix(883 ), bias ), /* 6.901262 */ -Mul( intToFix(139 ), bias ), /* -1.09323 */ Mul( intToFix(102 ), bias ), /* 0.802566 */
+        Mul( intToFix(549 ), bias ), /* 4.296041 */ -Mul( intToFix(257 ), bias ), /* -2.013732 */ Mul( intToFix(180 ), bias ), /* 1.407131 */
+        Mul( intToFix(671 ), bias ), /* 5.242415 */ -Mul( intToFix(184 ), bias ), /* -1.441092 */ -Mul( intToFix(33 ), bias ), /* -0.25914 */
+        
+        Mul( intToFix(608 ), bias ), /* 4.756162 */ Mul( intToFix(31 ), bias ), /* 0.24308 */ Mul( intToFix(188 ), bias ), /* 1.472917 */
+        Mul( intToFix(631 ), bias ), /* 4.936838 */ Mul( intToFix(45 ), bias ), /* 0.352405 */ Mul( intToFix(147 ), bias ), /* 1.154803 */
+        Mul( intToFix(671 ), bias ), /* 5.242415 */ -Mul( intToFix(184 ), bias ), /* -1.441092 */ -Mul( intToFix(33 ), bias ), /* -0.25914 */
+        
+        Mul( intToFix(608 ), bias ), /* 4.756162 */ Mul( intToFix(31 ), bias ), /* 0.24308 */ Mul( intToFix(188 ), bias ), /* 1.472917 */
+        Mul( intToFix(671 ), bias ), /* 5.242415 */ -Mul( intToFix(184 ), bias ), /* -1.441092 */ -Mul( intToFix(33 ), bias ), /* -0.25914 */
+        Mul( intToFix(549 ), bias ), /* 4.296041 */ -Mul( intToFix(257 ), bias ), /* -2.013732 */ Mul( intToFix(180 ), bias ), /* 1.407131 */
+        
+        Mul( intToFix(631 ), bias ), /* 4.936838 */ Mul( intToFix(45 ), bias ), /* 0.352405 */ Mul( intToFix(147 ), bias ), /* 1.154803 */
+        Mul( intToFix(672 ), bias ), /* 5.253534 */ Mul( intToFix(53 ), bias ), /* 0.418816 */ Mul( intToFix(173 ), bias ), /* 1.357497 */
+        Mul( intToFix(883 ), bias ), /* 6.901262 */ -Mul( intToFix(139 ), bias ), /* -1.09323 */ Mul( intToFix(102 ), bias ), /* 0.802566 */
+        
+        Mul( intToFix(631 ), bias ), /* 4.936838 */ Mul( intToFix(45 ), bias ), /* 0.352405 */ Mul( intToFix(147 ), bias ), /* 1.154803 */
+        Mul( intToFix(649 ), bias ), /* 5.072858 */ Mul( intToFix(39 ), bias ), /* 0.309491 */ Mul( intToFix(214 ), bias ), /* 1.675611 */
+        Mul( intToFix(672 ), bias ), /* 5.253534 */ Mul( intToFix(53 ), bias ), /* 0.418816 */ Mul( intToFix(173 ), bias ), /* 1.357497 */
+        
+        Mul( intToFix(631 ), bias ), /* 4.936838 */ Mul( intToFix(45 ), bias ), /* 0.352405 */ Mul( intToFix(147 ), bias ), /* 1.154803 */
+        Mul( intToFix(608 ), bias ), /* 4.756162 */ Mul( intToFix(31 ), bias ), /* 0.24308 */ Mul( intToFix(188 ), bias ), /* 1.472917 */
+        Mul( intToFix(649 ), bias ), /* 5.072858 */ Mul( intToFix(39 ), bias ), /* 0.309491 */ Mul( intToFix(214 ), bias ), /* 1.675611 */
+        
+        Mul( intToFix(649 ), bias ), /* 5.072858 */ Mul( intToFix(39 ), bias ), /* 0.309491 */ Mul( intToFix(214 ), bias ), /* 1.675611 */
+        Mul( intToFix(608 ), bias ), /* 4.756162 */ Mul( intToFix(31 ), bias ), /* 0.24308 */ Mul( intToFix(188 ), bias ), /* 1.472917 */
+        Mul( intToFix(549 ), bias ), /* 4.296041 */ -Mul( intToFix(257 ), bias ), /* -2.013732 */ Mul( intToFix(180 ), bias ), /* 1.407131 */
+        
+        Mul( intToFix(672 ), bias ), /* 5.253534 */ Mul( intToFix(53 ), bias ), /* 0.418816 */ Mul( intToFix(173 ), bias ), /* 1.357497 */
+        Mul( intToFix(762 ), bias ), /* 5.954888 */ -Mul( intToFix(213 ), bias ), /* -1.665871 */ Mul( intToFix(316 ), bias ), /* 2.468837 */
+        Mul( intToFix(883 ), bias ), /* 6.901262 */ -Mul( intToFix(139 ), bias ), /* -1.09323 */ Mul( intToFix(102 ), bias ), /* 0.802566 */
+        
+        Mul( intToFix(883 ), bias ), /* 6.901262 */ -Mul( intToFix(139 ), bias ), /* -1.09323 */ Mul( intToFix(102 ), bias ), /* 0.802566 */
+        Mul( intToFix(762 ), bias ), /* 5.954888 */ -Mul( intToFix(213 ), bias ), /* -1.665871 */ Mul( intToFix(316 ), bias ), /* 2.468837 */
+        Mul( intToFix(549 ), bias ), /* 4.296041 */ -Mul( intToFix(257 ), bias ), /* -2.013732 */ Mul( intToFix(180 ), bias ), /* 1.407131 */
+        
+        Mul( intToFix(672 ), bias ), /* 5.253534 */ Mul( intToFix(53 ), bias ), /* 0.418816 */ Mul( intToFix(173 ), bias ), /* 1.357497 */
+        Mul( intToFix(649 ), bias ), /* 5.072858 */ Mul( intToFix(39 ), bias ), /* 0.309491 */ Mul( intToFix(214 ), bias ), /* 1.675611 */
+        Mul( intToFix(762 ), bias ), /* 5.954888 */ -Mul( intToFix(213 ), bias ), /* -1.665871 */ Mul( intToFix(316 ), bias ), /* 2.468837 */
+        
+        Mul( intToFix(649 ), bias ), /* 5.072858 */ Mul( intToFix(39 ), bias ), /* 0.309491 */ Mul( intToFix(214 ), bias ), /* 1.675611 */
+        Mul( intToFix(549 ), bias ), /* 4.296041 */ -Mul( intToFix(257 ), bias ), /* -2.013732 */ Mul( intToFix(180 ), bias ), /* 1.407131 */
+        Mul( intToFix(762 ), bias ), /* 5.954888 */ -Mul( intToFix(213 ), bias ), /* -1.665871 */ Mul( intToFix(316 ), bias ), /* 2.468837 */
+        
+    };
+    struct Mesh mesh;
+    
+    mesh.triangleCount = 16;
+    mesh.uvCoords = &uvCoords[0];
+    mesh.geometry = &coords[0];
+    
+
+    
+    
+
+    struct Vec3 center;
+    
+    center.mX = -intToFix(1);
+    center.mY = intToFix(1);
+    center.mZ = intToFix(10);
+    
+    drawMesh( &mesh, center);
+
+    /// TEST END ////
 }
