@@ -1018,14 +1018,12 @@ void fillTriangle(int *coords, uint8_t colour) {
 
 void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture) {
     int y = coords[1];
-    int x = 0;
     int u, v;
     FixP_t fU1, fU2, fV1, fV2;
     FixP_t fDU1 = intToFix(1);
     FixP_t fDU2 = intToFix(1);
     FixP_t fDV1 = intToFix(1);
     FixP_t fDV2 = intToFix(1);
-    FixP_t f32 = intToFix(32);
     FixP_t one = intToFix(1);
 
     int yFinal = coords[5]; //not the lowest, neither the topmost
@@ -1043,12 +1041,6 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
     FixP_t v1 = intToFix(uvCoords[3]);
     FixP_t u2 = intToFix(uvCoords[4]);
     FixP_t v2 = intToFix(uvCoords[5]);
-    
-    
-    
-    fill( 256 - 64 + (fixToInt(u0) * 2), 64 + ( fixToInt(v0) * 2), 2, 2, 128, 0);
-    fill( 256 - 64 + (fixToInt(u1) * 2), 64 + ( fixToInt(v1) * 2), 2, 2, 128, 0);
-    fill( 256 - 64 + (fixToInt(u2) * 2), 64 + ( fixToInt(v2) * 2), 2, 2, 128, 0);
     
 
     FixP_t dX1X0 = (x1 - x0);
@@ -1147,7 +1139,6 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
 
 void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture) {
     int y = coords[1];
-    int x = 0;
     int u, v;
     FixP_t fU1, fU2, fV1, fV2;
     FixP_t fDU1 = intToFix(1);
@@ -1156,7 +1147,6 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     FixP_t fDV2 = intToFix(1);
 
     int yFinal = coords[3]; //not the upper, not the lowest
-    FixP_t f32 = intToFix(32);
     FixP_t one = intToFix(1);
     FixP_t x0 = intToFix(coords[0]);
     FixP_t y0 = intToFix(coords[1]);
@@ -1171,12 +1161,6 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     FixP_t v1 = intToFix(uvCoords[3]);
     FixP_t u2 = intToFix(uvCoords[4]);
     FixP_t v2 = intToFix(uvCoords[5]);
-    
-    
-    fill( 256 - 64 + (fixToInt(u0) * 2), 64 + ( fixToInt(v0) * 2), 2, 2, 128, 0);
-    fill( 256 - 64 + (fixToInt(u1) * 2), 64 + ( fixToInt(v1) * 2), 2, 2, 128, 0);
-    fill( 256 - 64 + (fixToInt(u2) * 2), 64 + ( fixToInt(v2) * 2), 2, 2, 128, 0);
-
 
 
     FixP_t dX1X0 = (x1 - x0);
@@ -1314,12 +1298,15 @@ void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *textur
     newCoors[4] = coords[2 * other];
     newCoors[5] = coords[(2 * other) + 1];
 
-    newUV[0] = uvCoords[2 * upper];
-    newUV[1] = uvCoords[(2 * upper) + 1];
-    newUV[2] = uvCoords[2 * lower];
-    newUV[3] = uvCoords[(2 * lower) + 1];
-    newUV[4] = uvCoords[2 * other];
-    newUV[5] = uvCoords[(2 * other) + 1];
+    newUV[0] = 32 - uvCoords[(2 * upper) + 1];
+    newUV[1] = uvCoords[2 * upper];
+    
+    newUV[2] = 32 - uvCoords[(2 * lower) + 1];
+    newUV[3] = uvCoords[2 * lower];
+    
+    newUV[4] = 32 - uvCoords[(2 * other) + 1];
+    newUV[5] = uvCoords[2 * other];
+    
 
     drawTexturedBottomFlatTriangle(&newCoors[0], &newUV[0], texture);
 
@@ -1330,12 +1317,15 @@ void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *textur
     newCoors[4] = coords[2 * upper];
     newCoors[5] = coords[(2 * upper) + 1];
 
-    newUV[0] = uvCoords[2 * lower];
-    newUV[1] = uvCoords[(2 * lower) + 1];
-    newUV[2] = uvCoords[2 * other];
-    newUV[3] = uvCoords[(2 * other) + 1];
-    newUV[4] = uvCoords[2 * upper];
-    newUV[5] = uvCoords[(2 * upper) + 1];
+    newUV[0] = 32 - uvCoords[(2 * lower) + 1];
+    newUV[1] = uvCoords[2 * lower];
+    
+    newUV[2] = 32 - uvCoords[(2 * other) + 1];
+    newUV[3] = uvCoords[2 * other];
+    
+    newUV[4] = 32 - uvCoords[(2 * upper) + 1];
+    newUV[5] = uvCoords[2 * upper];
+    
 
     drawTexturedTopFlatTriangle(&newCoors[0], &newUV[0], texture);
 }
