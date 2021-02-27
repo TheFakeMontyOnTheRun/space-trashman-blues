@@ -34,14 +34,15 @@ public class Exports : MonoBehaviour
             DestroyImmediate(child.gameObject);
         }
 
+        GameObject geometryRoot = new GameObject("Geometry");
         GameObject spawner;
         Material matRef1 = AssetDatabase.LoadAssetAtPath("Assets/Materials/tex1.mat", typeof(Material)) as Material;
         Material matRef2 = AssetDatabase.LoadAssetAtPath("Assets/Materials/tex2.mat", typeof(Material)) as Material;
     
-        for ( int y = 0; y < 32; ++y ) {
-            for (int x = 0; x < 32; ++x ) {
+        for ( int y = 0; y < 64; ++y ) {
+            for (int x = 0; x < 64; ++x ) {
                 spawner = new GameObject("tile" + x + "_" + y );
-                
+                spawner.transform.parent = geometryRoot.transform;
                 spawner.transform.position = new Vector3(x, 0, y);
                 
 
@@ -49,10 +50,14 @@ public class Exports : MonoBehaviour
                 spawner.GetComponent<Exportable>().floorMaterial = matRef1;
                 spawner.GetComponent<Exportable>().ceilingMaterial = matRef1;
                 spawner.GetComponent<Exportable>().ceilingHeight = 1.0f;
+                spawner.GetComponent<Exportable>().representation = "1";
                 spawner.GetComponent<Exportable>().Apply();
             }
         }
 
+        GameObject playerSpawner = new GameObject("PlayerSpawner");
+        playerSpawner.AddComponent<PlayerSpawner>();
+        playerSpawner.transform.position = new Vector3( 1, 1  ,1 );
     }
 
     [MenuItem("Monty/Export Level as Data File")]
@@ -67,11 +72,11 @@ public class Exports : MonoBehaviour
 
         GameObject[] objects = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
 
-        string[,] map = new string[32, 32];
-        PetEntry[] pet = new PetEntry[16];
+        string[,] map = new string[64, 64];
+        PetEntry[] pet = new PetEntry[256];
 
-        for (int y = 0; y < 32; ++y) {
-            for ( int x = 0; x < 32; ++x ) {
+        for (int y = 0; y < 64; ++y) {
+            for ( int x = 0; x < 64; ++x ) {
                 map[y, x] = "0";
             }
         }
@@ -81,7 +86,7 @@ public class Exports : MonoBehaviour
                 var exportbl = go.GetComponent(typeof(Exportable)) as Exportable;
                 if (exportbl != null) {
                     int x = (int) (go.transform.position.x );
-                    int z = 32 - (int) (go.transform.position.z );
+                    int z = 64 - (int) (go.transform.position.z );
                     print(go + ": " + go.name + " is active in hierarchy at ( " + x + ", " + z + " ) and is " + exportbl.representation);
                     
                     map[z, x] = exportbl.representation;
@@ -91,9 +96,9 @@ public class Exports : MonoBehaviour
         }
 
 
-        for (int y = 1; y < 31; ++y)
+        for (int y = 1; y < 63; ++y)
         {
-            for (int x = 1; x < 31; ++x)
+            for (int x = 1; x < 63; ++x)
             {
                 if (map[y, x] == "0" && (
                     (Int32.Parse(map[y - 1, x]) > 1) ||
@@ -112,10 +117,10 @@ public class Exports : MonoBehaviour
 
         string finalMap = "{\n";
 
-        for (int y = 0; y < 32; ++y)
+        for (int y = 0; y < 64; ++y)
         {
             finalMap += "{ ";
-            for (int x = 0; x < 32; ++x)
+            for (int x = 0; x < 64; ++x)
             {
                 finalMap += map[y, x] + ", ";
             }
@@ -125,7 +130,7 @@ public class Exports : MonoBehaviour
 
         string petCode = "patterns[16]={\n";
 
-        for (int c = 0; c < 16; ++c ) {
+        for (int c = 0; c < 256; ++c ) {
 
             if (pet[c] == null) {
                 continue;

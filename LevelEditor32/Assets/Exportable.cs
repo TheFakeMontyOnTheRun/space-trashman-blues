@@ -5,6 +5,8 @@ using UnityEngine;
 //[ExecuteInEditMode]
 public class Exportable : MonoBehaviour
 {
+    public static Dictionary<string, Exportable> GeneralTable = new Dictionary<string, Exportable>();
+
     public float ceilingHeight;
     public float floorHeight;
     public float floorRepetitions;
@@ -23,6 +25,21 @@ public class Exportable : MonoBehaviour
 
     void Update()
     {
+    }
+
+    public void CopyFrom(Exportable other ) {
+        ceilingHeight = other.ceilingHeight;
+        floorHeight = other.floorHeight;
+        floorRepetitions = other.floorRepetitions;
+        ceilingRepetitions = other.ceilingRepetitions;
+        mainMaterial = other.mainMaterial;
+        ceilingMaterial = other.ceilingMaterial;
+        ceilingRepetitionsMaterial = other.ceilingRepetitionsMaterial;
+        floorMaterial = other.floorMaterial;
+        floorRepetitionsMaterial = other.floorRepetitionsMaterial;
+        blockVisibility = other.blockVisibility;
+        blockMovement = other.blockMovement;
+        needsAlphaTest = other.needsAlphaTest;
     }
 
     public void Apply() {
