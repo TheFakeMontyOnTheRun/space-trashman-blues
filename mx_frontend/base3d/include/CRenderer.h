@@ -64,7 +64,7 @@ extern uint8_t enableSmoothMovement;
 
 
 
-struct Mesh  {
+struct Mesh {
     uint16_t triangleCount;
     uint8_t *uvCoords;
     FixP_t *geometry;
