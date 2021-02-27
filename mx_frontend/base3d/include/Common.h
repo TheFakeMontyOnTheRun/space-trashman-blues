@@ -6,6 +6,11 @@
 #define TRUE 1
 #define FALSE 0
 
+
+struct StaticBuffer {
+    uint8_t *data;
+    size_t size;
+};
 int isBigEndian(void);
 
 uint32_t toNativeEndianess(const uint32_t val);

@@ -91,7 +91,7 @@ void printMessageTo3DView(const char* message ) {
 
 void loadTileProperties(const uint8_t levelNumber) {
     char buffer[64];
-    uint8_t *data;
+    struct StaticBuffer data;
     int16_t c;
     
     setLoggerDelegate(printMessageTo3DView);
@@ -125,13 +125,12 @@ void loadTileProperties(const uint8_t levelNumber) {
         }
     }
 
-    free(data);
+    free(data.data);
 }
 
 void loadTexturesForLevel(const uint8_t levelNumber) {
     char tilesFilename[64];
-    uint8_t *data;
-    size_t size;
+    struct StaticBuffer data;
     char *head;
     char *end;
     char *nameStart;
@@ -139,9 +138,8 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     sprintf (tilesFilename, "tiles%d.lst", levelNumber);
 
     data = loadBinaryFileFromPath(tilesFilename);
-    size = sizeOfFile(tilesFilename);
-    head = (char *) data;
-    end = head + size;
+    head = (char *) data.data;
+    end = head + data.size;
     nameStart = head;
 
     texturesUsed = 0;
@@ -158,7 +156,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
         ++head;
     }
 
-    free(data);
+    free(data.data);
 
     backdrop = loadBitmap("backdrop.img");
     

@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <unistd.h>
 
+#include "Common.h"
 #include "FixP.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
@@ -13,10 +14,9 @@
 
 void loadPropertyList(const char *__restrict__ propertyFile, struct MapWithCharKey *__restrict__ map) {
 
-    uint8_t *buffer = loadBinaryFileFromPath(propertyFile);
-    size_t size = sizeOfFile(propertyFile);
-    uint8_t *limit = buffer + size;
-    uint8_t *bufferHead = buffer;
+    struct StaticBuffer buffer = loadBinaryFileFromPath(propertyFile);
+    uint8_t *limit = buffer.data + buffer.size;
+    uint8_t *bufferHead = buffer.data;
 
     clearMap(map);
 
@@ -59,5 +59,5 @@ void loadPropertyList(const char *__restrict__ propertyFile, struct MapWithCharK
         setInMap(map, key, prop);
     }
 
-    free(buffer);
+    free(buffer.data);
 }
