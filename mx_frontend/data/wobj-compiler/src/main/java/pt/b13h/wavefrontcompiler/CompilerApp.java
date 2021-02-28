@@ -60,13 +60,30 @@ public class CompilerApp {
 	 * @param args
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
-		FileOutputStream fos = new FileOutputStream("../assets/output.mdl");
+
+		String inputOBJFile = "";
+		String inputMTLFile = "";
+		String ouputFile = "";
+
+		if (args.length == 0) {
+			inputOBJFile = "/Users/monty/Desktop/fighter.obj";
+			inputMTLFile = "/Users/monty/Desktop/fighter.mtl";
+			ouputFile = "../assets/output.mdl";
+		} else {
+			inputOBJFile = "../src/" + args[0] + ".obj";
+			inputMTLFile = "../src/" + args[0] + ".mtl";
+			ouputFile = "../assets/" + args[0] + ".mdl";
+		}
+
+		System.out.println("Crunching " + inputOBJFile + " and " + inputMTLFile + " into " + ouputFile );
+
+		FileOutputStream fos = new FileOutputStream(ouputFile);
 		ByteBuffer bb;
 		GeneralTriangleFactory trigFactory = new GeneralTriangleFactory();
 		WavefrontMaterialLoader materialLoader = new WavefrontMaterialLoader();
 		SimpleWavefrontOBJLoader meshLoader = new SimpleWavefrontOBJLoader(trigFactory);
-		List<WavefrontMaterial> materialList = materialLoader.parseMaterials(new FileInputStream("/Users/monty/Desktop/fighter.mtl"));
-		List<TriangleMesh> meshes = meshLoader.loadMeshes(new FileInputStream("/Users/monty/Desktop/fighter.obj"), materialList);
+		List<WavefrontMaterial> materialList = materialLoader.parseMaterials(new FileInputStream(inputMTLFile));
+		List<TriangleMesh> meshes = meshLoader.loadMeshes(new FileInputStream(inputOBJFile), materialList);
 		String textureName = meshes.get(0).faces.get(0).material.texture;
 		textureName = textureName.substring(textureName.lastIndexOf("/") + 1).replace(".png", ".img");
 		int total = 0;
