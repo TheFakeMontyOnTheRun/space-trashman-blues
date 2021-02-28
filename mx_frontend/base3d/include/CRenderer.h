@@ -70,6 +70,8 @@ struct Mesh {
     FixP_t *geometry;
 };
 
+extern struct Mesh mesh;
+
 void graphicsInit(void);
 
 void graphicsShutdown(void);
@@ -94,6 +96,7 @@ void initHW(void);
 
 void shutdownHW(void);
 
+void loadMesh(struct Mesh* mesh, char* filename );
 
 void projectAllVertices(const uint8_t count);
 

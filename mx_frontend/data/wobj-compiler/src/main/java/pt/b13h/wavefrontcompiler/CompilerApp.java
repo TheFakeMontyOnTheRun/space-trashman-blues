@@ -11,9 +11,8 @@ import br.odb.libstrip.GeneralTriangle;
 import br.odb.libstrip.TriangleMesh;
 import br.odb.libstrip.builders.GeneralTriangleFactory;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.io.*;
+import java.nio.ByteBuffer;
 import java.util.Comparator;
 import java.util.List;
 
@@ -23,23 +22,34 @@ import java.util.List;
  */
 public class CompilerApp {
 
-	public static void emit(float num) {
+	static int shift = (int) Math.pow(2, 16);
+
+	public static void emitFP(ByteBuffer bb, float num) {
+
+		int fixedPoint = 0;
 		if (num < 0 ) {
-			System.out.print("-Mul( intToFix(" + ((int)(-num * 128)) + " ), bias ), /* " + num  + " */ ");
+			fixedPoint = -((int)(-num * shift));
 		} else {
-			System.out.print("Mul( intToFix(" + ((int)(num * 128)) + " ), bias ), /* " + num  + " */ ");
+			fixedPoint = (int)(num * shift);
 		}
+
+		bb.put( (byte)(( fixedPoint & 0x000000FF) >> 0 ));
+		bb.put( (byte)(( fixedPoint & 0x0000FF00) >> 8 ));
+		bb.put( (byte)(( fixedPoint & 0x00FF0000) >> 16));
+		bb.put( (byte)(( fixedPoint & 0xFF000000) >> 24));
 	}
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
+		FileOutputStream fos = new FileOutputStream("../assets/output.mdl");
+		ByteBuffer bb;
 		GeneralTriangleFactory trigFactory = new GeneralTriangleFactory();
 		WavefrontMaterialLoader materialLoader = new WavefrontMaterialLoader();
 		SimpleWavefrontOBJLoader meshLoader = new SimpleWavefrontOBJLoader(trigFactory);
-		List<WavefrontMaterial> materialList = materialLoader.parseMaterials(new FileInputStream("/Users/monty/Desktop/pile.mtl"));
-		List<TriangleMesh> meshes = meshLoader.loadMeshes(new FileInputStream("/Users/monty/Desktop/pile.obj"), materialList);
+		List<WavefrontMaterial> materialList = materialLoader.parseMaterials(new FileInputStream("/Users/monty/Desktop/fighter.mtl"));
+		List<TriangleMesh> meshes = meshLoader.loadMeshes(new FileInputStream("/Users/monty/Desktop/fighter.obj"), materialList);
 
 
 		int total = 0;
@@ -48,7 +58,10 @@ public class CompilerApp {
 			total += m.faces.size();
 		}
 
-		System.out.println("uint8_t uvCoords[ " + total * 6 + "] = {");
+		bb = ByteBuffer.allocate(2 + (6 * total ) + (9 * 4 * total));
+
+		bb.put((byte )(total & 0xFF));
+		bb.put((byte )((total >> 8) & 0xFF));
 
 
 		for (int c = 0; c < meshes.size(); ++c ) {
@@ -70,43 +83,37 @@ public class CompilerApp {
 		}
 
 		for (TriangleMesh m : meshes ) {
-
 			for (GeneralTriangle trig : m.faces) {
 				for (float f : trig.getTextureCoordinates()) {
-					System.out.print( ((int)(f * 32)) + ", ");
+					bb.put( ((byte)(f * 32)));
 				}
-				System.out.println();
 			}
 		}
-		System.out.println("};");
-
-		System.out.println("FixP_t bias = Div(intToFix(1), intToFix(128));");
-
-		System.out.println("FixP_t coords[ " + total * 9 + "] = {" );
 
 		for (TriangleMesh m : meshes ) {
 
 			for (GeneralTriangle trig : m.faces ) {
-				emit(trig.x0 );
-				emit(trig.y0 );
-				emit(trig.z0 );
-				System.out.println();
-				emit(trig.x1 );
-				emit(trig.y1 );
-				emit(trig.z1 );
-				System.out.println();
-				emit(trig.x2 );
-				emit(trig.y2 );
-				emit(trig.z2 );
-				System.out.println("\n");
+				emitFP(bb, trig.x0 );
+				emitFP(bb, trig.y0 );
+				emitFP(bb, trig.z0 );
+
+				emitFP(bb, trig.x1 );
+				emitFP(bb, trig.y1 );
+				emitFP(bb, trig.z1 );
+
+				emitFP(bb, trig.x2 );
+				emitFP(bb, trig.y2 );
+				emitFP(bb, trig.z2 );
 			}
 		}
-		System.out.println("};");
 
-		System.out.println("    struct Mesh mesh;\n" +
-				"    \n" +
-				"    mesh.triangleCount = " + total + ";\n" +
-				"    mesh.uvCoords = &uvCoords[0];\n" +
-				"    mesh.geometry = &coords[0];");
+
+		try {
+			fos.write(bb.array());
+			fos.flush();
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

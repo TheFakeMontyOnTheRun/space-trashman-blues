@@ -144,7 +144,8 @@ struct StaticBuffer loadBinaryFileFromPath(const char *__restrict__ path) {
     fseek(mDataPack, offset, SEEK_SET);
 
     assert (fread(&size, 4, 1, mDataPack));
-    toReturn.size = toNativeEndianess(size);
+    size = toNativeEndianess(size);
+    toReturn.size = size;
     toReturn.data = (uint8_t *) malloc(size);
 
     assert (fread(toReturn.data, sizeof(uint8_t), size, mDataPack));
