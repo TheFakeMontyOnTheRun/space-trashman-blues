@@ -30,7 +30,6 @@ FixP_t playerHeightChangeRate = 0;
 FixP_t playerHeightTarget = 0;
 int cursorX = -1;
 int cursorZ = -1;
-struct Mesh mesh;
 extern int currentSelectedItem;
 int covered = FALSE;
 int useDither = TRUE;
@@ -168,8 +167,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
         sprintf( &buffer[0], "%s.img",  getItem(c)->description);
         itemSprites[c] = (makeTextureFrom(&buffer[0]));
     }
-    
-    loadMesh( &mesh, "output.mdl");
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -914,16 +911,6 @@ void render(const long ms) {
             drawTextAt(2, 23, &messageLogBuffer[0], 255);
         }
     }
-    
-    //// TEST ////
-    struct Vec3 center;
-    
-    center.mX = -intToFix(0);
-    center.mY = intToFix(0);
-    center.mZ = intToFix(10);
-    
-    drawMesh( &mesh, center);
-    /// TEST END ////
 }
 
 void loadMesh(struct Mesh* mesh, char* filename ) {

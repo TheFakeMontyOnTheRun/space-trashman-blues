@@ -62,8 +62,6 @@ extern int enable3DRendering;
 extern uint8_t enableSmoothMovement;
 
 
-
-
 struct Mesh {
     uint16_t triangleCount;
     uint8_t *uvCoords;
@@ -72,7 +70,6 @@ struct Mesh {
     uint8_t colour;
 };
 
-extern struct Mesh mesh;
 
 void graphicsInit(void);
 
