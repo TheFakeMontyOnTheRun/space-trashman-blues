@@ -106,7 +106,7 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
     char collisions[256 + 1];
     int c;
     char nameBuffer[256];
-    uint8_t *buffer;
+    struct StaticBuffer buffer;
 
     collisions[256] = 0;
     for (c = 0; c < 256; ++c) {
@@ -117,8 +117,8 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
 
     sprintf (nameBuffer, "map%d.txt", map);
     buffer = loadBinaryFileFromPath(nameBuffer);
-    dungeon_loadMap(buffer, collisions, map);
-    free(buffer);
+    dungeon_loadMap(buffer.data, collisions, map);
+    free(buffer.data);
 }
 
 int canSeeSpy(const struct Vec2i seer,

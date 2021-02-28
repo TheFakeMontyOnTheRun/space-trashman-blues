@@ -61,6 +61,16 @@ extern FixP_t zCameraOffset;
 extern int enable3DRendering;
 extern uint8_t enableSmoothMovement;
 
+
+struct Mesh {
+    uint16_t triangleCount;
+    uint8_t *uvCoords;
+    FixP_t *geometry;
+    struct Texture* texture;
+    uint8_t colour;
+};
+
+
 void graphicsInit(void);
 
 void graphicsShutdown(void);
@@ -85,6 +95,7 @@ void initHW(void);
 
 void shutdownHW(void);
 
+void loadMesh(struct Mesh* mesh, char* filename );
 
 void projectAllVertices(const uint8_t count);
 
@@ -94,6 +105,9 @@ void fill(
 		const int16_t x, const int16_t y,
 		const int16_t dx, const int16_t dy,
 		const uint8_t pixel, const int stipple);
+
+
+void drawMesh(const struct Mesh* mesh, const struct Vec3 at );
 
 void drawMap(const uint8_t * __restrict__ elements,
 			 const uint8_t * __restrict__ items,

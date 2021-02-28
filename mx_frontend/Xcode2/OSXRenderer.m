@@ -38,9 +38,6 @@ void initHW() {
     setupOPL2();
 }
 
-int selected = 0;
-extern int coords[6];
-
 void shutdownHW();
 
 #include "OSXRenderer.h"
@@ -112,11 +109,9 @@ void handleSystemEvents() {
 
         case 1: //s
             mBufferedCommand = kCommandStrafeLeft;
-             coords[(selected * 2)] -= 2;
             break;
         case 2: //d
             mBufferedCommand = kCommandStrafeRight;
-            coords[(selected * 2)] += 2;
             break;
 
         case 3: //f
@@ -139,17 +134,9 @@ void handleSystemEvents() {
             
         case 126:
             mBufferedCommand = kCommandUp;
-            if ( renderingMethod == FIXED )
-            {
-            coords[(selected * 2) + 1] -= 2;
-            }
             break;
         case 125:
             mBufferedCommand = kCommandDown;
-            if ( renderingMethod == FIXED )
-            {
-            coords[(selected * 2) + 1] += 2;
-            }
             break;
             
         case 123:
@@ -166,18 +153,15 @@ void handleSystemEvents() {
         case -1:
             break;
         case 18:
-            selected = 0;
             needsToRedrawVisibleMeshes = TRUE;
             visibilityCached = FALSE;
             break;
         case 19:
-            selected = 1;
             needsToRedrawVisibleMeshes = TRUE;
             visibilityCached = FALSE;
             break;
             
         case 20:
-            selected = 2;
             needsToRedrawVisibleMeshes = TRUE;
             visibilityCached = FALSE;
             break;

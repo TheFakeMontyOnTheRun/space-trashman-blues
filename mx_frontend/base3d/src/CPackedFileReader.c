@@ -102,20 +102,22 @@ size_t sizeOfFile(const char *__restrict__ path) {
     return size;
 }
 
-uint8_t *loadBinaryFileFromPath(const char *__restrict__ path) {
+struct StaticBuffer loadBinaryFileFromPath(const char *__restrict__ path) {
 
 #ifndef ANDROID
     FILE *mDataPack = fopen(mDataPath, "rb");
 #else
     FILE *mDataPack = android_fopen(&mDataPath[0]);
 #endif
+    
+    struct StaticBuffer toReturn;
 
     uint32_t offset = 0;
     uint16_t entries = 0;
     char buffer[85];
     int c;
     uint32_t size = 0;
-    uint8_t *toReturn;
+    
 
     assert (fread(&entries, 2, 1, mDataPack));
 
@@ -143,9 +145,10 @@ uint8_t *loadBinaryFileFromPath(const char *__restrict__ path) {
 
     assert (fread(&size, 4, 1, mDataPack));
     size = toNativeEndianess(size);
-    toReturn = (uint8_t *) malloc(size);
+    toReturn.size = size;
+    toReturn.data = (uint8_t *) malloc(size);
 
-    assert (fread(toReturn, sizeof(uint8_t), size, mDataPack));
+    assert (fread(toReturn.data, sizeof(uint8_t), size, mDataPack));
     fclose(mDataPack);
 
     return toReturn;

@@ -30,8 +30,6 @@ int32_t CreditsScreen_nextStateNavigation[1] = {
 int16_t CreditsScreen_optionsCount = 1;
 extern char textBuffer[40 * 25];
 struct Bitmap *monty;
-struct Bitmap *belle;
-struct Bitmap *stdmatt;
 
 int32_t CreditsScreen_initStateCallback(int32_t tag) {
 	size_t fileSize = sizeOfFile("Credits.txt");
@@ -52,10 +50,6 @@ int32_t CreditsScreen_initStateCallback(int32_t tag) {
 	CreditsScreen_optionsCount = 1;
 
 	monty = loadBitmap("monty.img");
-
-	belle = loadBitmap("belle.img");
-
-	stdmatt = loadBitmap("stdmatt.img");
 
 	return 0;
 }
@@ -130,18 +124,14 @@ void CreditsScreen_repaintCallback(void) {
 	drawTextAt(3, 17, "Monty", 255);
 
 	fill(80, 128, 64, 64, 255, FALSE);
-	drawBitmap(80, 128, stdmatt, TRUE);
 	drawRect(80, 128, 64, 64, 0);
 
 	fill(80, 128, 64, 8, 0, FALSE);
-	drawTextAt(12, 17, "StdMatt", 255);
 
 	fill(152, 128, 64, 64, 255, FALSE);
-	drawBitmap(152, 128, belle, TRUE);
 	drawRect(152, 128, 64, 64, 0);
 
 	fill(152, 128, 64, 8, 0, FALSE);
-	drawTextAt(21, 17, "Belle", 255);
 
 	fill(320 - (len * 8) - 8 - 16, 200 - optionsHeight - 8 - 16,
 		 (len * 8) + 16, optionsHeight + 16, 0, TRUE);
@@ -240,13 +230,7 @@ void CreditsScreen_unloadStateCallback() {
 	if (currentBackgroundBitmap != NULL) {
 		releaseBitmap(currentBackgroundBitmap);
 		currentBackgroundBitmap = NULL;
-
 		releaseBitmap(monty);
-		releaseBitmap(belle);
-		releaseBitmap(stdmatt);
-
 		monty = NULL;
-		belle = NULL;
-		stdmatt = NULL;
 	}
 }

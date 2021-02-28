@@ -7,6 +7,7 @@
 
 #include "FixP.h"
 #include "Vec.h"
+#include "Common.h"
 #include "Enums.h"
 #include "CActor.h"
 #include "MapWithCharKey.h"
@@ -29,7 +30,6 @@ FixP_t playerHeightChangeRate = 0;
 FixP_t playerHeightTarget = 0;
 int cursorX = -1;
 int cursorZ = -1;
-
 extern int currentSelectedItem;
 int covered = FALSE;
 int useDither = TRUE;
@@ -76,8 +76,6 @@ char* focusItemName = NULL;
 
 struct Projection projectionVertices[8];
 
-int coords[6];
-
 enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
 uint8_t intMap[MAP_SIZE * MAP_SIZE];
 struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
@@ -93,7 +91,7 @@ void printMessageTo3DView(const char* message ) {
 
 void loadTileProperties(const uint8_t levelNumber) {
     char buffer[64];
-    uint8_t *data;
+    struct StaticBuffer data;
     int16_t c;
     
     setLoggerDelegate(printMessageTo3DView);
@@ -127,34 +125,23 @@ void loadTileProperties(const uint8_t levelNumber) {
         }
     }
 
-    free(data);
-    
-    
-    
-    coords[0] =  50;
-    coords[1] =  50;
-    coords[2] = 100;
-    coords[3] = 75;
-    coords[4] = 50;
-    coords[5] = 100;
+    free(data.data);
 }
 
 void loadTexturesForLevel(const uint8_t levelNumber) {
     char tilesFilename[64];
-    uint8_t *data;
-    size_t size;
+    struct StaticBuffer data;
     char *head;
     char *end;
     char *nameStart;
 
     sprintf (tilesFilename, "tiles%d.lst", levelNumber);
-
+    
     data = loadBinaryFileFromPath(tilesFilename);
-    size = sizeOfFile(tilesFilename);
-    head = (char *) data;
-    end = head + size;
+    head = (char *) data.data;
+    end = head + data.size;
     nameStart = head;
-
+    
     texturesUsed = 0;
     clearTextures();
 
@@ -169,7 +156,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
         ++head;
     }
 
-    free(data);
+    free(data.data);
 
     backdrop = loadBitmap("backdrop.img");
     
@@ -923,5 +910,55 @@ void render(const long ms) {
         if (messageLogBufferCoolDown > 0 ) {
             drawTextAt(2, 23, &messageLogBuffer[0], 255);
         }
+    }
+}
+
+void loadMesh(struct Mesh* mesh, char* filename ) {
+    struct StaticBuffer buffer = loadBinaryFileFromPath(filename);
+    FixP_t val = 0;
+    uint8_t* bufferHead = buffer.data;
+    int16_t trigCount = 0;
+    int uvCoordsCount;
+    int coordsCount;
+    char *textureName;
+    
+    uint8_t read;
+    read = (*(bufferHead++));
+    trigCount += read;
+    read = (*(bufferHead++)) << 8;
+    trigCount += read;
+    
+    uvCoordsCount = trigCount * 6;
+    coordsCount = trigCount * 9;
+
+    mesh->triangleCount = trigCount;
+    mesh->uvCoords = calloc( 1, uvCoordsCount);
+    mesh->geometry = calloc( sizeof(FixP_t), coordsCount);
+    
+    uint8_t* uvCoord = mesh->uvCoords;
+    FixP_t* coord = mesh->geometry;
+    
+    for (int c = 0; c < uvCoordsCount; ++c ) {
+        *(uvCoord++) = (*(bufferHead++));
+    }
+    
+    for (int c = 0; c < coordsCount; ++c ) {
+        val = 0;
+        val += (*(bufferHead++) << 0);
+        val += (*(bufferHead++) << 8);
+        val += (*(bufferHead++) << 16);
+        val += (*(bufferHead++) << 24);
+        *(coord++) = val;
+    }
+    
+    read = (*(bufferHead++));
+    if (read == 0 ) {
+        mesh->colour = *bufferHead;
+        mesh->texture = NULL;
+    } else {
+        textureName = calloc(1, read + 1);
+        memcpy(textureName, bufferHead, read),
+        mesh->texture = makeTextureFrom(textureName);
+        free(textureName);
     }
 }
