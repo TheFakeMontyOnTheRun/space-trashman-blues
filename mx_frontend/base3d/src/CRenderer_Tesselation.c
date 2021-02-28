@@ -651,7 +651,7 @@ void drawMesh( const struct Mesh *mesh, const struct Vec3 center ) {
         coords[4] = fixToInt(projectionVertices[2].second.mX);
         coords[5] = fixToInt(projectionVertices[2].second.mY);
 
-        drawTexturedTriangle( &coords[0], uvData, nativeTextures[23] );
+        drawTexturedTriangle( &coords[0], uvData, mesh->texture);
         uvData += 6;
         vertexData += 9;
     }

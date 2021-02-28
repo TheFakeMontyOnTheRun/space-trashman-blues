@@ -137,13 +137,12 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     char *nameStart;
 
     sprintf (tilesFilename, "tiles%d.lst", levelNumber);
-
-    loadMesh( &mesh, "output.mdl");
+    
     data = loadBinaryFileFromPath(tilesFilename);
     head = (char *) data.data;
     end = head + data.size;
     nameStart = head;
-
+    
     texturesUsed = 0;
     clearTextures();
 
@@ -169,6 +168,8 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
         sprintf( &buffer[0], "%s.img",  getItem(c)->description);
         itemSprites[c] = (makeTextureFrom(&buffer[0]));
     }
+    
+    loadMesh( &mesh, "output.mdl");
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -932,6 +933,7 @@ void loadMesh(struct Mesh* mesh, char* filename ) {
     int16_t trigCount = 0;
     int uvCoordsCount;
     int coordsCount;
+    char *textureName;
     
     uint8_t read;
     read = (*(bufferHead++));
@@ -961,4 +963,10 @@ void loadMesh(struct Mesh* mesh, char* filename ) {
         val += (*(bufferHead++) << 24);
         *(coord++) = val;
     }
+    
+    read = (*(bufferHead++));
+    textureName = calloc(1, read + 1);
+    memcpy(textureName, bufferHead, read),
+    mesh->texture = makeTextureFrom(textureName);
+    free(textureName);
 }

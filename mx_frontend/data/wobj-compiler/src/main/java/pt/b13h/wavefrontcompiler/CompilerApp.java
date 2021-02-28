@@ -50,15 +50,15 @@ public class CompilerApp {
 		SimpleWavefrontOBJLoader meshLoader = new SimpleWavefrontOBJLoader(trigFactory);
 		List<WavefrontMaterial> materialList = materialLoader.parseMaterials(new FileInputStream("/Users/monty/Desktop/fighter.mtl"));
 		List<TriangleMesh> meshes = meshLoader.loadMeshes(new FileInputStream("/Users/monty/Desktop/fighter.obj"), materialList);
-
-
+		String textureName = meshes.get(0).faces.get(0).material.texture;
+		textureName = textureName.substring(textureName.lastIndexOf("/") + 1).replace(".png", ".img");
 		int total = 0;
 
 		for (TriangleMesh m : meshes ) {
 			total += m.faces.size();
 		}
 
-		bb = ByteBuffer.allocate(2 + (6 * total ) + (9 * 4 * total));
+		bb = ByteBuffer.allocate(2 + (6 * total ) + (9 * 4 * total) + (textureName.length()) + 1);
 
 		bb.put((byte )(total & 0xFF));
 		bb.put((byte )((total >> 8) & 0xFF));
@@ -106,6 +106,8 @@ public class CompilerApp {
 				emitFP(bb, trig.z2 );
 			}
 		}
+		bb.put((byte)textureName.length());
+		bb.put(textureName.getBytes());
 
 
 		try {

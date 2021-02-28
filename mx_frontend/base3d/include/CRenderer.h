@@ -68,6 +68,7 @@ struct Mesh {
     uint16_t triangleCount;
     uint8_t *uvCoords;
     FixP_t *geometry;
+    struct Texture* texture;
 };
 
 extern struct Mesh mesh;
