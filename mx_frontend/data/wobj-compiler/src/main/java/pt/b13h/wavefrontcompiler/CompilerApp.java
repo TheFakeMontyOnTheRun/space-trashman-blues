@@ -4,6 +4,7 @@ package pt.b13h.wavefrontcompiler;
  * 
  */
 
+import br.odb.gameutils.Color;
 import br.odb.liboldfart.SimpleWavefrontOBJLoader;
 import br.odb.liboldfart.WavefrontMaterial;
 import br.odb.liboldfart.WavefrontMaterialLoader;
@@ -22,7 +23,23 @@ import java.util.List;
  */
 public class CompilerApp {
 
+	public static final short TRANSPARENCY_COLOR = 199;
 	static int shift = (int) Math.pow(2, 16);
+
+	public static short getPaletteEntry(long origin) {
+		short shade;
+
+		if ((origin & 0xFF000000) == 0) {
+			return TRANSPARENCY_COLOR;
+		}
+
+		shade = 0;
+		shade += (((((origin & 0xFF0000) >> 16) << 2) >> 8)) << 6;
+		shade += (((((origin & 0x00FF00) >>  8) << 3) >> 8)) << 3;
+		shade += (((((origin & 0x0000FF)      ) << 3) >> 8)) << 0;
+
+		return shade;
+	}
 
 	public static void emitFP(ByteBuffer bb, float num) {
 
@@ -106,8 +123,15 @@ public class CompilerApp {
 				emitFP(bb, trig.z2 );
 			}
 		}
-		bb.put((byte)textureName.length());
-		bb.put(textureName.getBytes());
+
+		if (textureName.startsWith("#")) {
+			bb.put((byte)0);
+			bb.put((byte)(getPaletteEntry(Color.getColorFromHTMLColor(textureName).getARGBColor()) & 0xFF));
+		} else {
+			bb.put((byte)textureName.length());
+			bb.put(textureName.getBytes());
+		}
+
 
 
 		try {

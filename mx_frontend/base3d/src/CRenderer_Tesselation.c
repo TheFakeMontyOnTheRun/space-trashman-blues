@@ -630,30 +630,56 @@ void drawMesh( const struct Mesh *mesh, const struct Vec3 center ) {
     int count = mesh->triangleCount;
     
     FixP_t * vertexData = mesh->geometry;
-    uint8_t* uvData = mesh->uvCoords;
+    uint8_t colour = mesh->colour;
     
-    for (int c = 0; c < count; ++c ) {
-        
-        memcpy (&projectionVertices[0].first, &center, sizeof(struct Vec3));
-        memcpy (&projectionVertices[1].first, &center, sizeof(struct Vec3));
-        memcpy (&projectionVertices[2].first, &center, sizeof(struct Vec3));
-        
-        addToVec3(&projectionVertices[0].first, *(vertexData + 0), *(vertexData + 1), *(vertexData + 2));
-        addToVec3(&projectionVertices[1].first, *(vertexData + 3), *(vertexData + 4), *(vertexData + 5));
-        addToVec3(&projectionVertices[2].first, *(vertexData + 6), *(vertexData + 7), *(vertexData + 8));
-        
-        projectAllVertices(3);
-        
-        coords[0] = fixToInt(projectionVertices[0].second.mX);
-        coords[1] = fixToInt(projectionVertices[0].second.mY);
-        coords[2] = fixToInt(projectionVertices[1].second.mX);
-        coords[3] = fixToInt(projectionVertices[1].second.mY);
-        coords[4] = fixToInt(projectionVertices[2].second.mX);
-        coords[5] = fixToInt(projectionVertices[2].second.mY);
-
-        drawTexturedTriangle( &coords[0], uvData, mesh->texture);
-        uvData += 6;
-        vertexData += 9;
+    if (mesh->texture == NULL ) {
+        for (int c = 0; c < count; ++c ) {
+            
+            memcpy (&projectionVertices[0].first, &center, sizeof(struct Vec3));
+            memcpy (&projectionVertices[1].first, &center, sizeof(struct Vec3));
+            memcpy (&projectionVertices[2].first, &center, sizeof(struct Vec3));
+            
+            addToVec3(&projectionVertices[0].first, *(vertexData + 0), *(vertexData + 1), *(vertexData + 2));
+            addToVec3(&projectionVertices[1].first, *(vertexData + 3), *(vertexData + 4), *(vertexData + 5));
+            addToVec3(&projectionVertices[2].first, *(vertexData + 6), *(vertexData + 7), *(vertexData + 8));
+            
+            projectAllVertices(3);
+            
+            coords[0] = fixToInt(projectionVertices[0].second.mX);
+            coords[1] = fixToInt(projectionVertices[0].second.mY);
+            coords[2] = fixToInt(projectionVertices[1].second.mX);
+            coords[3] = fixToInt(projectionVertices[1].second.mY);
+            coords[4] = fixToInt(projectionVertices[2].second.mX);
+            coords[5] = fixToInt(projectionVertices[2].second.mY);
+            
+            fillTriangle( &coords[0], colour);
+            vertexData += 9;
+        }
+    } else {
+        uint8_t* uvData = mesh->uvCoords;
+        for (int c = 0; c < count; ++c ) {
+            
+            memcpy (&projectionVertices[0].first, &center, sizeof(struct Vec3));
+            memcpy (&projectionVertices[1].first, &center, sizeof(struct Vec3));
+            memcpy (&projectionVertices[2].first, &center, sizeof(struct Vec3));
+            
+            addToVec3(&projectionVertices[0].first, *(vertexData + 0), *(vertexData + 1), *(vertexData + 2));
+            addToVec3(&projectionVertices[1].first, *(vertexData + 3), *(vertexData + 4), *(vertexData + 5));
+            addToVec3(&projectionVertices[2].first, *(vertexData + 6), *(vertexData + 7), *(vertexData + 8));
+            
+            projectAllVertices(3);
+            
+            coords[0] = fixToInt(projectionVertices[0].second.mX);
+            coords[1] = fixToInt(projectionVertices[0].second.mY);
+            coords[2] = fixToInt(projectionVertices[1].second.mX);
+            coords[3] = fixToInt(projectionVertices[1].second.mY);
+            coords[4] = fixToInt(projectionVertices[2].second.mX);
+            coords[5] = fixToInt(projectionVertices[2].second.mY);
+            
+            drawTexturedTriangle( &coords[0], uvData, mesh->texture);
+            uvData += 6;
+            vertexData += 9;
+        }
     }
 }
 

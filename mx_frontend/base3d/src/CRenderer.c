@@ -965,8 +965,13 @@ void loadMesh(struct Mesh* mesh, char* filename ) {
     }
     
     read = (*(bufferHead++));
-    textureName = calloc(1, read + 1);
-    memcpy(textureName, bufferHead, read),
-    mesh->texture = makeTextureFrom(textureName);
-    free(textureName);
+    if (read == 0 ) {
+        mesh->colour = *bufferHead;
+        mesh->texture = NULL;
+    } else {
+        textureName = calloc(1, read + 1);
+        memcpy(textureName, bufferHead, read),
+        mesh->texture = makeTextureFrom(textureName);
+        free(textureName);
+    }
 }

@@ -69,6 +69,7 @@ struct Mesh {
     uint8_t *uvCoords;
     FixP_t *geometry;
     struct Texture* texture;
+    uint8_t colour;
 };
 
 extern struct Mesh mesh;
