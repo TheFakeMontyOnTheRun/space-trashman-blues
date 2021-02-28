@@ -68,11 +68,12 @@ public class CompilerApp {
 		if (args.length == 0) {
 			inputOBJFile = "/Users/monty/Desktop/fighter.obj";
 			inputMTLFile = "/Users/monty/Desktop/fighter.mtl";
-			ouputFile = "../assets/output.mdl";
+			ouputFile = "assets/output.mdl";
 		} else {
-			inputOBJFile = "../src/" + args[0] + ".obj";
-			inputMTLFile = "../src/" + args[0] + ".mtl";
-			ouputFile = "../assets/" + args[0] + ".mdl";
+			String radical = args[0].substring(args[0].lastIndexOf("/") + 1).replace(".obj", "");
+			inputOBJFile = "src/" + radical + ".obj";
+			inputMTLFile = "src/" + radical + ".mtl";
+			ouputFile = "assets/" + radical + ".mdl";
 		}
 
 		System.out.println("Crunching " + inputOBJFile + " and " + inputMTLFile + " into " + ouputFile );
