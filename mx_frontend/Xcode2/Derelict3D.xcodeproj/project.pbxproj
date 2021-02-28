@@ -33,6 +33,7 @@
 		F1277A1C236DE63E00478B2C /* UI.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A12236DE63E00478B2C /* UI.c */; };
 		F1277A2B236DE6DD00478B2C /* GameView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1277A26236DE6DD00478B2C /* GameView.m */; };
 		F1277A2C236DE6DD00478B2C /* OSXRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = F1277A28236DE6DD00478B2C /* OSXRenderer.m */; };
+		F16D180325EAE21700C666AB /* Common.c in Sources */ = {isa = PBXBuildFile; fileRef = F16D180225EAE21700C666AB /* Common.c */; };
 		F18B851825581D380012292B /* magbootson.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850725581D370012292B /* magbootson.wav */; };
 		F18B851925581D380012292B /* menu_select.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850825581D370012292B /* menu_select.wav */; };
 		F18B851A25581D380012292B /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850925581D370012292B /* click.wav */; };
@@ -110,6 +111,7 @@
 		F1277A27236DE6DD00478B2C /* OSXRenderer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OSXRenderer.h; sourceTree = "<group>"; };
 		F1277A28236DE6DD00478B2C /* OSXRenderer.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OSXRenderer.m; sourceTree = "<group>"; };
 		F1277A29236DE6DD00478B2C /* The Mistral Report OSX_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = "The Mistral Report OSX_Prefix.pch"; sourceTree = "<group>"; };
+		F16D180225EAE21700C666AB /* Common.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Common.c; path = ../base3d/src/Common.c; sourceTree = "<group>"; };
 		F18B850725581D370012292B /* magbootson.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = magbootson.wav; path = ../data/wavogg/magbootson.wav; sourceTree = "<group>"; };
 		F18B850825581D370012292B /* menu_select.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = menu_select.wav; path = ../data/wavogg/menu_select.wav; sourceTree = "<group>"; };
 		F18B850925581D370012292B /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = click.wav; path = ../data/wavogg/click.wav; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 			children = (
 				F12779F9236DE62100478B2C /* CActor.h */,
 				F12779FA236DE62100478B2C /* Common.h */,
+				F16D180225EAE21700C666AB /* Common.c */,
 				F12779E8236DE60800478B2C /* CPackedFileReader.c */,
 				F12779FB236DE62100478B2C /* CPackedFileReader.h */,
 				F1277A09236DE63E00478B2C /* Crawler.c */,
@@ -404,6 +407,7 @@
 				F1277A1A236DE63E00478B2C /* MainMenu.c in Sources */,
 				F1277A1C236DE63E00478B2C /* UI.c in Sources */,
 				F1277A2B236DE6DD00478B2C /* GameView.m in Sources */,
+				F16D180325EAE21700C666AB /* Common.c in Sources */,
 				F1277A2C236DE6DD00478B2C /* OSXRenderer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
