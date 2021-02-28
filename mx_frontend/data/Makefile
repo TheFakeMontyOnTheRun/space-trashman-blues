@@ -1,14 +1,18 @@
 .DEFAULT_GOAL := default
 
-cruncher: 
+CRUNCHER=wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
+PACKAGER=packer
+
+$(CRUNCHER): 
 	mvn -q -f wobj-compiler/pom.xml clean compile package install
+	mkdir -p wobj-compiler/dist
 	cp wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar wobj-compiler/dist 
 
-packager:
-	rm -f base3d/packer
-	$(CXX) -std=c++14 -opacker packer.cpp
+$(PACKAGER):
+	rm -f $(PACKAGER)
+	$(CXX) -std=c++14 -o$(PACKAGER) packer.cpp
 
-data:	packager cruncher
+data:	$(PACKAGER) $(CRUNCHER)
 	rm -f ./base.pfs
 	ls src/*.obj  | xargs java -jar wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
 	ls assets/*.*  | xargs ./packer
