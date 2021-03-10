@@ -21,7 +21,9 @@ int playerDirection;
 int playerRank;
 int gameStatus;
 int playerHealth = 100;
-struct WorldPosition playerPosition;
+struct WorldPosition *characterPositions;
+int charactersCount = 1;
+int playerCharacter;
 ErrorHandlerCallback errorHandlerCallback = NULL;
 
 
@@ -42,7 +44,7 @@ void setErrorHandlerCallback(ErrorHandlerCallback callback) {
 }
 
 struct WorldPosition getPlayerPosition() {
-    return playerPosition;
+    return characterPositions[playerCharacter];
 }
 
 int getPlayerHealth() {
@@ -54,7 +56,7 @@ void setPlayerHealth(int health) {
 }
 
 void setPlayerPosition(struct WorldPosition pos) {
-    playerPosition = pos;
+    characterPositions[playerCharacter] = pos;
 }
 
 int isCloseToObject(struct WorldPosition pos, struct Item *item) {
@@ -182,23 +184,23 @@ void moveBy(int direction) {
 
         switch (direction) {
             case 0:
-                playerPosition.x = station[playerLocation].sizeX / 2;
-                playerPosition.y = station[playerLocation].sizeY - 1;
+                characterPositions[playerCharacter].x = station[playerLocation].sizeX / 2;
+                characterPositions[playerCharacter].y = station[playerLocation].sizeY - 1;
                 break;
 
             case 1:
-                playerPosition.x = 0;
-                playerPosition.y = station[playerLocation].sizeY / 2;
+                characterPositions[playerCharacter].x = 0;
+                characterPositions[playerCharacter].y = station[playerLocation].sizeY / 2;
                 break;
 
             case 2:
-                playerPosition.x = station[playerLocation].sizeX / 2;
-                playerPosition.y = 0;
+                characterPositions[playerCharacter].x = station[playerLocation].sizeX / 2;
+                characterPositions[playerCharacter].y = 0;
                 break;
 
             case 3:
-                playerPosition.x = station[playerLocation].sizeX - 1;
-                playerPosition.y = station[playerLocation].sizeY / 2;
+                characterPositions[playerCharacter].x = station[playerLocation].sizeX - 1;
+                characterPositions[playerCharacter].y = station[playerLocation].sizeY / 2;
                 break;
         }
 
@@ -213,7 +215,7 @@ void pickObjectByName(const char *objName) {
 
     while (itemToPick != NULL) {
         if (!strcmp(itemToPick->item->description, objName)) {
-            playerPosition = itemToPick->item->position;
+            characterPositions[playerCharacter] = itemToPick->item->position;
             pickObject(itemToPick->item);
             return;
         }
@@ -450,99 +452,99 @@ void walkBy(int direction) {
         case 0:
             switch (playerDirection) {
                 case 0:
-                    playerPosition.y--;
+                    characterPositions[playerCharacter].y--;
                     break;
                 case 1:
-                    playerPosition.x++;
+                    characterPositions[playerCharacter].x++;
                     break;
                 case 2:
-                    playerPosition.y++;
+                    characterPositions[playerCharacter].y++;
                     break;
                 case 3:
-                    playerPosition.x--;
+                    characterPositions[playerCharacter].x--;
                     break;
             }
             break;
         case 1:
             switch (playerDirection) {
                 case 0:
-                    playerPosition.x++;
+                    characterPositions[playerCharacter].x++;
                     break;
                 case 1:
-                    playerPosition.y++;
+                    characterPositions[playerCharacter].y++;
                     break;
                 case 2:
-                    playerPosition.x--;
+                    characterPositions[playerCharacter].x--;
                     break;
                 case 3:
-                    playerPosition.y--;
+                    characterPositions[playerCharacter].y--;
                     break;
             }
             break;
         case 2:
             switch (playerDirection) {
                 case 0:
-                    playerPosition.y++;
+                    characterPositions[playerCharacter].y++;
                     break;
                 case 1:
-                    playerPosition.x--;
+                    characterPositions[playerCharacter].x--;
                     break;
                 case 2:
-                    playerPosition.y--;
+                    characterPositions[playerCharacter].y--;
                     break;
                 case 3:
-                    playerPosition.x++;
+                    characterPositions[playerCharacter].x++;
                     break;
             }
             break;
         case 3:
             switch (playerDirection) {
                 case 0:
-                    playerPosition.x--;
+                    characterPositions[playerCharacter].x--;
                     break;
                 case 1:
-                    playerPosition.y--;
+                    characterPositions[playerCharacter].y--;
                     break;
                 case 2:
-                    playerPosition.x++;
+                    characterPositions[playerCharacter].x++;
                     break;
                 case 3:
-                    playerPosition.y++;
+                    characterPositions[playerCharacter].y++;
                     break;
             }
             break;
     }
 
-    if (playerPosition.x < 0) {
+    if (characterPositions[playerCharacter].x < 0) {
         if (getRoom(playerLocation)->connections[3]) {
             moveBy(3);
         } else {
-            playerPosition.x = 0;
+            characterPositions[playerCharacter].x = 0;
         }
     }
 
-    if (playerPosition.y < 0) {
+    if (characterPositions[playerCharacter].y < 0) {
         if (getRoom(playerLocation)->connections[0]) {
             moveBy(0);
         } else {
-            playerPosition.y = 0;
+            characterPositions[playerCharacter].y = 0;
         }
     }
 
 
-    if (playerPosition.x >= station[playerLocation].sizeX) {
+    if (characterPositions[playerCharacter].x >= station[playerLocation].sizeX) {
         if (getRoom(playerLocation)->connections[1]) {
             moveBy(1);
         } else {
-            playerPosition.x = station[playerLocation].sizeX - 1;
+            characterPositions[playerCharacter].x = station[playerLocation].sizeX - 1;
         }
     }
 
-    if (playerPosition.y >= station[playerLocation].sizeY) {
+    if (characterPositions[playerCharacter].y >= station[playerLocation].sizeY) {
         if (getRoom(playerLocation)->connections[2]) {
             moveBy(2);
         } else {
-            playerPosition.y = station[playerLocation].sizeY - 1;
+            characterPositions[playerCharacter].y = station[playerLocation].sizeY - 1;
         }
     }
 }
@@ -676,6 +678,11 @@ void setPlayerDirection(int direction) {
 
 void initStation(void) {
 
+    //prepare for a single player in the game
+    playerCharacter = 0;
+    charactersCount = 1;
+    characterPositions = (struct WorldPosition*)calloc(charactersCount, sizeof(struct WorldPosition));
+    
     setErrorHandlerCallback(NULL);
     collectedObject = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
     playerLocation = 1;
@@ -694,8 +701,8 @@ void initStation(void) {
     station[1].sizeX = 64;
     station[1].sizeY = 64;
 
-    playerPosition.x = 15;
-    playerPosition.y = 15;
+    characterPositions[playerCharacter].x = 15;
+    characterPositions[playerCharacter].y = 15;
 
     station[2].description = "hangar";
     station[2].info = "The station main hangar is rather unremarkable. The only thing you notice is a slight yellow tint of the air, as if a mist slides next to the floor. It's very faint. Your ship's computer tells you this is harmless (as if those readings were worth the trust). Unfortunately, no useful tools around here. Around the corner, near the escape pod entrance, there is deactivated ship reactor.";
