@@ -14,6 +14,7 @@ Created by Daniel Monteiro on 2019-07-26.
 #define TOTAL_ITEMS 30
 
 struct Room station[TOTAL_ROOMS];
+int itemsCount = 0;
 struct Item item[TOTAL_ITEMS];
 struct ObjectNode *collectedObject = NULL;
 int playerLocation = 1;
@@ -35,6 +36,26 @@ void writeToLog(const char *errorMsg) {
     } else {
         errorHandlerCallback(errorMsg);
     }
+}
+
+struct Item* addItem(char *description,
+                     char *info,
+                     int weight,
+                     int pickable,
+                     int positionX,
+                     int positionY) {
+    
+    struct Item* toReturn = &item[itemsCount];
+    
+    toReturn->index = itemsCount++;
+    toReturn->description = description;
+    toReturn->info = info;
+    toReturn->weight = weight;
+    toReturn->pickable = pickable;
+    toReturn->position.x = positionX;
+    toReturn->position.y = positionY;
+    
+    return toReturn;
 }
 
 LogDelegate defaultLogger = writeToLog;
@@ -678,6 +699,9 @@ void setPlayerDirection(int direction) {
 
 void initStation(void) {
 
+    struct Item* newItem;
+    struct Room* newRoom;
+    
     //prepare for a single player in the game
     playerCharacter = 0;
     charactersCount = 1;
@@ -686,6 +710,7 @@ void initStation(void) {
     setErrorHandlerCallback(NULL);
     collectedObject = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
     playerLocation = 1;
+    itemsCount = 0;
     playerHealth = 100;
     playerRank = 0;
     gameStatus = 0;
@@ -896,336 +921,193 @@ void initStation(void) {
     /*Items*/
 
     /* LSS-Daedalus */
+    newItem = addItem("time-bomb", "time-programmable Halogen bomb.", 5, TRUE, 9, 14);
+    addToRoom("lss-daedalus", newItem);
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    newItem->useCallback = bombActivatedCallback;
 
-    item[0].description = "time-bomb";
-    item[0].pickable = TRUE;
-    item[0].info = "time-programmable Halogen bomb.";
-    item[0].useWithCallback = cantBeUsedWithOthersCallback;
-    item[0].weight = 5;
-    item[0].index = 0;
-    item[0].position.x = 9;
-    item[0].position.y = 14;
-    item[0].useCallback = bombActivatedCallback;
-    addToRoom("lss-daedalus", &item[0]);
+    
+    newItem = addItem("time-bomb-controller",
+                      "The remote controller allows you to instantly detonate the bomb from very far (empirical evidence tells it works from as far as 0.5AU).",
+                      0, TRUE, 10, 14);
+    addToRoom("lss-daedalus", newItem);
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    newItem->useCallback = bombControllerActivatedCallback;
+    
+    
+    newItem = addItem("blowtorch", "precision vintage-but-rather-well-kept metal cutter", 8, TRUE, 11, 14);
+    addToRoom("lss-daedalus", newItem);
+    newItem->useWithCallback = useBlowtorchWithCallback;
+    newItem->useCallback = cantBeUsedCallback;
 
-    item[1].description = "time-bomb-controller";
-    item[1].info = "The remote controller allows you to instantly detonate the bomb from very far (empirical evidence tells it works from as far as 0.5AU).";
-    item[1].weight = 0;
-    item[1].index = 1;
-    item[1].useWithCallback = cantBeUsedWithOthersCallback;
-    item[1].pickable = TRUE;
-    item[1].position.x = 10;
-    item[1].position.y = 14;
-    item[1].useCallback = bombControllerActivatedCallback;
-    addToRoom("lss-daedalus", &item[1]);
+    
+    newItem = addItem("ship-ignition", "token needed to ignite the ship's computer and thrusters", 0, TRUE, 12, 14);
+    addToRoom("lss-daedalus", newItem);
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
 
-    item[2].description = "blowtorch";
-    item[2].info = "precision vintage-but-rather-well-kept metal cutter";
-    item[2].weight = 8;
-    item[2].index = 2;
-    item[2].useWithCallback = useBlowtorchWithCallback;
-    item[2].useCallback = cantBeUsedCallback;
-    item[2].pickable = TRUE;
-    item[2].position.x = 11;
-    item[2].position.y = 14;
-    addToRoom("lss-daedalus", &item[2]);
 
-    item[3].description = "ship-ignition";
-    item[3].weight = 0;
-    item[3].useWithCallback = cantBeUsedWithOthersCallback;
-    item[3].info = "token needed to ignite the ship's computer and thrusters";
-    item[3].index = 3;
-    item[3].pickable = TRUE;
-    item[3].position.x = 12;
-    item[3].position.y = 14;
-    addToRoom("lss-daedalus", &item[3]);
+    newItem = addItem("plasma-gun", "A mostly harmless gun. Useful for heating surfaces and light defense.", 1, TRUE, 13, 14);
+    addToRoom("lss-daedalus", newItem);
+    
 
-    item[4].description = "plasma-gun";
-    item[4].info = "A mostly harmless gun. Useful for heating surfaces and light defense.";
-    item[4].weight = 1;
-    item[4].index = 4;
-    item[4].pickable = TRUE;
-    item[4].position.x = 13;
-    item[4].position.y = 14;
-    addToRoom("lss-daedalus", &item[4]);
+    newItem = addItem("magnetic-boots",
+                      "boots with strong electro-magnets. Ideal for walking on low-gravity situations - as long as the surface in question is metallic (like most of the surfaces here).",
+                      2, TRUE, 14, 14);
+    addToRoom("lss-daedalus", newItem);
+    newItem->useWithCallback = useBootsWithCallback;
+    newItem->useCallback = useObjectToggleCallback;
+    
 
-    item[5].description = "magnetic-boots";
-    item[5].weight = 2;
-    item[5].index = 5;
-    item[5].info = "boots with strong electro-magnets. Ideal for walking on low-gravity situations - as long as the surface in question is metallic (like most of the surfaces here).";
-    item[5].useWithCallback = useBootsWithCallback;
-    item[5].useCallback = useObjectToggleCallback;
-    item[5].pickable = TRUE;
-    item[5].position.x = 14;
-    item[5].position.y = 14;
-    addToRoom("lss-daedalus", &item[5]);
+    newItem = addItem("helmet", "Atmosphere-contained helmet for safety.", 2, TRUE, 15, 14);
+    addToRoom("lss-daedalus", newItem);
+    newItem->useCallback = useObjectToggleCallback;
 
-    item[6].description = "helmet";
-    item[6].weight = 2;
-    item[6].index = 6;
-    item[6].info = "makes sure the air entering your gear is the best. Or how that was, 50 years ago, when this was manufactured.";
-    item[6].info = "Atmosphere-contained helmet for safety.";
-    item[6].pickable = TRUE;
-    item[6].useCallback = useObjectToggleCallback;
-    item[6].position.x = 15;
-    item[6].position.y = 14;
-    addToRoom("lss-daedalus", &item[6]);
+    
+    newItem = addItem("low-rank-keycard", "Clearance for low rank.", 0, TRUE, 16, 14);
+    addToRoom("lss-daedalus", newItem);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    newItem->pickCallback = keycardPickCallback;
+    newItem->dropCallback = keycardDropCallback;
 
-    item[7].description = "low-rank-keycard";
-    item[7].info = "clearance for low rank";
-    item[7].weight = 0;
-    item[7].index = 7;
-    item[7].pickable = TRUE;
-    item[7].position.x = 16;
-    item[7].useCallback = cantBeUsedCallback;
-    item[7].useWithCallback = cantBeUsedWithOthersCallback;
-    item[7].position.y = 14;
-    item[7].pickCallback = keycardPickCallback;
-    item[7].dropCallback = keycardDropCallback;
-    addToRoom("lss-daedalus", &item[7]);
 
     /* Hangar */
-
-    item[8].description = "gold-pipe";
-    item[8].info = "This seems valuable. One can wonder why it is used here and what would be the consequences of taking it out? Whaever. It looks like paying for dinner.";
-    item[8].weight = 17;
-    item[8].index = 8;
-    item[8].useCallback = cantBeUsedCallback;
-    item[8].useWithCallback = cantBeUsedWithOthersCallback;
-    item[8].pickable = FALSE;
-    item[8].position.x = 17;
-    item[8].position.y = 16;
-    addToRoom("hangar", &item[8]);
+    
+    newItem = addItem("gold-pipe",
+                      "This seems valuable. One can wonder why it is used here and what would be the consequences of taking it out? Whaever. It looks like paying for dinner.",
+                      17, FALSE, 17, 16);
+    addToRoom("hangar", newItem);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    
 
     /* Comm terminals*/
-    item[9].description = "comm-terminal";
-    item[9].info = "Offline comm terminal for communicating with the other levels";
-    item[9].useCallback = cantBeUsedCallback;
-    item[9].useWithCallback = cantBeUsedWithOthersCallback;
-    item[9].weight = 200;
-    item[9].index = 9;
-    item[9].pickable = FALSE;
-    item[9].position.x = 17;
-    item[9].position.y = 16;
-    addToRoom("hall-1", &item[9]);
+    newItem = addItem("comm-terminal", "Offline comm terminal for communicating with the other levels.", 200, FALSE, 17, 16);
+    addToRoom("lss-daedalus", newItem);
+    newItem->useCallback = useObjectToggleCallback;
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("hall-1", newItem);
 
-    item[10].description = "comm-terminal";
-    item[10].info = "Offline comm terminal for communicating with the other levels";
-    item[10].useCallback = cantBeUsedCallback;
-    item[10].useWithCallback = cantBeUsedWithOthersCallback;
-    item[10].weight = 200;
-    item[10].index = 10;
-    item[10].pickable = FALSE;
-    item[10].position.x = 17;
-    item[10].position.y = 16;
-    addToRoom("hall-2", &item[10]);
-
-    item[11].description = "comm-terminal";
-    item[11].info = "Offline comm terminal for communicating with the other levels";
-    item[11].useCallback = cantBeUsedCallback;
-    item[11].useWithCallback = cantBeUsedWithOthersCallback;
-    item[11].weight = 200;
-    item[11].index = 11;
-    item[11].pickable = FALSE;
-    item[11].position.x = 17;
-    item[11].position.y = 16;
-    addToRoom("hall-3", &item[11]);
+    
+    newItem = addItem("comm-terminal", "Offline comm terminal for communicating with the other levels.", 200, FALSE, 17, 16);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("hall-2", newItem);
+    
+    
+    newItem = addItem("comm-terminal", "Offline comm terminal for communicating with the other levels.", 200, FALSE, 17, 16);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("hall-3", newItem);
 
     /* Diaries */
-    item[12].description = "white-diary";
-    item[12].info = "...And so, I realized that when you apply a presure in MicroG...";
-    item[12].useCallback = cantBeUsedCallback;
-    item[12].useWithCallback = cantBeUsedWithOthersCallback;
-    item[12].weight = 0;
-    item[12].index = 12;
-    item[12].pickable = TRUE;
-    item[12].position.x = 5;
-    item[12].position.y = 3;
-    addToRoom("pod-1", &item[12]);
+    newItem = addItem("white-diary", "...And so, I realized that when you apply a presure in MicroG...", 0, TRUE, 5, 3);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("pod-1", newItem);
 
-    item[13].description = "blue-diary";
-    item[13].weight = 0;
-    item[13].info = "...Look in the mirror e try laughing. It's going to be hard first, but once you get used to it, it is easy to leave the room with a smile in your face.";
-    item[13].useCallback = cantBeUsedCallback;
-    item[13].useWithCallback = cantBeUsedWithOthersCallback;
-    item[13].pickable = TRUE;
-    item[13].index = 13;
-    item[13].position.x = 8;
-    item[13].position.y = 4;
-    addToRoom("pod-3", &item[13]);
+    
+    newItem = addItem("blue-diary",
+                      "...Look in the mirror e try laughing. It's going to be hard first, but once you get used to it, it is easy to leave the room with a smile in your face.",
+                      0, TRUE, 8, 4);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("pod-3", newItem);
 
-    item[14].description = "black-diary";
-    item[14].weight = 0;
-    item[14].info = "...We meet every night in the empty lab, to make out. I asked her for a access key and hid it in the tubes - probably a good place to hide it. Those are inactive for years! If they catch me, I'm scr...";
-    item[14].useCallback = cantBeUsedCallback;
-    item[14].useWithCallback = cantBeUsedWithOthersCallback;
-    item[14].pickable = TRUE;
-    item[14].index = 14;
-    item[14].position.x = 2;
-    item[14].position.y = 2;
-    addToRoom("pod-4", &item[14]);
+    
+    newItem = addItem("black-diary",
+                      "...We meet every night in the empty lab, to make out. I asked her for a access key and hid it in the tubes - probably a good place to hide it. Those are inactive for years! If they catch me, I'm scr...", 0, TRUE, 2, 2);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("pod-4", newItem);
 
-    item[15].description = "yellow-book";
-    item[15].info = "Today, I lost card during dinner. Gonna ask for a new one. Specially disconcerting since it gives access to all bunks. Nobody knows, so nothing to worry, I guess...";
-    item[15].useCallback = cantBeUsedCallback;
-    item[15].useWithCallback = cantBeUsedWithOthersCallback;
-    item[15].weight = 0;
-    item[15].index = 15;
-    item[15].pickable = TRUE;
-    item[15].position.x = 4;
-    item[15].position.y = 3;
-    addToRoom("dinner-room", &item[15]);
+    
+    newItem = addItem("yellow-book", "Today, I lost card during dinner. Gonna ask for a new one. Specially disconcerting since it gives access to all bunks. Nobody knows, so nothing to worry, I guess...", 0, TRUE, 4, 3);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("dinner-room", newItem);
 
-    item[16].description = "log-book";
-    item[16].info = "A side note is written: That metal mending we put on Lab 1. last week mending was a real rush job. Any stronger bump and it might ...";
-    item[16].useCallback = cantBeUsedCallback;
-    item[16].useWithCallback = cantBeUsedWithOthersCallback;
-    item[16].weight = 1;
-    item[16].index = 16;
-    item[16].pickable = TRUE;
-    item[16].position.x = 10;
-    item[16].position.y = 10;
-    addToRoom("lab-2", &item[16]);
+    
+    newItem = addItem("log-book", "A side note is written: That metal mending we put on Lab 1. last week mending was a real rush job. Any stronger bump and it might...", 1, TRUE, 10, 10);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("lab-2", newItem);
 
     /* Misc */
-    item[17].description = "plastic-pipe";
-    item[17].info = "Just a regular pipe, taking something somewhere.";
-    item[17].useCallback = cantBeUsedCallback;
-    item[17].useWithCallback = cantBeUsedWithOthersCallback;
-    item[17].weight = 3;
-    item[17].index = 17;
-    item[17].pickable = FALSE;
-    item[17].position.x = 20;
-    item[17].position.y = 40;
-    addToRoom("restroom", &item[17]);
+    newItem = addItem("plastic-pipe", "Just a regular pipe, taking something somewhere.", 3, FALSE, 20, 40);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("restroom", newItem);
 
-    item[18].description = "high-rank-keycard";
-    item[18].info = "Clearance for high-rank officer";
-    item[18].useCallback = cantBeUsedCallback;
-    item[18].useWithCallback = cantBeUsedWithOthersCallback;
-    item[18].weight = 0;
-    item[18].index = 18;
-    item[18].pickable = TRUE;
-    item[18].position.x = 7;
-    item[18].pickCallback = keycardPickCallback;
-    item[18].dropCallback = keycardDropCallback;
-    item[18].position.y = 6;
-    addToRoom("dinner-room", &item[18]);
+    
+    newItem = addItem("high-rank-keycard", "Clearance for high-rank officer.", 0, TRUE, 7, 6);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    newItem->pickCallback = keycardPickCallback;
+    newItem->dropCallback = keycardDropCallback;
+    addToRoom("dinner-room", newItem);
 
-    item[19].description = "computer-rack";
-    item[19].useCallback = cantBeUsedCallback;
-    item[19].useWithCallback = cantBeUsedWithOthersCallback;
-    item[19].weight = 138;
-    item[19].index = 19;
-    item[19].info = "A very valuable vintage rare-and-in-working-conditions computer rack!";
-    item[19].pickable = FALSE;
-    item[19].position.x = 1;
-    item[19].position.y = 1;
-    addToRoom("control-room", &item[19]);
+    
+    newItem = addItem("computer-rack", "A very valuable vintage rare-and-in-working-conditions computer rack!", 138, FALSE, 1, 1);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("control-room", newItem);
 
-    item[20].description = "journal";
-    item[20].useCallback = cantBeUsedCallback;
-    item[20].useWithCallback = cantBeUsedWithOthersCallback;
-    item[20].info = "...and so you guys could just join in and see whats going on. I hope it is not too instrusive of me. To that, she just gave me a cold stare and...";
-    item[20].weight = 0;
-    item[20].index = 20;
-    item[20].pickable = TRUE;
-    item[20].position.x = 17;
-    item[20].position.y = 6;
-    addToRoom("control-room", &item[20]);
+    
+    newItem = addItem("journal",
+                      "...and so you guys could just join in and see whats going on. I hope it is not too instrusive of me. To that, she just gave me a cold stare and...",
+                      0, TRUE, 17, 6);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("control-room", newItem);
+    
 
     /* Has to be removed for the bomb to be properly planted */
-    item[21].description = "metal-mending";
-    item[21].useCallback = cantBeUsedCallback;
-    item[21].useWithCallback = cantBeUsedWithOthersCallback;
-    item[21].info = "A piece of metal that might be valuable.";
-    item[21].weight = 74;
-    item[21].index = 21;
-    item[21].pickable = FALSE;
-    item[21].position.x = 7;
-    item[21].position.y = 6;
-    addToRoom("lab-1", &item[21]);
+    newItem = addItem("metal-mending", "A piece of metal that might be valuable.", 74, FALSE, 7, 6);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("lab-1", newItem);
 
-    item[22].description = "scientific-treatise";
-    item[22].useCallback = cantBeUsedCallback;
-    item[22].useWithCallback = cantBeUsedWithOthersCallback;
-    item[22].info = "Voynich Manuscript - Annottated Translation. Classical edition. It's badly burn't. Can't read it.";
-    item[22].weight = 1;
-    item[22].index = 22;
-    item[22].pickable = TRUE;
-    item[22].position.x = 1;
-    item[22].position.y = 1;
-    addToRoom("lab-2", &item[22]);
+    
+    newItem = addItem("scientific-treatise", "Voynich Manuscript - Annottated Translation. Classical edition. It's badly burn't. Can't read it.", 1, TRUE, 1, 1);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("lab-2", newItem);
+    
+    newItem = addItem("electric-experiment", "All these equipment looks the same. Doesn't look valuable for me.", 209, FALSE, 1, 1);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("lab-2", newItem);
 
-    item[23].description = "electric-experiment";
-    item[23].info = "All these equipment looks the same. Doesn't look valuable for me.";
-    item[23].useCallback = cantBeUsedCallback;
-    item[23].useWithCallback = cantBeUsedWithOthersCallback;
-    item[23].weight = 209;
-    item[23].index = 23;
-    item[23].pickable = FALSE;
-    item[23].position.x = 1;
-    item[23].position.y = 1;
-    addToRoom("lab-2", &item[23]);
+    
+    newItem = addItem("chemical-experiment", "All these equipment looks the same. Doesn't look valuable for me.", 62, TRUE, 1, 1);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("lab-3", newItem);
 
-    item[24].description = "chemical-experiment";
-    item[24].info = "All these equipment looks the same. Doesn't look valuable for me.";
-    item[24].useCallback = cantBeUsedCallback;
-    item[24].useWithCallback = cantBeUsedWithOthersCallback;
-    item[24].weight = 62;
-    item[24].index = 24;
-    item[24].pickable = TRUE;
-    item[24].position.x = 1;
-    item[24].position.y = 1;
-    addToRoom("lab-3", &item[24]);
-
+    
     /* Not added directly, will be placed on the restroom after you search the pipe */
-    item[25].description = "root-keycard";
-    item[25].info = "Card for root access";
-    item[25].useCallback = cantBeUsedCallback;
-    item[25].useWithCallback = cantBeUsedWithOthersCallback;
-    item[25].weight = 0;
-    item[25].index = 25;
-    item[25].pickCallback = keycardPickCallback;
-    item[25].dropCallback = keycardDropCallback;
-    item[25].pickable = TRUE;
-    item[25].position.x = 21;
-    item[25].position.y = 41;
+    newItem = addItem("root-keycard", "Card for root access.", 0, TRUE, 21, 41);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    newItem->pickCallback = keycardPickCallback;
+    newItem->dropCallback = keycardDropCallback;
 
     /* Elevator controls */
-    item[26].description = "elevator-level1-go-down";
-    item[26].info = "Elevator controls - Go down";
-    item[26].useCallback = elevatorGoDownCallback;
-    item[26].useWithCallback = cantBeUsedWithOthersCallback;
-    item[26].index = 26;
-    item[26].pickable = FALSE;
-    item[26].position.x = 27;
-    item[26].position.y = 0;
+    newItem = addItem("elevator-level1-go-down", "Elevator controls - Go down.", 0, FALSE, 27, 0);
+    newItem->useCallback = elevatorGoDownCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
 
-    item[27].description = "elevator-level2-go-down";
-    item[27].info = "Elevator controls - Go down";
-    item[27].useCallback = elevatorGoDownCallback;
-    item[27].useWithCallback = cantBeUsedWithOthersCallback;
-    item[27].pickable = FALSE;
-    item[27].position.x = 27;
-    item[27].position.y = 0;
-    item[27].index = 27;
-
-    item[28].description = "elevator-level2-go-up";
-    item[28].info = "Elevator controls - Go Up";
-    item[28].useCallback = elevatorGoUpCallback;
-    item[28].useWithCallback = cantBeUsedWithOthersCallback;
-    item[28].pickable = FALSE;
-    item[28].position.x = 28;
-    item[28].position.y = 0;
-    item[28].index = 28;
-
-    item[29].description = "elevator-level3-go-up";
-    item[29].info = "Elevator controls - Go Up";
-    item[29].useCallback = elevatorGoUpCallback;
-    item[29].useWithCallback = cantBeUsedWithOthersCallback;
-    item[29].pickable = FALSE;
-    item[29].position.x = 28;
-    item[29].position.y = 0;
-    item[29].index = 29;
+    newItem = addItem("elevator-level2-go-down", "Elevator controls - Go down.", 0, FALSE, 27, 0);
+    newItem->useCallback = elevatorGoDownCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    
+    newItem = addItem("elevator-level2-go-up", "Elevator controls - Go Up.", 0, FALSE, 28, 0);
+    newItem->useCallback = elevatorGoUpCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    
+    newItem = addItem("elevator-level3-go-up", "Elevator controls - Go Up.", 0, FALSE, 28, 0);
+    newItem->useCallback = elevatorGoUpCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
 }
