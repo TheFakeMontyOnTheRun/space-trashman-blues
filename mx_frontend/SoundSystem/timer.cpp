@@ -19,56 +19,56 @@ static unsigned int timer_counter;
 static unsigned int timer_sum;
 
 void timer_handler() {
-	auto old_sum = timer_sum;
+    auto old_sum = timer_sum;
 
-	++timer_ticks;
+    ++timer_ticks;
 
-	timer_sum += timer_counter;
+    timer_sum += timer_counter;
 
-	if (timer_sum < old_sum) {
-		_go32_dpmi_chain_protected_mode_interrupt_vector(TIMER, &OldISR);
-	} else {
-		outp(0x20, 0x20);
-	}
+    if (timer_sum < old_sum) {
+        _go32_dpmi_chain_protected_mode_interrupt_vector(TIMER, &OldISR);
+    } else {
+        outp(0x20, 0x20);
+    }
 }
 
 void timer_reset(unsigned short frequency) {
-	timer_ticks = 0;
-	timer_counter = 0x1234DD / frequency;
-	timer_sum = 0;
+    timer_ticks = 0;
+    timer_counter = 0x1234DD / frequency;
+    timer_sum = 0;
 }
 
 void timer_setup(unsigned short frequency) {
-	timer_reset(frequency);
+    timer_reset(frequency);
 
-	LOCK_FUNCTION(timer_handler);
-	LOCK_VARIABLE(timer_ticks);
+    LOCK_FUNCTION(timer_handler);
+    LOCK_VARIABLE(timer_ticks);
 
-	_go32_dpmi_get_protected_mode_interrupt_vector(TIMER, &OldISR);
-	NewISR.pm_offset = (int) timer_handler;
-	NewISR.pm_selector = _go32_my_cs();
-	_go32_dpmi_chain_protected_mode_interrupt_vector(TIMER, &NewISR);
+    _go32_dpmi_get_protected_mode_interrupt_vector(TIMER, &OldISR);
+    NewISR.pm_offset = (int) timer_handler;
+    NewISR.pm_selector = _go32_my_cs();
+    _go32_dpmi_chain_protected_mode_interrupt_vector(TIMER, &NewISR);
 
-	disable();
-	outp(0x43, 0x34);
-	outp(0x40, timer_counter & 256);
-	outp(0x40, timer_counter >> 8);
-	enable();
+    disable();
+    outp(0x43, 0x34);
+    outp(0x40, timer_counter & 256);
+    outp(0x40, timer_counter >> 8);
+    enable();
 }
 
 void timer_shutdown() {
-	disable();
-	outp(0x43, 0x34);
-	outp(0x40, 0);
-	outp(0x40, 0);
-	enable();
+    disable();
+    outp(0x43, 0x34);
+    outp(0x40, 0);
+    outp(0x40, 0);
+    enable();
 
-	_go32_dpmi_set_protected_mode_interrupt_vector(TIMER, &OldISR);
+    _go32_dpmi_set_protected_mode_interrupt_vector(TIMER, &OldISR);
 }
 
 unsigned int timer_get() {
-	disable();
-	auto result = timer_ticks;
-	enable();
-	return result;
+    disable();
+    auto result = timer_ticks;
+    enable();
+    return result;
 }

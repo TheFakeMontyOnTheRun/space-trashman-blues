@@ -72,7 +72,7 @@ FixP_t xCameraOffset;
 FixP_t yCameraOffset;
 FixP_t zCameraOffset;
 uint8_t enableSmoothMovement = FALSE;
-char* focusItemName = NULL;
+char *focusItemName = NULL;
 
 struct Projection projectionVertices[8];
 
@@ -84,7 +84,7 @@ char messageLogBuffer[256];
 
 int messageLogBufferCoolDown = 0;
 
-void printMessageTo3DView(const char* message ) {
+void printMessageTo3DView(const char *message) {
     strcpy(&messageLogBuffer[0], message);
     messageLogBufferCoolDown = 5000;
 }
@@ -93,9 +93,9 @@ void loadTileProperties(const uint8_t levelNumber) {
     char buffer[64];
     struct StaticBuffer data;
     int16_t c;
-    
+
     setLoggerDelegate(printMessageTo3DView);
-    
+
 
     clearMap(&tileProperties);
     clearMap(&occluders);
@@ -136,12 +136,12 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     char *nameStart;
 
     sprintf (tilesFilename, "tiles%d.lst", levelNumber);
-    
+
     data = loadBinaryFileFromPath(tilesFilename);
     head = (char *) data.data;
     end = head + data.size;
     nameStart = head;
-    
+
     texturesUsed = 0;
     clearTextures();
 
@@ -159,12 +159,12 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     free(data.data);
 
     backdrop = loadBitmap("backdrop.img");
-    
-    
+
+
     char buffer[256];
-    
-    for ( int c = 0; c < 30; ++c ) {
-        sprintf( &buffer[0], "%s.img",  getItem(c)->description);
+
+    for (int c = 0; c < 30; ++c) {
+        sprintf(&buffer[0], "%s.img", getItem(c)->description);
         itemSprites[c] = (makeTextureFrom(&buffer[0]));
     }
 }
@@ -176,10 +176,10 @@ void updateCursorForRenderer(const int x, const int z) {
     cursorZ = z;
 }
 
-void drawMap(const uint8_t * __restrict__ elements,
-             const uint8_t * __restrict__ items,
-             const uint8_t * __restrict__ actors,
-             uint8_t * __restrict__ effects,
+void drawMap(const uint8_t *__restrict__ elements,
+             const uint8_t *__restrict__ items,
+             const uint8_t *__restrict__ actors,
+             uint8_t *__restrict__ effects,
              const struct CActor *current) {
 
     int8_t z, x;
@@ -191,31 +191,30 @@ void drawMap(const uint8_t * __restrict__ elements,
     if (!enable3DRendering) {
         return;
     }
-    
-    if (abs(yCameraOffset) <= 1000 ) {
+
+    if (abs(yCameraOffset) <= 1000) {
         yCameraOffset = 0;
     }
-    
-    if ( yCameraOffset > 0 ){
+
+    if (yCameraOffset > 0) {
         yCameraOffset -= Div(intToFix(1), intToFix(2));
         needsToRedrawVisibleMeshes = TRUE;
-    } else if ( zCameraOffset > 0 ){
+    } else if (zCameraOffset > 0) {
         zCameraOffset -= Div(intToFix(1), intToFix(2));
         needsToRedrawVisibleMeshes = TRUE;
-    } else if ( zCameraOffset < 0 ){
+    } else if (zCameraOffset < 0) {
         zCameraOffset += Div(intToFix(1), intToFix(2));
         needsToRedrawVisibleMeshes = TRUE;
-    } else if ( xCameraOffset > 0 ){
+    } else if (xCameraOffset > 0) {
         xCameraOffset -= Div(intToFix(1), intToFix(2));
         needsToRedrawVisibleMeshes = TRUE;
-    } else if ( xCameraOffset < 0 ){
+    } else if (xCameraOffset < 0) {
         xCameraOffset += Div(intToFix(1), intToFix(2));
         needsToRedrawVisibleMeshes = TRUE;
-    } else if ( yCameraOffset < 0 ){
+    } else if (yCameraOffset < 0) {
         yCameraOffset += Div(intToFix(1), intToFix(2));
         needsToRedrawVisibleMeshes = TRUE;
     }
-
 
 
     if (visibilityCached) {
@@ -226,7 +225,7 @@ void drawMap(const uint8_t * __restrict__ elements,
     needsToRedrawVisibleMeshes = TRUE;
 
     cameraPosition = mapCamera;
-    
+
     for (z = 0; z < MAP_SIZE; ++z) {
         for (x = 0; x < MAP_SIZE; ++x) {
             const uint16_t offset = (MAP_SIZE * z) + x;
@@ -254,7 +253,7 @@ void drawMap(const uint8_t * __restrict__ elements,
 
     switch (cameraDirection) {
         case kNorth:
-            mCamera.mX = intToFix( ((MAP_SIZE - 1) * 2) - (2 * cameraPosition.x));
+            mCamera.mX = intToFix(((MAP_SIZE - 1) * 2) - (2 * cameraPosition.x));
             mCamera.mZ = intToFix((2 * cameraPosition.y) - ((MAP_SIZE * 2) - 1));
             break;
 
@@ -270,7 +269,7 @@ void drawMap(const uint8_t * __restrict__ elements,
 
         case kEast:
             mCamera.mX = intToFix(-(2 * cameraPosition.y));
-            mCamera.mZ = intToFix( ((MAP_SIZE * 2) - 1) - (2 * cameraPosition.x));
+            mCamera.mZ = intToFix(((MAP_SIZE * 2) - 1) - (2 * cameraPosition.x));
             break;
     }
 
@@ -303,17 +302,16 @@ void render(const long ms) {
     FixP_t one = intToFix(1);
     const FixP_t halfOne = Div(one, two);
     FixP_t standardHeight = Div(intToFix(195), intToFix(100));
-    
-    if (messageLogBufferCoolDown > 0 ) {
+
+    if (messageLogBufferCoolDown > 0) {
         messageLogBufferCoolDown -= ms;
     }
-    
-    
+
 
     if (!enable3DRendering) {
         return;
     }
-    
+
     if (!hasSnapshot) {
         return;
     }
@@ -393,7 +391,7 @@ void render(const long ms) {
                         x = visPos.x;
                         z = visPos.y;
                         onTarget = (cursorX == x && cursorZ == z);
-                        element = visibleElementsMap[ (z * MAP_SIZE) + x];
+                        element = visibleElementsMap[(z * MAP_SIZE) + x];
 
                         actorsSnapshotElement = mActors[z][x];
                         itemsSnapshotElement = mItems[z][x];
@@ -412,11 +410,11 @@ void render(const long ms) {
                         }
 
                         /* remember, bounds - 1! */
-                        if ((x < (MAP_SIZE - 1)) && (visibleElementsMap[(z * MAP_SIZE) + (x + 1)] == element) ) {
+                        if ((x < (MAP_SIZE - 1)) && (visibleElementsMap[(z * MAP_SIZE) + (x + 1)] == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((z < (MAP_SIZE - 1)) && (visibleElementsMap[((z + 1) * MAP_SIZE) + x] == element) ) {
+                        if ((z < (MAP_SIZE - 1)) && (visibleElementsMap[((z + 1) * MAP_SIZE) + x] == element)) {
                             facesMask &= ~MASK_FRONT;
                         }
 
@@ -447,11 +445,11 @@ void render(const long ms) {
 
                         /*						remember, bounds - 1!*/
 
-                        if ((x > 0) && (visibleElementsMap[(z * MAP_SIZE) + (x - 1)] == element) ) {
+                        if ((x > 0) && (visibleElementsMap[(z * MAP_SIZE) + (x - 1)] == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((x < (MAP_SIZE - 1)) && (visibleElementsMap[(z * MAP_SIZE) + (x + 1)] == element) ) {
+                        if ((x < (MAP_SIZE - 1)) && (visibleElementsMap[(z * MAP_SIZE) + (x + 1)] == element)) {
                             facesMask &= ~MASK_RIGHT;
                         }
                         /*
@@ -526,7 +524,7 @@ void render(const long ms) {
 
 
                         /* remember, bounds - 1! */
-                        if ((x > 0) && (visibleElementsMap[((x - 1) * MAP_SIZE) + z] == element) ) {
+                        if ((x > 0) && (visibleElementsMap[((x - 1) * MAP_SIZE) + z] == element)) {
                             facesMask &= ~MASK_RIGHT;
                         }
 
@@ -697,7 +695,6 @@ void render(const long ms) {
                     addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2), 0);
 
 
-
                     drawFloorAt(tmp, nativeTextures[tileProp->mFloorTextureIndex], cameraDirection);
                 }
 
@@ -713,7 +710,8 @@ void render(const long ms) {
 
                     if (cameraDirection == kNorth) {
                         newDirection = kSouth;
-                    } if (cameraDirection == kSouth) {
+                    }
+                    if (cameraDirection == kSouth) {
                         newDirection = kNorth;
                     }
 
@@ -765,79 +763,77 @@ void render(const long ms) {
                                     nativeTextures[tileProp->mMainWallTextureIndex]->rowMajor,
                                     facesMask, tileProp->mRepeatMainTexture);
                             break;
-                            
-                        case kRampNorth:
-                        {
-                            
+
+                        case kRampNorth: {
+
                             tmp.mX = position.mX;
                             tmp.mY = position.mY;
                             tmp.mZ = position.mZ;
-                            
+
                             tmp2.mX = position.mX;
                             tmp2.mY = position.mY;
                             tmp2.mZ = position.mZ;
 
-                            
+
                             addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2), 0);
                             addToVec3(&tmp2, 0, (tileProp->mCeilingHeight * 2), 0);
-                            
+
                             drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection);
                         }
                             break;
-                            
-                        case kRampSouth:
-                        {
-                            
+
+                        case kRampSouth: {
+
                             tmp.mX = position.mX;
                             tmp.mY = position.mY;
                             tmp.mZ = position.mZ;
-                            
+
                             tmp2.mX = position.mX;
                             tmp2.mY = position.mY;
                             tmp2.mZ = position.mZ;
-                            
-                            
-                            addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
-                            addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
-                            
-                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection);
-                        }
-                            break;
-                            
-                        case kRampEast:
-                        {
-                            
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-                            
-                            tmp2.mX = position.mX;
-                            tmp2.mY = position.mY;
-                            tmp2.mZ = position.mZ;
-                            
-                            
-                            addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
-                            addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
-                            
-                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], (cameraDirection + 1) & 3 );
-                        }
-                            break;
-                        case kRampWest:
-                        {
-                            
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-                            
-                            tmp2.mX = position.mX;
-                            tmp2.mY = position.mY;
-                            tmp2.mZ = position.mZ;
-                            
-                            
+
+
                             addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
                             addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
 
-                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], (cameraDirection + 3) & 3);
+                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection);
+                        }
+                            break;
+
+                        case kRampEast: {
+
+                            tmp.mX = position.mX;
+                            tmp.mY = position.mY;
+                            tmp.mZ = position.mZ;
+
+                            tmp2.mX = position.mX;
+                            tmp2.mY = position.mY;
+                            tmp2.mZ = position.mZ;
+
+
+                            addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
+                            addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
+
+                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex],
+                                       (cameraDirection + 1) & 3);
+                        }
+                            break;
+                        case kRampWest: {
+
+                            tmp.mX = position.mX;
+                            tmp.mY = position.mY;
+                            tmp.mZ = position.mZ;
+
+                            tmp2.mX = position.mX;
+                            tmp2.mY = position.mY;
+                            tmp2.mZ = position.mZ;
+
+
+                            addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
+                            addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
+
+                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex],
+                                       (cameraDirection + 3) & 3);
                         }
                             break;
                         case kCube:
@@ -864,9 +860,9 @@ void render(const long ms) {
                     tmp.mX = position.mX;
                     tmp.mY = position.mY;
                     tmp.mZ = position.mZ;
-                    
+
                     addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
-                    
+
                     drawBillboardAt(tmp, itemSprites[itemsSnapshotElement]->rotations[0], one, 32);
                 }
             }
@@ -881,20 +877,22 @@ void render(const long ms) {
         drawTextAt(2, 1, &buffer[0], 255);
         fill(256, 8, 320 - 256, 160 - 8, 255, FALSE);
         drawTextAt(34, 1, "Items", 255);
-        
-        
+
+
         int line = 0;
-        struct ObjectNode* head = getPlayerItems();
-        
-        while(head != NULL) {
-            if (head->item != NULL ) {
+        struct ObjectNode *head = getPlayerItems();
+
+        while (head != NULL) {
+            if (head->item != NULL) {
                 char buffer[255];
-                sprintf( &buffer[0], "%c%c%s", ( line == currentSelectedItem ? '>' : ' ' ), (head->item->active ? '*' : ' '), head->item->description);
+                sprintf(&buffer[0], "%c%c%s", (line == currentSelectedItem ? '>' : ' '),
+                        (head->item->active ? '*' : ' '), head->item->description);
                 buffer[7] = 0;
                 drawTextAt(34, 2 + line, &buffer[0], 0);
-                
-                if (line == currentSelectedItem ) {
-                    drawFrontWall(intToFix(0), intToFix(199 - 32), intToFix(31), intToFix(199), itemSprites[head->item->index]->rotations[0], one, 0, 0, 32);
+
+                if (line == currentSelectedItem) {
+                    drawFrontWall(intToFix(0), intToFix(199 - 32), intToFix(31), intToFix(199),
+                                  itemSprites[head->item->index]->rotations[0], one, 0, 0, 32);
                 }
 
                 ++line;
@@ -902,47 +900,47 @@ void render(const long ms) {
             head = head->next;
         }
 
-        
-        if (focusItemName != NULL ) {
+
+        if (focusItemName != NULL) {
             drawTextAt(2, 20, focusItemName, 255);
         }
-        
-        if (messageLogBufferCoolDown > 0 ) {
+
+        if (messageLogBufferCoolDown > 0) {
             drawTextAt(2, 23, &messageLogBuffer[0], 255);
         }
     }
 }
 
-void loadMesh(struct Mesh* mesh, char* filename ) {
+void loadMesh(struct Mesh *mesh, char *filename) {
     struct StaticBuffer buffer = loadBinaryFileFromPath(filename);
     FixP_t val = 0;
-    uint8_t* bufferHead = buffer.data;
+    uint8_t *bufferHead = buffer.data;
     int16_t trigCount = 0;
     int uvCoordsCount;
     int coordsCount;
     char *textureName;
-    
+
     uint8_t read;
     read = (*(bufferHead++));
     trigCount += read;
     read = (*(bufferHead++)) << 8;
     trigCount += read;
-    
+
     uvCoordsCount = trigCount * 6;
     coordsCount = trigCount * 9;
 
     mesh->triangleCount = trigCount;
-    mesh->uvCoords = calloc( 1, uvCoordsCount);
-    mesh->geometry = calloc( sizeof(FixP_t), coordsCount);
-    
-    uint8_t* uvCoord = mesh->uvCoords;
-    FixP_t* coord = mesh->geometry;
-    
-    for (int c = 0; c < uvCoordsCount; ++c ) {
+    mesh->uvCoords = calloc(1, uvCoordsCount);
+    mesh->geometry = calloc(sizeof(FixP_t), coordsCount);
+
+    uint8_t *uvCoord = mesh->uvCoords;
+    FixP_t *coord = mesh->geometry;
+
+    for (int c = 0; c < uvCoordsCount; ++c) {
         *(uvCoord++) = (*(bufferHead++));
     }
-    
-    for (int c = 0; c < coordsCount; ++c ) {
+
+    for (int c = 0; c < coordsCount; ++c) {
         val = 0;
         val += (*(bufferHead++) << 0);
         val += (*(bufferHead++) << 8);
@@ -950,15 +948,15 @@ void loadMesh(struct Mesh* mesh, char* filename ) {
         val += (*(bufferHead++) << 24);
         *(coord++) = val;
     }
-    
+
     read = (*(bufferHead++));
-    if (read == 0 ) {
+    if (read == 0) {
         mesh->colour = *bufferHead;
         mesh->texture = NULL;
     } else {
         textureName = calloc(1, read + 1);
         memcpy(textureName, bufferHead, read),
-        mesh->texture = makeTextureFrom(textureName);
+                mesh->texture = makeTextureFrom(textureName);
         free(textureName);
     }
 }

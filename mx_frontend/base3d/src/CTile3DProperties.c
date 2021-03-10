@@ -25,17 +25,17 @@ void loadPropertyList(const char *__restrict__ propertyFile, struct MapWithCharK
         uint8_t key = *(bufferHead++);
         struct CTile3DProperties *prop = (struct CTile3DProperties *) calloc(
                 1, sizeof(struct CTile3DProperties));
-        
+
         prop->mNeedsAlphaTest = *(bufferHead++);
         prop->mBlockVisibility = *(bufferHead++);
         prop->mBlockMovement = *(bufferHead++);
         prop->mBlockEnemySight = *(bufferHead++);
         prop->mRepeatMainTexture = *(bufferHead++);
-        
+
         prop->mCeilingTextureIndex = *(bufferHead++);
         prop->mFloorTextureIndex = *(bufferHead++);
         prop->mMainWallTextureIndex = *(bufferHead++);
-        
+
         prop->mGeometryType = (enum GeometryType) (*(bufferHead++));
 
         prop->mCeilingRepeatedTextureIndex = *(bufferHead++);

@@ -214,7 +214,7 @@ int canSeeSpy(const struct Vec2i seer,
         iX = fixToInt(x);
         iY = fixToInt(y);
 
-        tile = visibleElementsMap[(iY * MAP_SIZE ) + iX];
+        tile = visibleElementsMap[(iY * MAP_SIZE) + iX];
 
         if (tile == 0) {
             /* map is not loaded  yet... */
@@ -246,7 +246,7 @@ void renderTick(long ms) {
 int loopTick(enum ECommand command) {
 
     int needRedraw = 0;
-    
+
     if (command == kCommandBack) {
         shouldContinue = kCrawlerQuit;
     } else if (command != kCommandNone || gameTicks == 0) {
@@ -258,13 +258,17 @@ int loopTick(enum ECommand command) {
         }
 
         tickMission(command);
-        
-        if (gameTicks != 0 ) {
-            yCameraOffset = ((struct CTile3DProperties *) getFromMap(&tileProperties, elements[ (z * MAP_SIZE) + x]))->mFloorHeight - ((struct CTile3DProperties *) getFromMap(&tileProperties, elements[(actor.mPosition.y * MAP_SIZE) + actor.mPosition.x]))->mFloorHeight;
+
+        if (gameTicks != 0) {
+            yCameraOffset = ((struct CTile3DProperties *) getFromMap(&tileProperties,
+                                                                     elements[(z * MAP_SIZE) + x]))->mFloorHeight -
+                            ((struct CTile3DProperties *) getFromMap(&tileProperties,
+                                                                     elements[(actor.mPosition.y * MAP_SIZE) +
+                                                                              actor.mPosition.x]))->mFloorHeight;
         } else {
             yCameraOffset = 0;
         }
-        
+
         actor.mPosition.x = x;
         actor.mPosition.y = z;
         actor.mDirection = (enum EDirection) (rotation);
@@ -275,9 +279,9 @@ int loopTick(enum ECommand command) {
     if (zCameraOffset != 0 || xCameraOffset != 0 || yCameraOffset != 0) {
         needRedraw = 1;
     }
-    
-    
-    if ( needRedraw ) {
+
+
+    if (needRedraw) {
         drawMap(&elements[0], &items[0], &actorsInMap[0], &effects[0],
                 &actor);
         if (!enable3DRendering) {

@@ -25,7 +25,7 @@ struct GameSnapshot gameSnapshot;
 uint8_t map[MAP_SIZE][MAP_SIZE];
 uint8_t collisionMap[256];
 int enteredThru = 0;
-extern char* focusItemName;
+extern char *focusItemName;
 
 extern int currentSelectedItem;
 
@@ -56,7 +56,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
     struct WorldPosition oldPosition = getPlayerPosition();
     setActor(playerCrawler.position.x, playerCrawler.position.y, 0xFF);
     int currentPlayerRoom = getPlayerRoom();
-    
+
     {
         switch (command) {
             case kCommandRight:
@@ -85,8 +85,8 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 } else {
                     walkBy(0);
                 }
-                
-                if (enableSmoothMovement ) {
+
+                if (enableSmoothMovement) {
                     zCameraOffset = intToFix(2);
                 }
             }
@@ -106,41 +106,42 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 } else {
                     walkBy(2);
                 }
-                
-                if (enableSmoothMovement ) {
+
+                if (enableSmoothMovement) {
                     zCameraOffset = -intToFix(2);
                 }
             }
                 break;
-                
+
             case kCommandFire5: {
-                struct ObjectNode* head = getPlayerItems();
+                struct ObjectNode *head = getPlayerItems();
                 struct Item *item = NULL;
                 int index = 0;
-                
+
                 ++currentSelectedItem;
-                
+
                 while (head != NULL) {
                     ++index;
                     head = head->next;
                 }
-                
-                if ( currentSelectedItem > index ) {
+
+                if (currentSelectedItem > index) {
                     currentSelectedItem = 0;
                 }
-            } break;
-                
+            }
+                break;
+
             case kCommandFire4: {
-                struct ObjectNode* head1 = getRoom(getPlayerRoom())->itemsPresent->next;
+                struct ObjectNode *head1 = getRoom(getPlayerRoom())->itemsPresent->next;
                 struct Item *item1 = NULL;
                 struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
-                struct ObjectNode* head2 = getPlayerItems();
+                struct ObjectNode *head2 = getPlayerItems();
                 struct Item *item2 = NULL;
                 offseted.x += playerCrawler.position.x;
                 offseted.y += playerCrawler.position.y;
-                
+
                 int index = 0;
-                
+
                 while (head2 != NULL && (index < currentSelectedItem)) {
                     ++index;
                     head2 = head2->next;
@@ -149,32 +150,33 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 if (head2 != NULL) {
                     item2 = head2->item;
                 }
-                
+
                 while (head1 != NULL && item1 == NULL) {
                     if (offseted.x == (head1->item->position.x) && offseted.y == (head1->item->position.y)) {
                         item1 = head1->item;
                     }
                     head1 = head1->next;
                 }
-                
+
                 if (item1 != NULL && item2 != NULL) {
                     char buffer[255];
                     sprintf(&buffer[0], "use-with %s %s", item2->description, item1->description);
-                    char *operator1 = strtok( &buffer[0], "\n " );
-                    char *operand1 = strtok( NULL, "\n ");
+                    char *operator1 = strtok(&buffer[0], "\n ");
+                    char *operand1 = strtok(NULL, "\n ");
                     parseCommand(operator1, operand1);
                 }
                 gameSnapshot.turn++;
-            } break;
+            }
+                break;
             case kCommandFire2: {
-                struct ObjectNode* head = getPlayerItems();
+                struct ObjectNode *head = getPlayerItems();
                 struct Item *item = NULL;
                 struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
                 offseted.x += playerCrawler.position.x;
                 offseted.y += playerCrawler.position.y;
-                
+
                 int index = 0;
-                
+
                 while (head != NULL && (index < currentSelectedItem)) {
                     ++index;
                     head = head->next;
@@ -183,7 +185,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 if (head != NULL) {
                     item = head->item;
                 }
-                
+
                 if (item != NULL) {
                     parseCommand("drop", item->description);
                     item->position.x = offseted.x;
@@ -192,48 +194,49 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     currentSelectedItem--;
                 }
             }
-            break;
+                break;
             case kCommandFire1: {
-                struct ObjectNode* head = getPlayerItems();
+                struct ObjectNode *head = getPlayerItems();
                 struct Item *item = NULL;
                 int index = 0;
-                
+
                 while (head != NULL && (index < currentSelectedItem)) {
                     ++index;
                     head = head->next;
                 }
-                
+
                 if (head != NULL) {
                     item = head->item;
                 }
-                
+
                 if (item != NULL) {
                     parseCommand("use", item->description);
                 }
                 gameSnapshot.turn++;
-            } break;
-                
+            }
+                break;
+
             case kCommandFire6: {
                 enterState(kInspectItem);
             }
                 break;
-                
+
             case kCommandFire3: {
-                struct ObjectNode* head = getRoom(getPlayerRoom())->itemsPresent->next;
+                struct ObjectNode *head = getRoom(getPlayerRoom())->itemsPresent->next;
                 struct Item *item = NULL;
                 struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
                 offseted.x += playerCrawler.position.x;
                 offseted.y += playerCrawler.position.y;
-                
+
                 while (head != NULL && item == NULL) {
                     if (offseted.x == (head->item->position.x) && offseted.y == (head->item->position.y)) {
                         item = head->item;
                     }
                     head = head->next;
                 }
-                
+
                 if (item != NULL) {
-                    parseCommand( item->pickable ? "pick" : "use", item->description);
+                    parseCommand(item->pickable ? "pick" : "use", item->description);
                     if (item->pickable) {
                         setItem(offseted.x, offseted.y, 0xFF);
                     }
@@ -262,8 +265,8 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 } else {
                     walkBy(3);
                 }
-                
-                if (enableSmoothMovement ) {
+
+                if (enableSmoothMovement) {
                     xCameraOffset = -intToFix(2);
                 }
             }
@@ -284,11 +287,11 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 } else {
                     walkBy(1);
                 }
-                
-                if (enableSmoothMovement ) {
+
+                if (enableSmoothMovement) {
                     xCameraOffset = intToFix(2);
                 }
-                
+
             }
                 break;
             default:
@@ -300,7 +303,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
     playerCrawler.position.x = worldPos.x;
     playerCrawler.position.y = worldPos.y;
     playerCrawler.rotation = getPlayerDirection();
-    
+
     gameSnapshot.camera_x = playerCrawler.position.x;
     gameSnapshot.camera_z = playerCrawler.position.y;
     gameSnapshot.camera_rotation = playerCrawler.rotation;
@@ -308,7 +311,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
     setActor(playerCrawler.position.x, playerCrawler.position.y, 0xFF);
 
     if (oldTurn != gameSnapshot.turn) {
-        
+
         switch (getGameStatus()) {
             case kBadVictory:
                 enterState(kBadVictoryEpilogue);
@@ -326,53 +329,53 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 enterState(kGoodGameOverEpilogue);
                 return gameSnapshot;
         }
-        
-        
+
+
         if (getPlayerRoom() != 1 && (!getItem(6)->active || !playerHasObject("helmet"))) {
             setPlayerHealth(getPlayerHealth() - 1);
         }
-        
+
         {
             focusItemName = NULL;
-            struct ObjectNode* head = getRoom(getPlayerRoom())->itemsPresent->next;
+            struct ObjectNode *head = getRoom(getPlayerRoom())->itemsPresent->next;
             struct Item *item = NULL;
             struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
             offseted.x += playerCrawler.position.x;
             offseted.y += playerCrawler.position.y;
-            
+
             while (head != NULL && item == NULL) {
                 if (offseted.x == (head->item->position.x) && offseted.y == (head->item->position.y)) {
                     item = head->item;
                 }
                 head = head->next;
             }
-            
+
             if (item != NULL) {
                 focusItemName = item->description;
             }
         }
-        
+
         int cell = map[playerCrawler.position.y][playerCrawler.position.x];
-        
-        
+
+
         if (currentPlayerRoom != getPlayerRoom()) {
             enable3DRendering = FALSE;
-            enteredThru = 0 ;
+            enteredThru = 0;
             setPlayerDirection(enteredThru);
             initRoom(getPlayerRoom());
-            
+
             thisMissionName = getRoomDescription();
             thisMissionNameLen = strlen(getRoomDescription());
 
-            
+
             return gameSnapshot;
         }
-        
-    
-        if ( '0' <= cell && cell <= '3') {
-            
+
+
+        if ('0' <= cell && cell <= '3') {
+
             moveBy(cell - '0');
-            
+
             if (currentPlayerRoom != getPlayerRoom()) {
                 enable3DRendering = FALSE;
                 int room = getPlayerRoom();
@@ -390,12 +393,12 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 gameSnapshot.camera_x = playerCrawler.position.x;
                 gameSnapshot.camera_z = playerCrawler.position.y;
             }
-            
+
             return gameSnapshot;
         }
-        
-        struct ObjectNode* head = getRoom(getPlayerRoom())->itemsPresent->next;
-        
+
+        struct ObjectNode *head = getRoom(getPlayerRoom())->itemsPresent->next;
+
         while (head != NULL) {
             setItem(head->item->position.x, head->item->position.y, head->item->index);
             head = head->next;
@@ -416,7 +419,7 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     playerCrawler.symbol = '^';
     playerCrawler.rotation = 0;
     memcpy (&collisionMap, collisions, 256);
-    
+
     struct WorldPosition worldPos;
 
     for (y = 0; y < MAP_SIZE; ++y) {
@@ -426,12 +429,12 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
             setItem(x, y, 0xFF);
             setActor(x, y, 0xFF);
             setElement(x, y, current);
-            
+
             if ((current == 's' && enteredThru == 0) ||
                 (current == 'w' && enteredThru == 1) ||
                 (current == 'n' && enteredThru == 2) ||
                 (current == 'e' && enteredThru == 3)
-                ) {
+                    ) {
                 worldPos.x = x;
                 worldPos.y = y;
                 enteredThru = -1;
@@ -441,14 +444,14 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
         }
         ++ptr;
     }
-    
+
     x = worldPos.x;
     y = worldPos.y;
     setActor(x, y, 0xFF);
     setPlayerPosition(worldPos);
     playerCrawler.position.x = x;
     playerCrawler.position.y = y;
-    
+
 
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = TRUE;

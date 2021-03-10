@@ -9,6 +9,7 @@
 #include "Globals.h"
 #include "Enums.h"
 #include "Engine.h"
+
 int renderingMethod = FIXED;
 struct Bitmap *currentBackgroundBitmap = NULL;
 int32_t currentGameMenuState = -1;
