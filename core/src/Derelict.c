@@ -13,6 +13,7 @@ Created by Daniel Monteiro on 2019-07-26.
 #define TOTAL_ROOMS 24
 #define TOTAL_ITEMS 30
 
+int roomCount = 1; /* there's an implicit dummy first */
 struct Room station[TOTAL_ROOMS];
 int itemsCount = 0;
 struct Item item[TOTAL_ITEMS];
@@ -54,6 +55,27 @@ struct Item* addItem(char *description,
     toReturn->pickable = pickable;
     toReturn->position.x = positionX;
     toReturn->position.y = positionY;
+    
+    return toReturn;
+}
+
+struct Room *addRoom(char *description, char *info, int sizeX, int sizeY, int connections[6]) {
+    
+    struct Room* toReturn = &station[roomCount++];
+    
+    toReturn->description = description;
+    toReturn->info = info;
+    toReturn->sizeX = sizeX;
+    toReturn->sizeY = sizeY;
+    
+    toReturn->connections[0] = connections[0];
+    toReturn->connections[1] = connections[1];
+    toReturn->connections[2] = connections[2];
+    toReturn->connections[3] = connections[3];
+    toReturn->connections[4] = connections[4];
+    toReturn->connections[5] = connections[5];
+    
+    toReturn->itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
     
     return toReturn;
 }
@@ -701,6 +723,7 @@ void initStation(void) {
 
     struct Item* newItem;
     struct Room* newRoom;
+    int connections[6];
     
     //prepare for a single player in the game
     playerCharacter = 0;
@@ -708,216 +731,164 @@ void initStation(void) {
     characterPositions = (struct WorldPosition*)calloc(charactersCount, sizeof(struct WorldPosition));
     
     setErrorHandlerCallback(NULL);
+    
     collectedObject = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
     playerLocation = 1;
     itemsCount = 0;
+    roomCount = 1; /* there's an implicit dummy first */
     playerHealth = 100;
     playerRank = 0;
     gameStatus = 0;
     playerDirection = 0;
+    characterPositions[playerCharacter].x = 15;
+    characterPositions[playerCharacter].y = 15;
+    
     memset(&station, 0, TOTAL_ROOMS * sizeof(struct Room));
     memset(&item, 0, TOTAL_ITEMS * sizeof(struct Item));
 
+    
     /*Rooms*/
-    station[1].description = "lss-daedalus";
-    station[1].info = "My trusty old scrap ship. Built it myself. Still leaks fuel like a drunken horse, but it's mine, damn it! Well, at least until some of fines I have to pay results in repo men knocking my door.";
-    station[1].connections[0] = 2;
-    station[1].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[1].sizeX = 64;
-    station[1].sizeY = 64;
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[0] = 2;
+    addRoom("lss-daedalus", "My trusty old scrap ship. Built it myself. Still leaks fuel like a drunken horse, but it's mine, damn it! Well, at least until some of fines I have to pay results in repo men knocking my door.", 64, 64, connections);
+    
+    
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[2] = 1;
+    connections[1] = 6;
+    connections[0] = 3;
+    addRoom("hangar", "The station main hangar is rather unremarkable. The only thing you notice is a slight yellow tint of the air, as if a mist slides next to the floor. It's very faint. Your ship's computer tells you this is harmless (as if those readings were worth the trust). Unfortunately, no useful tools around here. Around the corner, near the escape pod entrance, there is deactivated ship reactor.", 64, 64, connections);
 
-    characterPositions[playerCharacter].x = 15;
-    characterPositions[playerCharacter].y = 15;
+    
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[2] = 2;
+    connections[0] = 4;
+    connections[1] = 5;
+    addRoom("hall-1", "A well lit hall, with doors. It's the main hub of the station. Despite being right next to the hangar and the control room, it's rather quiet.", 64, 64, connections)
+    ->rankRequired = 1;
 
-    station[2].description = "hangar";
-    station[2].info = "The station main hangar is rather unremarkable. The only thing you notice is a slight yellow tint of the air, as if a mist slides next to the floor. It's very faint. Your ship's computer tells you this is harmless (as if those readings were worth the trust). Unfortunately, no useful tools around here. Around the corner, near the escape pod entrance, there is deactivated ship reactor.";
-    station[2].connections[2] = 1;
-    station[2].connections[1] = 6;
-    station[2].connections[0] = 3;
-    station[2].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[2].sizeX = 64;
-    station[2].sizeY = 64;
+    
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[2] = 3;
+    connections[4] = 13;
+    addRoom("elevator-level-1", "Going down? The elevator no longer works. It seems to be stuck in level 3. You have to navegate the shaft by yourself.", 64, 64, connections);
+    
+    
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[3] = 3;
+    connections[1] = 9;
+    connections[0] = 7;
+    connections[2] = 8;
+    addRoom("dorms-1", "Part of the dorms hallway. There are some (busted) control panels for ejecting the pods. Some pieces of cloth and broken plastic on the floor, but nothing really useful or valuable.", 64, 64, connections);
 
-    station[3].description = "hall-1";
-    station[3].info = "A well lit hall, with doors. It's the main hub of the station. Despite being right next to the hangar and the control room, it's rather quiet.";
-    station[3].connections[2] = 2;
-    station[3].connections[0] = 4;
-    station[3].connections[1] = 5;
-    station[3].rankRequired = 1;
-    station[3].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[3].sizeX = 64;
-    station[3].sizeY = 64;
+    
+    
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[3] = 2;
+    addRoom("rls-bohr-2", "A rescue lander ship. Only for emergencies. Named after some Niels Bohr scientist guy or whatever. Some drops on the carpet and I don't even want know what it is, but I guess I already know. Ick.", 64, 5, connections);
 
-    station[4].description = "elevator-level-1";
-    station[4].info = "Going down? The elevator no longer works. It seems to be stuck in level 3. You have to navegate the shaft by yourself";
-    station[4].connections[2] = 3;
-    station[4].connections[4] = 13;
-    station[4].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[4].sizeX = 64;
-    station[4].sizeY = 64;
-    addToRoom("elevator-level-1", &item[26]);
+    
+    
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[2] = 5;
+    addRoom("pod-1", "A male living pod. Looks like from one of the scientists. It's messy, but as if it's occupant would easily find his belongings in there. There are a few cracks in the glass already.", 64, 64, connections)->rankRequired = 2;
+    
+    
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[0] = 5;
+    addRoom("pod-2", "A empty living pod. Looks as if it was never ever used. If can even see some of the factory stickers in it.", 64, 64, connections)->rankRequired = 2;
+    
+    
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[1] = 12;
+    connections[3] = 5;
+    connections[0] = 10;
+    connections[2] = 11;
+    addRoom("dorms-2", "Anonther part of the dorms hallway. On those, the panels were visibly well. There is a skylight. These parts of the quarters were probably the luxury ones.", 64, 64, connections);
+    
+    
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[2] = 9;
+    addRoom("pod-3", "A young woman's pod. You do recognize a few items, but its badly mixed up. It's hard to make the age of girl, but she was young.",
+            64, 64, connections)->rankRequired = 2;
+    
 
-    station[5].description = "dorms-1";
-    station[5].info = "Part of the dorms hallway. There are some (busted) control panels for ejecting the pods. Some pieces of cloth and broken plastic on the floor, but nothing really useful or valuable.";
-    station[5].connections[3] = 3;
-    station[5].connections[1] = 9;
-    station[5].connections[0] = 7;
-    station[5].connections[2] = 8;
-    station[5].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[5].sizeX = 64;
-    station[5].sizeY = 64;
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[0] = 9;
+    addRoom("pod-4", "A scientists pod, for sure. It's neat, clean and organized. Not much around. He had a strange fixation on redheads.",
+            64, 64, connections)->rankRequired = 2;
+    
+    
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[3] = 9;
+    addRoom("lounge", "Here, it seems like a relaxation place. You gaze at the stars and the planet. Very nice.", 64, 5, connections);
 
-    station[6].description = "rls-bohr-2";
-    station[6].info = "A rescue lander ship. Only for emergencies. Named after some Niels Bohr scientist guy or whatever. Some drops on the carpet and I don't even want know what it is, but I guess I already know. Ick.";
-    station[6].connections[3] = 2;
-    station[6].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[6].sizeX = 64;
-    station[6].sizeY = 5;
+    
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[5] = 4;
+    connections[4] = 19;
+    connections[2] = 14;
+    addRoom("elevator-level-2", "Going up or down? Looking down, you can clearly see the elevator cabin in level 3.", 64, 64, connections);
+    
+    
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[0] = 13;
+    connections[1] = 17;
+    connections[2] = 16;
+    connections[3] = 15;
+    addRoom("hall-2", "Not as imponent as the main hall from Level 1, this hall has a busier feel. Here you see objects thrown all over the place, as if someone was in the middle of a day-to-day routine and had to quickly run.", 64, 64, connections);
+    
+    
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[1] = 14;
+    addRoom("dinner-room", "Empty stomach makes no science. Those thinkers were really into fancy stuff. Too bad it all went bad a long time ago.", 64, 64, connections);
+    
 
-    station[7].description = "pod-1";
-    station[7].info = "A male living pod. Looks like from one of the scientists. It's messy, but as if it's occupant would easily find his belongings in there. There are a few cracks in the glass already.";
-    station[7].connections[2] = 5;
-    station[7].rankRequired = 2;
-    station[7].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[7].sizeX = 64;
-    station[7].sizeY = 64;
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[0] = 14;
+    addRoom("control-room", "Lots of old equiptment.", 64, 64, connections)->rankRequired = 2;
 
-    station[8].description = "pod-2";
-    station[8].info = "A empty living pod. Looks as if it was never ever used. If can even see some of the factory stickers in it.";
-    station[8].connections[0] = 5;
-    station[8].rankRequired = 2;
-    station[8].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[8].sizeX = 64;
-    station[8].sizeY = 64;
+    
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[3] = 14;
+    connections[1] = 18;
+    addRoom("gymnasium", "This is where they used to workout to keep their health.", 64, 64, connections);
+    
 
-    station[9].description = "dorms-2";
-    station[9].info = "Anonther part of the dorms hallway. On those, the panels were visibly well. There is a skylight. These parts of the quarters were probably the luxury ones.";
-    station[9].connections[1] = 12;
-    station[9].connections[3] = 5;
-    station[9].connections[0] = 10;
-    station[9].connections[2] = 11;
-    station[9].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[9].sizeX = 64;
-    station[9].sizeY = 64;
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[3] = 17;
+    addRoom("restroom", "...and this is where they would stay clean. Smells like dry sweat. Ick.", 64, 64, connections);
 
-    station[10].description = "pod-3";
-    station[10].info = "A young woman's pod. You do recognize a few items, but its badly mixed up. It's hard to make the age of girl, but she was young.";
-    station[10].connections[2] = 9;
-    station[10].rankRequired = 2;
-    station[10].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[10].sizeX = 64;
-    station[10].sizeY = 64;
+    
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[2] = 20;
+    connections[5] = 13;
+    addRoom("elevator-level-3", "Going up? Fortunately, the escape hatch is open and this allows for access. The cabin itself is unremarkable.", 64, 64, connections);
+    
 
-    station[11].description = "pod-4";
-    station[11].info = "A scientists pod, for sure. It's neat, clean and organized. Not much around. He had a strange fixation on redheads.";
-    station[11].connections[0] = 9;
-    station[11].rankRequired = 2;
-    station[11].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[11].sizeX = 64;
-    station[11].sizeY = 64;
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[0] = 19;
+    connections[1] = 21;
+    connections[2] = 22;
+    connections[3] = 23;
+    addRoom("hall-3", "This was a restricted area, so it's rather sparce. Mostly labs and equipment. A constant hum from the generaters can be heard", 64, 64, connections);
 
-    station[12].description = "lounge";
-    station[12].info = "Here, it seems like a relaxation place. You gaze at the stars and the planet. Very nice.";
-    station[12].connections[3] = 9;
-    station[12].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[12].sizeX = 64;
-    station[12].sizeY = 64;
+    
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[3] = 20;
+    addRoom("lab-1", "A micro-g-hydrostatic lab. Lots of old equipments. There must be something valuable here.", 64, 64, connections)->rankRequired = 3;
 
-    station[13].description = "elevator-level-2";
-    station[13].info = "Going up or down? Looking down, you can clearly see the elevator cabin in level 3.";
-    station[13].connections[5] = 4;
-    station[13].connections[4] = 19;
-    station[13].connections[2] = 14;
-    station[13].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[13].sizeX = 64;
-    station[13].sizeY = 64;
-    addToRoom("elevator-level-2", &item[27]);
-    addToRoom("elevator-level-2", &item[28]);
 
-    station[14].description = "hall-2";
-    station[14].info = "Not as imponent as the main hall from Level 1, this hall has a busier feel. Here you see objects thrown all over the place, as if someone was in the middle of a day-to-day routine and had to quickly run.";
-    station[14].connections[0] = 13;
-    station[14].connections[1] = 17;
-    station[14].connections[2] = 16;
-    station[14].connections[3] = 15;
-    station[14].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[14].sizeX = 64;
-    station[14].sizeY = 64;
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[0] = 20;
+    addRoom("lab-2", "A low-atmosphere-electricity lab. Lots of strange equipment. Looks dangerous.", 64, 64, connections)->rankRequired = 3;
+    
 
-    station[15].description = "dinner-room";
-    station[15].info = "Empty stomach makes no science. Those thinkers were really into fancy stuff. Too bad it all went bad a long time ago.";
-    station[15].connections[1] = 14;
-    station[15].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[15].sizeX = 64;
-    station[15].sizeY = 64;
+    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[1] = 20;
+    addRoom("lab-3", "Looks like this was a chemistry lab. Looks badly destroyed. I was told this was due to space-trash. That's why they got us! On the left wall, there are remnants of a 3D periodic table. If only this was in once piece, it could make some good cash.", 64, 64, connections)->rankRequired = 3;
 
-    station[16].description = "control-room";
-    station[16].info = "Lots of old equiptment.";
-    station[16].connections[0] = 14;
-    station[16].rankRequired = 2;
-    station[16].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[16].sizeX = 64;
-    station[16].sizeY = 64;
 
-    station[17].description = "gymnasium";
-    station[17].info = "This is where they used to workout to keep their health";
-    station[17].connections[3] = 14;
-    station[17].connections[1] = 18;
-    station[17].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[17].sizeX = 64;
-    station[17].sizeY = 64;
-
-    station[18].description = "restroom";
-    station[18].info = "...and this is where they would stay clean. Smells like dry sweat. Ick.";
-    station[18].connections[3] = 17;
-    station[18].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[18].sizeX = 64;
-    station[18].sizeY = 64;
-
-    station[19].description = "elevator-level-3";
-    station[19].info = "Going up? Fortunately, the escape hatch is open and this allows for access. The cabin itself is unremarkable.";
-    station[19].connections[2] = 20;
-    station[19].connections[5] = 13;
-    station[19].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[19].sizeX = 64;
-    station[19].sizeY = 64;
-    addToRoom("elevator-level-3", &item[29]);
-
-    station[20].description = "hall-3";
-    station[20].info = "This was a restricted area, so it's rather sparce. Mostly labs and equipment. A constant hum from the generaters can be heard";
-    station[20].connections[0] = 19;
-    station[20].connections[1] = 21;
-    station[20].connections[2] = 22;
-    station[20].connections[3] = 23;
-    station[20].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[20].sizeX = 64;
-    station[20].sizeY = 64;
-
-    station[21].description = "lab-1";
-    station[21].connections[3] = 20;
-    station[21].info = "A micro-g-hydrostatic lab. Lots of old equipments. There must be something valuable here.";
-    station[21].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[21].rankRequired = 3;
-    station[21].sizeX = 64;
-    station[21].sizeY = 64;
-
-    station[22].description = "lab-2";
-    station[22].connections[0] = 20;
-    station[22].info = "A low-atmosphere-electricity lab. Lots of strange equipment. Looks dangerous.";
-    station[22].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[22].rankRequired = 3;
-    station[22].sizeX = 64;
-    station[22].sizeY = 64;
-
-    station[23].description = "lab-3";
-    station[23].connections[1] = 20;
-    station[23].info = "Looks like this was a chemistry lab. Looks badly destroyed. I was told this was due to space-trash. That's why they got us! On the left wall, there are remnants of a 3D periodic table. If only this was in once piece, it could make some good cash.";
-    station[23].itemsPresent = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
-    station[23].rankRequired = 3;
-    station[23].sizeX = 64;
-    station[23].sizeY = 64;
-
-    playerLocation = 1;
     /*Items*/
 
     /* LSS-Daedalus */
@@ -1098,16 +1069,20 @@ void initStation(void) {
     newItem = addItem("elevator-level1-go-down", "Elevator controls - Go down.", 0, FALSE, 27, 0);
     newItem->useCallback = elevatorGoDownCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("elevator-level-1", newItem);
 
     newItem = addItem("elevator-level2-go-down", "Elevator controls - Go down.", 0, FALSE, 27, 0);
     newItem->useCallback = elevatorGoDownCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("elevator-level-2", newItem);
     
     newItem = addItem("elevator-level2-go-up", "Elevator controls - Go Up.", 0, FALSE, 28, 0);
     newItem->useCallback = elevatorGoUpCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("elevator-level-2", newItem);
     
     newItem = addItem("elevator-level3-go-up", "Elevator controls - Go Up.", 0, FALSE, 28, 0);
     newItem->useCallback = elevatorGoUpCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("elevator-level-3", newItem);
 }
