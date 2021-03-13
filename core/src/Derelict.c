@@ -840,7 +840,7 @@ void initStation(void) {
     
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 9;
-    addRoom("lounge", "Here, it seems like a relaxation place. You gaze at the stars and the planet. Very nice.", 64, 5, connections);
+    addRoom("lounge", "Here, it seems like a relaxation place. You gaze at the stars and the planet. Very nice.", 64, 64, connections);
 
     
     memset(&connections[0], 0, 6 * sizeof(int));
