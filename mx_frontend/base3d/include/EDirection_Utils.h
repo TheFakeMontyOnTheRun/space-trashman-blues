@@ -7,4 +7,6 @@ enum EDirection rightOf(const enum EDirection d);
 
 struct Vec2i mapOffsetForDirection(const enum EDirection direction);
 
+int oppositeOf(int d);
+
 #endif

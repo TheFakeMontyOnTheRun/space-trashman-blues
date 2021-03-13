@@ -15,6 +15,7 @@
 #include "SoundSystem.h"
 #include "Derelict.h"
 #include "Parser.h"
+#include "EDirection_Utils.h"
 
 /* This include must be here just to satisfy the .h - your IDE might trick you into thinking this is not needed. And it's not, but ISO requires. */
 #include "CActor.h"
@@ -77,9 +78,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 playerCrawler.position.y += offset.y;
 
 
-                if (collisionMap[map[playerCrawler.position.y]
-                [playerCrawler.position.x]]
-                    == '1') {
+                if (collisionMap[map[playerCrawler.position.y][playerCrawler.position.x]]== '1') {
                     playerCrawler.position.x -= offset.x;
                     playerCrawler.position.y -= offset.y;
                 } else {
@@ -98,9 +97,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 playerCrawler.position.x -= offset.x;
                 playerCrawler.position.y -= offset.y;
 
-                if (collisionMap[map[playerCrawler.position.y]
-                [playerCrawler.position.x]]
-                    == '1') {
+                if (collisionMap[map[playerCrawler.position.y][playerCrawler.position.x]]== '1') {
                     playerCrawler.position.x += offset.x;
                     playerCrawler.position.y += offset.y;
                 } else {
@@ -115,7 +112,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
 
             case kCommandFire5: {
                 struct ObjectNode *head = getPlayerItems();
-                struct Item *item = NULL;
                 int index = 0;
 
                 ++currentSelectedItem;
@@ -257,9 +253,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 playerCrawler.position.x += offset.x;
                 playerCrawler.position.y += offset.y;
 
-                if (collisionMap[map[playerCrawler.position.y]
-                [playerCrawler.position.x]]
-                    == '1') {
+                if (collisionMap[map[playerCrawler.position.y][playerCrawler.position.x]]== '1') {
                     playerCrawler.position.x -= offset.x;
                     playerCrawler.position.y -= offset.y;
                 } else {
@@ -279,9 +273,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 playerCrawler.position.x += offset.x;
                 playerCrawler.position.y += offset.y;
 
-                if (collisionMap[map[playerCrawler.position.y]
-                [playerCrawler.position.x]]
-                    == '1') {
+                if (collisionMap[map[playerCrawler.position.y][playerCrawler.position.x]]== '1') {
                     playerCrawler.position.x -= offset.x;
                     playerCrawler.position.y -= offset.y;
                 } else {
@@ -331,7 +323,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         }
 
 
-        if (getPlayerRoom() != 1 && (!getItem(6)->active || !playerHasObject("helmet"))) {
+        if (getPlayerRoom() != 1 && (!getItemNamed("helmet")->active || !playerHasObject("helmet"))) {
             setPlayerHealth(getPlayerHealth() - 1);
         }
 
@@ -357,35 +349,28 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
 
         int cell = map[playerCrawler.position.y][playerCrawler.position.x];
 
-
-        if (currentPlayerRoom != getPlayerRoom()) {
-            enable3DRendering = FALSE;
-            enteredThru = 0;
-            setPlayerDirection(enteredThru);
-            initRoom(getPlayerRoom());
-
-            thisMissionName = getRoomDescription();
-            thisMissionNameLen = strlen(getRoomDescription());
-
-
-            return gameSnapshot;
-        }
-
-
         if ('0' <= cell && cell <= '3') {
 
             moveBy(cell - '0');
 
             if (currentPlayerRoom != getPlayerRoom()) {
-                enable3DRendering = FALSE;
+                int c = 0;
                 int room = getPlayerRoom();
-                enteredThru = cell - '0';
+                struct Room* roomPtr = getRoom(room);
+                
+                for (c = 0; c < 6; ++c ) {
+                    if (roomPtr->connections[c] == currentPlayerRoom) {
+                        enteredThru = oppositeOf(c);
+                    }
+                }
+                
+                enable3DRendering = FALSE;
                 setPlayerDirection(enteredThru);
                 initRoom(room);
                 thisMissionName = getRoomDescription();
-                thisMissionNameLen = strlen(getRoomDescription());
+                thisMissionNameLen = strlen(thisMissionName);
 
-            } else {
+            } else { /* Something prevented the player from moving - maybe not enough clearance */
                 setPlayerPosition(oldPosition);
                 playerCrawler.position.x = oldPosition.x;
                 playerCrawler.position.y = oldPosition.y;

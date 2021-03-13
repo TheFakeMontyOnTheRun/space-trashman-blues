@@ -94,6 +94,8 @@ int getGameStatus();
 
 void setGameStatus(int newStatus);
 
+struct Item *getItemNamed(const char* name);
+
 int getPlayerDirection(void);
 
 void setPlayerDirection(int direction);

@@ -221,6 +221,8 @@ void setPlayerRank(int newRank) {
 }
 
 void moveBy(int direction) {
+    int c;
+    int previousLocation = playerLocation;
     struct Room *room = &station[playerLocation];
     if (direction >= 0 && direction <= 5 && room->connections[direction] != 0) {
 
@@ -236,24 +238,30 @@ void moveBy(int direction) {
 
         playerLocation = room->connections[direction];
         room = &station[playerLocation];
+        
+        for (c = 0; c < 6; ++c ) {
+            if (room->connections[c] == previousLocation) {
+                direction = c;
+            }
+        }
 
         switch (direction) {
-            case 0:
+            case 2:
                 characterPositions[playerCharacter].x = station[playerLocation].sizeX / 2;
                 characterPositions[playerCharacter].y = station[playerLocation].sizeY - 1;
                 break;
 
-            case 1:
+            case 3:
                 characterPositions[playerCharacter].x = 0;
                 characterPositions[playerCharacter].y = station[playerLocation].sizeY / 2;
                 break;
 
-            case 2:
+            case 0:
                 characterPositions[playerCharacter].x = station[playerLocation].sizeX / 2;
                 characterPositions[playerCharacter].y = 0;
                 break;
 
-            case 3:
+            case 1:
                 characterPositions[playerCharacter].x = station[playerLocation].sizeX - 1;
                 characterPositions[playerCharacter].y = station[playerLocation].sizeY / 2;
                 break;

@@ -63,3 +63,22 @@ enum EDirection rightOf(const enum EDirection d) {
             assert (FALSE);
     }
 }
+
+int oppositeOf(int d) {
+    switch (d) {
+        case 0:
+            return 2;
+        case 2:
+            return 0;
+        case 1:
+            return 3;
+        case 3:
+            return 1;
+        case 5:
+            return 4;
+        case 4:
+            return 5;
+        default:
+            assert (FALSE);
+    }
+}
