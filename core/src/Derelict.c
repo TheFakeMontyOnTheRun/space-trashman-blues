@@ -934,8 +934,12 @@ void initStation(void) {
 
     newItem = addItem("magnetic-boots",
                       "boots with strong electro-magnets. Ideal for walking on low-gravity situations - as long as the surface in question is metallic (like most of the surfaces here).",
-                      2, TRUE, 14, 14);
-    addToRoom("lss-daedalus", newItem);
+                      2, TRUE, 15, 15);
+    
+    newItem->active = TRUE;
+    
+    pickObject(newItem);
+    
     newItem->useWithCallback = useBootsWithCallback;
     newItem->useCallback = useObjectToggleCallback;
     
