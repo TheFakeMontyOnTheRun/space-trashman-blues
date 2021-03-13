@@ -888,18 +888,18 @@ void initStation(void) {
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 19;
     connections[1] = 21;
-    connections[2] = 22;
     connections[3] = 23;
     addRoom("hall-3", "This was a restricted area, so it's rather sparce. Mostly labs and equipment. A constant hum from the generaters can be heard", 64, 64, connections);
 
     
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 20;
+    connections[1] = 22;
     addRoom("lab-1", "A micro-g-hydrostatic lab. Lots of old equipments. There must be something valuable here.", 64, 64, connections)->rankRequired = 3;
 
 
     memset(&connections[0], 0, 6 * sizeof(int));
-    connections[0] = 20;
+    connections[0] = 21;
     addRoom("lab-2", "A low-atmosphere-electricity lab. Lots of strange equipment. Looks dangerous.", 64, 64, connections)->rankRequired = 3;
     
 
