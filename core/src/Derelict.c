@@ -780,7 +780,7 @@ void initStation(void) {
 
     
     memset(&connections[0], 0, 6 * sizeof(int));
-    connections[2] = 2;
+    connections[3] = 2;
     connections[0] = 4;
     connections[1] = 5;
     addRoom("hall-1", "A well lit hall, with doors. It's the main hub of the station. Despite being right next to the hangar and the control room, it's rather quiet.", 64, 64, connections)
