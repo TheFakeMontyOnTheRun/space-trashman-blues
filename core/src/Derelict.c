@@ -118,6 +118,18 @@ struct ObjectNode *getPlayerItems() {
     return collectedObject->next;
 }
 
+struct Item *getItemNamed(const char* name) {
+    int c = 0;
+    
+    for (c = 0; c < itemsCount; ++c ) {
+        if (!strcmp(item[c].description, name)) {
+            return &item[c];
+        }
+    }
+    
+    return NULL;
+}
+
 void addObjectToList(struct Item *itemToAdd, struct ObjectNode *listHead) {
     struct ObjectNode *head = listHead;
 
@@ -217,7 +229,7 @@ void moveBy(int direction) {
             return;
         }
 
-        if (!item[5].active || !playerHasObject("magnetic-boots")) {
+        if (!getItemNamed("magnetic-boots")->active || !playerHasObject("magnetic-boots")) {
             defaultLogger("You can't move without your magnetic-boots!");
             return;
         }
@@ -486,7 +498,7 @@ void turnRight(void) {
 
 void walkBy(int direction) {
 
-    if (playerLocation != 1 && (!item[5].active || !playerHasObject("magnetic-boots"))) {
+    if (!getItemNamed("magnetic-boots")->active || !playerHasObject("magnetic-boots")) {
         defaultLogger("You can't move without your magnetic-boots!");
         return;
     }
@@ -722,7 +734,6 @@ void setPlayerDirection(int direction) {
 void initStation(void) {
 
     struct Item* newItem;
-    struct Room* newRoom;
     int connections[6];
     
     //prepare for a single player in the game
