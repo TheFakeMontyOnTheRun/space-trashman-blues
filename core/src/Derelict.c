@@ -486,7 +486,7 @@ void useBlowtorchWithCallback(struct Item *item1, struct Item *item2) {
 
 void useBootsWithCallback(struct Item *item1, struct Item *item2) {
     if (item2 == &item[17]) {
-        addToRoom("restroom", &item[25]);
+        addToRoom("armory", &item[25]);
     }
 }
 
@@ -854,7 +854,7 @@ void initStation(void) {
     /* 12 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 9;
-    addRoom("lounge", "Here, it seems like a relaxation place. You gaze at the stars and the planet. Very nice.", 64, 64, connections);
+    addRoom("computer-core", "Here, it seems like a relaxation place. You gaze at the stars and the planet. Very nice.", 64, 64, connections);
 
     /* 13 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -873,23 +873,23 @@ void initStation(void) {
     /* 15 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[1] = 14;
-    addRoom("dinner-room", "Empty stomach makes no science. Those thinkers were really into fancy stuff. Too bad it all went bad a long time ago.", 64, 64, connections);
+    addRoom("bridge", "Empty stomach makes no science. Those thinkers were really into fancy stuff. Too bad it all went bad a long time ago.", 64, 64, connections);
     
     /* 16 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 14;
-    addRoom("control-room", "Lots of old equiptment.", 64, 64, connections)->rankRequired = 2;
+    addRoom("situation-room", "Lots of old equiptment.", 64, 64, connections)->rankRequired = 2;
 
     /* 17 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 14;
     connections[1] = 18;
-    addRoom("gymnasium", "This is where they used to workout to keep their health.", 64, 64, connections);
+    addRoom("computer-core", "This is where they used to workout to keep their health.", 64, 64, connections);
     
     /* 18 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 17;
-    addRoom("restroom", "...and this is where they would stay clean. Smells like dry sweat. Ick.", 64, 64, connections);
+    addRoom("armory", "...and this is where they would stay clean. Smells like dry sweat. Ick.", 64, 64, connections);
 
     /* 19 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -1031,7 +1031,7 @@ void initStation(void) {
     newItem = addItem("yellow-book", "Today, I lost card during dinner. Gonna ask for a new one. Specially disconcerting since it gives access to all bunks. Nobody knows, so nothing to worry, I guess...", 0, TRUE, 4, 3);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("dinner-room", newItem);
+    addToRoom("bridge", newItem);
 
     
     newItem = addItem("log-book", "A side note is written: That metal mending we put on Lab 1. last week mending was a real rush job. Any stronger bump and it might...", 1, TRUE, 10, 10);
@@ -1043,7 +1043,7 @@ void initStation(void) {
     newItem = addItem("plastic-pipe", "Just a regular pipe, taking something somewhere.", 3, FALSE, 20, 40);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("restroom", newItem);
+    addToRoom("armory", newItem);
 
     
     newItem = addItem("high-rank-keycard", "Clearance for high-rank officer.", 0, TRUE, 7, 6);
@@ -1051,13 +1051,13 @@ void initStation(void) {
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
-    addToRoom("dinner-room", newItem);
+    addToRoom("bridge", newItem);
 
     
     newItem = addItem("computer-rack", "A very valuable vintage rare-and-in-working-conditions computer rack!", 138, FALSE, 1, 1);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("control-room", newItem);
+    addToRoom("situation-room", newItem);
 
     
     newItem = addItem("journal",
@@ -1065,7 +1065,7 @@ void initStation(void) {
                       0, TRUE, 17, 6);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("control-room", newItem);
+    addToRoom("situation-room", newItem);
     
 
     /* Has to be removed for the bomb to be properly planted */
