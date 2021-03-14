@@ -715,10 +715,22 @@ void bombControllerActivatedCallback(struct Item *item) {
 }
 
 void elevatorGoDownCallback(struct Item *item) {
+    
+    if (!getItemNamed("comm-terminal-2")->active) {
+        defaultLogger("Central computer is offline");
+        return;
+    }
+    
     moveBy(4);
 }
 
 void elevatorGoUpCallback(struct Item *item) {
+    
+    if (!getItemNamed("comm-terminal-2")->active) {
+        defaultLogger("Central computer is offline");
+        return;
+    }
+    
     moveBy(5);
 }
 
@@ -977,22 +989,20 @@ void initStation(void) {
     
 
     /* Comm terminals*/
-    newItem = addItem("comm-terminal", "Offline comm terminal for communicating with the other levels.", 200, FALSE, 17, 16);
-    addToRoom("lss-daedalus", newItem);
+    newItem = addItem("comm-terminal-1", "Offline comm terminal for communicating with the other levels.", 200, FALSE, 17, 16);
     newItem->useCallback = useObjectToggleCallback;
-    newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-1", newItem);
 
     
-    newItem = addItem("comm-terminal", "Offline comm terminal for communicating with the other levels.", 200, FALSE, 17, 16);
-    newItem->useCallback = cantBeUsedCallback;
+    newItem = addItem("comm-terminal-2", "Offline comm terminal for communicating with the other levels.", 200, FALSE, 17, 16);
+    newItem->useCallback = useObjectToggleCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-2", newItem);
     
     
-    newItem = addItem("comm-terminal", "Offline comm terminal for communicating with the other levels.", 200, FALSE, 17, 16);
-    newItem->useCallback = cantBeUsedCallback;
+    newItem = addItem("comm-terminal-3", "Offline comm terminal for communicating with the other levels.", 200, FALSE, 17, 16);
+    newItem->useCallback = useObjectToggleCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-3", newItem);
 
