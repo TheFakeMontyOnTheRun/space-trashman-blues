@@ -767,32 +767,34 @@ void initStation(void) {
 
     
     /*Rooms*/
+    /* 1 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 2;
     addRoom("lss-daedalus", "My trusty old scrap ship. Built it myself. Still leaks fuel like a drunken horse, but it's mine, damn it! Well, at least until some of fines I have to pay results in repo men knocking my door.", 64, 64, connections);
     
-    
+    /* 2 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 1;
     connections[1] = 6;
     connections[0] = 3;
     addRoom("hangar", "The station main hangar is rather unremarkable. The only thing you notice is a slight yellow tint of the air, as if a mist slides next to the floor. It's very faint. Your ship's computer tells you this is harmless (as if those readings were worth the trust). Unfortunately, no useful tools around here. Around the corner, near the escape pod entrance, there is deactivated ship reactor.", 64, 64, connections);
 
-    
+    /* 3 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 2;
     connections[0] = 4;
     connections[1] = 5;
-    addRoom("hall-1", "A well lit hall, with doors. It's the main hub of the station. Despite being right next to the hangar and the control room, it's rather quiet.", 64, 64, connections)
+    addRoom("hall-2", "A well lit hall, with doors. It's the main hub of the station. Despite being right next to the hangar and the control room, it's rather quiet.", 64, 64, connections)
     ->rankRequired = 1;
 
-    
+    /* 4 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 3;
-    connections[4] = 13;
-    addRoom("elevator-level-1", "Going down? The elevator no longer works. It seems to be stuck in level 3. You have to navegate the shaft by yourself.", 64, 64, connections);
+    connections[4] = 19;
+    connections[5] = 13;
+    addRoom("elevator-level-2", "Going down? The elevator no longer works. It seems to be stuck in level 3. You have to navegate the shaft by yourself.", 64, 64, connections);
     
-    
+    /* 5 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 3;
     connections[1] = 9;
@@ -801,23 +803,23 @@ void initStation(void) {
     addRoom("dorms-1", "Part of the dorms hallway. There are some (busted) control panels for ejecting the pods. Some pieces of cloth and broken plastic on the floor, but nothing really useful or valuable.", 64, 64, connections);
 
     
-    
+    /* 6 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 2;
     addRoom("rls-bohr-2", "A rescue lander ship. Only for emergencies. Named after some Niels Bohr scientist guy or whatever. Some drops on the carpet and I don't even want know what it is, but I guess I already know. Ick.", 64, 5, connections);
 
     
-    
+    /* 7 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 5;
     addRoom("pod-1", "A male living pod. Looks like from one of the scientists. It's messy, but as if it's occupant would easily find his belongings in there. There are a few cracks in the glass already.", 64, 64, connections)->rankRequired = 2;
     
-    
+    /* 8 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 5;
     addRoom("pod-2", "A empty living pod. Looks as if it was never ever used. If can even see some of the factory stickers in it.", 64, 64, connections)->rankRequired = 2;
     
-    
+    /* 9 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[1] = 12;
     connections[3] = 5;
@@ -825,84 +827,83 @@ void initStation(void) {
     connections[2] = 11;
     addRoom("dorms-2", "Anonther part of the dorms hallway. On those, the panels were visibly well. There is a skylight. These parts of the quarters were probably the luxury ones.", 64, 64, connections);
     
-    
+    /* 10 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 9;
     addRoom("pod-3", "A young woman's pod. You do recognize a few items, but its badly mixed up. It's hard to make the age of girl, but she was young.",
             64, 64, connections)->rankRequired = 2;
     
-
+    /* 11 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 9;
     addRoom("pod-4", "A scientists pod, for sure. It's neat, clean and organized. Not much around. He had a strange fixation on redheads.",
             64, 64, connections)->rankRequired = 2;
     
-    
+    /* 12 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 9;
     addRoom("lounge", "Here, it seems like a relaxation place. You gaze at the stars and the planet. Very nice.", 64, 64, connections);
 
-    
+    /* 13 */
     memset(&connections[0], 0, 6 * sizeof(int));
-    connections[5] = 4;
     connections[4] = 19;
     connections[2] = 14;
-    addRoom("elevator-level-2", "Going up or down? Looking down, you can clearly see the elevator cabin in level 3.", 64, 64, connections);
+    addRoom("elevator-level-1", "Going up or down? Looking down, you can clearly see the elevator cabin in level 3.", 64, 64, connections);
     
-    
+    /* 14 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 13;
     connections[1] = 17;
     connections[2] = 16;
     connections[3] = 15;
-    addRoom("hall-2", "Not as imponent as the main hall from Level 1, this hall has a busier feel. Here you see objects thrown all over the place, as if someone was in the middle of a day-to-day routine and had to quickly run.", 64, 64, connections);
+    addRoom("hall-1", "Not as imponent as the main hall from Level 1, this hall has a busier feel. Here you see objects thrown all over the place, as if someone was in the middle of a day-to-day routine and had to quickly run.", 64, 64, connections);
     
-    
+    /* 15 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[1] = 14;
     addRoom("dinner-room", "Empty stomach makes no science. Those thinkers were really into fancy stuff. Too bad it all went bad a long time ago.", 64, 64, connections);
     
-
+    /* 16 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 14;
     addRoom("control-room", "Lots of old equiptment.", 64, 64, connections)->rankRequired = 2;
 
-    
+    /* 17 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 14;
     connections[1] = 18;
     addRoom("gymnasium", "This is where they used to workout to keep their health.", 64, 64, connections);
     
-
+    /* 18 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 17;
     addRoom("restroom", "...and this is where they would stay clean. Smells like dry sweat. Ick.", 64, 64, connections);
 
-    
+    /* 19 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 20;
-    connections[5] = 13;
+    connections[5] = 4;
     addRoom("elevator-level-3", "Going up? Fortunately, the escape hatch is open and this allows for access. The cabin itself is unremarkable.", 64, 64, connections);
     
-
+    /* 20 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 19;
     connections[1] = 21;
     connections[3] = 23;
     addRoom("hall-3", "This was a restricted area, so it's rather sparce. Mostly labs and equipment. A constant hum from the generaters can be heard", 64, 64, connections);
 
-    
+    /* 21 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 20;
     connections[1] = 22;
     addRoom("lab-1", "A micro-g-hydrostatic lab. Lots of old equipments. There must be something valuable here.", 64, 64, connections)->rankRequired = 3;
 
-
+    /* 22 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 21;
     addRoom("lab-2", "A low-atmosphere-electricity lab. Lots of strange equipment. Looks dangerous.", 64, 64, connections)->rankRequired = 3;
     
-
+    /* 23 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[1] = 20;
     addRoom("lab-3", "Looks like this was a chemistry lab. Looks badly destroyed. I was told this was due to space-trash. That's why they got us! On the left wall, there are remnants of a 3D periodic table. If only this was in once piece, it could make some good cash.", 64, 64, connections)->rankRequired = 3;
