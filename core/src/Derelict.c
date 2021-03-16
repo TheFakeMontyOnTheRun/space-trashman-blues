@@ -10,8 +10,7 @@ Created by Daniel Monteiro on 2019-07-26.
 
 #include "Derelict.h"
 
-#define TOTAL_ROOMS 24
-#define TOTAL_ITEMS 30
+
 
 int roomCount = 1; /* there's an implicit dummy first */
 struct Room station[TOTAL_ROOMS];
@@ -130,6 +129,19 @@ struct Item *getItemNamed(const char* name) {
     return NULL;
 }
 
+
+struct Room *getRoomByName(const char* name) {
+    int c = 0;
+    
+    for (c = 1; c < roomCount; ++c ) {
+        if (!strcmp(station[c].description, name)) {
+            return &station[c];
+        }
+    }
+    
+    return NULL;
+}
+
 void addObjectToList(struct Item *itemToAdd, struct ObjectNode *listHead) {
     struct ObjectNode *head = listHead;
 
@@ -225,7 +237,9 @@ void moveBy(int direction) {
     int previousLocation = playerLocation;
     struct Room *room = &station[playerLocation];
     if (direction >= 0 && direction <= 5 && room->connections[direction] != 0) {
-
+        struct Item *coupling = getItemNamed("magnetic-coupling");
+        room = &station[playerLocation];
+        
         if (station[room->connections[direction]].rankRequired > playerRank) {
             defaultLogger("Insuficient rank to enter room");
             return;
@@ -235,6 +249,12 @@ void moveBy(int direction) {
             defaultLogger("You can't move without your magnetic-boots!");
             return;
         }
+
+        if (room == getRoomByName("hangar") && coupling->active) {
+            defaultLogger("The magnetic coupling is engaged. The door will not open");
+            return;
+        }
+        
 
         playerLocation = room->connections[direction];
         room = &station[playerLocation];
@@ -484,9 +504,23 @@ void useBlowtorchWithCallback(struct Item *item1, struct Item *item2) {
     item2->pickable = TRUE;
 }
 
-void useBootsWithCallback(struct Item *item1, struct Item *item2) {
-    if (item2 == &item[17]) {
-        addToRoom("armory", &item[25]);
+void useCardWithCardWritter(struct Item *item1, struct Item *item2) {
+    if (item2 == getItemNamed("card-writter")) {
+        struct Item* card = getItemNamed("hacked-keycard");
+        addToRoom("computer-core", card);
+        card = getItemNamed("low-rank-keycard");
+        removeObjectFromList(card, collectedObject);
+    } else {
+        defaultLogger("No effect");
+    }
+}
+
+void useBootsWithMagneticCoupling(struct Item *item1, struct Item *item2) {
+    struct Item *coupling = getItemNamed("magnetic-coupling");
+    if (item2 == coupling ) {
+        coupling->active = FALSE;
+    } else {
+        defaultLogger("No effect");
     }
 }
 
@@ -641,32 +675,25 @@ void setLoggerDelegate(LogDelegate newDelegate) {
 
 
 void updateRankFromKeycards() {
-
-    struct ObjectNode *itemToPick = collectedObject->next;
-    int newRank = 0;
-    while (itemToPick != NULL) {
-        int rank = 0;
-
-        if (itemToPick->item == &item[7]) {
-            rank = 1;
-        }
-
-        if (itemToPick->item == &item[18]) {
-            rank = 2;
-        }
-
-        if (itemToPick->item == &item[25]) {
-            rank = 3;
-        }
-
-        if (newRank < rank) {
-            newRank = rank;
-        }
-
-        itemToPick = itemToPick->next;
+    int rank = 0;
+    
+    if (playerHasObject("low-rank-keycard")) {
+        rank = 1;
     }
 
-    setPlayerRank(newRank);
+    if (playerHasObject("hacked-keycard")) {
+        rank = 2;
+    }
+
+    if (playerHasObject("high-rank-keycard")) {
+        rank = 3;
+    }
+
+    if (playerHasObject("root-keycard")) {
+        rank = 4;
+    }
+
+    setPlayerRank(rank);
 }
 
 void keycardPickCallback(struct Item *item) {
@@ -747,6 +774,16 @@ void useObjectToggleCallback(struct Item *item) {
     item->active = !item->active;
 }
 
+void useCommWithRank(struct Item *item) {
+    
+    if (playerRank <= 1) {
+        defaultLogger("Insufficient rank to access");
+        return;
+    }
+    
+    item->active = !item->active;
+}
+
 void setPlayerDirection(int direction) {
     playerDirection = direction;
 }
@@ -796,15 +833,14 @@ void initStation(void) {
     connections[3] = 2;
     connections[0] = 4;
     connections[1] = 5;
-    addRoom("hall-2", "A well lit hall, with doors. It's the main hub of the station. Despite being right next to the hangar and the control room, it's rather quiet.", 64, 64, connections)
-    ->rankRequired = 1;
+    addRoom("hall-2", "A well lit hall, with doors. It's the main hub of the station. Despite being right next to the hangar and the control room, it's rather quiet.", 64, 64, connections);
 
     /* 4 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 3;
     connections[4] = 19;
     connections[5] = 13;
-    addRoom("elevator-level-2", "Going down? The elevator no longer works. It seems to be stuck in level 3. You have to navegate the shaft by yourself.", 64, 64, connections);
+    addRoom("elevator-level-2", "Going down? The elevator no longer works. It seems to be stuck in level 3. You have to navegate the shaft by yourself.", 64, 64, connections)->rankRequired = 1;
     
     /* 5 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -812,7 +848,7 @@ void initStation(void) {
     connections[1] = 9;
     connections[0] = 7;
     connections[2] = 8;
-    addRoom("dorms-1", "Part of the dorms hallway. There are some (busted) control panels for ejecting the pods. Some pieces of cloth and broken plastic on the floor, but nothing really useful or valuable.", 64, 64, connections);
+    addRoom("dorms-1", "Part of the dorms hallway. There are some (busted) control panels for ejecting the pods. Some pieces of cloth and broken plastic on the floor, but nothing really useful or valuable.", 64, 64, connections)->rankRequired = 1;
 
     
     /* 6 */
@@ -860,7 +896,7 @@ void initStation(void) {
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[4] = 19;
     connections[2] = 14;
-    addRoom("elevator-level-1", "Going up or down? Looking down, you can clearly see the elevator cabin in level 3.", 64, 64, connections);
+    addRoom("elevator-level-1", "Going up or down? Looking down, you can clearly see the elevator cabin in level 3.", 64, 64, connections)->rankRequired = 3;
     
     /* 14 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -873,7 +909,7 @@ void initStation(void) {
     /* 15 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[1] = 14;
-    addRoom("bridge", "Empty stomach makes no science. Those thinkers were really into fancy stuff. Too bad it all went bad a long time ago.", 64, 64, connections);
+    addRoom("bridge", "Empty stomach makes no science. Those thinkers were really into fancy stuff. Too bad it all went bad a long time ago.", 64, 64, connections)->rankRequired = 3;
     
     /* 16 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -884,7 +920,7 @@ void initStation(void) {
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 14;
     connections[1] = 18;
-    addRoom("computer-core", "This is where they used to workout to keep their health.", 64, 64, connections);
+    addRoom("crew-bunks", "This is where they used to workout to keep their health.", 64, 64, connections);
     
     /* 18 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -895,7 +931,7 @@ void initStation(void) {
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 20;
     connections[5] = 4;
-    addRoom("elevator-level-3", "Going up? Fortunately, the escape hatch is open and this allows for access. The cabin itself is unremarkable.", 64, 64, connections);
+    addRoom("elevator-level-3", "Going up? Fortunately, the escape hatch is open and this allows for access. The cabin itself is unremarkable.", 64, 64, connections)->rankRequired = 2;
     
     /* 20 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -908,17 +944,17 @@ void initStation(void) {
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 20;
     connections[1] = 22;
-    addRoom("lab-1", "A micro-g-hydrostatic lab. Lots of old equipments. There must be something valuable here.", 64, 64, connections)->rankRequired = 3;
+    addRoom("lab-1", "A micro-g-hydrostatic lab. Lots of old equipments. There must be something valuable here.", 64, 64, connections)->rankRequired = 4;
 
     /* 22 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 21;
-    addRoom("lab-2", "A low-atmosphere-electricity lab. Lots of strange equipment. Looks dangerous.", 64, 64, connections)->rankRequired = 3;
+    addRoom("lab-2", "A low-atmosphere-electricity lab. Lots of strange equipment. Looks dangerous.", 64, 64, connections)->rankRequired = 4;
     
     /* 23 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[1] = 20;
-    addRoom("lab-3", "Looks like this was a chemistry lab. Looks badly destroyed. I was told this was due to space-trash. That's why they got us! On the left wall, there are remnants of a 3D periodic table. If only this was in once piece, it could make some good cash.", 64, 64, connections)->rankRequired = 3;
+    addRoom("lab-3", "Looks like this was a chemistry lab. Looks badly destroyed. I was told this was due to space-trash. That's why they got us! On the left wall, there are remnants of a 3D periodic table. If only this was in once piece, it could make some good cash.", 64, 64, connections)->rankRequired = 4;
 
 
     /*Items*/
@@ -961,7 +997,7 @@ void initStation(void) {
     
     pickObject(newItem);
     
-    newItem->useWithCallback = useBootsWithCallback;
+    newItem->useWithCallback = useBootsWithMagneticCoupling;
     newItem->useCallback = useObjectToggleCallback;
     
 
@@ -971,7 +1007,14 @@ void initStation(void) {
 
     
     newItem = addItem("low-rank-keycard", "Clearance for low rank.", 0, TRUE, 16, 14);
-    addToRoom("lss-daedalus", newItem);
+    addToRoom("hall-2", newItem);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = useCardWithCardWritter;
+    newItem->pickCallback = keycardPickCallback;
+    newItem->dropCallback = keycardDropCallback;
+    
+    
+    newItem = addItem("hacked-keycard", "Hacked keycard for mid clearance rank.", 0, TRUE, 26, 26);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
@@ -980,12 +1023,20 @@ void initStation(void) {
 
     /* Hangar */
     
-    newItem = addItem("gold-pipe",
+    newItem = addItem("magnetic-coupling",
                       "This seems valuable. One can wonder why it is used here and what would be the consequences of taking it out? Whaever. It looks like paying for dinner.",
                       17, FALSE, 17, 16);
     addToRoom("hangar", newItem);
+    newItem->active = TRUE;
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    
+    /* Comm terminals*/
+    
+    newItem = addItem("door-panel", "Offline comm terminal for communicating with the other levels.", 200, FALSE, 18, 16);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("hangar", newItem);
     
 
     /* Comm terminals*/
@@ -996,7 +1047,7 @@ void initStation(void) {
 
     
     newItem = addItem("comm-terminal-2", "Offline comm terminal for communicating with the other levels.", 200, FALSE, 17, 16);
-    newItem->useCallback = useObjectToggleCallback;
+    newItem->useCallback = useCommWithRank;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-2", newItem);
     
@@ -1040,10 +1091,10 @@ void initStation(void) {
     addToRoom("lab-2", newItem);
 
     /* Misc */
-    newItem = addItem("plastic-pipe", "Just a regular pipe, taking something somewhere.", 3, FALSE, 20, 40);
+    newItem = addItem("card-writter", "Just a regular pipe, taking something somewhere.", 3, FALSE, 25, 25);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("armory", newItem);
+    addToRoom("computer-core", newItem);
 
     
     newItem = addItem("high-rank-keycard", "Clearance for high-rank officer.", 0, TRUE, 7, 6);

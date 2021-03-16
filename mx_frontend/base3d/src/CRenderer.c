@@ -65,7 +65,7 @@ uint32_t palette[256];
 uint8_t texturesUsed = 0;
 enum ECommand mBufferedCommand = kCommandNone;
 struct Texture *nativeTextures[TOTAL_TEXTURES];
-struct Texture *itemSprites[32];
+struct Texture *itemSprites[TOTAL_ITEMS];
 int turnTarget = 0;
 int turnStep = 0;
 FixP_t xCameraOffset;
@@ -163,7 +163,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 
     char buffer[256];
 
-    for (int c = 0; c < 30; ++c) {
+    for (int c = 0; c < itemsCount; ++c) {
         sprintf(&buffer[0], "%s.img", getItem(c)->description);
         itemSprites[c] = (makeTextureFrom(&buffer[0]));
     }

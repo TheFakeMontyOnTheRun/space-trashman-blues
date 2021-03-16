@@ -143,4 +143,12 @@ void walkBy(int direction);
 int getPlayerRank();
 
 void setPlayerRank(int newRank);
+
+#define TOTAL_ROOMS 24
+#define TOTAL_ITEMS 64
+
+
+/* TODO: make accessory method for this */
+extern int itemsCount;
+
 #endif
