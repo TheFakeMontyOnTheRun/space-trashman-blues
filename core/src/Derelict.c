@@ -713,28 +713,7 @@ void keycardDropCallback(struct Item *item) {
  */
 void bombActivatedCallback(struct Item *item) {
 
-    int blewTheStation = (!hasItemInRoom("lab-1", "metal-mending") && hasItemInRoom("lab-1", "time-bomb"));
-    int playerAtShip = (playerLocation == 1);
-    int playerAtSameLocationAsBomb = hasItemInRoom(getRoom(playerLocation)->description, "time-bomb");
 
-    if (blewTheStation) {
-        if (playerAtShip) {
-            setGameStatus(kGoodVictory);
-        } else {
-            setGameStatus(kBadVictory);
-        }
-    } else {
-
-        if (playerAtSameLocationAsBomb) {
-            setGameStatus(kBadGameOver);
-        } else {
-            if (playerAtShip) {
-                setGameStatus(kGoodGameOver);
-            } else {
-                setGameStatus(kBadGameOver);
-            }
-        }
-    }
 }
 
 void bombControllerActivatedCallback(struct Item *item) {
@@ -944,17 +923,17 @@ void initStation(void) {
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 20;
     connections[1] = 22;
-    addRoom("lab-1", "A micro-g-hydrostatic lab. Lots of old equipments. There must be something valuable here.", 64, 64, connections)->rankRequired = 4;
+    addRoom("reactor-core", "A micro-g-hydrostatic lab. Lots of old equipments. There must be something valuable here.", 64, 64, connections)->rankRequired = 4;
 
     /* 22 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 21;
-    addRoom("lab-2", "A low-atmosphere-electricity lab. Lots of strange equipment. Looks dangerous.", 64, 64, connections)->rankRequired = 4;
+    addRoom("brig", "0A low-atmosphere-electricity lab. Lots of strange equipment. Looks dangerous.", 64, 64, connections)->rankRequired = 3;
     
     /* 23 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[1] = 20;
-    addRoom("lab-3", "Looks like this was a chemistry lab. Looks badly destroyed. I was told this was due to space-trash. That's why they got us! On the left wall, there are remnants of a 3D periodic table. If only this was in once piece, it could make some good cash.", 64, 64, connections)->rankRequired = 4;
+    addRoom("radar-array", "Looks like this was a chemistry lab. Looks badly destroyed. I was told this was due to space-trash. That's why they got us! On the left wall, there are remnants of a 3D periodic table. If only this was in once piece, it could make some good cash.", 64, 64, connections)->rankRequired = 2;
 
 
     /*Items*/
@@ -994,15 +973,14 @@ void initStation(void) {
                       2, TRUE, 15, 15);
     
     newItem->active = TRUE;
-    
     pickObject(newItem);
-    
     newItem->useWithCallback = useBootsWithMagneticCoupling;
     newItem->useCallback = useObjectToggleCallback;
     
 
-    newItem = addItem("helmet", "Atmosphere-contained helmet for safety.", 2, TRUE, 15, 14);
-    addToRoom("lss-daedalus", newItem);
+    newItem = addItem("helmet", "Atmosphere-contained helmet for safety.", 2, TRUE, 15, 15);
+    newItem->active = TRUE;
+    pickObject(newItem);
     newItem->useCallback = useObjectToggleCallback;
 
     
@@ -1088,7 +1066,7 @@ void initStation(void) {
     newItem = addItem("log-book", "A side note is written: That metal mending we put on Lab 1. last week mending was a real rush job. Any stronger bump and it might...", 1, TRUE, 10, 10);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("lab-2", newItem);
+    addToRoom("brig", newItem);
 
     /* Misc */
     newItem = addItem("card-writter", "Just a regular pipe, taking something somewhere.", 3, FALSE, 25, 25);
@@ -1097,12 +1075,12 @@ void initStation(void) {
     addToRoom("computer-core", newItem);
 
     
-    newItem = addItem("high-rank-keycard", "Clearance for high-rank officer.", 0, TRUE, 7, 6);
+    newItem = addItem("high-rank-keycard", "Clearance for high-rank officer.", 0, TRUE, 30, 15);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
-    addToRoom("bridge", newItem);
+    addToRoom("radar-array", newItem);
 
     
     newItem = addItem("computer-rack", "A very valuable vintage rare-and-in-working-conditions computer rack!", 138, FALSE, 1, 1);
@@ -1123,33 +1101,34 @@ void initStation(void) {
     newItem = addItem("metal-mending", "A piece of metal that might be valuable.", 74, FALSE, 7, 6);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("lab-1", newItem);
+    addToRoom("radar-array", newItem);
 
     
     newItem = addItem("scientific-treatise", "Voynich Manuscript - Annottated Translation. Classical edition. It's badly burn't. Can't read it.", 1, TRUE, 1, 1);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("lab-2", newItem);
+    addToRoom("brig", newItem);
     
     newItem = addItem("electric-experiment", "All these equipment looks the same. Doesn't look valuable for me.", 209, FALSE, 1, 1);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("lab-2", newItem);
+    addToRoom("reactor-core", newItem);
 
     
     newItem = addItem("chemical-experiment", "All these equipment looks the same. Doesn't look valuable for me.", 62, TRUE, 1, 1);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("lab-3", newItem);
+    addToRoom("reactor-core", newItem);
 
     
     /* Not added directly, will be placed on the restroom after you search the pipe */
-    newItem = addItem("root-keycard", "Card for root access.", 0, TRUE, 21, 41);
+    newItem = addItem("root-keycard", "Card for root access.", 0, TRUE, 30, 15);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
-
+    addToRoom("bridge", newItem);
+    
     /* Elevator controls */
     newItem = addItem("elevator-level1-go-down", "Elevator controls - Go down.", 0, FALSE, 27, 0);
     newItem->useCallback = elevatorGoDownCallback;
