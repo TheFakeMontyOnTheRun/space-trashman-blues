@@ -763,6 +763,10 @@ void useCommWithRank(struct Item *item) {
     item->active = !item->active;
 }
 
+void reactorValveCallback(struct Item *item) {
+    gameStatus = kGoodVictory;
+}
+
 void setPlayerDirection(int direction) {
     playerDirection = direction;
 }
@@ -1115,8 +1119,8 @@ void initStation(void) {
     addToRoom("reactor-core", newItem);
 
     
-    newItem = addItem("chemical-experiment", "All these equipment looks the same. Doesn't look valuable for me.", 62, TRUE, 1, 1);
-    newItem->useCallback = cantBeUsedCallback;
+    newItem = addItem("reactor-valve-control", "All these equipment looks the same. Doesn't look valuable for me.", 62, FALSE, 30, 15);
+    newItem->useCallback = reactorValveCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("reactor-core", newItem);
 
@@ -1127,7 +1131,7 @@ void initStation(void) {
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
-    addToRoom("bridge", newItem);
+    addToRoom("situation-room", newItem);
     
     /* Elevator controls */
     newItem = addItem("elevator-level1-go-down", "Elevator controls - Go down.", 0, FALSE, 27, 0);

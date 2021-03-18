@@ -4,7 +4,11 @@ Preamble:
 
 You: a skinny hawaian hacker. Dont know how to swim. You got arrested and sentenced to the lower depths penal colony, working as a junker.
 
-As a junker, you go into a sunken warship to collect scrap. You're the first person entering it after it sunk to the bottom.
+As a junker, you go into a sunken warship to collect scrap, but for this mission you will have an special assignment: instead of collecting scrap, like usual, you must deactivate or eject the
+nuclear core of the warship, to prevent it from exploding and allowing future crews to come and collect scrap.
+
+You're the first person entering it after it sunk to the bottom.
+
 You must do a perfect job, in order to build trust on your supervisor, allowing you to eventually abuse that trust. But for now, everything must be by the book.
 The docking operation is a very delicate one, since the ship is on the verge of breaking apart and further sinking into the abyss.
 
@@ -27,11 +31,9 @@ keycard in its pocket. Using this keycard, you begin unravelling the thread that
 Meanwhile, you must also prevent the overloading reactor from melting down, which would cause a big explosion and probably kill evebody in the neighbouring colonies - you can do
 this by ejecting the rods into the abyss; doing so, requires access to the machine room, using the root keycard.
 
-The root keycard was hidden in the torpedo bay in the armory - a last ditch effort to prevent amotinated crew from taking over the ship.
-You will need to look carefully and allow that section of the ship to flood.
 
-In order to reach the armory, you will need to use the officer's keycard on his cabinet and you will find the dead body of another officer. From his uniform, you get his card.
-His card should be enough for entering the armory.
+The root keycard stays in the situation room - a last ditch effort to prevent amotinated crew from taking over the ship. To enter it, you must first get the high-ranking card on the radar array.
+
 
 During all this time, you get very intermitent contact with your supervisor and he will discuss the ideas without, learning of your skills.
 
