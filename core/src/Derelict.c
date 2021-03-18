@@ -877,7 +877,7 @@ void initStation(void) {
 
     /* 13 */
     memset(&connections[0], 0, 6 * sizeof(int));
-    connections[4] = 19;
+    connections[4] = 4;
     connections[2] = 14;
     addRoom("elevator-level-1", "Going up or down? Looking down, you can clearly see the elevator cabin in level 3.", 64, 64, connections)->rankRequired = 3;
     
