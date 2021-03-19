@@ -57,7 +57,8 @@ enum EPresentationState {
 	kConfirmInputBlink4,
 	kConfirmInputBlink5,
 	kConfirmInputBlink6,
-	kFade
+	kFade,
+    kRoomTransitioning
 };
 
 enum ESoundDriver {

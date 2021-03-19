@@ -32,6 +32,8 @@ extern int currentSelectedItem;
 
 extern int shouldContinue;
 
+extern enum EPresentationState currentPresentationState;
+
 extern char *thisMissionName;
 extern int16_t thisMissionNameLen;
 
@@ -366,6 +368,8 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 
                 enable3DRendering = FALSE;
                 setPlayerDirection(enteredThru);
+                zCameraOffset = intToFix(4);
+                currentPresentationState = kRoomTransitioning;
                 initRoom(room);
                 thisMissionName = getRoomDescription();
                 thisMissionNameLen = strlen(thisMissionName);

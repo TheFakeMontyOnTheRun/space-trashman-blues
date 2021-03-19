@@ -36,6 +36,7 @@ char *thisMissionName;
 int16_t thisMissionNameLen;
 int showPromptToAbandonMission = FALSE;
 extern size_t biggestOption;
+struct Texture *doorTransitioningTexture;
 
 const char *AbandonMission_Title = "Abandon mission?";
 const char *AbandonMission_options[6] = {"Continue", "End game"};
@@ -74,6 +75,8 @@ int32_t Crawler_initStateCallback(int32_t tag) {
     currentPresentationState = kAppearing;
     timeUntilNextState = kDefaultPresentationStateInterval;
     currentBackgroundBitmap = loadBitmap("pattern.img");
+    
+    doorTransitioningTexture = makeTextureFrom("arch.img");
 
     if (tag == kPlayGame) {
         initRoom(getPlayerRoom());
@@ -159,6 +162,23 @@ void Crawler_repaintCallback() {
                     isCursor ? 200 : 0);
         }
     } else {
+        
+        if  (currentPresentationState == kRoomTransitioning ) {
+            
+            struct Vec3 center;
+            center.mX = center.mY = 0;
+            center.mZ = intToFix(1);
+            fill(0, 0, 256, 200, 0, 0);
+            drawTextAt(16 - (thisMissionNameLen / 2), 1, thisMissionName, 255);
+            drawBillboardAt( center, &doorTransitioningTexture->rotations[0][0], intToFix(1), 32);
+            zCameraOffset -= Div(intToFix(1), intToFix(16));
+            if (zCameraOffset == 0 ) {
+                currentPresentationState = kWaitingForInput;
+            }
+            return;
+        }
+        
+        
         renderTick(30);
 
         if (currentPresentationState == kAppearing) {
