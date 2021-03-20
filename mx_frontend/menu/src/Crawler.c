@@ -205,6 +205,8 @@ int32_t Crawler_tickCallback(int32_t tag, void *data) {
                     break;
                 case kWaitingForInput:
                     break;
+                case kRoomTransitioning:
+                    break;
                 case kConfirmInputBlink1:
                 case kConfirmInputBlink2:
                 case kConfirmInputBlink3:

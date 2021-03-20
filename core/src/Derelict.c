@@ -843,12 +843,12 @@ void initStation(void) {
     /* 7 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 5;
-    addRoom("pod-1", "A male living pod. Looks like from one of the scientists. It's messy, but as if it's occupant would easily find his belongings in there. There are a few cracks in the glass already.", 64, 64, connections)->rankRequired = 2;
+    addRoom("pod-1", "A male living pod. Looks like from one of the scientists. It's messy, but as if it's occupant would easily find his belongings in there. There are a few cracks in the glass already.", 64, 64, connections)->rankRequired = 1;
     
     /* 8 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 5;
-    addRoom("pod-2", "A empty living pod. Looks as if it was never ever used. If can even see some of the factory stickers in it.", 64, 64, connections)->rankRequired = 2;
+    addRoom("pod-2", "A empty living pod. Looks as if it was never ever used. If can even see some of the factory stickers in it.", 64, 64, connections)->rankRequired = 3;
     
     /* 9 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -862,13 +862,13 @@ void initStation(void) {
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 9;
     addRoom("pod-3", "A young woman's pod. You do recognize a few items, but its badly mixed up. It's hard to make the age of girl, but she was young.",
-            64, 64, connections)->rankRequired = 2;
+            64, 64, connections)->rankRequired = 3;
     
     /* 11 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 9;
     addRoom("pod-4", "A scientists pod, for sure. It's neat, clean and organized. Not much around. He had a strange fixation on redheads.",
-            64, 64, connections)->rankRequired = 2;
+            64, 64, connections)->rankRequired = 4;
     
     /* 12 */
     memset(&connections[0], 0, 6 * sizeof(int));
