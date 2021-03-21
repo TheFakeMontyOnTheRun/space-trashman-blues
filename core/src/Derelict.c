@@ -760,7 +760,7 @@ void useCommWithRank(struct Item *item) {
         defaultLogger("Insufficient rank to access");
         return;
     }
-    
+       defaultLogger("Computer core rebooted");
     item->active = !item->active;
 }
 
@@ -803,28 +803,28 @@ void initStation(void) {
     /* 1 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 2;
-    addRoom("lss-daedalus", "My trusty old scrap ship. Built it myself. Still leaks fuel like a drunken horse, but it's mine, damn it! Well, at least until some of fines I have to pay results in repo men knocking my door.", 64, 64, connections);
+    addRoom("lss-daedalus", "The salvage operations vehicle. It's tracked remotely, to prevent escapes. If I try taking outside the predicted path, I will sink into the abyss myself.", 64, 64, connections);
     
     /* 2 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 1;
     connections[1] = 6;
     connections[0] = 3;
-    addRoom("hangar", "The station main hangar is rather unremarkable. The only thing you notice is a slight yellow tint of the air, as if a mist slides next to the floor. It's very faint. Your ship's computer tells you this is harmless (as if those readings were worth the trust). Unfortunately, no useful tools around here. Around the corner, near the escape pod entrance, there is deactivated ship reactor.", 64, 64, connections);
+    addRoom("hangar", "The main hangar is rather unremarkable. The only thing you notice is a slight yellow tint of the air, as if a mist slides next to the floor. It's very faint. Your ship's computer tells you this is harmless (as if those readings were worth the trust). Unfortunately, no useful tools around here. Around the corner, there's a escape pod entrance. Apparently, only one pod was launched.", 64, 64, connections);
 
     /* 3 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 2;
     connections[0] = 4;
     connections[1] = 5;
-    addRoom("hall-2", "A well lit hall, with doors. It's the main hub of the station. Despite being right next to the hangar and the control room, it's rather quiet.", 64, 64, connections);
+    addRoom("hall-2", "A well lit hall, with doors. It's the main hub of the vehicle. Despite being right next to the hangar and the control room, it's rather quiet.", 64, 64, connections);
 
     /* 4 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 3;
     connections[4] = 19;
     connections[5] = 13;
-    addRoom("elevator-level-2", "Going down? The elevator no longer works. It seems to be stuck in level 3. You have to navegate the shaft by yourself.", 64, 64, connections)->rankRequired = 1;
+    addRoom("elevator-level-2", "It's rather surprising that this ship has an elevator. This is was typical only of ships with 5 levels or more.", 64, 64, connections)->rankRequired = 1;
     
     /* 5 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -832,19 +832,19 @@ void initStation(void) {
     connections[1] = 9;
     connections[0] = 7;
     connections[2] = 8;
-    addRoom("dorms-1", "Part of the dorms hallway. There are some (busted) control panels for ejecting the pods. Some pieces of cloth and broken plastic on the floor, but nothing really useful or valuable.", 64, 64, connections)->rankRequired = 1;
+    addRoom("dorms-1", "Part of the dorms hallway. There are some (busted) control panels for ejecting the pods. Some pieces of cloth and broken plastic on the floor, but nothing really useful.", 64, 64, connections)->rankRequired = 1;
 
     
     /* 6 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 2;
-    addRoom("rls-bohr-2", "A rescue lander ship. Only for emergencies. Named after some Niels Bohr scientist guy or whatever. Some drops on the carpet and I don't even want know what it is, but I guess I already know. Ick.", 64, 5, connections);
+    addRoom("rls-bohr-2", "A rescue ship. Only for emergencies. Named after some Niels Bohr scientist guy or whatever. Some drops on the carpet and I don't even want know what it is, but I guess I already know. Ick.", 64, 5, connections);
 
     
     /* 7 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 5;
-    addRoom("pod-1", "A male living pod. Looks like from one of the scientists. It's messy, but as if it's occupant would easily find his belongings in there. There are a few cracks in the glass already.", 64, 64, connections)->rankRequired = 1;
+    addRoom("pod-1", "A living pod. Looks like from one of the oficcers. It's messy, but as if it's occupant would easily find his belongings in there. There are some burn marks on the walls.", 64, 64, connections)->rankRequired = 1;
     
     /* 8 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -857,7 +857,7 @@ void initStation(void) {
     connections[3] = 5;
     connections[0] = 10;
     connections[2] = 11;
-    addRoom("dorms-2", "Anonther part of the dorms hallway. On those, the panels were visibly well. There is a skylight. These parts of the quarters were probably the luxury ones.", 64, 64, connections);
+    addRoom("dorms-2", "Anonther part of the dorms hallway. On those, the panels were visibly well. These parts of the quarters were probably the more prestigious ones.", 64, 64, connections);
     
     /* 10 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -868,19 +868,19 @@ void initStation(void) {
     /* 11 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 9;
-    addRoom("pod-4", "A scientists pod, for sure. It's neat, clean and organized. Not much around. He had a strange fixation on redheads.",
+    addRoom("pod-4", "A the first officer's pod, for sure. It's neat, clean and organized. Not much around. He had a strange fixation on redheads.",
             64, 64, connections)->rankRequired = 4;
     
     /* 12 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 9;
-    addRoom("computer-core", "Here, it seems like a relaxation place. You gaze at the stars and the planet. Very nice.", 64, 64, connections);
+    addRoom("computer-core", "While it is not the main control.", 64, 64, connections);
 
     /* 13 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[4] = 4;
     connections[2] = 14;
-    addRoom("elevator-level-1", "Going up or down? Looking down, you can clearly see the elevator cabin in level 3.", 64, 64, connections)->rankRequired = 1;
+    addRoom("elevator-level-1", "It's rather surprising that this ship has an elevator. This is was typical only of ships with 5 levels or more.", 64, 64, connections)->rankRequired = 1;
     
     /* 14 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -915,7 +915,7 @@ void initStation(void) {
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 20;
     connections[5] = 4;
-    addRoom("elevator-level-3", "Going up? Fortunately, the escape hatch is open and this allows for access. The cabin itself is unremarkable.", 64, 64, connections)->rankRequired = 1;
+    addRoom("elevator-level-3", "It's rather surprising that this ship has an elevator. This is was typical only of ships with 5 levels or more.", 64, 64, connections)->rankRequired = 1;
     
     /* 20 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -944,14 +944,14 @@ void initStation(void) {
     /*Items*/
 
     /* LSS-Daedalus */
-    newItem = addItem("time-bomb", "time-programmable Halogen bomb.", 5, TRUE, 9, 14);
+    newItem = addItem("emp-bomb", "time-programmable Halogen bomb.", 5, TRUE, 9, 14);
     addToRoom("lss-daedalus", newItem);
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->useCallback = bombActivatedCallback;
 
     
-    newItem = addItem("time-bomb-controller",
-                      "The remote controller allows you to instantly detonate the bomb from very far (empirical evidence tells it works from as far as 0.5AU).",
+    newItem = addItem("emp-controller",
+                      "The remote controller allows you to instantly detonate the bomb from very far (empirical evidence tells it works from as far as 200 nautical miles).",
                       0, TRUE, 10, 14);
     addToRoom("lss-daedalus", newItem);
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
@@ -969,12 +969,12 @@ void initStation(void) {
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
 
 
-    newItem = addItem("plasma-gun", "A mostly harmless gun. Useful for heating surfaces and light defense.", 1, TRUE, 13, 14);
+    newItem = addItem("flare-gun", "A mostly harmless signalling gun. Useful too for heating surfaces and light defense.", 1, TRUE, 13, 14);
     addToRoom("lss-daedalus", newItem);
     
 
     newItem = addItem("magnetic-boots",
-                      "boots with strong electro-magnets. Ideal for walking on low-gravity situations - as long as the surface in question is metallic (like most of the surfaces here).",
+                      "boots with strong electro-magnets. Ideal for walking underwater - as long as the surface in question is metallic (like most of the surfaces here).",
                       2, TRUE, 15, 15);
     
     newItem->active = TRUE;
@@ -989,7 +989,7 @@ void initStation(void) {
     newItem->useCallback = useObjectToggleCallback;
 
     
-    newItem = addItem("low-rank-keycard", "Clearance for low rank.", 0, TRUE, 16, 14);
+    newItem = addItem("low-rank-keycard", "Clearance for low rank. Oddly, this one is of the rewrittable kind; probably due to a field promotion.", 0, TRUE, 16, 14);
     addToRoom("hall-2", newItem);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = useCardWithCardWritter;
@@ -1007,7 +1007,7 @@ void initStation(void) {
     /* Hangar */
     
     newItem = addItem("magnetic-coupling",
-                      "This seems valuable. One can wonder why it is used here and what would be the consequences of taking it out? Whaever. It looks like paying for dinner.",
+                      "Automatic seal activated by special safety protocols",
                       17, FALSE, 17, 16);
     addToRoom("hangar", newItem);
     newItem->active = TRUE;
@@ -1016,71 +1016,71 @@ void initStation(void) {
     
     /* Comm terminals*/
     
-    newItem = addItem("door-panel", "Offline comm terminal for communicating with the other levels.", 200, FALSE, 18, 16);
+    newItem = addItem("door-panel", "Special control for ", 200, FALSE, 18, 16);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hangar", newItem);
     
 
     /* Comm terminals*/
-    newItem = addItem("comm-terminal-1", "Offline comm terminal for communicating with the other levels.", 200, FALSE, 17, 16);
+    newItem = addItem("comm-terminal-1", "Tterminal for communicating with the central computer.", 200, FALSE, 17, 16);
     newItem->useCallback = useObjectToggleCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-1", newItem);
 
     
-    newItem = addItem("comm-terminal-2", "Offline comm terminal for communicating with the other levels.", 200, FALSE, 17, 16);
+    newItem = addItem("comm-terminal-2", "Terminal for communicating with the central computer.", 200, FALSE, 17, 16);
     newItem->useCallback = useCommWithRank;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-2", newItem);
     
     
-    newItem = addItem("comm-terminal-3", "Offline comm terminal for communicating with the other levels.", 200, FALSE, 17, 16);
+    newItem = addItem("comm-terminal-3", "Terminal for communicating with the central computer.", 200, FALSE, 17, 16);
     newItem->useCallback = useObjectToggleCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-3", newItem);
 
     /* Diaries */
-    newItem = addItem("white-diary", "...And so, I realized that when you apply a presure in MicroG...", 0, TRUE, 5, 3);
+    newItem = addItem("white-diary", "Crew is growing demotivated with all the combat exercises and no downtime. Don't know long can I keep the fact that we already lost the war. If anything goes wrong, the situation room will be our last stand.", 0, TRUE, 5, 3);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("pod-2", newItem);
+
+    
+    newItem = addItem("blue-diary",
+                      "The growing discontent is very noticeable. I don't know flor how long can we keep the situation stable. For safety, I gave the root keycard to first officer Costa.",
+                      0, TRUE, 8, 4);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("pod-1", newItem);
 
     
-    newItem = addItem("blue-diary",
-                      "...Look in the mirror e try laughing. It's going to be hard first, but once you get used to it, it is easy to leave the room with a smile in your face.",
-                      0, TRUE, 8, 4);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("pod-3", newItem);
-
-    
     newItem = addItem("black-diary",
-                      "...We meet every night in the empty lab, to make out. I asked her for a access key and hid it in the tubes - probably a good place to hide it. Those are inactive for years! If they catch me, I'm scr...", 0, TRUE, 2, 2);
+                      "...We meet every night in the rest room, to make out. I asked her for an access key for the armory - let's see if she keeps her promisse. If they catch me, I'm scr...", 0, TRUE, 2, 2);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("pod-4", newItem);
 
     
-    newItem = addItem("yellow-book", "Today, I lost card during dinner. Gonna ask for a new one. Specially disconcerting since it gives access to all bunks. Nobody knows, so nothing to worry, I guess...", 0, TRUE, 4, 3);
+    newItem = addItem("yellow-book", "Situation is hopeless. I must enact the security lockdown protocol and set the reactor to a low activity state. With luck, they will rescue us in the next weeks or so.", 0, TRUE, 4, 3);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("bridge", newItem);
 
     
-    newItem = addItem("log-book", "A side note is written: That metal mending we put on Lab 1. last week mending was a real rush job. Any stronger bump and it might...", 1, TRUE, 10, 10);
+    newItem = addItem("log-book", "Power conduit on level 3 was restored without incidents.", 1, TRUE, 10, 10);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("wc", newItem);
 
     /* Misc */
-    newItem = addItem("card-writter", "Just a regular pipe, taking something somewhere.", 3, FALSE, 25, 25);
+    newItem = addItem("card-writter", "Terminal with card writter, connected to the main computer", 3, FALSE, 25, 25);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("computer-core", newItem);
 
     
-    newItem = addItem("high-rank-keycard", "Clearance for high-rank officer.", 0, TRUE, 30, 15);
+    newItem = addItem("high-rank-keycard", "Clearance for high-rank officer.", 0, TRUE, 30, 16);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
@@ -1114,13 +1114,23 @@ void initStation(void) {
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("wc", newItem);
     
-    newItem = addItem("electric-experiment", "All these equipment looks the same. Doesn't look valuable for me.", 209, FALSE, 1, 1);
+    
+    newItem = addItem("clogged-flush", "Voynich Manuscript - Annottated Translation. Classical edition. It's badly burn't. Can't read it.", 1, FALSE, 30, 15);
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("wc", newItem);
+    
+    newItem = addItem("flush", "Voynich Manuscript - Annottated Translation. Classical edition. It's badly burn't. Can't read it.", 1, FALSE, 35, 15);
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("wc", newItem);
+
+    
+    newItem = addItem("fuel-rods", "This is the source of all the trouble. Both now and then. Gotta find a way to eject those into the abyss.", 209, FALSE, 1, 1);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("reactor-core", newItem);
 
     
-    newItem = addItem("reactor-valve-control", "All these equipment looks the same. Doesn't look valuable for me.", 62, FALSE, 30, 15);
+    newItem = addItem("reactor-valve-control", "This is the computer node that could be used to eject the rods into the abyss.", 62, FALSE, 30, 15);
     newItem->useCallback = reactorValveCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("reactor-core", newItem);
