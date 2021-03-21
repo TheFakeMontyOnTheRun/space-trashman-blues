@@ -880,7 +880,7 @@ void initStation(void) {
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[4] = 4;
     connections[2] = 14;
-    addRoom("elevator-level-1", "Going up or down? Looking down, you can clearly see the elevator cabin in level 3.", 64, 64, connections)->rankRequired = 3;
+    addRoom("elevator-level-1", "Going up or down? Looking down, you can clearly see the elevator cabin in level 3.", 64, 64, connections)->rankRequired = 1;
     
     /* 14 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -888,28 +888,28 @@ void initStation(void) {
     connections[1] = 17;
     connections[2] = 16;
     connections[3] = 15;
-    addRoom("hall-1", "Not as imponent as the main hall from Level 1, this hall has a busier feel. Here you see objects thrown all over the place, as if someone was in the middle of a day-to-day routine and had to quickly run.", 64, 64, connections);
+    addRoom("hall-1", "Not as imponent as the main hall from Level 1, this hall has a busier feel. Here you see objects thrown all over the place, as if someone was in the middle of a day-to-day routine and had to quickly run.", 64, 64, connections)->rankRequired = 1;
     
     /* 15 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[1] = 14;
-    addRoom("bridge", "Empty stomach makes no science. Those thinkers were really into fancy stuff. Too bad it all went bad a long time ago.", 64, 64, connections)->rankRequired = 3;
+    addRoom("bridge", "Empty stomach makes no science. Those thinkers were really into fancy stuff. Too bad it all went bad a long time ago.", 64, 64, connections)->rankRequired = 4;
     
     /* 16 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 14;
-    addRoom("situation-room", "Lots of old equiptment.", 64, 64, connections)->rankRequired = 2;
+    addRoom("situation-room", "Lots of old equiptment.", 64, 64, connections)->rankRequired = 3;
 
     /* 17 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 14;
     connections[1] = 18;
-    addRoom("crew-bunks", "This is where they used to workout to keep their health.", 64, 64, connections);
+    addRoom("crew-bunks", "This is where they used to workout to keep their health.", 64, 64, connections)->rankRequired = 1;
     
     /* 18 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 17;
-    addRoom("armory", "...and this is where they would stay clean. Smells like dry sweat. Ick.", 64, 64, connections);
+    addRoom("armory", "...and this is where they would stay clean. Smells like dry sweat. Ick.", 64, 64, connections)->rankRequired = 3;
 
     /* 19 */
     memset(&connections[0], 0, 6 * sizeof(int));
