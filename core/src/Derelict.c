@@ -915,7 +915,7 @@ void initStation(void) {
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 20;
     connections[5] = 4;
-    addRoom("elevator-level-3", "Going up? Fortunately, the escape hatch is open and this allows for access. The cabin itself is unremarkable.", 64, 64, connections)->rankRequired = 2;
+    addRoom("elevator-level-3", "Going up? Fortunately, the escape hatch is open and this allows for access. The cabin itself is unremarkable.", 64, 64, connections)->rankRequired = 1;
     
     /* 20 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -928,12 +928,12 @@ void initStation(void) {
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 20;
     connections[1] = 22;
-    addRoom("reactor-core", "A micro-g-hydrostatic lab. Lots of old equipments. There must be something valuable here.", 64, 64, connections)->rankRequired = 4;
-
+    addRoom("wc", "0A low-atmosphere-electricity lab. Lots of strange equipment. Looks dangerous.", 64, 64, connections);
+    
     /* 22 */
     memset(&connections[0], 0, 6 * sizeof(int));
-    connections[0] = 21;
-    addRoom("wc", "0A low-atmosphere-electricity lab. Lots of strange equipment. Looks dangerous.", 64, 64, connections)->rankRequired = 3;
+    connections[3] = 21;
+    addRoom("reactor-core", "A micro-g-hydrostatic lab. Lots of old equipments. There must be something valuable here.", 64, 64, connections)->rankRequired = 4;
     
     /* 23 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -1085,7 +1085,7 @@ void initStation(void) {
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
-    addToRoom("radar-array", newItem);
+    addToRoom("wc", newItem);
 
     
     newItem = addItem("computer-rack", "A very valuable vintage rare-and-in-working-conditions computer rack!", 138, FALSE, 1, 1);
