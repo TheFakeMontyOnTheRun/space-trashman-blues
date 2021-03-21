@@ -442,6 +442,13 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     playerCrawler.position.y = y;
 
 
+    struct ObjectNode *head = getRoom(getPlayerRoom())->itemsPresent->next;
+    
+    while (head != NULL) {
+      setItem(head->item->position.x, head->item->position.y, head->item->index);
+      head = head->next;
+    }
+    
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = TRUE;
 }

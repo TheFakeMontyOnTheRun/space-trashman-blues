@@ -519,6 +519,7 @@ void useBootsWithMagneticCoupling(struct Item *item1, struct Item *item2) {
     struct Item *coupling = getItemNamed("magnetic-coupling");
     if (item2 == coupling ) {
         coupling->active = FALSE;
+	defaultLogger("Magnetic lock disengaged");
     } else {
         defaultLogger("No effect");
     }
