@@ -123,7 +123,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     head = head->next;
                 }
 
-                if (currentSelectedItem > index) {
+                if (currentSelectedItem >= index) {
                     currentSelectedItem = 0;
                 }
             }
@@ -189,7 +189,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     item->position.x = offseted.x;
                     item->position.y = offseted.y;
                     setItem(item->position.x, item->position.y, item->index);
-                    currentSelectedItem--;
+                    currentSelectedItem = 0;
                 }
             }
                 break;
