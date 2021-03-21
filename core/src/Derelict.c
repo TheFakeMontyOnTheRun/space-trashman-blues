@@ -1041,7 +1041,7 @@ void initStation(void) {
     
     newItem = addItem("magnetic-coupling",
                       "Automatic seal activated by special safety protocols",
-                      17, FALSE, 17, 16);
+                      17, FALSE, 3, 10);
     addToRoom("hangar", newItem);
     newItem->active = TRUE;
     newItem->useCallback = cantBeUsedCallback;
@@ -1049,7 +1049,7 @@ void initStation(void) {
     
     /* Comm terminals*/
     
-    newItem = addItem("door-panel", "Special control for ", 200, FALSE, 18, 16);
+    newItem = addItem("door-panel", "Special control for ", 200, FALSE, 11, 9);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hangar", newItem);
@@ -1113,7 +1113,7 @@ void initStation(void) {
     addToRoom("computer-core", newItem);
 
     
-    newItem = addItem("high-rank-keycard", "Clearance for high-rank officer.", 0, TRUE, 30, 16);
+    newItem = addItem("high-rank-keycard", "Clearance for high-rank officer.", 0, TRUE, 33, 16);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
@@ -1148,12 +1148,12 @@ void initStation(void) {
     addToRoom("wc", newItem);
     
     
-    newItem = addItem("clogged-flush", "Voynich Manuscript - Annottated Translation. Classical edition. It's badly burn't. Can't read it.", 1, FALSE, 30, 15);
+    newItem = addItem("clogged-flush", "Voynich Manuscript - Annottated Translation. Classical edition. It's badly burn't. Can't read it.", 1, FALSE, 33, 17);
     newItem->useCallback = useCloggedFlush;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("wc", newItem);
     
-    newItem = addItem("flush", "Voynich Manuscript - Annottated Translation. Classical edition. It's badly burn't. Can't read it.", 1, FALSE, 35, 15);
+    newItem = addItem("flush", "Voynich Manuscript - Annottated Translation. Classical edition. It's badly burn't. Can't read it.", 1, FALSE, 29, 17);
     newItem->useCallback = useRegularFlush;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("wc", newItem);
