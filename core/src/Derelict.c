@@ -13,7 +13,7 @@ Created by Daniel Monteiro on 2019-07-26.
 
 
 int roomCount = 1; /* there's an implicit dummy first */
-struct Room station[TOTAL_ROOMS];
+struct Room rooms[TOTAL_ROOMS];
 int itemsCount = 0;
 struct Item item[TOTAL_ITEMS];
 struct ObjectNode *collectedObject = NULL;
@@ -60,7 +60,7 @@ struct Item* addItem(char *description,
 
 struct Room *addRoom(char *description, char *info, int sizeX, int sizeY, int connections[6]) {
     
-    struct Room* toReturn = &station[roomCount++];
+    struct Room* toReturn = &rooms[roomCount++];
     
     toReturn->description = description;
     toReturn->info = info;
@@ -134,8 +134,8 @@ struct Room *getRoomByName(const char* name) {
     int c = 0;
     
     for (c = 1; c < roomCount; ++c ) {
-        if (!strcmp(station[c].description, name)) {
-            return &station[c];
+        if (!strcmp(rooms[c].description, name)) {
+            return &rooms[c];
         }
     }
     
@@ -178,14 +178,14 @@ void removeObjectFromList(struct Item *itemToRemove, struct ObjectNode *listHead
 
 void removeObjectFromRoom(struct Item *itemToRemove) {
     if (itemToRemove->roomId != 0) {
-        removeObjectFromList(itemToRemove, station[itemToRemove->roomId].itemsPresent);
+        removeObjectFromList(itemToRemove, rooms[itemToRemove->roomId].itemsPresent);
         itemToRemove->roomId = 0;
     }
 }
 
 
 void addObjectToRoom(int roomId, struct Item *itemToAdd) {
-    struct Room *roomToAddObject = &station[roomId];
+    struct Room *roomToAddObject = &rooms[roomId];
     removeObjectFromRoom(itemToAdd);
     addObjectToList(itemToAdd, roomToAddObject->itemsPresent);
     itemToAdd->roomId = roomId;
@@ -235,12 +235,12 @@ void setPlayerRank(int newRank) {
 void moveBy(int direction) {
     int c;
     int previousLocation = playerLocation;
-    struct Room *room = &station[playerLocation];
+    struct Room *room = &rooms[playerLocation];
     if (direction >= 0 && direction <= 5 && room->connections[direction] != 0) {
         struct Item *coupling = getItemNamed("magnetic-coupling");
-        room = &station[playerLocation];
+        room = &rooms[playerLocation];
         
-        if (station[room->connections[direction]].rankRequired > playerRank) {
+        if (rooms[room->connections[direction]].rankRequired > playerRank) {
             defaultLogger("Insuficient rank to enter room");
             return;
         }
@@ -257,7 +257,7 @@ void moveBy(int direction) {
         
 
         playerLocation = room->connections[direction];
-        room = &station[playerLocation];
+        room = &rooms[playerLocation];
         
         for (c = 0; c < 6; ++c ) {
             if (room->connections[c] == previousLocation) {
@@ -267,23 +267,23 @@ void moveBy(int direction) {
 
         switch (direction) {
             case 2:
-                characterPositions[playerCharacter].x = station[playerLocation].sizeX / 2;
-                characterPositions[playerCharacter].y = station[playerLocation].sizeY - 1;
+                characterPositions[playerCharacter].x = rooms[playerLocation].sizeX / 2;
+                characterPositions[playerCharacter].y = rooms[playerLocation].sizeY - 1;
                 break;
 
             case 3:
                 characterPositions[playerCharacter].x = 0;
-                characterPositions[playerCharacter].y = station[playerLocation].sizeY / 2;
+                characterPositions[playerCharacter].y = rooms[playerLocation].sizeY / 2;
                 break;
 
             case 0:
-                characterPositions[playerCharacter].x = station[playerLocation].sizeX / 2;
+                characterPositions[playerCharacter].x = rooms[playerLocation].sizeX / 2;
                 characterPositions[playerCharacter].y = 0;
                 break;
 
             case 1:
-                characterPositions[playerCharacter].x = station[playerLocation].sizeX - 1;
-                characterPositions[playerCharacter].y = station[playerLocation].sizeY / 2;
+                characterPositions[playerCharacter].x = rooms[playerLocation].sizeX - 1;
+                characterPositions[playerCharacter].y = rooms[playerLocation].sizeY / 2;
                 break;
         }
 
@@ -293,7 +293,7 @@ void moveBy(int direction) {
 }
 
 void pickObjectByName(const char *objName) {
-    struct Room *room = &station[playerLocation];
+    struct Room *room = &rooms[playerLocation];
     struct ObjectNode *itemToPick = room->itemsPresent->next;
 
     while (itemToPick != NULL) {
@@ -327,10 +327,10 @@ int hasItemInRoom(const char *roomName, const char *itemName) {
     }
 
     for (r = 1; r < TOTAL_ROOMS; ++r) {
-        char *desc = station[r].description;
+        char *desc = rooms[r].description;
 
         if (desc != NULL && !strcmp(desc, roomName)) {
-            struct ObjectNode *itemToPick = station[r].itemsPresent->next;
+            struct ObjectNode *itemToPick = rooms[r].itemsPresent->next;
 
             while (itemToPick != NULL) {
                 if (!strcmp(itemToPick->item->description, itemName)) {
@@ -359,19 +359,19 @@ int playerHasObject(const char *itemName) {
 
 
 int isPlayerAtRoom(const char *roomName) {
-    struct Room *room = &station[playerLocation];
+    struct Room *room = &rooms[playerLocation];
     char *name = room->description;
     int returnValue = !strcmp(name, roomName);
     return returnValue;
 }
 
 char *getRoomDescription() {
-    struct Room *room = &station[playerLocation];
+    struct Room *room = &rooms[playerLocation];
     return room->description;
 }
 
 struct Room *getRoom(int index) {
-    return &station[index];
+    return &rooms[index];
 }
 
 struct Item *getItem(int index) {
@@ -425,7 +425,7 @@ void walkTo(const char *operands) {
 void infoAboutItemNamed(const char *itemName) {
 
     struct ObjectNode *object1 = collectedObject->next;
-    struct Room *room = &station[playerLocation];
+    struct Room *room = &rooms[playerLocation];
     struct ObjectNode *object2 = room->itemsPresent->next;
 
     if (itemName == NULL || strlen(itemName) == 0) {
@@ -459,7 +459,7 @@ void infoAboutItemNamed(const char *itemName) {
 void useObjectsTogether(const char *operands) {
 
     struct ObjectNode *object1 = collectedObject->next;
-    struct Room *room = &station[playerLocation];
+    struct Room *room = &rooms[playerLocation];
     struct ObjectNode *object2 = room->itemsPresent->next;
 
     char *operand1 = operands;
@@ -630,19 +630,19 @@ void walkBy(int direction) {
     }
 
 
-    if (characterPositions[playerCharacter].x >= station[playerLocation].sizeX) {
+    if (characterPositions[playerCharacter].x >= rooms[playerLocation].sizeX) {
         if (getRoom(playerLocation)->connections[1]) {
             moveBy(1);
         } else {
-            characterPositions[playerCharacter].x = station[playerLocation].sizeX - 1;
+            characterPositions[playerCharacter].x = rooms[playerLocation].sizeX - 1;
         }
     }
 
-    if (characterPositions[playerCharacter].y >= station[playerLocation].sizeY) {
+    if (characterPositions[playerCharacter].y >= rooms[playerLocation].sizeY) {
         if (getRoom(playerLocation)->connections[2]) {
             moveBy(2);
         } else {
-            characterPositions[playerCharacter].y = station[playerLocation].sizeY - 1;
+            characterPositions[playerCharacter].y = rooms[playerLocation].sizeY - 1;
         }
     }
 }
@@ -660,7 +660,7 @@ void addToRoom(const char *roomName, struct Item *itemName) {
     }
 
     for (r = 1; r < TOTAL_ROOMS; ++r) {
-        char *desc = station[r].description;
+        char *desc = rooms[r].description;
 
         if (desc != NULL && !strcmp(desc, roomName)) {
             addObjectToRoom(r, itemName);
@@ -807,7 +807,7 @@ void initStation(void) {
     characterPositions[playerCharacter].x = 15;
     characterPositions[playerCharacter].y = 15;
     
-    memset(&station, 0, TOTAL_ROOMS * sizeof(struct Room));
+    memset(&rooms, 0, TOTAL_ROOMS * sizeof(struct Room));
     memset(&item, 0, TOTAL_ITEMS * sizeof(struct Item));
 
     
