@@ -741,6 +741,18 @@ void elevatorGoUpCallback(struct Item *item) {
     moveBy(5);
 }
 
+void useCloggedFlush(struct Item *item) {
+    struct Item* highRankKeycard = getItemNamed("high-rank-keycard");
+    if (highRankKeycard->roomId == 0) {
+        defaultLogger("Found something among the....stufff...");
+        addToRoom("wc", highRankKeycard);
+    }
+}
+
+void useRegularFlush(struct Item *item) {
+    defaultLogger("*FLUSH*");
+}
+
 
 void cantBeUsedCallback(struct Item *item) {
     defaultLogger("You can't use it like this.");
@@ -1085,7 +1097,7 @@ void initStation(void) {
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
-    addToRoom("wc", newItem);
+    
 
     
     newItem = addItem("computer-rack", "A very valuable vintage rare-and-in-working-conditions computer rack!", 138, FALSE, 1, 1);
@@ -1116,10 +1128,12 @@ void initStation(void) {
     
     
     newItem = addItem("clogged-flush", "Voynich Manuscript - Annottated Translation. Classical edition. It's badly burn't. Can't read it.", 1, FALSE, 30, 15);
+    newItem->useCallback = useCloggedFlush;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("wc", newItem);
     
     newItem = addItem("flush", "Voynich Manuscript - Annottated Translation. Classical edition. It's badly burn't. Can't read it.", 1, FALSE, 35, 15);
+    newItem->useCallback = useRegularFlush;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("wc", newItem);
 
