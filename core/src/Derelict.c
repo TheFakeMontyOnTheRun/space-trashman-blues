@@ -933,7 +933,7 @@ void initStation(void) {
     /* 22 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 21;
-    addRoom("brig", "0A low-atmosphere-electricity lab. Lots of strange equipment. Looks dangerous.", 64, 64, connections)->rankRequired = 3;
+    addRoom("wc", "0A low-atmosphere-electricity lab. Lots of strange equipment. Looks dangerous.", 64, 64, connections)->rankRequired = 3;
     
     /* 23 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -1071,7 +1071,7 @@ void initStation(void) {
     newItem = addItem("log-book", "A side note is written: That metal mending we put on Lab 1. last week mending was a real rush job. Any stronger bump and it might...", 1, TRUE, 10, 10);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("brig", newItem);
+    addToRoom("wc", newItem);
 
     /* Misc */
     newItem = addItem("card-writter", "Just a regular pipe, taking something somewhere.", 3, FALSE, 25, 25);
@@ -1112,7 +1112,7 @@ void initStation(void) {
     newItem = addItem("scientific-treatise", "Voynich Manuscript - Annottated Translation. Classical edition. It's badly burn't. Can't read it.", 1, TRUE, 1, 1);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("brig", newItem);
+    addToRoom("wc", newItem);
     
     newItem = addItem("electric-experiment", "All these equipment looks the same. Doesn't look valuable for me.", 209, FALSE, 1, 1);
     newItem->useCallback = cantBeUsedCallback;
