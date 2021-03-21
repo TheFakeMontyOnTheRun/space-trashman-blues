@@ -744,7 +744,7 @@ void elevatorGoUpCallback(struct Item *item) {
 void useCloggedFlush(struct Item *item) {
     struct Item* highRankKeycard = getItemNamed("high-rank-keycard");
     if (highRankKeycard->roomId == 0) {
-        defaultLogger("Found something among the....stufff...");
+        defaultLogger("Found something among the....stuff...");
         addToRoom("wc", highRankKeycard);
     }
 }
