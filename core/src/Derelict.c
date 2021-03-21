@@ -714,7 +714,28 @@ void keycardDropCallback(struct Item *item) {
  */
 void bombActivatedCallback(struct Item *item) {
 
-
+    int playerAtWarship = hasItemInRoom( "lab-1", "emp-bomb");
+    int playerAtDaedaus = (playerLocation == 1);
+    int playerAtSameLocationAsBomb = hasItemInRoom( getRoom( playerLocation)->description, "emp-bomb");
+    
+    if (playerAtWarship) {
+        if (playerAtDaedaus) {
+            setGameStatus(kGoodVictory);
+        } else {
+            setGameStatus(kBadVictory);
+        }
+    } else {
+        
+        if (playerAtSameLocationAsBomb) {
+            setGameStatus(kBadGameOver);
+        } else {
+            if (playerAtDaedaus  ) {
+                setGameStatus(kGoodGameOver);
+            } else {
+                setGameStatus(kBadGameOver);
+            }
+        }
+    }
 }
 
 void bombControllerActivatedCallback(struct Item *item) {
@@ -777,7 +798,7 @@ void useCommWithRank(struct Item *item) {
 }
 
 void reactorValveCallback(struct Item *item) {
-    gameStatus = kGoodVictory;
+    gameStatus = kBadVictory;
 }
 
 void setPlayerDirection(int direction) {
