@@ -26,7 +26,7 @@ struct WorldPosition *characterPositions;
 int charactersCount = 1;
 int playerCharacter;
 ErrorHandlerCallback errorHandlerCallback = NULL;
-
+int accessGrantedToSafe = FALSE;
 
 void writeToLog(const char *errorMsg) {
     if (errorHandlerCallback == NULL) {
@@ -796,6 +796,18 @@ void useCommWithRank(struct Item *item) {
     item->active = !item->active;
 }
 
+
+void useComputerRack(struct Item *item) {
+    
+    if (accessGrantedToSafe) {
+        defaultLogger("Safe unlocked");
+        addToRoom("situation-room", getItemNamed("root-keycard"));
+        return;
+    }
+    
+    defaultLogger("Safe secured");
+}
+
 void reactorValveCallback(struct Item *item) {
     gameStatus = kBadVictory;
 }
@@ -813,7 +825,7 @@ void initStation(void) {
     playerCharacter = 0;
     charactersCount = 1;
     characterPositions = (struct WorldPosition*)calloc(charactersCount, sizeof(struct WorldPosition));
-    
+    accessGrantedToSafe = FALSE;
     setErrorHandlerCallback(NULL);
     
     collectedObject = (struct ObjectNode *) calloc(1, sizeof(struct ObjectNode));
@@ -1120,9 +1132,13 @@ void initStation(void) {
     newItem->dropCallback = keycardDropCallback;
     
 
+    newItem = addItem("computer-node", "A very valuable vintage rare-and-in-working-conditions computer rack!", 138, FALSE, 31, 15);
+    newItem->useCallback = useComputerRack;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("situation-room", newItem);
     
-    newItem = addItem("computer-rack", "A very valuable vintage rare-and-in-working-conditions computer rack!", 138, FALSE, 1, 1);
-    newItem->useCallback = cantBeUsedCallback;
+    newItem = addItem("computer-terminal", "An offline terminal connected to the computer node", 138, FALSE, 32, 15);
+    newItem->useCallback = useComputerRack;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("situation-room", newItem);
 
@@ -1177,7 +1193,6 @@ void initStation(void) {
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
-    addToRoom("situation-room", newItem);
     
     /* Elevator controls */
     newItem = addItem("elevator-level1-go-down", "Elevator controls - Go down.", 0, FALSE, 27, 0);

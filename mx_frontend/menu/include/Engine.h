@@ -83,6 +83,16 @@ int32_t GameMenu_tickCallback(int32_t tag, void *data);
 
 void GameMenu_unloadStateCallback(void);
 
+int32_t HackingScreen_initStateCallback(int32_t tag);
+
+void HackingScreen_initialPaintCallback(void);
+
+void HackingScreen_repaintCallback(void);
+
+int32_t HackingScreen_tickCallback(int32_t tag, void *data);
+
+void HackingScreen_unloadStateCallback(void);
+
 int countLines(void);
 void enterState( enum EGameMenuState State );
 #define MENU_ITEM_TIME_TO_BECOME_ACTIVE_MS 200

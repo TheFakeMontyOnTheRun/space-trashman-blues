@@ -234,9 +234,14 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 }
 
                 if (item != NULL) {
-                    parseCommand(item->pickable ? "pick" : "use", item->description);
-                    if (item->pickable) {
-                        setItem(offseted.x, offseted.y, 0xFF);
+                    
+                    if (item == getItemNamed("computer-terminal")) {
+                        enterState(kHackingGame);
+                    } else {
+                        parseCommand(item->pickable ? "pick" : "use", item->description);
+                        if (item->pickable) {
+                            setItem(offseted.x, offseted.y, 0xFF);
+                        }
                     }
                 }
                 gameSnapshot.turn++;

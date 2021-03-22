@@ -51,6 +51,7 @@
 		F18B852625581D380012292B /* detected2.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851525581D370012292B /* detected2.wav */; };
 		F18B852725581D380012292B /* bonk.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851625581D370012292B /* bonk.wav */; };
 		F18B852825581D380012292B /* fire.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851725581D380012292B /* fire.wav */; };
+		F18C31BC2608BDE8002C2CDA /* HackingScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F18C31BB2608BDE8002C2CDA /* HackingScreen.c */; };
 		F1B679BB24E4AA3F00FCEF8E /* Engine.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B679BA24E4AA3F00FCEF8E /* Engine.c */; };
 		F1B679BE24E4AAE400FCEF8E /* GameWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B679BD24E4AAE400FCEF8E /* GameWindow.m */; };
 		F1BD0D32236EF697002329C6 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1BD0D30236EF697002329C6 /* Quartz.framework */; };
@@ -129,6 +130,7 @@
 		F18B851525581D370012292B /* detected2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = detected2.wav; path = ../data/wavogg/detected2.wav; sourceTree = "<group>"; };
 		F18B851625581D370012292B /* bonk.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = bonk.wav; path = ../data/wavogg/bonk.wav; sourceTree = "<group>"; };
 		F18B851725581D380012292B /* fire.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = fire.wav; path = ../data/wavogg/fire.wav; sourceTree = "<group>"; };
+		F18C31BB2608BDE8002C2CDA /* HackingScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = HackingScreen.c; path = ../menu/src/HackingScreen.c; sourceTree = "<group>"; };
 		F1B679BA24E4AA3F00FCEF8E /* Engine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Engine.c; path = ../menu/src/Engine.c; sourceTree = "<group>"; };
 		F1B679BC24E4AAE400FCEF8E /* GameWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameWindow.h; sourceTree = "<group>"; };
 		F1B679BD24E4AAE400FCEF8E /* GameWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameWindow.m; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 				F1277A0C236DE63E00478B2C /* GameMenu.c */,
 				F12779E4236DE60800478B2C /* Globals.c */,
 				F1CD088E2450E32D00D4794D /* Globals.h */,
+				F18C31BB2608BDE8002C2CDA /* HackingScreen.c */,
 				F1277A0D236DE63E00478B2C /* HelpScreen.c */,
 				F12779DD236DE60800478B2C /* LoadBitmap.c */,
 				F1277A02236DE62100478B2C /* LoadBitmap.h */,
@@ -383,6 +386,7 @@
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				F1B679BE24E4AAE400FCEF8E /* GameWindow.m in Sources */,
+				F18C31BC2608BDE8002C2CDA /* HackingScreen.c in Sources */,
 				F12779EB236DE60800478B2C /* Vec.c in Sources */,
 				F12779EC236DE60800478B2C /* LoadBitmap.c in Sources */,
 				F12779ED236DE60800478B2C /* FixP.c in Sources */,

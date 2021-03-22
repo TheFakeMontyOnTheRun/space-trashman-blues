@@ -125,6 +125,14 @@ void enterState(enum EGameMenuState newState) {
             unloadStateCallback = GameMenu_unloadStateCallback;
         }
             break;
+        case kHackingGame: {
+            initStateCallback = HackingScreen_initStateCallback;
+            initialPaintCallback = HackingScreen_initialPaintCallback;
+            repaintCallback = HackingScreen_repaintCallback;
+            tickCallback = HackingScreen_tickCallback;
+            unloadStateCallback = HackingScreen_unloadStateCallback;
+        }
+            break;
         case kQuit:
             isRunning = FALSE;
             break;
