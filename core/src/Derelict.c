@@ -714,18 +714,17 @@ void keycardDropCallback(struct Item *item) {
  */
 void bombActivatedCallback(struct Item *item) {
 
-    int playerAtWarship = hasItemInRoom( "lab-1", "emp-bomb");
+    int empOnReactor = hasItemInRoom( "reactor-core", "emp-bomb");
     int playerAtDaedaus = (playerLocation == 1);
     int playerAtSameLocationAsBomb = hasItemInRoom( getRoom( playerLocation)->description, "emp-bomb");
     
-    if (playerAtWarship) {
+    if (empOnReactor) {
         if (playerAtDaedaus) {
             setGameStatus(kGoodVictory);
         } else {
             setGameStatus(kBadVictory);
         }
     } else {
-        
         if (playerAtSameLocationAsBomb) {
             setGameStatus(kBadGameOver);
         } else {
@@ -999,6 +998,7 @@ void initStation(void) {
     
     newItem = addItem("ship-ignition", "token needed to ignite the ship's computer and thrusters", 0, TRUE, 12, 14);
     addToRoom("lss-daedalus", newItem);
+    newItem->useCallback = bombActivatedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
 
 
