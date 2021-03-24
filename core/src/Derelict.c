@@ -1061,7 +1061,7 @@ void initStation(void) {
     
     /* Comm terminals*/
     
-    newItem = addItem("door-panel", "Special control for ", 200, FALSE, 11, 9);
+    newItem = addItem("door-panel", "Special control for ", 200, FALSE, 12, 8);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hangar", newItem);
