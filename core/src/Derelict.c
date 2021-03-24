@@ -1053,7 +1053,7 @@ void initStation(void) {
     
     newItem = addItem("magnetic-coupling",
                       "Automatic seal activated by special safety protocols",
-                      17, FALSE, 3, 10);
+                      17, FALSE, 2, 7);
     addToRoom("hangar", newItem);
     newItem->active = TRUE;
     newItem->useCallback = cantBeUsedCallback;
@@ -1068,19 +1068,19 @@ void initStation(void) {
     
 
     /* Comm terminals*/
-    newItem = addItem("comm-terminal-1", "Tterminal for communicating with the central computer.", 200, FALSE, 17, 16);
+    newItem = addItem("comm-terminal-1", "Tterminal for communicating with the central computer.", 200, FALSE, 19, 10);
     newItem->useCallback = useObjectToggleCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-1", newItem);
 
     
-    newItem = addItem("comm-terminal-2", "Terminal for communicating with the central computer.", 200, FALSE, 17, 16);
+    newItem = addItem("comm-terminal-2", "Terminal for communicating with the central computer.", 200, FALSE, 19, 10);
     newItem->useCallback = useCommWithRank;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-2", newItem);
     
     
-    newItem = addItem("comm-terminal-3", "Terminal for communicating with the central computer.", 200, FALSE, 17, 16);
+    newItem = addItem("comm-terminal-3", "Terminal for communicating with the central computer.", 200, FALSE, 19, 10);
     newItem->useCallback = useObjectToggleCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-3", newItem);
