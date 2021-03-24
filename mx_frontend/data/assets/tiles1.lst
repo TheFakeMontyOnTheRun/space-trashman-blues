@@ -1,9 +1,8 @@
-bars.img
+arch.img
 floor.img
 stonefloor.img
 bricks.img
 bricks2.img
-arch.img
 grating.img
 grass.img
 ceiling.img
@@ -19,5 +18,6 @@ grating2.img
 tablepaper.img
 machinery.img
 electric.img
-noclue.img
+doorl.img
+doorr.img
 chevrons.img
