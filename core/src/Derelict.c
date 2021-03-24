@@ -250,7 +250,7 @@ void moveBy(int direction) {
             return;
         }
 
-        if (room == getRoomByName("hangar") && coupling->active) {
+        if (room == getRoomByName("hangar") && coupling->active && direction == 0) {
             defaultLogger("The magnetic coupling is engaged. The door will not open");
             return;
         }
