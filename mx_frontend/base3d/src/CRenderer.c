@@ -301,7 +301,7 @@ void render(const long ms) {
     FixP_t four = intToFix(4);
     FixP_t one = intToFix(1);
     const FixP_t halfOne = Div(one, two);
-    FixP_t standardHeight = Div(intToFix(230), intToFix(100));
+    FixP_t standardHeight = Div(intToFix(195), intToFix(100));
 
     if (messageLogBufferCoolDown > 0) {
         messageLogBufferCoolDown -= ms;
