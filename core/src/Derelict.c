@@ -1042,7 +1042,7 @@ void initStation(void) {
     newItem->dropCallback = keycardDropCallback;
     
     
-    newItem = addItem("hacked-keycard", "Hacked keycard for mid clearance rank.", 0, TRUE, 26, 26);
+    newItem = addItem("hacked-keycard", "Hacked keycard for mid clearance rank.", 0, TRUE, 35, 19);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
@@ -1119,7 +1119,7 @@ void initStation(void) {
     addToRoom("wc", newItem);
 
     /* Misc */
-    newItem = addItem("card-writter", "Terminal with card writter, connected to the main computer", 3, FALSE, 25, 25);
+    newItem = addItem("card-writter", "Terminal with card writter, connected to the main computer", 3, FALSE, 36, 20);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("computer-core", newItem);
