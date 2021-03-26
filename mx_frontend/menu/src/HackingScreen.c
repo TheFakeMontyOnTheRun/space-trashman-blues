@@ -52,6 +52,7 @@ int32_t HackingScreen_initStateCallback(int32_t tag) {
     pinTop[0] = 5;
     pinTop[1] = 0;
     pinTop[2] = 0;
+    holdingDisk = 3;
     enableSmoothMovement = FALSE;
     return 0;
 }
