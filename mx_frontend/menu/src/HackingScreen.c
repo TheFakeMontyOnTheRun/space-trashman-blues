@@ -33,6 +33,7 @@ uint8_t holdingDisk = 3;
 uint8_t pins[3][10];
 uint8_t pinTop[3];
 extern int accessGrantedToSafe;
+int wasSmoothMovementPreviouslyEnabled;
 
 int32_t HackingScreen_initStateCallback(int32_t tag) {
 
@@ -53,6 +54,7 @@ int32_t HackingScreen_initStateCallback(int32_t tag) {
     pinTop[1] = 0;
     pinTop[2] = 0;
     holdingDisk = 3;
+    wasSmoothMovementPreviouslyEnabled = enableSmoothMovement;
     enableSmoothMovement = FALSE;
     return 0;
 }
@@ -232,4 +234,5 @@ void HackingScreen_unloadStateCallback() {
         releaseBitmap(currentBackgroundBitmap);
         currentBackgroundBitmap = NULL;
     }
+    enableSmoothMovement = wasSmoothMovementPreviouslyEnabled;
 }
