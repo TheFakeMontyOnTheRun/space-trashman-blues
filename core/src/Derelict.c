@@ -500,10 +500,6 @@ void useObjectsTogether(const char *operands) {
     }
 }
 
-void useBlowtorchWithCallback(struct Item *item1, struct Item *item2) {
-    item2->pickable = TRUE;
-}
-
 void useCardWithCardWritter(struct Item *item1, struct Item *item2) {
     if (item2 == getItemNamed("card-writter")) {
         struct Item* card = getItemNamed("hacked-keycard");
@@ -1001,22 +997,10 @@ void initStation(void) {
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->useCallback = bombControllerActivatedCallback;
     
-    
-    newItem = addItem("blowtorch", "precision vintage-but-rather-well-kept metal cutter", 8, TRUE, 11, 14);
-    addToRoom("lss-daedalus", newItem);
-    newItem->useWithCallback = useBlowtorchWithCallback;
-    newItem->useCallback = cantBeUsedCallback;
-
-    
-    newItem = addItem("ship-ignition", "token needed to ignite the ship's computer and thrusters", 0, TRUE, 12, 14);
+    newItem = addItem("ship-ignition", "token needed to ignite the ship's computer and thrusters", 0, TRUE, 11, 14);
     addToRoom("lss-daedalus", newItem);
     newItem->useCallback = bombActivatedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
-
-
-    newItem = addItem("flare-gun", "A mostly harmless signalling gun. Useful too for heating surfaces and light defense.", 1, TRUE, 13, 14);
-    addToRoom("lss-daedalus", newItem);
-    
 
     newItem = addItem("magnetic-boots",
                       "boots with strong electro-magnets. Ideal for walking underwater - as long as the surface in question is metallic (like most of the surfaces here).",
