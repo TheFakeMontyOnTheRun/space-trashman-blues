@@ -1125,7 +1125,7 @@ void initStation(void) {
     addToRoom("computer-core", newItem);
 
     
-    newItem = addItem("high-rank-keycard", "Clearance for high-rank officer.", 0, TRUE, 33, 16);
+    newItem = addItem("high-rank-keycard", "Clearance for high-rank officer.", 0, TRUE, 32, 17);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
