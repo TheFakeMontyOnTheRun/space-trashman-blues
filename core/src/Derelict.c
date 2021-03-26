@@ -1132,12 +1132,12 @@ void initStation(void) {
     newItem->dropCallback = keycardDropCallback;
     
 
-    newItem = addItem("computer-node", "A very valuable vintage rare-and-in-working-conditions computer rack!", 138, FALSE, 31, 15);
+    newItem = addItem("computer-node", "A very valuable vintage rare-and-in-working-conditions computer rack!", 138, FALSE, 35, 15);
     newItem->useCallback = useComputerRack;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("situation-room", newItem);
     
-    newItem = addItem("computer-terminal", "An offline terminal connected to the computer node", 138, FALSE, 32, 15);
+    newItem = addItem("computer-terminal", "An offline terminal connected to the computer node", 138, FALSE, 35, 16);
     newItem->useCallback = useComputerRack;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("situation-room", newItem);
@@ -1188,7 +1188,7 @@ void initStation(void) {
 
     
     /* Not added directly, will be placed on the restroom after you search the pipe */
-    newItem = addItem("root-keycard", "Card for root access.", 0, TRUE, 30, 15);
+    newItem = addItem("root-keycard", "Card for root access.", 0, TRUE, 34, 14);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;

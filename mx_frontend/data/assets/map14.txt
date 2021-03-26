@@ -22,10 +22,10 @@ X.....IFFFFFXFF3.......444444.......1FFXFFFFFFFFFFFFFFFFFFFFFFFF
 X.....IIIIIIIII\.......444444...e...1FFXFFFFFFFFFFFFFFFFFFFFFFFF
 X.....I........I.........s..........1FFXFFFFFFFFFFFFFFFFFFFFFFFF
 I\....I........I..................../IIIIIIIIII\F/II\FFF/IIIII\.
-II....I........IIIIIIIIIIIIIIIIIIIIIII........II....IFFFI......I
-II....I........I....................II........II....IFFFI......I
-II....I........I....................II........II....IFFFI......I
-II....I........I....................II........II...LIFFFI......I
+II....I........IIIIIIIII\22222/IIIIIII........II....IFFFI......I
+II....I........I........IFFFFFI.....II........II....IFFFI......I
+II....I........I........IFFFFFI.....II........II....IFFFI......I
+II....I........I.........XXXXX......II........II...LIFFFI......I
 II....I........I....................II........II....IXXXI......I
 II\...I........I....................II........II...............I
 IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
