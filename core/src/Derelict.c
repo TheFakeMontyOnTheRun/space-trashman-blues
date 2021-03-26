@@ -1181,7 +1181,7 @@ void initStation(void) {
     addToRoom("reactor-core", newItem);
 
     
-    newItem = addItem("reactor-valve-control", "This is the computer node that could be used to eject the rods into the abyss.", 62, FALSE, 30, 15);
+    newItem = addItem("reactor-valve-control", "This is the computer node that could be used to eject the rods into the abyss.", 62, FALSE, 35, 15);
     newItem->useCallback = reactorValveCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("reactor-core", newItem);
