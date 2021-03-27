@@ -348,6 +348,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
     FixP_t zero = 0;
     FixP_t minusOne = -one;
     FixP_t threshold = 0;
+    int diffY = fixToInt( Mul( intToFix(32), (p1.mY - p0.mY ) ) );
     struct Vec2 llz0;
     struct Vec2 lrz0;
     struct Vec2 llz1;
@@ -403,10 +404,10 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         int coords[6];
         
 
-        uvCoords[0] = 32;
+        uvCoords[0] = diffY;
         uvCoords[1] = 0;
-        uvCoords[2] = 32;
-        uvCoords[3] = 32;
+        uvCoords[2] = diffY;
+        uvCoords[3] = diffY;
         uvCoords[4] = 0;
         uvCoords[5] = 0;
         
@@ -422,10 +423,10 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 
         uvCoords[0] = 0;
         uvCoords[1] = 0;
-        uvCoords[2] = 32;
-        uvCoords[3] = 32;
+        uvCoords[2] = diffY;
+        uvCoords[3] = diffY;
         uvCoords[4] = 0;
-        uvCoords[5] = 32;
+        uvCoords[5] = diffY;
 
         coords[0] = fixToInt(llz0.mX); //0
         coords[1] = fixToInt(llz0.mY);
