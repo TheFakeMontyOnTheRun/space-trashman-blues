@@ -32,7 +32,7 @@ NSMutableSet* playingSounds;
 int nextAudioChannel = -1;
 float multiplier = 1.0f;
 
-NSString* fileNamesForSounds[] = {@"menu_move", @"menu_select", @"gotclue", @"detected2", @"bong", @"fire", @"enemyfire", @"detected2" };
+NSString* fileNamesForSounds[] = {@"menu_move", @"menu_select", @"gotclue", @"detected2", @"bong", @"fire", @"enemyfire", @"derelicttheme"};
 
 NSSound* playerSounds[8];
 
@@ -51,7 +51,13 @@ void setupOPL2(int port) {
 }
 
 
-void stopSounds() {}
+void stopSounds() {
+    
+    NSArray* groupsArray = [playingSounds allObjects];
+    for(NSSound* sound in groupsArray) {
+        [sound stop];
+    }
+}
 
 void playSound( const int action ){
     NSSound *original = playerSounds[action];

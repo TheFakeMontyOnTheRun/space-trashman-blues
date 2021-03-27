@@ -65,6 +65,8 @@ int countLines() {
 
 void enterState(enum EGameMenuState newState) {
 
+    stopSounds();
+    
     if (unloadStateCallback != NULL) {
         unloadStateCallback();
     }

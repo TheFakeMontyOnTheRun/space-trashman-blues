@@ -67,6 +67,7 @@ int32_t MainMenu_initStateCallback(int32_t tag) {
             biggestOption = len;
         }
     }
+    playSound(7);
     return 0;
 }
 

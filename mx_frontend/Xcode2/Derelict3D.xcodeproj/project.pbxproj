@@ -52,6 +52,7 @@
 		F18B852725581D380012292B /* bonk.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851625581D370012292B /* bonk.wav */; };
 		F18B852825581D380012292B /* fire.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851725581D380012292B /* fire.wav */; };
 		F18C31BC2608BDE8002C2CDA /* HackingScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F18C31BB2608BDE8002C2CDA /* HackingScreen.c */; };
+		F19BC7A1260F901800C734C4 /* derelicttheme.wav in Resources */ = {isa = PBXBuildFile; fileRef = F19BC7A0260F901800C734C4 /* derelicttheme.wav */; };
 		F1B679BB24E4AA3F00FCEF8E /* Engine.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B679BA24E4AA3F00FCEF8E /* Engine.c */; };
 		F1B679BE24E4AAE400FCEF8E /* GameWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B679BD24E4AAE400FCEF8E /* GameWindow.m */; };
 		F1BD0D32236EF697002329C6 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1BD0D30236EF697002329C6 /* Quartz.framework */; };
@@ -131,6 +132,7 @@
 		F18B851625581D370012292B /* bonk.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = bonk.wav; path = ../data/wavogg/bonk.wav; sourceTree = "<group>"; };
 		F18B851725581D380012292B /* fire.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = fire.wav; path = ../data/wavogg/fire.wav; sourceTree = "<group>"; };
 		F18C31BB2608BDE8002C2CDA /* HackingScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = HackingScreen.c; path = ../menu/src/HackingScreen.c; sourceTree = "<group>"; };
+		F19BC7A0260F901800C734C4 /* derelicttheme.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = derelicttheme.wav; path = ../data/wavogg/derelicttheme.wav; sourceTree = "<group>"; };
 		F1B679BA24E4AA3F00FCEF8E /* Engine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Engine.c; path = ../menu/src/Engine.c; sourceTree = "<group>"; };
 		F1B679BC24E4AAE400FCEF8E /* GameWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameWindow.h; sourceTree = "<group>"; };
 		F1B679BD24E4AAE400FCEF8E /* GameWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameWindow.m; sourceTree = "<group>"; };
@@ -270,6 +272,7 @@
 			isa = PBXGroup;
 			children = (
 				F18B851125581D370012292B /* bong.wav */,
+				F19BC7A0260F901800C734C4 /* derelicttheme.wav */,
 				F18B851625581D370012292B /* bonk.wav */,
 				F18B850925581D370012292B /* click.wav */,
 				F18B851025581D370012292B /* dead.wav */,
@@ -358,6 +361,7 @@
 				F18B852225581D380012292B /* bong.wav in Resources */,
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				F18B852625581D380012292B /* detected2.wav in Resources */,
+				F19BC7A1260F901800C734C4 /* derelicttheme.wav in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				F18B852125581D380012292B /* dead.wav in Resources */,
 				F1CD08C72450E41C00D4794D /* base.pfs in Resources */,
