@@ -20,7 +20,7 @@
 
 #if !defined(ANDROID) && !defined(__EMSCRIPTEN__)
 const char *MainMenu_options[4] = {
-        "Agent log in", "Credits", "Help", "Quit"};
+        "Play game", "Credits", "Help", "Quit"};
 
 int32_t MainMenu_nextStateNavigation[4] = {
         kPlayGame, kCredits, kHelp,
@@ -29,7 +29,7 @@ int32_t MainMenu_nextStateNavigation[4] = {
 const int kMainMenuOptionsCount = 4;
 #else
 const char *MainMenu_options[3] = {
-        "Agent log in", "Credits", "Help"};
+        "Play game", "Credits", "Help"};
 
 int32_t MainMenu_nextStateNavigation[3] = {
         kPlayGame, kCredits, kHelp};
@@ -109,7 +109,7 @@ void MainMenu_repaintCallback(void) {
     drawBitmap(118, 45, logo2Bitmap, 1);
 
     drawWindow(40 - biggestOption - 3, 25 - 4 - (optionsHeight / 8), biggestOption + 2, (optionsHeight / 8) + 2,
-               "Play Game");
+               "Episode 0");
 
     for (c = 0; c < kMainMenuOptionsCount; ++c) {
 
