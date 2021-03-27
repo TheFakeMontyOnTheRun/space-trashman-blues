@@ -298,7 +298,9 @@ void pickObjectByName(const char *objName) {
 
     while (itemToPick != NULL) {
         if (!strcmp(itemToPick->item->description, objName)) {
+#ifdef MOVE_TO_OBJECT_POSITION_WHEM_PICKING
             characterPositions[playerCharacter] = itemToPick->item->position;
+#endif
             pickObject(itemToPick->item);
             return;
         }
