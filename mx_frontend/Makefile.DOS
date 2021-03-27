@@ -63,6 +63,7 @@ MENU_OBJ= menu/src/Main.o \
 	  menu/src/MainMenu.o \
 	  menu/src/Engine.o \
 	  menu/src/UI.o \
+	  menu/src/HackingScreen.o \
 	  menu/src/HelpScreen.o \
 	  menu/src/CreditsScreen.o \
 	  menu/src/Crawler.o \

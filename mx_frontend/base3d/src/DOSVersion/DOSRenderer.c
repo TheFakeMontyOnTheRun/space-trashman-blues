@@ -62,8 +62,7 @@ void graphicsShutdown() {
 	textmode(C80);
 	clrscr();
 	printf(
-			"Thanks for playing!\nDOS is back with a vengeance.\n\nSource code and "
-			"licenses:\nhttps://bitbucket.org/MontyOnTheRun/the-mistral-report\n\n");
+			"Thanks for playing!\nDOS is back with a vengeance!.\n\n");
 }
 
 void putStr(int x, int y, const char *str, int fg, int bg) {
@@ -107,13 +106,13 @@ void drawTitleBox() {
 	}
 	putStr(76, 10, "\xbc", COLOR_WHITE, COLOR_BLUE);
 
-	putStr(17, 4, "The Mistral Report - Invisible Affairs - v1.1", COLOR_WHITE,
+	putStr(17, 4, "Sub Mare Imperium - Derelict - v0.9", COLOR_WHITE,
 		   COLOR_BLUE);
 
-	putStr(5, 6, "Program and Audio-visual (C) 2018-2019 by Brotherhood of 13h",
+	putStr(5, 6, "Program and Audio-visual (C) 2021 by Brotherhood of 13h",
 		   COLOR_WHITE, COLOR_BLUE);
 
-	putStr(30, 7, "Licensed under GPLv3 ", COLOR_WHITE, COLOR_BLUE);
+	putStr(30, 7, "PRE-RELEASE version! Beware!", COLOR_WHITE, COLOR_BLUE);
 }
 
 void querySoundDriver() {
@@ -191,6 +190,7 @@ void graphicsInit() {
 	}
 
 	defaultFont = loadBitmap("font.img");
+	enableSmoothMovement = TRUE;
 }
 
 void handleSystemEvents() {
