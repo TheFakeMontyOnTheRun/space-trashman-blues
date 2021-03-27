@@ -19,6 +19,6 @@ w 0 0 0 0 1 ceiling asphalt null null null null 0 0 5 0
 . 0 0 0 0 1 ceiling asphalt null null null null 0 0 5 0
 L 0 0 0 0 1 ceiling asphalt null null null asphalt 0 1 5 0
 _ 0 0 0 0 1 ceiling asphalt null null null null 0 0 5 -0.5
-T 0 0 0 0 1 ceiling chevrons electric rampeast bricks bricks 3 1 2 1
+T 0 0 1 0 1 ceiling chevrons electric rampeast bricks bricks 3 1 2 1
 C 0 0 0 0 1 ceiling chevrons electric null null null 0 0 5 0
 X 0 0 1 1 1 null null null null bricks grating 3 2 2 2
