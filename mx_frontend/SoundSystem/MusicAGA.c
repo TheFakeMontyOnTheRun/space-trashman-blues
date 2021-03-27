@@ -14,6 +14,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "PCMAudio.h"
+#include "Common.h"
 #include "CPackedFileReader.h"
 
 //Lifted from http://amigadev.elowar.com/read/ADCD_2.1/Devices_Manual_guide/node0161.html
@@ -103,9 +104,10 @@ void setupOPL2(int unused) {
 	for ( int c = 0; c < 8; ++c ) {
 
 		struct PCMAudio audio;
+		struct StaticBuffer buffer = loadBinaryFileFromPath(files[c]);
+		uint8_t* pcm = buffer.data;
+		size_t size = buffer.size;
 
-		uint8_t* pcm = loadBinaryFileFromPath(files[c]);
-		size_t size = sizeOfFile(files[c]);
 		initAudio(pcm, size, &audio);
 
 		samples[c] = audio.size;

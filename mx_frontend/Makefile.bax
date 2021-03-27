@@ -28,6 +28,7 @@ MENU_OBJ= menu/src/Main.o \
 	base3d/src/CPackedFileReader.o \
 	base3d/src/CRenderer_Tesselation.o \
 	base3d/src/EDirection_Utils.o \
+	menu/src/HackingScreen.o    \
 	menu/src/GameMenu.o \
 	menu/src/Crawler.o \
 	menu/src/UI.o \
@@ -46,7 +47,7 @@ all:   $(MENU_TARGET)
 
 adf: $(MENU_TARGET)
 	rm -f derelict3d.adf
-	xdftool derelict3d.adf format "Derelict3D" + write game12k game12k + write base.pfs base.pfs
+	xdftool derelict3d.adf format "Sub Mare Imperium - Derelict" + write game12k game12k + write base.pfs base.pfs
 	xdftool derelict3d.adf list
 
 clean:

@@ -67,7 +67,7 @@ struct NewScreen xnewscreen = {
 	0,			  /* ViewModes High-resolution, Interlaced */
 	CUSTOMSCREEN,	  /* Type customized screen. */
 	NULL,		  /* Font */
-	"The Mistral Report", /* Title */
+	"Sub Mare Imperium - Derelict", /* Title */
 	NULL,		  /* Gadget */
 	NULL		  /* BitMap */
 };
@@ -83,7 +83,7 @@ struct NewScreen xnewscreen = {
 		0,              /* ViewModes High-resolution, Interlaced */
 		CUSTOMSCREEN,      /* Type customized screen. */
 		NULL,          /* Font */
-		"The Mistral Report", /* Title */
+		"Sub Mare Imperium - Derelict", /* Title */
 		NULL,          /* Gadget */
 		NULL          /* BitMap */
 };
@@ -103,7 +103,7 @@ struct NewScreen xnewscreen = {
 			ACTIVATE,                      /*            */
 			NULL,                          /* FirstGadget */
 			NULL,                          /* CheckMark   */
-			(UBYTE *) "The Mistral Report",              /* Title       */
+			(UBYTE *) "Sub Mare Imperium - Derelict",              /* Title       */
 			NULL,                          /* Screen      */
 			NULL,                          /* BitMap      */
 			320,                          /* MinWidth    */
@@ -205,6 +205,8 @@ void graphicsInit() {
 	int IsPAL;
 
 	drawTitleBox();
+
+	enableSmoothMovement = TRUE;
 
 	IntuitionBase =
 			(struct IntuitionBase *) OpenLibrary("intuition.library", 0);
