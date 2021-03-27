@@ -164,11 +164,25 @@ void Crawler_repaintCallback() {
         if  (currentPresentationState == kRoomTransitioning ) {
             
             struct Vec3 center;
-            center.mX = center.mY = 0;
-            center.mZ = intToFix(1);
+            
             fill(0, 0, 256, 200, 0, 0);
-            drawTextAt(16 - (thisMissionNameLen / 2), 1, thisMissionName, 255);
+            
+            center.mY = 0;
+            center.mX = -intToFix(1);
+            center.mZ = intToFix(2);
             drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            center.mX = intToFix(1);
+            drawBillboardAt( center, &nativeTextures[1]->rotations[0][0], intToFix(1), 32);
+
+             
+            center.mX = -intToFix(1);
+            center.mZ = Div(intToFix(1), intToFix(10));
+            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            center.mX = intToFix(1);
+            drawBillboardAt( center, &nativeTextures[1]->rotations[0][0], intToFix(1), 32);
+
+            drawTextAt(16 - (thisMissionNameLen / 2), 1, thisMissionName, 255);
+            
             zCameraOffset -= Div(intToFix(1), intToFix(16));
             if (zCameraOffset == 0 ) {
                 currentPresentationState = kWaitingForInput;
