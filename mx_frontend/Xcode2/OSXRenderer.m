@@ -83,6 +83,7 @@ void graphicsInit() {
     [osxview setBuffer: framebuffer];
     needsToRedrawVisibleMeshes = TRUE;
     visibilityCached = FALSE;
+    enableSmoothMovement = TRUE;
     mFont = loadBitmap("font.img");
     defaultFont = mFont;
 }
