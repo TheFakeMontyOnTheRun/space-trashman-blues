@@ -165,19 +165,61 @@ void Crawler_repaintCallback() {
             
             fill(0, 0, 256, 200, 0, 0);
             
+            
+            
             center.mY = 0;
-            center.mX = -intToFix(1);
-            center.mZ = intToFix(2);
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
-            center.mX = intToFix(1);
-            drawBillboardAt( center, &nativeTextures[1]->rotations[0][0], intToFix(1), 32);
+            center.mZ = intToFix(3);
+            center.mX = -intToFix(3);
+            drawColumnAt( center, intToFix(3), nativeTextures[1], MASK_LEFT, 0, 1);
+  
 
-             
+
+            center.mY = 0;
+            center.mX = intToFix(3);
+            drawColumnAt( center, intToFix(3), nativeTextures[1], MASK_RIGHT, 0, 1);
+            
+
+            center.mZ = intToFix(2);
             center.mX = -intToFix(1);
-            center.mZ = Div(intToFix(1), intToFix(10));
+            
+            center.mY = intToFix(4) - zCameraOffset;
             drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            
             center.mX = intToFix(1);
-            drawBillboardAt( center, &nativeTextures[1]->rotations[0][0], intToFix(1), 32);
+            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            
+            center.mY = intToFix(2) - zCameraOffset;
+            
+            center.mZ = intToFix(3);
+            drawCeilingAt( center, nativeTextures[0], 0);
+
+            center.mZ = intToFix(2);
+            
+            center.mY = intToFix(3) - zCameraOffset;
+            
+            center.mX = -intToFix(1);
+            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            
+            center.mX = intToFix(1);
+            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            
+            
+            center.mY = intToFix(6) - zCameraOffset;
+            
+            center.mX = -intToFix(1);
+            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            
+            center.mX = intToFix(1);
+            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            
+            
+
+            center.mX = -intToFix(1);
+            
+            center.mY = intToFix(2) - zCameraOffset;
+            
+            center.mZ = intToFix(3);
+            drawCeilingAt( center, nativeTextures[0], 0);
 
             drawTextAt(16 - (thisMissionNameLen / 2), 1, thisMissionName, 255);
             
