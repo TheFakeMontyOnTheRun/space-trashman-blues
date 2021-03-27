@@ -432,7 +432,7 @@ void drawFrontWall(FixP_t x0,
         return;
     }
 
-    du = Div(texWidth + intToFix(2), diffX);
+    du = Div(texWidth, diffX);
 
     for (; iy < limit; ++iy) {
 
