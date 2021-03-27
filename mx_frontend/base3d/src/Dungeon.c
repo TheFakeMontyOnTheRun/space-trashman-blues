@@ -353,6 +353,21 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 focusItemName = item->description;
             }
         }
+        
+        //for the elevators
+        if (currentPlayerRoom != getPlayerRoom()) {
+            enable3DRendering = FALSE;
+            enteredThru = 0 ;
+            setPlayerDirection(enteredThru);
+            initRoom(getPlayerRoom());
+            
+            thisMissionName = getRoomDescription();
+            thisMissionNameLen = strlen(getRoomDescription());
+            
+            setPlayerPosition(oldPosition);
+            
+            return gameSnapshot;
+        }
 
         int cell = map[playerCrawler.position.y][playerCrawler.position.x];
 
