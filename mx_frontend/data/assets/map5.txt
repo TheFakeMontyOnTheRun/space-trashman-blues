@@ -44,8 +44,8 @@ II....I........I....................II........I.XX..ILnLI......I
 I/....I........I....................II........I.IX..ILLLI......I
 X.....I........I....................\IIIIIIIIII/IIII/LLL\IIIIIII
 X.....I........I.....................FFFFFFFFFFFX3LLLLLLLLLLLL1X
-X.....I........I.....................FFFFFFFFFFFX3FFFFFFFFFFFF1X
-X.....I........I.....................FFFFFFFFFFFX3FwFFFFFFFFeF1X
+X.....I........I.....................FFFFFFFFFFF#3FFFFFFFFFFFF1X
+X.....I........I.....................FFFFFFFFFFFX3FwFFFFFFFFeF1#
 X.....I........I.....................FFFFFFFFFFFX3LLLLLLLLLLLL1X
 I\....I........I..................../IIIIIIIIII\IIII\LLL/IIIIIII
 II....I........I....................II........II....ILLLI......I

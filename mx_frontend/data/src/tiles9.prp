@@ -3,7 +3,6 @@ V 0 0 1 1 1 null null bricks rampnorth null bricks 0 0 0 0
 F 0 0 0 1 1 ceiling asphalt null null bricks null 0 0 3 0
 L 0 0 0 1 1 bricks asphalt null null bricks null 1 0 2 0
 = 0 0 1 1 1 bricks bricks null null null bricks 0 0 2 0
-# 0 0 1 1 1 null null null null null bricks 0 2 2 2
 R 0 0 1 1 1 null null null null null bricks 0 2 2 2
 \ 0 0 1 1 1 ceiling asphalt bricks leftfar null null 0 0 5 0
 / 0 0 1 1 1 ceiling asphalt bricks leftnear null null 0 0 5 0
@@ -26,4 +25,5 @@ w 0 0 0 0 1 ceiling asphalt null null null null 0 0 3 0
 . 0 0 0 0 1 ceiling asphalt null null null null 0 0 5 0
 _ 0 0 0 0 1 ceiling asphalt null null null null 0 0 5 -0.5
 C 0 0 0 0 1 ceiling chevrons null null null null 0 0 5 0
+# 0 0 1 1 1 null null null null p2 grating 3 2 2 2
 X 0 0 1 1 1 null null null null bricks grating 3 2 2 2
