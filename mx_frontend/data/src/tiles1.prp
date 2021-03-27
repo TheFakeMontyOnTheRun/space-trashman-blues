@@ -4,8 +4,8 @@ D 0 0 1 1 1 null null null null bricks2 grating 2 2 2 2
 F 0 0 1 1 1 ceiling asphalt null null bricks2 null 2 0 2 0
 = 0 0 1 1 1 bricks2 bricks null null null bricks2 0 0 2 0
 d 0 0 1 1 1 null null null null bricks2 grating 0 2 2 2
-[ 0 0 1 1 1 null bricks bricks rampsouth null null 0 2 2 0
-] 0 0 1 1 1 null bricks bricks rampnorth null null 0 2 2 0
+[ 0 0 1 1 1 null bricks bricks2 rampsouth null null 0 2 2 0
+] 0 0 1 1 1 null bricks bricks2 rampnorth null null 0 2 2 0
 R 0 0 1 1 1 null null null null null bricks2 0 2 2 2
 \ 0 0 1 1 1 ceiling asphalt bricks2 leftfar null null 0 0 4 0
 / 0 0 1 1 1 ceiling asphalt bricks2 leftnear null null 0 0 4 0
