@@ -37,7 +37,7 @@ int16_t thisMissionNameLen;
 int showPromptToAbandonMission = FALSE;
 extern size_t biggestOption;
 
-const char *AbandonMission_Title = "Abandon mission?";
+const char *AbandonMission_Title = "Abandon game?";
 const char *AbandonMission_options[6] = {"Continue", "End game"};
 int AbandonMission_navigation[2] = {-1, kMainMenu};
 int AbandonMission_count = 2;
@@ -92,7 +92,7 @@ void Crawler_initialPaintCallback() {
 
     drawRect(11 * 8, 11 * 8, 18 * 8, 16, 0);
 
-    drawTextAt(13, 13, "Decoding mission", 0);
+    drawTextAt(13, 13, "Loading", 0);
     drawTextAt(13, 12, "Please wait...", 255);
 
 
@@ -105,11 +105,9 @@ void Crawler_repaintCallback() {
     if (needsToRedrawVisibleMeshes && (currentPresentationState == kAppearing)) {
         drawRepeatBitmap(0, 32, 320, 200, currentBackgroundBitmap);
 
-        drawTextAt(2, 18, "Mission Status", 255);
 
         fill(256, 8, 64, 120, 255, FALSE);
         fill(256, 0, 64, 8, 0, FALSE);
-        drawTextAt(34, 1, "Map", 255);
     }
 
     if (showPromptToAbandonMission) {
@@ -194,7 +192,7 @@ void Crawler_repaintCallback() {
         renderTick(30);
 
         if (currentPresentationState == kAppearing) {
-            drawTextAt(16 - (thisMissionNameLen / 2), 10, thisMissionName, 255);
+            drawTextAt(16 - (10 / 2), 10, "Loading...", 255);
         }
     }
 }
