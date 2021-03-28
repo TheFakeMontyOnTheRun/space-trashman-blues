@@ -1,17 +1,15 @@
-You must find the traitor and accuse
-him or her once you find yourself on
-the same city.
+Place the EMP near the reactor control
+valve to cause it to drop the fuel
+rods and prevent the meltdown.
 
-During interrogations, try to find the
-red spot to find the truth - pay close
-attention to their stress levels!
-
-To succeed an infiltration, stay close
-to the walls and watch for the guards.
+Make sure to take a safe distance!
 
 Controls:
-- arrows will move
-- C to pick objects
-- X to aim (before you shoot)
-- Z to shoot (must aim first)
-- S and D to strafe
+
+- S and D: strafe
+- Z: use current item
+- A: use current item on what in front
+- X: drop current item
+- C: pick or use whats in front of you
+- V: toggle current item
+- F: inspect current item
