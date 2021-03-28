@@ -5,8 +5,10 @@ Created by Daniel Monteiro on 2019-07-26.
 #ifndef DERELICT_DERELICT_H
 #define DERELICT_DERELICT_H
 
+#ifndef TRUE
 #define TRUE 1
 #define FALSE 0
+#endif
 
 enum GameStates {
   kNormalGameplay,
@@ -143,6 +145,8 @@ void walkBy(int direction);
 int getPlayerRank();
 
 void setPlayerRank(int newRank);
+
+int isPositionAllowed(int x, int y);
 
 #define TOTAL_ROOMS 24
 #define TOTAL_ITEMS 64

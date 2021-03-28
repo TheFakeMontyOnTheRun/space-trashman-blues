@@ -68,9 +68,11 @@ void HackingScreen_initialPaintCallback(void) {
 
 void HackingScreen_repaintCallback(void) {
     int lines;
-    size_t len = "3";
-    lines = 5;
+    size_t len = 3;
+    uint8_t isSelected = 0;
+    int pin;
     int16_t optionsHeight = 8 * (1);
+    lines = 5;
     
     if (currentPresentationState == kAppearing) {
 
@@ -99,21 +101,20 @@ void HackingScreen_repaintCallback(void) {
 
     
     drawWindow(1, 1, 40, 15, "Disassembly: CONTROLLER.PRG (stack)");
-    uint8_t isSelected = 0;
     
     drawTextAt( 6 + (12 * 0), 11, "CPU0", cursorPosition == 0 ? 128 : 0);
     drawTextAt( 6 + (12 * 1), 11, "CPU1", cursorPosition == 1 ? 128 : 0);
     drawTextAt( 6 + (12 * 2), 11, "CPU2", cursorPosition == 2 ? 128 : 0);
     
-    for ( int pin = 0; pin < 3; ++pin ) {
-        
+    for ( pin = 0; pin < 3; ++pin ) {
+        int disk;
         int isCursorOnThisPin = cursorPosition == pin;
         
         if (pins[pin][5] == 0 ) {
             accessGrantedToSafe = TRUE;
         }
         
-        for (int disk = 0; disk < 6; ++disk) {
+        for (disk = 0; disk < 6; ++disk) {
             
             int diskIndex = pins[pin][disk];
             
@@ -184,8 +185,9 @@ int32_t HackingScreen_tickCallback(int32_t tag, void *data) {
     if (currentPresentationState == kWaitingForInput) {
         
         enum ECommand cmd = (enum ECommand) (tag);
+        int pin;
         
-        for ( int pin = 0; pin < 3; ++pin ) {
+        for ( pin = 0; pin < 3; ++pin ) {
             if (pins[pin][5] == 0 ) {
                 accessGrantedToSafe = TRUE;
             }

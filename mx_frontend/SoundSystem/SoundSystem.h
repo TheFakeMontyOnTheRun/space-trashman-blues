@@ -11,4 +11,6 @@ void soundTick(void);
 
 void setupOPL2(void);
 
+void stopSounds(void);
+
 #endif /*THE_MISTRAL_REPORT_SOUNDSYSTEM_H*/

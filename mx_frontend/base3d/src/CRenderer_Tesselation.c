@@ -159,6 +159,15 @@ void projectAllVertices(const uint8_t count) {
     FixP_t projected;
     FixP_t oneOver;
     int c;
+    int intZ;
+    int x0;
+    int y0;
+    int z0px;
+    int z0dx;
+    int px0z0;
+    int z0py;
+    int py0z0;
+        
     for (c = 0; c < count; ++c) {
         struct Projection *vertex = &projectionVertices[c];
 
@@ -169,7 +178,7 @@ void projectAllVertices(const uint8_t count) {
             z = one;
         }
 
-        int intZ = fixToInt(z);
+        intZ = fixToInt(z);
         
         if ( renderingMethod == FIXED )
         {
@@ -197,13 +206,13 @@ void projectAllVertices(const uint8_t count) {
             return;
         }
         
-        int x0 = 1 + ( fixToInt(vertex->first.mX));
-        int y0 = 1 + (fixToInt(vertex->first.mY));
-        int z0px = (projections[intZ].px);
-        int z0dx = ((projections[intZ].dx));
-        int px0z0 = z0px - (x0 * z0dx * 2);
-        int z0py = (projections[intZ].py);
-        int py0z0 = z0py + ((y0) * z0dx * 2);
+        x0 = 1 + ( fixToInt(vertex->first.mX));
+        y0 = 1 + (fixToInt(vertex->first.mY));
+        z0px = (projections[intZ].px);
+        z0dx = ((projections[intZ].dx));
+        px0z0 = z0px - (x0 * z0dx * 2);
+        z0py = (projections[intZ].py);
+        py0z0 = z0py + ((y0) * z0dx * 2);
         
         
         vertex->second.mX = intToFix(px0z0);
@@ -352,7 +361,10 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
     struct Vec2 lrz0;
     struct Vec2 llz1;
     struct Vec2 lrz1;
-    
+    int z;
+    uint8_t uvCoords[6];
+    int coords[6];
+
     if (min(p0.mZ, p1.mZ) <= kMinZCull) {
         return;
     }
@@ -397,11 +409,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         llz0 = projectionVertices[0].second;
         lrz0 = projectionVertices[1].second;
         llz1 = projectionVertices[2].second;
-        lrz1 = projectionVertices[3].second;
-        
-        uint8_t uvCoords[6];
-        int coords[6];
-        
+        lrz1 = projectionVertices[3].second;        
 
         uvCoords[0] = 32;
         uvCoords[1] = 0;
@@ -417,7 +425,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         coords[4] = fixToInt(llz0.mX); // 0
         coords[5] = fixToInt(llz0.mY);
         
-        drawTexturedTriangle(&coords[0], &uvCoords[0], texture );
+        drawTexturedTriangle(&coords[0], &uvCoords[0], (struct Texture*)texture );
 
 
         uvCoords[0] = 0;
@@ -434,7 +442,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         coords[4] = fixToInt(lrz0.mX); //1
         coords[5] = fixToInt(lrz0.mY);
 
-        drawTexturedTriangle( &coords[0], &uvCoords[0], texture );
+        drawTexturedTriangle( &coords[0], &uvCoords[0], (struct Texture*)texture );
 
         return;
     }
@@ -454,7 +462,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
     llz1 = projectionVertices[2].second;
     lrz1 = projectionVertices[3].second;
     
-    int z = fixToInt(p0.mZ);
+    z = fixToInt(p0.mZ);
         
     if (z >= distanceForDarkness && useDither) {
         drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, z, texture->rotations[cameraDirection] );
@@ -633,7 +641,8 @@ void drawMesh( const struct Mesh *mesh, const struct Vec3 center ) {
     uint8_t colour = mesh->colour;
     
     if (mesh->texture == NULL ) {
-        for (int c = 0; c < count; ++c ) {
+	    int c;
+        for (c = 0; c < count; ++c ) {
             
             memcpy (&projectionVertices[0].first, &center, sizeof(struct Vec3));
             memcpy (&projectionVertices[1].first, &center, sizeof(struct Vec3));
@@ -656,8 +665,9 @@ void drawMesh( const struct Mesh *mesh, const struct Vec3 center ) {
             vertexData += 9;
         }
     } else {
+	    int c;
         uint8_t* uvData = mesh->uvCoords;
-        for (int c = 0; c < count; ++c ) {
+        for (c = 0; c < count; ++c ) {
             
             memcpy (&projectionVertices[0].first, &center, sizeof(struct Vec3));
             memcpy (&projectionVertices[1].first, &center, sizeof(struct Vec3));

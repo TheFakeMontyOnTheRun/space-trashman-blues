@@ -409,16 +409,20 @@ void useObjectNamed(const char *operand) {
 }
 
 void walkTo(const char *operands) {
+    struct WorldPosition pos;
+    char *xStr;
+    char *yStr;
+    int x;
+    int y;
 
     if (playerLocation != 1 && (!item[5].active || !playerHasObject("magnetic-boots"))) {
         defaultLogger("You can't move without your magnetic-boots!");
     }
 
-    struct WorldPosition pos;
-    char *xStr = operands;
-    char *yStr = strtok(NULL, "\n ");
-    int x = atoi(xStr);
-    int y = atoi(yStr);
+    xStr = (char*)operands;
+    yStr = strtok(NULL, "\n ");
+    x = atoi(xStr);
+    y = atoi(yStr);
     pos.x = x;
     pos.y = y;
     setPlayerPosition(pos);
@@ -464,7 +468,7 @@ void useObjectsTogether(const char *operands) {
     struct Room *room = &rooms[playerLocation];
     struct ObjectNode *object2 = room->itemsPresent->next;
 
-    char *operand1 = operands;
+    char *operand1 = (char*)operands;
     char *operand2 = strtok(NULL, "\n ");
 
     if (!playerHasObject(operand1)) {

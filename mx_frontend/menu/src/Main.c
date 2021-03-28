@@ -177,7 +177,7 @@ int main(int argc, char **argv) {
 #endif
 
     puts(
-            "The Mistral Report - Invisible Affairs, 2018-2019 - by the Brotherhood "
+            "Sub Mare Imperium - Derelict, 2021 - by the Brotherhood "
             "of 13h");
 
     srand(time(NULL));

@@ -84,6 +84,8 @@ char messageLogBuffer[256];
 
 int messageLogBufferCoolDown = 0;
 
+void printMessageTo3DView(const char *message);
+
 void printMessageTo3DView(const char *message) {
     strcpy(&messageLogBuffer[0], message);
     messageLogBufferCoolDown = 5000;
@@ -134,7 +136,9 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     char *head;
     char *end;
     char *nameStart;
-
+    char buffer[256];    
+	int c;
+	
     sprintf (tilesFilename, "tiles%d.lst", levelNumber);
 
     data = loadBinaryFileFromPath(tilesFilename);
@@ -160,10 +164,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 
     backdrop = loadBitmap("backdrop.img");
 
-
-    char buffer[256];
-
-    for (int c = 0; c < itemsCount; ++c) {
+    for (c = 0; c < itemsCount; ++c) {
         sprintf(&buffer[0], "%s.img", getItem(c)->description);
         itemSprites[c] = (makeTextureFrom(&buffer[0]));
     }
@@ -185,7 +186,7 @@ void drawMap(const uint8_t *__restrict__ elements,
     int8_t z, x;
     const struct Vec2i mapCamera = current->mPosition;
     cameraDirection = current->mDirection;
-    visibleElementsMap = elements;
+    visibleElementsMap = (uint8_t *)elements;
     hasSnapshot = TRUE;
 
     if (!enable3DRendering) {
@@ -296,6 +297,8 @@ enum ECommand getInput() {
 }
 
 void render(const long ms) {
+    int line = 0;
+	struct ObjectNode *head;
     static FixP_t zero = 0;
     FixP_t two = intToFix(2);
     FixP_t four = intToFix(4);
@@ -878,9 +881,7 @@ void render(const long ms) {
         fill(256, 8, 320 - 256, 160 - 8, 255, FALSE);
         drawTextAt(34, 1, "CyDeck", 255);
 
-
-        int line = 0;
-        struct ObjectNode *head = getPlayerItems();
+		head = getPlayerItems();
 
         while (head != NULL) {
             if (head->item != NULL) {
@@ -919,8 +920,11 @@ void loadMesh(struct Mesh *mesh, char *filename) {
     int uvCoordsCount;
     int coordsCount;
     char *textureName;
-
+    uint8_t *uvCoord;
+    FixP_t *coord;
     uint8_t read;
+    int c;
+    
     read = (*(bufferHead++));
     trigCount += read;
     read = (*(bufferHead++)) << 8;
@@ -933,14 +937,14 @@ void loadMesh(struct Mesh *mesh, char *filename) {
     mesh->uvCoords = calloc(1, uvCoordsCount);
     mesh->geometry = calloc(sizeof(FixP_t), coordsCount);
 
-    uint8_t *uvCoord = mesh->uvCoords;
-    FixP_t *coord = mesh->geometry;
+	uvCoord = mesh->uvCoords;
+	coord = mesh->geometry;
 
-    for (int c = 0; c < uvCoordsCount; ++c) {
+    for (c = 0; c < uvCoordsCount; ++c) {
         *(uvCoord++) = (*(bufferHead++));
     }
 
-    for (int c = 0; c < coordsCount; ++c) {
+    for (c = 0; c < coordsCount; ++c) {
         val = 0;
         val += (*(bufferHead++) << 0);
         val += (*(bufferHead++) << 8);

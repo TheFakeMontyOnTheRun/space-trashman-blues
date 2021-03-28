@@ -172,13 +172,16 @@ int32_t GameMenu_initStateCallback(int32_t tag) {
             break;
 
         case kInspectItem: {
+            struct ObjectNode *head;
+            struct Item *item;
+            int index = 0;
+
             GameMenu_StateTitle = "Dossier";
             currentBackgroundBitmap = loadBitmap("pattern.img");
 
-            struct ObjectNode *head = getPlayerItems();
-            struct Item *item = NULL;
-            int index = 0;
-
+            head = getPlayerItems();
+            item = NULL;
+            
             while (head != NULL && index < currentSelectedItem) {
                 ++index;
                 head = head->next;
