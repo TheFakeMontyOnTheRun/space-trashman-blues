@@ -52,11 +52,13 @@ void setupOPL2(int port) {
 
 
 void stopSounds() {
-    
+    int count = [playingSounds count];
+	int c = 0;
     NSArray* groupsArray = [playingSounds allObjects];
-    for(NSSound* sound in groupsArray) {
-        [sound stop];
-    }
+	for (c = 0; c < count; ++c ) {
+		NSSound* sound = [groupsArray objectAtIndex: c ];
+		[sound stop];
+	}
 }
 
 void playSound( const int action ){
