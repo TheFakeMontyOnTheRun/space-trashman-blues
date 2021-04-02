@@ -1204,4 +1204,10 @@ void initStation(void) {
     newItem->useCallback = elevatorGoUpCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-3", newItem);
+
+    newItem = addItem("the-mistral-report", "RetroZaragoza Homebrew '18 awarded\nentry: A espionage-themed \nturn-based 3D RPG for MS-DOS,\nXBox One, Mac and Amiga.", 200, TRUE, 27, 19);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("crew-bunks", newItem);
+
 }
