@@ -180,7 +180,7 @@ int main(int argc, char **argv) {
             "Sub Mare Imperium - Derelict, 2021 - by the Brotherhood "
             "of 13h");
 
-    srand(time(NULL));
+
     initHW();
     initStation();
     enterState(kMainMenu);
