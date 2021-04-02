@@ -17,7 +17,7 @@ MENU_OBJ= menu/src/Main.o menu/src/Engine.o \
 	base3d/src/FixP.o \
 	base3d/src/CRenderer_Rasterization.o \
 	base3d/src/CPackedFileReader.o \
-	menu/src/Interrogation.o \
+	menu/src/CrawlerScreen.o \
 	menu/src/UI.o \
 	base3d/src/Globals.o \
 	menu/src/HelpScreen.o \

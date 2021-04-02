@@ -19,7 +19,7 @@ CFLAGS=-g -c -O3 -std=c90    \
 MENU_TARGET=game.html
 
 MENU_OBJ=menu/src/MainMenu.o \
-	menu/src/Interrogation.o \
+	menu/src/CrawlerScreen.o \
 	menu/src/UI.o \
 	menu/src/Main.o \
 	base3d/src/SDLVersion/CSDL2Renderer.o \

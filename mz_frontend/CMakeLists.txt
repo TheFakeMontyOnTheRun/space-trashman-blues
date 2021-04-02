@@ -20,7 +20,7 @@ find_package(SDL2 REQUIRED)
 
 add_executable(mistral-ocs
 		menu/src/MainMenu.c
-		menu/src/Interrogation.c
+		menu/src/CrawlerScreen.c
         menu/src/HelpScreen.c
 		menu/src/CreditsScreen.c
         menu/src/Main.c
