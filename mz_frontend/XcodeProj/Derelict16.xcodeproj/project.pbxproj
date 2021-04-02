@@ -90,7 +90,7 @@
 		F1B3F17024C2127B00DA2549 = {
 			isa = PBXGroup;
 			children = (
-				F1B3F18224C2127B00DA2549 /* Mistral OCS */,
+				F1B3F18224C2127B00DA2549 /* src */,
 				F1B3F17B24C2127B00DA2549 /* Frameworks */,
 				F1B3F17A24C2127B00DA2549 /* Products */,
 			);
@@ -123,7 +123,7 @@
 			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
-		F1B3F18224C2127B00DA2549 /* Mistral OCS */ = {
+		F1B3F18224C2127B00DA2549 /* src */ = {
 			isa = PBXGroup;
 			children = (
 				F1B3F1AE24C2139A00DA2549 /* Common.h */,
@@ -159,7 +159,7 @@
 				F1B3F19124C2127B00DA2549 /* MainMenu.xib */,
 				F1B3F18324C2127B00DA2549 /* Supporting Files */,
 			);
-			path = "Mistral OCS";
+			path = src;
 			sourceTree = "<group>";
 		};
 		F1B3F18324C2127B00DA2549 /* Supporting Files */ = {
@@ -203,7 +203,7 @@
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Daniel Monteiro";
 			};
-			buildConfigurationList = F1B3F17424C2127B00DA2549 /* Build configuration list for PBXProject "Mistral OCS" */;
+			buildConfigurationList = F1B3F17424C2127B00DA2549 /* Build configuration list for PBXProject "Derelict16" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -375,7 +375,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F1B3F17424C2127B00DA2549 /* Build configuration list for PBXProject "Mistral OCS" */ = {
+		F1B3F17424C2127B00DA2549 /* Build configuration list for PBXProject "Derelict16" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1B3F19424C2127B00DA2549 /* Debug */,
