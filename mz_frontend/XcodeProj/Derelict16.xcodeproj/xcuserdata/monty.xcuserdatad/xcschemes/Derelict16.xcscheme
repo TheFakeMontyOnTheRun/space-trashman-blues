@@ -15,18 +15,18 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F1B3F17824C2127B00DA2549"
-               BuildableName = "Mistral OCS.app"
-               BlueprintName = "Mistral OCS"
-               ReferencedContainer = "container:Mistral OCS.xcodeproj">
+               BuildableName = "Derelict16.app"
+               BlueprintName = "Derelict16"
+               ReferencedContainer = "container:Derelict16.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Debug">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
       <MacroExpansion>
@@ -38,43 +38,38 @@
             ReferencedContainer = "container:Mistral OCS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F1B3F17824C2127B00DA2549"
-            BuildableName = "Mistral OCS.app"
-            BlueprintName = "Mistral OCS"
-            ReferencedContainer = "container:Mistral OCS.xcodeproj">
+            BuildableName = "Derelict16.app"
+            BlueprintName = "Derelict16"
+            ReferencedContainer = "container:Derelict16.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
+      buildConfiguration = "Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F1B3F17824C2127B00DA2549"
-            BuildableName = "Mistral OCS.app"
-            BlueprintName = "Mistral OCS"
-            ReferencedContainer = "container:Mistral OCS.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

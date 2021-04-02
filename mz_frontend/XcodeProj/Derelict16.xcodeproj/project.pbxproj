@@ -32,15 +32,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F1B3F17924C2127B00DA2549 /* Mistral OCS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mistral OCS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1B3F17924C2127B00DA2549 /* Derelict16.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Derelict16.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1B3F17C24C2127B00DA2549 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		F1B3F17F24C2127B00DA2549 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		F1B3F18024C2127B00DA2549 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F1B3F18124C2127B00DA2549 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		F1B3F18424C2127B00DA2549 /* Mistral OCS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Mistral OCS-Info.plist"; sourceTree = "<group>"; };
+		F1B3F18424C2127B00DA2549 /* Derelict16.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Derelict16.plist; sourceTree = "<group>"; };
 		F1B3F18624C2127B00DA2549 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F1B3F18824C2127B00DA2549 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		F1B3F18A24C2127B00DA2549 /* Mistral OCS-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mistral OCS-Prefix.pch"; sourceTree = "<group>"; };
 		F1B3F18C24C2127B00DA2549 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		F1B3F18E24C2127B00DA2549 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F1B3F18F24C2127B00DA2549 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -99,7 +98,7 @@
 		F1B3F17A24C2127B00DA2549 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F1B3F17924C2127B00DA2549 /* Mistral OCS.app */,
+				F1B3F17924C2127B00DA2549 /* Derelict16.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -165,10 +164,9 @@
 		F1B3F18324C2127B00DA2549 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				F1B3F18424C2127B00DA2549 /* Mistral OCS-Info.plist */,
+				F1B3F18424C2127B00DA2549 /* Derelict16.plist */,
 				F1B3F18524C2127B00DA2549 /* InfoPlist.strings */,
 				F1B3F18824C2127B00DA2549 /* main.m */,
-				F1B3F18A24C2127B00DA2549 /* Mistral OCS-Prefix.pch */,
 				F1B3F18B24C2127B00DA2549 /* Credits.rtf */,
 			);
 			name = "Supporting Files";
@@ -177,9 +175,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F1B3F17824C2127B00DA2549 /* Mistral OCS */ = {
+		F1B3F17824C2127B00DA2549 /* Derelict16 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F1B3F19624C2127B00DA2549 /* Build configuration list for PBXNativeTarget "Mistral OCS" */;
+			buildConfigurationList = F1B3F19624C2127B00DA2549 /* Build configuration list for PBXNativeTarget "Derelict16" */;
 			buildPhases = (
 				F1B3F17524C2127B00DA2549 /* Sources */,
 				F1B3F17624C2127B00DA2549 /* Frameworks */,
@@ -189,9 +187,9 @@
 			);
 			dependencies = (
 			);
-			name = "Mistral OCS";
+			name = Derelict16;
 			productName = "Mistral OCS";
-			productReference = F1B3F17924C2127B00DA2549 /* Mistral OCS.app */;
+			productReference = F1B3F17924C2127B00DA2549 /* Derelict16.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -216,7 +214,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F1B3F17824C2127B00DA2549 /* Mistral OCS */,
+				F1B3F17824C2127B00DA2549 /* Derelict16 */,
 			);
 		};
 /* End PBXProject section */
@@ -352,9 +350,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Mistral OCS/Mistral OCS-Prefix.pch";
-				INFOPLIST_FILE = "Mistral OCS/Mistral OCS-Info.plist";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				INFOPLIST_FILE = src/Derelict16.plist;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -364,9 +362,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Mistral OCS/Mistral OCS-Prefix.pch";
-				INFOPLIST_FILE = "Mistral OCS/Mistral OCS-Info.plist";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				INFOPLIST_FILE = src/Derelict16.plist;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -384,7 +382,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F1B3F19624C2127B00DA2549 /* Build configuration list for PBXNativeTarget "Mistral OCS" */ = {
+		F1B3F19624C2127B00DA2549 /* Build configuration list for PBXNativeTarget "Derelict16" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1B3F19724C2127B00DA2549 /* Debug */,
