@@ -1,0 +1,49 @@
+CC=i386-pc-msdosdjgpp-gcc
+STRIP=i386-pc-msdosdjgpp-strip
+LD = i386-pc-msdosdjgpp-ld
+
+LDFLAGS = -lemu
+
+CFLAGS=-c -O6 -Ofast      \
+    -Ibase3d/include        \
+    -ISoundSystem           \
+    -Imenu/include          \
+    -funroll-loops          \
+    -funroll-all-loops      \
+    -fomit-frame-pointer    \
+    -fno-exceptions         \
+    -ffast-math             \
+    -mtune=i486             \
+    -march=i486				\
+    -DNFILLED_POLYS -DTEXTURES
+
+MENU_TARGET=game.exe
+
+MENU_OBJ= menu/src/Main.o \
+	menu/src/Engine.o \
+	 base3d/src/DOSVersion/DOSRenderer.o \
+	base3d/src/LoadBitmap.o \
+	base3d/src/CRenderer.o \
+	base3d/src/FixP.o \
+	base3d/src/CRenderer_Rasterization.o \
+	base3d/src/CPackedFileReader.o \
+	menu/src/Interrogation.o \
+	menu/src/UI.o \
+	base3d/src/Globals.o \
+	menu/src/HelpScreen.o \
+	menu/src/CreditsScreen.o \
+	menu/src/MainMenu.o
+
+
+$(MENU_TARGET):	$(MENU_OBJ)
+	$(CC) -o$(MENU_TARGET) $(MENU_OBJ) $(LDFLAGS)
+	$(STRIP) $(MENU_TARGET)
+
+all:   $(MENU_TARGET)
+
+clean:
+	rm -f menu/src/*.o
+	rm -f base3d/src/*.o
+	rm -f common/src/*.o
+	rm -f SoundSystem/*.o
+	rm -f base3d/src/DOSVersion/*.o
