@@ -1569,12 +1569,12 @@ void graphicsFlush() {
     word ofs, _yoff;
     uint8_t *ptr = &buffer[0];
     uint8_t pixel;
-    _y = 0;
+    _y = 2;
     for (y = 64; y; --y ) {
         _y++;
         _yoff = ( ((_y >> 3 ) << 8)) + (_y & 7);
         
-        _x = 0;
+        _x = 96;
         
         for (x = 0; x < 64;) {
             
@@ -1904,12 +1904,12 @@ const struct Projection projections[36] =
     {30, 34,  -2},  // 27
     {30, 34,  -2}, // 28
     {30, 34,  -2}, // 29
-    {30, 34,  -2}, // 30
-    {30, 34,  -2}, // 31
-    {30, 34,  -2}, // 32
-    {30, 34,  -2}, // 33
-    {30, 34,  -2}, // 34
-    {30, 34,  -2}, // 35
+    {31, 34,  -1}, // 30
+    {31, 34,  -1}, // 31
+    {31, 34,  -1}, // 32
+    {31, 34,  -1}, // 33
+    {31, 34,  -1}, // 34
+    {31, 34,  -1}, // 35
 };
 
 const struct Pattern patterns[16] = {
@@ -2713,6 +2713,34 @@ void putchar(char dummy) {
     dummy = dummy;
 }
 
+void drawColorLineDirect(int x0, int y0, int x1, int y1, byte color) {
+    int dx = abs(x1-x0);
+    int sx = x0<x1 ? 1 : -1;
+    int dy = abs(y1-y0);
+    int sy = y0<y1 ? 1 : -1;
+    int err = (dx>dy ? dx : -dy)>>1;
+    int e2;
+    for(;;) {
+        
+        word ofs = (x0/8)*8 + (y0/8)*256 + (y0&7);
+        byte b = cvu_vinb(PATTERN + ofs);
+        
+        if (color>1) {
+            b |= 128 >> (x0 & 7);
+            cvu_voutb(b, PATTERN + ofs);
+            cvu_voutb(color<<4, COLOR + ofs);
+        } else {
+            b &= ~(128 >> (x0 & 7));
+            cvu_voutb(b, PATTERN + ofs);
+        }
+        
+        if (x0==x1 && y0==y1) break;
+        e2 = err;
+        if (e2 > -dx) { err -= dy; x0 += sx; }
+        if (e2 < dy) { err += dx; y0 += sy; }
+    }
+}
+
 int demoMain() {
     /*
      struct ObjectNode* head = getRoom(getPlayerRoom())->itemsPresent->next;
@@ -2722,11 +2750,16 @@ int demoMain() {
      head = head->next;
      }
      */
+    
     running = 1;
     cameraX = 15;
     cameraZ = 15;
     cameraRotation = 0;
     init();
+    drawColorLineDirect(93, 0, 163, 0, 4 );
+    drawColorLineDirect(93, 1, 93, 66, 4 );
+    drawColorLineDirect(163, 1, 163, 66, 4 );
+    drawColorLineDirect(93, 67, 163, 67, 4 );
     
     memset(stencilHigh, 0, 64);
     
