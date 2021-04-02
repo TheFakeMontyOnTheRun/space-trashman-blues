@@ -884,7 +884,7 @@ void initStation(void) {
     /* 6 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 2;
-    addRoom("rls-bohr-2", "A rescue ship. Only for emergencies. Named after some Niels Bohr scientist guy or whatever. Some drops on the carpet and I don't even want know what it is, but I guess I already know. Ick.", 64, 5, connections);
+    addRoom("rls-bohr-2", "A rescue ship. Only for emergencies. Named after some Niels Bohr scientist guy or whatever. Some drops on the carpet and I don't even want know what it is, but I guess I already know. Ick.", 64, 9, connections);
 
     
     /* 7 */
