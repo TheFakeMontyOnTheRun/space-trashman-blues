@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
-project(mistral-ocs)
+project(derelict16)
 
 set(CMAKE_C_STANDARD 99)
 
@@ -18,7 +18,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -std=c90 -W -pedantic -Wall")
 
 find_package(SDL2 REQUIRED)
 
-add_executable(mistral-ocs
+add_executable(derelict16
 		menu/src/MainMenu.c
 		menu/src/CrawlerScreen.c
         menu/src/HelpScreen.c
@@ -38,6 +38,6 @@ add_executable(mistral-ocs
 
 include(FindPkgConfig)
 
-target_include_directories(mistral-ocs PUBLIC ${SDL2_INCLUDE_DIR})
-target_link_libraries(mistral-ocs LINK_PUBLIC ${SDL2_LIBRARY} m)
+target_include_directories(derelict16 PUBLIC ${SDL2_INCLUDE_DIR})
+target_link_libraries(derelict16 LINK_PUBLIC ${SDL2_LIBRARY} m)
 
