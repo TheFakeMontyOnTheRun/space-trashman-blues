@@ -17,12 +17,13 @@
 #include <proto/graphics.h>
 #include <intuition/intuition.h>
 #include <graphics/gels.h>
-#include <utility/date.h>
 
-
+#ifndef AGA5BPP
+ #include <utility/date.h>
 #include <utility/date.h>
 #include <clib/timer_protos.h>
 #include <clib/exec_protos.h>
+#endif
 
 #include <string.h>
 #include <assert.h>
@@ -45,6 +46,7 @@
 #include "LoadBitmap.h"
 #include "CRenderer.h"
 
+#ifndef AGA5BPP
 static struct IORequest timereq;
 struct Library *TimerBase;
 
@@ -62,6 +64,7 @@ unsigned long getMilliseconds(){
 
     return (endTime.tv_secs * 1000 + endTime.tv_micro / 1000);
 }
+#endif
 
 #define REG(xn, parm) parm __asm(#xn)
 #define REGARGS __regargs
@@ -486,7 +489,7 @@ void graphicsInit() {
     SetPointer(my_window, emptypointer, 1, 16, 0, 0);
 
     defaultFont = loadBitmap("font.img");
-
+#ifndef AGA5BPP
     OpenDevice("timer.device", 0, &timereq, 0);
     TimerBase = timereq.io_Device;
     startup();
@@ -517,7 +520,7 @@ void graphicsInit() {
     }
     t2 = getMilliseconds();
     DisownBlitter();
-
+#endif
 }
 
 /*

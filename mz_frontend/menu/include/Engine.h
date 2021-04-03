@@ -86,8 +86,10 @@ void enterState(enum EGameMenuState State);
 #define MENU_ITEM_TIME_TO_BLINK_MS 84
 
 
+#ifndef AGA5BPP
 void startup();
 
 unsigned long getMilliseconds();
+#endif
 
 #endif

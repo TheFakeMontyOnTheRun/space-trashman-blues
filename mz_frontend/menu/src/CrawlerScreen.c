@@ -782,11 +782,16 @@ void Interrogation_repaintCallback() {
     fill(0, 64, 256, 64, 7, FALSE);
 
     drawRect(0, 0, 256, 128, 0);
+
+#ifndef AGA5BPP
     startup();
+#endif
     renderScene();
 
+#ifndef AGA5BPP
     lastTime = getMilliseconds();
-    
+#endif
+
     int farthest = 0;
 
 
