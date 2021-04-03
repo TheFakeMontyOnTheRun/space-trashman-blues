@@ -18,6 +18,7 @@ MENU_OBJ= menu/src/Main.o \
 	base3d/src/Dungeon.o \
 	base3d/src/Events.o \
 	menu/src/Engine.o \
+	menu/src/HackingScreen.o \
 	base3d/src/VisibilityStrategy.o \
 	base3d/src/FixP.o \
 	base3d/src/CRenderer_Rasterization.o \
