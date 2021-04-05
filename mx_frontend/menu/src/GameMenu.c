@@ -37,10 +37,10 @@ void goTo(int location);
 extern int playerLocation;
 
 
-const char *inspectItem_options[2] = {"Back to game", "End game"};
+const char *inspectItem_options[1] = {"Back"};
 
-int32_t InspectItem_nextStateNavigation[2] = {
-        kBackToGame, kEndGame};
+int32_t InspectItem_nextStateNavigation[1] = {
+        kBackToGame};
 
 
 int32_t GameMenu_EndGame_nextStateNavigation[2] = {kInspectItem, kMainMenu};
@@ -176,7 +176,7 @@ int32_t GameMenu_initStateCallback(int32_t tag) {
             struct Item *item;
             int index = 0;
 
-            GameMenu_StateTitle = "Dossier";
+            GameMenu_StateTitle = "CyDeck";
             currentBackgroundBitmap = loadBitmap("pattern.img");
 
             head = getPlayerItems();
@@ -190,7 +190,7 @@ int32_t GameMenu_initStateCallback(int32_t tag) {
             mainText = head->item->description;
             strcpy(&textBuffer[0], head->item->info);
 
-            GameMenu_optionsCount = 2;
+            GameMenu_optionsCount = 1;
             GameMenu_options = &inspectItem_options[0];
             GameMenu_nextStateNavigation =
                     &InspectItem_nextStateNavigation[0];
