@@ -88,10 +88,9 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     playerCrawler.position.y -= offset.y;
                 } else {
                     walkBy(0);
-                }
-
-                if (enableSmoothMovement) {
-                    zCameraOffset = intToFix(2);
+                    if (enableSmoothMovement) {
+                        zCameraOffset = intToFix(2);
+                    }
                 }
             }
                 break;
@@ -107,10 +106,9 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     playerCrawler.position.y += offset.y;
                 } else {
                     walkBy(2);
-                }
-
-                if (enableSmoothMovement) {
-                    zCameraOffset = -intToFix(2);
+                    if (enableSmoothMovement) {
+                        zCameraOffset = -intToFix(2);
+                    }
                 }
             }
                 break;
@@ -270,10 +268,9 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     playerCrawler.position.y -= offset.y;
                 } else {
                     walkBy(3);
-                }
-
-                if (enableSmoothMovement) {
-                    xCameraOffset = -intToFix(2);
+                    if (enableSmoothMovement) {
+                        xCameraOffset = -intToFix(2);
+                    }
                 }
             }
                 break;
@@ -290,12 +287,10 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     playerCrawler.position.y -= offset.y;
                 } else {
                     walkBy(1);
+                    if (enableSmoothMovement) {
+                        xCameraOffset = intToFix(2);
+                    }
                 }
-
-                if (enableSmoothMovement) {
-                    xCameraOffset = intToFix(2);
-                }
-
             }
                 break;
             default:
