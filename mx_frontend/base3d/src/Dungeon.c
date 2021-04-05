@@ -59,7 +59,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
 	struct WorldPosition worldPos;
 	struct ObjectNode *head;
     int oldTurn = gameSnapshot.turn;
-    struct WorldPosition oldPosition = getPlayerPosition();
+    struct WorldPosition oldPosition = *getPlayerPosition();
     setActor(playerCrawler.position.x, playerCrawler.position.y, 0xFF);
     currentPlayerRoom = getPlayerRoom();
 
@@ -303,7 +303,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         }
     }
 
-	worldPos = getPlayerPosition();
+	worldPos = *getPlayerPosition();
     playerCrawler.position.x = worldPos.x;
     playerCrawler.position.y = worldPos.y;
     playerCrawler.rotation = getPlayerDirection();
@@ -369,7 +369,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             thisMissionName = getRoomDescription();
             thisMissionNameLen = strlen(getRoomDescription());
             
-            setPlayerPosition(oldPosition);
+            setPlayerPosition(&oldPosition);
             
             return gameSnapshot;
         }
@@ -400,7 +400,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 thisMissionNameLen = strlen(thisMissionName);
 
             } else { /* Something prevented the player from moving - maybe not enough clearance */
-                setPlayerPosition(oldPosition);
+                setPlayerPosition(&oldPosition);
                 playerCrawler.position.x = oldPosition.x;
                 playerCrawler.position.y = oldPosition.y;
                 setActor(playerCrawler.position.x, playerCrawler.position.y, 0xFF);
@@ -463,7 +463,7 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     x = worldPos.x;
     y = worldPos.y;
     setActor(x, y, 0xFF);
-    setPlayerPosition(worldPos);
+    setPlayerPosition(&worldPos);
     playerCrawler.position.x = x;
     playerCrawler.position.y = y;
 

@@ -29,6 +29,7 @@ ErrorHandlerCallback errorHandlerCallback = NULL;
 int accessGrantedToSafe = FALSE;
 
 void writeToLog(const char *errorMsg) {
+#ifdef HAS_STDIO
     if (errorHandlerCallback == NULL) {
         puts("-------");
         puts(errorMsg);
@@ -36,6 +37,10 @@ void writeToLog(const char *errorMsg) {
     } else {
         errorHandlerCallback(errorMsg);
     }
+#else
+//We assume the error handler was already set. If you don't have stdio, you probably know what you're doing
+    errorHandlerCallback(errorMsg);
+#endif
 }
 
 struct Item* addItem(char *description,
@@ -85,8 +90,8 @@ void setErrorHandlerCallback(ErrorHandlerCallback callback) {
     errorHandlerCallback = callback;
 }
 
-struct WorldPosition getPlayerPosition() {
-    return characterPositions[playerCharacter];
+struct WorldPosition *getPlayerPosition() {
+    return &characterPositions[playerCharacter];
 }
 
 int getPlayerHealth() {
@@ -97,12 +102,13 @@ void setPlayerHealth(int health) {
     playerHealth = health;
 }
 
-void setPlayerPosition(struct WorldPosition pos) {
-    characterPositions[playerCharacter] = pos;
+void setPlayerPosition(struct WorldPosition* pos) {
+    characterPositions[playerCharacter].x = pos->x;
+    characterPositions[playerCharacter].y = pos->y;
 }
 
-int isCloseToObject(struct WorldPosition pos, struct Item *item) {
-    return (abs(pos.x - item->position.x) + abs(pos.y - item->position.y)) <= 1;
+int isCloseToObject(struct WorldPosition* pos, struct Item *item) {
+    return (abs(pos->x - item->position.x) + abs(pos->y - item->position.y)) <= 1;
 }
 
 int getGameStatus() {
@@ -425,7 +431,7 @@ void walkTo(const char *operands) {
     y = atoi(yStr);
     pos.x = x;
     pos.y = y;
-    setPlayerPosition(pos);
+    setPlayerPosition(&pos);
 }
 
 void infoAboutItemNamed(const char *itemName) {
@@ -514,6 +520,7 @@ void useCardWithCardWritter(struct Item *item1, struct Item *item2) {
         removeObjectFromList(card, collectedObject);
     } else {
         defaultLogger("No effect");
+        item1 = NULL;
     }
 }
 
@@ -521,9 +528,10 @@ void useBootsWithMagneticCoupling(struct Item *item1, struct Item *item2) {
     struct Item *coupling = getItemNamed("magnetic-coupling");
     if (item2 == coupling ) {
         coupling->active = FALSE;
-	defaultLogger("Magnetic lock disengaged");
+        defaultLogger("Magnetic lock disengaged");
     } else {
         defaultLogger("No effect");
+        item1 = NULL;
     }
 }
 
@@ -701,11 +709,13 @@ void updateRankFromKeycards() {
 
 void keycardPickCallback(struct Item *item) {
     updateRankFromKeycards();
+    item = NULL;
 }
 
 
 void keycardDropCallback(struct Item *item) {
     updateRankFromKeycards();
+    item = NULL;
 }
 
 /*
@@ -737,10 +747,12 @@ void bombActivatedCallback(struct Item *item) {
             }
         }
     }
+    item = NULL;
 }
 
 void bombControllerActivatedCallback(struct Item *item) {
     bombActivatedCallback(NULL);
+    item = NULL;
 }
 
 void elevatorGoDownCallback(struct Item *item) {
@@ -751,6 +763,7 @@ void elevatorGoDownCallback(struct Item *item) {
     }
     
     moveBy(4);
+    item = NULL;
 }
 
 void elevatorGoUpCallback(struct Item *item) {
@@ -761,6 +774,7 @@ void elevatorGoUpCallback(struct Item *item) {
     }
     
     moveBy(5);
+    item = NULL;
 }
 
 void useCloggedFlush(struct Item *item) {
@@ -769,23 +783,28 @@ void useCloggedFlush(struct Item *item) {
         defaultLogger("Found something among the....stuff...");
         addToRoom("wc", highRankKeycard);
     }
+    item = NULL;
 }
 
 void useRegularFlush(struct Item *item) {
     defaultLogger("*FLUSH*");
+    item = NULL;
 }
 
 
 void cantBeUsedCallback(struct Item *item) {
     defaultLogger("You can't use it like this.");
+    item = NULL;
 }
 
 void cantBeUsedWithOthersCallback(struct Item *item1, struct Item *item2) {
     defaultLogger("Nothing happens.");
+    item1 = item2 = NULL;
 }
 
 void useObjectToggleCallback(struct Item *item) {
     item->active = !item->active;
+    item = NULL;
 }
 
 void useCommWithRank(struct Item *item) {
@@ -794,8 +813,9 @@ void useCommWithRank(struct Item *item) {
         defaultLogger("Insufficient rank to access");
         return;
     }
-       defaultLogger("Computer core rebooted");
+    defaultLogger("Computer core rebooted");
     item->active = !item->active;
+    item = NULL;
 }
 
 
@@ -808,10 +828,12 @@ void useComputerRack(struct Item *item) {
     }
     
     defaultLogger("Safe secured");
+    item = NULL;
 }
 
 void reactorValveCallback(struct Item *item) {
     gameStatus = kBadVictory;
+    item = NULL;
 }
 
 void setPlayerDirection(int direction) {

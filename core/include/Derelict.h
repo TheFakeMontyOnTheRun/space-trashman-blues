@@ -68,17 +68,17 @@ struct Room {
   int rankRequired;
 };
 
-struct WorldPosition getPlayerPosition();
+struct WorldPosition* getPlayerPosition();
 
 struct Item* getItem(int index);
 
 struct ObjectNode* getPlayerItems();
 
-void setPlayerPosition(struct WorldPosition pos);
+void setPlayerPosition(struct WorldPosition* pos);
 
 void addToRoom( const char* roomName, struct Item *itemName );
 
-int isCloseToObject( struct WorldPosition pos, struct Item* item );
+int isCloseToObject( struct WorldPosition* pos, struct Item* item );
 
 void addObjectToRoom(int roomId, struct Item *itemToAdd);
 
