@@ -36,6 +36,8 @@ void enterFullScreenMode() {
 SDL_Window *window;
 SDL_Renderer *renderer;
 
+uint8_t turnBuffer[320 * 200];
+
 uint8_t getPaletteEntry(const uint32_t origin) {
 	uint8_t shade;
 
@@ -58,7 +60,7 @@ void graphicsInit() {
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 
 	window =
-			SDL_CreateWindow("The Mistral Report", SDL_WINDOWPOS_CENTERED,
+			SDL_CreateWindow("Sub Mare Imperium - Derelict", SDL_WINDOWPOS_CENTERED,
 							 SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
 
 	renderer = SDL_CreateRenderer(window, -1, 0);
@@ -77,6 +79,7 @@ void graphicsInit() {
 	enterFullScreenMode ();
 #endif
 	defaultFont = loadBitmap("font.img");
+	enableSmoothMovement = TRUE;
 }
 
 void handleSystemEvents() {
@@ -156,10 +159,24 @@ void handleSystemEvents() {
 				case SDLK_LEFT:
 					mBufferedCommand = kCommandLeft;
 					visibilityCached = FALSE;
+					if ((currentGameMenuState == kPlayGame ||
+						 currentGameMenuState == kBackToGame) &&
+						currentPresentationState == kWaitingForInput
+							) {
+						turnStep = 0;
+						turnTarget = 256;
+					}
 					break;
 				case SDLK_RIGHT:
 					mBufferedCommand = kCommandRight;
 					visibilityCached = FALSE;
+					if ((currentGameMenuState == kPlayGame ||
+						 currentGameMenuState == kBackToGame) &&
+						currentPresentationState == kWaitingForInput
+							) {
+						turnStep = 256;
+						turnTarget = 0;
+					}
 					break;
 				case SDLK_UP:
 					mBufferedCommand = kCommandUp;
@@ -204,19 +221,106 @@ void flipRenderer() {
 	for (y = 0; y < 200; ++y) {
 		for (x = 0; x < 320; ++x) {
 
-			rect.x = 2 * x;
-			rect.y = (24 * y) / 10;
-			rect.w = 2;
-			rect.h = 3;
 
-			pixel = palette[framebuffer[(320 * y) + x]];
-
-			SDL_SetRenderDrawColor(renderer, (pixel & 0x000000FF) - 0x38,
-								   ((pixel & 0x0000FF00) >> 8) - 0x18,
-								   ((pixel & 0x00FF0000) >> 16) - 0x10, 255);
-			SDL_RenderFillRect(renderer, &rect);
 		}
 	}
+
+	if ( turnTarget == turnStep ) {
+		uint8_t *pixelPtr = &framebuffer[0];
+
+		for ( y = 0; y < 200; ++y ) {
+			for ( x = 0; x < 320; ++x ) {
+				uint8_t index = *pixelPtr;
+				uint32_t pixel = palette[ index ];
+
+				rect.x = 2 * x;
+				rect.y = (24 * y) / 10;
+				rect.w = 2;
+				rect.h = 3;
+
+				pixel = palette[framebuffer[(320 * y) + x]];
+
+				SDL_SetRenderDrawColor(renderer, (pixel & 0x000000FF) - 0x38,
+									   ((pixel & 0x0000FF00) >> 8) - 0x18,
+									   ((pixel & 0x00FF0000) >> 16) - 0x10, 255);
+				SDL_RenderFillRect(renderer, &rect);
+
+				++pixelPtr;
+			}
+		}
+
+		memcpy( previousFrame, framebuffer, 320 * 200);
+	} else if ( turnStep < turnTarget ) {
+
+		for ( y = 0; y < 200; ++y ) {
+			for ( x = 0; x < 320; ++x ) {
+				uint8_t index;
+
+				if (x < 256 && y >= 8  ) {
+
+					if ( x  >= turnStep ) {
+						index = previousFrame[ (320 * y) - turnStep + x ];
+					} else {
+						index = framebuffer[ (320 * y) + x - 64 - turnStep];
+					}
+
+				} else {
+					index = framebuffer[ (320 * y) + x];
+				}
+
+				uint32_t pixel = palette[ index ];
+
+				rect.x = 2 * x;
+				rect.y = (24 * y) / 10;
+				rect.w = 2;
+				rect.h = 3;
+
+				SDL_SetRenderDrawColor(renderer, (pixel & 0x000000FF) - 0x38,
+									   ((pixel & 0x0000FF00) >> 8) - 0x18,
+									   ((pixel & 0x00FF0000) >> 16) - 0x10, 255);
+				SDL_RenderFillRect(renderer, &rect);
+			}
+		}
+
+		turnStep+= 32;
+	} else {
+
+		uint8_t *pixelPtr = &framebuffer[0];
+		for ( y = 0; y < 200; ++y ) {
+			for ( x = 0; x < 320; ++x ) {
+				uint8_t index;
+
+				if (x < 256 && y >= 8  ) {
+
+					if ( x  >= turnStep ) {
+						index = framebuffer[ (320 * y) - turnStep + x ];
+					} else {
+						index = previousFrame[ (320 * y) + x - 64 - turnStep];
+					}
+
+				} else {
+					index = framebuffer[ (320 * y) + x];
+				}
+
+				uint32_t pixel = palette[ index ];
+
+				rect.x = 2 * x;
+				rect.y = (24 * y) / 10;
+				rect.w = 2;
+				rect.h = 3;
+
+				SDL_SetRenderDrawColor(renderer, (pixel & 0x000000FF) - 0x38,
+									   ((pixel & 0x0000FF00) >> 8) - 0x18,
+									   ((pixel & 0x00FF0000) >> 16) - 0x10, 255);
+				SDL_RenderFillRect(renderer, &rect);
+				++pixelPtr;
+			}
+		}
+
+		turnStep-= 32;
+	}
+
+
 
 	SDL_RenderPresent(renderer);
 

@@ -44,6 +44,7 @@ add_executable(derelict3d
 		base3d/src/MapWithCharKey.c
 		base3d/src/Dungeon.c
 		menu/src/UI.c
+		menu/src/HackingScreen.c
 		SoundSystem/PCMAudio.c
 		../core/src/Derelict.c
 		../core/src/Parser.c
