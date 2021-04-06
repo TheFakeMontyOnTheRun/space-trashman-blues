@@ -142,14 +142,26 @@ void handleSystemEvents() {
             
         case 123:
             mBufferedCommand = kCommandLeft;
-            turnStep = 0;
-            turnTarget = 256;
+            if ((currentGameMenuState == kPlayGame ||
+                currentGameMenuState == kBackToGame) &&
+                currentPresentationState == kWaitingForInput
+                ) {
+                
+                turnStep = 0;
+                turnTarget = 256;
+            }
             break;
             
         case 124:
             mBufferedCommand = kCommandRight;
-            turnStep = 256;
-            turnTarget = 0;
+            if ((currentGameMenuState == kPlayGame ||
+                 currentGameMenuState == kBackToGame) &&
+                currentPresentationState == kWaitingForInput
+                ) {
+                
+                turnStep = 256;
+                turnTarget = 0;
+            }
             break;
         case -1:
             break;

@@ -28,6 +28,7 @@
 #include "Engine.h"
 #include "LoadBitmap.h"
 #include "CRenderer.h"
+#include "Globals.h"
 
 typedef int ESoundDriver;
 
@@ -269,8 +270,13 @@ void handleSystemEvents() {
 				switch (arrow) {
 					case 75:
 						mBufferedCommand = kCommandLeft;
-                        turnStep = 0;
-                        turnTarget = 256;
+						if ((currentGameMenuState == kPlayGame ||
+							 currentGameMenuState == kBackToGame) &&
+							currentPresentationState == kWaitingForInput
+								) {
+							turnStep = 0;
+							turnTarget = 256;
+						}
 						visibilityCached = FALSE;
 						break;
 					case 72:
@@ -279,8 +285,13 @@ void handleSystemEvents() {
 						break;
 					case 77:
 						mBufferedCommand = kCommandRight;
-                        turnStep = 256;
-                        turnTarget = 0;
+						if ((currentGameMenuState == kPlayGame ||
+							 currentGameMenuState == kBackToGame) &&
+							currentPresentationState == kWaitingForInput
+								) {
+							turnStep = 256;
+							turnTarget = 0;
+						}
 						visibilityCached = FALSE;
 						break;
 					case 80:

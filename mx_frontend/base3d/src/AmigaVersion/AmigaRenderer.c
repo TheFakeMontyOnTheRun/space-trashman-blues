@@ -36,6 +36,7 @@
 #include "Engine.h"
 #include "LoadBitmap.h"
 #include "CRenderer.h"
+#include "Globals.h"
 
 #define REG(xn, parm) parm __asm(#xn)
 #define REGARGS __regargs
@@ -309,8 +310,13 @@ int xlate_key (UWORD rawkey, UWORD qualifier, APTR eventptr)
 					case '4':
 						mBufferedCommand = kCommandLeft;
 						visibilityCached = FALSE;
-                        turnStep = 0;
-                        turnTarget = 256;
+                        if ((currentGameMenuState == kPlayGame ||
+                             currentGameMenuState == kBackToGame) &&
+                            currentPresentationState == kWaitingForInput
+                                ) {
+                            turnStep = 0;
+                            turnTarget = 256;
+                        }
 						break;
 					case '5':
 						mBufferedCommand = kCommandDown;
@@ -319,8 +325,13 @@ int xlate_key (UWORD rawkey, UWORD qualifier, APTR eventptr)
 					case '6':
 						mBufferedCommand = kCommandRight;
 						visibilityCached = FALSE;
-                        turnStep = 256;
-                        turnTarget = 0;
+                        if ((currentGameMenuState == kPlayGame ||
+                             currentGameMenuState == kBackToGame) &&
+                            currentPresentationState == kWaitingForInput
+                                ) {
+                            turnStep = 256;
+                            turnTarget = 0;
+                        }
 						break;
 					case '8':
 						mBufferedCommand = kCommandUp;
@@ -341,14 +352,24 @@ int xlate_key (UWORD rawkey, UWORD qualifier, APTR eventptr)
 			case 0x4E:
 				mBufferedCommand = kCommandRight;
 				visibilityCached = FALSE;
-                turnStep = 256;
-                turnTarget = 0;
+                if ((currentGameMenuState == kPlayGame ||
+                     currentGameMenuState == kBackToGame) &&
+                    currentPresentationState == kWaitingForInput
+                        ) {
+                    turnStep = 256;
+                    turnTarget = 0;
+                }
                 break;
 			case 0x4F:
 				mBufferedCommand = kCommandLeft;
 				visibilityCached = FALSE;
-                turnStep = 0;
-                turnTarget = 256;
+                if ((currentGameMenuState == kPlayGame ||
+                     currentGameMenuState == kBackToGame) &&
+                    currentPresentationState == kWaitingForInput
+                        ) {
+                    turnStep = 0;
+                    turnTarget = 256;
+                }
 				break;
 			case 96:
 			case 97:
@@ -414,15 +435,25 @@ void handleSystemEvents() {
 				case 'b':
 					mBufferedCommand = kCommandLeft;
 					visibilityCached = FALSE;
-					turnStep = 0;
-					turnTarget = 256;
+                    if ((currentGameMenuState == kPlayGame ||
+                         currentGameMenuState == kBackToGame) &&
+                        currentPresentationState == kWaitingForInput
+                            ) {
+                        turnStep = 0;
+                        turnTarget = 256;
+                    }
 					break;
 
 				case 'm':
 					mBufferedCommand = kCommandRight;
 					visibilityCached = FALSE;
-					turnStep = 256;
-					turnTarget = 0;
+                    if ((currentGameMenuState == kPlayGame ||
+                         currentGameMenuState == kBackToGame) &&
+                        currentPresentationState == kWaitingForInput
+                            ) {
+                        turnStep = 256;
+                        turnTarget = 0;
+                    }
 					break;
 
 				case 'h':

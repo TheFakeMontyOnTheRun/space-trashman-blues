@@ -114,6 +114,7 @@ void Crawler_repaintCallback() {
         int c = 0;
         int optionsHeight = 8 * (AbandonMission_count);
 
+        turnStep = turnTarget;
         drawRepeatBitmap(0, 32, 320, 200, currentBackgroundBitmap);
 
         fill(0, 0, 320, 200, 0, TRUE);
