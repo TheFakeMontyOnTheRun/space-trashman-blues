@@ -41,12 +41,20 @@ const char *AbandonMission_Title = "Abandon game?";
 const char *AbandonMission_options[6] = {"Continue", "End game"};
 int AbandonMission_navigation[2] = {-1, kMainMenu};
 int AbandonMission_count = 2;
+int firstEnteringTheGame = 1;
 
 int32_t Crawler_initStateCallback(int32_t tag) {
     int c = 0;
 
     if (tag == kPlayGame) {
         initStation();
+        currentPresentationState = kAppearing;
+        timeUntilNextState = kDefaultPresentationStateInterval;
+
+    } else {
+        firstEnteringTheGame = 0;
+        currentPresentationState = kWaitingForInput;
+        timeUntilNextState = 0;
     }
 
     kCameraYDeltaPlayerDeath = Div(intToFix(9), intToFix(10));
@@ -71,8 +79,6 @@ int32_t Crawler_initStateCallback(int32_t tag) {
     thisMissionName = getRoomDescription();
     thisMissionNameLen = (int16_t) (strlen(thisMissionName));
 
-    currentPresentationState = kAppearing;
-    timeUntilNextState = kDefaultPresentationStateInterval;
     currentBackgroundBitmap = loadBitmap("pattern.img");
     
 
@@ -113,7 +119,6 @@ void Crawler_repaintCallback() {
     if (showPromptToAbandonMission) {
         int c = 0;
         int optionsHeight = 8 * (AbandonMission_count);
-
         turnStep = turnTarget;
         drawRepeatBitmap(0, 32, 320, 200, currentBackgroundBitmap);
 
@@ -234,7 +239,7 @@ void Crawler_repaintCallback() {
         
         renderTick(30);
 
-        if (currentPresentationState == kAppearing) {
+        if (currentPresentationState == kAppearing && firstEnteringTheGame ) {
             drawTextAt(16 - (10 / 2), 10, "Loading...", 255);
         }
     }
