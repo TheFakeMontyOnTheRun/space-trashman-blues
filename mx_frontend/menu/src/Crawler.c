@@ -19,6 +19,7 @@
 #include "SoundSystem.h"
 
 #include "Derelict.h"
+#include "Dungeon.h"
 
 FixP_t kCameraYDeltaPlayerDeath;
 
@@ -42,6 +43,7 @@ const char *AbandonMission_options[6] = {"Continue", "End game"};
 int AbandonMission_navigation[2] = {-1, kMainMenu};
 int AbandonMission_count = 2;
 int firstEnteringTheGame = 1;
+extern struct GameSnapshot gameSnapshot;
 
 int32_t Crawler_initStateCallback(int32_t tag) {
     int c = 0;
@@ -50,7 +52,9 @@ int32_t Crawler_initStateCallback(int32_t tag) {
         initStation();
         currentPresentationState = kAppearing;
         timeUntilNextState = kDefaultPresentationStateInterval;
-
+        gameTicks = 0;
+        enteredThru = 0;
+        memset(&gameSnapshot, 0, sizeof(struct GameSnapshot));
     } else {
         firstEnteringTheGame = 0;
         currentPresentationState = kWaitingForInput;
@@ -237,10 +241,11 @@ void Crawler_repaintCallback() {
         }
         
         
-        renderTick(30);
 
         if (currentPresentationState == kAppearing && firstEnteringTheGame ) {
             drawTextAt(16 - (10 / 2), 10, "Loading...", 255);
+        } else {
+            renderTick(30);
         }
     }
 }

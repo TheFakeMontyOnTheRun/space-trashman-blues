@@ -38,4 +38,6 @@ void setDamage(void);
 void setDetected(void);
 
 void initRoom(int room);
+
+extern int enteredThru;
 #endif
