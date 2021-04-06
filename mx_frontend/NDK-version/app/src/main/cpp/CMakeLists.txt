@@ -32,6 +32,7 @@ add_library( # Sets the name of the library.
         ../../../../../menu/src/Crawler.c
         ../../../../../menu/src/HelpScreen.c
         ../../../../../menu/src/CreditsScreen.c
+        ../../../../../menu/src/HackingScreen.c
         ../../../../../menu/src/GameMenu.c
         ../../../../../menu/src/Main.c
         ../../../../../base3d/src/Globals.c
