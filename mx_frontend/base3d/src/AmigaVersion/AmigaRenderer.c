@@ -526,7 +526,7 @@ void flipRenderer() {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
 
-                if (x < 256 && y >= 8  ) {
+                if (x < 256  ) {
 
                     if ( x  >= turnStep ) {
                         index = previousFrame[ (320 * y) - turnStep + x ];
@@ -559,7 +559,7 @@ void flipRenderer() {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
 
-                if (x < 256 && y >= 8  ) {
+                if (x < 256  ) {
 
                     if ( x  >= turnStep ) {
                         index = framebuffer[ (320 * y) - turnStep + x ];

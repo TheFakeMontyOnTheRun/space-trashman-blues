@@ -872,16 +872,16 @@ void render(const long ms) {
         }
 
         clippingY1 = 200;
+        fill(256, 0, 320 - 256, 8, 0, FALSE);
+        sprintf(&buffer[0], "HP: %d", getPlayerHealth());
+        fill(256, 8, 320 - 256, 200 - 64 - 8 - 8, 255, FALSE);
+        drawTextAt(34, 1, &buffer[0], 255);
 
-        drawRect(256, 0, 64, 128, 0);
+        fill(256, 200 - 64 - 8, 320 - 256, 8, 0, FALSE);
+        drawTextAt(34, 17, " Map:", 255);
 
-        fill(0, 0, 320, 8, 0, FALSE);
-        sprintf(&buffer[0], "Health: %d%%", getPlayerHealth());
-        drawTextAt(2, 1, &buffer[0], 255);
-        fill(256, 8, 320 - 256, 160 - 8, 255, FALSE);
-        drawTextAt(34, 1, "CyDeck", 255);
-
-		head = getPlayerItems();
+        //draw current item on the corner of the screen
+        head = getPlayerItems();
 
         while (head != NULL) {
             if (head->item != NULL) {
@@ -892,10 +892,10 @@ void render(const long ms) {
                 drawTextAt(34, 2 + line, &buffer[0], 0);
 
                 if (line == currentSelectedItem) {
-                    drawFrontWall(intToFix(0), intToFix(199 - 32), intToFix(31), intToFix(199),
+                    drawFrontWall(intToFix(0), intToFix(199 - 32 - 8), intToFix(31), intToFix(199 - 8),
                                   itemSprites[head->item->index]->rotations[0], one, 0, 0, 32);
+                    drawTextAt(1, 25, head->item->description, 255);
                 }
-
                 ++line;
             }
             head = head->next;
@@ -903,13 +903,24 @@ void render(const long ms) {
 
 
         if (focusItemName != NULL) {
-            drawTextAt(2, 20, focusItemName, 255);
+            size_t len = strlen(focusItemName);
+            drawTextAt(20 - len / 2, 10, focusItemName, 255);
         }
 
         if (messageLogBufferCoolDown > 0) {
-            drawTextAt(2, 23, &messageLogBuffer[0], 255);
+            drawTextAt(2, 2, &messageLogBuffer[0], 255);
         }
     }
+    
+    struct WorldPosition visPos = *getPlayerPosition();
+    
+    for (int y = -8; y < 8; ++y ) {
+        for (int x = -8; x < 8; ++x ) {
+            fill(320 - 32 + ( 4 * x), 199 - 32 +  ( 4 * y), 4, 4, isPositionAllowed(visPos.x + x, visPos.y  + y) ? 192 : 64, FALSE);
+        }
+    }
+    
+    fill(320 - 32, 199 - 32, 4, 4, 32, FALSE);
 }
 
 void loadMesh(struct Mesh *mesh, char *filename) {

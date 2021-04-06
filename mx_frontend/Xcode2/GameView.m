@@ -227,16 +227,11 @@ void shutdownHW() {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
                 
-                if (x < 256 && y >= 8  ) {
+                if (x < 256 ) {
                     
                     if ( x  >= turnStep ) {
-                        assert( ((320 * y) - turnStep + x) > 0 );
-                        assert( ((320 * y) - turnStep + x) < (320 * 200) );
                         index = previousFrame[ (320 * y) - turnStep + x ];
                     } else {
-                        assert( ((320 * y) + x - 64 - turnStep) > 0 );
-                        assert( ((320 * y) + x - 64 - turnStep) < (320 * 200) );
-
                         index = buffer[ (320 * y) + x - 64 - turnStep];
                     }
                     
@@ -259,17 +254,11 @@ void shutdownHW() {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
 
-                if (x < 256 && y >= 8  ) {
+                if (x < 256 ) {
                     
                     if ( x  >= turnStep ) {
-                        assert( ((320 * y) - turnStep + x) > 0 );
-                        assert( ((320 * y) - turnStep + x) < (320 * 200) );
-
                         index = buffer[ (320 * y) - turnStep + x ];
                     } else {
-                        assert( ((320 * y) + x - 64 - turnStep) > 0 );
-                        assert( ((320 * y) + x - 64 - turnStep) < (320 * 200) );
-
                         index = previousFrame[ (320 * y) + x - 64 - turnStep];
                     }
                     
