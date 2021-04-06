@@ -173,6 +173,8 @@ void Crawler_repaintCallback() {
             
             struct Vec3 center;
             
+            xCameraOffset = yCameraOffset = 0;
+            
             fill(0, 0, 256, 200, 0, 0);
             
             
