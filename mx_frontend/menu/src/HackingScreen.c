@@ -119,32 +119,32 @@ void HackingScreen_repaintCallback(void) {
             int diskIndex = pins[pin][disk];
             
             
-                char *funcName = (disk >= pinTop[pin]) ? NULL : functionNames[diskIndex];
+            char *funcName = (disk >= pinTop[pin]) ? NULL : functionNames[diskIndex];
                 
-                if (isCursorOnThisPin) {
-                    isSelected = 128;
-                } else if (diskIndex == 3){
-                    isSelected = 64;
-                } else {
-                    isSelected = 0;
-                }
+            if (isCursorOnThisPin) {
+                isSelected = 128;
+            } else if (diskIndex == 3){
+                isSelected = 64;
+            } else {
+                isSelected = 0;
+            }
                 
-                if (accessGrantedToSafe ) {
-                    isSelected = getPaletteEntry(0xFF00AA00);
-                }
+            if (accessGrantedToSafe ) {
+                isSelected = getPaletteEntry(0xFF00AA00);
+            }
                 
-                drawTextAt( 13 * (pin) + 1, 4 + (5 - disk), "|", isSelected);
+            drawTextAt( 13 * (pin) + 1, 4 + (5 - disk), "|", isSelected);
                 
-                if (funcName) {
-                    drawTextAt( 13 * (pin) + 2, 4 + (5 - disk), funcName, isSelected);
-                }
+            if (funcName) {
+                drawTextAt( 13 * (pin) + 2, 4 + (5 - disk), funcName, isSelected);
+            }
             
             drawTextAt( 13 * (pin) + 1, 10, "-------------", isSelected);
         }
     }
     
-    
     drawTextAt(1,2, "register pointer:", 0);
+    
     if (holdingDisk != 0xFF ) {
         drawTextAt(19,2, functionNames[holdingDisk], 128);
     } else {
