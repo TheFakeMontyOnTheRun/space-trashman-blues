@@ -101,11 +101,21 @@ void handleSystemEvents() {
     
     switch (code) {
         case 0: //a
+        case 6: //z
         case 36: //enter
-            mBufferedCommand = kCommandFire4;
+            mBufferedCommand = kCommandFire1;
             break;
+            
+        case 7: //x
+            mBufferedCommand = kCommandFire2;
+            break;
+            
+        case 8: //c
+            mBufferedCommand = kCommandFire3;
+            break;
+
         case 9: //v
-            mBufferedCommand = kCommandFire5;
+            mBufferedCommand = kCommandFire4;
             break;
 
         case 1: //s
@@ -115,23 +125,11 @@ void handleSystemEvents() {
             mBufferedCommand = kCommandStrafeRight;
             break;
 
-        case 3: //f
-            mBufferedCommand = kCommandFire6;
-            break;
             
         case 53: //esc
             mBufferedCommand = kCommandBack;
             break;
             
-        case 6: //z
-            mBufferedCommand = kCommandFire1;
-            break;
-        case 7: //x
-            mBufferedCommand = kCommandFire2;
-            break;
-        case 8: //c
-            mBufferedCommand = kCommandFire3;
-            break;
             
         case 126:
             mBufferedCommand = kCommandUp;

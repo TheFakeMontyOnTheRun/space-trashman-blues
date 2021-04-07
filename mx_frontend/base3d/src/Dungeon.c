@@ -113,24 +113,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             }
                 break;
 
-            case kCommandFire5: {
-                struct ObjectNode *head = getPlayerItems();
-                int index = 0;
-
-                ++currentSelectedItem;
-
-                while (head != NULL) {
-                    ++index;
-                    head = head->next;
-                }
-
-                if (currentSelectedItem >= index) {
-                    currentSelectedItem = 0;
-                }
-            }
-                break;
-
-            case kCommandFire4: {
+            case kCommandFire1: {
                 int index = 0;
                 struct ObjectNode *head1 = getRoom(getPlayerRoom())->itemsPresent->next;
                 struct Item *item1 = NULL;
@@ -157,72 +140,24 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     head1 = head1->next;
                 }
 
-                if (item1 != NULL && item2 != NULL) {
-                    char buffer[255];
-                    char *operator1;
-                    char *operand1;
-                    
-                    sprintf(&buffer[0], "use-with %s %s", item2->description, item1->description);
-                    operator1 = strtok(&buffer[0], "\n ");
-                    operand1 = strtok(NULL, "\n ");
-                    parseCommand(operator1, operand1);
+                if (item2 != NULL) {
+                    if (item1 != NULL ) {
+                        char buffer[255];
+                        char *operator1;
+                        char *operand1;
+                        
+                        sprintf(&buffer[0], "use-with %s %s", item2->description, item1->description);
+                        operator1 = strtok(&buffer[0], "\n ");
+                        operand1 = strtok(NULL, "\n ");
+                        parseCommand(operator1, operand1);
+                    } else {
+                        parseCommand("use", item2->description);
+                    }
                 }
                 gameSnapshot.turn++;
             }
                 break;
             case kCommandFire2: {
-				int index = 0;
-                struct ObjectNode *head = getPlayerItems();
-                struct Item *item = NULL;
-                struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
-                offseted.x += playerCrawler.position.x;
-                offseted.y += playerCrawler.position.y;
-
-                while (head != NULL && (index < currentSelectedItem)) {
-                    ++index;
-                    head = head->next;
-                }
-
-                if (head != NULL) {
-                    item = head->item;
-                }
-
-                if (item != NULL) {
-                    parseCommand("drop", item->description);
-                    item->position.x = offseted.x;
-                    item->position.y = offseted.y;
-                    setItem(item->position.x, item->position.y, item->index);
-                    currentSelectedItem = 0;
-                }
-            }
-                break;
-            case kCommandFire1: {
-                int index = 0;
-                struct ObjectNode *head = getPlayerItems();
-                struct Item *item = NULL;
-
-                while (head != NULL && (index < currentSelectedItem)) {
-                    ++index;
-                    head = head->next;
-                }
-
-                if (head != NULL) {
-                    item = head->item;
-                }
-
-                if (item != NULL) {
-                    parseCommand("use", item->description);
-                }
-                gameSnapshot.turn++;
-            }
-                break;
-
-            case kCommandFire6: {
-                enterState(kInspectItem);
-            }
-                break;
-
-            case kCommandFire3: {
                 struct ObjectNode *head = getRoom(getPlayerRoom())->itemsPresent->next;
                 struct Item *item = NULL;
                 struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
@@ -246,9 +181,54 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                             setItem(offseted.x, offseted.y, 0xFF);
                         }
                     }
+                } else {
+                    int index = 0;
+                    head = getPlayerItems();
+                    item = NULL;
+                    
+                    while (head != NULL && (index < currentSelectedItem)) {
+                        ++index;
+                        head = head->next;
+                    }
+                    
+                    if (head != NULL) {
+                        item = head->item;
+                    }
+                    
+                    if (item != NULL) {
+                        parseCommand("drop", item->description);
+                        item->position.x = offseted.x;
+                        item->position.y = offseted.y;
+                        setItem(item->position.x, item->position.y, item->index);
+                        currentSelectedItem = 0;
+                    }
                 }
                 gameSnapshot.turn++;
             }
+                break;
+            case kCommandFire3: {
+                enterState(kInspectItem);
+            }
+                break;
+                
+            case kCommandFire4: {
+                struct ObjectNode *head = getPlayerItems();
+                int index = 0;
+                
+                ++currentSelectedItem;
+                
+                while (head != NULL) {
+                    ++index;
+                    head = head->next;
+                }
+                
+                if (currentSelectedItem >= index) {
+                    currentSelectedItem = 0;
+                }
+            }
+                break;
+                
+
 
                 break;
             case kCommandNone:
