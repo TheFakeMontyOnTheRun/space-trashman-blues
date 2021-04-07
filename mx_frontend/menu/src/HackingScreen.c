@@ -210,9 +210,11 @@ int32_t HackingScreen_tickCallback(int32_t tag, void *data) {
             case kCommandDown:
                 return kBackToGame;
             case kCommandFire1:
-                if (holdingDisk == 0xFF ) {
-                    pinTop[cursorPosition]--;
-                    holdingDisk = pins[cursorPosition][pinTop[cursorPosition]];
+                if (holdingDisk == 0xFF) {
+                    if (pinTop[cursorPosition] > 0) {
+                        pinTop[cursorPosition]--;
+                        holdingDisk = pins[cursorPosition][pinTop[cursorPosition]];
+                    }
                 } else {
 
                     if (pinTop[cursorPosition] == 0 || holdingDisk < pins[cursorPosition][pinTop[cursorPosition] - 1]) {
