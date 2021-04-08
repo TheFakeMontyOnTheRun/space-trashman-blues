@@ -886,15 +886,24 @@ void render(const long ms) {
         while (head != NULL) {
             if (head->item != NULL) {
                 char buffer[255];
-                sprintf(&buffer[0], "%c%c%s", (line == currentSelectedItem ? '>' : ' '),
-                        (head->item->active ? '*' : ' '), head->item->description);
+                sprintf(&buffer[0], "%s", head->item->description);
                 buffer[7] = 0;
-                drawTextAt(34, 2 + line, &buffer[0], 0);
 
                 if (line == currentSelectedItem) {
-                    drawFrontWall(intToFix(0), intToFix(199 - 32 - 8), intToFix(31), intToFix(199 - 8),
+                    
+                    fill(256, (1 + line) * 8, 64, 8, 0, FALSE);
+                    drawTextAt(34, 2 + line, &buffer[0], head->item->active ? 192 :  255);
+                    
+                    
+                    
+                    drawFrontWall(intToFix(0), intToFix(199 - 32 - 8), intToFix(32), intToFix(199 - 8),
                                   itemSprites[head->item->index]->rotations[0], one, 0, 0, 32);
-                    drawTextAt(1, 25, head->item->description, 255);
+                    
+                    drawTextAt(1, 25, head->item->description, head->item->active ? 192 :  255);
+                    
+                } else {
+                    fill(256, (1 + line) * 8, 64, 8, 255, FALSE);
+                    drawTextAt(34, 2 + line, &buffer[0], head->item->active ? 64 :  0);
                 }
                 ++line;
             }

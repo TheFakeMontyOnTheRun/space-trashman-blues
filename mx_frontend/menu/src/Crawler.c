@@ -112,13 +112,7 @@ void Crawler_initialPaintCallback() {
 
 void Crawler_repaintCallback() {
 
-    if (needsToRedrawVisibleMeshes && (currentPresentationState == kAppearing)) {
-        drawRepeatBitmap(0, 32, 320, 200, currentBackgroundBitmap);
-
-
-        fill(256, 8, 64, 120, 255, FALSE);
-        fill(256, 0, 64, 8, 0, FALSE);
-    }
+   
 
     if (showPromptToAbandonMission) {
         int c = 0;
@@ -244,9 +238,7 @@ void Crawler_repaintCallback() {
         
         
 
-        if (currentPresentationState == kAppearing && firstEnteringTheGame ) {
-            drawTextAt(16 - (10 / 2), 10, "Loading...", 255);
-        } else {
+        if (currentPresentationState == kWaitingForInput ) {
             renderTick(30);
         }
     }
