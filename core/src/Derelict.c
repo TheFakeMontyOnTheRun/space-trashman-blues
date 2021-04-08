@@ -422,7 +422,7 @@ void walkTo(const char *operands) {
     int y;
 
     if (playerLocation != 1 && (!item[5].active || !playerHasObject("magnetic-boots"))) {
-        defaultLogger("You can't move without your magnetic-boots!");
+        defaultLogger("You can't move without your\nmagnetic-boots!");
     }
 
     xStr = (char*)operands;
@@ -552,7 +552,7 @@ void turnRight(void) {
 void walkBy(int direction) {
 
     if (!getItemNamed("magnetic-boots")->active || !playerHasObject("magnetic-boots")) {
-        defaultLogger("You can't move without your magnetic-boots!");
+        defaultLogger("You can't move without your\nmagnetic-boots!");
         return;
     }
 
@@ -962,7 +962,7 @@ void initStation(void) {
             "A empty living pod. Looks as if it\n"
             "was never ever used. If can even \n"
             "see some of the factory stickers \n"
-            "in it.", 64, 64, connections)->rankRequired = 3;
+            "in it.", 64, 64, connections)->rankRequired = 2;
     
     /* 9 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -1197,6 +1197,30 @@ void initStation(void) {
     addToRoom("hall-3", newItem);
 
     /* Diaries */
+    newItem = addItem("black-diary",
+                      "...We meet every night in the rest\n"
+                      "room, to make out. I asked her for\n"
+                      "an access key for the armory - let's\n"
+                      " see if she keeps her promisse. If\n"
+                      "they catch me, I'm scr...", 0, TRUE, 50, 34);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("pod-1", newItem);
+    
+    
+    newItem = addItem("blue-diary",
+                      "The growing discontent is very \n"
+                      "noticeable. I don't know for how\n"
+                      "long can we keep the situation\n"
+                      "stable. For safety, I gave the root\n"
+                      "keycard to first officer Costa.",
+                      0, TRUE, 50, 55);
+    newItem->useCallback = cantBeUsedCallback;
+    newItem->useWithCallback = cantBeUsedWithOthersCallback;
+    addToRoom("pod-2", newItem);
+
+    
+
     newItem = addItem("white-diary",
                       "Crew is growing demotivated with\n"
                       "all the combat exercises and no \n"
@@ -1204,44 +1228,21 @@ void initStation(void) {
                       "keep the fact that we already lost\n"
                       "the war. If anything goes wrong,\n"
                       "the situation room will be our\n"
-                      "last stand.", 0, TRUE, 5, 3);
+                      "last stand.", 0, TRUE, 53, 34);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("pod-2", newItem);
-
+    addToRoom("pod-3", newItem);
     
-    newItem = addItem("blue-diary",
-                      "The growing discontent is very \n"
-                      "noticeable. I don't know flor how\n"
-                      "long can we keep the situation\n"
-                      "stable. For safety, I gave the root\n"
-                      "keycard to first officer Costa.",
-                      0, TRUE, 8, 4);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("pod-1", newItem);
-
-    
-    newItem = addItem("black-diary",
-                      "...We meet every night in the rest\n"
-                      "room, to make out. I asked her for\n"
-                      "an access key for the armory - let's\n"
-                      " see if she keeps her promisse. If\n"
-                      "they catch me, I'm scr...", 0, TRUE, 2, 2);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("pod-4", newItem);
-
     
     newItem = addItem("yellow-book",
                       "Situation is hopeless. I must enact\n"
                       "the security lockdown protocol and \n"
                       "set the reactor to a low activity \n"
                       "state. With luck, they will rescue \n"
-                      "us in the next weeks or so.", 0, TRUE, 4, 3);
+                      "us in the next weeks or so.", 0, TRUE, 52, 55);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("bridge", newItem);
+    addToRoom("pod-4", newItem);
 
     
     newItem = addItem("log-book",
@@ -1249,7 +1250,7 @@ void initStation(void) {
                       "without incidents.", 1, TRUE, 10, 10);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
-    addToRoom("wc", newItem);
+    addToRoom("crew-bunks", newItem);
 
     /* Misc */
     newItem = addItem("card-writter",
@@ -1303,9 +1304,9 @@ void initStation(void) {
 
     
     newItem = addItem("scientific-treatise",
-                      "Voynich Manuscript - Annottated Translation.\n"
+                      "Voynich Manuscript\nAnnottated Translation.\n"
                       "Classical edition. It's badly burn't.\n"
-                      "Can't read it.", 1, TRUE, 1, 1);
+                      "Can't read it.", 1, TRUE, 21, 16);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("wc", newItem);
