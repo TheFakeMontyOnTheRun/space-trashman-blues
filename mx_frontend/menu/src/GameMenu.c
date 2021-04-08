@@ -190,14 +190,17 @@ int32_t GameMenu_initStateCallback(int32_t tag) {
                 ++index;
                 head = head->next;
             }
+            
+            if (head != NULL && head->item != NULL ) {
 
-            mainText = head->item->description;
-            strcpy(&textBuffer[0], head->item->info);
+                mainText = head->item->description;
+                strcpy(&textBuffer[0], head->item->info);
 
-            GameMenu_optionsCount = 1;
-            GameMenu_options = &inspectItem_options[0];
-            GameMenu_nextStateNavigation =
-                    &InspectItem_nextStateNavigation[0];
+                GameMenu_optionsCount = 1;
+                GameMenu_options = &inspectItem_options[0];
+                GameMenu_nextStateNavigation =
+                        &InspectItem_nextStateNavigation[0];
+            }
         }
     }
 
