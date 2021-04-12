@@ -18,7 +18,10 @@ geometryIndex = {
     "rampnorth": 5,
     "rampeast": 6,
     "rampsouth": 7,
-    "rampwest": 8
+    "rampwest": 8,
+    "wallnorth": 9,
+    "wallwest": 10,
+    "wallcorner": 11,
 }
 
 class Properties:

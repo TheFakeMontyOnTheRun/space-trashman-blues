@@ -6,7 +6,7 @@ typedef uint8_t TextureIndex;
 struct CTile3DProperties;
 
 enum GeometryType {
-	kNoGeometry, kCube, kLeftNearWall, kRightNearWall, kFloor, kRampNorth, kRampEast, kRampSouth, kRampWest
+	kNoGeometry, kCube, kLeftNearWall, kRightNearWall, kFloor, kRampNorth, kRampEast, kRampSouth, kRampWest, kWallNorth, kWallWest, kWallCorner
 };
 
 struct CTile3DProperties {

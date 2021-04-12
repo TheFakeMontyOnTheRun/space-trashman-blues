@@ -41,6 +41,8 @@ extern int turnStep;
 #define MASK_FRONT 2
 #define MASK_RIGHT 4
 #define MASK_BEHIND 8
+#define MASK_FORCE_LEFT 16
+#define MASK_FORCE_RIGHT 32
 
 extern struct MapWithCharKey tileProperties;
 extern struct Vec2i cameraPosition;

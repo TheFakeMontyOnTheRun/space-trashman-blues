@@ -735,6 +735,109 @@ void render(const long ms) {
                     }
 
                     switch (tileProp->mGeometryType) {
+                        case kWallNorth:
+
+                            tmp.mX = position.mX;
+                            tmp.mY = position.mY;
+                            tmp.mZ = position.mZ;
+                            
+                            addToVec3(&tmp, zero,
+                                      ((tileProp->mFloorHeight * 2) + heightDiff),
+                                      zero);
+                            
+                            switch (cameraDirection) {
+                                case kNorth:
+                                    facesMask = MASK_BEHIND;
+                                    break;
+                                case kWest:
+                                    facesMask = MASK_FORCE_LEFT;
+                                    break;
+                                case kSouth:
+                                    facesMask = MASK_FRONT;
+                                    break;
+                                case kEast:
+                                    facesMask = MASK_FORCE_RIGHT;
+                                    break;
+                                default:
+                                    facesMask = 0;
+                                    break;
+                            }
+                            
+                            drawColumnAt(tmp, (heightDiff + Div(adjust, two)),
+                                         nativeTextures[tileProp->mMainWallTextureIndex],
+                                         facesMask, tileProp->mNeedsAlphaTest,
+                                         tileProp->mRepeatMainTexture);
+                            break;
+                        case kWallWest:
+                            
+
+                            tmp.mX = position.mX;
+                            tmp.mY = position.mY;
+                            tmp.mZ = position.mZ;
+                            
+                            addToVec3(&tmp, zero,
+                                      ((tileProp->mFloorHeight * 2) + heightDiff),
+                                      zero);
+                            
+                            switch (cameraDirection) {
+                                case kNorth:
+                                    facesMask = MASK_FORCE_RIGHT;
+                                    break;
+                                case kWest:
+                                    facesMask = MASK_BEHIND;
+                                    break;
+                                case kSouth:
+                                    facesMask = MASK_FORCE_LEFT;
+                                    break;
+                                case kEast:
+                                    facesMask = MASK_FRONT;
+                                    break;
+                                default:
+                                    facesMask = 0;
+                                    break;
+                            }
+                            
+                            drawColumnAt(tmp, (heightDiff + Div(adjust, two)),
+                                         nativeTextures[tileProp->mMainWallTextureIndex],
+                                         facesMask, tileProp->mNeedsAlphaTest,
+                                         tileProp->mRepeatMainTexture);
+                            break;
+                            
+                        case kWallCorner:
+                            
+
+                            tmp.mX = position.mX;
+                            tmp.mY = position.mY;
+                            tmp.mZ = position.mZ;
+                            
+                            addToVec3(&tmp, zero,
+                                      ((tileProp->mFloorHeight * 2) + heightDiff),
+                                      zero);
+                            
+                            switch (cameraDirection) {
+                                case kNorth:
+                                    facesMask = MASK_BEHIND | MASK_FORCE_RIGHT;
+                                    break;
+                                case kWest:
+                                    facesMask = MASK_FORCE_LEFT | MASK_BEHIND;
+                                    break;
+                                case kSouth:
+                                    facesMask = MASK_FRONT | MASK_FORCE_LEFT;
+                                    break;
+                                case kEast:
+                                    facesMask = MASK_FORCE_RIGHT | MASK_FRONT;
+                                    break;
+                                default:
+                                    facesMask = 0;
+                                    break;
+                            }
+                            
+                            drawColumnAt(tmp, (heightDiff + Div(adjust, two)),
+                                         nativeTextures[tileProp->mMainWallTextureIndex],
+                                         facesMask, tileProp->mNeedsAlphaTest,
+                                         tileProp->mRepeatMainTexture);
+                            break;
+                            
                         case kRightNearWall:
 
                             tmp.mX = position.mX;
