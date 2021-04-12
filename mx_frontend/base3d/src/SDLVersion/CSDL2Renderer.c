@@ -101,6 +101,22 @@ void handleSystemEvents() {
 					visibilityCached = FALSE;
 					needsToRedrawVisibleMeshes = TRUE;
 					break;
+				case SDLK_x:
+					mBufferedCommand = kCommandFire2;
+					visibilityCached = FALSE;
+					needsToRedrawVisibleMeshes = TRUE;
+					break;
+				case SDLK_c:
+					mBufferedCommand = kCommandFire3;
+					visibilityCached = FALSE;
+					needsToRedrawVisibleMeshes = TRUE;
+					break;
+				case SDLK_v:
+					mBufferedCommand = kCommandFire4;
+					visibilityCached = FALSE;
+					needsToRedrawVisibleMeshes = TRUE;
+					break;
+
 
 				case SDLK_ESCAPE:
 				case SDLK_q:
@@ -135,26 +151,6 @@ void handleSystemEvents() {
 					visibilityCached = FALSE;
 					break;
 
-				case SDLK_x:
-					mBufferedCommand = kCommandFire2;
-					visibilityCached = FALSE;
-					needsToRedrawVisibleMeshes = TRUE;
-					break;
-				case SDLK_c:
-					mBufferedCommand = kCommandFire3;
-					visibilityCached = FALSE;
-					needsToRedrawVisibleMeshes = TRUE;
-					break;
-				case SDLK_a:
-					mBufferedCommand = kCommandFire4;
-					visibilityCached = FALSE;
-					needsToRedrawVisibleMeshes = TRUE;
-					break;
-				case SDLK_v:
-					mBufferedCommand = kCommandFire5;
-					visibilityCached = FALSE;
-					needsToRedrawVisibleMeshes = TRUE;
-					break;
 
 				case SDLK_LEFT:
 					mBufferedCommand = kCommandLeft;

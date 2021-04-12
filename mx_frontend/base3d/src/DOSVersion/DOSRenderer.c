@@ -201,10 +201,6 @@ void handleSystemEvents() {
 	if (kbhit()) {
 		char getched = getch();
 		switch (getched) {
-			case 'c':
-				mBufferedCommand = kCommandFire3;
-				visibilityCached = FALSE;
-				break;
 
 			case 27:
 			case 'q':
@@ -223,14 +219,8 @@ void handleSystemEvents() {
 			case 'b':
 				visibilityCached = FALSE;
 				break;
-			case 'a':
-				mBufferedCommand = kCommandFire4;
-				break;
 			case 'v':
-				mBufferedCommand = kCommandFire5;
-				break;
-			case 'f':
-				mBufferedCommand = kCommandFire6;
+				mBufferedCommand = kCommandFire4;
 				break;
 			case 'j':
 				useDither = FALSE;
@@ -263,6 +253,13 @@ void handleSystemEvents() {
 				needsToRedrawVisibleMeshes = TRUE;
 				visibilityCached = FALSE;
 				break;
+
+			case '\t':
+			case 'c':
+				mBufferedCommand = kCommandFire3;
+				visibilityCached = FALSE;
+				break;
+
 
 			case 224:
 			case 0: {

@@ -422,14 +422,19 @@ void handleSystemEvents() {
 					mBufferedCommand = kCommandFire1;
 					break;
 
-			    case 'a':
-                    mBufferedCommand = kCommandFire4;
-                    break;
+				case 'o':
+				case 'x':
+				case ' ':
+					mBufferedCommand = kCommandFire2;
+					break;
+
+				case 'p':
+				case 'c':
+					mBufferedCommand = kCommandFire3;
+					break;
+
 			    case 'v':
-                    mBufferedCommand = kCommandFire5;
-                    break;
-			    case 'f':
-                    mBufferedCommand = kCommandFire6;
+                    mBufferedCommand = kCommandFire4;
                     break;
 
 				case 'b':
@@ -475,20 +480,6 @@ void handleSystemEvents() {
 				case 'n':
 					mBufferedCommand = kCommandDown;
 					visibilityCached = FALSE;
-					break;
-
-				case 'e':
-					break;
-
-				case 'o':
-				case 'x':
-				case ' ':
-					mBufferedCommand = kCommandFire2;
-					break;
-
-				case 'p':
-				case 'c':
-					mBufferedCommand = kCommandFire3;
 					break;
 			}
 
