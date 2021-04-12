@@ -1,15 +1,19 @@
 Place the EMP near the reactor control
-valve to cause it to drop the fuel
-rods and prevent the meltdown.
+valve to cause it to drop the fuel rods
 
-Make sure to take a safe distance!
+Controls (besides the arrow keys):
 
-Controls:
+S and D: strafe.
 
-- S and D: strafe
-- Z: use current item
-- A: use current item on what in front
-- X: drop current item
-- C: pick or use whats in front of you
-- V: toggle current item
-- F: inspect current item
+Z: if you have an object in front of
+you, use what's your hand with it. 
+If not, use what's in your hand.
+
+X: If you can't pick the object in 
+front of you, do it. If you can't, 
+interact with it. If there's nothing, 
+drop the object in your hand.
+
+C: Inspect the object in your hand.
+
+V: Next item in the inventory.
