@@ -48,7 +48,6 @@ void onLevelLoaded(int index) {
     clearMap(&tileProperties);
     loadTexturesForLevel(index);
     loadTileProperties(index);
-    memset (&revealed[0], FALSE, 40 * 40 * sizeof(int));
 }
 
 void tickMission(enum ECommand cmd) {

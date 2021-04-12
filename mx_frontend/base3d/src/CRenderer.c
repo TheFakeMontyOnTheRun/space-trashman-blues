@@ -57,7 +57,6 @@ int distanceForDarkness = 48;
 int mSlow = FALSE;
 #endif
 int linesOfSight[MAP_SIZE][MAP_SIZE];
-int revealed[MAP_SIZE][MAP_SIZE];
 struct Bitmap *backdrop = NULL;
 struct MapWithCharKey tileProperties;
 struct Vec2i cameraPosition;
@@ -383,8 +382,6 @@ void render(const long ms) {
                     bucketPos = MAP_SIZE;
                     continue;
                 }
-
-                revealed[visPos.y][visPos.x] = TRUE;
 
                 facesMask = MASK_LEFT | MASK_FRONT | MASK_RIGHT;
 

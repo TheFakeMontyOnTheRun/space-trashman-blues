@@ -25,7 +25,6 @@ extern struct Bitmap *defaultFont;
 extern uint8_t framebuffer[320 * 200];
 extern uint8_t previousFrame[320 * 200];
 extern int linesOfSight[MAP_SIZE][MAP_SIZE];
-extern int revealed[MAP_SIZE][MAP_SIZE];
 extern enum EDirection cameraDirection;
 extern long gameTicks;
 extern int playerAmmo;
