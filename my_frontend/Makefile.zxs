@@ -1,0 +1,22 @@
+#
+# Examples for MSX 
+#
+# $Id: Makefile $
+#
+
+#include ../../libsrc/Make.config
+# zcc +zx -vn ../graphics/showlib3d.c -lndos -lm -llib3d -create-app -oshowlib3d.bin
+
+CC = zcc
+
+CFLAGS = +zx -vn -llib3d -lm -lndos -create-app -DAMALLOC -DMSX -O3 --opt-code-speed=all
+
+EXECFILES = $(CFILES:.c=.cas)
+
+all: demo.tap
+
+demo.tap: src/demo.o src/spectrum.o
+	$(CC) $(CFLAGS) -odemo.bin src/demo.c src/spectrum.c
+
+clean:
+	$(RM) *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.bin *.tap

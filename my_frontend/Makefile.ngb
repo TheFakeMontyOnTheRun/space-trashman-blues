@@ -1,0 +1,11 @@
+CC = zcc
+
+CFLAGS = +gb -create-app -DGB -O0
+
+all: demo.gb
+
+demo.gb: src/demo.o src/gb.o
+	$(CC) $(CFLAGS) -o demo.gb src/demo.o src/gb.o -lm -vn  -m -O2 --opt-code-speed=all
+
+clean:
+	$(RM) *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.rom *.gb src/*.o

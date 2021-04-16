@@ -1,0 +1,21 @@
+#
+# Examples for MSX 
+#
+# $Id: Makefile $
+#
+
+#include ../../libsrc/Make.config
+
+CC = zcc
+
+CFLAGS = +msx -vn -llib3d -lm -lndos -create-app -DAMALLOC -DMSX -O3 --opt-code-speed=all
+
+EXECFILES = $(CFILES:.c=.cas)
+
+all: demo.rom
+
+demo.rom: src/demo.o src/msx.o
+	$(CC) $(CFLAGS) -odemo.rom src/demo.c src/msx.c -lmsxbios -subtype=rom
+
+clean:
+	$(RM) *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.rom

@@ -1696,13 +1696,8 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
     ptr = &buffer[(_y0 * 64) + x0];
     
     for (uint8_t y = _y0; y <= _y1; ++y) {
-        
-        
         *ptr |= 1;
         ptr += 64;
-        
-        
-        
     }
 }
 
@@ -1832,23 +1827,8 @@ enum DIRECTION {
 #define IN_RANGE(V0, V1, V)  ((V0) <= (V) && (V) <= (V1))
 
 
-void shutdownGraphics();
 
-void clearGraphics();
 
-void writeStr(uint8_t nColumn, uint8_t nLine, char *str, uint8_t fg, uint8_t bg);
-
-uint8_t getKey();
-
-void init();
-
-void graphicsFlush();
-
-void fix_line(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
-
-void hLine(uint8_t x0, uint8_t x1, uint8_t y);
-
-void vLine(uint8_t x0, uint8_t y0, uint8_t y1);
 
 int8_t stencilHigh[64];
 
