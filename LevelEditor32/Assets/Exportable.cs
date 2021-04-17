@@ -80,6 +80,20 @@ public class Exportable : MonoBehaviour
 
         }
 
+        if (mainMaterial != null)
+        {
+            GameObject mainShapeGO = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            mainShapeGO.transform.parent = (target as Exportable).transform;
+            mainShapeGO.transform.localPosition = new Vector3(0, (floorHeight +  ceilingHeight) / 2.0f, 0);
+            mainShapeGO.transform.localScale = new Vector3(1, (ceilingHeight - floorHeight), 1);
+            mainShapeGO.name = "mainShape";
+            if (repeatMainTexture) {
+                cloneMaterialFor((mainMaterial as Material), mainShapeGO.GetComponent<MeshRenderer>(), ceilingHeight - floorHeight);
+            } else {
+                cloneMaterialFor((mainMaterial as Material), mainShapeGO.GetComponent<MeshRenderer>(), 1.0f);
+            }
+        }
+
         if (ceilingRepetitions > 0 && ceilingRepetitionsMaterial != null ) {
                 GameObject ceilingRepetitionsGO = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 ceilingRepetitionsGO.transform.parent  = (target as Exportable).transform; 
