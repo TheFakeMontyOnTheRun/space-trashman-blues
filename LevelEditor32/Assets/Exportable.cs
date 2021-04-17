@@ -123,6 +123,103 @@ public class Exportable : MonoBehaviour
 
                     return parentGO;
                 }
+            case GeometryType.NorthWall:
+                {
+                    var parentGO = new GameObject();
+                    var GO = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    GO.transform.parent = parentGO.transform;
+                    GO.transform.localScale = new Vector3(0.1f, 1.0f, 0.1f);
+                    GO.transform.position = new Vector3(0.5f, 0.0f, 0.0f);
+                    GO.transform.rotation = Quaternion.Euler(0, 0.0f, 90.0f);
+
+                    if (repeatMainTexture)
+                    {
+                        cloneMaterialFor((mainMaterial as Material), GO.GetComponent<MeshRenderer>(), (ceilingHeight - floorHeight), 1.0f);
+                    }
+                    else
+                    {
+                        cloneMaterialFor((mainMaterial as Material), GO.GetComponent<MeshRenderer>(), 1.0f, 1.0f);
+                    }
+
+                    var otherGO = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    otherGO.transform.parent = parentGO.transform;
+                    otherGO.transform.localScale = new Vector3(0.1f, -1.0f, 0.1f);
+                    otherGO.transform.position = new Vector3(0.5f, 0.0f, 0.0f);
+                    otherGO.transform.rotation = Quaternion.Euler(0, 0.0f, 90.0f);
+                    otherGO.GetComponent<MeshRenderer>().sharedMaterial = GO.GetComponent<MeshRenderer>().sharedMaterial;
+
+                    return parentGO;
+                }
+
+            case GeometryType.WestWall:
+                {
+                    var parentGO = new GameObject();
+                    var GO = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    GO.transform.parent = parentGO.transform;
+                    GO.transform.localScale = new Vector3(0.1f, 1.0f, 0.1f);
+                    GO.transform.position = new Vector3(0f, 0.0f, 0.5f);
+                    GO.transform.rotation = Quaternion.Euler(0, 90.0f, 90.0f);
+
+                    if (repeatMainTexture)
+                    {
+                        cloneMaterialFor((mainMaterial as Material), GO.GetComponent<MeshRenderer>(), (ceilingHeight - floorHeight), 1.0f);
+                    }
+                    else
+                    {
+                        cloneMaterialFor((mainMaterial as Material), GO.GetComponent<MeshRenderer>(), 1.0f, 1.0f);
+                    }
+
+                    var otherGO = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    otherGO.transform.parent = parentGO.transform;
+                    otherGO.transform.localScale = new Vector3(0.1f, -1.0f, 0.1f);
+                    otherGO.transform.position = new Vector3(0.0f, 0.0f, 0.5f);
+                    otherGO.transform.rotation = Quaternion.Euler(0, 90.0f, 90.0f);
+                    otherGO.GetComponent<MeshRenderer>().sharedMaterial = GO.GetComponent<MeshRenderer>().sharedMaterial;
+
+                    return parentGO;
+                }
+
+            case GeometryType.Corner:
+                {
+                    var parentGO = new GameObject();
+                    var GO = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    GO.transform.parent = parentGO.transform;
+                    GO.transform.localScale = new Vector3(0.1f, 1.0f, 0.1f);
+                    GO.transform.position = new Vector3(0.5f, 0.0f, 0.0f);
+                    GO.transform.rotation = Quaternion.Euler(0, 0.0f, 90.0f);
+
+                    if (repeatMainTexture)
+                    {
+                        cloneMaterialFor((mainMaterial as Material), GO.GetComponent<MeshRenderer>(), (ceilingHeight - floorHeight), 1.0f);
+                    }
+                    else
+                    {
+                        cloneMaterialFor((mainMaterial as Material), GO.GetComponent<MeshRenderer>(), 1.0f, 1.0f);
+                    }
+
+                    var otherGO = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    otherGO.transform.parent = parentGO.transform;
+                    otherGO.transform.localScale = new Vector3(0.1f, -1.0f, 0.1f);
+                    otherGO.transform.position = new Vector3(0.5f, 0.0f, 0.0f);
+                    otherGO.transform.rotation = Quaternion.Euler(0, 0.0f, 90.0f);
+                    otherGO.GetComponent<MeshRenderer>().sharedMaterial = GO.GetComponent<MeshRenderer>().sharedMaterial;
+
+                    GO = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    GO.transform.parent = parentGO.transform;
+                    GO.transform.localScale = new Vector3(0.1f, 1.0f, 0.1f);
+                    GO.transform.position = new Vector3(0f, 0.0f, 0.5f);
+                    GO.transform.rotation = Quaternion.Euler(0, 90.0f, 90.0f);
+                    GO.GetComponent<MeshRenderer>().sharedMaterial = otherGO.GetComponent<MeshRenderer>().sharedMaterial;
+
+                    otherGO = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    otherGO.transform.parent = parentGO.transform;
+                    otherGO.transform.localScale = new Vector3(0.1f, -1.0f, 0.1f);
+                    otherGO.transform.position = new Vector3(0.0f, 0.0f, 0.5f);
+                    otherGO.transform.rotation = Quaternion.Euler(0, 90.0f, 90.0f);
+                    otherGO.GetComponent<MeshRenderer>().sharedMaterial = GO.GetComponent<MeshRenderer>().sharedMaterial;
+
+                    return parentGO;
+                }
 
             case GeometryType.None:
             default:
