@@ -79,7 +79,7 @@ public class Exportable : MonoBehaviour
                     var GO = GameObject.CreatePrimitive(PrimitiveType.Plane);
                     GO.transform.parent = parentGO.transform;
                     GO.transform.localScale = new Vector3(0.1f, 1.0f, 0.1f * (float)Math.Sqrt(2.0));
-                    GO.transform.rotation = Quaternion.Euler(0, 50.0f, 90.0f);
+                    GO.transform.rotation = Quaternion.Euler(0, 45.0f, 90.0f);
 
                     if (repeatMainTexture)
                     {
@@ -93,7 +93,7 @@ public class Exportable : MonoBehaviour
                     var otherGO = GameObject.CreatePrimitive(PrimitiveType.Plane);
                     otherGO.transform.parent = parentGO.transform;
                     otherGO.transform.localScale = new Vector3(0.1f, -1.0f, 0.1f * (float)Math.Sqrt(2.0));
-                    otherGO.transform.rotation = Quaternion.Euler(0, 50.0f, 90.0f);
+                    otherGO.transform.rotation = Quaternion.Euler(0, 45.0f, 90.0f);
                     otherGO.GetComponent<MeshRenderer>().sharedMaterial = GO.GetComponent<MeshRenderer>().sharedMaterial;
 
                     return parentGO;
@@ -104,7 +104,7 @@ public class Exportable : MonoBehaviour
                     var GO = GameObject.CreatePrimitive(PrimitiveType.Plane);
                     GO.transform.parent = parentGO.transform;
                     GO.transform.localScale = new Vector3(0.1f, 1.0f, 0.1f * (float)Math.Sqrt(2.0));
-                    GO.transform.rotation = Quaternion.Euler(0, 310.0f, 90.0f);
+                    GO.transform.rotation = Quaternion.Euler(0, 315.0f, 90.0f);
 
                     if (repeatMainTexture)
                     {
@@ -118,7 +118,7 @@ public class Exportable : MonoBehaviour
                     var otherGO = GameObject.CreatePrimitive(PrimitiveType.Plane);
                     otherGO.transform.parent = parentGO.transform;
                     otherGO.transform.localScale = new Vector3(0.1f, -1.0f, 0.1f * (float)Math.Sqrt(2.0));
-                    otherGO.transform.rotation = Quaternion.Euler(0, 310.0f, 90.0f);
+                    otherGO.transform.rotation = Quaternion.Euler(0, 315.0f, 90.0f);
                     otherGO.GetComponent<MeshRenderer>().sharedMaterial = GO.GetComponent<MeshRenderer>().sharedMaterial;
 
                     return parentGO;
