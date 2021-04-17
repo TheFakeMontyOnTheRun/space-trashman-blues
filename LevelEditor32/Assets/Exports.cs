@@ -48,7 +48,7 @@ public class Exports : MonoBehaviour
 
                 spawner.AddComponent<Exportable>();
                 spawner.GetComponent<Exportable>().floorMaterial = matRef1;
-                spawner.GetComponent<Exportable>().ceilingMaterial = matRef1;
+                spawner.GetComponent<Exportable>().ceilingMaterial = matRef2;
                 spawner.GetComponent<Exportable>().ceilingHeight = 1.0f;
                 spawner.GetComponent<Exportable>().representation = "1";
                 spawner.GetComponent<Exportable>().Apply();
