@@ -7,6 +7,8 @@ using System;
 
 public class Exports : MonoBehaviour
 {
+    const int kMapSize = 32;
+
     class PetEntry {
 
         public PetEntry(int floor, int ceiling, int geometryType, bool blockMovement, int textureIndex) {
@@ -38,9 +40,10 @@ public class Exports : MonoBehaviour
         GameObject spawner;
         Material matRef1 = AssetDatabase.LoadAssetAtPath("Assets/Materials/tex1.mat", typeof(Material)) as Material;
         Material matRef2 = AssetDatabase.LoadAssetAtPath("Assets/Materials/tex2.mat", typeof(Material)) as Material;
+
     
-        for ( int y = 0; y < 64; ++y ) {
-            for (int x = 0; x < 64; ++x ) {
+        for ( int y = 0; y < kMapSize; ++y ) {
+            for (int x = 0; x < kMapSize; ++x ) {
                 spawner = new GameObject("tile" + x + "_" + y );
                 spawner.transform.parent = geometryRoot.transform;
                 spawner.transform.position = new Vector3(x, 0, y);
@@ -72,11 +75,11 @@ public class Exports : MonoBehaviour
 
         GameObject[] objects = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
 
-        string[,] map = new string[64, 64];
+        string[,] map = new string[kMapSize, kMapSize];
         PetEntry[] pet = new PetEntry[256];
 
-        for (int y = 0; y < 64; ++y) {
-            for ( int x = 0; x < 64; ++x ) {
+        for (int y = 0; y < kMapSize; ++y) {
+            for ( int x = 0; x < kMapSize; ++x ) {
                 map[y, x] = "0";
             }
         }
@@ -86,7 +89,7 @@ public class Exports : MonoBehaviour
                 var exportbl = go.GetComponent(typeof(Exportable)) as Exportable;
                 if (exportbl != null) {
                     int x = (int) (go.transform.position.x );
-                    int z = 64 - (int) (go.transform.position.z );
+                    int z = kMapSize - (int) (go.transform.position.z );
                     print(go + ": " + go.name + " is active in hierarchy at ( " + x + ", " + z + " ) and is " + exportbl.representation);
                     
                     map[z, x] = exportbl.representation;
@@ -96,9 +99,9 @@ public class Exports : MonoBehaviour
         }
 
 
-        for (int y = 1; y < 63; ++y)
+        for (int y = 1; y < kMapSize - 1; ++y)
         {
-            for (int x = 1; x < 63; ++x)
+            for (int x = 1; x < kMapSize - 1; ++x)
             {
                 if (map[y, x] == "0" && (
                     (Int32.Parse(map[y - 1, x]) > 1) ||
@@ -117,10 +120,10 @@ public class Exports : MonoBehaviour
 
         string finalMap = "{\n";
 
-        for (int y = 0; y < 64; ++y)
+        for (int y = 0; y < kMapSize; ++y)
         {
             finalMap += "{ ";
-            for (int x = 0; x < 64; ++x)
+            for (int x = 0; x < kMapSize; ++x)
             {
                 finalMap += map[y, x] + ", ";
             }
