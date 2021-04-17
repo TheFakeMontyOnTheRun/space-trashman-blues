@@ -19,6 +19,7 @@ public class ExportableEditor : Editor
     SerializedProperty floorMaterial;
     SerializedProperty floorRepetitionsMaterial;
     SerializedProperty representation;
+    SerializedProperty geometryType;
 
     SerializedProperty repeatMainTexture;
 
@@ -34,6 +35,7 @@ public class ExportableEditor : Editor
         floorRepetitionsMaterial = serializedObject.FindProperty("floorRepetitionsMaterial");
         representation = serializedObject.FindProperty("representation");
         repeatMainTexture = serializedObject.FindProperty("repeatMainTexture");
+        geometryType = serializedObject.FindProperty("geometryType");
     }
 
     public override void OnInspectorGUI() {
@@ -54,6 +56,7 @@ public class ExportableEditor : Editor
         EditorGUILayout.PropertyField(floorRepetitionsMaterial);
         EditorGUILayout.PropertyField(representation);
         EditorGUILayout.PropertyField(repeatMainTexture);
+        EditorGUILayout.PropertyField(geometryType);
 
         if (GUILayout.Button("Apply")) {
             var tempList = (target as Exportable).transform.Cast<Transform>().ToList();

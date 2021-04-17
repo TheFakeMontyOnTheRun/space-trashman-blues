@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
+using System.IO;
+using System;
 
 //[ExecuteInEditMode]
 public class Exportable : MonoBehaviour
 {
     public static Dictionary<string, Exportable> GeneralTable = new Dictionary<string, Exportable>();
+    public enum GeometryType { None, Cube, LeftNear, LeftFar, NorthWall, WestWall, Corner};
 
     public float ceilingHeight;
     public float floorHeight;
@@ -22,6 +26,7 @@ public class Exportable : MonoBehaviour
     public bool repeatMainTexture;
     public bool needsAlphaTest;
     public string representation;
+    public GeometryType geometryType;
 
     static Shader specularShader;
 
@@ -44,14 +49,85 @@ public class Exportable : MonoBehaviour
         needsAlphaTest = other.needsAlphaTest;
     }
 
-    
-
-    void cloneMaterialFor(Material originalMat, Renderer destination, float scale) {
+    void cloneMaterialFor(Material originalMat, Renderer destination, float scaleX, float scaleY) {
         
         var newMat = new Material(specularShader);
         newMat.mainTexture = originalMat.mainTexture;
-        newMat.mainTextureScale = new Vector2(1.0f, scale);
+        newMat.mainTextureScale = new Vector2(scaleX, scaleY);
         destination.sharedMaterial = newMat;     
+    }
+
+    GameObject createObjectForGeometryType(GeometryType type) {
+        
+        switch (type) {
+            case GeometryType.Cube:
+                {
+                    var GO = GameObject.CreatePrimitive(PrimitiveType.Cube);
+
+                    if (repeatMainTexture)
+                    {
+                        cloneMaterialFor((mainMaterial as Material), GO.GetComponent<MeshRenderer>(), 1.0f, (ceilingHeight - floorHeight));
+                    }
+                    else
+                    {
+                        cloneMaterialFor((mainMaterial as Material), GO.GetComponent<MeshRenderer>(), 1.0f, 1.0f);
+                    }
+                    return GO;
+                }
+            case GeometryType.LeftFar: {
+                    var parentGO = new GameObject();
+                    var GO = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    GO.transform.parent = parentGO.transform;
+                    GO.transform.localScale = new Vector3(0.1f, 1.0f, 0.1f * (float)Math.Sqrt(2.0));
+                    GO.transform.rotation = Quaternion.Euler(0, 50.0f, 90.0f);
+
+                    if (repeatMainTexture)
+                    {
+                        cloneMaterialFor((mainMaterial as Material), GO.GetComponent<MeshRenderer>(), (ceilingHeight - floorHeight), 1.0f);
+                    }
+                    else
+                    {
+                        cloneMaterialFor((mainMaterial as Material), GO.GetComponent<MeshRenderer>(), 1.0f, 1.0f);
+                    }
+
+                    var otherGO = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    otherGO.transform.parent = parentGO.transform;
+                    otherGO.transform.localScale = new Vector3(0.1f, -1.0f, 0.1f * (float)Math.Sqrt(2.0));
+                    otherGO.transform.rotation = Quaternion.Euler(0, 50.0f, 90.0f);
+                    otherGO.GetComponent<MeshRenderer>().sharedMaterial = GO.GetComponent<MeshRenderer>().sharedMaterial;
+
+                    return parentGO;
+                }
+            case GeometryType.LeftNear:
+                {
+                    var parentGO = new GameObject();
+                    var GO = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    GO.transform.parent = parentGO.transform;
+                    GO.transform.localScale = new Vector3(0.1f, 1.0f, 0.1f * (float)Math.Sqrt(2.0));
+                    GO.transform.rotation = Quaternion.Euler(0, 310.0f, 90.0f);
+
+                    if (repeatMainTexture)
+                    {
+                        cloneMaterialFor((mainMaterial as Material), GO.GetComponent<MeshRenderer>(), (ceilingHeight - floorHeight), 1.0f);
+                    }
+                    else
+                    {
+                        cloneMaterialFor((mainMaterial as Material), GO.GetComponent<MeshRenderer>(), 1.0f, 1.0f);
+                    }
+
+                    var otherGO = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    otherGO.transform.parent = parentGO.transform;
+                    otherGO.transform.localScale = new Vector3(0.1f, -1.0f, 0.1f * (float)Math.Sqrt(2.0));
+                    otherGO.transform.rotation = Quaternion.Euler(0, 310.0f, 90.0f);
+                    otherGO.GetComponent<MeshRenderer>().sharedMaterial = GO.GetComponent<MeshRenderer>().sharedMaterial;
+
+                    return parentGO;
+                }
+
+            case GeometryType.None:
+            default:
+                return new GameObject();
+        }
     }
  
     public void Apply() {
@@ -66,7 +142,7 @@ public class Exportable : MonoBehaviour
             floorGO.transform.localPosition = new Vector3(0, floorHeight, 0);
             floorGO.transform.localScale = new Vector3( 1, 0, 1 );
             floorGO.name = "floor";
-            cloneMaterialFor((floorMaterial as Material), floorGO.GetComponent<MeshRenderer>(), 1.0f);
+            cloneMaterialFor((floorMaterial as Material), floorGO.GetComponent<MeshRenderer>(), 1.0f, 1.0f);
         }
 
 
@@ -76,22 +152,17 @@ public class Exportable : MonoBehaviour
                 ceilingGO.transform.localPosition = new Vector3(0, ceilingHeight, 0);
                 ceilingGO.transform.localScale = new Vector3( 1, 0, 1 );
                 ceilingGO.name = "ceiling";
-                cloneMaterialFor((ceilingMaterial as Material), ceilingGO.GetComponent<MeshRenderer>(), 1.0f);
+                cloneMaterialFor((ceilingMaterial as Material), ceilingGO.GetComponent<MeshRenderer>(), 1.0f, 1.0f);
 
         }
 
-        if (mainMaterial != null)
+        if (mainMaterial != null && geometryType != GeometryType.None)
         {
-            GameObject mainShapeGO = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject mainShapeGO = createObjectForGeometryType(geometryType);
             mainShapeGO.transform.parent = (target as Exportable).transform;
             mainShapeGO.transform.localPosition = new Vector3(0, (floorHeight +  ceilingHeight) / 2.0f, 0);
-            mainShapeGO.transform.localScale = new Vector3(1, (ceilingHeight - floorHeight), 1);
+            mainShapeGO.transform.localScale = new Vector3(mainShapeGO.transform.localScale.x, (ceilingHeight - floorHeight), mainShapeGO.transform.localScale.z);
             mainShapeGO.name = "mainShape";
-            if (repeatMainTexture) {
-                cloneMaterialFor((mainMaterial as Material), mainShapeGO.GetComponent<MeshRenderer>(), ceilingHeight - floorHeight);
-            } else {
-                cloneMaterialFor((mainMaterial as Material), mainShapeGO.GetComponent<MeshRenderer>(), 1.0f);
-            }
         }
 
         if (ceilingRepetitions > 0 && ceilingRepetitionsMaterial != null ) {
@@ -100,7 +171,7 @@ public class Exportable : MonoBehaviour
                 ceilingRepetitionsGO.transform.localPosition = new Vector3(0, ceilingHeight + (ceilingRepetitions / 2) + 0.001f, 0);
                 ceilingRepetitionsGO.transform.localScale = new Vector3( 1, ceilingRepetitions, 1 );
                 ceilingRepetitionsGO.name = "ceilingRepetition";
-                cloneMaterialFor((ceilingRepetitionsMaterial as Material), ceilingRepetitionsGO.GetComponent<MeshRenderer>(), ceilingRepetitions);
+                cloneMaterialFor((ceilingRepetitionsMaterial as Material), ceilingRepetitionsGO.GetComponent<MeshRenderer>(), 1.0f, ceilingRepetitions);
         }
 
             if (floorRepetitions > 0 && floorRepetitionsMaterial != null) {
@@ -109,7 +180,7 @@ public class Exportable : MonoBehaviour
                 floorRepetitionsGO.transform.localPosition = new Vector3(0, floorHeight - (floorRepetitions / 2) - 0.001f, 0);
                 floorRepetitionsGO.transform.localScale = new Vector3( 1, floorRepetitions, 1 );
                 floorRepetitionsGO.name = "floorRepetition";
-                cloneMaterialFor((floorRepetitionsMaterial as Material), floorRepetitionsGO.GetComponent<MeshRenderer>(), floorRepetitions);
+                cloneMaterialFor((floorRepetitionsMaterial as Material), floorRepetitionsGO.GetComponent<MeshRenderer>(), 1.0f, floorRepetitions);
         }
         
     }
