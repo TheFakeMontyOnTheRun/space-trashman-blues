@@ -53,6 +53,7 @@ public class Exportable : MonoBehaviour
         
         var newMat = new Material(specularShader);
         newMat.mainTexture = originalMat.mainTexture;
+        newMat.mainTexture.filterMode = FilterMode.Point;
         newMat.mainTextureScale = new Vector2(scaleX, scaleY);
         destination.sharedMaterial = newMat;     
     }
