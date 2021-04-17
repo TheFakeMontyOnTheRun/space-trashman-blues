@@ -9,7 +9,7 @@ using System;
 public class Exportable : MonoBehaviour
 {
     public static Dictionary<string, Exportable> GeneralTable = new Dictionary<string, Exportable>();
-    public enum GeometryType { None, Cube, LeftNear, LeftFar, NorthWall, WestWall, Corner};
+    public enum GeometryType { None, Cube, LeftNear, LeftFar, NorthWall, WestWall, Corner, RampNorth, RampEast, RampSouth, RampWest};
 
     public float ceilingHeight;
     public float floorHeight;
@@ -220,7 +220,51 @@ public class Exportable : MonoBehaviour
 
                     return parentGO;
                 }
+            case GeometryType.RampNorth:
+            case GeometryType.RampEast:
+            case GeometryType.RampSouth:
+            case GeometryType.RampWest:
+                {
+                    float angleXZ = 0.0f;
 
+                    switch (type) {
+                        case GeometryType.RampNorth:
+                            angleXZ = 0.0f;
+                            break;
+                        case GeometryType.RampEast:
+                            angleXZ = 90.0f;
+                            break;
+                        case GeometryType.RampSouth:
+                            angleXZ = 180.0f;
+                            break;
+                        case GeometryType.RampWest:
+                            angleXZ = 270.0f;
+                            break;
+                    }
+
+                    var parentGO = new GameObject();
+                    var GO = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    GO.transform.parent = parentGO.transform;
+                    GO.transform.localScale = new Vector3(0.1f * (float)Math.Sqrt(2.0), 0.1f, 0.1f);
+                    GO.transform.rotation = Quaternion.Euler(0, angleXZ, 45.0f);
+
+                    if (repeatMainTexture)
+                    {
+                        cloneMaterialFor((mainMaterial as Material), GO.GetComponent<MeshRenderer>(), (ceilingHeight - floorHeight), 1.0f);
+                    }
+                    else
+                    {
+                        cloneMaterialFor((mainMaterial as Material), GO.GetComponent<MeshRenderer>(), 1.0f, 1.0f);
+                    }
+
+                    var otherGO = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    otherGO.transform.parent = parentGO.transform;
+                    otherGO.transform.localScale = new Vector3(0.1f * (float)Math.Sqrt(2.0), -0.1f, 0.1f);
+                    otherGO.transform.rotation = Quaternion.Euler(0, angleXZ, 45.0f);
+                    otherGO.GetComponent<MeshRenderer>().sharedMaterial = GO.GetComponent<MeshRenderer>().sharedMaterial;
+
+                    return parentGO;
+                }
             case GeometryType.None:
             default:
                 return new GameObject();
