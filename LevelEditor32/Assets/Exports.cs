@@ -69,6 +69,36 @@ public class Exports : MonoBehaviour
         Debug.Log("Doing stuff");
     }
 
+    [MenuItem("Monty/Update Materials")]
+    static void UpdateMaterials()
+    {
+        var shader = Shader.Find("Unlit/Texture");
+        var texturesInfo = new DirectoryInfo("Assets/Resources/Textures");
+        var filesTextureInfo = texturesInfo.GetFiles();
+        var materialsInfo = new DirectoryInfo("Assets/Materials/");
+        var filesMaterialsInfo = materialsInfo.GetFiles();
+
+        var materialList = "";
+
+        foreach (var file in filesMaterialsInfo)
+        {
+            materialList += file.Name + ";";
+        }
+
+        foreach (var file in filesTextureInfo) {
+            if (file.Name.EndsWith(".png") && !materialList.Contains(file.Name.Replace(".png", ""))) {
+                var texture = Resources.Load("Textures/"  + file.Name.Replace(".png", ""), typeof(Texture2D)) as Texture2D;
+                texture.filterMode = FilterMode.Point;
+                var newMat = new Material(shader);
+                newMat.mainTexture = texture;
+                AssetDatabase.CreateAsset( newMat, "Assets/Materials/" + file.Name.Replace(".png", ".mat"));
+            }
+        }
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+    }
+
     [MenuItem("Monty/Export Level as C Source File")]
     static void ExportLevelAsSource() {
         Debug.Log("Doing stuff in C");
