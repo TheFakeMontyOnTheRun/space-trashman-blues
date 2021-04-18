@@ -53,3 +53,7 @@ mx_frontend/game.data
 mx_frontend/game.html
 mx_frontend/game.js
 mx_frontend/game.wasm
+LevelEditor32/Assets/Map.txt
+LevelEditor32/Assets/Map.txt.meta
+LevelEditor32/Assets/Tiles.prp
+LevelEditor32/Assets/Tiles.prp.meta
