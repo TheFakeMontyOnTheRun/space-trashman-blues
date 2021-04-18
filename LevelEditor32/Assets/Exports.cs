@@ -41,8 +41,9 @@ public class Exports : MonoBehaviour
         GameObject spawner;
         Material matRef1 = AssetDatabase.LoadAssetAtPath("Assets/Materials/asphalt.mat", typeof(Material)) as Material;
         Material matRef2 = AssetDatabase.LoadAssetAtPath("Assets/Materials/ceiling.mat", typeof(Material)) as Material;
+        matRef1.mainTexture.filterMode = FilterMode.Point;
+        matRef2.mainTexture.filterMode = FilterMode.Point;
 
-    
         for ( int y = 0; y < kMapSize; ++y ) {
             for (int x = 0; x < kMapSize; ++x ) {
                 spawner = new GameObject("tile" + x + "_" + y );
@@ -91,7 +92,7 @@ public class Exports : MonoBehaviour
                     int z = kMapSize - (int)(go.transform.position.z);
                     print(go + ": " + go.name + " is active in hierarchy at ( " + x + ", " + z + " ) and is " + exportbl.representation);
 
-                    if (z < kMapSize && z >= 0 && x < kMapSize && x >= 0) {
+                    if (z < kMapSize && x < kMapSize && x >= 0 && z >= 0 ) {
                         map[z, x] = Convert.ToInt32(exportbl.representation);
                         pet[map[z, x]] = exportbl;
                     }
