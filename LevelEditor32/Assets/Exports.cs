@@ -77,7 +77,7 @@ public class Exports : MonoBehaviour
         {
             for (int x = 0; x < kMapSize; ++x)
             {
-                map[y, x] = 0;
+                map[y, x] = 46;
             }
         }
 
@@ -89,8 +89,7 @@ public class Exports : MonoBehaviour
                 if (exportbl != null)
                 {
                     int x = (int)(go.transform.position.x);
-                    int z = kMapSize - (int)(go.transform.position.z);
-                    print(go + ": " + go.name + " is active in hierarchy at ( " + x + ", " + z + " ) and is " + exportbl.representation);
+                    int z = (kMapSize - 1) - (int)(go.transform.position.z);
 
                     if (z < kMapSize && x < kMapSize && x >= 0 && z >= 0 ) {
                         map[z, x] = Convert.ToInt32(exportbl.representation);
