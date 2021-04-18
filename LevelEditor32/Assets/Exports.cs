@@ -9,9 +9,11 @@ public class Exports : MonoBehaviour
 {
     const int kMapSize = 32;
 
-    class PetEntry {
+    class PetEntry
+    {
 
-        public PetEntry(int floor, int ceiling, int geometryType, bool blockMovement, int textureIndex) {
+        public PetEntry(int floor, int ceiling, int geometryType, bool blockMovement, int textureIndex)
+        {
             this.floor = floor;
             this.ceiling = ceiling;
             this.geometryType = geometryType;
@@ -26,7 +28,6 @@ public class Exports : MonoBehaviour
         public int textureIndex;
     };
 
-
     [MenuItem("Monty/Reset scene")]
     static void ResetLevel()
     {
@@ -38,8 +39,8 @@ public class Exports : MonoBehaviour
 
         GameObject geometryRoot = new GameObject("Geometry");
         GameObject spawner;
-        Material matRef1 = AssetDatabase.LoadAssetAtPath("Assets/Materials/tex1.mat", typeof(Material)) as Material;
-        Material matRef2 = AssetDatabase.LoadAssetAtPath("Assets/Materials/tex2.mat", typeof(Material)) as Material;
+        Material matRef1 = AssetDatabase.LoadAssetAtPath("Assets/Materials/asphalt.mat", typeof(Material)) as Material;
+        Material matRef2 = AssetDatabase.LoadAssetAtPath("Assets/Materials/ceiling.mat", typeof(Material)) as Material;
 
     
         for ( int y = 0; y < kMapSize; ++y ) {
@@ -53,7 +54,7 @@ public class Exports : MonoBehaviour
                 spawner.GetComponent<Exportable>().floorMaterial = matRef1;
                 spawner.GetComponent<Exportable>().ceilingMaterial = matRef2;
                 spawner.GetComponent<Exportable>().ceilingHeight = 1.0f;
-                spawner.GetComponent<Exportable>().representation = "1";
+                spawner.GetComponent<Exportable>().representation = "46";
                 spawner.GetComponent<Exportable>().Apply();
             }
         }
@@ -66,7 +67,112 @@ public class Exports : MonoBehaviour
     [MenuItem("Monty/Export Level as Data File")]
     static void ExportLevelFile()
     {
-        Debug.Log("Doing stuff");
+        GameObject[] objects = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
+
+        int[,] map = new int[kMapSize, kMapSize];
+        Exportable[] pet = new Exportable[256];
+
+        for (int y = 0; y < kMapSize; ++y)
+        {
+            for (int x = 0; x < kMapSize; ++x)
+            {
+                map[y, x] = 0;
+            }
+        }
+
+        foreach (GameObject go in objects)
+        {
+            if (go.activeInHierarchy)
+            {
+                var exportbl = go.GetComponent(typeof(Exportable)) as Exportable;
+                if (exportbl != null)
+                {
+                    int x = (int)(go.transform.position.x);
+                    int z = kMapSize - (int)(go.transform.position.z);
+                    print(go + ": " + go.name + " is active in hierarchy at ( " + x + ", " + z + " ) and is " + exportbl.representation);
+
+                    if (z < kMapSize && z >= 0 && x < kMapSize && x >= 0) {
+                        map[z, x] = Convert.ToInt32(exportbl.representation);
+                        pet[map[z, x]] = exportbl;
+                    }
+                }
+            }
+        }
+
+        string finalMap = "";
+
+        for (int y = 0; y < kMapSize; ++y)
+        {
+            for (int x = 0; x < kMapSize; ++x)
+            {
+                finalMap += Convert.ToChar(map[y, x]);
+            }
+
+            finalMap += "\n";
+        }
+        
+
+        string petCode = "";
+
+        for (int c = 0; c < 256; ++c)
+        {
+
+            if (pet[c] == null)
+            {
+                continue;
+            }
+
+            petCode += Convert.ToChar(c);
+            petCode += " ";
+            petCode += pet[c].needsAlphaTest ? 1 : 0;
+            petCode += " ";
+            petCode += pet[c].blockVisibility ? 1 : 0;
+            petCode += " ";
+            petCode += pet[c].blockMovement ? 1 : 0;
+            petCode += " ";
+            petCode += "0"; //blocks enemy sight
+            petCode += " ";
+            petCode += pet[c].repeatMainTexture ? 1 : 0;
+            petCode += " ";
+            petCode += pet[c].ceilingMaterial != null ? pet[c].ceilingMaterial.name : "null";
+            petCode += " ";
+            petCode += pet[c].floorMaterial != null ? pet[c].floorMaterial.name : "null";
+            petCode += " ";
+            petCode += pet[c].mainMaterial != null ? pet[c].mainMaterial.name : "null";
+            petCode += " ";
+            petCode += pet[c].geometryType != Exportable.GeometryType.None ? pet[c].geometryType.ToString().ToLower() : "null";
+            petCode += " ";
+            petCode += pet[c].ceilingRepetitionsMaterial != null ? pet[c].ceilingRepetitionsMaterial.name : "null";
+            petCode += " ";
+            petCode += pet[c].floorRepetitionsMaterial != null ? pet[c].floorRepetitionsMaterial.name : "null";
+            petCode += " ";
+            petCode += pet[c].ceilingRepetitions;
+            petCode += " ";
+            petCode += pet[c].floorRepetitions;
+            petCode += " ";
+            petCode += pet[c].ceilingHeight;
+            petCode += " ";
+            petCode += pet[c].floorHeight;
+
+            petCode += "\n";
+        }
+
+        petCode += "";
+
+        string path = "Assets/Map.txt";
+        StreamWriter writer = new StreamWriter(path, false);
+        writer.WriteLine(finalMap.Trim());
+        writer.Close();
+
+        AssetDatabase.ImportAsset(path);
+
+
+        path = "Assets/Tiles.prp";
+        writer = new StreamWriter(path, false);
+        writer.WriteLine(petCode.Trim());
+        writer.Close();
+
+        AssetDatabase.ImportAsset(path);
     }
 
     [MenuItem("Monty/Update Materials")]
