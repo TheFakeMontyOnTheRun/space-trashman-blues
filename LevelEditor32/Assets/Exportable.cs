@@ -47,6 +47,8 @@ public class Exportable : MonoBehaviour
         blockVisibility = other.blockVisibility;
         blockMovement = other.blockMovement;
         needsAlphaTest = other.needsAlphaTest;
+        geometryType = other.geometryType;
+        repeatMainTexture = other.repeatMainTexture;
     }
 
     void cloneMaterialFor(Material originalMat, Renderer destination, float scaleX, float scaleY) {
