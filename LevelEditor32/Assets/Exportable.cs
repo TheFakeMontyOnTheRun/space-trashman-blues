@@ -133,7 +133,7 @@ public class Exportable : MonoBehaviour
                     var GO = GameObject.CreatePrimitive(PrimitiveType.Plane);
                     GO.transform.parent = parentGO.transform;
                     GO.transform.localScale = new Vector3(0.1f, 1.0f, 0.1f);
-                    GO.transform.position = new Vector3(0.5f, 0.0f, 0.0f);
+                    GO.transform.position = new Vector3(-0.5f, 0.0f, 0.0f);
                     GO.transform.rotation = Quaternion.Euler(0, 0.0f, 90.0f);
 
                     if (repeatMainTexture)
@@ -148,7 +148,7 @@ public class Exportable : MonoBehaviour
                     var otherGO = GameObject.CreatePrimitive(PrimitiveType.Plane);
                     otherGO.transform.parent = parentGO.transform;
                     otherGO.transform.localScale = new Vector3(0.1f, -1.0f, 0.1f);
-                    otherGO.transform.position = new Vector3(0.5f, 0.0f, 0.0f);
+                    otherGO.transform.position = new Vector3(-0.5f, 0.0f, 0.0f);
                     otherGO.transform.rotation = Quaternion.Euler(0, 0.0f, 90.0f);
                     otherGO.GetComponent<MeshRenderer>().sharedMaterial = GO.GetComponent<MeshRenderer>().sharedMaterial;
 
@@ -161,7 +161,7 @@ public class Exportable : MonoBehaviour
                     var GO = GameObject.CreatePrimitive(PrimitiveType.Plane);
                     GO.transform.parent = parentGO.transform;
                     GO.transform.localScale = new Vector3(0.1f, 1.0f, 0.1f);
-                    GO.transform.position = new Vector3(0f, 0.0f, -0.5f);
+                    GO.transform.position = new Vector3(0f, 0.0f, 0.5f);
                     GO.transform.rotation = Quaternion.Euler(0, 90.0f, 90.0f);
 
                     if (repeatMainTexture)
@@ -176,7 +176,7 @@ public class Exportable : MonoBehaviour
                     var otherGO = GameObject.CreatePrimitive(PrimitiveType.Plane);
                     otherGO.transform.parent = parentGO.transform;
                     otherGO.transform.localScale = new Vector3(0.1f, -1.0f, 0.1f);
-                    otherGO.transform.position = new Vector3(0.0f, 0.0f, -0.5f);
+                    otherGO.transform.position = new Vector3(0.0f, 0.0f, 0.5f);
                     otherGO.transform.rotation = Quaternion.Euler(0, 90.0f, 90.0f);
                     otherGO.GetComponent<MeshRenderer>().sharedMaterial = GO.GetComponent<MeshRenderer>().sharedMaterial;
 
@@ -189,7 +189,7 @@ public class Exportable : MonoBehaviour
                     var GO = GameObject.CreatePrimitive(PrimitiveType.Plane);
                     GO.transform.parent = parentGO.transform;
                     GO.transform.localScale = new Vector3(0.1f, 1.0f, 0.1f);
-                    GO.transform.position = new Vector3(0.5f, 0.0f, 0.0f);
+                    GO.transform.position = new Vector3(-0.5f, 0.0f, 0.0f);
                     GO.transform.rotation = Quaternion.Euler(0, 0.0f, 90.0f);
 
                     if (repeatMainTexture)
@@ -204,21 +204,21 @@ public class Exportable : MonoBehaviour
                     var otherGO = GameObject.CreatePrimitive(PrimitiveType.Plane);
                     otherGO.transform.parent = parentGO.transform;
                     otherGO.transform.localScale = new Vector3(0.1f, -1.0f, 0.1f);
-                    otherGO.transform.position = new Vector3(0.5f, 0.0f, 0.0f);
+                    otherGO.transform.position = new Vector3(-0.5f, 0.0f, 0.0f);
                     otherGO.transform.rotation = Quaternion.Euler(0, 0.0f, 90.0f);
                     otherGO.GetComponent<MeshRenderer>().sharedMaterial = GO.GetComponent<MeshRenderer>().sharedMaterial;
 
                     GO = GameObject.CreatePrimitive(PrimitiveType.Plane);
                     GO.transform.parent = parentGO.transform;
                     GO.transform.localScale = new Vector3(0.1f, 1.0f, 0.1f);
-                    GO.transform.position = new Vector3(0f, 0.0f, -0.5f);
+                    GO.transform.position = new Vector3(0f, 0.0f, 0.5f);
                     GO.transform.rotation = Quaternion.Euler(0, 90.0f, 90.0f);
                     GO.GetComponent<MeshRenderer>().sharedMaterial = otherGO.GetComponent<MeshRenderer>().sharedMaterial;
 
                     otherGO = GameObject.CreatePrimitive(PrimitiveType.Plane);
                     otherGO.transform.parent = parentGO.transform;
                     otherGO.transform.localScale = new Vector3(0.1f, -1.0f, 0.1f);
-                    otherGO.transform.position = new Vector3(0.0f, 0.0f, -0.5f);
+                    otherGO.transform.position = new Vector3(0.0f, 0.0f, 0.5f);
                     otherGO.transform.rotation = Quaternion.Euler(0, 90.0f, 90.0f);
                     otherGO.GetComponent<MeshRenderer>().sharedMaterial = GO.GetComponent<MeshRenderer>().sharedMaterial;
 
@@ -233,16 +233,16 @@ public class Exportable : MonoBehaviour
 
                     switch (type) {
                         case GeometryType.RampNorth:
-                            angleXZ = 0.0f;
+                            angleXZ = 270.0f;
                             break;
                         case GeometryType.RampEast:
-                            angleXZ = 90.0f;
+                            angleXZ = 0.0f;
                             break;
                         case GeometryType.RampSouth:
-                            angleXZ = 180.0f;
+                            angleXZ = 90.0f;
                             break;
                         case GeometryType.RampWest:
-                            angleXZ = 270.0f;
+                            angleXZ = 180.0f;
                             break;
                     }
 
