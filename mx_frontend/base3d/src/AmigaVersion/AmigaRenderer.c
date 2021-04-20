@@ -41,13 +41,29 @@
 #define REG(xn, parm) parm __asm(#xn)
 #define REGARGS __regargs
 
-extern void REGARGS c2p1x1_8_c5_bm(
+#ifdef AGA5BPP
+extern void REGARGS c2p1x1_4_c5_bm(
 REG(d0, UWORD chunky_x),
 REG(d1, UWORD chunky_y),
 REG(d2, UWORD offset_x),
 REG(d3, UWORD offset_y),
 REG(a0, UBYTE *chunky_buffer),
 REG(a1, struct BitMap *bitmap));
+#else
+extern void REGARGS
+c2p1x1_8_c5_bm(
+REG(d0, UWORD
+        chunky_x),
+REG(d1, UWORD
+        chunky_y),
+REG(d2, UWORD
+        offset_x),
+REG(d3, UWORD
+        offset_y),
+REG(a0, UBYTE * chunky_buffer),
+REG(a1, struct BitMap *bitmap)
+);
+#endif
 
 struct IntuitionBase *IntuitionBase;
 struct GfxBase *GfxBase;
@@ -506,7 +522,7 @@ void flipRenderer() {
 #ifdef AGA8BPP
         c2p1x1_8_c5_bm(320,200,0,0,&framebuffer[0], my_window->RPort->BitMap);
 #else
-        WriteChunkyPixels(my_window->RPort, 0, 0, 319, 199, &framebuffer[0], 320);
+        c2p1x1_4_c5_bm(320,200,0,0,&framebuffer[0], my_window->RPort->BitMap);
 #endif
 #endif
         memcpy( previousFrame, framebuffer, 320 * 200);
@@ -540,7 +556,7 @@ void flipRenderer() {
 #ifdef AGA8BPP
         c2p1x1_8_c5_bm(320,200,0,0,&turnBuffer[0], my_window->RPort->BitMap);
 #else
-        WriteChunkyPixels(my_window->RPort, 0, 0, 319, 199, &turnBuffer[0], 320);
+        c2p1x1_4_c5_bm(320,200,0,0,&turnBuffer[0], my_window->RPort->BitMap);
 #endif
 #endif
     } else {
@@ -574,7 +590,7 @@ void flipRenderer() {
 #ifdef AGA8BPP
         c2p1x1_8_c5_bm(320,200,0,0,&turnBuffer[0], my_window->RPort->BitMap);
 #else
-        WriteChunkyPixels(my_window->RPort, 0, 0, 319, 199, &turnBuffer[0], 320);
+        c2p1x1_4_c5_bm(320,200,0,0,&turnBuffer[0], my_window->RPort->BitMap);
 #endif
 #endif
     }
