@@ -141,6 +141,9 @@ const struct Pattern patterns[16] = {
         {0, 0, 0, LEFT_WALL, 0, -1}, // 8
         {0, 0, 3, BACK_WALL, 0, -1}, // 9
         {0, 6, 3, CUBE, 0, -1}, // a
+        {2, 7, 3, CUBE, 0, -1}, // b
+        {3, 7, 3, CUBE, 0, -1}, // c
+        {4, 7, 3, CUBE, 0, -1}, // d
 };
 
 const int8_t map[32][32] = {
@@ -150,9 +153,9 @@ const int8_t map[32][32] = {
         {0x1, 0x8, 0x7, 0x7, 0x7, 0x7, 0x7, 0x7, 0x0, 0x0, 0x0, 0x7, 0x7, 0x7, 0x7, 0x7, 0x7, 0x7, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7, 0x7, 0x8, 0x1},
         {0x1, 0x8, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7, 0x8, 0x1},
         {0x1, 0x8, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7, 0x8, 0x1},
-        {0x1, 0x8, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7, 0x8, 0x1},
-        {0x1, 0x8, 0x7, 0x0, 0x0, 0x0, 0x7, 0x7, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7, 0x8, 0x1},
-        {0x1, 0x8, 0x7, 0x0, 0x0, 0x0, 0x7, 0xA, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7, 0x8, 0x1},
+        {0x1, 0x8, 0x7, 0x0, 0x0, 0x7, 0x7, 0x7, 0x7, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7, 0x8, 0x1},
+        {0x1, 0x8, 0x7, 0x0, 0x0, 0x7, 0xC, 0xD, 0xC, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7, 0x8, 0x1},
+        {0x1, 0x8, 0x7, 0x0, 0x0, 0x7, 0x7, 0xB, 0x7, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7, 0x8, 0x1},
         {0x1, 0x8, 0x7, 0x0, 0x0, 0x0, 0x7, 0x7, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7, 0x8, 0x1},
         {0x1, 0x8, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7, 0x7, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7, 0x8, 0x1},
         {0x1, 0x8, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7, 0x9, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7, 0x8, 0x1},
@@ -261,16 +264,23 @@ void drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t te
         /* Draw the horizontal outlines of z0 and z1 */
 
         /* Ceiling is lower than camera */
-        for (x = px0z0; x <= px1z0; ++x) {
-            if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
-                if (drawContour) {
+        if (drawContour) {
+            for (x = px0z0; x <= px1z0; ++x) {
+                if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
 #ifndef FILLED_POLYS
+                    graphicsPut(x, py0z0, 0);
                     graphicsPut(x, stencilHigh[x], 0);
 #else
                     graphicsVerticalLine(x, py0z0, max(stencilHigh[x], py1z0), 9);
 #endif
+                    stencilHigh[x] = py0z0;
                 }
-                stencilHigh[x] = py0z0;
+            }
+        } else {
+            for (x = px0z0; x <= px1z0; ++x) {
+                if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
+                    stencilHigh[x] = py0z0;
+                }
             }
         }
     }
@@ -349,7 +359,8 @@ void drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ,
         return;
     }
 
-    drawContour = 1;
+    drawContour = dY;
+    
 #ifdef TEXTURES
     if (textureIndex != -1 ) {
         drawWall(intToFix(px0z0 * 2), intToFix(px1z1 * 2), intToFix(py0z0), intToFix(py1z0), intToFix(py0z1), intToFix(py1z1), &montyTexture->rowMajor[0], intToFix(2), z0 );
@@ -475,237 +486,15 @@ void drawHighCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_
 
     z1 = z0 + dZ;
 
-    z0px = (projections[z0].px);
-    z1px = (projections[z1].px);
-    z0dx = ((projections[z0].dx));
-    z1dx = ((projections[z1].dx));
-
-    px0z0 = z0px - ((x0) * z0dx);
-    px0z1 = z1px - ((x0) * z1dx);
-
-    px1z0 = px0z0 - (dX * z0dx);
-    px1z1 = px0z1 - (dX * z1dx);
-
-    z1py = (projections[z1].py);
-    z0py = (projections[z0].py);
-
-    py0z0 = z0py + ((y0) * z0dx);
-    py1z0 = py0z0 + (dY * z0dx);
-    py0z1 = z1py + ((y0) * z1dx);
-
-    if (px1z0 < 0 || px0z0 > 127) {
-        return;
-    }
-
-#ifdef TEXTURES
-    if (textureIndex != -1 ) {
-        drawFrontWall(intToFix(px0z0 * 2), intToFix(py0z0), intToFix(px1z0 * 2), intToFix(py1z0), &montyTexture->rotations[0][0], intToFix(2), z0, 0);
-        return;
-    }
-#endif
-
-/*
-    drawWall(intToFix(px0z0 * 2), intToFix(px1z1 * 2), intToFix(py0z0), intToFix(py1z0), intToFix(py0z1), intToFix(py1z1), &montyTexture->rowMajor[0], intToFix(1), 1 );
-
-    drawWall(intToFix(px0z0 * 2), intToFix(px1z1 * 2), intToFix(py0z0), intToFix(py1z0), intToFix(py0z1), intToFix(py1z1), &montyTexture->rowMajor[0], intToFix(1), 1 );
-*/
-
-    drawContour = (dY);
-    {
-        int16_t x, x0, x1;
-#ifndef FILLED_POLYS
-        if (drawContour) {
-
-            if (IN_RANGE(0, 127, px0z0) && stencilHigh[px0z0] < py0z0) {
-                graphicsVerticalLine(px0z0, py0z0, stencilHigh[px0z0], 0);
-            }
-
-            if (IN_RANGE(0, 127, px1z0) && stencilHigh[px1z0] < py0z0) {
-                graphicsVerticalLine(px1z0, py0z0, stencilHigh[px1z0], 0);
-            }
-            if (IN_RANGE(0, 127, px0z1) && px0z1 < px0z0 && py0z1 > stencilHigh[px0z1]) {
-                graphicsVerticalLine(px0z1, py0z1, stencilHigh[px0z1], 0);
-            }
-
-            if (IN_RANGE(0, 127, px1z1) && px1z1 > px1z0 && py0z1 > stencilHigh[px1z1]) {
-                graphicsVerticalLine(px1z1, py0z1, stencilHigh[px1z1], 0);
-            }
-
-        }
-#endif
-        /* Draw the horizontal outlines of z0 and z1 */
-
-        if (py0z0 > py0z1) {
-            /* Ceiling is lower than camera */
-            for (x = px0z0; x <= px1z0; ++x) {
-                if (IN_RANGE(0, 127, x) && stencilHigh[x] < py0z0) {
-                    if (drawContour) {
-#ifdef FILLED_POLYS
-                        graphicsVerticalLine(x, py0z0, stencilHigh[x], 9);
-#else
-                        graphicsPut(x, py0z0, 0);
-                        graphicsPut(x, stencilHigh[x], 0);
-#endif
-                    }
-                    stencilHigh[x] = py0z0;
-                }
-            }
-        } else if (drawContour) {
-            /* Ceiling is higher than the camera*/
-            /* Let's just draw the nearer segment */
-            for (x = px0z0; x <= px1z0; ++x) {
-                if (IN_RANGE(0, 127, x) && stencilHigh[x] < py0z0) {
-#ifdef FILLED_POLYS
-                    graphicsVerticalLine(x, py0z0, stencilHigh[x], 9);
-#else
-                    graphicsPut(x, py0z0, 0);
-                    graphicsPut(x, stencilHigh[x], 0);
-#endif
-                }
-            }
+    if (dY) {
+        if (z0 <= 5) {
+            return;
         }
 
-
-        /* The left segment */
-        x0 = px0z0;
-        x1 = px0z1;
-
-        if (x0 != x1) {
-            int16_t y0 = py0z0;
-            int16_t y1 = py0z1;
-            int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
-            int16_t dy = -abs(y1 - y0);
-            int16_t sy = y0 < y1 ? 1 : -1;
-            int16_t err = dx + dy;  /* error value e_xy */
-            int16_t e2;
-
-            while ((x0 != x1 || y0 != y1)) {
-
-                if (IN_RANGE(0, 127, x0)) {
-                    if (stencilHigh[x0] < y0) {
-                        if (drawContour) {
-#ifdef FILLED_POLYS
-                            graphicsVerticalLine(x0, y0, stencilHigh[x0], 3);
-#else
-                            graphicsPut(x0, y0, 0);
-                            graphicsPut(x0, stencilHigh[x0], 0);
-#endif
-                        }
-                        stencilHigh[x0] = y0;
-                    }
-                }
-
-                /* loop */
-                e2 = err * 2;
-
-                if (e2 >= dy) {
-                    err += dy; /* e_xy+e_x > 0 */
-                    x0 += sx;
-                }
-
-                if (x0 >= 128) {
-                    goto right_stroke;
-                }
-
-                if (e2 <= dx) {
-                    /* e_xy+e_y < 0 */
-                    err += dx;
-                    y0 += sy;
-                }
-            }
-        }
-
-        right_stroke:
-
-        /* The right segment */
-        x0 = px1z0;
-        x1 = px1z1;
-
-        if (x0 != x1) {
-            int16_t y0 = py0z0;
-            int16_t y1 = py0z1;
-            int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
-            int16_t dy = -abs(y1 - y0);
-            int16_t sy = y0 < y1 ? 1 : -1;
-            int16_t err = dx + dy;  /* error value e_xy */
-            int16_t e2;
-
-            while ((x0 != x1 || y0 != y1)) {
-
-                if (IN_RANGE(0, 127, x0) && stencilHigh[x0] < y0) {
-                    if (drawContour) {
-#ifdef FILLED_POLYS
-                        graphicsVerticalLine(x0, y0, stencilHigh[x0], 3);
-#else
-                        graphicsPut(x0, y0, 0);
-                        graphicsPut(x0, stencilHigh[x0], 0);
-#endif
-                    }
-                    stencilHigh[x0] = y0;
-                }
-
-                /* loop */
-                e2 = err * 2;
-
-                if (e2 >= dy) {
-                    err += dy; /* e_xy+e_x > 0 */
-                    x0 += sx;
-                }
-
-                if (x0 >= 128) {
-                    goto final_stroke;
-                }
-
-                if (e2 <= dx) {
-                    /* e_xy+e_y < 0 */
-                    err += dx;
-                    y0 += sy;
-                }
-            }
-        }
-
-        final_stroke:
-        if (py0z0 <= py0z1) {
-            /* Ceiling is higher than the camera*/
-            /* Draw the last segment */
-
-            for (x = px0z1; x <= px1z1; ++x) {
-                if (IN_RANGE(0, 127, x) && stencilHigh[x] < py0z1) {
-#ifndef FILLED_POLYS
-                    if (drawContour) {
-                        graphicsPut(x, py0z1, 0);
-                    }
-#endif
-                    stencilHigh[x] = py0z1;
-                }
-            }
+        if (z1 <= 5) {
+            return;
         }
     }
-}
-
-void drawHighCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, int8_t textureIndex) {
-
-    int8_t z1;
-    uint8_t z0px;
-    uint8_t z0py;
-    uint8_t z1px;
-    uint8_t z1py;
-    int8_t z0dx;
-    int8_t z1dx;
-
-    int16_t px0z0;
-    int8_t py0z0;
-    int16_t px1z0;
-    int8_t py1z0;
-    int16_t px0z1;
-    int8_t py0z1;
-    int16_t px1z1;
-
-    uint8_t drawContour;
-
-    z1 = z0 + dZ;
 
     z0px = (projections[z0].px);
     z1px = (projections[z1].px);
@@ -919,7 +708,7 @@ void drawHighCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_
 
 uint8_t drawPattern(uint8_t pattern, uint8_t x0, uint8_t x1, uint8_t y) {
 
-    int8_t diff = patterns[0].ceiling - patterns[pattern].ceiling;
+    int8_t diffCeiling = patterns[0].ceiling     - patterns[pattern].ceiling;
     uint8_t type = patterns[pattern].geometryType;
 
     if (patterns[pattern].block) {
@@ -928,25 +717,30 @@ uint8_t drawPattern(uint8_t pattern, uint8_t x0, uint8_t x1, uint8_t y) {
 
     if (type == CUBE) {
         drawHighCubeAt(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y, x1 - x0,
-                          diff, 1, patterns[pattern].textureIndex);
+                          diffCeiling, 1, patterns[pattern].textureIndex);
 
     } else if (type == RIGHT_NEAR || type == LEFT_NEAR  ){
 
 
         drawWedge(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y, x1 - x0,
-                         diff, 1, patterns[pattern].textureIndex, type);
+                         diffCeiling, 1, patterns[pattern].textureIndex, type);
+
 
     } else if (type == LEFT_WALL  ){
 
 
         drawWedge(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y,
-                         0, diff, 1, patterns[pattern].textureIndex, LEFT_NEAR);
+                         0, diffCeiling, 1, patterns[pattern].textureIndex, LEFT_NEAR);
+
+
 
     } else if (type == BACK_WALL  ){
 
 
         drawSquare(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1,
-                          x1 - x0, diff, patterns[pattern].textureIndex, patterns[pattern].elementsMask);
+                          x1 - x0, diffCeiling, patterns[pattern].textureIndex, patterns[pattern].elementsMask);
+
+
 
     }
 
