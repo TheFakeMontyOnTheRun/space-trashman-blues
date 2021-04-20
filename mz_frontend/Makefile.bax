@@ -36,6 +36,7 @@ all:   $(MENU_TARGET)
 adf: $(MENU_TARGET)
 	rm -f blank.adf
 	xdftool blank.adf format "Blank - The Game" + write game12k game12k + write base.pfs base.pfs + write base4.pfs base4.pfs + write base5.pfs base5.pfs
+	xdftool blank.adf boot install
 	xdftool blank.adf list
 
 clean:
