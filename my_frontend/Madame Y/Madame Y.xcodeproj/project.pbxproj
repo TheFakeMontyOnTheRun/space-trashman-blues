@@ -27,6 +27,7 @@
 		F1254F12247EFDCC000FB68A /* GameView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameView.h; sourceTree = "<group>"; };
 		F1254F13247EFDCC000FB68A /* GameView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameView.m; sourceTree = "<group>"; };
 		F1254F15247F0E03000FB68A /* demo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = demo.c; path = ../../src/demo.c; sourceTree = "<group>"; };
+		F163DE862630B77B003BF67A /* map.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = map.h; path = ../../src/map.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,8 +65,9 @@
 				F1254F02247EFC26000FB68A /* Assets.xcassets */,
 				F1254F04247EFC26000FB68A /* MainMenu.xib */,
 				F1254F07247EFC26000FB68A /* Info.plist */,
-				F1254F08247EFC26000FB68A /* main.m */,
+				F163DE862630B77B003BF67A /* map.h */,
 				F1254F15247F0E03000FB68A /* demo.c */,
+				F1254F08247EFC26000FB68A /* main.m */,
 				F1254F0A247EFC26000FB68A /* Madame_Y.entitlements */,
 				F1254F12247EFDCC000FB68A /* GameView.h */,
 				F1254F13247EFDCC000FB68A /* GameView.m */,

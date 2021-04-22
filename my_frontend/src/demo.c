@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "Parser.h"
+#include "Derelict.h"
+
 #define XRES 64
 #define YRES 128
 #define XRESMINUSONE XRES - 1
@@ -66,7 +69,9 @@ int8_t cameraZ = 22;
 int8_t cameraRotation = 0;
 uint8_t running = 1;
 
-int playerLocation = 0;
+uint8_t enteredFrom = 0xFF;
+
+extern int playerLocation;
 
 struct Projection {
     uint8_t px;
@@ -135,6 +140,70 @@ int8_t max(int8_t x1, int8_t x2) {
 
 int8_t min(int8_t x1, int8_t x2) {
     return x1 < x2 ? x1 : x2;
+}
+
+void drawObjectAt( int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ) {
+
+    int8_t z1;
+    uint8_t z0px;
+    uint8_t z0py;
+    uint8_t z1px;
+    uint8_t z1py;
+    int8_t z0dx;
+    int8_t z1dx;
+
+    int16_t px0z0;
+    int8_t py0z0;
+    int16_t px1z0;
+    int8_t py1z0;
+    int16_t px0z1;
+    int8_t py0z1;
+    int16_t px1z1;
+
+    uint8_t drawContour;
+
+    if (z0 >= 32) {
+        return;
+    }
+
+    z1 = z0 + dZ;
+
+    if (z1 >= 32) {
+        return;
+    }
+
+
+    z0px = (projections[z0].px);
+    z1px = (projections[z1].px);
+    z0dx = ((projections[z0].dx));
+    z1dx = ((projections[z1].dx));
+
+    px0z0 = z0px - ((x0) * z0dx);
+    px0z1 = z1px - ((x0) * z1dx);
+
+    px1z0 = px0z0 - (dX * z0dx);
+    px1z1 = px0z1 - (dX * z1dx);
+
+    z1py = (projections[z1].py);
+    z0py = (projections[z0].py);
+
+    py0z0 = z0py + ((y0) * z0dx);
+    py1z0 = py0z0 + (dY * z0dx);
+    py0z1 = z1py + ((y0) * z1dx);
+
+    if (px1z0 < 0 || px0z0 > XRESMINUSONE) {
+        return;
+    }
+
+    drawContour = (dY);
+
+    fix_line( px0z0, py0z0, px1z0, py0z0);
+    fix_line( px0z0, py0z0, px0z0, py1z0);
+    fix_line( px1z0, py0z0, px1z0, py1z0);
+    fix_line( px0z0, py1z0, px1z0, py1z0);
+    fix_line( px0z1, py0z1, px1z1, py0z1);
+    fix_line( px0z0, py0z0, px0z1, py0z1);
+    fix_line( px1z0, py0z0, px1z1, py0z1);
 }
 
 
@@ -953,6 +1022,30 @@ void renderScene() {
 #endif
 }
 
+void initMap() {
+    int x, y;
+    for (y = 0; y < 32; ++y ) {
+        for (x = 0; x < 32; ++x ) {
+            uint8_t current = maps[playerLocation][y][x];
+            
+            if ((current == 's' && enteredFrom == 0) ||
+                (current == 'w' && enteredFrom == 1) ||
+                (current == 'n' && enteredFrom == 2) ||
+                (current == 'e' && enteredFrom == 3)
+                ) {
+
+                struct WorldPosition newPos;
+                cameraX = x;
+                cameraZ = y;
+                newPos.x = x;
+                newPos.y = y;
+                setPlayerPosition(&newPos);
+                enteredFrom = 0xFF;
+            }
+        }
+    }
+}
+
 void tickRenderer() {
     uint8_t prevX;
     uint8_t prevZ;
@@ -982,8 +1075,8 @@ void tickRenderer() {
             break;
 
         case 'l':
-            playerLocation = 1;
-            break;
+            shutdownGraphics();
+            exit(0);
 
         case 'q':
             cameraRotation--;
@@ -1066,6 +1159,25 @@ void tickRenderer() {
         cameraX = prevX;
         cameraZ = prevZ;
     }
+    
+
+    if (maps[playerLocation][cameraZ][cameraX] == '0') {
+        enteredFrom = 2;
+        moveBy(0);
+        initMap();
+    } else if (maps[playerLocation][cameraZ][cameraX] == '2') {
+        enteredFrom = 0;
+        moveBy(2);
+        initMap();
+    } else if (maps[playerLocation][cameraZ][cameraX] == '3') {
+        enteredFrom = 1;
+        moveBy(3);
+        initMap();
+    } else if (maps[playerLocation][cameraZ][cameraX] == '1') {
+        enteredFrom = 3;
+        moveBy(1);
+        initMap();
+    }
 }
 
 
@@ -1086,10 +1198,12 @@ int main(int argc, char **argv) {
 #endif
     {
         running = 1;
-        cameraX = 15;
-        cameraZ = 6;
+        enteredFrom = 2;
         cameraRotation = 0;
         init();
+        initStation();
+        initMap();
+
 
         memset(stencilHigh, 0, XRES);
 
