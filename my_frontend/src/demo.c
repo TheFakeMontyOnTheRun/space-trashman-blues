@@ -3,8 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "Parser.h"
+#ifndef SMS
 #include "Derelict.h"
+#endif
 
 #define XRES 64
 #define YRES 128
@@ -18,9 +19,6 @@
 
 #ifdef CPC_PLATFORM
 #include <cpctelera.h>
-
-extern uint16_t baseScreen;
-extern const uint16_t lineStart[YRESMINUSONE];
 #endif
 
 enum DIRECTION {
@@ -80,13 +78,6 @@ struct Projection {
 };
 
 
-struct Pattern {
-    uint8_t ceiling: 4;
-    uint8_t elementsMask: 4;
-    uint8_t geometryType;
-    uint8_t block;
-};
-
 const struct Projection projections[40] =
         {
                 {	0	,	63	,	-64	},	//	1
@@ -131,8 +122,9 @@ const struct Projection projections[40] =
                 {	29	,	63	,	-1	},	//	40
         };
 
+#ifndef SMS
 #include "map.h"
-
+#endif
 
 int8_t max(int8_t x1, int8_t x2) {
     return x1 > x2 ? x1 : x2;
@@ -808,9 +800,13 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
 
 uint8_t drawPattern(uint8_t pattern, uint8_t x0, uint8_t x1, uint8_t y) {
+    int8_t diff;
+    uint8_t type;
 
-    int8_t diff = patterns[0].ceiling - patterns[pattern].ceiling;
-    uint8_t type = patterns[pattern].geometryType;
+
+
+    diff = patterns[0].ceiling - patterns[pattern].ceiling;
+    type = patterns[pattern].geometryType;
 
     if (patterns[pattern].block) {
         return 0;
@@ -1073,11 +1069,13 @@ void tickRenderer() {
         case 'k':
             playerLocation = 0;
             break;
-
+#ifndef CPC_PLATFORM
+#ifndef SMS
         case 'l':
             shutdownGraphics();
             exit(0);
-
+#endif
+#endif
         case 'q':
             cameraRotation--;
             if (cameraRotation < 0) {
@@ -1189,7 +1187,11 @@ int demoMain() {
     }
 #else
 
-int main(int argc, char **argv) {
+int main(
+#ifndef SMS
+        int argc, char **argv
+#endif
+        ) {
 #endif
 
 
@@ -1202,6 +1204,7 @@ int main(int argc, char **argv) {
         cameraRotation = 0;
         init();
         initStation();
+        playerLocation = 0;
         initMap();
 
 
