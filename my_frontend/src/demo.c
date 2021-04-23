@@ -1049,10 +1049,10 @@ void tickRenderer() {
 #ifndef CPC_PLATFORM
     clearGraphics();
 #endif
-    vLine(XRES, 0, YRES);
-    vLine(0, 0, YRES);
-    hLine(0, XRES, 0);
-    hLine(0, XRES, YRES);
+    vLine(XRES - 1, 0, YRES - 1);
+    vLine(0, 0, YRES - 1);
+    hLine(0, XRES - 1, 0);
+    hLine(0, XRES - 1, YRES - 1);
     
     renderScene();
 
