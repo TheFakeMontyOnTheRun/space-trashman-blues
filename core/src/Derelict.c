@@ -8,8 +8,9 @@ Created by Daniel Monteiro on 2019-07-26.
 #include <string.h>
 #include <stdint.h>
 
+#ifndef SMS
 #include "Derelict.h"
-
+#endif
 
 
 int roomCount = 1; /* there's an implicit dummy first */
@@ -55,7 +56,6 @@ struct Item* addItem(char *description,
     toReturn->index = itemsCount++;
     toReturn->description = description;
     toReturn->info = info;
-    toReturn->weight = weight;
     toReturn->pickable = pickable;
     toReturn->position.x = positionX;
     toReturn->position.y = positionY;
@@ -63,12 +63,18 @@ struct Item* addItem(char *description,
     return toReturn;
 }
 
-struct Room *addRoom(char *description, char *info, int sizeX, int sizeY, int connections[6]) {
+struct Room *addRoom(
+        char *description,
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
+        char *info,
+#endif
+                int sizeX, int sizeY, int connections[6]) {
     
     struct Room* toReturn = &rooms[roomCount++];
-    
     toReturn->description = description;
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
     toReturn->info = info;
+#endif
     toReturn->sizeX = sizeX;
     toReturn->sizeY = sizeY;
     
@@ -441,7 +447,9 @@ void infoAboutItemNamed(const char *itemName) {
     struct ObjectNode *object2 = room->itemsPresent->next;
 
     if (itemName == NULL || strlen(itemName) == 0) {
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
         defaultLogger(room->info);
+#endif
         return;
     }
 
@@ -871,12 +879,16 @@ void initStation(void) {
     /* 1 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 2;
-    addRoom("lss-daedalus",
+    addRoom(
+            "lss-daedalus",
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
             "The salvage operations vehicle. It's\n"
             "tracked remotely, to prevent \n"
             "escapes. If I try taking outside \n"
             "the predicted path, I will sink into\n"
-            "the abyss myself.", 64, 64, connections);
+            "the abyss myself.",
+#endif
+            64, 64, connections);
     
     /* 2 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -884,6 +896,7 @@ void initStation(void) {
     connections[1] = 6;
     connections[0] = 3;
     addRoom("hangar",
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
             "The main hangar is rather \n"
             "unremarkable. The only thing you \n"
             "notice is a slight yellow tint of \n"
@@ -894,7 +907,9 @@ void initStation(void) {
             "worth the trust). Unfortunately, no\n"
             "useful tools around here. Around the\n"
             "corner, there's a escape pod entrance.\n"
-            "Apparently, only one pod was launched.", 64, 64, connections);
+            "Apparently, only one pod was launched.",
+#endif
+            64, 64, connections);
 
     /* 3 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -902,10 +917,13 @@ void initStation(void) {
     connections[0] = 4;
     connections[1] = 5;
     addRoom("hall-2",
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
             "A well lit hall, with doors. It's \n"
             "the main hub of the vehicle. Despite\n"
             "being right next to the hangar and\n"
-            "the control room, it's rather quiet.", 64, 64, connections);
+            "the control room, it's rather quiet.",
+#endif
+            64, 64, connections);
 
     /* 4 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -913,10 +931,13 @@ void initStation(void) {
     connections[4] = 19;
     connections[5] = 13;
     addRoom("elevator-level-2",
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
             "It's rather surprising that this \n"
             "ship has an elevator. This is was\n"
             "typical only of ships with 5 levels\n"
-            "or more.", 64, 64, connections)->rankRequired = 1;
+            "or more.",
+#endif
+            64, 64,connections)->rankRequired = 1;
     
     /* 5 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -925,44 +946,56 @@ void initStation(void) {
     connections[0] = 7;
     connections[2] = 8;
     addRoom("dorms-1",
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
             "Part of the dorms hallway. There are\n"
             "some (busted) control panels for \n"
             "ejecting the pods. Some pieces of \n"
             "cloth and broken plastic on the floor,\n"
-            "but nothing really useful.", 64, 64, connections)->rankRequired = 1;
+            "but nothing really useful.",
+#endif
+            64, 64, connections)->rankRequired = 1;
 
     
     /* 6 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 2;
     addRoom("rls-bohr-2",
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
             "A rescue ship. Only for emergencies.\n"
             "Named after some Niels Bohr scientist\n"
             "guy or whatever. Some drops on the\n"
             "carpet and I don't even want know \n"
             "what it is, but I guess I already\n"
-            "know. Ick.", 64, 9, connections);
+            "know. Ick.",
+#endif
+            64, 9, connections);
 
     
     /* 7 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 5;
     addRoom("pod-1",
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
             "A living pod. Looks like from one \n"
             "of the oficcers. It's messy, but \n"
             "as if it's occupant would easily \n"
             "find his belongings in there. \n"
             "There are some burn marks on the \n"
-            "walls.", 64, 64, connections)->rankRequired = 1;
+            "walls.",
+#endif
+            64, 64, connections)->rankRequired = 1;
     
     /* 8 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 5;
     addRoom("pod-2",
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
             "A empty living pod. Looks as if it\n"
             "was never ever used. If can even \n"
             "see some of the factory stickers \n"
-            "in it.", 64, 64, connections)->rankRequired = 2;
+            "in it.",
+#endif
+            64, 64, connections)->rankRequired = 2;
     
     /* 9 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -971,45 +1004,58 @@ void initStation(void) {
     connections[0] = 10;
     connections[2] = 11;
     addRoom("dorms-2",
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
             "Anonther part of the dorms hallway.\n"
             "On those, the panels were visibly\n"
             "well. These parts of the quarters \n"
-            "were probably the more prestigious ones.", 64, 64, connections);
+            "were probably the more prestigious ones.",
+#endif
+            64, 64, connections);
     
     /* 10 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 9;
     addRoom("pod-3",
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
             "A young woman's pod. You \n"
             "do recognize a few items, but its \n"
             "badly mixed up. It's hard to make \n"
             "the age of girl, but she was young.",
+#endif
             64, 64, connections)->rankRequired = 3;
     
     /* 11 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 9;
     addRoom("pod-4",
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
             "A the first officer's pod, for sure.\n"
             "It's neat, clean and organized. Not \n"
             "much around. He had a strange \n"
             "fixation on redheads.",
+#endif
             64, 64, connections)->rankRequired = 4;
     
     /* 12 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 9;
     addRoom("computer-core",
-            "TBD.", 64, 64, connections);
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
+            "TBD.",
+#endif
+                    64, 64, connections);
 
     /* 13 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[4] = 4;
     connections[2] = 14;
     addRoom("elevator-level-1",
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
             "It's rather surprising that this ship\n"
             "has an elevator. This is was typical \n"
-            "only of ships with 5 levels or more.", 64, 64, connections)->rankRequired = 1;
+            "only of ships with 5 levels or more.",
+#endif
+            64, 64, connections)->rankRequired = 1;
     
     /* 14 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -1018,45 +1064,63 @@ void initStation(void) {
     connections[2] = 16;
     connections[3] = 15;
     addRoom("hall-1",
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
             "This hall has a busier feel.\n"
             "Here you see objects thrown all over \n"
             "the place, as if someone was in the \n"
             "middle of a day-to-day routine and had\n"
-            "to quickly run.", 64, 64, connections)->rankRequired = 1;
+            "to quickly run.",
+#endif
+            64, 64, connections)->rankRequired = 1;
     
     /* 15 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[1] = 14;
     addRoom("bridge",
-            "TBD.", 64, 64, connections)->rankRequired = 4;
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
+            "TBD.",
+#endif
+                    64, 64, connections)->rankRequired = 4;
     
     /* 16 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[0] = 14;
     addRoom("situation-room",
-            "TBD.", 64, 64, connections)->rankRequired = 3;
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
+            "TBD.",
+#endif
+                    64, 64, connections)->rankRequired = 3;
 
     /* 17 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 14;
     connections[1] = 18;
     addRoom("crew-bunks",
-            "TBD.", 64, 64, connections)->rankRequired = 1;
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
+            "TBD.",
+#endif
+                    64, 64, connections)->rankRequired = 1;
     
     /* 18 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 17;
     addRoom("armory",
-            "TBD", 64, 64, connections)->rankRequired = 3;
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
+            "TBD",
+#endif
+                    64, 64, connections)->rankRequired = 3;
 
     /* 19 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 20;
     connections[5] = 4;
     addRoom("elevator-level-3",
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
             "It's rather surprising that this ship has an\n"
             "elevator. This is was typical only of ships \n"
-            "with 5 levels or more.", 64, 64, connections)->rankRequired = 1;
+            "with 5 levels or more.",
+#endif
+            64, 64, connections)->rankRequired = 1;
     
     /* 20 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -1064,26 +1128,38 @@ void initStation(void) {
     connections[1] = 21;
     connections[3] = 23;
     addRoom("hall-3",
-            "TBD", 64, 64, connections);
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
+            "TBD",
+#endif
+                    64, 64, connections);
 
     /* 21 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 20;
     connections[1] = 22;
     addRoom("wc",
-            "TBD.", 64, 64, connections);
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
+            "TBD.",
+#endif
+                    64, 64, connections);
     
     /* 22 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[3] = 21;
     addRoom("reactor-core",
-            "TBD.", 64, 64, connections)->rankRequired = 4;
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
+            "TBD.",
+#endif
+                    64, 64, connections)->rankRequired = 4;
     
     /* 23 */
     memset(&connections[0], 0, 6 * sizeof(int));
     connections[1] = 20;
     addRoom("radar-array",
-            "TBD", 64, 64, connections)->rankRequired = 2;
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
+            "TBD",
+#endif
+                    64, 64, connections)->rankRequired = 2;
 
 
     /*Items*/
