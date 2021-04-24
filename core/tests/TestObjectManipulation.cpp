@@ -71,8 +71,7 @@ TEST(TestObjectManipulation, canUseObjects) {
   memset(&item, 0, 2 * sizeof(struct Item));
 
   item[0].description = "usable";
-  item[0].weight = 5;
-  item[0].pickable = TRUE; 
+  item[0].pickable = TRUE;
   item[0].useCallback = usableCallback;
 
   item[1].description = "artificial";
@@ -94,56 +93,13 @@ TEST(TestObjectManipulation, canUseObjects) {
   ASSERT_TRUE(hasItemInRoom("lss-daedalus", "used"));
 }
 
-extern Item item[25];
-
-TEST(TestObjectManipulation, blowtorchMakesThingsPickable) {
-
-  initStation();
-  item[6].pickable = FALSE;
-
-  ASSERT_TRUE(hasItemInRoom("lss-daedalus", "helmet"));
-  ASSERT_TRUE(isPlayerAtRoom("lss-daedalus"));
-  parseCommand("pick", "helmet");
-  ASSERT_TRUE(hasItemInRoom("lss-daedalus", "helmet"));
-
-  parseCommand("pick", "blowtorch");
-
-  char buffer[255];
-  strcpy(&buffer[0], "use-with blowtorch helmet");
-  char *operator1 = strtok( &buffer[0], "\n " );
-  char *operand1 = strtok( NULL, "\n ");
-  parseCommand(operator1, operand1);
-
-  parseCommand("pick", "helmet");
-  ASSERT_FALSE(hasItemInRoom("lss-daedalus", "helmet"));
-}
-
-TEST(TestObjectManipulation, usingBootsWithPlasticPipesWillProduceTheRootKeycard) {
-
-  initStation();
-  addObjectToRoom(1, &item[17]);
-
-  ASSERT_FALSE(hasItemInRoom("lss-daedalus", "root-keycard"));
-
-  parseCommand("pick", "magnetic-boots");
-
-  char buffer[255];
-  strcpy(&buffer[0], "use-with magnetic-boots plastic-pipe");
-  char *operator1 = strtok( &buffer[0], "\n " );
-  char *operand1 = strtok( NULL, "\n ");
-  parseCommand(operator1, operand1);
-
-  ASSERT_TRUE(hasItemInRoom("restroom", "root-keycard"));
-}
-
 TEST(TestObjectManipulation, cantPickUnpickableObjects) {
 
   struct Item item;
   memset(&item, 0, sizeof(struct Item));
 
   item.description = "unpickable";
-  item.weight = 5;
-  item.pickable = FALSE; 
+  item.pickable = FALSE;
   item.useCallback = usableCallback;
 
   initStation();

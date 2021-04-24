@@ -46,7 +46,9 @@ void writeToLog(const char *errorMsg) {
 
 struct Item* addItem(char *description,
                      char *info,
+#ifdef ITEMS_HAVE_WEIGHT
                      int weight,
+#endif
                      int pickable,
                      int positionX,
                      int positionY) {
@@ -555,6 +557,10 @@ void turnRight(void) {
     playerDirection++;
 
     playerDirection = playerDirection & 3;
+}
+
+void setPlayerLocation(int location) {
+    playerLocation = location;
 }
 
 void walkBy(int direction) {
@@ -1167,7 +1173,11 @@ void initStation(void) {
     /* LSS-Daedalus */
     newItem = addItem("emp-bomb", "Time-programmable Halogen EMP bomb.\n"
                                   "Will disable any electrical device\n"
-                                  "within the 50 nautical miles range.", 5, TRUE, 9, 14);
+                                  "within the 50 nautical miles range.",
+#ifdef ITEMS_HAVE_WEIGHT
+                                  5,
+#endif
+                                  TRUE, 9, 14);
     addToRoom("lss-daedalus", newItem);
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->useCallback = bombActivatedCallback;
@@ -1179,14 +1189,21 @@ void initStation(void) {
                       "far (empirical evidence tells it \n"
                       "works from as far as 200 nautical\n"
                       "miles).",
-                      0, TRUE, 10, 14);
+#ifdef ITEMS_HAVE_WEIGHT
+                      0,
+#endif
+                      TRUE, 10, 14);
     addToRoom("lss-daedalus", newItem);
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->useCallback = bombControllerActivatedCallback;
                                         
     newItem = addItem("ship-ignition",
                       "Token needed to ignite the ship's\n"
-                      "computer and thrusters", 0, TRUE, 11, 14);
+                      "computer and thrusters",
+#ifdef ITEMS_HAVE_WEIGHT
+                      0,
+#endif
+                      TRUE, 11, 14);
     addToRoom("lss-daedalus", newItem);
     newItem->useCallback = bombActivatedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
@@ -1197,7 +1214,10 @@ void initStation(void) {
                       "...as long as the surface in question\n"
                       "is metallic (like most of the \n"
                       "surfaces here).",
-                      2, TRUE, 15, 15);
+#ifdef ITEMS_HAVE_WEIGHT
+                      2,
+#endif
+                      TRUE, 15, 15);
     
     newItem->active = TRUE;
     pickObject(newItem);
@@ -1207,7 +1227,11 @@ void initStation(void) {
 
     newItem = addItem("helmet",
                       "Atmosphere-contained helmet for\n"
-                      "safety.", 2, TRUE, 15, 15);
+                      "safety.",
+#ifdef ITEMS_HAVE_WEIGHT
+                      2,
+#endif
+                      TRUE, 15, 15);
     newItem->active = TRUE;
     pickObject(newItem);
     newItem->useCallback = useObjectToggleCallback;
@@ -1216,7 +1240,11 @@ void initStation(void) {
     newItem = addItem("low-rank-keycard",
                       "Clearance for low rank. Oddly, \n"
                       "this one is of the rewrittable kind;\n"
-                      "probably due to a field promotion.", 0, TRUE, 16, 14);
+                      "probably due to a field promotion.",
+#ifdef ITEMS_HAVE_WEIGHT
+                      0,
+#endif
+                      TRUE, 16, 14);
     addToRoom("hall-2", newItem);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = useCardWithCardWritter;
@@ -1225,7 +1253,11 @@ void initStation(void) {
     
     
     newItem = addItem("hacked-keycard",
-                      "Hacked keycard for mid-clearance\nrank.", 0, TRUE, 35, 19);
+                      "Hacked keycard for mid-clearance\nrank.",
+#ifdef ITEMS_HAVE_WEIGHT
+                      0,
+#endif
+                      TRUE, 35, 19);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
@@ -1236,7 +1268,10 @@ void initStation(void) {
     
     newItem = addItem("magnetic-coupling",
                       "Automatic seal activated by \nspecial safety protocols",
-                      17, FALSE, 2, 7);
+#ifdef ITEMS_HAVE_WEIGHT
+                      17,
+#endif
+                      FALSE, 2, 7);
     addToRoom("hangar", newItem);
     newItem->active = TRUE;
     newItem->useCallback = cantBeUsedCallback;
@@ -1245,7 +1280,11 @@ void initStation(void) {
     /* Comm terminals*/
     
     newItem = addItem("door-panel",
-                      "Special control for the door", 200, FALSE, 12, 8);
+                      "Special control for the door",
+#ifdef ITEMS_HAVE_WEIGHT
+                      200,
+#endif
+                      FALSE, 12, 8);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hangar", newItem);
@@ -1253,21 +1292,33 @@ void initStation(void) {
 
     /* Comm terminals*/
     newItem = addItem("comm-terminal-1",
-                      "Terminal for communicating with\nthe central computer.", 200, FALSE, 19, 10);
+                      "Terminal for communicating with\nthe central computer.",
+#ifdef ITEMS_HAVE_WEIGHT
+                      200,
+#endif
+                      FALSE, 19, 10);
     newItem->useCallback = useObjectToggleCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-1", newItem);
 
     
     newItem = addItem("comm-terminal-2",
-                      "Terminal for communicating with\nthe central computer.", 200, FALSE, 19, 10);
+                      "Terminal for communicating with\nthe central computer.",
+#ifdef ITEMS_HAVE_WEIGHT
+                      200,
+#endif
+                      FALSE, 19, 10);
     newItem->useCallback = useCommWithRank;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-2", newItem);
     
     
     newItem = addItem("comm-terminal-3",
-                      "Terminal for communicating with\nthe central computer.", 200, FALSE, 19, 10);
+                      "Terminal for communicating with\nthe central computer.",
+#ifdef ITEMS_HAVE_WEIGHT
+                      200,
+#endif
+                      FALSE, 19, 10);
     newItem->useCallback = useObjectToggleCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-3", newItem);
@@ -1278,7 +1329,11 @@ void initStation(void) {
                       "room, to make out. I asked her for\n"
                       "an access key for the armory - let's\n"
                       " see if she keeps her promisse. If\n"
-                      "they catch me, I'm scr...", 0, TRUE, 50, 34);
+                      "they catch me, I'm scr...",
+#ifdef ITEMS_HAVE_WEIGHT
+                      0,
+#endif
+                      TRUE, 50, 34);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("pod-1", newItem);
@@ -1290,7 +1345,10 @@ void initStation(void) {
                       "long can we keep the situation\n"
                       "stable. For safety, I gave the root\n"
                       "keycard to first officer Costa.",
-                      0, TRUE, 50, 55);
+#ifdef ITEMS_HAVE_WEIGHT
+                      0,
+#endif
+                      TRUE, 50, 55);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("pod-2", newItem);
@@ -1304,7 +1362,11 @@ void initStation(void) {
                       "keep the fact that we already lost\n"
                       "the war. If anything goes wrong,\n"
                       "the situation room will be our\n"
-                      "last stand.", 0, TRUE, 53, 34);
+                      "last stand.",
+#ifdef ITEMS_HAVE_WEIGHT
+                      0,
+#endif
+                      TRUE, 53, 34);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("pod-3", newItem);
@@ -1315,7 +1377,11 @@ void initStation(void) {
                       "the security lockdown protocol and \n"
                       "set the reactor to a low activity \n"
                       "state. With luck, they will rescue \n"
-                      "us in the next weeks or so.", 0, TRUE, 52, 55);
+                      "us in the next weeks or so.",
+#ifdef ITEMS_HAVE_WEIGHT
+                      0,
+#endif
+                      TRUE, 52, 55);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("pod-4", newItem);
@@ -1323,7 +1389,11 @@ void initStation(void) {
     
     newItem = addItem("log-book",
                       "Power conduit on level 3 was restored\n"
-                      "without incidents.", 1, TRUE, 10, 10);
+                      "without incidents.",
+#ifdef ITEMS_HAVE_WEIGHT
+                      1,
+#endif
+                      TRUE, 10, 10);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("crew-bunks", newItem);
@@ -1331,14 +1401,22 @@ void initStation(void) {
     /* Misc */
     newItem = addItem("card-writter",
                       "Terminal with card writter, connected\n"
-                      " to the main computer", 3, FALSE, 36, 20);
+                      " to the main computer",
+#ifdef ITEMS_HAVE_WEIGHT
+                      3,
+#endif
+                      FALSE, 36, 20);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("computer-core", newItem);
 
     
     newItem = addItem("high-rank-keycard",
-                      "Clearance for high-rank officer.", 0, TRUE, 32, 17);
+                      "Clearance for high-rank officer.",
+#ifdef ITEMS_HAVE_WEIGHT
+                      0,
+#endif
+                      TRUE, 32, 17);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
@@ -1347,14 +1425,22 @@ void initStation(void) {
 
     newItem = addItem("digital-safe",
                       "A very valuable vintage rare and in\n"
-                      "working-conditions computer rack!", 138, FALSE, 35, 15);
+                      "working-conditions computer rack!",
+#ifdef ITEMS_HAVE_WEIGHT
+                      138,
+#endif
+                      FALSE, 35, 15);
     newItem->useCallback = useComputerRack;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("situation-room", newItem);
     
     newItem = addItem("computer-terminal",
                       "An offline terminal connected to the\n"
-                      "computer node", 138, FALSE, 35, 16);
+                      "computer node",
+#ifdef ITEMS_HAVE_WEIGHT
+                      138,
+#endif
+                      FALSE, 35, 16);
     newItem->useCallback = useComputerRack;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("situation-room", newItem);
@@ -1365,7 +1451,10 @@ void initStation(void) {
                       "and see whats going on. I hope it is not\n"
                       "too instrusive of me. To that, she just\n"
                       "gave me a cold stare and...",
-                      0, TRUE, 17, 6);
+#ifdef ITEMS_HAVE_WEIGHT
+                      0,
+#endif
+                      TRUE, 17, 6);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("situation-room", newItem);
@@ -1373,7 +1462,11 @@ void initStation(void) {
 
     /* Has to be removed for the bomb to be properly planted */
     newItem = addItem("metal-mending",
-                      "A piece of metal that might be valuable.", 74, FALSE, 7, 6);
+                      "A piece of metal that might be valuable.",
+#ifdef ITEMS_HAVE_WEIGHT
+                      74,
+#endif
+                      FALSE, 7, 6);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("radar-array", newItem);
@@ -1382,20 +1475,32 @@ void initStation(void) {
     newItem = addItem("scientific-treatise",
                       "Voynich Manuscript\nAnnottated Translation.\n"
                       "Classical edition. It's badly burn't.\n"
-                      "Can't read it.", 1, TRUE, 21, 16);
+                      "Can't read it.",
+#ifdef ITEMS_HAVE_WEIGHT
+                      1,
+#endif
+                      TRUE, 21, 16);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("wc", newItem);
     
     
     newItem = addItem("clogged-flush",
-                      "There is so much matter in the pipe...", 1, FALSE, 33, 17);
+                      "There is so much matter in the pipe...",
+#ifdef ITEMS_HAVE_WEIGHT
+                      1,
+#endif
+                      FALSE, 33, 17);
     newItem->useCallback = useCloggedFlush;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("wc", newItem);
     
     newItem = addItem("flush",
-                      "Working dispose valve for a very basic need.", 1, FALSE, 29, 17);
+                      "Working dispose valve for a very basic need.",
+#ifdef ITEMS_HAVE_WEIGHT
+                      1,
+#endif
+                      FALSE, 29, 17);
     newItem->useCallback = useRegularFlush;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("wc", newItem);
@@ -1404,7 +1509,11 @@ void initStation(void) {
     newItem = addItem("fuel-rods",
                       "This is the source of all the trouble.\n"
                       "Both now and then. Gotta find a way to\n"
-                      "eject those into the abyss.", 209, FALSE, 1, 1);
+                      "eject those into the abyss.",
+#ifdef ITEMS_HAVE_WEIGHT
+                      209,
+#endif
+                      FALSE, 1, 1);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("reactor-core", newItem);
@@ -1412,7 +1521,11 @@ void initStation(void) {
     
     newItem = addItem("reactor-valve-control",
                       "This is the computer node that could be\n"
-                      "used to eject the rods into the abyss.", 62, FALSE, 35, 15);
+                      "used to eject the rods into the abyss.",
+#ifdef ITEMS_HAVE_WEIGHT
+                      62,
+#endif
+                      FALSE, 35, 15);
     newItem->useCallback = reactorValveCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("reactor-core", newItem);
@@ -1420,34 +1533,58 @@ void initStation(void) {
     
     /* Not added directly, will be placed on the restroom after you search the pipe */
     newItem = addItem("root-keycard",
-                      "Card for root access.", 0, TRUE, 34, 14);
+                      "Card for root access.",
+#ifdef ITEMS_HAVE_WEIGHT
+                      0,
+#endif
+                      TRUE, 34, 14);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
     
     /* Elevator controls */
-    newItem = addItem("elevator-level1-go-down", "Elevator controls - Go down.", 0, FALSE, 27, 0);
+    newItem = addItem("elevator-level1-go-down", "Elevator controls - Go down.",
+#ifdef ITEMS_HAVE_WEIGHT
+            0,
+#endif
+                    FALSE, 27, 0);
     newItem->useCallback = elevatorGoDownCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-1", newItem);
 
-    newItem = addItem("elevator-level2-go-down", "Elevator controls - Go down.", 0, FALSE, 27, 0);
+    newItem = addItem("elevator-level2-go-down", "Elevator controls - Go down.",
+#ifdef ITEMS_HAVE_WEIGHT
+            0,
+#endif
+                    FALSE, 27, 0);
     newItem->useCallback = elevatorGoDownCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-2", newItem);
     
-    newItem = addItem("elevator-level2-go-up", "Elevator controls - Go Up.", 0, FALSE, 28, 0);
+    newItem = addItem("elevator-level2-go-up", "Elevator controls - Go Up.",
+#ifdef ITEMS_HAVE_WEIGHT
+            0,
+#endif
+                    FALSE, 28, 0);
     newItem->useCallback = elevatorGoUpCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-2", newItem);
     
-    newItem = addItem("elevator-level3-go-up", "Elevator controls - Go Up.", 0, FALSE, 28, 0);
+    newItem = addItem("elevator-level3-go-up", "Elevator controls - Go Up.",
+#ifdef ITEMS_HAVE_WEIGHT
+            0,
+#endif
+                    FALSE, 28, 0);
     newItem->useCallback = elevatorGoUpCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-3", newItem);
 
-    newItem = addItem("the-mistral-report", "RetroZaragoza Homebrew '18 awarded\nentry: A espionage-themed \nturn-based 3D RPG for MS-DOS,\nXBox One, Mac and Amiga.", 200, TRUE, 27, 19);
+    newItem = addItem("the-mistral-report", "RetroZaragoza Homebrew '18 awarded\nentry: A espionage-themed \nturn-based 3D RPG for MS-DOS,\nXBox One, Mac and Amiga.",
+#ifdef ITEMS_HAVE_WEIGHT
+            200,
+#endif
+                    TRUE, 27, 19);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("crew-bunks", newItem);

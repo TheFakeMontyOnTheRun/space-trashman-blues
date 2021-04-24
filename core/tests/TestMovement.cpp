@@ -66,9 +66,6 @@ TEST_F(TestMovement, canWalkInsideRooms) {
   char buffer[255];
 
 
-  parseCommand("pick", "magnetic-boots");
-  parseCommand("use", "magnetic-boots");
-
   strcpy(&buffer[0], "walkTo 2 3");
   char *operator1 = strtok( &buffer[0], "\n " );
   char *operand1 = strtok( NULL, "\n ");
@@ -76,30 +73,30 @@ TEST_F(TestMovement, canWalkInsideRooms) {
   parseCommand(operator1, operand1);
 
   auto pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 2);
-  ASSERT_EQ(pos.y, 3);
+  ASSERT_EQ(pos->x, 2);
+  ASSERT_EQ(pos->y, 3);
 
   ASSERT_EQ(getPlayerDirection(), 0);
 
   parseCommand("w", NULL);
   pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 2);
-  ASSERT_EQ(pos.y, 2);
+  ASSERT_EQ(pos->x, 2);
+  ASSERT_EQ(pos->y, 2);
 
   parseCommand("s", NULL);
   pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 2);
-  ASSERT_EQ(pos.y, 3);
+  ASSERT_EQ(pos->x, 2);
+  ASSERT_EQ(pos->y, 3);
 
   parseCommand("a", NULL);
   pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 1);
-  ASSERT_EQ(pos.y, 3);
+  ASSERT_EQ(pos->x, 1);
+  ASSERT_EQ(pos->y, 3);
 
   parseCommand("d", NULL);
   pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 2);
-  ASSERT_EQ(pos.y, 3);
+  ASSERT_EQ(pos->x, 2);
+  ASSERT_EQ(pos->y, 3);
 
 
 
@@ -109,23 +106,23 @@ TEST_F(TestMovement, canWalkInsideRooms) {
 
   parseCommand("w", NULL);
   pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 3);
-  ASSERT_EQ(pos.y, 3);
+  ASSERT_EQ(pos->x, 3);
+  ASSERT_EQ(pos->y, 3);
 
   parseCommand("s", NULL);
   pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 2);
-  ASSERT_EQ(pos.y, 3);
+  ASSERT_EQ(pos->x, 2);
+  ASSERT_EQ(pos->y, 3);
 
   parseCommand("a", NULL);
   pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 2);
-  ASSERT_EQ(pos.y, 2);
+  ASSERT_EQ(pos->x, 2);
+  ASSERT_EQ(pos->y, 2);
 
   parseCommand("d", NULL);
   pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 2);
-  ASSERT_EQ(pos.y, 3);
+  ASSERT_EQ(pos->x, 2);
+  ASSERT_EQ(pos->y, 3);
 
 
 
@@ -135,23 +132,23 @@ TEST_F(TestMovement, canWalkInsideRooms) {
 
   parseCommand("w", NULL);
   pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 2);
-  ASSERT_EQ(pos.y, 4);
+  ASSERT_EQ(pos->x, 2);
+  ASSERT_EQ(pos->y, 4);
 
   parseCommand("s", NULL);
   pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 2);
-  ASSERT_EQ(pos.y, 3);
+  ASSERT_EQ(pos->x, 2);
+  ASSERT_EQ(pos->y, 3);
 
   parseCommand("a", NULL);
   pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 3);
-  ASSERT_EQ(pos.y, 3);
+  ASSERT_EQ(pos->x, 3);
+  ASSERT_EQ(pos->y, 3);
 
   parseCommand("d", NULL);
   pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 2);
-  ASSERT_EQ(pos.y, 3);
+  ASSERT_EQ(pos->x, 2);
+  ASSERT_EQ(pos->y, 3);
 
 
   parseCommand("e", NULL);
@@ -160,23 +157,23 @@ TEST_F(TestMovement, canWalkInsideRooms) {
 
   parseCommand("w", NULL);
   pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 1);
-  ASSERT_EQ(pos.y, 3);
+  ASSERT_EQ(pos->x, 1);
+  ASSERT_EQ(pos->y, 3);
 
   parseCommand("s", NULL);
   pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 2);
-  ASSERT_EQ(pos.y, 3);
+  ASSERT_EQ(pos->x, 2);
+  ASSERT_EQ(pos->y, 3);
 
   parseCommand("a", NULL);
   pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 2);
-  ASSERT_EQ(pos.y, 4);
+  ASSERT_EQ(pos->x, 2);
+  ASSERT_EQ(pos->y, 4);
 
   parseCommand("d", NULL);
   pos = getPlayerPosition();
-  ASSERT_EQ(pos.x, 2);
-  ASSERT_EQ(pos.y, 3);
+  ASSERT_EQ(pos->x, 2);
+  ASSERT_EQ(pos->y, 3);
 
 
   parseCommand("e", NULL);
@@ -224,10 +221,6 @@ TEST_F(TestMovement, canWalkBetweenRooms) {
 
   ASSERT_EQ(getPlayerRoom(), 1);
 
-  parseCommand("pick", "low-rank-keycard");
-  parseCommand("pick", "magnetic-boots");
-  parseCommand("use", "magnetic-boots");
-  
   strcpy(&buffer[0], "walkTo 0 0");
   operator1 = strtok( &buffer[0], "\n " );
   operand1 = strtok( NULL, "\n ");
@@ -242,45 +235,19 @@ TEST_F(TestMovement, canWalkBetweenRooms) {
 
   parseCommand("move", "0");
   ASSERT_EQ(getPlayerRoom(), 2);
-
-  parseCommand("move", "0");
-  ASSERT_EQ(getPlayerRoom(), 3);
-
-  parseCommand("move", "1");
-  ASSERT_EQ(getPlayerRoom(), 5);
-
-  strcpy(&buffer[0], "walkTo 0 0");
-  operator1 = strtok( &buffer[0], "\n " );
-  operand1 = strtok( NULL, "\n ");
-
-  parseCommand("a", NULL);
-  ASSERT_EQ(getPlayerRoom(), 3);
-
-  parseCommand("d", NULL);
-  ASSERT_EQ(getPlayerRoom(), 5);
-
 }
 
 TEST_F(TestMovement, roomsCanRequireSpecialRankForAccess) {
 
-  ASSERT_EQ(getPlayerRoom(), 1);
+  setPlayerLocation(3);
+
+  parseCommand("move", "0");
+  ASSERT_EQ(getPlayerRoom(), 3);
 
   parseCommand("pick", "low-rank-keycard");
-  parseCommand("pick", "magnetic-boots");
-  parseCommand("use", "magnetic-boots");
 
-  parseCommand("move", "0");
-  ASSERT_EQ(getPlayerRoom(), 2);
-  parseCommand("move", "2");
-
-  getRoom(2)->rankRequired = 2;
-  parseCommand("move", "0");
-  ASSERT_EQ(getPlayerRoom(), 1);
-
-  setPlayerRank(2);
-
-  parseCommand("move", "0");
-  ASSERT_EQ(getPlayerRoom(), 2);
+  parseCommand("move", "1");
+  ASSERT_EQ(getPlayerRoom(), 5);
 }
 
 extern struct Item item[26];
@@ -288,29 +255,31 @@ extern struct Item item[26];
 TEST_F(TestMovement, keycardsCanElevatePlayerRankIfItsHigherThanCurrent) {
   ASSERT_EQ(getPlayerRoom(), 1);
   ASSERT_EQ(getPlayerRank(), 0);
+  addToRoom( "lss-daedalus", getItemNamed("low-rank-keycard"));
+  addToRoom( "lss-daedalus", getItemNamed("high-rank-keycard"));
+  addToRoom( "lss-daedalus", getItemNamed("root-keycard"));
+
   parseCommand("pick", "low-rank-keycard");
   ASSERT_EQ(getPlayerRank(), 1);
   parseCommand("drop", "low-rank-keycard");
   ASSERT_EQ(getPlayerRank(), 0);
 
-  addToRoom( "lss-daedalus", &item[25]);
-  addToRoom( "lss-daedalus", &item[18]);
 
   parseCommand("pick", "root-keycard");
 
-  ASSERT_EQ(getPlayerRank(), 3);
+  ASSERT_EQ(getPlayerRank(), 4);
 
   parseCommand("pick", "low-rank-keycard");
-  ASSERT_EQ(getPlayerRank(), 3);
+  ASSERT_EQ(getPlayerRank(), 4);
 
   parseCommand("drop", "low-rank-keycard");
-  ASSERT_EQ(getPlayerRank(), 3);
+  ASSERT_EQ(getPlayerRank(), 4);
 
   parseCommand("pick", "high-rank-keycard");
-  ASSERT_EQ(getPlayerRank(), 3);
+  ASSERT_EQ(getPlayerRank(), 4);
 
   parseCommand("drop", "root-keycard");
-  ASSERT_EQ(getPlayerRank(), 2);
+  ASSERT_EQ(getPlayerRank(), 3);
 
   parseCommand("drop", "high-rank-keycard");
   ASSERT_EQ(getPlayerRank(), 0);
@@ -322,13 +291,12 @@ TEST_F(TestMovement, walkingTowardsWallsWillBlockMovement) {
   char buffer[255];
   char *operator1;
   char *operand1;
+  addToRoom( "lss-daedalus", getItemNamed("low-rank-keycard"));
 
   ASSERT_EQ(getPlayerRoom(), 1);
 
   parseCommand("pick", "low-rank-keycard");
-  parseCommand("pick", "magnetic-boots");
-  parseCommand("use", "magnetic-boots");
-  
+
   strcpy(&buffer[0], "walkTo 0 0");
   operator1 = strtok( &buffer[0], "\n " );
   operand1 = strtok( NULL, "\n ");
@@ -359,17 +327,4 @@ TEST_F(TestMovement, walkingTowardsWallsWillBlockMovement) {
 
   parseCommand("move", "0");
   ASSERT_EQ(getPlayerRoom(), 2);
-
-  parseCommand("move", "0");
-  ASSERT_EQ(getPlayerRoom(), 3);
-
-  parseCommand("move", "0");
-  ASSERT_EQ(getPlayerRoom(), 4);
-
-  strcpy(&buffer[0], "walkTo 0 0");
-  operator1 = strtok( &buffer[0], "\n " );
-  operand1 = strtok( NULL, "\n ");
-
-  parseCommand("w", NULL);
-  ASSERT_EQ(getPlayerRoom(), 4);
 }

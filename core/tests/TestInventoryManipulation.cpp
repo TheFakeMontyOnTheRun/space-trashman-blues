@@ -88,15 +88,11 @@ TEST_F(TestInventoryManipulation, checkingInvalidRoomForObjectsWillCauseError) {
 }
 
 TEST_F(TestInventoryManipulation, objectsDroppedInRoomStayThere) {
-	ASSERT_TRUE(collectedObject->next == nullptr);
-
+	addToRoom( "lss-daedalus", getItemNamed("low-rank-keycard"));
 	ASSERT_TRUE(isPlayerAtRoom("lss-daedalus"));
 	ASSERT_TRUE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
 	parseCommand("pick", "low-rank-keycard");
 	ASSERT_FALSE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
-
-	parseCommand("pick", "magnetic-boots");
-	parseCommand("use", "magnetic-boots");
 
 	parseCommand("move", "0");
 	ASSERT_TRUE(isPlayerAtRoom("hangar"));
@@ -107,9 +103,8 @@ TEST_F(TestInventoryManipulation, objectsDroppedInRoomStayThere) {
 }
 
 TEST_F(TestInventoryManipulation, canPickObjects) {
-	ASSERT_TRUE(collectedObject->next == nullptr);
 	ASSERT_TRUE(isPlayerAtRoom("lss-daedalus"));
-
+	addToRoom( "lss-daedalus", getItemNamed("low-rank-keycard"));
 	struct Item *item = getRoom(getPlayerRoom())->itemsPresent->item;
 
 	ASSERT_TRUE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
@@ -118,7 +113,6 @@ TEST_F(TestInventoryManipulation, canPickObjects) {
 	ASSERT_TRUE(collectedObject->item == item);
 
 	parseCommand("drop", "low-rank-keycard");
-	ASSERT_TRUE(collectedObject->next == NULL);
 	ASSERT_TRUE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
 }
 
@@ -130,9 +124,6 @@ TEST_F(TestInventoryManipulation, objectsCanOnlyExistInOneRoom) {
   item.description = "farofinha";
   item.pickable = TRUE;
   initStation();
-
-  parseCommand("pick", "magnetic-boots");
-  parseCommand("use", "magnetic-boots");
 
   addObjectToRoom(1, &item);
   ASSERT_TRUE(hasItemInRoom("lss-daedalus", "farofinha"));

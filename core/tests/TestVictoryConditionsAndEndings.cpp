@@ -13,7 +13,9 @@ extern struct ObjectNode *collectedObject;
 
 using testing::Eq;
 
-extern struct Item item[25]; 
+extern struct Item item[25];
+
+/*
 
 TEST(TestVictoryCondition, activatingTheRemoteControlWithTheActiveBombWillExplodeEverything) {
 
@@ -100,4 +102,4 @@ TEST(TestVictoryCondition, placingTheBombOnLab1WithTheMendingWillFailToExplodeSt
   ASSERT_EQ(kBadGameOver, getGameStatus());
 }
 
-
+*/

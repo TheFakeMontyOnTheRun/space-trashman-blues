@@ -6,9 +6,9 @@ CXXFLAGS = -Iinclude -O3 -g -c -std=c++14  -ferror-limit=1 -Wno-narrowing   \
 		-I$(GMOCK_DIR)/include \
 		-I$(GMOCK_DIR) \
 		-I$(GMOCK_DIR)/include/gtest \
-		-I$(GMOCK_DIR)/include/gtest/internal
+		-I$(GMOCK_DIR)/include/gtest/internal -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING
 
-CFLAGS = -Iinclude -O3 -g -c -std=c89 -ansi  -ferror-limit=1
+CFLAGS = -Iinclude -O3 -g -c -std=c89 -ansi  -ferror-limit=1 -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING
 
 CXX = clang++
 CC = clang

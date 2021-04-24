@@ -18,7 +18,7 @@ int main() {
 		char buffer[255];
 		char *operator;
 		char *operand;
-		struct WorldPosition playerPos = getPlayerPosition();
+		struct WorldPosition playerPos = *getPlayerPosition();
 		struct ObjectNode *head = NULL;
 
 		puts("------\nYou are at:");

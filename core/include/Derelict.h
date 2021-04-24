@@ -33,24 +33,22 @@ typedef void ( *UseWithObjectCallback )(struct Item* item, struct Item* otherIte
 typedef void ( *LogDelegate )(const char* item);
 
 struct WorldPosition {
-  int16_t x;
-  int16_t y;
+  int8_t x;
+  int8_t y;
 };
 
 struct Item {
   char *description;
-  int weight;
-  int roomId;
-  int active;
-  int capacity;
-  int pickable;
-  uint8_t index;
   char *info;
+  uint8_t roomId;
+  uint8_t index;
   struct WorldPosition position;
   UseWithObjectCallback useWithCallback;
   UseObjectCallback useCallback;
   DropObjectCallback dropCallback;
   PickObjectCallback pickCallback;
+  uint8_t active : 1;
+  uint8_t pickable : 1;
 };
 
 struct ObjectNode {
@@ -60,12 +58,14 @@ struct ObjectNode {
 
 struct Room {
   char *description;
-  char *info;
-  int connections[6];
+#ifdef INCLUDE_ROOM_DESCRIPTIONS
+    char *info;
+#endif
+  uint8_t connections[6];
   struct ObjectNode *itemsPresent;
-  int sizeX;
-  int sizeY;
-  int rankRequired;
+  uint8_t rankRequired;
+  uint8_t sizeX;
+  uint8_t sizeY;
 };
 
 struct WorldPosition* getPlayerPosition();
@@ -108,6 +108,8 @@ void moveBy(int direction);
 
 int getPlayerRoom(void);
 
+void setPlayerLocation(int location);
+
 int hasItemInRoom(const char *roomName, const char *itemName);
 
 int playerHasObject( const char* itemName);
@@ -149,7 +151,7 @@ void setPlayerRank(int newRank);
 int isPositionAllowed(int x, int y);
 
 #define TOTAL_ROOMS 24
-#define TOTAL_ITEMS 64
+#define TOTAL_ITEMS 34
 
 
 /* TODO: make accessory method for this */
