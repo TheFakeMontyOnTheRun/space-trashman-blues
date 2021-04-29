@@ -160,7 +160,7 @@ int menuTick(long delta_time) {
 
     input = getInput();
 
-    newState = tickCallback(input, &delta_time);
+    newState = tickCallback(input, delta_time);
 
     if (input == kCommandQuit) {
         isRunning = FALSE;
