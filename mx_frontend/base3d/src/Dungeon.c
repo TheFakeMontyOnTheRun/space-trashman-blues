@@ -31,9 +31,6 @@ extern char *focusItemName;
 extern int currentSelectedItem;
 
 extern int shouldContinue;
-
-extern enum EPresentationState currentPresentationState;
-
 extern char *thisMissionName;
 extern int16_t thisMissionNameLen;
 
@@ -41,8 +38,6 @@ struct CrawlerAgent {
     struct Vec2i position;
     enum EDirection rotation;
     char symbol;
-    uint8_t life;
-    struct Vec2i target;
 };
 
 struct CrawlerAgent playerCrawler;
@@ -212,24 +207,20 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 break;
                 
             case kCommandFire4: {
-                struct ObjectNode *head = getPlayerItems();
+                struct ObjectNode *playerItems = getPlayerItems();
                 int index = 0;
                 
                 ++currentSelectedItem;
                 
-                while (head != NULL) {
+                while (playerItems != NULL) {
                     ++index;
-                    head = head->next;
+                    playerItems = playerItems->next;
                 }
                 
                 if (currentSelectedItem >= index) {
                     currentSelectedItem = 0;
                 }
             }
-                break;
-                
-
-
                 break;
             case kCommandNone:
                 break;
@@ -315,18 +306,18 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         }
 
         {
-            struct ObjectNode *head = getRoom(getPlayerRoom())->itemsPresent->next;
+            struct ObjectNode *roomItems = getRoom(getPlayerRoom())->itemsPresent->next;
             struct Item *item = NULL;
             struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
             focusItemName = NULL;
             offseted.x += playerCrawler.position.x;
             offseted.y += playerCrawler.position.y;
 
-            while (head != NULL && item == NULL) {
-                if (offseted.x == (head->item->position.x) && offseted.y == (head->item->position.y)) {
-                    item = head->item;
+            while (roomItems != NULL && item == NULL) {
+                if (offseted.x == (roomItems->item->position.x) && offseted.y == (roomItems->item->position.y)) {
+                    item = roomItems->item;
                 }
-                head = head->next;
+                roomItems = roomItems->next;
             }
 
             if (item != NULL) {

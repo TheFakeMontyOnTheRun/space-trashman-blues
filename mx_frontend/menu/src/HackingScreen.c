@@ -24,7 +24,7 @@ char* functionNames[6] = {
         "???",
         "writeB",
         "snprintf",
-        "hackAcess",
+        "hackLogin",
         "LoadDBFile",
         "MainRunLoop",
 };

@@ -24,7 +24,7 @@ extern const char *mainText;
 
 const char *HelpScreen_options[1] = {"Back"};
 
-int32_t HelpScreen_nextStateNavigation[1] = {
+enum EGameMenuState HelpScreen_nextStateNavigation[1] = {
         kMainMenu,
 };
 
@@ -61,7 +61,7 @@ void HelpScreen_repaintCallback(void) {
     int c = 0;
     int lines;
     size_t len = strlen(HelpScreen_options[0]);
-    int16_t optionsHeight = 8 * (HelpScreen_optionsCount);
+    int optionsHeight = 8 * (HelpScreen_optionsCount);
 
     lines = countLines();
 

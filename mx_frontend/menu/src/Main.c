@@ -69,7 +69,6 @@ long uclock() {
 #include <emscripten/emscripten.h>
 #endif
 
-void initHW();
 
 void shutdownHW();
 
@@ -96,7 +95,7 @@ void shutdownHW() {
     graphicsShutdown();
 }
 
-int start_clock, end_clock, prev;
+long start_clock, end_clock, prev;
 
 #ifdef __EMSCRIPTEN__
 void mainLoop();

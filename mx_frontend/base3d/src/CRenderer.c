@@ -28,10 +28,7 @@ FixP_t playerHeight = 0;
 FixP_t walkingBias = 0;
 FixP_t playerHeightChangeRate = 0;
 FixP_t playerHeightTarget = 0;
-int cursorX = -1;
-int cursorZ = -1;
 extern int currentSelectedItem;
-int covered = FALSE;
 int useDither = TRUE;
 int visibilityCached = FALSE;
 int needsToRedrawVisibleMeshes = TRUE;
@@ -46,17 +43,12 @@ uint8_t mActors[MAP_SIZE][MAP_SIZE];
 uint8_t mItems[MAP_SIZE][MAP_SIZE];
 uint8_t mEffects[MAP_SIZE][MAP_SIZE];
 enum EDirection cameraDirection;
-extern int playerHealth;
 struct Vec3 mCamera;
 long gameTicks = 0;
 
 int distanceForPenumbra = 24;
 int distanceForDarkness = 48;
 
-#ifdef SDLSW
-int mSlow = FALSE;
-#endif
-int linesOfSight[MAP_SIZE][MAP_SIZE];
 struct Bitmap *backdrop = NULL;
 struct MapWithCharKey tileProperties;
 struct Vec2i cameraPosition;
@@ -76,7 +68,6 @@ char *focusItemName = NULL;
 struct Projection projectionVertices[8];
 
 enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
-uint8_t intMap[MAP_SIZE * MAP_SIZE];
 struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
 
 char messageLogBuffer[256];
@@ -172,8 +163,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 void updateCursorForRenderer(const int x, const int z) {
     needsToRedrawVisibleMeshes = TRUE;
     visibilityCached = FALSE;
-    cursorX = x;
-    cursorZ = z;
 }
 
 void drawMap(const uint8_t *__restrict__ elements,
@@ -323,16 +312,13 @@ void render(const long ms) {
     }
 
     if (needsToRedrawVisibleMeshes) {
-        uint8_t actorsSnapshotElement = 0xFF;
         uint8_t itemsSnapshotElement = 0xFF;
-        uint8_t effectsSnapshotElement = 0xFF;
         char buffer[64];
         struct Vec3 tmp, tmp2;
         struct CTile3DProperties *tileProp;
         FixP_t heightDiff;
         uint8_t lastElement = 0xFF;
         uint8_t element = 0;
-        int onTarget = FALSE;
         struct Vec3 position;
         FixP_t tileHeight = 0;
         int16_t x, z;
@@ -389,12 +375,9 @@ void render(const long ms) {
                     case kNorth:
                         x = visPos.x;
                         z = visPos.y;
-                        onTarget = (cursorX == x && cursorZ == z);
                         element = visibleElementsMap[(z * MAP_SIZE) + x];
 
-                        actorsSnapshotElement = mActors[z][x];
                         itemsSnapshotElement = mItems[z][x];
-                        effectsSnapshotElement = mEffects[z][x];
 
                         position.mX =
                                 mCamera.mX + intToFix(-2 * ((MAP_SIZE - 1) - x));
@@ -433,10 +416,7 @@ void render(const long ms) {
                         z = visPos.y;
 
                         element = visibleElementsMap[(z * MAP_SIZE) + x];
-                        onTarget = (cursorX == x && cursorZ == z);
-                        actorsSnapshotElement = mActors[z][x];
                         itemsSnapshotElement = mItems[z][x];
-                        effectsSnapshotElement = mEffects[z][x];
 
                         position.mX = mCamera.mX + intToFix(-2 * x);
                         position.mY = mCamera.mY;
@@ -473,10 +453,7 @@ void render(const long ms) {
                         z = visPos.x;
 
                         element = visibleElementsMap[(x * MAP_SIZE) + z];
-                        onTarget = (cursorX == z && cursorZ == x);
                         itemsSnapshotElement = mItems[x][z];
-                        effectsSnapshotElement = mEffects[x][z];
-                        actorsSnapshotElement = mActors[x][z];
 
                         position.mX = mCamera.mX + intToFix(-2 * x);
                         position.mY = mCamera.mY;
@@ -512,10 +489,7 @@ void render(const long ms) {
                         z = visPos.x;
 
                         element = visibleElementsMap[(x * MAP_SIZE) + z];
-                        onTarget = (cursorX == z && cursorZ == x);
-                        actorsSnapshotElement = mActors[x][z];
                         itemsSnapshotElement = mItems[x][z];
-                        effectsSnapshotElement = mEffects[x][z];
 
                         position.mX = mCamera.mX + intToFix(2 * x);
                         position.mY = mCamera.mY;
@@ -984,14 +958,14 @@ void render(const long ms) {
 
         while (head != NULL) {
             if (head->item != NULL) {
-                char buffer[255];
-                sprintf(&buffer[0], "%s", head->item->description);
-                buffer[7] = 0;
+                char textBuffer[255];
+                sprintf(&textBuffer[0], "%s", head->item->description);
+                textBuffer[7] = 0;
 
                 if (line == currentSelectedItem) {
                     
                     fill(256, (1 + line) * 8, 64, 8, 0, FALSE);
-                    drawTextAt(34, 2 + line, &buffer[0], head->item->active ? 192 :  255);
+                    drawTextAt(34, 2 + line, &textBuffer[0], head->item->active ? 192 :  255);
                     
                     
                     
@@ -1002,7 +976,7 @@ void render(const long ms) {
                     
                 } else {
                     fill(256, (1 + line) * 8, 64, 8, 255, FALSE);
-                    drawTextAt(34, 2 + line, &buffer[0], head->item->active ? 64 :  0);
+                    drawTextAt(34, 2 + line, &textBuffer[0], head->item->active ? 64 :  0);
                 }
                 ++line;
             }

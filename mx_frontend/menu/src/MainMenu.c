@@ -22,7 +22,7 @@
 const char *MainMenu_options[4] = {
         "Play game", "Credits", "Help", "Quit"};
 
-int32_t MainMenu_nextStateNavigation[4] = {
+enum EGameMenuState MainMenu_nextStateNavigation[4] = {
         kPlayGame, kCredits, kHelp,
         kQuit};
 

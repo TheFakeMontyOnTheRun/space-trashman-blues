@@ -22,9 +22,7 @@
 #include "Dungeon.h"
 
 FixP_t kCameraYDeltaPlayerDeath;
-
 FixP_t kCameraYSpeedPlayerDeath;
-
 char *thisMissionName;
 int16_t thisMissionNameLen;
 int showPromptToAbandonMission = FALSE;

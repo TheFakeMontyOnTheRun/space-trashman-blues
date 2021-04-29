@@ -39,17 +39,17 @@ extern int playerLocation;
 
 const char *inspectItem_options[1] = {"Back"};
 
-int32_t InspectItem_nextStateNavigation[1] = {
+enum EGameMenuState InspectItem_nextStateNavigation[1] = {
         kBackToGame};
 
 
-int32_t GameMenu_EndGame_nextStateNavigation[2] = {kInspectItem, kMainMenu};
+enum EGameMenuState GameMenu_EndGame_nextStateNavigation[2] = {kInspectItem, kMainMenu};
 
 const char *GameMenu_EndGame_options[2] = {"No", "Yes"};
 
 const char *GameMenu_Story_options[1] = {"Continue"};
 
-int32_t GameMenu_Story_nextStateNavigation[1] = {kMainMenu};
+enum EGameMenuState GameMenu_Story_nextStateNavigation[1] = {kMainMenu};
 
 int16_t GameMenu_optionsCount = 2;
 extern size_t biggestOption;

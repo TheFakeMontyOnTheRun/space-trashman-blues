@@ -33,8 +33,6 @@ int rotation = 0;
 enum CrawlerState shouldContinue = kCrawlerGameInProgress;
 struct CActor actor;
 
-int loopTick(enum ECommand command);
-
 void clearMapCache() {
     size_t sizeForSet = sizeof(uint8_t) * (MAP_SIZE * MAP_SIZE);
     memset (&items[0], 0xFF, sizeForSet);
@@ -85,18 +83,6 @@ void setActor(const int x, const int y, uint8_t actor) {
 
 void setItem(const int x, const int y, uint8_t item) {
     items[(MAP_SIZE * y) + x] = item;
-}
-
-void setDamage() {
-}
-
-void setDetected() {
-    /* enemy detected you */
-    playSound(PLAYER_GOT_DETECTED_SOUND);
-}
-
-uint8_t getItemOnMap(int x, int y) {
-    return items[(MAP_SIZE * y) + x];
 }
 
 void loadMap(int map, struct MapWithCharKey *collisionMap) {

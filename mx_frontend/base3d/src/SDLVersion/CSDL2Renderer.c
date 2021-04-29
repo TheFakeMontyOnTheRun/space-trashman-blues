@@ -184,12 +184,10 @@ void handleSystemEvents() {
 					break;
 
                 case SDLK_n:
-                    renderingMethod = FIXED;
                     needsToRedrawVisibleMeshes = TRUE;
                     visibilityCached = FALSE;
                     break;
                 case SDLK_m:
-                    renderingMethod = LUT;
                     needsToRedrawVisibleMeshes = TRUE;
                     visibilityCached = FALSE;
                     break;
