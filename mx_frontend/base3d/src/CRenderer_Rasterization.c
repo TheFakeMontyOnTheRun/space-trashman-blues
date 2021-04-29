@@ -18,8 +18,6 @@
 #include "CRenderer.h"
 #include "VisibilityStrategy.h"
 
-#define mTransparency 199
-
 uint16_t clippingY1 = 200;
 
 /*
@@ -284,7 +282,7 @@ void drawWall(FixP_t x0,
                         lastV = iv;
                     }
 
-                    if (pixel != mTransparency) {
+                    if (pixel != TRANSPARENCY_COLOR) {
                         uint8_t color = pixel;
 
                         if (farForStipple && stipple) {
@@ -436,8 +434,8 @@ void drawFrontWall(FixP_t x0,
             if (!farEnoughForStipple
                 && ((!enableAlpha && iv == lastV)
                     && (iX1 < XRES && iX0 >= 0))) {
-                int16_t start = (0 >= iX0) ? 0 : iX0;
-                int16_t finish = ((256 - 1) >= iX1) ? iX1 : (256 - 1);
+                int start = (0 >= iX0) ? 0 : iX0;
+                int finish = ((256 - 1) >= iX1) ? iX1 : (256 - 1);
                 v += dv;
                 destinationLine = bufferData + (320 * iy);
                 sourceLineStart = destinationLine - 320;
@@ -468,7 +466,7 @@ void drawFrontWall(FixP_t x0,
                         lastV = iv;
                     }
 
-                    if (pixel != mTransparency) {
+                    if (pixel != TRANSPARENCY_COLOR) {
 
                         uint8_t color = pixel;
 
@@ -731,7 +729,7 @@ void drawFloor(FixP_t y0,
                         lastU = iu;
                     }
 
-                    if (pixel != mTransparency) {
+                    if (pixel != TRANSPARENCY_COLOR) {
                         uint8_t color = pixel;
 
                         if (farEnoughForStipple && stipple) {
@@ -779,69 +777,84 @@ void drawSlantedFloor(
     FixP_t d01X = one;
     FixP_t d02Y = one;
     FixP_t d03XdY;
-    FixP_t d12XdY;
-    FixP_t targetDy;
     FixP_t currDy0 = 0;
     FixP_t currX0;
     FixP_t fragmentSizeFactor;
     FixP_t currX1;
     int cachedVi;
-    /*
-    FixP_t U = 0;
-    FixP_t V = 0;
-    FixP_t dU = one;
-    FixP_t dV = one;
-     */
     FixP_t textureSizeFP = intToFix(NATIVE_TEXTURE_SIZE - 1);
 
 
     d03XdY = Div(p0x - p3x, p0y - p3y);
-    d12XdY = Div(p2x - p1x, p2y - p1y);
-    targetDy = p1y - p2y;
     currX0 = p0x;
     currX1 = p1x;
 
     fragmentSizeFactor = Div(p2y - p1y, p3y - p0y);
-
-    for (Y = p0y; Y < p3y; Y += d02Y) {
-        FixP_t percentile = Div((Y - p0y), (p3y - p0y));
-        FixP_t targetY = Mul((p2y - p1y), percentile) + p1y;
-        FixP_t dydx = Div((targetY - Y), currX1 - currX0);
-        currX0 += d03XdY;
-        currX1 = Mul((p2x - p1x), percentile) + p1x;
-        currDy0 = 0;
-        /*
-        U = 0;
-        dU = Div( intToFix(32), currX1 - currX0 );
-        dV = Div( intToFix(32), p2y - p0y );
-         */
-        cachedVi = (fixToInt(Mul(percentile, textureSizeFP)) * NATIVE_TEXTURE_SIZE);
-
-        for (X = currX0; X <= currX1; X += d01X) {
-
-            FixP_t percentileX = Div((X - currX0), (currX1 - currX0));
-            FixP_t sizeY = Mul(percentileX, fragmentSizeFactor);
-
-            pixel = texture[cachedVi + (fixToInt(Mul(percentileX, textureSizeFP)))];
-
-            if (sizeY < one) {
-                framebuffer[(320 * (fixToInt(Y + currDy0))) + fixToInt(X)] = pixel;
-            } else {
-                int i = 0;
-                FixP_t frag;
-                for (frag = 0; frag <= (sizeY); frag += one) {
-                    framebuffer[(320 * (fixToInt(Y + currDy0) + i++)) + fixToInt(X)] = pixel;
+    
+    if (farEnoughForStipple) {
+        int stipple = FALSE;
+        for (Y = p0y; Y < p3y; Y += d02Y) {
+            FixP_t percentile = Div((Y - p0y), (p3y - p0y));
+            FixP_t targetY = Mul((p2y - p1y), percentile) + p1y;
+            FixP_t dydx = Div((targetY - Y), currX1 - currX0);
+            currX0 += d03XdY;
+            currX1 = Mul((p2x - p1x), percentile) + p1x;
+            currDy0 = 0;
+            
+            cachedVi = (fixToInt(Mul(percentile, textureSizeFP)) * NATIVE_TEXTURE_SIZE);
+            
+            for (X = currX0; X <= currX1; X += d01X) {
+                
+                FixP_t percentileX = Div((X - currX0), (currX1 - currX0));
+                FixP_t sizeY = Mul(percentileX, fragmentSizeFactor);
+                
+                pixel = texture[cachedVi + (fixToInt(Mul(percentileX, textureSizeFP)))];
+                
+                if (sizeY < one) {
+                    framebuffer[(320 * (fixToInt(Y + currDy0))) + fixToInt(X)] = pixel;
+                } else {
+                    int i = 0;
+                    FixP_t frag;
+                    for (frag = 0; frag <= (sizeY); frag += one) {
+                        framebuffer[(320 * (fixToInt(Y + currDy0) + i++)) + fixToInt(X)] = stipple ? pixel : 0;
+                        stipple = !stipple;
+                    }
                 }
+                
+                currDy0 += dydx;
             }
-
-            currDy0 += dydx;
-            /*
-            U += dU;
-             */
         }
-        /*
-        V += dV;
-         */
+    } else {
+        for (Y = p0y; Y < p3y; Y += d02Y) {
+            FixP_t percentile = Div((Y - p0y), (p3y - p0y));
+            FixP_t targetY = Mul((p2y - p1y), percentile) + p1y;
+            FixP_t dydx = Div((targetY - Y), currX1 - currX0);
+            currX0 += d03XdY;
+            currX1 = Mul((p2x - p1x), percentile) + p1x;
+            currDy0 = 0;
+            
+            cachedVi = (fixToInt(Mul(percentile, textureSizeFP)) * NATIVE_TEXTURE_SIZE);
+            
+            for (X = currX0; X <= currX1; X += d01X) {
+                
+                FixP_t percentileX = Div((X - currX0), (currX1 - currX0));
+                FixP_t sizeY = Mul(percentileX, fragmentSizeFactor);
+                
+                pixel = texture[cachedVi + (fixToInt(Mul(percentileX, textureSizeFP)))];
+                
+                if (sizeY < one) {
+                    framebuffer[(320 * (fixToInt(Y + currDy0))) + fixToInt(X)] = pixel;
+                } else {
+                    int i = 0;
+                    FixP_t frag;
+                    for (frag = 0; frag <= (sizeY); frag += one) {
+                        framebuffer[(320 * (fixToInt(Y + currDy0) + i++)) + fixToInt(X)] = pixel;
+                    }
+                }
+                
+                currDy0 += dydx;
+            }
+        }
     }
 }
 
@@ -856,7 +869,7 @@ void drawRect(
     uint8_t *destinationLineStart = destination + (320 * (y)) + x;
     int16_t py;
 
-    if (pixel == mTransparency) {
+    if (pixel == TRANSPARENCY_COLOR) {
         return;
     }
 
@@ -871,7 +884,7 @@ void drawRect(
     memset (destination + (320 * (y + dy)) + x, pixel, dx);
 }
 
-void fillBottomFlat(int *coords, uint8_t colour) {
+void fillBottomFlat(const int *coords, uint8_t colour) {
     int y = coords[1];
     FixP_t dXDy2;
     FixP_t dXDy1;
@@ -1024,10 +1037,10 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
     int y = coords[1];
     int u, v;
     FixP_t fU1, fU2, fV1, fV2;
-    FixP_t fDU1 = intToFix(1);
-    FixP_t fDU2 = intToFix(1);
-    FixP_t fDV1 = intToFix(1);
-    FixP_t fDV2 = intToFix(1);
+    FixP_t fDU1;
+    FixP_t fDU2;
+    FixP_t fDV1;
+    FixP_t fDV2;
     FixP_t one = intToFix(1);
 
     int yFinal = coords[5]; //not the lowest, neither the topmost
@@ -1152,10 +1165,10 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     int y = coords[1];
     int u, v;
     FixP_t fU1, fU2, fV1, fV2;
-    FixP_t fDU1 = intToFix(1);
-    FixP_t fDV1 = intToFix(1);
-    FixP_t fDU2 = intToFix(1);
-    FixP_t fDV2 = intToFix(1);
+    FixP_t fDU1;
+    FixP_t fDV1;
+    FixP_t fDU2;
+    FixP_t fDV2;
 
     int yFinal = coords[3]; //not the upper, not the lowest
     FixP_t one = intToFix(1);
@@ -1356,9 +1369,9 @@ void fill(
         const int stipple) {
 
     uint8_t *destination = &framebuffer[0];
-    int16_t py;
+    int py;
 
-    if (pixel == mTransparency) {
+    if (pixel == TRANSPARENCY_COLOR) {
         return;
     }
 
@@ -1368,7 +1381,7 @@ void fill(
         if (!stipple) {
             memset (destinationLineStart, pixel, dx);
         } else {
-            int16_t px;
+            int px;
             for (px = 0; px < dx; ++px) {
                 destinationLineStart++;
                 if ((px + py) & 1) {
@@ -1386,9 +1399,9 @@ void drawBitmap(const int16_t dx,
 
     uint8_t *destination = &framebuffer[0];
     uint8_t *sourceLine = tile->data;
-    size_t height = tile->height;
-    size_t width = tile->width;
-    size_t y;
+    int height = tile->height;
+    int width = tile->width;
+    int y;
 
     if ((dy + height) >= 200) {
         height = (200 - dy);
@@ -1396,7 +1409,7 @@ void drawBitmap(const int16_t dx,
     for (y = 0; y < height; ++y) {
         uint8_t *destinationLineStart = destination + (320 * (dy + y)) + dx;
         uint8_t *sourceLineStart = sourceLine + (width * y);
-        size_t x;
+        int x;
 
         if ((dy + y) >= clippingY1) {
             return;
@@ -1405,7 +1418,7 @@ void drawBitmap(const int16_t dx,
         for (x = 0; x < width; ++x) {
             uint8_t pixel = *sourceLineStart;
 
-            if (!transparent || (pixel != mTransparency)) {
+            if (!transparent || (pixel != TRANSPARENCY_COLOR)) {
                 *destinationLineStart = pixel;
             }
 
@@ -1422,17 +1435,17 @@ void drawRepeatBitmap(
         const int16_t dy,
         const struct Bitmap *__restrict__ tile) {
 
-    size_t repeatX = (dx / tile->width) + 1;
-    size_t repeatY = (dy / tile->height) + 1;
-    size_t c, d;
+    int repeatX = (dx / tile->width) + 1;
+    int repeatY = (dy / tile->height) + 1;
+    int c, d;
     for (c = 0; c < repeatY; ++c) {
         for (d = 0; d < repeatX; ++d) {
 
-            size_t px = d * tile->width;
-            size_t py = c * tile->height;
+            int px = d * tile->width;
+            int py = c * tile->height;
 
             if (px < 320 && py < 200) {
-                drawBitmap(px, py, tile, FALSE);
+                drawBitmap(x + px, y + py, tile, FALSE);
             }
         }
     }
@@ -1474,7 +1487,7 @@ void drawTextAt(const uint16_t x, const uint16_t y, const char *__restrict__ tex
 
             for (srcX = 0; srcX < 8; ++srcX) {
 
-                if ((*letterSrc) != mTransparency) {
+                if ((*letterSrc) != TRANSPARENCY_COLOR) {
                     *letterDst = colour;
                 }
 

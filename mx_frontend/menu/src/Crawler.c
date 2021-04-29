@@ -25,14 +25,6 @@ FixP_t kCameraYDeltaPlayerDeath;
 
 FixP_t kCameraYSpeedPlayerDeath;
 
-int loopTick(enum ECommand cmd);
-
-void initRoom(int room);
-
-void renderTick(long ms);
-
-int getPlayerLocation();
-
 char *thisMissionName;
 int16_t thisMissionNameLen;
 int showPromptToAbandonMission = FALSE;
@@ -42,10 +34,9 @@ const char *AbandonMission_Title = "Abandon game?";
 const char *AbandonMission_options[6] = {"Continue", "End game"};
 int AbandonMission_navigation[2] = {-1, kMainMenu};
 int AbandonMission_count = 2;
-int firstEnteringTheGame = 1;
 extern struct GameSnapshot gameSnapshot;
 
-int32_t Crawler_initStateCallback(int32_t tag) {
+void Crawler_initStateCallback(int32_t tag) {
     int c = 0;
 
     if (tag == kPlayGame) {
@@ -56,7 +47,6 @@ int32_t Crawler_initStateCallback(int32_t tag) {
         enteredThru = 0;
         memset(&gameSnapshot, 0, sizeof(struct GameSnapshot));
     } else {
-        firstEnteringTheGame = 0;
         currentPresentationState = kWaitingForInput;
         timeUntilNextState = 0;
     }
@@ -89,12 +79,10 @@ int32_t Crawler_initStateCallback(int32_t tag) {
     if (tag == kPlayGame) {
         initRoom(getPlayerRoom());
     }
-
-    return 0;
 }
 
 void Crawler_initialPaintCallback() {
-    drawRepeatBitmap(0, 32, 320, 200, currentBackgroundBitmap);
+    drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
 
 
     fill(11 * 8, 12 * 8, 18 * 8, 8, 255, FALSE);
@@ -118,7 +106,7 @@ void Crawler_repaintCallback() {
         int c = 0;
         int optionsHeight = 8 * (AbandonMission_count);
         turnStep = turnTarget;
-        drawRepeatBitmap(0, 32, 320, 200, currentBackgroundBitmap);
+        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
 
         fill(0, 0, 320, 200, 0, TRUE);
 
@@ -235,8 +223,6 @@ void Crawler_repaintCallback() {
             }
             return;
         }
-        
-        
 
         if (currentPresentationState == kWaitingForInput ) {
             renderTick(30);
@@ -244,9 +230,7 @@ void Crawler_repaintCallback() {
     }
 }
 
-int32_t Crawler_tickCallback(int32_t tag, void *data) {
-    enum ECommand cmd = (enum ECommand) (tag);
-    long delta = *((int *) (data));
+enum EPresentationState Crawler_tickCallback(enum ECommand cmd, long delta) {
     int returnCode;
 
     if (showPromptToAbandonMission) {
@@ -272,7 +256,7 @@ int32_t Crawler_tickCallback(int32_t tag, void *data) {
                 case kConfirmInputBlink6:
                     timeUntilNextState = 250;
                     currentPresentationState =
-                            (enum EPresentationState) ((int) currentPresentationState + 1);
+                            (enum EPresentationState) (((int) currentPresentationState) + 1);
                     break;
                 case kFade:
                     return nextNavigationSelection;
@@ -281,7 +265,7 @@ int32_t Crawler_tickCallback(int32_t tag, void *data) {
 
         if (currentPresentationState == kWaitingForInput) {
 
-            switch (tag) {
+            switch (cmd) {
                 case kCommandBack:
                     return kMainMenu;
                 case kCommandUp:
@@ -306,7 +290,7 @@ int32_t Crawler_tickCallback(int32_t tag, void *data) {
                         showPromptToAbandonMission = FALSE;
                         needsToRedrawVisibleMeshes = TRUE;
                         currentPresentationState = kAppearing;
-                        return -1;
+                        return kResumeCurrentState;
                     }
                     timeUntilNextState = 0;
                     nextNavigationSelection = AbandonMission_navigation[cursorPosition];
@@ -315,7 +299,7 @@ int32_t Crawler_tickCallback(int32_t tag, void *data) {
             }
         }
 
-        return -1;
+        return kResumeCurrentState;
     }
 
     if (cmd == kCommandBack) {
@@ -331,16 +315,13 @@ int32_t Crawler_tickCallback(int32_t tag, void *data) {
     if (currentPresentationState == kWaitingForInput) {
         returnCode = loopTick(cmd);
 
-        switch (returnCode) {
-            case kCrawlerGameOver: {
-                playerHeightChangeRate = kCameraYSpeedPlayerDeath;
-                currentPresentationState = kFade;
-                timeUntilNextState = kDefaultPresentationStateInterval;
-            }
-                break;
+        if (returnCode == kCrawlerGameOver) {
+            playerHeightChangeRate = kCameraYSpeedPlayerDeath;
+            currentPresentationState = kFade;
+            timeUntilNextState = kDefaultPresentationStateInterval;
         }
 
-        return -1;
+        return kResumeCurrentState;
     }
 
     if (timeUntilNextState <= 0) {
@@ -351,7 +332,7 @@ int32_t Crawler_tickCallback(int32_t tag, void *data) {
                 timeUntilNextState = kNonExpiringPresentationState;
                 break;
             case kFade:
-                return -1;
+                return kResumeCurrentState;
             case kWaitingForInput:
                 return kMenuStateUnchanged;
             case kConfirmInputBlink1:

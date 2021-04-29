@@ -29,6 +29,7 @@ enum ECommand {
 };
 
 enum EGameMenuState {
+	kResumeCurrentState = -1,
 	kMainMenu,
 	kPlayGame,
 	kHelp,

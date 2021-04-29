@@ -327,7 +327,6 @@ void render(const long ms) {
         uint8_t itemsSnapshotElement = 0xFF;
         uint8_t effectsSnapshotElement = 0xFF;
         char buffer[64];
-        char directions[4] = {'N', 'E', 'S', 'W'};
         struct Vec3 tmp, tmp2;
         struct CTile3DProperties *tileProp;
         FixP_t heightDiff;
@@ -336,7 +335,7 @@ void render(const long ms) {
         int onTarget = FALSE;
         struct Vec3 position;
         FixP_t tileHeight = 0;
-        int16_t x, y, z;
+        int16_t x, z;
         int distance;
         FixP_t cameraHeight;
         int c;

@@ -3,8 +3,8 @@
 
 #define NATIVE_TEXTURE_SIZE 32
 #define XRES 256
-#define YRES 200
-#define HALF_XRES 128
+#define YRES 199
+#define HALF_XRES 127
 #define HALF_YRES 100
 #define TOTAL_TEXTURES 32
 #define TRANSPARENCY_COLOR 199
@@ -24,10 +24,8 @@ extern uint8_t *visibleElementsMap;
 extern struct Bitmap *defaultFont;
 extern uint8_t framebuffer[320 * 200];
 extern uint8_t previousFrame[320 * 200];
-extern int linesOfSight[MAP_SIZE][MAP_SIZE];
 extern enum EDirection cameraDirection;
 extern long gameTicks;
-extern int playerAmmo;
 extern int playerHealth;
 extern int hasSnapshot;
 extern int distanceForPenumbra;
@@ -50,7 +48,6 @@ extern uint8_t texturesUsed;
 extern enum ECommand mBufferedCommand;
 extern struct Texture *nativeTextures[TOTAL_TEXTURES];
 extern uint16_t clippingY1;
-extern int covered;
 extern struct Projection projectionVertices[8];
 extern FixP_t playerHeight;
 extern FixP_t walkingBias;
@@ -61,7 +58,6 @@ extern FixP_t yCameraOffset;
 extern FixP_t zCameraOffset;
 extern int enable3DRendering;
 extern uint8_t enableSmoothMovement;
-
 
 struct Mesh {
     uint16_t triangleCount;

@@ -31,7 +31,7 @@ int32_t HelpScreen_nextStateNavigation[1] = {
 int16_t HelpScreen_optionsCount = 1;
 extern char textBuffer[40 * 25];
 
-int32_t HelpScreen_initStateCallback(int32_t tag) {
+void HelpScreen_initStateCallback(int32_t tag) {
     size_t fileSize = sizeOfFile("Help.txt");
     FILE *fileInput = openBinaryFileFromPath("Help.txt");
 
@@ -48,14 +48,12 @@ int32_t HelpScreen_initStateCallback(int32_t tag) {
     fclose(fileInput);
 
     HelpScreen_optionsCount = 1;
-
-    return 0;
 }
 
 void HelpScreen_initialPaintCallback(void) {
 
     if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 32, 320, 200, currentBackgroundBitmap);
+        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
     }
 }
 
@@ -116,9 +114,7 @@ void HelpScreen_repaintCallback(void) {
     }
 }
 
-int32_t HelpScreen_tickCallback(int32_t tag, void *data) {
-
-    long delta = *((long *) data);
+enum EPresentationState HelpScreen_tickCallback(enum ECommand cmd, long delta) {
 
     timeUntilNextState -= delta;
 
@@ -148,7 +144,7 @@ int32_t HelpScreen_tickCallback(int32_t tag, void *data) {
 
     if (currentPresentationState == kWaitingForInput) {
 
-        switch (tag) {
+        switch (cmd) {
             case kCommandBack:
                 return kMainMenu;
             case kCommandUp:
@@ -174,7 +170,7 @@ int32_t HelpScreen_tickCallback(int32_t tag, void *data) {
         }
     }
 
-    return -1;
+    return kResumeCurrentState;
 }
 
 void HelpScreen_unloadStateCallback() {

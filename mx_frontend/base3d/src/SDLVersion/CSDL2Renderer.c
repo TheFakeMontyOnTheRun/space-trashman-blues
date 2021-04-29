@@ -211,7 +211,6 @@ void graphicsShutdown() {
 
 void flipRenderer() {
 	SDL_Rect rect;
-	uint32_t pixel;
 	int x, y;
 
 	for (y = 0; y < 200; ++y) {

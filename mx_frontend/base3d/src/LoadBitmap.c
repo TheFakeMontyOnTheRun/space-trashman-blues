@@ -45,7 +45,8 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
     uint8_t *diskBuffer;
     uint8_t pixel;
     uint8_t repetitions;
-    int c, d = 0;
+    size_t c;
+    int d = 0;
     size_t sizeInDisk = sizeOfFile(filename) - 4;
     int pixelIndex = 0;
     uint8_t buffer[NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];

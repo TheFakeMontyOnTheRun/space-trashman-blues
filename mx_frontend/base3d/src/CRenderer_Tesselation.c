@@ -363,7 +363,6 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
     FixP_t one = intToFix(1);
     FixP_t zero = 0;
     FixP_t minusOne = -one;
-    FixP_t threshold = 0;
     struct Vec2 llz0;
     struct Vec2 lrz0;
     struct Vec2 llz1;

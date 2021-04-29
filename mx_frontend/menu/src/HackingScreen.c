@@ -35,7 +35,7 @@ uint8_t pinTop[3];
 extern int accessGrantedToSafe;
 int wasSmoothMovementPreviouslyEnabled;
 
-int32_t HackingScreen_initStateCallback(int32_t tag) {
+void HackingScreen_initStateCallback(int32_t tag) {
 
     cursorPosition = 1;
     currentPresentationState = kAppearing;
@@ -56,50 +56,19 @@ int32_t HackingScreen_initStateCallback(int32_t tag) {
     holdingDisk = 3;
     wasSmoothMovementPreviouslyEnabled = enableSmoothMovement;
     enableSmoothMovement = FALSE;
-    return 0;
 }
 
 void HackingScreen_initialPaintCallback(void) {
 
     if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 32, 320, 200, currentBackgroundBitmap);
+        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
     }
 }
 
 void HackingScreen_repaintCallback(void) {
-    int lines;
-    size_t len = 3;
     uint8_t isSelected = 0;
     int pin;
-    int16_t optionsHeight = 8 * (1);
-    lines = 5;
-    
-    if (currentPresentationState == kAppearing) {
 
-        int invertedProgression = ((256 - timeUntilNextState) / 32) * 32;
-        int lerp320 = lerpInt(0, 319, invertedProgression, 256);
-        int lerpLines = lerpInt(0, (lines + 3) * 8, invertedProgression, 256);
-        int lerpLen8 = lerpInt(0, (len * 8), invertedProgression, 256);
-        int lerpOptionsHeight =
-                lerpInt(0, optionsHeight, invertedProgression, 256);
-
-        if (timeUntilNextState > 256) {
-            return;
-        }
-        
-/*
-        drawRect(160 - lerp320 / 2, ((lines + 3) * 8) / 2 - lerpLines / 2,
-                 lerp320, lerpLines, 0);
-
-        drawRect(320 - (len * 8) - 16 - 16 + (len * 8) / 2 - lerpLen8 / 2,
-                 200 - optionsHeight - 16 - 16 + optionsHeight / 2
-                 - lerpOptionsHeight / 2,
-                 lerpLen8 + 16, lerpOptionsHeight + 16, 0);
-*/
-        return;
-    }
-
-    
     drawWindow(1, 1, 40, 15, "Disassembly: CONTROLLER.PRG (stack)");
     
     drawTextAt( 6 + (12 * 0), 11, "CPU0", cursorPosition == 0 ? 128 : 0);
@@ -152,9 +121,7 @@ void HackingScreen_repaintCallback(void) {
     }
 }
 
-int32_t HackingScreen_tickCallback(int32_t tag, void *data) {
-
-    long delta = *((long *) data);
+enum EPresentationState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
 
     timeUntilNextState -= delta;
 
@@ -184,7 +151,6 @@ int32_t HackingScreen_tickCallback(int32_t tag, void *data) {
 
     if (currentPresentationState == kWaitingForInput) {
         
-        enum ECommand cmd = (enum ECommand) (tag);
         int pin;
         
         for ( pin = 0; pin < 3; ++pin ) {
@@ -230,7 +196,7 @@ int32_t HackingScreen_tickCallback(int32_t tag, void *data) {
         }
     }
 
-    return -1;
+    return kResumeCurrentState;
 }
 
 void HackingScreen_unloadStateCallback() {

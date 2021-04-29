@@ -31,7 +31,7 @@ int16_t CreditsScreen_optionsCount = 1;
 extern char textBuffer[40 * 25];
 struct Bitmap *monty;
 
-int32_t CreditsScreen_initStateCallback(int32_t tag) {
+void CreditsScreen_initStateCallback(int32_t tag) {
     size_t fileSize = sizeOfFile("Credits.txt");
     FILE *fileInput = openBinaryFileFromPath("Credits.txt");
 
@@ -50,13 +50,11 @@ int32_t CreditsScreen_initStateCallback(int32_t tag) {
     CreditsScreen_optionsCount = 1;
 
     monty = loadBitmap("monty.img");
-
-    return 0;
 }
 
 void CreditsScreen_initialPaintCallback(void) {
     if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 32, 320, 200, currentBackgroundBitmap);
+        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
     }
 }
 
@@ -165,9 +163,7 @@ void CreditsScreen_repaintCallback(void) {
     }
 }
 
-int32_t CreditsScreen_tickCallback(int32_t tag, void *data) {
-
-    long delta = *((long *) data);
+enum EPresentationState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
 
     timeUntilNextState -= delta;
 
@@ -188,7 +184,7 @@ int32_t CreditsScreen_tickCallback(int32_t tag, void *data) {
             case kConfirmInputBlink6:
                 timeUntilNextState = 250;
                 currentPresentationState =
-                        (enum EPresentationState) ((int) currentPresentationState + 1);
+                        (enum EPresentationState) (((int) currentPresentationState) + 1);
                 break;
             case kFade:
                 return nextNavigationSelection;
@@ -197,7 +193,7 @@ int32_t CreditsScreen_tickCallback(int32_t tag, void *data) {
 
     if (currentPresentationState == kWaitingForInput) {
 
-        switch (tag) {
+        switch (cmd) {
             case kCommandBack:
                 return kMainMenu;
             case kCommandUp:
@@ -223,7 +219,7 @@ int32_t CreditsScreen_tickCallback(int32_t tag, void *data) {
         }
     }
 
-    return -1;
+    return kResumeCurrentState;
 }
 
 void CreditsScreen_unloadStateCallback() {

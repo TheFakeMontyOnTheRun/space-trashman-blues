@@ -42,7 +42,7 @@ extern size_t biggestOption;
 struct Bitmap *logoBitmap;
 struct Bitmap *logo2Bitmap;
 
-int32_t MainMenu_initStateCallback(int32_t tag) {
+void MainMenu_initStateCallback(int32_t tag) {
     int c;
     cursorPosition = 0;
 
@@ -68,7 +68,6 @@ int32_t MainMenu_initStateCallback(int32_t tag) {
         }
     }
     playSound(7);
-    return 0;
 }
 
 void MainMenu_initialPaintCallback() {
@@ -84,7 +83,6 @@ void MainMenu_repaintCallback(void) {
 
     if (currentPresentationState == kAppearing) {
         int invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;
-        int size = lerpInt(0, 160, invertedProgression, 256);
         int movementX =
                 lerpInt(0, (biggestOption * 8), invertedProgression, 256);
         int movementY = lerpInt(0, optionsHeight, invertedProgression, 256);
@@ -132,9 +130,7 @@ void MainMenu_repaintCallback(void) {
 
 }
 
-int32_t MainMenu_tickCallback(int32_t tag, void *data) {
-
-    long delta = *((long *) data);
+enum EPresentationState MainMenu_tickCallback(enum ECommand cmd, long delta) {
 
     timeUntilNextState -= delta;
 
@@ -164,7 +160,7 @@ int32_t MainMenu_tickCallback(int32_t tag, void *data) {
 
     if (currentPresentationState == kWaitingForInput) {
 
-        switch (tag) {
+        switch (cmd) {
             case kCommandUp:
                 playSound(MENU_SELECTION_CHANGE_SOUND);
                 cursorPosition = cursorPosition - 1;
@@ -189,7 +185,7 @@ int32_t MainMenu_tickCallback(int32_t tag, void *data) {
         }
     }
 
-    return -1;
+    return kResumeCurrentState;
 }
 
 void MainMenu_unloadStateCallback() {

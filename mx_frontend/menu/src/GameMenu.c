@@ -54,41 +54,12 @@ int32_t GameMenu_Story_nextStateNavigation[1] = {kMainMenu};
 int16_t GameMenu_optionsCount = 2;
 extern size_t biggestOption;
 extern char textBuffer[TEXT_BUFFER_SIZE];
-int32_t GameMenu_substate;
 int drawFilter = FALSE;
 
-
-void getDisplayStatusText(char *buffer, size_t length) {
-    sprintf(buffer, "%s", "farofinha");
-}
-
-void getDossierText(int slot, char *buffer, size_t length) {
-    sprintf(buffer, "%s %d", "farofinha fofa", slot);
-}
-
-
-void getLocationName(int slot, char *buffer, size_t length) {
-    sprintf(buffer, "%s %d", "farofinha fofa", slot);
-}
-
-int getPlayerLocation() {
-    return 1;// playerLocation;
-}
-
-int getTurn() {
-    return 1;
-}
-
-void goTo(int slot) {
-    playerLocation = slot;
-}
-
-
-int32_t GameMenu_initStateCallback(int32_t tag) {
+void GameMenu_initStateCallback(int32_t tag) {
     int c;
     GameMenu_StateTitle = NULL;
     cursorPosition = 0;
-    GameMenu_substate = tag;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
     memset (&textBuffer[0], ' ', 40 * 25);
@@ -100,7 +71,6 @@ int32_t GameMenu_initStateCallback(int32_t tag) {
             timeUntilNextState = 0;
             drawFilter = TRUE;
             GameMenu_StateTitle = "End session?";
-            getDisplayStatusText(&textBuffer[0], 40 * 10);
             mainText = &textBuffer[0];
             currentBackgroundBitmap = loadBitmap("pattern.img");
             GameMenu_optionsCount = 2;
@@ -177,14 +147,12 @@ int32_t GameMenu_initStateCallback(int32_t tag) {
 
         case kInspectItem: {
             struct ObjectNode *head;
-            struct Item *item;
             int index = 0;
 
             GameMenu_StateTitle = "CyDeck";
             currentBackgroundBitmap = loadBitmap("pattern.img");
 
             head = getPlayerItems();
-            item = NULL;
             
             while (head != NULL && index < currentSelectedItem) {
                 ++index;
@@ -213,14 +181,12 @@ int32_t GameMenu_initStateCallback(int32_t tag) {
             biggestOption = len;
         }
     }
-
-    return 0;
 }
 
 void GameMenu_initialPaintCallback(void) {
 
     if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 32, 320, 200, currentBackgroundBitmap);
+        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
     }
 
     featuredBitmap = NULL;
@@ -228,12 +194,6 @@ void GameMenu_initialPaintCallback(void) {
 
 void GameMenu_repaintCallback(void) {
     int c;
-
-    int lines = countLines();
-    char photoBuffer[16];
-    const char *name;
-    int wrappedCursor = (cursorPosition < 8) ? cursorPosition : getPlayerLocation();
-
     int16_t optionsHeight = 8 * (GameMenu_optionsCount);
 
     if (currentPresentationState == kAppearing) {
@@ -291,9 +251,7 @@ void GameMenu_repaintCallback(void) {
     }
 }
 
-int32_t GameMenu_tickCallback(int32_t tag, void *data) {
-
-    long delta = *((long *) data);
+enum EPresentationState GameMenu_tickCallback(enum ECommand cmd, long delta) {
 
     timeUntilNextState -= delta;
 
@@ -323,7 +281,7 @@ int32_t GameMenu_tickCallback(int32_t tag, void *data) {
 
     if (currentPresentationState == kWaitingForInput) {
 
-        switch (tag) {
+        switch (cmd) {
             case kCommandBack:
                 return kMainMenu;
             case kCommandUp:
@@ -355,7 +313,7 @@ int32_t GameMenu_tickCallback(int32_t tag, void *data) {
         }
     }
 
-    return -1;
+    return kResumeCurrentState;
 }
 
 void GameMenu_unloadStateCallback() {
