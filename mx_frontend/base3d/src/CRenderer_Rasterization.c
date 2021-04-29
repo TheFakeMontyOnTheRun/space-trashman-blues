@@ -859,10 +859,10 @@ void drawSlantedFloor(
 }
 
 void drawRect(
-        const int16_t x,
-        const int16_t y,
-        const uint16_t dx,
-        const uint16_t dy,
+        const int x,
+        const int y,
+        const unsigned int dx,
+        const unsigned int dy,
         const uint8_t pixel) {
 
     uint8_t *destination = &framebuffer[0];
@@ -1361,10 +1361,10 @@ void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *textur
 }
 
 void fill(
-        const int16_t x,
-        const int16_t y,
-        const int16_t dx,
-        const int16_t dy,
+        const int x,
+        const int y,
+        const unsigned int dx,
+        const unsigned int dy,
         const uint8_t pixel,
         const int stipple) {
 
@@ -1392,8 +1392,8 @@ void fill(
     }
 }
 
-void drawBitmap(const int16_t dx,
-                const int16_t dy,
+void drawBitmap(const int dx,
+                const int dy,
                 const struct Bitmap *__restrict__ tile,
                 const int transparent) {
 
@@ -1429,10 +1429,10 @@ void drawBitmap(const int16_t dx,
 }
 
 void drawRepeatBitmap(
-        const int16_t x,
-        const int16_t y,
-        const int16_t dx,
-        const int16_t dy,
+        const int x,
+        const int y,
+        const unsigned int dx,
+        const unsigned int dy,
         const struct Bitmap *__restrict__ tile) {
 
     int repeatX = (dx / tile->width) + 1;
@@ -1451,7 +1451,7 @@ void drawRepeatBitmap(
     }
 }
 
-void drawTextAt(const uint16_t x, const uint16_t y, const char *__restrict__ text, const uint8_t colour) {
+void drawTextAt(const int x, const int y, const char *__restrict__ text, const uint8_t colour) {
 
     size_t len = strlen(text);
     int32_t dstX = (x - 1) * 8;

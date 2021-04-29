@@ -251,7 +251,7 @@ void GameMenu_repaintCallback(void) {
     }
 }
 
-enum EPresentationState GameMenu_tickCallback(enum ECommand cmd, long delta) {
+enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long delta) {
 
     timeUntilNextState -= delta;
 

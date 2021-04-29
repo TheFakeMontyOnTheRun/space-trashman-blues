@@ -230,7 +230,7 @@ void Crawler_repaintCallback() {
     }
 }
 
-enum EPresentationState Crawler_tickCallback(enum ECommand cmd, long delta) {
+enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     int returnCode;
 
     if (showPromptToAbandonMission) {

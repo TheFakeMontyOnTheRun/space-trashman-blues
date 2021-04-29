@@ -99,8 +99,8 @@ void projectAllVertices(const uint8_t count);
 uint8_t getPaletteEntry(const uint32_t origin);
 
 void fill(
-		const int16_t x, const int16_t y,
-		const int16_t dx, const int16_t dy,
+		const int x, const int y,
+		const unsigned int dx, const unsigned int dy,
 		const uint8_t pixel, const int stipple);
 
 
@@ -112,8 +112,8 @@ void drawMap(const uint8_t * __restrict__ elements,
 			 uint8_t * __restrict__ effects,
 			 const struct CActor * __restrict__ current);
 
-void drawTextAt(const uint16_t x,
-				const uint16_t y,
+void drawTextAt(const int x,
+				const int y,
 				const char * __restrict__ text,
 				const uint8_t colour);
 
@@ -150,8 +150,8 @@ void drawBillboardAt(const struct Vec3 center,
 					 const FixP_t scale,
 					 const int size);
 
-void drawBitmap(const int16_t x,
-				const int16_t y,
+void drawBitmap(const int x,
+				const int y,
 				const struct Bitmap * __restrict__ tile,
 						const int transparent);
 
@@ -168,16 +168,16 @@ void drawSlantedFloor(
                       const uint8_t *__restrict__ texture);
 
 void drawRepeatBitmap(
-		const int16_t x,
-		const int16_t y,
-		const int16_t dx,
-		const int16_t dy,
+		const int x,
+		const int y,
+		const unsigned int dx,
+		const unsigned int dy,
 		const struct Bitmap * __restrict__ tile);
 
-void drawRect(const int16_t x,
-			const int16_t y,
-			const uint16_t dx,
-			const uint16_t dy,
+void drawRect(const int x,
+			const int y,
+			const unsigned int dx,
+			const unsigned int dy,
 			const uint8_t pixel);
 
 

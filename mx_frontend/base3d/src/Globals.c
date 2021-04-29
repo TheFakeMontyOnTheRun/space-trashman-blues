@@ -13,9 +13,9 @@
 int renderingMethod = FIXED;
 struct Bitmap *currentBackgroundBitmap = NULL;
 int32_t currentGameMenuState = -1;
-enum EPresentationState menuStateToReturn = kResumeCurrentState;
+enum EGameMenuState menuStateToReturn = kResumeCurrentState;
 int cursorPosition = 0;
-enum EPresentationState nextNavigationSelection = kResumeCurrentState;
+enum EGameMenuState nextNavigationSelection = kResumeCurrentState;
 long timeUntilNextState = MENU_ITEM_TIME_TO_BECOME_ACTIVE_MS;
 enum EPresentationState currentPresentationState;
 size_t biggestOption;

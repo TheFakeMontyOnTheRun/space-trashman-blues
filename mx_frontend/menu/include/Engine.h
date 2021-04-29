@@ -7,7 +7,7 @@ typedef void ( *InitialPaintCallback )(void);
 
 typedef void ( *RepaintCallback )(void);
 
-typedef enum EPresentationState ( *TickCallback )(enum ECommand, long data);
+typedef enum EGameMenuState ( *TickCallback )(enum ECommand, long data);
 
 typedef void ( *UnloadStateCallback )(void);
 
@@ -28,8 +28,8 @@ extern enum EPresentationState currentPresentationState;
 extern struct Bitmap *currentBackgroundBitmap;
 
 extern int cursorPosition;
-extern enum EPresentationState nextNavigationSelection;
-extern enum EPresentationState menuStateToReturn;
+extern enum EGameMenuState nextNavigationSelection;
+extern enum EGameMenuState menuStateToReturn;
 
 int menuTick(long ms);
 
@@ -39,7 +39,7 @@ void MainMenu_initialPaintCallback(void);
 
 void MainMenu_repaintCallback(void);
 
-enum EPresentationState MainMenu_tickCallback(enum ECommand, long data);
+enum EGameMenuState MainMenu_tickCallback(enum ECommand, long data);
 
 void MainMenu_unloadStateCallback(void);
 
@@ -49,7 +49,7 @@ void Crawler_initialPaintCallback(void);
 
 void Crawler_repaintCallback(void);
 
-enum EPresentationState Crawler_tickCallback(enum ECommand, long data);
+enum EGameMenuState Crawler_tickCallback(enum ECommand, long data);
 
 void Crawler_unloadStateCallback(void);
 
@@ -59,7 +59,7 @@ void HelpScreen_initialPaintCallback(void);
 
 void HelpScreen_repaintCallback(void);
 
-enum EPresentationState HelpScreen_tickCallback(enum ECommand, long data);
+enum EGameMenuState HelpScreen_tickCallback(enum ECommand, long data);
 
 void HelpScreen_unloadStateCallback(void);
 
@@ -69,7 +69,7 @@ void CreditsScreen_initialPaintCallback(void);
 
 void CreditsScreen_repaintCallback(void);
 
-enum EPresentationState CreditsScreen_tickCallback(enum ECommand, long data);
+enum EGameMenuState CreditsScreen_tickCallback(enum ECommand, long data);
 
 void CreditsScreen_unloadStateCallback(void);
 
@@ -79,7 +79,7 @@ void GameMenu_initialPaintCallback(void);
 
 void GameMenu_repaintCallback(void);
 
-enum EPresentationState GameMenu_tickCallback(enum ECommand, long data);
+enum EGameMenuState GameMenu_tickCallback(enum ECommand, long data);
 
 void GameMenu_unloadStateCallback(void);
 
@@ -89,7 +89,7 @@ void HackingScreen_initialPaintCallback(void);
 
 void HackingScreen_repaintCallback(void);
 
-enum EPresentationState HackingScreen_tickCallback(enum ECommand, long data);
+enum EGameMenuState HackingScreen_tickCallback(enum ECommand, long data);
 
 void HackingScreen_unloadStateCallback(void);
 

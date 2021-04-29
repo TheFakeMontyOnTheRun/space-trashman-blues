@@ -121,7 +121,7 @@ void HackingScreen_repaintCallback(void) {
     }
 }
 
-enum EPresentationState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
+enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
 
     timeUntilNextState -= delta;
 

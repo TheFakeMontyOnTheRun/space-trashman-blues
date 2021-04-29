@@ -163,7 +163,7 @@ void CreditsScreen_repaintCallback(void) {
     }
 }
 
-enum EPresentationState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
+enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
 
     timeUntilNextState -= delta;
 

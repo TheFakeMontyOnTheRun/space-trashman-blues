@@ -114,7 +114,7 @@ void HelpScreen_repaintCallback(void) {
     }
 }
 
-enum EPresentationState HelpScreen_tickCallback(enum ECommand cmd, long delta) {
+enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, long delta) {
 
     timeUntilNextState -= delta;
 

@@ -77,8 +77,8 @@ extern int isRunning;
 extern long timeUntilNextState;
 extern enum EPresentationState currentPresentationState;
 extern struct Bitmap *currentBackgroundBitmap;
-extern enum EPresentationState nextNavigationSelection;
-extern enum EPresentationState currentGameMenuState;
+extern enum EGameMenuState nextNavigationSelection;
+extern enum EGameMenuState currentGameMenuState;
 extern const char *mainText;
 
 int menuTick(long delta_time);
