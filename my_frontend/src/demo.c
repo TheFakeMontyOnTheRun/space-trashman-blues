@@ -4,6 +4,7 @@
 #include <string.h>
 
 #ifndef SMS
+#include "Core.h"
 #include "Derelict.h"
 #endif
 

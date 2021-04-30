@@ -17,7 +17,7 @@
 #include "CRenderer.h"
 #include "VisibilityStrategy.h"
 #include "CPackedFileReader.h"
-
+#include "Core.h"
 #include "Derelict.h"
 
 /*	Div(intToFix(1), intToFix(16));*/

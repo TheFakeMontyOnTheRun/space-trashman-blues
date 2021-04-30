@@ -15,6 +15,7 @@ find_package(SDL2 REQUIRED)
 
 add_executable(madame_y src/demo.c src/sdl2.c
 		../core/src/Derelict.c
+		../core/src/Core.c
 		../core/src/Parser.c
 
 		)

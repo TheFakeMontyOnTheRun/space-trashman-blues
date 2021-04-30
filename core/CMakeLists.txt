@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(derelict)
+project(derelict-core)
 
 set(CMAKE_C_STANDARD 90)
 set(CMAKE_CXX_STANDARD 11)
@@ -30,10 +30,11 @@ set(TEST_SOURCE_FILES
 
 set(SOURCE_FILES
 		src/Derelict.c
+		src/Core.c
 		src/Parser.c
 		)
 
-add_executable(derelict src/main.c ${SOURCE_FILES} )
+add_executable(derelict-core src/main.c ${SOURCE_FILES} )
 
 add_executable(derelict_test  ${TEST_SOURCE_FILES} ${SOURCE_FILES} )
 

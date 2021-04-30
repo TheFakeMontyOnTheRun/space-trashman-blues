@@ -15,7 +15,7 @@ include_directories(common/include)
 include_directories(menu/include)
 include_directories(SoundSystem)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -std=c90 -W -pedantic -Wall -Wextra" )
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -std=c90 -W -pedantic -Wall -Wextra -Wimplicit-function-declaration" )
 
 find_package(SDL2 REQUIRED)
 
@@ -47,6 +47,7 @@ add_executable(derelict3d
 		menu/src/HackingScreen.c
 		SoundSystem/PCMAudio.c
 		../core/src/Derelict.c
+		../core/src/Core.c
 		../core/src/Parser.c
 		)
 

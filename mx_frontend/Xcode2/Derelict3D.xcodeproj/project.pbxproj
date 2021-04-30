@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F149B82A263CB11700A3F597 /* Core.c in Sources */ = {isa = PBXBuildFile; fileRef = F149B829263CB11700A3F597 /* Core.c */; };
 		F194EAD62610B51400E292ED /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		F1CA76BB2610A8E200FD1E04 /* GameView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1277A26236DE6DD00478B2C /* GameView.m */; };
 		F1CA76BC2610A8ED00FD1E04 /* OSXRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = F1277A28236DE6DD00478B2C /* OSXRenderer.m */; };
@@ -109,6 +110,8 @@
 		F1277A26236DE6DD00478B2C /* GameView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = GameView.m; sourceTree = "<group>"; };
 		F1277A27236DE6DD00478B2C /* OSXRenderer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OSXRenderer.h; sourceTree = "<group>"; };
 		F1277A28236DE6DD00478B2C /* OSXRenderer.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OSXRenderer.m; sourceTree = "<group>"; };
+		F149B829263CB11700A3F597 /* Core.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Core.c; path = ../../core/src/Core.c; sourceTree = "<group>"; };
+		F149B82B263CB12B00A3F597 /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Core.h; path = ../../core/include/Core.h; sourceTree = "<group>"; };
 		F16D180225EAE21700C666AB /* Common.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Common.c; path = ../base3d/src/Common.c; sourceTree = "<group>"; };
 		F18B850725581D370012292B /* magbootson.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = magbootson.wav; path = ../data/wavogg/magbootson.wav; sourceTree = "<group>"; };
 		F18B850825581D370012292B /* menu_select.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = menu_select.wav; path = ../data/wavogg/menu_select.wav; sourceTree = "<group>"; };
@@ -220,6 +223,7 @@
 				F12779E8236DE60800478B2C /* CPackedFileReader.c */,
 				F12779FB236DE62100478B2C /* CPackedFileReader.h */,
 				F1277A09236DE63E00478B2C /* Crawler.c */,
+				F149B82B263CB12B00A3F597 /* Core.h */,
 				F1277A0A236DE63E00478B2C /* CreditsScreen.c */,
 				F12779E6236DE60800478B2C /* CRenderer_Rasterization.c */,
 				F12779E7236DE60800478B2C /* CRenderer_Tesselation.c */,
@@ -227,6 +231,7 @@
 				F12779FC236DE62100478B2C /* CRenderer.h */,
 				F12779E0236DE60800478B2C /* CTile3DProperties.c */,
 				F12779FD236DE62100478B2C /* CTile3DProperties.h */,
+				F149B829263CB11700A3F597 /* Core.c */,
 				F1D5B5D22531D2BF0094ED78 /* Derelict.c */,
 				F1D5B5D72531D2CA0094ED78 /* Derelict.h */,
 				F12779E3236DE60800478B2C /* Dungeon.c */,
@@ -383,6 +388,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F149B82A263CB11700A3F597 /* Core.c in Sources */,
 				F1CA76BB2610A8E200FD1E04 /* GameView.m in Sources */,
 				F1CA76BC2610A8ED00FD1E04 /* OSXRenderer.m in Sources */,
 				F1CA76BD2610A8EE00FD1E04 /* GameWindow.m in Sources */,

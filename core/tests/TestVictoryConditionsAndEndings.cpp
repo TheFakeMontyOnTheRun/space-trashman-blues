@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 
 extern "C" {
+#include "Core.h"
 #include "Derelict.h"
 #include "Parser.h"
 }

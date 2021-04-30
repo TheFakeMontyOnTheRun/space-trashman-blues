@@ -3,6 +3,7 @@
 //
 #include <stdint.h>
 
+#include "Core.h"
 #include "Parser.h"
 #include "Derelict.h"
 

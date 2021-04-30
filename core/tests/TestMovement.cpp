@@ -7,6 +7,7 @@
 #include <memory>
 
 extern "C" {
+#include "Core.h"
 #include "Derelict.h"
 #include "Parser.h"
 }

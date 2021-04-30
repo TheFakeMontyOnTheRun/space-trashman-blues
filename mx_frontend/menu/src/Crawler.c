@@ -17,7 +17,7 @@
 #include "CRenderer.h"
 #include "VisibilityStrategy.h"
 #include "SoundSystem.h"
-
+#include "Core.h"
 #include "Derelict.h"
 #include "Dungeon.h"
 

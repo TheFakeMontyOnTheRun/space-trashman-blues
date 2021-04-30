@@ -13,6 +13,7 @@
 #include "EDirection_Utils.h"
 #include "Engine.h"
 #include "SoundSystem.h"
+#include "Core.h"
 #include "Derelict.h"
 #include "Parser.h"
 #include "EDirection_Utils.h"

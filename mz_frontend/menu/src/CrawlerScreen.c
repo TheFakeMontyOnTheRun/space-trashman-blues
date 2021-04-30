@@ -86,7 +86,6 @@ struct Pattern {
 
 const struct Projection projections[40] =
         {
-                //                                   Z
                 {	0	,	63	,	-128	},	//	1
                 {	0	,	63	,	-64	},	//	2
                 {	20	,	63	,	-42	},	//	3
@@ -127,7 +126,6 @@ const struct Projection projections[40] =
                 {	59	,	63	,	-3	},	//	38
                 {	59	,	63	,	-3	},	//	39
                 {	59	,	63	,	-3	},	//	40
-
         };
 
 const struct Pattern patterns[16] = {

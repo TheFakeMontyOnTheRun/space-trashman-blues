@@ -23,6 +23,7 @@
 #include "UI.h"
 #include "Globals.h"
 #include "SoundSystem.h"
+#include "Core.h"
 #include "Derelict.h"
 
 #define TEXT_BUFFER_SIZE 40 * 25

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "Core.h"
 #include "Derelict.h"
 #include "Parser.h"
 

@@ -150,7 +150,7 @@ enum ESoundDriver soundDriver = kNoSound;
 int menuTick(long delta_time) {
 
     enum ECommand input;
-    enum EPresentationState newState;
+    enum EGameMenuState newState;
 
     handleSystemEvents();
 
@@ -167,7 +167,7 @@ int menuTick(long delta_time) {
         return FALSE;
     }
 
-    if (newState != currentGameMenuState && newState != -1) {
+    if (newState != currentGameMenuState && newState != kResumeCurrentState) {
         playSound(STATE_CHANGE_SOUND);
         enterState(newState);
     }
