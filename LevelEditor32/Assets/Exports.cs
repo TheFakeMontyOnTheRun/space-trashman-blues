@@ -225,11 +225,14 @@ public class Exports : MonoBehaviour
                 var exportbl = go.GetComponent(typeof(Exportable)) as Exportable;
                 if (exportbl != null) {
                     int x = (int) (go.transform.position.x );
-                    int z = kMapSize - (int) (go.transform.position.z );
+                    int z = (kMapSize - 1) - (int) (go.transform.position.z );
                     print(go + ": " + go.name + " is active in hierarchy at ( " + x + ", " + z + " ) and is " + exportbl.representation);
-                    
-                    map[z, x] = exportbl.representation;
-                    pet[Int32.Parse(map[z, x])] = new PetEntry(0, (int)go.transform.localScale.x, 0, false, 0);
+
+                    if (z < kMapSize && x < kMapSize && x >= 0 && z >= 0)
+                    {
+                        map[z, x] = exportbl.representation;
+                        pet[Int32.Parse(map[z, x])] = new PetEntry(0, (int)go.transform.localScale.x, 0, false, 0);
+                    }
                 }
             }
         }
@@ -304,5 +307,27 @@ public class Exports : MonoBehaviour
         writer.Close();
 
         AssetDatabase.ImportAsset(path);
+    }
+
+
+
+    [MenuItem("Monty/Reacquire all patterns")]
+    static void ReacquireAllPatterns()
+    {
+        Exportable.GeneralTable.Clear();
+
+        GameObject[] objects = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
+
+        foreach (GameObject go in objects)
+        {
+            if (go.activeInHierarchy)
+            {
+                var exportbl = go.GetComponent(typeof(Exportable)) as Exportable;
+                if (exportbl != null)
+                {
+                    Exportable.GeneralTable[exportbl.representation] = exportbl;
+                }
+            }
+        }
     }
 }

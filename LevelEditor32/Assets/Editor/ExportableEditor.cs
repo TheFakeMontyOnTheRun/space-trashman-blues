@@ -69,11 +69,11 @@ public class ExportableEditor : Editor
 
     
         if (GUILayout.Button("Copy FROM representation")) {
-            (target as Exportable).CopyFrom(Exportable.GeneralTable[representation.stringValue]);
-        }
-        
-        serializedObject.ApplyModifiedProperties();
-        
+            if (Exportable.GeneralTable.ContainsKey(representation.stringValue))
+            {
+                (target as Exportable).CopyFrom(Exportable.GeneralTable[representation.stringValue]);
+            }
+        }        
 
         if (GUILayout.Button("Copy TO representation")) {
             Exportable.GeneralTable[representation.stringValue] = (target as Exportable); 
@@ -99,7 +99,19 @@ public class ExportableEditor : Editor
                 child.GetComponent<Exportable>().CopyFrom((target as Exportable));                    
                 child.GetComponent<Exportable>().Apply();
             }
-        }   
+        }
+
+        if (GUILayout.Button("Find next available index"))
+        {
+            for (int c = 46; c < 255; ++c) {
+                if (!Exportable.GeneralTable.ContainsKey("" + c )) {
+                    representation.stringValue = "" + c;
+                    serializedObject.ApplyModifiedProperties();
+                    return;
+                }
+            }
+        }
+
+        serializedObject.ApplyModifiedProperties();
     }
-    
 }
