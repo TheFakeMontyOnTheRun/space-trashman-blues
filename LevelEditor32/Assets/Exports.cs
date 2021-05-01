@@ -7,26 +7,28 @@ using System;
 
 public class Exports : MonoBehaviour
 {
-    const int kMapSize = 32;
-
-    class PetEntry
+    public class PetEntry
     {
+        public float ceilingHeight;
+        public float floorHeight;
+        public float floorRepetitions;
+        public float ceilingRepetitions;
+        public string mainMaterial;
+        public string ceilingMaterial;
+        public string ceilingRepetitionsMaterial;
+        public string floorMaterial;
+        public string floorRepetitionsMaterial;
 
-        public PetEntry(int floor, int ceiling, int geometryType, bool blockMovement, int textureIndex)
-        {
-            this.floor = floor;
-            this.ceiling = ceiling;
-            this.geometryType = geometryType;
-            this.blockMovement = blockMovement;
-            this.textureIndex = textureIndex;
-        }
-
-        public int floor;
-        public int ceiling;
-        public int geometryType;
+        public bool blockVisibility;
         public bool blockMovement;
-        public int textureIndex;
-    };
+        public bool repeatMainTexture;
+        public bool needsAlphaTest;
+        public bool blockEnemySight;
+        public string representation;
+        public Exportable.GeometryType geometryType;
+    }
+
+    const int kMapSize = 32;
 
     [MenuItem("Monty/Reset scene")]
     static void ResetLevel()
@@ -204,7 +206,7 @@ public class Exports : MonoBehaviour
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
     }
-
+    /*
     [MenuItem("Monty/Export Level as C Source File")]
     static void ExportLevelAsSource() {
         Debug.Log("Doing stuff in C");
@@ -307,6 +309,137 @@ public class Exports : MonoBehaviour
         writer.Close();
 
         AssetDatabase.ImportAsset(path);
+    }
+    */
+
+    static void ImportLevel(int size)
+    {
+        Dictionary<char, PetEntry> petTable = new Dictionary<char, PetEntry>();
+        char[,] map = new char[size, size];
+        StreamReader reader = new StreamReader("tiles1.prp");
+
+        while (!reader.EndOfStream)
+        {
+            string line = reader.ReadLine();
+            string[] tokens = line.Split(' ');
+            char lead = tokens[0][0];
+            PetEntry entry = new PetEntry();
+            entry.needsAlphaTest = (tokens[1][0] == '1');
+            entry.blockVisibility = (tokens[2][0] == '1');
+            entry.blockMovement = (tokens[3][0] == '1');
+            entry.blockEnemySight = (tokens[4][0] == '1');
+            entry.repeatMainTexture = (tokens[5][0] == '1');
+
+            entry.ceilingMaterial = tokens[6];
+            entry.floorMaterial = tokens[7];
+            entry.mainMaterial = tokens[8];
+
+            if (!tokens[9].Equals("null")) {
+                //not proud...
+                foreach (Exportable.GeometryType geoType in Enum.GetValues(typeof(Exportable.GeometryType))) {
+                    if (geoType.ToString().ToLower().Equals(tokens[9])) {
+                        entry.geometryType = geoType;
+                    }
+                }
+            }
+
+
+            entry.ceilingRepetitionsMaterial = tokens[10];
+            entry.floorRepetitionsMaterial = tokens[11];
+            entry.ceilingRepetitions = Convert.ToInt32(tokens[12]);
+            entry.floorRepetitions = Convert.ToInt32(tokens[13]);
+            entry.ceilingHeight = Convert.ToSingle(tokens[14]);
+            entry.floorHeight = Convert.ToSingle(tokens[15]);
+            petTable[lead] = entry;
+        }
+
+
+        reader = new StreamReader("map1.txt");
+        for (int y = 0; y < size; ++y)
+        {
+            string line = reader.ReadLine();
+            for (int x = 0; x < size; ++x)
+            {
+                char entry = line[x];
+                map[y, x] = entry;
+
+            }
+        }
+
+        var objects = FindObjectsOfType(typeof(GameObject));
+
+        foreach (GameObject child in objects)
+        {
+            DestroyImmediate(child.gameObject);
+        }
+
+        GameObject geometryRoot = new GameObject("Geometry");
+        GameObject spawner;
+
+        for (int _y = 0; _y < size; ++_y)
+        {
+            int y = size - _y - 1;
+            for (int _x = 0; _x < size; ++_x)
+            {
+                int x = size - _x - 1;
+                spawner = new GameObject("tile" + x + "_" + y);
+                spawner.transform.parent = geometryRoot.transform;
+                Debug.Log("(" + x + ", " + y + ") became (" + (size - x - 1) + ", " + (size - y - 1) + ")");
+                spawner.transform.position = new Vector3(_x, 0, _y);
+
+
+                spawner.AddComponent<Exportable>();
+                spawner.GetComponent<Exportable>().representation = "" + map[y, x];
+
+                if (Exportable.GeneralTable.ContainsKey("" + map[y, x])) {
+                    spawner.GetComponent<Exportable>().CopyFrom(Exportable.GeneralTable[spawner.GetComponent<Exportable>().representation]);
+                } else {
+                    var pet = petTable[map[y, x]];
+                    var exportable = spawner.GetComponent<Exportable>();
+
+                    exportable.blockMovement = pet.blockMovement;
+                    exportable.blockVisibility = pet.blockVisibility;
+                    exportable.ceilingMaterial = getMaterialRef(pet.ceilingMaterial);
+                    exportable.floorMaterial = getMaterialRef(pet.floorMaterial);
+                    exportable.mainMaterial = getMaterialRef(pet.mainMaterial);
+                    exportable.geometryType = pet.geometryType;
+                    exportable.ceilingRepetitionsMaterial = getMaterialRef(pet.ceilingRepetitionsMaterial);
+                    exportable.floorRepetitionsMaterial = getMaterialRef(pet.floorRepetitionsMaterial);
+                    exportable.ceilingRepetitions = pet.ceilingRepetitions;
+                    exportable.floorRepetitions = pet.floorRepetitions;
+                    exportable.floorHeight = pet.floorHeight;
+                    exportable.ceilingHeight = pet.ceilingHeight;
+
+                    Exportable.GeneralTable["" + map[y, x]] = exportable;
+                }
+                spawner.GetComponent<Exportable>().Apply();
+            }
+        }
+
+        GameObject playerSpawner = new GameObject("PlayerSpawner");
+        playerSpawner.AddComponent<PlayerSpawner>();
+        playerSpawner.transform.position = new Vector3(1, 1, 1);
+
+
+        reader.Close();
+        ReacquireAllPatterns();
+    }
+
+    [MenuItem("Monty/Import 64x64 level")]
+    static void Import64Level()
+    {
+        ImportLevel(64);
+    }
+
+    static Material getMaterialRef(string name) {
+        Debug.Log("ref: " + String.Format("Assets/Materials/{0}.mat", name) );
+        return AssetDatabase.LoadAssetAtPath(String.Format("Assets/Materials/{0}.mat", name), typeof(Material)) as Material;
+    }
+
+    [MenuItem("Monty/Import 32x32 level")]
+    static void Import32Level()
+    {
+        ImportLevel(32);
     }
 
 
