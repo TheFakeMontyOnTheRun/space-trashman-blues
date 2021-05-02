@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
-project(derelict3d)
+project(derelict32)
 
 set(CMAKE_C_STANDARD 11)
 
@@ -19,7 +19,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -std=c90 -W -pedantic -Wall -Wextra 
 
 find_package(SDL2 REQUIRED)
 
-add_executable(derelict3d
+add_executable(derelict32
 		menu/src/MainMenu.c
 		menu/src/Crawler.c
 		menu/src/HelpScreen.c
@@ -54,6 +54,6 @@ add_executable(derelict3d
 
 include(FindPkgConfig)
 
-target_include_directories(derelict3d PUBLIC ${SDL2_INCLUDE_DIR})
-target_link_libraries(derelict3d LINK_PUBLIC ${SDL2_LIBRARY} m)
+target_include_directories(derelict32 PUBLIC ${SDL2_INCLUDE_DIR})
+target_link_libraries(derelict32 LINK_PUBLIC ${SDL2_LIBRARY} m)
 
