@@ -29,7 +29,6 @@ add_executable(derelict16
 		base3d/src/Globals.c
 		base3d/src/LoadBitmap.c
 		base3d/src/CRenderer.c
-		base3d/src/FixP.c
 		base3d/src/CRenderer_Rasterization.c
 		base3d/src/CPackedFileReader.c
         menu/src/UI.c
