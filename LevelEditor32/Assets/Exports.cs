@@ -28,14 +28,25 @@ public class Exports : MonoBehaviour
         public Exportable.GeometryType geometryType;
     }
 
-    const int kMapSize = 32;
+    [MenuItem("Monty/Reset scene as 64x64")]
+    static void ResetLevel64()
+    {
+        ResetLevel(64);
+    }
 
-    [MenuItem("Monty/Reset scene")]
-    static void ResetLevel()
+    [MenuItem("Monty/Reset scene as 32x32")]
+    static void ResetLevel32()
+    {
+        ResetLevel(32);
+    }
+
+
+    static void ResetLevel(int size)
     {
         var objects = FindObjectsOfType(typeof(GameObject));
 
-        foreach (GameObject child  in objects ) {
+        foreach (GameObject child in objects)
+        {
             DestroyImmediate(child.gameObject);
         }
 
@@ -46,12 +57,14 @@ public class Exports : MonoBehaviour
         matRef1.mainTexture.filterMode = FilterMode.Point;
         matRef2.mainTexture.filterMode = FilterMode.Point;
 
-        for ( int y = 0; y < kMapSize; ++y ) {
-            for (int x = 0; x < kMapSize; ++x ) {
-                spawner = new GameObject("tile" + x + "_" + y );
+        for (int y = 0; y < size; ++y)
+        {
+            for (int x = 0; x < size; ++x)
+            {
+                spawner = new GameObject("tile" + x + "_" + y);
                 spawner.transform.parent = geometryRoot.transform;
                 spawner.transform.position = new Vector3(x, 0, y);
-                
+
 
                 spawner.AddComponent<Exportable>();
                 spawner.GetComponent<Exportable>().floorMaterial = matRef1;
@@ -64,20 +77,31 @@ public class Exports : MonoBehaviour
 
         GameObject playerSpawner = new GameObject("PlayerSpawner");
         playerSpawner.AddComponent<PlayerSpawner>();
-        playerSpawner.transform.position = new Vector3( 1, 1  ,1 );
+        playerSpawner.transform.position = new Vector3(1, 1, 1);
     }
 
-    [MenuItem("Monty/Export Level as Data File")]
-    static void ExportLevelFile()
+
+    [MenuItem("Monty/Export 64x64 Level as Data File")]
+    static void Export64Level()
     {
+        ExportLevelFile(64);
+    }
+
+    [MenuItem("Monty/Export 32x32 Level as Data File")]
+    static void Export32Level()
+    {
+        ExportLevelFile(32);
+    }
+
+    static void ExportLevelFile(int size) { 
         GameObject[] objects = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
 
-        int[,] map = new int[kMapSize, kMapSize];
+        int[,] map = new int[size, size];
         Exportable[] pet = new Exportable[256];
 
-        for (int y = 0; y < kMapSize; ++y)
+        for (int y = 0; y < size; ++y)
         {
-            for (int x = 0; x < kMapSize; ++x)
+            for (int x = 0; x < size; ++x)
             {
                 map[y, x] = 46;
             }
@@ -91,10 +115,10 @@ public class Exports : MonoBehaviour
                 if (exportbl != null)
                 {
                     int x = (int)(go.transform.position.x);
-                    int z = (kMapSize - 1) - (int)(go.transform.position.z);
+                    int z = (size - 1) - (int)(go.transform.position.z);
 
-                    if (z < kMapSize && x < kMapSize && x >= 0 && z >= 0 ) {
-                        map[z, x] = Convert.ToInt32(exportbl.representation);
+                    if (z < size && x < size && x >= 0 && z >= 0 ) {
+                        map[z, x] = Convert.ToInt32(exportbl.representation[0]);
                         pet[map[z, x]] = exportbl;
                     }
                 }
@@ -103,9 +127,9 @@ public class Exports : MonoBehaviour
 
         string finalMap = "";
 
-        for (int y = 0; y < kMapSize; ++y)
+        for (int y = 0; y < size; ++y)
         {
-            for (int x = 0; x < kMapSize; ++x)
+            for (int x = 0; x < size; ++x)
             {
                 finalMap += Convert.ToChar(map[y, x]);
             }
@@ -206,117 +230,12 @@ public class Exports : MonoBehaviour
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
     }
-    /*
-    [MenuItem("Monty/Export Level as C Source File")]
-    static void ExportLevelAsSource() {
-        Debug.Log("Doing stuff in C");
-
-        GameObject[] objects = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
-
-        string[,] map = new string[kMapSize, kMapSize];
-        PetEntry[] pet = new PetEntry[256];
-
-        for (int y = 0; y < kMapSize; ++y) {
-            for ( int x = 0; x < kMapSize; ++x ) {
-                map[y, x] = "0";
-            }
-        }
-
-        foreach (GameObject go in objects) {
-            if (go.activeInHierarchy) {
-                var exportbl = go.GetComponent(typeof(Exportable)) as Exportable;
-                if (exportbl != null) {
-                    int x = (int) (go.transform.position.x );
-                    int z = (kMapSize - 1) - (int) (go.transform.position.z );
-                    print(go + ": " + go.name + " is active in hierarchy at ( " + x + ", " + z + " ) and is " + exportbl.representation);
-
-                    if (z < kMapSize && x < kMapSize && x >= 0 && z >= 0)
-                    {
-                        map[z, x] = exportbl.representation;
-                        pet[Int32.Parse(map[z, x])] = new PetEntry(0, (int)go.transform.localScale.x, 0, false, 0);
-                    }
-                }
-            }
-        }
-
-
-        for (int y = 1; y < kMapSize - 1; ++y)
-        {
-            for (int x = 1; x < kMapSize - 1; ++x)
-            {
-                if (map[y, x] == "0" && (
-                    (Int32.Parse(map[y - 1, x]) > 1) ||
-                    (Int32.Parse(map[y + 1, x]) > 1) ||
-                    (Int32.Parse(map[y, x + 1]) > 1) ||
-                    (Int32.Parse(map[y, x - 1]) > 1) ||
-                    (Int32.Parse(map[y - 1, x - 1]) > 1) ||
-                    (Int32.Parse(map[y - 1, x + 1]) > 1) ||
-                    (Int32.Parse(map[y + 1, x - 1]) > 1) ||
-                    (Int32.Parse(map[y + 1, x + 1]) > 1))) {
-
-                    map[y, x] = "1";
-                }
-            }
-        }
-
-        string finalMap = "{\n";
-
-        for (int y = 0; y < kMapSize; ++y)
-        {
-            finalMap += "{ ";
-            for (int x = 0; x < kMapSize; ++x)
-            {
-                finalMap += map[y, x] + ", ";
-            }
-            finalMap += "},\n";
-        }
-        finalMap += "};\n";
-
-        string petCode = "patterns[16]={\n";
-
-        for (int c = 0; c < 256; ++c ) {
-
-            if (pet[c] == null) {
-                continue;
-            }
-
-            petCode += "{";
-            petCode += pet[c].floor;
-            petCode += ", ";
-            petCode += pet[c].ceiling;
-            petCode += ", ";
-            petCode += pet[c].blockMovement;
-            petCode += ", ";
-            petCode += pet[c].geometryType;
-            petCode += ", ";
-            petCode += pet[c].textureIndex;
-            petCode += " },\n";
-        }
-
-        petCode += "};";
-
-        string path = "Assets/monty.txt";
-        StreamWriter writer = new StreamWriter(path, false);
-        writer.WriteLine(finalMap);
-        writer.Close();
-
-        AssetDatabase.ImportAsset(path);
-
-
-        path = "Assets/pet.txt";
-        writer = new StreamWriter(path, false);
-        writer.WriteLine(petCode);
-        writer.Close();
-
-        AssetDatabase.ImportAsset(path);
-    }
-    */
 
     static void ImportLevel(int size)
     {
         Dictionary<char, PetEntry> petTable = new Dictionary<char, PetEntry>();
         char[,] map = new char[size, size];
-        StreamReader reader = new StreamReader("tiles1.prp");
+        StreamReader reader = new StreamReader("Assets/Tiles.prp");
 
         while (!reader.EndOfStream)
         {
@@ -354,7 +273,7 @@ public class Exports : MonoBehaviour
         }
 
 
-        reader = new StreamReader("map1.txt");
+        reader = new StreamReader("Assets/Map.txt");
         for (int y = 0; y < size; ++y)
         {
             string line = reader.ReadLine();
@@ -384,7 +303,6 @@ public class Exports : MonoBehaviour
                 int x = size - _x - 1;
                 spawner = new GameObject("tile" + x + "_" + y);
                 spawner.transform.parent = geometryRoot.transform;
-                Debug.Log("(" + x + ", " + y + ") became (" + (size - x - 1) + ", " + (size - y - 1) + ")");
                 spawner.transform.position = new Vector3(_x, 0, _y);
 
 
@@ -432,7 +350,6 @@ public class Exports : MonoBehaviour
     }
 
     static Material getMaterialRef(string name) {
-        Debug.Log("ref: " + String.Format("Assets/Materials/{0}.mat", name) );
         return AssetDatabase.LoadAssetAtPath(String.Format("Assets/Materials/{0}.mat", name), typeof(Material)) as Material;
     }
 
@@ -463,4 +380,112 @@ public class Exports : MonoBehaviour
             }
         }
     }
+
+    /*
+        const int kMapSize = 32;
+
+        [MenuItem("Monty/Export Level as C Source File")]
+        static void ExportLevelAsSource() {
+            Debug.Log("Doing stuff in C");
+
+            GameObject[] objects = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
+
+            string[,] map = new string[kMapSize, kMapSize];
+            PetEntry[] pet = new PetEntry[256];
+
+            for (int y = 0; y < kMapSize; ++y) {
+                for ( int x = 0; x < kMapSize; ++x ) {
+                    map[y, x] = "0";
+                }
+            }
+
+            foreach (GameObject go in objects) {
+                if (go.activeInHierarchy) {
+                    var exportbl = go.GetComponent(typeof(Exportable)) as Exportable;
+                    if (exportbl != null) {
+                        int x = (int) (go.transform.position.x );
+                        int z = (kMapSize - 1) - (int) (go.transform.position.z );
+                        print(go + ": " + go.name + " is active in hierarchy at ( " + x + ", " + z + " ) and is " + exportbl.representation);
+
+                        if (z < kMapSize && x < kMapSize && x >= 0 && z >= 0)
+                        {
+                            map[z, x] = exportbl.representation;
+                            pet[Int32.Parse(map[z, x])] = new PetEntry(0, (int)go.transform.localScale.x, 0, false, 0);
+                        }
+                    }
+                }
+            }
+
+
+            for (int y = 1; y < kMapSize - 1; ++y)
+            {
+                for (int x = 1; x < kMapSize - 1; ++x)
+                {
+                    if (map[y, x] == "0" && (
+                        (Int32.Parse(map[y - 1, x]) > 1) ||
+                        (Int32.Parse(map[y + 1, x]) > 1) ||
+                        (Int32.Parse(map[y, x + 1]) > 1) ||
+                        (Int32.Parse(map[y, x - 1]) > 1) ||
+                        (Int32.Parse(map[y - 1, x - 1]) > 1) ||
+                        (Int32.Parse(map[y - 1, x + 1]) > 1) ||
+                        (Int32.Parse(map[y + 1, x - 1]) > 1) ||
+                        (Int32.Parse(map[y + 1, x + 1]) > 1))) {
+
+                        map[y, x] = "1";
+                    }
+                }
+            }
+
+            string finalMap = "{\n";
+
+            for (int y = 0; y < kMapSize; ++y)
+            {
+                finalMap += "{ ";
+                for (int x = 0; x < kMapSize; ++x)
+                {
+                    finalMap += map[y, x] + ", ";
+                }
+                finalMap += "},\n";
+            }
+            finalMap += "};\n";
+
+            string petCode = "patterns[16]={\n";
+
+            for (int c = 0; c < 256; ++c ) {
+
+                if (pet[c] == null) {
+                    continue;
+                }
+
+                petCode += "{";
+                petCode += pet[c].floor;
+                petCode += ", ";
+                petCode += pet[c].ceiling;
+                petCode += ", ";
+                petCode += pet[c].blockMovement;
+                petCode += ", ";
+                petCode += pet[c].geometryType;
+                petCode += ", ";
+                petCode += pet[c].textureIndex;
+                petCode += " },\n";
+            }
+
+            petCode += "};";
+
+            string path = "Assets/monty.txt";
+            StreamWriter writer = new StreamWriter(path, false);
+            writer.WriteLine(finalMap);
+            writer.Close();
+
+            AssetDatabase.ImportAsset(path);
+
+
+            path = "Assets/pet.txt";
+            writer = new StreamWriter(path, false);
+            writer.WriteLine(petCode);
+            writer.Close();
+
+            AssetDatabase.ImportAsset(path);
+        }
+        */
 }
