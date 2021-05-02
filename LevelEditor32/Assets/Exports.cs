@@ -324,6 +324,7 @@ public class Exports : MonoBehaviour
                     exportable.ceilingRepetitionsMaterial = getMaterialRef(pet.ceilingRepetitionsMaterial);
                     exportable.floorRepetitionsMaterial = getMaterialRef(pet.floorRepetitionsMaterial);
                     exportable.ceilingRepetitions = pet.ceilingRepetitions;
+                    exportable.repeatMainTexture = pet.repeatMainTexture;
                     exportable.floorRepetitions = pet.floorRepetitions;
                     exportable.floorHeight = pet.floorHeight;
                     exportable.ceilingHeight = pet.ceilingHeight;
