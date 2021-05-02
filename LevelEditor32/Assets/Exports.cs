@@ -91,7 +91,7 @@ public class Exports : MonoBehaviour
     [MenuItem("Monty/Import Derelict level")]
     static void ImportDerelictLevel()
     {
-        ImportLevel("Assets/Banheirao.txt", "Assets/Banheirao.prp", 64, false);
+        ImportLevel("Assets/Banheirao.txt", "Assets/Banheirao.prp", 64, true);
     }
 
 
@@ -104,19 +104,7 @@ public class Exports : MonoBehaviour
     [MenuItem("Monty/Import Mistral Report level")]
     static void ImportMistralLevel()
     {
-        ImportLevel("Assets/Barcelona.txt", "Assets/Barcelona.prp", 40, true);
-    }
-
-    [MenuItem("Monty/Export Noudar level")]
-    static void ExportNoudarLevel()
-    {
-        ExportLevelFile("Assets/Map.txt", "Assets/Tiles.prp", 40, true);
-    }
-
-    [MenuItem("Monty/Import Noudar level")]
-    static void ImportNoudarLevel()
-    {
-        ImportLevel("Assets/Prison.txt", "Assets/Prison.prp", 40, true);
+        ImportLevel("Assets/map6.txt", "Assets/tiles6.prp", 40, true);
     }
 
     [MenuItem("Monty/Export 64x64 Level as Data File")]
@@ -132,7 +120,6 @@ public class Exports : MonoBehaviour
     }
 
 
-
     [MenuItem("Monty/Import 64x64 level")]
     static void Import64Level()
     {
@@ -144,7 +131,6 @@ public class Exports : MonoBehaviour
     {
         ImportLevel("Assets/Map.txt", "Assets/Tiles.prp", 32, false);
     }
-
 
 
     [MenuItem("Monty/Reacquire all patterns")]
@@ -344,20 +330,22 @@ public class Exports : MonoBehaviour
     {
         Dictionary<char, PetEntry> petTable = new Dictionary<char, PetEntry>();
         char[,] map = new char[size, size];
-        StreamReader reader = new StreamReader("Assets/Tiles.prp");
+        StreamReader reader = new StreamReader(patterns);
 
         while (!reader.EndOfStream)
         {
             string line = reader.ReadLine();
+
             string[] tokens = line.Split(' ');
+
             char lead = tokens[0][0];
             PetEntry entry = new PetEntry();
+
             entry.needsAlphaTest = (tokens[1][0] == '1');
             entry.blockVisibility = (tokens[2][0] == '1');
             entry.blockMovement = (tokens[3][0] == '1');
             entry.blockEnemySight = (tokens[4][0] == '1');
             entry.repeatMainTexture = (tokens[5][0] == '1');
-
             entry.ceilingMaterial = tokens[6];
             entry.floorMaterial = tokens[7];
             entry.mainMaterial = tokens[8];
@@ -371,7 +359,6 @@ public class Exports : MonoBehaviour
                 }
             }
 
-
             entry.ceilingRepetitionsMaterial = tokens[10];
             entry.floorRepetitionsMaterial = tokens[11];
             entry.ceilingRepetitions = Convert.ToInt32(tokens[12]);
@@ -382,7 +369,7 @@ public class Exports : MonoBehaviour
         }
 
 
-        reader = new StreamReader("Assets/Map.txt");
+        reader = new StreamReader(geometry);
         for (int y = 0; y < size; ++y)
         {
             string line = reader.ReadLine();
@@ -456,7 +443,18 @@ public class Exports : MonoBehaviour
 
 
     static Material getMaterialRef(string name) {
-        return AssetDatabase.LoadAssetAtPath(String.Format("Assets/Materials/{0}.mat", name), typeof(Material)) as Material;
+
+        if (name == null || name == "null") {
+            return null;
+        }
+
+        var mat = AssetDatabase.LoadAssetAtPath(String.Format("Assets/Materials/{0}.mat", name), typeof(Material)) as Material;
+
+        if (mat == null) {
+            Debug.Log(String.Format("Failed to obtain material {0}", name));
+        }
+
+        return mat;
     }
 
     /*
