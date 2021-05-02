@@ -80,22 +80,96 @@ public class Exports : MonoBehaviour
         playerSpawner.transform.position = new Vector3(1, 1, 1);
     }
 
+    [MenuItem("Monty/Export Derelict level")]
+    static void ExportDerelictLevel()
+    {
+        ExportLevelFile("Assets/Map.txt", "Assets/Tiles.prp", 64, true);
+    }
+
+
+
+    [MenuItem("Monty/Import Derelict level")]
+    static void ImportDerelictLevel()
+    {
+        ImportLevel("Assets/Banheirao.txt", "Assets/Banheirao.prp", 64, false);
+    }
+
+
+    [MenuItem("Monty/Export Mistral Report level")]
+    static void ExportMistralLevel()
+    {
+        ExportLevelFile("Assets/Map.txt", "Assets/Tiles.prp", 40, true);
+    }
+
+    [MenuItem("Monty/Import Mistral Report level")]
+    static void ImportMistralLevel()
+    {
+        ImportLevel("Assets/Barcelona.txt", "Assets/Barcelona.prp", 40, true);
+    }
+
+    [MenuItem("Monty/Export Noudar level")]
+    static void ExportNoudarLevel()
+    {
+        ExportLevelFile("Assets/Map.txt", "Assets/Tiles.prp", 40, true);
+    }
+
+    [MenuItem("Monty/Import Noudar level")]
+    static void ImportNoudarLevel()
+    {
+        ImportLevel("Assets/Prison.txt", "Assets/Prison.prp", 40, true);
+    }
 
     [MenuItem("Monty/Export 64x64 Level as Data File")]
     static void Export64Level()
     {
-        ExportLevelFile(64);
+        ExportLevelFile("Assets/Map.txt", "Assets/Tiles.prp", 64, false);
     }
 
     [MenuItem("Monty/Export 32x32 Level as Data File")]
     static void Export32Level()
     {
-        ExportLevelFile(32);
+        ExportLevelFile("Assets/Map.txt", "Assets/Tiles.prp", 32, false);
     }
 
-    static void ExportLevelFile(int size) { 
+
+
+    [MenuItem("Monty/Import 64x64 level")]
+    static void Import64Level()
+    {
+        ImportLevel("Assets/Map.txt", "Assets/Tiles.prp", 64, false);
+    }
+
+    [MenuItem("Monty/Import 32x32 level")]
+    static void Import32Level()
+    {
+        ImportLevel("Assets/Map.txt", "Assets/Tiles.prp", 32, false);
+    }
+
+
+
+    [MenuItem("Monty/Reacquire all patterns")]
+    static void ReacquireAllPatterns()
+    {
+        Exportable.GeneralTable.Clear();
+
         GameObject[] objects = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
 
+        foreach (GameObject go in objects)
+        {
+            if (go.activeInHierarchy)
+            {
+                var exportbl = go.GetComponent(typeof(Exportable)) as Exportable;
+                if (exportbl != null)
+                {
+                    Exportable.GeneralTable[exportbl.representation] = exportbl;
+                }
+            }
+        }
+    }
+
+    static void ExportLevelFile(string geometry, string patterns, int size, bool invertX) { 
+        GameObject[] objects = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
+        HashSet<string> materialList = new HashSet<string>();
         int[,] map = new int[size, size];
         Exportable[] pet = new Exportable[256];
 
@@ -115,7 +189,7 @@ public class Exports : MonoBehaviour
                 if (exportbl != null)
                 {
                     int x = (int)(go.transform.position.x);
-                    int z = (size - 1) - (int)(go.transform.position.z);
+                    int z = (int)(go.transform.position.z);
 
                     if (z < size && x < size && x >= 0 && z >= 0 ) {
                         map[z, x] = Convert.ToInt32(exportbl.representation[0]);
@@ -131,7 +205,8 @@ public class Exports : MonoBehaviour
         {
             for (int x = 0; x < size; ++x)
             {
-                finalMap += Convert.ToChar(map[y, x]);
+                
+                finalMap += Convert.ToChar(map[y, invertX ? ( size - 1 - x ) : x ]);
             }
 
             finalMap += "\n";
@@ -181,11 +256,33 @@ public class Exports : MonoBehaviour
             petCode += pet[c].floorHeight;
 
             petCode += "\n";
+
+
+
+            if (pet[c].ceilingMaterial != null) {
+                materialList.Add(pet[c].ceilingMaterial.name);
+            }
+
+            if (pet[c].floorMaterial != null) {
+                materialList.Add(pet[c].floorMaterial.name);
+            }
+
+            if (pet[c].mainMaterial != null) {
+                materialList.Add(pet[c].mainMaterial.name);
+            }
+            
+            if (pet[c].ceilingRepetitionsMaterial != null) {
+                materialList.Add(pet[c].ceilingRepetitionsMaterial.name);
+            }
+            
+            if (pet[c].floorRepetitionsMaterial != null) {
+                materialList.Add(pet[c].floorRepetitionsMaterial.name);
+            }
         }
 
         petCode += "";
 
-        string path = "Assets/Map.txt";
+        string path = geometry;
         StreamWriter writer = new StreamWriter(path, false);
         writer.WriteLine(finalMap.Trim());
         writer.Close();
@@ -193,9 +290,21 @@ public class Exports : MonoBehaviour
         AssetDatabase.ImportAsset(path);
 
 
-        path = "Assets/Tiles.prp";
+        path = patterns;
         writer = new StreamWriter(path, false);
         writer.WriteLine(petCode.Trim());
+        writer.Close();
+
+        AssetDatabase.ImportAsset(path);
+
+
+        path = "Assets/Tiles.lst";
+        writer = new StreamWriter(path, false);
+
+        foreach (var matName in materialList) {
+            writer.WriteLine(matName.Trim());
+        }
+        
         writer.Close();
 
         AssetDatabase.ImportAsset(path);
@@ -231,7 +340,7 @@ public class Exports : MonoBehaviour
         AssetDatabase.Refresh();
     }
 
-    static void ImportLevel(int size)
+    static void ImportLevel(string geometry, string patterns, int size, bool invertX)
     {
         Dictionary<char, PetEntry> petTable = new Dictionary<char, PetEntry>();
         char[,] map = new char[size, size];
@@ -280,7 +389,7 @@ public class Exports : MonoBehaviour
             for (int x = 0; x < size; ++x)
             {
                 char entry = line[x];
-                map[y, x] = entry;
+                map[y, invertX ? (size - 1 - x) : x] = entry;
 
             }
         }
@@ -300,7 +409,7 @@ public class Exports : MonoBehaviour
             int y = _y;
             for (int _x = 0; _x < size; ++_x)
             {
-                int x = size - _x - 1;
+                int x = _x;
                 spawner = new GameObject("tile" + x + "_" + y);
                 spawner.transform.parent = geometryRoot.transform;
                 spawner.transform.position = new Vector3(_x, 0, _y);
@@ -344,42 +453,10 @@ public class Exports : MonoBehaviour
         ReacquireAllPatterns();
     }
 
-    [MenuItem("Monty/Import 64x64 level")]
-    static void Import64Level()
-    {
-        ImportLevel(64);
-    }
+
 
     static Material getMaterialRef(string name) {
         return AssetDatabase.LoadAssetAtPath(String.Format("Assets/Materials/{0}.mat", name), typeof(Material)) as Material;
-    }
-
-    [MenuItem("Monty/Import 32x32 level")]
-    static void Import32Level()
-    {
-        ImportLevel(32);
-    }
-
-
-
-    [MenuItem("Monty/Reacquire all patterns")]
-    static void ReacquireAllPatterns()
-    {
-        Exportable.GeneralTable.Clear();
-
-        GameObject[] objects = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
-
-        foreach (GameObject go in objects)
-        {
-            if (go.activeInHierarchy)
-            {
-                var exportbl = go.GetComponent(typeof(Exportable)) as Exportable;
-                if (exportbl != null)
-                {
-                    Exportable.GeneralTable[exportbl.representation] = exportbl;
-                }
-            }
-        }
     }
 
     /*
