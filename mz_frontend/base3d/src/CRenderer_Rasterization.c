@@ -10,7 +10,6 @@
 #include "Engine.h"
 #include "CRenderer.h"
 
-uint16_t clippingY1 = 200;
 extern int8_t stencilHigh[128];
 int16_t dirtyLineY0 = 0;
 int16_t dirtyLineY1 = 200;
@@ -172,7 +171,7 @@ void drawWall(FixP_t x0,
     FixP_t dX;
     FixP_t upperDyDx;
     FixP_t lowerDyDx;
-    uint8_t pixel = 3;
+    uint8_t pixel;
     FixP_t u = 0;
     uint8_t lastV;
     const uint8_t *data = texture;
@@ -350,7 +349,7 @@ void drawFrontWall(FixP_t x0,
     int16_t y;
     int limit;
     FixP_t dY;
-    uint8_t pixel = 4;
+    uint8_t pixel;
     int32_t iy;
     FixP_t v = 0;
     FixP_t du;

@@ -16,12 +16,13 @@
 #include "Engine.h"
 #include "CRenderer.h"
 #include "CPackedFileReader.h"
+#include "UI.h"
 
 extern size_t biggestOption;
 
 #define XRES 128
 #define YRES 128
-#define XRESMINUSONE XRES - 1
+#define XRESMINUSONE (XRES - 1)
 #define YRESMINUSONE YRES - 1
 
 
@@ -393,7 +394,6 @@ void drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ,
             int16_t upperY0 = py1z0;
             int16_t upperY1 = py1z1;
             int16_t upperDx = abs(x1 - x0);
-            int16_t upperSx = x0 < x1 ? 1 : -1;
             int16_t upperDy = -abs(upperY1 - upperY0);
             int16_t upperSy = upperY0 < upperY1 ? 1 : -1;
             int16_t upperErr = upperDx + upperDy;  /* error value e_xy */
@@ -405,7 +405,7 @@ void drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ,
             int16_t lowerDy = -abs(lowerY1 - lowerY0);
             int16_t lowerSy = lowerY0 < lowerY1 ? 1 : -1;
             int16_t lowerErr = lowerDx + lowerDy;  /* error value e_xy */
-            int16_t lowerErr2;
+            int16_t lowerErr2 = 0;
 
             while ((x0 != x1 && (upperY0 != upperY1 || lowerY0 != lowerY1))) {
 
@@ -705,7 +705,7 @@ void drawHighCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_
     }
 }
 
-
+#ifdef DRAW_LOW_GEOMETRY
 void drawLowCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, int8_t textureIndex) {
 
     int8_t z1;
@@ -719,8 +719,6 @@ void drawLowCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     int16_t px0z0;
     int8_t py0z0;
     int16_t px1z0;
-    int8_t py1z0;
-    int8_t py1z1;
     int16_t px0z1;
     int8_t py0z1;
     int16_t px1z1;
@@ -754,9 +752,7 @@ void drawLowCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     z0py = (projections[z0].py);
 
     py0z0 = z0py + ((y0) * z0dx);
-    py1z0 = py0z0 - (dY * z0dx);
     py0z1 = z1py + ((y0) * z1dx);
-    py1z1 = z1py - ((y0 + dY) * z1dx);
 
     if (px1z0 < 0 || px0z0 > 127) {
         return;
@@ -777,10 +773,6 @@ void drawLowCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
 
     drawContour = (dY);
-
-    if (dY) {
-        drawContour = drawContour;
-    }
 
     {
         int16_t x, x0, x1;
@@ -951,6 +943,7 @@ void drawLowCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
         }
     }
 }
+#endif
 
 uint8_t drawPattern(uint8_t pattern, uint8_t x0, uint8_t x1, uint8_t y) {
 
@@ -965,10 +958,10 @@ uint8_t drawPattern(uint8_t pattern, uint8_t x0, uint8_t x1, uint8_t y) {
     if (type == CUBE) {
         drawHighCubeAt(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y, x1 - x0,
                        diffCeiling, 1, patterns[pattern].textureIndex);
-
+#if DRAW_LOW_GEOMETRY
         drawLowCubeAt(x0, patterns[pattern].floor - CAMERA_HEIGHT, y, x1 - x0,
                       diffFloor, 1, patterns[pattern].textureIndex);
-
+#endif
 
     } else if (type == RIGHT_NEAR || type == LEFT_NEAR  ){
 
@@ -976,9 +969,10 @@ uint8_t drawPattern(uint8_t pattern, uint8_t x0, uint8_t x1, uint8_t y) {
         drawWedge(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y, x1 - x0,
                   diffCeiling, 1, patterns[pattern].textureIndex, type);
 
+#if DRAW_LOW_GEOMETRY
         drawLowCubeAt(x0, patterns[pattern].floor - CAMERA_HEIGHT, y, x1 - x0,
                       diffFloor, 1, patterns[pattern].textureIndex);
-
+#endif
 
     } else if (type == LEFT_WALL  ){
 
@@ -986,9 +980,10 @@ uint8_t drawPattern(uint8_t pattern, uint8_t x0, uint8_t x1, uint8_t y) {
         drawWedge(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y,
                   0, diffCeiling, 1, patterns[pattern].textureIndex, LEFT_NEAR);
 
+#if DRAW_LOW_GEOMETRY
         drawLowCubeAt(x0, patterns[pattern].floor - CAMERA_HEIGHT, y, x1 - x0,
                       diffFloor, 1, patterns[pattern].textureIndex);
-
+#endif
 
     } else if (type == BACK_WALL  ){
 
@@ -996,9 +991,10 @@ uint8_t drawPattern(uint8_t pattern, uint8_t x0, uint8_t x1, uint8_t y) {
         drawSquare(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1,
                    x1 - x0, diffCeiling, patterns[pattern].textureIndex, patterns[pattern].elementsMask);
 
+#if DRAW_LOW_GEOMETRY
         drawLowCubeAt(x0, patterns[pattern].floor - CAMERA_HEIGHT, y, x1 - x0,
                       diffFloor, 1, patterns[pattern].textureIndex);
-
+#endif
 
     }
 
@@ -1182,7 +1178,7 @@ void Interrogation_repaintCallback() {
 #ifndef FILLED_POLYS
          7
 #else
-            7
+            5
 #endif
             , FALSE);
 
