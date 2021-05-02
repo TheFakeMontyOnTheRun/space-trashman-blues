@@ -497,7 +497,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                                   5,
 #endif
-                                  TRUE, 9, 14);
+                                  TRUE, 9, 6);
     addToRoom("lss-daedalus", newItem);
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->useCallback = bombActivatedCallback;
@@ -512,7 +512,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
-                      TRUE, 10, 14);
+                      TRUE, 10, 6);
     addToRoom("lss-daedalus", newItem);
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->useCallback = bombControllerActivatedCallback;
@@ -523,7 +523,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
-                      TRUE, 11, 14);
+                      TRUE, 11, 6);
     addToRoom("lss-daedalus", newItem);
     newItem->useCallback = bombActivatedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
