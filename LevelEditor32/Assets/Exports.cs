@@ -378,7 +378,7 @@ public class Exports : MonoBehaviour
 
         for (int _y = 0; _y < size; ++_y)
         {
-            int y = size - _y - 1;
+            int y = _y;
             for (int _x = 0; _x < size; ++_x)
             {
                 int x = size - _x - 1;

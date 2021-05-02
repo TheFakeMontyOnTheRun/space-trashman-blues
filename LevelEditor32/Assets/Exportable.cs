@@ -135,7 +135,7 @@ public class Exportable : MonoBehaviour
                     var GO = GameObject.CreatePrimitive(PrimitiveType.Plane);
                     GO.transform.parent = parentGO.transform;
                     GO.transform.localScale = new Vector3(0.1f, 1.0f, 0.1f);
-                    GO.transform.position = new Vector3(-0.5f, 0.0f, 0.0f);
+                    GO.transform.position = new Vector3(0.5f, 0.0f, 0.0f);
                     GO.transform.rotation = Quaternion.Euler(0, 0.0f, 90.0f);
 
                     if (repeatMainTexture)
@@ -150,7 +150,7 @@ public class Exportable : MonoBehaviour
                     var otherGO = GameObject.CreatePrimitive(PrimitiveType.Plane);
                     otherGO.transform.parent = parentGO.transform;
                     otherGO.transform.localScale = new Vector3(0.1f, -1.0f, 0.1f);
-                    otherGO.transform.position = new Vector3(-0.5f, 0.0f, 0.0f);
+                    otherGO.transform.position = new Vector3(0.5f, 0.0f, 0.0f);
                     otherGO.transform.rotation = Quaternion.Euler(0, 0.0f, 90.0f);
                     otherGO.GetComponent<MeshRenderer>().sharedMaterial = GO.GetComponent<MeshRenderer>().sharedMaterial;
 
@@ -234,17 +234,17 @@ public class Exportable : MonoBehaviour
                     float angleXZ = 0.0f;
 
                     switch (type) {
-                        case GeometryType.RampNorth:
-                            angleXZ = 270.0f;
-                            break;
-                        case GeometryType.RampEast:
+                        case GeometryType.RampWest:
                             angleXZ = 0.0f;
                             break;
-                        case GeometryType.RampSouth:
+                        case GeometryType.RampEast:
+                            angleXZ = 180.0f;
+                            break;
+                        case GeometryType.RampNorth:
                             angleXZ = 90.0f;
                             break;
-                        case GeometryType.RampWest:
-                            angleXZ = 180.0f;
+                        case GeometryType.RampSouth:
+                            angleXZ = 270.0f;
                             break;
                     }
 
