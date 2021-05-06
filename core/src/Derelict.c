@@ -564,7 +564,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
-                      TRUE, 16, 14);
+                      TRUE, 4, 7);
     addToRoom("hall-2", newItem);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = useCardWithCardWritter;
@@ -577,7 +577,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
-                      TRUE, 35, 19);
+                      TRUE, 21, 9);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
@@ -591,7 +591,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       17,
 #endif
-                      FALSE, 2, 7);
+                      FALSE, 2, 2);
     addToRoom("hangar", newItem);
     newItem->active = TRUE;
     newItem->useCallback = cantBeUsedCallback;
@@ -604,7 +604,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       200,
 #endif
-                      FALSE, 12, 8);
+                      FALSE, 12, 3);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hangar", newItem);
@@ -616,7 +616,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       200,
 #endif
-                      FALSE, 19, 10);
+                      FALSE, 6, 2);
     newItem->useCallback = useObjectToggleCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-1", newItem);
@@ -627,7 +627,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       200,
 #endif
-                      FALSE, 19, 10);
+                      FALSE, 6, 2);
     newItem->useCallback = useCommWithRank;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-2", newItem);
@@ -638,7 +638,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       200,
 #endif
-                      FALSE, 19, 10);
+                      FALSE, 6, 2);
     newItem->useCallback = useObjectToggleCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-3", newItem);
@@ -653,7 +653,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
-                      TRUE, 50, 34);
+                      TRUE, 4, 6);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("pod-1", newItem);
@@ -668,7 +668,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
-                      TRUE, 50, 55);
+                      TRUE, 11, 8);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("pod-2", newItem);
@@ -686,7 +686,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
-                      TRUE, 53, 34);
+                      TRUE, 3, 2);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("pod-3", newItem);
@@ -701,7 +701,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
-                      TRUE, 52, 55);
+                      TRUE, 5, 10);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("pod-4", newItem);
@@ -713,7 +713,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       1,
 #endif
-                      TRUE, 10, 10);
+                      TRUE, 26, 8);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("crew-bunks", newItem);
@@ -725,7 +725,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       3,
 #endif
-                      FALSE, 36, 20);
+                      FALSE, 22, 10);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("computer-core", newItem);
@@ -736,7 +736,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
-                      TRUE, 32, 17);
+                      TRUE, 23, 17);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
@@ -749,7 +749,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       138,
 #endif
-                      FALSE, 35, 15);
+                      FALSE, 16, 4);
     newItem->useCallback = useComputerRack;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("situation-room", newItem);
@@ -760,7 +760,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       138,
 #endif
-                      FALSE, 35, 16);
+                      FALSE, 16, 5);
     newItem->useCallback = useComputerRack;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("situation-room", newItem);
@@ -774,19 +774,17 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
-                      TRUE, 17, 6);
+                      TRUE, 8, 6);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("situation-room", newItem);
     
-
-    /* Has to be removed for the bomb to be properly planted */
     newItem = addItem("metal-mending",
                       "A piece of metal that might be valuable.",
 #ifdef ITEMS_HAVE_WEIGHT
                       74,
 #endif
-                      FALSE, 7, 6);
+                      FALSE, 5, 4);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("radar-array", newItem);
@@ -799,7 +797,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       1,
 #endif
-                      TRUE, 21, 16);
+                      TRUE, 17, 17);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("wc", newItem);
@@ -810,7 +808,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       1,
 #endif
-                      FALSE, 33, 17);
+                      FALSE, 22, 17);
     newItem->useCallback = useCloggedFlush;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("wc", newItem);
@@ -820,7 +818,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       1,
 #endif
-                      FALSE, 29, 17);
+                      FALSE, 18, 17);
     newItem->useCallback = useRegularFlush;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("wc", newItem);
@@ -833,7 +831,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       209,
 #endif
-                      FALSE, 1, 1);
+                      FALSE, 29, 10);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("reactor-core", newItem);
@@ -845,19 +843,18 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
                       62,
 #endif
-                      FALSE, 35, 15);
+                      FALSE, 21, 4);
     newItem->useCallback = reactorValveCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("reactor-core", newItem);
 
     
-    /* Not added directly, will be placed on the restroom after you search the pipe */
     newItem = addItem("root-keycard",
                       "Card for root access.",
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
-                      TRUE, 34, 14);
+                      TRUE, 16, 3);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
@@ -868,7 +865,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                    FALSE, 27, 0);
+                    FALSE, 2, 0);
     newItem->useCallback = elevatorGoDownCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-1", newItem);
@@ -877,7 +874,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                    FALSE, 27, 0);
+                    FALSE, 2, 0);
     newItem->useCallback = elevatorGoDownCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-2", newItem);
@@ -886,7 +883,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                    FALSE, 28, 0);
+                    FALSE, 3, 0);
     newItem->useCallback = elevatorGoUpCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-2", newItem);
@@ -895,7 +892,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                    FALSE, 28, 0);
+                    FALSE, 3, 0);
     newItem->useCallback = elevatorGoUpCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-3", newItem);
@@ -904,7 +901,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             200,
 #endif
-                    TRUE, 27, 19);
+                    TRUE, 15, 19);
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("crew-bunks", newItem);
