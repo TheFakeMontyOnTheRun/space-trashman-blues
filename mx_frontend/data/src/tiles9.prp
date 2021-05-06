@@ -11,8 +11,6 @@ s 0 0 0 0 1 ceiling asphalt null null null null 0 0 2 0
 2 0 0 0 0 1 ceiling asphalt null null null null 0 0 2 0
 w 0 0 0 0 1 ceiling asphalt null null null null 0 0 3 0
 3 0 0 0 0 1 ceiling asphalt null null null null 0 0 3 0
-. 0 0 0 0 1 ceiling asphalt null null null null 0 0 5 0
 , 0 1 1 1 0 null null null null null null 0 0 0 0
-_ 0 0 0 0 1 ceiling asphalt null null null null 0 0 5 -0.5
 # 0 0 1 1 1 null null null null p2 grating 3 2 2 2
 X 0 0 1 1 1 null null null null bricks grating 3 2 2 2

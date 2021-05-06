@@ -1,7 +1,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#define MAP_SIZE 64
+#define MAP_SIZE 32
 
 #ifndef TRUE
 #define TRUE 1
