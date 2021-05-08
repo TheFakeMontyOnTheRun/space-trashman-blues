@@ -8,10 +8,10 @@ d 0 0 1 1 1 null null null null bricks2 grating 0 2 2 2
 ] 0 0 1 1 1 null bricks bricks2 rampnorth null null 0 2 2 0
 \ 0 0 1 1 1 ceiling asphalt bricks2 leftfar null null 0 0 4 0
 / 0 0 1 1 1 ceiling asphalt bricks2 leftnear null null 0 0 4 0
-{ 0 0 1 1 1 ceiling asphalt bricks2 leftnear null table 0 2 4 0
+{ 0 0 1 1 1 ceiling asphalt bricks2 leftnear null table 0 2 4 2
 < 0 0 1 1 1 ceiling asphalt bricks2 leftnear null table 0 0 4 0 
 > 0 0 1 1 1 ceiling asphalt bricks2 leftfar null table 0 0 4 0
-} 0 0 1 1 1 ceiling asphalt bricks2 leftfar null table 0 2 4 0
+} 0 0 1 1 1 ceiling asphalt bricks2 leftfar null table 0 2 4 2
 ) 0 0 1 1 1 table null table rampwest bricks2 table 1 1 3 1
 ( 0 0 1 1 1 table null table rampeast bricks2 table 1 1 3 1
 E 0 0 1 1 1 table null bricks2 null bricks2 table 0 0 3 2
