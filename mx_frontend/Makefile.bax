@@ -38,6 +38,7 @@ MENU_OBJ= menu/src/Main.o \
 	menu/src/CreditsScreen.o \
 	menu/src/MainMenu.o \
 	../core/src/Derelict.o \
+	../core/src/Core.o \
 	../core/src/Parser.o
 
 $(MENU_TARGET):	$(MENU_OBJ)
