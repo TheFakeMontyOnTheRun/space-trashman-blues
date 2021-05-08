@@ -1137,7 +1137,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
                 texelLineY = fV1;
             }
 
-            if (y >= 0 && y <= 199) {
+            if (y >= 0 && y <= YRES) {
 
                 int xPos = iFX0;
 
@@ -1145,7 +1145,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
                     u = abs(fixToInt(texelLineX)) % NATIVE_TEXTURE_SIZE;
                     v = abs(fixToInt(texelLineY)) % NATIVE_TEXTURE_SIZE;
 
-                    if (xPos >= 0 && xPos <= 255) {
+                    if (xPos >= 0 && xPos <= XRES) {
                         *destination = *(&texture->rowMajor[0] + (NATIVE_TEXTURE_SIZE * v) + u);
                     }
                     ++xPos;
@@ -1266,7 +1266,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
                 texelLineY = fV1;
             }
 
-            if (y >= 0 && y <= 199) {
+            if (y >= 0 && y <= YRES) {
 
                 int xPos = iFX0;
 
@@ -1275,7 +1275,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
                     u = abs(fixToInt(texelLineX)) % NATIVE_TEXTURE_SIZE;
                     v = abs(fixToInt(texelLineY)) % NATIVE_TEXTURE_SIZE;
 
-                    if (xPos >= 0 && xPos <= 255) {
+                    if (xPos >= 0 && xPos <= XRES) {
                         *destination = *(&texture->rowMajor[0] + (NATIVE_TEXTURE_SIZE * v) + u);
                     }
                     ++xPos;
