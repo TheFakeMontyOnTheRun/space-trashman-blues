@@ -687,10 +687,11 @@ void initCore() {
     playerCharacter = 0;
     charactersCount = 1;
     characterPositions = (struct WorldPosition*)malloc(charactersCount * sizeof(struct WorldPosition));
-    memset(characterPositions, 0, sizeof(struct WorldPosition));
+    memset(characterPositions, 0, charactersCount * sizeof(struct WorldPosition));
     setErrorHandlerCallback(NULL);
 
     collectedObject = (struct ObjectNode *) malloc(sizeof(struct ObjectNode));
+    memset(collectedObject, 0, sizeof(struct ObjectNode));
     playerLocation = 1;
     itemsCount = 0;
     roomCount = 1; /* there's an implicit dummy first */
