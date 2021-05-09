@@ -1,11 +1,13 @@
 CC = zcc
 
-CFLAGS = +gb -create-app -DGB -O0
+CFLAGS = +gb -create-app -DGB -DAMALLOC  -O0 -I../Core/include
+LDFLAGS =  -lm -vn  -m --opt-code-speed=all -pragma-output:USING_amalloc
 
-all: demo.gb
+all: derelict.gb
 
-demo.gb: src/demo.o src/gb.o
-	$(CC) $(CFLAGS) -o demo.gb src/demo.o src/gb.o -lm -vn  -m -O2 --opt-code-speed=all
+derelict.gb: src/demo.o src/gb.o ../core/src/Derelict.o ../core/src/Core.o
+	$(CC) $(CFLAGS) -o demo.gb src/demo.o src/gb.o ../core/src/Core.o ../core/src/Derelict.o $(LDFLAGS)
 
 clean:
 	$(RM) *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.rom *.gb src/*.o
+	$(RM) ../core/src/*.o

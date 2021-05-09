@@ -1,21 +1,13 @@
-#
-# Examples for MSX 
-#
-# $Id: Makefile $
-#
-
-#include ../../libsrc/Make.config
-
 CC = zcc
 
-CFLAGS = +msx -vn -llib3d -lm -lndos -create-app -DAMALLOC -DMSX -O3 --opt-code-speed=all
+CFLAGS = +msx -vn -I../Core/include -create-app -DAMALLOC -DMSX -Os --opt-code-speed=all -pragma-output:USING_amalloc
+LDFLAGS = -llib3d -lm -lmsxbios -subtype=rom -pragma-output:USING_amalloc
 
-EXECFILES = $(CFILES:.c=.cas)
+all: derelict.rom
 
-all: demo.rom
-
-demo.rom: src/demo.o src/msx.o
-	$(CC) $(CFLAGS) -odemo.rom src/demo.c src/msx.c -lmsxbios -subtype=rom
+derelict.rom: src/demo.o src/msx.o ../core/src/Core.o ../core/src/Derelict.o
+	$(CC) $(CFLAGS) -odemo.rom src/demo.o src/msx.o ../core/src/Core.o ../core/src/Derelict.o $(LDFLAGS)
 
 clean:
 	$(RM) *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.rom
+	$(RM) ../core/src/*.o
