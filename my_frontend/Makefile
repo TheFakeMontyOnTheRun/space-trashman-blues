@@ -18,3 +18,14 @@ sms:
 	cat src/demo.c >> 8bitworkshop/game.c
 	cat ../core/src/Core.c >> 8bitworkshop/game.c
 	cat ../core/src/Derelict.c >> 8bitworkshop/game.c
+
+ia16:
+	rm -f MSDOS/src/*
+	cat src/msdos.c > MSDOS/src/game.c
+	cat ../core/include/Core.h >> MSDOS/src/game.c
+	cat ../core/include/Derelict.h >> MSDOS/src/game.c
+	cat src/map.h >> MSDOS/src/game.c
+	cat src/demo.c >> MSDOS/src/game.c
+	cat ../core/src/Core.c >> MSDOS/src/game.c
+	cat ../core/src/Derelict.c >> MSDOS/src/game.c
+	./MSDOS/build.sh

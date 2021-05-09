@@ -8,7 +8,7 @@ Created by Daniel Monteiro on 2019-07-26.
 #include <string.h>
 #include <stdint.h>
 
-#ifndef SMS
+#ifndef DONT_INCLUDE
 #include "Core.h"
 #endif
 

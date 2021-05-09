@@ -7,6 +7,7 @@
 #include <assert.h>
 
 #define SMS
+#define DONT_INCLUDE
 
 #ifndef _CV_COMMON_H
 #define _CV_COMMON_H

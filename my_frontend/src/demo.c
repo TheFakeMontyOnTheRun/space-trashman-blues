@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef SMS
+#ifndef DONT_INCLUDE
 #include "Core.h"
 #include "Derelict.h"
 #endif
@@ -27,15 +27,6 @@ enum DIRECTION {
     DIRECTION_E,
     DIRECTION_S,
     DIRECTION_W
-};
-
-enum GeometryType {
-    CUBE = 0,
-    RIGHT_NEAR = 4,
-    LEFT_NEAR = 8,
-    LEFT_WALL = 16,
-    BACK_WALL = 32,
-    CORNER = 64,
 };
 
 #define IN_RANGE(V0, V1, V)  ((V0) <= (V) && (V) <= (V1))
@@ -113,7 +104,7 @@ const struct Projection projections[32] =
                 {	28	,	63	,	-2	},	//	31
         };
 
-#ifndef SMS
+#ifndef DONT_INCLUDE
 #include "map.h"
 #endif
 
