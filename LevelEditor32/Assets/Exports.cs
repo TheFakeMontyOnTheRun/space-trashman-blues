@@ -83,7 +83,7 @@ public class Exports : MonoBehaviour
     [MenuItem("Monty/Export Derelict level")]
     static void ExportDerelictLevel()
     {
-        ExportLevelFile("Assets/Map.txt", "Assets/Tiles.prp", 64, true);
+        ExportLevelFile("Assets/Map.txt", "Assets/Tiles.prp", 32, true);
     }
 
 
@@ -91,7 +91,7 @@ public class Exports : MonoBehaviour
     [MenuItem("Monty/Import Derelict level")]
     static void ImportDerelictLevel()
     {
-        ImportLevel("Assets/Banheirao.txt", "Assets/Banheirao.prp", 64, true);
+        ImportLevel("Assets/map2.txt", "Assets/tiles2.prp", 32, true);
     }
 
 
