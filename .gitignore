@@ -57,3 +57,9 @@ LevelEditor32/Assets/Map.txt
 LevelEditor32/Assets/Map.txt.meta
 LevelEditor32/Assets/Tiles.prp
 LevelEditor32/Assets/Tiles.prp.meta
+my_frontend/demo.rom
+my_frontend/demo_BSS.bin
+my_frontend/demo_DATA.bin
+my_frontend/derelict.com
+my_frontend/CPCVersion/game.cdt
+my_frontend/CPCVersion/game.dsk
