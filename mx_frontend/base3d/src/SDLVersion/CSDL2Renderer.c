@@ -234,7 +234,7 @@ void flipRenderer() {
 		}
 	}
 
-	if ( turnTarget == turnStep ) {
+	if ( !enableSmoothMovement || turnTarget == turnStep ) {
 		uint8_t *pixelPtr = &framebuffer[0];
 
 		for ( y = 0; y < 200; ++y ) {

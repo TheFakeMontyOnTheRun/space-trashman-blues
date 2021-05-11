@@ -529,7 +529,7 @@ void flipRenderer() {
 
 
 
-    if ( turnTarget == turnStep ) {
+    if ( !enableSmoothMovement || turnTarget == turnStep ) {
 #ifdef CD32
         WriteChunkyPixels(my_window->RPort, 0, 0, 320, 200, &framebuffer[0], 320);
 #else

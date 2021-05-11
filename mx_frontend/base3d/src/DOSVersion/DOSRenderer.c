@@ -343,7 +343,7 @@ void flipRenderer() {
     
     
     
-    if ( turnTarget == turnStep ) {
+    if ( !enableSmoothMovement || turnTarget == turnStep ) {
         dosmemput(&framebuffer[0], 320 * 200, 0xa0000);
         memcpy( previousFrame, framebuffer, 320 * 200);
     } else if ( turnStep < turnTarget ) {
