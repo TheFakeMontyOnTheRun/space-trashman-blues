@@ -481,7 +481,21 @@ void handleSystemEvents() {
 					mBufferedCommand = kCommandUp;
 					visibilityCached = FALSE;
 					break;
+                case '1':
+                    enableSmoothMovement = TRUE;
+                    break;
 
+                case '2':
+                    enableSmoothMovement = FALSE;
+                    break;
+
+                case '3':
+                    renderingMethod = FIXED;
+                    break;
+
+                case '4':
+                    renderingMethod = LUT;
+                    break;
 				case 's':
 					mBufferedCommand = kCommandStrafeLeft;
 					break;

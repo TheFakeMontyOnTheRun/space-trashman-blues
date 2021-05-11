@@ -10,6 +10,7 @@
 #include "Enums.h"
 #include "Engine.h"
 
+int renderingMethod = LUT;
 struct Bitmap *currentBackgroundBitmap = NULL;
 int32_t currentGameMenuState = -1;
 enum EGameMenuState menuStateToReturn = kResumeCurrentState;

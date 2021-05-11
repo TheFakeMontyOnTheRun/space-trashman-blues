@@ -178,6 +178,22 @@ void handleSystemEvents() {
 					mBufferedCommand = kCommandUp;
 					visibilityCached = FALSE;
 					break;
+				case SDLK_1:
+					enableSmoothMovement = TRUE;
+					break;
+
+				case SDLK_2:
+					enableSmoothMovement = FALSE;
+					break;
+
+				case SDLK_3:
+					renderingMethod = FIXED;
+					break;
+
+				case SDLK_4:
+					renderingMethod = LUT;
+					break;
+
 				case SDLK_DOWN:
 					mBufferedCommand = kCommandDown;
 					visibilityCached = FALSE;
