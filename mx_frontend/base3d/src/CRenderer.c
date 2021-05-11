@@ -46,7 +46,7 @@ enum EDirection cameraDirection;
 struct Vec3 mCamera;
 long gameTicks = 0;
 
-int distanceForPenumbra = 24;
+int distanceForPenumbra = 16;
 int distanceForDarkness = 48;
 
 struct Bitmap *backdrop = NULL;
