@@ -1469,7 +1469,7 @@ void drawTextAt(const int x, const int y, const char *__restrict__ text, const u
         uint8_t *letter =
                 fontPixelData + (col * 8) + (fontWidth * (line * 8));
 
-        if (text[c] == '\n' || dstX >= 320) {
+        if (text[c] == '\n' || dstX >= 319) {
             dstX = (x - 1) * 8;
             dstY += 8;
             continue;
