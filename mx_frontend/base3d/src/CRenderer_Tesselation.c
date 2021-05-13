@@ -302,6 +302,7 @@ void drawColumnAt(const struct Vec3 center,
     struct Vec2 p2;
     struct Vec2 p3;
     int z = fixToInt(center.mZ);
+    int originalZ = z;
 
     if (center.mZ <= kMinZCull) {
         return;
@@ -354,24 +355,41 @@ void drawColumnAt(const struct Vec3 center,
     }
 
     if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0) || (mask & MASK_FORCE_RIGHT)) {
+
+        if (mask & ~MASK_BEHIND) {
+            z -= 2;
+        }
+
         if (z >= distanceForDarkness && useDither) {
             maskWall(p2.mX, p0.mX, p2.mY, p3.mY, p0.mY, p1.mY);
         } else {
             drawWall(p2.mX, p0.mX, p2.mY, p3.mY, p0.mY, p1.mY, texture->rowMajor,
                      (textureScale), z);
         }
+
+        z = originalZ;
     }
 
     if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0) || (mask & MASK_FORCE_LEFT)) {
+        if (mask & ~MASK_BEHIND) {
+            z -= 2;
+        }
+
         if (z >= distanceForDarkness && useDither) {
             maskWall(p1.mX, p3.mX, p0.mY, p1.mY, p2.mY, p3.mY);
         } else {
             drawWall(p1.mX, p3.mX, p0.mY, p1.mY, p2.mY, p3.mY, texture->rowMajor,
                      (textureScale), z);
         }
+
+        z = originalZ;
     }
 
     if ( (mask & MASK_FRONT)) {
+        if (mask & ~MASK_BEHIND) {
+            z -= 2;
+        }
+
         if (z >= distanceForDarkness && useDither) {
             drawMask(p0.mX, p0.mY, p1.mX, p1.mY);
         } else {
