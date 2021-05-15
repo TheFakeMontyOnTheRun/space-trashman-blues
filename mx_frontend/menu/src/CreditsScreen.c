@@ -53,6 +53,9 @@ void CreditsScreen_initStateCallback(int32_t tag) {
 }
 
 void CreditsScreen_initialPaintCallback(void) {
+    dirtyLineY0 = 0;
+    dirtyLineY1 = 200;
+
     if (currentBackgroundBitmap != NULL) {
         drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
     }

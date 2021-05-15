@@ -534,9 +534,13 @@ void flipRenderer() {
         WriteChunkyPixels(my_window->RPort, 0, 0, 320, 200, &framebuffer[0], 320);
 #else
 #ifdef AGA8BPP
-        c2p1x1_8_c5_bm(320,200,0,0,&framebuffer[0], my_window->RPort->BitMap);
+        OwnBlitter();
+    c2p1x1_8_c5_bm(320, dirtyLineY1 - dirtyLineY0, 0, dirtyLineY0, &framebuffer[dirtyLineY0 * 320], my_window->RPort->BitMap);
+        DisownBlitter();
 #else
-        c2p1x1_4_c5_bm(320,200,0,0,&framebuffer[0], my_window->RPort->BitMap);
+        OwnBlitter();
+        c2p1x1_4_c5_bm(320, dirtyLineY1 - dirtyLineY0, 0, dirtyLineY0, &framebuffer[dirtyLineY0 * 320], my_window->RPort->BitMap);
+        DisownBlitter();
 #endif
 #endif
         memcpy( previousFrame, framebuffer, 320 * 200);

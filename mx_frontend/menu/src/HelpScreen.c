@@ -34,6 +34,8 @@ extern char textBuffer[40 * 25];
 void HelpScreen_initStateCallback(int32_t tag) {
     size_t fileSize = sizeOfFile("Help.txt");
     FILE *fileInput = openBinaryFileFromPath("Help.txt");
+    dirtyLineY0 = 0;
+    dirtyLineY1 = 200;
 
     cursorPosition = 0;
     currentPresentationState = kAppearing;

@@ -237,7 +237,7 @@ void flipRenderer() {
 	if ( !enableSmoothMovement || turnTarget == turnStep ) {
 		uint8_t *pixelPtr = &framebuffer[0];
 
-		for ( y = 0; y < 200; ++y ) {
+		for ( y = dirtyLineY0; y < dirtyLineY1; ++y ) {
 			for ( x = 0; x < 320; ++x ) {
 				uint8_t index = *pixelPtr;
 				uint32_t pixel = palette[ index ];
@@ -261,7 +261,7 @@ void flipRenderer() {
 		memcpy( previousFrame, framebuffer, 320 * 200);
 	} else if ( turnStep < turnTarget ) {
 
-		for ( y = 0; y < 200; ++y ) {
+		for ( y = dirtyLineY0; y < dirtyLineY1; ++y ) {
 			for ( x = 0; x < 320; ++x ) {
 				uint8_t index;
 
@@ -295,7 +295,8 @@ void flipRenderer() {
 	} else {
 
 		uint8_t *pixelPtr = &framebuffer[0];
-		for ( y = 0; y < 200; ++y ) {
+
+		for ( y = dirtyLineY0; y < dirtyLineY1; ++y ) {
 			for ( x = 0; x < 320; ++x ) {
 				uint8_t index;
 

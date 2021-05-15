@@ -58,6 +58,8 @@ extern FixP_t yCameraOffset;
 extern FixP_t zCameraOffset;
 extern int enable3DRendering;
 extern uint8_t enableSmoothMovement;
+extern int dirtyLineY0;
+extern int dirtyLineY1;
 
 struct Mesh {
     uint16_t triangleCount;

@@ -45,6 +45,8 @@ struct Bitmap *logo2Bitmap;
 void MainMenu_initStateCallback(int32_t tag) {
     int c;
     cursorPosition = 0;
+    dirtyLineY0 = 0;
+    dirtyLineY1 = 200;
 
     if (currentBackgroundBitmap != NULL) {
         releaseBitmap(currentBackgroundBitmap);

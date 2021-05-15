@@ -59,6 +59,9 @@ int drawFilter = FALSE;
 
 void GameMenu_initStateCallback(int32_t tag) {
     int c;
+    dirtyLineY0 = 0;
+    dirtyLineY1 = 200;
+
     GameMenu_StateTitle = NULL;
     cursorPosition = 0;
     currentPresentationState = kAppearing;

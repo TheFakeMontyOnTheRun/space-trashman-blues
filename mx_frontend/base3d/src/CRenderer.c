@@ -45,6 +45,8 @@ uint8_t mEffects[MAP_SIZE][MAP_SIZE];
 enum EDirection cameraDirection;
 struct Vec3 mCamera;
 long gameTicks = 0;
+int dirtyLineY0 = 0;
+int dirtyLineY1 = 200;
 
 int distanceForPenumbra = 16;
 int distanceForDarkness = 48;

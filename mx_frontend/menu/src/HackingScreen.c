@@ -36,6 +36,8 @@ extern int accessGrantedToSafe;
 int wasSmoothMovementPreviouslyEnabled;
 
 void HackingScreen_initStateCallback(int32_t tag) {
+    dirtyLineY0 = 0;
+    dirtyLineY1 = 200;
 
     cursorPosition = 1;
     currentPresentationState = kAppearing;
