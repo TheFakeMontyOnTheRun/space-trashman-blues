@@ -336,8 +336,8 @@ void render(const long ms) {
 
 #ifndef CD32
         clippingY1 = 200;
-        for (c = 0; c <= (XRES / 32); ++c) {
-            drawBitmap(c * 32, 0, backdrop, FALSE);
+        for (c = 0; c < 10; ++c) {
+            drawBitmap(c * 20, 0, backdrop, FALSE);
         }
         fill(0, 100, 256, 100, 0, FALSE);
 #else
