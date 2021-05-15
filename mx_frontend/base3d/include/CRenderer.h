@@ -114,6 +114,9 @@ void drawMap(const uint8_t * __restrict__ elements,
 			 uint8_t * __restrict__ effects,
 			 const struct CActor * __restrict__ current);
 
+void drawTextAtWithMargin(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour);
+
+
 void drawTextAt(const int x,
 				const int y,
 				const char * __restrict__ text,

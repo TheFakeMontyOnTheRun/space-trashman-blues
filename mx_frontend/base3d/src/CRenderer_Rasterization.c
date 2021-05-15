@@ -1451,7 +1451,7 @@ void drawRepeatBitmap(
     }
 }
 
-void drawTextAt(const int x, const int y, const char *__restrict__ text, const uint8_t colour) {
+void drawTextAtWithMargin(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour) {
 
     size_t len = strlen(text);
     int32_t dstX = (x - 1) * 8;
@@ -1469,7 +1469,7 @@ void drawTextAt(const int x, const int y, const char *__restrict__ text, const u
         uint8_t *letter =
                 fontPixelData + (col * 8) + (fontWidth * (line * 8));
 
-        if (text[c] == '\n' || dstX >= 319) {
+        if (text[c] == '\n' || dstX >= margin) {
             dstX = (x - 1) * 8;
             dstY += 8;
             continue;
@@ -1497,4 +1497,9 @@ void drawTextAt(const int x, const int y, const char *__restrict__ text, const u
         }
         dstX += 8;
     }
+}
+
+void drawTextAt(const int x, const int y, const char *__restrict__ text, const uint8_t colour) {
+
+    drawTextAtWithMargin( x, y, 319, text, colour);
 }
