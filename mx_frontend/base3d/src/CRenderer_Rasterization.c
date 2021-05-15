@@ -867,7 +867,7 @@ void drawRect(
 
     uint8_t *destination = &framebuffer[0];
     uint8_t *destinationLineStart = destination + (320 * (y)) + x;
-    int16_t py;
+    uint16_t py;
 
     if (pixel == TRANSPARENCY_COLOR) {
         return;
@@ -1369,7 +1369,7 @@ void fill(
         const int stipple) {
 
     uint8_t *destination = &framebuffer[0];
-    int py;
+    unsigned int py;
 
     if (pixel == TRANSPARENCY_COLOR) {
         return;
@@ -1381,7 +1381,7 @@ void fill(
         if (!stipple) {
             memset (destinationLineStart, pixel, dx);
         } else {
-            int px;
+            unsigned int px;
             for (px = 0; px < dx; ++px) {
                 destinationLineStart++;
                 if ((px + py) & 1) {

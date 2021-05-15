@@ -155,7 +155,8 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
 }
 
 struct Bitmap *loadBitmap(const char *__restrict__ filename) {
-    int c, d = 0;
+    size_t c;
+    int d = 0;
     uint8_t pixel;
     uint8_t repetitions;
 

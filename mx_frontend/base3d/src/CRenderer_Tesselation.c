@@ -154,7 +154,6 @@ void projectAllVertices(const uint8_t count) {
     FixP_t halfHeight = intToFix(HALF_YRES);
     FixP_t zero = 0;
     FixP_t one = intToFix(1);
-    FixP_t two = intToFix(2);
     FixP_t bias = Div(one, intToFix(128));
     FixP_t projected;
     FixP_t oneOver;
