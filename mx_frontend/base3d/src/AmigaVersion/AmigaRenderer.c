@@ -215,8 +215,6 @@ void graphicsInit() {
 	struct ColorMap *cm;
 	struct Window *window;
 	struct IntuiMessage *msg;
-	struct DisplayInfo displayinfo;
-	struct TagItem taglist[3];
 	int OpenA2024 = FALSE;
 	int IsV36 = FALSE;
 	int IsPAL;
