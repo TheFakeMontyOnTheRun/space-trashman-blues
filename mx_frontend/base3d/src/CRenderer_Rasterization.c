@@ -181,8 +181,7 @@ void drawWall(FixP_t x0,
     FixP_t u = 0;
     uint8_t lastV;
     const uint8_t *data = texture;
-    const int8_t textureWidth = NATIVE_TEXTURE_SIZE;
-    const FixP_t textureSize = intToFix(textureWidth);
+    const FixP_t textureSize = intToFix(NATIVE_TEXTURE_SIZE);
     FixP_t du;
     int32_t ix;
     uint8_t *bufferData = &framebuffer[0];
@@ -254,7 +253,7 @@ void drawWall(FixP_t x0,
             int32_t iu = fixToInt(u);
             int32_t iY0 = fixToInt(y0);
             int32_t iY1 = fixToInt(y1);
-            const uint8_t *sourceLineStart = data + (iu * textureWidth);
+            const uint8_t *sourceLineStart = data + (iu * NATIVE_TEXTURE_SIZE);
             const uint8_t *lineOffset = sourceLineStart;
             uint8_t *destinationLine = bufferData + (320 * iY0) + ix;
             FixP_t dv;
@@ -278,7 +277,7 @@ void drawWall(FixP_t x0,
                     if (iv != lastV && !(stipple && farForStipple)) {
 
                         pixel = *(lineOffset);
-                        lineOffset = ((iv & (textureWidth - 1)) + sourceLineStart);
+                        lineOffset = ((iv & (NATIVE_TEXTURE_SIZE - 1)) + sourceLineStart);
                         lastV = iv;
                     }
 
@@ -366,10 +365,7 @@ void drawFrontWall(FixP_t x0,
     uint8_t lastV = 0xFF;
     int32_t iy;
     const uint8_t *data = texture;
-    const uint16_t textureWidth = size;
-    const uint16_t textureHeight = size;
-    const FixP_t textureSize = intToFix(textureWidth);
-    const FixP_t texWidth = intToFix(textureWidth);
+    const FixP_t textureSize = intToFix(NATIVE_TEXTURE_SIZE);
     FixP_t dv;
     FixP_t diffX;
     int iX0;
@@ -419,14 +415,14 @@ void drawFrontWall(FixP_t x0,
         return;
     }
 
-    du = Div(texWidth, diffX);
+    du = Div(textureSize, diffX);
 
     for (; iy < limit; ++iy) {
 
         if (iy < YRES && iy >= 0) {
             FixP_t u = 0;
-            const uint8_t iv = fixToInt(v) % textureHeight;
-            const uint8_t *sourceLineStart = data + (iv * textureHeight);
+            const uint8_t iv = fixToInt(v) & (NATIVE_TEXTURE_SIZE - 1);
+            const uint8_t *sourceLineStart = data + (iv * NATIVE_TEXTURE_SIZE);
             uint8_t *destinationLine = bufferData + (320 * iy) + iX0;
             int ix;
             lastU = 0;
@@ -451,7 +447,7 @@ void drawFrontWall(FixP_t x0,
 
                 if (ix < XRES && ix >= 0) {
                     int stipple = ((ix + iy) & 1);
-                    const uint8_t iu = fixToInt(u) % textureWidth;
+                    const uint8_t iu = fixToInt(u) & (NATIVE_TEXTURE_SIZE - 1);
                     /*
                                   only fetch the next texel if we really changed the
                                   u, v coordinates (otherwise, would fetch the same
@@ -627,14 +623,13 @@ void drawFloor(FixP_t y0,
     const FixP_t zero = 0;
     FixP_t x0;
     FixP_t x1;
-    uint8_t pixel = 0;
+    uint8_t pixel = *texture;
     FixP_t v = 0;
     uint8_t lastU;
     int16_t iy;
     uint8_t *bufferData = &framebuffer[0];
     const uint8_t *data = texture;
-    const int8_t textureWidth = NATIVE_TEXTURE_SIZE;
-    const FixP_t textureSize = intToFix(textureWidth);
+    const FixP_t textureSize = intToFix(NATIVE_TEXTURE_SIZE);
     FixP_t dv;
     const uint8_t *sourceLineStart;
     int farEnoughForStipple = (z >= distanceForPenumbra);
@@ -708,7 +703,7 @@ void drawFloor(FixP_t y0,
             du = Div(textureSize, diffX);
             iv = fixToInt(v);
             destinationLine = bufferData + (320 * iy) + iX0;
-            sourceLineStart = data + (iv * textureWidth);
+            sourceLineStart = data + (iv * NATIVE_TEXTURE_SIZE);
             pixel = *(sourceLineStart);
 
             for (ix = iX0; ix < iX1; ++ix) {
