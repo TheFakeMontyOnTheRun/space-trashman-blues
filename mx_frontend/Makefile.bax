@@ -2,7 +2,7 @@ CXX = m68k-amigaos-g++
 CC = m68k-amigaos-gcc
 STRIP=m68k-amigaos-strip
 AS = vasmm68k_mot
-CFLAGS = -DAMIGA -Ibase3d/include -I../core/include -Imenu/include -ISoundSystem -c -m68000 -s -fno-keep-inline-functions -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -Ofast -DAGA8BPP
+CFLAGS = -DAMIGA -Ibase3d/include -I../core/include -Imenu/include -ISoundSystem -c -m68000 -mtune=68020 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -fstrength-reduce -Ofast -DAGA5BPP -DFLAT_FLOORS
 LDFLAGS =  -msmall-code -fexpensive-optimizations -Ofast -s -fomit-frame-pointer -noixemul
 ASFLAGS = -phxass -Fhunk -m68020 -chklabels -no-fpu -wfail -I/opt/amiga/m68k-amigaos/ndk-include
 
@@ -50,6 +50,7 @@ all:   $(MENU_TARGET)
 adf: $(MENU_TARGET)
 	rm -f derelict32.adf
 	xdftool derelict32.adf format "Sub Mare Imperium - Derelict" + write game12k game12k + write base.pfs base.pfs
+	xdftool derelict16.adf boot install
 	xdftool derelict32.adf list
 
 clean:

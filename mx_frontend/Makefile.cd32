@@ -2,8 +2,8 @@
 CXX = m68k-amigaos-g++
 CC = m68k-amigaos-gcc
 STRIP=m68k-amigaos-strip
-CFLAGS = -DAMIGA -DCD32 -I../core/include -ISoundSystem -Ibase3d/include -Imenu/include -c -m68020 -s -fno-keep-inline-functions -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -O3 -DAGA5BPP
-LDFLAGS =  -msmall-code -fexpensive-optimizations -O3 -s -fomit-frame-pointer -noixemul
+CFLAGS = -DAMIGA -DCD32 -Ibase3d/include -I../core/include -Imenu/include -ISoundSystem -c -m68000 -mtune=68020 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -fstrength-reduce -Ofast -DAGA5BPP  -DFLAT_FLOORS
+LDFLAGS =    -msmall-code -fexpensive-optimizations -Ofast -s -fomit-frame-pointer -noixemul
 
 MENU_TARGET=gm
 
