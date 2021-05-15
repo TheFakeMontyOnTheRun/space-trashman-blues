@@ -2,10 +2,19 @@
 #define RENDERER_H
 
 #define NATIVE_TEXTURE_SIZE 32
-#define XRES 256
-#define YRES 199
-#define HALF_XRES 127
+
+#ifdef AMIGA
+#define XRES 200
+#define YRES 128
+#define HALF_XRES 100
+#define HALF_YRES 64
+#else
+#define XRES 200
+#define YRES 200
+#define HALF_XRES 100
 #define HALF_YRES 100
+#endif
+
 #define TOTAL_TEXTURES 32
 #define TRANSPARENCY_COLOR 199
 
