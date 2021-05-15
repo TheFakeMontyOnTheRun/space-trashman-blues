@@ -27,7 +27,7 @@ char *thisMissionName;
 int16_t thisMissionNameLen;
 int showPromptToAbandonMission = FALSE;
 extern size_t biggestOption;
-
+int needToRedrawHUD = FALSE;
 const char *AbandonMission_Title = "Abandon game?";
 const char *AbandonMission_options[6] = {"Continue", "End game"};
 int AbandonMission_navigation[2] = {-1, kMainMenu};
@@ -93,7 +93,7 @@ void Crawler_initialPaintCallback() {
     drawTextAt(13, 13, "Loading", 0);
     drawTextAt(13, 12, "Please wait...", 255);
 
-
+    needToRedrawHUD = TRUE;
     needsToRedrawVisibleMeshes = TRUE;
     flipRenderer();
 }
@@ -154,10 +154,17 @@ void Crawler_repaintCallback() {
         if  (currentPresentationState == kRoomTransitioning ) {
             
             struct Vec3 center;
+
+            if ( !enableSmoothMovement ) {
+                currentPresentationState = kWaitingForInput;
+                zCameraOffset = xCameraOffset = yCameraOffset = 0;
+                needToRedrawHUD = TRUE;
+                return;
+            }
             
             xCameraOffset = yCameraOffset = 0;
             
-            fill(0, 0, 256, 200, 0, 0);
+            fill(0, 0, XRES + 1, 200, 0, 0);
             
             
             
@@ -215,11 +222,12 @@ void Crawler_repaintCallback() {
             center.mZ = intToFix(3);
             drawCeilingAt( center, nativeTextures[0], 0);
 
-            drawTextAt(16 - (thisMissionNameLen / 2), 1, thisMissionName, 255);
+            drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, 255);
             
             zCameraOffset -= Div(intToFix(1), intToFix(16));
             if (zCameraOffset == 0 ) {
                 currentPresentationState = kWaitingForInput;
+                needToRedrawHUD = TRUE;
             }
             return;
         }

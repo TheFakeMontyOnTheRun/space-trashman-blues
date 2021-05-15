@@ -23,6 +23,7 @@
 /*	Div(intToFix(1), intToFix(16));*/
 #define WALKING_BIAS 4096
 
+extern int needToRedrawHUD;
 int hasSnapshot = FALSE;
 FixP_t playerHeight = 0;
 FixP_t walkingBias = 0;
@@ -50,7 +51,7 @@ int dirtyLineY1 = 200;
 
 int distanceForPenumbra = 16;
 int distanceForDarkness = 48;
-
+struct Bitmap *mapTopLevel = NULL;
 struct Bitmap *backdrop = NULL;
 struct MapWithCharKey tileProperties;
 struct Vec2i cameraPosition;
@@ -287,14 +288,6 @@ enum ECommand getInput() {
 }
 
 void render(const long ms) {
-    int line = 0;
-	struct ObjectNode *head;
-    static FixP_t zero = 0;
-    FixP_t two = intToFix(2);
-    FixP_t four = intToFix(4);
-    FixP_t one = intToFix(1);
-    const FixP_t halfOne = Div(one, two);
-    FixP_t standardHeight = Div(intToFix(230), intToFix(100));
 
     if (messageLogBufferCoolDown > 0) {
         messageLogBufferCoolDown -= ms;
@@ -314,8 +307,16 @@ void render(const long ms) {
     }
 
     if (needsToRedrawVisibleMeshes) {
+        int line = 0;
+        struct ObjectNode *head;
+        int playerHealth = 100 - getPlayerHealth();
+        static FixP_t zero = 0;
+        FixP_t two = intToFix(2);
+        FixP_t four = intToFix(4);
+        FixP_t one = intToFix(1);
+        const FixP_t halfOne = Div(one, two);
+        FixP_t standardHeight = Div(intToFix(230), intToFix(100));
         uint8_t itemsSnapshotElement = 0xFF;
-        char buffer[64];
         struct Vec3 tmp, tmp2;
         struct CTile3DProperties *tileProp;
         FixP_t heightDiff;
@@ -328,6 +329,7 @@ void render(const long ms) {
         FixP_t cameraHeight;
         int c;
         uint8_t facesMask;
+        struct WorldPosition visPos = *getPlayerPosition();
 
         needsToRedrawVisibleMeshes = FALSE;
 #ifdef SDLSW
@@ -339,7 +341,7 @@ void render(const long ms) {
         for (c = 0; c < 10; ++c) {
             drawBitmap(c * 20, 0, backdrop, FALSE);
         }
-        fill(0, 100, 256, 100, 0, FALSE);
+
 #else
         fill(0, 0, 256, 128, 64, FALSE);
 #endif
@@ -946,65 +948,67 @@ void render(const long ms) {
             }
         }
 
-        clippingY1 = 200;
-        fill(256, 0, 320 - 256, 8, 0, FALSE);
-        sprintf(&buffer[0], "HP: %d", getPlayerHealth());
-        fill(256, 8, 320 - 256, 200 - 64 - 8 - 8, 255, FALSE);
-        drawTextAt(34, 1, &buffer[0], 255);
-
-        fill(256, 200 - 64 - 8, 320 - 256, 8, 0, FALSE);
-        drawTextAt(34, 17, " Map:", 255);
-
-        //draw current item on the corner of the screen
-        head = getPlayerItems();
-
-        while (head != NULL) {
-            if (head->item != NULL) {
-                char textBuffer[255];
-                sprintf(&textBuffer[0], "%s", head->item->description);
-                textBuffer[7] = 0;
-
-                if (line == currentSelectedItem) {
-                    
-                    fill(256, (1 + line) * 8, 64, 8, 0, FALSE);
-                    drawTextAt(34, 2 + line, &textBuffer[0], head->item->active ? 192 :  255);
-                    
-                    
-                    
-                    drawFrontWall(intToFix(0), intToFix(199 - 32 - 8), intToFix(32), intToFix(199 - 8),
-                                  itemSprites[head->item->index]->rotations[0], one, 0, 0, 32);
-                    
-                    drawTextAt(1, 25, head->item->description, head->item->active ? 192 :  255);
-                    
-                } else {
-                    fill(256, (1 + line) * 8, 64, 8, 255, FALSE);
-                    drawTextAt(34, 2 + line, &textBuffer[0], head->item->active ? 64 :  0);
-                }
-                ++line;
-            }
-            head = head->next;
-        }
-
-
         if (focusItemName != NULL) {
             size_t len = strlen(focusItemName);
-            drawTextAt(20 - len / 2, 10, focusItemName, 255);
+            drawTextAtWithMargin(((XRES / 8) / 2) - len / 2, 10, XRES, focusItemName, 255);
         }
 
         if (messageLogBufferCoolDown > 0) {
-            drawTextAt(2, 2, &messageLogBuffer[0], 255);
+            drawTextAtWithMargin(1, 1, XRES, &messageLogBuffer[0], 255);
         }
-    }
-    
-    struct WorldPosition visPos = *getPlayerPosition();
-    
-    for (int y = -8; y < 8; ++y ) {
-        for (int x = -8; x < 8; ++x ) {
-            fill(320 - 32 + ( 4 * x), 199 - 32 +  ( 4 * y), 4, 4, isPositionAllowed(visPos.x + x, visPos.y  + y) ? 192 : 64, FALSE);
+
+        clippingY1 = 200;
+
+        for (int y = -8; y < 8; ++y ) {
+            for (int x = -13; x < 13; ++x ) {
+                fill(XRES + 8 + (13 * 4) + ( 4 * x), 2 + 8 + ( 8 * 4 ) +  ( 4 * y), 4, 4, ( x == 0 && y == 0 ) ? 32 : isPositionAllowed(visPos.x + x, visPos.y  + y) ? 192 : 64, FALSE);
+            }
         }
+
+        if (!needToRedrawHUD) {
+            dirtyLineY0 = 0;
+            dirtyLineY1 = YRES;
+        } else {
+            fill(XRES, 0, 320 - XRES, 10, 0, FALSE);
+            fill(XRES, 0, 10, 72, 0, FALSE);
+            fill(311, 0, 10, 72, 0, FALSE);
+            drawTextAt(1 + (XRES / 8), 1, " Map:", 255);
+
+
+            fill(XRES, 8 + (16 * 4), 320 - XRES, 128, 0, FALSE);
+
+            if (mapTopLevel != NULL) {
+                drawBitmap(208, 72, mapTopLevel, 0);
+            }
+
+            drawTextAt(1 + 1 + (XRES / 8), 17, "Toxicity:", 255);
+            drawRect(XRES + 8, 138, 320 - XRES - 16, 8, 255);
+            fill(XRES + 8, 138, playerHealth, 8, 255, TRUE);
+
+
+            //draw current item on the corner of the screen
+            head = getPlayerItems();
+            line = 0;
+            while (head != NULL) {
+                if (head->item != NULL) {
+                    if (line == currentSelectedItem) {
+                        char textBuffer[255];
+                        sprintf(&textBuffer[0], "%s", head->item->description);
+                        textBuffer[14] = 0;
+
+                        drawBitmapRaw(XRES + 8, 199 - 32 - 16, 32, 32, itemSprites[head->item->index]->rotations[0], 1);
+
+                        drawTextAtWithMargin(2 + ((XRES) / 8), 24, 311, head->item->description, head->item->active ? 192 : 255);
+                    }
+                    ++line;
+                }
+                head = head->next;
+            }
+
+            fill(0, YRES, XRES, (200 - YRES), 0, FALSE);
+        }
+        needToRedrawHUD = FALSE;
     }
-    
-    fill(320 - 32, 199 - 32, 4, 4, 32, FALSE);
 }
 
 void loadMesh(struct Mesh *mesh, char *filename) {

@@ -103,6 +103,15 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
     sprintf (nameBuffer, "map%d.txt", map);
     buffer = loadBinaryFileFromPath(nameBuffer);
     dungeon_loadMap(buffer.data, collisions, map);
+
+    sprintf (nameBuffer, "map%d.img", map);
+
+    if (mapTopLevel) {
+        free(mapTopLevel);
+    }
+
+    mapTopLevel = loadBitmap(nameBuffer);
+
     free(buffer.data);
 }
 
