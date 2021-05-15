@@ -1392,15 +1392,16 @@ void fill(
     }
 }
 
-void drawBitmap(const int dx,
+void drawBitmapRaw(const int dx,
                 const int dy,
-                const struct Bitmap *__restrict__ tile,
+                int width,
+                int height,
+                uint8_t *bitmapData,
                 const int transparent) {
 
     uint8_t *destination = &framebuffer[0];
-    uint8_t *sourceLine = tile->data;
-    int height = tile->height;
-    int width = tile->width;
+    uint8_t *sourceLine = bitmapData;
+
     int y;
 
     if ((dy + height) >= 200) {
@@ -1426,6 +1427,14 @@ void drawBitmap(const int dx,
             ++destinationLineStart;
         }
     }
+}
+
+void drawBitmap(const int dx,
+                const int dy,
+                const struct Bitmap *__restrict__ tile,
+                const int transparent) {
+
+    drawBitmapRaw(dx, dy, tile->width, tile->height, tile->data, transparent);
 }
 
 void drawRepeatBitmap(

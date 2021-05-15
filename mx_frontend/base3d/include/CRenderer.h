@@ -155,6 +155,14 @@ void drawBillboardAt(const struct Vec3 center,
 					 const FixP_t scale,
 					 const int size);
 
+void drawBitmapRaw(const int dx,
+                   const int dy,
+                   int width,
+                   int height,
+                   uint8_t *bitmapData,
+                   const int transparent);
+
+
 void drawBitmap(const int x,
 				const int y,
 				const struct Bitmap * __restrict__ tile,
