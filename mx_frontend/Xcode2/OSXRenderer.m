@@ -146,7 +146,7 @@ void handleSystemEvents() {
                 ) {
                 
                 turnStep = 0;
-                turnTarget = 256;
+                turnTarget = 200;
             }
             break;
             
@@ -157,7 +157,7 @@ void handleSystemEvents() {
                 currentPresentationState == kWaitingForInput
                 ) {
                 
-                turnStep = 256;
+                turnStep = 200;
                 turnTarget = 0;
             }
             break;

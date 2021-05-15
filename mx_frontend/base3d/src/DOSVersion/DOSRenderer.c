@@ -289,7 +289,7 @@ void handleSystemEvents() {
 							currentPresentationState == kWaitingForInput
 								) {
 							turnStep = 0;
-							turnTarget = 256;
+							turnTarget = 200;
 						}
 						visibilityCached = FALSE;
 						break;
@@ -303,7 +303,7 @@ void handleSystemEvents() {
 							 currentGameMenuState == kBackToGame) &&
 							currentPresentationState == kWaitingForInput
 								) {
-							turnStep = 256;
+							turnStep = 200;
 							turnTarget = 0;
 						}
 						visibilityCached = FALSE;
@@ -353,12 +353,12 @@ void flipRenderer() {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
                 
-                if (x < 256 ) {
+                if (x < XRES ) {
                     
                     if ( x  >= turnStep ) {
                         index = previousFrame[ (320 * y) - turnStep + x ];
                     } else {
-                        index = framebuffer[ (320 * y) + x - 64 - turnStep];
+                        index = framebuffer[ (320 * y) + x - (320 - XRES) - turnStep];
                     }
                 } else {
                     index = framebuffer[ (320 * y) + x];
@@ -369,7 +369,7 @@ void flipRenderer() {
             }
         }
         
-        turnStep+= 32;
+        turnStep+= 20;
         dosmemput(&turnBuffer[0], 320 * 200, 0xa0000);
     } else {
         
@@ -378,12 +378,12 @@ void flipRenderer() {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
 
-                if (x < 256  ) {
+                if (x < XRES  ) {
                     
                     if ( x  >= turnStep ) {
                         index = framebuffer[ (320 * y) - turnStep + x ];
                     } else {
-                        index = previousFrame[ (320 * y) + x - 64 - turnStep];
+                        index = previousFrame[ (320 * y) + x - (320 - XRES) - turnStep];
                     }
                     
                 } else {
@@ -395,7 +395,7 @@ void flipRenderer() {
             }
         }
         
-        turnStep-= 32;
+        turnStep-= 20;
         dosmemput(&turnBuffer[0], 320 * 200, 0xa0000);
     }
 	

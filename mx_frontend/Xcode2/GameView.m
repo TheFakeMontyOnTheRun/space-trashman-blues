@@ -227,12 +227,12 @@ void shutdownHW() {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
                 
-                if (x < 256 ) {
+                if (x < XRES ) {
                     
                     if ( x  >= turnStep ) {
                         index = previousFrame[ (320 * y) - turnStep + x ];
                     } else {
-                        index = buffer[ (320 * y) + x - 64 - turnStep];
+                        index = buffer[ (320 * y) + x - (320 - XRES) - turnStep];
                     }
                     
                 } else {
@@ -254,12 +254,12 @@ void shutdownHW() {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
 
-                if (x < 256 ) {
+                if (x < XRES ) {
                     
                     if ( x  >= turnStep ) {
                         index = buffer[ (320 * y) - turnStep + x ];
                     } else {
-                        index = previousFrame[ (320 * y) + x - 64 - turnStep];
+                        index = previousFrame[ (320 * y) + x - (320 - XRES) - turnStep];
                     }
                     
                 } else {

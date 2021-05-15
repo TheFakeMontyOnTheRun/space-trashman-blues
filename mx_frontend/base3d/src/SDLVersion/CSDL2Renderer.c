@@ -160,7 +160,7 @@ void handleSystemEvents() {
 						currentPresentationState == kWaitingForInput
 							) {
 						turnStep = 0;
-						turnTarget = 256;
+						turnTarget = 200;
 					}
 					break;
 				case SDLK_RIGHT:
@@ -170,7 +170,7 @@ void handleSystemEvents() {
 						 currentGameMenuState == kBackToGame) &&
 						currentPresentationState == kWaitingForInput
 							) {
-						turnStep = 256;
+						turnStep = 200;
 						turnTarget = 0;
 					}
 					break;
@@ -239,8 +239,7 @@ void flipRenderer() {
 
 		for ( y = dirtyLineY0; y < dirtyLineY1; ++y ) {
 			for ( x = 0; x < 320; ++x ) {
-				uint8_t index = *pixelPtr;
-				uint32_t pixel = palette[ index ];
+				uint32_t pixel;
 
 				rect.x = 2 * x;
 				rect.y = (24 * y) / 10;
@@ -265,12 +264,12 @@ void flipRenderer() {
 			for ( x = 0; x < 320; ++x ) {
 				uint8_t index;
 
-				if (x < 256  ) {
+				if (x < XRES  ) {
 
 					if ( x  >= turnStep ) {
 						index = previousFrame[ (320 * y) - turnStep + x ];
 					} else {
-						index = framebuffer[ (320 * y) + x - 64 - turnStep];
+						index = framebuffer[ (320 * y) + x - (320 - XRES) - turnStep];
 					}
 
 				} else {
@@ -291,7 +290,7 @@ void flipRenderer() {
 			}
 		}
 
-		turnStep+= 32;
+		turnStep+= 20;
 	} else {
 
 		uint8_t *pixelPtr = &framebuffer[0];
@@ -300,12 +299,12 @@ void flipRenderer() {
 			for ( x = 0; x < 320; ++x ) {
 				uint8_t index;
 
-				if (x < 256 ) {
+				if (x < XRES ) {
 
 					if ( x  >= turnStep ) {
 						index = framebuffer[ (320 * y) - turnStep + x ];
 					} else {
-						index = previousFrame[ (320 * y) + x - 64 - turnStep];
+						index = previousFrame[ (320 * y) + x - (320 - XRES) - turnStep];
 					}
 
 				} else {
@@ -327,7 +326,7 @@ void flipRenderer() {
 			}
 		}
 
-		turnStep-= 32;
+		turnStep-= 20;
 	}
 
 
