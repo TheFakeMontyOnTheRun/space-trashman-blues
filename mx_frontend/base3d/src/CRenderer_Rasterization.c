@@ -116,26 +116,29 @@ void maskWall(
         if (ix >= 0 && ix < XRES) {
 
             const FixP_t diffY = (y1 - y0);
-            int32_t iY0 = fixToInt(y0);
+            int32_t iY0;
             int32_t iY1 = fixToInt(y1);
-            uint8_t *destinationLine = bufferData + (320 * iY0) + ix;
+            uint8_t *destinationLine;
             int32_t iy;
 
             if (diffY == zero) {
                 continue;
             }
 
-            if (iY0 < 0) {
+            if (y0 < 0) {
                 iY0 = 0;
+            } else {
+                iY0 = fixToInt(y0);
             }
 
             if (iY1 >= YRES) {
                 iY1 = YRES;
             }
 
+            destinationLine = bufferData + (320 * iY0) + ix;
+
             for (iy = iY0; iy < iY1; ++iy) {
                 *(destinationLine) = pixel;
-
                 destinationLine += (320);
             }
         }
@@ -559,27 +562,30 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
     iy = y;
 
     for (; iy < limit; ++iy) {
-
         if (iy < YRES && iy >= 0) {
 
+            int32_t iX0;
+            int32_t iX1;
             const FixP_t diffX = (x1 - x0);
-            int32_t iX0 = fixToInt(x0);
-            int32_t iX1 = fixToInt(x1);
 
             if (diffX == zero) {
                 continue;
             }
 
-            if (iX0 < 0) {
+            if (x0 < 0) {
                 iX0 = 0;
+            } else {
+                iX0 = fixToInt(x0);
+            }
+
+            if (x1 < 0) {
+                iX1 = 0;
+            } else {
+                iX1 = fixToInt(x1);
             }
 
             if (iX1 >= XRES) {
                 iX1 = XRES - 1;
-            }
-
-            if (iX1 < 0) {
-                iX1 = 0;
             }
 
             if (iX0 >= XRES) {
@@ -1370,11 +1376,11 @@ void fill(
         return;
     }
 
+    uint8_t *destinationLineStart = destination + (320 * y) + x;
     for (py = 0; py < dy; ++py) {
-        uint8_t *destinationLineStart = destination + (320 * (y + py)) + x;
-
         if (!stipple) {
             memset (destinationLineStart, pixel, dx);
+            destinationLineStart += 320;
         } else {
             unsigned int px;
             for (px = 0; px < dx; ++px) {
@@ -1383,6 +1389,7 @@ void fill(
                     *destinationLineStart = pixel;
                 }
             }
+            destinationLineStart += 320 - dx;
         }
     }
 }
