@@ -50,7 +50,7 @@ all:   $(MENU_TARGET)
 adf: $(MENU_TARGET)
 	rm -f derelict32.adf
 	xdftool derelict32.adf format "Sub Mare Imperium - Derelict" + write game12k game12k + write base.pfs base.pfs
-	xdftool derelict16.adf boot install
+	xdftool derelict32.adf boot install
 	xdftool derelict32.adf list
 
 clean:
