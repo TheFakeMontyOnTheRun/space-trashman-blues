@@ -227,13 +227,6 @@ void flipRenderer() {
 	SDL_Rect rect;
 	int x, y;
 
-	for (y = 0; y < 200; ++y) {
-		for (x = 0; x < 320; ++x) {
-
-
-		}
-	}
-
 	if ( !enableSmoothMovement || turnTarget == turnStep ) {
 		uint8_t *pixelPtr = &framebuffer[0];
 
