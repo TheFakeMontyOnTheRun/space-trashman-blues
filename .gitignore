@@ -33,6 +33,9 @@
 
 .idea
 
+mx_frontend/DerelictMacOSClassic/Derelict
+mx_frontend/Xcode2/build/
+**/.DS_Store
 coverage
 cmake-build-debug
 *.gcno
