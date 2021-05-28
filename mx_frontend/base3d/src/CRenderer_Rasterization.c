@@ -1371,12 +1371,14 @@ void fill(
 
     uint8_t *destination = &framebuffer[0];
     unsigned int py;
+	uint8_t *destinationLineStart;
 
     if (pixel == TRANSPARENCY_COLOR) {
         return;
     }
 
-    uint8_t *destinationLineStart = destination + (320 * y) + x;
+	destinationLineStart = destination + (320 * y) + x;
+	
     for (py = 0; py < dy; ++py) {
         if (!stipple) {
             memset (destinationLineStart, pixel, dx);
