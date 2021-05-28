@@ -959,9 +959,9 @@ void render(const long ms) {
 
         clippingY1 = 200;
 
-        for (int y = -8; y < 8; ++y ) {
-            for (int x = -13; x < 13; ++x ) {
-                fill(XRES + 8 + (13 * 4) + ( 4 * x), 2 + 8 + ( 8 * 4 ) +  ( 4 * y), 4, 4, ( x == 0 && y == 0 ) ? 32 : isPositionAllowed(visPos.x + x, visPos.y  + y) ? 192 : 64, FALSE);
+        for (z = -8; z < 8; ++z ) {
+            for (x = -13; x < 13; ++x ) {
+                fill(XRES + 8 + (13 * 4) + ( 4 * x), 2 + 8 + ( 8 * 4 ) +  ( 4 * z), 4, 4, ( x == 0 && z == 0 ) ? 32 : isPositionAllowed(visPos.x + x, visPos.y  + z) ? 192 : 64, FALSE);
             }
         }
 

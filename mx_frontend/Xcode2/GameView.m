@@ -245,7 +245,7 @@ void shutdownHW() {
             }
         }
         
-        turnStep+= 32;
+        turnStep+= 20;
     } else {
         
         uint8_t *pixelPtr = &buffer[0];
@@ -274,7 +274,7 @@ void shutdownHW() {
             }
         }
         
-        turnStep-= 32;
+        turnStep-= 20;
     }
         
         
