@@ -2,8 +2,8 @@ CXX = m68k-amigaos-g++
 CC = m68k-amigaos-gcc
 STRIP=m68k-amigaos-strip
 AS = vasmm68k_mot
-CFLAGS = -DAMIGA -Ibase3d/include -Imenu/include -ISoundSystem -c -m68000 -s -fno-keep-inline-functions -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -Ofast -DAGA5BPP -DNFILLED_POLYS -DTEXTURES
-LDFLAGS =  -msmall-code -fexpensive-optimizations -O3 -s -fomit-frame-pointer -noixemul
+CFLAGS = -DAMIGA -Ibase3d/include -I../core/include -Imenu/include -ISoundSystem -c -m68000 -mtune=68000 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -fstrength-reduce -Ofast -DAGA5BPP -DNFILLED_POLYS -DTEXTURES
+LDFLAGS =  -msmall-code -fexpensive-optimizations -Ofast -s -fomit-frame-pointer -noixemul
 ASFLAGS = -phxass -Fhunk -m68000 -chklabels -no-fpu -wfail -I/opt/amiga/m68k-amigaos/ndk-include
 
 MENU_TARGET=game12k
@@ -30,10 +30,10 @@ $(MENU_TARGET):	$(MENU_OBJ)
 all:   $(MENU_TARGET)
 
 adf: $(MENU_TARGET)
-	rm -f blank.adf
-	xdftool blank.adf format "Sub Mare Imperium - Derelict" + write game12k game12k + write base.pfs base.pfs + write base4.pfs base4.pfs + write base5.pfs base5.pfs
-	xdftool blank.adf boot install
-	xdftool blank.adf list
+	rm -f derelict16.adf
+	xdftool derelict16.adf format "Sub Mare Imperium - Derelict" + write game12k game12k + write base.pfs base.pfs + write base4.pfs base4.pfs + write base5.pfs base5.pfs
+	xdftool derelict16.adf boot install
+	xdftool derelict16.adf list
 
 clean:
 	rm -f menu/src/*.o

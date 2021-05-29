@@ -24,7 +24,6 @@ MENU_OBJ= menu/src/Main.o \
 	 base3d/src/DOSVersion/DOSRenderer.o \
 	base3d/src/LoadBitmap.o \
 	base3d/src/CRenderer.o \
-	base3d/src/FixP.o \
 	base3d/src/CRenderer_Rasterization.o \
 	base3d/src/CPackedFileReader.o \
 	menu/src/CrawlerScreen.o \
