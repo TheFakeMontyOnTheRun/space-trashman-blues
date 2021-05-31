@@ -9,7 +9,7 @@
 #endif
 
 #define XRES 64
-#define YRES 128
+#define YRES 64
 #define XRESMINUSONE XRES - 1
 #define YRESMINUSONE YRES - 1
 
@@ -73,35 +73,35 @@ const struct Projection projections[32] =
         {
                 {	0	,	63	,	-64	},	//	1
                 {	0	,	63	,	-32	},	//	2
-                {	9	,	63	,	-21	},	//	3
-                {	15	,	63	,	-16	},	//	4
-                {	18	,	63	,	-12	},	//	5
-                {	20	,	63	,	-10	},	//	6
-                {	21	,	63	,	-9	},	//	7
-                {	23	,	63	,	-8	},	//	8
-                {	23	,	63	,	-7	},	//	9
-                {	24	,	63	,	-6	},	//	10
-                {	25	,	63	,	-5	},	//	11
-                {	25	,	63	,	-5	},	//	12
-                {	26	,	63	,	-4	},	//	13
-                {	26	,	63	,	-4	},	//	14
-                {	26	,	63	,	-4	},	//	15
-                {	27	,	63	,	-4	},	//	16
-                {	27	,	63	,	-3	},	//	17
-                {	27	,	63	,	-3	},	//	18
-                {	27	,	63	,	-3	},	//	19
-                {	27	,	63	,	-3	},	//	20
-                {	27	,	63	,	-3	},	//	21
-                {	28	,	63	,	-2	},	//	22
-                {	28	,	63	,	-2	},	//	23
-                {	28	,	63	,	-2	},	//	24
-                {	28	,	63	,	-2	},	//	25
-                {	28	,	63	,	-2	},	//	26
-                {	28	,	63	,	-2	},	//	27
-                {	28	,	63	,	-2	},	//	28
-                {	28	,	63	,	-2	},	//	29
-                {	28	,	63	,	-2	},	//	30
-                {	28	,	63	,	-2	},	//	31
+                {	9	,	52	,	-21	},	//	3
+                {	15	,	47	,	-16	},	//	4
+                {	18	,	43	,	-12	},	//	5
+                {	20	,	41	,	-10	},	//	6
+                {	21	,	40	,	-9	},	//	7
+                {	23	,	39	,	-8	},	//	8
+                {	23	,	38	,	-7	},	//	9
+                {	24	,	37	,	-6	},	//	10
+                {	25	,	36	,	-5	},	//	11
+                {	25	,	36	,	-5	},	//	12
+                {	26	,	35	,	-4	},	//	13
+                {	26	,	35	,	-4	},	//	14
+                {	26	,	35	,	-4	},	//	15
+                {	27	,	35	,	-4	},	//	16
+                {	27	,	34	,	-3	},	//	17
+                {	27	,	34	,	-3	},	//	18
+                {	27	,	34	,	-3	},	//	19
+                {	27	,	34	,	-3	},	//	20
+                {	27	,	34	,	-3	},	//	21
+                {	28	,	33	,	-2	},	//	22
+                {	28	,	33	,	-2	},	//	23
+                {	28	,	33	,	-2	},	//	24
+                {	28	,	33	,	-2	},	//	25
+                {	28	,	33	,	-2	},	//	26
+                {	28	,	33	,	-2	},	//	27
+                {	28	,	33	,	-2	},	//	28
+                {	28	,	33	,	-2	},	//	29
+                {	28	,	33	,	-2	},	//	30
+                {	28	,	33	,	-2	},	//	31
         };
 
 #ifndef DONT_INCLUDE
@@ -318,8 +318,6 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
                 if (IN_RANGE(0, XRESMINUSONE, x0)) {
                     if (stencilHigh[x0] <= upperY0) {
 #ifdef CPC_PLATFORM
-                        
-                            
                         unsigned char *pS;
                         unsigned char nByte = 0;
                             
@@ -338,7 +336,6 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 #else
                         graphicsPut(x0, upperY0);
 #endif
-                        
                     }
                     
                     if (stencilHigh[x0] < lowerY0) {
@@ -839,7 +836,7 @@ void renderScene() {
             int8_t limit = max(cameraZ - VISIBILITY_LIMIT, 0);
             for (y = min(cameraZ - 3, 31); y >= limit; --y) {
                 int8_t x;
-                int8_t const *mapY = &maps[playerLocation][y][0];
+                int8_t const *mapY = &map[y][0];
                 int8_t const *mapXY;
                 int8_t minX = cameraX + 5 + ((cameraZ - 3) - y);
                 int8_t maxX = 0;
@@ -851,7 +848,7 @@ void renderScene() {
                 lastIndex = cameraX;
                 lastPattern = *(mapY + lastIndex);
 
-                mapXY = &maps[playerLocation][y][lastIndex];
+                mapXY = &map[y][lastIndex];
                 for (x = lastIndex; x < minX - 1; ++x) {
                     uint8_t pattern;
 
@@ -881,7 +878,7 @@ void renderScene() {
 
                 lastPattern = *(mapY + lastIndex);
 
-                mapXY = &maps[playerLocation][y][lastIndex];
+                mapXY = &map[y][lastIndex];
 
                 maxX = max(cameraX - 3 - ((cameraZ - 3) - y), 0);
 
@@ -916,11 +913,11 @@ void renderScene() {
                 int8_t y;
 
                 for (y = cameraZ; y <= min(cameraZ + (x - cameraX), 31); ++y) {
-                    drawPattern(maps[playerLocation][y][x], y - cameraZ + 3, y + 1 - cameraZ + 3, x - cameraX + 3);
+                    drawPattern(map[y][x], y - cameraZ + 3, y + 1 - cameraZ + 3, x - cameraX + 3);
                 }
 
                 for (y = max(cameraZ - 1, 0); y >= max(cameraZ - (x - cameraX), 0); --y) {
-                    drawPattern(maps[playerLocation][y][x], y - cameraZ + 3, y + 1 - cameraZ + 3, x - cameraX + 3);
+                    drawPattern(map[y][x], y - cameraZ + 3, y + 1 - cameraZ + 3, x - cameraX + 3);
                 }
 
             }
@@ -932,11 +929,11 @@ void renderScene() {
             for (y = min(cameraZ + 3, 31); y <= min(cameraZ + 19, 31); ++y) {
                 int8_t x;
                 for (x = cameraX; x <= min(cameraX + (y - (cameraZ + 3)), 31); ++x) {
-                    drawPattern(maps[playerLocation][y][x], cameraX - x, cameraX - x + 1, y - cameraZ);
+                    drawPattern(map[y][x], cameraX - x, cameraX - x + 1, y - cameraZ);
                 }
 
                 for (x = max(cameraX - 1, 0); x >= max(cameraX - (y - (cameraZ + 3)), 0); --x) {
-                    drawPattern(maps[playerLocation][y][x], cameraX - x, cameraX - x + 1, y - cameraZ);
+                    drawPattern(map[y][x], cameraX - x, cameraX - x + 1, y - cameraZ);
                 }
             }
         }
@@ -947,11 +944,11 @@ void renderScene() {
             for (x = max(cameraX, 0); x >= max(cameraX - 16, 0); --x) {
                 int8_t y;
                 for (y = cameraZ; y <= min(cameraZ - (x - (cameraX)), 31); ++y) {
-                    drawPattern(maps[playerLocation][y][x], y - cameraZ + 3, y + 1 - cameraZ + 3, cameraX - x + 1);
+                    drawPattern(map[y][x], y - cameraZ + 3, y + 1 - cameraZ + 3, cameraX - x + 1);
                 }
 
                 for (y = max(cameraZ - 1, 0); y >= max(cameraZ + (x - (cameraX)), 0); --y) {
-                    drawPattern(maps[playerLocation][y][x], y - cameraZ + 3, y + 1 - cameraZ + 3, cameraX - x + 1);
+                    drawPattern(map[y][x], y - cameraZ + 3, y + 1 - cameraZ + 3, cameraX - x + 1);
                 }
             }
         }
@@ -1002,15 +999,36 @@ void renderScene() {
 
 void initMap() {
     int x, y;
+    const uint8_t *head = &data[0][0];
+    int16_t repetitions = -1;
+    uint8_t current = '.';
     for (y = 0; y < 32; ++y ) {
         for (x = 0; x < 32; ++x ) {
-            uint8_t current = maps[playerLocation][y][x];
-            
+
+            if (repetitions < 1) {
+                repetitions = *head;
+
+                if (repetitions >= 32 ) {
+                    ++head;
+                    current = repetitions;
+                    repetitions = 0;
+                } else {
+                    ++head;
+                    current = *head;
+                    ++head;
+                    repetitions--;
+                }
+            } else {
+                repetitions--;
+            }
+
+            map[y][x] = current;
+
             if ((current == 's' && enteredFrom == 0) ||
                 (current == 'w' && enteredFrom == 1) ||
                 (current == 'n' && enteredFrom == 2) ||
                 (current == 'e' && enteredFrom == 3)
-                ) {
+                    ) {
 
                 struct WorldPosition newPos;
                 cameraX = x;
@@ -1135,25 +1153,25 @@ void tickRenderer() {
         cameraX = 0;
     }
 
-    if (patterns[maps[playerLocation][cameraZ - 2][cameraX]].ceiling < 2) {
+    if (patterns[map[cameraZ - 2][cameraX]].ceiling < 2) {
         cameraX = prevX;
         cameraZ = prevZ;
     }
     
 
-    if (maps[playerLocation][cameraZ][cameraX] == '0') {
+    if (map[cameraZ][cameraX] == '0') {
         enteredFrom = 2;
         moveBy(0);
         initMap();
-    } else if (maps[playerLocation][cameraZ][cameraX] == '2') {
+    } else if (map[cameraZ][cameraX] == '2') {
         enteredFrom = 0;
         moveBy(2);
         initMap();
-    } else if (maps[playerLocation][cameraZ][cameraX] == '3') {
+    } else if (map[cameraZ][cameraX] == '3') {
         enteredFrom = 1;
         moveBy(3);
         initMap();
-    } else if (maps[playerLocation][cameraZ][cameraX] == '1') {
+    } else if (map[cameraZ][cameraX] == '1') {
         enteredFrom = 3;
         moveBy(1);
         initMap();
