@@ -86,6 +86,7 @@ struct Room *addRoom(
     toReturn->connections[4] = connections[4];
     toReturn->connections[5] = connections[5];
     
+    //add list head to make manipulations easier
     toReturn->itemsPresent = (struct ObjectNode *) malloc(sizeof(struct ObjectNode));
     memset(toReturn->itemsPresent, 0, sizeof(struct ObjectNode) );
 

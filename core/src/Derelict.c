@@ -112,25 +112,63 @@ void bombControllerActivatedCallback(struct Item *item) {
 }
 
 void elevatorGoDownCallback(struct Item *item) {
+    struct ObjectNode* currentItem;
+    struct ObjectNode* nextItem;
+    int newRoom;
+
     
     if (!getItemNamed("comm-terminal-2")->active) {
         defaultLogger("Central computer is offline");
         return;
     }
     
+    newRoom = getRoom(getPlayerRoom())->connections[4];
+    currentItem = getRoom(getPlayerRoom())->itemsPresent->next;
+    
+    while(currentItem != NULL && currentItem->item != NULL ) {
+        
+        nextItem = currentItem->next;
+        
+        if (currentItem->item->pickable) {
+            item = currentItem->item;
+            removeObjectFromRoom(item);
+            addObjectToRoom( newRoom, item);
+        }
+        
+        currentItem = nextItem;
+    }
+    
     moveBy(4);
-    item = NULL;
 }
 
 void elevatorGoUpCallback(struct Item *item) {
     
+    struct ObjectNode* currentItem;
+    struct ObjectNode* nextItem;
+    int newRoom;
+    
     if (!getItemNamed("comm-terminal-2")->active) {
         defaultLogger("Central computer is offline");
         return;
     }
+
+    newRoom = getRoom(getPlayerRoom())->connections[5];
+    currentItem = getRoom(getPlayerRoom())->itemsPresent->next;
     
+    while(currentItem != NULL && currentItem->item != NULL) {
+ 
+        nextItem = currentItem->next;
+        
+        if (currentItem->item->pickable) {
+            item = currentItem->item;
+            removeObjectFromRoom(item);
+            addObjectToRoom( newRoom, item);
+        }
+        
+        currentItem = nextItem;
+    }
+
     moveBy(5);
-    item = NULL;
 }
 
 void useCloggedFlush(struct Item *item) {
