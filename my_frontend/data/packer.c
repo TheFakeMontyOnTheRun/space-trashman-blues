@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
     puts(" },");
 
     fclose(input);
-
+    printf("/*%d*/\n", used);
     if (used > 256) {
 //    printf("Map is bigger than allowed! %d\n", used );
 //    return 1;
