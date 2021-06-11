@@ -2,6 +2,7 @@ cpc:
 	rm -f CPCVersion/src/*
 	rm -f -R CPCVersion/obj/*
 	cp -f src/map.h CPCVersion/src
+	cp -f src/maps.h CPCVersion/src
 	cp -f ../core/include/Core.h CPCVersion/src
 	cp -f ../core/include/Derelict.h CPCVersion/src
 	cat src/cpc.c > CPCVersion/src/game.c
