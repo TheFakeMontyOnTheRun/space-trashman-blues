@@ -959,23 +959,12 @@ void render(const long ms) {
 
         clippingY1 = 200;
 
-        for (z = -8; z < 8; ++z ) {
-            for (x = -13; x < 13; ++x ) {
-                fill(XRES + 8 + (13 * 4) + ( 4 * x), 2 + 8 + ( 8 * 4 ) +  ( 4 * z), 4, 4, ( x == 0 && z == 0 ) ? 32 : isPositionAllowed(visPos.x + x, visPos.y  + z) ? 192 : 64, FALSE);
-            }
-        }
-
         if (!needToRedrawHUD) {
             dirtyLineY0 = 0;
             dirtyLineY1 = YRES;
         } else {
-            fill(XRES, 0, 320 - XRES, 10, 0, FALSE);
-            fill(XRES, 0, 10, 72, 0, FALSE);
-            fill(311, 0, 10, 72, 0, FALSE);
+            fill(XRES, 0, 320 - XRES, 200, 0, FALSE);
             drawTextAt(1 + (XRES / 8), 1, " Map:", 255);
-
-
-            fill(XRES, 8 + (16 * 4), 320 - XRES, 128, 0, FALSE);
 
             if (mapTopLevel != NULL) {
                 drawBitmap(208, 72, mapTopLevel, 0);
@@ -1004,9 +993,14 @@ void render(const long ms) {
                 }
                 head = head->next;
             }
-
-            fill(0, YRES, XRES, (200 - YRES), 0, FALSE);
         }
+
+        for (z = -8; z < 8; ++z ) {
+            for (x = -13; x < 13; ++x ) {
+                fill(XRES + 8 + (13 * 4) + ( 4 * x), 2 + 8 + ( 8 * 4 ) +  ( 4 * z), 4, 4, ( x == 0 && z == 0 ) ? 32 : isPositionAllowed(visPos.x + x, visPos.y  + z) ? 192 : 64, FALSE);
+            }
+        }
+
         needToRedrawHUD = FALSE;
     }
 }

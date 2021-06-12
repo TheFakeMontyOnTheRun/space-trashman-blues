@@ -41,7 +41,7 @@ extern int distanceForPenumbra;
 extern int distanceForDarkness;
 extern int turnTarget;
 extern int turnStep;
-
+extern int needToRedrawHUD;
 
 #define MASK_LEFT 1
 #define MASK_FRONT 2
