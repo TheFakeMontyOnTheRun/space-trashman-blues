@@ -25,7 +25,7 @@ TESTOBJS = Tests/TestMovement.o \
 		$(GMOCK_DIR)/src/gmock-all.o \
 		$(GMOCK_DIR)/src/gmock_main.o
 
-OBJS = src/Derelict.o src/Parser.o
+OBJS = src/Derelict.o src/Parser.o src/Core.o
 
 MAIN_GAME_OBJ = src/main.o
 
