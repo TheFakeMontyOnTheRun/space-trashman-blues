@@ -3,8 +3,12 @@
 #include <string.h>
 #include <assert.h>
 
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
 #include <unistd.h>
+#endif
 
 #include "Enums.h"
 #include "FixP.h"

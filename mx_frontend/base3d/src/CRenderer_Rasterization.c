@@ -1,7 +1,11 @@
 #include <stdlib.h>
 #include <string.h>
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
 #include <unistd.h>
+#endif
 #include <assert.h>
 
 #include "FixP.h"

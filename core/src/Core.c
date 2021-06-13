@@ -6,7 +6,13 @@ Created by Daniel Monteiro on 2019-07-26.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
+#include <unistd.h>
+#endif
 
 #ifndef DONT_INCLUDE
 #include "Core.h"

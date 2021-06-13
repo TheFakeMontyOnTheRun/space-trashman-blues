@@ -2,8 +2,12 @@
  Created by Daniel Monteiro on 03/10/2019.
 */
 
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
 #include <unistd.h>
+#endif
 
 #include "Common.h"
 #include "Globals.h"

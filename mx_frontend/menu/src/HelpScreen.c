@@ -1,6 +1,9 @@
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
 #include <unistd.h>
-
+#endif
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>

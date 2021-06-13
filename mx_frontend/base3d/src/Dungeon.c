@@ -1,8 +1,12 @@
 #include <stdio.h>
 
 #include <stddef.h>
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
-#include <string.h>
+#include <unistd.h>
+#endif#include <string.h>
 #include <stdlib.h>
 
 #include "FixP.h"

@@ -116,12 +116,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine, int nCmdShow)
 {
 
-
+        
 
         WNDCLASSEX WndCls;
-        RECT window_rect = {0, 0, 640, 480};
-        static char szAppName[] = "The Mistral Report 95";
-
+		RECT window_rect = {0, 0, 640, 480};
+        static char szAppName[] = "Sub Mare Imperium Derelict 95";
 
         hInst = hInstance;
         WndCls.cbSize = sizeof(WndCls);
@@ -143,7 +142,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
         HWnd = CreateWindowEx(WS_EX_OVERLAPPEDWINDOW,
                        szAppName,
-                       "The Mistral Report 95",
+                       "Sub Mare Imperium Derelict 95",
                        WS_OVERLAPPEDWINDOW | WS_VISIBLE,
                        CW_USEDEFAULT,
                        CW_USEDEFAULT,
@@ -155,19 +154,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                        NULL);
 
 
-        AdjustWindowRectEx(&window_rect,
-                            WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-                            FALSE,
-                            WS_EX_OVERLAPPEDWINDOW
-                            );
+		AdjustWindowRectEx(&window_rect, 
+							WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+							FALSE,
+							WS_EX_OVERLAPPEDWINDOW
+							);
 
-        MoveWindow(HWnd,
-                    CW_USEDEFAULT,
-                    CW_USEDEFAULT,
-                    window_rect.right - window_rect.left,
-                    window_rect.bottom - window_rect.top,
-                    TRUE
-                    );
+		MoveWindow(HWnd, 
+					CW_USEDEFAULT, 
+					CW_USEDEFAULT, 
+					window_rect.right - window_rect.left,
+					window_rect.bottom - window_rect.top,
+					TRUE
+					);
 
 
 #else

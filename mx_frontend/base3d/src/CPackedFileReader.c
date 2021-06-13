@@ -4,8 +4,12 @@
 #include <assert.h>
 #include <errno.h>
 
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
 #include <unistd.h>
+#endif
 
 #include "Common.h"
 

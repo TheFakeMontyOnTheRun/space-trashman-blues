@@ -1,7 +1,12 @@
 //
 // Created by Daniel Monteiro on 08/10/2019.
 //
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
+#include <unistd.h>
+#endif
 
 #include "Core.h"
 #include "Parser.h"

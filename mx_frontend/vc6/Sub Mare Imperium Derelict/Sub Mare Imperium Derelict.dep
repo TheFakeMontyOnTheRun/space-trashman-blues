@@ -1,0 +1,399 @@
+# Microsoft Developer Studio Generated Dependency File, included by Sub Mare Imperium Derelict.mak
+
+..\..\base3d\src\Win32Version\CGDIRenderer.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\loadbitmap.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	
+
+..\..\base3d\src\Common.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\win32int.h"\
+	
+
+..\..\..\core\src\Core.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\..\core\include\core.h"\
+	"..\..\base3d\include\win32int.h"\
+	
+
+..\..\base3d\src\CPackedFileReader.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\win32int.h"\
+	
+
+..\..\menu\src\Crawler.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\..\core\include\core.h"\
+	"..\..\..\core\include\derelict.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\dungeon.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\loadbitmap.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\visibilitystrategy.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	"..\..\soundsystem\soundsystem.h"\
+	
+
+..\..\menu\src\CreditsScreen.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\loadbitmap.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\visibilitystrategy.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	
+
+..\..\base3d\src\CRenderer.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\..\core\include\core.h"\
+	"..\..\..\core\include\derelict.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\loadbitmap.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\visibilitystrategy.h"\
+	"..\..\base3d\include\win32int.h"\
+	
+
+..\..\base3d\src\CRenderer_Rasterization.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\loadbitmap.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\visibilitystrategy.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	
+
+..\..\base3d\src\CRenderer_Tesselation.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\globals.h"\
+	"..\..\base3d\include\loadbitmap.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\visibilitystrategy.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	
+
+..\..\base3d\src\CTile3DProperties.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\win32int.h"\
+	
+
+..\..\..\core\src\Derelict.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\..\core\include\core.h"\
+	"..\..\..\core\include\derelict.h"\
+	"..\..\base3d\include\win32int.h"\
+	
+
+..\..\base3d\src\Dungeon.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\..\core\include\core.h"\
+	"..\..\..\core\include\derelict.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\dungeon.h"\
+	"..\..\base3d\include\edirection_utils.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	"..\..\soundsystem\soundsystem.h"\
+	
+
+..\..\base3d\src\EDirection_Utils.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\edirection_utils.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\win32int.h"\
+	
+
+..\..\menu\src\Engine.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\loadbitmap.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\visibilitystrategy.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	"..\..\soundsystem\soundsystem.h"\
+	
+
+..\..\base3d\src\Events.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\dungeon.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\loadbitmap.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\visibilitystrategy.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	"..\..\soundsystem\soundsystem.h"\
+	
+
+..\..\base3d\src\FixP.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\win32int.h"\
+	
+
+..\..\menu\src\GameMenu.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\..\core\include\core.h"\
+	"..\..\..\core\include\derelict.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\globals.h"\
+	"..\..\base3d\include\loadbitmap.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\visibilitystrategy.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	"..\..\menu\include\ui.h"\
+	"..\..\soundsystem\soundsystem.h"\
+	
+
+..\..\base3d\src\Globals.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\globals.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	
+
+..\..\menu\src\HackingScreen.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\loadbitmap.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\visibilitystrategy.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	"..\..\menu\include\ui.h"\
+	
+
+..\..\menu\src\HelpScreen.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\loadbitmap.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\visibilitystrategy.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	"..\..\menu\include\ui.h"\
+	
+
+..\..\base3d\src\LoadBitmap.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\loadbitmap.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\visibilitystrategy.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	
+
+..\..\menu\src\Main.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\..\core\include\derelict.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\loadbitmap.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\visibilitystrategy.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	
+
+..\..\menu\src\MainMenu.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\loadbitmap.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\visibilitystrategy.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	"..\..\menu\include\ui.h"\
+	"..\..\soundsystem\soundsystem.h"\
+	
+
+..\..\base3d\src\MapWithCharKey.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\win32int.h"\
+	
+
+..\..\..\core\src\Parser.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\..\core\include\core.h"\
+	"..\..\..\core\include\derelict.h"\
+	"..\..\base3d\include\win32int.h"\
+	
+
+..\..\menu\src\UI.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\loadbitmap.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\visibilitystrategy.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	"..\..\menu\include\ui.h"\
+	
+
+..\..\base3d\src\Vec.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\win32int.h"\
+	
+
+..\..\base3d\src\VisibilityStrategy.c : \
+	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\..\base3d\include\cactor.h"\
+	"..\..\base3d\include\common.h"\
+	"..\..\base3d\include\crenderer.h"\
+	"..\..\base3d\include\ctile3dproperties.h"\
+	"..\..\base3d\include\edirection_utils.h"\
+	"..\..\base3d\include\enums.h"\
+	"..\..\base3d\include\fixp.h"\
+	"..\..\base3d\include\loadbitmap.h"\
+	"..\..\base3d\include\mapwithcharkey.h"\
+	"..\..\base3d\include\vec.h"\
+	"..\..\base3d\include\visibilitystrategy.h"\
+	"..\..\base3d\include\win32int.h"\
+	"..\..\menu\include\engine.h"\
+	
+
+".\Sub Mare Imperium.rc" : \
+	".\bong.wav"\
+	".\dead.wav"\
+	".\detected.wav"\
+	".\detected2.wav"\
+	".\enemydead.wav"\
+	".\enemyfire.wav"\
+	".\fire.wav"\
+	".\gotclue.wav"\
+	".\hurt.wav"\
+	".\menu_move.wav"\
+	".\menu_select.wav"\
+	".\small.ico"\
+	".\The Mistral Report 95.ICO"\
+	

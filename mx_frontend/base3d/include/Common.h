@@ -1,6 +1,13 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#ifdef WIN32
+#include "Win32Int.h"
+#else
+#include <stdint.h>
+#include <unistd.h>
+#endif
+
 #define MAP_SIZE 32
 
 #ifndef TRUE
@@ -35,7 +42,9 @@ void initFileReader(const char * __restrict__ dataFilePath);
 
 uint32_t toNativeEndianess(const uint32_t val);
 
+#ifndef WIN32
 #define min(v1, v2) (( (v1) < (v2) ) ? (v1) : (v2) )
 #define max(v1, v2) (( (v1) > (v2) ) ? (v1) : (v2) )
+#endif
 
 #endif
