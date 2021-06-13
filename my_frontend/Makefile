@@ -16,6 +16,7 @@ sms:
 	cat ../core/include/Core.h >> 8bitworkshop/game.c
 	cat ../core/include/Derelict.h >> 8bitworkshop/game.c
 	cat src/map.h >> 8bitworkshop/game.c
+	cat src/maps.h >> 8bitworkshop/game.c
 	cat src/demo.c >> 8bitworkshop/game.c
 	cat ../core/src/Core.c >> 8bitworkshop/game.c
 	cat ../core/src/Derelict.c >> 8bitworkshop/game.c

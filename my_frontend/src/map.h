@@ -185,11 +185,7 @@ int8_t map[32][32] = {
 };
 
 
-
-const uint8_t data[1][320] = {
 #ifndef DONT_INCLUDE
 #include "maps.h"
 #endif
-};
-
 #endif
