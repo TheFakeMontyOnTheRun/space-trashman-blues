@@ -47,18 +47,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         sounds[7] = soundPool!!.load(this, R.raw.hurt, 1)
     }
 
-    private fun enterStickyImmersiveMode() {
-        window.decorView.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (Build.VERSION.SDK_INT >= 29) {
-            enterStickyImmersiveMode()
+            window.decorView.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         } else {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         }
 
 
@@ -92,12 +88,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         useBestRouteForGameplayPresentation()
 
-        Thread( Runnable {
+        Thread {
             while (running) {
                 Thread.sleep(1000)
 
                 runOnUiThread {
-                    if  ( !(application as MistralApplication).hasPhysicalController() ) {
+                    if (!(application as MistralApplication).hasPhysicalController()) {
 
                         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                             llActions.visibility = View.VISIBLE
@@ -125,7 +121,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     }
                 }
 
-                val route = findSecundaryDisplayRouter()
+                val route = findSecondaryDisplayRouter()
                 if ((this@MainActivity).presentation != null && (route == null || route.presentationDisplay == null)) {
                     presentation = null
                     runOnUiThread { (this@MainActivity).recreate() }
@@ -133,28 +129,32 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 
             }
-        }).start()
+        }.start()
 
-        Thread(Runnable {
+        Thread {
             while (running) {
-                Thread.sleep(75)
+                Thread.sleep(33)
                 runOnUiThread { redraw() }
             }
-        }
-        ).start()
+        }.start()
 
         if (soundPool != null) {
-            Thread(Runnable {
-
+            Thread {
                 while (running) {
                     Thread.sleep(10)
                     when (val sound = MistralJNI.getSoundToPlay()) {
-                        0, 1, 2, 3, 4, 5, 6, 7, 8 -> soundPool!!.play(sounds[sound], 1f, 1f, 0, 0, 1f)
+                        0, 1, 2, 3, 4, 5, 6, 7, 8 -> soundPool!!.play(
+                            sounds[sound],
+                            1f,
+                            1f,
+                            0,
+                            0,
+                            1f
+                        )
                     }
 
                 }
-            }
-            ).start()
+            }.start()
         }
     }
 
@@ -219,25 +219,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-    private fun findSecundaryDisplayRouter(): MediaRouter.RouteInfo? {
+    private fun findSecondaryDisplayRouter(): MediaRouter.RouteInfo? {
         val mMediaRouter =
             getSystemService(Context.MEDIA_ROUTER_SERVICE) as MediaRouter
         return mMediaRouter.getSelectedRoute(MediaRouter.ROUTE_TYPE_LIVE_VIDEO)
     }
 
     private fun useBestRouteForGameplayPresentation() {
-        val mRouteInfo = findSecundaryDisplayRouter()
+        val mRouteInfo = findSecondaryDisplayRouter()
         if (mRouteInfo != null) {
             val presentationDisplay = mRouteInfo.presentationDisplay
             if (presentationDisplay != null) {
-                useSecundaryDisplayForGameplayPresentation(presentationDisplay)
+                useSecondaryDisplayForGameplayPresentation(presentationDisplay)
                 Thread.sleep(1000)
             }
         }
     }
 
 
-    private fun useSecundaryDisplayForGameplayPresentation(presentationDisplay: Display) {
+    private fun useSecondaryDisplayForGameplayPresentation(presentationDisplay: Display) {
 
         (imageView.parent as ViewManager).removeView(imageView)
         presentation =

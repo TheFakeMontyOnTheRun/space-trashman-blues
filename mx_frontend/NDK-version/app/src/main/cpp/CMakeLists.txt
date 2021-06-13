@@ -27,6 +27,7 @@ add_library( # Sets the name of the library.
 
         # Provides a relative path to your source file(s).
         ../../../../../../core/src/Derelict.c
+        ../../../../../../core/src/Core.c
         ../../../../../../core/src/Parser.c
         ../../../../../menu/src/MainMenu.c
         ../../../../../menu/src/Crawler.c
