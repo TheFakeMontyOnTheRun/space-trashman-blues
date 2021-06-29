@@ -1,7 +1,7 @@
 CC = emcc
 CXX = em++
 
-LDFLAGS =  -O3 -s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_SDL=2 -s --preload-file ./base.pfs --use-preload-plugins -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0
+LDFLAGS =  -O3 -s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_SDL=1 -s --preload-file ./base.pfs --use-preload-plugins -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0
 
 CFLAGS=-g -c -O3     \
 	-Ibase3d/include                                     \
@@ -22,7 +22,7 @@ MENU_OBJ=menu/src/MainMenu.o \
 	menu/src/Engine.o \
 	menu/src/UI.o \
 	menu/src/Main.o \
-	base3d/src/SDLVersion/CSDL2Renderer.o \
+	base3d/src/SDLVersion/SDL1Renderer.o \
 	base3d/src/Vec.o \
 	base3d/src/Globals.o \
 	base3d/src/CTile3DProperties.o \
@@ -43,6 +43,7 @@ MENU_OBJ=menu/src/MainMenu.o \
 	menu/src/CreditsScreen.o \
 	base3d/src/Dungeon.o \
 	../core/src/Derelict.o \
+	../core/src/Core.o \
 	../core/src/Parser.o
 
 
