@@ -7,7 +7,8 @@
 #else
 #include <stdint.h>
 #include <unistd.h>
-#endif#include <string.h>
+#endif
+#include <string.h>
 #include <stdlib.h>
 
 #include "FixP.h"
