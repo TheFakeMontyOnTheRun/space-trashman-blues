@@ -66,6 +66,7 @@ struct Room {
   uint8_t rankRequired;
   uint8_t sizeX;
   uint8_t sizeY;
+  uint8_t chanceOfRandomBattle;
 };
 
 struct Room *addRoom(
@@ -73,7 +74,7 @@ struct Room *addRoom(
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
         char *info,
 #endif
-        int sizeX, int sizeY, int connections[6]);
+        int sizeX, int sizeY, int chanceOfRandomBattle, int connections[6]);
 
 struct Item* addItem(char *description,
                      char *info,

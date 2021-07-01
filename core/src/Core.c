@@ -75,7 +75,7 @@ struct Room *addRoom(
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
         char *info,
 #endif
-                int sizeX, int sizeY, int connections[6]) {
+                int sizeX, int sizeY, int chanceOfRandomBattle, int connections[6]) {
     
     struct Room* toReturn = &rooms[roomCount++];
     toReturn->description = description;
@@ -84,7 +84,7 @@ struct Room *addRoom(
 #endif
     toReturn->sizeX = sizeX;
     toReturn->sizeY = sizeY;
-    
+    toReturn->chanceOfRandomBattle = chanceOfRandomBattle;
     toReturn->connections[0] = connections[0];
     toReturn->connections[1] = connections[1];
     toReturn->connections[2] = connections[2];

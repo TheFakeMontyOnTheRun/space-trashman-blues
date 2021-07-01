@@ -258,7 +258,7 @@ void initStation(void) {
             "the predicted path, I will sink into\n"
             "the abyss myself.",
 #endif
-            32, 32, connections);
+            32, 32, 0, connections);
     
     /* 2 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -279,7 +279,7 @@ void initStation(void) {
             "corner, there's a escape pod entrance.\n"
             "Apparently, only one pod was launched.",
 #endif
-            32, 32, connections);
+            32, 32, 0, connections);
 
     /* 3 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -293,7 +293,7 @@ void initStation(void) {
             "being right next to the hangar and\n"
             "the control room, it's rather quiet.",
 #endif
-            32, 32, connections);
+            32, 32, 0, connections);
 
     /* 4 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -307,7 +307,7 @@ void initStation(void) {
             "typical only of ships with 5 levels\n"
             "or more.",
 #endif
-            64, 64,connections)->rankRequired = 1;
+            64, 64, 0, connections)->rankRequired = 1;
     
     /* 5 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -323,7 +323,7 @@ void initStation(void) {
             "cloth and broken plastic on the floor,\n"
             "but nothing really useful.",
 #endif
-            32, 32, connections)->rankRequired = 1;
+            32, 32, 0, connections)->rankRequired = 1;
 
     
     /* 6 */
@@ -338,7 +338,7 @@ void initStation(void) {
             "what it is, but I guess I already\n"
             "know. Ick.",
 #endif
-            64, 9, connections);
+            64, 9, 0, connections);
 
     
     /* 7 */
@@ -353,7 +353,7 @@ void initStation(void) {
             "There are some burn marks on the \n"
             "walls.",
 #endif
-            32, 32, connections)->rankRequired = 1;
+            32, 32, 0, connections)->rankRequired = 1;
     
     /* 8 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -365,7 +365,7 @@ void initStation(void) {
             "see some of the factory stickers \n"
             "in it.",
 #endif
-            32, 32, connections)->rankRequired = 2;
+            32, 32, 0, connections)->rankRequired = 2;
     
     /* 9 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -380,7 +380,7 @@ void initStation(void) {
             "well. These parts of the quarters \n"
             "were probably the more prestigious ones.",
 #endif
-            32, 32, connections);
+            32, 32, 0, connections);
     
     /* 10 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -392,7 +392,7 @@ void initStation(void) {
             "badly mixed up. It's hard to make \n"
             "the age of girl, but she was young.",
 #endif
-            32, 32, connections)->rankRequired = 3;
+            32, 32, 0, connections)->rankRequired = 3;
     
     /* 11 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -404,7 +404,7 @@ void initStation(void) {
             "much around. He had a strange \n"
             "fixation on redheads.",
 #endif
-            32, 32, connections)->rankRequired = 4;
+            32, 32, 0, connections)->rankRequired = 4;
     
     /* 12 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -413,7 +413,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD.",
 #endif
-                    32, 32, connections);
+                    32, 32, 0, connections);
 
     /* 13 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -425,7 +425,7 @@ void initStation(void) {
             "has an elevator. This is was typical \n"
             "only of ships with 5 levels or more.",
 #endif
-            32, 32, connections)->rankRequired = 1;
+            32, 32, 0, connections)->rankRequired = 1;
     
     /* 14 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -441,7 +441,7 @@ void initStation(void) {
             "middle of a day-to-day routine and had\n"
             "to quickly run.",
 #endif
-            32, 32, connections)->rankRequired = 1;
+            32, 32, 0, connections)->rankRequired = 1;
     
     /* 15 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -450,7 +450,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD.",
 #endif
-                    32, 32, connections)->rankRequired = 4;
+                    32, 32, 0, connections)->rankRequired = 4;
     
     /* 16 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -459,7 +459,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD.",
 #endif
-                    32, 32, connections)->rankRequired = 3;
+                    32, 32, 0, connections)->rankRequired = 3;
 
     /* 17 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -469,7 +469,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD.",
 #endif
-                    32, 32, connections)->rankRequired = 1;
+                    32, 32, 0, connections)->rankRequired = 1;
     
     /* 18 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -478,7 +478,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD",
 #endif
-                    32, 32, connections)->rankRequired = 3;
+                    32, 32, 0, connections)->rankRequired = 3;
 
     /* 19 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -490,7 +490,7 @@ void initStation(void) {
             "elevator. This is was typical only of ships \n"
             "with 5 levels or more.",
 #endif
-            32, 32, connections)->rankRequired = 1;
+            32, 32, 0, connections)->rankRequired = 1;
     
     /* 20 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -501,7 +501,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD",
 #endif
-                    32, 32, connections);
+                    32, 32, 0, connections);
 
     /* 21 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -511,7 +511,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD.",
 #endif
-                    32, 32, connections);
+                    32, 32, 0, connections);
     
     /* 22 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -520,7 +520,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD.",
 #endif
-                    32, 32, connections)->rankRequired = 4;
+                    32, 32, 0, connections)->rankRequired = 4;
     
     /* 23 */
     memset(&connections[0], 0, 6 * sizeof(int));
@@ -529,7 +529,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD",
 #endif
-                    32, 32, connections)->rankRequired = 2;
+                    32, 32, 0, connections)->rankRequired = 2;
 
 
     /*Items*/
