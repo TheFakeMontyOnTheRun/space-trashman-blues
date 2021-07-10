@@ -39,6 +39,7 @@ const char *AbandonMission_options[6] = {"Continue", "End game"};
 int AbandonMission_navigation[2] = {-1, kMainMenu};
 int AbandonMission_count = 2;
 extern struct GameSnapshot gameSnapshot;
+extern int cursorPosition;
 
 void Crawler_initStateCallback(int32_t tag) {
     int c = 0;
@@ -88,13 +89,10 @@ void Crawler_initStateCallback(int32_t tag) {
 }
 
 void Crawler_initialPaintCallback() {
-    drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
+    fill(0, 0, 320, 200, 0, FALSE);
 
-
-    fill(11 * 8, 12 * 8, 18 * 8, 8, 255, FALSE);
-    fill(11 * 8, 11 * 8, 18 * 8, 8, 0, FALSE);
-
-    drawRect(11 * 8, 11 * 8, 18 * 8, 16, 0);
+    fill(11 * 8 - 1, 12 * 8, 18 * 8 + 3, 8, 255, FALSE);
+    drawRect(11 * 8 - 1, 11 * 8 - 1, 18 * 8 + 2, 8 + 2, 255);
 
     drawTextAt(13, 13, "Loading", 0);
     drawTextAt(13, 12, "Please wait...", 255);
@@ -232,8 +230,18 @@ void Crawler_repaintCallback() {
             
             zCameraOffset -= Div(intToFix(1), intToFix(16));
             if (zCameraOffset == 0 ) {
-                currentPresentationState = kWaitingForInput;
-                needToRedrawHUD = TRUE;
+                int chanceForRandomBattle = getRoom(getPlayerRoom())->chanceOfRandomBattle;
+                int diceRoll = rand() % 0xFF;
+
+                //tmp
+                diceRoll = 0;
+
+                if (diceRoll <= chanceForRandomBattle ) {
+                    currentPresentationState = kEnteringRandomBattle;
+                } else {
+                    currentPresentationState = kWaitingForInput;
+                    needToRedrawHUD = TRUE;
+                }
             }
             return;
         }
@@ -246,6 +254,10 @@ void Crawler_repaintCallback() {
 
 enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     int returnCode;
+
+    if (kEnteringRandomBattle == currentPresentationState ) {
+        return kRandomBattle;
+    }
 
     if (showPromptToAbandonMission) {
 
@@ -311,6 +323,42 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
                     currentPresentationState = kConfirmInputBlink1;
                     break;
             }
+        }
+
+
+        switch(cmd) {
+            case kCommandUp:
+                playSound(MENU_SELECTION_CHANGE_SOUND);
+                cursorPosition = (cursorPosition - 1);
+
+                if (cursorPosition >= AbandonMission_count) {
+                    cursorPosition = AbandonMission_count - 1;
+                }
+                break;
+            case kCommandDown:
+                playSound(MENU_SELECTION_CHANGE_SOUND);
+                cursorPosition =
+                        (uint8_t) ((cursorPosition + 1) % AbandonMission_count);
+
+                break;
+            case kCommandBack:
+                showPromptToAbandonMission = TRUE;
+                break;
+
+            case kCommandFire1:
+            case kCommandFire2:
+            case kCommandFire3:
+
+                if (cursorPosition == 0) {
+                    showPromptToAbandonMission = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    currentPresentationState = kAppearing;
+                    return kResumeCurrentState;
+                }
+                timeUntilNextState = 0;
+                nextNavigationSelection = AbandonMission_navigation[cursorPosition];
+                currentPresentationState = kConfirmInputBlink1;
+                break;
         }
 
         return kResumeCurrentState;

@@ -35,7 +35,8 @@
 
 #include "UI.h"
 
-void drawWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *__restrict__ title) {
+void
+drawWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *__restrict__ title) {
 
     fill((x) * 8, (y) * 8, dx * 8, dy * 8, 0, TRUE);
     fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, 255, FALSE);
@@ -44,14 +45,16 @@ void drawWindow(const int x, const int y, const unsigned int dx, const unsigned 
     drawTextAt(x + 1, y, title, 255);
 }
 
-void drawTextWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *__restrict__ title,
-                    const char *__restrict__ content) {
+void
+drawTextWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *__restrict__ title,
+               const char *__restrict__ content) {
     drawWindow(x, y, dx, dy, title);
     drawTextAt(x + 1, y + 2, content, 0);
 }
 
-void drawImageWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *__restrict__ title,
-                     const struct Bitmap *__restrict__ content) {
+void
+drawImageWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *__restrict__ title,
+                const struct Bitmap *__restrict__ content) {
     fill((x) * 8, (y) * 8, dx * 8, dy * 8, 0, TRUE);
     fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, 255, FALSE);
     drawBitmap((x - 1) * 8, (y) * 8, content, TRUE);

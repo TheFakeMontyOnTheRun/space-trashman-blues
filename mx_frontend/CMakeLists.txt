@@ -23,6 +23,7 @@ add_executable(derelict32
 		menu/src/MainMenu.c
 		menu/src/Crawler.c
 		menu/src/HelpScreen.c
+		menu/src/BattleScreen.c
 		menu/src/CreditsScreen.c
 		menu/src/GameMenu.c
 		menu/src/Main.c

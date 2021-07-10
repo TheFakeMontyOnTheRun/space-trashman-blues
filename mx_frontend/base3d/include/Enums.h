@@ -44,6 +44,9 @@ enum EGameMenuState {
     kBadVictoryEpilogue,
     kGoodGameOverEpilogue,
 	kBadGameOverEpilogue,
+	kRandomBattle,
+	kAttackOnBattle,
+	kDefendOnBattle,
 	kPrologue,
 	kEpilogue
 };
@@ -58,7 +61,8 @@ enum EPresentationState {
 	kConfirmInputBlink5,
 	kConfirmInputBlink6,
 	kFade,
-    kRoomTransitioning
+    kRoomTransitioning,
+	kEnteringRandomBattle
 };
 
 enum ESoundDriver {
