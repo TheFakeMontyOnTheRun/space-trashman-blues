@@ -45,6 +45,41 @@ drawWindow(const int x, const int y, const unsigned int dx, const unsigned int d
     drawTextAt(x + 1, y, title, 255);
 }
 
+int
+drawAppearingWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char * title, long remainingTime) {
+
+    if (remainingTime > 256) {
+        return 0;
+    }
+
+   if (remainingTime > 0) {
+
+        int middleX = x + (dx / 2);
+        int middleY = y + (dy / 2);
+
+        int invertedProgression = ((256 - (remainingTime)) / 32) * 32;
+        int lerpPositionX = lerpInt( middleX, x, invertedProgression, 256);
+        int lerpPositionWidth = lerpInt( 0, dx, invertedProgression, 256);
+        int lerpPositionY = lerpInt(middleY, y, invertedProgression, 256);
+        int lerpPositionHeight = lerpInt( 0, dy, invertedProgression, 256);
+
+        drawRect(lerpPositionX * 8,
+                 lerpPositionY * 8,
+                 lerpPositionWidth * 8,
+                 lerpPositionHeight * 8, 0);
+
+        return 0;
+    }
+
+    fill((x) * 8, (y) * 8, dx * 8, dy * 8, 0, TRUE);
+    fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, 255, FALSE);
+    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, 0);
+    fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, 0, FALSE);
+    drawTextAt(x + 1, y, title, 255);
+
+    return 1;
+}
+
 void
 drawTextWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *__restrict__ title,
                const char *__restrict__ content) {

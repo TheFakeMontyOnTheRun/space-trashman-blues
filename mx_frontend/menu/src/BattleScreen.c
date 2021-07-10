@@ -61,48 +61,25 @@ void BattleScreen_repaintCallback(void) {
 
     drawBitmap( 32, 32, enemySprite, TRUE);
 
-    if (currentPresentationState == kAppearing) {
+    if (drawAppearingWindow(1, 15, 22, 10, "Actions", timeUntilNextState)) {
 
+        for (c = 0; c < Battlecreen_optionsCount; ++c) {
 
-        int invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;
-        int lerpPositionX = lerpInt( 20, 1, invertedProgression, 256);
-        int lerpPositionWidth = lerpInt( 0, 22, invertedProgression, 256);
-        int lerpPositionY = lerpInt( 20, 15, invertedProgression, 256);
-        int lerpPositionHeight = lerpInt( 0, 10, invertedProgression, 256);
+            int isCursor = (cursorPosition == c)
+                           && ((currentPresentationState == kConfirmInputBlink1)
+                               || (currentPresentationState == kConfirmInputBlink3)
+                               || (currentPresentationState == kConfirmInputBlink5)
+                               || (currentPresentationState == kWaitingForInput));
 
+            if (isCursor) {
+                fill(8,
+                     (200 - optionsHeight) + (c * 8) - 8 - 8, (len * 8) + 16, 8,
+                     0, FALSE);
+            }
 
-        if (timeUntilNextState > 256) {
-            return;
+            drawTextAt( 2, (26 - Battlecreen_optionsCount) + c - 2,
+                        &BattleScreen_options[c][0], isCursor ? 255 : 0);
         }
-
-
-        drawRect(lerpPositionX * 8,
-                 lerpPositionY * 8,
-                 lerpPositionWidth * 8,
-                 lerpPositionHeight * 8, 0);
-
-        return;
-    }
-
-
-    drawWindow(1, 15, 22, 10, "Actions");
-
-    for (c = 0; c < Battlecreen_optionsCount; ++c) {
-
-        int isCursor = (cursorPosition == c)
-                       && ((currentPresentationState == kConfirmInputBlink1)
-                           || (currentPresentationState == kConfirmInputBlink3)
-                           || (currentPresentationState == kConfirmInputBlink5)
-                           || (currentPresentationState == kWaitingForInput));
-
-        if (isCursor) {
-            fill(8,
-                 (200 - optionsHeight) + (c * 8) - 8 - 8, (len * 8) + 16, 8,
-                 0, FALSE);
-        }
-
-        drawTextAt( 2, (26 - Battlecreen_optionsCount) + c - 2,
-                   &BattleScreen_options[c][0], isCursor ? 255 : 0);
     }
 }
 

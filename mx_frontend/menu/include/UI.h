@@ -8,5 +8,6 @@
 void drawWindow( const int x, const int y, const unsigned int dx, const unsigned int dy, const char* title);
 void drawTextWindow( const int x, const int y, const unsigned int dx, const unsigned int dy, const char* __restrict__ title, const char* __restrict__ content);
 void drawImageWindow( const int x, const int y, const unsigned int dx, const unsigned int dy, const char* __restrict__ title, const struct Bitmap* __restrict__ content);
+int drawAppearingWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char * title, long remainingTime);
 
 #endif /*THE_MISTRAL_REPORT_UI_H*/
