@@ -57,6 +57,7 @@ long uclock() {
 #include "MapWithCharKey.h"
 #include "Common.h"
 #include "LoadBitmap.h"
+#include "Core.h"
 #include "Engine.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"

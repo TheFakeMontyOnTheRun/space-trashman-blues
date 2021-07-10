@@ -12,6 +12,7 @@
 #include "Common.h"
 #include "Globals.h"
 #include "Enums.h"
+#include "Core.h"
 #include "Engine.h"
 
 int renderingMethod = FIXED;

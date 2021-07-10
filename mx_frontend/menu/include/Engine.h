@@ -63,6 +63,16 @@ enum EGameMenuState HelpScreen_tickCallback(enum ECommand, long data);
 
 void HelpScreen_unloadStateCallback(void);
 
+void BattleScreen_initStateCallback(int32_t tag);
+
+void BattleScreen_initialPaintCallback(void);
+
+void BattleScreen_repaintCallback(void);
+
+enum EGameMenuState BattleScreen_tickCallback(enum ECommand, long data);
+
+void BattleScreen_unloadStateCallback(void);
+
 void CreditsScreen_initStateCallback(int32_t tag);
 
 void CreditsScreen_initialPaintCallback(void);
@@ -100,6 +110,12 @@ void enterState( enum EGameMenuState State );
 int loopTick(enum ECommand cmd);
 
 void renderTick(long ms);
+
+void redrawHUD();
+
+extern struct Texture *itemSprites[TOTAL_ITEMS];
+
+extern int currentSelectedItem;
 
 #define MENU_ITEM_TIME_TO_BECOME_ACTIVE_MS 200
 #endif

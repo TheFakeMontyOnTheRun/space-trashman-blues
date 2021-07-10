@@ -11,6 +11,7 @@
 #include "Enums.h"
 #include "FixP.h"
 #include "LoadBitmap.h"
+#include "Core.h"
 #include "Engine.h"
 #include "FixP.h"
 #include "Vec.h"

@@ -17,6 +17,7 @@
 #include "Dungeon.h"
 #include "Common.h"
 #include "EDirection_Utils.h"
+#include "Core.h"
 #include "Engine.h"
 #include "SoundSystem.h"
 #include "Core.h"

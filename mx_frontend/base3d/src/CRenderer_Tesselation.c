@@ -17,6 +17,7 @@
 #include "Vec.h"
 #include "Globals.h"
 #include "LoadBitmap.h"
+#include "Core.h"
 #include "Engine.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"

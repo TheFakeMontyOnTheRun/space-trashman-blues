@@ -15,6 +15,7 @@
 #include "Common.h"
 #include "Vec.h"
 #include "LoadBitmap.h"
+#include "Core.h"
 #include "Engine.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"

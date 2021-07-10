@@ -11,6 +11,7 @@
 #include "Enums.h"
 #include "FixP.h"
 #include "Vec.h"
+#include "Core.h"
 #include "Engine.h"
 #include "CActor.h"
 #include "Common.h"

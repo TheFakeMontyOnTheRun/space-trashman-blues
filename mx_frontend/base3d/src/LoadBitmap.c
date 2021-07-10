@@ -20,6 +20,7 @@
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
+#include "Core.h"
 #include "Engine.h"
 #include "FixP.h"
 #include "VisibilityStrategy.h"

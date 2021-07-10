@@ -22,6 +22,7 @@
 #include "CTile3DProperties.h"
 #include "EDirection_Utils.h"
 #include "CRenderer.h"
+#include "Core.h"
 #include "Engine.h"
 #include "FixP.h"
 #include "MapWithCharKey.h"
