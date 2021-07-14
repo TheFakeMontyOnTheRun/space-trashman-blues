@@ -1088,6 +1088,15 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
     fV1 = fV2 = v0;
     fU1 = fU2 = u0;
 
+#ifndef FASTER_TEXTURE_MAP
+    effectiveDelta = intToFix((coords[5]) - y);
+    fDU1 = Div((u2 - u0), effectiveDelta);
+    fDV1 = Div((v2 - v0), effectiveDelta);
+
+    effectiveDelta = (intToFix((coords[3]) - y));
+    fDU2 = Div((u1 - u0), effectiveDelta);
+    fDV2 = Div((v1 - v0), effectiveDelta);
+#else
     effectiveDelta = Div(one, intToFix((coords[5]) - y));
     fDU1 = Mul((u2 - u0), effectiveDelta);
     fDV1 = Mul((v2 - v0), effectiveDelta);
@@ -1095,6 +1104,8 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
     effectiveDelta = Div(one, intToFix((coords[3]) - y));
     fDU2 = Mul((u1 - u0), effectiveDelta);
     fDV2 = Mul((v1 - v0), effectiveDelta);
+#endif
+
 
     for (; y < yFinal; ++y) {
 
@@ -1216,7 +1227,15 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     fV1 = fV2 = v0;
     fU1 = fU2 = u0;
 
+#ifndef FASTER_TEXTURE_MAP
+    effectiveDelta = (intToFix(y - (coords[3])));
+    fDU1 = Div((u1 - u0), effectiveDelta);
+    fDV1 = Div((v1 - v0), effectiveDelta);
 
+    effectiveDelta = (intToFix(y - (coords[5])));
+    fDU2 = Div((u2 - u0), effectiveDelta);
+    fDV2 = Div((v2 - v0), effectiveDelta);
+#else
     effectiveDelta = Div(one, intToFix(y - (coords[3])));
     fDU1 = Mul((u1 - u0), effectiveDelta);
     fDV1 = Mul((v1 - v0), effectiveDelta);
@@ -1224,6 +1243,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     effectiveDelta = Div(one, intToFix(y - (coords[5])));
     fDU2 = Mul((u2 - u0), effectiveDelta);
     fDV2 = Mul((v2 - v0), effectiveDelta);
+#endif
 
 
     for (; y >= yFinal; --y) {
