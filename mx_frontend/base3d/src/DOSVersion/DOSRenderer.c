@@ -25,6 +25,7 @@
 
 #include "CTile3DProperties.h"
 
+#include "Core.h"
 #include "Engine.h"
 #include "LoadBitmap.h"
 #include "CRenderer.h"
