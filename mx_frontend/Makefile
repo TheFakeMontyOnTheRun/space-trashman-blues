@@ -34,12 +34,14 @@ MENU_OBJ=menu/src/MainMenu.o \
 	base3d/src/EDirection_Utils.o \
 	base3d/src/CRenderer_Tesselation.o \
 	../core/src/Derelict.o \
+	../core/src/Core.o \
 	../core/src/Parser.o \
 	SoundSystem/NullMusic.o \
 	menu/src/HelpScreen.o \
 	menu/src/GameMenu.o \
 	menu/src/Engine.o \
 	menu/src/CreditsScreen.o \
+	menu/src/HackingScreen.o \
 	base3d/src/Dungeon.o
 
 

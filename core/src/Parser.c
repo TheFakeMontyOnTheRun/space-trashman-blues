@@ -1,6 +1,6 @@
-//
-// Created by Daniel Monteiro on 08/10/2019.
-//
+/*
+Created by Daniel Monteiro on 08/10/2019.
+*/
 #ifdef WIN32
 #include "Win32Int.h"
 #else
