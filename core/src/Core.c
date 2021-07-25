@@ -2,6 +2,7 @@
 Created by Daniel Monteiro on 2019-07-26.
 */
 
+#ifndef DONT_INCLUDE
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,10 +12,13 @@ Created by Daniel Monteiro on 2019-07-26.
 #include "Win32Int.h"
 #else
 #include <stdint.h>
+
+#ifndef CPC_PLATFORM
 #include <unistd.h>
 #endif
 
-#ifndef DONT_INCLUDE
+#endif
+
 #include "Core.h"
 #endif
 

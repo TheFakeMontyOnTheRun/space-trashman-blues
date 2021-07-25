@@ -1,11 +1,17 @@
 /*
 Created by Daniel Monteiro on 08/10/2019.
 */
+
+#ifndef DONT_INCLUDE
 #ifdef WIN32
 #include "Win32Int.h"
 #else
 #include <stdint.h>
+
+#ifndef CPC_PLATFORM
 #include <unistd.h>
+#endif
+
 #endif
 
 #include "Core.h"
@@ -14,7 +20,7 @@ Created by Daniel Monteiro on 08/10/2019.
 
 #include <stdio.h>
 #include <string.h>
-
+#endif
 
 int parseCommand(char *cmd, char *operand) {
     if (!strcmp(cmd, "pick")) {
