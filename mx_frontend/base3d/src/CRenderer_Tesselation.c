@@ -403,7 +403,7 @@ void drawColumnAt(const struct Vec3 center,
 }
 
 void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
-                const struct Texture *__restrict__ texture, uint8_t cameraDirection) {
+                const struct Texture *__restrict__ texture, uint8_t cameraDirection, uint8_t flipTexture) {
     
     FixP_t one = intToFix(1);
     FixP_t zero = 0;
@@ -427,12 +427,20 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         memcpy (&projectionVertices[2].first, &p1, sizeof(struct Vec3));
         memcpy (&projectionVertices[3].first, &p1, sizeof(struct Vec3));
 
+        if (flipTexture) {
+            cameraDirection = kSouth;
+        }
+
     } else if (cameraDirection == kSouth) {
         
         memcpy (&projectionVertices[0].first, &p1, sizeof(struct Vec3));
         memcpy (&projectionVertices[1].first, &p1, sizeof(struct Vec3));
         memcpy (&projectionVertices[2].first, &p0, sizeof(struct Vec3));
         memcpy (&projectionVertices[3].first, &p0, sizeof(struct Vec3));
+
+        if (flipTexture) {
+            cameraDirection = kNorth;
+        }
 
     } else {
         if (cameraDirection == kEast) {
@@ -460,14 +468,23 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         llz0 = projectionVertices[0].second;
         lrz0 = projectionVertices[1].second;
         llz1 = projectionVertices[2].second;
-        lrz1 = projectionVertices[3].second;        
+        lrz1 = projectionVertices[3].second;
 
-        uvCoords[0] = 32;
-        uvCoords[1] = 0;
-        uvCoords[2] = 32;
-        uvCoords[3] = 32;
-        uvCoords[4] = 0;
-        uvCoords[5] = 0;
+        if (flipTexture) {
+            uvCoords[0] = 0;
+            uvCoords[1] = 32;
+            uvCoords[2] = 0;
+            uvCoords[3] = 0;
+            uvCoords[4] = 32;
+            uvCoords[5] = 32;
+        } else {
+            uvCoords[0] = 32;
+            uvCoords[1] = 0;
+            uvCoords[2] = 32;
+            uvCoords[3] = 32;
+            uvCoords[4] = 0;
+            uvCoords[5] = 0;
+        }
         
         coords[0] = fixToInt(llz1.mX); // 2
         coords[1] = fixToInt(llz1.mY);
@@ -479,12 +496,21 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         drawTexturedTriangle(&coords[0], &uvCoords[0], (struct Texture*)texture );
 
 
-        uvCoords[0] = 0;
-        uvCoords[1] = 0;
-        uvCoords[2] = 32;
-        uvCoords[3] = 32;
-        uvCoords[4] = 0;
-        uvCoords[5] = 32;
+        if (flipTexture) {
+            uvCoords[0] = 32;
+            uvCoords[1] = 32;
+            uvCoords[2] = 0;
+            uvCoords[3] = 0;
+            uvCoords[4] = 32;
+            uvCoords[5] = 0;
+        } else {
+            uvCoords[0] = 0;
+            uvCoords[1] = 0;
+            uvCoords[2] = 32;
+            uvCoords[3] = 32;
+            uvCoords[4] = 0;
+            uvCoords[5] = 32;
+        }
 
         coords[0] = fixToInt(llz0.mX); //0
         coords[1] = fixToInt(llz0.mY);

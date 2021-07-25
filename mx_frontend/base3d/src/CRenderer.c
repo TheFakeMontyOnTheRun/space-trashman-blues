@@ -847,7 +847,7 @@ void render(const long ms) {
                             break;
 
                         case kRampNorth: {
-
+                            uint8_t flipTextureVertical = 0;
                             tmp.mX = position.mX;
                             tmp.mY = position.mY;
                             tmp.mZ = position.mZ;
@@ -856,16 +856,18 @@ void render(const long ms) {
                             tmp2.mY = position.mY;
                             tmp2.mZ = position.mZ;
 
+
+                            flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kEast);
 
                             addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2), 0);
                             addToVec3(&tmp2, 0, (tileProp->mCeilingHeight * 2), 0);
 
-                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection);
+                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection, flipTextureVertical);
                         }
                             break;
 
                         case kRampSouth: {
-
+                            uint8_t flipTextureVertical = 0;
                             tmp.mX = position.mX;
                             tmp.mY = position.mY;
                             tmp.mZ = position.mZ;
@@ -878,12 +880,14 @@ void render(const long ms) {
                             addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
                             addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
 
-                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection);
+                            flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kWest);
+
+                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection, flipTextureVertical);
                         }
                             break;
 
                         case kRampEast: {
-
+                            uint8_t flipTextureVertical = 0;
                             tmp.mX = position.mX;
                             tmp.mY = position.mY;
                             tmp.mZ = position.mZ;
@@ -892,16 +896,17 @@ void render(const long ms) {
                             tmp2.mY = position.mY;
                             tmp2.mZ = position.mZ;
 
+                            flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kEast);
 
                             addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
                             addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
 
                             drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex],
-                                       (cameraDirection + 1) & 3);
+                                       (cameraDirection + 1) & 3, flipTextureVertical);
                         }
                             break;
                         case kRampWest: {
-
+                            uint8_t flipTextureVertical = 0;
                             tmp.mX = position.mX;
                             tmp.mY = position.mY;
                             tmp.mZ = position.mZ;
@@ -914,8 +919,10 @@ void render(const long ms) {
                             addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
                             addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
 
+                            flipTextureVertical = (cameraDirection == kNorth || cameraDirection == kWest );
+
                             drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex],
-                                       (cameraDirection + 3) & 3);
+                                       (cameraDirection + 3) & 3, flipTextureVertical);
                         }
                             break;
                         case kCube:

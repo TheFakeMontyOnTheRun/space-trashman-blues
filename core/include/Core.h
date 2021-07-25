@@ -43,7 +43,6 @@ struct Item {
   uint8_t index : 6;
   uint8_t active : 1;
   uint8_t pickable : 1;
-  uint8_t next;
   char *description;
   char *info;
   UseWithObjectCallback useWithCallback;
