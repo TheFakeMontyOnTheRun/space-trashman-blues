@@ -136,7 +136,7 @@ void drawFloorAt(const struct Vec3 center,
 				 const struct Texture * __restrict__ texture, uint8_t rotation);
 
 void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
-                 const struct Texture * __restrict__ texture, uint8_t rotation);
+                 const struct Texture * __restrict__ texture, uint8_t rotation, uint8_t flipTexture);
 
 void drawCeilingAt(const struct Vec3 center,
 				   const struct Texture * __restrict__ texture, uint8_t rotation);

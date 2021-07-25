@@ -61,16 +61,16 @@ struct Item* addItem(char *description,
                      int pickable,
                      int positionX,
                      int positionY) {
-    
+
     struct Item* toReturn = &item[itemsCount];
-    
+
     toReturn->index = itemsCount++;
     toReturn->description = description;
     toReturn->info = info;
     toReturn->pickable = pickable;
     toReturn->position.x = positionX;
     toReturn->position.y = positionY;
-    
+
     return toReturn;
 }
 
@@ -80,7 +80,7 @@ struct Room *addRoom(
         char *info,
 #endif
                 int sizeX, int sizeY, int chanceOfRandomBattle, int connections[6]) {
-    
+
     struct Room* toReturn = &rooms[roomCount++];
     toReturn->description = description;
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
@@ -95,7 +95,7 @@ struct Room *addRoom(
     toReturn->connections[3] = connections[3];
     toReturn->connections[4] = connections[4];
     toReturn->connections[5] = connections[5];
-    
+
     /* add list head to make manipulations easier */
     toReturn->itemsPresent = (struct ObjectNode *) malloc(sizeof(struct ObjectNode));
     memset(toReturn->itemsPresent, 0, sizeof(struct ObjectNode) );
@@ -140,26 +140,26 @@ struct ObjectNode *getPlayerItems() {
 
 struct Item *getItemNamed(const char* name) {
     int c = 0;
-    
+
     for (c = 0; c < itemsCount; ++c ) {
         if (!strcmp(item[c].description, name)) {
             return &item[c];
         }
     }
-    
+
     return NULL;
 }
 
 
 struct Room *getRoomByName(const char* name) {
     int c = 0;
-    
+
     for (c = 1; c < roomCount; ++c ) {
         if (!strcmp(rooms[c].description, name)) {
             return &rooms[c];
         }
     }
-    
+
     return NULL;
 }
 
@@ -261,7 +261,7 @@ void moveBy(int direction) {
     if (direction >= 0 && direction <= 5 && room->connections[direction] != 0) {
         struct Item *coupling = getItemNamed("magnetic-coupling");
         room = &rooms[playerLocation];
-        
+
         if (rooms[room->connections[direction]].rankRequired > playerRank) {
             defaultLogger("Insuficient rank to enter room");
             return;
@@ -276,11 +276,11 @@ void moveBy(int direction) {
             defaultLogger("The magnetic coupling is\nengaged. The door won't open.");
             return;
         }
-        
+
 
         playerLocation = room->connections[direction];
         room = &rooms[playerLocation];
-        
+
         for (c = 0; c < 6; ++c ) {
             if (room->connections[c] == previousLocation) {
                 direction = c;

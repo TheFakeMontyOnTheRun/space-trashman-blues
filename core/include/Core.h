@@ -38,17 +38,18 @@ struct WorldPosition {
 };
 
 struct Item {
+  struct WorldPosition position;
+  uint8_t roomId : 6;
+  uint8_t index : 6;
+  uint8_t active : 1;
+  uint8_t pickable : 1;
+  uint8_t next;
   char *description;
   char *info;
-  uint8_t roomId;
-  uint8_t index;
-  struct WorldPosition position;
   UseWithObjectCallback useWithCallback;
   UseObjectCallback useCallback;
   DropObjectCallback dropCallback;
   PickObjectCallback pickCallback;
-  uint8_t active : 1;
-  uint8_t pickable : 1;
 };
 
 struct ObjectNode {
@@ -63,10 +64,10 @@ struct Room {
 #endif
   uint8_t connections[6];
   struct ObjectNode *itemsPresent;
-  uint8_t rankRequired;
-  uint8_t sizeX;
-  uint8_t sizeY;
   uint8_t chanceOfRandomBattle;
+  uint8_t sizeX : 6;
+  uint8_t sizeY : 6;
+  uint8_t rankRequired : 3;
 };
 
 struct Room *addRoom(
