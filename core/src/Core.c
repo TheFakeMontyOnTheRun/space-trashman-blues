@@ -44,7 +44,7 @@ void writeToLog(const char *errorMsg) {
         errorHandlerCallback(errorMsg);
     }
 #else
-//We assume the error handler was already set. If you don't have stdio, you probably know what you're doing
+    /* We assume the error handler was already set. If you don't have stdio, you probably know what you're doing */
     errorHandlerCallback(errorMsg);
 #endif
 }
@@ -92,7 +92,7 @@ struct Room *addRoom(
     toReturn->connections[4] = connections[4];
     toReturn->connections[5] = connections[5];
     
-    //add list head to make manipulations easier
+    /* add list head to make manipulations easier */
     toReturn->itemsPresent = (struct ObjectNode *) malloc(sizeof(struct ObjectNode));
     memset(toReturn->itemsPresent, 0, sizeof(struct ObjectNode) );
 
@@ -690,7 +690,7 @@ void setGameStatus(enum EGameStates newStatus) {
 
 void initCore() {
 
-    //prepare for a single player in the game
+  /* prepare for a single player in the game */
     playerCharacter = 0;
     charactersCount = 1;
     characterPositions = (struct WorldPosition*)malloc(charactersCount * sizeof(struct WorldPosition));
