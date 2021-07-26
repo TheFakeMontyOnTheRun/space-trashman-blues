@@ -26,25 +26,41 @@ void useWithCallback(struct Item* item1, struct Item* item2 ) {
 
 TEST(TestObjectManipulation, canUseObjectsTogether) {
 
-  struct Item item[4];
-  memset(&item[0], 0, 4 * sizeof(struct Item));
-
-  item[0].description = "usableWith";
-  item[0].useWithCallback = useWithCallback;
-  item[0].pickable = TRUE;
-  item[1].description = "farofinha";
-  item[1].pickable = TRUE;
-  item[2].description = "pamonha";
-  item[2].pickable = TRUE;
-  item[3].description = "cocada";
-  item[3].pickable = TRUE;
+  struct Item *item;
 
   initStation();
 
-  addObjectToRoom(1, &item[0]);
-  addObjectToRoom(1, &item[1]);
-  addObjectToRoom(1, &item[2]);
-  addObjectToRoom(1, &item[3]);
+
+  item = addItem("usableWith", "",
+#ifdef ITEMS_HAVE_WEIGHT
+          0,
+#endif
+                 TRUE, 15, 19);
+  item->useCallback = usableCallback;
+  addToRoom("lss-daedalus", item);
+
+
+  item = addItem("farofinha", "",
+#ifdef ITEMS_HAVE_WEIGHT
+          0,
+#endif
+                 TRUE, 15, 19);
+  addToRoom("lss-daedalus", item);
+
+
+  item = addItem("pamonha", "",
+#ifdef ITEMS_HAVE_WEIGHT
+          0,
+#endif
+                 TRUE, 15, 19);
+  addToRoom("lss-daedalus", item);
+
+  item = addItem("cocada", "",
+#ifdef ITEMS_HAVE_WEIGHT
+          0,
+#endif
+                 TRUE, 15, 19);
+  addToRoom("lss-daedalus", item);
 
   ASSERT_TRUE(hasItemInRoom("lss-daedalus", "usableWith"));
   ASSERT_TRUE(hasItemInRoom("lss-daedalus", "farofinha"));
@@ -60,28 +76,31 @@ TEST(TestObjectManipulation, canUseObjectsTogether) {
   char *operand1 = strtok( NULL, "\n ");
 
   parseCommand(operator1, operand1);
-
-  parseCommand("drop", "used-twofold");
-
-  ASSERT_TRUE(hasItemInRoom("lss-daedalus", "used-twofold"));
 }
 
 TEST(TestObjectManipulation, canUseObjects) {
 
-  struct Item item[2];
-  memset(&item, 0, 2 * sizeof(struct Item));
+    struct Item *item;
 
-  item[0].description = "usable";
-  item[0].pickable = TRUE;
-  item[0].useCallback = usableCallback;
+    initStation();
 
-  item[1].description = "artificial";
-  item[1].pickable = TRUE;
 
-  initStation();
-  addObjectToRoom(2, &item[0]);  
-  addObjectToRoom(1, &item[0]);
-  addObjectToRoom(1, &item[1]);
+    item = addItem("usable", "",
+#ifdef ITEMS_HAVE_WEIGHT
+            0,
+#endif
+                   TRUE, 15, 19);
+    item->useCallback = usableCallback;
+
+    addToRoom("lss-daedalus", item);
+
+
+    item = addItem("artificial", "",
+#ifdef ITEMS_HAVE_WEIGHT
+            0,
+#endif
+                   TRUE, 15, 19);
+    addToRoom("lss-daedalus", item);
 
   ASSERT_TRUE(hasItemInRoom("lss-daedalus", "usable"));
   ASSERT_TRUE(isPlayerAtRoom("lss-daedalus"));
@@ -96,22 +115,26 @@ TEST(TestObjectManipulation, canUseObjects) {
 
 TEST(TestObjectManipulation, cantPickUnpickableObjects) {
 
-  struct Item item;
-  memset(&item, 0, sizeof(struct Item));
-
-  item.description = "unpickable";
-  item.pickable = FALSE;
-  item.useCallback = usableCallback;
+  struct Item *item;
 
   initStation();
-  addObjectToRoom(1, &item);
+
+
+  item = addItem("unpickable", "",
+#ifdef ITEMS_HAVE_WEIGHT
+          0,
+#endif
+                 FALSE, 15, 19);
+  item->useCallback = usableCallback;
+
+  addToRoom("lss-daedalus", item);
 
 
   ASSERT_TRUE(hasItemInRoom("lss-daedalus", "unpickable"));
   ASSERT_TRUE(isPlayerAtRoom("lss-daedalus"));
   parseCommand("pick", "unpickable");
   ASSERT_TRUE(hasItemInRoom("lss-daedalus", "unpickable"));
-  item.pickable = TRUE; 
+  item->pickable = TRUE;
   parseCommand("pick", "unpickable");
   ASSERT_FALSE(hasItemInRoom("lss-daedalus", "unpickable"));
 }

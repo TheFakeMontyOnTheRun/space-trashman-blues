@@ -137,12 +137,12 @@ void elevatorGoDownCallback(struct Item *item) {
     newRoom = getRoom(getPlayerRoom())->connections[4];
     currentItem = getRoom(getPlayerRoom())->itemsPresent->next;
     
-    while(currentItem != NULL && currentItem->item != NULL ) {
+    while(currentItem != NULL && getItem(currentItem->item) != NULL ) {
         
         nextItem = currentItem->next;
         
-        if (currentItem->item->pickable) {
-            item = currentItem->item;
+        if (getItem(currentItem->item)->pickable) {
+            item = getItem(currentItem->item);
             removeObjectFromRoom(item);
             addObjectToRoom( newRoom, item);
         }
@@ -167,12 +167,12 @@ void elevatorGoUpCallback(struct Item *item) {
     newRoom = getRoom(getPlayerRoom())->connections[5];
     currentItem = getRoom(getPlayerRoom())->itemsPresent->next;
     
-    while(currentItem != NULL && currentItem->item != NULL) {
+    while(currentItem != NULL && getItem(currentItem->item) != NULL) {
  
         nextItem = currentItem->next;
         
-        if (currentItem->item->pickable) {
-            item = currentItem->item;
+        if (getItem(currentItem->item)->pickable) {
+            item = getItem(currentItem->item);
             removeObjectFromRoom(item);
             addObjectToRoom( newRoom, item);
         }

@@ -168,10 +168,10 @@ void GameMenu_initStateCallback(int32_t tag) {
                 head = head->next;
             }
             
-            if (head != NULL && head->item != NULL ) {
-
-                mainText = head->item->description;
-                strcpy(&textBuffer[0], head->item->info);
+            if (head != NULL && getItem(head->item) != NULL ) {
+                struct Item *item = getItem(head->item);
+                mainText = item->description;
+                strcpy(&textBuffer[0], item->info);
 
                 GameMenu_optionsCount = 1;
                 GameMenu_options = &inspectItem_options[0];

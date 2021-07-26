@@ -106,12 +106,12 @@ TEST_F(TestInventoryManipulation, objectsDroppedInRoomStayThere) {
 TEST_F(TestInventoryManipulation, canPickObjects) {
 	ASSERT_TRUE(isPlayerAtRoom("lss-daedalus"));
 	addToRoom( "lss-daedalus", getItemNamed("low-rank-keycard"));
-	struct Item *item = getRoom(getPlayerRoom())->itemsPresent->item;
+	struct Item *item = getItem(getRoom(getPlayerRoom())->itemsPresent->item);
 
 	ASSERT_TRUE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
 	parseCommand("pick", "low-rank-keycard");
 	ASSERT_FALSE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
-	ASSERT_TRUE(collectedObject->item == item);
+	ASSERT_TRUE(getItem(collectedObject->item) == item);
 
 	parseCommand("drop", "low-rank-keycard");
 	ASSERT_TRUE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
@@ -119,18 +119,22 @@ TEST_F(TestInventoryManipulation, canPickObjects) {
 
 TEST_F(TestInventoryManipulation, objectsCanOnlyExistInOneRoom) {
 
-  struct Item item;
-  memset(&item, 0, sizeof(struct Item));
+  struct Item *item;
 
-  item.description = "farofinha";
-  item.pickable = TRUE;
   initStation();
 
-  addObjectToRoom(1, &item);
+
+  item = addItem("farofinha", "",
+#ifdef ITEMS_HAVE_WEIGHT
+            0,
+#endif
+                      TRUE, 15, 19);
+  addToRoom("lss-daedalus", item);
+
   ASSERT_TRUE(hasItemInRoom("lss-daedalus", "farofinha"));
   ASSERT_FALSE(hasItemInRoom("hangar", "farofinha"));
   
-  addObjectToRoom(2, &item);
+  addObjectToRoom(2, item);
   ASSERT_TRUE(hasItemInRoom("hangar", "farofinha"));
   ASSERT_FALSE(hasItemInRoom("lss-daedalus", "farofinha"));
   

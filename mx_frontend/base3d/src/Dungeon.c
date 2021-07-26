@@ -134,12 +134,12 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 }
 
                 if (head2 != NULL) {
-                    item2 = head2->item;
+                    item2 = getItem(head2->item);
                 }
 
                 while (head1 != NULL && item1 == NULL) {
-                    if (offseted.x == (head1->item->position.x) && offseted.y == (head1->item->position.y)) {
-                        item1 = head1->item;
+                    if (offseted.x == (getItem(head1->item)->position.x) && offseted.y == (getItem(head1->item)->position.y)) {
+                        item1 = getItem(head1->item);
                     }
                     head1 = head1->next;
                 }
@@ -171,8 +171,8 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 needToRedrawHUD = TRUE;
                 
                 while (head != NULL && item == NULL) {
-                    if (offseted.x == (head->item->position.x) && offseted.y == (head->item->position.y)) {
-                        item = head->item;
+                    if (offseted.x == (getItem(head->item)->position.x) && offseted.y == (getItem(head->item)->position.y)) {
+                        item = getItem(head->item);
                     }
                     head = head->next;
                 }
@@ -198,7 +198,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     }
                     
                     if (head != NULL) {
-                        item = head->item;
+                        item = getItem(head->item);
                     }
                     
                     if (item != NULL) {
@@ -328,8 +328,9 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             offseted.y += playerCrawler.position.y;
 
             while (roomItems != NULL && item == NULL) {
-                if (offseted.x == (roomItems->item->position.x) && offseted.y == (roomItems->item->position.y)) {
-                    item = roomItems->item;
+                struct Item* itemCandidate = getItem(roomItems->item);
+                if (offseted.x == (itemCandidate->position.x) && offseted.y == (itemCandidate->position.y)) {
+                    item = itemCandidate;
                 }
                 roomItems = roomItems->next;
             }
@@ -394,7 +395,8 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         head = getRoom(getPlayerRoom())->itemsPresent->next;
 
         while (head != NULL) {
-            setItem(head->item->position.x, head->item->position.y, head->item->index);
+            struct Item* itemPtr = getItem(head->item);
+            setItem(itemPtr->position.x, itemPtr->position.y, itemPtr->index);
             head = head->next;
         }
     }
@@ -450,7 +452,8 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
 	head = getRoom(getPlayerRoom())->itemsPresent->next;
     
     while (head != NULL) {
-      setItem(head->item->position.x, head->item->position.y, head->item->index);
+      struct Item *item = getItem(head->item);
+      setItem(item->position.x, item->position.y, item->index);
       head = head->next;
     }
     

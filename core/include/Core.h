@@ -52,7 +52,7 @@ struct Item {
 };
 
 struct ObjectNode {
-  struct Item *item;
+  uint8_t item;
   struct ObjectNode *next;
 };
 
@@ -172,7 +172,7 @@ void initCore();
 void setGameStatus(enum EGameStates newStatus);
 
 #define TOTAL_ROOMS 24
-#define TOTAL_ITEMS 34
+#define TOTAL_ITEMS 64
 
 
 /* TODO: make accessory method for this */

@@ -160,13 +160,13 @@ void projectAllVertices(const uint8_t count) {
     FixP_t one = intToFix(1);
     FixP_t bias = Div(one, intToFix(128));
     FixP_t projected;
-    FixP_t oneOver;
+    FixP_t oneOver = one;
     int c;
     int intZ;
 
     if ( renderingMethod == FIXED ) {
         struct Projection *vertex = &projectionVertices[0];
-        FixP_t lastZ = -1;
+        FixP_t lastZ = 0xCAFEBABE;
         FixP_t compoundYFactor = playerHeight + walkingBias + yCameraOffset;
 
         for (c = 0; c < count; ++c, ++vertex) {

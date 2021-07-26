@@ -65,7 +65,7 @@ int main() {
 			head = getRoom(getPlayerRoom())->itemsPresent->next;
 
 			while (head != NULL) {
-			  if (x == head->item->position.x && y == head->item->position.y) {
+			  if (x == getItem(head->item)->position.x && y == getItem(head->item)->position.y) {
 			    hasObject = 1;
 			  }
 			  head = head->next;
@@ -86,7 +86,7 @@ int main() {
 		}
 
 		while (head != NULL) {
-		  printf("%s%s\n", head->item->active ? "[*]" : "[ ]" , head->item->description);
+		  printf("%s%s\n", getItem(head->item)->active ? "[*]" : "[ ]" , getItem(head->item)->description);
 		  head = head->next;
 		}
 
@@ -97,7 +97,7 @@ int main() {
 		}
 
 		while (head != NULL) {
-		  printf("%s%s (%d, %d)\n", head->item->active ? "[*]" : "[ ]" , head->item->description, head->item->position.x, head->item->position.y);
+		  printf("%s%s (%d, %d)\n", getItem(head->item)->active ? "[*]" : "[ ]" , getItem(head->item)->description, getItem(head->item)->position.x, getItem(head->item)->position.y);
 		  head = head->next;
 		}
 

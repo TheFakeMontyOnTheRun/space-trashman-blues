@@ -634,7 +634,7 @@ void drawFloor(FixP_t y0,
     const FixP_t zero = 0;
     FixP_t x0;
     FixP_t x1;
-    uint8_t pixel = *texture;
+    uint8_t pixel;
     FixP_t v = 0;
     uint8_t lastU;
     int16_t iy;
