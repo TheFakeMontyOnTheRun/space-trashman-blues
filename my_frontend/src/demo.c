@@ -999,7 +999,7 @@ void renderScene() {
 
 void initMap() {
     int x, y;
-    const uint8_t *head = &data[0][0];
+    const uint8_t *head = &data[0];
     int16_t repetitions = -1;
     uint8_t current = '.';
     for (y = 0; y < 32; ++y ) {

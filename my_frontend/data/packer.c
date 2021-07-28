@@ -8,7 +8,7 @@ int main(int argc, char **argv) {
     int repetitions = 0;
     int total = 0;
     int used = 0;
-    printf("{ ");
+
     while (fread(&head, 1, 1, input)) {
 
         if (head == '\n') {
@@ -31,10 +31,10 @@ int main(int argc, char **argv) {
                 } else {
                     /*  know your data! */
                     if (repetitions == 0) {
-                        printf("'%c',", last);
+                        printf(" '%c',", last);
                         used++;
                     } else {
-                        printf("%d, '%c',", (repetitions + 1), last);
+                        printf(" %d, '%c',", (repetitions + 1), last);
                         used += 2;
                     }
                 }
@@ -47,18 +47,19 @@ int main(int argc, char **argv) {
 
     if (total <= (32 * 32)) {
         if (repetitions != 0) {
-            printf("%d, '%c'", (repetitions + 1), last);
+            printf("%d, '%c', ", (repetitions + 1), last);
             used += 2;
         } else {
-            printf("'%c'", last);
+            printf("'%c', ", last);
             used += 1;
         }
     }
 
-    puts(" },");
-
     fclose(input);
-    printf("/*%d*/\n", used);
+
+    //not proud of this
+    fprintf(stderr, "%d,\n", used);
+
     if (used > 256) {
 //    printf("Map is bigger than allowed! %d\n", used );
 //    return 1;
