@@ -6,9 +6,9 @@ CXXFLAGS = -Iinclude -O3 -g -c -std=c++14 -Wno-narrowing   \
 		-I$(GMOCK_DIR)/include \
 		-I$(GMOCK_DIR) \
 		-I$(GMOCK_DIR)/include/gtest \
-		-I$(GMOCK_DIR)/include/gtest/internal -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING
+		-I$(GMOCK_DIR)/include/gtest/internal -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS
 
-CFLAGS = -Iinclude -O3 -g -c -std=c89 -ansi -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING
+CFLAGS = -Iinclude -O3 -g -c -std=c89 -ansi -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS
 
 
 GTEST_DIR = googletest/googletest

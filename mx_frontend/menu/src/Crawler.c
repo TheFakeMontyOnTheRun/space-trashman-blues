@@ -234,7 +234,7 @@ void Crawler_repaintCallback() {
                 int diceRoll = rand() % 0xFF;
 
                 //tmp
-                diceRoll = 0;
+                diceRoll = 0xFF;
 
                 if (diceRoll <= chanceForRandomBattle ) {
                     currentPresentationState = kEnteringRandomBattle;
