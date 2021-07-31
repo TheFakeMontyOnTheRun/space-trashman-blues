@@ -1030,7 +1030,7 @@ void initMap() {
                 repetitions--;
             }
 
-            map[y][x] = current;
+
 
             if ((current == 's' && enteredFrom == 0) ||
                 (current == 'w' && enteredFrom == 1) ||
@@ -1045,7 +1045,11 @@ void initMap() {
                 newPos.y = y;
                 setPlayerPosition(&newPos);
                 enteredFrom = 0xFF;
+                current = '.';
             }
+
+            map[y][x] = current;
+
         }
     }
 }
