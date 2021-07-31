@@ -1096,10 +1096,36 @@ void tickRenderer() {
             break;
             
         case 'a':
-            cameraX -= WALKSTEP;
+            switch (cameraRotation) {
+                case 0:
+                    cameraX -= WALKSTEP;
+                    break;
+                case 1:
+                    cameraZ += WALKSTEP;
+                    break;
+                case 2:
+                    cameraX += WALKSTEP;
+                    break;
+                case 3:
+                    cameraZ -= WALKSTEP;
+                    break;
+            }
             break;
         case 'd':
-            cameraX += WALKSTEP;
+            switch (cameraRotation) {
+                case 0:
+                    cameraX += WALKSTEP;
+                    break;
+                case 1:
+                    cameraZ -= WALKSTEP;
+                    break;
+                case 2:
+                    cameraX -= WALKSTEP;
+                    break;
+                case 3:
+                    cameraZ += WALKSTEP;
+                    break;
+            }
             break;
 
 
