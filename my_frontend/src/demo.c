@@ -14,7 +14,7 @@
 #define YRESMINUSONE YRES - 1
 
 
-#define WALKSTEP 2
+#define WALKSTEP 1
 #define CAMERA_HEIGHT 2
 #define VISIBILITY_LIMIT 32
 
@@ -998,10 +998,18 @@ void renderScene() {
 }
 
 void initMap() {
-    int x, y;
-    const uint8_t *head = &data[0];
+    int x, y, c;
+    const uint8_t *head;
+    uint16_t offsetOnDataStrip = 0;
     int16_t repetitions = -1;
     uint8_t current = '.';
+
+    for (c = 0; c < playerLocation; ++c ) {
+        offsetOnDataStrip += dataPositions[c];
+    }
+
+    head = &data[offsetOnDataStrip];
+
     for (y = 0; y < 32; ++y ) {
         for (x = 0; x < 32; ++x ) {
 
@@ -1045,6 +1053,7 @@ void initMap() {
 void tickRenderer() {
     uint8_t prevX;
     uint8_t prevZ;
+    int previousLocation = playerLocation;
 
 #ifndef CPC_PLATFORM
     clearGraphics();
@@ -1152,32 +1161,45 @@ void tickRenderer() {
     if (cameraX < 0) {
         cameraX = 0;
     }
-
+/*
     if (patterns[map[cameraZ - 2][cameraX]].ceiling < 2) {
         cameraX = prevX;
         cameraZ = prevZ;
     }
-    
+  */
+
+    /* unlike MX, we are signaling from the origin into the new room. MX allows for the movement and then searches where
+     * did the player came from - hence the "opossite direction" there */
 
     if (map[cameraZ][cameraX] == '0') {
-        enteredFrom = 2;
-        moveBy(0);
-        initMap();
-    } else if (map[cameraZ][cameraX] == '2') {
         enteredFrom = 0;
+        moveBy(0);
+    } else if (map[cameraZ][cameraX] == '2') {
+        enteredFrom = 2;
         moveBy(2);
-        initMap();
     } else if (map[cameraZ][cameraX] == '3') {
-        enteredFrom = 1;
-        moveBy(3);
-        initMap();
-    } else if (map[cameraZ][cameraX] == '1') {
         enteredFrom = 3;
+        moveBy(3);
+    } else if (map[cameraZ][cameraX] == '1') {
+        enteredFrom = 1;
         moveBy(1);
+    }
+
+    if (playerLocation != previousLocation) {
         initMap();
+    } else {
+        enteredFrom = 0xFF;
     }
 }
 
+
+void onError(const char* mesg) {
+    puts(mesg);
+}
+
+void logDelegate(const char* mesg) {
+    puts(mesg);
+}
 
 #ifdef XCODE_BUILD
 int demoMain() {
@@ -1200,13 +1222,13 @@ int main(
 #endif
     {
         running = 1;
-        enteredFrom = 2;
+        enteredFrom = 0;
         cameraRotation = 0;
         init();
         initStation();
-        playerLocation = 0;
         initMap();
-
+        setErrorHandlerCallback(onError);
+        setLoggerDelegate(logDelegate);
 
         memset(stencilHigh, 0, XRES);
 
