@@ -124,12 +124,12 @@ uint8_t getKey () {
     }
     
     if (state.joystick & CV_LEFT) {
-        return 'a';
+        return 'q';
     }
     
     
     if (state.joystick & CV_RIGHT) {
-        return 'd';
+        return 'e';
     }
     
     
