@@ -32,6 +32,8 @@ data: $(PACKAGER)
 	echo " 0};\n" >> ../src/maps.h
 
 
+
+#TODO: precalc absolute offsets
 	echo "const long dataPositions[] ={ 0,\n" >> ../src/maps.h
 	cat ./datastrip >> ../src/maps.h
 	echo " 0\n};" >> ../src/maps.h

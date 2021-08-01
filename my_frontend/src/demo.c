@@ -797,17 +797,25 @@ uint8_t drawPattern(uint8_t pattern, uint8_t x0, uint8_t x1, uint8_t y) {
 
     } else if (type == RIGHT_NEAR || type == LEFT_NEAR  ){
 
+        if ( cameraRotation == 1 || cameraRotation == 3 ) {
+
+            if (type == RIGHT_NEAR ) {
+                type == LEFT_NEAR;
+            } else {
+                type == RIGHT_NEAR;
+            }
+        }
 
         return drawWedge(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y, x1 - x0,
                          diff, 1, patterns[pattern].elementsMask, type);
         
-    } else if (type == LEFT_WALL  ){
+    } else if (type == LEFT_WALL || ( type == BACK_WALL  && ( cameraRotation == 1 || cameraRotation == 3 )) ){
         
         
         return drawWedge(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y,
                          0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
         
-    } else if (type == BACK_WALL  ){
+    } else if (type == BACK_WALL  || ( type == LEFT_WALL  && ( cameraRotation == 1 || cameraRotation == 3 ))){
         
         
         return drawSquare(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1,
@@ -1003,6 +1011,8 @@ void initMap() {
     uint16_t offsetOnDataStrip = 0;
     int16_t repetitions = -1;
     uint8_t current = '.';
+
+/* TODO: precalc absolute offsets */
 
     for (c = 0; c < playerLocation; ++c ) {
         offsetOnDataStrip += dataPositions[c];
