@@ -11,7 +11,7 @@ cpc:
 	cat ../core/src/Derelict.c >> CPCVersion/src/game.c
 
 sms:
-	rm -f 8bitworkshop/*
+	rm -f 8bitworkshop/game.c
 	cat src/sms.c > 8bitworkshop/game.c
 	cat ../core/include/Core.h >> 8bitworkshop/game.c
 	cat ../core/include/Derelict.h >> 8bitworkshop/game.c

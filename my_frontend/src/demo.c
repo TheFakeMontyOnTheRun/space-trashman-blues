@@ -1226,6 +1226,7 @@ void tickRenderer() {
     }
 
     if (playerLocation != previousLocation) {
+        cameraRotation = enteredFrom;
         initMap();
     } else {
         enteredFrom = 0xFF;
