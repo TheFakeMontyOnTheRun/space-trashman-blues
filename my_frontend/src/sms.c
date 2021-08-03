@@ -315,7 +315,7 @@ void pauseMenu() {
             cv_get_controller_state(&state, 0);
 
 
-            if (state.joystick & CV_FIRE_1) {
+            if (state.joystick & CV_FIRE_0) {
                 keepGoing = 0;
             }
 
