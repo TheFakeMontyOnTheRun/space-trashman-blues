@@ -346,17 +346,22 @@ uint8_t getKey () {
     if (state.joystick & CV_UP) {
         return 'w';
     }
-    
+
     if (state.joystick & CV_LEFT) {
+        if (state.joystick & CV_FIRE_1) {
+            return 'a';
+        }
         return 'q';
     }
-    
-    
+
+
     if (state.joystick & CV_RIGHT) {
+        if (state.joystick & CV_FIRE_1) {
+            return 'd';
+        }
         return 'e';
     }
-    
-    
+
     if (state.joystick & CV_DOWN) {
         return 's';
     }
