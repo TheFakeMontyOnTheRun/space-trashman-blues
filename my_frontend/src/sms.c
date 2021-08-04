@@ -59,6 +59,8 @@ extern char font_bitmap_0[];
 
 #define wait_vsync() __asm__("halt")
 
+struct ObjectNode* focusedItem;
+
 volatile uint_fast8_t vint_counter;
 
 void vint_handler(void) {
@@ -244,10 +246,14 @@ void init() {
 }
 
 char *menuItems[] = {
-        "Option 1",
-        "Another item",
-        "And yet another",
-        "The final solution"
+        "Use/Toggle current item",
+        "Use current item with...",
+        "Pick",
+        "Drop",
+        "Next item in inventory",
+        "Next room item in focus",
+        "Toogle item desc/room desc",
+        "Back to room",
 };
 
 void setup_text_mode() {
@@ -285,6 +291,9 @@ void show_text(int x, int y, char *text) {
 void pauseMenu() {
     int keepGoing = 1;
     int refresh = 1;
+    int itemDesc = 1;
+    struct Room* room = getRoom(getPlayerRoom());
+    struct ObjectNode* roomItem = room->itemsPresent;
 
     setup_text_mode();
 
@@ -295,15 +304,37 @@ void pauseMenu() {
 
         if (refresh) {
             int i = 0;
+            struct Item* item = getItem(focusedItem->item);
             refresh = 0;
 
             cvu_vmemset(IMAGE, ' ', 40 * 24);
 
-            for (i = 0; i < 4; ++i) {
-                if (i == cursorPosition) {
-                    show_text(1, 10 + i, ">");
+
+            show_text(1, 1, "Object at room:");
+
+            if (roomItem) {
+                show_text(16, 1, getItem(roomItem->item)->description);
+            }
+
+            if (itemDesc) {
+                if (item->active) {
+                    show_text(1, 2, "*");
                 }
-                show_text(2, 10 + i, menuItems[i]);
+
+                show_text(2, 2, item->description);
+                show_text(1, 3, item->info);
+            } else {
+                show_text(1, 2, " ");
+                show_text(2, 2, room->description);
+                show_text(1, 3, room->info);
+            }
+
+
+            for (i = 0; i < 8; ++i) {
+                if (i == cursorPosition) {
+                    show_text(1, 16 + i, ">");
+                }
+                show_text(2, 16 + i, menuItems[i]);
             }
             cooldown = 4000;
         }
@@ -316,8 +347,113 @@ void pauseMenu() {
 
 
             if (state.joystick & CV_FIRE_0) {
-                keepGoing = 0;
+                switch (cursorPosition) {
+                    case 0: {
+
+                        break;
+                    }
+
+                    case 1: {
+                        struct Item *item = NULL;
+                        struct Item* itemToPick = NULL;
+
+                        if (roomItem != NULL) {
+                            itemToPick = getItem(roomItem->item);
+                            if (itemToPick != NULL ) {
+                                if (focusedItem != NULL) {
+                                    item = getItem(focusedItem->item);
+                                    if (item != NULL) {
+
+                                        /* next items */
+                                        focusedItem = focusedItem->next;
+                                        if (!focusedItem) {
+                                            focusedItem = getPlayerItems();
+                                        }
+
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                        break;
+
+                    case 2: {
+                        if (roomItem != NULL) {
+                            struct Item* itemToPick = getItem(roomItem->item);
+                            if (itemToPick != NULL ) {
+                                pickObject(itemToPick);
+                                roomItem = room->itemsPresent;
+                            }
+                        }
+                    }
+                        break;
+
+                    case 3: {
+                        struct Item *item = NULL;
+
+                        if (focusedItem != NULL) {
+                            item = getItem(focusedItem->item);
+                        }
+
+                        if (item != NULL) {
+                            focusedItem = focusedItem->next;
+                            if (!focusedItem) {
+                                focusedItem = getPlayerItems();
+                            }
+
+                            dropObjectToRoom(getPlayerRoom(), item);
+                            roomItem = room->itemsPresent;
+                        }
+                    }
+                        break;
+                    case 4: {
+                        struct Item *item = NULL;
+                        struct ObjectNode *head = NULL;
+                        head = getPlayerItems();
+                        item = NULL;
+
+                        if (head != NULL) {
+                            item = getItem(head->item);
+                        }
+
+                        if (item != NULL) {
+                            focusedItem = focusedItem->next;
+                            if (!focusedItem) {
+                                focusedItem = getPlayerItems();
+                            }
+                        }
+                    }
+                        break;
+
+                    case 5: {
+                        roomItem = roomItem->next;
+                        if (!roomItem) {
+                            roomItem = room->itemsPresent;
+                        }
+                    }
+                        break;
+
+                    case 6:
+                        itemDesc = !itemDesc;
+                        break;
+                    case 7:
+                        keepGoing = 0;
+                        break;
+
+
+                }
+                refresh = 1;
             }
+
+            if (state.joystick & CV_FIRE_1) {
+                focusedItem = focusedItem->next;
+                if (!focusedItem) {
+                    focusedItem = getPlayerItems();
+                }
+                refresh = 1;
+            }
+
 
             if (state.joystick & CV_UP) {
                 cursorPosition--;
@@ -330,8 +466,8 @@ void pauseMenu() {
             if (state.joystick & CV_DOWN) {
                 cursorPosition++;
                 refresh = 1;
-                if (cursorPosition >= 4) {
-                    cursorPosition = 3;
+                if (cursorPosition >= 8) {
+                    cursorPosition = 7;
                 }
             }
         }

@@ -228,10 +228,11 @@ void dropObjectToRoom(int roomId, struct Item *itemToDrop) {
 }
 
 void pickObject(struct Item *itemToPick) {
-
+#ifndef CAN_PICK_OBJECT_AT_ANY_DISTANCE
     if (!isCloseToObject(getPlayerPosition(), itemToPick)) {
         return;
     }
+#endif
 
     if (!itemToPick->pickable) {
         defaultLogger("Can't pick it up");

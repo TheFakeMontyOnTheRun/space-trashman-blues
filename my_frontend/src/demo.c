@@ -31,6 +31,7 @@ enum DIRECTION {
 
 #define IN_RANGE(V0, V1, V)  ((V0) <= (V) && (V) <= (V1))
 
+struct ObjectNode* focusedItem = NULL;
 
 void shutdownGraphics();
 
@@ -1268,6 +1269,7 @@ int main(
         init();
         initStation();
         initMap();
+        focusedItem = getPlayerItems();
         setErrorHandlerCallback(onError);
         setLoggerDelegate(logDelegate);
 
