@@ -682,7 +682,7 @@ void graphicsPut(uint8_t x, uint8_t y) {
     buffer[(y * 64) + x ] |= 1;
 }
 
-int putchar(char dummy) {
+int putchar(int dummy) {
     dummy = dummy;
 }
 
