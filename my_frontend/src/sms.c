@@ -345,11 +345,22 @@ void pauseMenu() {
             cooldown = 0;
             cv_get_controller_state(&state, 0);
 
-
+/*
+char *menuItems[] = {
+ 0       "Use/Toggle current item",
+ 1       "Use current item with...",
+ 2       "Pick",
+ 3       "Drop",
+ 4       "Next item in inventory",
+ 5       "Next room item in focus",
+ 6       "Toogle item desc/room desc",
+ 7       "Back to room",
+};
+*/
             if (state.joystick & CV_FIRE_0) {
                 switch (cursorPosition) {
                     case 0: {
-
+                        useObjectNamed(getItem(focusedItem->item)->description);
                         break;
                     }
 
@@ -370,7 +381,7 @@ void pauseMenu() {
                                             focusedItem = getPlayerItems();
                                         }
 
-
+                                        item->useWithCallback(item, itemToPick);
                                     }
                                 }
                             }
