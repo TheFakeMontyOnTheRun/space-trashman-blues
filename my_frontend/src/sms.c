@@ -802,4 +802,3 @@ void fix_line(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
     x0 = x1 = y0 = y1;
 }
 
-#define INCLUDE_ROOM_DESCRIPTIONS
