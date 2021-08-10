@@ -793,8 +793,8 @@ uint8_t drawPattern(uint8_t pattern, uint8_t x0, uint8_t x1, uint8_t y) {
     }
 
     if (type == CUBE) {
-        return drawCubeAt(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y, x1 - x0,
-                          diff, 1, patterns[pattern].elementsMask);
+        return drawCubeAt(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2, x1 - x0,
+                          diff, 1, /* patterns[pattern].elementsMask */ 15);
 
     } else if (type == RIGHT_NEAR || type == LEFT_NEAR  ){
 
@@ -807,19 +807,19 @@ uint8_t drawPattern(uint8_t pattern, uint8_t x0, uint8_t x1, uint8_t y) {
             }
         }
 
-        return drawWedge(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y, x1 - x0,
+        return drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2, x1 - x0,
                          diff, 1, patterns[pattern].elementsMask, type);
         
     } else if (type == LEFT_WALL || ( type == BACK_WALL  && ( cameraRotation == 1 || cameraRotation == 3 )) ){
         
         
-        return drawWedge(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y,
+        return drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
                          0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
         
     } else if (type == BACK_WALL  || ( type == LEFT_WALL  && ( cameraRotation == 1 || cameraRotation == 3 ))){
         
         
-        return drawSquare(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1,
+        return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
                          x1 - x0, diff, patterns[pattern].elementsMask);
         
     }
