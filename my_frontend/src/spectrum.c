@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+uint16_t heap;
 
 void fix_line (uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
     draw(x0, y0, x1, y1 );
