@@ -64,9 +64,9 @@ struct Room {
   uint8_t connections[6];
   struct ObjectNode *itemsPresent;
   uint8_t chanceOfRandomBattle;
-  uint8_t sizeX : 6;
-  uint8_t sizeY : 6;
-  uint8_t rankRequired : 3;
+  uint8_t sizeX;
+  uint8_t sizeY;
+  uint8_t rankRequired;
 };
 
 struct Room *addRoom(
