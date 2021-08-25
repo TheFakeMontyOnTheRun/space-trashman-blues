@@ -788,7 +788,7 @@ uint8_t drawPattern(uint8_t pattern, uint8_t x0, uint8_t x1, uint8_t y) {
     diff = patterns[0].ceiling - patterns[pattern].ceiling;
     type = patterns[pattern].geometryType;
 
-    if (patterns[pattern].block) {
+    if (patterns[pattern].blockVisibility) {
         return 0;
     }
 
@@ -1202,12 +1202,13 @@ void tickRenderer() {
     if (cameraX < 0) {
         cameraX = 0;
     }
-/*
-    if (patterns[map[cameraZ - 2][cameraX]].ceiling < 2) {
+
+
+    if (patterns[map[cameraZ - 2][cameraX]].blockMovement) {
         cameraX = prevX;
         cameraZ = prevZ;
     }
-  */
+
 
     /* unlike MX, we are signaling from the origin into the new room. MX allows for the movement and then searches where
      * did the player came from - hence the "opossite direction" there */

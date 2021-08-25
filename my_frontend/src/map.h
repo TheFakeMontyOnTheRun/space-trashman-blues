@@ -14,7 +14,8 @@ struct Pattern {
     uint8_t ceiling: 4;
     uint8_t elementsMask: 4;
     uint8_t geometryType : 7;
-    uint8_t block : 1;
+    uint8_t blockVisibility : 1;
+    uint8_t blockMovement : 1;
 };
 
 const struct Pattern patterns[127] = {
@@ -62,7 +63,7 @@ const struct Pattern patterns[127] = {
         {7, 3, CUBE, 1}, // 41
         {0, 0, CUBE, 0}, // 42
         {0, 3, CUBE, 0}, //43
-        {7, 3, CUBE, 0}, //44
+        {7, 3, CUBE, 0, 1}, //44
         {0, 3, BACK_WALL, 0}, // 45
         {7, 3, CUBE, 0}, //46
         {0, 3, RIGHT_NEAR, 0}, //47
