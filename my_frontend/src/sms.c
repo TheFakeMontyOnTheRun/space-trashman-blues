@@ -59,6 +59,8 @@ extern char font_bitmap_0[];
 
 #define wait_vsync() __asm__("halt")
 
+void titleScreen(void);
+
 struct ObjectNode* focusedItem;
 
 volatile uint_fast8_t vint_counter;
@@ -286,6 +288,32 @@ void show_text(int x, int y, char *text) {
     cvu_memtovmemcpy(IMAGE + (40 * y) + x, text, len);
     // turn on display
     cv_set_screen_active(true);
+}
+
+void titleScreen() {
+    int keepGoing = 1;
+
+    setup_text_mode();
+
+    cv_set_colors(CV_COLOR_LIGHT_GREEN, CV_COLOR_BLACK);
+    cvu_vmemset(IMAGE, ' ', 40 * 24);
+    show_text(1, 1, "Space Mare Imperium - Derelict");
+    show_text(1, 2, "by Daniel \"MontyOnTheRun\"Monteiro");
+    show_text(1, 3, "Press any button to start");
+
+    while (keepGoing) {
+        struct cv_controller_state state;
+
+        cv_get_controller_state(&state, 0);
+
+        if (state.joystick & CV_FIRE_0) {
+            keepGoing = 0;
+            clrscr();
+            init();
+            renderScene();
+            graphicsFlush();
+        }
+    }
 }
 
 void pauseMenu() {

@@ -53,6 +53,12 @@ void hLine(uint8_t x0, uint8_t x1, uint8_t y);
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1);
 
+void titleScreen();
+
+void pauseMenu();
+
+void clrscr();
+
 int8_t stencilHigh[XRES];
 
 int8_t cameraX = 33;
@@ -70,9 +76,9 @@ struct Projection {
     int16_t dx;
 };
 
-const struct Projection projections[32] =
+const struct Projection projections[40] =
         {
-                {	0	,	63	,	-64	},	//	1
+                {	0	,	64	,	-64	},	//	1
                 {	0	,	63	,	-32	},	//	2
                 {	9	,	52	,	-21	},	//	3
                 {	15	,	47	,	-16	},	//	4
@@ -103,6 +109,15 @@ const struct Projection projections[32] =
                 {	28	,	33	,	-2	},	//	29
                 {	28	,	33	,	-2	},	//	30
                 {	28	,	33	,	-2	},	//	31
+                {	29	,	33	,	-2	},	//	32
+                {	29	,	32	,	-1	},	//	33
+                {	29	,	32	,	-1	},	//	34
+                {	29	,	32	,	-1	},	//	35
+                {	29	,	32	,	-1	},	//	36
+                {	29	,	32	,	-1	},	//	37
+                {	29	,	32	,	-1	},	//	38
+                {	29	,	32	,	-1	},	//	39
+                {	29	,	32	,	-1	},	//	40
         };
 
 #ifndef DONT_INCLUDE
@@ -1275,6 +1290,11 @@ int main(
         setLoggerDelegate(logDelegate);
 
         memset(stencilHigh, 0, XRES);
+
+#ifdef SMS
+        titleScreen();
+#endif
+
 
 #ifndef XCODE_BUILD
         do {
