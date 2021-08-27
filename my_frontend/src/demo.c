@@ -55,6 +55,8 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1);
 
 void titleScreen();
 
+void showMessage(const char* msg );
+
 void pauseMenu();
 
 void startMusic();
@@ -1254,11 +1256,19 @@ void tickRenderer() {
 
 
 void onError(const char* mesg) {
+#ifndef SMS
     puts(mesg);
+#else
+    showMessage(mesg);
+#endif
 }
 
 void logDelegate(const char* mesg) {
+#ifndef SMS
     puts(mesg);
+#else
+    showMessage(mesg);
+#endif
 }
 
 #ifdef XCODE_BUILD

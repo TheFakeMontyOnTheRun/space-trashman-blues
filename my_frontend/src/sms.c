@@ -325,6 +325,31 @@ void show_text(int x, int y, char *text) {
     cv_set_screen_active(true);
 }
 
+void showMessage(const char* message ) {
+    int keepGoing = 1;
+
+    setup_text_mode();
+
+    cv_set_colors(CV_COLOR_LIGHT_GREEN, CV_COLOR_BLACK);
+    cvu_vmemset(IMAGE, ' ', 40 * 24);
+    show_text(1, 1, message);
+    show_text(1, 3, "Press any button to continue");
+
+    while (keepGoing) {
+        struct cv_controller_state state;
+
+        cv_get_controller_state(&state, 0);
+
+        if (state.joystick & CV_FIRE_0) {
+            keepGoing = 0;
+            clrscr();
+            init();
+            renderScene();
+            graphicsFlush();
+        }
+    }
+}
+
 void titleScreen() {
     int keepGoing = 1;
 
