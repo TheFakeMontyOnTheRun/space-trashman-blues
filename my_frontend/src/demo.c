@@ -57,6 +57,8 @@ void titleScreen();
 
 void pauseMenu();
 
+void startMusic();
+
 void clrscr();
 
 int8_t stencilHigh[XRES];
@@ -1292,6 +1294,7 @@ int main(
         memset(stencilHigh, 0, XRES);
 
 #ifdef SMS
+        startMusic();
         titleScreen();
 #endif
 

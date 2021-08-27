@@ -72,6 +72,12 @@ void vint_handler(void) {
 const unsigned char reverse_lookup[16] = {
         0x0, 0x8, 0x4, 0xc, 0x2, 0xa, 0x6, 0xe, 0x1, 0x9, 0x5, 0xd, 0x3, 0xb, 0x7, 0xf, };
 
+const uint16_t notes[] = { 12846, 12334, 11086, 10062, 10062, 9806, 10062, 10574, 11086, 10062, 11086, 12430, 11042, 12334, 12878, 14158, 14158, 12878, 13390, 13646, 10574, 9806, 10574, 12430, 12846, 12334, 11086, 10062, 10062, 9806, 10062, 10574, 11086, 10062, 11086, 12430, 11054, 12334, 12878, 14158, 14158, 12878, 13390, 13646, 10574, 10062, 10062, 10126, 11054, 12334, 12878, 14158, 13902, 14158, 14670, 14158, 13646, 12878, 13390, 13646, 3918, 12878, 14158, 13902, 12878, 12366, 12878, 12366, 12878, 11086, 10062, 9870, 12334, 11054, 11086, 10062, 10062, 9806, 10062, 10574, 11086, 10062, 11086, 12430, 11054, 12334, 12878, 14158, 14158, 12878, 13390, 13646, 10574, 10062, 10062, 10126, 0xffff };
+
+struct cvu_music music;
+struct cvu_music music1;
+struct cvu_music music2;
+
 byte reverse_bits(byte n) {
     return (reverse_lookup[n&0b1111] << 4) | reverse_lookup[n>>4];
 }
@@ -105,6 +111,34 @@ void putstringxy(byte x, byte y, const char* string) {
     }
 }
 
+void musicInterrupt(void)
+{
+    cvu_play_music(&music);
+    cvu_play_music(&music1);
+    cvu_play_music(&music2);
+}
+
+void startMusic(void)
+{
+    cvu_init_music(&music);
+    cvu_init_music(&music1);
+    cvu_init_music(&music2);
+    music.notes = notes;
+    music.channel = CV_SOUNDCHANNEL_0;
+    music.sixteenth_notes_per_second = 40;
+
+    music1.notes = notes;
+    music1.channel = CV_SOUNDCHANNEL_1;
+    music1.sixteenth_notes_per_second = 20;
+
+    music2.notes = notes;
+    music2.channel = CV_SOUNDCHANNEL_2;
+    music2.sixteenth_notes_per_second = 10;
+
+    cv_set_vint_handler(&musicInterrupt);
+    cv_set_screen_active(true);
+}
+
 void delay(byte i) {
     while (i--) {
         wait_vsync();
@@ -121,6 +155,7 @@ void memset_safe(void* _dest, char ch, word size) {
         *dest++ = ch;
     }
 }
+
 
 char in_rect(byte x, byte y, byte x0, byte y0, byte w, byte h) {
     return ((byte)(x-x0) < w && (byte)(y-y0) < h); // unsigned
