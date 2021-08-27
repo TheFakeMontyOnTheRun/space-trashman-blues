@@ -1,10 +1,11 @@
 cpc:
-	rm -f CPCVersion/src/*
+	mkdir -p CPCVersion/src
 	rm -f -R CPCVersion/obj/*
 	cp -f src/map.h CPCVersion/src
 	cp -f src/maps.h CPCVersion/src
 	cp -f ../core/include/Core.h CPCVersion/src
 	cp -f ../core/include/Derelict.h CPCVersion/src
+	touch CPCVersion/src/game.c
 	cat src/cpc.c > CPCVersion/src/game.c
 	cat src/demo.c >> CPCVersion/src/game.c
 	cat ../core/src/Core.c >> CPCVersion/src/game.c
@@ -12,6 +13,9 @@ cpc:
 
 sms:
 	rm -f 8bitworkshop/*
+	rmdir 8bitworkshop
+	mkdir 8bitworkshop
+	touch 8bitworkshop/game.c
 	echo "#include <stdint.h>" > 8bitworkshop/game.c
 	echo "#include <stdio.h>" >> 8bitworkshop/game.c
 	echo "#include <stdlib.h>" >> 8bitworkshop/game.c
