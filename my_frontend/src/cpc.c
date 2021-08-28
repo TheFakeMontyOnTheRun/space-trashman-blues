@@ -4,97 +4,9 @@
 #include <string.h>
 #include <cpctelera.h>
 
-uint8_t frame = 0;
-uint8_t* baseScreen =
-#ifndef MOVING_POINTERS
-        0x8000;
-#else
-        0xC000;
-#endif
+uint8_t __at(0xC000)  screen[16 * 1024];
 
-
-
-/*
- const uint16_t lineStart[64] = {
-        0,
-        2048,
-        4096,
-        6144,
-        8192,
-        10240,
-        12288,
-        14336,
-        80,
-        2128,
-        4176,
-        6224,
-        8272,
-        10320,
-        12368,
-        14416,
-        160,
-        2208,
-        4256,
-        6304,
-        8352,
-        10400,
-        12448,
-        14496,
-        240,
-        2288,
-        4336,
-        6384,
-        8432,
-        10480,
-        12528,
-        14576,
-        320,
-        2368,
-        4416,
-        6464,
-        8512,
-        10560,
-        12608,
-        14656,
-        400,
-        2448,
-        4496,
-        6544,
-        8592,
-        10640,
-        12688,
-        14736,
-        480,
-        2528,
-        4576,
-        6624,
-        8672,
-        10720,
-        12768,
-        14816,
-        560,
-        2608,
-        4656,
-        6704,
-        8752,
-        10800,
-        12848,
-        14896,
-};
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
+uint8_t* baseScreen = 0xC000;
 
 const uint16_t lineStart[128] = {
         0,
@@ -227,16 +139,10 @@ const uint16_t lineStart[128] = {
         15536,
 };
 
-#define MOVING_POINTERS
-
 void shutdownGraphics() {
 }
 
 void clearGraphics();
-
-uint8_t getFrame() {
-    return frame;
-}
 
 void graphicsPut(uint8_t nColumn, uint8_t nLine);
 
@@ -263,6 +169,12 @@ uint8_t getKey() {
     if (cpct_isKeyPressed(Key_O) || cpct_isKeyPressed(Key_A))
         return 'a';
 
+
+
+    if (cpct_isKeyPressed(Key_O) || cpct_isKeyPressed(Key_A))
+        return 'a';
+
+
     if (cpct_isKeyPressed(Key_L))
         return 'l';
 
@@ -274,42 +186,13 @@ uint8_t getKey() {
 
 void init() {
     cpct_disableFirmware();
-
     cpct_setVideoMode(0);
-
-    cpct_memset_f64((uint8_t*)0xC000, 0x0000, 16 * 1024);
-    cpct_memset_f64((uint8_t*)0x8000, 0x0000, 16 * 1024);
-
-#ifndef MOVING_POINTERS
-    frame = 1;
     cpct_setVideoMemoryPage(cpct_pageC0);
-#else
-    frame = 0;
-    cpct_setVideoMemoryPage(cpct_page80);
-#endif
-    if (frame) {
-        baseScreen = (uint8_t*)0x8000;
-    } else {
-        baseScreen = (uint8_t*)0xC000;
-    }
+    baseScreen = (uint8_t*)0xC000;
+    cpct_memset_f64((uint8_t*)baseScreen, 0, 16 * 1024);
 }
 
 void graphicsFlush() {
-    cpct_waitVSYNC();
-#ifdef MOVING_POINTERS
-    if (frame) {
-        cpct_setVideoMemoryPage(cpct_page80);
-        frame = 0;
-        baseScreen = (uint8_t*)0xC000;
-    } else {
-        cpct_setVideoMemoryPage(cpct_pageC0);
-        frame = 1;
-        baseScreen = (uint8_t*)0x8000;
-    }
-
-#else
-    memcpy(0xC000, 0x8000, 80 * 200);
-#endif
 }
 
 void fix_line(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
@@ -512,5 +395,5 @@ inline void graphicsPut(uint8_t nColumn, uint8_t nLine) {
 }
 
 void clearGraphics() {
-    memset((frame) ? (uint8_t*)0x8000 : (uint8_t*)0xC000, 0, 16 * 1024);
+    memset((uint8_t*)baseScreen, 0, 16 * 1024);
 }

@@ -1089,9 +1089,9 @@ void tickRenderer() {
     uint8_t prevZ;
     int previousLocation = playerLocation;
 
-#ifndef CPC_PLATFORM
+
     clearGraphics();
-#endif
+
     vLine(XRES - 1, 0, YRES - 1);
     vLine(0, 0, YRES - 1);
     hLine(0, XRES - 1, 0);
@@ -1101,9 +1101,7 @@ void tickRenderer() {
 
     graphicsFlush();
     memset(stencilHigh, 0, XRES);
-#ifdef CPC_PLATFORM
-    clearGraphics();
-#endif
+
     prevX = cameraX;
     prevZ = cameraZ;
 
@@ -1288,7 +1286,7 @@ int main(
 
 
 #ifdef CPC_PLATFORM
-    cpct_setStackLocation((uint8_t*)0x8000);
+    cpct_setStackLocation((uint8_t*)0xBBFF);
 #endif
     {
         running = 1;
