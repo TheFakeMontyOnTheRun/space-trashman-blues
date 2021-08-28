@@ -332,7 +332,7 @@ void showMessage(const char* message ) {
 
     cv_set_colors(CV_COLOR_LIGHT_GREEN, CV_COLOR_BLACK);
     cvu_vmemset(IMAGE, ' ', 40 * 24);
-    show_text(1, 1, message);
+    show_text(1, 1, (char*)message);
     show_text(1, 3, "Press any button to continue");
 
     while (keepGoing) {
