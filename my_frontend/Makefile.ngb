@@ -1,7 +1,7 @@
-CC = zcc
+CC = /Users/monty/gbdk/bin/lcc
 
-CFLAGS = +gb -create-app -DGB -DAMALLOC  -O0 -I../Core/include
-LDFLAGS =  -lm -vn  -m --opt-code-speed=all -pragma-output:USING_amalloc
+CFLAGS =  -Wa-l -Wl-m -Wl-j -I../Core/include
+
 
 all: derelict.gb
 
