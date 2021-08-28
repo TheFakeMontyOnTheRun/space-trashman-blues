@@ -258,7 +258,10 @@ extern void copy_default_character_set();
 
 #endif
 
+uint8_t buffer[64 * 64];
+
 void setup_mode2() {
+    memset( &buffer[0], 0, 64 * 64);
     cvu_vmemset(0, 0, 0x4000);
     cv_set_screen_mode(CV_SCREENMODE_BITMAP); // mode 2
     cv_set_image_table(IMAGE);
@@ -275,9 +278,8 @@ void setup_mode2() {
     }
 }
 
-uint8_t buffer[64 * 64];
-
 void init() {
+    cv_set_screen_active(false);
     setup_mode2();
     cv_set_screen_active(true);
 }
@@ -294,6 +296,7 @@ char *menuItems[] = {
 };
 
 void setup_text_mode() {
+    cv_set_screen_active(false);
     // set screen mode to text
     cv_set_screen_mode(CV_SCREENMODE_TEXT);
     // set image table address, which defines grid of characters
