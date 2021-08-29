@@ -127,7 +127,7 @@ void clearGraphics() {
 }
 
 void writeStr(uint8_t nColumn, uint8_t nLine, char *str, uint8_t fg, uint8_t bg) {
-
+    puts(str);
 }
 
 uint8_t getKey() {
