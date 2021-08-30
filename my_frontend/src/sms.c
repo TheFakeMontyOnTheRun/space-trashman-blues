@@ -8,6 +8,7 @@
 
 #define SMS
 #define DONT_INCLUDE
+#define RES64X64
 
 #ifndef _CV_COMMON_H
 #define _CV_COMMON_H

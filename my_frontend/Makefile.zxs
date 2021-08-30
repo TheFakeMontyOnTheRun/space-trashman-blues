@@ -1,6 +1,6 @@
 CC = zcc
 
-CFLAGS = +zx -vn -I../Core/include -create-app -lndos -DAMALLOC -DSPECTRUM -Os -compiler=sdcc
+CFLAGS = +zx -vn -I../Core/include -create-app -lndos -DAMALLOC -DRES64X128 -DSPECTRUM -Os -compiler=sdcc
 
 all: derelict.tap
 

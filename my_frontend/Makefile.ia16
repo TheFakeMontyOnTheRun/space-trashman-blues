@@ -1,4 +1,4 @@
-CFLAGS = -g -c -DMSDOS
+CFLAGS = -g -c -DMSDOS -DRES64X128
 
 CC = ia16-elf-gcc
 

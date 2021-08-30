@@ -1,6 +1,6 @@
 CC = zcc
 
-CFLAGS = +msx -vn -I../Core/include -create-app -DAMALLOC -DMSX -Os --opt-code-speed=all -pragma-output:USING_amalloc
+CFLAGS = +msx -vn -I../Core/include -create-app -DAMALLOC -DMSX -DRES64X128 -Os --opt-code-speed=all -pragma-output:USING_amalloc
 LDFLAGS = -llib3d -lm -lmsxbios -subtype=rom -pragma-output:USING_amalloc
 
 all: derelict.rom

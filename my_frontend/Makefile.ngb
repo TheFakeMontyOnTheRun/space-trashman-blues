@@ -1,6 +1,6 @@
 CC = /Users/monty/gbdk/bin/lcc
 
-CFLAGS =  -Wa-l -Wl-m -Wl-j -I../Core/include
+CFLAGS =  -Wa-l -Wl-m -Wl-j -I../Core/include -DRES64X64
 
 
 all: derelict.gb
