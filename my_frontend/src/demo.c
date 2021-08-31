@@ -34,6 +34,11 @@
 #include <cpctelera.h>
 #endif
 
+#ifdef SMS
+int currentlyInGraphics = FALSE;
+void backToGraphics();
+#endif
+
 enum DIRECTION {
     DIRECTION_N,
     DIRECTION_E,
@@ -1179,7 +1184,11 @@ void tickRenderer() {
     uint8_t prevX;
     uint8_t prevZ;
     int previousLocation = playerLocation;
-
+#ifdef SMS
+    if (!currentlyInGraphics) {
+        backToGraphics();
+    }
+#endif
 
     clearGraphics();
 
@@ -1285,6 +1294,8 @@ void tickRenderer() {
                     cameraX -= WALKSTEP;
                     break;
             }
+            break;
+        case 'p':
             break;
 
 #ifndef XCODE_BUILD

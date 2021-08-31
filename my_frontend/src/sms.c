@@ -262,21 +262,24 @@ extern void copy_default_character_set();
 uint8_t buffer[64 * 64];
 
 void setup_mode2() {
-    memset( &buffer[0], 0, 64 * 64);
-    cvu_vmemset(0, 0, 0x4000);
-    cv_set_screen_mode(CV_SCREENMODE_BITMAP); // mode 2
-    cv_set_image_table(IMAGE);
-    cv_set_character_pattern_t(PATTERN|0x1fff); // AND mask
-    cv_set_color_table(COLOR|0x1fff); // AND mask
-    cv_set_sprite_attribute_table(0x2800);
-    {
-        byte i=0;
-        do {
-            cvu_voutb(i, IMAGE+i);
-            cvu_voutb(i, IMAGE+0x100+i);
-            cvu_voutb(i, IMAGE+0x200+i);
-        } while (++i);
+    if (!currentlyInGraphics) {
+        memset(&buffer[0], 0, 64 * 64);
+        cvu_vmemset(0, 0, 0x4000);
+        cv_set_screen_mode(CV_SCREENMODE_BITMAP); // mode 2
+        cv_set_image_table(IMAGE);
+        cv_set_character_pattern_t(PATTERN | 0x1fff); // AND mask
+        cv_set_color_table(COLOR | 0x1fff); // AND mask
+        cv_set_sprite_attribute_table(0x2800);
+        {
+            byte i = 0;
+            do {
+                cvu_voutb(i, IMAGE + i);
+                cvu_voutb(i, IMAGE + 0x100 + i);
+                cvu_voutb(i, IMAGE + 0x200 + i);
+            } while (++i);
+        }
     }
+    currentlyInGraphics = TRUE;
 }
 
 void init() {
@@ -297,17 +300,24 @@ char *menuItems[] = {
 };
 
 void setup_text_mode() {
-    cv_set_screen_active(false);
-    // set screen mode to text
-    cv_set_screen_mode(CV_SCREENMODE_TEXT);
-    // set image table address, which defines grid of characters
-    cv_set_image_table(IMAGE);
-    // set pattern table address, which defines character graphics
-    cv_set_character_pattern_t(PATTERN);
-    // clear VRAM to all zeroes
-    cvu_vmemset(0, 0, 0x4000);
-    // copy default character set from ROM to VRAM
-    copy_default_character_set();
+//    if (currentlyInGraphics) {
+        cv_set_screen_active(false);
+        // set screen mode to text
+        cv_set_screen_mode(CV_SCREENMODE_TEXT);
+        // set image table address, which defines grid of characters
+        cv_set_image_table(IMAGE);
+        // set pattern table address, which defines character graphics
+        cv_set_character_pattern_t(PATTERN);
+        // clear VRAM to all zeroes
+        cvu_vmemset(0, 0, 0x4000);
+        // copy default character set from ROM to VRAM
+        copy_default_character_set();
+
+        cv_set_colors(CV_COLOR_LIGHT_GREEN, CV_COLOR_BLACK);
+        cvu_vmemset(IMAGE, ' ', 40 * 24);
+//    }
+
+    currentlyInGraphics = FALSE;
 }
 
 void graphicsFlush();
@@ -319,14 +329,16 @@ int cursorPosition = 0;
 
 
 void show_text(int x, int y, char *text) {
-
     unsigned int len = strlen(text);
-    // set background and foreground colors
-    // fill image table with '.' characters
-    // draw message at row 0, column 1
     cvu_memtovmemcpy(IMAGE + (40 * y) + x, text, len);
-    // turn on display
     cv_set_screen_active(true);
+}
+
+void backToGraphics() {
+    clrscr();
+    init();
+    renderScene();
+    graphicsFlush();
 }
 
 void showMessage(const char* message ) {
@@ -334,8 +346,6 @@ void showMessage(const char* message ) {
 
     setup_text_mode();
 
-    cv_set_colors(CV_COLOR_LIGHT_GREEN, CV_COLOR_BLACK);
-    cvu_vmemset(IMAGE, ' ', 40 * 24);
     show_text(1, 1, (char*)message);
     show_text(1, 3, "Press any button to continue");
 
@@ -344,12 +354,8 @@ void showMessage(const char* message ) {
 
         cv_get_controller_state(&state, 0);
 
-        if (state.joystick & CV_FIRE_0) {
+        if (state.joystick & CV_FIRE_1) {
             keepGoing = 0;
-            clrscr();
-            init();
-            renderScene();
-            graphicsFlush();
         }
     }
 }
@@ -359,8 +365,6 @@ void titleScreen() {
 
     setup_text_mode();
 
-    cv_set_colors(CV_COLOR_LIGHT_GREEN, CV_COLOR_BLACK);
-    cvu_vmemset(IMAGE, ' ', 40 * 24);
     show_text(1, 1, "Space Mare Imperium - Derelict");
     show_text(1, 2, "by Daniel \"MontyOnTheRun\"Monteiro");
     show_text(1, 3, "Press any button to start");
@@ -372,10 +376,6 @@ void titleScreen() {
 
         if (state.joystick & CV_FIRE_0) {
             keepGoing = 0;
-            clrscr();
-            init();
-            renderScene();
-            graphicsFlush();
         }
     }
 }
@@ -388,8 +388,6 @@ void pauseMenu() {
     struct ObjectNode* roomItem = room->itemsPresent;
 
     setup_text_mode();
-
-    cv_set_colors(CV_COLOR_LIGHT_GREEN, CV_COLOR_BLACK);
 
     while (keepGoing) {
         struct cv_controller_state state;
@@ -542,9 +540,7 @@ char *menuItems[] = {
                         break;
                     case 7:
                         keepGoing = 0;
-                        break;
-
-
+                        return;
                 }
                 refresh = 1;
             }
@@ -607,10 +603,7 @@ uint8_t getKey () {
 
     if (state.joystick & CV_FIRE_0) {
         pauseMenu();
-        clrscr();
-        init();
-        renderScene();
-        graphicsFlush();
+        return 'p';
     }
     
     return '.';
