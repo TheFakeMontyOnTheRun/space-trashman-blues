@@ -291,8 +291,8 @@ void init() {
 char *menuItems[] = {
         "Use/Toggle current item",
         "Use current item with...",
-        "Pick",
-        "Drop",
+        "Use/Pick object on the room...",
+        "Drop object in hand",
         "Next item in inventory",
         "Next room item in focus",
         "Toogle item desc/room desc",
@@ -354,7 +354,7 @@ void showMessage(const char* message ) {
 
         cv_get_controller_state(&state, 0);
 
-        if (state.joystick & CV_FIRE_1) {
+        if (state.joystick & CV_FIRE_0) {
             keepGoing = 0;
         }
     }
@@ -483,8 +483,14 @@ char *menuItems[] = {
                         if (roomItem != NULL) {
                             struct Item* itemToPick = getItem(roomItem->item);
                             if (itemToPick != NULL ) {
-                                pickObject(itemToPick);
-                                roomItem = room->itemsPresent;
+
+                                if (itemToPick->pickable) {
+                                    pickObject(itemToPick);
+                                    roomItem = room->itemsPresent;
+
+                                } else {
+                                    useObjectNamed(itemToPick->description);
+                                }
                             }
                         }
                     }

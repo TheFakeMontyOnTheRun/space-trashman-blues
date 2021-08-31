@@ -171,6 +171,8 @@ void initCore();
 
 void setGameStatus(enum EGameStates newStatus);
 
+void useObjectNamed(const char *operand);
+
 #define TOTAL_ROOMS 24
 #define TOTAL_ITEMS 64
 
