@@ -65,7 +65,7 @@ const struct Pattern patterns[127] = {
         {0, 3, CUBE, 0}, //43
         {7, 3, CUBE, 0, 1}, //44 ,
         {0, 3, BACK_WALL, 0}, // 45 -
-        {7, 3, CUBE, 0}, //46
+        {7, 3, CUBE, 0}, //46 .
         {0, 3, RIGHT_NEAR, 0}, //47 /
         {7, 3, CUBE, 0}, //48
         {0, 3, BACK_WALL, 0}, // 49
@@ -120,7 +120,7 @@ const struct Pattern patterns[127] = {
         {0, 0, LEFT_WALL, 0}, // 98
         {0, 3, BACK_WALL, 0}, // 99
         {6, 3, CUBE, 0}, // 100
-        {7, 3, CUBE, 0}, // 101
+        {7, 3, CUBE, 0}, // 101 e
         {0, 0, CUBE, 0}, // 102
         {0, 3, CUBE, 0}, //103
         {0, 3, RIGHT_NEAR, 0}, //104
@@ -129,16 +129,16 @@ const struct Pattern patterns[127] = {
         {7, 3, CUBE, 0}, //107
         {0, 0, LEFT_WALL, 0}, // 108
         {0, 3, BACK_WALL, 0}, // 109
-        {7, 3, CUBE, 0}, //110
+        {7, 3, CUBE, 0}, //110  n
         {7, 3, CUBE, 0}, // 111
         {0, 0, CUBE, 0}, // 112
         {0, 3, CUBE, 0}, //113
         {0, 3, RIGHT_NEAR, 0}, //114
-        {0, 3, LEFT_NEAR, 0}, //115
+        {7, 3, LEFT_NEAR, 0}, //115 s
         {3, 3, CUBE, 0}, //116
         {7, 3, CUBE, 0}, //117
         {0, 0, LEFT_WALL, 0}, // 118
-        {0, 3, BACK_WALL, 0}, // 119
+        {7, 3, BACK_WALL, 0}, // 119 w
         {7, 3, CUBE, 0}, //120
         {7, 3, CUBE, 0}, // 121
         {0, 0, CUBE, 0}, // 122
