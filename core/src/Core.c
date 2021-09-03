@@ -268,10 +268,12 @@ void moveBy(int direction) {
             return;
         }
 
+#ifndef CPC_PLATFORM
         if (!getItemNamed("magnetic-boots")->active || !playerHasObject("magnetic-boots")) {
             defaultLogger("You can't move without your\nmagnetic-boots!");
             return;
         }
+#endif
 
         if (room == getRoomByName("hangar") && coupling->active && direction == 0) {
             defaultLogger("The magnetic coupling is\nengaged. The door won't open.");
