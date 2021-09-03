@@ -63,7 +63,7 @@ const struct Pattern patterns[127] = {
         {7, 3, CUBE, 0}, // 41
         {0, 0, CUBE, 0}, // 42
         {0, 3, CUBE, 0}, //43
-        {7, 3, CUBE, 0, 1}, //44 ,
+        {7, 3, CUBE, 0, 0}, //44 ,
         {0, 3, BACK_WALL, 0}, // 45 -
         {7, 3, CUBE, 0}, //46 .
         {0, 3, RIGHT_NEAR, 0}, //47 /
