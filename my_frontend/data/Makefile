@@ -1,3 +1,5 @@
+.DEFAULT_GOAL := default
+
 PACKAGER = ./packer
 
 packager: 
@@ -41,7 +43,7 @@ data: $(PACKAGER)
 
 
 
-all: data
+all: packager data
 
-default: data
+default: packager data
 
