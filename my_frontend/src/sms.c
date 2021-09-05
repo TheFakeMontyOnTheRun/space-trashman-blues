@@ -484,6 +484,10 @@ char *menuItems[] = {
                             struct Item* itemToPick = getItem(roomItem->item);
                             if (itemToPick != NULL ) {
 
+                                if (!strcmp(itemToPick->description, "digital-safe")) {
+                                    accessGrantedToSafe = TRUE;
+                                }
+
                                 if (itemToPick->pickable) {
                                     pickObject(itemToPick);
                                     roomItem = room->itemsPresent;
