@@ -984,20 +984,23 @@ void renderScene() {
                 for (x = lastIndex; x < minX - 1; ++x) {
                     uint8_t pattern;
 
-                    pattern = map[y][x];
+                    pattern = *mapXY;
 
                     if (pattern != lastPattern) {
-                        if (!drawPattern(lastPattern, lastIndex - cameraX, x - cameraX, cameraZ - y)) {
-                            x = minX - 1;
+                        if (lastPattern != 0) {
+                            if (!drawPattern(lastPattern, lastIndex - cameraX, x - cameraX, cameraZ - y)) {
+                                x = minX - 1;
+                            }
+                            lastIndex = x;
                         }
-                        lastIndex = x;
                         lastPattern = pattern;
                     }
 
                     ++mapXY;
                 }
-
-                drawPattern(lastPattern, lastIndex - cameraX, x - cameraX, cameraZ - y);
+                if (lastPattern != 0) {
+                    drawPattern(lastPattern, lastIndex - cameraX, x - cameraX, cameraZ - y);
+                }
 
                 lastIndex = cameraX - 1;
                 
@@ -1016,17 +1019,22 @@ void renderScene() {
                     pattern = *mapXY;
 
                     if (pattern != lastPattern) {
-                        if (!drawPattern(lastPattern, x + 1 - cameraX, lastIndex + 1 - cameraX, cameraZ - y)) {
-                            x = maxX + 1;
+                        if (lastPattern != 0) {
+
+                            if (!drawPattern(lastPattern, x + 1 - cameraX, lastIndex + 1 - cameraX, cameraZ - y)) {
+                                x = maxX + 1;
+                            }
+
+                            lastIndex = x;
                         }
-                        lastIndex = x;
                         lastPattern = pattern;
                     }
 
                     --mapXY;
                 }
-
-                drawPattern(lastPattern, x + 1 - cameraX, lastIndex + 1 - cameraX, cameraZ - y);
+                if (lastPattern != 0) {
+                    drawPattern(lastPattern, x + 1 - cameraX, lastIndex + 1 - cameraX, cameraZ - y);
+                }
             }
         }
             break;
