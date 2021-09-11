@@ -966,11 +966,11 @@ void renderScene() {
         case DIRECTION_N: {
             int8_t y;
             int8_t limit = max(cameraZ - VISIBILITY_LIMIT, 0);
-            for (y = min(cameraZ - 3, 31); y >= limit; --y) {
+            for (y = min(cameraZ, 31); y >= limit; --y) {
                 int8_t x;
                 int8_t const *mapY = &map[y][0];
                 int8_t const *mapXY;
-                int8_t minX = cameraX + 5 + ((cameraZ - 3) - y);
+                int8_t minX = cameraX + ((cameraZ) - y);
                 int8_t maxX = 0;
 
                 if (minX > 31) {
@@ -987,20 +987,20 @@ void renderScene() {
                     pattern = *mapXY;
 
                     if (pattern != lastPattern) {
-                        if (lastPattern != 0) {
-                            if (!drawPattern(lastPattern, lastIndex - cameraX, x - cameraX, cameraZ - y)) {
-                                x = minX - 1;
-                            }
-                            lastIndex = x;
+
+                        if (!drawPattern(lastPattern, lastIndex - cameraX, x - cameraX, cameraZ - y)) {
+                            x = minX - 1;
                         }
+                        lastIndex = x;
+
                         lastPattern = pattern;
                     }
 
                     ++mapXY;
                 }
-                if (lastPattern != 0) {
-                    drawPattern(lastPattern, lastIndex - cameraX, x - cameraX, cameraZ - y);
-                }
+
+                drawPattern(lastPattern, lastIndex - cameraX, x - cameraX, cameraZ - y);
+
 
                 lastIndex = cameraX - 1;
                 
@@ -1012,29 +1012,28 @@ void renderScene() {
 
                 mapXY = &map[y][lastIndex];
 
-                maxX = max(cameraX - 3 - ((cameraZ - 3) - y), 0);
+                maxX = max(cameraX - ((cameraZ) - y), 0);
 
                 for (x = lastIndex; x >= maxX + 1; --x) {
                     uint8_t pattern;
                     pattern = *mapXY;
 
                     if (pattern != lastPattern) {
-                        if (lastPattern != 0) {
 
-                            if (!drawPattern(lastPattern, x + 1 - cameraX, lastIndex + 1 - cameraX, cameraZ - y)) {
-                                x = maxX + 1;
-                            }
-
-                            lastIndex = x;
+                        if (!drawPattern(lastPattern, x + 1 - cameraX, lastIndex + 1 - cameraX, cameraZ - y)) {
+                            x = maxX + 1;
                         }
+
+                        lastIndex = x;
+
                         lastPattern = pattern;
                     }
 
                     --mapXY;
                 }
-                if (lastPattern != 0) {
-                    drawPattern(lastPattern, x + 1 - cameraX, lastIndex + 1 - cameraX, cameraZ - y);
-                }
+
+                drawPattern(lastPattern, x + 1 - cameraX, lastIndex + 1 - cameraX, cameraZ - y);
+
             }
         }
             break;
