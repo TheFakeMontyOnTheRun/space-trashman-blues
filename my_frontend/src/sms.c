@@ -337,8 +337,6 @@ void show_text(int x, int y, char *text) {
 void backToGraphics() {
     clrscr();
     init();
-    renderScene();
-    graphicsFlush();
 }
 
 void showMessage(const char* message ) {
