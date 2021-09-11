@@ -1030,17 +1030,53 @@ void renderScene() {
 
         case DIRECTION_E: {
             int8_t x;
-            for (x = min(cameraX - 3, 31); x <= min(cameraX + 13, 31); ++x) {
-                int8_t y;
+            int8_t limit = min(cameraZ + VISIBILITY_LIMIT, 32);
 
-                for (y = cameraZ; y <= min(cameraZ + (x - cameraX), 31); ++y) {
-                    drawPattern(map[y][x], y - cameraZ + 3, y + 1 - cameraZ + 3, x - cameraX + 3);
+            for (x = max(cameraX, 0); x < limit; ++x) {
+
+                int8_t minY = min(cameraZ + (x - cameraX), 31);
+                lastIndex = cameraZ;
+                lastPattern = map[lastIndex][x];
+
+                for (y = lastIndex; y <= minY; ++y) {
+
+                    pattern = map[y][x];
+
+                    if (pattern != lastPattern) {
+
+                        if (!drawPattern(lastPattern, (lastIndex - cameraZ), (y - cameraZ), x - cameraX )) {
+                            y = limit;
+                        }
+                        lastIndex = y;
+
+                        lastPattern = pattern;
+                    }
                 }
 
-                for (y = max(cameraZ - 1, 0); y >= max(cameraZ - (x - cameraX), 0); --y) {
-                    drawPattern(map[y][x], y - cameraZ + 3, y + 1 - cameraZ + 3, x - cameraX + 3);
+                drawPattern(lastPattern, (lastIndex - cameraZ), (y - cameraZ), x - cameraX);
+
+
+                lastIndex = cameraZ;
+                lastPattern = map[lastIndex][x];
+
+                maxX = max(cameraZ - ( x - cameraX), 0);
+
+                for (y = lastIndex; y >= maxX; --y) {
+                    pattern = map[y][x];
+
+                    if (pattern != lastPattern) {
+
+                        if (!drawPattern(lastPattern, -(cameraZ - y), -(cameraZ - lastIndex), x - cameraX)) {
+                            y = maxX + 1;
+                        }
+
+                        lastIndex = y;
+
+                        lastPattern = pattern;
+                    }
                 }
 
+                drawPattern(lastPattern, -(cameraZ - y), -(cameraZ - lastIndex), x - cameraX);
             }
         }
             break;
@@ -1276,13 +1312,13 @@ void tickRenderer() {
                     cameraX -= WALKSTEP;
                     break;
                 case 1:
-                    cameraZ += WALKSTEP;
+                    cameraZ -= WALKSTEP;
                     break;
                 case 2:
                     cameraX += WALKSTEP;
                     break;
                 case 3:
-                    cameraZ -= WALKSTEP;
+                    cameraZ += WALKSTEP;
                     break;
             }
             break;
@@ -1292,13 +1328,13 @@ void tickRenderer() {
                     cameraX += WALKSTEP;
                     break;
                 case 1:
-                    cameraZ -= WALKSTEP;
+                    cameraZ += WALKSTEP;
                     break;
                 case 2:
                     cameraX -= WALKSTEP;
                     break;
                 case 3:
-                    cameraZ += WALKSTEP;
+                    cameraZ -= WALKSTEP;
                     break;
             }
             break;
