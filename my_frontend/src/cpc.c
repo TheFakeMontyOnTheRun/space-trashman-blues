@@ -441,7 +441,7 @@ void writeStr(uint8_t nColumn, uint8_t nLine, char *str, uint8_t fg, uint8_t bg)
 
     pS = (unsigned char *) baseScreen +lineStart[nLine] + (nColumn >> 1);
 
-    cpct_drawStringM0(str, pS);
+    cpct_drawStringM0(str, pS, fg, bg);
 }
 
 inline void graphicsPut(uint8_t nColumn, uint8_t nLine) {
