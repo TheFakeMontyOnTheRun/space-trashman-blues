@@ -1050,14 +1050,14 @@ void renderCameraWest() {
 
             if (pattern != lastPattern) {
 
-                if (!drawPattern(lastPattern, -(y - cameraZ), -(lastIndex - cameraZ), cameraX - x)) {
+                if (!drawPattern(lastPattern, -(y - cameraZ) + 2, -(lastIndex - cameraZ) + 2, cameraX - x)) {
                     y = minX - 1;
                 }
                 lastIndex = y;
                 lastPattern = pattern;
             }
         }
-        drawPattern(lastPattern, -(y - cameraZ), -(lastIndex - cameraZ), cameraX - x);
+        drawPattern(lastPattern, -(y - cameraZ) + 2, -(lastIndex - cameraZ)  + 2, cameraX - x);
 
 
         lastIndex = cameraZ;
@@ -1070,7 +1070,7 @@ void renderCameraWest() {
 
             if (pattern != lastPattern) {
 
-                if (!drawPattern(lastPattern, -(lastIndex + 1 - cameraZ), -(y + 1 - cameraZ), cameraX - x)) {
+                if (!drawPattern(lastPattern, -(lastIndex + 1 - cameraZ) + 2, -(y + 1 - cameraZ) + 2, cameraX - x)) {
                     y = maxX + 1;
                 }
 
@@ -1078,7 +1078,7 @@ void renderCameraWest() {
                 lastPattern = pattern;
             }
         }
-        drawPattern(lastPattern, -(lastIndex + 1 - cameraZ), -(y + 1 - cameraZ), cameraX - x);
+        drawPattern(lastPattern, -(lastIndex + 1 - cameraZ) + 2, -(y + 1 - cameraZ) + 2, cameraX - x);
     }
 }
 
@@ -1105,7 +1105,7 @@ renderCameraSouth() {
 
             if (pattern != lastPattern) {
 
-                if (!drawPattern(lastPattern, -(x - cameraX), -(lastIndex - cameraX), y - cameraZ)) {
+                if (!drawPattern(lastPattern, -(x - cameraX) + 2, -(lastIndex - cameraX) + 2, y - cameraZ)) {
                     x = VISIBILITY_LIMIT;
                 }
                 lastIndex = x;
@@ -1116,7 +1116,7 @@ renderCameraSouth() {
             ++mapXY;
         }
 
-        drawPattern(lastPattern, -(x - cameraX), -(lastIndex - cameraX), y - cameraZ);
+        drawPattern(lastPattern, -(x - cameraX) + 2, -(lastIndex - cameraX) + 2, y - cameraZ);
 
 
         lastIndex = cameraX;
@@ -1131,7 +1131,7 @@ renderCameraSouth() {
 
             if (pattern != lastPattern) {
 
-                if (!drawPattern(lastPattern, cameraX - lastIndex, cameraX - x, y - cameraZ)) {
+                if (!drawPattern(lastPattern, cameraX - lastIndex + 2, cameraX - x + 2, y - cameraZ)) {
                     x = maxX + 1;
                 }
 
@@ -1142,7 +1142,7 @@ renderCameraSouth() {
             --mapXY;
         }
 
-        drawPattern(lastPattern, cameraX - lastIndex, cameraX - x, y - cameraZ);
+        drawPattern(lastPattern, cameraX - lastIndex + 2, cameraX - x + 2, y - cameraZ);
     }
 
 }
@@ -1166,7 +1166,7 @@ void renderCameraEast() {
 
             if (pattern != lastPattern) {
 
-                if (!drawPattern(lastPattern, (lastIndex - cameraZ), (y - cameraZ), x - cameraX)) {
+                if (!drawPattern(lastPattern, (lastIndex - cameraZ) + 2, (y - cameraZ) + 2, x - cameraX)) {
                     y = VISIBILITY_LIMIT;
                 }
                 lastIndex = y;
@@ -1175,7 +1175,7 @@ void renderCameraEast() {
             }
         }
 
-        drawPattern(lastPattern, (lastIndex - cameraZ), (y - cameraZ), x - cameraX);
+        drawPattern(lastPattern, (lastIndex - cameraZ) + 2 , (y - cameraZ) + 2, x - cameraX);
 
 
         lastIndex = cameraZ;
@@ -1188,7 +1188,7 @@ void renderCameraEast() {
 
             if (pattern != lastPattern) {
 
-                if (!drawPattern(lastPattern, -(cameraZ - y), -(cameraZ - lastIndex), x - cameraX)) {
+                if (!drawPattern(lastPattern, -(cameraZ - y) + 2, -(cameraZ - lastIndex) + 2, x - cameraX)) {
                     y = maxX + 1;
                 }
 
@@ -1198,7 +1198,7 @@ void renderCameraEast() {
             }
         }
 
-        drawPattern(lastPattern, -(cameraZ - y), -(cameraZ - lastIndex), x - cameraX);
+        drawPattern(lastPattern, -(cameraZ - y) + 2, -(cameraZ - lastIndex) + 2, x - cameraX);
     }
 }
 
@@ -1211,9 +1211,7 @@ void renderCameraNorth() {
     int8_t x;
     uint8_t pattern;
 
-    for (
-            y = cameraZ;
-            y >= 0; --y) {
+    for (y = cameraZ; y >= 0; --y) {
 
         int8_t const *mapY = &map[y][0];
         int8_t minX = min(cameraX + ((cameraZ) - y), 31);
@@ -1229,9 +1227,7 @@ void renderCameraNorth() {
 
             if (pattern != lastPattern) {
 
-                if (!
-                        drawPattern(lastPattern, lastIndex
-                                                 - cameraX, x - cameraX, cameraZ - y)) {
+                if (!drawPattern(lastPattern, lastIndex - cameraX + 2, x - cameraX + 2, cameraZ - y)) {
                     x = minX - 1;
                 }
                 lastIndex = x;
@@ -1242,8 +1238,7 @@ void renderCameraNorth() {
             ++mapXY;
         }
 
-        drawPattern(lastPattern, lastIndex
-                                 - cameraX, x - cameraX, cameraZ - y);
+        drawPattern(lastPattern, lastIndex - cameraX + 2, x - cameraX + 2, cameraZ - y);
 
 
         lastIndex = cameraX - 1;
@@ -1253,16 +1248,12 @@ void renderCameraNorth() {
 
         maxX = max(cameraX - ((cameraZ) - y), 0);
 
-        for (
-                x = lastIndex;
-                x >= maxX + 1; --x) {
+        for (x = lastIndex; x >= maxX + 1; --x) {
             pattern = *mapXY;
 
             if (pattern != lastPattern) {
 
-                if (!
-                        drawPattern(lastPattern, x
-                                                 + 1 - cameraX, lastIndex + 1 - cameraX, cameraZ - y)) {
+                if (!drawPattern(lastPattern, x + 1 - cameraX + 2, lastIndex + 1 - cameraX + 2, cameraZ - y)) {
                     x = maxX + 1;
                 }
 
@@ -1273,8 +1264,7 @@ void renderCameraNorth() {
             --mapXY;
         }
 
-        drawPattern(lastPattern, x
-                                 + 1 - cameraX, lastIndex + 1 - cameraX, cameraZ - y);
+        drawPattern(lastPattern, x + 1 - cameraX + 2, lastIndex + 1 - cameraX + 2, cameraZ - y);
     }
 }
 
