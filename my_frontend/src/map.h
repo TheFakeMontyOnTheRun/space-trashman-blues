@@ -66,17 +66,17 @@ const struct Pattern patterns[127] = {
         {7, 3, CUBE, 0, 0}, //44 ,
         {0, 3, BACK_WALL, 0}, // 45 -
         {7, 3, CUBE, 0}, //46 .
-        {0, 3, RIGHT_NEAR, 0}, //47 /
-        {7, 3, CUBE, 0}, //48
-        {0, 3, BACK_WALL, 0}, // 49
-        {7, 3, CUBE, 0}, //50
-        {7, 3, CUBE, 0}, // 51
-        {0, 0, CUBE, 0}, // 52
-        {0, 3, CUBE, 0}, //53
-        {0, 3, RIGHT_NEAR, 0}, //54
-        {0, 3, LEFT_NEAR, 0}, //55
-        {3, 3, CUBE, 0}, //56
-        {7, 3, CUBE, 0}, //57
+        {0, 3, RIGHT_NEAR, 0, 1}, //47 /
+        {7, 3, CUBE, 0}, //48  0
+        {0, 3, BACK_WALL, 0}, // 49 1
+        {7, 3, CUBE, 0}, //50 2
+        {7, 3, CUBE, 0}, // 51 3
+        {0, 0, CUBE, 0}, // 52 4
+        {0, 3, CUBE, 0}, //53 5
+        {0, 3, RIGHT_NEAR, 0}, //54 6
+        {0, 3, LEFT_NEAR, 0}, //55 7
+        {3, 3, CUBE, 0}, //56 8
+        {7, 3, CUBE, 0}, //57 9
         {0, 0, LEFT_WALL, 0}, // 58
         {0, 3, BACK_WALL, 0}, // 59
         {7, 3, CUBE, 0}, //60
@@ -92,7 +92,7 @@ const struct Pattern patterns[127] = {
         {3, 3, CUBE, 0}, //70 F
         {7, 3, CUBE, 0}, // 71
         {0, 0, CUBE, 0}, // 72
-        {0, 0, CUBE, 0}, // 73
+        {0, 0, CUBE, 0, 1}, // 73
         {0, 3, RIGHT_NEAR, 0}, //74
         {0, 3, LEFT_NEAR, 0}, //75
         {3, 3, CUBE, 0}, //76
@@ -111,7 +111,7 @@ const struct Pattern patterns[127] = {
         {0, 3, BACK_WALL, 0}, // 89
         {7, 3, CUBE, 0}, //90
         {0, 3, LEFT_NEAR, 0}, //91 [
-        {0, 3, LEFT_NEAR, 0}, //92 /*  \ */
+        {0, 3, LEFT_NEAR, 0, 1}, //92 /*  \ */
         {0, 3, RIGHT_NEAR, 0}, //93 ]
         {0, 3, RIGHT_NEAR, 0}, //94
         {0, 3, LEFT_NEAR, 0}, //95 _
@@ -143,7 +143,7 @@ const struct Pattern patterns[127] = {
         {7, 3, CUBE, 0}, // 121
         {0, 0, CUBE, 0}, // 122
         {0, 3, CUBE, 0}, //123
-        {0, 0, LEFT_WALL, 0}, // 124 |
+        {0, 0, LEFT_WALL, 0, 1}, // 124 |
         {0, 3, LEFT_NEAR, 0}, //125
         {3, 3, CUBE, 0}, //126
     };
