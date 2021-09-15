@@ -1331,6 +1331,7 @@ void tickRenderer() {
     uint8_t prevX;
     uint8_t prevZ;
     int previousLocation = playerLocation;
+    uint8_t newCell;
 #ifdef SMS
     if (!currentlyInGraphics) {
         backToGraphics();
@@ -1470,7 +1471,23 @@ void tickRenderer() {
     }
 
 
-    if (patterns[map[cameraZ - 2][cameraX]].blockMovement) {
+
+    switch (cameraRotation) {
+        case 0:
+            newCell = map[cameraZ - 2][cameraX];
+            break;
+        case 1:
+            newCell = map[cameraZ][cameraX + 2];
+            break;
+        case 2:
+            newCell = map[cameraZ + 2][cameraX];
+            break;
+        case 3:
+            newCell = map[cameraZ][cameraX - 2];
+            break;
+    }
+
+    if (patterns[newCell].blockMovement) {
         cameraX = prevX;
         cameraZ = prevZ;
     }
@@ -1479,16 +1496,16 @@ void tickRenderer() {
     /* unlike MX, we are signaling from the origin into the new room. MX allows for the movement and then searches where
      * did the player came from - hence the "opossite direction" there */
 
-    if (map[cameraZ][cameraX] == '0') {
+    if (newCell == '0') {
         enteredFrom = 0;
         moveBy(0);
-    } else if (map[cameraZ][cameraX] == '2') {
+    } else if (newCell == '2') {
         enteredFrom = 2;
         moveBy(2);
-    } else if (map[cameraZ][cameraX] == '3') {
+    } else if (newCell == '3') {
         enteredFrom = 3;
         moveBy(3);
-    } else if (map[cameraZ][cameraX] == '1') {
+    } else if (newCell == '1') {
         enteredFrom = 1;
         moveBy(1);
     }
