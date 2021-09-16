@@ -1060,7 +1060,7 @@ void renderCameraWest() {
         drawPattern(lastPattern, -(y - cameraZ) + 2, -(lastIndex - cameraZ)  + 2, cameraX - x);
 
 
-        lastIndex = cameraZ;
+        lastIndex = cameraZ - 1;
         lastPattern = map[lastIndex][x];
 
         maxX = max(cameraZ - ((cameraX) - x), 0);
@@ -1119,7 +1119,7 @@ renderCameraSouth() {
         drawPattern(lastPattern, -(x - cameraX) + 2, -(lastIndex - cameraX) + 2, y - cameraZ);
 
 
-        lastIndex = cameraX;
+        lastIndex = cameraX - 1;
         lastPattern = *(mapY + lastIndex);
 
         mapXY = &map[y][lastIndex];
@@ -1131,7 +1131,7 @@ renderCameraSouth() {
 
             if (pattern != lastPattern) {
 
-                if (!drawPattern(lastPattern, cameraX - lastIndex + 2, cameraX - x + 2, y - cameraZ)) {
+                if (!drawPattern(lastPattern, cameraX - lastIndex + 1, cameraX - x + 1, y - cameraZ)) {
                     x = maxX + 1;
                 }
 
@@ -1142,7 +1142,7 @@ renderCameraSouth() {
             --mapXY;
         }
 
-        drawPattern(lastPattern, cameraX - lastIndex + 2, cameraX - x + 2, y - cameraZ);
+        drawPattern(lastPattern, cameraX - lastIndex + 1, cameraX - x + 1, y - cameraZ);
     }
 
 }
@@ -1178,7 +1178,7 @@ void renderCameraEast() {
         drawPattern(lastPattern, (lastIndex - cameraZ) + 2 , (y - cameraZ) + 2, x - cameraX);
 
 
-        lastIndex = cameraZ;
+        lastIndex = cameraZ - 1;
         lastPattern = map[lastIndex][x];
 
         maxX = max(cameraZ - (x - cameraX), 0);
@@ -1188,7 +1188,7 @@ void renderCameraEast() {
 
             if (pattern != lastPattern) {
 
-                if (!drawPattern(lastPattern, -(cameraZ - y) + 2, -(cameraZ - lastIndex) + 2, x - cameraX)) {
+                if (!drawPattern(lastPattern, -(cameraZ - y) + 3, -(cameraZ - lastIndex) + 3, x - cameraX)) {
                     y = maxX + 1;
                 }
 
@@ -1198,7 +1198,7 @@ void renderCameraEast() {
             }
         }
 
-        drawPattern(lastPattern, -(cameraZ - y) + 2, -(cameraZ - lastIndex) + 2, x - cameraX);
+        drawPattern(lastPattern, -(cameraZ - y) + 3, -(cameraZ - lastIndex) + 3, x - cameraX);
     }
 }
 
