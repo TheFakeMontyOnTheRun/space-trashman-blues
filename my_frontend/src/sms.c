@@ -383,7 +383,7 @@ void pauseMenu() {
     int refresh = 1;
     int itemDesc = 1;
     struct Room* room = getRoom(getPlayerRoom());
-    struct ObjectNode* roomItem = room->itemsPresent;
+    struct ObjectNode* roomItem = room->itemsPresent->next;
 
     setup_text_mode();
 
@@ -538,7 +538,7 @@ char *menuItems[] = {
                     case 5: {
                         roomItem = roomItem->next;
                         if (!roomItem) {
-                            roomItem = room->itemsPresent;
+                            roomItem = room->itemsPresent->next;
                         }
                     }
                         break;
