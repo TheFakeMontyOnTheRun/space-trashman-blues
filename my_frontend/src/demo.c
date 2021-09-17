@@ -920,10 +920,6 @@ uint8_t drawPattern(uint8_t pattern, int8_t x0, int8_t x1, int8_t y) {
     diff = patterns[0].ceiling - patterns[pattern].ceiling;
     type = patterns[pattern].geometryType;
 
-    if (patterns[pattern].blockVisibility) {
-        return 0;
-    }
-
     if (type == CUBE) {
         return drawCubeAt(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2, x1 - x0,
                           diff, 1, /* patterns[pattern].elementsMask */ 15);
@@ -1331,7 +1327,7 @@ void tickRenderer() {
     uint8_t prevX;
     uint8_t prevZ;
     int previousLocation = playerLocation;
-    uint8_t newCell;
+    uint8_t newCell = 0;
 #ifdef SMS
     if (!currentlyInGraphics) {
         backToGraphics();
