@@ -539,7 +539,12 @@ void initStation(void) {
 
 
     /*Items*/
-
+        newItem = addItem("dummy", "ERROR",
+    #ifdef ITEMS_HAVE_WEIGHT
+                                      0,
+    #endif
+                                      FALSE, 0, 0);
+    
     /* LSS-Daedalus */
     newItem = addItem("emp-bomb", "Time-programmable Halogen EMP bomb.\n"
                                   "Will disable any electrical device\n"

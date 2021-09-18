@@ -163,7 +163,8 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 
     backdrop = loadBitmap("backdrop.img");
 
-    for (c = 0; c < itemsCount; ++c) {
+    //item 0 is a dummy
+    for (c = 1; c < itemsCount; ++c) {
         sprintf(&buffer[0], "%s.img", getItem(c)->description);
         itemSprites[c] = (makeTextureFrom(&buffer[0]));
     }
