@@ -293,7 +293,7 @@ void shutdownHW() {
     CGContextFillRect(context, bounds);
     
     provider = CGDataProviderCreateWithData( NULL, &stretchedBuffer[0], 4 * 320 * 200, NULL );
-    ref = CGImageCreate( 320, 200, 8, 32, 4 * 320, rgb, kCGBitmapByteOrder32Host, provider, NULL, 0, kCGRenderingIntentDefault );
+    ref = CGImageCreate( 320, 200, 8, 32, 4 * 320, rgb, kCGBitmapByteOrder32Host | kCGImageAlphaNoneSkipLast, provider, NULL, 0, kCGRenderingIntentDefault );
     CGContextScaleCTM(context, multiplier, yMultiplier);
     CGContextDrawImage(context, CGRectMake( ((bounds.size.width / multiplier) - 320) / 2, ((bounds.size.height / yMultiplier) - 200) / 2, 320, 200), ref);
     CGImageRelease(ref);
