@@ -211,6 +211,9 @@ enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
                     cursorPosition = CreditsScreen_optionsCount - 1;
                 }
 
+                if (cursorPosition < 0 ) {
+                    cursorPosition = 0;
+                }
                 break;
             case kCommandDown:
                 cursorPosition =

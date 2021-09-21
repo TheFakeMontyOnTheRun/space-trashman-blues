@@ -301,6 +301,11 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
                     if (cursorPosition >= AbandonMission_count) {
                         cursorPosition = AbandonMission_count - 1;
                     }
+
+                    if (cursorPosition < 0 ) {
+                        cursorPosition = 0;
+                    }
+
                     break;
                 case kCommandDown:
                     playSound(MENU_SELECTION_CHANGE_SOUND);

@@ -301,6 +301,10 @@ enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long delta) {
                     cursorPosition = GameMenu_optionsCount - 1;
                 }
 
+                if (cursorPosition < 0 ) {
+                    cursorPosition = 0;
+                }
+
                 featuredBitmap = NULL;
                 break;
             case kCommandDown:

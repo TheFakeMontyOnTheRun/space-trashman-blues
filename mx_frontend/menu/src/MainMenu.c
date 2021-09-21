@@ -175,6 +175,10 @@ enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
                 if (cursorPosition > (kMainMenuOptionsCount - 1)) {
                     cursorPosition = (kMainMenuOptionsCount - 1);
                 }
+
+                if (cursorPosition < 0 ) {
+                    cursorPosition = 0;
+                }
                 break;
             case kCommandDown:
                 playSound(MENU_SELECTION_CHANGE_SOUND);
