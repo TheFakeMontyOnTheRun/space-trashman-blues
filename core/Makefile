@@ -1,3 +1,6 @@
+GTEST_DIR = googletest/googletest
+GMOCK_DIR = googletest/googlemock
+
 CXXFLAGS = -Iinclude -O3 -g -c -std=c++14 -Wno-narrowing   \
 		-I$(GTEST_DIR)/include \
 		-I$(GTEST_DIR) \
@@ -8,17 +11,15 @@ CXXFLAGS = -Iinclude -O3 -g -c -std=c++14 -Wno-narrowing   \
 		-I$(GMOCK_DIR)/include/gtest \
 		-I$(GMOCK_DIR)/include/gtest/internal -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS
 
-CFLAGS = -Iinclude -O3 -g -c -std=c89 -ansi -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS
+CFLAGS = -Iinclude -O3 -g -c -std=c90 -ansi -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS
 
 
-GTEST_DIR = googletest/googletest
-GMOCK_DIR = googletest/googlemock
 
-TESTOBJS = Tests/TestMovement.o \
-		Tests/TestInventoryManipulation.o \
-		Tests/TestObjectManipulation.o \
-		Tests/TestVictoryConditionsAndEndings.o \
-		Tests/TestParser.o \
+TESTOBJS = tests/TestMovement.o \
+		tests/TestInventoryManipulation.o \
+		tests/TestObjectManipulation.o \
+		tests/TestVictoryConditionsAndEndings.o \
+		tests/TestParser.o \
 		$(GTEST_DIR)/src/gtest-all.o \
 		$(GMOCK_DIR)/src/gmock-all.o \
 		$(GMOCK_DIR)/src/gmock_main.o
