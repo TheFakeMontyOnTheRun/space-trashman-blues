@@ -323,6 +323,8 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
                     currentPresentationState = kConfirmInputBlink1;
                     break;
             }
+            
+            return kResumeCurrentState;
         }
 
 
