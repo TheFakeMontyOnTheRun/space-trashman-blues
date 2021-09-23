@@ -167,6 +167,8 @@ void setPlayerRank(int newRank);
 
 int isPositionAllowed(int x, int y);
 
+uint8_t listIsEmpty(struct ObjectNode *listHead);
+
 void initCore();
 
 void setGameStatus(enum EGameStates newStatus);

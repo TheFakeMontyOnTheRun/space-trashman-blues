@@ -383,7 +383,7 @@ void pauseMenu() {
     int refresh = 1;
     int itemDesc = 1;
     struct Room* room = getRoom(getPlayerRoom());
-    struct ObjectNode* roomItem = room->itemsPresent->next;
+    struct ObjectNode* roomItem = NULL;
 
     setup_text_mode();
 
@@ -392,7 +392,7 @@ void pauseMenu() {
 
         if (refresh) {
             int i = 0;
-            struct Item* item = getItem(focusedItem->item);
+            struct Item *item;
             refresh = 0;
 
             cvu_vmemset(IMAGE, ' ', 40 * 24);
@@ -400,21 +400,32 @@ void pauseMenu() {
 
             show_text(1, 1, "Object at room:");
 
-            if (roomItem) {
-                show_text(16, 1, getItem(roomItem->item)->description);
+
+            if (!listIsEmpty(getPlayerItems())) {
+                item = getItem(focusedItem->item);
+
+                if (itemDesc) {
+                    if (item->active) {
+                        show_text(1, 2, "*");
+                    }
+
+                    show_text(2, 2, item->description);
+                    show_text(1, 3, item->info);
+                }
             }
 
-            if (itemDesc) {
-                if (item->active) {
-                    show_text(1, 2, "*");
-                }
-
-                show_text(2, 2, item->description);
-                show_text(1, 3, item->info);
-            } else {
+            if (!itemDesc) {
                 show_text(1, 2, " ");
                 show_text(2, 2, room->description);
                 show_text(1, 3, room->info);
+            }
+
+            if (!listIsEmpty(room->itemsPresent)) {
+                roomItem = room->itemsPresent->next;
+
+                if (roomItem) {
+                    show_text(16, 1, getItem(roomItem->item)->description);
+                }
             }
 
 
@@ -488,7 +499,7 @@ char *menuItems[] = {
 
                                 if (itemToPick->pickable) {
                                     pickObject(itemToPick);
-                                    roomItem = room->itemsPresent;
+                                    roomItem = room->itemsPresent->next;
 
                                 } else {
                                     useObjectNamed(itemToPick->description);
@@ -512,7 +523,7 @@ char *menuItems[] = {
                             }
 
                             dropObjectToRoom(getPlayerRoom(), item);
-                            roomItem = room->itemsPresent;
+                            roomItem = room->itemsPresent->next;
                         }
                     }
                         break;

@@ -27,12 +27,16 @@ int roomCount = 1; /* there's an implicit dummy first */
 struct Room rooms[TOTAL_ROOMS];
 int itemsCount = 0;
 struct Item item[TOTAL_ITEMS];
+struct ObjectNode objectNodes[TOTAL_ITEMS];
+struct ObjectNode collectedObjectHead;
+struct ObjectNode roomObjectHeads[TOTAL_ROOMS];
 struct ObjectNode *collectedObject = NULL;
 int playerLocation = 1;
 int playerDirection;
 int playerRank;
 int gameStatus;
 int playerHealth = 100;
+struct WorldPosition playerPosition;
 struct WorldPosition *characterPositions;
 int charactersCount = 1;
 int playerCharacter;
@@ -81,7 +85,7 @@ struct Room *addRoom(
 #endif
                 int sizeX, int sizeY, int chanceOfRandomBattle, int connections[6]) {
 
-    struct Room* toReturn = &rooms[roomCount++];
+    struct Room* toReturn = &rooms[roomCount];
     toReturn->description = description;
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
     toReturn->info = info;
@@ -97,7 +101,7 @@ struct Room *addRoom(
     toReturn->connections[5] = connections[5];
 
     /* add list head to make manipulations easier */
-    toReturn->itemsPresent = (struct ObjectNode *) malloc(sizeof(struct ObjectNode));
+    toReturn->itemsPresent = &roomObjectHeads[roomCount++];
     memset(toReturn->itemsPresent, 0, sizeof(struct ObjectNode) );
 
     return toReturn;
@@ -175,7 +179,7 @@ void addObjectToList(struct Item *itemToAdd, struct ObjectNode *listHead) {
         head = head->next;
     }
 
-    head->next = (struct ObjectNode *) malloc(sizeof(struct ObjectNode));
+    head->next = &objectNodes[itemToAdd->index];
     memset(head->next, 0, sizeof(struct ObjectNode));
     head->next->item = itemToAdd->index;
 }
@@ -187,7 +191,6 @@ void removeObjectFromList(struct Item *itemToRemove, struct ObjectNode *listHead
     while (head != NULL) {
         if (head->item == itemToRemove->index) {
             prev->next = head->next;
-            free(head);
             return;
         }
 
@@ -195,6 +198,10 @@ void removeObjectFromList(struct Item *itemToRemove, struct ObjectNode *listHead
         head = head->next;
     }
     /* Object doesn't belongs to the list! */
+}
+
+uint8_t listIsEmpty(struct ObjectNode *listHead) {
+    return (listHead == NULL || listHead->next == NULL);
 }
 
 
@@ -711,11 +718,11 @@ void initCore() {
   /* prepare for a single player in the game */
     playerCharacter = 0;
     charactersCount = 1;
-    characterPositions = (struct WorldPosition*)malloc(charactersCount * sizeof(struct WorldPosition));
+    characterPositions = &playerPosition;
     memset(characterPositions, 0, charactersCount * sizeof(struct WorldPosition));
     setErrorHandlerCallback(NULL);
 
-    collectedObject = (struct ObjectNode *) malloc(sizeof(struct ObjectNode));
+    collectedObject = &collectedObjectHead;
     memset(collectedObject, 0, sizeof(struct ObjectNode));
     playerLocation = 1;
     itemsCount = 0;

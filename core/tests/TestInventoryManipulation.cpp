@@ -117,6 +117,14 @@ TEST_F(TestInventoryManipulation, canPickObjects) {
 	ASSERT_TRUE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
 }
 
+
+TEST_F(TestInventoryManipulation, listIsEmptyWhenItShouldBe) {
+	parseCommand("drop", "helmet");
+	parseCommand("drop", "magnetic-boots");
+	ASSERT_TRUE(listIsEmpty(getPlayerItems()));
+}
+
+
 TEST_F(TestInventoryManipulation, objectsCanOnlyExistInOneRoom) {
 
   struct Item *item;
