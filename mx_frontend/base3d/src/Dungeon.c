@@ -312,6 +312,9 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             case kGoodGameOver:
                 enterState(kGoodGameOverEpilogue);
                 return gameSnapshot;
+            default:
+            case kNormalGameplay:
+                break;
         }
 
 
