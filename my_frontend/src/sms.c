@@ -390,6 +390,37 @@ void pauseMenu() {
     while (keepGoing) {
         struct cv_controller_state state;
 
+        switch (getGameStatus()) {
+            case kBadVictory:
+                showMessage("Victory! Too bad you didn't survive\nto tell the story\n\n\n\n\n\n");
+                while(1);
+                break;
+
+            case kBadGameOver:
+                showMessage("You're dead! And so are millions of\n"
+                            "other people on the path of\n"
+                            "destruction faulty reactor\n\n\n\n\n\n");
+                while(1);
+                break;
+
+            case kGoodVictory:
+                showMessage("Victory! You managed to destroy the\nship and get out alive\n\n\n\n\n\n");
+                while(1);
+                break;
+
+            case kGoodGameOver:
+                showMessage("You failed! While you fled the ship\n"
+                            "alive, you failed to prevent the \n"
+                            "worstscenario and now EVERYBODY is\n"
+                            "dead (and that includes you!)\n\n\n\n\n");
+                while(1);
+                break;
+
+            default:
+            case kNormalGameplay:
+                break;
+        }
+
         if (refresh) {
             int i = 0;
             struct Item *item;
