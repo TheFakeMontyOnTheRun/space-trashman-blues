@@ -383,7 +383,6 @@ void pauseMenu() {
     int refresh = 1;
     int itemDesc = 1;
     struct Room* room = getRoom(getPlayerRoom());
-    struct ObjectNode* roomItem = NULL;
 
     setup_text_mode();
 
@@ -423,7 +422,6 @@ void pauseMenu() {
 
         if (refresh) {
             int i = 0;
-            struct Item *item;
             refresh = 0;
 
             cvu_vmemset(IMAGE, ' ', 40 * 24);
@@ -431,17 +429,28 @@ void pauseMenu() {
 
             show_text(1, 1, "Object at room:");
 
+            if (focusedItem != NULL) {
+                struct Item *item = getItem(focusedItem->item);
 
-            if (!listIsEmpty(getPlayerItems())) {
-                item = getItem(focusedItem->item);
+                if (item->active) {
+                    show_text(1, 2, "*");
+                }
+
+                show_text(2, 2, item->description);
+            }
+
+
+            if (roomItem != NULL) {
+                struct Item *item = getItem(roomItem->item);
+
+                if (item->active) {
+                    show_text(1, 3, "*");
+                }
+
+                show_text(2, 3, item->description);
 
                 if (itemDesc) {
-                    if (item->active) {
-                        show_text(1, 2, "*");
-                    }
-
-                    show_text(2, 2, item->description);
-                    show_text(1, 3, item->info);
+                    show_text(1, 4, item->info);
                 }
             }
 
@@ -450,15 +459,6 @@ void pauseMenu() {
                 show_text(2, 2, room->description);
                 show_text(1, 3, room->info);
             }
-
-            if (!listIsEmpty(room->itemsPresent)) {
-                roomItem = room->itemsPresent->next;
-
-                if (roomItem) {
-                    show_text(16, 1, getItem(roomItem->item)->description);
-                }
-            }
-
 
             for (i = 0; i < 8; ++i) {
                 if (i == cursorPosition) {
@@ -489,10 +489,10 @@ char *menuItems[] = {
 */
             if (state.joystick & CV_FIRE_0) {
                 switch (cursorPosition) {
-                    case 0: {
+                    case 0:
                         useObjectNamed(getItem(focusedItem->item)->description);
                         break;
-                    }
+
 
                     case 1: {
                         struct Item *item = NULL;
@@ -504,13 +504,6 @@ char *menuItems[] = {
                                 if (focusedItem != NULL) {
                                     item = getItem(focusedItem->item);
                                     if (item != NULL) {
-
-                                        /* next items */
-                                        focusedItem = focusedItem->next;
-                                        if (!focusedItem) {
-                                            focusedItem = getPlayerItems();
-                                        }
-
                                         item->useWithCallback(item, itemToPick);
                                     }
                                 }
@@ -519,70 +512,19 @@ char *menuItems[] = {
                     }
                         break;
 
-                    case 2: {
-                        if (roomItem != NULL) {
-                            struct Item* itemToPick = getItem(roomItem->item);
-                            if (itemToPick != NULL ) {
-
-                                if (!strcmp(itemToPick->description, "digital-safe")) {
-                                    accessGrantedToSafe = TRUE;
-                                }
-
-                                if (itemToPick->pickable) {
-                                    pickObject(itemToPick);
-                                    roomItem = room->itemsPresent->next;
-
-                                } else {
-                                    useObjectNamed(itemToPick->description);
-                                }
-                            }
-                        }
-                    }
+                    case 2:
+                        pickItem();
                         break;
 
-                    case 3: {
-                        struct Item *item = NULL;
-
-                        if (focusedItem != NULL) {
-                            item = getItem(focusedItem->item);
-                        }
-
-                        if (item != NULL) {
-                            focusedItem = focusedItem->next;
-                            if (!focusedItem) {
-                                focusedItem = getPlayerItems();
-                            }
-
-                            dropObjectToRoom(getPlayerRoom(), item);
-                            roomItem = room->itemsPresent->next;
-                        }
-                    }
+                    case 3:
+                        dropItem();
                         break;
-                    case 4: {
-                        struct Item *item = NULL;
-                        struct ObjectNode *head = NULL;
-                        head = getPlayerItems();
-                        item = NULL;
-
-                        if (head != NULL) {
-                            item = getItem(head->item);
-                        }
-
-                        if (item != NULL) {
-                            focusedItem = focusedItem->next;
-                            if (!focusedItem) {
-                                focusedItem = getPlayerItems();
-                            }
-                        }
-                    }
+                    case 4:
+                        nextItemInHand();
                         break;
 
-                    case 5: {
-                        roomItem = roomItem->next;
-                        if (!roomItem) {
-                            roomItem = room->itemsPresent->next;
-                        }
-                    }
+                    case 5:
+                        nextItemInRoom();
                         break;
 
                     case 6:

@@ -9,7 +9,7 @@ include_directories( src ../core/src ../core/include
 		${SDL2_INCLUDE_DIR}
 )
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DRES128X128 -std=c90 -W -ansi -g -pedantic -Wall")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DRES128X128 -std=c90 -W -ansi -g -pedantic -Wall")
 
 find_package(SDL2 REQUIRED)
 

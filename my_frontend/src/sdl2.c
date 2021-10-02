@@ -2,10 +2,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <Core.h>
 
 
 #include "SDL.h"
 
+
+extern struct ObjectNode* focusedItem;
+extern struct ObjectNode* roomItem;
+extern int accessGrantedToSafe;
 SDL_Window *window;
 SDL_Renderer *renderer;
 
@@ -16,6 +21,18 @@ uint32_t palette[16];
 uint8_t framebuffer[160 * 200];
 
 void graphicsFlush();
+
+void nextItemInHand();
+
+void useItemInHand();
+
+void nextItemInRoom();
+
+void interactWithItemInRoom();
+
+void pickOrDrop();
+
+void pickItem();
 
 void graphicsPut(uint8_t x, uint8_t y) {
 
@@ -130,6 +147,41 @@ void writeStr(uint8_t nColumn, uint8_t nLine, char *str, uint8_t fg, uint8_t bg)
     puts(str);
 }
 
+void printSituation() {
+    struct ObjectNode *playerObjects = getPlayerItems();
+    puts("---------------");
+    puts("\nPlayer items:");
+
+    while( playerObjects != NULL ) {
+        struct Item *item = getItem(playerObjects->item);
+
+        printf("%c%c%s\n", (playerObjects == focusedItem) ? '>' : ' ', item->active ? '*' : '-', item->description );
+
+        playerObjects = playerObjects->next;
+    }
+
+    puts("\nItems in room:");
+
+    struct ObjectNode *roomItems = getRoom(getPlayerRoom())->itemsPresent->next;
+
+    while( roomItems != NULL ) {
+        struct Item *item = getItem(roomItems->item);
+
+        printf("%c%c%s\n", (roomItems == roomItem) ? '>' : ' ',item->active ? '*' : '-', item->description );
+
+        roomItems = roomItems->next;
+    }
+}
+
+void interactWithItemInRoom() {
+
+}
+
+void dropItem();
+
+void pickItem();
+
+
 uint8_t getKey() {
     SDL_Event event;
 
@@ -156,6 +208,35 @@ uint8_t getKey() {
                     break;
 
                 case SDLK_SPACE:
+                    printSituation();
+                    break;
+
+                case SDLK_KP_7:
+                    nextItemInHand();
+                    break;
+
+                case SDLK_KP_8:
+                    useItemInHand();
+                    break;
+
+
+                case SDLK_KP_4:
+                    nextItemInRoom();
+                    break;
+
+                case SDLK_KP_5:
+                    interactWithItemInRoom();
+                    break;
+
+                case SDLK_KP_9:
+                    pickItem();
+                    break;
+
+                case SDLK_KP_6:
+                    dropItem();
+                    break;
+
+
                 case SDLK_s:
                     break;
                 case SDLK_d:
@@ -197,6 +278,7 @@ uint8_t getKey() {
 
     return mBufferedCommand;
 }
+
 
 void init() {
     int r, g, b;

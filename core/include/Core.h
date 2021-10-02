@@ -181,5 +181,5 @@ void useObjectNamed(const char *operand);
 
 /* TODO: make accessory method for this */
 extern int itemsCount;
-
+extern struct ObjectNode objectNodes[TOTAL_ITEMS];
 #endif

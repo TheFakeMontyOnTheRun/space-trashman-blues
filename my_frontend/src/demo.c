@@ -49,6 +49,10 @@ enum DIRECTION {
 #define IN_RANGE(V0, V1, V)  ((V0) <= (V) && (V) <= (V1))
 
 struct ObjectNode* focusedItem = NULL;
+struct ObjectNode* roomItem = NULL;
+
+extern int accessGrantedToSafe;
+
 
 void shutdownGraphics();
 
@@ -1264,12 +1268,89 @@ void renderCameraNorth() {
     }
 }
 
+void pickItem() {
+    struct Room* room = getRoom(getPlayerRoom());
+
+    if (roomItem && roomItem->item) {
+        struct Item* itemToPick = getItem(roomItem->item);
+        if (itemToPick != NULL ) {
+
+            if (!strcmp(itemToPick->description, "digital-safe")) {
+                accessGrantedToSafe = TRUE;
+                return;
+            }
+
+            if (itemToPick->pickable) {
+                pickObject(itemToPick);
+                focusedItem = roomItem;
+                roomItem = room->itemsPresent->next;
+
+            } else {
+                useObjectNamed(itemToPick->description);
+            }
+
+        }
+    }
+}
+
+void dropItem() {
+    struct Room* room = getRoom(getPlayerRoom());
+
+    struct Item *item = NULL;
+
+    if (focusedItem != NULL) {
+        item = getItem(focusedItem->item);
+    }
+
+    if (item != NULL) {
+        dropObjectToRoom(getPlayerRoom(), item);
+
+        focusedItem = getPlayerItems();
+
+        roomItem = &objectNodes[item->index];
+    }
+}
+
+void nextItemInRoom() {
+    struct Room* room = getRoom(getPlayerRoom());
+
+    if (roomItem == NULL ) {
+        return;
+    }
+
+    roomItem = roomItem->next;
+
+    if (!roomItem) {
+        roomItem = room->itemsPresent;
+    }
+
+    if (roomItem->item == 0) {
+        roomItem = roomItem->next;
+    }
+}
+
+void useItemInHand() {
+    useObjectNamed(getItem(focusedItem->item)->description);
+}
+
+void nextItemInHand() {
+    focusedItem = focusedItem->next;
+
+    if (!focusedItem) {
+        focusedItem = getPlayerItems();
+    }
+}
+
 void initMap() {
     int x, y, c;
     const uint8_t *head;
     uint16_t offsetOnDataStrip = 0;
     int16_t repetitions = -1;
     uint8_t current = '.';
+
+    /* first item in the list is always a dummy */
+    roomItem = getRoom(playerLocation)->itemsPresent->next;
+
 
 /* TODO: precalc absolute offsets */
 
