@@ -173,10 +173,6 @@ void printSituation() {
     }
 }
 
-void interactWithItemInRoom() {
-
-}
-
 void dropItem();
 
 void pickItem();

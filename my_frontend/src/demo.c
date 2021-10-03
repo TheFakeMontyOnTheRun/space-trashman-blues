@@ -1330,6 +1330,23 @@ void nextItemInRoom() {
     }
 }
 
+void interactWithItemInRoom() {
+    struct Item *item = NULL;
+    struct Item* itemToPick = NULL;
+
+    if (roomItem != NULL) {
+        itemToPick = getItem(roomItem->item);
+        if (itemToPick != NULL ) {
+            if (focusedItem != NULL) {
+                item = getItem(focusedItem->item);
+                if (item != NULL) {
+                    item->useWithCallback(item, itemToPick);
+                }
+            }
+        }
+    }
+}
+
 void useItemInHand() {
     useObjectNamed(getItem(focusedItem->item)->description);
 }

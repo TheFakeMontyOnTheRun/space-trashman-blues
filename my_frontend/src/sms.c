@@ -494,22 +494,8 @@ char *menuItems[] = {
                         break;
 
 
-                    case 1: {
-                        struct Item *item = NULL;
-                        struct Item* itemToPick = NULL;
-
-                        if (roomItem != NULL) {
-                            itemToPick = getItem(roomItem->item);
-                            if (itemToPick != NULL ) {
-                                if (focusedItem != NULL) {
-                                    item = getItem(focusedItem->item);
-                                    if (item != NULL) {
-                                        item->useWithCallback(item, itemToPick);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    case 1:
+                        interactWithItemInRoom();
                         break;
 
                     case 2:
