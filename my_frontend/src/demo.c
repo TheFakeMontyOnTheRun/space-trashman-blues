@@ -9,15 +9,15 @@
 #endif
 
 #ifdef RES64X128
-#define XRES 64
-#define YRES 128
+    #define XRES 64
+    #define YRES 128
 #else
     #ifdef RES128X128
-    #define XRES 128
-    #define YRES 128
+        #define XRES 128
+        #define YRES 128
     #else
-    #define XRES 64
-    #define YRES 64
+        #define XRES 64
+        #define YRES 64
     #endif
 #endif
 
@@ -933,9 +933,9 @@ uint8_t drawPattern(uint8_t pattern, int8_t x0, int8_t x1, int8_t y) {
         if ( cameraRotation == 1 || cameraRotation == 3 ) {
 
             if (type == RIGHT_NEAR ) {
-                type == LEFT_NEAR;
+                type = LEFT_NEAR;
             } else {
-                type == RIGHT_NEAR;
+                type = RIGHT_NEAR;
             }
         }
 
@@ -950,7 +950,8 @@ uint8_t drawPattern(uint8_t pattern, int8_t x0, int8_t x1, int8_t y) {
         
     } else if (type == BACK_WALL  || ( type == LEFT_WALL  && ( cameraRotation == 1 || cameraRotation == 3 ))){
         
-        
+
+        //                                                                     \/ flip
         return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
                          x1 - x0, diff, patterns[pattern].elementsMask);
         
@@ -1653,7 +1654,6 @@ int main(
         memset(stencilHigh, 0, XRES);
 
 #ifdef SMS
-        startMusic();
         titleScreen();
 #endif
 
