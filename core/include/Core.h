@@ -176,7 +176,7 @@ void setGameStatus(enum EGameStates newStatus);
 void useObjectNamed(const char *operand);
 
 #define TOTAL_ROOMS 24
-#define TOTAL_ITEMS 64
+#define TOTAL_ITEMS 36
 
 
 /* TODO: make accessory method for this */
