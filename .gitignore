@@ -67,3 +67,8 @@ my_frontend/derelict.com
 my_frontend/CPCVersion/game.cdt
 my_frontend/CPCVersion/game.dsk
 /core/blues
+UserInterfaceState.xcuserstate
+my_frontend/demo.bin
+my_frontend/demo.tap
+my_frontend/demo_BANK_7.bin
+sms.c
