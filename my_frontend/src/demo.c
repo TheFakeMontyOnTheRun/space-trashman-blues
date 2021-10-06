@@ -568,26 +568,28 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
         if (drawContour) {
             if (elementMask & 2) {
                 if (IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
-                    vLine(px0z0, py0z0, stencilHigh[px0z0]);
+                    vLine(px0z0, py0z0, stencilHigh[px0z0] < py1z0 ? py1z0 : stencilHigh[px0z0] );
                 }
                 
                 if (IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
-                    vLine(px1z0, py0z0, stencilHigh[px1z0]);
+                    vLine(px1z0, py0z0, stencilHigh[px1z0] < py1z0 ? py1z0 : stencilHigh[px1z0] );
                 }
             }
         }
-        
+
         /* Draw the horizontal outlines of z0 and z1 */
-        
-            /* Ceiling is lower than camera */
-            for (x = px0z0; x <= px1z0; ++x) {
-                if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
+
+        /* Ceiling is lower than camera */
+        for (x = px0z0; x <= px1z0; ++x) {
+            if (IN_RANGE(0, XRESMINUSONE, x)) {
+
+                if (stencilHigh[x] < py1z0) {
                     if (drawContour) {
 #ifdef CPC_PLATFORM
                         unsigned char *pS;
                         unsigned char nByte = 0;
                         
-                        pS = (unsigned char *) baseScreen + lineStart[stencilHigh[x]] + (x >> 1);
+                        pS = (unsigned char *) baseScreen + lineStart[py1z0] + (x >> 1);
                         nByte = *pS;
                         
                         if (x & 1) {
@@ -600,12 +602,39 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
                         
                         *pS = nByte;
 #else
-                        graphicsPut(x, stencilHigh[x]);
+                        graphicsPut(x, py1z0);
+#endif
+                    }
+                    stencilHigh[x] = py1z0;
+                }
+
+
+                if (stencilHigh[x] < py0z0) {
+                    if (drawContour) {
+#ifdef CPC_PLATFORM
+                        unsigned char *pS;
+                        unsigned char nByte = 0;
+
+                        pS = (unsigned char *) baseScreen + lineStart[py0z0] + (x >> 1);
+                        nByte = *pS;
+
+                        if (x & 1) {
+                            nByte &= 170;
+                            nByte |= 64;
+                        } else {
+                            nByte &= 85;
+                            nByte |= 128;
+                        }
+
+                        *pS = nByte;
+#else
+                        graphicsPut(x, py0z0);
 #endif
                     }
                     stencilHigh[x] = py0z0;
                 }
             }
+        }
     }
     
     return 1;
@@ -919,8 +948,6 @@ uint8_t drawPattern(uint8_t pattern, int8_t x0, int8_t x1, int8_t y) {
     int8_t diff;
     uint8_t type;
 
-
-
     diff = patterns[0].ceiling - patterns[pattern].ceiling;
     type = patterns[pattern].geometryType;
 
@@ -942,19 +969,80 @@ uint8_t drawPattern(uint8_t pattern, int8_t x0, int8_t x1, int8_t y) {
         return drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2, x1 - x0,
                          diff, 1, patterns[pattern].elementsMask, type);
         
-    } else if (type == LEFT_WALL || ( type == BACK_WALL  && ( cameraRotation == 1 || cameraRotation == 3 )) ){
-        
-        
-        return drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-                         0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
-        
-    } else if (type == BACK_WALL  || ( type == LEFT_WALL  && ( cameraRotation == 1 || cameraRotation == 3 ))){
-        
+    } else if (type == LEFT_WALL ){
 
-        //                                                                     \/ flip
-        return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
-                         x1 - x0, diff, patterns[pattern].elementsMask);
-        
+        switch (cameraRotation) {
+            case 0:
+                return drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                 0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
+
+            case 1:
+                return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                  x1 - x0, diff, patterns[pattern].elementsMask);
+            case 2:
+                return drawWedge(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                 0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
+
+            case 3:
+                return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
+                                  x1 - x0, diff, patterns[pattern].elementsMask);
+        }
+    } else if (type == BACK_WALL){
+
+
+        switch (cameraRotation) {
+            case 0:
+                return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
+                                  x1 - x0, diff, patterns[pattern].elementsMask);
+
+            case 1:
+                return drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                 0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
+
+            case 2:
+                return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                  x1 - x0, diff, patterns[pattern].elementsMask);
+
+            case 3:
+                return drawWedge(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                 0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
+        }
+    } else if (type == CORNER){
+        int returnVal = 0;
+
+        switch( cameraRotation) {
+            case 0:
+                returnVal = drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                      0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR) ;
+
+                returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
+                                       x1 - x0, diff, patterns[pattern].elementsMask) || returnVal;
+                break;
+            case 1:
+                returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                       x1 - x0, diff, patterns[pattern].elementsMask);
+                returnVal = drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                      0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR) || returnVal;
+
+                break;
+            case 2:
+                returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                       x1 - x0, diff, patterns[pattern].elementsMask);
+
+                returnVal = drawWedge(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                      0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR) || returnVal;
+
+                break;
+            case 3:
+                returnVal = drawWedge(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                      0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
+
+                returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
+                                       x1 - x0, diff, patterns[pattern].elementsMask) || returnVal;
+                break;
+        }
+
+        return returnVal;
     }
     
     return 0;
