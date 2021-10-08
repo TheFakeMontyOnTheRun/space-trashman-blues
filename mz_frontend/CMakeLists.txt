@@ -1,39 +1,26 @@
 cmake_minimum_required(VERSION 3.11)
 project(derelict16)
 
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 90)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake_find")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake_sdl2")
 
-include_directories(
+include_directories( src ../core/src ../core/include
 		${SDL2_INCLUDE_DIR}
 )
 
-include_directories(base3d/include)
-include_directories(common/include)
-include_directories(menu/include)
-include_directories(SoundSystem)
-
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -std=c90 -W -pedantic -Wall -Wextra -DNFILLED_POLYS -DTEXTURES")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DRES128X128 -std=c90 -W -ansi -g -pedantic -Wall")
 
 find_package(SDL2 REQUIRED)
 
 add_executable(derelict16
-		menu/src/MainMenu.c
-		menu/src/CrawlerScreen.c
-        menu/src/HelpScreen.c
-		menu/src/CreditsScreen.c
-        menu/src/Main.c
-		menu/src/Engine.c
-		base3d/src/SDLVersion/CSDL2Renderer.c
-		base3d/src/Globals.c
-		base3d/src/LoadBitmap.c
-		base3d/src/CRenderer.c
-		base3d/src/CRenderer_Rasterization.c
-		base3d/src/CPackedFileReader.c
-        menu/src/UI.c
-		)
+		src/demo.c
+		src/sdl2.c
+		../core/src/Derelict.c
+		../core/src/Core.c
+		../core/src/Parser.c
 
+		)
 
 include(FindPkgConfig)
 
