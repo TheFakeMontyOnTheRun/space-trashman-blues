@@ -72,3 +72,10 @@ my_frontend/demo.bin
 my_frontend/demo.tap
 my_frontend/demo_BANK_7.bin
 sms.c
+mz_frontend/gameocs
+mz_frontend/out.bin
+mz_frontend/out.elf
+mz_frontend/symbol.txt
+mz_frontend/data/datastrip
+mz_frontend/data/packer
+mz_frontend/MSDOSVersion/derelict.com
