@@ -3,20 +3,26 @@ Created by Daniel Monteiro on 2019-07-26.
 */
 
 #ifndef DONT_INCLUDE
+
+#ifndef SMD
 #include <assert.h>
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 
 #ifdef WIN32
 #include "Win32Int.h"
 #else
 #include <stdint.h>
+#endif
 
 #ifndef CPC_PLATFORM
 #include <unistd.h>
 #endif
 
+#else
+#include <genesis.h>
 #endif
 
 #include "Core.h"
@@ -443,6 +449,7 @@ void useObjectNamed(const char *operand) {
     }
 }
 
+#ifndef SMD
 void walkTo(const char *operands) {
     struct WorldPosition pos;
     char *xStr;
@@ -462,6 +469,7 @@ void walkTo(const char *operands) {
     pos.y = y;
     setPlayerPosition(&pos);
 }
+#endif
 
 void infoAboutItemNamed(const char *itemName) {
 
@@ -501,6 +509,7 @@ void infoAboutItemNamed(const char *itemName) {
     defaultLogger("No such item could be found");
 }
 
+#ifndef SMD
 void useObjectsTogether(const char *operands) {
 
     struct ObjectNode *object1 = collectedObject->next;
@@ -550,6 +559,7 @@ void useObjectsTogether(const char *operands) {
         }
     }
 }
+#endif
 
 void turnLeft(void) {
     playerDirection--;

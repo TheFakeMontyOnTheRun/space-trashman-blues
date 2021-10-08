@@ -4,22 +4,27 @@ Created by Daniel Monteiro on 2019-07-26.
 
 
 #ifndef DONT_INCLUDE
+
+#ifndef SMD
 #include <assert.h>
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 
 #ifdef WIN32
 #include "Win32Int.h"
 #else
 #include <stdint.h>
+#endif
 
 #ifndef CPC_PLATFORM
 #include <unistd.h>
 #endif
 
+#else
+#include <genesis.h>
 #endif
-
 
 #include "Core.h"
 #include "Derelict.h"
