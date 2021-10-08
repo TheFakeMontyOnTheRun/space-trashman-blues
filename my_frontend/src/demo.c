@@ -450,7 +450,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
             int16_t lowerErr = lowerDx + lowerDy;  /* error value e_xy */
             int16_t lowerErr2 = 0;
             
-            while ((x0 != x1 && (upperY0 != upperY1 || lowerY0 != lowerY1))) {
+            while (x0 != x1) {
                 
                 if (IN_RANGE(0, XRESMINUSONE, x0)) {
                     if (stencilHigh[x0] <= upperY0) {
@@ -583,7 +583,7 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
         for (x = px0z0; x <= px1z0; ++x) {
             if (IN_RANGE(0, XRESMINUSONE, x)) {
 
-                if (stencilHigh[x] < py1z0) {
+                if (stencilHigh[x] <= py1z0) {
                     if (drawContour) {
 #ifdef CPC_PLATFORM
                         unsigned char *pS;
@@ -609,7 +609,7 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
                 }
 
 
-                if (stencilHigh[x] < py0z0) {
+                if (stencilHigh[x] <= py0z0) {
                     if (drawContour) {
 #ifdef CPC_PLATFORM
                         unsigned char *pS;
