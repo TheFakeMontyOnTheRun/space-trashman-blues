@@ -128,16 +128,16 @@ const struct Pattern patterns[127] = {
         {7, 3, CUBE,       0}, //  107
         {0, 0, LEFT_WALL,  0}, //  108
         {0, 3, BACK_WALL,  0}, //  109
-        {7, 3, CUBE,       0}, //  110  n
+        {7, 3, CUBE,       0}, //  110 n
         {7, 3, CUBE,       0}, //  111
         {0, 0, CUBE,       0}, //  112
         {0, 3, CUBE,       0}, //  113
         {0, 3, RIGHT_NEAR, 0}, //  114
-        {7, 3, LEFT_NEAR,  0}, //  115 s
+        {7, 3, CUBE,       0}, //  115 s
         {3, 3, CUBE,       0}, //  116
         {7, 3, CUBE,       0}, //  117
         {0, 0, LEFT_WALL,  0}, //  118
-        {7, 3, BACK_WALL,  0}, //  119 w
+        {7, 3, CUBE,       0}, //  119 w
         {7, 3, CUBE,       0}, //  120
         {7, 3, CUBE,       0}, //  121
         {0, 0, CUBE,       0}, //  122
