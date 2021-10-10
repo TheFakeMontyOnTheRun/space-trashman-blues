@@ -73,11 +73,13 @@ void vint_handler(void) {
 const unsigned char reverse_lookup[16] = {
         0x0, 0x8, 0x4, 0xc, 0x2, 0xa, 0x6, 0xe, 0x1, 0x9, 0x5, 0xd, 0x3, 0xb, 0x7, 0xf, };
 
+#ifdef SUPPORT_MUSIC
 const uint16_t notes[] = { 12846, 12334, 11086, 10062, 10062, 9806, 10062, 10574, 11086, 10062, 11086, 12430, 11042, 12334, 12878, 14158, 14158, 12878, 13390, 13646, 10574, 9806, 10574, 12430, 12846, 12334, 11086, 10062, 10062, 9806, 10062, 10574, 11086, 10062, 11086, 12430, 11054, 12334, 12878, 14158, 14158, 12878, 13390, 13646, 10574, 10062, 10062, 10126, 11054, 12334, 12878, 14158, 13902, 14158, 14670, 14158, 13646, 12878, 13390, 13646, 3918, 12878, 14158, 13902, 12878, 12366, 12878, 12366, 12878, 11086, 10062, 9870, 12334, 11054, 11086, 10062, 10062, 9806, 10062, 10574, 11086, 10062, 11086, 12430, 11054, 12334, 12878, 14158, 14158, 12878, 13390, 13646, 10574, 10062, 10062, 10126, 0xffff };
 
 struct cvu_music music;
 struct cvu_music music1;
 struct cvu_music music2;
+#endif
 
 byte reverse_bits(byte n) {
     return (reverse_lookup[n&0b1111] << 4) | reverse_lookup[n>>4];
@@ -112,6 +114,7 @@ void putstringxy(byte x, byte y, const char* string) {
     }
 }
 
+#ifdef SUPPORT_MUSIC
 void musicInterrupt(void)
 {
     cvu_play_music(&music);
@@ -139,6 +142,7 @@ void startMusic(void)
     cv_set_vint_handler(&musicInterrupt);
     cv_set_screen_active(true);
 }
+#endif
 
 void delay(byte i) {
     while (i--) {
