@@ -414,6 +414,39 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
     {
         int16_t x0, x1;
 
+        if (py1z0 < 0) {
+            py1z0 = 0;
+        }
+
+        if (py0z0 < 0) {
+            py0z0 = 0;
+        }
+
+        if (py1z0 >= YRES) {
+            py1z0 = YRESMINUSONE;
+        }
+
+        if (py0z0 >= YRES) {
+            py0z0 = YRESMINUSONE;
+        }
+
+
+        if (py1z1 < 0) {
+            py1z1 = 0;
+        }
+
+        if (py0z1 < 0) {
+            py0z1 = 0;
+        }
+
+        if (py1z1 >= YRES) {
+            py1z1 = YRESMINUSONE;
+        }
+
+        if (py0z1 >= YRES) {
+            py0z1 = YRESMINUSONE;
+        }
+
 
         if (elementMask & 2) {
             if (IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {

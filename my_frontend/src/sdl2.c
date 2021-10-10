@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <Core.h>
+#include <assert.h>
 
 
 #include "SDL.h"
@@ -36,10 +37,10 @@ void pickItem();
 
 void graphicsPut(uint8_t x, uint8_t y) {
 
-
-    if (x < 0 || x > 127 || y < 0 || y > 127) {
-        return;
-    }
+    assert(x >= 0);
+    assert(x < 128);
+    assert(y >= 0);
+    assert(y < 128);
 
 
     framebuffer[(160 * y) + x] = 1;
