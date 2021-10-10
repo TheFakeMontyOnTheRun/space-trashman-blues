@@ -981,10 +981,6 @@ uint8_t drawPattern(uint8_t pattern, int8_t x0, int8_t x1, int8_t y) {
     int8_t diff;
     uint8_t type;
 
-    if (pattern == '#') {
-        return 0;
-    }
-
     diff = patterns[0].ceiling - patterns[pattern].ceiling;
     type = patterns[pattern].geometryType;
 
