@@ -19,6 +19,7 @@
 #include "Vec.h"
 #include "LoadBitmap.h"
 #include "CActor.h"
+#include "Core.h"
 #include "Engine.h"
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
