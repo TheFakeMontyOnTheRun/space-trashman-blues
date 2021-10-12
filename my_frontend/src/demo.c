@@ -93,6 +93,8 @@ renderCameraSouth();
 
 void renderCameraWest();
 
+void printSituation();
+
 int8_t stencilHigh[XRES];
 
 int8_t cameraX = 33;
@@ -1834,6 +1836,36 @@ void tickRenderer() {
                 cameraRotation = 3;
             }
             break;
+
+        case '7':
+            nextItemInHand();
+            printSituation();
+            break;
+
+        case '4':
+            nextItemInRoom();
+            printSituation();
+            break;
+
+        case '8':
+            useItemInHand();
+            updateMapItems();
+            break;
+
+        case '5':
+            interactWithItemInRoom();
+            updateMapItems();
+            break;
+
+        case '9':
+            pickItem();
+            printSituation();
+            break;
+        case '6':
+            dropItem();
+            printSituation();
+            break;
+
         case 'e':
             cameraRotation = (cameraRotation + 1) & 3;
             break;
@@ -1959,7 +1991,7 @@ void tickRenderer() {
 
 
     /* unlike MX, we are signaling from the origin into the new room. MX allows for the movement and then searches where
-     * did the player came from - hence the "opossite direction" there */
+     * did the player came from - hence the "opposite direction" there */
 
     if (newCell == '0') {
         enteredFrom = 0;
@@ -1982,6 +2014,8 @@ void tickRenderer() {
         enteredFrom = 0xFF;
     }
 }
+
+void printSituation();
 
 
 void onError(const char* mesg) {

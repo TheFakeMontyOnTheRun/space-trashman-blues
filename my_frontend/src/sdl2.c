@@ -209,28 +209,28 @@ uint8_t getKey() {
                     break;
 
                 case SDLK_KP_7:
-                    nextItemInHand();
+                    mBufferedCommand = '7';
                     break;
 
                 case SDLK_KP_8:
-                    useItemInHand();
+                    mBufferedCommand = '8';
                     break;
 
 
                 case SDLK_KP_4:
-                    nextItemInRoom();
+                    mBufferedCommand = '4';
                     break;
 
                 case SDLK_KP_5:
-                    interactWithItemInRoom();
+                    mBufferedCommand = '5';
                     break;
 
                 case SDLK_KP_9:
-                    pickItem();
+                    mBufferedCommand = '9';
                     break;
 
                 case SDLK_KP_6:
-                    dropItem();
+                    mBufferedCommand = '6';
                     break;
 
 
