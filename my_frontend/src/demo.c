@@ -1874,15 +1874,19 @@ void tickRenderer() {
             switch (cameraRotation) {
                 case 0:
                     cameraX -= WALKSTEP;
+                    walkBy(3);
                     break;
                 case 1:
                     cameraZ -= WALKSTEP;
+                    walkBy(0);
                     break;
                 case 2:
                     cameraX += WALKSTEP;
+                    walkBy(1);
                     break;
                 case 3:
                     cameraZ += WALKSTEP;
+                    walkBy(2);
                     break;
             }
             break;
@@ -1890,15 +1894,19 @@ void tickRenderer() {
             switch (cameraRotation) {
                 case 0:
                     cameraX += WALKSTEP;
+                    walkBy(1);
                     break;
                 case 1:
                     cameraZ += WALKSTEP;
+                    walkBy(2);
                     break;
                 case 2:
                     cameraX -= WALKSTEP;
+                    walkBy(3);
                     break;
                 case 3:
                     cameraZ -= WALKSTEP;
+                    walkBy(0);
                     break;
             }
             break;
@@ -1908,15 +1916,19 @@ void tickRenderer() {
             switch (cameraRotation) {
                 case 0:
                     cameraZ += WALKSTEP;
+                    walkBy(2);
                     break;
                 case 1:
                     cameraX -= WALKSTEP;
+                    walkBy(3);
                     break;
                 case 2:
                     cameraZ -= WALKSTEP;
+                    walkBy(0);
                     break;
                 case 3:
                     cameraX += WALKSTEP;
+                    walkBy(1);
                     break;
             }
 
@@ -1926,15 +1938,19 @@ void tickRenderer() {
             switch (cameraRotation) {
                 case 0:
                     cameraZ -= WALKSTEP;
+                    walkBy(0);
                     break;
                 case 1:
                     cameraX += WALKSTEP;
+                    walkBy(1);
                     break;
                 case 2:
                     cameraZ += WALKSTEP;
+                    walkBy(2);
                     break;
                 case 3:
                     cameraX -= WALKSTEP;
+                    walkBy(3);
                     break;
             }
             break;
