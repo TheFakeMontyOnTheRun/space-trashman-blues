@@ -877,7 +877,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
     uint8_t drawContour;
 
-    if (z0 >= 32) {
+    if (z0 >= 32|| z0 <= 4) {
         return 0;
     }
 
