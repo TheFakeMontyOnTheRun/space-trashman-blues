@@ -609,6 +609,254 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
 }
 
 
+uint8_t drawObjectAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask) {
+
+    int8_t z1;
+    uint8_t z0px;
+    uint8_t z0py;
+    uint8_t z1px;
+    uint8_t z1py;
+    int8_t z0dx;
+    int8_t z1dx;
+
+    int16_t px0z0;
+    int8_t py0z0;
+    int16_t px1z0;
+    int16_t px0z1;
+    int8_t py0z1;
+    int16_t px1z1;
+
+
+    if (z0 >= 32 || z0 <= 4) {
+        return 0;
+    }
+
+    z1 = z0 + dZ;
+
+    if (z1 >= 32) {
+        return 0;
+    }
+
+
+    z0px = (projections[z0].px);
+    z1px = (projections[z1].px);
+    z0dx = ((projections[z0].dx));
+    z1dx = ((projections[z1].dx));
+
+    px0z0 = z0px - ((x0) * z0dx);
+    px0z1 = z1px - ((x0) * z1dx);
+
+    px1z0 = px0z0 - (dX * z0dx);
+    px1z1 = px0z1 - (dX * z1dx);
+
+    z1py = (projections[z1].py);
+    z0py = (projections[z0].py);
+
+    py0z0 = z0py + ((y0) * z0dx);
+    py0z1 = z1py + ((y0) * z1dx);
+
+    if (px1z0 < 0 || px0z0 > XRESMINUSONE) {
+        return 0;
+    }
+
+
+#ifdef DEBUG_WIREFRAME
+    fix_line( px0z0, py0z0, px1z0, py0z0, 4);
+    fix_line( px0z0, py0z0, px0z0, py1z0, 4);
+    fix_line( px1z0, py0z0, px1z0, py1z0, 4);
+    fix_line( px0z0, py1z0, px1z0, py1z0, 4);
+
+    fix_line( px0z1, py0z1, px1z1, py0z1, 4);
+
+    fix_line( px0z0, py0z0, px0z1, py0z1, 4);
+    fix_line( px1z0, py0z0, px1z1, py0z1, 4);
+    return;
+#endif
+
+    {
+        int16_t x, x0, x1;
+
+        /* Draw the horizontal outlines of z0 and z1 */
+
+        for (x = px0z0; x <= px1z0; ++x) {
+            if (IN_RANGE(0, XRESMINUSONE, x)) {
+                if (stencilHigh[x] < py0z0) {
+#ifdef CPC_PLATFORM
+                    unsigned char *pS;
+                        unsigned char nByte = 0;
+
+                        pS = (unsigned char *) baseScreen + lineStart[stencilHigh[x]] + (x >> 1);
+                        nByte = *pS;
+
+                        if (x & 1) {
+                            nByte &= 170;
+                            nByte |= 64;
+                        } else {
+                            nByte &= 85;
+                            nByte |= 128;
+                        }
+
+                        *pS = nByte;
+#else
+                    graphicsPut(x, py0z0);
+#endif
+                }
+            }
+        }
+
+        for (x = px0z1; x <= px1z1; ++x) {
+            if (IN_RANGE(0, XRESMINUSONE, x)) {
+                if (stencilHigh[x] < py0z1) {
+#ifdef CPC_PLATFORM
+                    unsigned char *pS;
+                        unsigned char nByte = 0;
+
+                        pS = (unsigned char *) baseScreen + lineStart[stencilHigh[x]] + (x >> 1);
+                        nByte = *pS;
+
+                        if (x & 1) {
+                            nByte &= 170;
+                            nByte |= 64;
+                        } else {
+                            nByte &= 85;
+                            nByte |= 128;
+                        }
+
+                        *pS = nByte;
+#else
+                    graphicsPut(x, py0z1);
+#endif
+                }
+            }
+        }
+
+
+
+        /* The left segment */
+        x0 = px0z0;
+        x1 = px0z1;
+
+        if (x0 != x1) {
+            int16_t y0 = py0z0;
+            int16_t y1 = py0z1;
+            int16_t dx = abs(x1 - x0);
+            int16_t sx = x0 < x1 ? 1 : -1;
+            int16_t dy = -abs(y1 - y0);
+            int16_t sy = y0 < y1 ? 1 : -1;
+            int16_t err = dx + dy;  /* error value e_xy */
+            int16_t e2;
+
+            while ((x0 != x1 || y0 != y1)) {
+
+                if (IN_RANGE(0, XRESMINUSONE, x0)) {
+                    if (stencilHigh[x0] < y0) {
+
+#ifdef CPC_PLATFORM
+                            unsigned char *pS;
+                            unsigned char nByte = 0;
+
+                            pS = (unsigned char *) baseScreen + lineStart[stencilHigh[x0]] + (x0 >> 1);
+                            nByte = *pS;
+
+                            if (x0 & 1) {
+                                nByte &= 170;
+                                nByte |= 64;
+                            } else {
+                                nByte &= 85;
+                                nByte |= 128;
+                            }
+
+                            *pS = nByte;
+#else
+                            graphicsPut(x0, y0);
+#endif
+                    }
+                }
+
+                /* loop */
+                e2 = err << 2;
+
+                if (e2 >= dy) {
+                    err += dy; /* e_xy+e_x > 0 */
+                    x0 += sx;
+                }
+
+                if (x0 >= XRES) {
+                    goto right_stroke;
+                }
+
+                if (e2 <= dx) {
+                    /* e_xy+e_y < 0 */
+                    err += dx;
+                    y0 += sy;
+                }
+            }
+        }
+
+        right_stroke:
+
+        /* The right segment */
+        x0 = px1z0;
+        x1 = px1z1;
+
+        if (x0 != x1) {
+            int16_t y0 = py0z0;
+            int16_t y1 = py0z1;
+            int16_t dx = abs(x1 - x0);
+            int16_t sx = x0 < x1 ? 1 : -1;
+            int16_t dy = -abs(y1 - y0);
+            int16_t sy = y0 < y1 ? 1 : -1;
+            int16_t err = dx + dy;  /* error value e_xy */
+            int16_t e2;
+
+            while ((x0 != x1 || y0 != y1)) {
+
+                if (IN_RANGE(0, XRESMINUSONE, x0) && stencilHigh[x0] < y0) {
+#ifdef CPC_PLATFORM
+                        unsigned char *pS;
+                        unsigned char nByte = 0;
+
+                        pS = (unsigned char *) baseScreen + lineStart[stencilHigh[x0]] + (x0 >> 1);
+                        nByte = *pS;
+
+                        if (x0 & 1) {
+                            nByte &= 170;
+                            nByte |= 64;
+                        } else {
+                            nByte &= 85;
+                            nByte |= 128;
+                        }
+
+                        *pS = nByte;
+#else
+                        graphicsPut(x0, y0);
+#endif
+                }
+
+                /* loop */
+                e2 = err << 2;
+
+                if (e2 >= dy) {
+                    err += dy; /* e_xy+e_x > 0 */
+                    x0 += sx;
+                }
+
+                if (x0 >= XRES) {
+                    return 1;
+                }
+
+                if (e2 <= dx) {
+                    /* e_xy+e_y < 0 */
+                    err += dx;
+                    y0 += sy;
+                }
+            }
+        }
+    }
+
+    return 1;
+}
+
 uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask) {
 
     int8_t z1;
@@ -912,9 +1160,23 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 }
 
 
-uint8_t drawPattern(uint8_t pattern, int8_t x0, int8_t x1, int8_t y) {
+uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
     int8_t diff;
+    uint8_t pattern = _pattern & 127;
     uint8_t type;
+
+    /* 127 = 01111111 - the first bit is used for indicating the presence of an object.
+     * And since there are only 127 patterns anyway...
+     * */
+
+    if (_pattern & 128) {
+        drawObjectAt(x0 - 1, 0 - CAMERA_HEIGHT, y + 2,
+                x1 - x0, 7, 1,
+                15 + 16);
+
+        return 1;
+    }
+
 
     diff = patterns[0].ceiling - patterns[pattern].ceiling;
     type = patterns[pattern].geometryType;
@@ -1338,6 +1600,10 @@ void pickItem() {
             }
 
             if (itemToPick->pickable) {
+
+                uint8_t pattern = map[itemToPick->position.y][itemToPick->position.x];
+                map[itemToPick->position.y][itemToPick->position.x] = pattern & 127;
+
                 pickObject(itemToPick);
                 focusedItem = roomItem;
                 roomItem = room->itemsPresent->next;
@@ -1351,7 +1617,6 @@ void pickItem() {
 }
 
 void dropItem() {
-    struct Room* room = getRoom(getPlayerRoom());
 
     struct Item *item = NULL;
 
@@ -1360,11 +1625,40 @@ void dropItem() {
     }
 
     if (item != NULL) {
+
+        struct WorldPosition* pos = getPlayerPosition();
+
         dropObjectToRoom(getPlayerRoom(), item);
 
         focusedItem = getPlayerItems();
 
         roomItem = &objectNodes[item->index];
+
+        switch(cameraRotation) {
+            case 0:
+                item->position.x = pos->x;
+                item->position.y = pos->y - 3;
+                break;
+
+            case 1:
+                item->position.x = pos->x + 3;
+                item->position.y = pos->y;
+                break;
+
+            case 2:
+                item->position.x = pos->x;
+                item->position.y = pos->y + 3;
+                break;
+
+            case 3:
+                item->position.x = pos->x - 3;
+                item->position.y = pos->y;
+                break;
+        }
+
+
+        uint8_t pattern = map[item->position.y][item->position.x];
+        map[item->position.y][item->position.x] = pattern | 128;
     }
 }
 
@@ -1414,6 +1708,8 @@ void nextItemInHand() {
         focusedItem = getPlayerItems();
     }
 }
+
+void updateMapItems();
 
 void initMap() {
     int x, y, c;
@@ -1476,7 +1772,23 @@ void initMap() {
 
         }
     }
+    updateMapItems();
 }
+
+void updateMapItems() {
+    struct ObjectNode *node;
+
+    /* ignore header node */
+    node = getRoom(playerLocation)->itemsPresent->next;
+
+    while (node != NULL) {
+        struct Item *item = getItem(node->item);
+        uint8_t pattern = map[item->position.y][item->position.x];
+        map[item->position.y][item->position.x] = pattern | 128;
+        node = node->next;
+    }
+        printSituation();
+    }
 
 void tickRenderer() {
     uint8_t prevX;
@@ -1637,6 +1949,8 @@ void tickRenderer() {
             newCell = map[cameraZ][cameraX - 2];
             break;
     }
+
+    newCell = newCell & 127;
 
     if (patterns[newCell].blockMovement) {
         cameraX = prevX;
