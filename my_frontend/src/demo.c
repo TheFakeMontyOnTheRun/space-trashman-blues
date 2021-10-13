@@ -611,7 +611,7 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
 }
 
 
-uint8_t drawObjectAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask) {
+uint8_t drawObjectAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dZ) {
 
     int8_t z1;
     uint8_t z0px;
@@ -1173,8 +1173,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 
     if (_pattern & 128) {
         drawObjectAt(x0 - 1, 0 - CAMERA_HEIGHT, y + 2,
-                x1 - x0, 7, 1,
-                15 + 16);
+                x1 - x0, 1);
 
         return 1;
     }
@@ -1627,7 +1626,7 @@ void dropItem() {
     }
 
     if (item != NULL) {
-
+        uint8_t pattern;
         struct WorldPosition* pos = getPlayerPosition();
 
         dropObjectToRoom(getPlayerRoom(), item);
@@ -1659,7 +1658,7 @@ void dropItem() {
         }
 
 
-        uint8_t pattern = map[item->position.y][item->position.x];
+        pattern = map[item->position.y][item->position.x];
         map[item->position.y][item->position.x] = pattern | 128;
     }
 }
