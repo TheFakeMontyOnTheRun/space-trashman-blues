@@ -1,0 +1,14 @@
+#--max-allocs-per-node200000
+
+CC = zcc
+
+CFLAGS = +sms -compiler=sdcc -SO3 -create-app  -vn -I../Core/include -create-app -DSMS -DRES64X64 -DINCLUDE_ROOM_DESCRIPTIONS
+
+all: derelict.sms
+
+derelict.sms: src/demo.o src/sms.o ../core/src/Core.o ../core/src/Derelict.o
+	$(CC) $(CFLAGS) -oderelict.sms src/demo.o src/sms.o ../core/src/Core.o ../core/src/Derelict.o $(LDFLAGS)
+
+clean:
+	$(RM) *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.rom
+	$(RM) ../core/src/*.o
