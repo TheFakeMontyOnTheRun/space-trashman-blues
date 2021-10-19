@@ -1,295 +1,173 @@
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
-
-#include <cv.h>
-#include <cvu.h>
 #include <assert.h>
+#include <sms.h>
+#include <graphics.h>
 
-#define SMS
-#define DONT_INCLUDE
-#define RES64X64
+#include "Core.h"
+#include "Derelict.h"
 
-#ifndef _CV_COMMON_H
-#define _CV_COMMON_H
+extern struct ObjectNode* focusedItem;
+extern struct ObjectNode* roomItem;
+extern int accessGrantedToSafe;
 
-/* VRAM map
- 0x0000 - 0x17ff character pattern table
- 0x1800 - 0x1aff image table
- 0x2000 - 0x37ff color table
- 0x3800 - 0x3bff sprite pattern table
- 0x3c00 - 0x3fff sprite attribute table
- */
+void graphicsFlush();
 
-#define PATTERN        ((const cv_vmemp)0x0000)
-#define IMAGE        ((const cv_vmemp)0x1800)
-#define COLOR        ((const cv_vmemp)0x2000)
-#define SPRITE_PATTERNS ((const cv_vmemp)0x3800)
-#define SPRITES        ((const cv_vmemp)0x3c00)
+void nextItemInHand();
 
-#ifndef COLS
-#define COLS 32
-#endif
+void useItemInHand();
 
-#ifndef ROWS
-#define ROWS 24
-#endif
+void nextItemInRoom();
 
-typedef unsigned char byte;
-typedef signed char sbyte;
-typedef unsigned short word;
+void interactWithItemInRoom();
 
-#ifdef CV_CV
-uintptr_t __at(0x6a) font_bitmap_a;
-uintptr_t __at(0x6c) font_bitmap_0;
-#endif
+void pickOrDrop();
 
-#ifdef CV_SMS
-extern char font_bitmap_a[];
-extern char font_bitmap_0[];
-#endif
+void dropItem();
 
-#define COLOR_FGBG(fg,bg) (((fg)<<4)|(bg))
-#define COLOR_FG(fg) (((fg)<<4))
+void pickItem();
 
-#ifndef LOCHAR
-#define LOCHAR 0x0
-#endif
+int currentlyInGraphics = FALSE;
+void backToGraphics();
 
-#define CHAR(ch) (ch-LOCHAR)
+unsigned char pal1[] = {0x00, 0x20, 0x08, 0x28, 0x02, 0x22, 0x0A, 0x2A,
+                        0x15, 0x35, 0x1D, 0x3D, 0x17, 0x37, 0x1F, 0x3F};
 
-#define wait_vsync() __asm__("halt")
+unsigned char pal2[] = {0x00, 0x03, 0x08, 0x28, 0x02, 0x22, 0x0A, 0x2A,
+                        0x15, 0x35, 0x1D, 0x3D, 0x17, 0x37, 0x1F, 0x3F};
 
-void titleScreen(void);
 
-struct ObjectNode* focusedItem;
+uint8_t font[] = {
+          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 // space
+        , 0x10,0x38,0x38,0x10,0x10,0x00,0x10,0x00
+        , 0x6c,0x6c,0x48,0x00,0x00,0x00,0x00,0x00
+        , 0x00,0x28,0x7c,0x28,0x28,0x7c,0x28,0x00
+        , 0x20,0x38,0x40,0x30,0x08,0x70,0x10,0x00
+        , 0x64,0x64,0x08,0x10,0x20,0x4c,0x4c,0x00
+        , 0x20,0x50,0x50,0x20,0x54,0x48,0x34,0x00
+        , 0x30,0x30,0x20,0x00,0x00,0x00,0x00,0x00
+        , 0x10,0x20,0x20,0x20,0x20,0x20,0x10,0x00
+        , 0x20,0x10,0x10,0x10,0x10,0x10,0x20,0x00
+        , 0x00,0x28,0x38,0x7c,0x38,0x28,0x00,0x00
+        , 0x00,0x10,0x10,0x7c,0x10,0x10,0x00,0x00
+        , 0x00,0x00,0x00,0x00,0x00,0x30,0x30,0x20
+        , 0x00,0x00,0x00,0x7c,0x00,0x00,0x00,0x00
+        , 0x00,0x00,0x00,0x00,0x00,0x30,0x30,0x00
+        , 0x00,0x04,0x08,0x10,0x20,0x40,0x00,0x00 // /space - 15
 
-volatile uint_fast8_t vint_counter;
 
-void vint_handler(void) {
-    vint_counter++;
-}
 
-const unsigned char reverse_lookup[16] = {
-        0x0, 0x8, 0x4, 0xc, 0x2, 0xa, 0x6, 0xe, 0x1, 0x9, 0x5, 0xd, 0x3, 0xb, 0x7, 0xf, };
 
-#ifdef SUPPORT_MUSIC
-const uint16_t notes[] = { 12846, 12334, 11086, 10062, 10062, 9806, 10062, 10574, 11086, 10062, 11086, 12430, 11042, 12334, 12878, 14158, 14158, 12878, 13390, 13646, 10574, 9806, 10574, 12430, 12846, 12334, 11086, 10062, 10062, 9806, 10062, 10574, 11086, 10062, 11086, 12430, 11054, 12334, 12878, 14158, 14158, 12878, 13390, 13646, 10574, 10062, 10062, 10126, 11054, 12334, 12878, 14158, 13902, 14158, 14670, 14158, 13646, 12878, 13390, 13646, 3918, 12878, 14158, 13902, 12878, 12366, 12878, 12366, 12878, 11086, 10062, 9870, 12334, 11054, 11086, 10062, 10062, 9806, 10062, 10574, 11086, 10062, 11086, 12430, 11054, 12334, 12878, 14158, 14158, 12878, 13390, 13646, 10574, 10062, 10062, 10126, 0xffff };
+        , 0x38,0x44,0x4c,0x54,0x64,0x44,0x38,0x00 // 0
+        , 0x10,0x30,0x10,0x10,0x10,0x10,0x38,0x00
+        , 0x38,0x44,0x04,0x18,0x20,0x40,0x7c,0x00
+        , 0x38,0x44,0x04,0x38,0x04,0x44,0x38,0x00
+        , 0x08,0x18,0x28,0x48,0x7c,0x08,0x08,0x00
+        , 0x7c,0x40,0x40,0x78,0x04,0x44,0x38,0x00
+        , 0x18,0x20,0x40,0x78,0x44,0x44,0x38,0x00
+        , 0x7c,0x04,0x08,0x10,0x20,0x20,0x20,0x00
+        , 0x38,0x44,0x44,0x38,0x44,0x44,0x38,0x00
+        , 0x38,0x44,0x44,0x3c,0x04,0x08,0x30,0x00
+        , 0x00,0x00,0x30,0x30,0x00,0x30,0x30,0x00
+        , 0x00,0x00,0x30,0x30,0x00,0x30,0x30,0x20
+        , 0x08,0x10,0x20,0x40,0x20,0x10,0x08,0x00
+        , 0x00,0x00,0x7c,0x00,0x00,0x7c,0x00,0x00
+        , 0x20,0x10,0x08,0x04,0x08,0x10,0x20,0x00
+        , 0x38,0x44,0x04,0x18,0x10,0x00,0x10,0x00
+        , 0x38,0x44,0x5c,0x54,0x5c,0x40,0x38,0x00 // /0
 
-struct cvu_music music;
-struct cvu_music music1;
-struct cvu_music music2;
-#endif
-
-byte reverse_bits(byte n) {
-    return (reverse_lookup[n&0b1111] << 4) | reverse_lookup[n>>4];
-}
-
-void flip_sprite_patterns(word dest, const byte* patterns, word len) {
-    word i;
-    for (i=0; i<len; i++) {
-        cvu_voutb(reverse_bits(*patterns++), dest++ ^ 16); // swap left/right chars
-    }
-}
+        , 0x38,0x44,0x44,0x44,0x7c,0x44,0x44,0x00 // a
+        , 0x78,0x44,0x44,0x78,0x44,0x44,0x78,0x00
+        , 0x38,0x44,0x40,0x40,0x40,0x44,0x38,0x00
+        , 0x78,0x44,0x44,0x44,0x44,0x44,0x78,0x00
+        , 0x7c,0x40,0x40,0x78,0x40,0x40,0x7c,0x00
+        , 0x7c,0x40,0x40,0x78,0x40,0x40,0x40,0x00
+        , 0x38,0x44,0x40,0x5c,0x44,0x44,0x3c,0x00
+        , 0x44,0x44,0x44,0x7c,0x44,0x44,0x44,0x00
+        , 0x38,0x10,0x10,0x10,0x10,0x10,0x38,0x00
+        , 0x04,0x04,0x04,0x04,0x44,0x44,0x38,0x00
+        , 0x44,0x48,0x50,0x60,0x50,0x48,0x44,0x00
+        , 0x40,0x40,0x40,0x40,0x40,0x40,0x7c,0x00
+        , 0x44,0x6c,0x54,0x44,0x44,0x44,0x44,0x00
+        , 0x44,0x64,0x54,0x4c,0x44,0x44,0x44,0x00
+        , 0x38,0x44,0x44,0x44,0x44,0x44,0x38,0x00
+        , 0x78,0x44,0x44,0x78,0x40,0x40,0x40,0x00
+        , 0x38,0x44,0x44,0x44,0x54,0x48,0x34,0x00
+        , 0x78,0x44,0x44,0x78,0x48,0x44,0x44,0x00
+        , 0x38,0x44,0x40,0x38,0x04,0x44,0x38,0x00
+        , 0x7c,0x10,0x10,0x10,0x10,0x10,0x10,0x00
+        , 0x44,0x44,0x44,0x44,0x44,0x44,0x38,0x00
+        , 0x44,0x44,0x44,0x44,0x44,0x28,0x10,0x00
+        , 0x44,0x44,0x54,0x54,0x54,0x54,0x28,0x00
+        , 0x44,0x44,0x28,0x10,0x28,0x44,0x44,0x00
+        , 0x44,0x44,0x44,0x28,0x10,0x10,0x10,0x00
+        , 0x78,0x08,0x10,0x20,0x40,0x40,0x78,0x00
+        , 0x38,0x20,0x20,0x20,0x20,0x20,0x38,0x00
+        , 0x00,0x40,0x20,0x10,0x08,0x04,0x00,0x00
+        , 0x38,0x08,0x08,0x08,0x08,0x08,0x38,0x00
+        , 0x10,0x28,0x44,0x00,0x00,0x00,0x00,0x00
+        , 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xfc
+        , 0x30,0x30,0x10,0x00,0x00,0x00,0x00,0x00
+        , 0x00,0x00,0x38,0x04,0x3c,0x44,0x3c,0x00
+        , 0x40,0x40,0x78,0x44,0x44,0x44,0x78,0x00
+        , 0x00,0x00,0x38,0x44,0x40,0x44,0x38,0x00
+        , 0x04,0x04,0x3c,0x44,0x44,0x44,0x3c,0x00
+        , 0x00,0x00,0x38,0x44,0x78,0x40,0x38,0x00
+        , 0x18,0x20,0x20,0x78,0x20,0x20,0x20,0x00
+        , 0x00,0x00,0x3c,0x44,0x44,0x3c,0x04,0x38
+        , 0x40,0x40,0x70,0x48,0x48,0x48,0x48,0x00
+        , 0x10,0x00,0x10,0x10,0x10,0x10,0x18,0x00
+        , 0x08,0x00,0x18,0x08,0x08,0x08,0x48,0x30
+        , 0x40,0x40,0x48,0x50,0x60,0x50,0x48,0x00
+        , 0x10,0x10,0x10,0x10,0x10,0x10,0x18,0x00
+        , 0x00,0x00,0x68,0x54,0x54,0x44,0x44,0x00
+        , 0x00,0x00,0x70,0x48,0x48,0x48,0x48,0x00
+        , 0x00,0x00,0x38,0x44,0x44,0x44,0x38,0x00
+        , 0x00,0x00,0x78,0x44,0x44,0x44,0x78,0x40
+        , 0x00,0x00,0x3c,0x44,0x44,0x44,0x3c,0x04
+        , 0x00,0x00,0x58,0x24,0x20,0x20,0x70,0x00
+        , 0x00,0x00,0x38,0x40,0x38,0x04,0x38,0x00
+        , 0x00,0x20,0x78,0x20,0x20,0x28,0x10,0x00
+        , 0x00,0x00,0x48,0x48,0x48,0x58,0x28,0x00
+        , 0x00,0x00,0x44,0x44,0x44,0x28,0x10,0x00
+        , 0x00,0x00,0x44,0x44,0x54,0x7c,0x28,0x00
+        , 0x00,0x00,0x48,0x48,0x30,0x48,0x48,0x00
+        , 0x00,0x00,0x48,0x48,0x48,0x38,0x10,0x60
+        , 0x00,0x00,0x78,0x08,0x30,0x40,0x78,0x00
+        , 0x18,0x20,0x20,0x60,0x20,0x20,0x18,0x00
+        , 0x10,0x10,0x10,0x00,0x10,0x10,0x10,0x00
+        , 0x30,0x08,0x08,0x0c,0x08,0x08,0x30,0x00
+        , 0x28,0x50,0x00,0x00,0x00,0x00,0x00,0x00
+        , 0x10,0x38,0x6c,0x44,0x44,0x7c,0x00,0x00
+};
 
 void clrscr() {
-    cvu_vmemset(IMAGE, 0, COLS*ROWS);
 }
 
-word getimageaddr(byte x, byte y) {
-    return IMAGE + y*COLS + x;
+void clearTextScreen() {
+    clg();
 }
 
-byte getcharxy(byte x, byte y) {
-    return cvu_vinb(getimageaddr(x,y));
-}
-
-void putcharxy(byte x, byte y, byte attr) {
-    cvu_voutb(attr, getimageaddr(x,y));
-}
-
-void putstringxy(byte x, byte y, const char* string) {
-    while (*string) {
-        putcharxy(x++, y, CHAR(*string++));
-    }
-}
-
-#ifdef SUPPORT_MUSIC
-void musicInterrupt(void)
-{
-    cvu_play_music(&music);
-    cvu_play_music(&music1);
-    cvu_play_music(&music2);
-}
-
-void startMusic(void)
-{
-    cvu_init_music(&music);
-    cvu_init_music(&music1);
-    cvu_init_music(&music2);
-    music.notes = notes;
-    music.channel = CV_SOUNDCHANNEL_0;
-    music.sixteenth_notes_per_second = 40;
-
-    music1.notes = notes;
-    music1.channel = CV_SOUNDCHANNEL_1;
-    music1.sixteenth_notes_per_second = 20;
-
-    music2.notes = notes;
-    music2.channel = CV_SOUNDCHANNEL_2;
-    music2.sixteenth_notes_per_second = 10;
-
-    cv_set_vint_handler(&musicInterrupt);
-    cv_set_screen_active(true);
-}
-#endif
-
-void delay(byte i) {
-    while (i--) {
-        wait_vsync();
-    }
-}
-
-byte rndint(byte a, byte b) {
-    return ((byte)rand() % (b-a+1)) + a;
-}
-
-void memset_safe(void* _dest, char ch, word size) {
-    byte* dest = _dest;
-    while (size--) {
-        *dest++ = ch;
-    }
-}
-
-
-char in_rect(byte x, byte y, byte x0, byte y0, byte w, byte h) {
-    return ((byte)(x-x0) < w && (byte)(y-y0) < h); // unsigned
-}
-
-void draw_bcd_word(byte x, byte y, word bcd) {
-    byte j;
-    x += 3;
-    for (j=0; j<4; j++) {
-        putcharxy(x, y, CHAR('0'+(bcd&0xf)));
-        x--;
-        bcd >>= 4;
-    }
-}
-
-// add two 16-bit BCD values
-word bcd_add(word a, word b) __naked {
-a; b; // to avoid warning
-__asm
-push	ix
-ld	ix,#0
-add	ix,sp
-ld	a,4 (ix)
-add	a, 6 (ix)
-daa
-        ld	c,a
-        ld	a,5 (ix)
-adc	a, 7 (ix)
-daa
-        ld	b,a
-        ld	l, c
-        ld	h, b
-        pop	ix
-        ret
-__endasm;
-}
-
-
-
-//#link "fonts.s"
-
-
-void vdp_setup() {
-    cv_set_screen_active(false);
-    cv_set_screen_mode(CV_SCREENMODE_STANDARD);
-    cv_set_image_table(IMAGE);
-    cv_set_character_pattern_t(PATTERN);
-    cv_set_color_table(COLOR);
-    cv_set_sprite_pattern_table(SPRITE_PATTERNS);
-    cv_set_sprite_attribute_table(SPRITES);
-    cv_set_sprite_big(true);
-}
-
-void set_shifted_pattern(const byte* src, word dest, byte shift) {
-    byte y;
-    for (y=0; y<8; y++) {
-        byte a = src[y+8];
-        byte b = src[y];
-        cvu_voutb(a>>shift, dest);
-        cvu_voutb(b>>shift | a<<(8-shift), dest+8);
-        cvu_voutb(b<<(8-shift), dest+16);
-        dest++;
-    }
-}
-
-void copy_default_character_set() {
-#ifdef CV_MSX
-    static byte __at(0xf91f) CGPNT;
-  static byte* __at(0xf920) CGADDR;
-  cvu_memtovmemcpy(PATTERN, CGADDR, 256*8);
-#else
-    cvu_memtovmemcpy(PATTERN, (void *)(font_bitmap_0 - '0'*8), 256*8);
-#endif
-}
-
-extern byte reverse_bits(byte n);
-extern void flip_sprite_patterns(word dest, const byte* patterns, word len);
-
-extern char cursor_x;
-extern char cursor_y;
-
-extern void clrscr();
-
-extern word getimageaddr(byte x, byte y);
-extern byte getcharxy(byte x, byte y);
-extern void putcharxy(byte x, byte y, byte attr);
-extern void putstringxy(byte x, byte y, const char* string);
-extern void delay(byte i);
-extern byte rndint(byte a, byte b);
-
-extern void memset_safe(void* _dest, char ch, word size);
-extern char in_rect(byte x, byte y, byte x0, byte y0, byte w, byte h);
-// print 4-digit BCD value
-extern void draw_bcd_word(byte x, byte y, word bcd);
-
-extern void vdp_setup();
-extern void set_shifted_pattern(const byte* src, word dest, byte shift);
-
-extern void copy_default_character_set();
-
-#endif
 
 uint8_t buffer[64 * 64];
 
 void setup_mode2() {
     if (!currentlyInGraphics) {
         memset(&buffer[0], 0, 64 * 64);
-        cvu_vmemset(0, 0, 0x4000);
-        cv_set_screen_mode(CV_SCREENMODE_BITMAP); // mode 2
-        cv_set_image_table(IMAGE);
-        cv_set_character_pattern_t(PATTERN | 0x1fff); // AND mask
-        cv_set_color_table(COLOR | 0x1fff); // AND mask
-        cv_set_sprite_attribute_table(0x2800);
-        {
-            byte i = 0;
-            do {
-                cvu_voutb(i, IMAGE + i);
-                cvu_voutb(i, IMAGE + 0x100 + i);
-                cvu_voutb(i, IMAGE + 0x200 + i);
-            } while (++i);
-        }
+        clg();
     }
     currentlyInGraphics = TRUE;
 }
 
 void init() {
-    cv_set_screen_active(false);
-    setup_mode2();
-    cv_set_screen_active(true);
+    clear_vram();
+    load_tiles(standard_font, 0, 255, 1);
+    load_palette(pal1, 0, 16);
+    load_palette(pal2, 16, 16);
+    set_vdp_reg(VDP_REG_FLAGS1, VDP_REG_FLAGS1_BIT7 | VDP_REG_FLAGS1_SCREEN);
+    clg();
 }
 
 char *menuItems[] = {
@@ -304,23 +182,6 @@ char *menuItems[] = {
 };
 
 void setup_text_mode() {
-//    if (currentlyInGraphics) {
-        cv_set_screen_active(false);
-        // set screen mode to text
-        cv_set_screen_mode(CV_SCREENMODE_TEXT);
-        // set image table address, which defines grid of characters
-        cv_set_image_table(IMAGE);
-        // set pattern table address, which defines character graphics
-        cv_set_character_pattern_t(PATTERN);
-        // clear VRAM to all zeroes
-        cvu_vmemset(0, 0, 0x4000);
-        // copy default character set from ROM to VRAM
-        copy_default_character_set();
-
-        cv_set_colors(CV_COLOR_LIGHT_GREEN, CV_COLOR_BLACK);
-        cvu_vmemset(IMAGE, ' ', 40 * 24);
-//    }
-
     currentlyInGraphics = FALSE;
 }
 
@@ -332,34 +193,89 @@ int cooldown = 0;
 int cursorPosition = 0;
 
 
-void show_text(int x, int y, char *text) {
-    unsigned int len = strlen(text);
-    cvu_memtovmemcpy(IMAGE + (40 * y) + x, text, len);
-    cv_set_screen_active(true);
+void show_text(int _x, int y, char *text) {
+
+    int len = strlen(text);
+    char *ptr = text;
+    int c = 0;
+    int chary = 0;
+    int x = _x;
+
+    for (; c < len; ++c ) {
+
+        char cha = *ptr;
+
+        ++x;
+
+        if (cha == '\n') {
+            ++y;
+            x = _x;
+        }
+
+        if (cha != ' ') {
+
+            for (chary = 0; chary < 8; ++chary) {
+                uint8_t ch = font[((cha - 32) * 8) + chary];
+                int baseX = (x * 8);
+                int baseY = (y * 8) + chary;
+
+                if (ch & 1) {
+                    plot(baseX + 7, baseY);
+                }
+
+                if (ch & 2) {
+                    plot(baseX + 6, baseY);
+                }
+
+                if (ch & 4) {
+                    plot(baseX + 5, baseY);
+                }
+
+                if (ch & 8) {
+                    plot(baseX + 4, baseY);
+                }
+
+                if (ch & 16) {
+                    plot(baseX + 3, baseY);
+                }
+
+                if (ch & 32) {
+                    plot(baseX + 2, baseY);
+                }
+
+                if (ch & 64) {
+                    plot(baseX + 1, baseY);
+                }
+
+                if (ch & 128) {
+                    plot(baseX, baseY);
+                }
+            }
+        }
+        ++ptr;
+    }
 }
 
 void backToGraphics() {
     clrscr();
-    init();
+    setup_mode2();
 }
 
-void showMessage(const char* message ) {
+void showMessage(const char *message) {
     int keepGoing = 1;
-
+    clearTextScreen();
     setup_text_mode();
 
-    show_text(1, 1, (char*)message);
+    show_text(1, 1, (char *) message);
     show_text(1, 3, "Press any button to continue");
 
     while (keepGoing) {
-        struct cv_controller_state state;
-
-        cv_get_controller_state(&state, 0);
-
-        if (state.joystick & CV_FIRE_0) {
+        if (read_joypad1() & JOY_FIREA) {
             keepGoing = 0;
         }
     }
+
+    clg();
 }
 
 void titleScreen() {
@@ -372,43 +288,40 @@ void titleScreen() {
     show_text(1, 3, "Press any button to start");
 
     while (keepGoing) {
-        struct cv_controller_state state;
-
-        cv_get_controller_state(&state, 0);
-
-        if (state.joystick & CV_FIRE_0) {
+        if (read_joypad1() & JOY_FIREA) {
             keepGoing = 0;
         }
     }
+
+    clg();
 }
 
 void pauseMenu() {
     int keepGoing = 1;
     int refresh = 1;
     int itemDesc = 1;
-    struct Room* room = getRoom(getPlayerRoom());
+    struct Room *room = getRoom(getPlayerRoom());
 
     setup_text_mode();
 
     while (keepGoing) {
-        struct cv_controller_state state;
 
         switch (getGameStatus()) {
             case kBadVictory:
                 showMessage("Victory! Too bad you didn't survive\nto tell the story\n\n\n\n\n\n");
-                while(1);
+                while (1);
                 break;
 
             case kBadGameOver:
                 showMessage("You're dead! And so are millions of\n"
                             "other people on the path of\n"
                             "destruction faulty reactor\n\n\n\n\n\n");
-                while(1);
+                while (1);
                 break;
 
             case kGoodVictory:
                 showMessage("Victory! You managed to destroy the\nship and get out alive\n\n\n\n\n\n");
-                while(1);
+                while (1);
                 break;
 
             case kGoodGameOver:
@@ -416,7 +329,7 @@ void pauseMenu() {
                             "alive, you failed to prevent the \n"
                             "worstscenario and now EVERYBODY is\n"
                             "dead (and that includes you!)\n\n\n\n\n");
-                while(1);
+                while (1);
                 break;
 
             default:
@@ -428,7 +341,7 @@ void pauseMenu() {
             int i = 0;
             refresh = 0;
 
-            cvu_vmemset(IMAGE, ' ', 40 * 24);
+            clearTextScreen();
 
 
             show_text(1, 1, "Object at room:");
@@ -476,8 +389,9 @@ void pauseMenu() {
         cooldown--;
 
         if (cooldown < 0) {
+            unsigned int key = read_joypad1();
             cooldown = 0;
-            cv_get_controller_state(&state, 0);
+
 
 /*
 char *menuItems[] = {
@@ -491,7 +405,7 @@ char *menuItems[] = {
  7       "Back to room",
 };
 */
-            if (state.joystick & CV_FIRE_0) {
+            if (key & JOY_FIREA) {
                 switch (cursorPosition) {
                     case 0:
                         useObjectNamed(getItem(focusedItem->item)->description);
@@ -522,12 +436,13 @@ char *menuItems[] = {
                         break;
                     case 7:
                         keepGoing = 0;
+                        clg();
                         return;
                 }
                 refresh = 1;
             }
 
-            if (state.joystick & CV_FIRE_1) {
+            if (key & JOY_FIREB) {
                 focusedItem = focusedItem->next;
                 if (!focusedItem) {
                     focusedItem = getPlayerItems();
@@ -536,7 +451,7 @@ char *menuItems[] = {
             }
 
 
-            if (state.joystick & CV_UP) {
+            if (key & JOY_UP) {
                 cursorPosition--;
                 refresh = 1;
                 if (cursorPosition < 0) {
@@ -544,7 +459,7 @@ char *menuItems[] = {
                 }
             }
 
-            if (state.joystick & CV_DOWN) {
+            if (key & JOY_DOWN) {
                 cursorPosition++;
                 refresh = 1;
                 if (cursorPosition >= 8) {
@@ -553,41 +468,41 @@ char *menuItems[] = {
             }
         }
     }
+    clg();
 }
 
 
-uint8_t getKey () {
-    struct cv_controller_state state;
-    cv_get_controller_state(&state, 0);
-    
-    if (state.joystick & CV_UP) {
+uint8_t getKey() {
+    unsigned int key = read_joypad1();
+
+    if (key & JOY_UP) {
         return 'w';
     }
 
-    if (state.joystick & CV_LEFT) {
-        if (state.joystick & CV_FIRE_1) {
+    if (key & JOY_LEFT) {
+        if (key & JOY_FIREB) {
             return 'a';
         }
         return 'q';
     }
 
 
-    if (state.joystick & CV_RIGHT) {
-        if (state.joystick & CV_FIRE_1) {
+    if (key & JOY_RIGHT) {
+        if (key & JOY_FIREB) {
             return 'd';
         }
         return 'e';
     }
 
-    if (state.joystick & CV_DOWN) {
+    if (key & JOY_DOWN) {
         return 's';
     }
 
-    if (state.joystick & CV_FIRE_0) {
+    if (key & JOY_FIREA) {
         pauseMenu();
         return 'p';
     }
-    
+
     return '.';
 }
 
@@ -595,113 +510,26 @@ void shutdownGraphics() {
 }
 
 void clearGraphics() {
-    /*
-     cvu_vmemset(0, 0, 0x4000 / 3 );
-     
-     
-     {
-     byte i=0;
-     do {
-     cvu_voutb(i, IMAGE+i);
-     } while (++i);
-     }*/
 }
 
 void graphicsFlush() {
-    uint8_t x, y, _x, _y;
-    byte b;
-    word ofs, _yoff;
     uint8_t *ptr = &buffer[0];
-    uint8_t pixel;
-    _y = 2;
-    for (y = 64; y; --y ) {
-        _y++;
-        _yoff = ( ((_y >> 3 ) << 8)) + (_y & 7);
-        
-        _x = 96;
-        
-        for (x = 0; x < 64;) {
-            
-            // refactor: _x & 248 -> (_x / 8 ) * 8
-            ofs = ( _x & 248 ) + _yoff;
-            b = cvu_vinb(PATTERN + ofs);
-            
-            //1
-            pixel = *ptr;
-            if ( pixel & 1 ) {
-                
-                if ( ~(pixel & 2) ) {
-                    b |= 128 >> (_x & 7);
-                    
-                }
-                
-            } else {
-                if ( (pixel & 2) ) {
-                    b &= ~(128 >> ( _x     &7));
-                    
-                }
-            }
-            *ptr = pixel << 1;
-            ptr++;
-            _x += 1;
-            
-            //2
-            pixel = *ptr;
-            if ( pixel & 1 ) {
-                if ( ~(pixel & 2) ) {
-                    b |= 128 >> (_x & 7);
-                    
+    for (int y = 0; y < 64; ++y) {
+        for (int x = 0; x < 64; ++x) {
+            uint8_t pixel = *ptr;
+            if (pixel & 1) {
+                if (~(pixel & 2)) {
+                    plot(x, y);
                 }
             } else {
-                if ( (pixel & 2) ) {
-                    b &= ~(128 >> ( _x     &7));
-                    
+                if (pixel & 2) {
+                    unplot(x, y);
                 }
             }
-            *ptr = pixel << 1;
+
+            pixel = pixel << 1;
+            *ptr = pixel;
             ptr++;
-            _x += 1;
-            
-            //3
-            pixel = *ptr;
-            if ( pixel & 1 ) {
-                if ( ~(pixel & 2) ) {
-                    b |= 128 >> (_x & 7);
-                    
-                }
-                
-            } else {
-                if ( (pixel & 2) ) {
-                    b &= ~(128 >> ( _x     &7));
-                    
-                }
-            }
-            *ptr = pixel << 1;
-            ptr++;
-            _x += 1;
-            
-            //4
-            pixel = *ptr;
-            if ( pixel & 1 ) {
-                if ( ~(pixel & 2) ) {
-                    b |= 128 >> (_x & 7);
-                    
-                }
-            } else {
-                if ( (pixel & 2) ) {
-                    b &= ~(128 >> ( _x     &7));
-                    
-                }
-            }
-            *ptr = pixel << 1;
-            ptr++;
-            _x += 1;
-            
-            x += 4;
-            cvu_voutb(b, PATTERN + ofs);
-            cvu_voutb(32, COLOR + ofs);
-            
-            
         }
     }
 }
@@ -710,127 +538,130 @@ void hLine(uint8_t x0, uint8_t x1, uint8_t y0) {
     uint8_t *ptr;
     uint8_t _x0 = x0;
     uint8_t _x1 = x1;
-    
+
     if (x0 > x1) {
         _x0 = x1;
         _x1 = x0;
     }
-    
+
     ptr = &buffer[(y0 * 64) + _x0];
     for (uint8_t x = _x0; x <= _x1; ++x) {
         {
+            if (y0 >= 64 || x >= 64) return;
+
             ptr++;
             *ptr |= 1;
-            
+
         }
     }
 }
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
-    
+
     uint8_t *ptr;
     uint8_t _y0 = y0;
     uint8_t _y1 = y1;
-    
+
     if (y0 > y1) {
         _y0 = y1;
         _y1 = y0;
     }
-    
+
     ptr = &buffer[(_y0 * 64) + x0];
-    
+
     for (uint8_t y = _y0; y <= _y1; ++y) {
+        if (y >= 64 || x0 >= 64) return;
+
         *ptr |= 1;
         ptr += 64;
     }
 }
 
 void graphicsPut(uint8_t x, uint8_t y) {
-    buffer[(y * 64) + x ] |= 1;
-}
 
-int putchar(int dummy) {
-    dummy = dummy;
+    if (y >= 64 || x >= 64) return;
+
+    buffer[(y * 64) + x] |= 1;
 }
 
 void drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
-    word offset;
+    int offset;
     uint8_t *ptr;
     if (x0 == x1) {
-        
+
         uint8_t _y0 = y0;
         uint8_t _y1 = y1;
-        
+
         if (y0 > y1) {
             _y0 = y1;
             _y1 = y0;
         }
-        
-        
+
+
         offset = (_y0 * 64) + x0;
         ptr = &buffer[offset];
-        
+
         for (uint8_t y = _y0; y <= _y1; ++y) {
-            
-            
+
+
             {
                 ptr += 64;
                 *ptr |= 1;
-                
+
             }
         }
         return;
     }
-    
+
     if (y0 == y1) {
         uint8_t _x0 = x0;
         uint8_t _x1 = x1;
-        
+
         if (x0 > x1) {
             _x0 = x1;
             _x1 = x0;
         }
-        
-        
+
+
         offset = (y0 * 64) + _x0;
         ptr = &buffer[offset];
         for (uint8_t x = _x0; x <= _x1; ++x) {
             {
                 ptr++;
                 *ptr |= 1;
-                
+
             }
         }
         return;
     }
-    
-    
+
+
     {
         //https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
-        
+
         uint8_t dx = abs(x1 - x0);
         int8_t sx = x0 < x1 ? 1 : -1;
         int16_t dy = -abs(y1 - y0);
         int8_t sy = y0 < y1 ? 1 : -1;
         int16_t err = dx + dy;  /* error value e_xy */
         int16_t e2;
-        word offset = (y0 * 64) + x0;
-        
-        if (sy > 0 ) {
+        int offset = (y0 * 64) + x0;
+
+        if (sy > 0) {
             while (1) {
-                
+
                 buffer[offset] |= 1;
-                
+
                 /* loop */
                 if (x0 == x1 && y0 == y1) return;
                 e2 = err << 2;
-                
+
                 if (e2 >= dy) {
                     err += dy; /* e_xy+e_x > 0 */
                     x0 += sx;
                     offset += sx;
                 }
-                
+
                 if (e2 <= dx) {
                     /* e_xy+e_y < 0 */
                     err += dx;
@@ -840,19 +671,19 @@ void drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
             }
         } else {
             while (1) {
-                
+
                 buffer[offset] |= 1;
-                
+
                 /* loop */
                 if (x0 == x1 && y0 == y1) return;
                 e2 = err << 2;
-                
+
                 if (e2 >= dy) {
                     err += dy; /* e_xy+e_x > 0 */
                     x0 += sx;
                     offset += sx;
                 }
-                
+
                 if (e2 <= dx) {
                     /* e_xy+e_y < 0 */
                     err += dx;
@@ -861,11 +692,8 @@ void drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
                 }
             }
         }
-        
+
     }
 }
 
-void fix_line(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
-    x0 = x1 = y0 = y1;
-}
-
+void printSituation() {}

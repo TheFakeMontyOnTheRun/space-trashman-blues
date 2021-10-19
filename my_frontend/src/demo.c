@@ -34,10 +34,6 @@
 #include <cpctelera.h>
 #endif
 
-#ifdef SMS
-int currentlyInGraphics = FALSE;
-void backToGraphics();
-#endif
 
 enum DIRECTION {
     DIRECTION_N,
@@ -1796,11 +1792,6 @@ void tickRenderer() {
     uint8_t prevZ;
     int previousLocation = playerLocation;
     uint8_t newCell = 0;
-#ifdef SMS
-    if (!currentlyInGraphics) {
-        backToGraphics();
-    }
-#endif
 
     clearGraphics();
 
@@ -2006,7 +1997,7 @@ void tickRenderer() {
 
 
     /* unlike MX, we are signaling from the origin into the new room. MX allows for the movement and then searches where
-     * did the player came from - hence the "opposite direction" there */
+     * did the player came from - hence the "opossite direction" there */
 
     if (newCell == '0') {
         enteredFrom = 0;
@@ -2029,8 +2020,6 @@ void tickRenderer() {
         enteredFrom = 0xFF;
     }
 }
-
-void printSituation();
 
 
 void onError(const char* mesg) {
