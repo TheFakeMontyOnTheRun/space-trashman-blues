@@ -683,7 +683,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dZ) {
                     unsigned char *pS;
                         unsigned char nByte = 0;
 
-                        pS = (unsigned char *) baseScreen + lineStart[stencilHigh[x]] + (x >> 1);
+                        pS = (unsigned char *) baseScreen + lineStart[py0z0] + (x >> 1);
                         nByte = *pS;
 
                         if (x & 1) {
@@ -709,7 +709,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dZ) {
                     unsigned char *pS;
                         unsigned char nByte = 0;
 
-                        pS = (unsigned char *) baseScreen + lineStart[stencilHigh[x]] + (x >> 1);
+                        pS = (unsigned char *) baseScreen + lineStart[py0z1] + (x >> 1);
                         nByte = *pS;
 
                         if (x & 1) {
@@ -753,7 +753,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dZ) {
                             unsigned char *pS;
                             unsigned char nByte = 0;
 
-                            pS = (unsigned char *) baseScreen + lineStart[stencilHigh[x0]] + (x0 >> 1);
+                            pS = (unsigned char *) baseScreen + lineStart[y0] + (x0 >> 1);
                             nByte = *pS;
 
                             if (x0 & 1) {
@@ -814,7 +814,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dZ) {
                         unsigned char *pS;
                         unsigned char nByte = 0;
 
-                        pS = (unsigned char *) baseScreen + lineStart[stencilHigh[x0]] + (x0 >> 1);
+                        pS = (unsigned char *) baseScreen + lineStart[y0] + (x0 >> 1);
                         nByte = *pS;
 
                         if (x0 & 1) {
