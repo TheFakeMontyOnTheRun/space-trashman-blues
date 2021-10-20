@@ -11,4 +11,4 @@ derelict.sms: src/demo.o src/sms.o ../core/src/Core.o ../core/src/Derelict.o
 
 clean:
 	$(RM) *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.rom
-	$(RM) ../core/src/*.o
+	$(RM) ../core/src/*.o src/*.o
