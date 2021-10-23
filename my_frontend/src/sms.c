@@ -8,6 +8,10 @@
 
 #include "Core.h"
 #include "Derelict.h"
+#include "Engine3D.h"
+
+#define BUFFER_XRES 64
+#define BUFFER_YRES 64
 
 extern struct ObjectNode* focusedItem;
 extern struct ObjectNode* roomItem;
@@ -151,11 +155,11 @@ void clearTextScreen() {
 }
 
 
-uint8_t buffer[64 * 64];
+uint8_t buffer[BUFFER_XRES * BUFFER_YRES];
 
 void setup_mode2() {
     if (!currentlyInGraphics) {
-        memset(&buffer[0], 0, 64 * 64);
+        memset(&buffer[0], 0, XRES * YRES);
         clg();
     }
     currentlyInGraphics = TRUE;
@@ -201,55 +205,70 @@ void show_text(int _x, int y, char *text) {
     int chary = 0;
     int x = _x;
 
-    for (; c < len; ++c ) {
+    for (; c < len && y < 64; ++c ) {
 
         char cha = *ptr;
 
+        if (cha == '\n') {
+            ++y;
+            x = _x;
+            ++ptr;
+            continue;
+        }
+
         ++x;
 
-        if (cha == '\n') {
+        if (x >= 64) {
             ++y;
             x = _x;
         }
 
         if (cha != ' ') {
+            int baseY = (y * 8);
+
+            uint8_t *fontTop = &font[((cha - 32) * 8)];
+            int baseX = (x * 8);
 
             for (chary = 0; chary < 8; ++chary) {
-                uint8_t ch = font[((cha - 32) * 8) + chary];
-                int baseX = (x * 8);
-                int baseY = (y * 8) + chary;
+                baseY++;
+                uint8_t ch = *fontTop;
 
-                if (ch & 1) {
-                    plot(baseX + 7, baseY);
+                if ( ch != 0 ) {
+
+                    if (ch & 1) {
+                        plot(baseX + 7, baseY);
+                    }
+
+                    if (ch & 2) {
+                        plot(baseX + 6, baseY);
+                    }
+
+                    if (ch & 4) {
+                        plot(baseX + 5, baseY);
+                    }
+
+                    if (ch & 8) {
+                        plot(baseX + 4, baseY);
+                    }
+
+                    if (ch & 16) {
+                        plot(baseX + 3, baseY);
+                    }
+
+                    if (ch & 32) {
+                        plot(baseX + 2, baseY);
+                    }
+
+                    if (ch & 64) {
+                        plot(baseX + 1, baseY);
+                    }
+
+                    if (ch & 128) {
+                        plot(baseX, baseY);
+                    }
                 }
 
-                if (ch & 2) {
-                    plot(baseX + 6, baseY);
-                }
-
-                if (ch & 4) {
-                    plot(baseX + 5, baseY);
-                }
-
-                if (ch & 8) {
-                    plot(baseX + 4, baseY);
-                }
-
-                if (ch & 16) {
-                    plot(baseX + 3, baseY);
-                }
-
-                if (ch & 32) {
-                    plot(baseX + 2, baseY);
-                }
-
-                if (ch & 64) {
-                    plot(baseX + 1, baseY);
-                }
-
-                if (ch & 128) {
-                    plot(baseX, baseY);
-                }
+                ++fontTop;
             }
         }
         ++ptr;
@@ -276,6 +295,7 @@ void showMessage(const char *message) {
     }
 
     clg();
+    HUD_initialPaint();
 }
 
 void titleScreen() {
@@ -294,6 +314,7 @@ void titleScreen() {
     }
 
     clg();
+    HUD_initialPaint();
 }
 
 void pauseMenu() {
@@ -337,56 +358,6 @@ void pauseMenu() {
                 break;
         }
 
-        if (refresh) {
-            int i = 0;
-            refresh = 0;
-
-            clearTextScreen();
-
-
-            show_text(1, 1, "Object at room:");
-
-            if (focusedItem != NULL) {
-                struct Item *item = getItem(focusedItem->item);
-
-                if (item->active) {
-                    show_text(1, 2, "*");
-                }
-
-                show_text(2, 2, item->description);
-            }
-
-
-            if (roomItem != NULL) {
-                struct Item *item = getItem(roomItem->item);
-
-                if (item->active) {
-                    show_text(1, 3, "*");
-                }
-
-                show_text(2, 3, item->description);
-
-                if (itemDesc) {
-                    show_text(1, 4, item->info);
-                }
-            }
-
-            if (!itemDesc) {
-                show_text(1, 2, " ");
-                show_text(2, 2, room->description);
-                show_text(1, 3, room->info);
-            }
-
-            for (i = 0; i < 8; ++i) {
-                if (i == cursorPosition) {
-                    show_text(1, 16 + i, ">");
-                }
-                show_text(2, 16 + i, menuItems[i]);
-            }
-            cooldown = 4000;
-        }
-
-        cooldown--;
 
         if (cooldown < 0) {
             unsigned int key = read_joypad1();
@@ -437,6 +408,7 @@ char *menuItems[] = {
                     case 7:
                         keepGoing = 0;
                         clg();
+                        HUD_initialPaint();
                         return;
                 }
                 refresh = 1;
@@ -468,7 +440,6 @@ char *menuItems[] = {
             }
         }
     }
-    clg();
 }
 
 
@@ -503,6 +474,11 @@ uint8_t getKey() {
         return 'p';
     }
 
+    if (key & JOY_FIREB) {
+        cursorPosition = (cursorPosition + 1) & 7;
+        return 'p';
+    }
+
     return '.';
 }
 
@@ -514,17 +490,32 @@ void clearGraphics() {
 
 void graphicsFlush() {
     uint8_t *ptr = &buffer[0];
-    for (int y = 0; y < 64; ++y) {
-        for (int x = 0; x < 64; ++x) {
+    for (int y = 0; y < BUFFER_YRES; ++y) {
+        for (int x = 0; x < BUFFER_XRES; ++x) {
             uint8_t pixel = *ptr;
-            if (pixel & 1) {
-                if (~(pixel & 2)) {
-                    plot(x, y);
-                }
-            } else {
-                if (pixel & 2) {
-                    unplot(x, y);
-                }
+            uint8_t lastTwo = pixel & 3;
+
+            if (lastTwo == 1) {
+#ifndef DOUBLE_PIXEL
+                plot(32 + x, 32 + y);
+#else
+                plot(2 * x, 2 * y);
+                plot((2 * x) + 1, 2 * y);
+
+                plot(2 * x, (2 * y) + 1);
+                plot((2 * x) + 1, (2 * y) + 1);
+#endif
+
+            } else if (lastTwo == 2) {
+#ifndef DOUBLE_PIXEL
+                unplot( 32 + x,  32 + y);
+#else
+                unplot(2 * x, 2 * y);
+                unplot((2 * x) + 1, 2 * y);
+
+                unplot(2 * x, (2 * y) + 1);
+                unplot((2 * x) + 1, (2 * y) + 1);
+#endif
             }
 
             pixel = pixel << 1;
@@ -535,165 +526,120 @@ void graphicsFlush() {
 }
 
 void hLine(uint8_t x0, uint8_t x1, uint8_t y0) {
-    uint8_t *ptr;
-    uint8_t _x0 = x0;
-    uint8_t _x1 = x1;
 
-    if (x0 > x1) {
-        _x0 = x1;
-        _x1 = x0;
-    }
-
-    ptr = &buffer[(y0 * 64) + _x0];
-    for (uint8_t x = _x0; x <= _x1; ++x) {
-        {
-            if (y0 >= 64 || x >= 64) return;
-
-            ptr++;
-            *ptr |= 1;
-
-        }
-    }
 }
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
 
     uint8_t *ptr;
-    uint8_t _y0 = y0;
-    uint8_t _y1 = y1;
+    uint8_t _y0 = y0 >> 1;
+    uint8_t _y1 = y1 >> 1;
 
     if (y0 > y1) {
-        _y0 = y1;
-        _y1 = y0;
+        _y0 = y1 >> 1;
+        _y1 = y0 >> 1;
     }
 
-    ptr = &buffer[(_y0 * 64) + x0];
+    x0 = x0 >> 1;
+
+    ptr = &buffer[(_y0 * BUFFER_XRES) + x0];
 
     for (uint8_t y = _y0; y <= _y1; ++y) {
-        if (y >= 64 || x0 >= 64) return;
+        if (y >= BUFFER_YRES || x0 >= BUFFER_XRES) return;
 
         *ptr |= 1;
-        ptr += 64;
+        ptr += BUFFER_XRES;
     }
 }
 
 void graphicsPut(uint8_t x, uint8_t y) {
 
-    if (y >= 64 || x >= 64) return;
+    x = x >> 1;
+    y = y >> 1;
 
-    buffer[(y * 64) + x] |= 1;
+    if (y >= BUFFER_YRES || x >= BUFFER_XRES) return;
+
+    buffer[(y * BUFFER_XRES) + x] |= 1;
+}
+
+
+void HUD_initialPaint() {
+    struct Room *room = getRoom(getPlayerRoom());
+
+    draw( 128, 0, 128, 128);
+    draw( 0, 128, 128, 128);
+
+
+//    show_text(32, 1, "Object at room:");
+//
+//    if (focusedItem != NULL) {
+//        struct Item *item = getItem(focusedItem->item);
+//
+//        if (item->active) {
+//            show_text(32, 2, "*");
+//        }
+//
+//        show_text(33, 2, item->description);
+//    }
+//
+//
+//    if (roomItem != NULL) {
+//        struct Item *item = getItem(roomItem->item);
+//
+//        if (item->active) {
+//            show_text(32, 3, "*");
+//        }
+//
+//        show_text(33, 3, item->description);
+//
+////        if (itemDesc) {
+//            show_text(32, 4, item->info);
+////        }
+//    }
+
+//    if (!itemDesc) {
+//        show_text(9, 2, " ");
+//        show_text(10, 2, room->description);
+//        show_text(9, 3, room->info);
+//    }
+
+    for (int i = 0; i < 8; ++i) {
+        if (i == cursorPosition) {
+            show_text(0, 16 + i, ">");
+        }
+        show_text(1, 16 + i, menuItems[i]);
+    }
+}
+
+void HUD_refresh() {
+
 }
 
 void drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
-    int offset;
-    uint8_t *ptr;
-    if (x0 == x1) {
 
-        uint8_t _y0 = y0;
-        uint8_t _y1 = y1;
-
-        if (y0 > y1) {
-            _y0 = y1;
-            _y1 = y0;
-        }
-
-
-        offset = (_y0 * 64) + x0;
-        ptr = &buffer[offset];
-
-        for (uint8_t y = _y0; y <= _y1; ++y) {
-
-
-            {
-                ptr += 64;
-                *ptr |= 1;
-
-            }
-        }
-        return;
-    }
-
-    if (y0 == y1) {
-        uint8_t _x0 = x0;
-        uint8_t _x1 = x1;
-
-        if (x0 > x1) {
-            _x0 = x1;
-            _x1 = x0;
-        }
-
-
-        offset = (y0 * 64) + _x0;
-        ptr = &buffer[offset];
-        for (uint8_t x = _x0; x <= _x1; ++x) {
-            {
-                ptr++;
-                *ptr |= 1;
-
-            }
-        }
-        return;
-    }
-
-
-    {
-        //https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
-
-        uint8_t dx = abs(x1 - x0);
-        int8_t sx = x0 < x1 ? 1 : -1;
-        int16_t dy = -abs(y1 - y0);
-        int8_t sy = y0 < y1 ? 1 : -1;
-        int16_t err = dx + dy;  /* error value e_xy */
-        int16_t e2;
-        int offset = (y0 * 64) + x0;
-
-        if (sy > 0) {
-            while (1) {
-
-                buffer[offset] |= 1;
-
-                /* loop */
-                if (x0 == x1 && y0 == y1) return;
-                e2 = err << 2;
-
-                if (e2 >= dy) {
-                    err += dy; /* e_xy+e_x > 0 */
-                    x0 += sx;
-                    offset += sx;
-                }
-
-                if (e2 <= dx) {
-                    /* e_xy+e_y < 0 */
-                    err += dx;
-                    y0++;
-                    offset += 64;
-                }
-            }
-        } else {
-            while (1) {
-
-                buffer[offset] |= 1;
-
-                /* loop */
-                if (x0 == x1 && y0 == y1) return;
-                e2 = err << 2;
-
-                if (e2 >= dy) {
-                    err += dy; /* e_xy+e_x > 0 */
-                    x0 += sx;
-                    offset += sx;
-                }
-
-                if (e2 <= dx) {
-                    /* e_xy+e_y < 0 */
-                    err += dx;
-                    y0--;
-                    offset -= 64;
-                }
-            }
-        }
-
-    }
 }
 
-void printSituation() {}
+void printSituation() {
+
+//    clg();
+//    memset( &buffer[0], 0, BUFFER_XRES * BUFFER_YRES);
+//
+//    struct Room *room = getRoom(getPlayerRoom());
+//
+//    int i = 0;
+//
+//
+//    if (focusedItem != NULL) {
+//        struct Item *item = getItem(focusedItem->item);
+//
+//        if (item->active) {
+//            show_text(1, 2, "*");
+//        }
+//
+//        show_text(2, 10, item->description);
+//    }
+//
+//
+//    show_text(2, 11, room->description);
+
+}

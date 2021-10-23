@@ -6,29 +6,9 @@
 #ifndef DONT_INCLUDE
 #include "Core.h"
 #include "Derelict.h"
+#include "Engine3D.h"
 #endif
 
-#ifdef RES64X128
-    #define XRES 64
-    #define YRES 128
-#else
-    #ifdef RES128X128
-        #define XRES 128
-        #define YRES 128
-    #else
-        #define XRES 64
-        #define YRES 64
-    #endif
-#endif
-
-
-#define XRESMINUSONE XRES - 1
-#define YRESMINUSONE YRES - 1
-
-
-#define WALKSTEP 1
-#define CAMERA_HEIGHT 2
-#define VISIBILITY_LIMIT 32
 
 #ifdef CPC_PLATFORM
 #include <cpctelera.h>
@@ -110,6 +90,48 @@ struct Projection {
 
 const struct Projection projections[40] =
         {
+#ifdef RES96x64
+        {	0	,	64	,	-96	},	//	1
+{	0	,	63	,	-48	},	//	2
+{	15	,	52	,	-32	},	//	3
+{	23	,	47	,	-24	},	//	4
+{	27	,	43	,	-19	},	//	5
+{	31	,	41	,	-16	},	//	6
+{	33	,	40	,	-13	},	//	7
+{	35	,	39	,	-12	},	//	8
+{	36	,	38	,	-10	},	//	9
+{	37	,	37	,	-9	},	//	10
+{	38	,	36	,	-8	},	//	11
+{	39	,	36	,	-8	},	//	12
+{	39	,	35	,	-7	},	//	13
+{	40	,	35	,	-6	},	//	14
+{	40	,	35	,	-6	},	//	15
+{	41	,	35	,	-6	},	//	16
+{	41	,	34	,	-5	},	//	17
+{	41	,	34	,	-5	},	//	18
+{	41	,	34	,	-5	},	//	19
+{	42	,	34	,	-4	},	//	20
+{	42	,	34	,	-4	},	//	21
+{	42	,	33	,	-4	},	//	22
+{	42	,	33	,	-4	},	//	23
+{	43	,	33	,	-4	},	//	24
+{	43	,	33	,	-3	},	//	25
+{	43	,	33	,	-3	},	//	26
+{	43	,	33	,	-3	},	//	27
+{	43	,	33	,	-3	},	//	28
+{	43	,	33	,	-3	},	//	29
+{	43	,	33	,	-3	},	//	30
+{	43	,	33	,	-3	},	//	31
+{	44	,	33	,	-3	},	//	32
+{	44	,	32	,	-2	},	//	33
+{	44	,	32	,	-2	},	//	34
+{	44	,	32	,	-2	},	//	35
+{	44	,	32	,	-2	},	//	36
+{	44	,	32	,	-2	},	//	37
+{	44	,	32	,	-2	},	//	38
+{	44	,	32	,	-2	},	//	39
+{	44	,	32	,	-2	},	//	40
+#else
 #ifdef RES64X128
             {	0	,	128	,	-64	},	//	1
             {	0	,	127	,	-32	},	//	2
@@ -235,6 +257,7 @@ const struct Projection projections[40] =
                 {	29	,	32	,	-1	},	//	38
                 {	29	,	32	,	-1	},	//	39
                 {	29	,	32	,	-1	},	//	40
+#endif
 #endif
 #endif
         };
@@ -607,7 +630,7 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
 }
 
 
-uint8_t drawObjectAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dZ) {
+uint8_t drawObjectAt(int8_t x0, int8_t z0) {
 
     int8_t z1;
     uint8_t z0px;
@@ -629,7 +652,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dZ) {
         return 0;
     }
 
-    z1 = z0 + dZ;
+    z1 = z0 + 1;
 
     if (z1 >= 32) {
         return 0;
@@ -644,14 +667,14 @@ uint8_t drawObjectAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dZ) {
     px0z0 = z0px - ((x0) * z0dx);
     px0z1 = z1px - ((x0) * z1dx);
 
-    px1z0 = px0z0 - (dX * z0dx);
-    px1z1 = px0z1 - (dX * z1dx);
+    px1z0 = px0z0 - (1 * z0dx);
+    px1z1 = px0z1 - (1 * z1dx);
 
     z1py = (projections[z1].py);
     z0py = (projections[z0].py);
 
-    py0z0 = z0py + ((y0) * z0dx);
-    py0z1 = z1py + ((y0) * z1dx);
+    py0z0 = z0py + ((- CAMERA_HEIGHT) * z0dx);
+    py0z1 = z1py + ((- CAMERA_HEIGHT) * z1dx);
 
     if (px1z0 < 0 || px0z0 > XRESMINUSONE) {
         return 0;
@@ -1168,8 +1191,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
      * */
 
     if (_pattern & 128) {
-        drawObjectAt(x0 - 1, 0 - CAMERA_HEIGHT, y + 2,
-                x1 - x0, 1);
+        drawObjectAt(x0 - 1, y + 2);
 
         return 1;
     }
@@ -1795,11 +1817,6 @@ void tickRenderer() {
 
     clearGraphics();
 
-    vLine(XRES - 1, 0, YRES - 1);
-    vLine(0, 0, YRES - 1);
-    hLine(0, XRES - 1, 0);
-    hLine(0, XRES - 1, YRES - 1);
-    
     renderScene();
 
     graphicsFlush();
@@ -2019,6 +2036,7 @@ void tickRenderer() {
     } else {
         enteredFrom = 0xFF;
     }
+    HUD_refresh();
 }
 
 

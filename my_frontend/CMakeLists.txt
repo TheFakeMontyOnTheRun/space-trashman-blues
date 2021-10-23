@@ -20,7 +20,7 @@ add_executable(derelict8
 		../core/src/Core.c
 		../core/src/Parser.c
 
-		)
+		src/Engine3D.h)
 
 include(FindPkgConfig)
 

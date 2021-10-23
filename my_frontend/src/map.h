@@ -88,7 +88,7 @@ const struct Pattern patterns[127] = {
         {7, 3, CUBE,       0}, //   67
         {0, 0, CUBE,       0}, //   68 D
         {5, 0, CUBE,       0}, //   69 E
-        {3,15, CUBE,       0}, //   70 F
+        {5,15, CUBE,       0}, //   70 F
         {7, 3, CUBE,       0}, //   71
         {0, 0, CUBE,       0}, //   72
         {0, 0, CUBE,       1}, //   73 I

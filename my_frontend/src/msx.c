@@ -5,7 +5,7 @@
 #include <malloc.h>
 #include <msx/gfx.h>
 
-
+uint8_t *heap;
 
 uint8_t getch();
 
@@ -91,4 +91,14 @@ void init() {
 void graphicsFlush() {
     msx_vwrite_direct(sbuffer, 0, MODE2_MAX);
 }
+
+void printSituation() {}
+
+void showMessage(char *txt) {}
+
+void titleScreen(){}
+
+void HUD_initialPaint() {}
+
+void HUD_refresh() {}
 #endif

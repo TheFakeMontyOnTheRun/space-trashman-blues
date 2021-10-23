@@ -2,7 +2,7 @@
 
 CC = zcc
 
-CFLAGS = +sms -compiler=sdcc -SO3 -create-app  -vn -I../Core/include -create-app -DSMS -DRES64X64 -DINCLUDE_ROOM_DESCRIPTIONS
+CFLAGS = +sms -compiler=sdcc -SO3 -pragma-define:CRT_MODEL=2 -create-app  -vn -I../Core/include -create-app -DSMS -DRES128X128 -DINCLUDE_ROOM_DESCRIPTIONS
 
 all: derelict.sms
 
