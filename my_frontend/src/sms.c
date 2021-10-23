@@ -10,8 +10,8 @@
 #include "Derelict.h"
 #include "Engine3D.h"
 
-extern struct ObjectNode* focusedItem;
-extern struct ObjectNode* roomItem;
+extern struct ObjectNode *focusedItem;
+extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
 
 void graphicsFlush();
@@ -33,13 +33,6 @@ void pickItem();
 int currentlyInGraphics = FALSE;
 void backToGraphics();
 
-unsigned char pal1[] = {0x00, 0x20, 0x08, 0x28, 0x02, 0x22, 0x0A, 0x2A,
-                        0x15, 0x35, 0x1D, 0x3D, 0x17, 0x37, 0x1F, 0x3F};
-
-unsigned char pal2[] = {0x00, 0x03, 0x08, 0x28, 0x02, 0x22, 0x0A, 0x2A,
-                        0x15, 0x35, 0x1D, 0x3D, 0x17, 0x37, 0x1F, 0x3F};
-
-
 uint8_t font[] = {
           0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 // space
         , 0x10,0x38,0x38,0x10,0x10,0x00,0x10,0x00
@@ -57,10 +50,6 @@ uint8_t font[] = {
         , 0x00,0x00,0x00,0x7c,0x00,0x00,0x00,0x00
         , 0x00,0x00,0x00,0x00,0x00,0x30,0x30,0x00
         , 0x00,0x04,0x08,0x10,0x20,0x40,0x00,0x00 // /space - 15
-
-
-
-
         , 0x38,0x44,0x4c,0x54,0x64,0x44,0x38,0x00 // 0
         , 0x10,0x30,0x10,0x10,0x10,0x10,0x38,0x00
         , 0x38,0x44,0x04,0x18,0x20,0x40,0x7c,0x00
@@ -78,7 +67,6 @@ uint8_t font[] = {
         , 0x20,0x10,0x08,0x04,0x08,0x10,0x20,0x00
         , 0x38,0x44,0x04,0x18,0x10,0x00,0x10,0x00
         , 0x38,0x44,0x5c,0x54,0x5c,0x40,0x38,0x00 // /0
-
         , 0x38,0x44,0x44,0x44,0x7c,0x44,0x44,0x00 // a
         , 0x78,0x44,0x44,0x78,0x44,0x44,0x78,0x00
         , 0x38,0x44,0x40,0x40,0x40,0x44,0x38,0x00
@@ -164,10 +152,6 @@ void setup_mode2() {
 
 void init() {
     clear_vram();
-    load_tiles(standard_font, 0, 255, 1);
-    load_palette(pal1, 0, 16);
-    load_palette(pal2, 16, 16);
-    set_vdp_reg(VDP_REG_FLAGS1, VDP_REG_FLAGS1_BIT7 | VDP_REG_FLAGS1_SCREEN);
     clg();
 }
 
@@ -193,16 +177,15 @@ void renderScene();
 int cooldown = 0;
 int cursorPosition = 0;
 
-
 void show_text(int _x, int y, char *text) {
 
-    int len = strlen(text);
+    uint8_t len = strlen(text);
     char *ptr = text;
-    int c = 0;
-    int chary = 0;
-    int x = _x;
+    uint8_t c = 0;
+    uint8_t chary = 0;
+    uint8_t x = _x;
 
-    for (; c < len && y < 64; ++c ) {
+    for (; c < len && y < 64; ++c) {
 
         char cha = *ptr;
 
@@ -221,47 +204,22 @@ void show_text(int _x, int y, char *text) {
         }
 
         if (cha != ' ') {
-            int baseY = (y * 8);
+            uint8_t baseY = (y << 3);
 
-            uint8_t *fontTop = &font[((cha - 32) * 8)];
-            int baseX = (x * 8);
+            uint8_t *fontTop = &font[((cha - 32) << 3)];
+            uint8_t baseX = (x << 3);
 
             for (chary = 0; chary < 8; ++chary) {
                 baseY++;
                 uint8_t ch = *fontTop;
-
-                if ( ch != 0 ) {
-
-                    if (ch & 1) {
-                        plot(baseX + 7, baseY);
-                    }
-
-                    if (ch & 2) {
-                        plot(baseX + 6, baseY);
-                    }
-
-                    if (ch & 4) {
-                        plot(baseX + 5, baseY);
-                    }
-
-                    if (ch & 8) {
-                        plot(baseX + 4, baseY);
-                    }
-
-                    if (ch & 16) {
-                        plot(baseX + 3, baseY);
-                    }
-
-                    if (ch & 32) {
-                        plot(baseX + 2, baseY);
-                    }
-
-                    if (ch & 64) {
-                        plot(baseX + 1, baseY);
-                    }
-
-                    if (ch & 128) {
-                        plot(baseX, baseY);
+                if (ch != 0) {
+                    baseX += 7;
+                    for (uint8_t r = 0; r < 7; ++r) {
+                        if (ch & 1) {
+                            plot(baseX, baseY);
+                        }
+                        --baseX;
+                        ch >>= 1;
                     }
                 }
 
@@ -328,19 +286,16 @@ void pauseMenu() {
             case kBadVictory:
                 showMessage("Victory! Too bad you didn't survive\nto tell the story\n\n\n\n\n\n");
                 while (1);
-                break;
 
             case kBadGameOver:
                 showMessage("You're dead! And so are millions of\n"
                             "other people on the path of\n"
                             "destruction faulty reactor\n\n\n\n\n\n");
                 while (1);
-                break;
 
             case kGoodVictory:
                 showMessage("Victory! You managed to destroy the\nship and get out alive\n\n\n\n\n\n");
                 while (1);
-                break;
 
             case kGoodGameOver:
                 showMessage("You failed! While you fled the ship\n"
@@ -348,7 +303,6 @@ void pauseMenu() {
                             "worstscenario and now EVERYBODY is\n"
                             "dead (and that includes you!)\n\n\n\n\n");
                 while (1);
-                break;
 
             default:
             case kNormalGameplay:
@@ -487,47 +441,24 @@ void clearGraphics() {
 
 void graphicsFlush() {
     uint8_t *ptr = &buffer[0];
-    for (int y = 0; y < 128; ++y) {
-        for (int x = 0; x < 32; ++x) {
+    for (uint8_t y = 0; y < 128; ++y) {
+        for (uint8_t x = 0; x < 128;) {
             uint8_t pixel = *ptr;
-            uint8_t lastTwo;
+            uint8_t r = 4;
 
-            //pixel 1 - left most 11000000
-            lastTwo = pixel &     0b11000000;
-            if (lastTwo ==        0b01000000) {
-                plot((x * 4), y);
-            } else if (lastTwo == 0b10000000) {
-                unplot((x * 4), y);
+            while (r--) {
+                int twoBits = pixel & 192;
+
+                if (twoBits == 64) {
+                    plot(x, y);
+                } else if (twoBits == 128) {
+                    unplot(x, y);
+                }
+                pixel <<= 2;
+                ++x;
             }
 
-            //pixel 2 - left middle 00110000
-            lastTwo = pixel &     0b00110000;
-            if (lastTwo ==        0b00010000) {
-                plot((x * 4) + 1, y);
-            } else if (lastTwo == 0b00100000) {
-                unplot((x * 4) + 1, y);
-            }
-
-            //pixel 3 - right middle 00001100
-            lastTwo = pixel &     0b00001100;
-            if (lastTwo ==        0b00000100) {
-                plot((x * 4) + 2, y);
-            } else if (lastTwo == 0b00001000) {
-                unplot((x * 4) + 2, y);
-            }
-
-            //pixel 4 - right most 00000011
-            lastTwo = (pixel &    0b00000011);
-            if (lastTwo ==        0b00000001) {
-                plot((x * 4) +3, y);
-            } else if (lastTwo == 0b00000010) {
-                unplot((x * 4) +3, y);
-            }
-
-            pixel = pixel << 1;
-            pixel = pixel & 0b10101010;
-
-            *ptr = pixel;
+            *ptr = (*ptr << 1) & 0b10101010;
             ptr++;
         }
     }
@@ -554,52 +485,37 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
 
     ptr = &buffer[(_y0 * 32) + x0];
 
-    switch ( offset) {
+    if (_y1 >= YRES) {
+        _y1 = YRESMINUSONE;
+    };
+
+
+    if (_y0 >= YRES) {
+        _y0 = YRESMINUSONE;
+    };
+
+    switch (offset) {
         case 0:
             for (uint8_t y = _y0; y <= _y1; ++y) {
-
-                if (y >= XRES) return;
-
-
                 *ptr |= 64;
-
-
                 ptr += 32;
             }
             break;
         case 1:
             for (uint8_t y = _y0; y <= _y1; ++y) {
-
-                if (y >= XRES) return;
-
-
                 *ptr |= 16;
-
-
                 ptr += 32;
             }
             break;
         case 2:
             for (uint8_t y = _y0; y <= _y1; ++y) {
-
-                if (y >= XRES) return;
-
-
                 *ptr |= 4;
-
-
                 ptr += 32;
             }
             break;
         case 3:
             for (uint8_t y = _y0; y <= _y1; ++y) {
-
-                if (y >= XRES) return;
-
-
                 *ptr |= 1;
-
-
                 ptr += 32;
             }
             break;
@@ -609,18 +525,16 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
 void graphicsPut(uint8_t x, uint8_t y) {
 
     uint8_t *ptr;
-    uint8_t _x0 = x;
     int offset;
 
     if (y >= YRES || x >= XRES) return;
 
-    _x0 = _x0 >> 2;
     offset = (x & 3);
-    x = _x0;
+    x = x >> 2;
 
     ptr = &buffer[(y * 32) + x];
 
-    switch ( offset) {
+    switch (offset) {
         case 0:
             *ptr |= 64;
             break;
@@ -640,9 +554,8 @@ void graphicsPut(uint8_t x, uint8_t y) {
 void HUD_initialPaint() {
     struct Room *room = getRoom(getPlayerRoom());
 
-    draw( 128, 0, 128, 128);
-    draw( 0, 128, 128, 128);
-
+    draw(128, 0, 128, 128);
+    draw(0, 128, 128, 128);
 
 
     for (int i = 0; i < 7; ++i) {

@@ -1,4 +1,4 @@
-#--max-allocs-per-node200000
+#--max-allocs-per-node200000  --opt-code-speed
 
 CC = zcc
 
