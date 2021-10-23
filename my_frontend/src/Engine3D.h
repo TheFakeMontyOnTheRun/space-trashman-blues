@@ -5,6 +5,10 @@
 #ifndef DERELICT8_ENGINE3D_H
 #define DERELICT8_ENGINE3D_H
 
+#ifdef RES128X64
+    #define XRES 128
+    #define YRES 64
+#else
 #ifdef RES96x64
     #define XRES 96
     #define YRES 64
@@ -19,6 +23,7 @@
 #else
 #define XRES 64
         #define YRES 64
+#endif
 #endif
 #endif
 #endif
