@@ -163,7 +163,6 @@ char *menuItems[] = {
         "Next item in inventory",
         "Next room item in focus",
         "Toogle item desc/room desc",
-        "Back to room",
 };
 
 void setup_text_mode() {
@@ -174,7 +173,6 @@ void graphicsFlush();
 
 void renderScene();
 
-int cooldown = 0;
 int cursorPosition = 0;
 
 void show_text(int _x, int y, char *text) {
@@ -272,48 +270,35 @@ void titleScreen() {
     HUD_initialPaint();
 }
 
-void pauseMenu() {
-    int keepGoing = 1;
-    int refresh = 1;
-    int itemDesc = 1;
+void performAction() {
     struct Room *room = getRoom(getPlayerRoom());
 
-    setup_text_mode();
+    switch (getGameStatus()) {
+        case kBadVictory:
+            showMessage("Victory! Too bad you didn't survive\nto tell the story\n\n\n\n\n\n");
+            while (1);
 
-    while (keepGoing) {
+        case kBadGameOver:
+            showMessage("You're dead! And so are millions of\n"
+                        "other people on the path of\n"
+                        "destruction faulty reactor\n\n\n\n\n\n");
+            while (1);
 
-        switch (getGameStatus()) {
-            case kBadVictory:
-                showMessage("Victory! Too bad you didn't survive\nto tell the story\n\n\n\n\n\n");
-                while (1);
+        case kGoodVictory:
+            showMessage("Victory! You managed to destroy the\nship and get out alive\n\n\n\n\n\n");
+            while (1);
 
-            case kBadGameOver:
-                showMessage("You're dead! And so are millions of\n"
-                            "other people on the path of\n"
-                            "destruction faulty reactor\n\n\n\n\n\n");
-                while (1);
+        case kGoodGameOver:
+            showMessage("You failed! While you fled the ship\n"
+                        "alive, you failed to prevent the \n"
+                        "worstscenario and now EVERYBODY is\n"
+                        "dead (and that includes you!)\n\n\n\n\n");
+            while (1);
 
-            case kGoodVictory:
-                showMessage("Victory! You managed to destroy the\nship and get out alive\n\n\n\n\n\n");
-                while (1);
-
-            case kGoodGameOver:
-                showMessage("You failed! While you fled the ship\n"
-                            "alive, you failed to prevent the \n"
-                            "worstscenario and now EVERYBODY is\n"
-                            "dead (and that includes you!)\n\n\n\n\n");
-                while (1);
-
-            default:
-            case kNormalGameplay:
-                break;
-        }
-
-
-        if (cooldown < 0) {
-            unsigned int key = read_joypad1();
-            cooldown = 0;
-
+        default:
+        case kNormalGameplay:
+            break;
+    }
 
 /*
 char *menuItems[] = {
@@ -323,73 +308,32 @@ char *menuItems[] = {
  3       "Drop",
  4       "Next item in inventory",
  5       "Next room item in focus",
- 6       "Toogle item desc/room desc",
- 7       "Back to room",
+ 6       "Toogle item desc/room desc"
 };
 */
-            if (key & JOY_FIREA) {
-                switch (cursorPosition) {
-                    case 0:
-                        useObjectNamed(getItem(focusedItem->item)->description);
-                        break;
 
-
-                    case 1:
-                        interactWithItemInRoom();
-                        break;
-
-                    case 2:
-                        pickItem();
-                        break;
-
-                    case 3:
-                        dropItem();
-                        break;
-                    case 4:
-                        nextItemInHand();
-                        break;
-
-                    case 5:
-                        nextItemInRoom();
-                        break;
-
-                    case 6:
-                        itemDesc = !itemDesc;
-                        break;
-                    case 7:
-                        keepGoing = 0;
-                        clg();
-                        HUD_initialPaint();
-                        return;
-                }
-                refresh = 1;
-            }
-
-            if (key & JOY_FIREB) {
-                focusedItem = focusedItem->next;
-                if (!focusedItem) {
-                    focusedItem = getPlayerItems();
-                }
-                refresh = 1;
-            }
-
-
-            if (key & JOY_UP) {
-                cursorPosition--;
-                refresh = 1;
-                if (cursorPosition < 0) {
-                    cursorPosition = 0;
-                }
-            }
-
-            if (key & JOY_DOWN) {
-                cursorPosition++;
-                refresh = 1;
-                if (cursorPosition >= 8) {
-                    cursorPosition = 7;
-                }
-            }
-        }
+    switch (cursorPosition) {
+        case 0:
+            useObjectNamed(getItem(focusedItem->item)->description);
+            break;
+        case 1:
+            interactWithItemInRoom();
+            break;
+        case 2:
+            pickItem();
+            break;
+        case 3:
+            dropItem();
+            break;
+        case 4:
+            nextItemInHand();
+            break;
+        case 5:
+            nextItemInRoom();
+            break;
+        case 6:
+//            itemDesc = !itemDesc;
+            break;
     }
 }
 
@@ -421,12 +365,19 @@ uint8_t getKey() {
     }
 
     if (key & JOY_FIREA) {
-        pauseMenu();
+        performAction();
+        HUD_refresh();
         return 'p';
     }
 
     if (key & JOY_FIREB) {
-        cursorPosition = (cursorPosition + 1) & 7;
+        cursorPosition = (cursorPosition + 1);
+
+        if (cursorPosition >= 7) {
+            cursorPosition = 0;
+        }
+
+        HUD_refresh();
         return 'p';
     }
 
@@ -447,7 +398,7 @@ void graphicsFlush() {
             uint8_t r = 4;
 
             while (r--) {
-                int twoBits = pixel & 192;
+                uint8_t twoBits = pixel & 192;
 
                 if (twoBits == 64) {
                     plot(x, y);
@@ -470,7 +421,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
     uint8_t _y0 = y0;
     uint8_t _y1 = y1;
     uint8_t _x0 = x0;
-    int offset;
+    uint8_t offset;
 
     if (x0 >= XRES) return;
 
@@ -525,7 +476,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
 void graphicsPut(uint8_t x, uint8_t y) {
 
     uint8_t *ptr;
-    int offset;
+    uint8_t offset;
 
     if (y >= YRES || x >= XRES) return;
 
@@ -558,7 +509,7 @@ void HUD_initialPaint() {
     draw(0, 128, 128, 128);
 
 
-    for (int i = 0; i < 7; ++i) {
+    for (uint8_t i = 0; i < 7; ++i) {
         if (i == cursorPosition) {
             show_text(0, 16 + i, ">");
         }
@@ -567,6 +518,46 @@ void HUD_initialPaint() {
 }
 
 void HUD_refresh() {
+//    clg();
+//    HUD_initialPaint();
+//    memset(buffer, 0, 32 * 128);
+    clga(0, 128, 16, 127);
+//    clga(128, 0, 127, 64);
+    show_text(0, 16 + cursorPosition, ">");
+
+    show_text(16, 0, "Object at room:");
+
+    if (focusedItem != NULL) {
+        struct Item *item = getItem(focusedItem->item);
+
+        if (item->active) {
+            show_text(16, 2, "*");
+        }
+
+        show_text(17, 2, item->description);
+    }
+
+
+    if (roomItem != NULL) {
+        struct Item *item = getItem(roomItem->item);
+
+        if (item->active) {
+            show_text(16, 3, "*");
+        }
+
+        show_text(17, 3, item->description);
+
+//        if (itemDesc) {
+//            show_text(1, 4, item->info);
+//        }
+    }
+
+//    if (!itemDesc) {
+//        show_text(1, 2, " ");
+//        show_text(2, 2, room->description);
+//        show_text(1, 3, room->info);
+//    }
+
 
 }
 

@@ -54,7 +54,7 @@ void titleScreen();
 
 void showMessage(const char* msg );
 
-void pauseMenu();
+void performAction();
 
 void startMusic();
 
@@ -468,7 +468,6 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
             int16_t upperY0 = py1z0;
             int16_t upperY1 = py1z1;
             int16_t upperDx = abs(x1 - x0);
-            int16_t upperSx = x0 < x1 ? 1 : -1;
             int16_t upperDy = -abs(upperY1 - upperY0);
             int16_t upperSy = upperY0 < upperY1 ? 1 : -1;
             int16_t upperErr = upperDx + upperDy;  /* error value e_xy */
@@ -2004,9 +2003,8 @@ void tickRenderer() {
                     break;
             }
             break;
-        case 'p':
-            break;
 
+        case 'p':
 #ifndef XCODE_BUILD
 #if !defined(SDLSW) || !defined(AMIGA)
         default:
@@ -2079,7 +2077,6 @@ void tickRenderer() {
     } else {
         enteredFrom = 0xFF;
     }
-    HUD_refresh();
 }
 
 
