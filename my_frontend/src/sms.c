@@ -10,9 +10,6 @@
 #include "Derelict.h"
 #include "Engine3D.h"
 
-#define BUFFER_XRES 64
-#define BUFFER_YRES 64
-
 extern struct ObjectNode* focusedItem;
 extern struct ObjectNode* roomItem;
 extern int accessGrantedToSafe;
@@ -155,11 +152,11 @@ void clearTextScreen() {
 }
 
 
-uint8_t buffer[BUFFER_XRES * BUFFER_YRES];
+uint8_t buffer[32 * 128];
 
 void setup_mode2() {
     if (!currentlyInGraphics) {
-        memset(&buffer[0], 0, BUFFER_XRES * BUFFER_YRES);
+        memset(&buffer[0], 0, 32 * 128);
         clg();
     }
     currentlyInGraphics = TRUE;
@@ -490,76 +487,153 @@ void clearGraphics() {
 
 void graphicsFlush() {
     uint8_t *ptr = &buffer[0];
-    for (int y = 0; y < BUFFER_YRES; ++y) {
-        for (int x = 0; x < BUFFER_XRES; ++x) {
+    for (int y = 0; y < 128; ++y) {
+        for (int x = 0; x < 32; ++x) {
             uint8_t pixel = *ptr;
-            uint8_t lastTwo = pixel & 3;
+            uint8_t lastTwo;
 
-            if (lastTwo == 1) {
-#ifndef DOUBLE_PIXEL
-                plot(32 + x, 32 + y);
-#else
-                plot(2 * x, 2 * y);
-                plot((2 * x) + 1, 2 * y);
+            //pixel 1 - left most 11000000
+            lastTwo = pixel &     0b11000000;
+            if (lastTwo ==        0b01000000) {
+                plot((x * 4), y);
+            } else if (lastTwo == 0b10000000) {
+                unplot((x * 4), y);
+            }
 
-                plot(2 * x, (2 * y) + 1);
-                plot((2 * x) + 1, (2 * y) + 1);
-#endif
+            //pixel 2 - left middle 00110000
+            lastTwo = pixel &     0b00110000;
+            if (lastTwo ==        0b00010000) {
+                plot((x * 4) + 1, y);
+            } else if (lastTwo == 0b00100000) {
+                unplot((x * 4) + 1, y);
+            }
 
-            } else if (lastTwo == 2) {
-#ifndef DOUBLE_PIXEL
-                unplot( 32 + x,  32 + y);
-#else
-                unplot(2 * x, 2 * y);
-                unplot((2 * x) + 1, 2 * y);
+            //pixel 3 - right middle 00001100
+            lastTwo = pixel &     0b00001100;
+            if (lastTwo ==        0b00000100) {
+                plot((x * 4) + 2, y);
+            } else if (lastTwo == 0b00001000) {
+                unplot((x * 4) + 2, y);
+            }
 
-                unplot(2 * x, (2 * y) + 1);
-                unplot((2 * x) + 1, (2 * y) + 1);
-#endif
+            //pixel 4 - right most 00000011
+            lastTwo = (pixel &    0b00000011);
+            if (lastTwo ==        0b00000001) {
+                plot((x * 4) +3, y);
+            } else if (lastTwo == 0b00000010) {
+                unplot((x * 4) +3, y);
             }
 
             pixel = pixel << 1;
+            pixel = pixel & 0b10101010;
+
             *ptr = pixel;
             ptr++;
         }
     }
 }
 
-void hLine(uint8_t x0, uint8_t x1, uint8_t y0) {
-
-}
-
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
 
     uint8_t *ptr;
-    uint8_t _y0 = y0 >> 1;
-    uint8_t _y1 = y1 >> 1;
+    uint8_t _y0 = y0;
+    uint8_t _y1 = y1;
+    uint8_t _x0 = x0;
+    int offset;
+
+    if (x0 >= XRES) return;
 
     if (y0 > y1) {
-        _y0 = y1 >> 1;
-        _y1 = y0 >> 1;
+        _y0 = y1;
+        _y1 = y0;
     }
 
-    x0 = x0 >> 1;
+    _x0 = _x0 >> 2;
+    offset = (x0 & 3);
+    x0 = _x0;
 
-    ptr = &buffer[(_y0 * BUFFER_XRES) + x0];
+    ptr = &buffer[(_y0 * 32) + x0];
 
-    for (uint8_t y = _y0; y <= _y1; ++y) {
-        if (y >= BUFFER_YRES || x0 >= BUFFER_XRES) return;
+    switch ( offset) {
+        case 0:
+            for (uint8_t y = _y0; y <= _y1; ++y) {
 
-        *ptr |= 1;
-        ptr += BUFFER_XRES;
+                if (y >= XRES) return;
+
+
+                *ptr |= 64;
+
+
+                ptr += 32;
+            }
+            break;
+        case 1:
+            for (uint8_t y = _y0; y <= _y1; ++y) {
+
+                if (y >= XRES) return;
+
+
+                *ptr |= 16;
+
+
+                ptr += 32;
+            }
+            break;
+        case 2:
+            for (uint8_t y = _y0; y <= _y1; ++y) {
+
+                if (y >= XRES) return;
+
+
+                *ptr |= 4;
+
+
+                ptr += 32;
+            }
+            break;
+        case 3:
+            for (uint8_t y = _y0; y <= _y1; ++y) {
+
+                if (y >= XRES) return;
+
+
+                *ptr |= 1;
+
+
+                ptr += 32;
+            }
+            break;
     }
 }
 
 void graphicsPut(uint8_t x, uint8_t y) {
 
-    x = x >> 1;
-    y = y >> 1;
+    uint8_t *ptr;
+    uint8_t _x0 = x;
+    int offset;
 
-    if (y >= BUFFER_YRES || x >= BUFFER_XRES) return;
+    if (y >= YRES || x >= XRES) return;
 
-    buffer[(y * BUFFER_XRES) + x] |= 1;
+    _x0 = _x0 >> 2;
+    offset = (x & 3);
+    x = _x0;
+
+    ptr = &buffer[(y * 32) + x];
+
+    switch ( offset) {
+        case 0:
+            *ptr |= 64;
+            break;
+        case 1:
+            *ptr |= 16;
+            break;
+        case 2:
+            *ptr |= 4;
+            break;
+        case 3:
+            *ptr |= 1;
+            break;
+    }
 }
 
 
@@ -571,7 +645,7 @@ void HUD_initialPaint() {
 
 
 
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 7; ++i) {
         if (i == cursorPosition) {
             show_text(0, 16 + i, ">");
         }
@@ -580,10 +654,6 @@ void HUD_initialPaint() {
 }
 
 void HUD_refresh() {
-
-}
-
-void drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 
 }
 
