@@ -159,7 +159,7 @@ uint8_t buffer[BUFFER_XRES * BUFFER_YRES];
 
 void setup_mode2() {
     if (!currentlyInGraphics) {
-        memset(&buffer[0], 0, XRES * YRES);
+        memset(&buffer[0], 0, BUFFER_XRES * BUFFER_YRES);
         clg();
     }
     currentlyInGraphics = TRUE;
@@ -570,38 +570,6 @@ void HUD_initialPaint() {
     draw( 0, 128, 128, 128);
 
 
-//    show_text(32, 1, "Object at room:");
-//
-//    if (focusedItem != NULL) {
-//        struct Item *item = getItem(focusedItem->item);
-//
-//        if (item->active) {
-//            show_text(32, 2, "*");
-//        }
-//
-//        show_text(33, 2, item->description);
-//    }
-//
-//
-//    if (roomItem != NULL) {
-//        struct Item *item = getItem(roomItem->item);
-//
-//        if (item->active) {
-//            show_text(32, 3, "*");
-//        }
-//
-//        show_text(33, 3, item->description);
-//
-////        if (itemDesc) {
-//            show_text(32, 4, item->info);
-////        }
-//    }
-
-//    if (!itemDesc) {
-//        show_text(9, 2, " ");
-//        show_text(10, 2, room->description);
-//        show_text(9, 3, room->info);
-//    }
 
     for (int i = 0; i < 8; ++i) {
         if (i == cursorPosition) {
@@ -620,26 +588,5 @@ void drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 }
 
 void printSituation() {
-
-//    clg();
-//    memset( &buffer[0], 0, BUFFER_XRES * BUFFER_YRES);
-//
-//    struct Room *room = getRoom(getPlayerRoom());
-//
-//    int i = 0;
-//
-//
-//    if (focusedItem != NULL) {
-//        struct Item *item = getItem(focusedItem->item);
-//
-//        if (item->active) {
-//            show_text(1, 2, "*");
-//        }
-//
-//        show_text(2, 10, item->description);
-//    }
-//
-//
-//    show_text(2, 11, room->description);
 
 }
