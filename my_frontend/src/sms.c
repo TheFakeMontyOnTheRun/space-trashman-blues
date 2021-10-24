@@ -139,12 +139,23 @@ void clearTextScreen() {
     clg();
 }
 
+#ifndef HALF_BUFFER
+#define BUFFER_SIZEX 32
+#define BUFFER_SIZEY 128
+#define BUFFER_RESX 128
+#define BUFFER_RESY 128
+#else
+#define BUFFER_SIZEX 16
+#define BUFFER_SIZEY 64
+#define BUFFER_RESX 64
+#define BUFFER_RESY 64
+#endif
 
-uint8_t buffer[32 * 128];
+uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 
 void setup_mode2() {
     if (!currentlyInGraphics) {
-        memset(&buffer[0], 0, 32 * 128);
+        memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
         clg();
     }
     currentlyInGraphics = TRUE;
@@ -392,8 +403,8 @@ void clearGraphics() {
 
 void graphicsFlush() {
     uint8_t *ptr = &buffer[0];
-    for (uint8_t y = 0; y < 128; ++y) {
-        for (uint8_t x = 0; x < 128;) {
+    for (uint8_t y = 0; y < BUFFER_RESY; ++y) {
+        for (uint8_t x = 0; x < BUFFER_RESX;) {
             uint8_t pixel = *ptr;
             uint8_t r = 4;
 
@@ -417,13 +428,19 @@ void graphicsFlush() {
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
 
+#ifdef HALF_BUFFER
+    x0 = x0 >> 1;
+    y0 = y0 >> 1;
+    y1 = y1 >> 1;
+#endif
+
     uint8_t *ptr;
     uint8_t _y0 = y0;
     uint8_t _y1 = y1;
     uint8_t _x0 = x0;
     uint8_t offset;
 
-    if (x0 >= XRES) return;
+    if (x0 >= BUFFER_RESX) return;
 
     if (y0 > y1) {
         _y0 = y1;
@@ -434,40 +451,40 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
     offset = (x0 & 3);
     x0 = _x0;
 
-    ptr = &buffer[(_y0 * 32) + x0];
+    ptr = &buffer[(_y0 * BUFFER_SIZEX) + x0];
 
-    if (_y1 >= YRES) {
-        _y1 = YRESMINUSONE;
+    if (_y1 >= BUFFER_RESY) {
+        _y1 = BUFFER_RESY - 1;
     };
 
 
-    if (_y0 >= YRES) {
-        _y0 = YRESMINUSONE;
+    if (_y0 >= BUFFER_RESY) {
+        _y0 = BUFFER_RESY - 1;
     };
 
     switch (offset) {
         case 0:
             for (uint8_t y = _y0; y <= _y1; ++y) {
                 *ptr |= 64;
-                ptr += 32;
+                ptr += BUFFER_SIZEX;
             }
             break;
         case 1:
             for (uint8_t y = _y0; y <= _y1; ++y) {
                 *ptr |= 16;
-                ptr += 32;
+                ptr += BUFFER_SIZEX;
             }
             break;
         case 2:
             for (uint8_t y = _y0; y <= _y1; ++y) {
                 *ptr |= 4;
-                ptr += 32;
+                ptr += BUFFER_SIZEX;
             }
             break;
         case 3:
             for (uint8_t y = _y0; y <= _y1; ++y) {
                 *ptr |= 1;
-                ptr += 32;
+                ptr += BUFFER_SIZEX;
             }
             break;
     }
@@ -475,15 +492,20 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
 
 void graphicsPut(uint8_t x, uint8_t y) {
 
+#ifdef HALF_BUFFER
+    x = x >> 1;
+    y = y >> 1;
+#endif
+
     uint8_t *ptr;
     uint8_t offset;
 
-    if (y >= YRES || x >= XRES) return;
+    if (y >= BUFFER_RESY || x >= BUFFER_RESX) return;
 
     offset = (x & 3);
     x = x >> 2;
 
-    ptr = &buffer[(y * 32) + x];
+    ptr = &buffer[(y * BUFFER_SIZEX) + x];
 
     switch (offset) {
         case 0:
@@ -505,8 +527,8 @@ void graphicsPut(uint8_t x, uint8_t y) {
 void HUD_initialPaint() {
     struct Room *room = getRoom(getPlayerRoom());
 
-    draw(128, 0, 128, 128);
-    draw(0, 128, 128, 128);
+    draw(BUFFER_RESX, 0, BUFFER_RESX, BUFFER_RESY);
+    draw(0, BUFFER_RESY, BUFFER_RESX, BUFFER_RESY);
 
 
     for (uint8_t i = 0; i < 7; ++i) {
