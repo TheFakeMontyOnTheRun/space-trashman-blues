@@ -1857,8 +1857,9 @@ void tickRenderer() {
     int previousLocation = playerLocation;
     uint8_t newCell = 0;
 
+#ifndef SMS
     clearGraphics();
-
+#endif
     renderScene();
 
     graphicsFlush();

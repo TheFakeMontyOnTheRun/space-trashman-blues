@@ -4,7 +4,8 @@
 #include <string.h>
 #include <assert.h>
 #include <sms.h>
-#include <graphics.h>
+#include <stdio.h>
+#include <msx/gfx.h>
 
 #include "Core.h"
 #include "Derelict.h"
@@ -30,8 +31,7 @@ void dropItem();
 
 void pickItem();
 
-int currentlyInGraphics = FALSE;
-void backToGraphics();
+void clearGraphics();
 
 uint8_t font[] = {
           0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 // space
@@ -132,20 +132,13 @@ uint8_t font[] = {
         , 0x10,0x38,0x6c,0x44,0x44,0x7c,0x00,0x00
 };
 
-void clrscr() {
-}
-
-void clearTextScreen() {
-    clg();
-}
-
 #ifndef HALF_BUFFER
-#define BUFFER_SIZEX 32
+#define BUFFER_SIZEX 16
 #define BUFFER_SIZEY 128
 #define BUFFER_RESX 128
 #define BUFFER_RESY 128
 #else
-#define BUFFER_SIZEX 16
+#define BUFFER_SIZEX 8
 #define BUFFER_SIZEY 64
 #define BUFFER_RESX 64
 #define BUFFER_RESY 64
@@ -153,17 +146,10 @@ void clearTextScreen() {
 
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 
-void setup_mode2() {
-    if (!currentlyInGraphics) {
-        memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
-        clg();
-    }
-    currentlyInGraphics = TRUE;
-}
-
 void init() {
-    clear_vram();
-    clg();
+    set_color(15, 1, 1);
+    set_mode(mode_2);
+    fill(MODE2_ATTR, 0xF1, MODE2_MAX);
 }
 
 char *menuItems[] = {
@@ -173,12 +159,7 @@ char *menuItems[] = {
         "Drop object in hand",
         "Next item in inventory",
         "Next room item in focus",
-        "Toogle item desc/room desc",
 };
-
-void setup_text_mode() {
-    currentlyInGraphics = FALSE;
-}
 
 void graphicsFlush();
 
@@ -225,7 +206,7 @@ void show_text(int _x, int y, char *text) {
                     baseX += 7;
                     for (uint8_t r = 0; r < 7; ++r) {
                         if (ch & 1) {
-                            plot(baseX, baseY);
+                            set_color(2, 0, 0);pset(baseX, baseY);
                         }
                         --baseX;
                         ch >>= 1;
@@ -239,15 +220,9 @@ void show_text(int _x, int y, char *text) {
     }
 }
 
-void backToGraphics() {
-    clrscr();
-    setup_mode2();
-}
-
 void showMessage(const char *message) {
     int keepGoing = 1;
-    clearTextScreen();
-    setup_text_mode();
+    clearGraphics();
 
     show_text(1, 1, (char *) message);
     show_text(1, 3, "Press any button to continue");
@@ -258,18 +233,19 @@ void showMessage(const char *message) {
         }
     }
 
-    clg();
+    clearGraphics();
     HUD_initialPaint();
 }
 
 void titleScreen() {
     int keepGoing = 1;
+    clearGraphics();
 
-    setup_text_mode();
-
-    show_text(1, 1, "Space Mare Imperium - Derelict");
-    show_text(1, 2, "by Daniel \"MontyOnTheRun\"Monteiro");
-    show_text(1, 3, "Press any button to start");
+    show_text(1, 1, "Space Mare Imperium:");
+    show_text(1, 2, "     Derelict");
+    show_text(1, 4, "by Daniel Monteiro");
+    show_text(1, 6, "Press any button ");
+    show_text(1, 7, "    to start");
 
     while (keepGoing) {
         if (read_joypad1() & JOY_FIREA) {
@@ -277,7 +253,7 @@ void titleScreen() {
         }
     }
 
-    clg();
+    clearGraphics();
     HUD_initialPaint();
 }
 
@@ -319,7 +295,6 @@ char *menuItems[] = {
  3       "Drop",
  4       "Next item in inventory",
  5       "Next room item in focus",
- 6       "Toogle item desc/room desc"
 };
 */
 
@@ -341,9 +316,6 @@ char *menuItems[] = {
             break;
         case 5:
             nextItemInRoom();
-            break;
-        case 6:
-//            itemDesc = !itemDesc;
             break;
     }
 }
@@ -384,7 +356,7 @@ uint8_t getKey() {
     if (key & JOY_FIREB) {
         cursorPosition = (cursorPosition + 1);
 
-        if (cursorPosition >= 7) {
+        if (cursorPosition >= 6) {
             cursorPosition = 0;
         }
 
@@ -399,31 +371,32 @@ void shutdownGraphics() {
 }
 
 void clearGraphics() {
+    fill(MODE2_ATTR, 0xF1, MODE2_MAX);
 }
 
 void graphicsFlush() {
     uint8_t *ptr = &buffer[0];
-    for (uint8_t y = 0; y < BUFFER_RESY; ++y) {
+    for (uint8_t y = 0; y < BUFFER_RESY; y += 8) {
+        ptr = &buffer[ ((y) * BUFFER_SIZEX)];
+
         for (uint8_t x = 0; x < BUFFER_RESX;) {
-            uint8_t pixel = *ptr;
-            uint8_t r = 4;
+            uint16_t addr = map_pixel(x, y);
 
-            while (r--) {
-                uint8_t twoBits = pixel & 192;
-
-                if (twoBits == 64) {
-                    plot(x, y);
-                } else if (twoBits == 128) {
-                    unplot(x, y);
-                }
-                pixel <<= 2;
-                ++x;
+            for (uint8_t r = 0; r < 8; ++r ) {
+                uint8_t pixel = *ptr;
+                vpoke( addr + r, pixel);
+                ptr+= BUFFER_SIZEX;
             }
 
-            *ptr = (*ptr << 1) & 0b10101010;
-            ptr++;
+            //this weird order is slightly faster than what one would write initially.
+            ptr-= -1 + (8 * BUFFER_SIZEX);
+
+            x += 8;
         }
+
+//        ptr += (BUFFER_SIZEX) * 8;
     }
+    memset( &buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
@@ -447,8 +420,8 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
         _y1 = y0;
     }
 
-    _x0 = _x0 >> 2;
-    offset = (x0 & 3);
+    _x0 = _x0 >> 3;
+    offset = (x0 & 7);
     x0 = _x0;
 
     ptr = &buffer[(_y0 * BUFFER_SIZEX) + x0];
@@ -465,27 +438,55 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
     switch (offset) {
         case 0:
             for (uint8_t y = _y0; y <= _y1; ++y) {
-                *ptr |= 64;
+                *ptr |= 128;
                 ptr += BUFFER_SIZEX;
             }
             break;
         case 1:
             for (uint8_t y = _y0; y <= _y1; ++y) {
-                *ptr |= 16;
+                *ptr |= 64;
                 ptr += BUFFER_SIZEX;
             }
             break;
         case 2:
             for (uint8_t y = _y0; y <= _y1; ++y) {
-                *ptr |= 4;
+                *ptr |= 32;
                 ptr += BUFFER_SIZEX;
             }
             break;
         case 3:
             for (uint8_t y = _y0; y <= _y1; ++y) {
+                *ptr |= 16;
+                ptr += BUFFER_SIZEX;
+            }
+            break;
+        case 4:
+            for (uint8_t y = _y0; y <= _y1; ++y) {
+                *ptr |= 8;
+                ptr += BUFFER_SIZEX;
+            }
+
+            break;
+        case 5:
+            for (uint8_t y = _y0; y <= _y1; ++y) {
+                *ptr |= 4;
+                ptr += BUFFER_SIZEX;
+            }
+
+            break;
+        case 6:
+            for (uint8_t y = _y0; y <= _y1; ++y) {
+                *ptr |= 2;
+                ptr += BUFFER_SIZEX;
+            }
+
+            break;
+        case 7:
+            for (uint8_t y = _y0; y <= _y1; ++y) {
                 *ptr |= 1;
                 ptr += BUFFER_SIZEX;
             }
+
             break;
     }
 }
@@ -502,22 +503,34 @@ void graphicsPut(uint8_t x, uint8_t y) {
 
     if (y >= BUFFER_RESY || x >= BUFFER_RESX) return;
 
-    offset = (x & 3);
-    x = x >> 2;
+    offset = (x & 7);
+    x = x >> 3;
 
     ptr = &buffer[(y * BUFFER_SIZEX) + x];
 
     switch (offset) {
         case 0:
-            *ptr |= 64;
+            *ptr |= 128;
             break;
         case 1:
-            *ptr |= 16;
+            *ptr |= 64;
             break;
         case 2:
-            *ptr |= 4;
+            *ptr |= 32;
             break;
         case 3:
+            *ptr |= 16;
+            break;
+        case 4:
+            *ptr |= 8;
+            break;
+        case 5:
+            *ptr |= 4;
+            break;
+        case 6:
+            *ptr |= 2;
+            break;
+        case 7:
             *ptr |= 1;
             break;
     }
@@ -531,7 +544,7 @@ void HUD_initialPaint() {
     draw(0, BUFFER_RESY, BUFFER_RESX, BUFFER_RESY);
 
 
-    for (uint8_t i = 0; i < 7; ++i) {
+    for (uint8_t i = 0; i < 6; ++i) {
         if (i == cursorPosition) {
             show_text(0, 16 + i, ">");
         }
@@ -540,11 +553,7 @@ void HUD_initialPaint() {
 }
 
 void HUD_refresh() {
-//    clg();
-//    HUD_initialPaint();
-//    memset(buffer, 0, 32 * 128);
-    clga(0, 128, 16, 127);
-//    clga(128, 0, 127, 64);
+
     show_text(0, 16 + cursorPosition, ">");
 
     show_text(16, 0, "Object at room:");
@@ -568,19 +577,7 @@ void HUD_refresh() {
         }
 
         show_text(17, 3, item->description);
-
-//        if (itemDesc) {
-//            show_text(1, 4, item->info);
-//        }
     }
-
-//    if (!itemDesc) {
-//        show_text(1, 2, " ");
-//        show_text(2, 2, room->description);
-//        show_text(1, 3, room->info);
-//    }
-
-
 }
 
 void printSituation() {
