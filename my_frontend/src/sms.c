@@ -132,17 +132,10 @@ uint8_t font[] = {
         , 0x10,0x38,0x6c,0x44,0x44,0x7c,0x00,0x00
 };
 
-#ifndef HALF_BUFFER
 #define BUFFER_SIZEX 16
 #define BUFFER_SIZEY 128
 #define BUFFER_RESX 128
 #define BUFFER_RESY 128
-#else
-#define BUFFER_SIZEX 8
-#define BUFFER_SIZEY 64
-#define BUFFER_RESX 64
-#define BUFFER_RESY 64
-#endif
 
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 
@@ -197,24 +190,7 @@ void show_text(int _x, int y, char *text) {
             uint8_t baseY = (y << 3);
 
             uint8_t *fontTop = &font[((cha - 32) << 3)];
-            uint8_t baseX = (x << 3);
-
-            for (chary = 0; chary < 8; ++chary) {
-                baseY++;
-                uint8_t ch = *fontTop;
-                if (ch != 0) {
-                    baseX += 7;
-                    for (uint8_t r = 0; r < 7; ++r) {
-                        if (ch & 1) {
-                            set_color(2, 0, 0);pset(baseX, baseY);
-                        }
-                        --baseX;
-                        ch >>= 1;
-                    }
-                }
-
-                ++fontTop;
-            }
+            vwrite(fontTop, map_pixel( x << 3, y << 3), 8 );
         }
         ++ptr;
     }
@@ -379,22 +355,9 @@ void graphicsFlush() {
     for (uint8_t y = 0; y < BUFFER_RESY; y += 8) {
         ptr = &buffer[ ((y) * BUFFER_SIZEX)];
 
-        for (uint8_t x = 0; x < BUFFER_RESX;) {
-            uint16_t addr = map_pixel(x, y);
-
-            for (uint8_t r = 0; r < 8; ++r ) {
-                uint8_t pixel = *ptr;
-                vpoke( addr + r, pixel);
-                ptr+= BUFFER_SIZEX;
-            }
-
-            //this weird order is slightly faster than what one would write initially.
-            ptr-= -1 + (8 * BUFFER_SIZEX);
-
-            x += 8;
-        }
-
-//        ptr += (BUFFER_SIZEX) * 8;
+        uint16_t addr = map_pixel(0, y);
+        vwrite( ptr, addr, 16 * 8);
+//        ptr += 8 * 16;
     }
     memset( &buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
@@ -407,11 +370,9 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
     y1 = y1 >> 1;
 #endif
 
-    uint8_t *ptr;
     uint8_t _y0 = y0;
     uint8_t _y1 = y1;
-    uint8_t _x0 = x0;
-    uint8_t offset;
+
 
     if (x0 >= BUFFER_RESX) return;
 
@@ -419,12 +380,6 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
         _y0 = y1;
         _y1 = y0;
     }
-
-    _x0 = _x0 >> 3;
-    offset = (x0 & 7);
-    x0 = _x0;
-
-    ptr = &buffer[(_y0 * BUFFER_SIZEX) + x0];
 
     if (_y1 >= BUFFER_RESY) {
         _y1 = BUFFER_RESY - 1;
@@ -435,56 +390,120 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
         _y0 = BUFFER_RESY - 1;
     };
 
-    switch (offset) {
+    uint8_t column = x0 >> 3;
+    uint8_t patternRow = _y0 >> 3; // which pattern row
+    uint8_t patternLine = (_y0 & 7); //which line inside the pattern;
+    uint8_t bitAddrX = (x0 & 7); //which bit to set
+    uint8_t *ptr = &buffer[ ( 16 * 8 * patternRow ) + //skip the entire row of patterns along the y
+                            (8 * column) + //skip to the correct pattern in the row
+                            patternLine ]; //skip to the line in pattern
+
+    switch (bitAddrX) {
         case 0:
             for (uint8_t y = _y0; y <= _y1; ++y) {
                 *ptr |= 128;
-                ptr += BUFFER_SIZEX;
+
+                ++patternLine;
+                ++ptr;
+
+                if (patternLine >= 8) {
+                    patternLine = 0;
+                    ptr += ( 16 * 8  ) - 8;
+                }
             }
             break;
         case 1:
             for (uint8_t y = _y0; y <= _y1; ++y) {
                 *ptr |= 64;
-                ptr += BUFFER_SIZEX;
+
+                ++patternLine;
+                ++ptr;
+
+                if (patternLine >= 8) {
+                    patternLine = 0;
+                    ptr += ( 16 * 8  ) - 8;
+                }
             }
             break;
         case 2:
             for (uint8_t y = _y0; y <= _y1; ++y) {
                 *ptr |= 32;
-                ptr += BUFFER_SIZEX;
+
+                ++patternLine;
+                ++ptr;
+
+                if (patternLine >= 8) {
+                    patternLine = 0;
+                    ptr += ( 16 * 8  ) - 8;
+                }
             }
             break;
         case 3:
             for (uint8_t y = _y0; y <= _y1; ++y) {
                 *ptr |= 16;
-                ptr += BUFFER_SIZEX;
+
+                ++patternLine;
+                ++ptr;
+
+                if (patternLine >= 8) {
+                    patternLine = 0;
+                    ptr += ( 16 * 8  ) - 8;
+                }
             }
             break;
         case 4:
             for (uint8_t y = _y0; y <= _y1; ++y) {
                 *ptr |= 8;
-                ptr += BUFFER_SIZEX;
+
+                ++patternLine;
+                ++ptr;
+
+                if (patternLine >= 8) {
+                    patternLine = 0;
+                    ptr += ( 16 * 8  ) - 8;
+                }
             }
 
             break;
         case 5:
             for (uint8_t y = _y0; y <= _y1; ++y) {
                 *ptr |= 4;
-                ptr += BUFFER_SIZEX;
+
+                ++patternLine;
+                ++ptr;
+
+                if (patternLine >= 8) {
+                    patternLine = 0;
+                    ptr += ( 16 * 8  ) - 8;
+                }
             }
 
             break;
         case 6:
             for (uint8_t y = _y0; y <= _y1; ++y) {
                 *ptr |= 2;
-                ptr += BUFFER_SIZEX;
+
+                ++patternLine;
+                ++ptr;
+
+                if (patternLine >= 8) {
+                    patternLine = 0;
+                    ptr += ( 16 * 8  ) - 8;
+                }
             }
 
             break;
         case 7:
             for (uint8_t y = _y0; y <= _y1; ++y) {
                 *ptr |= 1;
-                ptr += BUFFER_SIZEX;
+
+                ++patternLine;
+                ++ptr;
+
+                if (patternLine >= 8) {
+                    patternLine = 0;
+                    ptr += ( 16 * 8  ) - 8;
+                }
             }
 
             break;
@@ -498,17 +517,17 @@ void graphicsPut(uint8_t x, uint8_t y) {
     y = y >> 1;
 #endif
 
-    uint8_t *ptr;
-    uint8_t offset;
-
     if (y >= BUFFER_RESY || x >= BUFFER_RESX) return;
 
-    offset = (x & 7);
-    x = x >> 3;
+    uint8_t column = x >> 3;
+    uint8_t patternRow = y >> 3; // which pattern row
+    uint8_t patternLine = (y & 7); //which line inside the pattern;
+    uint8_t bitAddrX = (x & 7); //which bit to set
+    uint8_t *ptr = &buffer[ ( 16 * 8 * patternRow ) + //skip the entire row of patterns along the y
+                             (8 * column) + //skip to the correct pattern in the row
+                             patternLine ]; //skip to the line in pattern
 
-    ptr = &buffer[(y * BUFFER_SIZEX) + x];
-
-    switch (offset) {
+    switch (bitAddrX) {
         case 0:
             *ptr |= 128;
             break;
@@ -545,16 +564,16 @@ void HUD_initialPaint() {
 
 
     for (uint8_t i = 0; i < 6; ++i) {
-        if (i == cursorPosition) {
-            show_text(0, 16 + i, ">");
-        }
+        show_text(0, 16 + i, i == cursorPosition ? ">" : " ");
         show_text(1, 16 + i, menuItems[i]);
     }
 }
 
 void HUD_refresh() {
 
-    show_text(0, 16 + cursorPosition, ">");
+    for (uint8_t i = 0; i < 6; ++i) {
+        show_text(0, 16 + i, i == cursorPosition ? ">" : " ");
+    }
 
     show_text(16, 0, "Object at room:");
 
