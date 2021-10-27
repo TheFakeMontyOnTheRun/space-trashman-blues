@@ -322,9 +322,9 @@ void flipRenderer() {
     for (y = 0; y < 200; ++y) {
         for (x = 0; x < 160; ++x) {
 
-            rect.x = 4 * x;
+            rect.x = 2 * x;
             rect.y = (24 * y) / 10;
-            rect.w = 4;
+            rect.w = 2;
             rect.h = 3;
             int index = framebuffer[(160 * y) + x];
 

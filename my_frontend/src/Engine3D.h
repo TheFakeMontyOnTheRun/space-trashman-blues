@@ -36,8 +36,28 @@
 #define CAMERA_HEIGHT 2
 #define VISIBILITY_LIMIT 32
 
+enum GeometryType {
+    CUBE = 0,
+    RIGHT_NEAR = 4,
+    LEFT_NEAR = 8,
+    LEFT_WALL = 16,
+    BACK_WALL = 32,
+    CORNER = 64,
+};
+
+struct Pattern {
+    uint8_t ceiling: 4;
+    uint8_t elementsMask: 4;
+    uint8_t geometryType : 7;
+    uint8_t blockMovement : 1;
+};
 
 void HUD_initialPaint();
 void HUD_refresh();
+void tickRenderer();
+
+#ifdef SMS
+uint8_t* graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr);
+#endif
 
 #endif //DERELICT8_ENGINE3D_H

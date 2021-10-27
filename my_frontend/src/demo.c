@@ -641,27 +641,6 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
 
 
                 if (stencilHigh[x] <= py0z0) {
-                    if (drawContour) {
-#ifdef CPC_PLATFORM
-                        unsigned char *pS;
-                        unsigned char nByte = 0;
-
-                        pS = (unsigned char *) baseScreen + lineStart[py0z0] + (x >> 1);
-                        nByte = *pS;
-
-                        if (x & 1) {
-                            nByte &= 170;
-                            nByte |= 64;
-                        } else {
-                            nByte &= 85;
-                            nByte |= 128;
-                        }
-
-                        *pS = nByte;
-#else
-                        graphicsPut(x, py0z0);
-#endif
-                    }
                     stencilHigh[x] = py0z0;
                 }
             }
@@ -1405,9 +1384,46 @@ void renderScene() {
         ++stencilPtr;
     }
 #else
-    for (x = 0; x < XRESMINUSONE; ++x) {
-        graphicsPut(x, stencilHigh[x]);
+#ifdef SMS
+
+    int8_t *stencilPtr = &stencilHigh[0];
+
+    for (x = 0; x < XRESMINUSONE;) {
+        uint8_t y, prevY;
+        uint8_t *ptr;
+next_cluster:
+        //pixel 1
+        y = *stencilPtr;
+        ptr = graphicsPutAddr(x, y, NULL );
+
+        if (x & 7) {
+            ++x;
+            ++stencilPtr;
+            continue;
+        }
+
+        for (int c = 2; c < 8; ++c ) {
+            ++x;
+            ++stencilPtr;
+            prevY = y;
+            y = *stencilPtr;
+            if ( y != prevY ) {
+                goto next_cluster;
+            }
+            ptr = graphicsPutAddr(x, y, ptr );
+        }
+
+        ++x;
+        ++stencilPtr;
     }
+#else
+    int8_t *stencilPtr = &stencilHigh[0];
+
+    for (x = 0; x < XRESMINUSONE; ++x) {
+        graphicsPut(x, *stencilPtr);
+        ++stencilPtr;
+    }
+#endif
 #endif
 }
 
@@ -1672,7 +1688,6 @@ void pickItem() {
             } else {
                 useObjectNamed(itemToPick->description);
             }
-
         }
     }
 }
@@ -1834,6 +1849,7 @@ void initMap() {
         }
     }
     updateMapItems();
+    HUD_initialPaint();
 }
 
 void updateMapItems() {
@@ -2130,6 +2146,11 @@ int main(
         cameraRotation = 0;
         init();
         initStation();
+
+#ifdef SMS
+        titleScreen();
+#endif
+
         initMap();
         focusedItem = getPlayerItems();
         setErrorHandlerCallback(onError);
@@ -2137,9 +2158,6 @@ int main(
 
         memset(stencilHigh, 0, XRES);
 
-#ifdef SMS
-        titleScreen();
-#endif
 
 
 #ifndef XCODE_BUILD

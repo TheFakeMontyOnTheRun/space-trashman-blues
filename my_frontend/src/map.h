@@ -1,21 +1,7 @@
 #ifndef MAP_H
 #define MAP_H
 
-enum GeometryType {
-    CUBE = 0,
-    RIGHT_NEAR = 4,
-    LEFT_NEAR = 8,
-    LEFT_WALL = 16,
-    BACK_WALL = 32,
-    CORNER = 64,
-};
 
-struct Pattern {
-    uint8_t ceiling: 4;
-    uint8_t elementsMask: 4;
-    uint8_t geometryType : 7;
-    uint8_t blockMovement : 1;
-};
 
 const struct Pattern patterns[127] = {
         {7, 3, CUBE,       0}, //    0

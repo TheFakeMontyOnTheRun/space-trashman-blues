@@ -11,6 +11,11 @@
 #include "Derelict.h"
 #include "Engine3D.h"
 
+
+extern const struct Pattern patterns[127];
+
+extern int8_t map[32][32];
+
 extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
@@ -136,31 +141,32 @@ uint8_t font[] = {
 #define BUFFER_SIZEY 128
 #define BUFFER_RESX 128
 #define BUFFER_RESY 128
+#define COOLDOWN_MAX 0x2EF
 
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
+uint16_t cooldown;
 
 void init() {
     set_color(15, 1, 1);
     set_mode(mode_2);
     fill(MODE2_ATTR, 0xF1, MODE2_MAX);
+    cooldown = COOLDOWN_MAX;
 }
 
 char *menuItems[] = {
-        "Use/Toggle current item",
-        "Use current item with...",
-        "Use/Pick object on the room...",
-        "Drop object in hand",
-        "Next item in inventory",
-        "Next room item in focus",
+        "Use/Toggle",
+        "Use with...",
+        "Use/pick...",
+        "Drop",
+        "Next item",
+        "Next in room",
 };
 
 void graphicsFlush();
 
-void renderScene();
-
 int cursorPosition = 0;
 
-void show_text(int _x, int y, char *text) {
+void drawTextWithLimit(int _x, int y, char *text, int limitX) {
 
     uint8_t len = strlen(text);
     char *ptr = text;
@@ -172,65 +178,66 @@ void show_text(int _x, int y, char *text) {
 
         char cha = *ptr;
 
-        if (cha == '\n') {
+        if (x == limitX) {
+            ++y;
+            x = _x;
+        } else if (cha == '\n') {
             ++y;
             x = _x;
             ++ptr;
             continue;
+        } else {
+            ++x;
         }
 
-        ++x;
+        uint8_t baseY = (y << 3);
 
-        if (x >= 64) {
-            ++y;
-            x = _x;
-        }
+        uint8_t *fontTop = &font[((cha - 32) << 3)];
+        vwrite(fontTop, map_pixel( x << 3, y << 3), 8 );
 
-        if (cha != ' ') {
-            uint8_t baseY = (y << 3);
-
-            uint8_t *fontTop = &font[((cha - 32) << 3)];
-            vwrite(fontTop, map_pixel( x << 3, y << 3), 8 );
-        }
         ++ptr;
     }
+}
+
+void drawText(int _x, int y, char *text) {
+    drawTextWithLimit(_x, y, text, 32);
 }
 
 void showMessage(const char *message) {
     int keepGoing = 1;
     clearGraphics();
 
-    show_text(1, 1, (char *) message);
-    show_text(1, 3, "Press any button to continue");
+    drawText(1, 1, (char *) message);
+    drawText(1, 3, "Press B button to continue");
 
     while (keepGoing) {
-        if (read_joypad1() & JOY_FIREA) {
+        if (read_joypad1() & JOY_FIREB) {
             keepGoing = 0;
         }
     }
 
     clearGraphics();
     HUD_initialPaint();
+    tickRenderer();
 }
 
 void titleScreen() {
     int keepGoing = 1;
     clearGraphics();
 
-    show_text(1, 1, "Space Mare Imperium:");
-    show_text(1, 2, "     Derelict");
-    show_text(1, 4, "by Daniel Monteiro");
-    show_text(1, 6, "Press any button ");
-    show_text(1, 7, "    to start");
+    drawText(1, 1, "Space Mare Imperium:");
+    drawText(1, 2, "     Derelict");
+    drawText(1, 4, "by Daniel Monteiro");
+    drawText(1, 6, "  Press B button ");
+    drawText(1, 7, "    to start");
 
     while (keepGoing) {
-        if (read_joypad1() & JOY_FIREA) {
+        if (read_joypad1() & JOY_FIREB) {
             keepGoing = 0;
         }
     }
 
     clearGraphics();
-    HUD_initialPaint();
 }
 
 void performAction() {
@@ -294,11 +301,16 @@ char *menuItems[] = {
             nextItemInRoom();
             break;
     }
+    HUD_refresh();
 }
 
 
 uint8_t getKey() {
     unsigned int key = read_joypad1();
+
+    if (cooldown) {
+        cooldown--;
+    }
 
     if (key & JOY_UP) {
         return 'w';
@@ -323,13 +335,14 @@ uint8_t getKey() {
         return 's';
     }
 
-    if (key & JOY_FIREA) {
+    if ((key & JOY_FIREA) && !cooldown) {
         performAction();
         HUD_refresh();
+        cooldown = COOLDOWN_MAX;
         return 'p';
     }
 
-    if (key & JOY_FIREB) {
+    if ((key & JOY_FIREB) && !cooldown) {
         cursorPosition = (cursorPosition + 1);
 
         if (cursorPosition >= 6) {
@@ -337,6 +350,7 @@ uint8_t getKey() {
         }
 
         HUD_refresh();
+        cooldown = COOLDOWN_MAX;
         return 'p';
     }
 
@@ -347,17 +361,17 @@ void shutdownGraphics() {
 }
 
 void clearGraphics() {
+    set_mode(mode_2);
     fill(MODE2_ATTR, 0xF1, MODE2_MAX);
+    memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
 void graphicsFlush() {
     uint8_t *ptr = &buffer[0];
     for (uint8_t y = 0; y < BUFFER_RESY; y += 8) {
-        ptr = &buffer[ ((y) * BUFFER_SIZEX)];
-
-        uint16_t addr = map_pixel(0, y);
+        uint16_t addr = map_pixel(0, y + 32);
         vwrite( ptr, addr, 16 * 8);
-//        ptr += 8 * 16;
+        ptr += 8 * 16;
     }
     memset( &buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
@@ -390,15 +404,12 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
         _y0 = BUFFER_RESY - 1;
     };
 
-    uint8_t column = x0 >> 3;
-    uint8_t patternRow = _y0 >> 3; // which pattern row
     uint8_t patternLine = (_y0 & 7); //which line inside the pattern;
-    uint8_t bitAddrX = (x0 & 7); //which bit to set
-    uint8_t *ptr = &buffer[ ( 16 * 8 * patternRow ) + //skip the entire row of patterns along the y
-                            (8 * column) + //skip to the correct pattern in the row
+    uint8_t *ptr = &buffer[ ( 16 * 8 * (_y0 >> 3) ) + //skip the entire row of patterns along the y
+                            (8 * (x0 >> 3)) + //skip to the correct pattern in the row
                             patternLine ]; //skip to the line in pattern
 
-    switch (bitAddrX) {
+    switch (x0 & 7) {
         case 0:
             for (uint8_t y = _y0; y <= _y1; ++y) {
                 *ptr |= 128;
@@ -510,6 +521,52 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
     }
 }
 
+
+uint8_t* graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr) {
+
+#ifdef HALF_BUFFER
+    x = x >> 1;
+    y = y >> 1;
+#endif
+
+    if (ptr == NULL) {
+        if (y >= BUFFER_RESY) return NULL;
+
+        ptr = &buffer[(16 * 8 * (y >> 3)) + //skip the entire row of patterns along the y
+                      (8 * (x >> 3)) + //skip to the correct pattern in the row
+                      (y & 7)]; //skip to the line in pattern
+    }
+
+    switch (x & 7) {
+        case 0:
+            *ptr |= 128;
+            break;
+        case 1:
+            *ptr |= 64;
+            break;
+        case 2:
+            *ptr |= 32;
+            break;
+        case 3:
+            *ptr |= 16;
+            break;
+        case 4:
+            *ptr |= 8;
+            break;
+        case 5:
+            *ptr |= 4;
+            break;
+        case 6:
+            *ptr |= 2;
+            break;
+        case 7:
+            *ptr |= 1;
+            break;
+    }
+
+    return ptr;
+}
+
 void graphicsPut(uint8_t x, uint8_t y) {
 
 #ifdef HALF_BUFFER
@@ -519,15 +576,11 @@ void graphicsPut(uint8_t x, uint8_t y) {
 
     if (y >= BUFFER_RESY || x >= BUFFER_RESX) return;
 
-    uint8_t column = x >> 3;
-    uint8_t patternRow = y >> 3; // which pattern row
-    uint8_t patternLine = (y & 7); //which line inside the pattern;
-    uint8_t bitAddrX = (x & 7); //which bit to set
-    uint8_t *ptr = &buffer[ ( 16 * 8 * patternRow ) + //skip the entire row of patterns along the y
-                             (8 * column) + //skip to the correct pattern in the row
-                             patternLine ]; //skip to the line in pattern
+    uint8_t *ptr = &buffer[ ( 16 * 8 * (y >> 3) ) + //skip the entire row of patterns along the y
+                             (8 * (x >> 3)) + //skip to the correct pattern in the row
+                                              (y & 7) ]; //skip to the line in pattern
 
-    switch (bitAddrX) {
+    switch (x & 7) {
         case 0:
             *ptr |= 128;
             break;
@@ -559,43 +612,63 @@ void graphicsPut(uint8_t x, uint8_t y) {
 void HUD_initialPaint() {
     struct Room *room = getRoom(getPlayerRoom());
 
-    draw(BUFFER_RESX, 0, BUFFER_RESX, BUFFER_RESY);
-    draw(0, BUFFER_RESY, BUFFER_RESX, BUFFER_RESY);
-
+    draw(BUFFER_RESX, 0, BUFFER_RESX, 191);
 
     for (uint8_t i = 0; i < 6; ++i) {
-        show_text(0, 16 + i, i == cursorPosition ? ">" : " ");
-        show_text(1, 16 + i, menuItems[i]);
+        drawText(16, 14 + i, i == cursorPosition ? ">" : " ");
+        drawText(17, 14 + i, menuItems[i]);
     }
+
+//
+//    for (uint8_t y = 0; y < 32; ++y ) {
+//        for (uint8_t x = 0; x < 32; ++x ) {
+//
+//            if (patterns[map[y][x]].blockMovement) {
+//                set_color(15, 1, 1);
+//            } else {
+//                set_color(0, 1, 1);
+//            }
+//            pset( 128 + 8 + (x * 2), 16 + (y * 2) );
+//            pset( 128 + 8 + (x * 2) + 1, 16 + (y * 2) );
+//            pset( 128 + 8 + (x * 2), 16 + (y * 2) + 1);
+//            pset( 128 + 8 + (x * 2) + 1, 16 + (y * 2) + 1);
+//        }
+//    }
+//
+//    set_color(15, 1, 1);
+    HUD_refresh();
 }
 
 void HUD_refresh() {
 
     for (uint8_t i = 0; i < 6; ++i) {
-        show_text(0, 16 + i, i == cursorPosition ? ">" : " ");
+        drawText(16, 14 + i, (i == cursorPosition) ? ">" : " ");
     }
-
-    show_text(16, 0, "Object at room:");
 
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
 
+        fill(map_pixel(16 * 8,  21 * 8), 0, 255 - (17 * 8) );
+        fill(map_pixel(16 * 8,  22 * 8), 0, 255 - (17 * 8) );
+
         if (item->active) {
-            show_text(16, 2, "*");
+            drawText(16, 21, "*");
         }
 
-        show_text(17, 2, item->description);
+        drawTextWithLimit(17, 21, item->description, 30);
     }
-
 
     if (roomItem != NULL) {
         struct Item *item = getItem(roomItem->item);
 
+        fill(map_pixel(0,  1 * 8), 0, 127 );
+        fill(map_pixel(0,  2 * 8), 0, 127 );
+
         if (item->active) {
-            show_text(16, 3, "*");
+            drawText(0, 1, "*");
         }
 
-        show_text(17, 3, item->description);
+        drawTextWithLimit(1, 1, item->description, 14);
     }
 }
 
