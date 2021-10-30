@@ -1,7 +1,7 @@
 CC = zcc
 
-CFLAGS = +msx -vn -I../Core/include -create-app -DAMALLOC -DMSX -DRES64X128 -Os --opt-code-speed=all -pragma-output:USING_amalloc
-LDFLAGS = -llib3d -lm -lmsxbios -subtype=rom -pragma-output:USING_amalloc
+CFLAGS = +msx -compiler=sdcc --max-allocs-per-node200000  --opt-code-speed -SO3 -vn -I../Core/include -DSMS -DRES128X128
+LDFLAGS = -subtype=rom
 
 all: derelict.rom
 
