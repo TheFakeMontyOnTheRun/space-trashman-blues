@@ -2,12 +2,12 @@
 
 CC = zcc
 
-CFLAGS = +sms -compiler=sdcc -SO3 -pragma-define:CRT_MODEL=2 -create-app  -vn -I../Core/include -create-app -DSMS -DRES128X128 -DINCLUDE_ROOM_DESCRIPTIONS
+CFLAGS = +sms -compiler=sdcc -SO3 -lndos -pragma-define:CLIB_EXIT_STACK_SIZE=0 -pragma-define:CRT_MODEL=2 --opt-code-speed -vn -I../Core/include -DSMS -DRES128X128 -DDINCLUDE_ROOM_DESCRIPTIONS
 
 all: derelict.sms
 
 derelict.sms: src/demo.o src/sms.o ../core/src/Core.o ../core/src/Derelict.o
-	$(CC) $(CFLAGS) -oderelict.sms src/demo.o src/sms.o ../core/src/Core.o ../core/src/Derelict.o $(LDFLAGS)
+	$(CC) $(CFLAGS)  -create-app   -oderelict.sms src/demo.o src/sms.o ../core/src/Core.o ../core/src/Derelict.o $(LDFLAGS)
 
 clean:
 	$(RM) *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.rom
