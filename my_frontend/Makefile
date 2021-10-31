@@ -1,6 +1,7 @@
 cpc:
 	mkdir -p CPCVersion/src
 	rm -f -R CPCVersion/obj/*
+	cp -f src/Engine3D.h CPCVersion/src
 	cp -f src/map.h CPCVersion/src
 	cp -f src/maps.h CPCVersion/src
 	cp -f ../core/include/Core.h CPCVersion/src

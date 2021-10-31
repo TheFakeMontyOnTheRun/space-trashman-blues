@@ -122,3 +122,7 @@ my_frontend/src/gb.sym
 my_frontend/derelict_BANK_1F.bin
 my_frontend/derelict_BSS.bin
 my_frontend/derelict_DATA.bin
+my_frontend/CPCVersion/obj/.folder
+my_frontend/CPCVersion/obj/prebuildstep.objectfile
+my_frontend/CPCVersion/obj/dsk_files/.folder
+my_frontend/CPCVersion/src/Engine3D.h

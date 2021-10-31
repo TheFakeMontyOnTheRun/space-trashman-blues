@@ -34,7 +34,7 @@ void shutdownGraphics();
 
 void clearGraphics();
 
-void writeStr(uint8_t nColumn, uint8_t nLine, char *str, uint8_t fg, uint8_t bg);
+void writeStr(uint8_t nColumn, uint8_t nLine, const char *str, uint8_t fg, uint8_t bg);
 
 void graphicsPut(uint8_t x, uint8_t y);
 
@@ -1349,7 +1349,6 @@ void renderScene() {
     }
     
 #ifdef CPC_PLATFORM
-
     stencilPtr = &stencilHigh[0];
     lastY = 0xFF;
     
@@ -1369,7 +1368,9 @@ void renderScene() {
         
         lastY = *(++stencilPtr);
 
-        //if the line is the same, there is no need to write, recompute the same address and load the same byte
+        // if the line is the same, there is no need to write, recompute
+        // the same address and load the same byte
+
         if (y != lastY) {
             *pS = nByte;
             lastPS = (unsigned char *) baseScreen + lineStart[lastY];

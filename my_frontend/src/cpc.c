@@ -350,9 +350,9 @@ void hLine(uint8_t x0, uint8_t x1, uint8_t y) {
     unsigned char *pS;
     unsigned char *base;
     uint8_t nLine = y;
-    uint8_t nColumn = 0;
+    int nColumn = 0;
     uint8_t bytes;
-    uint8_t dx = (x1 - x0);
+    int dx = (x1 - x0);
     bytes = dx >> 1;
     base = (unsigned char *) baseScreen + lineStart[nLine] + (x0 >> 1);
 //write whole bytes first, then the remainder with masks
@@ -391,7 +391,7 @@ void hLine(uint8_t x0, uint8_t x1, uint8_t y) {
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
 
     register uint8_t y;
-    register uint16_t *lineStartPtr;
+    register const uint16_t *lineStartPtr;
     register uint8_t *pS;
     register uint8_t *base;
     register uint8_t nByte;
@@ -429,7 +429,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
     }
 }
 
-void writeStr(uint8_t nColumn, uint8_t nLine, char *str, uint8_t fg, uint8_t bg) {
+void writeStr(uint8_t nColumn, uint8_t nLine, const char *str, uint8_t fg, uint8_t bg) {
     unsigned char nPixel = fg + bg; /* just to silence the compiler warnings */
     uint8_t *pS;
 
@@ -470,3 +470,8 @@ void clearGraphics() {
 void printSituation() {
 
 }
+
+
+void HUD_initialPaint() {}
+
+void HUD_refresh(){}
