@@ -166,7 +166,7 @@ void graphicsFlush();
 
 int cursorPosition = 0;
 
-void drawTextWithLimit(int _x, int y, char *text, int limitX) {
+void writeStrWithLimit(int _x, int y, char *text, int limitX) {
 
     uint8_t len = strlen(text);
     char *ptr = text;
@@ -199,16 +199,16 @@ void drawTextWithLimit(int _x, int y, char *text, int limitX) {
     }
 }
 
-void drawText(int _x, int y, char *text) {
-    drawTextWithLimit(_x, y, text, 32);
+void writeStr(int _x, int y, char *text, int fg, int bg) {
+    writeStrWithLimit(_x, y, text, 31);
 }
 
 void showMessage(const char *message) {
     int keepGoing = 1;
     clearGraphics();
 
-    drawText(1, 1, (char *) message);
-    drawText(1, 3, "Press B button to continue");
+    writeStr(1, 1, (char *) message, 2, 0);
+    writeStr(1, 3, "Press B button to continue", 2, 0);
 
     while (keepGoing) {
         if (read_joypad1() & JOY_FIREB) {
@@ -225,11 +225,11 @@ void titleScreen() {
     int keepGoing = 1;
     clearGraphics();
 
-    drawText(1, 1, "Space Mare Imperium:");
-    drawText(1, 2, "     Derelict");
-    drawText(1, 4, "by Daniel Monteiro");
-    drawText(1, 6, "  Press B button ");
-    drawText(1, 7, "    to start");
+    writeStr(1, 1, "Space Mare Imperium:", 2, 0);
+    writeStr(1, 2, "     Derelict", 2, 0);
+    writeStr(1, 4, "by Daniel Monteiro", 2, 0);
+    writeStr(1, 6, "  Press B button ", 2, 0);
+    writeStr(1, 7, "    to start", 2, 0);
 
     while (keepGoing) {
         if (read_joypad1() & JOY_FIREB) {
@@ -615,8 +615,8 @@ void HUD_initialPaint() {
     draw(BUFFER_RESX, 0, BUFFER_RESX, 191);
 
     for (uint8_t i = 0; i < 6; ++i) {
-        drawText(16, 14 + i, i == cursorPosition ? ">" : " ");
-        drawText(17, 14 + i, menuItems[i]);
+        writeStr(16, 14 + i, i == cursorPosition ? ">" : " ", 2, 0);
+        writeStr(17, 14 + i, menuItems[i], 2, 0);
     }
 
 //
@@ -642,7 +642,7 @@ void HUD_initialPaint() {
 void HUD_refresh() {
 
     for (uint8_t i = 0; i < 6; ++i) {
-        drawText(16, 14 + i, (i == cursorPosition) ? ">" : " ");
+        writeStr(16, 14 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
     }
 
     if (focusedItem != NULL) {
@@ -652,10 +652,10 @@ void HUD_refresh() {
         fill(map_pixel(16 * 8,  22 * 8), 0, 255 - (17 * 8) );
 
         if (item->active) {
-            drawText(16, 21, "*");
+            writeStr(16, 21, "*", 2, 0);
         }
 
-        drawTextWithLimit(17, 21, item->description, 30);
+        writeStrWithLimit(17, 21, item->description, 30);
     }
 
     if (roomItem != NULL) {
@@ -665,10 +665,10 @@ void HUD_refresh() {
         fill(map_pixel(0,  2 * 8), 0, 127 );
 
         if (item->active) {
-            drawText(0, 1, "*");
+            writeStr(0, 1, "*", 2, 0);
         }
 
-        drawTextWithLimit(1, 1, item->description, 14);
+        writeStrWithLimit(1, 1, item->description, 14);
     }
 }
 
