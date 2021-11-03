@@ -46,8 +46,6 @@ void graphicsFlush();
 
 void fix_line(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
 
-void hLine(uint8_t x0, uint8_t x1, uint8_t y);
-
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1);
 
 void titleScreen();
@@ -58,8 +56,6 @@ void performAction();
 
 void startMusic();
 
-void clrscr();
-
 void renderCameraNorth();
 
 void renderCameraEast();
@@ -68,8 +64,6 @@ void
 renderCameraSouth();
 
 void renderCameraWest();
-
-void printSituation();
 
 int8_t stencilHigh[XRES];
 
@@ -85,7 +79,7 @@ extern int playerLocation;
 struct Projection {
     uint8_t px;
     uint8_t py;
-    int16_t dx;
+    int8_t dx;
 };
 
 const struct Projection projections[40] =
@@ -122,15 +116,6 @@ const struct Projection projections[40] =
                 {	58	,	33	,	-4	},	//	29
                 {	58	,	33	,	-4	},	//	30
                 {	58	,	33	,	-4	},	//	31
-                {	59	,	33	,	-4	},	//	32
-                {	59	,	32	,	-3	},	//	33
-                {	59	,	32	,	-3	},	//	34
-                {	59	,	32	,	-3	},	//	35
-                {	59	,	32	,	-3	},	//	36
-                {	59	,	32	,	-3	},	//	37
-                {	59	,	32	,	-3	},	//	38
-                {	59	,	32	,	-3	},	//	39
-                {	59	,	32	,	-3	},	//	40
 #else
 #ifdef RES96x64
 {	0	,	64	,	-96	},	//	1
@@ -164,15 +149,6 @@ const struct Projection projections[40] =
 {	43	,	33	,	-3	},	//	29
 {	43	,	33	,	-3	},	//	30
 {	43	,	33	,	-3	},	//	31
-{	44	,	33	,	-3	},	//	32
-{	44	,	32	,	-2	},	//	33
-{	44	,	32	,	-2	},	//	34
-{	44	,	32	,	-2	},	//	35
-{	44	,	32	,	-2	},	//	36
-{	44	,	32	,	-2	},	//	37
-{	44	,	32	,	-2	},	//	38
-{	44	,	32	,	-2	},	//	39
-{	44	,	32	,	-2	},	//	40
 #else
 #ifdef RES64X128
             {	0	,	128	,	-64	},	//	1
@@ -206,15 +182,6 @@ const struct Projection projections[40] =
             {	28	,	67	,	-2	},	//	29
             {	28	,	67	,	-2	},	//	30
             {	28	,	67	,	-2	},	//	31
-            {	29	,	67	,	-2	},	//	32
-            {	29	,	66	,	-1	},	//	33
-            {	29	,	66	,	-1	},	//	34
-            {	29	,	66	,	-1	},	//	35
-            {	29	,	66	,	-1	},	//	36
-            {	29	,	66	,	-1	},	//	37
-            {	29	,	66	,	-1	},	//	38
-            {	29	,	66	,	-1	},	//	39
-            {	29	,	66	,	-1	},	//	40
 #else
 #ifdef RES128X128
                 {	0	,	128	,	-128	},	//	1
@@ -248,15 +215,6 @@ const struct Projection projections[40] =
                 {	58	,	67	,	-4	},	//	29
                 {	58	,	67	,	-4	},	//	30
                 {	58	,	67	,	-4	},	//	31
-                {	59	,	67	,	-4	},	//	32
-                {	59	,	66	,	-3	},	//	33
-                {	59	,	66	,	-3	},	//	34
-                {	59	,	66	,	-3	},	//	35
-                {	59	,	66	,	-3	},	//	36
-                {	59	,	66	,	-3	},	//	37
-                {	59	,	66	,	-3	},	//	38
-                {	59	,	66	,	-3	},	//	39
-                {	59	,	66	,	-3	},	//	40
 #else
 
                 {	0	,	64	,	-64	},	//	1
@@ -290,15 +248,6 @@ const struct Projection projections[40] =
                 {	28	,	33	,	-2	},	//	29
                 {	28	,	33	,	-2	},	//	30
                 {	28	,	33	,	-2	},	//	31
-                {	29	,	33	,	-2	},	//	32
-                {	29	,	32	,	-1	},	//	33
-                {	29	,	32	,	-1	},	//	34
-                {	29	,	32	,	-1	},	//	35
-                {	29	,	32	,	-1	},	//	36
-                {	29	,	32	,	-1	},	//	37
-                {	29	,	32	,	-1	},	//	38
-                {	29	,	32	,	-1	},	//	39
-                {	29	,	32	,	-1	},	//	40
 #endif
 #endif
 #endif
@@ -912,7 +861,6 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     int16_t px0z0;
     int8_t py0z0;
     int16_t px1z0;
-    int8_t py1z0;
     int16_t px0z1;
     int8_t py0z1;
     int16_t px1z1;
@@ -945,7 +893,6 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     z0py = (projections[z0].py);
 
     py0z0 = z0py + ((y0) * z0dx);
-    py1z0 = py0z0 + (dY * z0dx);
     py0z1 = z1py + ((y0) * z1dx);
 
     if (px1z0 < 0 || px0z0 > XRESMINUSONE) {
@@ -1213,10 +1160,8 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 
     if (_pattern & 128) {
         drawObjectAt(x0 - 1, y + 2);
-
         return 1;
     }
-
 
     diff = patterns[0].ceiling - patterns[pattern].ceiling;
     type = patterns[pattern].geometryType;
@@ -1243,18 +1188,13 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 
         switch (cameraRotation) {
             case 0:
-                return drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-                                 0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
-
-            case 1:
-                return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-                                  x1 - x0, diff, patterns[pattern].elementsMask);
             case 2:
-                return drawWedge(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                return drawWedge(x0 - (cameraRotation == 0 ? -1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
                                  0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
-
+            case 1:
             case 3:
-                return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
+                return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT,
+                        y + ( cameraRotation == 3 ? 1 : 0 ) + 2,
                                   x1 - x0, diff, patterns[pattern].elementsMask);
         }
     } else if (type == BACK_WALL){
@@ -1262,53 +1202,41 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 
         switch (cameraRotation) {
             case 0:
-                return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
-                                  x1 - x0, diff, patterns[pattern].elementsMask);
-
-            case 1:
-                return drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-                                 0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
-
             case 2:
-                return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT,
+                        y + (cameraRotation == 0? 1 : 0) + 2,
                                   x1 - x0, diff, patterns[pattern].elementsMask);
-
+            case 1:
             case 3:
-                return drawWedge(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                return drawWedge(x0 - (cameraRotation == 1 ? 1 : 0 ),
+                        patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
                                  0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
+
+
         }
     } else if (type == CORNER){
         int returnVal = 0;
 
         switch( cameraRotation) {
+
+            case 3:
             case 0:
-                returnVal = drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                returnVal = drawWedge(x0 - (cameraRotation == 3 ? 0 : 1),
+                        patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
                                       0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR) ;
 
                 returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
                                        x1 - x0, diff, patterns[pattern].elementsMask) || returnVal;
                 break;
-            case 1:
-                returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-                                       x1 - x0, diff, patterns[pattern].elementsMask);
-                returnVal = drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-                                      0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR) || returnVal;
 
-                break;
+            case 1:
             case 2:
                 returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
                                        x1 - x0, diff, patterns[pattern].elementsMask);
 
-                returnVal = drawWedge(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                returnVal = drawWedge(x0  - (cameraRotation == 1 ? 1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
                                       0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR) || returnVal;
 
-                break;
-            case 3:
-                returnVal = drawWedge(x0, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-                                      0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
-
-                returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
-                                       x1 - x0, diff, patterns[pattern].elementsMask) || returnVal;
                 break;
         }
 
@@ -1800,7 +1728,6 @@ void initMap() {
 
 
 /* TODO: precalc absolute offsets */
-
     for (c = 0; c < playerLocation; ++c ) {
         offsetOnDataStrip += dataPositions[c];
     }
@@ -1828,12 +1755,10 @@ void initMap() {
             }
 
 
-
             if ((current == 's' && enteredFrom == 0) ||
                 (current == 'w' && enteredFrom == 1) ||
                 (current == 'n' && enteredFrom == 2) ||
-                (current == 'e' && enteredFrom == 3)
-                    ) {
+                (current == 'e' && enteredFrom == 3) ){
 
                 struct WorldPosition newPos;
                 cameraX = x;
@@ -1865,12 +1790,13 @@ void updateMapItems() {
         map[item->position.y][item->position.x] = pattern | 128;
         node = node->next;
     }
-        printSituation();
-    }
+        
+}
 
 void tickRenderer() {
     uint8_t prevX;
     uint8_t prevZ;
+    struct WorldPosition *pos;
     int previousLocation = playerLocation;
     uint8_t newCell = 0;
 
@@ -1887,9 +1813,7 @@ void tickRenderer() {
 
     waitkey:
     switch (getKey()) {
-        case 'k':
-            playerLocation = 0;
-            break;
+
 #ifndef CPC_PLATFORM
 #ifndef SMS
         case 'l':
@@ -1898,20 +1822,32 @@ void tickRenderer() {
 #endif
 #endif
         case 'q':
-            cameraRotation--;
-            if (cameraRotation < 0) {
-                cameraRotation = 3;
-            }
+            turnLeft();
+            break;
+
+        case 'e':
+            turnRight();
+            break;
+
+        case 'a':
+            walkBy(3);
+            break;
+        case 'd':
+            walkBy(1);
+            break;
+        case 's':
+            walkBy(2);
+            break;
+        case 'w':
+            walkBy(0);
             break;
 
         case '7':
             nextItemInHand();
-            printSituation();
             break;
 
         case '4':
             nextItemInRoom();
-            printSituation();
             break;
 
         case '8':
@@ -1926,100 +1862,10 @@ void tickRenderer() {
 
         case '9':
             pickItem();
-            printSituation();
             break;
+
         case '6':
             dropItem();
-            printSituation();
-            break;
-
-        case 'e':
-            cameraRotation = (cameraRotation + 1) & 3;
-            break;
-            
-        case 'a':
-            switch (cameraRotation) {
-                case 0:
-                    cameraX -= WALKSTEP;
-                    walkBy(3);
-                    break;
-                case 1:
-                    cameraZ -= WALKSTEP;
-                    walkBy(0);
-                    break;
-                case 2:
-                    cameraX += WALKSTEP;
-                    walkBy(1);
-                    break;
-                case 3:
-                    cameraZ += WALKSTEP;
-                    walkBy(2);
-                    break;
-            }
-            break;
-        case 'd':
-            switch (cameraRotation) {
-                case 0:
-                    cameraX += WALKSTEP;
-                    walkBy(1);
-                    break;
-                case 1:
-                    cameraZ += WALKSTEP;
-                    walkBy(2);
-                    break;
-                case 2:
-                    cameraX -= WALKSTEP;
-                    walkBy(3);
-                    break;
-                case 3:
-                    cameraZ -= WALKSTEP;
-                    walkBy(0);
-                    break;
-            }
-            break;
-
-
-        case 's':
-            switch (cameraRotation) {
-                case 0:
-                    cameraZ += WALKSTEP;
-                    walkBy(2);
-                    break;
-                case 1:
-                    cameraX -= WALKSTEP;
-                    walkBy(3);
-                    break;
-                case 2:
-                    cameraZ -= WALKSTEP;
-                    walkBy(0);
-                    break;
-                case 3:
-                    cameraX += WALKSTEP;
-                    walkBy(1);
-                    break;
-            }
-
-
-            break;
-        case 'w':
-            switch (cameraRotation) {
-                case 0:
-                    cameraZ -= WALKSTEP;
-                    walkBy(0);
-                    break;
-                case 1:
-                    cameraX += WALKSTEP;
-                    walkBy(1);
-                    break;
-                case 2:
-                    cameraZ += WALKSTEP;
-                    walkBy(2);
-                    break;
-                case 3:
-                    cameraX -= WALKSTEP;
-                    walkBy(3);
-                    break;
-            }
             break;
 
         case 'p':
@@ -2031,23 +1877,11 @@ void tickRenderer() {
 #endif
     }
 
-    if (cameraZ >= 32) {
-        cameraZ = 31;
-    }
+    cameraRotation = getPlayerDirection();
+    pos = getPlayerPosition();
 
-    if (cameraX >= 32) {
-        cameraX = 31;
-    }
-
-    if (cameraZ < 0) {
-        cameraZ = 0;
-    }
-
-    if (cameraX < 0) {
-        cameraX = 0;
-    }
-
-
+    cameraX = pos->x;
+    cameraZ = pos->y;
 
     switch (cameraRotation) {
         case 0:
@@ -2067,31 +1901,22 @@ void tickRenderer() {
     newCell = newCell & 127;
 
     if (patterns[newCell].blockMovement) {
-        cameraX = prevX;
-        cameraZ = prevZ;
+        pos->x = cameraX = prevX;
+        pos->y = cameraZ = prevZ;
+        setPlayerPosition(pos);
     }
 
-
     /* unlike MX, we are signaling from the origin into the new room. MX allows for the movement and then searches where
-     * did the player came from - hence the "opossite direction" there */
+     * did the player came from - hence the "opposite direction" there */
 
-    if (newCell == '0') {
-        enteredFrom = 0;
-        moveBy(0);
-    } else if (newCell == '2') {
-        enteredFrom = 2;
-        moveBy(2);
-    } else if (newCell == '3') {
-        enteredFrom = 3;
-        moveBy(3);
-    } else if (newCell == '1') {
-        enteredFrom = 1;
-        moveBy(1);
+    if (newCell > ('0' - 1) && newCell < ('3' + 1) ) {
+        enteredFrom = newCell - '0';
+        moveBy(enteredFrom);
     }
 
     if (playerLocation != previousLocation) {
-        cameraRotation = enteredFrom;
         initMap();
+        cameraRotation = getPlayerDirection();
     } else {
         enteredFrom = 0xFF;
     }

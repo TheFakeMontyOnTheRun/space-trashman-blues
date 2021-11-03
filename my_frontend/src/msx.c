@@ -1,4 +1,3 @@
-#ifdef MSX
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -673,8 +672,3 @@ void HUD_refresh() {
         writeStrWithLimit(1, 1, item->description, 14);
     }
 }
-
-void printSituation() {
-
-}
-#endif

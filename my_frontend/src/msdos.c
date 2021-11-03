@@ -114,14 +114,6 @@ void init() {
 
 unsigned char getPaletteEntry( int origin ) {
   return origin;
-
-  unsigned char shade = 0;
-
-  if ( origin > 0 ) {
-    return 3;
-  } else {
-    return 0;
-  }
 }
 
 void graphicsFlush() {

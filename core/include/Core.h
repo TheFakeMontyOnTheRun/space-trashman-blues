@@ -107,7 +107,7 @@ void pickObjectByName(const char *objName);
 
 void dropObjectByName(const char *objName);
 
-enum EGameStates  getGameStatus();
+enum EGameStates  getGameStatus(void);
 
 struct Item *getItemNamed(const char* name);
 
@@ -127,13 +127,13 @@ int hasItemInRoom(const char *roomName, const char *itemName);
 
 int playerHasObject( const char* itemName);
 
-int getPlayerHealth();
+int getPlayerHealth(void);
 
 void setPlayerHealth(int health);
 
 int isPlayerAtRoom(const char *roomName);
 
-char *getRoomDescription();
+char *getRoomDescription(void);
 
 struct Room *getRoom(int index);
 
@@ -145,7 +145,7 @@ void removeObjectFromRoom(struct Item *itemToRemove);
 
 void useObjectsTogether(const char* operands);
 
-void showInventory();
+void showInventory(void);
 
 extern LogDelegate defaultLogger;
 
@@ -161,7 +161,7 @@ void turnRight(void);
 
 void walkBy(int direction);
 
-int getPlayerRank();
+int getPlayerRank(void);
 
 void setPlayerRank(int newRank);
 
@@ -169,7 +169,7 @@ int isPositionAllowed(int x, int y);
 
 uint8_t listIsEmpty(struct ObjectNode *listHead);
 
-void initCore();
+void initCore(void);
 
 void setGameStatus(enum EGameStates newStatus);
 

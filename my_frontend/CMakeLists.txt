@@ -17,10 +17,7 @@ add_executable(derelict8
 		src/demo.c
 		src/sdl2.c
 		../core/src/Derelict.c
-		../core/src/Core.c
-		../core/src/Parser.c
-
-		src/Engine3D.h)
+		../core/src/Core.c)
 
 include(FindPkgConfig)
 

@@ -467,11 +467,6 @@ void clearGraphics() {
     memset((uint8_t*)baseScreen, 0, 16 * 1024);
 }
 
-void printSituation() {
-
-}
-
-
 void HUD_initialPaint() {}
 
 void HUD_refresh(){}
