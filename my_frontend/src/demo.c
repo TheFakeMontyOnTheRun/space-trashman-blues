@@ -1151,7 +1151,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
 uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
     int8_t diff;
-    uint8_t pattern = _pattern & 127;
+    uint8_t pattern = (_pattern - 32) & 127;
     uint8_t type;
 
     /* 127 = 01111111 - the first bit is used for indicating the presence of an object.
@@ -1900,7 +1900,7 @@ void tickRenderer() {
 
     newCell = newCell & 127;
 
-    if (patterns[newCell].blockMovement) {
+    if (patterns[newCell - 32].blockMovement) {
         pos->x = cameraX = prevX;
         pos->y = cameraZ = prevZ;
         setPlayerPosition(pos);
