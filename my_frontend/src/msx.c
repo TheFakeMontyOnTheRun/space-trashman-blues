@@ -313,29 +313,6 @@ uint8_t getKey() {
         cooldown--;
     }
 
-    if (key == 'w') {
-        return 'w';
-    }
-
-    if (key == 'a') {
-        if (key == 'x') {
-            return 'a';
-        }
-        return 'q';
-    }
-
-
-    if (key == 'd') {
-        if (key == 'x') {
-            return 'd';
-        }
-        return 'e';
-    }
-
-    if (key == 's') {
-        return 's';
-    }
-
     if ((key == 'z') && !cooldown) {
         performAction();
         HUD_refresh();
@@ -355,7 +332,11 @@ uint8_t getKey() {
         return 'p';
     }
 
-    return '.';
+    if (key == 0 ) {
+        return '.';
+    }
+
+    return key;
 }
 
 void shutdownGraphics() {
