@@ -1,6 +1,6 @@
 CC = zcc
 
-CFLAGS = +msx -compiler=sdcc --max-allocs-per-node200000  --opt-code-speed -SO3 -vn -I../Core/include -DSMS -DRES128X128
+CFLAGS = +msx -compiler=sdcc --max-allocs-per-node200000  --opt-code-speed -SO3 -vn -I../Core/include -DSMS -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE
 LDFLAGS = -subtype=rom
 
 all: derelict.rom
