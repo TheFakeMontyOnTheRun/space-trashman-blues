@@ -134,3 +134,6 @@ core/src/Derelict.lst
 core/src/Derelict.sym
 my_frontend/demo.ihx
 my_frontend/demo.noi
+my_frontend/derelict.bin
+my_frontend/derelict.cpc
+my_frontend/derelict.dsk
