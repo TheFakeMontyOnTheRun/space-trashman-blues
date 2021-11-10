@@ -18,7 +18,9 @@ Created by Daniel Monteiro on 2019-07-26.
 #endif
 
 #ifndef CPC_PLATFORM
+#ifndef NGB
 #include <unistd.h>
+#endif
 #endif
 
 #else
@@ -43,9 +45,6 @@ int playerRank;
 int gameStatus;
 int playerHealth = 100;
 struct WorldPosition playerPosition;
-struct WorldPosition *characterPositions;
-int charactersCount = 1;
-int playerCharacter;
 ErrorHandlerCallback errorHandlerCallback = NULL;
 
 void writeToLog(const char *errorMsg) {
@@ -119,11 +118,11 @@ void setErrorHandlerCallback(ErrorHandlerCallback callback) {
     errorHandlerCallback = callback;
 }
 
-struct WorldPosition *getPlayerPosition() {
-    return &characterPositions[playerCharacter];
+struct WorldPosition *getPlayerPosition(void) {
+    return &playerPosition;
 }
 
-int getPlayerHealth() {
+int getPlayerHealth(void) {
     return playerHealth;
 }
 
@@ -132,19 +131,19 @@ void setPlayerHealth(int health) {
 }
 
 void setPlayerPosition(struct WorldPosition* pos) {
-    characterPositions[playerCharacter].x = pos->x;
-    characterPositions[playerCharacter].y = pos->y;
+    playerPosition.x = pos->x;
+    playerPosition.y = pos->y;
 }
 
 int isCloseToObject(struct WorldPosition* pos, struct Item *item) {
     return (abs(pos->x - item->position.x) + abs(pos->y - item->position.y)) <= 1;
 }
 
-enum EGameStates getGameStatus() {
+enum EGameStates getGameStatus(void) {
     return gameStatus;
 }
 
-struct ObjectNode *getPlayerItems() {
+struct ObjectNode *getPlayerItems(void) {
     return collectedObject->next;
 }
 
@@ -206,11 +205,6 @@ void removeObjectFromList(struct Item *itemToRemove, struct ObjectNode *listHead
     /* Object doesn't belongs to the list! */
 }
 
-uint8_t listIsEmpty(struct ObjectNode *listHead) {
-    return (listHead == NULL || listHead->next == NULL);
-}
-
-
 void removeObjectFromRoom(struct Item *itemToRemove) {
     if (itemToRemove->roomId != 0) {
         removeObjectFromList(itemToRemove, rooms[itemToRemove->roomId].itemsPresent);
@@ -227,10 +221,11 @@ void addObjectToRoom(int roomId, struct Item *itemToAdd) {
 }
 
 void dropObjectToRoom(int roomId, struct Item *itemToDrop) {
-
+#ifdef CLI_BUILD
     if (itemToDrop->roomId != 0) {
         defaultLogger("Object not present to drop");
     }
+#endif
 
     removeObjectFromList(itemToDrop, collectedObject);
     addObjectToRoom(roomId, itemToDrop);
@@ -260,7 +255,7 @@ void pickObject(struct Item *itemToPick) {
     }
 }
 
-int getPlayerRank() {
+int getPlayerRank(void) {
     return playerRank;
 }
 
@@ -277,7 +272,7 @@ void moveBy(int direction) {
         room = &rooms[playerLocation];
 
         if (rooms[room->connections[direction]].rankRequired > playerRank) {
-            defaultLogger("Insuficient rank to enter room");
+            defaultLogger("Insufficient rank to enter room");
             return;
         }
 
@@ -305,28 +300,29 @@ void moveBy(int direction) {
 
         switch (direction) {
             case 2:
-                characterPositions[playerCharacter].x = rooms[playerLocation].sizeX / 2;
-                characterPositions[playerCharacter].y = rooms[playerLocation].sizeY - 1;
+                playerPosition.x = rooms[playerLocation].sizeX / 2;
+                playerPosition.y = rooms[playerLocation].sizeY - 1;
                 break;
 
             case 3:
-                characterPositions[playerCharacter].x = 0;
-                characterPositions[playerCharacter].y = rooms[playerLocation].sizeY / 2;
+                playerPosition.x = 0;
+                playerPosition.y = rooms[playerLocation].sizeY / 2;
                 break;
 
             case 0:
-                characterPositions[playerCharacter].x = rooms[playerLocation].sizeX / 2;
-                characterPositions[playerCharacter].y = 0;
+                playerPosition.x = rooms[playerLocation].sizeX / 2;
+                playerPosition.y = 0;
                 break;
 
             case 1:
-                characterPositions[playerCharacter].x = rooms[playerLocation].sizeX - 1;
-                characterPositions[playerCharacter].y = rooms[playerLocation].sizeY / 2;
+                playerPosition.x = rooms[playerLocation].sizeX - 1;
+                playerPosition.y = rooms[playerLocation].sizeY / 2;
                 break;
         }
-
+#ifdef CLI_BUILD
     } else {
         defaultLogger("Please specify a valid direction");
+#endif
     }
 }
 
@@ -337,7 +333,7 @@ void pickObjectByName(const char *objName) {
     while (itemToPick != NULL) {
         if (!strcmp(getItem(itemToPick->item)->description, objName)) {
 #ifdef MOVE_TO_OBJECT_POSITION_WHEM_PICKING
-            characterPositions[playerCharacter] = getItem(itemToPick->item)->position;
+            playerPosition = getItem(itemToPick->item)->position;
 #endif
             pickObject(getItem(itemToPick->item));
             return;
@@ -349,6 +345,8 @@ void pickObjectByName(const char *objName) {
 void dropObjectByName(const char *objName) {
     struct ObjectNode *itemToPick = collectedObject->next;
 
+
+
     while (itemToPick != NULL) {
         if (!strcmp(getItem(itemToPick->item)->description, objName)) {
             dropObjectToRoom(playerLocation, getItem(itemToPick->item));
@@ -356,33 +354,46 @@ void dropObjectByName(const char *objName) {
         }
         itemToPick = itemToPick->next;
     }
+
+#ifdef CLI_BUILD
+        errorHandlerCallback("Unable to locate object");
+#endif
+
 }
 
 int hasItemInRoom(const char *roomName, const char *itemName) {
-    int r = 0;
+    struct ObjectNode *itemToPick;
+
+#ifdef CLI_BUILD
+    struct Room* room;
 
     if (roomName == NULL || itemName == NULL || strlen(roomName) == 0 || strlen(itemName) == 0) {
         defaultLogger("Either the object name or the room name are null. Check your stuff");
         return 0;
     }
+#endif
 
-    for (r = 1; r < TOTAL_ROOMS; ++r) {
-        char *desc = rooms[r].description;
+#ifdef CLI_BUILD
+    room = getRoomByName(roomName);
 
-        if (desc != NULL && !strcmp(desc, roomName)) {
-            struct ObjectNode *itemToPick = rooms[r].itemsPresent->next;
-
-            while (itemToPick != NULL) {
-                struct Item *pick = getItem(itemToPick->item);
-                if (!strcmp(pick->description, itemName)) {
-                    return 1;
-                }
-                itemToPick = itemToPick->next;
-            }
-            return 0;
-        }
+    if (room != NULL) {
+        itemToPick = room->itemsPresent->next;
+    } else {
+        errorHandlerCallback("Invalid room name");
+        return 0;
     }
-    defaultLogger("It was not possible to determine if object is in room");
+#else
+    itemToPick = getRoomByName(roomName)->itemsPresent->next;
+#endif
+
+    while (itemToPick != NULL) {
+        struct Item *pick = getItem(itemToPick->item);
+        if (!strcmp(pick->description, itemName)) {
+            return 1;
+        }
+        itemToPick = itemToPick->next;
+    }
+
     return 0;
 }
 
@@ -449,7 +460,7 @@ void useObjectNamed(const char *operand) {
     }
 }
 
-#ifndef SMD
+#ifdef CLI_BUILD
 void walkTo(const char *operands) {
     struct WorldPosition pos;
     char *xStr;
@@ -469,7 +480,6 @@ void walkTo(const char *operands) {
     pos.y = y;
     setPlayerPosition(&pos);
 }
-#endif
 
 void infoAboutItemNamed(const char *itemName) {
 
@@ -509,7 +519,6 @@ void infoAboutItemNamed(const char *itemName) {
     defaultLogger("No such item could be found");
 }
 
-#ifndef SMD
 void useObjectsTogether(const char *operands) {
 
     struct ObjectNode *object1 = collectedObject->next;
@@ -590,101 +599,103 @@ void walkBy(int direction) {
         case 0:
             switch (playerDirection) {
                 case 0:
-                    characterPositions[playerCharacter].y--;
+                    playerPosition.y--;
                     break;
                 case 1:
-                    characterPositions[playerCharacter].x++;
+                    playerPosition.x++;
                     break;
                 case 2:
-                    characterPositions[playerCharacter].y++;
+                    playerPosition.y++;
                     break;
                 case 3:
-                    characterPositions[playerCharacter].x--;
+                    playerPosition.x--;
                     break;
             }
             break;
         case 1:
             switch (playerDirection) {
                 case 0:
-                    characterPositions[playerCharacter].x++;
+                    playerPosition.x++;
                     break;
                 case 1:
-                    characterPositions[playerCharacter].y++;
+                    playerPosition.y++;
                     break;
                 case 2:
-                    characterPositions[playerCharacter].x--;
+                    playerPosition.x--;
                     break;
                 case 3:
-                    characterPositions[playerCharacter].y--;
+                    playerPosition.y--;
                     break;
             }
             break;
         case 2:
             switch (playerDirection) {
                 case 0:
-                    characterPositions[playerCharacter].y++;
+                    playerPosition.y++;
                     break;
                 case 1:
-                    characterPositions[playerCharacter].x--;
+                    playerPosition.x--;
                     break;
                 case 2:
-                    characterPositions[playerCharacter].y--;
+                    playerPosition.y--;
                     break;
                 case 3:
-                    characterPositions[playerCharacter].x++;
+                    playerPosition.x++;
                     break;
             }
             break;
         case 3:
             switch (playerDirection) {
                 case 0:
-                    characterPositions[playerCharacter].x--;
+                    playerPosition.x--;
                     break;
                 case 1:
-                    characterPositions[playerCharacter].y--;
+                    playerPosition.y--;
                     break;
                 case 2:
-                    characterPositions[playerCharacter].x++;
+                    playerPosition.x++;
                     break;
                 case 3:
-                    characterPositions[playerCharacter].y++;
+                    playerPosition.y++;
                     break;
             }
             break;
     }
 
-    if (characterPositions[playerCharacter].x < 0) {
+#ifdef CLI_BUILD
+    if (playerPosition.x < 0) {
         if (getRoom(playerLocation)->connections[3]) {
             moveBy(3);
         } else {
-            characterPositions[playerCharacter].x = 0;
+            playerPosition.x = 0;
         }
     }
 
-    if (characterPositions[playerCharacter].y < 0) {
+    if (playerPosition.y < 0) {
         if (getRoom(playerLocation)->connections[0]) {
             moveBy(0);
         } else {
-            characterPositions[playerCharacter].y = 0;
+            playerPosition.y = 0;
         }
     }
 
 
-    if (characterPositions[playerCharacter].x >= rooms[playerLocation].sizeX) {
+    if (playerPosition.x >= rooms[playerLocation].sizeX) {
         if (getRoom(playerLocation)->connections[1]) {
             moveBy(1);
         } else {
-            characterPositions[playerCharacter].x = rooms[playerLocation].sizeX - 1;
+            playerPosition.x = rooms[playerLocation].sizeX - 1;
         }
     }
 
-    if (characterPositions[playerCharacter].y >= rooms[playerLocation].sizeY) {
+    if (playerPosition.y >= rooms[playerLocation].sizeY) {
         if (getRoom(playerLocation)->connections[2]) {
             moveBy(2);
         } else {
-            characterPositions[playerCharacter].y = rooms[playerLocation].sizeY - 1;
+            playerPosition.y = rooms[playerLocation].sizeY - 1;
         }
     }
+#endif
 }
 
 int getPlayerDirection(void) {
@@ -694,10 +705,12 @@ int getPlayerDirection(void) {
 void addToRoom(const char *roomName, struct Item *itemName) {
     int r = 0;
 
+#ifdef CLI_BUILD
     if (roomName == NULL || itemName == NULL || strlen(roomName) == 0) {
         defaultLogger("Either the object name or the room name are null. Check your stuff");
         return;
     }
+#endif
 
     for (r = 1; r < TOTAL_ROOMS; ++r) {
         char *desc = rooms[r].description;
@@ -707,7 +720,10 @@ void addToRoom(const char *roomName, struct Item *itemName) {
             return;
         }
     }
+
+#ifdef CLI_BUILD
     defaultLogger("It was not possible to determine the room to add object");
+#endif
 }
 
 void setLoggerDelegate(LogDelegate newDelegate) {
@@ -723,13 +739,10 @@ void setGameStatus(enum EGameStates newStatus) {
     gameStatus = newStatus;
 }
 
-void initCore() {
+void initCore(void) {
 
   /* prepare for a single player in the game */
-    playerCharacter = 0;
-    charactersCount = 1;
-    characterPositions = &playerPosition;
-    memset(characterPositions, 0, charactersCount * sizeof(struct WorldPosition));
+    memset(&playerPosition, 0, sizeof(struct WorldPosition));
     setErrorHandlerCallback(NULL);
 
     collectedObject = &collectedObjectHead;
@@ -741,8 +754,8 @@ void initCore() {
     playerRank = 0;
     gameStatus = 0;
     playerDirection = 0;
-    characterPositions[playerCharacter].x = 15;
-    characterPositions[playerCharacter].y = 15;
+    playerPosition.x = 15;
+    playerPosition.y = 15;
 
     memset(&rooms, 0, TOTAL_ROOMS * sizeof(struct Room));
     memset(&item, 0, TOTAL_ITEMS * sizeof(struct Item));

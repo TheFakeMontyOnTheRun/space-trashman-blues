@@ -19,7 +19,9 @@ Created by Daniel Monteiro on 2019-07-26.
 #endif
 
 #ifndef CPC_PLATFORM
+#ifndef NGB
 #include <unistd.h>
+#endif
 #endif
 
 #else
@@ -56,13 +58,11 @@ void updateRankFromKeycards() {
 
 void keycardPickCallback(struct Item *item) {
     updateRankFromKeycards();
-    item = NULL;
 }
 
 
 void keycardDropCallback(struct Item *item) {
     updateRankFromKeycards();
-    item = NULL;
 }
 
 
@@ -75,7 +75,6 @@ void useCardWithCardWritter(struct Item *item1, struct Item *item2) {
         removeObjectFromRoom(getItemNamed("low-rank-keycard"));
     } else {
         defaultLogger("No effect");
-        item1 = NULL;
     }
 }
 
@@ -86,7 +85,6 @@ void useBootsWithMagneticCoupling(struct Item *item1, struct Item *item2) {
         defaultLogger("Magnetic lock disengaged");
     } else {
         defaultLogger("No effect");
-        item1 = NULL;
     }
 }
 
@@ -120,12 +118,10 @@ void bombActivatedCallback(struct Item *item) {
             }
         }
     }
-    item = NULL;
 }
 
 void bombControllerActivatedCallback(struct Item *item) {
     bombActivatedCallback(NULL);
-    item = NULL;
 }
 
 void elevatorGoDownCallback(struct Item *item) {
@@ -194,28 +190,23 @@ void useCloggedFlush(struct Item *item) {
         defaultLogger("Found something among the\n...stuff...");
         addToRoom("wc", highRankKeycard);
     }
-    item = NULL;
 }
 
 void useRegularFlush(struct Item *item) {
     defaultLogger("*FLUSH*");
-    item = NULL;
 }
 
 
 void cantBeUsedCallback(struct Item *item) {
     defaultLogger("You can't use it like this.");
-    item = NULL;
 }
 
 void cantBeUsedWithOthersCallback(struct Item *item1, struct Item *item2) {
     defaultLogger("Nothing happens.");
-    item1 = item2 = NULL;
 }
 
 void useObjectToggleCallback(struct Item *item) {
     item->active = !item->active;
-    item = NULL;
 }
 
 void useCommWithRank(struct Item *item) {
@@ -226,7 +217,6 @@ void useCommWithRank(struct Item *item) {
     }
     defaultLogger("Computer core rebooted");
     item->active = !item->active;
-    item = NULL;
 }
 
 
@@ -239,12 +229,10 @@ void useComputerRack(struct Item *item) {
     }
     
     defaultLogger("Safe secured");
-    item = NULL;
 }
 
 void reactorValveCallback(struct Item *item) {
     setGameStatus(kBadVictory);
-    item = NULL;
 }
 
 
@@ -272,7 +260,6 @@ void initStation(void) {
             32, 32, 0, connections);
     
     /* 2 */
-    memset(&connections[0], 0, 6 * sizeof(int));
     connections[2] = 1;
     connections[1] = 6;
     connections[0] = 3;
@@ -293,7 +280,7 @@ void initStation(void) {
             32, 32, 0, connections);
 
     /* 3 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[2] = 0;
     connections[3] = 2;
     connections[0] = 4;
     connections[1] = 5;
@@ -353,7 +340,7 @@ void initStation(void) {
 
     
     /* 7 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[3] = 0;
     connections[2] = 5;
     addRoom("pod-1",
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
@@ -367,7 +354,7 @@ void initStation(void) {
             32, 32, 0, connections)->rankRequired = 1;
     
     /* 8 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[2] = 0;
     connections[0] = 5;
     addRoom("pod-2",
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
@@ -379,7 +366,6 @@ void initStation(void) {
             32, 32, 0, connections)->rankRequired = 2;
     
     /* 9 */
-    memset(&connections[0], 0, 6 * sizeof(int));
     connections[1] = 12;
     connections[3] = 5;
     connections[0] = 10;
@@ -406,7 +392,7 @@ void initStation(void) {
             32, 32, 0, connections)->rankRequired = 3;
     
     /* 11 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[2] = 0;
     connections[0] = 9;
     addRoom("pod-4",
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
@@ -418,7 +404,7 @@ void initStation(void) {
             32, 32, 0, connections)->rankRequired = 4;
     
     /* 12 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[0] = 0;
     connections[3] = 9;
     addRoom("computer-core",
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
@@ -427,7 +413,7 @@ void initStation(void) {
                     32, 32, 0, connections);
 
     /* 13 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[3] = 0;
     connections[4] = 4;
     connections[2] = 14;
     addRoom("elevator-level-1",
@@ -464,7 +450,7 @@ void initStation(void) {
                     32, 32, 0, connections)->rankRequired = 4;
     
     /* 16 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[1] = 0;
     connections[0] = 14;
     addRoom("situation-room",
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
@@ -473,7 +459,7 @@ void initStation(void) {
                     32, 32, 0, connections)->rankRequired = 3;
 
     /* 17 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[0] = 0;
     connections[3] = 14;
     connections[1] = 18;
     addRoom("crew-bunks",
@@ -483,7 +469,7 @@ void initStation(void) {
                     32, 32, 0, connections)->rankRequired = 1;
     
     /* 18 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[1] = 0;
     connections[3] = 17;
     addRoom("armory",
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
@@ -492,7 +478,7 @@ void initStation(void) {
                     32, 32, 0, connections)->rankRequired = 3;
 
     /* 19 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[3] = 0;
     connections[2] = 20;
     connections[5] = 4;
     addRoom("elevator-level-3",
@@ -515,7 +501,7 @@ void initStation(void) {
                     32, 32, 0, connections);
 
     /* 21 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[0] = 0;
     connections[3] = 20;
     connections[1] = 22;
     addRoom("wc",
@@ -525,7 +511,7 @@ void initStation(void) {
                     32, 32, 0, connections);
     
     /* 22 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[1] = 0;
     connections[3] = 21;
     addRoom("reactor-core",
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
@@ -534,7 +520,7 @@ void initStation(void) {
                     32, 32, 0, connections)->rankRequired = 4;
     
     /* 23 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    connections[3] = 0;
     connections[1] = 20;
     addRoom("radar-array",
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
@@ -965,5 +951,4 @@ void initStation(void) {
     newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("crew-bunks", newItem);
-
 }

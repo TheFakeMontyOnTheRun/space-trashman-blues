@@ -69,7 +69,7 @@ TEST_F(TestInventoryManipulation, droppingAnInvalidObjectWillResultInAnError) {
 	setErrorHandlerCallback(myErrorHandler);
 
 	EXPECT_CALL(*mockedObj, handleError());
-	ASSERT_FALSE(hasItemInRoom("drop", "farofinha"));
+    parseCommand("drop", "farofinha");
 }
 
 TEST_F(TestInventoryManipulation, checkingInvalidRoomForObjectsWillCauseError) {
@@ -116,14 +116,6 @@ TEST_F(TestInventoryManipulation, canPickObjects) {
 	parseCommand("drop", "low-rank-keycard");
 	ASSERT_TRUE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
 }
-
-
-TEST_F(TestInventoryManipulation, listIsEmptyWhenItShouldBe) {
-	parseCommand("drop", "helmet");
-	parseCommand("drop", "magnetic-boots");
-	ASSERT_TRUE(listIsEmpty(getPlayerItems()));
-}
-
 
 TEST_F(TestInventoryManipulation, objectsCanOnlyExistInOneRoom) {
 

@@ -11,7 +11,7 @@ CXXFLAGS = -Iinclude -O3 -g -c -std=c++14 -Wno-narrowing   \
 		-I$(GMOCK_DIR)/include/gtest \
 		-I$(GMOCK_DIR)/include/gtest/internal -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS
 
-CFLAGS = -Iinclude -O3 -g -c -std=c90 -ansi -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS
+CFLAGS = -Iinclude -O3 -g -c  -DCLI_BUILD -std=c90 -ansi -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS
 
 
 
@@ -38,6 +38,9 @@ $(TARGET):	$(OBJS) $(MAIN_GAME_OBJ)
 
 $(TESTTARGET): $(OBJS) $(TESTOBJS)
 	$(CXX) -o $(TESTTARGET) -g $(OBJS) $(TESTOBJS) $(TESTLDFLAGS) $(LDFLAGS)
+
+check: clean $(TESTTARGET)
+	./unittests
 
 all:	$(TARGET)
 

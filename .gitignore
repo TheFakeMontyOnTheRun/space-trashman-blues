@@ -126,3 +126,15 @@ my_frontend/CPCVersion/obj/.folder
 my_frontend/CPCVersion/obj/prebuildstep.objectfile
 my_frontend/CPCVersion/obj/dsk_files/.folder
 my_frontend/CPCVersion/src/Engine3D.h
+core/src/Core.asm
+core/src/Core.lst
+core/src/Core.sym
+core/src/Derelict.asm
+core/src/Derelict.lst
+core/src/Derelict.sym
+my_frontend/demo.ihx
+my_frontend/demo.noi
+my_frontend/derelict.bin
+my_frontend/derelict.cpc
+my_frontend/derelict.dsk
+lcov-output.info

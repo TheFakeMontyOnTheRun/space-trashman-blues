@@ -672,6 +672,3 @@ void HUD_refresh() {
     }
 }
 
-void printSituation() {
-
-}
