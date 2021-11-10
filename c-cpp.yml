@@ -1,0 +1,19 @@
+name: Run Core tests
+
+on:
+  push:
+    branches: [ release/episode0 ]
+  pull_request:
+    branches: [ release/episode0 ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: make
+      run: cd core && make
+    - name: make check
+      run: cd core && make check
