@@ -39,6 +39,9 @@ $(TARGET):	$(OBJS) $(MAIN_GAME_OBJ)
 $(TESTTARGET): $(OBJS) $(TESTOBJS)
 	$(CXX) -o $(TESTTARGET) -g $(OBJS) $(TESTOBJS) $(TESTLDFLAGS) $(LDFLAGS)
 
+check: clean $(TESTTARGET)
+	./unittests
+
 all:	$(TARGET)
 
 clean:
