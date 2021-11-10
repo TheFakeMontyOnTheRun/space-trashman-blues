@@ -26,11 +26,10 @@ enum ECommand {
 	kCommandStrafeRight,
 	kCommandFire3,
 	kCommandFire4,
-    kCommandFire5,
-    kCommandFire6,
 };
 
 enum EGameMenuState {
+	kResumeCurrentState = -1,
 	kMainMenu,
 	kPlayGame,
 	kHelp,
@@ -40,10 +39,14 @@ enum EGameMenuState {
     kBackToGame,
 	kEndGame,
     kInspectItem,
+    kHackingGame,
 	kGoodVictoryEpilogue,
     kBadVictoryEpilogue,
     kGoodGameOverEpilogue,
 	kBadGameOverEpilogue,
+	kRandomBattle,
+	kAttackOnBattle,
+	kDefendOnBattle,
 	kPrologue,
 	kEpilogue
 };
@@ -57,7 +60,9 @@ enum EPresentationState {
 	kConfirmInputBlink4,
 	kConfirmInputBlink5,
 	kConfirmInputBlink6,
-	kFade
+	kFade,
+    kRoomTransitioning,
+	kEnteringRandomBattle
 };
 
 enum ESoundDriver {

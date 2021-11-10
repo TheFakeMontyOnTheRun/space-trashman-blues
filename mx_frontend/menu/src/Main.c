@@ -21,8 +21,8 @@
 #else
 
 #include <stdint.h>
-#endif
 
+#endif
 
 
 #endif
@@ -30,11 +30,11 @@
 #ifdef WIN32
 const long UCLOCKS_PER_SEC = 1000;
 long uclock() {
-	SYSTEMTIME systime;
-	GetSystemTime(&systime);
+    SYSTEMTIME systime;
+    GetSystemTime(&systime);
 
 
-	return 1000 * ((systime.wSecond * 1000) + (systime.wMilliseconds));
+    return 1000 * ((systime.wSecond * 1000) + (systime.wMilliseconds));
 }
 #else
 #ifndef __DJGPP__
@@ -43,8 +43,8 @@ const long UCLOCKS_PER_SEC = 1000;
 long timeEllapsed = 0;
 
 long uclock() {
-	timeEllapsed += (1000 / 60);
-	return timeEllapsed;
+    timeEllapsed += (1000 / 60);
+    return timeEllapsed;
 }
 
 #endif
@@ -57,6 +57,7 @@ long uclock() {
 #include "MapWithCharKey.h"
 #include "Common.h"
 #include "LoadBitmap.h"
+#include "Core.h"
 #include "Engine.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
@@ -69,7 +70,6 @@ long uclock() {
 #include <emscripten/emscripten.h>
 #endif
 
-void initHW();
 
 void shutdownHW();
 
@@ -77,26 +77,26 @@ extern int isRunning;
 extern long timeUntilNextState;
 extern enum EPresentationState currentPresentationState;
 extern struct Bitmap *currentBackgroundBitmap;
-extern int32_t nextNavigationSelection;
-extern int32_t currentGameMenuState;
+extern enum EGameMenuState nextNavigationSelection;
+extern enum EGameMenuState currentGameMenuState;
 extern const char *mainText;
 
-int menuTick ( long delta_time );
+int menuTick(long delta_time);
 
 void initHW() {
 #ifndef CD32
-	initFileReader("base.pfs");
+    initFileReader("base.pfs");
 #else
-	initFileReader("base.pfs");
+    initFileReader("base.pfs");
 #endif
-	graphicsInit();
+    graphicsInit();
 }
 
 void shutdownHW() {
-	graphicsShutdown();
+    graphicsShutdown();
 }
 
-int start_clock, end_clock, prev;
+long start_clock, end_clock, prev;
 
 #ifdef __EMSCRIPTEN__
 void mainLoop();
@@ -117,12 +117,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine, int nCmdShow)
 {
 
-
+        
 
         WNDCLASSEX WndCls;
 		RECT window_rect = {0, 0, 640, 480};
-        static char szAppName[] = "The Mistral Report 95";
-
+        static char szAppName[] = "Sub Mare Imperium Derelict 95";
 
         hInst = hInstance;
         WndCls.cbSize = sizeof(WndCls);
@@ -144,7 +143,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
         HWnd = CreateWindowEx(WS_EX_OVERLAPPEDWINDOW,
                        szAppName,
-                       "The Mistral Report 95",
+                       "Sub Mare Imperium Derelict 95",
                        WS_OVERLAPPEDWINDOW | WS_VISIBLE,
                        CW_USEDEFAULT,
                        CW_USEDEFAULT,
@@ -156,15 +155,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                        NULL);
 
 
-		AdjustWindowRectEx(&window_rect,
+		AdjustWindowRectEx(&window_rect, 
 							WS_OVERLAPPEDWINDOW | WS_VISIBLE,
 							FALSE,
 							WS_EX_OVERLAPPEDWINDOW
 							);
 
-		MoveWindow(HWnd,
-					CW_USEDEFAULT,
-					CW_USEDEFAULT,
+		MoveWindow(HWnd, 
+					CW_USEDEFAULT, 
+					CW_USEDEFAULT, 
 					window_rect.right - window_rect.left,
 					window_rect.bottom - window_rect.top,
 					TRUE
@@ -176,49 +175,50 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 int main(int argc, char **argv) {
 #endif
 
-	puts(
-			"The Mistral Report - Invisible Affairs, 2018-2019 - by the Brotherhood "
-			"of 13h");
+    puts(
+            "Sub Mare Imperium - Derelict, 2021 - by the Brotherhood "
+            "of 13h");
 
-	srand(time(NULL));
-	initHW();
-        initStation();
-	enterState(kMainMenu);
 
-	end_clock = uclock();
-	prev = 0;
+    initHW();
+    initStation();
+    enterState(kMainMenu);
 
-	start_clock = uclock();
+    end_clock = uclock();
+    prev = 0;
+
+    start_clock = uclock();
 
 #ifdef __EMSCRIPTEN__
-	emscripten_set_main_loop(mainLoop, 0, 1);
+    emscripten_set_main_loop(mainLoop, 0, 1);
 #else
-	while (isRunning) {
-		long now, delta_time;
+    while (isRunning) {
+        long now, delta_time;
 
 #ifdef AMIGA
-		#ifdef AGA8BPP
-		delta_time = 50;
+#ifdef AGA8BPP
+        delta_time = 50;
 #else
-		delta_time = 1000;
+        delta_time = 1000;
 #endif
 
 #else
-		now = (end_clock - start_clock) / (UCLOCKS_PER_SEC / 1000);
-		delta_time = now - prev;
-		prev = now;
+        now = (end_clock - start_clock) / (UCLOCKS_PER_SEC / 1000);
+        delta_time = now - prev;
+        prev = now;
 
-		/* protect against machines too fast for their own good. */
-		if (delta_time < 50) {
-			delta_time = 50;
-		}
+        /* protect against machines too fast for their own good. */
+        if (delta_time < 50) {
+            delta_time = 50;
+        }
 #endif
-		isRunning = isRunning && menuTick(delta_time);
-	}
+        isRunning = isRunning && menuTick(delta_time);
+    }
 #endif
-	unloadStateCallback();
-	shutdownHW();
+    unloadStateCallback();
+    shutdownHW();
 
-	return 0;
+    return 0;
 }
+
 #endif

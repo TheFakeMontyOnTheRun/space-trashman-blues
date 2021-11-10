@@ -27,11 +27,14 @@ add_library( # Sets the name of the library.
 
         # Provides a relative path to your source file(s).
         ../../../../../../core/src/Derelict.c
+        ../../../../../../core/src/Core.c
         ../../../../../../core/src/Parser.c
         ../../../../../menu/src/MainMenu.c
         ../../../../../menu/src/Crawler.c
         ../../../../../menu/src/HelpScreen.c
         ../../../../../menu/src/CreditsScreen.c
+        ../../../../../menu/src/HackingScreen.c
+        ../../../../../menu/src/BattleScreen.c
         ../../../../../menu/src/GameMenu.c
         ../../../../../menu/src/Main.c
         ../../../../../base3d/src/Globals.c

@@ -14,6 +14,7 @@
 #include "Vec.h"
 #include "LoadBitmap.h"
 #include "CActor.h"
+#include "Core.h"
 #include "Engine.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
@@ -32,7 +33,7 @@ NSMutableSet* playingSounds;
 int nextAudioChannel = -1;
 float multiplier = 1.0f;
 
-NSString* fileNamesForSounds[] = {@"menu_move", @"menu_select", @"gotclue", @"detected2", @"bong", @"fire", @"enemyfire", @"detected2" };
+NSString* fileNamesForSounds[] = {@"menu_move", @"menu_select", @"gotclue", @"detected2", @"bong", @"fire", @"enemyfire", @"derelicttheme"};
 
 NSSound* playerSounds[8];
 
@@ -51,7 +52,15 @@ void setupOPL2(int port) {
 }
 
 
-void stopSounds() {}
+void stopSounds() {
+    int count = [playingSounds count];
+	int c = 0;
+    NSArray* groupsArray = [playingSounds allObjects];
+	for (c = 0; c < count; ++c ) {
+		NSSound* sound = [groupsArray objectAtIndex: c ];
+		[sound stop];
+	}
+}
 
 void playSound( const int action ){
     NSSound *original = playerSounds[action];
@@ -219,17 +228,12 @@ void shutdownHW() {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
                 
-                if (x < 256 && y >= 8  ) {
+                if (x < XRES ) {
                     
                     if ( x  >= turnStep ) {
-                        assert( ((320 * y) - turnStep + x) > 0 );
-                        assert( ((320 * y) - turnStep + x) < (320 * 200) );
                         index = previousFrame[ (320 * y) - turnStep + x ];
                     } else {
-                        assert( ((320 * y) + x - 64 - turnStep) > 0 );
-                        assert( ((320 * y) + x - 64 - turnStep) < (320 * 200) );
-
-                        index = buffer[ (320 * y) + x - 64 - turnStep];
+                        index = buffer[ (320 * y) + x - (320 - XRES) - turnStep];
                     }
                     
                 } else {
@@ -242,7 +246,7 @@ void shutdownHW() {
             }
         }
         
-        turnStep+= 32;
+        turnStep+= 20;
     } else {
         
         uint8_t *pixelPtr = &buffer[0];
@@ -251,18 +255,12 @@ void shutdownHW() {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
 
-                if (x < 256 && y >= 8  ) {
+                if (x < XRES ) {
                     
                     if ( x  >= turnStep ) {
-                        assert( ((320 * y) - turnStep + x) > 0 );
-                        assert( ((320 * y) - turnStep + x) < (320 * 200) );
-
                         index = buffer[ (320 * y) - turnStep + x ];
                     } else {
-                        assert( ((320 * y) + x - 64 - turnStep) > 0 );
-                        assert( ((320 * y) + x - 64 - turnStep) < (320 * 200) );
-
-                        index = previousFrame[ (320 * y) + x - 64 - turnStep];
+                        index = previousFrame[ (320 * y) + x - (320 - XRES) - turnStep];
                     }
                     
                 } else {
@@ -277,7 +275,7 @@ void shutdownHW() {
             }
         }
         
-        turnStep-= 32;
+        turnStep-= 20;
     }
         
         
@@ -295,7 +293,7 @@ void shutdownHW() {
     CGContextFillRect(context, bounds);
     
     provider = CGDataProviderCreateWithData( NULL, &stretchedBuffer[0], 4 * 320 * 200, NULL );
-    ref = CGImageCreate( 320, 200, 8, 32, 4 * 320, rgb, kCGBitmapByteOrder32Host, provider, NULL, 0, kCGRenderingIntentDefault );
+    ref = CGImageCreate( 320, 200, 8, 32, 4 * 320, rgb, kCGBitmapByteOrder32Host | kCGImageAlphaNoneSkipLast, provider, NULL, 0, kCGRenderingIntentDefault );
     CGContextScaleCTM(context, multiplier, yMultiplier);
     CGContextDrawImage(context, CGRectMake( ((bounds.size.width / multiplier) - 320) / 2, ((bounds.size.height / yMultiplier) - 200) / 2, 320, 200), ref);
     CGImageRelease(ref);

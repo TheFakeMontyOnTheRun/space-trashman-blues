@@ -2,14 +2,20 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
 #include <unistd.h>
+#endif
 
 #include "Common.h"
 
 void clearVector(struct ItemVector *vector) {
+	size_t c;
     vector->used = 0;
-    for (size_t c = 0; c < vector->capacity; ++c) {
+    for (c = 0; c < vector->capacity; ++c) {
         if (vector->items[c] != NULL) {
             free(vector->items[c]);
             vector->items[c] = NULL;
@@ -24,12 +30,12 @@ void initVector(struct ItemVector *vector, size_t capacity) {
 }
 
 int removeFromVector(struct ItemVector *vector, void *item) {
-
-    for (size_t c = 0; c < vector->capacity; ++c) {
+	size_t c, d;
+    for (c = 0; c < vector->capacity; ++c) {
         if (vector->items[c] == item) {
             void *replacement = NULL;
 
-            for (size_t d = vector->used - 1; d >= c + 1; --d) {
+            for (d = vector->used - 1; d >= c + 1; --d) {
                 replacement = vector->items[d];
                 if (replacement != NULL) {
                     vector->items[d] = NULL;
@@ -47,8 +53,8 @@ int removeFromVector(struct ItemVector *vector, void *item) {
 }
 
 int pushVector(struct ItemVector *vector, void *item) {
-
-    for (size_t c = 0; c < vector->capacity; ++c) {
+	size_t c;
+    for (c = 0; c < vector->capacity; ++c) {
         if (vector->items[c] == NULL) {
             vector->used++;
             vector->items[c] = item;

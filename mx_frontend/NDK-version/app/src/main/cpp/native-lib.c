@@ -19,6 +19,7 @@
 #include "Vec.h"
 #include "LoadBitmap.h"
 #include "CActor.h"
+#include "Core.h"
 #include "Engine.h"
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
@@ -102,7 +103,6 @@ void flipRenderer(void) {
     uint8_t r, g, b, a;
 
     unsigned char *ptr = &framebufferFinal[0];
-    memset(ptr, 0, 320 * 240 * 4);
 
     if ( turnTarget == turnStep ) {
 
@@ -130,18 +130,18 @@ void flipRenderer(void) {
 
     } else if ( turnStep < turnTarget ) {
 
-        for ( y = 0; y < 200; ++y ) {
+        for ( y = 0; y < 240; ++y ) {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
 
-                if (x < 256 && y >= 8  ) {
+                if (x < XRES) {
                     if ( x  >= turnStep ) {
-                        index = previousFrame[ (320 * y) - turnStep + x ];
+                        index = previousFrame[ (int)(320 * ((200 * y) / 240 )) - turnStep + x ];
                     } else {
-                        index = framebuffer[ (320 * y) + x - 64 - turnStep];
+                        index = framebuffer[ (int)(320 * ((200 * y) / 240 )) + x - (320 - XRES) - turnStep];
                     }
                 } else {
-                    index = framebuffer[ (320 * y) + x];
+                    index = framebuffer[ (int)(320 * ((200 * y) / 240 )) + x];
                 }
 
                 uint32_t pixel = palette[ index ];
@@ -161,23 +161,23 @@ void flipRenderer(void) {
             }
         }
 
-        turnStep+= 32;
+        turnStep+= 20;
     } else {
 
-        for ( y = 0; y < 200; ++y ) {
+        for ( y = 0; y < 240; ++y ) {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
 
-                if (x < 256 && y >= 8  ) {
+                if (x < XRES) {
 
                     if ( x  >= turnStep ) {
-                        index = framebuffer[ (320 * y) - turnStep + x ];
+                        index = framebuffer[ (int)(320 * ((200 * y) / 240 )) - turnStep + x ];
                     } else {
-                        index = previousFrame[ (320 * y) + x - 64 - turnStep];
+                        index = previousFrame[ (int)(320 * ((200 * y) / 240 )) + x - (320 - XRES) - turnStep];
                     }
 
                 } else {
-                    index = framebuffer[ (320 * y) + x];
+                    index = framebuffer[ (int)(320 * ((200 * y) / 240 )) + x];
                 }
 
                 uint32_t pixel = palette[ index ];
@@ -197,7 +197,7 @@ void flipRenderer(void) {
             }
         }
 
-        turnStep-= 32;
+        turnStep-= 20;
     }
 }
 
@@ -211,6 +211,7 @@ Java_pt_b13h_spacetrashmanblues_MistralJNI_initAssets(JNIEnv *env, jclass clazz,
     defaultAssetManager = asset_manager;
     srand(time(NULL));
     initHW();
+    enableSmoothMovement = TRUE;
 #ifndef INSTANT_APP
     enterState(kMainMenu);
 #else
@@ -221,7 +222,7 @@ Java_pt_b13h_spacetrashmanblues_MistralJNI_initAssets(JNIEnv *env, jclass clazz,
 JNIEXPORT void JNICALL
 Java_pt_b13h_spacetrashmanblues_MistralJNI_getPixelsFromNative(JNIEnv *env, jclass clazz,
                                                              jbyteArray array) {
-    menuTick ( 50 );
+    menuTick ( 33 );
     jbyte *narr = (*env)->GetByteArrayElements(env, array, NULL);
     memcpy(narr, &framebufferFinal[0], 320 * 240 * 4);
 }
@@ -279,13 +280,13 @@ JNIEXPORT void JNICALL
         case 'a':
             mBufferedCommand = kCommandLeft;
             turnStep = 0;
-            turnTarget = 256;
+            turnTarget = 200;
             break;
 
 
         case 'd':
             mBufferedCommand = kCommandRight;
-            turnStep = 256;
+            turnStep = 200;
             turnTarget = 0;
             break;
 

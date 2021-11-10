@@ -1,0 +1,17 @@
+CFLAGS = -g -c -DMSDOS -DRES64X128
+
+CC = ia16-elf-gcc
+
+
+OBJS = src/demo.o src/msdos.o
+
+TARGET = my.com
+
+$(TARGET):	$(OBJS)
+	$(CXX) -o $(TARGET) $(OBJS) $(LDFLAGS)
+
+all:	$(TARGET)
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+	rm *~

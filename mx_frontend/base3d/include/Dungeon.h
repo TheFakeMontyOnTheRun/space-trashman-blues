@@ -31,7 +31,13 @@ void setActor(const int x, const int y, const uint8_t actor);
 
 void setItem(const int x, const int y, const uint8_t item);
 
+int isPositionAllowed(int x, int y);
+
 void setDamage(void);
 
 void setDetected(void);
+
+void initRoom(int room);
+
+extern int enteredThru;
 #endif

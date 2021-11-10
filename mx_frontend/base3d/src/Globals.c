@@ -2,19 +2,25 @@
  Created by Daniel Monteiro on 03/10/2019.
 */
 
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
 #include <unistd.h>
+#endif
 
 #include "Common.h"
 #include "Globals.h"
 #include "Enums.h"
+#include "Core.h"
 #include "Engine.h"
+
 int renderingMethod = FIXED;
 struct Bitmap *currentBackgroundBitmap = NULL;
 int32_t currentGameMenuState = -1;
-int32_t menuStateToReturn = -1;
+enum EGameMenuState menuStateToReturn = kResumeCurrentState;
 int cursorPosition = 0;
-int32_t nextNavigationSelection = -1;
+enum EGameMenuState nextNavigationSelection = kResumeCurrentState;
 long timeUntilNextState = MENU_ITEM_TIME_TO_BECOME_ACTIVE_MS;
 enum EPresentationState currentPresentationState;
 size_t biggestOption;

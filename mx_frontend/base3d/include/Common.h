@@ -1,10 +1,19 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#define MAP_SIZE 64
+#ifdef WIN32
+#include "Win32Int.h"
+#else
+#include <stdint.h>
+#include <unistd.h>
+#endif
 
+#define MAP_SIZE 32
+
+#ifndef TRUE
 #define TRUE 1
 #define FALSE 0
+#endif
 
 struct ItemVector {
     void **items;
@@ -17,6 +26,8 @@ struct StaticBuffer {
     size_t size;
 };
 
+#define __restrict__ /*__restrict__*/ 
+
 void initVector(struct ItemVector *vector, size_t capacity);
 
 int removeFromVector(struct ItemVector *vector, void *item);
@@ -27,9 +38,13 @@ int pushVector(struct ItemVector *vector, void *item);
 
 int isBigEndian(void);
 
+void initFileReader(const char * __restrict__ dataFilePath);
+
 uint32_t toNativeEndianess(const uint32_t val);
 
+#ifndef WIN32
 #define min(v1, v2) (( (v1) < (v2) ) ? (v1) : (v2) )
 #define max(v1, v2) (( (v1) > (v2) ) ? (v1) : (v2) )
+#endif
 
 #endif

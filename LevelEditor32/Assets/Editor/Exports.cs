@@ -5,9 +5,4 @@ using UnityEditor;
 
 public class Exports : Editor
 {
-    [MenuItem("Monty/Export Level")]
-    static void ExportLevel()
-    {
-        Debug.Log("Doing stuff");
-    }
 }

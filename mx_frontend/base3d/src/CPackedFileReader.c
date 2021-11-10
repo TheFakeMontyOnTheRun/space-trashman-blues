@@ -4,8 +4,12 @@
 #include <assert.h>
 #include <errno.h>
 
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
 #include <unistd.h>
+#endif
 
 #include "Common.h"
 
@@ -109,7 +113,7 @@ struct StaticBuffer loadBinaryFileFromPath(const char *__restrict__ path) {
 #else
     FILE *mDataPack = android_fopen(&mDataPath[0]);
 #endif
-    
+
     struct StaticBuffer toReturn;
 
     uint32_t offset = 0;
@@ -117,7 +121,7 @@ struct StaticBuffer loadBinaryFileFromPath(const char *__restrict__ path) {
     char buffer[85];
     int c;
     uint32_t size = 0;
-    
+
 
     assert (fread(&entries, 2, 1, mDataPack));
 

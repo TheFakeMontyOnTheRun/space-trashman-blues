@@ -3,8 +3,12 @@
 #include <math.h>
 #include <assert.h>
 
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
 #include <unistd.h>
+#endif
 
 #include "Enums.h"
 #include "Common.h"
@@ -18,6 +22,7 @@
 #include "CTile3DProperties.h"
 #include "EDirection_Utils.h"
 #include "CRenderer.h"
+#include "Core.h"
 #include "Engine.h"
 #include "FixP.h"
 #include "MapWithCharKey.h"

@@ -36,17 +36,34 @@
 #include "Engine.h"
 #include "LoadBitmap.h"
 #include "CRenderer.h"
+#include "Globals.h"
 
 #define REG(xn, parm) parm __asm(#xn)
 #define REGARGS __regargs
 
-extern void REGARGS c2p1x1_8_c5_bm(
+#ifdef AGA5BPP
+extern void REGARGS c2p1x1_4_c5_bm(
 REG(d0, UWORD chunky_x),
 REG(d1, UWORD chunky_y),
 REG(d2, UWORD offset_x),
 REG(d3, UWORD offset_y),
 REG(a0, UBYTE *chunky_buffer),
 REG(a1, struct BitMap *bitmap));
+#else
+extern void REGARGS
+c2p1x1_8_c5_bm(
+REG(d0, UWORD
+        chunky_x),
+REG(d1, UWORD
+        chunky_y),
+REG(d2, UWORD
+        offset_x),
+REG(d3, UWORD
+        offset_y),
+REG(a0, UBYTE * chunky_buffer),
+REG(a1, struct BitMap *bitmap)
+);
+#endif
 
 struct IntuitionBase *IntuitionBase;
 struct GfxBase *GfxBase;
@@ -67,7 +84,7 @@ struct NewScreen xnewscreen = {
 	0,			  /* ViewModes High-resolution, Interlaced */
 	CUSTOMSCREEN,	  /* Type customized screen. */
 	NULL,		  /* Font */
-	"The Mistral Report", /* Title */
+	"Sub Mare Imperium - Derelict", /* Title */
 	NULL,		  /* Gadget */
 	NULL		  /* BitMap */
 };
@@ -83,7 +100,7 @@ struct NewScreen xnewscreen = {
 		0,              /* ViewModes High-resolution, Interlaced */
 		CUSTOMSCREEN,      /* Type customized screen. */
 		NULL,          /* Font */
-		"The Mistral Report", /* Title */
+		"Sub Mare Imperium - Derelict", /* Title */
 		NULL,          /* Gadget */
 		NULL          /* BitMap */
 };
@@ -103,7 +120,7 @@ struct NewScreen xnewscreen = {
 			ACTIVATE,                      /*            */
 			NULL,                          /* FirstGadget */
 			NULL,                          /* CheckMark   */
-			(UBYTE *) "The Mistral Report",              /* Title       */
+			(UBYTE *) "Sub Mare Imperium - Derelict",              /* Title       */
 			NULL,                          /* Screen      */
 			NULL,                          /* BitMap      */
 			320,                          /* MinWidth    */
@@ -198,13 +215,13 @@ void graphicsInit() {
 	struct ColorMap *cm;
 	struct Window *window;
 	struct IntuiMessage *msg;
-	struct DisplayInfo displayinfo;
-	struct TagItem taglist[3];
 	int OpenA2024 = FALSE;
 	int IsV36 = FALSE;
 	int IsPAL;
 
 	drawTitleBox();
+
+	enableSmoothMovement = TRUE;
 
 	IntuitionBase =
 			(struct IntuitionBase *) OpenLibrary("intuition.library", 0);
@@ -307,8 +324,13 @@ int xlate_key (UWORD rawkey, UWORD qualifier, APTR eventptr)
 					case '4':
 						mBufferedCommand = kCommandLeft;
 						visibilityCached = FALSE;
-                        turnStep = 0;
-                        turnTarget = 256;
+                        if ((currentGameMenuState == kPlayGame ||
+                             currentGameMenuState == kBackToGame) &&
+                            currentPresentationState == kWaitingForInput
+                                ) {
+                            turnStep = 0;
+                            turnTarget = 256;
+                        }
 						break;
 					case '5':
 						mBufferedCommand = kCommandDown;
@@ -317,8 +339,13 @@ int xlate_key (UWORD rawkey, UWORD qualifier, APTR eventptr)
 					case '6':
 						mBufferedCommand = kCommandRight;
 						visibilityCached = FALSE;
-                        turnStep = 256;
-                        turnTarget = 0;
+                        if ((currentGameMenuState == kPlayGame ||
+                             currentGameMenuState == kBackToGame) &&
+                            currentPresentationState == kWaitingForInput
+                                ) {
+                            turnStep = 256;
+                            turnTarget = 0;
+                        }
 						break;
 					case '8':
 						mBufferedCommand = kCommandUp;
@@ -339,14 +366,24 @@ int xlate_key (UWORD rawkey, UWORD qualifier, APTR eventptr)
 			case 0x4E:
 				mBufferedCommand = kCommandRight;
 				visibilityCached = FALSE;
-                turnStep = 256;
-                turnTarget = 0;
+                if ((currentGameMenuState == kPlayGame ||
+                     currentGameMenuState == kBackToGame) &&
+                    currentPresentationState == kWaitingForInput
+                        ) {
+                    turnStep = 256;
+                    turnTarget = 0;
+                }
                 break;
 			case 0x4F:
 				mBufferedCommand = kCommandLeft;
 				visibilityCached = FALSE;
-                turnStep = 0;
-                turnTarget = 256;
+                if ((currentGameMenuState == kPlayGame ||
+                     currentGameMenuState == kBackToGame) &&
+                    currentPresentationState == kWaitingForInput
+                        ) {
+                    turnStep = 0;
+                    turnTarget = 256;
+                }
 				break;
 			case 96:
 			case 97:
@@ -399,35 +436,64 @@ void handleSystemEvents() {
 					mBufferedCommand = kCommandFire1;
 					break;
 
-			    case 'a':
-                    mBufferedCommand = kCommandFire4;
-                    break;
+				case 'o':
+				case 'x':
+				case ' ':
+					mBufferedCommand = kCommandFire2;
+					break;
+
+				case 'p':
+				case 'c':
+					mBufferedCommand = kCommandFire3;
+					break;
+
 			    case 'v':
-                    mBufferedCommand = kCommandFire5;
-                    break;
-			    case 'f':
-                    mBufferedCommand = kCommandFire6;
+                    mBufferedCommand = kCommandFire4;
                     break;
 
 				case 'b':
 					mBufferedCommand = kCommandLeft;
 					visibilityCached = FALSE;
-					turnStep = 0;
-					turnTarget = 256;
+                    if ((currentGameMenuState == kPlayGame ||
+                         currentGameMenuState == kBackToGame) &&
+                        currentPresentationState == kWaitingForInput
+                            ) {
+                        turnStep = 0;
+                        turnTarget = 256;
+                    }
 					break;
 
 				case 'm':
 					mBufferedCommand = kCommandRight;
 					visibilityCached = FALSE;
-					turnStep = 256;
-					turnTarget = 0;
+                    if ((currentGameMenuState == kPlayGame ||
+                         currentGameMenuState == kBackToGame) &&
+                        currentPresentationState == kWaitingForInput
+                            ) {
+                        turnStep = 256;
+                        turnTarget = 0;
+                    }
 					break;
 
 				case 'h':
 					mBufferedCommand = kCommandUp;
 					visibilityCached = FALSE;
 					break;
+                case '1':
+                    enableSmoothMovement = TRUE;
+                    break;
 
+                case '2':
+                    enableSmoothMovement = FALSE;
+                    break;
+
+                case '3':
+                    renderingMethod = FIXED;
+                    break;
+
+                case '4':
+                    renderingMethod = LUT;
+                    break;
 				case 's':
 					mBufferedCommand = kCommandStrafeLeft;
 					break;
@@ -442,20 +508,6 @@ void handleSystemEvents() {
 				case 'n':
 					mBufferedCommand = kCommandDown;
 					visibilityCached = FALSE;
-					break;
-
-				case 'e':
-					break;
-
-				case 'o':
-				case 'x':
-				case ' ':
-					mBufferedCommand = kCommandFire2;
-					break;
-
-				case 'p':
-				case 'c':
-					mBufferedCommand = kCommandFire3;
 					break;
 			}
 
@@ -475,14 +527,18 @@ void flipRenderer() {
 
 
 
-    if ( turnTarget == turnStep ) {
+    if ( !enableSmoothMovement || turnTarget == turnStep ) {
 #ifdef CD32
         WriteChunkyPixels(my_window->RPort, 0, 0, 320, 200, &framebuffer[0], 320);
 #else
 #ifdef AGA8BPP
-        c2p1x1_8_c5_bm(320,200,0,0,&framebuffer[0], my_window->RPort->BitMap);
+        OwnBlitter();
+    c2p1x1_8_c5_bm(320, dirtyLineY1 - dirtyLineY0, 0, dirtyLineY0, &framebuffer[dirtyLineY0 * 320], my_window->RPort->BitMap);
+        DisownBlitter();
 #else
-        WriteChunkyPixels(my_window->RPort, 0, 0, 319, 199, &framebuffer[0], 320);
+        OwnBlitter();
+        c2p1x1_4_c5_bm(320, dirtyLineY1 - dirtyLineY0, 0, dirtyLineY0, &framebuffer[dirtyLineY0 * 320], my_window->RPort->BitMap);
+        DisownBlitter();
 #endif
 #endif
         memcpy( previousFrame, framebuffer, 320 * 200);
@@ -493,7 +549,7 @@ void flipRenderer() {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
 
-                if (x < 256 && y >= 8  ) {
+                if (x < 256  ) {
 
                     if ( x  >= turnStep ) {
                         index = previousFrame[ (320 * y) - turnStep + x ];
@@ -516,7 +572,7 @@ void flipRenderer() {
 #ifdef AGA8BPP
         c2p1x1_8_c5_bm(320,200,0,0,&turnBuffer[0], my_window->RPort->BitMap);
 #else
-        WriteChunkyPixels(my_window->RPort, 0, 0, 319, 199, &turnBuffer[0], 320);
+        c2p1x1_4_c5_bm(320,200,0,0,&turnBuffer[0], my_window->RPort->BitMap);
 #endif
 #endif
     } else {
@@ -526,7 +582,7 @@ void flipRenderer() {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
 
-                if (x < 256 && y >= 8  ) {
+                if (x < 256  ) {
 
                     if ( x  >= turnStep ) {
                         index = framebuffer[ (320 * y) - turnStep + x ];
@@ -550,7 +606,7 @@ void flipRenderer() {
 #ifdef AGA8BPP
         c2p1x1_8_c5_bm(320,200,0,0,&turnBuffer[0], my_window->RPort->BitMap);
 #else
-        WriteChunkyPixels(my_window->RPort, 0, 0, 319, 199, &turnBuffer[0], 320);
+        c2p1x1_4_c5_bm(320,200,0,0,&turnBuffer[0], my_window->RPort->BitMap);
 #endif
 #endif
     }

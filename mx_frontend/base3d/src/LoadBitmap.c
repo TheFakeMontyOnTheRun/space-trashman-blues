@@ -3,8 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
 #include <unistd.h>
+#endif
 
 #include "Enums.h"
 #include "FixP.h"
@@ -16,6 +20,7 @@
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
+#include "Core.h"
 #include "Engine.h"
 #include "FixP.h"
 #include "VisibilityStrategy.h"
@@ -45,7 +50,8 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
     uint8_t *diskBuffer;
     uint8_t pixel;
     uint8_t repetitions;
-    int c, d = 0;
+    size_t c;
+    int d = 0;
     size_t sizeInDisk = sizeOfFile(filename) - 4;
     int pixelIndex = 0;
     uint8_t buffer[NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
@@ -154,7 +160,8 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
 }
 
 struct Bitmap *loadBitmap(const char *__restrict__ filename) {
-    int c, d = 0;
+    size_t c;
+    int d = 0;
     uint8_t pixel;
     uint8_t repetitions;
 

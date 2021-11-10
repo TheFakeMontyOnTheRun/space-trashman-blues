@@ -3,8 +3,12 @@
 #include <string.h>
 #include <assert.h>
 
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
 #include <unistd.h>
+#endif
 
 #include "Enums.h"
 #include "FixP.h"
@@ -14,6 +18,7 @@
 #include "Common.h"
 #include "Vec.h"
 #include "LoadBitmap.h"
+#include "Core.h"
 #include "Engine.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
@@ -33,8 +38,6 @@ int rotation = 0;
 enum CrawlerState shouldContinue = kCrawlerGameInProgress;
 struct CActor actor;
 
-int loopTick(enum ECommand command);
-
 void clearMapCache() {
     size_t sizeForSet = sizeof(uint8_t) * (MAP_SIZE * MAP_SIZE);
     memset (&items[0], 0xFF, sizeForSet);
@@ -48,7 +51,6 @@ void onLevelLoaded(int index) {
     clearMap(&tileProperties);
     loadTexturesForLevel(index);
     loadTileProperties(index);
-    memset (&revealed[0], FALSE, 40 * 40 * sizeof(int));
 }
 
 void tickMission(enum ECommand cmd) {
@@ -88,18 +90,6 @@ void setItem(const int x, const int y, uint8_t item) {
     items[(MAP_SIZE * y) + x] = item;
 }
 
-void setDamage() {
-}
-
-void setDetected() {
-    /* enemy detected you */
-    playSound(PLAYER_GOT_DETECTED_SOUND);
-}
-
-uint8_t getItemOnMap(int x, int y) {
-    return items[(MAP_SIZE * y) + x];
-}
-
 void loadMap(int map, struct MapWithCharKey *collisionMap) {
 
     /* all the char keys plus null terminator */
@@ -118,125 +108,16 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
     sprintf (nameBuffer, "map%d.txt", map);
     buffer = loadBinaryFileFromPath(nameBuffer);
     dungeon_loadMap(buffer.data, collisions, map);
-    free(buffer.data);
-}
 
-int canSeeSpy(const struct Vec2i seer,
-              int direction,
-              const struct Vec2i target,
-              int enemy) {
-    int iX;
-    int iY;
-    char tile;
-    int occluder;
-    int dx = (target.x - seer.x);
-    int dy = (target.y - seer.y);
-    FixP_t x = intToFix(seer.x);
-    FixP_t y = intToFix(seer.y);
-    FixP_t one = intToFix(1);
-    FixP_t zero = 0;
-    FixP_t incX;
-    FixP_t incY;
-    FixP_t targetX = intToFix(target.x);
-    FixP_t targetY = intToFix(target.y);
+    sprintf (nameBuffer, "map%d.img", map);
 
-    /* we must pick the bigger, iterate on each square of it and slowly increment the smaller */
-
-    if (abs(dx) >= abs(dy)) {
-
-        /* ++x, y += incY */
-        FixP_t inc = zero;
-
-        if (dx != 0) {
-            inc = Div(intToFix(abs(dy)), intToFix(abs(dx)));
-
-            if ((direction == 0 || direction == 2)) {
-                return FALSE;
-            }
-
-            if (dy < 0) {
-                inc = -inc;
-            }
-        }
-
-        incY = inc;
-
-        if (dx >= 0) {
-            incX = one;
-        } else {
-            incX = -one;
-        }
-
-        if ((direction == 3) && incX > zero) {
-            return FALSE;
-        }
-        if ((direction == 1) && incX < zero) {
-            return FALSE;
-        }
-
-    } else {
-        /* ++y, x += incX */
-        FixP_t inc = zero;
-
-        if (dy != 0) {
-            inc = Div(intToFix(abs(dx)), intToFix(abs(dy)));
-
-            if ((direction == 1 || direction == 3)) {
-                return FALSE;
-            }
-
-            if (dx < 0) {
-                inc = -inc;
-            }
-        }
-
-        incX = inc;
-
-        if (dy >= 0) {
-            incY = one;
-        } else {
-            incY = -one;
-        }
-
-        if ((direction == 2) && incY < zero) {
-            return FALSE;
-        }
-
-        if ((direction == 0) && incY > zero) {
-            return FALSE;
-        }
+    if (mapTopLevel) {
+        free(mapTopLevel);
     }
 
-    do {
-        x += incX;
-        y += incY;
+    mapTopLevel = loadBitmap(nameBuffer);
 
-        iX = fixToInt(x);
-        iY = fixToInt(y);
-
-        tile = visibleElementsMap[(iY * MAP_SIZE ) + iX];
-
-        if (tile == 0) {
-            /* map is not loaded  yet... */
-            return FALSE;
-        }
-
-        occluder = (getFromMap(&enemySightBlockers, tile) != NULL);
-
-        if (occluder) {
-            return FALSE;
-        }
-
-        if ((abs(x - targetX) < one) && (abs(y - targetY) < one)) {
-            return TRUE;
-        }
-
-        linesOfSight[iY][iX] = TRUE;
-
-    } while (!occluder
-             && (iX < MAP_SIZE && iY < MAP_SIZE && iX >= 0 && iY >= 0));
-
-    return FALSE;
+    free(buffer.data);
 }
 
 void renderTick(long ms) {
@@ -246,7 +127,7 @@ void renderTick(long ms) {
 int loopTick(enum ECommand command) {
 
     int needRedraw = 0;
-    
+
     if (command == kCommandBack) {
         shouldContinue = kCrawlerQuit;
     } else if (command != kCommandNone || gameTicks == 0) {
@@ -258,13 +139,17 @@ int loopTick(enum ECommand command) {
         }
 
         tickMission(command);
-        
-        if (gameTicks != 0 ) {
-            yCameraOffset = ((struct CTile3DProperties *) getFromMap(&tileProperties, elements[ (z * MAP_SIZE) + x]))->mFloorHeight - ((struct CTile3DProperties *) getFromMap(&tileProperties, elements[(actor.mPosition.y * MAP_SIZE) + actor.mPosition.x]))->mFloorHeight;
+
+        if (gameTicks != 0) {
+            yCameraOffset = ((struct CTile3DProperties *) getFromMap(&tileProperties,
+                                                                     elements[(z * MAP_SIZE) + x]))->mFloorHeight -
+                            ((struct CTile3DProperties *) getFromMap(&tileProperties,
+                                                                     elements[(actor.mPosition.y * MAP_SIZE) +
+                                                                              actor.mPosition.x]))->mFloorHeight;
         } else {
             yCameraOffset = 0;
         }
-        
+
         actor.mPosition.x = x;
         actor.mPosition.y = z;
         actor.mDirection = (enum EDirection) (rotation);
@@ -275,9 +160,9 @@ int loopTick(enum ECommand command) {
     if (zCameraOffset != 0 || xCameraOffset != 0 || yCameraOffset != 0) {
         needRedraw = 1;
     }
-    
-    
-    if ( needRedraw ) {
+
+
+    if (needRedraw) {
         drawMap(&elements[0], &items[0], &actorsInMap[0], &effects[0],
                 &actor);
         if (!enable3DRendering) {

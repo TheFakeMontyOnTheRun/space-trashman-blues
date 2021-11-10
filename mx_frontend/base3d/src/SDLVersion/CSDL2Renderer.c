@@ -10,6 +10,7 @@
 #include "Vec.h"
 #include "LoadBitmap.h"
 #include "CActor.h"
+#include "Core.h"
 #include "Engine.h"
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
@@ -36,6 +37,8 @@ void enterFullScreenMode() {
 SDL_Window *window;
 SDL_Renderer *renderer;
 
+uint8_t turnBuffer[320 * 200];
+
 uint8_t getPaletteEntry(const uint32_t origin) {
 	uint8_t shade;
 
@@ -58,7 +61,7 @@ void graphicsInit() {
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 
 	window =
-			SDL_CreateWindow("The Mistral Report", SDL_WINDOWPOS_CENTERED,
+			SDL_CreateWindow("Sub Mare Imperium - Derelict", SDL_WINDOWPOS_CENTERED,
 							 SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
 
 	renderer = SDL_CreateRenderer(window, -1, 0);
@@ -77,6 +80,7 @@ void graphicsInit() {
 	enterFullScreenMode ();
 #endif
 	defaultFont = loadBitmap("font.img");
+	enableSmoothMovement = TRUE;
 }
 
 void handleSystemEvents() {
@@ -98,6 +102,22 @@ void handleSystemEvents() {
 					visibilityCached = FALSE;
 					needsToRedrawVisibleMeshes = TRUE;
 					break;
+				case SDLK_x:
+					mBufferedCommand = kCommandFire2;
+					visibilityCached = FALSE;
+					needsToRedrawVisibleMeshes = TRUE;
+					break;
+				case SDLK_c:
+					mBufferedCommand = kCommandFire3;
+					visibilityCached = FALSE;
+					needsToRedrawVisibleMeshes = TRUE;
+					break;
+				case SDLK_v:
+					mBufferedCommand = kCommandFire4;
+					visibilityCached = FALSE;
+					needsToRedrawVisibleMeshes = TRUE;
+					break;
+
 
 				case SDLK_ESCAPE:
 				case SDLK_q:
@@ -116,10 +136,10 @@ void handleSystemEvents() {
 					visibilityCached = FALSE;
 					break;
 
-				case SDLK_v:
+				case SDLK_i:
 					visibilityCached = FALSE;
 					break;
-				case SDLK_b:
+				case SDLK_o:
 					visibilityCached = FALSE;
 					break;
 
@@ -132,46 +152,59 @@ void handleSystemEvents() {
 					visibilityCached = FALSE;
 					break;
 
-				case SDLK_x:
-					mBufferedCommand = kCommandFire2;
-					visibilityCached = FALSE;
-					needsToRedrawVisibleMeshes = TRUE;
-					break;
-				case SDLK_c:
-					mBufferedCommand = kCommandFire3;
-					visibilityCached = FALSE;
-					needsToRedrawVisibleMeshes = TRUE;
-					break;
-				case SDLK_e:
-					mBufferedCommand = kCommandFire4;
-					visibilityCached = FALSE;
-					needsToRedrawVisibleMeshes = TRUE;
-					break;
 
 				case SDLK_LEFT:
 					mBufferedCommand = kCommandLeft;
 					visibilityCached = FALSE;
+					if ((currentGameMenuState == kPlayGame ||
+						 currentGameMenuState == kBackToGame) &&
+						currentPresentationState == kWaitingForInput
+							) {
+						turnStep = 0;
+						turnTarget = 200;
+					}
 					break;
 				case SDLK_RIGHT:
 					mBufferedCommand = kCommandRight;
 					visibilityCached = FALSE;
+					if ((currentGameMenuState == kPlayGame ||
+						 currentGameMenuState == kBackToGame) &&
+						currentPresentationState == kWaitingForInput
+							) {
+						turnStep = 200;
+						turnTarget = 0;
+					}
 					break;
 				case SDLK_UP:
 					mBufferedCommand = kCommandUp;
 					visibilityCached = FALSE;
 					break;
+				case SDLK_1:
+					enableSmoothMovement = TRUE;
+					break;
+
+				case SDLK_2:
+					enableSmoothMovement = FALSE;
+					break;
+
+				case SDLK_3:
+					renderingMethod = FIXED;
+					break;
+
+				case SDLK_4:
+					renderingMethod = LUT;
+					break;
+
 				case SDLK_DOWN:
 					mBufferedCommand = kCommandDown;
 					visibilityCached = FALSE;
 					break;
 
                 case SDLK_n:
-                    renderingMethod = FIXED;
                     needsToRedrawVisibleMeshes = TRUE;
                     visibilityCached = FALSE;
                     break;
                 case SDLK_m:
-                    renderingMethod = LUT;
                     needsToRedrawVisibleMeshes = TRUE;
                     visibilityCached = FALSE;
                     break;
@@ -193,25 +226,104 @@ void graphicsShutdown() {
 
 void flipRenderer() {
 	SDL_Rect rect;
-	uint32_t pixel;
 	int x, y;
 
-	for (y = 0; y < 200; ++y) {
-		for (x = 0; x < 320; ++x) {
+	if ( !enableSmoothMovement || turnTarget == turnStep ) {
+		uint8_t *pixelPtr = &framebuffer[0];
 
-			rect.x = 2 * x;
-			rect.y = (24 * y) / 10;
-			rect.w = 2;
-			rect.h = 3;
+		for ( y = dirtyLineY0; y < dirtyLineY1; ++y ) {
+			for ( x = 0; x < 320; ++x ) {
+				uint32_t pixel;
 
-			pixel = palette[framebuffer[(320 * y) + x]];
+				rect.x = 2 * x;
+				rect.y = (24 * y) / 10;
+				rect.w = 2;
+				rect.h = 3;
 
-			SDL_SetRenderDrawColor(renderer, (pixel & 0x000000FF) - 0x38,
-								   ((pixel & 0x0000FF00) >> 8) - 0x18,
-								   ((pixel & 0x00FF0000) >> 16) - 0x10, 255);
-			SDL_RenderFillRect(renderer, &rect);
+				pixel = palette[framebuffer[(320 * y) + x]];
+
+				SDL_SetRenderDrawColor(renderer, (pixel & 0x000000FF) - 0x38,
+									   ((pixel & 0x0000FF00) >> 8) - 0x18,
+									   ((pixel & 0x00FF0000) >> 16) - 0x10, 255);
+				SDL_RenderFillRect(renderer, &rect);
+
+				++pixelPtr;
+			}
 		}
+
+		memcpy( previousFrame, framebuffer, 320 * 200);
+	} else if ( turnStep < turnTarget ) {
+
+		for ( y = dirtyLineY0; y < dirtyLineY1; ++y ) {
+			for ( x = 0; x < 320; ++x ) {
+				uint8_t index;
+
+				if (x < XRES  ) {
+
+					if ( x  >= turnStep ) {
+						index = previousFrame[ (320 * y) - turnStep + x ];
+					} else {
+						index = framebuffer[ (320 * y) + x - (320 - XRES) - turnStep];
+					}
+
+				} else {
+					index = framebuffer[ (320 * y) + x];
+				}
+
+				uint32_t pixel = palette[ index ];
+
+				rect.x = 2 * x;
+				rect.y = (24 * y) / 10;
+				rect.w = 2;
+				rect.h = 3;
+
+				SDL_SetRenderDrawColor(renderer, (pixel & 0x000000FF) - 0x38,
+									   ((pixel & 0x0000FF00) >> 8) - 0x18,
+									   ((pixel & 0x00FF0000) >> 16) - 0x10, 255);
+				SDL_RenderFillRect(renderer, &rect);
+			}
+		}
+
+		turnStep+= 20;
+	} else {
+
+		uint8_t *pixelPtr = &framebuffer[0];
+
+		for ( y = dirtyLineY0; y < dirtyLineY1; ++y ) {
+			for ( x = 0; x < 320; ++x ) {
+				uint8_t index;
+
+				if (x < XRES ) {
+
+					if ( x  >= turnStep ) {
+						index = framebuffer[ (320 * y) - turnStep + x ];
+					} else {
+						index = previousFrame[ (320 * y) + x - (320 - XRES) - turnStep];
+					}
+
+				} else {
+					index = framebuffer[ (320 * y) + x];
+				}
+
+				uint32_t pixel = palette[ index ];
+
+				rect.x = 2 * x;
+				rect.y = (24 * y) / 10;
+				rect.w = 2;
+				rect.h = 3;
+
+				SDL_SetRenderDrawColor(renderer, (pixel & 0x000000FF) - 0x38,
+									   ((pixel & 0x0000FF00) >> 8) - 0x18,
+									   ((pixel & 0x00FF0000) >> 16) - 0x10, 255);
+				SDL_RenderFillRect(renderer, &rect);
+				++pixelPtr;
+			}
+		}
+
+		turnStep-= 20;
 	}
+
+
 
 	SDL_RenderPresent(renderer);
 

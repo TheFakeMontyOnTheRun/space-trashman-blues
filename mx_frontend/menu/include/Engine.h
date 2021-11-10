@@ -1,13 +1,13 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-typedef int32_t ( *InitStateCallback )(int32_t tag);
+typedef void ( *InitStateCallback )(int32_t tag);
 
 typedef void ( *InitialPaintCallback )(void);
 
 typedef void ( *RepaintCallback )(void);
 
-typedef int32_t ( *TickCallback )(int32_t tag, void *data);
+typedef enum EGameMenuState ( *TickCallback )(enum ECommand, long data);
 
 typedef void ( *UnloadStateCallback )(void);
 
@@ -28,65 +28,94 @@ extern enum EPresentationState currentPresentationState;
 extern struct Bitmap *currentBackgroundBitmap;
 
 extern int cursorPosition;
-extern int32_t nextNavigationSelection;
-extern int32_t menuStateToReturn;
+extern enum EGameMenuState nextNavigationSelection;
+extern enum EGameMenuState menuStateToReturn;
 
 int menuTick(long ms);
 
-int32_t MainMenu_initStateCallback(int32_t tag);
+void MainMenu_initStateCallback(int32_t tag);
 
 void MainMenu_initialPaintCallback(void);
 
 void MainMenu_repaintCallback(void);
 
-int32_t MainMenu_tickCallback(int32_t tag, void *data);
+enum EGameMenuState MainMenu_tickCallback(enum ECommand, long data);
 
 void MainMenu_unloadStateCallback(void);
 
-int32_t Crawler_initStateCallback(int32_t tag);
+void Crawler_initStateCallback(int32_t tag);
 
 void Crawler_initialPaintCallback(void);
 
 void Crawler_repaintCallback(void);
 
-int32_t Crawler_tickCallback(int32_t tag, void *data);
+enum EGameMenuState Crawler_tickCallback(enum ECommand, long data);
 
 void Crawler_unloadStateCallback(void);
 
-int32_t HelpScreen_initStateCallback(int32_t tag);
+void HelpScreen_initStateCallback(int32_t tag);
 
 void HelpScreen_initialPaintCallback(void);
 
 void HelpScreen_repaintCallback(void);
 
-int32_t HelpScreen_tickCallback(int32_t tag, void *data);
+enum EGameMenuState HelpScreen_tickCallback(enum ECommand, long data);
 
 void HelpScreen_unloadStateCallback(void);
 
-int32_t CreditsScreen_initStateCallback(int32_t tag);
+void BattleScreen_initStateCallback(int32_t tag);
+
+void BattleScreen_initialPaintCallback(void);
+
+void BattleScreen_repaintCallback(void);
+
+enum EGameMenuState BattleScreen_tickCallback(enum ECommand, long data);
+
+void BattleScreen_unloadStateCallback(void);
+
+void CreditsScreen_initStateCallback(int32_t tag);
 
 void CreditsScreen_initialPaintCallback(void);
 
 void CreditsScreen_repaintCallback(void);
 
-int32_t CreditsScreen_tickCallback(int32_t tag, void *data);
+enum EGameMenuState CreditsScreen_tickCallback(enum ECommand, long data);
 
 void CreditsScreen_unloadStateCallback(void);
 
-int32_t GameMenu_initStateCallback(int32_t tag);
+void GameMenu_initStateCallback(int32_t tag);
 
 void GameMenu_initialPaintCallback(void);
 
 void GameMenu_repaintCallback(void);
 
-int32_t GameMenu_tickCallback(int32_t tag, void *data);
+enum EGameMenuState GameMenu_tickCallback(enum ECommand, long data);
 
 void GameMenu_unloadStateCallback(void);
 
-int countLines(void);
-void enterState( enum EGameMenuState State );
-#define MENU_ITEM_TIME_TO_BECOME_ACTIVE_MS 200
+void HackingScreen_initStateCallback(int32_t tag);
 
-/* 84ms * 6 blinks == ~500ms */
-#define MENU_ITEM_TIME_TO_BLINK_MS 84
+void HackingScreen_initialPaintCallback(void);
+
+void HackingScreen_repaintCallback(void);
+
+enum EGameMenuState HackingScreen_tickCallback(enum ECommand, long data);
+
+void HackingScreen_unloadStateCallback(void);
+
+int countLines(void);
+
+void enterState( enum EGameMenuState State );
+
+int loopTick(enum ECommand cmd);
+
+void renderTick(long ms);
+
+void redrawHUD();
+
+extern struct Texture *itemSprites[TOTAL_ITEMS];
+
+extern int currentSelectedItem;
+
+#define MENU_ITEM_TIME_TO_BECOME_ACTIVE_MS 200
 #endif

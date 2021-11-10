@@ -25,9 +25,11 @@
 
 #include "CTile3DProperties.h"
 
+#include "Core.h"
 #include "Engine.h"
 #include "LoadBitmap.h"
 #include "CRenderer.h"
+#include "Globals.h"
 
 typedef int ESoundDriver;
 
@@ -62,8 +64,7 @@ void graphicsShutdown() {
 	textmode(C80);
 	clrscr();
 	printf(
-			"Thanks for playing!\nDOS is back with a vengeance.\n\nSource code and "
-			"licenses:\nhttps://bitbucket.org/MontyOnTheRun/the-mistral-report\n\n");
+			"Thanks for playing!\nDOS is back with a vengeance!.\n\n");
 }
 
 void putStr(int x, int y, const char *str, int fg, int bg) {
@@ -107,13 +108,13 @@ void drawTitleBox() {
 	}
 	putStr(76, 10, "\xbc", COLOR_WHITE, COLOR_BLUE);
 
-	putStr(17, 4, "The Mistral Report - Invisible Affairs - v1.1", COLOR_WHITE,
+	putStr(17, 4, "Sub Mare Imperium - Derelict - v0.9", COLOR_WHITE,
 		   COLOR_BLUE);
 
-	putStr(5, 6, "Program and Audio-visual (C) 2018-2019 by Brotherhood of 13h",
+	putStr(5, 6, "Program and Audio-visual (C) 2021 by Brotherhood of 13h",
 		   COLOR_WHITE, COLOR_BLUE);
 
-	putStr(30, 7, "Licensed under GPLv3 ", COLOR_WHITE, COLOR_BLUE);
+	putStr(30, 7, "PRE-RELEASE version! Beware!", COLOR_WHITE, COLOR_BLUE);
 }
 
 void querySoundDriver() {
@@ -191,6 +192,7 @@ void graphicsInit() {
 	}
 
 	defaultFont = loadBitmap("font.img");
+	enableSmoothMovement = TRUE;
 }
 
 void handleSystemEvents() {
@@ -200,15 +202,28 @@ void handleSystemEvents() {
 	if (kbhit()) {
 		char getched = getch();
 		switch (getched) {
-			case 'c':
-				mBufferedCommand = kCommandFire3;
-				visibilityCached = FALSE;
-				break;
 
 			case 27:
 			case 'q':
 				mBufferedCommand = kCommandBack;
 				break;
+
+			case '1':
+				enableSmoothMovement = TRUE;
+				break;
+
+			case '2':
+				enableSmoothMovement = FALSE;
+				break;
+
+			case '3':
+				renderingMethod = FIXED;
+				break;
+
+			case '4':
+				renderingMethod = LUT;
+				break;
+
 
 			case 's':
 				mBufferedCommand = kCommandStrafeLeft;
@@ -222,14 +237,8 @@ void handleSystemEvents() {
 			case 'b':
 				visibilityCached = FALSE;
 				break;
-			case 'a':
-				mBufferedCommand = kCommandFire4;
-				break;
 			case 'v':
-				mBufferedCommand = kCommandFire5;
-				break;
-			case 'f':
-				mBufferedCommand = kCommandFire6;
+				mBufferedCommand = kCommandFire4;
 				break;
 			case 'j':
 				useDither = FALSE;
@@ -263,14 +272,26 @@ void handleSystemEvents() {
 				visibilityCached = FALSE;
 				break;
 
+			case '\t':
+			case 'c':
+				mBufferedCommand = kCommandFire3;
+				visibilityCached = FALSE;
+				break;
+
+
 			case 224:
 			case 0: {
 				char arrow = getch();
 				switch (arrow) {
 					case 75:
 						mBufferedCommand = kCommandLeft;
-                        turnStep = 0;
-                        turnTarget = 256;
+						if ((currentGameMenuState == kPlayGame ||
+							 currentGameMenuState == kBackToGame) &&
+							currentPresentationState == kWaitingForInput
+								) {
+							turnStep = 0;
+							turnTarget = 200;
+						}
 						visibilityCached = FALSE;
 						break;
 					case 72:
@@ -279,8 +300,13 @@ void handleSystemEvents() {
 						break;
 					case 77:
 						mBufferedCommand = kCommandRight;
-                        turnStep = 256;
-                        turnTarget = 0;
+						if ((currentGameMenuState == kPlayGame ||
+							 currentGameMenuState == kBackToGame) &&
+							currentPresentationState == kWaitingForInput
+								) {
+							turnStep = 200;
+							turnTarget = 0;
+						}
 						visibilityCached = FALSE;
 						break;
 					case 80:
@@ -318,7 +344,7 @@ void flipRenderer() {
     
     
     
-    if ( turnTarget == turnStep ) {
+    if ( !enableSmoothMovement || turnTarget == turnStep ) {
         dosmemput(&framebuffer[0], 320 * 200, 0xa0000);
         memcpy( previousFrame, framebuffer, 320 * 200);
     } else if ( turnStep < turnTarget ) {
@@ -328,12 +354,12 @@ void flipRenderer() {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
                 
-                if (x < 256 && y >= 8  ) {
+                if (x < XRES ) {
                     
                     if ( x  >= turnStep ) {
                         index = previousFrame[ (320 * y) - turnStep + x ];
                     } else {
-                        index = framebuffer[ (320 * y) + x - 64 - turnStep];
+                        index = framebuffer[ (320 * y) + x - (320 - XRES) - turnStep];
                     }
                 } else {
                     index = framebuffer[ (320 * y) + x];
@@ -344,7 +370,7 @@ void flipRenderer() {
             }
         }
         
-        turnStep+= 32;
+        turnStep+= 20;
         dosmemput(&turnBuffer[0], 320 * 200, 0xa0000);
     } else {
         
@@ -353,12 +379,12 @@ void flipRenderer() {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
 
-                if (x < 256 && y >= 8  ) {
+                if (x < XRES  ) {
                     
                     if ( x  >= turnStep ) {
                         index = framebuffer[ (320 * y) - turnStep + x ];
                     } else {
-                        index = previousFrame[ (320 * y) + x - 64 - turnStep];
+                        index = previousFrame[ (320 * y) + x - (320 - XRES) - turnStep];
                     }
                     
                 } else {
@@ -370,7 +396,7 @@ void flipRenderer() {
             }
         }
         
-        turnStep-= 32;
+        turnStep-= 20;
         dosmemput(&turnBuffer[0], 320 * 200, 0xa0000);
     }
 	

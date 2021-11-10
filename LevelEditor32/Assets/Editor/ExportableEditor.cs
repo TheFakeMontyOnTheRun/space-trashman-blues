@@ -19,6 +19,9 @@ public class ExportableEditor : Editor
     SerializedProperty floorMaterial;
     SerializedProperty floorRepetitionsMaterial;
     SerializedProperty representation;
+    SerializedProperty geometryType;
+
+    SerializedProperty repeatMainTexture;
 
     void OnEnable() {
         ceilingHeight = serializedObject.FindProperty("ceilingHeight");
@@ -31,6 +34,8 @@ public class ExportableEditor : Editor
         floorMaterial = serializedObject.FindProperty("floorMaterial");
         floorRepetitionsMaterial = serializedObject.FindProperty("floorRepetitionsMaterial");
         representation = serializedObject.FindProperty("representation");
+        repeatMainTexture = serializedObject.FindProperty("repeatMainTexture");
+        geometryType = serializedObject.FindProperty("geometryType");
     }
 
     public override void OnInspectorGUI() {
@@ -50,6 +55,8 @@ public class ExportableEditor : Editor
         EditorGUILayout.PropertyField(floorMaterial);
         EditorGUILayout.PropertyField(floorRepetitionsMaterial);
         EditorGUILayout.PropertyField(representation);
+        EditorGUILayout.PropertyField(repeatMainTexture);
+        EditorGUILayout.PropertyField(geometryType);
 
         if (GUILayout.Button("Apply")) {
             var tempList = (target as Exportable).transform.Cast<Transform>().ToList();
@@ -62,11 +69,11 @@ public class ExportableEditor : Editor
 
     
         if (GUILayout.Button("Copy FROM representation")) {
-            (target as Exportable).CopyFrom(Exportable.GeneralTable[representation.stringValue]);
-        }
-        
-        serializedObject.ApplyModifiedProperties();
-        
+            if (Exportable.GeneralTable.ContainsKey(representation.stringValue))
+            {
+                (target as Exportable).CopyFrom(Exportable.GeneralTable[representation.stringValue]);
+            }
+        }        
 
         if (GUILayout.Button("Copy TO representation")) {
             Exportable.GeneralTable[representation.stringValue] = (target as Exportable); 
@@ -92,7 +99,19 @@ public class ExportableEditor : Editor
                 child.GetComponent<Exportable>().CopyFrom((target as Exportable));                    
                 child.GetComponent<Exportable>().Apply();
             }
-        }   
+        }
+
+        if (GUILayout.Button("Find next available index"))
+        {
+            for (int c = 46; c < 255; ++c) {
+                if (!Exportable.GeneralTable.ContainsKey("" + c )) {
+                    representation.stringValue = "" + c;
+                    serializedObject.ApplyModifiedProperties();
+                    return;
+                }
+            }
+        }
+
+        serializedObject.ApplyModifiedProperties();
     }
-    
 }
