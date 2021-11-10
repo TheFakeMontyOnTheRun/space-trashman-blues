@@ -3,12 +3,7 @@ guid: 994979abc709da24aa081ddc4f90765a
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - mainMaterial: {instanceID: 0}
-  - ceilingMaterial: {instanceID: 0}
-  - ceilingRepetitionsMaterial: {instanceID: 0}
-  - floorMaterial: {instanceID: 0}
-  - floorRepetitionsMaterial: {instanceID: 0}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

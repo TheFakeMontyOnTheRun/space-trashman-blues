@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -18,10 +17,6 @@ public class ExportableEditor : Editor
     SerializedProperty ceilingRepetitionsMaterial;
     SerializedProperty floorMaterial;
     SerializedProperty floorRepetitionsMaterial;
-    SerializedProperty representation;
-    SerializedProperty geometryType;
-
-    SerializedProperty repeatMainTexture;
 
     void OnEnable() {
         ceilingHeight = serializedObject.FindProperty("ceilingHeight");
@@ -33,17 +28,10 @@ public class ExportableEditor : Editor
         ceilingRepetitionsMaterial = serializedObject.FindProperty("ceilingRepetitionsMaterial");
         floorMaterial = serializedObject.FindProperty("floorMaterial");
         floorRepetitionsMaterial = serializedObject.FindProperty("floorRepetitionsMaterial");
-        representation = serializedObject.FindProperty("representation");
-        repeatMainTexture = serializedObject.FindProperty("repeatMainTexture");
-        geometryType = serializedObject.FindProperty("geometryType");
     }
 
     public override void OnInspectorGUI() {
         serializedObject.Update();
-
-        if (String.IsNullOrEmpty(representation.stringValue.Trim())) {
-            representation.stringValue = "1";
-        }
 
         EditorGUILayout.PropertyField(ceilingHeight);
         EditorGUILayout.PropertyField(floorHeight);
@@ -54,9 +42,6 @@ public class ExportableEditor : Editor
         EditorGUILayout.PropertyField(ceilingRepetitionsMaterial);
         EditorGUILayout.PropertyField(floorMaterial);
         EditorGUILayout.PropertyField(floorRepetitionsMaterial);
-        EditorGUILayout.PropertyField(representation);
-        EditorGUILayout.PropertyField(repeatMainTexture);
-        EditorGUILayout.PropertyField(geometryType);
 
         if (GUILayout.Button("Apply")) {
             var tempList = (target as Exportable).transform.Cast<Transform>().ToList();
@@ -64,54 +49,47 @@ public class ExportableEditor : Editor
                 DestroyImmediate(child.gameObject);
             }
 
-            (target as Exportable).Apply();
-        }
-
-    
-        if (GUILayout.Button("Copy FROM representation")) {
-            if (Exportable.GeneralTable.ContainsKey(representation.stringValue))
-            {
-                (target as Exportable).CopyFrom(Exportable.GeneralTable[representation.stringValue]);
-            }
-        }        
-
-        if (GUILayout.Button("Copy TO representation")) {
-            Exportable.GeneralTable[representation.stringValue] = (target as Exportable); 
-        }
-
-        if (GUILayout.Button("Apply globally *CAREFUL*")) {
-            Exportable.GeneralTable[representation.stringValue] = (target as Exportable); 
-            var geometryRoot = GameObject.Find("Geometry");
-            List<GameObject> children = new List<GameObject>();
-
-            foreach (GameObject child  in FindObjectsOfType(typeof(GameObject)) ) {
-
-                if (child.GetComponent<Exportable>() && child.GetComponent<Exportable>().representation.Equals(representation.stringValue)) {
-                    children.Add(child);
-                }
+            if (floorMaterial.objectReferenceValue != null ) {
+                GameObject floorGO = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                floorGO.transform.parent  = (target as Exportable).transform;
+                floorGO.transform.localPosition = new Vector3(0, floorHeight.floatValue, 0);
+                floorGO.transform.localScale = new Vector3( 1, 0, 1 );
+                floorGO.name = "floor";
+                floorGO.GetComponent<MeshRenderer>().material = floorMaterial.objectReferenceValue as Material;
             }
 
-            foreach( GameObject child in children ) {
-                var tempList = child.transform.Cast<Transform>().ToList();
-                foreach(Transform undesirable in tempList) {
-                    DestroyImmediate(undesirable.gameObject);
-                }
-                child.GetComponent<Exportable>().CopyFrom((target as Exportable));                    
-                child.GetComponent<Exportable>().Apply();
-            }
-        }
 
-        if (GUILayout.Button("Find next available index"))
-        {
-            for (int c = 46; c < 255; ++c) {
-                if (!Exportable.GeneralTable.ContainsKey("" + c )) {
-                    representation.stringValue = "" + c;
-                    serializedObject.ApplyModifiedProperties();
-                    return;
-                }
+            if (ceilingMaterial.objectReferenceValue) {
+                GameObject ceilingGO = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                ceilingGO.transform.parent  = (target as Exportable).transform; 
+                ceilingGO.transform.localPosition = new Vector3(0, ceilingHeight.floatValue, 0);
+                ceilingGO.transform.localScale = new Vector3( 1, 0, 1 );
+                ceilingGO.name = "ceiling";
+                ceilingGO.GetComponent<MeshRenderer>().material = ceilingMaterial.objectReferenceValue as Material;
             }
-        }
 
+            if (ceilingRepetitions.floatValue > 0 && ceilingRepetitionsMaterial.objectReferenceValue != null ) {
+                GameObject ceilingRepetitionsGO = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                ceilingRepetitionsGO.transform.parent  = (target as Exportable).transform; 
+                ceilingRepetitionsGO.transform.localPosition = new Vector3(0, ceilingHeight.floatValue + (ceilingRepetitions.floatValue / 2), 0);
+                ceilingRepetitionsGO.transform.localScale = new Vector3( 1, ceilingRepetitions.floatValue, 1 );
+                ceilingRepetitionsGO.name = "ceilingRepetition";
+                ceilingRepetitionsGO.GetComponent<MeshRenderer>().material = ceilingRepetitionsMaterial.objectReferenceValue as Material;
+            }
+
+            if (floorRepetitions.floatValue > 0 && floorRepetitionsMaterial.objectReferenceValue != null) {
+                GameObject floorRepetitionsGO = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                floorRepetitionsGO.transform.parent  = (target as Exportable).transform; 
+                floorRepetitionsGO.transform.localPosition = new Vector3(0, floorHeight.floatValue - (floorRepetitions.floatValue / 2), 0);
+                floorRepetitionsGO.transform.localScale = new Vector3( 1, floorRepetitions.floatValue, 1 );
+                floorRepetitionsGO.name = "floorRepetition";
+                floorRepetitionsGO.GetComponent<MeshRenderer>().material = floorRepetitionsMaterial.objectReferenceValue as Material;
+            }
+
+        }
+        
         serializedObject.ApplyModifiedProperties();
+        
     }
+    
 }
