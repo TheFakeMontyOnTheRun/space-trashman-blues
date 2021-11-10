@@ -2,9 +2,9 @@ name: Run Core tests
 
 on:
   push:
-    branches: [ release/episode0 ]
+    branches: [ master ]
   pull_request:
-    branches: [ release/episode0 ]
+    branches: [ master ]
 
 jobs:
   build:
