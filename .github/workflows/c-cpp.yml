@@ -19,3 +19,5 @@ jobs:
       run: cd core && make
     - name: make check
       run: cd core && make check
+    - name: run coverage
+      run: cd core && ./update-coverage.sh
