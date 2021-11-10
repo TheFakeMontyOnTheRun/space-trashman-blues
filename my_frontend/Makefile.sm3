@@ -2,7 +2,7 @@
 
 CC = zcc
 
-CFLAGS = +sms -compiler=sdcc -SO3 -lndos -pragma-define:CLIB_EXIT_STACK_SIZE=0 -pragma-define:CRT_MODEL=2 --opt-code-speed -vn -I../Core/include -DSMS -DRES128X128 -DDINCLUDE_ROOM_DESCRIPTIONS -DCAN_PICK_OBJECT_AT_ANY_DISTANCE
+CFLAGS = +sms -compiler=sdcc -SO3 -lndos -pragma-define:CLIB_EXIT_STACK_SIZE=0 -pragma-define:CRT_MODEL=2 --opt-code-speed -vn -I../Core/include -DSMS -DRES128X128 -DINCLUDE_ROOM_DESCRIPTIONS -DCAN_PICK_OBJECT_AT_ANY_DISTANCE
 
 all: derelict.sms
 
