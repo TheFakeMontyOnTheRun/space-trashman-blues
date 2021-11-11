@@ -150,3 +150,23 @@ void graphicsFlush() {
 
     memset( imageBuffer, 0, 64 * 128);
 }
+
+uint8_t* graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr) {
+    return NULL;
+}
+
+void showMessage(const char *message) {
+
+}
+
+void titleScreen() {
+
+}
+
+void HUD_initialPaint() {
+
+}
+
+void HUD_refresh() {
+
+}
