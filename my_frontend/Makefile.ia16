@@ -1,4 +1,4 @@
-CFLAGS = -c -DMSDOS -DRES64X128 -I../core/include -DINCLUDE_ROOM_DESCRIPTIONS -DCAN_PICK_OBJECT_AT_ANY_DISTANCE
+CFLAGS = -DMSDOS -DRES64X128 -I../core/include -DINCLUDE_ROOM_DESCRIPTIONS -DCAN_PICK_OBJECT_AT_ANY_DISTANCE
 
 CC = ia16-elf-gcc
 
@@ -7,7 +7,7 @@ OBJS = src/demo.o src/msdos.o ../core/src/Core.o ../core/src/Derelict.o
 TARGET = derelict.com
 
 $(TARGET):	$(OBJS)
-	$(CC) $(CFLAGS)  -o $(TARGET) $(OBJS) $(LDFLAGS)
+	$(CC) -o $(TARGET) $(OBJS) $(LDFLAGS)
 
 all:	$(TARGET)
 
