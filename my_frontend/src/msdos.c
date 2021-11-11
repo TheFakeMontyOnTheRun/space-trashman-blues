@@ -10,8 +10,8 @@
 #include "Derelict.h"
 #include "Engine3D.h"
 
-unsigned char imageBuffer[64 * 128];
-unsigned char buffer[64 * 128];
+unsigned char imageBuffer[128 * 128];
+unsigned char buffer[128 * 128];
 
 void shutdownGraphics() {
     asm("movb $0x0, %ah\n\t"
@@ -42,7 +42,7 @@ void fix_line (uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 
 void hLine(uint8_t x0, uint8_t x1, uint8_t y) {
     for (int x = x0; x < x1; ++x ) {
-        imageBuffer[(64 * y) + x] = 1;
+        imageBuffer[(128 * y) + x] = 1;
     }
 }
 
@@ -54,7 +54,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
     }
 
     for (int y = y0; y < y1; ++y ) {
-        imageBuffer[(64 * y) + x0] = 1;
+        imageBuffer[(128 * y) + x0] = 1;
     }
 }
 
@@ -63,12 +63,12 @@ void graphicsPut( uint8_t x, uint8_t y) {
         return;
     }
 
-    if (x > 64 ) {
+    if (x > 128 ) {
         return;
     }
 
 
-    imageBuffer[ (64 * y ) + x ] = 1;
+    imageBuffer[ (128 * y ) + x ] = 1;
 }
 
 void realPut( int x, int y, int value ) {
@@ -88,7 +88,7 @@ void realPut( int x, int y, int value ) {
 }
 
 void clearGraphics() {
-    memset(imageBuffer, 0, 64 * 128 );
+    memset(imageBuffer, 0, 128 * 128 );
 }
 
 uint8_t getKey() {
@@ -128,10 +128,10 @@ void graphicsFlush() {
     for ( int y = 0; y < 128; ++y ) {
 
 
-        for ( int x = 0; x < 64; ++x ) {
+        for ( int x = 0; x < 128; ++x ) {
 
 
-            offset = (y * 64) + x;
+            offset = (y * 128) + x;
             origin = imageBuffer[ offset ];
 
             if ( lastOrigin != origin ) {
@@ -148,7 +148,7 @@ void graphicsFlush() {
         }
     }
 
-    memset( imageBuffer, 0, 64 * 128);
+    memset( imageBuffer, 0, 128 * 128);
 }
 
 uint8_t* graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr) {
