@@ -23,4 +23,4 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
          name: Derelict for MS-DOS on 8088 (CGA Graphics)
-      	 path: my_frontend/derelict.com
+         path: my_frontend/derelict.com
