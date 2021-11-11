@@ -1,0 +1,21 @@
+name: Run Core tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Checkout submodules
+      run: git submodule update --init --recursive
+    - name: install ia16-gcc
+      run: apt-get update && apt-get -y install software-properties-common && add-apt-repository ppa:tkchia/build-ia16 && apt-get install -y build-essential && apt-get install -y gcc-ia16-elf
+    - name: make
+      run: cd my_frontend && make -f Makefile.ia16
