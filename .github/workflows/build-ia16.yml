@@ -16,6 +16,6 @@ jobs:
     - name: Checkout submodules
       run: git submodule update --init --recursive
     - name: install ia16-gcc
-      run: apt-get update && apt-get -y install software-properties-common && add-apt-repository ppa:tkchia/build-ia16 && apt-get install -y build-essential && apt-get install -y gcc-ia16-elf
+      run: sudo apt-get update && sudo apt-get -y install software-properties-common && sudo add-apt-repository ppa:tkchia/build-ia16 && sudo apt-get install -y build-essential && sudo apt-get install -y gcc-ia16-elf
     - name: make
       run: cd my_frontend && make -f Makefile.ia16
