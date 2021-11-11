@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <string.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -5,10 +6,12 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "Core.h"
+#include "Derelict.h"
+#include "Engine3D.h"
+
 unsigned char imageBuffer[64 * 128];
 unsigned char buffer[64 * 128];
-
-
 
 void shutdownGraphics() {
     asm("movb $0x0, %ah\n\t"
