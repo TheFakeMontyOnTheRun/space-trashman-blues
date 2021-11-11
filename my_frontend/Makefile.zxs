@@ -1,6 +1,6 @@
 CC = zcc
 
-CFLAGS = +zx -vn -lndos -DRES64X128 -DSPECTRUM -compiler=sdcc -SO3 -pragma-define:CLIB_EXIT_STACK_SIZE=0 -pragma-define:CRT_MODEL=2 --opt-code-speed -I../Core/include
+CFLAGS = +zx -vn -lndos -DRES64X128 -DSPECTRUM -compiler=sdcc -SO3 -pragma-define:CLIB_EXIT_STACK_SIZE=0 -pragma-define:CRT_MODEL=2 --opt-code-speed -I../core/include
 
 all: derelict.tap
 
