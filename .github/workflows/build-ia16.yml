@@ -1,4 +1,4 @@
-name: Run Core tests
+name: Build ia16 package of the MY frontend
 
 on:
   push:
