@@ -5,7 +5,7 @@ LD=i386-pc-msdosdjgpp-ld
 
 LDFLAGS = -lemu -flto
 
-CFLAGS=-c -O6 -Ofast      \
+CFLAGS= -O6 -Ofast      \
     -Ibase3d/include        \
     -ISoundSystem           \
     -Imenu/include          \
@@ -18,9 +18,10 @@ CFLAGS=-c -O6 -Ofast      \
     -flto		    \
     -march=i486             \
     --pedantic		    \
+    -DCLI_BUILD \
     -I../core/include
 
-CXXFLAGS=-c -O6 -Ofast      \
+CXXFLAGS= -O6 -Ofast      \
     -Ibase3d/include        \
     -flto		    \
     -Imenu/include          \
@@ -34,6 +35,7 @@ CXXFLAGS=-c -O6 -Ofast      \
     -march=i486             \
     -fpermissive \
     -Wno-narrowing \
+    -DCLI_BUILD \
     --pedantic		\
     -I../core/include
 
