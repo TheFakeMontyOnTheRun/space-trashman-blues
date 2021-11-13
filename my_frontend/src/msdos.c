@@ -126,18 +126,11 @@ uint8_t getKey() {
                  "int $0x21"
     );
 
-    if (toReturn >= '1' && toReturn <= '9') {
-        init();
-        HUD_initialPaint();
-        HUD_refresh();
-    }
 
     return toReturn;
 }
 
 void writeStr(uint8_t nColumn, uint8_t nLine, char *pStr, uint8_t fg, uint8_t bg){
-
-    init();
 
     while(*pStr) {
         __asm__ __volatile__ (
