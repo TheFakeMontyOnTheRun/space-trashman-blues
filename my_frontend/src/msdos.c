@@ -23,7 +23,10 @@ void shutdownGraphics() {
 }
 
 void writeStr(uint8_t nColumn, uint8_t nLine, char *pStr, uint8_t fg, uint8_t bg){
-        while(*pStr) {
+
+    init();
+
+    while(*pStr) {
         __asm__ __volatile__ (
         "movb 0x0e, %%ah\n"
         "movb %[c], %%al\n"
@@ -34,6 +37,8 @@ void writeStr(uint8_t nColumn, uint8_t nLine, char *pStr, uint8_t fg, uint8_t bg
         );
         ++pStr;
     }
+
+    HUD_initialPaint();
 }
 
 void fix_line (uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
@@ -165,7 +170,9 @@ void titleScreen() {
 }
 
 void HUD_initialPaint() {
-
+    for ( int y = 0; y < 200; ++y ) {
+        realPut( 160, y);
+    }
 }
 
 void HUD_refresh() {
