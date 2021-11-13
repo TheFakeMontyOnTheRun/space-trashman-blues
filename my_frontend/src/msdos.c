@@ -112,20 +112,11 @@ void init() {
 }
 
 uint8_t getKey() {
-    unsigned char toReturn = 255;
+    uint8_t toReturn = getchar();
 
-    asm volatile ("movb $0x01, %%ah\n\t"
-                  "movb $0x00, %%al\n\t"
-                  "int $0x16       \n\t"
-                  "movb %%al, %0 "
-    : "=rm"(toReturn)
-    );
-
-    asm volatile("movb $0x0C, %ah\n\t"
-                 "movb $0x00, %al\n\t"
-                 "int $0x21"
-    );
-
+    if (toReturn >= '1' && toReturn <= '9') {
+        HUD_refresh();
+    }
 
     return toReturn;
 }
