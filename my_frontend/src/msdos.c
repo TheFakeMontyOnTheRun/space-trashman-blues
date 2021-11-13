@@ -221,7 +221,7 @@ void HUD_refresh() {
             writeStr(20, 21, "*", 2, 0);
         }
 
-        writeStr(21, 21, item->description);
+        writeStr(21, 21, item->description, 2, 0);
     }
 
     if (roomItem != NULL) {
@@ -231,6 +231,6 @@ void HUD_refresh() {
             writeStr(0, 1, "*", 2, 0);
         }
 
-        writeStr(1, 1, item->description);
+        writeStr(1, 1, item->description, 2, 0);
     }
 }
