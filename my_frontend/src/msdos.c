@@ -18,6 +18,8 @@ extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
 
+int cursorPosition = 0;
+
 void graphicsFlush();
 
 void nextItemInHand();
@@ -103,6 +105,12 @@ void clearGraphics() {
     memset(imageBuffer, 0, 64 * 128 );
 }
 
+void init() {
+    asm("movb $0x0, %ah\n\t"
+        "movb $0x4, %al\n\t"
+        "int $0x10\n\t");
+}
+
 uint8_t getKey() {
     unsigned char toReturn = 255;
 
@@ -125,12 +133,6 @@ uint8_t getKey() {
     }
 
     return toReturn;
-}
-
-void init() {
-    asm("movb $0x0, %ah\n\t"
-        "movb $0x4, %al\n\t"
-        "int $0x10\n\t");
 }
 
 void writeStr(uint8_t nColumn, uint8_t nLine, char *pStr, uint8_t fg, uint8_t bg){
@@ -203,23 +205,23 @@ void titleScreen() {
 
 void HUD_initialPaint() {
     for ( int y = 0; y < 200; ++y ) {
-        realPut( 160, y, 2);
+        realPut( 159, y, 2);
     }
 }
 
 void HUD_refresh() {
     for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(16, 14 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
+        writeStr(20, 14 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
     }
 
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
 
         if (item->active) {
-            writeStr(16, 21, "*", 2, 0);
+            writeStr(20, 21, "*", 2, 0);
         }
 
-        writeStrWithLimit(17, 21, item->description, 30);
+        writeStr(21, 21, item->description);
     }
 
     if (roomItem != NULL) {
@@ -229,6 +231,6 @@ void HUD_refresh() {
             writeStr(0, 1, "*", 2, 0);
         }
 
-        writeStrWithLimit(1, 1, item->description, 14);
+        writeStr(1, 1, item->description);
     }
 }

@@ -20,6 +20,8 @@ extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
 
+int cursorPosition = 0;
+
 void graphicsFlush();
 
 void nextItemInHand();
@@ -163,8 +165,6 @@ char *menuItems[] = {
 };
 
 void graphicsFlush();
-
-int cursorPosition = 0;
 
 void writeStrWithLimit(int _x, int y, char *text, int limitX) {
 
