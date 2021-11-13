@@ -169,8 +169,8 @@ void graphicsFlush() {
 
 
             if ( buffer[ offset ] != value ) {
-                realPut( 32 + (2 * x), (y) + 36, value);
-                realPut( 32 + (2 * x) + 1, (y) + 36, value);
+                realPut( 16 + (2 * x), (y) + 36, value);
+                realPut( 16 + (2 * x) + 1, (y) + 36, value);
             }
 
             buffer[ offset ] = value;
