@@ -92,6 +92,12 @@ uint8_t getKey() {
                  "int $0x21"
     );
 
+    if (toReturn >= '1' && toReturn <= '9') {
+        init();
+        HUD_initialPaint();
+        HUD_refresh();
+    }
+
     return toReturn;
 }
 
@@ -176,5 +182,27 @@ void HUD_initialPaint() {
 }
 
 void HUD_refresh() {
+    for (uint8_t i = 0; i < 6; ++i) {
+        writeStr(16, 14 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
+    }
 
+    if (focusedItem != NULL) {
+        struct Item *item = getItem(focusedItem->item);
+
+        if (item->active) {
+            writeStr(16, 21, "*", 2, 0);
+        }
+
+        writeStrWithLimit(17, 21, item->description, 30);
+    }
+
+    if (roomItem != NULL) {
+        struct Item *item = getItem(roomItem->item);
+
+        if (item->active) {
+            writeStr(0, 1, "*", 2, 0);
+        }
+
+        writeStrWithLimit(1, 1, item->description, 14);
+    }
 }
