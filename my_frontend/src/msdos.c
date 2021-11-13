@@ -143,8 +143,6 @@ void writeStr(uint8_t nColumn, uint8_t nLine, char *pStr, uint8_t fg, uint8_t bg
         );
         ++pStr;
     }
-
-    HUD_initialPaint();
 }
 
 unsigned char getPaletteEntry( int origin ) {
