@@ -207,6 +207,7 @@ void HUD_initialPaint() {
     for ( int y = 0; y < 200; ++y ) {
         realPut( 159, y, 2);
     }
+    HUD_refresh();
 }
 
 void HUD_refresh() {
