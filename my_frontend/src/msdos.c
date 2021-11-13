@@ -22,25 +22,6 @@ void shutdownGraphics() {
     exit(0);
 }
 
-void writeStr(uint8_t nColumn, uint8_t nLine, char *pStr, uint8_t fg, uint8_t bg){
-
-    init();
-
-    while(*pStr) {
-        __asm__ __volatile__ (
-        "movb 0x0e, %%ah\n"
-        "movb %[c], %%al\n"
-        "int $0x10\n"
-        :
-        : [c] "r" (*pStr)
-        : "ax"
-        );
-        ++pStr;
-    }
-
-    HUD_initialPaint();
-}
-
 void fix_line (uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 
 }
@@ -120,6 +101,25 @@ void init() {
         "int $0x10\n\t");
 }
 
+void writeStr(uint8_t nColumn, uint8_t nLine, char *pStr, uint8_t fg, uint8_t bg){
+
+    init();
+
+    while(*pStr) {
+        __asm__ __volatile__ (
+        "movb 0x0e, %%ah\n"
+        "movb %[c], %%al\n"
+        "int $0x10\n"
+        :
+        : [c] "r" (*pStr)
+        : "ax"
+        );
+        ++pStr;
+    }
+
+    HUD_initialPaint();
+}
+
 unsigned char getPaletteEntry( int origin ) {
   return origin;
 }
@@ -171,7 +171,7 @@ void titleScreen() {
 
 void HUD_initialPaint() {
     for ( int y = 0; y < 200; ++y ) {
-        realPut( 160, y);
+        realPut( 160, y, 2);
     }
 }
 
