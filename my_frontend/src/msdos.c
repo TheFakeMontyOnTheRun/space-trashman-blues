@@ -136,52 +136,18 @@ uint8_t getKey() {
 }
 
 void writeStrWithLimit(int _x, int y, char *text, int limitX) {
-
-    uint8_t len = strlen(text);
-    char *ptr = text;
-    uint8_t c = 0;
-    uint8_t chary = 0;
-    uint8_t x = _x;
-
-    for (; c < len && y < 25; ++c) {
-
-        char cha = *ptr;
-
-        if (x == limitX) {
-            ++y;
-            x = _x;
-        } else if (cha == '\n') {
-            ++y;
-            x = _x;
-            ++ptr;
-            continue;
-        } else {
-            ++x;
-        }
-
-        __asm__ __volatile__ (
-        "movb 0x02, %%ah\n"
-        "movb %0, %%dl\n"
-        "movb %1, %%dh\n"
-        "int $0x10\n"
-        :
-        : "rm" (x), "rm" (y)
-        :
-        );
-
-        __asm__ __volatile__ (
-        "movb 0x09, %%ah\n"
-        "movb %0, %%al\n"
-        "movb 0x01, %%cx\n"
-        "int $0x10\n"
-        :
-        : [c] "r" (cha)
-        :
-        );
+    __asm__ __volatile__ (
+    "movb 0x02, %%ah\n"
+    "movb %0, %%dl\n"
+    "movb %1, %%dh\n"
+    "int $0x10\n"
+    :
+    : "rm" (_x), "rm" (y)
+    :
+    );
 
 
-        ++ptr;
-    }
+    puts(text);
 }
 
 void writeStr(int _x, int y, char *text, int fg, int bg) {
