@@ -63,7 +63,7 @@ void graphicsPut( uint8_t x, uint8_t y) {
         return;
     }
 
-    if (x > 64 ) {
+    if (x > 63 ) {
         return;
     }
 
@@ -130,8 +130,6 @@ void graphicsFlush() {
 
         for ( int x = 0; x < 64; ++x ) {
 
-
-            offset = (y * 64) + x;
             origin = imageBuffer[ offset ];
 
             if ( lastOrigin != origin ) {
@@ -141,10 +139,13 @@ void graphicsFlush() {
 
 
             if ( buffer[ offset ] != value ) {
-                realPut( (x), (y), value);
+                realPut( (2 * x), (y), value);
+                realPut( (2 * x) + 1, (y), value);
             }
 
             buffer[ offset ] = value;
+
+            ++offset;
         }
     }
 
