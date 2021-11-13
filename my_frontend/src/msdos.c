@@ -10,6 +10,32 @@
 #include "Derelict.h"
 #include "Engine3D.h"
 
+extern const struct Pattern patterns[127];
+
+extern int8_t map[32][32];
+
+extern struct ObjectNode *focusedItem;
+extern struct ObjectNode *roomItem;
+extern int accessGrantedToSafe;
+
+void graphicsFlush();
+
+void nextItemInHand();
+
+void useItemInHand();
+
+void nextItemInRoom();
+
+void interactWithItemInRoom();
+
+void pickOrDrop();
+
+void dropItem();
+
+void pickItem();
+
+void clearGraphics();
+
 unsigned char imageBuffer[64 * 128];
 unsigned char buffer[64 * 128];
 
