@@ -154,29 +154,30 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
         }
 
         asm volatile (
-                    "movb 0x02, %%ah\n"
-                    "movb %0, %%dl\n"
-                    "movb %1, %%dh\n"
-                    "int $0x10\n"
+                    "movb $0x02, %%ah\n"
+                    "movb    %0, %%dl\n"
+                    "movb    %1, %%dh\n"
+                    "movb  $0x0, %%bh\n"
+                    "int  $0x10\n"
                     :
                     : "rm" (x), "rm" (y)
                     :
         );
 
         asm volatile (
-                    "movb 0x09, %%ah\n"
-                    "movb %[c], %%al\n"
-                    "movb 0x01, %%cx\n"
+                    "movb $0x09, %%ah\n"
+                    "movb  %[c], %%al\n"
+                    "movw $0x01, %%cx\n"
+                    "movb  $0x0, %%bh\n"
+                    "movb $0x03, %%bl\n"
                     "int $0x10\n"
                     :
                     :[c] "r"(cha)
                     :
         );
 
-
         ++ptr;
     }
-
 }
 
 void writeStr(int _x, int y, char *text, int fg, int bg) {
