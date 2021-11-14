@@ -184,11 +184,6 @@ void HUD_initialPaint() {
         realPut( 15, c, 3);
         realPut( 16 + 128, c, 3);
     }
-
-    for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(22, 14 + i, menuItems[i], 2, 0);
-    }
-
     HUD_refresh();
 }
 
