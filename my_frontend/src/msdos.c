@@ -1,10 +1,5 @@
-#include <assert.h>
 #include <string.h>
 #include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <unistd.h>
 
 #include "Core.h"
 #include "Derelict.h"
@@ -129,7 +124,55 @@ uint8_t getKey() {
     return toReturn;
 }
 
-void writeStrWithLimit(int x, int y, char *text, int limitX) {
+void writeStrWithLimit(int _x, int y, char *text, int limitX) {
+
+    uint8_t len = strlen(text);
+    char *ptr = text;
+    uint8_t c = 0;
+    uint8_t chary = 0;
+    uint8_t x = _x;
+
+    for (; c < len && y < 25; ++c) {
+
+        char cha = *ptr;
+
+        if (x == limitX) {
+            ++y;
+            x = _x;
+        } else if (cha == '\n') {
+            ++y;
+            x = _x;
+            ++ptr;
+            continue;
+        } else {
+            ++x;
+        }
+
+        asm volatile (
+        "movb $0x02, %%ah\n"
+        "movb    %0, %%dl\n"
+        "movb    %1, %%dh\n"
+        "movb  $0x0, %%bh\n"
+        "int  $0x10\n"
+        :
+        : "rm" (x), "rm" (y)
+        :
+        );
+
+        asm volatile (
+        "movb $0x09, %%ah\n"
+        "movb  %[c], %%al\n"
+        "movw $0x01, %%cx\n"
+        "movb  $0x0, %%bh\n"
+        "movb $0x03, %%bl\n"
+        "int $0x10\n"
+        :
+        :[c] "r"(cha)
+        :
+        );
+
+        ++ptr;
+    }
 }
 
 void writeStr(int _x, int y, char *text, int fg, int bg) {
