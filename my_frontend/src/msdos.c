@@ -19,15 +19,6 @@ extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
 
-char *menuItems[] = {
-        "8) Use/Toggle",
-        "5) Use with...",
-        "9) Use/pick...",
-        "6) Drop",
-        "7) Next item",
-        "4) Next in room",
-};
-
 void graphicsFlush();
 
 void nextItemInHand();
@@ -132,7 +123,7 @@ uint8_t getKey() {
 
 void writeStrWithLimit(int x, int y, char *text, int limitX) {
     gotoxy(x, y);
-    printf(text);
+    puts(text);
 }
 
 void writeStr(int _x, int y, char *text, int fg, int bg) {
@@ -182,20 +173,6 @@ void titleScreen() {
 void HUD_initialPaint() {
     for ( int y = 0; y < 200; ++y ) {
         realPut( 159, y, 3);
-    }
-
-    for ( int c = 15; c < (128 + 16 + 1); ++c ) {
-        realPut( c, 35, 3);
-        realPut( c, 36 + 128, 3);
-    }
-
-    for ( int c = 35; c < (128 + 36 + 1); ++c ) {
-        realPut( 15, c, 3);
-        realPut( 16 + 128, c, 3);
-    }
-
-    for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(22, 14 + i, menuItems[i], 2, 0);
     }
 
     HUD_refresh();
