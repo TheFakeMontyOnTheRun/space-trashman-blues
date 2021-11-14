@@ -2,7 +2,7 @@ CFLAGS = -DMSDOS -DRES128X128 -I../core/include -DCAN_PICK_OBJECT_AT_ANY_DISTANC
 
 CC = ia16-elf-gcc
 
-LDFLAGS = -li86
+#LDFLAGS = -li86
 
 OBJS = src/demo.o src/msdos.o ../core/src/Core.o ../core/src/Derelict.o
 

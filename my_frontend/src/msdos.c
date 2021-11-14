@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-#include <conio.h>
 
 #include "Core.h"
 #include "Derelict.h"
@@ -131,8 +130,6 @@ uint8_t getKey() {
 }
 
 void writeStrWithLimit(int x, int y, char *text, int limitX) {
-    gotoxy(x, y);
-    printf(text);
 }
 
 void writeStr(int _x, int y, char *text, int fg, int bg) {
