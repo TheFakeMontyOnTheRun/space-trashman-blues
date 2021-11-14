@@ -56,6 +56,8 @@ void fix_line (uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 }
 
 void hLine(uint8_t x0, uint8_t x1, uint8_t y) {
+    x0 >>= 1;
+    x1 >>= 1;
     for (int x = x0; x < x1; ++x ) {
         imageBuffer[(64 * y) + x] = 1;
     }
@@ -68,6 +70,8 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
         y1 = tmp;
     }
 
+    x0 >>= 1;
+
     for (int y = y0; y < y1; ++y ) {
         imageBuffer[(64 * y) + x0] = 1;
     }
@@ -78,10 +82,11 @@ void graphicsPut( uint8_t x, uint8_t y) {
         return;
     }
 
+    x >>= 1;
+
     if (x > 63 ) {
         return;
     }
-
 
     imageBuffer[ (64 * y ) + x ] = 1;
 }
