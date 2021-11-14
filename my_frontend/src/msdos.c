@@ -142,7 +142,7 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
     "movb %1, %%dh\n"
     "int $0x10\n"
     :
-    : "rm" (_x), "rm" (y)
+    : "r" (_x), "r" (y)
     :
     );
 
