@@ -130,6 +130,17 @@ uint8_t getKey() {
 }
 
 void writeStrWithLimit(int x, int y, char *text, int limitX) {
+    asm volatile ("movb 0x02, %%ah\n"
+                  "movb %0, %%dl\n"
+                  "movb %1, %%dh\n"
+                  "int $0x10\n"
+                  :
+                  : "rm" (x), "rm" (y)
+                  :
+    );
+
+
+    puts(text);
 }
 
 void writeStr(int _x, int y, char *text, int fg, int bg) {
