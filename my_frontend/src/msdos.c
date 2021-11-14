@@ -235,7 +235,7 @@ void HUD_initialPaint() {
     }
 
     for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(22, 14 + i, menuItems[i], 2, 0);
+        writeStr(21, 14 + i, menuItems[i], 2, 0);
     }
 
     HUD_refresh();
@@ -246,19 +246,21 @@ void HUD_refresh() {
         struct Item *item = getItem(focusedItem->item);
 
         if (item->active) {
-            writeStr(22, 21, "*", 2, 0);
+            writeStr(21, 21, "*", 2, 0);
+            writeStr(22, 21, item->description, 2, 0);
+        } else {
+            writeStr(21, 21, item->description, 2, 0);
         }
-
-        writeStr(23, 21, item->description, 2, 0);
     }
 
     if (roomItem != NULL) {
         struct Item *item = getItem(roomItem->item);
 
         if (item->active) {
-            writeStr(2, 2, "*", 2, 0);
+            writeStr(1, 2, "*", 2, 0);
+            writeStr(2, 2, item->description, 2, 0);
+        } else {
+            writeStr(1, 2, item->description, 2, 0);
         }
-
-        writeStr(3, 2, item->description, 2, 0);
     }
 }
