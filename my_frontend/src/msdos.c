@@ -19,7 +19,14 @@ extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
 
-int cursorPosition = 0;
+char *menuItems[] = {
+        "8) Use/Toggle",
+        "5) Use with...",
+        "9) Use/pick...",
+        "6) Drop",
+        "7) Next item",
+        "4) Next in room",
+};
 
 void graphicsFlush();
 
@@ -59,7 +66,7 @@ void hLine(uint8_t x0, uint8_t x1, uint8_t y) {
     x0 >>= 1;
     x1 >>= 1;
     for (int x = x0; x < x1; ++x ) {
-        imageBuffer[(64 * y) + x] = 1;
+        imageBuffer[(64 * y) + x] = 3;
     }
 }
 
@@ -73,7 +80,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
     x0 >>= 1;
 
     for (int y = y0; y < y1; ++y ) {
-        imageBuffer[(64 * y) + x0] = 1;
+        imageBuffer[(64 * y) + x0] = 2;
     }
 }
 
@@ -143,7 +150,7 @@ uint8_t getKey() {
 
 void writeStrWithLimit(int x, int y, char *text, int limitX) {
     gotoxy(x, y);
-    puts(text);
+    printf(text);
 }
 
 void writeStr(int _x, int y, char *text, int fg, int bg) {
@@ -203,33 +210,51 @@ void titleScreen() {
 
 void HUD_initialPaint() {
     for ( int y = 0; y < 200; ++y ) {
-        realPut( 159, y, 2);
+        realPut( 159, y, 3);
     }
+
+    for ( int c = 15; c < (128 + 16 + 1); ++c ) {
+        realPut( c, 35, 3);
+        realPut( c, 36 + 128, 3);
+    }
+
+    for ( int c = 35; c < (128 + 36 + 1); ++c ) {
+        realPut( 15, c, 3);
+        realPut( 16 + 128, c, 3);
+    }
+
+
+    for (uint8_t i = 0; i < 6; ++i) {
+        writeStr(22, 14 + i, menuItems[i], 2, 0);
+    }
+
     HUD_refresh();
 }
 
 void HUD_refresh() {
-    for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(21, 14 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
-    }
+    writeStr(1, 1, "                   ", 2, 0);
+    writeStr(1, 2, "                   ", 2, 0);
+
+    writeStr(22, 21, "                   ", 2, 0);
+    writeStr(22, 22, "                   ", 2, 0);
 
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
 
         if (item->active) {
-            writeStr(21, 21, "*", 2, 0);
+            writeStr(22, 21, "*", 2, 0);
         }
 
-        writeStr(22, 21, item->description, 2, 0);
+        writeStr(23, 21, item->description, 2, 0);
     }
 
     if (roomItem != NULL) {
         struct Item *item = getItem(roomItem->item);
 
         if (item->active) {
-            writeStr(0, 1, "*", 2, 0);
+            writeStr(2, 2, "*", 2, 0);
         }
 
-        writeStr(1, 1, item->description, 2, 0);
+        writeStr(3, 2, item->description, 2, 0);
     }
 }
