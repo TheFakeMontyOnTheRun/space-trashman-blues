@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <conio.h>
 
 #include "Core.h"
 #include "Derelict.h"
@@ -135,18 +136,8 @@ uint8_t getKey() {
     return toReturn;
 }
 
-void writeStrWithLimit(int _x, int y, char *text, int limitX) {
-    __asm__ __volatile__ (
-    "movb 0x02, %%ah\n"
-    "movb %0, %%dl\n"
-    "movb %1, %%dh\n"
-    "int $0x10\n"
-    :
-    : "rm" (_x), "rm" (y)
-    :
-    );
-
-
+void writeStrWithLimit(int x, int y, char *text, int limitX) {
+    gotoxy(x, y);
     puts(text);
 }
 

@@ -2,6 +2,8 @@ CFLAGS = -DMSDOS -DRES64X128 -I../core/include -DINCLUDE_ROOM_DESCRIPTIONS -DCAN
 
 CC = ia16-elf-gcc
 
+LDFLAGS = -li86
+
 OBJS = src/demo.o src/msdos.o ../core/src/Core.o ../core/src/Derelict.o
 
 TARGET = derelict.com
