@@ -1,12 +1,10 @@
-CFLAGS = -DMSDOS -DRES128X128 -I../core/include -DINCLUDE_ROOM_DESCRIPTIONS -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -fomit-frame-pointer -fno-exceptions -ffast-math -flto
+CFLAGS = -DMSDOS -DRES128X128 -I../core/include -DINCLUDE_ROOM_DESCRIPTIONS -DCAN_PICK_OBJECT_AT_ANY_DISTANCE
 
-CC = ia16-elf-gcc
-
-#LDFLAGS = -li86
+CC = i386-pc-msdosdjgpp-gcc
 
 OBJS = src/demo.o src/msdos.o ../core/src/Core.o ../core/src/Derelict.o
 
-TARGET = derelict.com
+TARGET = derelict.exe
 
 $(TARGET):	$(OBJS)
 	$(CC) -o $(TARGET) $(OBJS) $(LDFLAGS)
