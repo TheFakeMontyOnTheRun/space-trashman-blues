@@ -969,11 +969,12 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
     /* 127 = 01111111 - the first bit is used for indicating the presence of an object.
      * And since there are only 127 patterns anyway...
      * */
-
+#ifndef MSDOS
     if (_pattern & 128) {
         drawObjectAt(x0 - 1, y + 2);
         return 1;
     }
+#endif
 
     diff = patterns[0].ceiling - patterns[pattern].ceiling;
     type = patterns[pattern].geometryType;
@@ -1058,6 +1059,54 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
     return 0;
 }
 
+#ifdef MSDOS
+void repaintMapItems() {
+    struct ObjectNode *node;
+
+    /* ignore header node */
+    node = getRoom(playerLocation)->itemsPresent->next;
+
+    //        drawObjectAt(x0 - 1, y + 2);
+    switch (cameraRotation) {
+        case 0:
+            //drawPattern(lastPattern, lastIndex - cameraX + 2, x - cameraX + 2, cameraZ - y);
+            while (node != NULL) {
+                struct Item *item = getItem(node->item);
+                drawObjectAt(item->position.x - cameraX + 2 - 1, cameraZ - item->position.y + 2);
+                node = node->next;
+            }
+            break;
+
+        case 1:
+            //drawPattern(lastPattern, (lastIndex - cameraZ) + 2 , (y - cameraZ) + 2, x - cameraX);
+            while (node != NULL) {
+                struct Item *item = getItem(node->item);
+                drawObjectAt((item->position.y - cameraZ) + 1, (item->position.x - cameraX) + 2);
+                node = node->next;
+            }
+            break;
+
+        case 2:
+            //drawPattern(lastPattern, -(x - cameraX) + 2, -(lastIndex - cameraX) + 2, y - cameraZ);
+            while (node != NULL) {
+                struct Item *item = getItem(node->item);
+                drawObjectAt(-(item->position.x - cameraX) + 1, (item->position.y - cameraZ) +2);
+                node = node->next;
+            }
+            break;
+
+        case 3:
+            //        drawPattern(lastPattern, -(y - cameraZ) + 2, -(lastIndex - cameraZ)  + 2, cameraX - x);
+            while (node != NULL) {
+                struct Item *item = getItem(node->item);
+                drawObjectAt( -(item->position.y - cameraZ) + 1, (cameraX - item->position.x) + 2);
+                node = node->next;
+            }
+            break;
+    }
+}
+#endif
+
 /* all those refactors are due to a SDCC bug with very long functions */
 void renderScene() {
     int8_t x;
@@ -1116,9 +1165,16 @@ next_cluster:
     int8_t *stencilPtr = &stencilHigh[0];
 
     for (x = 0; x < XRESMINUSONE; ++x) {
+#ifdef MSDOS
+        vLine(x, *stencilPtr, 128);
+#endif
         graphicsPut(x, *stencilPtr);
         ++stencilPtr;
     }
+#endif
+
+#ifdef MSDOS
+    repaintMapItems();
 #endif
 }
 
