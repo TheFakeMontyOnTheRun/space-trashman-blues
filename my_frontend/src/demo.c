@@ -1732,10 +1732,10 @@ int main(
         titleScreen();
 #endif
 
-        initMap();
         focusedItem = getPlayerItems();
         setErrorHandlerCallback(onError);
         setLoggerDelegate(logDelegate);
+        initMap();
 
         memset(stencilHigh, 0, XRES);
 
