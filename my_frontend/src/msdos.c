@@ -189,7 +189,7 @@ uint8_t* graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr) {
 void showMessage(const char *message) {
     init();
     gotoxy(1,1);
-    puts(mesg);
+    puts(message);
 }
 
 void titleScreen() {
