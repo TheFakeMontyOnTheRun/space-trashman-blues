@@ -202,14 +202,6 @@ void HUD_initialPaint() {
 }
 
 void HUD_refresh() {
-
-    for (int c = 0; c < 20; ++c ) {
-        writeStr(1 + c, 1, " ", 2, 0);
-        writeStr(1 + c, 2, " ", 2, 0);
-        writeStr(22 + c, 21, " ", 2, 0);
-        writeStr(22 + c, 22, " ", 2, 0);
-    }
-
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
 
