@@ -50,24 +50,6 @@ unsigned char imageBuffer[64 * 128];
 unsigned char buffer[64 * 128];
 
 void shutdownGraphics() {
-    asm("movb $0x0, %ah\n\t"
-        "movb $0x3, %al\n\t"
-        "int $0x10\n\t");
-
-    puts("Thanks for playing!");
-    exit(0);
-}
-
-void fix_line (uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
-
-}
-
-void hLine(uint8_t x0, uint8_t x1, uint8_t y) {
-    x0 >>= 1;
-    x1 >>= 1;
-    for (int x = x0; x < x1; ++x ) {
-        imageBuffer[(64 * y) + x] = 3;
-    }
 }
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
@@ -157,10 +139,6 @@ void writeStr(int _x, int y, char *text, int fg, int bg) {
     writeStrWithLimit(_x, y, text, 40);
 }
 
-unsigned char getPaletteEntry( int origin ) {
-  return origin;
-}
-
 void graphicsFlush() {
     int origin = 0;
     int lastOrigin = -1;
@@ -175,7 +153,7 @@ void graphicsFlush() {
             origin = imageBuffer[ offset ];
 
             if ( lastOrigin != origin ) {
-                value = getPaletteEntry( origin );
+                value = origin;
                 lastOrigin = origin;
             }
 
@@ -194,14 +172,7 @@ void graphicsFlush() {
     memset( imageBuffer, 0, 64 * 128);
 }
 
-uint8_t* graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr) {
-    return NULL;
-}
-
 void showMessage(const char *message) {
-    init();
-    gotoxy(1,1);
-    puts(message);
 }
 
 void titleScreen() {
@@ -223,7 +194,6 @@ void HUD_initialPaint() {
         realPut( 16 + 128, c, 3);
     }
 
-
     for (uint8_t i = 0; i < 6; ++i) {
         writeStr(22, 14 + i, menuItems[i], 2, 0);
     }
@@ -232,11 +202,11 @@ void HUD_initialPaint() {
 }
 
 void HUD_refresh() {
-    writeStr(1, 1, "                   ", 2, 0);
-    writeStr(1, 2, "                   ", 2, 0);
-
-    writeStr(22, 21, "                   ", 2, 0);
-    writeStr(22, 22, "                   ", 2, 0);
+    const char *blank = "                   ";
+    writeStr(1, 1, blank, 2, 0);
+    writeStr(1, 2, blank, 2, 0);
+    writeStr(22, 21, blank, 2, 0);
+    writeStr(22, 22, blank, 2, 0);
 
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
