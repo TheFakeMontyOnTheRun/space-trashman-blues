@@ -213,6 +213,7 @@ void graphicsFlush() {
 }
 
 void showMessage(const char *message) {
+    writeStr(1, 1, message, 2, 0);
 }
 
 void titleScreen() {
@@ -220,9 +221,6 @@ void titleScreen() {
 }
 
 void HUD_initialPaint() {
-    for ( int y = 0; y < 200; ++y ) {
-        realPut( 159, y, 3);
-    }
 
     for ( int c = 15; c < (128 + 16 + 1); ++c ) {
         realPut( c, 35, 3);
