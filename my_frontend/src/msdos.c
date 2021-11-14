@@ -187,7 +187,9 @@ uint8_t* graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr) {
 }
 
 void showMessage(const char *message) {
-
+    init();
+    gotoxy(1,1);
+    puts(mesg);
 }
 
 void titleScreen() {
@@ -203,17 +205,17 @@ void HUD_initialPaint() {
 
 void HUD_refresh() {
     for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(20, 14 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
+        writeStr(21, 14 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
     }
 
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
 
         if (item->active) {
-            writeStr(20, 21, "*", 2, 0);
+            writeStr(21, 21, "*", 2, 0);
         }
 
-        writeStr(21, 21, item->description, 2, 0);
+        writeStr(22, 21, item->description, 2, 0);
     }
 
     if (roomItem != NULL) {

@@ -139,6 +139,10 @@ void shutdownGraphics() {
     SDL_Quit();
 }
 
+void showMessage(const char* mesg) {
+    puts(mesg);
+}
+
 
 void clearGraphics() {
     memset(framebuffer, 0, 160 * 200);

@@ -1702,15 +1702,7 @@ void onError(const char* mesg) {
 }
 
 void logDelegate(const char* mesg) {
-#ifndef SMS
-#ifdef CPC_PLATFORM
-    writeStr(1,1, mesg, 1, 2);
-#else
-    puts(mesg);
-#endif
-#else
     showMessage(mesg);
-#endif
 }
 
 #ifdef XCODE_BUILD
