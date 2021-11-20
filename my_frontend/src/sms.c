@@ -301,7 +301,6 @@ char *menuItems[] = {
             nextItemInRoom();
             break;
     }
-    HUD_refresh();
 }
 
 

@@ -116,11 +116,6 @@ uint8_t getKey() {
                  "int $0x21"
     );
 
-
-    if (toReturn >= '1' && toReturn <= '9') {
-        HUD_refresh();
-    }
-
     return toReturn;
 }
 
