@@ -640,6 +640,12 @@ void HUD_initialPaint() {
 
 void HUD_refresh() {
 
+    fill(map_pixel(17 * 8,  21 * 8), 0, 255 - (17 * 8) );
+    fill(map_pixel(17 * 8,  22 * 8), 0, 255 - (17 * 8) );
+    fill(map_pixel(0,  1 * 8), 0, 127 );
+    fill(map_pixel(0,  2 * 8), 0, 127 );
+
+
     for (uint8_t i = 0; i < 6; ++i) {
         writeStr(16, 14 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
     }
@@ -647,8 +653,6 @@ void HUD_refresh() {
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
 
-        fill(map_pixel(16 * 8,  21 * 8), 0, 255 - (17 * 8) );
-        fill(map_pixel(16 * 8,  22 * 8), 0, 255 - (17 * 8) );
 
         if (item->active) {
             writeStr(16, 21, "*", 2, 0);
@@ -660,8 +664,6 @@ void HUD_refresh() {
     if (roomItem != NULL) {
         struct Item *item = getItem(roomItem->item);
 
-        fill(map_pixel(0,  1 * 8), 0, 127 );
-        fill(map_pixel(0,  2 * 8), 0, 127 );
 
         if (item->active) {
             writeStr(0, 1, "*", 2, 0);

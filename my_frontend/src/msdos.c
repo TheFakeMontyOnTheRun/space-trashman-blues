@@ -235,6 +235,11 @@ void HUD_initialPaint() {
 }
 
 void HUD_refresh() {
+    writeStr(21, 21, "                    ", 2, 0);
+    writeStr(21, 22, "                    ", 2, 0);
+    writeStr(1, 2, "                    ", 2, 0);
+    writeStr(1, 3, "                    ", 2, 0);
+
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
 
