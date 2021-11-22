@@ -607,20 +607,6 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
         return 0;
     }
 
-
-#ifdef DEBUG_WIREFRAME
-    fix_line( px0z0, py0z0, px1z0, py0z0, 4);
-    fix_line( px0z0, py0z0, px0z0, py1z0, 4);
-    fix_line( px1z0, py0z0, px1z0, py1z0, 4);
-    fix_line( px0z0, py1z0, px1z0, py1z0, 4);
-
-    fix_line( px0z1, py0z1, px1z1, py0z1, 4);
-
-    fix_line( px0z0, py0z0, px0z1, py0z1, 4);
-    fix_line( px1z0, py0z0, px1z1, py0z1, 4);
-    return;
-#endif
-
     {
         int16_t x, x0, x1;
 
@@ -969,7 +955,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
     /* 127 = 01111111 - the first bit is used for indicating the presence of an object.
      * And since there are only 127 patterns anyway...
      * */
-#ifndef MSDOS
+#ifndef TRACE_OBJECTS_OVER_FLOOR
     if (_pattern & 128) {
         drawObjectAt(x0 - 1, y + 2);
         return 1;
@@ -1059,7 +1045,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
     return 0;
 }
 
-#ifdef MSDOS
+#ifdef TRACE_OBJECTS_OVER_FLOOR
 void repaintMapItems() {
     struct ObjectNode *node;
 
@@ -1173,7 +1159,7 @@ next_cluster:
     }
 #endif
 
-#ifdef MSDOS
+#ifdef TRACE_OBJECTS_OVER_FLOOR
     repaintMapItems();
 #endif
 }
