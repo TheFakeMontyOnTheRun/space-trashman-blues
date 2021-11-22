@@ -1352,9 +1352,7 @@ void renderCameraNorth() {
         lastPattern = *(mapY + lastIndex);
         mapXY = &map[y][lastIndex];
 
-        for (
-                x = lastIndex;
-                x < minX - 1; ++x) {
+        for (x = lastIndex; x < minX; ++x) {
 
             pattern = *mapXY;
 
@@ -1381,7 +1379,7 @@ void renderCameraNorth() {
 
         maxX = max(cameraX - ((cameraZ) - y), 0);
 
-        for (x = lastIndex; x >= maxX + 1; --x) {
+        for (x = lastIndex; x >= maxX; --x) {
             pattern = *mapXY;
 
             if (pattern != lastPattern) {
