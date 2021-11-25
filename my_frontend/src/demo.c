@@ -335,10 +335,6 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
         py1z1 = z1py + ((y0 + dY) * z1dx);
     }
 
-    if (px1z1 < 0 || px0z0 > XRESMINUSONE) {
-        return 0;
-    }
-
 #ifdef DEBUG_WIREFRAME
     fix_line( px0z0, py0z0, px1z0, py0z0, 4);
     fix_line( px0z0, py0z0, px0z0, py1z0, 4);
@@ -603,9 +599,6 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
     py0z0 = z0py + ((- CAMERA_HEIGHT) * z0dx);
     py0z1 = z1py + ((- CAMERA_HEIGHT) * z1dx);
 
-    if (px1z0 < 0 || px0z0 > XRESMINUSONE) {
-        return 0;
-    }
 
     {
         int16_t x, x0, x1;
@@ -764,10 +757,6 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
     py0z0 = z0py + ((y0) * z0dx);
     py0z1 = z1py + ((y0) * z1dx);
-
-    if (px1z0 < 0 || px0z0 > XRESMINUSONE) {
-        return 0;
-    }
 
     drawContour = (dY);
 
@@ -1177,7 +1166,7 @@ void renderCameraWest() {
         lastIndex = cameraZ;
         lastPattern = map[lastIndex][x];
 
-        for (y = lastIndex; y < minX - 1; ++y) {
+        for (y = lastIndex; y < minX; ++y) {
 
             pattern = map[y][x];
 
@@ -1198,7 +1187,7 @@ void renderCameraWest() {
 
         maxX = max(cameraZ - ((cameraX) - x), 0);
 
-        for (y = lastIndex; y >= maxX + 1; --y) {
+        for (y = lastIndex; y >= maxX; --y) {
             pattern = map[y][x];
 
             if (pattern != lastPattern) {
