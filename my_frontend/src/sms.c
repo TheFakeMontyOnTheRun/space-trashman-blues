@@ -199,7 +199,7 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
     }
 }
 
-void writeStr(int _x, int y, char *text, int fg, int bg) {
+void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
     writeStrWithLimit(_x, y, text, 31);
 }
 
@@ -375,7 +375,7 @@ void graphicsFlush() {
     memset( &buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
-void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
+void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
 #ifdef HALF_BUFFER
     x0 = x0 >> 1;
@@ -411,7 +411,9 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
     switch (x0 & 7) {
         case 0:
             for (uint8_t y = _y0; y <= _y1; ++y) {
-                *ptr |= 128;
+                if ( !shouldStipple || (y & 1) ) {
+                    *ptr |= 128;
+                }
 
                 ++patternLine;
                 ++ptr;
