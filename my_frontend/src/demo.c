@@ -24,28 +24,6 @@ struct ObjectNode* roomItem = NULL;
 
 extern int accessGrantedToSafe;
 
-
-void shutdownGraphics();
-
-void clearGraphics();
-
-void writeStr(uint8_t nColumn, uint8_t nLine, const char *str, uint8_t fg, uint8_t bg);
-
-void graphicsPut(uint8_t x, uint8_t y);
-
-uint8_t getKey();
-
-void init();
-
-void graphicsFlush();
-
-void fix_line(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
-
-
-void titleScreen();
-
-void showMessage(const char* msg );
-
 void performAction();
 
 void startMusic();
