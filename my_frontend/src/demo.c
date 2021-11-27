@@ -1120,7 +1120,7 @@ void repaintMapItems() {
 
 /* all those refactors are due to a SDCC bug with very long functions */
 void renderScene() {
-    int8_t x;
+    uint8_t x;
 
     switch (cameraRotation) {
         case DIRECTION_N:
@@ -1174,13 +1174,21 @@ next_cluster:
     }
 #else
     int8_t *stencilPtr = &stencilHigh[0];
+    uint8_t signal = 0;
 
-    for (x = 0; x < XRESMINUSONE; ++x) {
+    for (x = 0; x < XRES; x += 2) {
 #ifdef MSDOS
-        vLine(x, *stencilPtr, 128, 0);
+        signal = !signal;
+        int8_t stencilY = (*stencilPtr);
+
+        if (stencilY > 86) {
+            vLine(x, stencilY, 128, 2);
+        } else {
+            vLine(x, stencilY + (signal), 86, 3);
+            vLine(x, 86, 128, 2);
+        }
 #endif
-        graphicsPut(x, *stencilPtr);
-        ++stencilPtr;
+        stencilPtr += 2;
     }
 #endif
 

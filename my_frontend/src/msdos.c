@@ -47,6 +47,9 @@ void shutdownGraphics() {
 }
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
+
+    uint8_t stipple = 1;
+
     if (y0 > y1) {
         int tmp = y0;
         y0 = y1;
@@ -55,8 +58,39 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
     x0 >>= 1;
 
+    uint8_t colour;
+
+    switch (shouldStipple) {
+        case 0:
+            shouldStipple = 0;
+            colour = 2;
+            break;
+
+        case 1:
+            shouldStipple = 1;
+            colour = 2;
+            break;
+
+        case 2:
+            shouldStipple = 0;
+            colour = 3;
+            break;
+
+        case 3:
+            shouldStipple = 1;
+            colour = 3;
+            break;
+    }
+
     for (int y = y0; y < y1; ++y ) {
-        imageBuffer[(64 * y) + x0] = 2;
+
+        if (shouldStipple) {
+            stipple = !stipple;
+        }
+
+        if (!shouldStipple || stipple ) {
+            imageBuffer[(64 * y) + x0] = colour;
+        }
     }
 }
 
