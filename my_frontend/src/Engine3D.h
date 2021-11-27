@@ -56,6 +56,7 @@ void HUD_initialPaint();
 void HUD_refresh();
 void tickRenderer();
 
+void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple);
 #ifdef SMS
 uint8_t* graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr);
 #endif
