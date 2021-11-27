@@ -46,7 +46,7 @@ unsigned char buffer[64 * 128];
 void shutdownGraphics() {
 }
 
-void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
+void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
     if (y0 > y1) {
         int tmp = y0;
         y0 = y1;
@@ -170,7 +170,7 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
     }
 }
 
-void writeStr(int _x, int y, char *text, int fg, int bg) {
+void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
     writeStrWithLimit(_x, y, text, 40);
 }
 

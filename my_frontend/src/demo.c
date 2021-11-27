@@ -1177,7 +1177,7 @@ next_cluster:
 
     for (x = 0; x < XRESMINUSONE; ++x) {
 #ifdef MSDOS
-        vLine(x, *stencilPtr, 128);
+        vLine(x, *stencilPtr, 128, 0);
 #endif
         graphicsPut(x, *stencilPtr);
         ++stencilPtr;
