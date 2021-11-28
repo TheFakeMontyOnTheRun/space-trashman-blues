@@ -209,34 +209,48 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 }
 
 void graphicsFlush() {
-    int origin = 0;
-    int lastOrigin = -1;
-    int value = -2;
+//    int origin = 0;
+//    int lastOrigin = -1;
+//    int value = -2;
+//    int offset = 0;
+//
+//    for ( int y = 0; y < 128; ++y ) {
+//
+//
+//        for ( int x = 0; x < 64; ++x ) {
+//
+//            origin = imageBuffer[ offset ];
+//
+//            if ( lastOrigin != origin ) {
+//                value = origin;
+//                lastOrigin = origin;
+//            }
+//
+//
+//            if ( buffer[ offset ] != value ) {
+//                realPut( 16 + (2 * x), (y) + 36, value);
+//                realPut( 16 + (2 * x) + 1, (y) + 36, value);
+//            }
+//
+//            buffer[ offset ] = value;
+//
+//            ++offset;
+//        }
+//    }
+
     int offset = 0;
+    for ( int y = 0; y < 100; ++y ) {
+        for (int x = 0; x < 320; ++x) {
 
-    for ( int y = 0; y < 128; ++y ) {
-
-
-        for ( int x = 0; x < 64; ++x ) {
-
-            origin = imageBuffer[ offset ];
-
-            if ( lastOrigin != origin ) {
-                value = origin;
-                lastOrigin = origin;
-            }
-
-
-            if ( buffer[ offset ] != value ) {
-                realPut( 16 + (2 * x), (y) + 36, value);
-                realPut( 16 + (2 * x) + 1, (y) + 36, value);
-            }
-
-            buffer[ offset ] = value;
-
+            uint8_t pixel = buffer[ (y) * 320 + x ];
+            uint8_t *ptr;
+            ptr = 0xB800;
+            ptr += offset;
+            *ptr = pixel;
             ++offset;
         }
     }
+
 
     memset( imageBuffer, 0, 64 * 128);
 }
