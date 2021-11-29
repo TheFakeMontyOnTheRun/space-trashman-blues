@@ -113,9 +113,9 @@ void realPut( int x, int y, int color ) {
 
         /* address section differs depending on odd/even scanline */
         if (y & 1) {
-            p = (uint8_t __far*)(0xB8002000);
+            p = (uint8_t __far*)((0xB800 * 16) + 0x2000);
         } else {
-            p = (uint8_t __far*)(0xB8000000);
+            p = (uint8_t __far*)(0xB800 * 16);
         }
 
         /* divide by 2 (each address section is 100 pixels) */
