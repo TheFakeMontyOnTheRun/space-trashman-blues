@@ -201,9 +201,9 @@ void graphicsFlush() {
 //        for (int x = 0; x < (320 / 4); ++x) {
 
 
-    asm volatile (
-    "movb $0x05, 10($0xB800)\n"
-    );
+    //asm volatile (
+//    "movb $0x05, ($0xB800,0)\n"
+//    );
 //            ++offset;
 //        }
 //    }
