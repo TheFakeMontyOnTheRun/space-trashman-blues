@@ -202,7 +202,7 @@ void graphicsFlush() {
 
             uint8_t pixel = buffer[ (y) * 320 + x ];
             volatile uint8_t __far *ptr;
-            ptr = (uint8_t*)(0xB800 * 16);
+            ptr = (uint8_t*)(0xB8000);
             ptr += offset;
             *ptr = pixel;
             ++offset;
