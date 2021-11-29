@@ -1,6 +1,6 @@
 #include <string.h>
 #include <stdint.h>
-
+#include <i86.h>
 #include "Core.h"
 #include "Derelict.h"
 #include "Engine3D.h"
@@ -213,9 +213,9 @@ void graphicsFlush() {
     int lastOrigin = -1;
     int value = -2;
     int offset = 0;
-    uint8_t __far *ptr = 0xB8000;
-
-    *ptr = 5;
+    pokeb(0xB8000, 5 * 80 + 40, 5);
+    pokeb(0xB8000, 5 * 80 + 41, 4);
+    pokeb(0xB8000, 5 * 80 + 42, 5);
 
     for ( int y = 0; y < 128; ++y ) {
 
