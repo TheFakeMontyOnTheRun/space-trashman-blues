@@ -246,7 +246,8 @@ void graphicsFlush() {
 
             asm volatile (
                     "movw %0, %%ax\n"
-                    "movb %1, %%ax($0xB8000)\n"
+                    "movw $0xB8000, %%ax\n"
+                    "movb %1, %%ax(,$1)\n"
             :
             :[c] "r"(offset), "r" (pixel)
             :
