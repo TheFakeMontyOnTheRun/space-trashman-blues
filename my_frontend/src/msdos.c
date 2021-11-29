@@ -108,31 +108,7 @@ void graphicsPut( uint8_t x, uint8_t y) {
     imageBuffer[ (64 * y ) + x ] = 1;
 }
 
-void realPut( int x, int y, int color ) {
-        uint16_t p;
-
-        /* address section differs depending on odd/even scanline */
-        if (y & 1) {
-            p = ((0xB800 * 16) + 0x2000);
-        } else {
-            p = (0xB800 * 16);
-        }
-
-        /* divide by 2 (each address section is 100 pixels) */
-        y >>= 1;
-
-        /* divide X by 4 (2 bits for each pixel) */
-        x >>= 2;
-
-        /* 80 bytes per line (80 * 4 = 320), 4 pixels per byte */
-        p += ((80 * y) + x);
-
-        asm volatile ("mov %1, (%0)\n"
-        :
-        : "r" (p), "r" (color)
-        :
-        );
-
+void realPut( int x, int y, int value ) {
 }
 
 void clearGraphics() {
@@ -220,6 +196,25 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 }
 
 void graphicsFlush() {
+//    int offset = 0;
+//    for ( int y = 0; y < 100; ++y ) {
+//        for (int x = 0; x < (320 / 4); ++x) {
+
+            uint8_t pixel = buffer[ 0 ];
+            volatile uint8_t __far *ptr;
+            ptr = (uint8_t*)(0xB8000000L);
+            ptr += 20 * (80) + 8;
+            *ptr = 5;
+            ++ptr;
+            *ptr = 4;
+            ++ptr;
+            *ptr = 5;
+
+//            ++offset;
+//        }
+//    }
+
+    memset( imageBuffer, 0, 64 * 128);
 }
 
 void showMessage(const char *message) {
