@@ -202,7 +202,7 @@ void graphicsFlush() {
 
 
     asm volatile (
-    "movb $0x05, $0xB800:$0x0200\n"
+    "movb $0x05, $0x0200($0xB800)\n"
     );
 //            ++offset;
 //        }
