@@ -108,7 +108,58 @@ void graphicsPut( uint8_t x, uint8_t y) {
     imageBuffer[ (64 * y ) + x ] = 1;
 }
 
-void realPut( int x, int y, int value ) {
+void realPut( int x, int y, int color ) {
+        int b, m; /* bits and mask */
+        unsigned char __far *p;
+        unsigned char c;
+
+        /* address section differs depending on odd/even scanline */
+        if (1 == (y & 0x1)) {
+            p = (char __far*)(0xB8002000L);
+        } else {
+            p = (char __far*)(0xB8000000L);
+        }
+
+        /* divide by 2 (each address section is 100 pixels) */
+        y >>= 1;
+
+        /* start bit (b) and mask (m) for 2-bit pixels */
+        switch (x & 0x3) {
+            case 0:
+                b = 6;
+                m = 0xC0;
+                break;
+            case 1:
+                b = 4;
+                m = 0x30;
+                break;
+            case 2:
+                b = 2;
+                m = 0x0C;
+                break;
+            case 3:
+                b = 0;
+                m = 0x03;
+                break;
+        }
+
+        /* divide X by 4 (2 bits for each pixel) */
+        x >>= 2;
+
+        /* 80 bytes per line (80 * 4 = 320), 4 pixels per byte */
+        p += ((80 * y) + x);
+
+        /* read current pixel */
+        c = *p;
+
+        /* remove bits at new position */
+        c = c & ~m;
+
+        /* set bits at new position */
+        c = c | (color << b);
+
+        /* write new pixel */
+        *p = c;
 }
 
 void clearGraphics() {
@@ -196,20 +247,6 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 }
 
 void graphicsFlush() {
-//    int offset = 0;
-//    for ( int y = 0; y < 100; ++y ) {
-//        for (int x = 0; x < (320 / 4); ++x) {
-
-            uint8_t pixel = buffer[ 0 ];
-            volatile uint8_t __far *ptr;
-            ptr = (uint8_t*)(0xB8000000L);
-//            ptr += offset;
-            *ptr = 5;
-//            ++offset;
-//        }
-//    }
-
-    memset( imageBuffer, 0, 64 * 128);
 }
 
 void showMessage(const char *message) {
