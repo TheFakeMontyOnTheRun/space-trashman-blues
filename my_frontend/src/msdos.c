@@ -109,9 +109,7 @@ void graphicsPut( uint8_t x, uint8_t y) {
 }
 
 void realPut( int x, int y, int color ) {
-        int b, m; /* bits and mask */
         uint8_t __far *p;
-        uint8_t c;
 
         /* address section differs depending on odd/even scanline */
         if (y & 1) {
@@ -123,43 +121,14 @@ void realPut( int x, int y, int color ) {
         /* divide by 2 (each address section is 100 pixels) */
         y >>= 1;
 
-        /* start bit (b) and mask (m) for 2-bit pixels */
-        switch (x & 0x3) {
-            case 0:
-                b = 6;
-                m = 0xC0;
-                break;
-            case 1:
-                b = 4;
-                m = 0x30;
-                break;
-            case 2:
-                b = 2;
-                m = 0x0C;
-                break;
-            case 3:
-                b = 0;
-                m = 0x03;
-                break;
-        }
-
         /* divide X by 4 (2 bits for each pixel) */
         x >>= 2;
 
         /* 80 bytes per line (80 * 4 = 320), 4 pixels per byte */
         p += ((80 * y) + x);
 
-        /* read current pixel */
-        c = *p;
-
-        /* remove bits at new position */
-        c = c & ~m;
-
-        /* set bits at new position */
-        c = c | (color << b);
-
         /* write new pixel */
-        *p = c;
+        *p = color;
 }
 
 void clearGraphics() {
