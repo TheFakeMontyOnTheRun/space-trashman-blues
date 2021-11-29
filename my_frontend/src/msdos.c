@@ -110,14 +110,14 @@ void graphicsPut( uint8_t x, uint8_t y) {
 
 void realPut( int x, int y, int color ) {
         int b, m; /* bits and mask */
-        unsigned char __far *p;
-        unsigned char c;
+        uint8_t __far *p;
+        uint8_t c;
 
         /* address section differs depending on odd/even scanline */
-        if (1 == (y & 0x1)) {
-            p = (char __far*)(0xB8002000L);
+        if (y & 1) {
+            p = (uint8_t __far*)(0xB8002000);
         } else {
-            p = (char __far*)(0xB8000000L);
+            p = (uint8_t __far*)(0xB8000000);
         }
 
         /* divide by 2 (each address section is 100 pixels) */
