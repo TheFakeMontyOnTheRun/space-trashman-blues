@@ -200,16 +200,11 @@ void graphicsFlush() {
 //    for ( int y = 0; y < 100; ++y ) {
 //        for (int x = 0; x < (320 / 4); ++x) {
 
-            uint8_t pixel = buffer[ 0 ];
-            volatile uint8_t __far *ptr;
-            ptr = (uint8_t*)(0xB8000000L);
-            ptr += 20 * (80) + 8;
-            *ptr = 5;
-            ++ptr;
-            *ptr = 4;
-            ++ptr;
-            *ptr = 5;
 
+    asm volatile (
+    "movw $0xB800, %es\n"
+    "movb $0x05, %es:(%ax)\n"
+    );
 //            ++offset;
 //        }
 //    }
