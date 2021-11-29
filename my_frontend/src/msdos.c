@@ -204,7 +204,7 @@ void graphicsFlush() {
             volatile uint8_t __far *ptr;
             ptr = (uint8_t*)(0xB8000000L);
 //            ptr += offset;
-            *ptr = pixel;
+            *ptr = 5;
 //            ++offset;
 //        }
 //    }
