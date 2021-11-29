@@ -108,22 +108,7 @@ void graphicsPut( uint8_t x, uint8_t y) {
     imageBuffer[ (64 * y ) + x ] = 1;
 }
 
-void reallyReallyPut( uint16_t  offset, uint8_t value ) {
-
-    asm("movl    $753664, 20(%esp)\n"
-        "movl    4(%esp), %eax\n"
-        "andl    $65535, %eax\n"
-        "addl    %eax, 20(%esp)\n"
-        "movl    20(%esp), %eax\n"
-        "movb    (%esp), %dl\n"
-        "movb    %dl, (%eax)\n");
-}
-
-
 void realPut( int x, int y, int value ) {
-    uint8_t pixel = value;
-    uint16_t offset = (320 * y) + x;
-    reallyReallyPut( offset, value);
 }
 
 void clearGraphics() {
@@ -211,31 +196,16 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 }
 
 void graphicsFlush() {
-    int origin = 0;
-    int lastOrigin = -1;
-    int value = -2;
     int offset = 0;
+    for ( int y = 0; y < 100; ++y ) {
+        for (int x = 0; x < 320; ++x) {
 
-    for ( int y = 0; y < 128; ++y ) {
-
-
-        for ( int x = 0; x < 64; ++x ) {
-
-            origin = imageBuffer[ offset ];
-
-            if ( lastOrigin != origin ) {
-                value = origin;
-                lastOrigin = origin;
-            }
-
-
-            if ( buffer[ offset ] != value ) {
-                realPut( 16 + (2 * x), (y) + 36, value);
-                realPut( 16 + (2 * x) + 1, (y) + 36, value);
-            }
-
-            buffer[ offset ] = value;
-
+            uint8_t pixel = buffer[ (y) * 320 + x ];
+            volatile uint8_t __far *ptr;
+            ptr = (uint8_t*)(0xB800 * 16);
+            ptr += offset;
+            *ptr = pixel;
+            ++offset;
             ++offset;
         }
     }
