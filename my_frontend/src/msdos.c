@@ -108,20 +108,22 @@ void graphicsPut( uint8_t x, uint8_t y) {
     imageBuffer[ (64 * y ) + x ] = 1;
 }
 
-void realPut( int x, int y, int value ) {
-    int pixel = value;
-    int px = x;
-    int py = y;
+void reallyReallyPut( uint16_t  offset, uint8_t value ) {
 
-    asm volatile ("movb $0x0C, %%ah\n\t"
-                  "movb %0,    %%al\n\t"
-                  "movb $0x0,  %%bh\n\t"
-                  "movw %1,    %%cx\n\t"
-                  "movw %2,    %%dx\n\t"
-                  "int $0x10"
-    :
-    :"rm" (pixel), "rm" (px), "rm" (py)
-    );
+    asm("movl    $753664, 20(%esp)\n"
+        "movl    4(%esp), %eax\n"
+        "andl    $65535, %eax\n"
+        "addl    %eax, 20(%esp)\n"
+        "movl    20(%esp), %eax\n"
+        "movb    (%esp), %dl\n"
+        "movb    %dl, (%eax)\n");
+}
+
+
+void realPut( int x, int y, int value ) {
+    uint8_t pixel = value;
+    uint16_t offset = (320 * y) + x;
+    reallyReallyPut( offset, value);
 }
 
 void clearGraphics() {
@@ -209,54 +211,34 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 }
 
 void graphicsFlush() {
-//    int origin = 0;
-//    int lastOrigin = -1;
-//    int value = -2;
-//    int offset = 0;
-//
-//    for ( int y = 0; y < 128; ++y ) {
-//
-//
-//        for ( int x = 0; x < 64; ++x ) {
-//
-//            origin = imageBuffer[ offset ];
-//
-//            if ( lastOrigin != origin ) {
-//                value = origin;
-//                lastOrigin = origin;
-//            }
-//
-//
-//            if ( buffer[ offset ] != value ) {
-//                realPut( 16 + (2 * x), (y) + 36, value);
-//                realPut( 16 + (2 * x) + 1, (y) + 36, value);
-//            }
-//
-//            buffer[ offset ] = value;
-//
-//            ++offset;
-//        }
-//    }
-
+    int origin = 0;
+    int lastOrigin = -1;
+    int value = -2;
     int offset = 0;
-    for ( int y = 0; y < 100; ++y ) {
-        for (int x = 0; x < 320; ++x) {
 
-            uint8_t pixel = buffer[ (y) * 320 + x ];
+    for ( int y = 0; y < 128; ++y ) {
 
-            asm volatile (
-                    "movw %0, %%ax\n"
-                    "movw $0xB8000, %%ax\n"
-                    "movb %1, 1(%%ax)\n"
-            :
-            :[c] "r"(offset), "r" (pixel)
-            :
-            );
+
+        for ( int x = 0; x < 64; ++x ) {
+
+            origin = imageBuffer[ offset ];
+
+            if ( lastOrigin != origin ) {
+                value = origin;
+                lastOrigin = origin;
+            }
+
+
+            if ( buffer[ offset ] != value ) {
+                realPut( 16 + (2 * x), (y) + 36, value);
+                realPut( 16 + (2 * x) + 1, (y) + 36, value);
+            }
+
+            buffer[ offset ] = value;
 
             ++offset;
         }
     }
-
 
     memset( imageBuffer, 0, 64 * 128);
 }
