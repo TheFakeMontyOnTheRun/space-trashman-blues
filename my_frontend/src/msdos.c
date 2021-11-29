@@ -213,6 +213,9 @@ void graphicsFlush() {
     int lastOrigin = -1;
     int value = -2;
     int offset = 0;
+    uint8_t __far *ptr = 0xB8000;
+
+    *ptr = 5;
 
     for ( int y = 0; y < 128; ++y ) {
 
