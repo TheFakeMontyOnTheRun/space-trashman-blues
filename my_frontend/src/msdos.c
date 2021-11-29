@@ -123,7 +123,7 @@ void realPut( int x, int y, int value ) {
     asm("movw $0x800, %ax\n\t"
                   "movw %ax, %es\n\t"
                   "xor %di, %di  \n\t"
-                  "movb $5, %es:[%di]\n\t"
+                  "movb $5, %es:(%di)\n\t"
 
     );
 }
