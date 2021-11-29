@@ -109,13 +109,13 @@ void graphicsPut( uint8_t x, uint8_t y) {
 }
 
 void realPut( int x, int y, int color ) {
-        uint8_t __far *p;
+        uint16_t p;
 
         /* address section differs depending on odd/even scanline */
         if (y & 1) {
-            p = (uint8_t __far*)((0xB800 * 16) + 0x2000);
+            p = ((0xB800 * 16) + 0x2000);
         } else {
-            p = (uint8_t __far*)(0xB800 * 16);
+            p = (0xB800 * 16);
         }
 
         /* divide by 2 (each address section is 100 pixels) */
@@ -127,8 +127,12 @@ void realPut( int x, int y, int color ) {
         /* 80 bytes per line (80 * 4 = 320), 4 pixels per byte */
         p += ((80 * y) + x);
 
-        /* write new pixel */
-        *p = color;
+        asm volatile ("mov %1, (%0)\n"
+        :
+        : "r" (p), "r" (color)
+        :
+        );
+
 }
 
 void clearGraphics() {
