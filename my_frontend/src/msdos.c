@@ -198,14 +198,13 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 void graphicsFlush() {
     int offset = 0;
     for ( int y = 0; y < 100; ++y ) {
-        for (int x = 0; x < 320; ++x) {
+        for (int x = 0; x < (320 / 4); ++x) {
 
             uint8_t pixel = buffer[ (y) * 320 + x ];
             volatile uint8_t __far *ptr;
-            ptr = (uint8_t*)(0xB8000);
+            ptr = (uint8_t*)(0xB8000000L);
             ptr += offset;
             *ptr = pixel;
-            ++offset;
             ++offset;
         }
     }
