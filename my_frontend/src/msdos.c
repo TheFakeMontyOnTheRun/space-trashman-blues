@@ -120,7 +120,7 @@ void realPut( int x, int y, int value ) {
 //    mov es:[di],al ; back to CGA
     x = y = 0;
 
-    asm volatile("movw $0x800, %%ax\n\t"
+    asm volatile("movw $0x8000, %%ax\n\t"
                   "movw %%ax, %%es\n\t"
                   "movw $0, %%di  \n\t"
                   "movb $128, %%es:(%%di)\n\t"
