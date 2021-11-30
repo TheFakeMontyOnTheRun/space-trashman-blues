@@ -149,17 +149,27 @@ void realPut( int x, int y, int value ) {
 //                break;
 //        }
 
-        pixel = 128;
 
+
+    if (y & 1) {
         asm volatile("movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
                      "movw %0, %%di  \n\t"
                      "movb $128, %%es:(%%di)\n\t"
         :
-        : "r"( ((y & 1) ? 0x2000 : 0 ) + ((x / 4) + ((y / 2) * 80)) ), "r" (pixel)
+        : "r"( ((x / 4) + ((y / 2) * 80)) ), "r" (pixel)
         :
         );
-
+    } else {
+        asm volatile("movw $0xb800, %%ax\n\t"
+                     "movw %%ax, %%es\n\t"
+                     "movw %0, %%di  \n\t"
+                     "movb $128, %%es:(%%di)\n\t"
+        :
+        : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80)) ), "r" (pixel)
+        :
+        );
+    }
 
 
 }
