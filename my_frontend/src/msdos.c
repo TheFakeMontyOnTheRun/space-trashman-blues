@@ -118,12 +118,12 @@ void realPut( int x, int y, int value ) {
 //    and al,xx ; erase old pixel bits
 //    or al,xx ; set new pixel bits
 //    mov es:[di],al ; back to CGA
-    x = y = 0;
+
 
     asm volatile("movw $0xb800, %%ax\n\t"
                   "movw %%ax, %%es\n\t"
-                  "movw $0, %%di  \n\t"
-                  "movb $128, %%es:(%%di)\n\t"
+                  "movw %1, %%di  \n\t"
+                  "movb %0, %%es:(%%di)\n\t"
             :
             : "r"( ((x / 4) + (y / 2)) ), "r" (value)
             :
