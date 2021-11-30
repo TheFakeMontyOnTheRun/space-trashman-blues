@@ -95,17 +95,17 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 }
 
 void graphicsPut( uint8_t x, uint8_t y) {
-    if (y > 127 ) {
-        return;
-    }
-
-    x >>= 1;
-
-    if (x > 63 ) {
-        return;
-    }
-
-    imageBuffer[ (64 * y ) + x ] = 1;
+//    if (y > 127 ) {
+//        return;
+//    }
+//
+//    x >>= 1;
+//
+//    if (x > 63 ) {
+//        return;
+//    }
+//
+//    imageBuffer[ (64 * y ) + x ] = 1;
 }
 
 void realPut( int x, int y, int value ) {
@@ -160,54 +160,54 @@ uint8_t getKey() {
 }
 
 void writeStrWithLimit(int _x, int y, char *text, int limitX) {
-
-    uint8_t len = strlen(text);
-    char *ptr = text;
-    uint8_t c = 0;
-    uint8_t chary = 0;
-    uint8_t x = _x;
-
-    for (; c < len && y < 25; ++c) {
-
-        char cha = *ptr;
-
-        if (x == limitX) {
-            ++y;
-            x = _x;
-        } else if (cha == '\n') {
-            ++y;
-            x = _x;
-            ++ptr;
-            continue;
-        } else {
-            ++x;
-        }
-
-        asm volatile (
-        "movb $0x02, %%ah\n"
-        "movb    %0, %%dl\n"
-        "movb    %1, %%dh\n"
-        "movb  $0x0, %%bh\n"
-        "int  $0x10\n"
-        :
-        : "rm" (x), "rm" (y)
-        :
-        );
-
-        asm volatile (
-        "movb $0x09, %%ah\n"
-        "movb  %[c], %%al\n"
-        "movw $0x01, %%cx\n"
-        "movb  $0x0, %%bh\n"
-        "movb $0x03, %%bl\n"
-        "int $0x10\n"
-        :
-        :[c] "r"(cha)
-        :
-        );
-
-        ++ptr;
-    }
+//
+//    uint8_t len = strlen(text);
+//    char *ptr = text;
+//    uint8_t c = 0;
+//    uint8_t chary = 0;
+//    uint8_t x = _x;
+//
+//    for (; c < len && y < 25; ++c) {
+//
+//        char cha = *ptr;
+//
+//        if (x == limitX) {
+//            ++y;
+//            x = _x;
+//        } else if (cha == '\n') {
+//            ++y;
+//            x = _x;
+//            ++ptr;
+//            continue;
+//        } else {
+//            ++x;
+//        }
+//
+//        asm volatile (
+//        "movb $0x02, %%ah\n"
+//        "movb    %0, %%dl\n"
+//        "movb    %1, %%dh\n"
+//        "movb  $0x0, %%bh\n"
+//        "int  $0x10\n"
+//        :
+//        : "rm" (x), "rm" (y)
+//        :
+//        );
+//
+//        asm volatile (
+//        "movb $0x09, %%ah\n"
+//        "movb  %[c], %%al\n"
+//        "movw $0x01, %%cx\n"
+//        "movb  $0x0, %%bh\n"
+//        "movb $0x03, %%bl\n"
+//        "int $0x10\n"
+//        :
+//        :[c] "r"(cha)
+//        :
+//        );
+//
+//        ++ptr;
+//    }
 }
 
 void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
