@@ -149,13 +149,13 @@ void realPut( int x, int y, int value ) {
 //                break;
 //        }
 
-
+    value = 128;
 
     if (y & 1) {
         asm volatile("movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
                      "movw %0, %%di  \n\t"
-                     "movb $128, %%es:(%%di)\n\t"
+                     "movb %1, %%es:(%%di)\n\t"
         :
         : "r"( ((x / 4) + ((y / 2) * 80)) ), "r" (value)
         :
@@ -164,7 +164,7 @@ void realPut( int x, int y, int value ) {
         asm volatile("movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
                      "movw %0, %%di  \n\t"
-                     "movb $128, %%es:(%%di)\n\t"
+                     "movb %1, %%es:(%%di)\n\t"
         :
         : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80)) ), "r" (value)
         :
