@@ -131,25 +131,26 @@ void realPut( int x, int y, int value ) {
         : "r"( ((y & 1) ? 0x2000 : 0 ) + ((x / 4) + ((y / 2) * 80)) )
         :
         );
+//
+//        switch ( x & 3 ) {
+//            case 0:
+//                pixel = (pixel & 0b11111100) | ( value << 0);
+//                break;
+//            case 1:
+//                pixel = (pixel & 0b11110011) | ( value << 2);
+//                break;
+//
+//            case 2:
+//                pixel = (pixel & 0b11001111) | ( value << 4);
+//                break;
+//
+//            case 3:
+//                pixel = (pixel & 0b00111111) | ( value << 6);
+//                break;
+//        }
 
-        switch ( x & 3 ) {
-            case 0:
-                pixel = (pixel & 0b11111100) | ( value << 0);
-                break;
-            case 1:
-                pixel = (pixel & 0b11110011) | ( value << 2);
-                break;
-
-            case 2:
-                pixel = (pixel & 0b11001111) | ( value << 4);
-                break;
-
-            case 3:
-                pixel = (pixel & 0b00111111) | ( value << 6);
-                break;
-        }
-
-
+        pixel = 128;
+        
         asm volatile("movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
                      "movw %0, %%di  \n\t"
