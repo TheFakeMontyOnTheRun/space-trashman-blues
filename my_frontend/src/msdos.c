@@ -120,53 +120,52 @@ void realPut( int x, int y, int value ) {
 //    mov es:[di],al ; back to CGA
 
 
+    uint8_t pixel = 0;
 
-//
-//        asm volatile("movw $0xb800, %%ax\n\t"
-//                     "movw %%ax, %%es\n\t"
-//                     "movw %1, %%di  \n\t"
-//                     "movb %%es:(%%di), %0 "
-//        : "=rm"(pixel)
-//        : "r"( ((y & 1) ? 0x2000 : 0 ) + ((x / 4) + ((y / 2) * 80)) )
-//        :
-//        );
+        asm volatile("movw $0xb800, %%ax\n\t"
+                     "movw %%ax, %%es\n\t"
+                     "movw %1, %%di  \n\t"
+                     "movb %%es:(%%di), %0 "
+        : "=rm"(pixel)
+        : "r"( ((y & 1) ? 0x2000 : 0 ) + ((x / 4) + ((y / 2) * 80)) )
+        :
+        );
 
-//
-//        switch ( x & 3 ) {
-//            case 0:
-//                pixel = (pixel & 0b11111100) | ( value << 0);
-//                break;
-//            case 1:
-//                pixel = (pixel & 0b11110011) | ( value << 2);
-//                break;
-//
-//            case 2:
-//                pixel = (pixel & 0b11001111) | ( value << 4);
-//                break;
-//
-//            case 3:
-//                pixel = (pixel & 0b00111111) | ( value << 6);
-//                break;
-//        }
 
-    value = 128;
+        switch ( x & 3 ) {
+            case 0:
+                pixel = (pixel & 0b11111100) | ( value << 0);
+                break;
+            case 1:
+                pixel = (pixel & 0b11110011) | ( value << 2);
+                break;
+
+            case 2:
+                pixel = (pixel & 0b11001111) | ( value << 4);
+                break;
+
+            case 3:
+                pixel = (pixel & 0b00111111) | ( value << 6);
+                break;
+        }
+
 
     if (y & 1) {
         asm volatile("movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
                      "movw %0, %%di  \n\t"
-                     "movb %1, %%es:(%%di)\n\t"
+                     "movb $128, %%es:(%%di)\n\t"
         :
-        : "r"( ((x / 4) + ((y / 2) * 80)) ), "r" (value)
+        : "r"( ((x / 4) + ((y / 2) * 80)) ), "r" (pixel) //<--- NOT USED!
         :
         );
     } else {
         asm volatile("movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
                      "movw %0, %%di  \n\t"
-                     "movb %1, %%es:(%%di)\n\t"
+                     "movb $128, %%es:(%%di)\n\t"
         :
-        : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80)) ), "r" (value)
+        : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80)) ), "r" (pixel)
         :
         );
     }
