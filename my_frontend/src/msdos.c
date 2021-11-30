@@ -125,7 +125,7 @@ void realPut( int x, int y, int value ) {
                   "movw %0, %%di  \n\t"
                   "movb $128, %%es:(%%di)\n\t"
             :
-            : "r"( ((x / 4) + (y / 2)) ), "r" (value)
+            : "r"( ((x / 4) + ((y / 2) * 80)) ), "r" (value)
             :
     );
 }
