@@ -119,18 +119,20 @@ void realPut( int x, int y, int value ) {
 //    or al,xx ; set new pixel bits
 //    mov es:[di],al ; back to CGA
 
+        int pixel = 0;
 
-/*
         asm volatile("movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
                      "movw %1, %%di  \n\t"
-                     "movb %%es:(%%di), %0\n\t"
+                     "xorw %%ax, %%ax\n\t"
+                     "movb %%es:(%%di), %%al\n\t"
+                     "movb %%al, %0\n\t"
         : "=rm"(pixel)
         : "r"( ((y & 1) ? 0x2000 : 0 ) + ((x / 4) + ((y / 2) * 80)) )
-        :
+        : "ax", "es", "di"
         );
-*/
-        uint8_t pixel = 0;
+
+
 
         switch ( x & 3 ) {
             case 0:
@@ -163,7 +165,7 @@ void realPut( int x, int y, int value ) {
                      "movw %0, %%di  \n\t"
                      "movb %1, %%es:(%%di)\n\t"
         :
-        : "r"( ((x / 4) + ((y / 2) * 80)) ), "r" (value) //<--- NOT USED!
+        : "r"( ((x / 4) + ((y / 2) * 80)) ), "r" (value)
         : "ax", "es", "di"
         );
     } else {
