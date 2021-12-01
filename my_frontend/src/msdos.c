@@ -366,4 +366,9 @@ void HUD_refresh() {
         realPut(300 - i, i+20, 2);
     }
 
+    for (uint8_t i = 0; i < 50; ++i) {
+        realPut(200, i+20, 2);
+    }
+
+
 }
