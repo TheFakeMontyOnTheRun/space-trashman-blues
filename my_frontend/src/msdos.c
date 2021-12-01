@@ -112,6 +112,9 @@ void realPut( int x, int y, int value ) {
 
         int pixel = 0;
 
+        uint16_t odd = (y & 1);
+        y >>= 2;
+
         asm volatile("movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
                      "movw %1, %%di  \n\t"
@@ -119,25 +122,25 @@ void realPut( int x, int y, int value ) {
                      "movb %%es:(%%di), %%al\n\t"
                      "movw %%ax, %0\n\t"
         : "=rm"(pixel)
-        : "r"( ((y & 1) ? 0x2000 : 0 ) + ((x / 4) + ((y / 2) * 80)) )
+        : "r"( (odd ? 0x2000 : 0 ) + ((x / 4) + (y * 80)) )
         : "ax", "es", "di"
         );
 
         switch ( x & 3 ) {
-            case 0:
+            case 3:
                 pixel = value | (pixel & 0b11111100);
                 break;
-            case 1:
+            case 2:
                 value = ( value << 2);
                 pixel = value | (pixel & 0b11110011);
                 break;
 
-            case 2:
+            case 1:
                 value = ( value << 4);
                 pixel = value | (pixel & 0b11001111);
                 break;
 
-            case 3:
+            case 0:
                 value = ( value << 6);
                 pixel = value | (pixel & 0b00111111);
                 break;
@@ -146,13 +149,13 @@ void realPut( int x, int y, int value ) {
     value = pixel;
 
 
-    if (y & 1) {
+    if (odd) {
         asm volatile("movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
                      "movw %0, %%di  \n\t"
                      "movb %1, %%es:(%%di)\n\t"
         :
-        : "r"( ((x / 4) + ((y / 2) * 80)) ), "r" (value)
+        : "r"( ((x / 4) + (y * 80)) ), "r" (value)
         : "ax", "es", "di"
         );
     } else {
@@ -161,7 +164,7 @@ void realPut( int x, int y, int value ) {
                      "movw %0, %%di  \n\t"
                      "movb %1, %%es:(%%di)\n\t"
         :
-        : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80)) ), "r" (value)
+        : "r"( 0x2000 + ((x / 4) + (y * 80)) ), "r" (value)
         : "ax", "es", "di"
         );
     }
