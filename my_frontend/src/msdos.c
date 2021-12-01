@@ -121,7 +121,7 @@ void realPut(int x, int y, int value) {
                      "movb %%es:(%%di), %%al\n\t"
                      "movw %%ax, %0\n\t"
         : "=r"(pixelRead)
-        : "r"((x / 4) + ((y / 2) * 80))
+        : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80)))
         : "ax", "es", "di"
         );
     } else {
@@ -132,7 +132,7 @@ void realPut(int x, int y, int value) {
                      "movb %%es:(%%di), %%al\n\t"
                      "movw %%ax, %0\n\t"
         : "=r"(pixelRead)
-        : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80)))
+        : "r"((x / 4) + ((y / 2) * 80))
         : "ax", "es", "di"
         );
     }
@@ -167,7 +167,7 @@ void realPut(int x, int y, int value) {
                      "movw %0, %%di  \n\t"
                      "movb %1, %%es:(%%di)\n\t"
         :
-        : "r"(((x / 4) + ((y / 2) * 80))), "r" (value)
+        : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80))), "r" (value)
         : "ax", "es", "di"
         );
     } else {
@@ -176,7 +176,7 @@ void realPut(int x, int y, int value) {
                      "movw %0, %%di  \n\t"
                      "movb %1, %%es:(%%di)\n\t"
         :
-        : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80))), "r" (value)
+        : "r"(((x / 4) + ((y / 2) * 80))), "r" (value)
         : "ax", "es", "di"
         );
     }
