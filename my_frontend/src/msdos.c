@@ -357,4 +357,13 @@ void HUD_refresh() {
             writeStr(1, 2, item->description, 2, 0);
         }
     }
+
+    for (uint8_t i = 0; i < 200; ++i) {
+        realPut(i, i, 1);
+    }
+
+    for (uint8_t i = 0; i < 200; ++i) {
+        realPut(200 - i, i, 2);
+    }
+
 }
