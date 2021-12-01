@@ -126,7 +126,7 @@ void realPut( int x, int y, int value ) {
                      "movw %1, %%di  \n\t"
                      "xorw %%ax, %%ax\n\t"
                      "movb %%es:(%%di), %%al\n\t"
-                     "movb %%al, %0\n\t"
+                     "movw %%ax, %0\n\t"
         : "=rm"(pixel)
         : "r"( ((y & 1) ? 0x2000 : 0 ) + ((x / 4) + ((y / 2) * 80)) )
         : "ax", "es", "di"
