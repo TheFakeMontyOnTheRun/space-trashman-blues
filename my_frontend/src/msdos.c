@@ -111,7 +111,7 @@ void graphicsPut( uint8_t x, uint8_t y) {
 void realPut( int x, int y, uint8_t value ) {
 }
 
-void realRealPut( int x, int y, uint8_t value ) {
+void realRealPut( int x, int y, int value ) {
         uint8_t pixel = 0;
 
         asm volatile("movw $0xb800, %%ax\n\t"
