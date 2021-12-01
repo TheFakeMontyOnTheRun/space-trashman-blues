@@ -108,20 +108,78 @@ void graphicsPut( uint8_t x, uint8_t y) {
     imageBuffer[ (64 * y ) + x ] = 1;
 }
 
-void realPut( int x, int y, int value ) {
-    int pixel = value;
-    int px = x;
-    int py = y;
+void realPut(int x, int y, int value) {
 
-    asm volatile ("movb $0x0C, %%ah\n\t"
-                  "movb %0,    %%al\n\t"
-                  "movb $0x0,  %%bh\n\t"
-                  "movw %1,    %%cx\n\t"
-                  "movw %2,    %%dx\n\t"
-                  "int $0x10"
-    :
-    :"rm" (pixel), "rm" (px), "rm" (py)
-    );
+    int pixelRead = 0;
+
+
+    if (y & 1) {
+        asm volatile("movw $0xb800, %%ax\n\t"
+                     "movw %%ax, %%es\n\t"
+                     "movw %1, %%di  \n\t"
+                     "xorw %%ax, %%ax\n\t"
+                     "movb %%es:(%%di), %%al\n\t"
+                     "movw %%ax, %0\n\t"
+        : "=r"(pixelRead)
+        : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80)))
+        : "ax", "es", "di"
+        );
+    } else {
+        asm volatile("movw $0xb800, %%ax\n\t"
+                     "movw %%ax, %%es\n\t"
+                     "movw %1, %%di  \n\t"
+                     "xorw %%ax, %%ax\n\t"
+                     "movb %%es:(%%di), %%al\n\t"
+                     "movw %%ax, %0\n\t"
+        : "=r"(pixelRead)
+        : "r"((x / 4) + ((y / 2) * 80))
+        : "ax", "es", "di"
+        );
+    }
+
+    uint8_t pixel = pixelRead & 0xFFFF;
+
+    switch (x & 3) {
+        case 3:
+            pixel = value | (pixel & 0b11111100);
+            break;
+        case 2:
+            value = (value << 2);
+            pixel = value | (pixel & 0b11110011);
+            break;
+
+        case 1:
+            value = (value << 4);
+            pixel = value | (pixel & 0b11001111);
+            break;
+
+        case 0:
+            value = (value << 6);
+            pixel = value | (pixel & 0b00111111);
+            break;
+    }
+
+    value = pixel;
+
+    if (y & 1) {
+        asm volatile("movw $0xb800, %%ax\n\t"
+                     "movw %%ax, %%es\n\t"
+                     "movw %0, %%di  \n\t"
+                     "movb %1, %%es:(%%di)\n\t"
+        :
+        : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80))), "r" (value)
+        : "ax", "es", "di"
+        );
+    } else {
+        asm volatile("movw $0xb800, %%ax\n\t"
+                     "movw %%ax, %%es\n\t"
+                     "movw %0, %%di  \n\t"
+                     "movb %1, %%es:(%%di)\n\t"
+        :
+        : "r"(((x / 4) + ((y / 2) * 80))), "r" (value)
+        : "ax", "es", "di"
+        );
+    }
 }
 
 void clearGraphics() {
