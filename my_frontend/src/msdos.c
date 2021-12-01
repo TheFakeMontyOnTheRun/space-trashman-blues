@@ -171,12 +171,24 @@ void realRealPut( int x, int y, int value ) {
 
 void clearGraphics() {
     memset(imageBuffer, 0, 64 * 128 );
+
+
+    realRealPut( 0, 0, 1);
+    realRealPut( 1, 0, 2);
+    realRealPut( 2, 0, 3);
+    realRealPut( 3, 0, 4);
 }
 
 void init() {
     asm("movb $0x0, %ah\n\t"
         "movb $0x4, %al\n\t"
         "int $0x10\n\t");
+
+
+    realRealPut( 0, 0, 1);
+    realRealPut( 1, 0, 2);
+    realRealPut( 2, 0, 3);
+    realRealPut( 3, 0, 4);
 }
 
 uint8_t getKey() {
