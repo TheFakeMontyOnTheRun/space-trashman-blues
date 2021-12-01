@@ -155,7 +155,6 @@ void realPut( int x, int y, int value ) {
                 break;
         }
 
-    pixel = 128;
     value = pixel;
 
 
