@@ -120,7 +120,7 @@ void realPut( int x, int y, int value ) {
 //    mov es:[di],al ; back to CGA
 
 
-    register uint8_t pixel = 0;
+    uint8_t pixel = 0;
 
         asm volatile("movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
@@ -171,8 +171,6 @@ void realPut( int x, int y, int value ) {
         :
         );
     }
-
-
 }
 
 void clearGraphics() {
