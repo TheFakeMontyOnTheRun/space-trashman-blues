@@ -109,7 +109,7 @@ void graphicsPut( uint8_t x, uint8_t y) {
 }
 
 void realPut( int x, int y, int value ) {
-
+/*
         int pixel = 0;
 
         uint16_t odd = (y & 1);
@@ -145,7 +145,8 @@ void realPut( int x, int y, int value ) {
         }
 
     value = pixel;
-
+*/
+    value = 0b11100100;
 
     if (y & 1) {
         asm volatile("movw $0xb800, %%ax\n\t"
