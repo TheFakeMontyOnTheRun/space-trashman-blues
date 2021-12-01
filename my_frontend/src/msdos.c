@@ -108,7 +108,7 @@ void graphicsPut( uint8_t x, uint8_t y) {
 //    imageBuffer[ (64 * y ) + x ] = 1;
 }
 
-void realPut( int x, int y, uint8_t pixel ) {
+void realPut( int x, int y, int value ) {
 //    mov ax,b800
 //    mov es,ax
 //    xor di,di ; es:di points b800:0000
@@ -130,6 +130,7 @@ void realPut( int x, int y, uint8_t pixel ) {
         :
         );
 */
+        uint8_t pixel = 0;
 
         switch ( x & 3 ) {
             case 0:
@@ -161,8 +162,8 @@ void realPut( int x, int y, uint8_t pixel ) {
                      "movw %0, %%di  \n\t"
                      "movb $128, %%es:(%%di)\n\t"
         :
-        : "r"( ((x / 4) + ((y / 2) * 80)) ), "rm" (pixel) //<--- NOT USED!
-        :
+        : "r"( ((x / 4) + ((y / 2) * 80)) ), "r" (value) //<--- NOT USED!
+        : "ax", "es", "di"
         );
     } else {
         asm volatile("movw $0xb800, %%ax\n\t"
@@ -170,8 +171,8 @@ void realPut( int x, int y, uint8_t pixel ) {
                      "movw %0, %%di  \n\t"
                      "movb $128, %%es:(%%di)\n\t"
         :
-        : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80)) ), "rm" (pixel)
-        :
+        : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80)) ), "r" (value)
+        : "ax", "es", "di"
         );
     }
 }
