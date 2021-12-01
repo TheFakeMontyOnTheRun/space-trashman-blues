@@ -108,31 +108,19 @@ void graphicsPut( uint8_t x, uint8_t y) {
 //    imageBuffer[ (64 * y ) + x ] = 1;
 }
 
-void realPut( int x, int y, int value ) {
-//    mov ax,b800
-//    mov es,ax
-//    xor di,di ; es:di points b800:0000
-//
-//        ; you can plot pixels like:
-//    mov al,es:di ; get from CGA
-//    and al,xx ; erase old pixel bits
-//    or al,xx ; set new pixel bits
-//    mov es:[di],al ; back to CGA
-
-        int pixel = 0;
+void realPut( int x, int y, uint8_t value ) {
+        uint8_t pixel = 0;
 
         asm volatile("movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
                      "movw %1, %%di  \n\t"
                      "xorw %%ax, %%ax\n\t"
                      "movb %%es:(%%di), %%al\n\t"
-                     "movw %%ax, %0\n\t"
+                     "movb %%al, %0\n\t"
         : "=rm"(pixel)
         : "r"( ((y & 1) ? 0x2000 : 0 ) + ((x / 4) + ((y / 2) * 80)) )
         : "ax", "es", "di"
         );
-
-
 
         switch ( x & 3 ) {
             case 0:
