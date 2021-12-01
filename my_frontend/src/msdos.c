@@ -158,7 +158,7 @@ void realPut( int x, int y, int value ) {
                      "movw %0, %%di  \n\t"
                      "movb $128, %%es:(%%di)\n\t"
         :
-        : "r"( ((x / 4) + ((y / 2) * 80)) ), "r" (pixel) //<--- NOT USED!
+        : "r"( ((x / 4) + ((y / 2) * 80)) ), "rm" (pixel) //<--- NOT USED!
         :
         );
     } else {
@@ -167,7 +167,7 @@ void realPut( int x, int y, int value ) {
                      "movw %0, %%di  \n\t"
                      "movb $128, %%es:(%%di)\n\t"
         :
-        : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80)) ), "r" (pixel)
+        : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80)) ), "rm" (pixel)
         :
         );
     }
