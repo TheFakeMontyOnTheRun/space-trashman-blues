@@ -358,12 +358,12 @@ void HUD_refresh() {
         }
     }
 
-    for (uint8_t i = 0; i < 200; ++i) {
-        realPut(i, i, 1);
+    for (uint8_t i = 0; i < 50; ++i) {
+        realPut(160 + i, i+20, 1);
     }
 
-    for (uint8_t i = 0; i < 200; ++i) {
-        realPut(200 - i, i, 2);
+    for (uint8_t i = 0; i < 50; ++i) {
+        realPut(300 - i, i+20, 2);
     }
 
 }
