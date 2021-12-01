@@ -113,8 +113,6 @@ void realPut( int x, int y, int value ) {
         int pixel = 0;
 
         uint16_t odd = (y & 1);
-        y >>= 2;
-
         asm volatile("movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
                      "movw %1, %%di  \n\t"
@@ -122,7 +120,7 @@ void realPut( int x, int y, int value ) {
                      "movb %%es:(%%di), %%al\n\t"
                      "movw %%ax, %0\n\t"
         : "=rm"(pixel)
-        : "r"( (odd ? 0x2000 : 0 ) + ((x / 4) + (y * 80)) )
+        : "r"( ((y & 1) ? 0x2000 : 0 ) + ((x / 4) + ((y / 2) * 80)) )
         : "ax", "es", "di"
         );
 
@@ -149,13 +147,13 @@ void realPut( int x, int y, int value ) {
     value = pixel;
 
 
-    if (odd) {
+    if (y & 1) {
         asm volatile("movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
                      "movw %0, %%di  \n\t"
                      "movb %1, %%es:(%%di)\n\t"
         :
-        : "r"( ((x / 4) + (y * 80)) ), "r" (value)
+        : "r"( ((x / 4) + ((y / 2) * 80)) ), "r" (value)
         : "ax", "es", "di"
         );
     } else {
@@ -164,7 +162,7 @@ void realPut( int x, int y, int value ) {
                      "movw %0, %%di  \n\t"
                      "movb %1, %%es:(%%di)\n\t"
         :
-        : "r"( 0x2000 + ((x / 4) + (y * 80)) ), "r" (value)
+        : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80)) ), "r" (value)
         : "ax", "es", "di"
         );
     }
