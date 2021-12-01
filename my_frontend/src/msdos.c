@@ -108,10 +108,8 @@ void graphicsPut( uint8_t x, uint8_t y) {
 //    imageBuffer[ (64 * y ) + x ] = 1;
 }
 
-void realPut( int x, int y, uint8_t value ) {
-}
+void realPut( int x, int y, int value ) {
 
-void realRealPut( int x, int y, int value ) {
         int pixel = 0;
 
         asm volatile("movw $0xb800, %%ax\n\t"
@@ -171,24 +169,12 @@ void realRealPut( int x, int y, int value ) {
 
 void clearGraphics() {
     memset(imageBuffer, 0, 64 * 128 );
-
-
-    realRealPut( 0, 0, 1);
-    realRealPut( 1, 0, 2);
-    realRealPut( 2, 0, 3);
-    realRealPut( 3, 0, 4);
 }
 
 void init() {
     asm("movb $0x0, %ah\n\t"
         "movb $0x4, %al\n\t"
         "int $0x10\n\t");
-
-
-    realRealPut( 0, 0, 1);
-    realRealPut( 1, 0, 2);
-    realRealPut( 2, 0, 3);
-    realRealPut( 3, 0, 4);
 }
 
 uint8_t getKey() {
@@ -327,11 +313,6 @@ void HUD_initialPaint() {
     }
 
     HUD_refresh();
-
-    realRealPut( 0, 0, 1);
-    realRealPut( 1, 0, 2);
-    realRealPut( 2, 0, 3);
-    realRealPut( 3, 0, 4);
 }
 
 void HUD_refresh() {
