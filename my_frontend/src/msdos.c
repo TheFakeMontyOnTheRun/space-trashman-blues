@@ -95,17 +95,17 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 }
 
 void graphicsPut( uint8_t x, uint8_t y) {
-//    if (y > 127 ) {
-//        return;
-//    }
-//
-//    x >>= 1;
-//
-//    if (x > 63 ) {
-//        return;
-//    }
-//
-//    imageBuffer[ (64 * y ) + x ] = 1;
+    if (y > 127 ) {
+        return;
+    }
+
+    x >>= 1;
+
+    if (x > 63 ) {
+        return;
+    }
+
+    imageBuffer[ (64 * y ) + x ] = 1;
 }
 
 void realPut(int x, int y, int value) {
