@@ -112,14 +112,14 @@ void realPut( int x, int y, uint8_t value ) {
 }
 
 void realRealPut( int x, int y, int value ) {
-        uint8_t pixel = 0;
+        int pixel = 0;
 
         asm volatile("movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
                      "movw %1, %%di  \n\t"
                      "xorw %%ax, %%ax\n\t"
                      "movb %%es:(%%di), %%al\n\t"
-                     "movb %%al, %0\n\t"
+                     "movw %%ax, %0\n\t"
         : "=rm"(pixel)
         : "r"( ((y & 1) ? 0x2000 : 0 ) + ((x / 4) + ((y / 2) * 80)) )
         : "ax", "es", "di"
