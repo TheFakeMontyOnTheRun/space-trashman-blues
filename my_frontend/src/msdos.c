@@ -108,7 +108,7 @@ void graphicsPut( uint8_t x, uint8_t y) {
 //    imageBuffer[ (64 * y ) + x ] = 1;
 }
 
-void realPut( int x, int y, int value ) {
+void realPut( int x, int y, uint8_t pixel ) {
 //    mov ax,b800
 //    mov es,ax
 //    xor di,di ; es:di points b800:0000
@@ -120,8 +120,7 @@ void realPut( int x, int y, int value ) {
 //    mov es:[di],al ; back to CGA
 
 
-    uint8_t pixel = 0;
-
+/*
         asm volatile("movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
                      "movw %1, %%di  \n\t"
@@ -130,22 +129,26 @@ void realPut( int x, int y, int value ) {
         : "r"( ((y & 1) ? 0x2000 : 0 ) + ((x / 4) + ((y / 2) * 80)) )
         :
         );
-
+*/
 
         switch ( x & 3 ) {
             case 0:
-                pixel = (pixel & 0b11111100) | ( value << 0);
+                pixel = ( pixel << 0);
+                pixel = pixel | (pixel & 0b11111100);
                 break;
             case 1:
-                pixel = (pixel & 0b11110011) | ( value << 2);
+                pixel = ( pixel << 2);
+                pixel = pixel | (pixel & 0b11110011);
                 break;
 
             case 2:
-                pixel = (pixel & 0b11001111) | ( value << 4);
+                pixel = ( pixel << 4);
+                pixel = pixel | (pixel & 0b11001111);
                 break;
 
             case 3:
-                pixel = (pixel & 0b00111111) | ( value << 6);
+                pixel = ( pixel << 6);
+                pixel = pixel | (pixel & 0b00111111);
                 break;
         }
 
