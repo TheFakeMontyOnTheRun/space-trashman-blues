@@ -136,22 +136,21 @@ void realPut( int x, int y, int value ) {
 
         switch ( x & 3 ) {
             case 0:
-                pixel = ( pixel << 0);
-                pixel = pixel | (pixel & 0b11111100);
+                pixel = value | (pixel & 0b11111100);
                 break;
             case 1:
-                pixel = ( pixel << 2);
-                pixel = pixel | (pixel & 0b11110011);
+                value = ( value << 2);
+                pixel = value | (pixel & 0b11110011);
                 break;
 
             case 2:
-                pixel = ( pixel << 4);
-                pixel = pixel | (pixel & 0b11001111);
+                value = ( value << 4);
+                pixel = value | (pixel & 0b11001111);
                 break;
 
             case 3:
-                pixel = ( pixel << 6);
-                pixel = pixel | (pixel & 0b00111111);
+                value = ( value << 6);
+                pixel = value | (pixel & 0b00111111);
                 break;
         }
 
