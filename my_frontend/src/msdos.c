@@ -309,7 +309,7 @@ void graphicsFlush() {
             }
 
             x += 4;
-            ++offset;
+            offset += 4;
         }
     }
 
