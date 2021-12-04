@@ -275,23 +275,41 @@ void graphicsFlush() {
     for ( int y = 0; y < 128; ++y ) {
 
 
-        for ( int x = 0; x < 64; ++x ) {
+        for ( int x = 0; x < 64; ) {
+
+            origin = imageBuffer[ offset + 3];
+            value = origin & 3;
+
+            origin = imageBuffer[ offset + 2];
+            value = value | (( origin &  3) << 2 ) ;
+
+            origin = imageBuffer[ offset + 1];
+            value = value | (( origin &  3) << 4 ) ;
 
             origin = imageBuffer[ offset ];
+            value = value | (( origin &  3) << 6 ) ;
 
-            if ( lastOrigin != origin ) {
-                value = origin;
-                lastOrigin = origin;
+            if (y & 1) {
+                asm volatile("movw $0xb800, %%ax\n\t"
+                             "movw %%ax, %%es\n\t"
+                             "movw %0, %%di  \n\t"
+                             "movb %1, %%es:(%%di)\n\t"
+                :
+                : "r"( 0x2000 + (((16 + (x * 2)) / 4) + ((y / 2) * 80))), "r" (value)
+                : "ax", "es", "di"
+                );
+            } else {
+                asm volatile("movw $0xb800, %%ax\n\t"
+                             "movw %%ax, %%es\n\t"
+                             "movw %0, %%di  \n\t"
+                             "movb %1, %%es:(%%di)\n\t"
+                :
+                : "r"(((((16 + (x * 2)) + 1) / 4) + ((y / 2) * 80))), "r" (value)
+                : "ax", "es", "di"
+                );
             }
 
-
-            if ( buffer[ offset ] != value ) {
-                realPut( 16 + (2 * x), (y) + 36, value);
-                realPut( 16 + (2 * x) + 1, (y) + 36, value);
-            }
-
-            buffer[ offset ] = value;
-
+            x += 4;
             ++offset;
         }
     }
