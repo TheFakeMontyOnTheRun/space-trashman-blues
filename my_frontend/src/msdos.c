@@ -41,7 +41,6 @@ void pickItem();
 void clearGraphics();
 
 unsigned char imageBuffer[64 * 128];
-unsigned char buffer[64 * 128];
 
 void shutdownGraphics() {
 }
