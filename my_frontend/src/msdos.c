@@ -294,7 +294,7 @@ void graphicsFlush() {
                 asm volatile("movw $0xb800, %%ax\n\t"
                              "movw %%ax, %%es\n\t"
                              "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
+                             "movw %1, %%es:(%%di)\n\t"
                 :
                 : "r"( 0x2000 + (((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
                 : "ax", "es", "di"
@@ -303,7 +303,7 @@ void graphicsFlush() {
                 asm volatile("movw $0xb800, %%ax\n\t"
                              "movw %%ax, %%es\n\t"
                              "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
+                             "movw %1, %%es:(%%di)\n\t"
                 :
                 : "r"(((((16 + (2 * x))) / 4) + (((y + 36) / 2) * 80))), "r" (value)
                 : "ax", "es", "di"
