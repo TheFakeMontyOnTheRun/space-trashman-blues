@@ -266,15 +266,16 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 }
 
 void graphicsFlush() {
-    int origin = 0;
+    uint8_t origin = 0;
     int lastOrigin = -1;
     int value = -2;
     int offset = 0;
 
     for ( int y = 0; y < 128; ++y ) {
 
+        uint16_t oddLine = (y & 1);
 
-        for ( int x = 0; x < 128; ) {
+        for ( int x = 0; x < 64; ) {
 
 
             origin = imageBuffer[ offset + 3];
@@ -289,7 +290,7 @@ void graphicsFlush() {
             origin = imageBuffer[ offset ];
             value = value | (( origin &  3) << 6 ) ;
 
-            if (y & 1) {
+            if (oddLine) {
                 asm volatile("movw $0xb800, %%ax\n\t"
                              "movw %%ax, %%es\n\t"
                              "movw %0, %%di  \n\t"
@@ -309,28 +310,7 @@ void graphicsFlush() {
                 );
             }
 
-
-            if (y & 1) {
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
-                :
-                : "r"( 0x2000 + (((16 + (x + 1)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
-                : "ax", "es", "di"
-                );
-            } else {
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
-                :
-                : "r"(((((16 + (x + 1))) / 4) + (((y + 36) / 2) * 80))), "r" (value)
-                : "ax", "es", "di"
-                );
-            }
-
-            x += 2;
+            x += 4;
             offset += 4;
         }
     }
