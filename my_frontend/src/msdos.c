@@ -278,21 +278,20 @@ void graphicsFlush() {
         for ( int x = 0; x < 64; ) {
 
 
-            origin = imageBuffer[ offset + 3];
-            value = origin & 3;
-            value = (origin & 3) << 2;
+            origin = imageBuffer[ offset + 3] & 3;
+            value = origin | (origin << 2);
 
-            origin = imageBuffer[ offset + 2];
-            value = value | (( origin &  3) << 4 ) ;
-            value = value | (( origin &  3) << 6 ) ;
+            origin = imageBuffer[ offset + 2] & 3;
+            value = value | (origin << 4 ) ;
+            value = value | (origin << 6 ) ;
 
-            origin = imageBuffer[ offset + 1];
-            value = value | (( origin &  3) << 8 ) ;
-            value = value | (( origin &  3) << 10 ) ;
+            origin = imageBuffer[ offset + 1] & 3;
+            value = value | (origin << 8 ) ;
+            value = value | (origin << 10 ) ;
 
-            origin = imageBuffer[ offset ];
-            value = value | (( origin &  3) << 12 ) ;
-            value = value | (( origin &  3) << 14 ) ;
+            origin = imageBuffer[ offset ] & 3;
+            value = value | (origin << 12 ) ;
+            value = value | (origin << 14 ) ;
 
 
 
