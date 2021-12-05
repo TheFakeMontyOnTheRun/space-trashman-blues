@@ -290,24 +290,42 @@ void graphicsFlush() {
             origin = imageBuffer[ offset ];
             value = value | (( origin &  3) << 6 ) ;
 
-            value = (value << 8 ) | value;
+
 
             if (oddLine) {
                 asm volatile("movw $0xb800, %%ax\n\t"
                              "movw %%ax, %%es\n\t"
                              "movw %0, %%di  \n\t"
-                             "movw %1, %%es:(%%di)\n\t"
+                             "movb %1, %%es:(%%di)\n\t"
                 :
                 : "r"( 0x2000 + (((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
+                : "ax", "es", "di"
+                );
+
+                asm volatile("movw $0xb800, %%ax\n\t"
+                             "movw %%ax, %%es\n\t"
+                             "movw %0, %%di  \n\t"
+                             "movb %1, %%es:(%%di)\n\t"
+                :
+                : "r"( 0x2000 + (((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80))) - 1, "r" (value)
                 : "ax", "es", "di"
                 );
             } else {
                 asm volatile("movw $0xb800, %%ax\n\t"
                              "movw %%ax, %%es\n\t"
                              "movw %0, %%di  \n\t"
-                             "movw %1, %%es:(%%di)\n\t"
+                             "movb %1, %%es:(%%di)\n\t"
                 :
                 : "r"(((((16 + (2 * x))) / 4) + (((y + 36) / 2) * 80))), "r" (value)
+                : "ax", "es", "di"
+                );
+
+                asm volatile("movw $0xb800, %%ax\n\t"
+                             "movw %%ax, %%es\n\t"
+                             "movw %0, %%di  \n\t"
+                             "movb %1, %%es:(%%di)\n\t"
+                :
+                : "r"(((((16 + (2 * x))) / 4) + (((y + 36) / 2) * 80))) - 1, "r" (value)
                 : "ax", "es", "di"
                 );
             }
