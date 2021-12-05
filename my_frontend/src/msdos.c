@@ -283,7 +283,7 @@ void graphicsFlush() {
             int pixelRead = 0;
 
 
-            if (y & 1) {
+            if ((y + 36) & 1) {
                 asm volatile("movw $0xb800, %%ax\n\t"
                              "movw %%ax, %%es\n\t"
                              "movw %1, %%di  \n\t"
@@ -291,7 +291,7 @@ void graphicsFlush() {
                              "movb %%es:(%%di), %%al\n\t"
                              "movw %%ax, %0\n\t"
                 : "=r"(pixelRead)
-                : "r"( 0x2000 + (((2 * x) / 4) + ((y / 2) * 80)))
+                : "r"( 0x2000 + (((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80)))
                 : "ax", "es", "di"
                 );
             } else {
@@ -302,7 +302,7 @@ void graphicsFlush() {
                              "movb %%es:(%%di), %%al\n\t"
                              "movw %%ax, %0\n\t"
                 : "=r"(pixelRead)
-                : "r"(((2 * x) / 4) + ((y / 2) * 80))
+                : "r"(((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80))
                 : "ax", "es", "di"
                 );
             }
@@ -328,6 +328,56 @@ void graphicsFlush() {
                     pixel = value | (pixel & 0b00111111);
                     break;
             }
+
+            value = pixel;
+
+            if (y & 1) {
+                asm volatile("movw $0xb800, %%ax\n\t"
+                             "movw %%ax, %%es\n\t"
+                             "movw %0, %%di  \n\t"
+                             "movb %1, %%es:(%%di)\n\t"
+                :
+                : "r"( 0x2000 + (((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
+                : "ax", "es", "di"
+                );
+            } else {
+                asm volatile("movw $0xb800, %%ax\n\t"
+                             "movw %%ax, %%es\n\t"
+                             "movw %0, %%di  \n\t"
+                             "movb %1, %%es:(%%di)\n\t"
+                :
+                : "r"((((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
+                : "ax", "es", "di"
+                );
+            }
+
+
+
+            if (y & 1) {
+                asm volatile("movw $0xb800, %%ax\n\t"
+                             "movw %%ax, %%es\n\t"
+                             "movw %1, %%di  \n\t"
+                             "xorw %%ax, %%ax\n\t"
+                             "movb %%es:(%%di), %%al\n\t"
+                             "movw %%ax, %0\n\t"
+                : "=r"(pixelRead)
+                : "r"( 0x2000 + ((( 16 + (2 * x) + 1) / 4) + (((y + 36) / 2) * 80)))
+                : "ax", "es", "di"
+                );
+            } else {
+                asm volatile("movw $0xb800, %%ax\n\t"
+                             "movw %%ax, %%es\n\t"
+                             "movw %1, %%di  \n\t"
+                             "xorw %%ax, %%ax\n\t"
+                             "movb %%es:(%%di), %%al\n\t"
+                             "movw %%ax, %0\n\t"
+                : "=r"(pixelRead)
+                : "r"(((16 + (2 * x) + 1) / 4) + (((y + 36) / 2) * 80))
+                : "ax", "es", "di"
+                );
+            }
+
+            uint8_t pixel = pixelRead & 0xFFFF;
 
             switch (((2 * x) + 1) & 3) {
                 case 3:
@@ -357,7 +407,7 @@ void graphicsFlush() {
                              "movw %0, %%di  \n\t"
                              "movb %1, %%es:(%%di)\n\t"
                 :
-                : "r"( 0x2000 + (((2 * x) / 4) + ((y / 2) * 80))), "r" (value)
+                : "r"( 0x2000 + (((16 + (2 * x) + 1) / 4) + ((y / 2) * 80))), "r" (value)
                 : "ax", "es", "di"
                 );
             } else {
@@ -366,7 +416,7 @@ void graphicsFlush() {
                              "movw %0, %%di  \n\t"
                              "movb %1, %%es:(%%di)\n\t"
                 :
-                : "r"((((2 * x) / 4) + ((y / 2) * 80))), "r" (value)
+                : "r"((((16 + (2 * x) + 1) / 4) + ((y / 2) * 80))), "r" (value)
                 : "ax", "es", "di"
                 );
             }
