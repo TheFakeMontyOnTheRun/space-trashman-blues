@@ -377,7 +377,7 @@ void graphicsFlush() {
                 );
             }
 
-            uint8_t pixel = pixelRead & 0xFFFF;
+            pixel = pixelRead & 0xFFFF;
 
             switch (((2 * x) + 1) & 3) {
                 case 3:
