@@ -278,11 +278,17 @@ void graphicsFlush() {
         for ( int x = 0; x < 64; ) {
 
 
-            origin = imageBuffer[ offset + 1] & 3;
+            origin = imageBuffer[ offset  + 3] & 3;
             value = origin | (origin << 2);
 
-            origin = imageBuffer[ offset] & 3;
+            origin = imageBuffer[ offset + 2] & 3;
             value = value | (origin << 4 ) | (origin << 6 ) ;
+
+            origin = imageBuffer[ offset + 1] & 3;
+            value = value | (origin << 8 ) | (origin << 10 ) ;
+
+            origin = imageBuffer[ offset ] & 3;
+            value = value | (origin << 14 ) | (origin << 12 ) ;
 
             if (oddLine) {
                 asm volatile("movw $0xb800, %%ax\n\t"
@@ -300,32 +306,6 @@ void graphicsFlush() {
                              "movb %1, %%es:(%%di)\n\t"
                 :
                 : "r"(((((16 + (2 * x))) / 4) + (((y + 36) / 2) * 80))), "r" (value)
-                : "ax", "es", "di"
-                );
-            }
-
-            origin = imageBuffer[ offset + 1] & 3;
-            value = origin | (origin << 2 ) ;
-
-            origin = imageBuffer[ offset] & 3;
-            value = value | (origin << 4 ) | (origin << 6 ) ;
-
-            if (oddLine) {
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
-                :
-                : "r"( 0x2000 + (((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80)) + 1), "r" (value)
-                : "ax", "es", "di"
-                );
-            } else {
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
-                :
-                : "r"(((((16 + (2 * x))) / 4) + (((y + 36) / 2) * 80)) + 1), "r" (value)
                 : "ax", "es", "di"
                 );
             }
