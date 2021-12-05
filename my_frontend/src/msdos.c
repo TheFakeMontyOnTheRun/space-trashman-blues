@@ -81,30 +81,30 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
             break;
     }
 
-    for (int y = y0; y < y1; ++y ) {
+    for (int y = y0; y < y1; ++y) {
 
         if (shouldStipple) {
             stipple = !stipple;
         }
 
-        if (!shouldStipple || stipple ) {
+        if (!shouldStipple || stipple) {
             imageBuffer[(64 * y) + x0] = colour;
         }
     }
 }
 
-void graphicsPut( uint8_t x, uint8_t y) {
-    if (y > 127 ) {
+void graphicsPut(uint8_t x, uint8_t y) {
+    if (y > 127) {
         return;
     }
 
     x >>= 1;
 
-    if (x > 63 ) {
+    if (x > 63) {
         return;
     }
 
-    imageBuffer[ (64 * y ) + x ] = 1;
+    imageBuffer[(64 * y) + x] = 1;
 }
 
 void realPut(int x, int y, int value) {
@@ -182,7 +182,7 @@ void realPut(int x, int y, int value) {
 }
 
 void clearGraphics() {
-    memset(imageBuffer, 0, 64 * 128 );
+    memset(imageBuffer, 0, 64 * 128);
 }
 
 void init() {
@@ -272,48 +272,48 @@ void graphicsFlush() {
     int offset = 0;
     int diOffset;
 
-    for ( int y = 0; y < 128; ++y ) {
+    for (int y = 0; y < 128; ++y) {
 
         uint16_t oddLine = (y & 1);
-        diOffset = (oddLine ? 0x2000 : 0x0 ) + (((y + 36) / 2) * 80) + 4;
+        diOffset = (oddLine ? 0x2000 : 0x0) + (((y + 36) / 2) * 80) + 4;
 
-        for ( int x = 0; x < 64; ) {
+        for (int x = 0; x < 64;) {
 
 
-            origin = imageBuffer[ offset ] & 3;
+            origin = imageBuffer[offset] & 3;
             value = (origin << 4) | (origin << 6);
 
-            origin = imageBuffer[ offset + 1] & 3;
-            value = value | (origin << 2 ) | (origin ) ;
+            origin = imageBuffer[offset + 1] & 3;
+            value = value | (origin << 2) | (origin);
 
 
 
             asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
-                :
-                : "r"( diOffset + ( x / 2) ), "r" (value)
-                : "ax", "es", "di"
-                );
+                         "movw %%ax, %%es\n\t"
+                         "movw %0, %%di  \n\t"
+                         "movb %1, %%es:(%%di)\n\t"
+            :
+            : "r"( diOffset + (x / 2)), "r" (value)
+            : "ax", "es", "di"
+            );
 
 
-            origin = imageBuffer[ offset + 2 ] & 3;
+            origin = imageBuffer[offset + 2] & 3;
             value = (origin << 4) | (origin << 6);
 
-            origin = imageBuffer[ offset + 3] & 3;
-            value = value | (origin << 2 ) | (origin ) ;
+            origin = imageBuffer[offset + 3] & 3;
+            value = value | (origin << 2) | (origin);
 
 
 
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
-                :
-                : "r"( diOffset + ( x / 2) + 1), "r" (value)
-                : "ax", "es", "di"
-                );
+            asm volatile("movw $0xb800, %%ax\n\t"
+                         "movw %%ax, %%es\n\t"
+                         "movw %0, %%di  \n\t"
+                         "movb %1, %%es:(%%di)\n\t"
+            :
+            : "r"( diOffset + (x / 2) + 1), "r" (value)
+            : "ax", "es", "di"
+            );
 
 
             x += 4;
@@ -321,7 +321,7 @@ void graphicsFlush() {
         }
     }
 
-    memset( imageBuffer, 0, 64 * 128);
+    memset(imageBuffer, 0, 64 * 128);
 }
 
 void showMessage(const char *message) {
@@ -334,14 +334,14 @@ void titleScreen() {
 
 void HUD_initialPaint() {
 
-    for ( int c = 15; c < (128 + 16 + 1); ++c ) {
-        realPut( c, 35, 3);
-        realPut( c, 36 + 128, 3);
+    for (int c = 15; c < (128 + 16 + 1); ++c) {
+        realPut(c, 35, 3);
+        realPut(c, 36 + 128, 3);
     }
 
-    for ( int c = 35; c < (128 + 36 + 1); ++c ) {
-        realPut( 15, c, 3);
-        realPut( 16 + 128, c, 3);
+    for (int c = 35; c < (128 + 36 + 1); ++c) {
+        realPut(15, c, 3);
+        realPut(16 + 128, c, 3);
     }
 
     for (uint8_t i = 0; i < 6; ++i) {
