@@ -277,67 +277,25 @@ void graphicsFlush() {
         for ( int x = 0; x < 64; ) {
 
 
-            origin = imageBuffer[ offset++];
+            origin = imageBuffer[ offset + 3];
             value = origin & 3;
 
-            int pixelRead = 0;
+            origin = imageBuffer[ offset + 2];
+            value = value | (( origin &  3) << 2 ) ;
 
+            origin = imageBuffer[ offset + 1];
+            value = value | (( origin &  3) << 4 ) ;
 
-            if ((y + 36) & 1) {
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %1, %%di  \n\t"
-                             "xorw %%ax, %%ax\n\t"
-                             "movb %%es:(%%di), %%al\n\t"
-                             "movw %%ax, %0\n\t"
-                : "=r"(pixelRead)
-                : "r"( 0x2000 + (((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80)))
-                : "ax", "es", "di"
-                );
-            } else {
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %1, %%di  \n\t"
-                             "xorw %%ax, %%ax\n\t"
-                             "movb %%es:(%%di), %%al\n\t"
-                             "movw %%ax, %0\n\t"
-                : "=r"(pixelRead)
-                : "r"(((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80))
-                : "ax", "es", "di"
-                );
-            }
+            origin = imageBuffer[ offset ];
+            value = value | (( origin &  3) << 6 ) ;
 
-            uint8_t pixel = pixelRead & 0xFFFF;
-
-            switch ((16 + (2 * x)) & 3) {
-                case 3:
-                    pixel = value | (pixel & 0b11111100);
-                    break;
-                case 2:
-                    value = (value << 2);
-                    pixel = value | (pixel & 0b11110011);
-                    break;
-
-                case 1:
-                    value = (value << 4);
-                    pixel = value | (pixel & 0b11001111);
-                    break;
-
-                case 0:
-                    value = (value << 6);
-                    pixel = value | (pixel & 0b00111111);
-                    break;
-            }
-
-            value = pixel;
-
-            if ((y + 36) & 1) {
+            if (y & 1) {
                 asm volatile("movw $0xb800, %%ax\n\t"
                              "movw %%ax, %%es\n\t"
                              "movw %0, %%di  \n\t"
                              "movb %1, %%es:(%%di)\n\t"
                 :
-                : "r"( 0x2000 + (((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
+                : "r"( 0x2000 + (((16 + (x * 2)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
                 : "ax", "es", "di"
                 );
             } else {
@@ -346,135 +304,13 @@ void graphicsFlush() {
                              "movw %0, %%di  \n\t"
                              "movb %1, %%es:(%%di)\n\t"
                 :
-                : "r"((((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
+                : "r"(((((16 + (x * 2))) / 4) + (((y + 36) / 2) * 80))), "r" (value)
                 : "ax", "es", "di"
                 );
             }
 
-
-
-            if ((y + 36) & 1) {
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %1, %%di  \n\t"
-                             "xorw %%ax, %%ax\n\t"
-                             "movb %%es:(%%di), %%al\n\t"
-                             "movw %%ax, %0\n\t"
-                : "=r"(pixelRead)
-                : "r"( 0x2000 + (((16 + (2 * x) + 1) / 4) + (((y + 36) / 2) * 80)))
-                : "ax", "es", "di"
-                );
-            } else {
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %1, %%di  \n\t"
-                             "xorw %%ax, %%ax\n\t"
-                             "movb %%es:(%%di), %%al\n\t"
-                             "movw %%ax, %0\n\t"
-                : "=r"(pixelRead)
-                : "r"(((16 + (2 * x) + 1) / 4) + (((y + 36) / 2) * 80))
-                : "ax", "es", "di"
-                );
-            }
-
-            pixel = pixelRead & 0xFFFF;
-
-            switch ((16 + (2 * x) + 1) & 3) {
-                case 3:
-                    pixel = value | (pixel & 0b11111100);
-                    break;
-                case 2:
-                    value = (value << 2);
-                    pixel = value | (pixel & 0b11110011);
-                    break;
-
-                case 1:
-                    value = (value << 4);
-                    pixel = value | (pixel & 0b11001111);
-                    break;
-
-                case 0:
-                    value = (value << 6);
-                    pixel = value | (pixel & 0b00111111);
-                    break;
-            }
-
-            value = pixel;
-
-            if ((y + 36) & 1) {
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
-                :
-                : "r"( 0x2000 + (((16 + (2 * x) + 1) / 4) + (((y + 36) / 2) * 80))), "r" (value)
-                : "ax", "es", "di"
-                );
-            } else {
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
-                :
-                : "r"((((16 + (2 * x) + 1) / 4) + (((y + 36) / 2) * 80))), "r" (value)
-                : "ax", "es", "di"
-                );
-            }
-            ++x;
-
-//
-//            origin = imageBuffer[ offset + 3];
-//            value = origin & 3;
-//
-//            origin = imageBuffer[ offset + 2];
-//            value = value | (( origin &  3) << 2 ) ;
-//
-//            origin = imageBuffer[ offset + 1];
-//            value = value | (( origin &  3) << 4 ) ;
-//
-//            origin = imageBuffer[ offset ];
-//            value = value | (( origin &  3) << 6 ) ;
-//
-//            if (y & 1) {
-//                asm volatile("movw $0xb800, %%ax\n\t"
-//                             "movw %%ax, %%es\n\t"
-//                             "movw %0, %%di  \n\t"
-//                             "movb %1, %%es:(%%di)\n\t"
-//                :
-//                : "r"( 0x2000 + (((16 + (x * 2)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
-//                : "ax", "es", "di"
-//                );
-//
-//                asm volatile("movw $0xb800, %%ax\n\t"
-//                             "movw %%ax, %%es\n\t"
-//                             "movw %0, %%di  \n\t"
-//                             "movb %1, %%es:(%%di)\n\t"
-//                :
-//                : "r"( 0x2000 + ((((16 + ((x * 2) + 1))) / 4) + (((y + 36) / 2) * 80))), "r" (value)
-//                : "ax", "es", "di"
-//                );
-//            } else {
-//                asm volatile("movw $0xb800, %%ax\n\t"
-//                             "movw %%ax, %%es\n\t"
-//                             "movw %0, %%di  \n\t"
-//                             "movb %1, %%es:(%%di)\n\t"
-//                :
-//                : "r"(((((16 + (x * 2))) / 4) + (((y + 36) / 2) * 80))), "r" (value)
-//                : "ax", "es", "di"
-//                );
-//
-//                asm volatile("movw $0xb800, %%ax\n\t"
-//                             "movw %%ax, %%es\n\t"
-//                             "movw %0, %%di  \n\t"
-//                             "movb %1, %%es:(%%di)\n\t"
-//                :
-//                : "r"(((((16 + ((x * 2) + 1))) / 4) + (((y + 36) / 2) * 80))), "r" (value)
-//                : "ax", "es", "di"
-//                );
-//            }
-//
-//            x += 4;
-//            offset += 4;
+            x += 4;
+            offset += 4;
         }
     }
 
