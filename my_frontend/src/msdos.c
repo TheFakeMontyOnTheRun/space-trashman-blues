@@ -303,7 +303,9 @@ void graphicsFlush() {
             origin = *bufferPtr;
             value = value | (origin << 2) | (origin);
 
-            asm volatile("movw %0, %%di  \n\t"
+            asm volatile("movw $0xb800, %%ax\n\t"
+                         "movw %%ax, %%es\n\t"
+                         "movw %0, %%di  \n\t"
                          "movb %1, %%es:(%%di)\n\t"
             :
             : "r"( diOffset + (x >> 1) + 1), "r" (value)
