@@ -280,15 +280,19 @@ void graphicsFlush() {
 
             origin = imageBuffer[ offset + 3];
             value = origin & 3;
+            value = (origin & 3) << 2;
 
             origin = imageBuffer[ offset + 2];
-            value = value | (( origin &  3) << 2 ) ;
+            value = value | (( origin &  3) << 4 ) ;
+            value = value | (( origin &  3) << 6 ) ;
 
             origin = imageBuffer[ offset + 1];
-            value = value | (( origin &  3) << 4 ) ;
+            value = value | (( origin &  3) << 8 ) ;
+            value = value | (( origin &  3) << 10 ) ;
 
             origin = imageBuffer[ offset ];
-            value = value | (( origin &  3) << 6 ) ;
+            value = value | (( origin &  3) << 12 ) ;
+            value = value | (( origin &  3) << 14 ) ;
 
 
 
@@ -296,36 +300,18 @@ void graphicsFlush() {
                 asm volatile("movw $0xb800, %%ax\n\t"
                              "movw %%ax, %%es\n\t"
                              "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
+                             "movw %1, %%es:(%%di)\n\t"
                 :
                 : "r"( 0x2000 + (((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
-                : "ax", "es", "di"
-                );
-
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
-                :
-                : "r"( 0x2000 + (((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80)) - 1), "r" (value)
                 : "ax", "es", "di"
                 );
             } else {
                 asm volatile("movw $0xb800, %%ax\n\t"
                              "movw %%ax, %%es\n\t"
                              "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
+                             "movw %1, %%es:(%%di)\n\t"
                 :
                 : "r"(((((16 + (2 * x))) / 4) + (((y + 36) / 2) * 80))), "r" (value)
-                : "ax", "es", "di"
-                );
-
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
-                :
-                : "r"(((((16 + (2 * x))) / 4) + (((y + 36) / 2) * 80)) - 1), "r" (value)
                 : "ax", "es", "di"
                 );
             }
