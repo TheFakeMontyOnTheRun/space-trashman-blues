@@ -278,10 +278,10 @@ void graphicsFlush() {
         for ( int x = 0; x < 64; ) {
 
 
-            origin = imageBuffer[ offset + 3] & 3;
+            origin = imageBuffer[ offset + 1] & 3;
             value = origin | (origin << 2);
 
-            origin = imageBuffer[ offset + 2] & 3;
+            origin = imageBuffer[ offset] & 3;
             value = value | (origin << 4 ) | (origin << 6 ) ;
 
             if (oddLine) {
@@ -307,7 +307,7 @@ void graphicsFlush() {
             origin = imageBuffer[ offset + 1] & 3;
             value = origin | (origin << 2 ) ;
 
-            origin = imageBuffer[ offset ] & 3;
+            origin = imageBuffer[ offset] & 3;
             value = value | (origin << 4 ) | (origin << 6 ) ;
 
             if (oddLine) {
