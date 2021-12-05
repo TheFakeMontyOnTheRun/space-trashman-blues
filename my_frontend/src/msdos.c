@@ -293,7 +293,7 @@ void graphicsFlush() {
                          "movw %0, %%di  \n\t"
                          "movb %1, %%es:(%%di)\n\t"
             :
-            : "r"( diOffset + (x / 2)), "r" (value)
+            : "r"( diOffset ), "r" (value)
             : "ax", "es", "di"
             );
 
@@ -311,10 +311,11 @@ void graphicsFlush() {
                          "movw %0, %%di  \n\t"
                          "movb %1, %%es:(%%di)\n\t"
             :
-            : "r"( diOffset + (x / 2) + 1), "r" (value)
+            : "r"( diOffset + 1), "r" (value)
             : "ax", "es", "di"
             );
 
+            diOffset += (x & 1);
 
             x += 4;
             offset += 4;
