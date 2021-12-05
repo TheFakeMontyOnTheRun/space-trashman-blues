@@ -282,13 +282,13 @@ void graphicsFlush() {
             value = origin | (origin << 2);
 
             origin = imageBuffer[ offset + 2] & 3;
-            value = value | (origin << 4 ) | (origin << 6 ) ;
+            value = value | (origin << 4 ) /* | (origin << 6 )*/ ;
 
             origin = imageBuffer[ offset + 1] & 3;
-            value = value | (origin << 8 ) | (origin << 10 ) ;
+            value = value | (origin << 8 ) /*| (origin << 10 ) */;
 
             origin = imageBuffer[ offset ] & 3;
-            value = value | (origin << 14 ) | (origin << 12 ) ;
+            value = value | (origin << 14 ) /* | (origin << 12 )*/ ;
 
             if (oddLine) {
                 asm volatile("movw $0xb800, %%ax\n\t"
