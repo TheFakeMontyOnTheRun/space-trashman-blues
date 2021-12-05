@@ -268,7 +268,7 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 void graphicsFlush() {
     uint8_t origin = 0;
     int lastOrigin = -1;
-    int value = -2;
+    uint16_t value;
     int offset = 0;
 
     for ( int y = 0; y < 128; ++y ) {
@@ -282,16 +282,13 @@ void graphicsFlush() {
             value = origin | (origin << 2);
 
             origin = imageBuffer[ offset + 2] & 3;
-            value = value | (origin << 4 ) ;
-            value = value | (origin << 6 ) ;
+            value = value | (origin << 4 ) | (origin << 6 ) ;
 
             origin = imageBuffer[ offset + 1] & 3;
-            value = value | (origin << 8 ) ;
-            value = value | (origin << 10 ) ;
+            value = value | (origin << 8 ) | (origin << 10 ) ;
 
             origin = imageBuffer[ offset ] & 3;
-            value = value | (origin << 12 ) ;
-            value = value | (origin << 14 ) ;
+            value = value | (origin << 12 ) | (origin << 14 ) ;
 
 
 
@@ -301,7 +298,7 @@ void graphicsFlush() {
                              "movw %0, %%di  \n\t"
                              "movw %1, %%es:(%%di)\n\t"
                 :
-                : "r"( 0x2000 + (((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
+                : "r"( 0x2000 + (((15 + (2 * x)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
                 : "ax", "es", "di"
                 );
             } else {
@@ -310,7 +307,7 @@ void graphicsFlush() {
                              "movw %0, %%di  \n\t"
                              "movw %1, %%es:(%%di)\n\t"
                 :
-                : "r"(((((16 + (2 * x))) / 4) + (((y + 36) / 2) * 80))), "r" (value)
+                : "r"(((((15 + (2 * x))) / 4) + (((y + 36) / 2) * 80))), "r" (value)
                 : "ax", "es", "di"
                 );
             }
