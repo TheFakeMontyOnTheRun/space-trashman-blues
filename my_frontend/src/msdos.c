@@ -291,7 +291,7 @@ void graphicsFlush() {
                              "movb %%es:(%%di), %%al\n\t"
                              "movw %%ax, %0\n\t"
                 : "=r"(pixelRead)
-                : "r"( 0x2000 + (((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80)))
+                : "r"( 0x2000 + (((16 + (x)) / 4) + (((y + 36) / 2) * 80)))
                 : "ax", "es", "di"
                 );
             } else {
@@ -302,14 +302,14 @@ void graphicsFlush() {
                              "movb %%es:(%%di), %%al\n\t"
                              "movw %%ax, %0\n\t"
                 : "=r"(pixelRead)
-                : "r"(((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80))
+                : "r"(((16 + (x)) / 4) + (((y + 36) / 2) * 80))
                 : "ax", "es", "di"
                 );
             }
 
             uint8_t pixel = pixelRead & 0xFFFF;
 
-            switch ((2 * x) & 3) {
+            switch ((x) & 3) {
                 case 3:
                     pixel = value | (pixel & 0b11111100);
                     break;
@@ -337,7 +337,7 @@ void graphicsFlush() {
                              "movw %0, %%di  \n\t"
                              "movb %1, %%es:(%%di)\n\t"
                 :
-                : "r"( 0x2000 + (((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
+                : "r"( 0x2000 + (((16 + (x)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
                 : "ax", "es", "di"
                 );
             } else {
@@ -346,77 +346,7 @@ void graphicsFlush() {
                              "movw %0, %%di  \n\t"
                              "movb %1, %%es:(%%di)\n\t"
                 :
-                : "r"((((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
-                : "ax", "es", "di"
-                );
-            }
-
-
-
-            if ((y + 36) & 1) {
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %1, %%di  \n\t"
-                             "xorw %%ax, %%ax\n\t"
-                             "movb %%es:(%%di), %%al\n\t"
-                             "movw %%ax, %0\n\t"
-                : "=r"(pixelRead)
-                : "r"( 0x2000 + ((( 16 + (2 * x) + 1) / 4) + (((y + 36) / 2) * 80)))
-                : "ax", "es", "di"
-                );
-            } else {
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %1, %%di  \n\t"
-                             "xorw %%ax, %%ax\n\t"
-                             "movb %%es:(%%di), %%al\n\t"
-                             "movw %%ax, %0\n\t"
-                : "=r"(pixelRead)
-                : "r"(((16 + (2 * x) + 1) / 4) + (((y + 36) / 2) * 80))
-                : "ax", "es", "di"
-                );
-            }
-
-            pixel = pixelRead & 0xFFFF;
-
-            switch (((2 * x) + 1) & 3) {
-                case 3:
-                    pixel = value | (pixel & 0b11111100);
-                    break;
-                case 2:
-                    value = (value << 2);
-                    pixel = value | (pixel & 0b11110011);
-                    break;
-
-                case 1:
-                    value = (value << 4);
-                    pixel = value | (pixel & 0b11001111);
-                    break;
-
-                case 0:
-                    value = (value << 6);
-                    pixel = value | (pixel & 0b00111111);
-                    break;
-            }
-
-            value = pixel;
-
-            if ((y + 36) & 1) {
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
-                :
-                : "r"( 0x2000 + (((16 + (2 * x) + 1) / 4) + (((y + 36) / 2) * 80))), "r" (value)
-                : "ax", "es", "di"
-                );
-            } else {
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
-                :
-                : "r"((((16 + (2 * x) + 1) / 4) + (((y + 36) / 2) * 80))), "r" (value)
+                : "r"((((16 + (x)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
                 : "ax", "es", "di"
                 );
             }
