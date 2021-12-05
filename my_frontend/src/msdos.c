@@ -331,7 +331,7 @@ void graphicsFlush() {
 
             value = pixel;
 
-            if (y & 1) {
+            if ((y + 36) & 1) {
                 asm volatile("movw $0xb800, %%ax\n\t"
                              "movw %%ax, %%es\n\t"
                              "movw %0, %%di  \n\t"
@@ -353,7 +353,7 @@ void graphicsFlush() {
 
 
 
-            if (y & 1) {
+            if ((y + 36) & 1) {
                 asm volatile("movw $0xb800, %%ax\n\t"
                              "movw %%ax, %%es\n\t"
                              "movw %1, %%di  \n\t"
@@ -401,7 +401,7 @@ void graphicsFlush() {
 
             value = pixel;
 
-            if (y & 1) {
+            if ((y + 36) & 1) {
                 asm volatile("movw $0xb800, %%ax\n\t"
                              "movw %%ax, %%es\n\t"
                              "movw %0, %%di  \n\t"
