@@ -274,7 +274,7 @@ void graphicsFlush() {
     for ( int y = 0; y < 128; ++y ) {
 
 
-        for ( int x = 0; x < 64; ) {
+        for ( int x = 0; x < 128; ) {
 
 
             origin = imageBuffer[ offset + 3];
@@ -295,7 +295,7 @@ void graphicsFlush() {
                              "movw %0, %%di  \n\t"
                              "movb %1, %%es:(%%di)\n\t"
                 :
-                : "r"( 0x2000 + (((16 + (x * 2)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
+                : "r"( 0x2000 + (((16 + (x)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
                 : "ax", "es", "di"
                 );
             } else {
@@ -304,12 +304,33 @@ void graphicsFlush() {
                              "movw %0, %%di  \n\t"
                              "movb %1, %%es:(%%di)\n\t"
                 :
-                : "r"(((((16 + (x * 2))) / 4) + (((y + 36) / 2) * 80))), "r" (value)
+                : "r"(((((16 + (x))) / 4) + (((y + 36) / 2) * 80))), "r" (value)
                 : "ax", "es", "di"
                 );
             }
 
-            x += 4;
+
+            if (y & 1) {
+                asm volatile("movw $0xb800, %%ax\n\t"
+                             "movw %%ax, %%es\n\t"
+                             "movw %0, %%di  \n\t"
+                             "movb %1, %%es:(%%di)\n\t"
+                :
+                : "r"( 0x2000 + (((16 + (x + 1)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
+                : "ax", "es", "di"
+                );
+            } else {
+                asm volatile("movw $0xb800, %%ax\n\t"
+                             "movw %%ax, %%es\n\t"
+                             "movw %0, %%di  \n\t"
+                             "movb %1, %%es:(%%di)\n\t"
+                :
+                : "r"(((((16 + (x + 1))) / 4) + (((y + 36) / 2) * 80))), "r" (value)
+                : "ax", "es", "di"
+                );
+            }
+
+            x += 2;
             offset += 4;
         }
     }
