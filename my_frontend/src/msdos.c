@@ -278,11 +278,11 @@ void graphicsFlush() {
         for (int x = 0; x < 64;) {
 
 
-            origin = *bufferPtr & 3;
+            origin = *bufferPtr;
             value = (origin << 4) | (origin << 6);
 
             ++bufferPtr;
-            origin = *bufferPtr & 3;
+            origin = *bufferPtr;
             value = value | (origin << 2) | (origin);
 
             asm volatile("movw $0xb800, %%ax\n\t"
@@ -296,16 +296,14 @@ void graphicsFlush() {
 
 
             ++bufferPtr;
-            origin = *bufferPtr & 3;
+            origin = *bufferPtr;
             value = (origin << 4) | (origin << 6);
 
             ++bufferPtr;
-            origin = *bufferPtr & 3;
+            origin = *bufferPtr;
             value = value | (origin << 2) | (origin);
 
-            asm volatile("movw $0xb800, %%ax\n\t"
-                         "movw %%ax, %%es\n\t"
-                         "movw %0, %%di  \n\t"
+            asm volatile("movw %0, %%di  \n\t"
                          "movb %1, %%es:(%%di)\n\t"
             :
             : "r"( diOffset + (x >> 1) + 1), "r" (value)
