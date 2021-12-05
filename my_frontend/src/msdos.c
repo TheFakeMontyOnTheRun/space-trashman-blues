@@ -270,10 +270,12 @@ void graphicsFlush() {
     int lastOrigin = -1;
     uint16_t value;
     int offset = 0;
+    int diOffset;
 
     for ( int y = 0; y < 128; ++y ) {
 
         uint16_t oddLine = (y & 1);
+        diOffset = (oddLine ? 0x2000 : 0x0 ) + (((y + 36) / 2) * 80) + 4;
 
         for ( int x = 0; x < 64; ) {
 
@@ -285,25 +287,15 @@ void graphicsFlush() {
             value = value | (origin << 2 ) | (origin ) ;
 
 
-            if (oddLine) {
-                asm volatile("movw $0xb800, %%ax\n\t"
+
+            asm volatile("movw $0xb800, %%ax\n\t"
                              "movw %%ax, %%es\n\t"
                              "movw %0, %%di  \n\t"
                              "movb %1, %%es:(%%di)\n\t"
                 :
-                : "r"( 0x2000 + (((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80))), "r" (value)
+                : "r"( diOffset + ( x / 2) ), "r" (value)
                 : "ax", "es", "di"
                 );
-            } else {
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
-                :
-                : "r"(((((16 + (2 * x))) / 4) + (((y + 36) / 2) * 80))), "r" (value)
-                : "ax", "es", "di"
-                );
-            }
 
 
             origin = imageBuffer[ offset + 2 ] & 3;
@@ -313,25 +305,16 @@ void graphicsFlush() {
             value = value | (origin << 2 ) | (origin ) ;
 
 
-            if (oddLine) {
+
                 asm volatile("movw $0xb800, %%ax\n\t"
                              "movw %%ax, %%es\n\t"
                              "movw %0, %%di  \n\t"
                              "movb %1, %%es:(%%di)\n\t"
                 :
-                : "r"( 0x2000 + (((16 + (2 * x)) / 4) + (((y + 36) / 2) * 80)) + 1), "r" (value)
+                : "r"( diOffset + ( x / 2) + 1), "r" (value)
                 : "ax", "es", "di"
                 );
-            } else {
-                asm volatile("movw $0xb800, %%ax\n\t"
-                             "movw %%ax, %%es\n\t"
-                             "movw %0, %%di  \n\t"
-                             "movb %1, %%es:(%%di)\n\t"
-                :
-                : "r"(((((16 + (2 * x))) / 4) + (((y + 36) / 2) * 80)) + 1), "r" (value)
-                : "ax", "es", "di"
-                );
-            }
+
 
             x += 4;
             offset += 4;
