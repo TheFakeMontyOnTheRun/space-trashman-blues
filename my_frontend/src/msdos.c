@@ -291,7 +291,7 @@ void graphicsFlush() {
                              "movb %%es:(%%di), %%al\n\t"
                              "movw %%ax, %0\n\t"
                 : "=r"(pixelRead)
-                : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80)))
+                : "r"( 0x2000 + (((2 * x) / 4) + ((y / 2) * 80)))
                 : "ax", "es", "di"
                 );
             } else {
@@ -302,14 +302,34 @@ void graphicsFlush() {
                              "movb %%es:(%%di), %%al\n\t"
                              "movw %%ax, %0\n\t"
                 : "=r"(pixelRead)
-                : "r"((x / 4) + ((y / 2) * 80))
+                : "r"(((2 * x) / 4) + ((y / 2) * 80))
                 : "ax", "es", "di"
                 );
             }
 
             uint8_t pixel = pixelRead & 0xFFFF;
 
-            switch (x & 3) {
+            switch ((2 * x) & 3) {
+                case 3:
+                    pixel = value | (pixel & 0b11111100);
+                    break;
+                case 2:
+                    value = (value << 2);
+                    pixel = value | (pixel & 0b11110011);
+                    break;
+
+                case 1:
+                    value = (value << 4);
+                    pixel = value | (pixel & 0b11001111);
+                    break;
+
+                case 0:
+                    value = (value << 6);
+                    pixel = value | (pixel & 0b00111111);
+                    break;
+            }
+
+            switch (((2 * x) + 1) & 3) {
                 case 3:
                     pixel = value | (pixel & 0b11111100);
                     break;
@@ -337,7 +357,7 @@ void graphicsFlush() {
                              "movw %0, %%di  \n\t"
                              "movb %1, %%es:(%%di)\n\t"
                 :
-                : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80))), "r" (value)
+                : "r"( 0x2000 + (((2 * x) / 4) + ((y / 2) * 80))), "r" (value)
                 : "ax", "es", "di"
                 );
             } else {
@@ -346,7 +366,7 @@ void graphicsFlush() {
                              "movw %0, %%di  \n\t"
                              "movb %1, %%es:(%%di)\n\t"
                 :
-                : "r"(((x / 4) + ((y / 2) * 80))), "r" (value)
+                : "r"((((2 * x) / 4) + ((y / 2) * 80))), "r" (value)
                 : "ax", "es", "di"
                 );
             }
