@@ -407,7 +407,7 @@ void graphicsFlush() {
                              "movw %0, %%di  \n\t"
                              "movb %1, %%es:(%%di)\n\t"
                 :
-                : "r"( 0x2000 + (((16 + (2 * x) + 1) / 4) + ((y / 2) * 80))), "r" (value)
+                : "r"( 0x2000 + (((16 + (2 * x) + 1) / 4) + (((y + 36) / 2) * 80))), "r" (value)
                 : "ax", "es", "di"
                 );
             } else {
@@ -416,7 +416,7 @@ void graphicsFlush() {
                              "movw %0, %%di  \n\t"
                              "movb %1, %%es:(%%di)\n\t"
                 :
-                : "r"((((16 + (2 * x) + 1) / 4) + ((y / 2) * 80))), "r" (value)
+                : "r"((((16 + (2 * x) + 1) / 4) + (((y + 36) / 2) * 80))), "r" (value)
                 : "ax", "es", "di"
                 );
             }
