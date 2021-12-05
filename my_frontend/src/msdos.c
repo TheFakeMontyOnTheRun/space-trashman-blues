@@ -268,22 +268,24 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 void graphicsFlush() {
     uint8_t origin = 0;
     uint16_t value;
+    int offset = 0;
     int diOffset;
-    uint8_t *bufferPtr = &imageBuffer[0];
 
     for (int y = 0; y < 128; ++y) {
 
-        diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) / 2) * 80) + 4;
+        uint16_t oddLine = (y & 1);
+        diOffset = (oddLine ? 0x2000 : 0x0) + (((y + 36) / 2) * 80) + 4;
 
         for (int x = 0; x < 64;) {
 
 
-            origin = *bufferPtr & 3;
+            origin = imageBuffer[offset] & 3;
             value = (origin << 4) | (origin << 6);
 
-            ++bufferPtr;
-            origin = *bufferPtr & 3;
+            origin = imageBuffer[offset + 1] & 3;
             value = value | (origin << 2) | (origin);
+
+
 
             asm volatile("movw $0xb800, %%ax\n\t"
                          "movw %%ax, %%es\n\t"
@@ -295,13 +297,13 @@ void graphicsFlush() {
             );
 
 
-            ++bufferPtr;
-            origin = *bufferPtr & 3;
+            origin = imageBuffer[offset + 2] & 3;
             value = (origin << 4) | (origin << 6);
 
-            ++bufferPtr;
-            origin = *bufferPtr & 3;
+            origin = imageBuffer[offset + 3] & 3;
             value = value | (origin << 2) | (origin);
+
+
 
             asm volatile("movw $0xb800, %%ax\n\t"
                          "movw %%ax, %%es\n\t"
@@ -312,7 +314,9 @@ void graphicsFlush() {
             : "ax", "es", "di"
             );
 
+
             x += 4;
+            offset += 4;
         }
     }
 
