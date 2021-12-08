@@ -40,7 +40,7 @@ void pickItem();
 
 void clearGraphics();
 
-unsigned char imageBuffer[64 * 128];
+unsigned char imageBuffer[128 * 128];
 
 void shutdownGraphics() {
 }
@@ -54,8 +54,6 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
         y0 = y1;
         y1 = tmp;
     }
-
-    x0 >>= 1;
 
     uint8_t colour;
 
@@ -88,7 +86,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
         }
 
         if (!shouldStipple || stipple) {
-            imageBuffer[(64 * y) + x0] = colour;
+            imageBuffer[(128 * y) + x0] = colour;
         }
     }
 }
@@ -98,13 +96,11 @@ void graphicsPut(uint8_t x, uint8_t y) {
         return;
     }
 
-    x >>= 1;
-
     if (x > 63) {
         return;
     }
 
-    imageBuffer[(64 * y) + x] = 1;
+    imageBuffer[(128 * y) + x] = 1;
 }
 
 void realPut(int x, int y, int value) {
@@ -182,7 +178,7 @@ void realPut(int x, int y, int value) {
 }
 
 void clearGraphics() {
-    memset(imageBuffer, 0, 64 * 128);
+    memset(imageBuffer, 0, 128 * 128);
 }
 
 void init() {
@@ -275,7 +271,7 @@ void graphicsFlush() {
 
         diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) / 2) * 80) + 4;
 
-        for (int x = 0; x < 64;) {
+        for (int x = 0; x < 128;) {
 
 
             origin = *bufferPtr;
@@ -315,7 +311,7 @@ void graphicsFlush() {
         }
     }
 
-    memset(imageBuffer, 0, 64 * 128);
+    memset(imageBuffer, 0, 128 * 128);
 }
 
 void showMessage(const char *message) {
