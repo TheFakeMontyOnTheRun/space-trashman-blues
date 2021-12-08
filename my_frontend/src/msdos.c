@@ -292,7 +292,7 @@ void graphicsFlush() {
             asm volatile("movw %0, %%di  \n\t"
                          "movb %1, %%es:(%%di)\n\t"
             :
-            : "r"( diOffset + (x >> 1)), "r" (value)
+            : "r"( diOffset + x), "r" (value)
             : "ax", "es", "di"
             );
 
