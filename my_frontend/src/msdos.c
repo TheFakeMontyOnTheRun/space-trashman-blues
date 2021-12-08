@@ -96,7 +96,7 @@ void graphicsPut(uint8_t x, uint8_t y) {
         return;
     }
 
-    if (x > 63) {
+    if (x > 127) {
         return;
     }
 
