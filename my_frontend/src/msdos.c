@@ -272,8 +272,7 @@ void graphicsFlush() {
         diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) / 2) * 80) + 4;
 
         //DS:[SI] to ES:[DI], CX times
-        asm volatile("pushw %%es\n\t"
-                     "pushw %%ax\n\t"
+        asm volatile("pushw %%ax\n\t"
                      "pushw %%di\n\t"
                      "pushw %%si\n\t"
                      "pushw %%cx\n\t"
@@ -287,11 +286,10 @@ void graphicsFlush() {
                      "popw %%si\n\t"
                      "popw %%di\n\t"
                      "popw %%ax\n\t"
-                     "popw %%es\n\t"
 
         :
         : "r"( diOffset ), "r" (128 / 4), "r"(&imageBuffer[0] + ( y * (128 / 4) ))
-        : "ax", "es", "di", "cx", "ds", "si"
+        : "ax", "es", "di", "cx", "si"
         );
     }
 
