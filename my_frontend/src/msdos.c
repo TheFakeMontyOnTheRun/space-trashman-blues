@@ -289,7 +289,7 @@ void graphicsFlush() {
 
         :
         : "r"( diOffset ), "r" (128 / 4), "r"(&imageBuffer[0] + ( y * (128 / 4) ))
-        : "ax", "es", "di", "cx", "si"
+        :
         );
     }
 
