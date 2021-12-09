@@ -271,36 +271,28 @@ void graphicsFlush() {
 
         diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) / 2) * 80) + 4;
 
-        for (int x = 0; x < 128;) {
+        //DS:[SI] to ES:[DI], CX times
+        asm volatile("pushw %%es\n\t"
+                     "pushw %%ax\n\t"
+                     "pushw %%di\n\t"
+                     "pushw %%si\n\t"
+                     "pushw %%cx\n\t"
+                     "movw $0xb800, %%ax\n\t"
+                     "movw %%ax, %%es\n\t"
+                     "movw %0, %%di  \n\t"
+                     "movb %1, %%cx\n\t"
+                     "movw %2, %%si  \n\t"
+                     "repnz movsw\n\t"
+                     "popw %%cx\n\t"
+                     "popw %%si\n\t"
+                     "popw %%di\n\t"
+                     "popw %%ax\n\t"
+                     "popw %%es\n\t"
 
-
-            origin = *bufferPtr;
-            value = (origin << 6);
-
-            ++bufferPtr;
-            origin = *bufferPtr;
-            value = value | (origin << 4);
-
-            ++bufferPtr;
-            origin = *bufferPtr;
-            value = value | (origin << 2);
-
-            ++bufferPtr;
-            origin = *bufferPtr;
-            value = value | (origin);
-
-            asm volatile("movw $0xb800, %%ax\n\t"
-                         "movw %%ax, %%es\n\t"
-                         "movw %0, %%di  \n\t"
-                         "movb %1, %%es:(%%di)\n\t"
-            :
-            : "r"( diOffset + (x >> 2)), "r" (value)
-            : "ax", "es", "di"
-            );
-
-            ++bufferPtr;
-            x += 4;
-        }
+        :
+        : "r"( diOffset ), "r" (128 / 4), "r"(&imageBuffer[0] + ( y * (128 / 4) ))
+        : "ax", "es", "di", "cx", "ds", "si"
+        );
     }
 
     memset(imageBuffer, 0, 128 * 128);
