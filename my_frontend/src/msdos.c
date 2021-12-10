@@ -40,7 +40,7 @@ void pickItem();
 
 void clearGraphics();
 
-unsigned char imageBuffer[128 * (128 / 4)];
+unsigned char imageBuffer[128 * 32];
 
 void shutdownGraphics() {
 }
@@ -80,7 +80,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
     }
 
 
-    uint16_t offset = (128 * y0) + (x0 / 4);
+    uint16_t offset = (32 * y0) + (x0 / 4);
 
 
     switch ( x0 & 3 ) {
@@ -98,7 +98,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
                     imageBuffer[offset] = byteInVRAM;
                 }
 
-                offset += (128 / 4);
+                offset += 32;
             }
             break;
         case 2:
@@ -114,7 +114,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
                     imageBuffer[offset] = byteInVRAM;
                 }
 
-                offset += (128 / 4);
+                offset += 32;
             }
             break;
         case 1:
@@ -129,7 +129,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
                     imageBuffer[offset] = byteInVRAM;
                 }
 
-                offset += (128 / 4);
+                offset += 32;
             }
             break;
         case 0:
@@ -145,7 +145,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
                     imageBuffer[offset] = byteInVRAM;
                 }
 
-                offset += (128 / 4);
+                offset += 32;
             }
             break;
     }
@@ -160,7 +160,7 @@ void graphicsPut(uint8_t x, uint8_t y) {
         return;
     }
 
-    uint16_t offset = (128 * y) + (x / 4);
+    uint16_t offset = ( 32 * y) + (x / 4);
     uint8_t byteInVRAM = imageBuffer[offset];
 
     switch ( x & 3 ) {
@@ -255,7 +255,7 @@ void realPut(int x, int y, int value) {
 }
 
 void clearGraphics() {
-    memset(imageBuffer, 0, 128 * 128);
+    memset(imageBuffer, 0, 128 * 32);
 }
 
 void init() {
@@ -388,7 +388,7 @@ void graphicsFlush() {
         }
     }
 
-    memset(imageBuffer, 0, 128 * 128);
+    memset(imageBuffer, 0, 128 * 32);
 }
 
 void showMessage(const char *message) {
