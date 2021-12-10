@@ -348,29 +348,44 @@ void graphicsFlush() {
 
         diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) / 2) * 80) + 4;
 
-        //DS:[SI] to ES:[DI], CX times
-        asm volatile("pushw %%ax\n\t"
-                     "pushw %%di\n\t"
-                     "pushw %%si\n\t"
-                     "pushw %%cx\n\t"
-                     "cld\n\t"
-                     "movw $0xb800, %%ax\n\t"
-                     "movw %%ax, %%es\n\t"
-                     "movw %0, %%di  \n\t"
-                     "movb $0x20, %%cx\n\t"
-                     "movw %1, %%ax\n\t"
-                     "addw _imageBuffer, %%ax\n\t"
-                     "movw %%ax, %%si\n\t"
-                     "rep movsb\n\t"
-                     "popw %%cx\n\t"
-                     "popw %%si\n\t"
-                     "popw %%di\n\t"
-                     "popw %%ax\n\t"
+//        //DS:[SI] to ES:[DI], CX times
+//        asm volatile("pushw %%ax\n\t"
+//                     "pushw %%di\n\t"
+//                     "pushw %%si\n\t"
+//                     "pushw %%cx\n\t"
+//                     "cld\n\t"
+//                     "movw $0xb800, %%ax\n\t"
+//                     "movw %%ax, %%es\n\t"
+//                     "movw %0, %%di  \n\t"
+//                     "movb %1, %%cx\n\t"
+//                     "movw %2, %%si  \n\t"
+//                     "rep movsb\n\t"
+//                     "popw %%cx\n\t"
+//                     "popw %%si\n\t"
+//                     "popw %%di\n\t"
+//                     "popw %%ax\n\t"
+//
+//        :
+//        : "r"( diOffset ), "r" (128 / 4), "r"(&imageBuffer[0] + ( y * (128 / 4) ))
+//        :
+//        );
 
-        :
-        : "r"( diOffset ), "r"( y * (128 / 4) )
-        :
-        );
+        for (int x = 0; x < 32; ++x) {
+
+
+            origin = *bufferPtr;
+            ++bufferPtr;
+            value = origin;
+
+            asm volatile("movw $0xb800, %%ax\n\t"
+                         "movw %%ax, %%es\n\t"
+                         "movw %0, %%di  \n\t"
+                         "movb %1, %%es:(%%di)\n\t"
+            :
+            : "r"( diOffset + x), "r" (value)
+            : "ax", "es", "di"
+            );
+        }
     }
 
     memset(imageBuffer, 0, 128 * 128);
