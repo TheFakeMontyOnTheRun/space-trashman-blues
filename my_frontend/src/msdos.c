@@ -353,6 +353,7 @@ void graphicsFlush() {
                      "pushw %%di\n\t"
                      "pushw %%si\n\t"
                      "pushw %%cx\n\t"
+                     "cld\n\t"
                      "movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
                      "movw %0, %%di  \n\t"
