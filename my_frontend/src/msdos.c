@@ -358,7 +358,9 @@ void graphicsFlush() {
                      "movw %%ax, %%es\n\t"
                      "movw %0, %%di  \n\t"
                      "movb $0x20, %%cx\n\t"
-                     "movw %1, %%si  \n\t"
+                     "movw %1, %%ax\n\t"
+                     "addw _imageBuffer, %%ax\n\t"
+                     "movw %%ax, %%si\n\t"
                      "rep movsb\n\t"
                      "popw %%cx\n\t"
                      "popw %%si\n\t"
@@ -366,7 +368,7 @@ void graphicsFlush() {
                      "popw %%ax\n\t"
 
         :
-        : "r"( diOffset ), "r"(&imageBuffer[0] + ( y * (128 / 4) ))
+        : "r"( diOffset ), "r"( y * (128 / 4) )
         :
         );
     }
