@@ -347,49 +347,49 @@ void graphicsFlush() {
     for (int y = 0; y < 128; ++y) {
         diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) / 2) * 80) + 4;
 
-//        //DS:[SI] to ES:[DI], CX times
-//        asm volatile("pushw %%ax\n\t"
-//                     "pushw %%di\n\t"
-//                     "pushw %%si\n\t"
-//                     "pushw %%cx\n\t"
-//                     "cld\n\t"
-//                     "movw $0xb800, %%ax\n\t"
-//                     "movw %%ax, %%es\n\t"
-//                     "movw %0, %%di\n\t"
-//                     "movw $0x20, %%cx\n\t"
-//                     "movw %1, %%ax\n\t"
-//                     "addw $imageBuffer,%%ax\n\t"
-//                     "movw %%ax, %%si\n\t"
-//                     "rep movsb\n\t"
-//                     "popw %%cx\n\t"
-//                     "popw %%si\n\t"
-//                     "popw %%di\n\t"
-//                     "popw %%ax\n\t"
+        //DS:[SI] to ES:[DI], CX times
+        asm volatile("pushw %%ax\n\t"
+                     "pushw %%di\n\t"
+                     "pushw %%si\n\t"
+                     "pushw %%cx\n\t"
+                     "cld\n\t"
+                     "movw $0xb800, %%ax\n\t"
+                     "movw %%ax, %%es\n\t"
+                     "movw %0, %%di\n\t"
+                     "movw $0x20, %%cx\n\t"
+                     "movw %1, %%ax\n\t"
+                     "addw $imageBuffer,%%ax\n\t"
+                     "movw %%ax, %%si\n\t"
+                     "rep movsb\n\t"
+                     "popw %%cx\n\t"
+                     "popw %%si\n\t"
+                     "popw %%di\n\t"
+                     "popw %%ax\n\t"
+
+        :
+        : "r"( diOffset ), "r"(y * 32)
+        :
+        );
+
 //
-//        :
-//        : "r"( diOffset ), "r"(y * 32)
-//        :
-//        );
-
-
-        //byte for byte - without pointers
-        for (int x = 0; x < 32; ++x) {
-            asm volatile(
-                        //set ES pointing to VRAM
-                        "movw $0xb800, %%ax\n\t"
-                        "movw %%ax, %%es\n\t"
-                        //set DI to the offset inside the VRAM
-                        "movw %0, %%di\n\t"
-                        //fetch the fragment from the framebuffer
-                        "movw %1, %%bx\n\t"
-                        "movb %%ss:imageBuffer(%%bx), %%al\n\t"
-                        //put fragment in VRAM position
-                        "movb %%al, %%es:(%%di)\n\t"
-            :
-            : "r"( diOffset + x), "r"(index++)
-            : "ax", "es", "di", "bx"
-            );
-        }
+//        //byte for byte - without pointers
+//        for (int x = 0; x < 32; ++x) {
+//            asm volatile(
+//                        //set ES pointing to VRAM
+//                        "movw $0xb800, %%ax\n\t"
+//                        "movw %%ax, %%es\n\t"
+//                        //set DI to the offset inside the VRAM
+//                        "movw %0, %%di\n\t"
+//                        //fetch the fragment from the framebuffer
+//                        "movw %1, %%bx\n\t"
+//                        "movb %%ss:imageBuffer(%%bx), %%al\n\t"
+//                        //put fragment in VRAM position
+//                        "movb %%al, %%es:(%%di)\n\t"
+//            :
+//            : "r"( diOffset + x), "r"(index++)
+//            : "ax", "es", "di", "bx"
+//            );
+//        }
     }
 
     memset(imageBuffer, 0, 128 * 32);
