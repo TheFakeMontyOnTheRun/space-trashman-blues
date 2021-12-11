@@ -344,7 +344,7 @@ void graphicsFlush() {
     int diOffset;
     uint8_t *bufferPtr = &imageBuffer[0];
     int index = 0;
-    for (int y = 0; y < 1; ++y) {
+    for (int y = 0; y < 128; ++y) {
         diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) / 2) * 80) + 4;
 
 //        //DS:[SI] to ES:[DI], CX times
