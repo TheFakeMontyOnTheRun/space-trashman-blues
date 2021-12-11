@@ -371,42 +371,21 @@ void graphicsFlush() {
 //        :
 //        );
 
-//
-//        //byte for byte - without pointers
-//        for (int x = 0; x < 32; ++x) {
-//            asm volatile(
-//                        //set ES pointing to VRAM
-//                        "movw $0xb800, %%ax\n\t"
-//                        "movw %%ax, %%es\n\t"
-//                        //set DI to the offset inside the VRAM
-//                        "movw %0, %%di\n\t"
-//                        //fetch the fragment from the framebuffer
-//                        "movb %%ss:imageBuffer(%1), %%al\n\t"
-//                        //put fragment in VRAM position
-//                        "movb %%al, %%es:(%%di)\n\t"
-//            :
-//            : "r"( diOffset + x), "r"(index++)
-//            : "ax", "es", "di"
-//            );
-//        }
-//    }
 
-
-
-
+        //byte for byte - without pointers
         for (int x = 0; x < 32; ++x) {
-
-
-            origin = *bufferPtr;
-            ++bufferPtr;
-            value = origin;
-
-            asm volatile("movw $0xb800, %%ax\n\t"
-                         "movw %%ax, %%es\n\t"
-                         "movw %0, %%di  \n\t"
-                         "movb %1, %%es:(%%di)\n\t"
+            asm volatile(
+                        //set ES pointing to VRAM
+                        "movw $0xb800, %%ax\n\t"
+                        "movw %%ax, %%es\n\t"
+                        //set DI to the offset inside the VRAM
+                        "movw %0, %%di\n\t"
+                        //fetch the fragment from the framebuffer
+                        "movb %%ss:imageBuffer(%1), %%al\n\t"
+                        //put fragment in VRAM position
+                        "movb %%al, %%es:(%%di)\n\t"
             :
-            : "r"( diOffset + x), "r" (value)
+            : "r"( diOffset + x), "r"(index++)
             : "ax", "es", "di"
             );
         }
