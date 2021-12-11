@@ -10,6 +10,7 @@ TARGET = derelict.com
 
 $(TARGET):	$(OBJS)
 	$(CC) -o $(TARGET) $(OBJS) $(LDFLAGS)
+	ia16-elf-gcc -DMSDOS -DRES128X128 -S -I../core/include -DTRACE_OBJECTS_OVER_FLOOR -DINCLUDE_ROOM_DESCRIPTIONS -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -fomit-frame-pointer -fno-exceptions -ffast-math  -c src/msdos.c
 
 all:	$(TARGET)
 
