@@ -384,15 +384,17 @@ void graphicsFlush() {
             asm volatile("movw $0xb800, %%ax\n\t"
                          "movw %%ax, %%es\n\t"
                          "movw %0, %%di  \n\t"
-                         "movw %1, %%ax\n\t"
-                         "movb imageBuffer(%%ax), %%al"
+                         "movw %1, %%bx\n\t"
+                         "movb %%ss:imageBuffer(%%bx), %%al\n\t"
                          "movb %%al, %%es:(%%di)\n\t"
             :
             : "r"( diOffset + x), "r"(index++)
-            : "ax", "es", "di"
+            : "ax", "es", "di", "bx"
             );
         }
     }
+
+//    imageBuffer[index - 50] = diOffset;
 
     memset(imageBuffer, 0, 128 * 32);
 }
