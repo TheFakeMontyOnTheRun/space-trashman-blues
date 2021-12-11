@@ -352,11 +352,7 @@ void graphicsFlush() {
 
         asm volatile(
                     //save old values
-                    "pushw %%ax\n\t"
-                     "pushw %%di\n\t"
                      "pushw %%si\n\t"
-                     "pushw %%es\n\t"
-                     "pushw %%cx\n\t"
                      "pushw %%ds\n\t"
 
                      //mimicking GCC move here.
@@ -388,15 +384,11 @@ void graphicsFlush() {
 
                      //restore previous values
                      "popw %%ds\n\t"
-                     "popw %%cx\n\t"
-                     "popw %%es\n\t"
                      "popw %%si\n\t"
-                     "popw %%di\n\t"
-                     "popw %%ax\n\t"
 
         :
         : "r"( diOffset ), "r"(index)
-        : "ax", "cx"
+        : "ax", "cx", "es", "di",
         );
 
         index += 32;
