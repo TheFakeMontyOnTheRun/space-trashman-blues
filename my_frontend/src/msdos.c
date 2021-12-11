@@ -357,7 +357,7 @@ void graphicsFlush() {
                      "movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
                      "movw %0, %%di  \n\t"
-                     "movb $0x20, %%cx\n\t"
+                     "movw $0x20, %%cx\n\t"
                      "movw %2, %%si  \n\t"
                      "rep movsb\n\t"
                      "popw %%cx\n\t"
