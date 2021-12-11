@@ -347,36 +347,56 @@ void graphicsFlush() {
     for (int y = 0; y < 128; ++y) {
         diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) / 2) * 80) + 4;
 
-        //DS:[SI] to ES:[DI], CX times
-        asm volatile("pushw %%ax\n\t"
+        asm volatile(
+                    //save old values
+                    "pushw %%ax\n\t"
                      "pushw %%di\n\t"
                      "pushw %%si\n\t"
+                     "pushw %%es\n\t"
                      "pushw %%cx\n\t"
                      "pushw %%ds\n\t"
 
                      //mimicking GCC move here.
+                     //making DS the same as SS
                      "pushw %%ss\n\t"
                      "popw %%ds\n\t"
 
-                     "cld\n\t"
+                     //set ES to point to VRAM
                      "movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
+
+                     //point to the correct offset inside VRAM
                      "movw %0, %%di\n\t"
-                     "movw $0x20, %%cx\n\t"
+
+                     //we will copy 32-bytes
+                     "movw $32, %%cx\n\t"
+
+                     //point SI to imageBuffer
                      "movw %1, %%ax\n\t"
-                     "addw $imageBuffer,%%ax\n\t"
+                     "addw $imageBuffer, %%ax\n\t"
                      "movw %%ax, %%si\n\t"
+
+                     //clear direction flag
+                     "cld\n\t"
+
+                     //copy the damn thing
+                     //DS:[SI] to ES:[DI], CX times
                      "rep movsb\n\t"
+
+                     //restore previous values
                      "popw %%ds\n\t"
                      "popw %%cx\n\t"
+                     "popw %%es\n\t"
                      "popw %%si\n\t"
                      "popw %%di\n\t"
                      "popw %%ax\n\t"
 
         :
-        : "r"( diOffset ), "r"(y * 32)
+        : "r"( diOffset ), "r"(index)
         :
         );
+
+        index += 32;
 
 //
 //        //byte for byte - without pointers
