@@ -386,7 +386,7 @@ void graphicsFlush() {
                          "movw %0, %%di  \n\t"
                          "movw %1, %%ax\n\t"
                          "movw imageBuffer(%%ax), %%ax"
-                         "movb %%ax, %%es:(%%di)\n\t"
+                         "movb %%al, %%es:(%%di)\n\t"
             :
             : "r"( diOffset + x), "r"(index++)
             : "ax", "es", "di"
