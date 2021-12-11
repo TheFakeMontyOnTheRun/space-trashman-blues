@@ -393,7 +393,7 @@ void graphicsFlush() {
 
         :
         : "r"( diOffset ), "r"(index)
-        :
+        : "ax", "cx"
         );
 
         index += 32;
