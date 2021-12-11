@@ -342,54 +342,56 @@ void graphicsFlush() {
     uint8_t origin = 0;
     uint16_t value;
     int diOffset;
-    uint8_t *bufferPtr = &imageBuffer[0];
-
+//    uint8_t *bufferPtr = &imageBuffer[0];
+    int index = 0;
     for (int y = 0; y < 1; ++y) {
 
         diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) / 2) * 80) + 4;
 
-        //DS:[SI] to ES:[DI], CX times
-        asm volatile("pushw %%ax\n\t"
-                     "pushw %%di\n\t"
-                     "pushw %%si\n\t"
-                     "pushw %%cx\n\t"
-                     "cld\n\t"
-                     "movw $0xb800, %%ax\n\t"
-                     "movw %%ax, %%es\n\t"
-                     "movw %0, %%di\n\t"
-                     "movw $0x20, %%cx\n\t"
-                     "movw %1, %%ax\n\t"
-                     "addw $imageBuffer,%%ax\n\t"
-                     "movw %%ax, %%si\n\t"
-                     "rep movsb\n\t"
-                     "popw %%cx\n\t"
-                     "popw %%si\n\t"
-                     "popw %%di\n\t"
-                     "popw %%ax\n\t"
-
-        :
-        : "r"( diOffset ), "r"(y * 32)
-        :
-        );
+//        //DS:[SI] to ES:[DI], CX times
+//        asm volatile("pushw %%ax\n\t"
+//                     "pushw %%di\n\t"
+//                     "pushw %%si\n\t"
+//                     "pushw %%cx\n\t"
+//                     "cld\n\t"
+//                     "movw $0xb800, %%ax\n\t"
+//                     "movw %%ax, %%es\n\t"
+//                     "movw %0, %%di\n\t"
+//                     "movw $0x20, %%cx\n\t"
+//                     "movw %1, %%ax\n\t"
+//                     "addw $imageBuffer,%%ax\n\t"
+//                     "movw %%ax, %%si\n\t"
+//                     "rep movsb\n\t"
+//                     "popw %%cx\n\t"
+//                     "popw %%si\n\t"
+//                     "popw %%di\n\t"
+//                     "popw %%ax\n\t"
+//
+//        :
+//        : "r"( diOffset ), "r"(y * 32)
+//        :
+//        );
 
 
         //byte for byte
-//        for (int x = 0; x < 32; ++x) {
-//
-//
+        for (int x = 0; x < 32; ++x) {
+
+
 //            origin = *bufferPtr;
 //            ++bufferPtr;
 //            value = origin;
-//
-//            asm volatile("movw $0xb800, %%ax\n\t"
-//                         "movw %%ax, %%es\n\t"
-//                         "movw %0, %%di  \n\t"
-//                         "movb %1, %%es:(%%di)\n\t"
-//            :
-//            : "r"( diOffset + x), "r" (value)
-//            : "ax", "es", "di"
-//            );
-//        }
+
+            asm volatile("movw $0xb800, %%ax\n\t"
+                         "movw %%ax, %%es\n\t"
+                         "movw %0, %%di  \n\t"
+                         "movw %1, %%ax\n\t"
+                         "movw imageBuffer(%%ax), %%ax"
+                         "movb %%ax, %%es:(%%di)\n\t"
+            :
+            : "r"( diOffset + x), "r"(index++)
+            : "ax", "es", "di"
+            );
+        }
     }
 
     memset(imageBuffer, 0, 128 * 32);
