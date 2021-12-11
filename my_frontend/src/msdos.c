@@ -352,6 +352,12 @@ void graphicsFlush() {
                      "pushw %%di\n\t"
                      "pushw %%si\n\t"
                      "pushw %%cx\n\t"
+                     "pushw %%ds\n\t"
+
+                     //mimicking GCC move here.
+                     "pushw %%ss\n\t"
+                     "popw %%ds\n\t"
+
                      "cld\n\t"
                      "movw $0xb800, %%ax\n\t"
                      "movw %%ax, %%es\n\t"
@@ -361,6 +367,7 @@ void graphicsFlush() {
                      "addw $imageBuffer,%%ax\n\t"
                      "movw %%ax, %%si\n\t"
                      "rep movsb\n\t"
+                     "popw %%ds\n\t"
                      "popw %%cx\n\t"
                      "popw %%si\n\t"
                      "popw %%di\n\t"
