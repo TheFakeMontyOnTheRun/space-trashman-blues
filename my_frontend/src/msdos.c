@@ -345,7 +345,7 @@ void graphicsFlush() {
 //    uint8_t *bufferPtr = &imageBuffer[0];
     int index = 0;
     for (int y = 0; y < 1; ++y) {
-
+        index = 0;
         diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) / 2) * 80) + 4;
 
 //        //DS:[SI] to ES:[DI], CX times
@@ -387,9 +387,11 @@ void graphicsFlush() {
                         "movw %%ax, %%es\n\t"
                         //set DI to the offset inside the VRAM
                         "movw %0, %%di\n\t"
-                        //copy fragment from the framebuffer to VRAM position
+                        //fetch the fragment from the framebuffer
                         "movw %1, %%bx\n\t"
-                        "movb %%ss:imageBuffer(%%bx), %%es:(%%di)\n\t"
+                        "movb %%ss:imageBuffer(%%bx), %%al\n\t"
+                        //put fragment in VRAM position
+                        "movb %%al, %%es:(%%di)\n\t"
             :
             : "r"( diOffset + x), "r"(index++)
             : "ax", "es", "di", "bx"
