@@ -410,6 +410,7 @@ void graphicsFlush() {
             : "ax", "es", "di"
             );
         }
+    }
 
     memset(imageBuffer, 0, 128 * 32);
 }
