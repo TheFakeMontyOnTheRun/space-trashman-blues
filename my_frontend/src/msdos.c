@@ -265,9 +265,10 @@ void realPut(int x, int y, int value) {
                   "movb $0x0,  %%bh\n\t"
                   "movw %1,    %%cx\n\t"
                   "movw %2,    %%dx\n\t"
-                  "int $0x10"
+                  "int $0x10\n\t"
     :
     :"rm" (pixel), "rm" (px), "rm" (py)
+    : "ax", "bx", "cx", "dx"
     );
 #endif
 }
@@ -277,9 +278,13 @@ void clearGraphics() {
 }
 
 void init() {
-    asm("movb $0x0, %ah\n\t"
+    asm volatile("movb $0x0, %ah\n\t"
         "movb $0x4, %al\n\t"
-        "int $0x10\n\t");
+        "int $0x10\n\t"
+        :
+        :
+        : "ax"
+        );
 }
 
 uint8_t getKey() {
@@ -289,13 +294,18 @@ uint8_t getKey() {
     asm volatile ("movb $0x00, %%ah\n\t"
                   "movb $0x00, %%al\n\t"
                   "int $0x16       \n\t"
-                  "movb %%al, %0 "
+                  "movb %%al, %0\n\t"
     : "=rm"(toReturn)
+    :
+    : "ax"
     );
 
     asm volatile("movb $0x0C, %ah\n\t"
                  "movb $0x00, %al\n\t"
-                 "int $0x21"
+                 "int $0x21\n\t"
+    :
+    :
+    : "ax"
     );
 
     return toReturn;
@@ -326,14 +336,14 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
         }
 
         asm volatile (
-        "movb $0x02, %%ah\n"
-        "movb    %0, %%dl\n"
-        "movb    %1, %%dh\n"
-        "movb  $0x0, %%bh\n"
-        "int  $0x10\n"
+        "movb $0x02, %%ah\n\t"
+        "movb    %0, %%dl\n\t"
+        "movb    %1, %%dh\n\t"
+        "movb  $0x0, %%bh\n\t"
+        "int  $0x10\n\t"
         :
         : "rm" (x), "rm" (y)
-        :
+        : "ax", "bx", "dx"
         );
 
         asm volatile (
@@ -342,10 +352,10 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
         "movw $0x01, %%cx\n"
         "movb  $0x0, %%bh\n"
         "movb $0x03, %%bl\n"
-        "int $0x10\n"
+        "int $0x10\n\t"
         :
         :[c] "r"(cha)
-        :
+        : "ax", "bx", "cx"
         );
 
         ++ptr;
