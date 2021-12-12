@@ -368,7 +368,7 @@ void graphicsFlush() {
                      "movw %0, %%di\n\t"
 
                      //we will copy 32-bytes
-                     "movw $32, %%cx\n\t"
+                     "movw $16, %%cx\n\t"
 
                      //point SI to imageBuffer
                      "movw %1, %%ax\n\t"
@@ -380,7 +380,7 @@ void graphicsFlush() {
 
                      //copy the damn thing
                      //DS:[SI] to ES:[DI], CX times
-                     "rep movsb\n\t"
+                     "rep movsw\n\t"
 
                      //restore previous values
                      "popw %%ds\n\t"
