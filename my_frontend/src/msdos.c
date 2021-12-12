@@ -186,7 +186,7 @@ void graphicsPut(uint8_t x, uint8_t y) {
 void realPut(int x, int y, int value) {
 
     int pixelRead = 0;
-
+#ifndef __DJGPP__
 
     if (y & 1) {
         asm volatile("movw $0xb800, %%ax\n\t"
@@ -255,6 +255,21 @@ void realPut(int x, int y, int value) {
         : "ax", "es", "di"
         );
     }
+#else
+    int pixel = value;
+    int px = x;
+    int py = y;
+
+    asm volatile ("movb $0x0C, %%ah\n\t"
+                  "movb %0,    %%al\n\t"
+                  "movb $0x0,  %%bh\n\t"
+                  "movw %1,    %%cx\n\t"
+                  "movw %2,    %%dx\n\t"
+                  "int $0x10"
+    :
+    :"rm" (pixel), "rm" (px), "rm" (py)
+    );
+#endif
 }
 
 void clearGraphics() {
@@ -349,7 +364,7 @@ void graphicsFlush() {
     int index = 0;
     for (int y = 0; y < 128; ++y) {
         diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) / 2) * 80) + 4;
-
+#ifndef __DJGPP__
         asm volatile(
                     //save old values
                      "pushw %%si\n\t"
@@ -390,28 +405,10 @@ void graphicsFlush() {
         : "r"( diOffset ), "r"(index)
         : "ax", "cx", "es", "di"
         );
-
+#else
+        dosmemput(bufferPtr + index, 32, (0xB800 * 16) + diOffset);
+#endif
         index += 32;
-
-//
-//        //byte for byte - without pointers
-//        for (int x = 0; x < 32; ++x) {
-//            asm volatile(
-//                        //set ES pointing to VRAM
-//                        "movw $0xb800, %%ax\n\t"
-//                        "movw %%ax, %%es\n\t"
-//                        //set DI to the offset inside the VRAM
-//                        "movw %0, %%di\n\t"
-//                        //fetch the fragment from the framebuffer
-//                        "movw %1, %%bx\n\t"
-//                        "movb %%ss:imageBuffer(%%bx), %%al\n\t"
-//                        //put fragment in VRAM position
-//                        "movb %%al, %%es:(%%di)\n\t"
-//            :
-//            : "r"( diOffset + x), "r"(index++)
-//            : "ax", "es", "di", "bx"
-//            );
-//        }
     }
 
     memset(imageBuffer, 0, 128 * 32);
