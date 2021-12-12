@@ -83,7 +83,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
     uint16_t offset = (32 * y0) + (x0 / 4);
 
 
-    switch ( x0 & 3 ) {
+    switch (x0 & 3) {
         case 3:
             for (int y = y0; y < y1; ++y) {
 
@@ -94,7 +94,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
                 if (!shouldStipple || stipple) {
                     uint8_t byteInVRAM = imageBuffer[offset];
-                    byteInVRAM = ( byteInVRAM & 0b11111100 ) | colour;
+                    byteInVRAM = (byteInVRAM & 0b11111100) | colour;
                     imageBuffer[offset] = byteInVRAM;
                 }
 
@@ -111,7 +111,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
                 if (!shouldStipple || stipple) {
                     uint8_t byteInVRAM = imageBuffer[offset];
-                    byteInVRAM = ( byteInVRAM & 0b11110011 ) | colour;
+                    byteInVRAM = (byteInVRAM & 0b11110011) | colour;
                     imageBuffer[offset] = byteInVRAM;
                 }
 
@@ -127,7 +127,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
                 if (!shouldStipple || stipple) {
                     uint8_t byteInVRAM = imageBuffer[offset];
-                    byteInVRAM = ( byteInVRAM & 0b11001111 ) | colour;
+                    byteInVRAM = (byteInVRAM & 0b11001111) | colour;
                     imageBuffer[offset] = byteInVRAM;
                 }
 
@@ -144,7 +144,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
                 if (!shouldStipple || stipple) {
                     uint8_t byteInVRAM = imageBuffer[offset];
-                    byteInVRAM = ( byteInVRAM & 0b00111111 ) | colour;
+                    byteInVRAM = (byteInVRAM & 0b00111111) | colour;
                     imageBuffer[offset] = byteInVRAM;
                 }
 
@@ -163,21 +163,21 @@ void graphicsPut(uint8_t x, uint8_t y) {
         return;
     }
 
-    uint16_t offset = ( 32 * y) + (x / 4);
+    uint16_t offset = (32 * y) + (x / 4);
     uint8_t byteInVRAM = imageBuffer[offset];
 
-    switch ( x & 3 ) {
+    switch (x & 3) {
         case 3:
-            byteInVRAM = ( byteInVRAM & 0b11111100 ) | 0b00000001;
+            byteInVRAM = (byteInVRAM & 0b11111100) | 0b00000001;
             break;
         case 2:
-            byteInVRAM = ( byteInVRAM & 0b11110011 ) | 0b00000100;
+            byteInVRAM = (byteInVRAM & 0b11110011) | 0b00000100;
             break;
         case 1:
-            byteInVRAM = ( byteInVRAM & 0b11001111 ) | 0b00010000;
+            byteInVRAM = (byteInVRAM & 0b11001111) | 0b00010000;
             break;
         case 0:
-            byteInVRAM = ( byteInVRAM & 0b00111111 ) | 0b01000000;
+            byteInVRAM = (byteInVRAM & 0b00111111) | 0b01000000;
             break;
     }
     imageBuffer[offset] = byteInVRAM;
@@ -279,12 +279,12 @@ void clearGraphics() {
 
 void init() {
     asm volatile("movb $0x0, %%ah\n\t"
-        "movb $0x4, %%al\n\t"
-        "int $0x10\n\t"
-        :
-        :
-        : "ax"
-        );
+                 "movb $0x4, %%al\n\t"
+                 "int $0x10\n\t"
+    :
+    :
+    : "ax"
+    );
 }
 
 uint8_t getKey() {
@@ -376,40 +376,40 @@ void graphicsFlush() {
         diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) / 2) * 80) + 4;
 #ifndef __DJGPP__
         asm volatile(
-                    //save old values
-                     "pushw %%si\n\t"
-                     "pushw %%ds\n\t"
+        //save old values
+        "pushw %%si\n\t"
+        "pushw %%ds\n\t"
 
-                     //mimicking GCC move here.
-                     //making DS the same as SS
-                     "pushw %%ss\n\t"
-                     "popw %%ds\n\t"
+        //mimicking GCC move here.
+        //making DS the same as SS
+        "pushw %%ss\n\t"
+        "popw %%ds\n\t"
 
-                     //set ES to point to VRAM
-                     "movw $0xb800, %%ax\n\t"
-                     "movw %%ax, %%es\n\t"
+        //set ES to point to VRAM
+        "movw $0xb800, %%ax\n\t"
+        "movw %%ax, %%es\n\t"
 
-                     //point to the correct offset inside VRAM
-                     "movw %0, %%di\n\t"
+        //point to the correct offset inside VRAM
+        "movw %0, %%di\n\t"
 
-                     //we will copy 32-bytes
-                     "movw $16, %%cx\n\t"
+        //we will copy 32-bytes
+        "movw $16, %%cx\n\t"
 
-                     //point SI to imageBuffer
-                     "movw %1, %%ax\n\t"
-                     "addw $imageBuffer, %%ax\n\t"
-                     "movw %%ax, %%si\n\t"
+        //point SI to imageBuffer
+        "movw %1, %%ax\n\t"
+        "addw $imageBuffer, %%ax\n\t"
+        "movw %%ax, %%si\n\t"
 
-                     //clear direction flag
-                     "cld\n\t"
+        //clear direction flag
+        "cld\n\t"
 
-                     //copy the damn thing
-                     //DS:[SI] to ES:[DI], CX times
-                     "rep movsw\n\t"
+        //copy the damn thing
+        //DS:[SI] to ES:[DI], CX times
+        "rep movsw\n\t"
 
-                     //restore previous values
-                     "popw %%ds\n\t"
-                     "popw %%si\n\t"
+        //restore previous values
+        "popw %%ds\n\t"
+        "popw %%si\n\t"
 
         :
         : "r"( diOffset ), "r"(index)
