@@ -278,8 +278,8 @@ void clearGraphics() {
 }
 
 void init() {
-    asm volatile("movb $0x0, %ah\n\t"
-        "movb $0x4, %al\n\t"
+    asm volatile("movb $0x0, %%ah\n\t"
+        "movb $0x4, %%al\n\t"
         "int $0x10\n\t"
         :
         :
@@ -300,8 +300,8 @@ uint8_t getKey() {
     : "ax"
     );
 
-    asm volatile("movb $0x0C, %ah\n\t"
-                 "movb $0x00, %al\n\t"
+    asm volatile("movb $0x0C, %%ah\n\t"
+                 "movb $0x00, %%al\n\t"
                  "int $0x21\n\t"
     :
     :
