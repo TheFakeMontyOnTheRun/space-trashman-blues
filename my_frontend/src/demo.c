@@ -1761,7 +1761,7 @@ void tickRenderer() {
     } else {
         enteredFrom = 0xFF;
     }
-    HUD_refresh();
+//    HUD_refresh();
 }
 
 
