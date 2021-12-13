@@ -81,18 +81,19 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
 
     uint16_t offset = (32 * y0) + (x0 / 4);
+    uint8_t dy = (y1 - y0);
 
 
     switch (x0 & 3) {
         case 3:
-            for (int y = y0; y < y1; ++y) {
+            while( dy--) {
 
 
                 if (shouldStipple) {
                     stipple = !stipple;
                 }
 
-                if (!shouldStipple || stipple) {
+                if (stipple) {
                     uint8_t byteInVRAM = imageBuffer[offset];
                     byteInVRAM = (byteInVRAM & 0b11111100) | colour;
                     imageBuffer[offset] = byteInVRAM;
@@ -103,13 +104,13 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
             break;
         case 2:
             colour = colour << 2;
-            for (int y = y0; y < y1; ++y) {
+            while( dy--) {
 
                 if (shouldStipple) {
                     stipple = !stipple;
                 }
 
-                if (!shouldStipple || stipple) {
+                if (stipple) {
                     uint8_t byteInVRAM = imageBuffer[offset];
                     byteInVRAM = (byteInVRAM & 0b11110011) | colour;
                     imageBuffer[offset] = byteInVRAM;
@@ -120,12 +121,12 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
             break;
         case 1:
             colour = colour << 4;
-            for (int y = y0; y < y1; ++y) {
+            while( dy--) {
                 if (shouldStipple) {
                     stipple = !stipple;
                 }
 
-                if (!shouldStipple || stipple) {
+                if (stipple) {
                     uint8_t byteInVRAM = imageBuffer[offset];
                     byteInVRAM = (byteInVRAM & 0b11001111) | colour;
                     imageBuffer[offset] = byteInVRAM;
@@ -136,13 +137,13 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
             break;
         case 0:
             colour = colour << 6;
-            for (int y = y0; y < y1; ++y) {
+            while( dy--) {
 
                 if (shouldStipple) {
                     stipple = !stipple;
                 }
 
-                if (!shouldStipple || stipple) {
+                if (stipple) {
                     uint8_t byteInVRAM = imageBuffer[offset];
                     byteInVRAM = (byteInVRAM & 0b00111111) | colour;
                     imageBuffer[offset] = byteInVRAM;
@@ -163,8 +164,8 @@ void graphicsPut(uint8_t x, uint8_t y) {
         return;
     }
 
-    uint16_t offset = (32 * y) + (x / 4);
-    uint8_t byteInVRAM = imageBuffer[offset];
+    uint8_t *ptrToByte = &imageBuffer[(32 * y) + (x / 4)];
+    uint8_t byteInVRAM = *ptrToByte;
 
     switch (x & 3) {
         case 3:
@@ -180,7 +181,7 @@ void graphicsPut(uint8_t x, uint8_t y) {
             byteInVRAM = (byteInVRAM & 0b00111111) | 0b01000000;
             break;
     }
-    imageBuffer[offset] = byteInVRAM;
+    *ptrToByte = byteInVRAM;
 }
 
 void realPut(int x, int y, int value) {
@@ -373,7 +374,7 @@ void graphicsFlush() {
     uint8_t *bufferPtr = &imageBuffer[0];
     int index = 0;
     for (int y = 0; y < 128; ++y) {
-        diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) / 2) * 80) + 4;
+        diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) >> 1) * 80) + 4;
 #ifndef __DJGPP__
         asm volatile(
         //save old values
@@ -420,8 +421,6 @@ void graphicsFlush() {
 #endif
         index += 32;
     }
-
-    memset(imageBuffer, 0, 128 * 32);
 }
 
 void showMessage(const char *message) {
