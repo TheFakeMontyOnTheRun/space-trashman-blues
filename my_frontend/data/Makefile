@@ -5,6 +5,14 @@ PACKAGER = ./packer
 packager: 
 	$(CC) packer.c -opacker
 
+short_data: $(PACKAGER)
+	echo "const uint8_t data[] ={" > ../src/maps.h
+	echo "" > ./datastrip
+	$(PACKAGER) src/map1.txt >> ../src/maps.h 2>>./datastrip
+	$(PACKAGER) src/map2.txt >> ../src/maps.h 2>>./datastrip
+	$(PACKAGER) src/map3.txt >> ../src/maps.h 2>>./datastrip
+	echo " 0};\n" >> ../src/maps.h
+
 data: $(PACKAGER)
 	echo "const uint8_t data[] ={" > ../src/maps.h
 	echo "" > ./datastrip
@@ -41,7 +49,7 @@ data: $(PACKAGER)
 	echo " 0\n};" >> ../src/maps.h
 
 
-
+short: packager short_data
 
 all: packager data
 

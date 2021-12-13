@@ -40,7 +40,7 @@ void pickItem();
 
 void clearGraphics();
 
-unsigned char imageBuffer[64 * 128];
+unsigned char imageBuffer[128 * 32];
 
 void shutdownGraphics() {
 }
@@ -54,8 +54,6 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
         y0 = y1;
         y1 = tmp;
     }
-
-    x0 >>= 1;
 
     uint8_t colour;
 
@@ -81,15 +79,79 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
             break;
     }
 
-    for (int y = y0; y < y1; ++y) {
 
-        if (shouldStipple) {
-            stipple = !stipple;
-        }
+    uint16_t offset = (32 * y0) + (x0 / 4);
+    uint8_t dy = (y1 - y0);
 
-        if (!shouldStipple || stipple) {
-            imageBuffer[(64 * y) + x0] = colour;
-        }
+
+    switch (x0 & 3) {
+        case 3:
+            while( dy--) {
+
+
+                if (shouldStipple) {
+                    stipple = !stipple;
+                }
+
+                if (stipple) {
+                    uint8_t byteInVRAM = imageBuffer[offset];
+                    byteInVRAM = (byteInVRAM & 0b11111100) | colour;
+                    imageBuffer[offset] = byteInVRAM;
+                }
+
+                offset += 32;
+            }
+            break;
+        case 2:
+            colour = colour << 2;
+            while( dy--) {
+
+                if (shouldStipple) {
+                    stipple = !stipple;
+                }
+
+                if (stipple) {
+                    uint8_t byteInVRAM = imageBuffer[offset];
+                    byteInVRAM = (byteInVRAM & 0b11110011) | colour;
+                    imageBuffer[offset] = byteInVRAM;
+                }
+
+                offset += 32;
+            }
+            break;
+        case 1:
+            colour = colour << 4;
+            while( dy--) {
+                if (shouldStipple) {
+                    stipple = !stipple;
+                }
+
+                if (stipple) {
+                    uint8_t byteInVRAM = imageBuffer[offset];
+                    byteInVRAM = (byteInVRAM & 0b11001111) | colour;
+                    imageBuffer[offset] = byteInVRAM;
+                }
+
+                offset += 32;
+            }
+            break;
+        case 0:
+            colour = colour << 6;
+            while( dy--) {
+
+                if (shouldStipple) {
+                    stipple = !stipple;
+                }
+
+                if (stipple) {
+                    uint8_t byteInVRAM = imageBuffer[offset];
+                    byteInVRAM = (byteInVRAM & 0b00111111) | colour;
+                    imageBuffer[offset] = byteInVRAM;
+                }
+
+                offset += 32;
+            }
+            break;
     }
 }
 
@@ -98,19 +160,34 @@ void graphicsPut(uint8_t x, uint8_t y) {
         return;
     }
 
-    x >>= 1;
-
-    if (x > 63) {
+    if (x > 127) {
         return;
     }
 
-    imageBuffer[(64 * y) + x] = 1;
+    uint8_t *ptrToByte = &imageBuffer[(32 * y) + (x / 4)];
+    uint8_t byteInVRAM = *ptrToByte;
+
+    switch (x & 3) {
+        case 3:
+            byteInVRAM = (byteInVRAM & 0b11111100) | 0b00000001;
+            break;
+        case 2:
+            byteInVRAM = (byteInVRAM & 0b11110011) | 0b00000100;
+            break;
+        case 1:
+            byteInVRAM = (byteInVRAM & 0b11001111) | 0b00010000;
+            break;
+        case 0:
+            byteInVRAM = (byteInVRAM & 0b00111111) | 0b01000000;
+            break;
+    }
+    *ptrToByte = byteInVRAM;
 }
 
 void realPut(int x, int y, int value) {
 
     int pixelRead = 0;
-
+#ifndef __DJGPP__
 
     if (y & 1) {
         asm volatile("movw $0xb800, %%ax\n\t"
@@ -179,16 +256,36 @@ void realPut(int x, int y, int value) {
         : "ax", "es", "di"
         );
     }
+#else
+    int pixel = value;
+    int px = x;
+    int py = y;
+
+    asm volatile ("movb $0x0C, %%ah\n\t"
+                  "movb %0,    %%al\n\t"
+                  "movb $0x0,  %%bh\n\t"
+                  "movw %1,    %%cx\n\t"
+                  "movw %2,    %%dx\n\t"
+                  "int $0x10\n\t"
+    :
+    :"rm" (pixel), "rm" (px), "rm" (py)
+    : "ax", "bx", "cx", "dx"
+    );
+#endif
 }
 
 void clearGraphics() {
-    memset(imageBuffer, 0, 64 * 128);
+    memset(imageBuffer, 0, 128 * 32);
 }
 
 void init() {
-    asm("movb $0x0, %ah\n\t"
-        "movb $0x4, %al\n\t"
-        "int $0x10\n\t");
+    asm volatile("movb $0x0, %%ah\n\t"
+                 "movb $0x4, %%al\n\t"
+                 "int $0x10\n\t"
+    :
+    :
+    : "ax"
+    );
 }
 
 uint8_t getKey() {
@@ -198,13 +295,18 @@ uint8_t getKey() {
     asm volatile ("movb $0x00, %%ah\n\t"
                   "movb $0x00, %%al\n\t"
                   "int $0x16       \n\t"
-                  "movb %%al, %0 "
+                  "movb %%al, %0\n\t"
     : "=rm"(toReturn)
+    :
+    : "ax"
     );
 
-    asm volatile("movb $0x0C, %ah\n\t"
-                 "movb $0x00, %al\n\t"
-                 "int $0x21"
+    asm volatile("movb $0x0C, %%ah\n\t"
+                 "movb $0x00, %%al\n\t"
+                 "int $0x21\n\t"
+    :
+    :
+    : "ax"
     );
 
     return toReturn;
@@ -235,14 +337,14 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
         }
 
         asm volatile (
-        "movb $0x02, %%ah\n"
-        "movb    %0, %%dl\n"
-        "movb    %1, %%dh\n"
-        "movb  $0x0, %%bh\n"
-        "int  $0x10\n"
+        "movb $0x02, %%ah\n\t"
+        "movb    %0, %%dl\n\t"
+        "movb    %1, %%dh\n\t"
+        "movb  $0x0, %%bh\n\t"
+        "int  $0x10\n\t"
         :
         : "rm" (x), "rm" (y)
-        :
+        : "ax", "bx", "dx"
         );
 
         asm volatile (
@@ -251,10 +353,10 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
         "movw $0x01, %%cx\n"
         "movb  $0x0, %%bh\n"
         "movb $0x03, %%bl\n"
-        "int $0x10\n"
+        "int $0x10\n\t"
         :
         :[c] "r"(cha)
-        :
+        : "ax", "bx", "cx"
         );
 
         ++ptr;
@@ -270,52 +372,55 @@ void graphicsFlush() {
     uint16_t value;
     int diOffset;
     uint8_t *bufferPtr = &imageBuffer[0];
-
+    int index = 0;
     for (int y = 0; y < 128; ++y) {
+        diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) >> 1) * 80) + 4;
+#ifndef __DJGPP__
+        asm volatile(
+        //save old values
+        "pushw %%si\n\t"
+        "pushw %%ds\n\t"
 
-        diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) / 2) * 80) + 4;
+        //mimicking GCC move here.
+        //making DS the same as SS
+        "pushw %%ss\n\t"
+        "popw %%ds\n\t"
 
-        for (int x = 0; x < 64;) {
+        //set ES to point to VRAM
+        "movw $0xb800, %%ax\n\t"
+        "movw %%ax, %%es\n\t"
 
+        //point to the correct offset inside VRAM
+        "movw %0, %%di\n\t"
 
-            origin = *bufferPtr;
-            value = (origin << 4) | (origin << 6);
+        //we will copy 32-bytes
+        "movw $16, %%cx\n\t"
 
-            ++bufferPtr;
-            origin = *bufferPtr;
-            value = value | (origin << 2) | (origin);
+        //point SI to imageBuffer
+        "movw %1, %%ax\n\t"
+        "addw $imageBuffer, %%ax\n\t"
+        "movw %%ax, %%si\n\t"
 
-            asm volatile("movw $0xb800, %%ax\n\t"
-                         "movw %%ax, %%es\n\t"
-                         "movw %0, %%di  \n\t"
-                         "movb %1, %%es:(%%di)\n\t"
-            :
-            : "r"( diOffset + (x >> 1)), "r" (value)
-            : "ax", "es", "di"
-            );
+        //clear direction flag
+        "cld\n\t"
 
+        //copy the damn thing
+        //DS:[SI] to ES:[DI], CX times
+        "rep movsw\n\t"
 
-            ++bufferPtr;
-            origin = *bufferPtr;
-            value = (origin << 4) | (origin << 6);
+        //restore previous values
+        "popw %%ds\n\t"
+        "popw %%si\n\t"
 
-            ++bufferPtr;
-            origin = *bufferPtr;
-            value = value | (origin << 2) | (origin);
-
-            asm volatile("movw %0, %%di  \n\t"
-                         "movb %1, %%es:(%%di)\n\t"
-            :
-            : "r"( diOffset + (x >> 1) + 1), "r" (value)
-            : "ax", "es", "di"
-            );
-
-            ++bufferPtr;
-            x += 4;
-        }
+        :
+        : "r"( diOffset ), "r"(index)
+        : "ax", "cx", "es", "di"
+        );
+#else
+        dosmemput(bufferPtr + index, 32, (0xB800 * 16) + diOffset);
+#endif
+        index += 32;
     }
-
-    memset(imageBuffer, 0, 64 * 128);
 }
 
 void showMessage(const char *message) {

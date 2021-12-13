@@ -2,8 +2,6 @@ CFLAGS = -DMSDOS -DRES128X128 -I../core/include -DTRACE_OBJECTS_OVER_FLOOR -DINC
 
 CC = ia16-elf-gcc
 
-#LDFLAGS = -li86
-
 OBJS = src/demo.o src/msdos.o ../core/src/Core.o ../core/src/Derelict.o
 
 TARGET = derelict.com

@@ -1176,10 +1176,10 @@ next_cluster:
     int8_t *stencilPtr = &stencilHigh[0];
     uint8_t signal = 0;
 
-    for (x = 0; x < XRES; x += 2) {
+    for (x = 0; x < XRES; ++x) {
+        int8_t stencilY = (*stencilPtr);
 #ifdef MSDOS
         signal = !signal;
-        int8_t stencilY = (*stencilPtr);
 
         if (stencilY > 86) {
             vLine(x, stencilY, 128, 2);
@@ -1187,8 +1187,10 @@ next_cluster:
             vLine(x, stencilY + (signal), 86, 3);
             vLine(x, 86, 128, 2);
         }
+#else
+        graphicsPut(x, stencilY);
 #endif
-        stencilPtr += 2;
+        ++stencilPtr;
     }
 #endif
 

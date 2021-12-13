@@ -10,36 +10,25 @@
 #include "Derelict.h"
 #include "Engine3D.h"
 
-
 extern const struct Pattern patterns[127];
 
 extern int8_t map[32][32];
 
 extern struct ObjectNode *focusedItem;
+
 extern struct ObjectNode *roomItem;
+
 extern int accessGrantedToSafe;
 
 uint8_t getch();
-
-void graphicsFlush();
-
-void nextItemInHand();
-
-void useItemInHand();
-
-void nextItemInRoom();
-
-void interactWithItemInRoom();
-
-void pickOrDrop();
-
-void dropItem();
-
-void pickItem();
-
-void clearGraphics();
-
 uint8_t font[] = {
+
+
+
+
+
+          // ASCII table starting on SPACE.
+          // Being on line 32 is no accident.
           0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 // space
         , 0x10,0x38,0x38,0x10,0x10,0x00,0x10,0x00
         , 0x6c,0x6c,0x48,0x00,0x00,0x00,0x00,0x00
@@ -138,6 +127,24 @@ uint8_t font[] = {
         , 0x10,0x38,0x6c,0x44,0x44,0x7c,0x00,0x00
 };
 
+void graphicsFlush();
+
+void nextItemInHand();
+
+void useItemInHand();
+
+void nextItemInRoom();
+
+void interactWithItemInRoom();
+
+void pickOrDrop();
+
+void dropItem();
+
+void pickItem();
+
+void clearGraphics();
+
 #define BUFFER_SIZEX 16
 #define BUFFER_SIZEY 128
 #define BUFFER_RESX 128
@@ -200,8 +207,8 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
     }
 }
 
-void writeStr(int _x, int y, char *text, int fg, int bg) {
-    writeStrWithLimit(_x, y, text, 32);
+void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
+    writeStrWithLimit(_x, y, text, 31);
 }
 
 void showMessage(const char *message) {
@@ -358,7 +365,7 @@ void graphicsFlush() {
     memset( &buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
-void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
+void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
 #ifdef HALF_BUFFER
     x0 = x0 >> 1;
@@ -394,7 +401,9 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
     switch (x0 & 7) {
         case 0:
             for (uint8_t y = _y0; y <= _y1; ++y) {
-                *ptr |= 128;
+                if ( !shouldStipple || (y & 1) ) {
+                    *ptr |= 128;
+                }
 
                 ++patternLine;
                 ++ptr;
@@ -407,7 +416,9 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
             break;
         case 1:
             for (uint8_t y = _y0; y <= _y1; ++y) {
-                *ptr |= 64;
+                if ( !shouldStipple || (y & 1) ) {
+                    *ptr |= 64;
+                }
 
                 ++patternLine;
                 ++ptr;
@@ -420,7 +431,9 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
             break;
         case 2:
             for (uint8_t y = _y0; y <= _y1; ++y) {
-                *ptr |= 32;
+                if ( !shouldStipple || (y & 1) ) {
+                    *ptr |= 32;
+                }
 
                 ++patternLine;
                 ++ptr;
@@ -433,7 +446,9 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
             break;
         case 3:
             for (uint8_t y = _y0; y <= _y1; ++y) {
-                *ptr |= 16;
+                if ( !shouldStipple || (y & 1) ) {
+                    *ptr |= 16;
+                }
 
                 ++patternLine;
                 ++ptr;
@@ -446,7 +461,9 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
             break;
         case 4:
             for (uint8_t y = _y0; y <= _y1; ++y) {
-                *ptr |= 8;
+                if ( !shouldStipple || (y & 1) ) {
+                    *ptr |= 8;
+                }
 
                 ++patternLine;
                 ++ptr;
@@ -460,7 +477,9 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
             break;
         case 5:
             for (uint8_t y = _y0; y <= _y1; ++y) {
-                *ptr |= 4;
+                if ( !shouldStipple || (y & 1) ) {
+                    *ptr |= 4;
+                }
 
                 ++patternLine;
                 ++ptr;
@@ -474,7 +493,9 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
             break;
         case 6:
             for (uint8_t y = _y0; y <= _y1; ++y) {
-                *ptr |= 2;
+                if ( !shouldStipple || (y & 1) ) {
+                    *ptr |= 2;
+                }
 
                 ++patternLine;
                 ++ptr;
