@@ -1,4 +1,4 @@
-CFLAGS = -DMSDOS -DRES128X128 -I../core/include -DTRACE_OBJECTS_OVER_FLOOR -DINCLUDE_ROOM_DESCRIPTIONS -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -fomit-frame-pointer -fno-exceptions -ffast-math -flto -O1
+CFLAGS = -DMSDOS -DRES128X128 -I../core/include -DTRACE_OBJECTS_OVER_FLOOR -DINCLUDE_ROOM_DESCRIPTIONS -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -fomit-frame-pointer -fno-exceptions -ffast-math -flto
 
 CC = ia16-elf-gcc
 
