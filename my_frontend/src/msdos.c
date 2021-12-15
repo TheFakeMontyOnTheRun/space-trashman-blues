@@ -12,6 +12,7 @@ extern int8_t map[32][32];
 extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
+int cursorPosition = 0;
 
 char *menuItems[] = {
         "8) Use/Toggle",
@@ -278,6 +279,13 @@ void clearGraphics() {
     memset(imageBuffer, 0, 128 * 32);
 }
 
+void clearScreen() {
+    uint8_t *mirrorVRAM = (uint8_t*)alloca( 320 * 100);
+    memset(mirrorVRAM, 0, 320 * 100);
+    dosmemput(mirrorVRAM, 320 * 100, (0xB800 * 16));
+    dosmemput(mirrorVRAM, 320 * 100, (0xB800 * 16) + 0x2000);
+}
+
 void init() {
     asm volatile("movb $0x0, %%ah\n\t"
                  "movb $0x4, %%al\n\t"
@@ -366,6 +374,8 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
 void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
     writeStrWithLimit(_x, y, text, 40);
 }
+
+void drawWindow(int tx, int ty, int tw, int th, const char* title ) {}
 
 void graphicsFlush() {
     uint8_t origin = 0;

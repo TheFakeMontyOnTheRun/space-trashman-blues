@@ -17,7 +17,10 @@ add_executable(derelict8
 		src/demo.c
 		src/sdl2.c
 		../core/src/Derelict.c
-		../core/src/Core.c)
+		../core/src/Core.c
+		src/Engine3D.h
+		src/HackingMinigame.c
+		src/HackingMinigame.h)
 
 include(FindPkgConfig)
 

@@ -7,6 +7,9 @@
 #include "Derelict.h"
 #include "Engine3D.h"
 
+#ifdef SUPPORTS_HACKING_MINIGAME
+#include "HackingMinigame.h"
+#endif
 
 enum DIRECTION {
     DIRECTION_N,
@@ -32,8 +35,7 @@ void renderCameraNorth();
 
 void renderCameraEast();
 
-void
-renderCameraSouth();
+void renderCameraSouth();
 
 void renderCameraWest();
 
@@ -1442,7 +1444,12 @@ void pickItem() {
         if (itemToPick != NULL ) {
 
             if (!strcmp(itemToPick->description, "digital-safe")) {
+
+#ifdef SUPPORTS_HACKING_MINIGAME
+                runHackingMinigame();
+#else
                 accessGrantedToSafe = TRUE;
+#endif
                 return;
             }
 

@@ -205,6 +205,8 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
     writeStrWithLimit(_x, y, text, 31);
 }
 
+void drawWindow(int tx, int ty, int tw, int th, const char* title ) {}
+
 void showMessage(const char *message) {
     int keepGoing = 1;
     clearGraphics();
@@ -361,9 +363,12 @@ uint8_t getKey() {
 void shutdownGraphics() {
 }
 
-void clearGraphics() {
+void clearScreen() {
     set_mode(mode_2);
     fill(MODE2_ATTR, 0xF1, MODE2_MAX);
+}
+
+void clearGraphics() {
     memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
