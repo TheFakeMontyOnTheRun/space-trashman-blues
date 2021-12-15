@@ -114,4 +114,9 @@ void titleScreen() {
 void HUD_initialPaint() {
 
 }
+
+void HUD_refresh() {
+
+}
+
 #endif
