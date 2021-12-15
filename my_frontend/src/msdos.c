@@ -279,69 +279,6 @@ void clearGraphics() {
     memset(imageBuffer, 0, 128 * 32);
 }
 
-void clearScreen() {
-#ifndef __DJGPP__
-    asm volatile(
-    //save old values
-    "pushw %%si\n\t"
-    "pushw %%ds\n\t"
-
-    //mimicking GCC move here.
-    //making DS the same as SS
-    "pushw %%ss\n\t"
-    "popw %%ds\n\t"
-
-    //set ES to point to first half of VRAM
-    "movw $0xb800, %%ax\n\t"
-    "movw %%ax, %%es\n\t"
-    "movw $0, %%di\n\t"
-
-    //we will copy 32-bytes
-    "movw $32000, %%cx\n\t"
-
-    //we will store zeroes
-    "movw $0, %%ax\n\t"
-
-    //clear direction flag
-    "cld\n\t"
-
-    //set the contents of AL to
-    //DS:[SI] to ES:[DI], CX times
-    "rep stosb\n\t"
-
-    //set ES to point to second half of VRAM
-    "movw $0xd800 , %%ax\n\t"
-    "movw %%ax, %%es\n\t"
-    "movw $0, %%di\n\t"
-
-    //we will copy 32-bytes
-    "movw $32000, %%cx\n\t"
-
-    //we will store zeroes
-    "movw $0, %%ax\n\t"
-
-    //clear direction flag
-    "cld\n\t"
-
-    //set the contents of AL to
-    //DS:[SI] to ES:[DI], CX times
-    "rep stosb\n\t"
-
-    //restore previous values
-    "popw %%ds\n\t"
-    "popw %%si\n\t"
-    :
-    :
-    : "ax", "cx", "es", "di"
-    );
-#else
-    uint8_t *mirrorVRAM = (uint8_t*)alloca( 320 * 100);
-    memset(mirrorVRAM, 0, 320 * 100);
-    dosmemput(mirrorVRAM, 320 * 100, (0xB800 * 16));
-    dosmemput(mirrorVRAM, 320 * 100, (0xB800 * 16) + 0x2000);
-#endif
-}
-
 void init() {
     asm volatile("movb $0x0, %%ah\n\t"
                  "movb $0x4, %%al\n\t"
@@ -350,6 +287,17 @@ void init() {
     :
     : "ax"
     );
+}
+
+void clearScreen() {
+#ifndef __DJGPP__
+    init();
+#else
+    uint8_t *mirrorVRAM = (uint8_t*)alloca( 320 * 100);
+    memset(mirrorVRAM, 0, 320 * 100);
+    dosmemput(mirrorVRAM, 320 * 100, (0xB800 * 16));
+    dosmemput(mirrorVRAM, 320 * 100, (0xB800 * 16) + 0x2000);
+#endif
 }
 
 uint8_t getKey() {
