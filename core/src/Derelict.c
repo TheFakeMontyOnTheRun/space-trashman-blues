@@ -99,7 +99,7 @@ void bombActivatedCallback(struct Item *item) {
     int empOnReactor = hasItemInRoom( "reactor-core", "emp-bomb");
     int playerLocation = getPlayerRoom();
     int playerAtDaedaus = (playerLocation == 1);
-    int playerAtSameLocationAsBomb = hasItemInRoom( getRoom( playerLocation)->description, "emp-bomb");
+    int playerAtSameLocationAsBomb = hasItemInRoom( getRoom( playerLocation)->name, "emp-bomb");
     
     if (empOnReactor) {
         if (playerAtDaedaus) {

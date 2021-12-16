@@ -84,14 +84,14 @@ struct Item* addItem(char *description,
 }
 
 struct Room *addRoom(
-        char *description,
+        char *name,
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
         char *info,
 #endif
                 int sizeX, int sizeY, int chanceOfRandomBattle, int connections[6]) {
 
     struct Room* toReturn = &rooms[roomCount];
-    toReturn->description = description;
+    toReturn->name = name;
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
     toReturn->info = info;
 #endif
@@ -164,7 +164,7 @@ struct Room *getRoomByName(const char* name) {
     int c = 0;
 
     for (c = 1; c < roomCount; ++c ) {
-        if (!strcmp(rooms[c].description, name)) {
+        if (!strcmp(rooms[c].name, name)) {
             return &rooms[c];
         }
     }
@@ -412,14 +412,14 @@ int playerHasObject(const char *itemName) {
 
 int isPlayerAtRoom(const char *roomName) {
     struct Room *room = &rooms[playerLocation];
-    char *name = room->description;
+    char *name = room->name;
     int returnValue = !strcmp(name, roomName);
     return returnValue;
 }
 
 char *getRoomDescription() {
     struct Room *room = &rooms[playerLocation];
-    return room->description;
+    return room->name;
 }
 
 struct Room *getRoom(int index) {
@@ -533,7 +533,7 @@ void useObjectsTogether(const char *operands) {
         return;
     }
 
-    if (!hasItemInRoom(getRoom(playerLocation)->description, operand2)) {
+    if (!hasItemInRoom(getRoom(playerLocation)->name, operand2)) {
         defaultLogger("That object is not present in the room");
         return;
     }
@@ -713,7 +713,7 @@ void addToRoom(const char *roomName, struct Item *itemName) {
 #endif
 
     for (r = 1; r < TOTAL_ROOMS; ++r) {
-        char *desc = rooms[r].description;
+        char *desc = rooms[r].name;
 
         if (desc != NULL && !strcmp(desc, roomName)) {
             addObjectToRoom(r, itemName);

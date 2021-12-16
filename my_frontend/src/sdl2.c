@@ -117,6 +117,8 @@ void dropItem();
 
 void pickItem();
 
+void clearScreen() {}
+
 
 uint8_t getKey() {
     SDL_Event event;

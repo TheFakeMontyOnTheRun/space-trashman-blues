@@ -113,7 +113,7 @@ int main() {
 				char buffer[255];
 				struct Room *r;
 				r = getRoom(connection);
-				snprintf(&buffer[0], 255, "%d - %s", d, r->description);
+				snprintf(&buffer[0], 255, "%d - %s", d, r->name);
 				puts(buffer);
 			}
 		}

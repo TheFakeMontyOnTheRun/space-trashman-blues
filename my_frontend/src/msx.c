@@ -291,7 +291,7 @@ char *menuItems[] = {
 
     switch (cursorPosition) {
         case 0:
-            useObjectNamed(getItem(focusedItem->item)->description);
+            useObjectNamed(getItem(focusedItem->item)->name);
             break;
         case 1:
             interactWithItemInRoom();
@@ -658,7 +658,7 @@ void HUD_refresh() {
             writeStr(16, 21, "*", 2, 0);
         }
 
-        writeStrWithLimit(17, 21, item->description, 30);
+        writeStrWithLimit(17, 21, item->name, 30);
     }
 
     if (roomItem != NULL) {
@@ -671,6 +671,6 @@ void HUD_refresh() {
             writeStr(0, 1, "*", 2, 0);
         }
 
-        writeStrWithLimit(1, 1, item->description, 14);
+        writeStrWithLimit(1, 1, item->name, 14);
     }
 }

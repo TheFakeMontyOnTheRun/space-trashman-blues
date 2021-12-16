@@ -57,7 +57,7 @@ struct ObjectNode {
 };
 
 struct Room {
-  char *description;
+  char *name;
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
     char *info;
 #endif
