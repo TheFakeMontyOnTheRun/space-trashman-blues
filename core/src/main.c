@@ -86,7 +86,7 @@ int main() {
 		}
 
 		while (head != NULL) {
-		  printf("%s%s\n", getItem(head->item)->active ? "[*]" : "[ ]" , getItem(head->item)->description);
+		  printf("%s%s\n", getItem(head->item)->active ? "[*]" : "[ ]" , getItem(head->item)->name);
 		  head = head->next;
 		}
 
@@ -97,7 +97,7 @@ int main() {
 		}
 
 		while (head != NULL) {
-		  printf("%s%s (%d, %d)\n", getItem(head->item)->active ? "[*]" : "[ ]" , getItem(head->item)->description, getItem(head->item)->position.x, getItem(head->item)->position.y);
+		  printf("%s%s (%d, %d)\n", getItem(head->item)->active ? "[*]" : "[ ]" , getItem(head->item)->name, getItem(head->item)->position.x, getItem(head->item)->position.y);
 		  head = head->next;
 		}
 

@@ -15,12 +15,12 @@ extern struct ObjectNode *collectedObject;
 using testing::Eq;
 
 void usableCallback(struct Item* item) {
-  item->description = "used";
+  item->name = "used";
 }
 
 void useWithCallback(struct Item* item1, struct Item* item2 ) {
-  if (!strcmp(item2->description, "farofinha")) {
-    item1->description = "used-twofold";
+  if (!strcmp(item2->name, "farofinha")) {
+    item1->name = "used-twofold";
   }
 }
 

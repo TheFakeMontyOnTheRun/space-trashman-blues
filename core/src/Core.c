@@ -74,7 +74,7 @@ struct Item* addItem(char *description,
     struct Item* toReturn = &item[itemsCount];
 
     toReturn->index = itemsCount++;
-    toReturn->description = description;
+    toReturn->name = description;
     toReturn->info = info;
     toReturn->pickable = pickable;
     toReturn->position.x = positionX;
@@ -151,7 +151,7 @@ struct Item *getItemNamed(const char* name) {
     int c = 0;
 
     for (c = 0; c < itemsCount; ++c ) {
-        if (!strcmp(item[c].description, name)) {
+        if (!strcmp(item[c].name, name)) {
             return &item[c];
         }
     }
@@ -331,7 +331,7 @@ void pickObjectByName(const char *objName) {
     struct ObjectNode *itemToPick = room->itemsPresent->next;
 
     while (itemToPick != NULL) {
-        if (!strcmp(getItem(itemToPick->item)->description, objName)) {
+        if (!strcmp(getItem(itemToPick->item)->name, objName)) {
 #ifdef MOVE_TO_OBJECT_POSITION_WHEM_PICKING
             playerPosition = getItem(itemToPick->item)->position;
 #endif
@@ -348,7 +348,7 @@ void dropObjectByName(const char *objName) {
 
 
     while (itemToPick != NULL) {
-        if (!strcmp(getItem(itemToPick->item)->description, objName)) {
+        if (!strcmp(getItem(itemToPick->item)->name, objName)) {
             dropObjectToRoom(playerLocation, getItem(itemToPick->item));
             return;
         }
@@ -388,7 +388,7 @@ int hasItemInRoom(const char *roomName, const char *itemName) {
 
     while (itemToPick != NULL) {
         struct Item *pick = getItem(itemToPick->item);
-        if (!strcmp(pick->description, itemName)) {
+        if (!strcmp(pick->name, itemName)) {
             return 1;
         }
         itemToPick = itemToPick->next;
@@ -401,7 +401,7 @@ int playerHasObject(const char *itemName) {
     struct ObjectNode *itemToPick = collectedObject->next;
 
     while (itemToPick != NULL) {
-        if (!strcmp(getItem(itemToPick->item)->description, itemName)) {
+        if (!strcmp(getItem(itemToPick->item)->name, itemName)) {
             return 1;
         }
         itemToPick = itemToPick->next;
@@ -437,7 +437,7 @@ void useObjectNamed(const char *operand) {
 
     while (itemToPick != NULL) {
         struct Item* item = getItem(itemToPick->item);
-        if (!strcmp(item->description, operand)) {
+        if (!strcmp(item->name, operand)) {
             if (item->useCallback != NULL) {
                 item->useCallback(item);
             }
@@ -450,7 +450,7 @@ void useObjectNamed(const char *operand) {
 
     while (itemToPick != NULL) {
         struct Item* item = getItem(itemToPick->item);
-        if (!strcmp(item->description, operand)) {
+        if (!strcmp(item->name, operand)) {
             if (item->useCallback != NULL) {
                 item->useCallback(item);
             }
@@ -496,9 +496,9 @@ void infoAboutItemNamed(const char *itemName) {
 
     while (object1 != NULL) {
         struct Item* item = getItem(object1->item);
-        assert(item->description != NULL);
+        assert(item->name != NULL);
 
-        if (!strcmp(item->description, itemName)) {
+        if (!strcmp(item->name, itemName)) {
             defaultLogger(item->info);
             return;
         }
@@ -507,9 +507,9 @@ void infoAboutItemNamed(const char *itemName) {
 
     while (object2 != NULL) {
         struct Item* item = getItem(object2->item);
-        assert(item->description != NULL);
+        assert(item->name != NULL);
 
-        if (!strcmp(item->description, itemName)) {
+        if (!strcmp(item->name, itemName)) {
             defaultLogger(item->info);
             return;
         }
@@ -540,9 +540,9 @@ void useObjectsTogether(const char *operands) {
 
     while (object1 != NULL) {
         struct Item* item = getItem(object1->item);
-        assert(item->description != NULL);
+        assert(item->name != NULL);
 
-        if (!strcmp(item->description, operand1)) {
+        if (!strcmp(item->name, operand1)) {
             goto got_first_object;
         }
         object1 = object1->next;
@@ -551,9 +551,9 @@ void useObjectsTogether(const char *operands) {
     got_first_object:
     while (object2 != NULL) {
         struct Item* item = getItem(object2->item);
-        assert(item->description != NULL);
+        assert(item->name != NULL);
 
-        if (!strcmp(item->description, operand2)) {
+        if (!strcmp(item->name, operand2)) {
             goto got_second_object;
         }
         object2 = object2->next;

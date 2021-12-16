@@ -475,9 +475,9 @@ void HUD_refresh() {
 
         if (item->active) {
             writeStr(21, 21, "*", 2, 0);
-            writeStr(22, 21, item->description, 2, 0);
+            writeStr(22, 21, item->name, 2, 0);
         } else {
-            writeStr(21, 21, item->description, 2, 0);
+            writeStr(21, 21, item->name, 2, 0);
         }
     }
 
@@ -486,9 +486,9 @@ void HUD_refresh() {
 
         if (item->active) {
             writeStr(1, 2, "*", 2, 0);
-            writeStr(2, 2, item->description, 2, 0);
+            writeStr(2, 2, item->name, 2, 0);
         } else {
-            writeStr(1, 2, item->description, 2, 0);
+            writeStr(1, 2, item->name, 2, 0);
         }
     }
 }

@@ -1443,7 +1443,7 @@ void pickItem() {
         struct Item* itemToPick = getItem(roomItem->item);
         if (itemToPick != NULL ) {
 
-            if (!strcmp(itemToPick->description, "digital-safe")) {
+            if (!strcmp(itemToPick->name, "digital-safe")) {
 
 #ifdef SUPPORTS_HACKING_MINIGAME
                 runHackingMinigame();
@@ -1463,7 +1463,7 @@ void pickItem() {
                 roomItem = room->itemsPresent->next;
 
             } else {
-                useObjectNamed(itemToPick->description);
+                useObjectNamed(itemToPick->name);
             }
         }
     }
@@ -1551,7 +1551,7 @@ void interactWithItemInRoom() {
 }
 
 void useItemInHand() {
-    useObjectNamed(getItem(focusedItem->item)->description);
+    useObjectNamed(getItem(focusedItem->item)->name);
 }
 
 void nextItemInHand() {
