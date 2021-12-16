@@ -62,6 +62,8 @@ void shutdownGraphics();
 
 void clearGraphics();
 
+void clearScreen();
+
 void writeStr(uint8_t nColumn, uint8_t nLine, const char *str, uint8_t fg, uint8_t bg);
 
 uint8_t getKey();
@@ -78,6 +80,9 @@ void titleScreen();
 
 void showMessage(const char* msg );
 
+void printSituation();
+
+void drawWindow(int tx, int ty, int tw, int th, const char* title );
 
 #ifdef SMS
 uint8_t* graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr);

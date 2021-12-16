@@ -8,7 +8,7 @@
 
 #include "SDL.h"
 
-
+int cursorPosition = 0;
 extern struct ObjectNode* focusedItem;
 extern struct ObjectNode* roomItem;
 extern int accessGrantedToSafe;
@@ -77,6 +77,7 @@ void showMessage(const char* mesg) {
     puts(mesg);
 }
 
+void drawWindow(int tx, int ty, int tw, int th, const char* title ) {}
 
 void clearGraphics() {
     memset(framebuffer, 0, 160 * 200);

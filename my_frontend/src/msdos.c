@@ -12,6 +12,7 @@ extern int8_t map[32][32];
 extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
+int cursorPosition = 0;
 
 char *menuItems[] = {
         "8) Use/Toggle",
@@ -288,6 +289,17 @@ void init() {
     );
 }
 
+void clearScreen() {
+#ifndef __DJGPP__
+    init();
+#else
+    uint8_t *mirrorVRAM = (uint8_t*)alloca( 320 * 100);
+    memset(mirrorVRAM, 0, 320 * 100);
+    dosmemput(mirrorVRAM, 320 * 100, (0xB800 * 16));
+    dosmemput(mirrorVRAM, 320 * 100, (0xB800 * 16) + 0x2000);
+#endif
+}
+
 uint8_t getKey() {
     unsigned char toReturn = 255;
 
@@ -366,6 +378,8 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
 void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
     writeStrWithLimit(_x, y, text, 40);
 }
+
+void drawWindow(int tx, int ty, int tw, int th, const char* title ) {}
 
 void graphicsFlush() {
     uint8_t origin = 0;
