@@ -3,15 +3,12 @@
 //
 #include <stdint.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
-#include <assert.h>
 #include <stdio.h>
 
 #include "Core.h"
 #include "Derelict.h"
 #include "Engine3D.h"
-
 #include "HackingMinigame.h"
 
 extern int accessGrantedToSafe;
@@ -45,13 +42,8 @@ void HackingScreen_initStateCallback() {
     holdingDisk = 3;
 }
 
-void HackingScreen_initialPaintCallback(void) {
-
-}
-
 void HackingScreen_repaintCallback(void) {
-    uint8_t isSelected = 0;
-    int pin;
+    uint8_t pin;
 
     drawWindow(1, 1, 40, 15, "Disassembly: CONTROLLER.PRG (stack)");
 
@@ -59,12 +51,11 @@ void HackingScreen_repaintCallback(void) {
     writeStr((12 * 1), 11, cursorPosition == 1 ? "[CPU1]" : " CPU1 ", 0, 0);
     writeStr((12 * 2), 11, cursorPosition == 2 ? "[CPU2]" : " CPU2 ", 0, 0);
 
-    writeStr(0, 10, "-------------------------------", isSelected, 0);
+    writeStr(0, 10, "-------------------------------", 1, 0);
 
 
     for (pin = 0; pin < 3; ++pin) {
-        int disk;
-        int isCursorOnThisPin = (cursorPosition == pin);
+        uint8_t disk;
 
         if (pins[pin][4] == 0) {
             accessGrantedToSafe = TRUE;
@@ -72,33 +63,19 @@ void HackingScreen_repaintCallback(void) {
 
         for (disk = 0; disk < 5; ++disk) {
 
-            int diskIndex = pins[pin][disk];
-
+            uint8_t diskIndex = pins[pin][disk];
 
             char *funcName = (disk >= pinTop[pin]) ? NULL : functionNames[diskIndex];
 
-            if (isCursorOnThisPin) {
-                isSelected = 128;
-            } else if (diskIndex == 3) {
-                isSelected = 64;
-            } else {
-                isSelected = 0;
-            }
-
-            if (accessGrantedToSafe) {
-                isSelected = 3;//getPaletteEntry(0xFF00AA00);
-            }
-
             if (pin != 0) {
-                writeStr(10 * (pin), 4 + (4 - disk), "I", isSelected, 0);
+                writeStr(10 * (pin), 4 + (4 - disk), "I", 1, 0);
             }
 
             if (funcName) {
-                writeStr(10 * (pin) + (pin == 0 ? 0 : 1), 4 + (4 - disk), funcName, isSelected, 0);
+                writeStr(10 * (pin) + (pin == 0 ? 0 : 1), 4 + (4 - disk), funcName, 1, 0);
             }
         }
     }
-
 
     writeStr(1, 2, "register pointer:", 0, 15);
 
@@ -111,8 +88,7 @@ void HackingScreen_repaintCallback(void) {
 
 int8_t HackingScreen_tickCallback(char cmd) {
 
-
-    int pin;
+    uint8_t pin;
 
     for (pin = 0; pin < 3; ++pin) {
         if (pins[pin][4] == 0) {
