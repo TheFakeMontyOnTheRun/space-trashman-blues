@@ -165,7 +165,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 
     //item 0 is a dummy
     for (c = 1; c < itemsCount; ++c) {
-        sprintf(&buffer[0], "%s.img", getItem(c)->description);
+        sprintf(&buffer[0], "%s.img", getItem(c)->name);
         itemSprites[c] = (makeTextureFrom(&buffer[0]));
     }
 }

@@ -63,7 +63,9 @@ void writeToLog(const char *errorMsg) {
 }
 
 struct Item* addItem(char *description,
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                      char *info,
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                      int weight,
 #endif
@@ -74,8 +76,10 @@ struct Item* addItem(char *description,
     struct Item* toReturn = &item[itemsCount];
 
     toReturn->index = itemsCount++;
-    toReturn->description = description;
+    toReturn->name = description;
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
     toReturn->info = info;
+#endif
     toReturn->pickable = pickable;
     toReturn->position.x = positionX;
     toReturn->position.y = positionY;
@@ -84,14 +88,14 @@ struct Item* addItem(char *description,
 }
 
 struct Room *addRoom(
-        char *description,
+        char *name,
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
         char *info,
 #endif
                 int sizeX, int sizeY, int chanceOfRandomBattle, int connections[6]) {
 
     struct Room* toReturn = &rooms[roomCount];
-    toReturn->description = description;
+    toReturn->name = name;
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
     toReturn->info = info;
 #endif
@@ -151,7 +155,7 @@ struct Item *getItemNamed(const char* name) {
     int c = 0;
 
     for (c = 0; c < itemsCount; ++c ) {
-        if (!strcmp(item[c].description, name)) {
+        if (!strcmp(item[c].name, name)) {
             return &item[c];
         }
     }
@@ -164,7 +168,7 @@ struct Room *getRoomByName(const char* name) {
     int c = 0;
 
     for (c = 1; c < roomCount; ++c ) {
-        if (!strcmp(rooms[c].description, name)) {
+        if (!strcmp(rooms[c].name, name)) {
             return &rooms[c];
         }
     }
@@ -331,7 +335,7 @@ void pickObjectByName(const char *objName) {
     struct ObjectNode *itemToPick = room->itemsPresent->next;
 
     while (itemToPick != NULL) {
-        if (!strcmp(getItem(itemToPick->item)->description, objName)) {
+        if (!strcmp(getItem(itemToPick->item)->name, objName)) {
 #ifdef MOVE_TO_OBJECT_POSITION_WHEM_PICKING
             playerPosition = getItem(itemToPick->item)->position;
 #endif
@@ -348,7 +352,7 @@ void dropObjectByName(const char *objName) {
 
 
     while (itemToPick != NULL) {
-        if (!strcmp(getItem(itemToPick->item)->description, objName)) {
+        if (!strcmp(getItem(itemToPick->item)->name, objName)) {
             dropObjectToRoom(playerLocation, getItem(itemToPick->item));
             return;
         }
@@ -388,7 +392,7 @@ int hasItemInRoom(const char *roomName, const char *itemName) {
 
     while (itemToPick != NULL) {
         struct Item *pick = getItem(itemToPick->item);
-        if (!strcmp(pick->description, itemName)) {
+        if (!strcmp(pick->name, itemName)) {
             return 1;
         }
         itemToPick = itemToPick->next;
@@ -401,7 +405,7 @@ int playerHasObject(const char *itemName) {
     struct ObjectNode *itemToPick = collectedObject->next;
 
     while (itemToPick != NULL) {
-        if (!strcmp(getItem(itemToPick->item)->description, itemName)) {
+        if (!strcmp(getItem(itemToPick->item)->name, itemName)) {
             return 1;
         }
         itemToPick = itemToPick->next;
@@ -412,14 +416,14 @@ int playerHasObject(const char *itemName) {
 
 int isPlayerAtRoom(const char *roomName) {
     struct Room *room = &rooms[playerLocation];
-    char *name = room->description;
+    char *name = room->name;
     int returnValue = !strcmp(name, roomName);
     return returnValue;
 }
 
 char *getRoomDescription() {
     struct Room *room = &rooms[playerLocation];
-    return room->description;
+    return room->name;
 }
 
 struct Room *getRoom(int index) {
@@ -437,7 +441,7 @@ void useObjectNamed(const char *operand) {
 
     while (itemToPick != NULL) {
         struct Item* item = getItem(itemToPick->item);
-        if (!strcmp(item->description, operand)) {
+        if (!strcmp(item->name, operand)) {
             if (item->useCallback != NULL) {
                 item->useCallback(item);
             }
@@ -450,7 +454,7 @@ void useObjectNamed(const char *operand) {
 
     while (itemToPick != NULL) {
         struct Item* item = getItem(itemToPick->item);
-        if (!strcmp(item->description, operand)) {
+        if (!strcmp(item->name, operand)) {
             if (item->useCallback != NULL) {
                 item->useCallback(item);
             }
@@ -481,6 +485,7 @@ void walkTo(const char *operands) {
     setPlayerPosition(&pos);
 }
 
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
 void infoAboutItemNamed(const char *itemName) {
 
     struct ObjectNode *object1 = collectedObject->next;
@@ -496,9 +501,9 @@ void infoAboutItemNamed(const char *itemName) {
 
     while (object1 != NULL) {
         struct Item* item = getItem(object1->item);
-        assert(item->description != NULL);
+        assert(item->name != NULL);
 
-        if (!strcmp(item->description, itemName)) {
+        if (!strcmp(item->name, itemName)) {
             defaultLogger(item->info);
             return;
         }
@@ -507,9 +512,9 @@ void infoAboutItemNamed(const char *itemName) {
 
     while (object2 != NULL) {
         struct Item* item = getItem(object2->item);
-        assert(item->description != NULL);
+        assert(item->name != NULL);
 
-        if (!strcmp(item->description, itemName)) {
+        if (!strcmp(item->name, itemName)) {
             defaultLogger(item->info);
             return;
         }
@@ -518,6 +523,7 @@ void infoAboutItemNamed(const char *itemName) {
 
     defaultLogger("No such item could be found");
 }
+#endif
 
 void useObjectsTogether(const char *operands) {
 
@@ -533,16 +539,16 @@ void useObjectsTogether(const char *operands) {
         return;
     }
 
-    if (!hasItemInRoom(getRoom(playerLocation)->description, operand2)) {
+    if (!hasItemInRoom(getRoom(playerLocation)->name, operand2)) {
         defaultLogger("That object is not present in the room");
         return;
     }
 
     while (object1 != NULL) {
         struct Item* item = getItem(object1->item);
-        assert(item->description != NULL);
+        assert(item->name != NULL);
 
-        if (!strcmp(item->description, operand1)) {
+        if (!strcmp(item->name, operand1)) {
             goto got_first_object;
         }
         object1 = object1->next;
@@ -551,9 +557,9 @@ void useObjectsTogether(const char *operands) {
     got_first_object:
     while (object2 != NULL) {
         struct Item* item = getItem(object2->item);
-        assert(item->description != NULL);
+        assert(item->name != NULL);
 
-        if (!strcmp(item->description, operand2)) {
+        if (!strcmp(item->name, operand2)) {
             goto got_second_object;
         }
         object2 = object2->next;
@@ -713,7 +719,7 @@ void addToRoom(const char *roomName, struct Item *itemName) {
 #endif
 
     for (r = 1; r < TOTAL_ROOMS; ++r) {
-        char *desc = rooms[r].description;
+        char *desc = rooms[r].name;
 
         if (desc != NULL && !strcmp(desc, roomName)) {
             addObjectToRoom(r, itemName);

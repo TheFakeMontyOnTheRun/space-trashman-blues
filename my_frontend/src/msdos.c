@@ -354,21 +354,15 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
         "movb    %1, %%dh\n\t"
         "movb  $0x0, %%bh\n\t"
         "int  $0x10\n\t"
-        :
-        : "rm" (x), "rm" (y)
-        : "ax", "bx", "dx"
-        );
-
-        asm volatile (
         "movb $0x09, %%ah\n"
-        "movb  %[c], %%al\n"
+        "movb %2,    %%al\n"
         "movw $0x01, %%cx\n"
-        "movb  $0x0, %%bh\n"
+        "movb $0x0,  %%bh\n"
         "movb $0x03, %%bl\n"
-        "int $0x10\n\t"
+        "int  $0x10\n\t"
         :
-        :[c] "r"(cha)
-        : "ax", "bx", "cx"
+        : "rm" (x), "rm" (y), "rm"(cha)
+        : "ax", "bx", "cx", "dx"
         );
 
         ++ptr;
@@ -475,9 +469,9 @@ void HUD_refresh() {
 
         if (item->active) {
             writeStr(21, 21, "*", 2, 0);
-            writeStr(22, 21, item->description, 2, 0);
+            writeStr(22, 21, item->name, 2, 0);
         } else {
-            writeStr(21, 21, item->description, 2, 0);
+            writeStr(21, 21, item->name, 2, 0);
         }
     }
 
@@ -486,9 +480,9 @@ void HUD_refresh() {
 
         if (item->active) {
             writeStr(1, 2, "*", 2, 0);
-            writeStr(2, 2, item->description, 2, 0);
+            writeStr(2, 2, item->name, 2, 0);
         } else {
-            writeStr(1, 2, item->description, 2, 0);
+            writeStr(1, 2, item->name, 2, 0);
         }
     }
 }

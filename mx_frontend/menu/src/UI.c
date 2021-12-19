@@ -125,12 +125,12 @@ void redrawHUD() {
         if (itemPtr != NULL) {
             if (line == currentSelectedItem) {
                 char textBuffer[255];
-                sprintf(&textBuffer[0], "%s", itemPtr->description);
+                sprintf(&textBuffer[0], "%s", itemPtr->name);
                 textBuffer[14] = 0;
 
                 drawBitmapRaw(XRES + 8, 199 - 32 - 16, 32, 32, itemSprites[itemPtr->index]->rotations[0], 1);
 
-                drawTextAtWithMargin(2 + ((XRES) / 8), 24, 311, itemPtr->description,
+                drawTextAtWithMargin(2 + ((XRES) / 8), 24, 311, itemPtr->name,
                                      itemPtr->active ? 192 : 255);
             }
             ++line;

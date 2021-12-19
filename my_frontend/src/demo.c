@@ -6,6 +6,7 @@
 #include "Core.h"
 #include "Derelict.h"
 #include "Engine3D.h"
+#include "map.h"
 
 #ifdef SUPPORTS_HACKING_MINIGAME
 #include "HackingMinigame.h"
@@ -228,9 +229,6 @@ const struct Projection projections[40] =
 #endif
         };
 
-#ifndef DONT_INCLUDE
-#include "map.h"
-#endif
 
 int8_t max(int8_t x1, int8_t x2) {
     return x1 > x2 ? x1 : x2;
@@ -1443,7 +1441,7 @@ void pickItem() {
         struct Item* itemToPick = getItem(roomItem->item);
         if (itemToPick != NULL ) {
 
-            if (!strcmp(itemToPick->description, "digital-safe")) {
+            if (!strcmp(itemToPick->name, "digital-safe")) {
 
 #ifdef SUPPORTS_HACKING_MINIGAME
                 runHackingMinigame();
@@ -1463,7 +1461,7 @@ void pickItem() {
                 roomItem = room->itemsPresent->next;
 
             } else {
-                useObjectNamed(itemToPick->description);
+                useObjectNamed(itemToPick->name);
             }
         }
     }
@@ -1551,7 +1549,7 @@ void interactWithItemInRoom() {
 }
 
 void useItemInHand() {
-    useObjectNamed(getItem(focusedItem->item)->description);
+    useObjectNamed(getItem(focusedItem->item)->name);
 }
 
 void nextItemInHand() {
@@ -1810,7 +1808,7 @@ int main(
         cameraRotation = 0;
         init();
         initStation();
-
+        
 #ifdef SMS
         titleScreen();
 #endif

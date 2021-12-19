@@ -15,12 +15,12 @@ extern struct ObjectNode *collectedObject;
 using testing::Eq;
 
 void usableCallback(struct Item* item) {
-  item->description = "used";
+  item->name = "used";
 }
 
 void useWithCallback(struct Item* item1, struct Item* item2 ) {
-  if (!strcmp(item2->description, "farofinha")) {
-    item1->description = "used-twofold";
+  if (!strcmp(item2->name, "farofinha")) {
+    item1->name = "used-twofold";
   }
 }
 
@@ -31,7 +31,10 @@ TEST(TestObjectManipulation, canUseObjectsTogether) {
   initStation();
 
 
-  item = addItem("usableWith", "",
+  item = addItem("usableWith",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
+          "",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
           0,
 #endif
@@ -40,7 +43,10 @@ TEST(TestObjectManipulation, canUseObjectsTogether) {
   addToRoom("lss-daedalus", item);
 
 
-  item = addItem("farofinha", "",
+  item = addItem("farofinha",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
+          "",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
           0,
 #endif
@@ -48,14 +54,20 @@ TEST(TestObjectManipulation, canUseObjectsTogether) {
   addToRoom("lss-daedalus", item);
 
 
-  item = addItem("pamonha", "",
+  item = addItem("pamonha",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
+          "",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
           0,
 #endif
                  TRUE, 15, 19);
   addToRoom("lss-daedalus", item);
 
-  item = addItem("cocada", "",
+  item = addItem("cocada",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
+          "",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
           0,
 #endif
@@ -85,7 +97,10 @@ TEST(TestObjectManipulation, canUseObjects) {
     initStation();
 
 
-    item = addItem("usable", "",
+    item = addItem("usable",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
+            "",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
@@ -95,7 +110,10 @@ TEST(TestObjectManipulation, canUseObjects) {
     addToRoom("lss-daedalus", item);
 
 
-    item = addItem("artificial", "",
+    item = addItem("artificial",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
+            "",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
@@ -120,7 +138,10 @@ TEST(TestObjectManipulation, cantPickUnpickableObjects) {
   initStation();
 
 
-  item = addItem("unpickable", "",
+  item = addItem("unpickable",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
+          "",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
           0,
 #endif

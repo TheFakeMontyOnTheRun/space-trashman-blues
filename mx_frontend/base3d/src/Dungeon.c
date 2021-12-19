@@ -150,12 +150,12 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                         char *operator1;
                         char *operand1;
                         
-                        sprintf(&buffer[0], "use-with %s %s", item2->description, item1->description);
+                        sprintf(&buffer[0], "use-with %s %s", item2->name, item1->name);
                         operator1 = strtok(&buffer[0], "\n ");
                         operand1 = strtok(NULL, "\n ");
                         parseCommand(operator1, operand1);
                     } else {
-                        parseCommand("use", item2->description);
+                        parseCommand("use", item2->name);
                     }
                 }
                 gameSnapshot.turn++;
@@ -182,7 +182,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     if (item == getItemNamed("computer-terminal")) {
                         enterState(kHackingGame);
                     } else {
-                        parseCommand(item->pickable ? "pick" : "use", item->description);
+                        parseCommand(item->pickable ? "pick" : "use", item->name);
                         if (item->pickable) {
                             setItem(offseted.x, offseted.y, 0xFF);
                         }
@@ -202,7 +202,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     }
                     
                     if (item != NULL) {
-                        parseCommand("drop", item->description);
+                        parseCommand("drop", item->name);
                         item->position.x = offseted.x;
                         item->position.y = offseted.y;
                         setItem(item->position.x, item->position.y, item->index);
@@ -339,7 +339,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             }
 
             if (item != NULL) {
-                focusItemName = item->description;
+                focusItemName = item->name;
             }
         }
         

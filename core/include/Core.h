@@ -43,8 +43,10 @@ struct Item {
   uint8_t index : 6;
   uint8_t active : 1;
   uint8_t pickable : 1;
-  char *description;
+  char *name;
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
   char *info;
+#endif
   UseWithObjectCallback useWithCallback;
   UseObjectCallback useCallback;
   DropObjectCallback dropCallback;
@@ -57,7 +59,7 @@ struct ObjectNode {
 };
 
 struct Room {
-  char *description;
+  char *name;
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
     char *info;
 #endif
@@ -77,7 +79,9 @@ struct Room *addRoom(
         int sizeX, int sizeY, int chanceOfRandomBattle, int connections[6]);
 
 struct Item* addItem(char *description,
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                      char *info,
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
         int weight,
 #endif
@@ -115,7 +119,9 @@ int getPlayerDirection(void);
 
 void setPlayerDirection(int direction);
 
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
 void infoAboutItemNamed(const char* itemName);
+#endif
 
 void moveBy(int direction);
 

@@ -1,13 +1,15 @@
 CC = zcc
 
-CFLAGS = +msx -compiler=sdcc --max-allocs-per-node200000  --opt-code-speed -SO3 -vn -I../core/include -DSMS -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE
+CFLAGS = +msx -compiler=sdcc --max-allocs-per-node200000  --opt-code-size -SO3 -vn -I../core/include -DSMS -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE
 LDFLAGS = -subtype=rom
 
 all: derelict.rom
 
 derelict.rom: src/demo.o src/msx.o ../core/src/Core.o ../core/src/Derelict.o
-	$(CC) $(CFLAGS) -odemo.rom src/demo.o src/msx.o ../core/src/Core.o ../core/src/Derelict.o $(LDFLAGS)
+	$(CC) $(CFLAGS) -oderelict.rom src/demo.o src/msx.o ../core/src/Core.o ../core/src/Derelict.o $(LDFLAGS)
 
 clean:
-	$(RM) *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.rom
-	$(RM) ../core/src/*.o
+	rm -f $(OBJS) $(TARGET)
+	$(RM) -f *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.rom
+	$(RM) -f ../core/src/*.o src/*.o
+	rm *~

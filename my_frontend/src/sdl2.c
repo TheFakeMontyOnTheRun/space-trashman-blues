@@ -95,7 +95,7 @@ void printSituation() {
     while( playerObjects != NULL ) {
         struct Item *item = getItem(playerObjects->item);
 
-        printf("%c%c%s\n", (playerObjects == focusedItem) ? '>' : ' ', item->active ? '*' : '-', item->description );
+        printf("%c%c%s\n", (playerObjects == focusedItem) ? '>' : ' ', item->active ? '*' : '-', item->name );
 
         playerObjects = playerObjects->next;
     }
@@ -107,7 +107,7 @@ void printSituation() {
     while( roomItems != NULL ) {
         struct Item *item = getItem(roomItems->item);
 
-        printf("%c%c%s\n", (roomItems == roomItem) ? '>' : ' ',item->active ? '*' : '-', item->description );
+        printf("%c%c%s\n", (roomItems == roomItem) ? '>' : ' ',item->active ? '*' : '-', item->name );
 
         roomItems = roomItems->next;
     }
@@ -116,6 +116,8 @@ void printSituation() {
 void dropItem();
 
 void pickItem();
+
+void clearScreen() {}
 
 
 uint8_t getKey() {
