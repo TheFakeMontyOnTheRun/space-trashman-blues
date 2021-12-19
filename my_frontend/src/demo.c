@@ -1808,7 +1808,7 @@ int main(
         cameraRotation = 0;
         init();
         initStation();
-        setPlayerLocation(16);
+        
 #ifdef SMS
         titleScreen();
 #endif
