@@ -13,6 +13,11 @@ short_data: $(PACKAGER)
 	$(PACKAGER) src/map3.txt >> ../src/maps.h 2>>./datastrip
 	echo " 0};\n" >> ../src/maps.h
 
+#TODO: precalc absolute offsets
+	echo "const long dataPositions[] ={ 0,\n" >> ../src/maps.h
+	cat ./datastrip >> ../src/maps.h
+	echo " 0\n};" >> ../src/maps.h
+
 data: $(PACKAGER)
 	echo "const uint8_t data[] ={" > ../src/maps.h
 	echo "" > ./datastrip
