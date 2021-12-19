@@ -6,6 +6,7 @@
 #include "Core.h"
 #include "Derelict.h"
 #include "Engine3D.h"
+#include "map.h"
 
 #ifdef SUPPORTS_HACKING_MINIGAME
 #include "HackingMinigame.h"
@@ -228,9 +229,6 @@ const struct Projection projections[40] =
 #endif
         };
 
-#ifndef DONT_INCLUDE
-#include "map.h"
-#endif
 
 int8_t max(int8_t x1, int8_t x2) {
     return x1 > x2 ? x1 : x2;
