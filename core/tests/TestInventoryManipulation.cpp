@@ -124,7 +124,10 @@ TEST_F(TestInventoryManipulation, objectsCanOnlyExistInOneRoom) {
   initStation();
 
 
-  item = addItem("farofinha", "",
+  item = addItem("farofinha",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
+          "",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif

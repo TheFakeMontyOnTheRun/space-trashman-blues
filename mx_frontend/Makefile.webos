@@ -16,7 +16,7 @@ CFLAGS=-g -c -O3 -std=c90    \
 	-fomit-frame-pointer                                 \
 	-fno-exceptions                                      \
 	-I../core/include									\
-	-ffast-math -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0 -s WASM=0
+	-ffast-math -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0 -s WASM=0 -DINCLUDE_ITEM_DESCRIPTIONS
 
 MENU_TARGET=game.html
 

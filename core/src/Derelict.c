@@ -530,16 +530,22 @@ void initStation(void) {
 
 
     /*Items*/
-        newItem = addItem("dummy", "ERROR",
-    #ifdef ITEMS_HAVE_WEIGHT
+        newItem = addItem("dummy",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
+                "ERROR",
+#endif
+#ifdef ITEMS_HAVE_WEIGHT
                                       0,
-    #endif
+#endif
                                       FALSE, 0, 0);
     
     /* LSS-Daedalus */
-    newItem = addItem("emp-bomb", "Time-programmable Halogen EMP bomb.\n"
+    newItem = addItem("emp-bomb",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
+            "Time-programmable Halogen EMP bomb.\n"
                                   "Will disable any electrical device\n"
                                   "within the 50 nautical miles range.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                                   5,
 #endif
@@ -550,11 +556,13 @@ void initStation(void) {
 
     
     newItem = addItem("emp-controller",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "The remote controller allows you to\n"
                       "instantly detonate the bomb from very\n"
                       "far (empirical evidence tells it \n"
                       "works from as far as 200 nautical\n"
                       "miles).",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
@@ -564,8 +572,10 @@ void initStation(void) {
     newItem->useCallback = bombControllerActivatedCallback;
                                         
     newItem = addItem("ship-ignition",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Token needed to ignite the ship's\n"
                       "computer and thrusters",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
@@ -575,11 +585,13 @@ void initStation(void) {
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
 
     newItem = addItem("magnetic-boots",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Boots with strong electro-magnets.\n"
                       "Ideal for walking underwater...\n"
                       "...as long as the surface in question\n"
                       "is metallic (like most of the \n"
                       "surfaces here).",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       2,
 #endif
@@ -592,8 +604,10 @@ void initStation(void) {
     
 
     newItem = addItem("helmet",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Atmosphere-contained helmet for\n"
                       "safety.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       2,
 #endif
@@ -604,9 +618,11 @@ void initStation(void) {
 
     
     newItem = addItem("low-rank-keycard",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Clearance for low rank. Oddly, \n"
                       "this one is of the rewrittable kind;\n"
                       "probably due to a field promotion.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
@@ -619,7 +635,9 @@ void initStation(void) {
     
     
     newItem = addItem("hacked-keycard",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Hacked keycard for mid-clearance\nrank.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
@@ -633,7 +651,9 @@ void initStation(void) {
     /* Hangar */
     
     newItem = addItem("magnetic-coupling",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Automatic seal activated by \nspecial safety protocols",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       17,
 #endif
@@ -646,7 +666,9 @@ void initStation(void) {
     /* Comm terminals*/
     
     newItem = addItem("door-panel",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Special control for the door",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       200,
 #endif
@@ -658,7 +680,9 @@ void initStation(void) {
 
     /* Comm terminals*/
     newItem = addItem("comm-terminal-1",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Terminal for communicating with\nthe central computer.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       200,
 #endif
@@ -669,7 +693,9 @@ void initStation(void) {
 
     
     newItem = addItem("comm-terminal-2",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Terminal for communicating with\nthe central computer.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       200,
 #endif
@@ -680,7 +706,9 @@ void initStation(void) {
     
     
     newItem = addItem("comm-terminal-3",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Terminal for communicating with\nthe central computer.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       200,
 #endif
@@ -691,11 +719,13 @@ void initStation(void) {
 
     /* Diaries */
     newItem = addItem("black-diary",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "...We meet every night in the rest\n"
                       "room, to make out. I asked her for\n"
                       "an access key for the armory - let's\n"
                       " see if she keeps her promisse. If\n"
                       "they catch me, I'm scr...",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
@@ -706,11 +736,13 @@ void initStation(void) {
     
     
     newItem = addItem("blue-diary",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "The growing discontent is very \n"
                       "noticeable. I don't know for how\n"
                       "long can we keep the situation\n"
                       "stable. For safety, I gave the root\n"
                       "keycard to first officer Costa.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
@@ -722,6 +754,7 @@ void initStation(void) {
     
 
     newItem = addItem("white-diary",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Crew is growing demotivated with\n"
                       "all the combat exercises and no \n"
                       "downtime. Don't know long can I\n"
@@ -729,6 +762,7 @@ void initStation(void) {
                       "the war. If anything goes wrong,\n"
                       "the situation room will be our\n"
                       "last stand.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
@@ -739,11 +773,13 @@ void initStation(void) {
     
     
     newItem = addItem("yellow-book",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Situation is hopeless. I must enact\n"
                       "the security lockdown protocol and \n"
                       "set the reactor to a low activity \n"
                       "state. With luck, they will rescue \n"
                       "us in the next weeks or so.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
@@ -754,8 +790,10 @@ void initStation(void) {
 
     
     newItem = addItem("log-book",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Power conduit on level 3 was restored\n"
                       "without incidents.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       1,
 #endif
@@ -766,8 +804,10 @@ void initStation(void) {
 
     /* Misc */
     newItem = addItem("card-writter",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Terminal with card writter, connected\n"
                       " to the main computer",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       3,
 #endif
@@ -778,7 +818,9 @@ void initStation(void) {
 
     
     newItem = addItem("high-rank-keycard",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Clearance for high-rank officer.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
@@ -790,8 +832,10 @@ void initStation(void) {
     
 
     newItem = addItem("digital-safe",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "A very valuable vintage rare and in\n"
                       "working-conditions computer rack!",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       138,
 #endif
@@ -801,8 +845,10 @@ void initStation(void) {
     addToRoom("situation-room", newItem);
     
     newItem = addItem("computer-terminal",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "An offline terminal connected to the\n"
                       "computer node",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       138,
 #endif
@@ -813,10 +859,12 @@ void initStation(void) {
 
     
     newItem = addItem("journal",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "...and so you guys could just join in\n"
                       "and see whats going on. I hope it is not\n"
                       "too instrusive of me. To that, she just\n"
                       "gave me a cold stare and...",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
@@ -826,7 +874,9 @@ void initStation(void) {
     addToRoom("situation-room", newItem);
     
     newItem = addItem("metal-mending",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "A piece of metal that might be valuable.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       74,
 #endif
@@ -837,9 +887,11 @@ void initStation(void) {
 
     
     newItem = addItem("scientific-treatise",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Voynich Manuscript\nAnnottated Translation.\n"
                       "Classical edition. It's badly burn't.\n"
                       "Can't read it.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       1,
 #endif
@@ -850,7 +902,9 @@ void initStation(void) {
     
     
     newItem = addItem("clogged-flush",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "There is so much matter in the pipe...",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       1,
 #endif
@@ -860,7 +914,9 @@ void initStation(void) {
     addToRoom("wc", newItem);
     
     newItem = addItem("flush",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Working dispose valve for a very basic need.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       1,
 #endif
@@ -871,9 +927,11 @@ void initStation(void) {
 
     
     newItem = addItem("fuel-rods",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "This is the source of all the trouble.\n"
                       "Both now and then. Gotta find a way to\n"
                       "eject those into the abyss.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       209,
 #endif
@@ -884,8 +942,10 @@ void initStation(void) {
 
     
     newItem = addItem("reactor-valve-control",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "This is the computer node that could be\n"
                       "used to eject the rods into the abyss.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       62,
 #endif
@@ -896,7 +956,9 @@ void initStation(void) {
 
     
     newItem = addItem("root-keycard",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                       "Card for root access.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                       0,
 #endif
@@ -907,7 +969,10 @@ void initStation(void) {
     newItem->dropCallback = keycardDropCallback;
     
     /* Elevator controls */
-    newItem = addItem("elevator-level1-go-down", "Elevator controls - Go down.",
+    newItem = addItem("elevator-level1-go-down",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
+            "Elevator controls - Go down.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
@@ -916,7 +981,10 @@ void initStation(void) {
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-1", newItem);
 
-    newItem = addItem("elevator-level2-go-down", "Elevator controls - Go down.",
+    newItem = addItem("elevator-level2-go-down",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
+            "Elevator controls - Go down.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
@@ -925,7 +993,10 @@ void initStation(void) {
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-2", newItem);
     
-    newItem = addItem("elevator-level2-go-up", "Elevator controls - Go Up.",
+    newItem = addItem("elevator-level2-go-up",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
+            "Elevator controls - Go Up.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
@@ -934,7 +1005,10 @@ void initStation(void) {
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-2", newItem);
     
-    newItem = addItem("elevator-level3-go-up", "Elevator controls - Go Up.",
+    newItem = addItem("elevator-level3-go-up",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
+            "Elevator controls - Go Up.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
@@ -943,7 +1017,10 @@ void initStation(void) {
     newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-3", newItem);
 
-    newItem = addItem("the-mistral-report", "RetroZaragoza Homebrew '18 awarded\nentry: A espionage-themed \nturn-based 3D RPG for MS-DOS,\nXBox One, Mac and Amiga.",
+    newItem = addItem("the-mistral-report",
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
+            "RetroZaragoza Homebrew '18 awarded\nentry: A espionage-themed \nturn-based 3D RPG for MS-DOS,\nXBox One, Mac and Amiga.",
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
             200,
 #endif

@@ -63,7 +63,9 @@ void writeToLog(const char *errorMsg) {
 }
 
 struct Item* addItem(char *description,
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                      char *info,
+#endif
 #ifdef ITEMS_HAVE_WEIGHT
                      int weight,
 #endif
@@ -75,7 +77,9 @@ struct Item* addItem(char *description,
 
     toReturn->index = itemsCount++;
     toReturn->name = description;
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
     toReturn->info = info;
+#endif
     toReturn->pickable = pickable;
     toReturn->position.x = positionX;
     toReturn->position.y = positionY;
@@ -481,6 +485,7 @@ void walkTo(const char *operands) {
     setPlayerPosition(&pos);
 }
 
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
 void infoAboutItemNamed(const char *itemName) {
 
     struct ObjectNode *object1 = collectedObject->next;
@@ -518,6 +523,7 @@ void infoAboutItemNamed(const char *itemName) {
 
     defaultLogger("No such item could be found");
 }
+#endif
 
 void useObjectsTogether(const char *operands) {
 

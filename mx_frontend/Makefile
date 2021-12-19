@@ -11,7 +11,7 @@ CFLAGS=-g -c `sdl2-config --cflags `  \
 	-fomit-frame-pointer                                 \
 	-fno-exceptions                                      \
 	-ffast-math	\
-	-I../core/include                                       
+	-I../core/include   -DINCLUDE_ITEM_DESCRIPTIONS
 
 MENU_TARGET=game
 

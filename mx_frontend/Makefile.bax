@@ -2,7 +2,7 @@ CXX = m68k-amigaos-g++
 CC = m68k-amigaos-gcc
 STRIP=m68k-amigaos-strip
 AS = vasmm68k_mot
-CFLAGS = -DAMIGA -Ibase3d/include -I../core/include -Imenu/include -ISoundSystem -c -m68000 -mtune=68000 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -fstrength-reduce -Ofast -DAGA8BPP
+CFLAGS = -DAMIGA -Ibase3d/include -I../core/include -Imenu/include -ISoundSystem -c -m68000 -mtune=68000 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -fstrength-reduce -Ofast -DAGA8BPP -DINCLUDE_ITEM_DESCRIPTIONS
 LDFLAGS =  -msmall-code -fexpensive-optimizations -Ofast -s -fomit-frame-pointer -noixemul
 ASFLAGS = -phxass -Fhunk -m68020 -chklabels -no-fpu -wfail -I/opt/amiga/m68k-amigaos/ndk-include
 
