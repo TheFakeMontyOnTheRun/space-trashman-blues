@@ -1,8 +1,8 @@
-CFLAGS = -DMSDOS -DRES128X128 -I../core/include -DSUPPORTS_HACKING_MINIGAME -DINCLUDE_ITEM_DESCRIPTIONS -DTRACE_OBJECTS_OVER_FLOOR -DINCLUDE_ROOM_DESCRIPTIONS -DINCLUDE_ITEM_DESCRIPTIONS -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -fomit-frame-pointer -fno-exceptions -ffast-math -flto
+CFLAGS = -DMSDOS -DRES128X128 -I../core/include -DINCLUDE_ITEM_DESCRIPTIONS -DTRACE_OBJECTS_OVER_FLOOR -DINCLUDE_ROOM_DESCRIPTIONS -DINCLUDE_ITEM_DESCRIPTIONS -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -fomit-frame-pointer -fno-exceptions -ffast-math -flto
 
 CC = ia16-elf-gcc
 
-OBJS = src/demo.o src/msdos.o ../core/src/Core.o ../core/src/Derelict.o src/HackingMinigame.o
+OBJS = src/demo.o src/msdos.o ../core/src/Core.o ../core/src/Derelict.o
 
 TARGET = derelict.com
 
