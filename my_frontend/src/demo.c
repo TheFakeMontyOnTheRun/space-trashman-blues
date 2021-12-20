@@ -1803,6 +1803,16 @@ int main(
 
 
     {
+
+        FILE* f  = fopen("derelict.com", "r");
+        char buffer[32];
+        memset(&buffer[0], 0, 32);
+        fread( &buffer[0], 4, 1, f);
+        puts(&buffer[0]);
+        exit(0);
+        return 0;
+
+
         running = 1;
         enteredFrom = 0;
         cameraRotation = 0;
