@@ -506,11 +506,11 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
         
         if (drawContour) {
             if (elementMask & 2) {
-                if (IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
+                if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
                     vLine(px0z0, py0z0, stencilHigh[px0z0] < py1z0 ? py1z0 : stencilHigh[px0z0], shouldStipple );
                 }
                 
-                if (IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
+                if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
                     vLine(px1z0, py0z0, stencilHigh[px1z0] < py1z0 ? py1z0 : stencilHigh[px1z0], shouldStipple );
                 }
             }
@@ -793,21 +793,21 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
         if (drawContour) {
             if (elementMask & 2) {
-                if (IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
+                if ((elementMask != 255 ) &&IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
                     vLine(px0z0, py0z0, stencilHigh[px0z0], shouldStipple);
                 }
 
-                if (IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
+                if ( (elementMask != 127 ) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
                     vLine(px1z0, py0z0, stencilHigh[px1z0], shouldStipple);
                 }
             }
 
             if (elementMask & 1) {
-                if (IN_RANGE(0, XRESMINUSONE, px0z1) && px0z1 < px0z0 && py0z1 > stencilHigh[px0z1]) {
+                if ((elementMask != 255 ) &&IN_RANGE(0, XRESMINUSONE, px0z1) && px0z1 < px0z0 && py0z1 > stencilHigh[px0z1]) {
                     vLine(px0z1, py0z1, stencilHigh[px0z1], shouldStipple);
                 }
 
-                if (IN_RANGE(0, XRESMINUSONE, px1z1) && px1z1 > px1z0 && py0z1 > stencilHigh[px1z1]) {
+                if ((elementMask != 127 ) && IN_RANGE(0, XRESMINUSONE, px1z1) && px1z1 > px1z0 && py0z1 > stencilHigh[px1z1]) {
                     vLine(px1z1, py0z1, stencilHigh[px1z1], shouldStipple);
                 }
             }
@@ -990,10 +990,19 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
     diff = patterns[0].ceiling - patterns[pattern].ceiling;
     type = patterns[pattern].geometryType;
 
+    uint8_t mask = patterns[pattern].elementsMask;
+
+    if (x0 == 2) {
+        mask = 255;
+    }
+
+    if (x1 == 2) {
+        mask = 127;
+    }
+
     if (type == CUBE) {
         return drawCubeAt(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2, x1 - x0,
-                          diff, 1, /* patterns[pattern].elementsMask */ 15);
-
+                          diff, 1,  mask);
     } else if (type == RIGHT_NEAR || type == LEFT_NEAR  ){
 
         if ( cameraRotation == 1 || cameraRotation == 3 ) {
@@ -1019,7 +1028,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
             case 3:
                 return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT,
                         y + ( cameraRotation == 3 ? 1 : 0 ) + 2,
-                                  x1 - x0, diff, patterns[pattern].elementsMask);
+                                  x1 - x0, diff, mask);
         }
     } else if (type == BACK_WALL){
 
@@ -1029,7 +1038,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
             case 2:
                 return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT,
                         y + (cameraRotation == 0? 1 : 0) + 2,
-                                  x1 - x0, diff, patterns[pattern].elementsMask);
+                                  x1 - x0, diff, mask);
             case 1:
             case 3:
                 return drawWedge(x0 - (cameraRotation == 1 ? 1 : 0 ),
