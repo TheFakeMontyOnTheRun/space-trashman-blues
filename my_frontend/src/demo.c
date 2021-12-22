@@ -1022,7 +1022,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
         switch (cameraRotation) {
             case 0:
             case 2:
-                return drawWedge(x0 - (cameraRotation == 0 ? -1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                return drawWedge(x0 - (cameraRotation == 0 ? 1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
                                  0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
             case 1:
             case 3:

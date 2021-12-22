@@ -20,8 +20,8 @@ const struct Pattern patterns[96] = {
         {0,15, BACK_WALL,  0}, //   45 -
         {7, 3, CUBE,       0}, //   46 .
         {0, 3, RIGHT_NEAR, 1}, //   47 /
-        {7, 3, CUBE,       0}, //   48  0
-        {0, 3, BACK_WALL,  0}, //   49 1
+        {7, 3, CUBE,       0}, //   48 0
+        {7, 3, CUBE,       0}, //   49 1
         {7, 3, CUBE,       0}, //   50 2
         {7, 3, CUBE,       0}, //   51 3
         {0, 0, CUBE,       0}, //   52 4
