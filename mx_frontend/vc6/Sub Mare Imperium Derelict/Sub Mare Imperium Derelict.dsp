@@ -106,7 +106,7 @@ SOURCE=..\..\..\core\src\Core.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\base3d\src\CPackedFileReader.c
+SOURCE=..\..\base3d\src\PackedFileReader.c
 # End Source File
 # Begin Source File
 

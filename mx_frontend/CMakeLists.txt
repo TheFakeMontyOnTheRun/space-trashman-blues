@@ -10,6 +10,7 @@ include_directories(
 )
 
 include_directories(../core/include)
+include_directories(../common/include)
 include_directories(base3d/include)
 include_directories(common/include)
 include_directories(menu/include)
@@ -30,19 +31,20 @@ add_executable(derelict32
 		menu/src/Engine.c
 		base3d/src/SDLVersion/CSDL2Renderer.c
 		base3d/src/Globals.c
-		base3d/src/Vec.c
 		base3d/src/CTile3DProperties.c
 		base3d/src/LoadBitmap.c
 		base3d/src/CRenderer.c
 		base3d/src/VisibilityStrategy.c
-		base3d/src/FixP.c
+		../common/src/Vec.c
+		../common/src/common.c
+		../common/src/FixP.c
+		../common/src/MapWithCharKey.c
+		../common/src/PackedFileReader.c
 		base3d/src/Events.c
 		base3d/src/CRenderer_Rasterization.c
-		base3d/src/CPackedFileReader.c
 		base3d/src/EDirection_Utils.c
 		base3d/src/CRenderer_Tesselation.c
 		SoundSystem/NullMusic.c
-		base3d/src/MapWithCharKey.c
 		base3d/src/Dungeon.c
 		menu/src/UI.c
 		menu/src/HackingScreen.c

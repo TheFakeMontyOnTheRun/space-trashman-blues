@@ -255,6 +255,25 @@ void init() {
 }
 
 
+void titleScreen() {
+    int keepGoing = 1;
+    clearGraphics();
+
+    writeStr(1, 1, "Space Mare Imperium:", 2, 0);
+    writeStr(1, 2, "     Derelict", 2, 0);
+    writeStr(1, 4, "by Daniel Monteiro", 2, 0);
+    writeStr(1, 6, "  Press B button ", 2, 0);
+    writeStr(1, 7, "    to start", 2, 0);
+
+    while (keepGoing) {
+        if (getKey() != '.') {
+            keepGoing = 0;
+        }
+    }
+
+    clearScreen();
+}
+
 void flipRenderer() {
     SDL_Rect rect;
     uint32_t pixel;

@@ -19,14 +19,10 @@
 		F1CA76C42610A92000FD1E04 /* Events.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E5236DE60800478B2C /* Events.c */; };
 		F1CA76C52610A92000FD1E04 /* HackingScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F18C31BB2608BDE8002C2CDA /* HackingScreen.c */; };
 		F1CA76C62610A92400FD1E04 /* HelpScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A0D236DE63E00478B2C /* HelpScreen.c */; };
-		F1CA76C72610A92500FD1E04 /* Common.c in Sources */ = {isa = PBXBuildFile; fileRef = F16D180225EAE21700C666AB /* Common.c */; };
-		F1CA76C82610A92600FD1E04 /* FixP.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779DE236DE60800478B2C /* FixP.c */; };
 		F1CA76C92610A92700FD1E04 /* CRenderer_Tesselation.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E7236DE60800478B2C /* CRenderer_Tesselation.c */; };
-		F1CA76CA2610A92800FD1E04 /* MapWithCharKey.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E1236DE60800478B2C /* MapWithCharKey.c */; };
 		F1CA76CB2610A92D00FD1E04 /* VisibilityStrategy.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E9236DE60800478B2C /* VisibilityStrategy.c */; };
 		F1CA76CC2610A92E00FD1E04 /* Engine.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B679BA24E4AA3F00FCEF8E /* Engine.c */; };
 		F1CA76CD2610A92E00FD1E04 /* CreditsScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A0A236DE63E00478B2C /* CreditsScreen.c */; };
-		F1CA76CE2610A93500FD1E04 /* CPackedFileReader.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E8236DE60800478B2C /* CPackedFileReader.c */; };
 		F1CA76CF2610A93600FD1E04 /* Globals.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E4236DE60800478B2C /* Globals.c */; };
 		F1CA76D02610A93600FD1E04 /* Derelict.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D5B5D22531D2BF0094ED78 /* Derelict.c */; };
 		F1CA76D12610A93600FD1E04 /* EDirection_Utils.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779DF236DE60800478B2C /* EDirection_Utils.c */; };
@@ -35,7 +31,6 @@
 		F1CA76D42610A93800FD1E04 /* CRenderer.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E2236DE60800478B2C /* CRenderer.c */; };
 		F1CA76D52610A93900FD1E04 /* GameMenu.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A0C236DE63E00478B2C /* GameMenu.c */; };
 		F1CA76D62610A93B00FD1E04 /* Parser.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D5B5D32531D2BF0094ED78 /* Parser.c */; };
-		F1CA76D72610A93C00FD1E04 /* Vec.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779DC236DE60800478B2C /* Vec.c */; };
 		F1CA76D82610A93C00FD1E04 /* UI.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A12236DE63E00478B2C /* UI.c */; };
 		F1CA76DA2610A94100FD1E04 /* Crawler.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A09236DE63E00478B2C /* Crawler.c */; };
 		F1CA76DC2610A98100FD1E04 /* CTile3DProperties.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E0236DE60800478B2C /* CTile3DProperties.c */; };
@@ -61,6 +56,11 @@
 		F1CA76F02610A99300FD1E04 /* fire.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851725581D380012292B /* fire.wav */; };
 		F1CA76F22610A99900FD1E04 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		F1CA774E2610AFA000FD1E04 /* Derelict-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */; };
+		F1F353A62774C9E400E2F918 /* FixP.c in Sources */ = {isa = PBXBuildFile; fileRef = F1F353A12774C9E300E2F918 /* FixP.c */; };
+		F1F353A72774C9E400E2F918 /* Vec.c in Sources */ = {isa = PBXBuildFile; fileRef = F1F353A22774C9E400E2F918 /* Vec.c */; };
+		F1F353A82774C9E400E2F918 /* PackedFileReader.c in Sources */ = {isa = PBXBuildFile; fileRef = F1F353A32774C9E400E2F918 /* PackedFileReader.c */; };
+		F1F353A92774C9E400E2F918 /* MapWithCharKey.c in Sources */ = {isa = PBXBuildFile; fileRef = F1F353A42774C9E400E2F918 /* MapWithCharKey.c */; };
+		F1F353AA2774C9E400E2F918 /* Common.c in Sources */ = {isa = PBXBuildFile; fileRef = F1F353A52774C9E400E2F918 /* Common.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,32 +72,23 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		F12779DC236DE60800478B2C /* Vec.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Vec.c; path = ../base3d/src/Vec.c; sourceTree = SOURCE_ROOT; };
 		F12779DD236DE60800478B2C /* LoadBitmap.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = LoadBitmap.c; path = ../base3d/src/LoadBitmap.c; sourceTree = SOURCE_ROOT; };
-		F12779DE236DE60800478B2C /* FixP.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = FixP.c; path = ../base3d/src/FixP.c; sourceTree = SOURCE_ROOT; };
 		F12779DF236DE60800478B2C /* EDirection_Utils.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = EDirection_Utils.c; path = ../base3d/src/EDirection_Utils.c; sourceTree = SOURCE_ROOT; };
 		F12779E0236DE60800478B2C /* CTile3DProperties.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = CTile3DProperties.c; path = ../base3d/src/CTile3DProperties.c; sourceTree = SOURCE_ROOT; };
-		F12779E1236DE60800478B2C /* MapWithCharKey.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = MapWithCharKey.c; path = ../base3d/src/MapWithCharKey.c; sourceTree = SOURCE_ROOT; };
 		F12779E2236DE60800478B2C /* CRenderer.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = CRenderer.c; path = ../base3d/src/CRenderer.c; sourceTree = SOURCE_ROOT; };
 		F12779E3236DE60800478B2C /* Dungeon.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Dungeon.c; path = ../base3d/src/Dungeon.c; sourceTree = SOURCE_ROOT; };
 		F12779E4236DE60800478B2C /* Globals.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Globals.c; path = ../base3d/src/Globals.c; sourceTree = SOURCE_ROOT; };
 		F12779E5236DE60800478B2C /* Events.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Events.c; path = ../base3d/src/Events.c; sourceTree = SOURCE_ROOT; };
 		F12779E6236DE60800478B2C /* CRenderer_Rasterization.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = CRenderer_Rasterization.c; path = ../base3d/src/CRenderer_Rasterization.c; sourceTree = SOURCE_ROOT; };
 		F12779E7236DE60800478B2C /* CRenderer_Tesselation.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = CRenderer_Tesselation.c; path = ../base3d/src/CRenderer_Tesselation.c; sourceTree = SOURCE_ROOT; };
-		F12779E8236DE60800478B2C /* CPackedFileReader.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = CPackedFileReader.c; path = ../base3d/src/CPackedFileReader.c; sourceTree = SOURCE_ROOT; };
 		F12779E9236DE60800478B2C /* VisibilityStrategy.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = VisibilityStrategy.c; path = ../base3d/src/VisibilityStrategy.c; sourceTree = SOURCE_ROOT; };
 		F12779F9236DE62100478B2C /* CActor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CActor.h; path = ../base3d/include/CActor.h; sourceTree = SOURCE_ROOT; };
-		F12779FA236DE62100478B2C /* Common.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Common.h; path = ../base3d/include/Common.h; sourceTree = SOURCE_ROOT; };
-		F12779FB236DE62100478B2C /* CPackedFileReader.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CPackedFileReader.h; path = ../base3d/include/CPackedFileReader.h; sourceTree = SOURCE_ROOT; };
 		F12779FC236DE62100478B2C /* CRenderer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CRenderer.h; path = ../base3d/include/CRenderer.h; sourceTree = SOURCE_ROOT; };
 		F12779FD236DE62100478B2C /* CTile3DProperties.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CTile3DProperties.h; path = ../base3d/include/CTile3DProperties.h; sourceTree = SOURCE_ROOT; };
 		F12779FE236DE62100478B2C /* Dungeon.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Dungeon.h; path = ../base3d/include/Dungeon.h; sourceTree = SOURCE_ROOT; };
 		F12779FF236DE62100478B2C /* EDirection_Utils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = EDirection_Utils.h; path = ../base3d/include/EDirection_Utils.h; sourceTree = SOURCE_ROOT; };
 		F1277A00236DE62100478B2C /* Enums.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Enums.h; path = ../base3d/include/Enums.h; sourceTree = SOURCE_ROOT; };
-		F1277A01236DE62100478B2C /* FixP.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = FixP.h; path = ../base3d/include/FixP.h; sourceTree = SOURCE_ROOT; };
 		F1277A02236DE62100478B2C /* LoadBitmap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = LoadBitmap.h; path = ../base3d/include/LoadBitmap.h; sourceTree = SOURCE_ROOT; };
-		F1277A03236DE62100478B2C /* MapWithCharKey.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = MapWithCharKey.h; path = ../base3d/include/MapWithCharKey.h; sourceTree = SOURCE_ROOT; };
-		F1277A04236DE62100478B2C /* Vec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Vec.h; path = ../base3d/include/Vec.h; sourceTree = SOURCE_ROOT; };
 		F1277A05236DE62100478B2C /* VisibilityStrategy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = VisibilityStrategy.h; path = ../base3d/include/VisibilityStrategy.h; sourceTree = SOURCE_ROOT; };
 		F1277A06236DE63700478B2C /* Engine.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Engine.h; path = ../menu/include/Engine.h; sourceTree = SOURCE_ROOT; };
 		F1277A08236DE63700478B2C /* UI.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = UI.h; path = ../menu/include/UI.h; sourceTree = SOURCE_ROOT; };
@@ -113,7 +104,6 @@
 		F1277A28236DE6DD00478B2C /* OSXRenderer.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OSXRenderer.m; sourceTree = "<group>"; };
 		F149B829263CB11700A3F597 /* Core.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Core.c; path = ../../core/src/Core.c; sourceTree = "<group>"; };
 		F149B82B263CB12B00A3F597 /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Core.h; path = ../../core/include/Core.h; sourceTree = "<group>"; };
-		F16D180225EAE21700C666AB /* Common.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Common.c; path = ../base3d/src/Common.c; sourceTree = "<group>"; };
 		F185B43B26A05C0100064855 /* BattleScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = BattleScreen.c; path = ../menu/src/BattleScreen.c; sourceTree = "<group>"; };
 		F18B850725581D370012292B /* magbootson.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = magbootson.wav; path = ../data/wavogg/magbootson.wav; sourceTree = "<group>"; };
 		F18B850825581D370012292B /* menu_select.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = menu_select.wav; path = ../data/wavogg/menu_select.wav; sourceTree = "<group>"; };
@@ -148,6 +138,16 @@
 		F1D5B5D32531D2BF0094ED78 /* Parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Parser.c; path = ../../core/src/Parser.c; sourceTree = "<group>"; };
 		F1D5B5D62531D2C90094ED78 /* Parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Parser.h; path = ../../core/include/Parser.h; sourceTree = "<group>"; };
 		F1D5B5D72531D2CA0094ED78 /* Derelict.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Derelict.h; path = ../../core/include/Derelict.h; sourceTree = "<group>"; };
+		F1F3539C2774C9C300E2F918 /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Common.h; path = ../../common/include/Common.h; sourceTree = "<group>"; };
+		F1F3539D2774C9C300E2F918 /* MapWithCharKey.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MapWithCharKey.h; path = ../../common/include/MapWithCharKey.h; sourceTree = "<group>"; };
+		F1F3539E2774C9C300E2F918 /* Vec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Vec.h; path = ../../common/include/Vec.h; sourceTree = "<group>"; };
+		F1F3539F2774C9C300E2F918 /* FixP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FixP.h; path = ../../common/include/FixP.h; sourceTree = "<group>"; };
+		F1F353A02774C9C300E2F918 /* PackedFileReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PackedFileReader.h; path = ../../common/include/PackedFileReader.h; sourceTree = "<group>"; };
+		F1F353A12774C9E300E2F918 /* FixP.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = FixP.c; path = ../../common/src/FixP.c; sourceTree = "<group>"; };
+		F1F353A22774C9E400E2F918 /* Vec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Vec.c; path = ../../common/src/Vec.c; sourceTree = "<group>"; };
+		F1F353A32774C9E400E2F918 /* PackedFileReader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = PackedFileReader.c; path = ../../common/src/PackedFileReader.c; sourceTree = "<group>"; };
+		F1F353A42774C9E400E2F918 /* MapWithCharKey.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = MapWithCharKey.c; path = ../../common/src/MapWithCharKey.c; sourceTree = "<group>"; };
+		F1F353A52774C9E400E2F918 /* Common.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Common.c; path = ../../common/src/Common.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,10 +220,6 @@
 			isa = PBXGroup;
 			children = (
 				F12779F9236DE62100478B2C /* CActor.h */,
-				F12779FA236DE62100478B2C /* Common.h */,
-				F16D180225EAE21700C666AB /* Common.c */,
-				F12779E8236DE60800478B2C /* CPackedFileReader.c */,
-				F12779FB236DE62100478B2C /* CPackedFileReader.h */,
 				F1277A09236DE63E00478B2C /* Crawler.c */,
 				F149B82B263CB12B00A3F597 /* Core.h */,
 				F1277A0A236DE63E00478B2C /* CreditsScreen.c */,
@@ -244,9 +240,17 @@
 				F1B679BA24E4AA3F00FCEF8E /* Engine.c */,
 				F1277A06236DE63700478B2C /* Engine.h */,
 				F1277A00236DE62100478B2C /* Enums.h */,
+				F1F353A52774C9E400E2F918 /* Common.c */,
+				F1F353A12774C9E300E2F918 /* FixP.c */,
+				F1F353A42774C9E400E2F918 /* MapWithCharKey.c */,
+				F1F353A32774C9E400E2F918 /* PackedFileReader.c */,
+				F1F353A22774C9E400E2F918 /* Vec.c */,
 				F12779E5236DE60800478B2C /* Events.c */,
-				F12779DE236DE60800478B2C /* FixP.c */,
-				F1277A01236DE62100478B2C /* FixP.h */,
+				F1F3539C2774C9C300E2F918 /* Common.h */,
+				F1F3539F2774C9C300E2F918 /* FixP.h */,
+				F1F3539D2774C9C300E2F918 /* MapWithCharKey.h */,
+				F1F353A02774C9C300E2F918 /* PackedFileReader.h */,
+				F1F3539E2774C9C300E2F918 /* Vec.h */,
 				F1277A0C236DE63E00478B2C /* GameMenu.c */,
 				F12779E4236DE60800478B2C /* Globals.c */,
 				F1CD088E2450E32D00D4794D /* Globals.h */,
@@ -256,15 +260,11 @@
 				F1277A02236DE62100478B2C /* LoadBitmap.h */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 				F1277A10236DE63E00478B2C /* MainMenu.c */,
-				F12779E1236DE60800478B2C /* MapWithCharKey.c */,
-				F1277A03236DE62100478B2C /* MapWithCharKey.h */,
 				F1D5B5D32531D2BF0094ED78 /* Parser.c */,
 				F1D5B5D62531D2C90094ED78 /* Parser.h */,
 				F1BF22812450F4AF0088A1C4 /* SoundSystem.h */,
 				F1277A12236DE63E00478B2C /* UI.c */,
 				F1277A08236DE63700478B2C /* UI.h */,
-				F12779DC236DE60800478B2C /* Vec.c */,
-				F1277A04236DE62100478B2C /* Vec.h */,
 				F12779E9236DE60800478B2C /* VisibilityStrategy.c */,
 				F1277A05236DE62100478B2C /* VisibilityStrategy.h */,
 			);
@@ -395,30 +395,30 @@
 				F1CA76BB2610A8E200FD1E04 /* GameView.m in Sources */,
 				F1CA76BC2610A8ED00FD1E04 /* OSXRenderer.m in Sources */,
 				F1CA76BD2610A8EE00FD1E04 /* GameWindow.m in Sources */,
+				F1F353A82774C9E400E2F918 /* PackedFileReader.c in Sources */,
 				F1CA76C12610A91800FD1E04 /* LoadBitmap.c in Sources */,
 				F1CA76C22610A91800FD1E04 /* main.m in Sources */,
 				F1CA76C32610A91C00FD1E04 /* CRenderer_Rasterization.c in Sources */,
 				F1CA76C42610A92000FD1E04 /* Events.c in Sources */,
 				F1CA76C52610A92000FD1E04 /* HackingScreen.c in Sources */,
 				F1CA76C62610A92400FD1E04 /* HelpScreen.c in Sources */,
-				F1CA76C72610A92500FD1E04 /* Common.c in Sources */,
-				F1CA76C82610A92600FD1E04 /* FixP.c in Sources */,
 				F1CA76C92610A92700FD1E04 /* CRenderer_Tesselation.c in Sources */,
+				F1F353A92774C9E400E2F918 /* MapWithCharKey.c in Sources */,
 				F185B43C26A05C0100064855 /* BattleScreen.c in Sources */,
-				F1CA76CA2610A92800FD1E04 /* MapWithCharKey.c in Sources */,
 				F1CA76CB2610A92D00FD1E04 /* VisibilityStrategy.c in Sources */,
 				F1CA76CC2610A92E00FD1E04 /* Engine.c in Sources */,
 				F1CA76CD2610A92E00FD1E04 /* CreditsScreen.c in Sources */,
-				F1CA76CE2610A93500FD1E04 /* CPackedFileReader.c in Sources */,
 				F1CA76CF2610A93600FD1E04 /* Globals.c in Sources */,
 				F1CA76D02610A93600FD1E04 /* Derelict.c in Sources */,
 				F1CA76D12610A93600FD1E04 /* EDirection_Utils.c in Sources */,
 				F1CA76D22610A93700FD1E04 /* MainMenu.c in Sources */,
 				F1CA76D32610A93700FD1E04 /* Dungeon.c in Sources */,
+				F1F353A72774C9E400E2F918 /* Vec.c in Sources */,
 				F1CA76D42610A93800FD1E04 /* CRenderer.c in Sources */,
+				F1F353A62774C9E400E2F918 /* FixP.c in Sources */,
 				F1CA76D52610A93900FD1E04 /* GameMenu.c in Sources */,
 				F1CA76D62610A93B00FD1E04 /* Parser.c in Sources */,
-				F1CA76D72610A93C00FD1E04 /* Vec.c in Sources */,
+				F1F353AA2774C9E400E2F918 /* Common.c in Sources */,
 				F1CA76D82610A93C00FD1E04 /* UI.c in Sources */,
 				F1CA76DA2610A94100FD1E04 /* Crawler.c in Sources */,
 				F1CA76DC2610A98100FD1E04 /* CTile3DProperties.c in Sources */,

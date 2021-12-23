@@ -16,7 +16,7 @@
 #include "Engine.h"
 #include "CActor.h"
 #include "Common.h"
-#include "CPackedFileReader.h"
+#include "PackedFileReader.h"
 #include "CRenderer.h"
 #include "CTile3DProperties.h"
 #include "FixP.h"

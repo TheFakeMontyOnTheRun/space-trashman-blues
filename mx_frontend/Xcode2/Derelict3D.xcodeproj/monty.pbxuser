@@ -168,8 +168,8 @@
 	};
 	F10E419F2661583B004CBD19 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
-		fRef = F12779E8236DE60800478B2C /* CPackedFileReader.c */;
-		name = "CPackedFileReader.c: 1";
+		fRef = F12779E8236DE60800478B2C /* PackedFileReader.c */;
+		name = "PackedFileReader.c: 1";
 		rLen = 0;
 		rLoc = 0;
 		rType = 0;
@@ -243,7 +243,7 @@
 			sepNavVisRect = "{{0, 13339}, {1235, 632}}";
 		};
 	};
-	F12779E8236DE60800478B2C /* CPackedFileReader.c */ = {
+	F12779E8236DE60800478B2C /* PackedFileReader.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1031, 2828}}";
 			sepNavSelRange = "{0, 0}";
@@ -328,8 +328,8 @@
 	};
 	F1D3239A2661563E00159412 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
-		fRef = F12779E8236DE60800478B2C /* CPackedFileReader.c */;
-		name = "CPackedFileReader.c: 1";
+		fRef = F12779E8236DE60800478B2C /* PackedFileReader.c */;
+		name = "PackedFileReader.c: 1";
 		rLen = 0;
 		rLoc = 0;
 		rType = 0;

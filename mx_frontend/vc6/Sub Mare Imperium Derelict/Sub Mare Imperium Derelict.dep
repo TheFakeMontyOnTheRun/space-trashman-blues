@@ -4,7 +4,7 @@
 	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
 	"..\..\base3d\include\cactor.h"\
 	"..\..\base3d\include\common.h"\
-	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\PackedFileReader.h"\
 	"..\..\base3d\include\crenderer.h"\
 	"..\..\base3d\include\ctile3dproperties.h"\
 	"..\..\base3d\include\enums.h"\
@@ -28,7 +28,7 @@
 	"..\..\base3d\include\win32int.h"\
 	
 
-..\..\base3d\src\CPackedFileReader.c : \
+..\..\base3d\src\PackedFileReader.c : \
 	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
 	"..\..\base3d\include\common.h"\
 	"..\..\base3d\include\win32int.h"\
@@ -58,7 +58,7 @@
 	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
 	"..\..\base3d\include\cactor.h"\
 	"..\..\base3d\include\common.h"\
-	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\PackedFileReader.h"\
 	"..\..\base3d\include\crenderer.h"\
 	"..\..\base3d\include\ctile3dproperties.h"\
 	"..\..\base3d\include\enums.h"\
@@ -77,7 +77,7 @@
 	"..\..\..\core\include\derelict.h"\
 	"..\..\base3d\include\cactor.h"\
 	"..\..\base3d\include\common.h"\
-	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\PackedFileReader.h"\
 	"..\..\base3d\include\crenderer.h"\
 	"..\..\base3d\include\ctile3dproperties.h"\
 	"..\..\base3d\include\enums.h"\
@@ -125,7 +125,7 @@
 ..\..\base3d\src\CTile3DProperties.c : \
 	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
 	"..\..\base3d\include\common.h"\
-	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\PackedFileReader.h"\
 	"..\..\base3d\include\ctile3dproperties.h"\
 	"..\..\base3d\include\fixp.h"\
 	"..\..\base3d\include\mapwithcharkey.h"\
@@ -170,7 +170,7 @@
 	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
 	"..\..\base3d\include\cactor.h"\
 	"..\..\base3d\include\common.h"\
-	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\PackedFileReader.h"\
 	"..\..\base3d\include\crenderer.h"\
 	"..\..\base3d\include\ctile3dproperties.h"\
 	"..\..\base3d\include\enums.h"\
@@ -188,7 +188,7 @@
 	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
 	"..\..\base3d\include\cactor.h"\
 	"..\..\base3d\include\common.h"\
-	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\PackedFileReader.h"\
 	"..\..\base3d\include\crenderer.h"\
 	"..\..\base3d\include\ctile3dproperties.h"\
 	"..\..\base3d\include\dungeon.h"\
@@ -243,7 +243,7 @@
 	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
 	"..\..\base3d\include\cactor.h"\
 	"..\..\base3d\include\common.h"\
-	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\PackedFileReader.h"\
 	"..\..\base3d\include\crenderer.h"\
 	"..\..\base3d\include\ctile3dproperties.h"\
 	"..\..\base3d\include\enums.h"\
@@ -261,7 +261,7 @@
 	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
 	"..\..\base3d\include\cactor.h"\
 	"..\..\base3d\include\common.h"\
-	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\PackedFileReader.h"\
 	"..\..\base3d\include\crenderer.h"\
 	"..\..\base3d\include\ctile3dproperties.h"\
 	"..\..\base3d\include\enums.h"\
@@ -279,7 +279,7 @@
 	"..\..\..\..\..\programas\microsoft visual studio\vc98\include\basetsd.h"\
 	"..\..\base3d\include\cactor.h"\
 	"..\..\base3d\include\common.h"\
-	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\PackedFileReader.h"\
 	"..\..\base3d\include\crenderer.h"\
 	"..\..\base3d\include\ctile3dproperties.h"\
 	"..\..\base3d\include\enums.h"\
@@ -297,7 +297,7 @@
 	"..\..\..\core\include\derelict.h"\
 	"..\..\base3d\include\cactor.h"\
 	"..\..\base3d\include\common.h"\
-	"..\..\base3d\include\cpackedfilereader.h"\
+	"..\..\base3d\include\PackedFileReader.h"\
 	"..\..\base3d\include\crenderer.h"\
 	"..\..\base3d\include\ctile3dproperties.h"\
 	"..\..\base3d\include\enums.h"\

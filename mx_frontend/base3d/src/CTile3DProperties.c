@@ -13,7 +13,7 @@
 #include "FixP.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
-#include "CPackedFileReader.h"
+#include "PackedFileReader.h"
 #include "MapWithCharKey.h"
 
 void loadPropertyList(const char *__restrict__ propertyFile, struct MapWithCharKey *__restrict__ map) {

@@ -24,7 +24,7 @@
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
 #include "VisibilityStrategy.h"
-#include "CPackedFileReader.h"
+#include "PackedFileReader.h"
 #include "Dungeon.h"
 #include "SoundSystem.h"
 

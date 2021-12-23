@@ -47,7 +47,7 @@ add_library( # Sets the name of the library.
         ../../../../../menu/src/Engine.c
         ../../../../../base3d/src/Events.c
         ../../../../../base3d/src/CRenderer_Rasterization.c
-        ../../../../../base3d/src/CPackedFileReader.c
+        ../../../../../base3d/src/PackedFileReader.c
         ../../../../../base3d/src/EDirection_Utils.c
         ../../../../../base3d/src/CRenderer_Tesselation.c
         ../../../../../base3d/src/MapWithCharKey.c
