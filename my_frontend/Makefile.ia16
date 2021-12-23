@@ -2,7 +2,7 @@ CFLAGS = -DMSDOS -DRES128X128 -DSUPPORTS_HACKING_MINIGAME -DINCLUDE_ITEM_DESCRIP
 
 CC = ia16-elf-gcc
 
-OBJS = src/demo.o src/msdos.o ../core/src/Core.o ../core/src/Derelict.o src/HackingMinigame.o ../common/src/PackedFileReader.o ../common/src/Common.o
+OBJS = src/demo.o src/msdos.o ../core/src/Core.o ../core/src/Derelict.o src/HackingMinigame.o
 
 TARGET = derelict.com
 

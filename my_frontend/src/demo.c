@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "PackedFileReader.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Engine3D.h"
@@ -1819,7 +1818,6 @@ int main(
         enteredFrom = 0;
         cameraRotation = 0;
         init();
-        initFileReader("base.pfs");
         initStation();
         
         titleScreen();
