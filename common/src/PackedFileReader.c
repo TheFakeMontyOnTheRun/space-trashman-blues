@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 #include <errno.h>
 
 #ifdef WIN32
@@ -55,55 +54,13 @@ FILE *android_fopen(const char* filename) {
 #endif
 
 
-#define kDataPath_MaxLength 256
+#define kDataPath_MaxLength 16
 
 char mDataPath[kDataPath_MaxLength];
 
 
 void initFileReader(const char *__restrict__ dataFilePath) {
     sprintf (mDataPath, "%s", dataFilePath);
-}
-
-size_t sizeOfFile(const char *__restrict__ path) {
-
-#ifndef ANDROID
-    FILE *mDataPack = fopen(mDataPath, "rb");
-#else
-    FILE *mDataPack = android_fopen(&mDataPath[0]);
-#endif
-
-    char buffer[85];
-    int c;
-    uint32_t size = 0;
-    uint32_t offset = 0;
-    uint16_t entries = 0;
-    assert (fread(&entries, 2, 1, mDataPack));
-
-    for (c = 0; c < entries; ++c) {
-        uint8_t stringSize = 0;
-
-        assert (fread(&offset, 4, 1, mDataPack));
-        offset = toNativeEndianess(offset);
-        assert (fread(&stringSize, 1, 1, mDataPack));
-        assert (fread(&buffer, stringSize + 1, 1, mDataPack));
-
-        if (!strcmp(buffer, path)) {
-            goto found;
-        }
-    }
-
-    found:
-    if (offset == 0) {
-        printf("failed to load %s\n", path);
-        exit(-1);
-    }
-
-    fseek(mDataPack, offset, SEEK_SET);
-    assert (fread(&size, 4, 1, mDataPack));
-    size = toNativeEndianess(size);
-    fclose(mDataPack);
-
-    return size;
 }
 
 struct StaticBuffer loadBinaryFileFromPath(const char *__restrict__ path) {
@@ -123,15 +80,15 @@ struct StaticBuffer loadBinaryFileFromPath(const char *__restrict__ path) {
     uint32_t size = 0;
 
 
-    assert (fread(&entries, 2, 1, mDataPack));
+     (fread(&entries, 2, 1, mDataPack));
 
     for (c = 0; c < entries; ++c) {
         uint8_t stringSize = 0;
 
-        assert (fread(&offset, 4, 1, mDataPack));
+         (fread(&offset, 4, 1, mDataPack));
         offset = toNativeEndianess(offset);
-        assert (fread(&stringSize, 1, 1, mDataPack));
-        assert (fread(&buffer, stringSize + 1, 1, mDataPack));
+         (fread(&stringSize, 1, 1, mDataPack));
+         (fread(&buffer, stringSize + 1, 1, mDataPack));
 
         if (!strcmp(buffer, path)) {
             goto found;
@@ -147,12 +104,12 @@ struct StaticBuffer loadBinaryFileFromPath(const char *__restrict__ path) {
 
     fseek(mDataPack, offset, SEEK_SET);
 
-    assert (fread(&size, 4, 1, mDataPack));
+     (fread(&size, 4, 1, mDataPack));
     size = toNativeEndianess(size);
     toReturn.size = size;
     toReturn.data = (uint8_t *) malloc(size);
 
-    assert (fread(toReturn.data, sizeof(uint8_t), size, mDataPack));
+     (fread(toReturn.data, sizeof(uint8_t), size, mDataPack));
     fclose(mDataPack);
 
     return toReturn;
@@ -172,16 +129,16 @@ FILE *openBinaryFileFromPath(const char *__restrict__ path) {
     int c;
     uint32_t size = 0;
 
-    assert (fread(&entries, 2, 1, mDataPack));
+     (fread(&entries, 2, 1, mDataPack));
 
     for (c = 0; c < entries; ++c) {
         uint8_t stringSize = 0;
 
-        assert (fread(&offset, 4, 1, mDataPack));
+         (fread(&offset, 4, 1, mDataPack));
         offset = toNativeEndianess(offset);
 
-        assert (fread(&stringSize, 1, 1, mDataPack));
-        assert (fread(&buffer, stringSize + 1, 1, mDataPack));
+         (fread(&stringSize, 1, 1, mDataPack));
+         (fread(&buffer, stringSize + 1, 1, mDataPack));
 
         if (!strcmp(buffer, path)) {
             goto found;
@@ -198,7 +155,7 @@ FILE *openBinaryFileFromPath(const char *__restrict__ path) {
     }
 
     fseek(mDataPack, offset, SEEK_SET);
-    assert (fread(&size, 4, 1, mDataPack));
+     (fread(&size, 4, 1, mDataPack));
     size = toNativeEndianess(size);
 
     return mDataPack;
