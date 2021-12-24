@@ -37,8 +37,6 @@ extern char textBuffer[40 * 25];
 struct Bitmap *monty;
 
 void CreditsScreen_initStateCallback(int32_t tag) {
-    size_t fileSize = sizeOfFile("Credits.txt");
-    FILE *fileInput = openBinaryFileFromPath("Credits.txt");
 
     cursorPosition = 0;
     currentPresentationState = kAppearing;
@@ -49,8 +47,8 @@ void CreditsScreen_initStateCallback(int32_t tag) {
 
     mainText = &textBuffer[0];
     memset (&textBuffer[0], 0, (40 * 25));
-    assert (fread(&textBuffer[0], fileSize, 1, fileInput));
-    fclose(fileInput);
+    struct StaticBuffer textFile = loadBinaryFileFromPath("Help.txt");
+    memcpy(&textBuffer[0], textFile.data, textFile.size);
 
     CreditsScreen_optionsCount = 1;
 

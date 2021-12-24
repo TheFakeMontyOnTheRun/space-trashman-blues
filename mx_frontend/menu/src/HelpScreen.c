@@ -36,8 +36,7 @@ int16_t HelpScreen_optionsCount = 1;
 extern char textBuffer[40 * 25];
 
 void HelpScreen_initStateCallback(int32_t tag) {
-    size_t fileSize = sizeOfFile("Help.txt");
-    FILE *fileInput = openBinaryFileFromPath("Help.txt");
+    struct StaticBuffer textFile = loadBinaryFileFromPath("Help.txt");
     dirtyLineY0 = 0;
     dirtyLineY1 = 200;
 
@@ -50,8 +49,7 @@ void HelpScreen_initStateCallback(int32_t tag) {
 
     mainText = &textBuffer[0];
     memset (&textBuffer[0], 0, (40 * 25));
-    assert (fread(&textBuffer[0], fileSize, 1, fileInput));
-    fclose(fileInput);
+    memcpy(&textBuffer[0], textFile.data, textFile.size);
 
     HelpScreen_optionsCount = 1;
 }
