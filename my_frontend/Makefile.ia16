@@ -1,4 +1,4 @@
-CFLAGS = -DMSDOS -DRES128X128 -DSUPPORTS_HACKING_MINIGAME -DINCLUDE_ITEM_DESCRIPTIONS -I../common/include -I../core/include -DINCLUDE_ROOM_DESCRIPTIONS -DTRACE_OBJECTS_OVER_FLOOR -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -fomit-frame-pointer -fno-exceptions -ffast-math
+CFLAGS = -DMSDOS -DRES128X128 -DSUPPORTS_HACKING_MINIGAME -I../common/include -I../core/include -DTRACE_OBJECTS_OVER_FLOOR -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -fomit-frame-pointer -fno-exceptions -ffast-math
 
 CC = ia16-elf-gcc
 
