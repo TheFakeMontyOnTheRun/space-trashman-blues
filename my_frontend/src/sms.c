@@ -382,6 +382,10 @@ void graphicsFlush() {
     memset( &buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
+void sleepForMS(uint32_t ms) {
+    //we cant afford to sleep
+}
+
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
 #ifdef HALF_BUFFER
