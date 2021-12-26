@@ -44,7 +44,7 @@ const struct Pattern patterns[96] = {
         {5, 0, CUBE,       0}, //   69 E
         {5,15, CUBE,       0}, //   70 F
         {7, 3, CUBE,       0}, //   71
-        {0, 0, CUBE,       0}, //   72
+        {1,15, CUBE,       1}, //   72
         {0,15, CUBE,       1}, //   73 I
         {0, 3, RIGHT_NEAR, 0}, //   74
         {0, 3, LEFT_NEAR,  0}, //   75
