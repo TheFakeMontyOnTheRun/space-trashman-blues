@@ -954,8 +954,18 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
             if (drawContour) {
                 for (x = px0z1; x <= px1z1; ++x) {
-                    if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z1) {
-                        stencilHigh[x] = py0z1;
+
+                    if (IN_RANGE(0, XRESMINUSONE, x)) {
+
+                        int8_t stencilY = stencilHigh[x];
+
+                        if ( stencilY < py0z0) {
+                            graphicsPut(x, py0z0);
+                        }
+
+                        if ( stencilY < py0z1) {
+                            stencilHigh[x] = py0z1;
+                        }
                     }
                 }
             } else {
