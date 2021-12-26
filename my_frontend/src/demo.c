@@ -1643,6 +1643,27 @@ void initMap() {
     HUD_initialPaint();
 }
 
+void startRoomTransitionAnimation() {
+
+    for ( uint8_t y = 32; y >= 2; --y ) {
+        clearGraphics();
+        vLine(y, y, 95 + (32 - y), 0);
+        vLine(95 + (32 - y), y, 95 + (32 - y), 0);
+
+        for (uint8_t x = y; x < (95 + (32 - y)); ++x) {
+            graphicsPut(x, y);
+            graphicsPut(x, 95 + (32 - y));
+
+            //door opening
+            vLine(x, y, 95 - 3 * (32 - y), 0);
+        }
+
+
+        graphicsFlush();
+        sleepForMS(20000);
+    }
+}
+
 void updateMapItems() {
     struct ObjectNode *node;
 
@@ -1784,6 +1805,10 @@ void tickRenderer() {
 
         if (newCell == '.') {
             newCell = '0';
+#ifndef SDLSW
+        } else {
+            startRoomTransitionAnimation();
+#endif
         }
 
         setPlayerDirection(cameraRotation = (newCell - '0'));

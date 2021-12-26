@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdint.h>
+#include <unistd.h>
 
 #include "Core.h"
 #include "Derelict.h"
@@ -471,6 +472,10 @@ void HUD_initialPaint() {
     }
 
     HUD_refresh();
+}
+
+void sleepForMS(uint32_t ms) {
+    usleep(ms);
 }
 
 void HUD_refresh() {
