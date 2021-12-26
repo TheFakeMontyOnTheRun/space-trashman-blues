@@ -1781,7 +1781,12 @@ void tickRenderer() {
 
     if (playerLocation != previousLocation) {
         initMap();
-        cameraRotation = getPlayerDirection();
+
+        if (newCell == '.') {
+            newCell = '0';
+        }
+
+        setPlayerDirection(cameraRotation = (newCell - '0'));
     } else {
         enteredFrom = 0xFF;
     }
