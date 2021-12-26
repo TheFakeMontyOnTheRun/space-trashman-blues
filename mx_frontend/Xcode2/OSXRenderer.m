@@ -30,7 +30,7 @@
 #include "CRenderer.h"
 #include "SoundSystem.h"
 #include "VisibilityStrategy.h"
-#include "CPackedFileReader.h"
+#include "PackedFileReader.h"
 
 void initHW() {
     NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent: @"base.pfs"];

@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include "PCMAudio.h"
 #include "Common.h"
-#include "CPackedFileReader.h"
+#include "PackedFileReader.h"
 
 //Lifted from http://amigadev.elowar.com/read/ADCD_2.1/Devices_Manual_guide/node0161.html
 

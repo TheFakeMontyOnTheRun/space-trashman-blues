@@ -44,7 +44,7 @@ CLEAN :
 	-@erase "$(INTDIR)\CGDIRenderer.obj"
 	-@erase "$(INTDIR)\Common.obj"
 	-@erase "$(INTDIR)\Core.obj"
-	-@erase "$(INTDIR)\CPackedFileReader.obj"
+	-@erase "$(INTDIR)\PackedFileReader.obj"
 	-@erase "$(INTDIR)\Crawler.obj"
 	-@erase "$(INTDIR)\CreditsScreen.obj"
 	-@erase "$(INTDIR)\CRenderer.obj"
@@ -89,7 +89,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\CGDIRenderer.obj" \
 	"$(INTDIR)\Common.obj" \
 	"$(INTDIR)\Core.obj" \
-	"$(INTDIR)\CPackedFileReader.obj" \
+	"$(INTDIR)\PackedFileReader.obj" \
 	"$(INTDIR)\Crawler.obj" \
 	"$(INTDIR)\CreditsScreen.obj" \
 	"$(INTDIR)\CRenderer.obj" \
@@ -136,7 +136,7 @@ CLEAN :
 	-@erase "$(INTDIR)\CGDIRenderer.obj"
 	-@erase "$(INTDIR)\Common.obj"
 	-@erase "$(INTDIR)\Core.obj"
-	-@erase "$(INTDIR)\CPackedFileReader.obj"
+	-@erase "$(INTDIR)\PackedFileReader.obj"
 	-@erase "$(INTDIR)\Crawler.obj"
 	-@erase "$(INTDIR)\CreditsScreen.obj"
 	-@erase "$(INTDIR)\CRenderer.obj"
@@ -182,7 +182,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\CGDIRenderer.obj" \
 	"$(INTDIR)\Common.obj" \
 	"$(INTDIR)\Core.obj" \
-	"$(INTDIR)\CPackedFileReader.obj" \
+	"$(INTDIR)\PackedFileReader.obj" \
 	"$(INTDIR)\Crawler.obj" \
 	"$(INTDIR)\CreditsScreen.obj" \
 	"$(INTDIR)\CRenderer.obj" \
@@ -275,9 +275,9 @@ SOURCE=..\..\..\core\src\Core.c
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\base3d\src\CPackedFileReader.c
+SOURCE=..\..\base3d\src\PackedFileReader.c
 
-"$(INTDIR)\CPackedFileReader.obj" : $(SOURCE) "$(INTDIR)"
+"$(INTDIR)\PackedFileReader.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 

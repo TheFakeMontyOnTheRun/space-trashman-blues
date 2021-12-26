@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 90)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake_sdl2")
 
-include_directories( src ../core/src ../core/include
+include_directories( src ../core/src ../core/include ../common/include
 		${SDL2_INCLUDE_DIR}
 )
 
@@ -19,6 +19,8 @@ add_executable(derelict8
 		../core/src/Derelict.c
 		../core/src/Core.c
 		src/Engine3D.h
+		../common/src/PackedFileReader.c
+		../common/src/Common.c
 		src/HackingMinigame.c
 		src/HackingMinigame.h)
 

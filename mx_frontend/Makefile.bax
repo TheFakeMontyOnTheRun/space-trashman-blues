@@ -2,7 +2,7 @@ CXX = m68k-amigaos-g++
 CC = m68k-amigaos-gcc
 STRIP=m68k-amigaos-strip
 AS = vasmm68k_mot
-CFLAGS = -DAMIGA -Ibase3d/include -I../core/include -Imenu/include -ISoundSystem -c -m68000 -mtune=68000 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -fstrength-reduce -Ofast -DAGA8BPP -DINCLUDE_ITEM_DESCRIPTIONS
+CFLAGS = -DAMIGA -Ibase3d/include -I../core/include -I../core/include -Imenu/include -ISoundSystem -c -m68000 -mtune=68000 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -fstrength-reduce -Ofast -DAGA8BPP -DINCLUDE_ITEM_DESCRIPTIONS
 LDFLAGS =  -msmall-code -fexpensive-optimizations -Ofast -s -fomit-frame-pointer -noixemul
 ASFLAGS = -phxass -Fhunk -m68020 -chklabels -no-fpu -wfail -I/opt/amiga/m68k-amigaos/ndk-include
 
@@ -10,12 +10,14 @@ MENU_TARGET=game12k
 
 
 MENU_OBJ= menu/src/Main.o \
+	../common/src/FixP.o \
+	../common/src/Vec.o \
+	../common/src/MapWithCharKey.o \
+	../common/src/PackedFileReader.o \
 	base3d/src/AmigaVersion/c2p1x1_8_c5_bm.o \
 	base3d/src/AmigaVersion/c2p1x1_4_c5_bm.o \
 	SoundSystem/MusicAGA.o \
 	SoundSystem/PCMAudio.o \
-	base3d/src/Vec.o \
-	base3d/src/MapWithCharKey.o \
 	menu/src/Engine.o \
 	base3d/src/AmigaVersion/AmigaRenderer.o \
 	base3d/src/CTile3DProperties.o \
@@ -24,9 +26,7 @@ MENU_OBJ= menu/src/Main.o \
 	base3d/src/Dungeon.o \
 	base3d/src/Events.o \
 	base3d/src/VisibilityStrategy.o \
-	base3d/src/FixP.o \
 	base3d/src/CRenderer_Rasterization.o \
-	base3d/src/CPackedFileReader.o \
 	base3d/src/CRenderer_Tesselation.o \
 	base3d/src/EDirection_Utils.o \
 	menu/src/HackingScreen.o    \
@@ -56,6 +56,7 @@ adf: $(MENU_TARGET)
 clean:
 	rm -f menu/src/*.o
 	rm -f ../core/src/*.o
+	rm -f ../common/src/*.o
 	rm -f base3d/src/*.o
 	rm -f base3d/src/AmigaVersion/*.o
 	rm -f common/src/*.o

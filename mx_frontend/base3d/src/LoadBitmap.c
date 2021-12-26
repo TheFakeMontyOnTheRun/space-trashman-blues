@@ -16,7 +16,7 @@
 #include "Vec.h"
 #include "CActor.h"
 #include "Common.h"
-#include "CPackedFileReader.h"
+#include "PackedFileReader.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"

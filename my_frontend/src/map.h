@@ -1,7 +1,7 @@
 #ifndef MAP_H
 #define MAP_H
 
-
+//ceiling is at height 7, floor at height 0. Camera is at height 2
 
 const struct Pattern patterns[96] = {
         {7, 3, CUBE,       0}, //   32
@@ -20,8 +20,8 @@ const struct Pattern patterns[96] = {
         {0,15, BACK_WALL,  0}, //   45 -
         {7, 3, CUBE,       0}, //   46 .
         {0, 3, RIGHT_NEAR, 1}, //   47 /
-        {7, 3, CUBE,       0}, //   48  0
-        {0, 3, BACK_WALL,  0}, //   49 1
+        {7, 3, CUBE,       0}, //   48 0
+        {7, 3, CUBE,       0}, //   49 1
         {7, 3, CUBE,       0}, //   50 2
         {7, 3, CUBE,       0}, //   51 3
         {0, 0, CUBE,       0}, //   52 4
@@ -44,8 +44,8 @@ const struct Pattern patterns[96] = {
         {5, 0, CUBE,       0}, //   69 E
         {5,15, CUBE,       0}, //   70 F
         {7, 3, CUBE,       0}, //   71
-        {0, 0, CUBE,       0}, //   72
-        {0, 0, CUBE,       1}, //   73 I
+        {1,15, CUBE,       1}, //   72
+        {0,15, CUBE,       1}, //   73 I
         {0, 3, RIGHT_NEAR, 0}, //   74
         {0, 3, LEFT_NEAR,  0}, //   75
         {4, 0, CUBE,       0}, //   76 L

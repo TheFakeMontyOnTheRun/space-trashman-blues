@@ -73,6 +73,7 @@ void useCardWithCardWritter(struct Item *item1, struct Item *item2) {
         addToRoom("computer-core", card);
         dropObjectByName("low-rank-keycard");
         removeObjectFromRoom(getItemNamed("low-rank-keycard"));
+        defaultLogger("Card credentials overridden.\nHacked card emitted.");
     } else {
         defaultLogger("No effect");
     }

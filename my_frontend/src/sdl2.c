@@ -225,7 +225,7 @@ void init() {
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     memset(framebuffer, 5, 160 * 200);
     window =
-            SDL_CreateWindow("The Mistral Report", SDL_WINDOWPOS_CENTERED,
+            SDL_CreateWindow("Derelict 8-bits SDL2 test", SDL_WINDOWPOS_CENTERED,
                              SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
 
     renderer = SDL_CreateRenderer(window, -1, 0);
@@ -255,16 +255,45 @@ void init() {
 }
 
 
+void titleScreen() {
+    int keepGoing = 1;
+    clearGraphics();
+
+    writeStr(1, 1, "Space Mare Imperium:", 2, 0);
+    writeStr(1, 2, "     Derelict", 2, 0);
+    writeStr(1, 4, "by Daniel Monteiro", 2, 0);
+    writeStr(1, 6, "  Press B button ", 2, 0);
+    writeStr(1, 7, "    to start", 2, 0);
+
+    while (keepGoing) {
+        if (getKey() != '.') {
+            keepGoing = 0;
+        }
+    }
+
+    clearScreen();
+}
+
 void flipRenderer() {
     SDL_Rect rect;
     uint32_t pixel;
     int x, y;
 
-    for (y = 0; y < 200; ++y) {
-        for (x = 0; x < 160; ++x) {
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = 259;
+    rect.h = 309;
 
-            rect.x = 2 * x;
-            rect.y = (24 * y) / 10;
+    SDL_SetRenderDrawColor(renderer, 0xFF,
+                           0xFF,
+                           0xFF, 255);
+    SDL_RenderFillRect(renderer, &rect);
+
+    for (y = 0; y < 128; ++y) {
+        for (x = 0; x < 128; ++x) {
+
+            rect.x = 1 + 2 * x;
+            rect.y = 1 + (24 * y) / 10;
             rect.w = 2;
             rect.h = 3;
             int index = framebuffer[(160 * y) + x];

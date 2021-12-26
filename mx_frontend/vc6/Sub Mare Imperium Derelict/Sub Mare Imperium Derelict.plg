@@ -48,7 +48,7 @@ kernel32.lib user32.lib gdi32.lib shell32.lib winmm.lib /nologo /subsystem:windo
 ".\Debug\CGDIRenderer.obj"
 ".\Debug\Common.obj"
 ".\Debug\Core.obj"
-".\Debug\CPackedFileReader.obj"
+".\Debug\PackedFileReader.obj"
 ".\Debug\Crawler.obj"
 ".\Debug\CreditsScreen.obj"
 ".\Debug\CRenderer.obj"
