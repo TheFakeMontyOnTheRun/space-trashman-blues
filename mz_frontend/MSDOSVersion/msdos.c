@@ -6,6 +6,10 @@
 #include "Derelict.h"
 #include "Engine3D.h"
 
+extern const struct Pattern patterns[127];
+
+extern int8_t map[32][32];
+
 extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
@@ -38,7 +42,7 @@ void pickItem();
 
 void clearGraphics();
 
-unsigned char *imageBuffer = NULL;
+unsigned char imageBuffer[128 * 32];
 
 void shutdownGraphics() {
 }
@@ -284,10 +288,6 @@ void init() {
     :
     : "ax"
     );
-
-    if (imageBuffer == NULL) {
-        imageBuffer = (uint8_t *) malloc(128 * 32);
-    }
 }
 
 void clearScreen() {
