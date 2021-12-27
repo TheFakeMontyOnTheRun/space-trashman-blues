@@ -182,19 +182,6 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
         py1z1 = z1py + ((y0 + dY) * z1dx);
     }
 
-#ifdef DEBUG_WIREFRAME
-    fix_line( px0z0, py0z0, px1z0, py0z0, 4);
-    fix_line( px0z0, py0z0, px0z0, py1z0, 4);
-    fix_line( px1z0, py0z0, px1z0, py1z0, 4);
-    fix_line( px0z0, py1z0, px1z0, py1z0, 4);
-
-    fix_line( px0z1, py0z1, px1z1, py0z1, 4);
-
-    fix_line( px0z0, py0z0, px0z1, py0z1, 4);
-    fix_line( px1z0, py0z0, px1z1, py0z1, 4);
-    return;
-#endif
-
     {
         int16_t x0, x1;
 
@@ -1393,15 +1380,35 @@ void initMap() {
     int x, y;
     const uint8_t *head;
     uint8_t current;
-    char buffer[30];
+    char *buffer = alloca(30);
 
-    sprintf(&buffer[0], "map%d.txt", playerLocation);
+    buffer[0] = 'm';
+    buffer[1] = 'a';
+    buffer[2] = 'p';
+
+    if (playerLocation > 9) {
+        buffer[3] = (playerLocation / 10) + '0';
+        buffer[4] = (playerLocation % 10) + '0';
+        buffer[5] = '.';
+        buffer[6] = 't';
+        buffer[7] = 'x';
+        buffer[8] = 't';
+        buffer[9] = 0;
+
+    } else {
+        buffer[3] = (playerLocation % 10) + '0';
+        buffer[4] = '.';
+        buffer[5] = 't';
+        buffer[6] = 'x';
+        buffer[7] = 't';
+        buffer[8] = 0;
+    }
 
     /* first item in the list is always a dummy */
     roomItem = getRoom(playerLocation)->itemsPresent->next;
 
 
-    struct StaticBuffer datafile = loadBinaryFileFromPath(&buffer[0]);
+    struct StaticBuffer datafile = loadBinaryFileFromPath(buffer);
     head = datafile.data;
 
     for (y = 0; y < 32; ++y ) {

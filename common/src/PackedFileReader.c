@@ -67,10 +67,10 @@ FILE *android_fopen(const char* filename) {
 #define kDataPath_MaxLength 13
 #endif
 
-char mDataPath[kDataPath_MaxLength];
+char *mDataPath;
 
 void initFileReader(const char *__restrict__ dataFilePath) {
-    sprintf (mDataPath, "%s", dataFilePath);
+    mDataPath = dataFilePath;
 }
 
 #ifndef LEAN_BUILD
@@ -79,7 +79,7 @@ size_t sizeOfFile(const char *__restrict__ path) {
 #ifndef ANDROID
     FILE *mDataPack = fopen(mDataPath, "rb");
 #else
-    FILE *mDataPack = android_fopen(&mDataPath[0]);
+    FILE *mDataPack = android_fopen(mDataPath);
 #endif
 
     char buffer[85];
@@ -122,7 +122,7 @@ struct StaticBuffer loadBinaryFileFromPath(const char *__restrict__ path) {
 #ifndef ANDROID
     FILE *mDataPack = fopen(mDataPath, "rb");
 #else
-    FILE *mDataPack = android_fopen(&mDataPath[0]);
+    FILE *mDataPack = android_fopen(mDataPath);
 #endif
 
     struct StaticBuffer toReturn;
@@ -175,7 +175,7 @@ FILE *openBinaryFileFromPath(const char *__restrict__ path) {
 #ifndef ANDROID
     FILE *mDataPack = fopen(mDataPath, "rb");
 #else
-    FILE *mDataPack = android_fopen(&mDataPath[0]);
+    FILE *mDataPack = android_fopen(mDataPath);
 #endif
 
     uint32_t offset = 0;
