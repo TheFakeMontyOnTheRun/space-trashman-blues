@@ -2,7 +2,6 @@
 #define MAP_H
 
 //ceiling is at height 7, floor at height 0. Camera is at height 2
-
 const struct Pattern patterns[96] = {
         {7, 3, CUBE,       0}, //   32
         {0, 3, CUBE,       0}, //   33
@@ -101,7 +100,5 @@ const struct Pattern patterns[96] = {
         {3, 3, CUBE,       0}, //  126
     };
 
-int8_t map[32][32];
-
-
+int8_t *map[32];
 #endif
