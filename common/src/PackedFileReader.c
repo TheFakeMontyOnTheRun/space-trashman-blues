@@ -54,16 +54,20 @@ FILE *android_fopen(const char* filename) {
 }
 #endif
 
-
+#ifndef LEAN_BUILD
 #define kDataPath_MaxLength 256
+#else
+//8.3 + \0 = 8 + 5 = 13
+#define kDataPath_MaxLength 13
+#endif
 
 char mDataPath[kDataPath_MaxLength];
-
 
 void initFileReader(const char *__restrict__ dataFilePath) {
     sprintf (mDataPath, "%s", dataFilePath);
 }
 
+#ifndef LEAN_BUILD
 size_t sizeOfFile(const char *__restrict__ path) {
 
 #ifndef ANDROID
@@ -105,6 +109,7 @@ size_t sizeOfFile(const char *__restrict__ path) {
 
     return size;
 }
+#endif
 
 struct StaticBuffer loadBinaryFileFromPath(const char *__restrict__ path) {
 
