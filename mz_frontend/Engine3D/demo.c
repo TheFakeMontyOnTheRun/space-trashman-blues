@@ -59,7 +59,7 @@ struct Projection {
     int8_t dx;
 };
 
-const struct Projection projections[40] =
+const struct Projection projections[31] =
         {
                 {	0	,	128	,	-128	},	//	1
                 {	0	,	127	,	-64	},	//	2
