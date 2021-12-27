@@ -1,7 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifndef LEAN_BUILD
 #include <assert.h>
+#else
+#define assert(x) (x)
+#endif
+
 #include <errno.h>
 
 #ifdef WIN32
@@ -163,6 +169,7 @@ struct StaticBuffer loadBinaryFileFromPath(const char *__restrict__ path) {
     return toReturn;
 }
 
+#ifndef LEAN_BUILD
 FILE *openBinaryFileFromPath(const char *__restrict__ path) {
 
 #ifndef ANDROID
@@ -208,3 +215,4 @@ FILE *openBinaryFileFromPath(const char *__restrict__ path) {
 
     return mDataPack;
 }
+#endif
