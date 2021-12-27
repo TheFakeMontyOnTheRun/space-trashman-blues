@@ -1,49 +1,26 @@
 .DEFAULT_GOAL := default
 
-PACKAGER = ./packer
+CRUNCHER=wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
+PACKAGER=packer
 
-packager: 
-	$(CC) packer.c -opacker
+$(CRUNCHER): 
+	mvn -q -f wobj-compiler/pom.xml clean compile package install
+	mkdir -p wobj-compiler/dist
+	cp wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar wobj-compiler/dist 
 
-data: $(PACKAGER)
-	echo "const uint8_t data[] ={" > ../Engine3D/maps.h
-	echo "" > ./datastrip
-	$(PACKAGER) src/map1.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map2.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map3.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map4.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map5.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map6.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map7.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map8.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map9.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map10.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map11.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map12.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map13.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map14.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map15.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map16.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map17.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map18.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map19.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map20.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map21.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map22.txt >> ../Engine3D/maps.h 2>>./datastrip
-	$(PACKAGER) src/map23.txt >> ../Engine3D/maps.h 2>>./datastrip
-	echo " 0};\n" >> ../Engine3D/maps.h
+$(PACKAGER):
+	rm -f $(PACKAGER)
+	$(CXX) -std=c++14 -o$(PACKAGER) packer.cpp
 
+data:	$(PACKAGER) $(CRUNCHER)
+	rm -f ./base.pfs
+	ls src/*.obj  | xargs java -jar wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
+	ls assets/*.*  | xargs ./packer
+	mv ./data.pfs ../base.pfs
 
+images:
+	python ./make_package.py
 
-#TODO: precalc absolute offsets
-	echo "const long dataPositions[] ={ 0,\n" >> ../Engine3D/maps.h
-	cat ./datastrip >> ../Engine3D/maps.h
-	echo " 0\n};" >> ../Engine3D/maps.h
+full: images data
 
-
-
-
-all: packager data
-
-default: packager data
-
+default: full

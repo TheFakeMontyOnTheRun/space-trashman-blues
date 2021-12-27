@@ -1643,6 +1643,7 @@ void initMap() {
     HUD_initialPaint();
 }
 
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
 void startRoomTransitionAnimation() {
 
     for ( uint8_t y = 32; y >= 2; --y ) {
@@ -1663,6 +1664,7 @@ void startRoomTransitionAnimation() {
         sleepForMS(20000);
     }
 }
+#endif
 
 void updateMapItems() {
     struct ObjectNode *node;
@@ -1805,7 +1807,7 @@ void tickRenderer() {
 
         if (newCell == '.') {
             newCell = '0';
-#ifndef SDLSW
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
         } else {
             startRoomTransitionAnimation();
 #endif
