@@ -43,8 +43,10 @@ void initFileReader(const char * __restrict__ dataFilePath);
 uint32_t toNativeEndianess(const uint32_t val);
 
 #ifndef WIN32
+#ifndef LEAN_BUILD
 #define min(v1, v2) (( (v1) < (v2) ) ? (v1) : (v2) )
 #define max(v1, v2) (( (v1) > (v2) ) ? (v1) : (v2) )
+#endif
 #endif
 
 #endif

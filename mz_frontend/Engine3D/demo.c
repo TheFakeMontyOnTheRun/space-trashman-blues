@@ -94,6 +94,15 @@ const struct Projection projections[31] =
                 {	58	,	67	,	-4	},	//	31
         };
 
+#ifdef LEAN_BUILD
+int8_t max(int8_t x1, int8_t x2) {
+    return x1 > x2 ? x1 : x2;
+}
+
+int8_t min(int8_t x1, int8_t x2) {
+    return x1 < x2 ? x1 : x2;
+}
+#endif
 
 uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask, uint8_t type) {
 
