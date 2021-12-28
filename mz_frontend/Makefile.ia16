@@ -1,8 +1,8 @@
-CFLAGS = -fomit-frame-pointer -fno-exceptions -ffast-math -I../core/include -I../common/include -IEngine3D -DLEAN_BUILD -DSUPPORTS_HACKING_MINIGAME -DMSDOS -DRES128X128 -DTRACE_OBJECTS_OVER_FLOOR -DCAN_PICK_OBJECT_AT_ANY_DISTANCE
+CFLAGS = -fomit-frame-pointer -fno-exceptions -ffast-math -I../core/include -I../common/include -IEngine3D -DLEAN_BUILD -DMSDOS -DRES128X128 -DTRACE_OBJECTS_OVER_FLOOR -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_HACKING_MINIGAME
 
 CC = ia16-elf-gcc
 
-OBJS = Engine3D/demo.o MSDOSVersion/msdos.o ../core/src/Core.o ../core/src/Derelict.o ../common/src/PackedFileReader.o ../common/src/Common.o
+OBJS = Engine3D/demo.o Engine3D/HackingMinigame.o MSDOSVersion/msdos.o ../core/src/Core.o ../core/src/Derelict.o ../common/src/PackedFileReader.o ../common/src/Common.o
 
 TARGET = derelict.com
 
