@@ -55,26 +55,12 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
     uint8_t colour;
 
-    switch (shouldStipple) {
-        case 0:
-            shouldStipple = 0;
-            colour = 2;
-            break;
-
-        case 1:
-            shouldStipple = 1;
-            colour = 2;
-            break;
-
-        case 2:
-            shouldStipple = 0;
-            colour = 3;
-            break;
-
-        case 3:
-            shouldStipple = 1;
-            colour = 3;
-            break;
+    if (shouldStipple < 4) {
+        colour = shouldStipple;
+        shouldStipple = 0;
+    } else {
+        colour = shouldStipple - 4;
+        shouldStipple = 1;
     }
 
 

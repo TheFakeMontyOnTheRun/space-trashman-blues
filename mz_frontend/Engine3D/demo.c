@@ -119,7 +119,13 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
     int16_t py1z1;
 
     int16_t px1z1;
-    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
+
+#ifndef USE_FILLED_POLYS
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 5 : 1;
+#else
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 5;
+#endif
+
     uint8_t stipple = 1;
 
     if (z0 >= 32) {
@@ -214,7 +220,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
             py0z1 = YRESMINUSONE;
         }
 
-
+#ifndef USE_FILLED_POLYS
         if (elementMask & 2) {
             if (IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
                 vLine(px0z0, py0z0, max(py1z0, stencilHigh[px0z0]), shouldStipple);
@@ -226,7 +232,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
                 vLine(px1z1, py0z1, max(py1z1, stencilHigh[px1z1]), shouldStipple);
             }
         }
-        
+#endif
 
         /* The upper segment */
         x0 = px0z0;
@@ -251,16 +257,25 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
             
             while (x0 != x1) {
 
+#ifndef USE_FILLED_POLYS
                 if (shouldStipple) {
                     stipple = !stipple;
                 }
+#endif
 
                 if (IN_RANGE(0, XRESMINUSONE, x0)) {
+#ifndef USE_FILLED_POLYS
                     if ( stipple && stencilHigh[x0] <= upperY0) {
                         graphicsPut(x0, upperY0);
                     }
+#endif
                     
                     if (stencilHigh[x0] < lowerY0) {
+#ifdef USE_FILLED_POLYS
+                        uint8_t top = max( upperY0, stencilHigh[x0]);
+                        vLine(x0, top, lowerY0, shouldStipple);
+                        graphicsPut(x0, top);
+#endif
                         stencilHigh[x0] = lowerY0;
                     }
                 }
@@ -295,6 +310,21 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
             }
         }
     }
+
+#ifdef USE_FILLED_POLYS
+    if (elementMask & 2) {
+            if (IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
+                vLine(px0z0, py0z0, max(py1z0, stencilHigh[px0z0]), 0);
+
+            }
+        }
+
+        if (elementMask & 1) {
+            if (IN_RANGE(0, XRESMINUSONE, px1z1) && py0z1 > stencilHigh[px1z1]) {
+                vLine(px1z1, py0z1, max(py1z1, stencilHigh[px1z1]), 0);
+            }
+        }
+#endif
 
     return 1;
 }
@@ -332,7 +362,12 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
         return 0;
     }
 
-    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
+#ifndef USE_FILLED_POLYS
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 6 : 2;
+#else
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 6 : 2;
+#endif
+
     uint8_t stipple = 1;
 
     drawContour = (dY);
@@ -340,7 +375,7 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
 
     {
         int16_t x;
-        
+#ifndef USE_FILLED_POLYS
         if (drawContour) {
             if (elementMask & 2) {
                 if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
@@ -352,6 +387,7 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
                 }
             }
         }
+#endif
 
         /* Draw the horizontal outlines of z0 and z1 */
 
@@ -359,10 +395,13 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
         for (x = px0z0; x <= px1z0; ++x) {
             if (IN_RANGE(0, XRESMINUSONE, x)) {
 
+#ifndef USE_FILLED_POLYS
                 if (shouldStipple) {
                     stipple = !stipple;
                 }
+#endif
 
+#ifndef USE_FILLED_POLYS
                 if (stencilHigh[x] <= py1z0) {
                     if (drawContour && stipple) {
                         graphicsPut(x, py1z0);
@@ -374,8 +413,29 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
                 if (stencilHigh[x] <= py0z0) {
                     stencilHigh[x] = py0z0;
                 }
+#else
+                if (stencilHigh[x] <= py0z0) {
+                    vLine(x, max( py1z0, stencilHigh[x]), py0z0, shouldStipple);
+                    stencilHigh[x] = py0z0;
+                }
+#endif
             }
         }
+
+#ifdef USE_FILLED_POLYS
+        if (drawContour) {
+            if (elementMask & 2) {
+                if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
+                    vLine(px0z0, py0z0, stencilHigh[px0z0] < py1z0 ? py1z0 : stencilHigh[px0z0], 0 );
+
+                }
+
+                if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
+                    vLine(px1z0, py0z0, stencilHigh[px1z0] < py1z0 ? py1z0 : stencilHigh[px1z0], 0 );
+                }
+            }
+        }
+#endif
     }
     
     return 1;
@@ -577,7 +637,11 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     int16_t px0z1;
     int8_t py0z1;
     int16_t px1z1;
-    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
+#ifndef USE_FILLED_POLYS
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 6 : 2;
+#else
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 6 : 2;
+#endif
     uint8_t stipple = 1;
 
     uint8_t drawContour;
@@ -614,7 +678,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
     {
         int16_t x, x0, x1;
-
+#ifndef USE_FILLED_POLYS
         if (drawContour) {
             if (elementMask & 2) {
                 if ((elementMask != 255 ) &&IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
@@ -671,6 +735,16 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
             }
         }
 
+#else
+        for (x = px0z0; x <= px1z0; ++x) {
+            if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
+                vLine(x, stencilHigh[x], py0z0, shouldStipple);
+                stencilHigh[x] = py0z0;
+            }
+        }
+
+        shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 6;
+#endif
 
         /* The left segment */
         x0 = px0z0;
@@ -689,14 +763,27 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
             while ((x0 != x1 || y0 != y1)) {
 
                 if (IN_RANGE(0, XRESMINUSONE, x0)) {
+#ifndef USE_FILLED_POLYS
                     if (shouldStipple) {
                         stipple = !stipple;
                     }
+#endif
 
                     if (stencilHigh[x0] < y0) {
+#ifndef USE_FILLED_POLYS
                         if (drawContour && stipple) {
                             graphicsPut(x0, stencilHigh[x0]);
                         }
+#endif
+
+#ifdef USE_FILLED_POLYS
+                        if (drawContour) {
+                            uint8_t top = stencilHigh[x0];
+                            vLine(x0, top, y0, 6);
+                            graphicsPut(x0, top);
+                        }
+#endif
+
                         stencilHigh[x0] = y0;
                     }
                 }
@@ -740,14 +827,26 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
             while ((x0 != x1 || y0 != y1)) {
 
                 if (IN_RANGE(0, XRESMINUSONE, x0) && stencilHigh[x0] < y0) {
-
+#ifndef USE_FILLED_POLYS
                     if (shouldStipple) {
                         stipple = !stipple;
                     }
+#endif
 
+#ifndef USE_FILLED_POLYS
                     if (drawContour && stipple) {
                         graphicsPut(x0, stencilHigh[x0]);
                     }
+#endif
+
+#ifdef USE_FILLED_POLYS
+                    if (drawContour) {
+                        uint8_t top = stencilHigh[x0];
+                        vLine(x0, top, y0, 6);
+                        graphicsPut(x0, top);
+                    }
+#endif
+
                     stencilHigh[x0] = y0;
                 }
 
@@ -772,6 +871,29 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
         }
 
         final_stroke:
+#ifdef USE_FILLED_POLYS
+        if (drawContour) {
+            if (elementMask & 2) {
+                if ((elementMask != 255 ) &&IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
+                    vLine(px0z0, py0z0, stencilHigh[px0z0], 0);
+                }
+
+                if ( (elementMask != 127 ) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
+                    vLine(px1z0, py0z0, stencilHigh[px1z0], 0);
+                }
+            }
+
+            if (elementMask & 1) {
+                if ((elementMask != 255 ) &&IN_RANGE(0, XRESMINUSONE, px0z1) && px0z1 < px0z0 && py0z1 > stencilHigh[px0z1]) {
+                    vLine(px0z1, py0z1, stencilHigh[px0z1], 0);
+                }
+
+                if ((elementMask != 127 ) && IN_RANGE(0, XRESMINUSONE, px1z1) && px1z1 > px1z0 && py0z1 > stencilHigh[px1z1]) {
+                    vLine(px1z1, py0z1, stencilHigh[px1z1], 0);
+                }
+            }
+        }
+#endif
         if (py0z0 <= py0z1) {
             /* Ceiling is higher than the camera*/
             /* Draw the last segment */
@@ -987,10 +1109,10 @@ void renderScene() {
         signal = !signal;
 
         if (stencilY > 86) {
-            vLine(x, stencilY, 128, 2);
+            vLine(x, stencilY, 128, 3);
         } else {
-            vLine(x, stencilY + (signal), 86, 3);
-            vLine(x, 86, 128, 2);
+            vLine(x, stencilY + (signal), 86, 7);
+            vLine(x, 86, 128, 3);
         }
 #else
         graphicsPut(x, stencilY);
