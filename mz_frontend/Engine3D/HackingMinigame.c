@@ -51,9 +51,6 @@ void HackingScreen_repaintCallback(void) {
     writeStr((12 * 1), 11, cursorPosition == 1 ? "[CPU1]" : " CPU1 ", 0, 0);
     writeStr((12 * 2), 11, cursorPosition == 2 ? "[CPU2]" : " CPU2 ", 0, 0);
 
-    writeStr(0, 10, "-------------------------------", 1, 0);
-
-
     for (pin = 0; pin < 3; ++pin) {
         uint8_t disk;
 
