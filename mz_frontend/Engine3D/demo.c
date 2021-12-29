@@ -121,9 +121,9 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
     int16_t px1z1;
 
 #ifndef USE_FILLED_POLYS
-    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 5 : 1;
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 6 : 2;
 #else
-    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 5;
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 6 : 2;
 #endif
 
     uint8_t stipple = 1;
