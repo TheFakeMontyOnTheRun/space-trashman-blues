@@ -458,6 +458,9 @@ void HUD_initialPaint() {
 }
 
 void sleepForMS(uint32_t ms) {
+#ifdef __DJGPP__
+    usleep(ms);
+#endif
 }
 
 void HUD_refresh() {
