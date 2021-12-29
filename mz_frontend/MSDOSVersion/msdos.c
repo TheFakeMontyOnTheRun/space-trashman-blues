@@ -316,41 +316,18 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
     uint8_t chary = 0;
     uint8_t x = _x;
 
-    for (; c < len && y < 25; ++c) {
+    asm volatile (
+    "movb $0x02, %%ah\n\t"
+    "movb    %0, %%dl\n\t"
+    "movb    %1, %%dh\n\t"
+    "movb  $0x0, %%bh\n\t"
+    "int  $0x10\n\t"
+    :
+    : "rm" (x), "rm" (y)
+    : "ax", "bx", "dx"
+    );
 
-        char cha = *ptr;
-
-        if (x == limitX) {
-            ++y;
-            x = _x;
-        } else if (cha == '\n') {
-            ++y;
-            x = _x;
-            ++ptr;
-            continue;
-        } else {
-            ++x;
-        }
-
-        asm volatile (
-        "movb $0x02, %%ah\n\t"
-        "movb    %0, %%dl\n\t"
-        "movb    %1, %%dh\n\t"
-        "movb  $0x0, %%bh\n\t"
-        "int  $0x10\n\t"
-        "movb $0x09, %%ah\n"
-        "movb %2,    %%al\n"
-        "movw $0x01, %%cx\n"
-        "movb $0x0,  %%bh\n"
-        "movb $0x03, %%bl\n"
-        "int  $0x10\n\t"
-        :
-        : "rm" (x), "rm" (y), "rm"(cha)
-        : "ax", "bx", "cx", "dx"
-        );
-
-        ++ptr;
-    }
+    puts(text);
 }
 
 void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
