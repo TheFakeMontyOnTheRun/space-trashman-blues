@@ -1680,7 +1680,7 @@ int main(int argc, char **argv) {
     init();
     initFileReader("base.pfs");
     initStation();
-    setPlayerLocation(16);
+
     titleScreen();
 
     focusedItem = getPlayerItems();
