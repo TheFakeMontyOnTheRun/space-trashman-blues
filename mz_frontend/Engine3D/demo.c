@@ -1567,28 +1567,34 @@ void tickRenderer() {
 
         case '7':
             nextItemInHand();
+            HUD_refresh();
             break;
 
         case '4':
             nextItemInRoom();
+            HUD_refresh();
             break;
 
         case '8':
             useItemInHand();
             updateMapItems();
+            HUD_refresh();
             break;
 
         case '5':
             interactWithItemInRoom();
             updateMapItems();
+            HUD_refresh();
             break;
 
         case '9':
             pickItem();
+            HUD_refresh();
             break;
 
         case '6':
             dropItem();
+            HUD_refresh();
             break;
 
 #if !defined(SDLSW)
@@ -1650,7 +1656,6 @@ void tickRenderer() {
     } else {
         enteredFrom = 0xFF;
     }
-    HUD_refresh();
 }
 
 
