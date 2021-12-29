@@ -1665,10 +1665,6 @@ void logDelegate(const char* mesg) {
 
 int main(int argc, char **argv) {
 
-    for (int c = 0; c < 32; ++c ) {
-        map[c] = (uint8_t*)malloc(32);
-    }
-
     running = 1;
     enteredFrom = 0;
     cameraRotation = 0;
