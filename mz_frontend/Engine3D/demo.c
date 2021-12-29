@@ -414,7 +414,7 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
                     stencilHigh[x] = py0z0;
                 }
 #else
-                if (stencilHigh[x] <= py0z0) {
+                if (drawContour && stencilHigh[x] <= py0z0) {
                     vLine(x, max( py1z0, stencilHigh[x]), py0z0, shouldStipple);
                     stencilHigh[x] = py0z0;
                 }
@@ -738,7 +738,9 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 #else
         for (x = px0z0; x <= px1z0; ++x) {
             if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
-                vLine(x, stencilHigh[x], py0z0, shouldStipple);
+                if (drawContour) {
+                    vLine(x, stencilHigh[x], py0z0, shouldStipple);
+                }
                 stencilHigh[x] = py0z0;
             }
         }
