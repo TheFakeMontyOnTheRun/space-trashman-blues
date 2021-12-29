@@ -458,7 +458,6 @@ void HUD_initialPaint() {
 }
 
 void sleepForMS(uint32_t ms) {
-    usleep(ms);
 }
 
 void HUD_refresh() {
