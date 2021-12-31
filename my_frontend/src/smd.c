@@ -1,7 +1,30 @@
-#ifdef SMD
 #include <genesis.h>
+#include "Core.h"
+#include "Derelict.h"
+#include "Engine3D.h"
+
+extern const struct Pattern patterns[127];
+
+extern int8_t map[32][32];
+
+extern struct ObjectNode *focusedItem;
+
+extern struct ObjectNode *roomItem;
+
+extern int accessGrantedToSafe;
 
 uint8_t buffered = '.';
+int cursorPosition = 0;
+
+
+char *menuItems[] = {
+        "Use/Toggle",
+        "Use with...",
+        "Use/pick...",
+        "Drop",
+        "Next item",
+        "Next in room",
+};
 
 static void handleInput()
 {
@@ -81,9 +104,16 @@ void fix_line (uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 void shutdownGraphics() {
 }
 
-void writeStr(uint8_t nColumn, uint8_t nLine, char *str, uint8_t fg, uint8_t bg){
-    BMP_clearText(1, nColumn, nLine);
-    BMP_drawText(str, nColumn, nLine);
+
+
+
+void writeStrWithLimit(int _x, int y, char *str, int limitX) {
+    BMP_clearText(1, _x, y);
+    BMP_drawText(str, _x, y);
+}
+
+void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
+    writeStrWithLimit(_x, y, text, 31);
 }
 
 void graphicsPut( uint8_t x, uint8_t y) {
@@ -97,7 +127,7 @@ void hLine(uint8_t x0, uint8_t x1, uint8_t y) {
     }
 }
 
-void vLine(int x0, int y0, int y1) {
+void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
     if (y0 > y1) {
         int tmp = y0;
         y0 = y1;
@@ -109,15 +139,46 @@ void vLine(int x0, int y0, int y1) {
     }
 }
 
+void showMessage(const char *message) {
+    writeStr(1, 1, message, 2, 0);
+}
+
+void clearScreen() {
+
+}
+
 void clearGraphics() {
     BMP_waitWhileFlipRequestPending();
     BMP_clear();
 
 }
 
+void drawWindow(int tx, int ty, int tw, int th, const char* title ) {}
+
 uint8_t getKey() {
     handleInput();
     return buffered;
+}
+
+
+
+void titleScreen() {
+    int keepGoing = 1;
+    clearGraphics();
+
+    writeStr(1, 1, "Space Mare Imperium:", 2, 0);
+    writeStr(1, 2, "     Derelict", 2, 0);
+    writeStr(1, 4, "by Daniel Monteiro", 2, 0);
+    writeStr(1, 6, "  Press B button ", 2, 0);
+    writeStr(1, 7, "    to start", 2, 0);
+
+//    while (keepGoing) {
+//        if (getKey() != '.') {
+//            keepGoing = 0;
+//        }
+//    }
+
+    clearGraphics();
 }
 
 void puts(char *unused) {
@@ -149,4 +210,44 @@ void init() {
 void graphicsFlush() {
     BMP_flip(1);
 }
-#endif
+
+void HUD_initialPaint() {
+    struct Room *room = getRoom(getPlayerRoom());
+
+
+    for (uint8_t i = 0; i < 6; ++i) {
+        writeStr(16, 14 + i, i == cursorPosition ? ">" : " ", 2, 0);
+        writeStr(17, 14 + i, menuItems[i], 2, 0);
+    }
+
+    HUD_refresh();
+}
+
+void HUD_refresh() {
+
+    for (uint8_t i = 0; i < 6; ++i) {
+        writeStr(16, 14 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
+    }
+
+    if (focusedItem != NULL) {
+        struct Item *item = getItem(focusedItem->item);
+
+
+        if (item->active) {
+            writeStr(16, 21, "*", 2, 0);
+        }
+
+        writeStrWithLimit(17, 21, item->name, 30);
+    }
+
+    if (roomItem != NULL) {
+        struct Item *item = getItem(roomItem->item);
+
+
+        if (item->active) {
+            writeStr(0, 1, "*", 2, 0);
+        }
+
+        writeStrWithLimit(1, 1, item->name, 14);
+    }
+}

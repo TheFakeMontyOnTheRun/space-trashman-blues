@@ -1,7 +1,11 @@
+#ifndef SMD
+#include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#else
+#include <genesis.h>
+#endif
 
 #include "Core.h"
 #include "Derelict.h"
@@ -230,6 +234,7 @@ const struct Projection projections[40] =
         };
 
 
+#ifndef SMD
 int8_t max(int8_t x1, int8_t x2) {
     return x1 > x2 ? x1 : x2;
 }
@@ -237,6 +242,7 @@ int8_t max(int8_t x1, int8_t x2) {
 int8_t min(int8_t x1, int8_t x2) {
     return x1 < x2 ? x1 : x2;
 }
+#endif
 
 uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask, uint8_t type) {
 
@@ -1702,7 +1708,7 @@ void tickRenderer() {
     waitkey:
     switch (getKey()) {
 
-#ifndef CPC_PLATFORM
+#ifndef SMD
 #ifndef SMS
         case 'l':
             shutdownGraphics();
@@ -1823,7 +1829,7 @@ void tickRenderer() {
 
 void onError(const char* mesg) {
 #ifndef SMS
-    #ifdef CPC_PLATFORM
+    #ifdef SMD
         writeStr(1,1, mesg, 1, 2);
     #else
         puts(mesg);
