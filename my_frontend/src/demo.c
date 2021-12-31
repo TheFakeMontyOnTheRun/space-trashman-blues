@@ -61,7 +61,7 @@ struct Projection {
     int8_t dx;
 };
 
-const struct Projection projections[40] =
+const struct Projection projections[31] =
         {
 #ifdef RES128X64
                 {	0	,	64	,	-128	},	//	1
@@ -263,7 +263,13 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
     int16_t py1z1;
 
     int16_t px1z1;
+    
+#ifndef USE_FILLED_POLYS
     uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
+#else
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 5;
+#endif
+
     uint8_t stipple = 1;
 
     if (z0 >= 32) {
@@ -322,19 +328,6 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
         py1z1 = z1py + ((y0 + dY) * z1dx);
     }
 
-#ifdef DEBUG_WIREFRAME
-    fix_line( px0z0, py0z0, px1z0, py0z0, 4);
-    fix_line( px0z0, py0z0, px0z0, py1z0, 4);
-    fix_line( px1z0, py0z0, px1z0, py1z0, 4);
-    fix_line( px0z0, py1z0, px1z0, py1z0, 4);
-
-    fix_line( px0z1, py0z1, px1z1, py0z1, 4);
-
-    fix_line( px0z0, py0z0, px0z1, py0z1, 4);
-    fix_line( px1z0, py0z0, px1z1, py0z1, 4);
-    return;
-#endif
-
     {
         int16_t x0, x1;
 
@@ -372,6 +365,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
         }
 
 
+#ifndef USE_FILLED_POLYS
         if (elementMask & 2) {
             if (IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
                 vLine(px0z0, py0z0, max(py1z0, stencilHigh[px0z0]), shouldStipple);
@@ -384,6 +378,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
             }
         }
         
+#endif
 
         /* The upper segment */
         x0 = px0z0;
@@ -408,16 +403,26 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
             
             while (x0 != x1) {
 
+#ifndef USE_FILLED_POLYS
                 if (shouldStipple) {
                     stipple = !stipple;
                 }
+#endif
 
                 if (IN_RANGE(0, XRESMINUSONE, x0)) {
+#ifndef USE_FILLED_POLYS
                     if ( stipple && stencilHigh[x0] <= upperY0) {
                         graphicsPut(x0, upperY0);
                     }
                     
+#endif
+
                     if (stencilHigh[x0] < lowerY0) {
+#ifdef USE_FILLED_POLYS
+                        uint8_t top = max( upperY0, stencilHigh[x0]);
+                        vLine(x0, top, lowerY0, shouldStipple);
+                        graphicsPut(x0, top);
+#endif
                         stencilHigh[x0] = lowerY0;
                     }
                 }
@@ -452,6 +457,21 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
             }
         }
     }
+
+#ifdef USE_FILLED_POLYS
+    if (elementMask & 2) {
+            if (IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
+                vLine(px0z0, py0z0, max(py1z0, stencilHigh[px0z0]), 0);
+
+            }
+        }
+
+        if (elementMask & 1) {
+            if (IN_RANGE(0, XRESMINUSONE, px1z1) && py0z1 > stencilHigh[px1z1]) {
+                vLine(px1z1, py0z1, max(py1z1, stencilHigh[px1z1]), 0);
+            }
+        }
+#endif
 
     return 1;
 }
@@ -489,27 +509,20 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
         return 0;
     }
 
+    
+#ifndef USE_FILLED_POLYS
     uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
+#else
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 5 : 1;
+#endif
+
     uint8_t stipple = 1;
 
     drawContour = (dY);
-    
-#ifdef DEBUG_WIREFRAME
-    fix_line( px0z0, py0z0, px1z0, py0z0, 4);
-    fix_line( px0z0, py0z0, px0z0, py1z0, 4);
-    fix_line( px1z0, py0z0, px1z0, py1z0, 4);
-    fix_line( px0z0, py1z0, px1z0, py1z0, 4);
-    
-    fix_line( px0z1, py0z1, px1z1, py0z1, 4);
-    
-    fix_line( px0z0, py0z0, px0z1, py0z1, 4);
-    fix_line( px1z0, py0z0, px1z1, py0z1, 4);
-    return;
-#endif
-    
     {
         int16_t x;
         
+#ifndef USE_FILLED_POLYS
         if (drawContour) {
             if (elementMask & 2) {
                 if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
@@ -521,6 +534,7 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
                 }
             }
         }
+#endif
 
         /* Draw the horizontal outlines of z0 and z1 */
 
@@ -528,10 +542,13 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
         for (x = px0z0; x <= px1z0; ++x) {
             if (IN_RANGE(0, XRESMINUSONE, x)) {
 
+#ifndef USE_FILLED_POLYS
                 if (shouldStipple) {
                     stipple = !stipple;
                 }
+#endif
 
+#ifndef USE_FILLED_POLYS
                 if (stencilHigh[x] <= py1z0) {
                     if (drawContour && stipple) {
                         graphicsPut(x, py1z0);
@@ -543,8 +560,29 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
                 if (stencilHigh[x] <= py0z0) {
                     stencilHigh[x] = py0z0;
                 }
+#else
+                if (drawContour && stencilHigh[x] <= py0z0) {
+                    vLine(x, max( py1z0, stencilHigh[x]), py0z0, shouldStipple);
+                    stencilHigh[x] = py0z0;
+                }
+#endif
             }
         }
+
+#ifdef USE_FILLED_POLYS
+        if (drawContour) {
+            if (elementMask & 2) {
+                if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
+                    vLine(px0z0, py0z0, stencilHigh[px0z0] < py1z0 ? py1z0 : stencilHigh[px0z0], 0 );
+
+                }
+
+                if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
+                    vLine(px1z0, py0z0, stencilHigh[px1z0] < py1z0 ? py1z0 : stencilHigh[px1z0], 0 );
+                }
+            }
+        }
+#endif
     }
     
     return 1;
@@ -746,7 +784,12 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     int16_t px0z1;
     int8_t py0z1;
     int16_t px1z1;
+
+#ifndef USE_FILLED_POLYS
     uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
+#else
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 6 : 2;
+#endif
     uint8_t stipple = 1;
 
     uint8_t drawContour;
@@ -781,22 +824,10 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
     drawContour = (dY);
 
-#ifdef DEBUG_WIREFRAME
-    fix_line( px0z0, py0z0, px1z0, py0z0, 4);
-    fix_line( px0z0, py0z0, px0z0, py1z0, 4);
-    fix_line( px1z0, py0z0, px1z0, py1z0, 4);
-    fix_line( px0z0, py1z0, px1z0, py1z0, 4);
-
-    fix_line( px0z1, py0z1, px1z1, py0z1, 4);
-
-    fix_line( px0z0, py0z0, px0z1, py0z1, 4);
-    fix_line( px1z0, py0z0, px1z1, py0z1, 4);
-    return;
-#endif
-
     {
         int16_t x, x0, x1;
 
+#ifndef USE_FILLED_POLYS
         if (drawContour) {
             if (elementMask & 2) {
                 if ((elementMask != 255 ) &&IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
@@ -853,6 +884,18 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
             }
         }
 
+#else
+        for (x = px0z0; x <= px1z0; ++x) {
+            if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
+                if (drawContour) {
+                    vLine(x, stencilHigh[x], py0z0, shouldStipple);
+                }
+                stencilHigh[x] = py0z0;
+            }
+        }
+
+        shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 6;
+#endif
 
         /* The left segment */
         x0 = px0z0;
@@ -871,14 +914,27 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
             while ((x0 != x1 || y0 != y1)) {
 
                 if (IN_RANGE(0, XRESMINUSONE, x0)) {
+#ifndef USE_FILLED_POLYS
                     if (shouldStipple) {
                         stipple = !stipple;
                     }
+#endif
 
                     if (stencilHigh[x0] < y0) {
+#ifndef USE_FILLED_POLYS
                         if (drawContour && stipple) {
                             graphicsPut(x0, stencilHigh[x0]);
                         }
+#endif
+
+#ifdef USE_FILLED_POLYS
+                        if (drawContour) {
+                            uint8_t top = stencilHigh[x0];
+                            vLine(x0, top, y0, 6);
+                            graphicsPut(x0, top);
+                        }
+#endif
+
                         stencilHigh[x0] = y0;
                     }
                 }
@@ -923,13 +979,26 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
                 if (IN_RANGE(0, XRESMINUSONE, x0) && stencilHigh[x0] < y0) {
 
+#ifndef USE_FILLED_POLYS
                     if (shouldStipple) {
                         stipple = !stipple;
                     }
+#endif
 
+#ifndef USE_FILLED_POLYS
                     if (drawContour && stipple) {
                         graphicsPut(x0, stencilHigh[x0]);
                     }
+#endif
+
+#ifdef USE_FILLED_POLYS
+                    if (drawContour) {
+                        uint8_t top = stencilHigh[x0];
+                        vLine(x0, top, y0, 6);
+                        graphicsPut(x0, top);
+                    }
+#endif
+
                     stencilHigh[x0] = y0;
                 }
 
@@ -954,6 +1023,29 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
         }
 
         final_stroke:
+#ifdef USE_FILLED_POLYS
+        if (drawContour) {
+            if (elementMask & 2) {
+                if ((elementMask != 255 ) &&IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
+                    vLine(px0z0, py0z0, stencilHigh[px0z0], 0);
+                }
+
+                if ( (elementMask != 127 ) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
+                    vLine(px1z0, py0z0, stencilHigh[px1z0], 0);
+                }
+            }
+
+            if (elementMask & 1) {
+                if ((elementMask != 255 ) &&IN_RANGE(0, XRESMINUSONE, px0z1) && px0z1 < px0z0 && py0z1 > stencilHigh[px0z1]) {
+                    vLine(px0z1, py0z1, stencilHigh[px0z1], 0);
+                }
+
+                if ((elementMask != 127 ) && IN_RANGE(0, XRESMINUSONE, px1z1) && px1z1 > px1z0 && py0z1 > stencilHigh[px1z1]) {
+                    vLine(px1z1, py0z1, stencilHigh[px1z1], 0);
+                }
+            }
+        }
+#endif
         if (py0z0 <= py0z1) {
             /* Ceiling is higher than the camera*/
             /* Draw the last segment */
@@ -1043,7 +1135,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
             case 1:
             case 3:
                 return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT,
-                        y + ( cameraRotation == 3 ? 1 : 0 ) + 2,
+                                  y + ( cameraRotation == 3 ? 1 : 0 ) + 2,
                                   x1 - x0, diff, mask);
         }
     } else if (type == BACK_WALL){
@@ -1053,12 +1145,12 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
             case 0:
             case 2:
                 return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT,
-                        y + (cameraRotation == 0? 1 : 0) + 2,
+                                  y + (cameraRotation == 0? 1 : 0) + 2,
                                   x1 - x0, diff, mask);
             case 1:
             case 3:
                 return drawWedge(x0 - (cameraRotation == 1 ? 1 : 0 ),
-                        patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                 patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
                                  0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
 
 
@@ -1071,7 +1163,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
             case 3:
             case 0:
                 returnVal = drawWedge(x0 - (cameraRotation == 3 ? 0 : 1),
-                        patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                      patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
                                       0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR) ;
 
                 returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
@@ -1203,14 +1295,14 @@ next_cluster:
 
     for (x = 0; x < XRES; ++x) {
         int8_t stencilY = (*stencilPtr);
-#ifdef MSDOS
+#ifdef USE_FILLED_POLYS
         signal = !signal;
 
         if (stencilY > 86) {
-            vLine(x, stencilY, 128, 2);
+            vLine(x, stencilY, 128, 3);
         } else {
-            vLine(x, stencilY + (signal), 86, 3);
-            vLine(x, 86, 128, 2);
+            vLine(x, stencilY + (signal), 86, 7);
+            vLine(x, 86, 128, 3);
         }
 #else
         graphicsPut(x, stencilY);
@@ -1654,15 +1746,15 @@ void startRoomTransitionAnimation() {
 
     for ( uint8_t y = 32; y >= 2; --y ) {
         clearGraphics();
-        vLine(y, y, 95 + (32 - y), 0);
-        vLine(95 + (32 - y), y, 95 + (32 - y), 0);
+        vLine(y, y, 95 + (32 - y), 1);
+        vLine(95 + (32 - y), y, 95 + (32 - y), 1);
 
         for (uint8_t x = y; x < (95 + (32 - y)); ++x) {
             graphicsPut(x, y);
             graphicsPut(x, 95 + (32 - y));
 
             //door opening
-            vLine(x, y, 95 - 3 * (32 - y), 0);
+            vLine(x, y, 95 - 3 * (32 - y), 7);
         }
 
 
@@ -1738,36 +1830,40 @@ void tickRenderer() {
 
         case '7':
             nextItemInHand();
+            HUD_refresh();
             break;
 
         case '4':
             nextItemInRoom();
+            HUD_refresh();
             break;
 
         case '8':
             useItemInHand();
             updateMapItems();
+            HUD_refresh();
             break;
 
         case '5':
             interactWithItemInRoom();
             updateMapItems();
+            HUD_refresh();
             break;
 
         case '9':
             pickItem();
+            HUD_refresh();
             break;
 
         case '6':
             dropItem();
+            HUD_refresh();
             break;
 
+#if !defined(SDLSW)
         case 'p':
-#ifndef XCODE_BUILD
-#if !defined(SDLSW) || !defined(AMIGA)
         default:
             goto waitkey;
-#endif
 #endif
     }
 
@@ -1823,7 +1919,6 @@ void tickRenderer() {
     } else {
         enteredFrom = 0xFF;
     }
-    HUD_refresh();
 }
 
 
@@ -1843,49 +1938,33 @@ void logDelegate(const char* mesg) {
     showMessage(mesg);
 }
 
-#ifdef XCODE_BUILD
-int demoMain() {
-    
-    for ( int nLine = 0; nLine < 200; ++nLine) {
-        printf("%d,\n", ((nLine & 248) * 10) + ((nLine & 7) << 11));
-    }
-#else
 
 int main(
 #ifndef SMS
         int argc, char **argv
 #endif
-        ) {
-#endif
+    ) {
 
+    running = 1;
+    enteredFrom = 0;
+    cameraRotation = 0;
+    init();
+    initStation();
 
-    {
+    titleScreen();
 
+    focusedItem = getPlayerItems();
+    setErrorHandlerCallback(onError);
+    setLoggerDelegate(logDelegate);
+    initMap();
 
-        running = 1;
-        enteredFrom = 0;
-        cameraRotation = 0;
-        init();
-        initStation();
-        
-        titleScreen();
+    memset(stencilHigh, 0, XRES);
 
-        focusedItem = getPlayerItems();
-        setErrorHandlerCallback(onError);
-        setLoggerDelegate(logDelegate);
-        initMap();
+    do {
+        tickRenderer();
+    } while (running);
 
-        memset(stencilHigh, 0, XRES);
+    shutdownGraphics();
 
-
-
-#ifndef XCODE_BUILD
-        do {
-            tickRenderer();
-        } while (running);
-
-        shutdownGraphics();
-#endif
-    }
     return 0;
 }

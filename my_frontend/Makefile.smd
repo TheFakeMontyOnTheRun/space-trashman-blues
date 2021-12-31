@@ -49,7 +49,7 @@ LIBS     = -L$(MARSDEV)/m68k-elf/lib/gcc/m68k-elf/$(GCC_VER) -lgcc
 LIBS    += -u __modsi3 -u __divsi3 -u __mulsi3 -u __umodsi3 -u __udivsi3 -u __umulsi3
 
 # Any C or C++ standard should be fine here as long as GCC support it
-CCFLAGS  = -m68000 -Wall -Wextra -std=c99 -ffreestanding -fcommon -DSMD -I../core/include -DRES128X128 -Wno-char-subscripts
+CCFLAGS  = -m68000 -Wall -Wextra -std=c99 -ffreestanding -fcommon -DSMD -I../core/include -DUSE_FILLED_POLYS -DRES128X128 -Wno-unused-parameter -Wno-char-subscripts
 
 # Extra options set by debug or release target
 OPTIONS  = 

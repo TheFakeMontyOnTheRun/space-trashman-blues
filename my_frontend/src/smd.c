@@ -128,14 +128,34 @@ void hLine(uint8_t x0, uint8_t x1, uint8_t y) {
 }
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
+
+    uint8_t stipple = 1;
+
     if (y0 > y1) {
         int tmp = y0;
         y0 = y1;
         y1 = tmp;
     }
 
+    uint8_t colour;
+
+    if (shouldStipple < 4) {
+        colour = shouldStipple;
+        shouldStipple = 0;
+    } else {
+        colour = shouldStipple - 4;
+        shouldStipple = 1;
+    }
+
+
     for (int y = y0; y < y1; ++y ) {
-        graphicsPut(x0, y);
+        if (shouldStipple) {
+            stipple = !stipple;
+        }
+
+        if (stipple) {
+            BMP_setPixel(x0, y, 0x11 + colour);
+        }
     }
 }
 
@@ -163,14 +183,14 @@ uint8_t getKey() {
 
 
 void titleScreen() {
-    int keepGoing = 1;
-    clearGraphics();
-
-    writeStr(1, 1, "Space Mare Imperium:", 2, 0);
-    writeStr(1, 2, "     Derelict", 2, 0);
-    writeStr(1, 4, "by Daniel Monteiro", 2, 0);
-    writeStr(1, 6, "  Press B button ", 2, 0);
-    writeStr(1, 7, "    to start", 2, 0);
+//    int keepGoing = 1;
+//    clearGraphics();
+//
+//    writeStr(1, 1, "Space Mare Imperium:", 2, 0);
+//    writeStr(1, 2, "     Derelict", 2, 0);
+//    writeStr(1, 4, "by Daniel Monteiro", 2, 0);
+//    writeStr(1, 6, "  Press B button ", 2, 0);
+//    writeStr(1, 7, "    to start", 2, 0);
 
 //    while (keepGoing) {
 //        if (getKey() != '.') {
