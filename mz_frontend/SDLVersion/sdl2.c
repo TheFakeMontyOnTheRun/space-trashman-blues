@@ -3,11 +3,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <Core.h>
+#include <assert.h>
 
 
 #include "SDL.h"
 
-
+int cursorPosition = 0;
 extern struct ObjectNode* focusedItem;
 extern struct ObjectNode* roomItem;
 extern int accessGrantedToSafe;
@@ -36,10 +37,10 @@ void pickItem();
 
 void graphicsPut(uint8_t x, uint8_t y) {
 
-
-    if (x < 0 || x > 127 || y < 0 || y > 127) {
-        return;
-    }
+    assert(x >= 0);
+    assert(x < 128);
+    assert(y >= 0);
+    assert(y < 128);
 
 
     framebuffer[(160 * y) + x] = 1;
@@ -49,88 +50,22 @@ void graphicsPut(uint8_t x, uint8_t y) {
 #endif
 }
 
+void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint shouldStipple) {
+    int16_t y;
+    int16_t _y0 = y0;
+    int16_t _y1 = y1;
 
-void fix_line(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
-
-    if (x0 == x1) {
-        int16_t y;
-        int16_t _y0 = y0;
-        int16_t _y1 = y1;
-
-        if (y0 > y1) {
-            _y0 = y1;
-            _y1 = y0;
-        }
+    if (y0 > y1) {
+        _y0 = y1;
+        _y1 = y0;
+    }
 
 
-        for ( y = _y0; y <= _y1; ++y) {
+    for ( y = _y0; y <= _y1; ++y) {
+        if ( !shouldStipple || (y & 1) ) {
             graphicsPut(x0, y);
         }
-        return;
     }
-
-    if (y0 == y1) {
-        int16_t _x0 = x0;
-        int16_t _x1 = x1;
-        int16_t x;
-
-        if (x0 > x1) {
-            _x0 = x1;
-            _x1 = x0;
-        }
-
-        for (x = _x0; x <= _x1; ++x) {
-            graphicsPut(x, y0);
-        }
-        return;
-    }
-
-    //switching x0 with x1
-    if (x0 > x1) {
-        x0 = x0 + x1;
-        x1 = x0 - x1;
-        x0 = x0 - x1;
-
-        y0 = y0 + y1;
-        y1 = y0 - y1;
-        y0 = y0 - y1;
-    }
-
-    {
-        //https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
-
-        int dx = abs(x1 - x0);
-        int sx = x0 < x1 ? 1 : -1;
-        int dy = -abs(y1 - y0);
-        int sy = y0 < y1 ? 1 : -1;
-        int err = dx + dy;  /* error value e_xy */
-
-        while (1) {
-            graphicsPut(x0, y0);
-            /* loop */
-            if (x0 == x1 && y0 == y1) return;
-            int e2 = 2 * err;
-
-            if (e2 >= dy) {
-                err += dy; /* e_xy+e_x > 0 */
-                x0 += sx;
-            }
-
-            if (e2 <= dx) {
-                /* e_xy+e_y < 0 */
-                err += dx;
-                y0 += sy;
-            }
-        }
-    }
-}
-
-void hLine(uint8_t x0, uint8_t x1, uint8_t y) {
-    fix_line(x0, y, x1, y);
-}
-
-void vLine(uint8_t x0, uint8_t y0, uint8_t y1) {
-    fix_line(x0, y0, x0, y1);
 }
 
 
@@ -138,6 +73,11 @@ void shutdownGraphics() {
     SDL_Quit();
 }
 
+void showMessage(const char* mesg) {
+    puts(mesg);
+}
+
+void drawWindow(int tx, int ty, int tw, int th, const char* title ) {}
 
 void clearGraphics() {
     memset(framebuffer, 0, 160 * 200);
@@ -155,7 +95,7 @@ void printSituation() {
     while( playerObjects != NULL ) {
         struct Item *item = getItem(playerObjects->item);
 
-        printf("%c%c%s\n", (playerObjects == focusedItem) ? '>' : ' ', item->active ? '*' : '-', item->description );
+        printf("%c%c%s\n", (playerObjects == focusedItem) ? '>' : ' ', item->active ? '*' : '-', item->name );
 
         playerObjects = playerObjects->next;
     }
@@ -167,7 +107,7 @@ void printSituation() {
     while( roomItems != NULL ) {
         struct Item *item = getItem(roomItems->item);
 
-        printf("%c%c%s\n", (roomItems == roomItem) ? '>' : ' ',item->active ? '*' : '-', item->description );
+        printf("%c%c%s\n", (roomItems == roomItem) ? '>' : ' ',item->active ? '*' : '-', item->name );
 
         roomItems = roomItems->next;
     }
@@ -176,6 +116,8 @@ void printSituation() {
 void dropItem();
 
 void pickItem();
+
+void clearScreen() {}
 
 
 uint8_t getKey() {
@@ -208,28 +150,28 @@ uint8_t getKey() {
                     break;
 
                 case SDLK_KP_7:
-                    nextItemInHand();
+                    mBufferedCommand = '7';
                     break;
 
                 case SDLK_KP_8:
-                    useItemInHand();
+                    mBufferedCommand = '8';
                     break;
 
 
                 case SDLK_KP_4:
-                    nextItemInRoom();
+                    mBufferedCommand = '4';
                     break;
 
                 case SDLK_KP_5:
-                    interactWithItemInRoom();
+                    mBufferedCommand = '5';
                     break;
 
                 case SDLK_KP_9:
-                    pickItem();
+                    mBufferedCommand = '9';
                     break;
 
                 case SDLK_KP_6:
-                    dropItem();
+                    mBufferedCommand = '6';
                     break;
 
 
@@ -275,6 +217,9 @@ uint8_t getKey() {
     return mBufferedCommand;
 }
 
+void sleepForMS() {
+
+}
 
 void init() {
     int r, g, b;
@@ -283,7 +228,7 @@ void init() {
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     memset(framebuffer, 5, 160 * 200);
     window =
-            SDL_CreateWindow("The Mistral Report", SDL_WINDOWPOS_CENTERED,
+            SDL_CreateWindow("Derelict 8-bits SDL2 test", SDL_WINDOWPOS_CENTERED,
                              SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
 
     renderer = SDL_CreateRenderer(window, -1, 0);
@@ -313,17 +258,46 @@ void init() {
 }
 
 
+void titleScreen() {
+    int keepGoing = 1;
+    clearGraphics();
+
+    writeStr(1, 1, "Space Mare Imperium:", 2, 0);
+    writeStr(1, 2, "     Derelict", 2, 0);
+    writeStr(1, 4, "by Daniel Monteiro", 2, 0);
+    writeStr(1, 6, "  Press B button ", 2, 0);
+    writeStr(1, 7, "    to start", 2, 0);
+
+    while (keepGoing) {
+        if (getKey() != '.') {
+            keepGoing = 0;
+        }
+    }
+
+    clearScreen();
+}
+
 void flipRenderer() {
     SDL_Rect rect;
     uint32_t pixel;
     int x, y;
 
-    for (y = 0; y < 200; ++y) {
-        for (x = 0; x < 160; ++x) {
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = 259;
+    rect.h = 309;
 
-            rect.x = 4 * x;
-            rect.y = (24 * y) / 10;
-            rect.w = 4;
+    SDL_SetRenderDrawColor(renderer, 0xFF,
+                           0xFF,
+                           0xFF, 255);
+    SDL_RenderFillRect(renderer, &rect);
+
+    for (y = 0; y < 128; ++y) {
+        for (x = 0; x < 128; ++x) {
+
+            rect.x = 1 + 2 * x;
+            rect.y = 1 + (24 * y) / 10;
+            rect.w = 2;
             rect.h = 3;
             int index = framebuffer[(160 * y) + x];
 
@@ -354,5 +328,15 @@ void flipRenderer() {
 void graphicsFlush() {
     flipRenderer();
 }
+
+
+void HUD_initialPaint() {
+
+}
+
+void HUD_refresh() {
+
+}
+
 
 #endif

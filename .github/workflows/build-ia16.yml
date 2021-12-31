@@ -18,9 +18,9 @@ jobs:
     - name: install ia16-gcc
       run: sudo apt-get update && sudo apt-get -y install software-properties-common && sudo add-apt-repository ppa:tkchia/build-ia16 && sudo apt-get install -y build-essential gcc-ia16-elf libi86-ia16-elf
     - name: make
-      run: cd my_frontend && make -f Makefile.ia16
+      run: cd mz_frontend && make -f Makefile.ia16
 
     - uses: actions/upload-artifact@v2
       with:
          name: Derelict for MS-DOS on 8088 (CGA Graphics)
-         path: my_frontend/derelict.com
+         path: mz_frontend/derelict.com

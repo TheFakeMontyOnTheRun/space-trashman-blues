@@ -1,14 +1,10 @@
 //
 // Created by Daniel Monteiro on 2021-11-01.
 //
-#ifndef SMD
-#include <stdlib.h>
 #include <stdint.h>
-#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#else
-#include <genesis.h>
-#endif
+#include <stdio.h>
 
 #include "Core.h"
 #include "Derelict.h"

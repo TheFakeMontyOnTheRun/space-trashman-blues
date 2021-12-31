@@ -5,21 +5,22 @@ set(CMAKE_C_STANDARD 90)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake_sdl2")
 
-include_directories( src ../core/src ../core/include
+include_directories( src ../core/src ../core/include ../common/include
 		${SDL2_INCLUDE_DIR}
 )
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DRES128X128 -std=c90 -W -ansi -g -pedantic -Wall")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DRES128X128 -DSUPPORTS_HACKING_MINIGAME  -I../core/include -I../common/include -IEngine3D -DTRACE_OBJECTS_OVER_FLOOR -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -std=c90 -W -ansi -g -pedantic -Wall")
 
 find_package(SDL2 REQUIRED)
 
 add_executable(derelict16
-		src/demo.c
-		src/sdl2.c
+		Engine3D/demo.c
+		Engine3D/HackingMinigame.c
+		../common/src/Common.c
+		SDLVersion/sdl2.c
 		../core/src/Derelict.c
 		../core/src/Core.c
-		../core/src/Parser.c
-
+		../common/src/PackedFileReader.c
 		)
 
 include(FindPkgConfig)

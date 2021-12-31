@@ -12,6 +12,8 @@
 
 #include "Common.h"
 
+#ifndef LEAN_BUILD
+
 void clearVector(struct ItemVector *vector) {
 	size_t c;
     vector->used = 0;
@@ -65,6 +67,7 @@ int pushVector(struct ItemVector *vector, void *item) {
     return 0;
 }
 
+#endif
 
 int isBigEndian() {
     union {

@@ -12,5 +12,5 @@ derelict.sms: src/demo.o src/sms.o src/HackingMinigame.o ../core/src/Core.o ../c
 clean:
 	rm -f $(OBJS) $(TARGET)
 	$(RM) -f *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.rom
-	$(RM) -f ../core/src/*.o src/*.o
+	$(RM) -f ../core/src/*.o src/*.o ../common/src/*.o
 	rm *~

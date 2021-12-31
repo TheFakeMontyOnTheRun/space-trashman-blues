@@ -139,3 +139,7 @@ my_frontend/derelict.cpc
 my_frontend/derelict.dsk
 lcov-output.info
 packer
+derelict.com
+my_frontend/out.bin
+my_frontend/out.elf
+my_frontend/symbol.txt
