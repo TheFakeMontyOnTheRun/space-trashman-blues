@@ -67,10 +67,11 @@ FILE *android_fopen(const char* filename) {
 #define kDataPath_MaxLength 13
 #endif
 
-char *mDataPath;
+char mDataPath[kDataPath_MaxLength];
 
 void initFileReader(const char *__restrict__ dataFilePath) {
-    mDataPath = dataFilePath;
+    uint8_t len = strlen(dataFilePath);
+    memcpy( &mDataPath[0], dataFilePath, len);
 }
 
 #ifndef LEAN_BUILD

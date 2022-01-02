@@ -143,3 +143,5 @@ derelict.com
 my_frontend/out.bin
 my_frontend/out.elf
 my_frontend/symbol.txt
+game.html.mem
+Breakpoints_v2.xcbkptlist
