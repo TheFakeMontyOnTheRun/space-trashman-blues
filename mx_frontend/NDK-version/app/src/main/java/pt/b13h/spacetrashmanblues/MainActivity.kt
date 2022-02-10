@@ -102,11 +102,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             llScreenControllers.visibility = View.VISIBLE
                         }
 
+                        btnItemInfo.setOnClickListener(this)
                         btnUp.setOnClickListener(this)
                         btnDown.setOnClickListener(this)
-                        btnFire.setOnClickListener(this)
-                        btnPick.setOnClickListener(this)
-                        btnAim.setOnClickListener(this)
+                        btnUse.setOnClickListener(this)
+                        btnNextItem.setOnClickListener(this)
+                        btnUseWith.setOnClickListener(this)
                         btnLeft.setOnClickListener(this)
                         btnRight.setOnClickListener(this)
                         btnStrafeLeft.setOnClickListener(this)
@@ -209,9 +210,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.btnDown -> toSend = 's'
             R.id.btnLeft -> toSend = 'a'
             R.id.btnRight -> toSend = 'd'
-            R.id.btnFire -> toSend = 'z'
-            R.id.btnAim -> toSend = 'x'
-            R.id.btnPick -> toSend = 'c'
+
+            R.id.btnUse -> toSend = 'z'
+            R.id.btnUseWith -> toSend = 'x'
+            R.id.btnNextItem -> toSend = 'c'
+            R.id.btnItemInfo -> toSend = 'v'
+
             R.id.btnStrafeLeft-> toSend = 'n'
             R.id.btnStrafeRight-> toSend = 'm'
         }

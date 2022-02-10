@@ -5,13 +5,17 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
+set(CMAKE_C_STANDARD 11)
+
+
 include_directories(../../../../../../core/include)
+include_directories(../../../../../../common/include)
 include_directories(../../../../../base3d/include)
 include_directories(../../../../../common/include)
 include_directories(../../../../../menu/include)
 include_directories(../../../../../SoundSystem)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -std=c90 -DANDROID  -D_BSD_SOURCE")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DANDROID  -D_BSD_SOURCE")
 
 
 # Creates and names a library, sets it as either STATIC
@@ -38,19 +42,20 @@ add_library( # Sets the name of the library.
         ../../../../../menu/src/GameMenu.c
         ../../../../../menu/src/Main.c
         ../../../../../base3d/src/Globals.c
-        ../../../../../base3d/src/Vec.c
+        ../../../../../../common/src/Vec.c
+        ../../../../../../common/src/Common.c
+        ../../../../../../common/src/PackedFileReader.c
+        ../../../../../../common/src/MapWithCharKey.c
+        ../../../../../../common/src/FixP.c
         ../../../../../base3d/src/CTile3DProperties.c
         ../../../../../base3d/src/LoadBitmap.c
         ../../../../../base3d/src/CRenderer.c
         ../../../../../base3d/src/VisibilityStrategy.c
-        ../../../../../base3d/src/FixP.c
         ../../../../../menu/src/Engine.c
         ../../../../../base3d/src/Events.c
         ../../../../../base3d/src/CRenderer_Rasterization.c
-        ../../../../../base3d/src/PackedFileReader.c
         ../../../../../base3d/src/EDirection_Utils.c
         ../../../../../base3d/src/CRenderer_Tesselation.c
-        ../../../../../base3d/src/MapWithCharKey.c
         ../../../../../base3d/src/Dungeon.c
         ../../../../../menu/src/UI.c
         ../../../../../SoundSystem/PCMAudio.c
