@@ -232,11 +232,14 @@ uint8_t getKey() {
 void titleScreen() {
     int keepGoing = 1;
     clearGraphics();
-
-    writeStr(1, 1, "Space Mare Imperium:", 2, 0);
-    writeStr(1, 2, "     Derelict", 2, 0);
-    writeStr(1, 4, "by Daniel Monteiro", 2, 0);
-    writeStr(1, 7, "  Press start button ", 2, 0);
+                    //               |
+    writeStr(16, 1, "   Space Mare   ", 2, 0);
+    writeStr(16, 2, "    Imperium    ", 2, 0);
+    writeStr(16, 4, "    Derelict    ", 2, 0);
+    writeStr(16, 6, "   by Daniel    ", 2, 0);
+    writeStr(16, 7, "    Monteiro    ", 2, 0);
+    writeStr(16, 9, "   Press start  ", 2, 0);
+    writeStr(16,10, "     button!    ", 2, 0);
 
     while (keepGoing) {
         if (getKey() == 'k') {
