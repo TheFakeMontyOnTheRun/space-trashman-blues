@@ -157,8 +157,37 @@ void shutdownGraphics() {
 
 
 void writeStrWithLimit(int _x, int y, char *str, int limitX) {
-    BMP_clearText(_x, y, strlen(str));
-    BMP_drawText(str, _x, y);
+
+    char textBuffer[2];
+    char *charPtr = &textBuffer[0];
+
+    uint8_t len = strlen(str);
+    uint8_t x = _x;
+    textBuffer[1] = 0;
+
+    for (uint8_t c = 0; c < len && y < 19; ++c) {
+
+        char cha = *str;
+
+        if (x == limitX) {
+            ++y;
+            x = _x;
+        } else if (cha == '\n') {
+            ++y;
+            x = _x;
+            ++str;
+            continue;
+        } else {
+            ++x;
+        }
+
+        *charPtr = ' ';
+        BMP_drawText(charPtr, x, y);
+        *charPtr = cha;
+        BMP_drawText(charPtr, x, y);
+
+        ++str;
+    }
 }
 
 void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
