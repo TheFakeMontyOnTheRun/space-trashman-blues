@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         sounds[4] = soundPool!!.load(this, R.raw.detected, 1)
         sounds[5] = soundPool!!.load(this, R.raw.fire, 1)
         sounds[6] = soundPool!!.load(this, R.raw.enemyfire, 1)
-        sounds[7] = soundPool!!.load(this, R.raw.hurt, 1)
+        sounds[7] = soundPool!!.load(this, R.raw.derelicttheme, 1)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,20 +57,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         }
 
-
-        setContentView(R.layout.activity_main)
-
-        if (savedInstanceState == null ) {
-            MistralJNI.initAssets(resources.assets)
-        }
-
-
         if  ( (application as MistralApplication).mayEnableSound() ) {
             initAudio()
         } else {
             soundPool = null
         }
 
+        setContentView(R.layout.activity_main)
+
+        if (savedInstanceState == null ) {
+            MistralJNI.initAssets(resources.assets)
+        }
 
         imageView.setImageBitmap(bitmap)
     }
@@ -141,19 +138,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         if (soundPool != null) {
             Thread {
+                Thread.sleep(2000)
                 while (running) {
                     Thread.sleep(10)
                     when (val sound = MistralJNI.getSoundToPlay()) {
-                        0, 1, 2, 3, 4, 5, 6, 7, 8 -> soundPool!!.play(
-                            sounds[sound],
-                            1f,
-                            1f,
-                            0,
-                            0,
-                            1f
-                        )
+                        0, 1, 2, 3, 4, 5, 6, 7, 8 -> runOnUiThread {
+                            soundPool!!.play(
+                                sounds[sound],
+                                1f,
+                                1f,
+                                0,
+                                0,
+                                1f
+                            )
+                        }
                     }
-
                 }
             }.start()
         }

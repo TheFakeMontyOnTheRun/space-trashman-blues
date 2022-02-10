@@ -74,7 +74,7 @@ void MainMenu_initStateCallback(int32_t tag) {
             biggestOption = len;
         }
     }
-    playSound(7);
+    playSound(MAIN_MENU_THEME);
 }
 
 void MainMenu_initialPaintCallback() {
