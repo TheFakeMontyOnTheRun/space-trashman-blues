@@ -3,6 +3,24 @@
 #include "Derelict.h"
 #include "Engine3D.h"
 
+void graphicsFlush();
+
+void nextItemInHand();
+
+void useItemInHand();
+
+void nextItemInRoom();
+
+void interactWithItemInRoom();
+
+void pickOrDrop();
+
+void dropItem();
+
+void pickItem();
+
+void clearGraphics();
+
 extern const struct Pattern patterns[127];
 
 extern int8_t map[32][32];
