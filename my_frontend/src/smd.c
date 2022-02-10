@@ -234,16 +234,31 @@ static void joyEvent(u16 joy, u16 changed, u16 state) {
 }
 
 void showMessage(const char *message) {
-    writeStr(1, 1, message, 2, 0);
+    int keepGoing = 1;
+
+    for (uint8_t i = 0; i < 19; ++i) {
+        BMP_clearText(16, i, 16);
+    }
+
+    writeStrWithLimit(16, 1, message, 31);
+    writeStrWithLimit(16, 17, "Press Start to continue", 31);
+
+    while (keepGoing) {
+        if (getKey() == 'k') {
+            keepGoing = 0;
+        }
+    }
+
+    clearScreen();
+
+    for (uint8_t i = 0; i < 19; ++i) {
+        BMP_clearText(16, i, 16);
+    }
+
+    HUD_initialPaint();
 }
 
 void clearScreen() {
-    BMP_waitWhileFlipRequestPending();
-    BMP_clear();
-
-    for ( int c = 0; c < 20; ++c) {
-        BMP_clearText(0, c, 32);
-    }
 }
 
 void clearGraphics() {
