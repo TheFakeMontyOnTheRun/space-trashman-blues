@@ -329,8 +329,8 @@ void HUD_initialPaint() {
 
 
     for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(16, 14 + i, i == cursorPosition ? ">" : " ", 2, 0);
-        writeStr(17, 14 + i, menuItems[i], 2, 0);
+        writeStr(16, 13 + i, i == cursorPosition ? ">" : " ", 2, 0);
+        writeStr(17, 13 + i, menuItems[i], 2, 0);
     }
 
     HUD_refresh();
@@ -338,29 +338,41 @@ void HUD_initialPaint() {
 
 void HUD_refresh() {
 
-    for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(16, 14 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
+    for (uint8_t i = 0; i < 13; ++i) {
+        BMP_clearText(16, i, 16);
     }
 
+    for (uint8_t i = 0; i < 6; ++i) {
+        writeStr(16, 13 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
+    }
+
+
+    writeStrWithLimit(16, 5, "Object in hand:", 31);
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
 
 
         if (item->active) {
-            writeStr(16, 21, "*", 2, 0);
+            writeStr(16, 6, "*", 2, 0);
         }
 
-        writeStrWithLimit(17, 21, item->name, 30);
+        writeStrWithLimit(17, 6, item->name, 31);
+    } else {
+        writeStrWithLimit(16, 6, "Nothing", 31);
     }
+
+    writeStrWithLimit(16, 1, "Object in room:", 31);
 
     if (roomItem != NULL) {
         struct Item *item = getItem(roomItem->item);
 
 
         if (item->active) {
-            writeStr(0, 1, "*", 2, 0);
+            writeStrWithLimit(16, 2, "*", 31);
         }
 
-        writeStrWithLimit(1, 1, item->name, 14);
+        writeStrWithLimit(17, 2, item->name, 31);
+    } else {
+        writeStrWithLimit(16, 2, "Nothing", 31);
     }
 }
