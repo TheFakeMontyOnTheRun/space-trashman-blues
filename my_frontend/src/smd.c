@@ -302,8 +302,6 @@ void assert( int unused) {
 }
 
 void init() {
-    char col;
-
     JOY_setEventHandler(joyEvent);
     VDP_setScreenWidth256();
     VDP_setHInterrupt(0);
@@ -313,10 +311,7 @@ void init() {
     DMA_setBufferSize(2048);
 
     // init Bitmap engine (require a ton shit of memory)
-    BMP_init(TRUE, BG_A, PAL0, FALSE);
-
-
-    col = 0xFF;
+    BMP_init(FALSE, BG_A, PAL0, FALSE);
 }
 
 void graphicsFlush() {
