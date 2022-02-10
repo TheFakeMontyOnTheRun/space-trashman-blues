@@ -97,6 +97,10 @@ static void handleInput()
     u16 value;
     buffered = '.';
 
+    if (cooldown) {
+        cooldown--;
+    }
+
     // need to call it manually as we don't use SYS_doVBlankProcess() here
     JOY_update();
 
