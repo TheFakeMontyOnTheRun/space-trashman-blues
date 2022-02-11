@@ -190,36 +190,35 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 
 void drawWindow(int tx, int ty, int tw, int th, const char* title ) {}
 
+
 void showMessage(const char *message) {
     int keepGoing = 1;
-    clearGraphics();
+    clearScreen();
 
-    writeStr(1, 1, (char *) message, 2, 0);
-    writeStr(1, 3, "Press B button to continue", 2, 0);
+    writeStr(1, 1, message, 2 , 0);
+    writeStr(2, 22, "Press any button to continue", 2, 0);
 
     while (keepGoing) {
-        if (read_joypad1() & JOY_FIREB) {
+        if (getKey() == 'p') {
             keepGoing = 0;
         }
     }
 
-    clearGraphics();
+    clearScreen();
     HUD_initialPaint();
-    tickRenderer();
+    renderScene();
 }
 
 void titleScreen() {
     int keepGoing = 1;
     clearGraphics();
 
-    writeStr(1, 1, "Space Mare Imperium:", 2, 0);
-    writeStr(1, 2, "     Derelict", 2, 0);
+    writeStr(1, 1, "Space Mare Imperium: Derelict", 2, 0);
     writeStr(1, 4, "by Daniel Monteiro", 2, 0);
-    writeStr(1, 6, "  Press B button ", 2, 0);
-    writeStr(1, 7, "    to start", 2, 0);
+    writeStr(1, 6, "  Press B to start ", 2, 0);
 
     while (keepGoing) {
-        if (read_joypad1() & JOY_FIREB) {
+        if (getKey() == 'p') {
             keepGoing = 0;
         }
     }
@@ -624,8 +623,7 @@ void HUD_initialPaint() {
     draw(BUFFER_RESX, 0, BUFFER_RESX, 191);
 
     for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(16, 14 + i, i == cursorPosition ? ">" : " ", 2, 0);
-        writeStr(17, 14 + i, menuItems[i], 2, 0);
+        writeStr(18, 14 + i, menuItems[i], 2, 0);
     }
 
     HUD_refresh();
@@ -633,36 +631,44 @@ void HUD_initialPaint() {
 
 void HUD_refresh() {
 
-    fill(map_pixel(17 * 8,  21 * 8), 0, 255 - (17 * 8) );
-    fill(map_pixel(17 * 8,  22 * 8), 0, 255 - (17 * 8) );
-    fill(map_pixel(0,  1 * 8), 0, 127 );
-    fill(map_pixel(0,  2 * 8), 0, 127 );
-
+    for ( int c = 0; c < 13; ++c ) {
+        for (int d = 0; d < 15; ++d ) {
+            writeStr(17 + d, c, " ", 2, 0);
+        }
+    }
 
     for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(16, 14 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
+        writeStr(17, 14 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
     }
+
+    writeStrWithLimit(17, 5, "Object in hand", 31);
 
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
 
 
         if (item->active) {
-            writeStr(16, 21, "*", 2, 0);
+            writeStr(17, 6, "*", 2, 0);
         }
 
-        writeStrWithLimit(17, 21, item->name, 30);
+        writeStrWithLimit(18, 6, item->name, 31);
+    } else {
+        writeStrWithLimit(18, 6, "Nothing", 31);
     }
+
+    writeStrWithLimit(17, 1, "Object in room", 31);
 
     if (roomItem != NULL) {
         struct Item *item = getItem(roomItem->item);
 
 
         if (item->active) {
-            writeStr(0, 1, "*", 2, 0);
+            writeStrWithLimit(17, 2, "*", 31);
         }
 
-        writeStrWithLimit(1, 1, item->name, 14);
+        writeStrWithLimit(18, 2, item->name, 31);
+    } else {
+        writeStrWithLimit(18, 2, "Nothing", 31);
     }
 }
 
