@@ -277,9 +277,17 @@ char *menuItems[] = {
             break;
         case 2:
             pickItem();
+            clearGraphics();
+            renderScene();
+            graphicsFlush();
+            HUD_refresh();
             break;
         case 3:
             dropItem();
+            clearGraphics();
+            renderScene();
+            graphicsFlush();
+            HUD_refresh();
             break;
         case 4:
             nextItemInHand();
@@ -317,7 +325,6 @@ uint8_t getKey() {
 
     if ((key & JOY_FIREA) && !cooldown) {
         performAction();
-        HUD_refresh();
         cooldown = COOLDOWN_MAX;
         return 'p';
     }
@@ -356,7 +363,6 @@ void graphicsFlush() {
         vwrite( ptr, addr, 16 * 8);
         ptr += 8 * 16;
     }
-    memset( &buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
 void sleepForMS(uint32_t ms) {

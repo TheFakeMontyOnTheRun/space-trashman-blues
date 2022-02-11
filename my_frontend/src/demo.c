@@ -1314,6 +1314,7 @@ next_cluster:
 #ifdef TRACE_OBJECTS_OVER_FLOOR
     repaintMapItems();
 #endif
+    memset(stencilHigh, 0, XRES);
 }
 
 void renderCameraWest() {
@@ -1786,13 +1787,9 @@ void tickRenderer() {
     int previousLocation = playerLocation;
     uint8_t newCell = 0;
 
-#ifndef SMS
     clearGraphics();
-#endif
     renderScene();
-
     graphicsFlush();
-    memset(stencilHigh, 0, XRES);
 
     prevX = cameraX;
     prevZ = cameraZ;

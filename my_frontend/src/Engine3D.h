@@ -58,6 +58,8 @@ void HUD_refresh();
 
 void tickRenderer();
 
+void renderScene();
+
 void shutdownGraphics();
 
 void clearGraphics();
