@@ -107,6 +107,8 @@ char *menuItems[] = {
             nextItemInRoom();
             break;
     }
+
+
 }
 
 
@@ -199,8 +201,6 @@ void writeStrWithLimit(int _x, int y, char *str, int limitX) {
             x = _x;
             ++str;
             continue;
-        } else {
-            ++x;
         }
 
         *charPtr = ' ';
@@ -208,6 +208,7 @@ void writeStrWithLimit(int _x, int y, char *str, int limitX) {
         *charPtr = cha;
         BMP_drawText(charPtr, x, y);
 
+        ++x;
         ++str;
     }
 }
@@ -284,7 +285,6 @@ void clearScreen() {
 }
 
 void clearGraphics() {
-    BMP_waitWhileFlipRequestPending();
     BMP_clear();
 }
 
