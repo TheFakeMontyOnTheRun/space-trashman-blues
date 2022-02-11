@@ -25,6 +25,7 @@ extern int accessGrantedToSafe;
 #define BUFFER_RESX 128
 #define BUFFER_RESY 128
 #define COOLDOWN_MAX 0x2EF
+#define MARGIN_TEXT_SCREEN_LIMIT 30
 
 uint8_t font[] = {
         // ASCII table starting on SPACE.
@@ -163,8 +164,6 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
             x = _x;
             ++ptr;
             continue;
-        } else {
-            ++x;
         }
 
         if (cha >= 'a') {
@@ -180,12 +179,13 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
         uint8_t *fontTop = &font[((cha - 32) << 3)];
         vwrite(fontTop, map_pixel( x << 3, y << 3), 8 );
 
+        ++x;
         ++ptr;
     }
 }
 
 void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
-    writeStrWithLimit(_x, y, text, 31);
+    writeStrWithLimit(_x, y, text, MARGIN_TEXT_SCREEN_LIMIT);
 }
 
 void drawWindow(int tx, int ty, int tw, int th, const char* title ) {}
