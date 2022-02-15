@@ -204,10 +204,9 @@ void writeStrWithLimit(int _x, int y, char *str, int limitX) {
         }
 
         *charPtr = ' ';
-        BMP_drawText(charPtr, x, y);
+        VDP_drawText(charPtr, x, y);
         *charPtr = cha;
-        BMP_drawText(charPtr, x, y);
-
+        VDP_drawText(charPtr, x, y);
         ++x;
         ++str;
     }
@@ -299,19 +298,29 @@ void titleScreen() {
     int keepGoing = 1;
     clearGraphics();
                     //               |
-    writeStr(16, 1, "   Space Mare   ", 2, 0);
-    writeStr(16, 2, "    Imperium    ", 2, 0);
-    writeStr(16, 4, "    Derelict    ", 2, 0);
-    writeStr(16, 6, "   by Daniel    ", 2, 0);
-    writeStr(16, 7, "    Monteiro    ", 2, 0);
-    writeStr(16, 9, "   Press start  ", 2, 0);
-    writeStr(16,10, "     button!    ", 2, 0);
+    writeStr(1, 1, "   Space Mare   ", 2, 0);
+    writeStr(1, 2, "    Imperium    ", 2, 0);
+    writeStr(1, 4, "    Derelict    ", 2, 0);
+    writeStr(1, 6, "   by Daniel    ", 2, 0);
+    writeStr(1, 7, "    Monteiro    ", 2, 0);
+    writeStr(1, 9, "   Press start  ", 2, 0);
+    writeStr(1,10, "     button!    ", 2, 0);
 
     while (keepGoing) {
         if (getKey() == 'k') {
             keepGoing = 0;
         }
     }
+
+
+    VDP_clearText(1, 1, 16);
+    VDP_clearText(1, 2, 16);
+    VDP_clearText(1, 4, 16);
+    VDP_clearText(1, 6, 16);
+    VDP_clearText(1, 7, 16);
+    VDP_clearText(1, 9, 16);
+    VDP_clearText(1,10, 16);
+
     clearScreen();
 }
 
@@ -329,11 +338,9 @@ void init() {
     VDP_setHInterrupt(0);
     VDP_setHilightShadow(0);
 
-    // reduce DMA buffer size to avoid running out of memory (we don't need it)
     DMA_setBufferSize(2048);
 
-    // init Bitmap engine (require a ton shit of memory)
-    BMP_init(FALSE, BG_A, PAL0, FALSE);
+    BMP_init(FALSE, BG_B, PAL0, 0);
 }
 
 void graphicsFlush() {
