@@ -217,7 +217,7 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 }
 
 void graphicsPut( uint8_t x, uint8_t y) {
-    BMP_setPixelFast(x, 16 + y, 0x1111);
+    BMP_setPixelFast(x, 16 + y, 0b11111011);
 }
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
@@ -246,7 +246,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
         }
 
         if (stipple) {
-            BMP_setPixelFast(x0, 16 + y, 3 + colour);
+            BMP_setPixelFast(x0, 16 + y, 0b10011111);
         }
     }
 }
