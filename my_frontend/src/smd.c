@@ -262,8 +262,8 @@ void showMessage(const char *message) {
         VDP_clearText(16, i, 16);
     }
 
-    writeStrWithLimit(16, 1, message, 31);
-    writeStrWithLimit(16, 17, "Press Start to continue", 31);
+    writeStrWithLimit(1, 5, message, 31);
+    writeStrWithLimit(6, 17, "Press Start to continue", 31);
 
     while (keepGoing) {
         if (getKey() == 'k') {
@@ -298,13 +298,10 @@ void titleScreen() {
     int keepGoing = 1;
     clearGraphics();
                     //               |
-    writeStr(1, 1, "   Space Mare   ", 2, 0);
-    writeStr(1, 2, "    Imperium    ", 2, 0);
-    writeStr(1, 4, "    Derelict    ", 2, 0);
-    writeStr(1, 6, "   by Daniel    ", 2, 0);
-    writeStr(1, 7, "    Monteiro    ", 2, 0);
-    writeStr(1, 9, "   Press start  ", 2, 0);
-    writeStr(1,10, "     button!    ", 2, 0);
+    writeStr(1, 5, "   Space Mare Imperium  ", 2, 0);
+    writeStr(1, 6, "        Derelict        ", 2, 0);
+    writeStr(1, 8, "   by Daniel Monteiro   ", 2, 0);
+    writeStr(1,10, "   Press start button!  ", 2, 0);
 
     while (keepGoing) {
         if (getKey() == 'k') {
@@ -313,13 +310,10 @@ void titleScreen() {
     }
 
 
-    VDP_clearText(1, 1, 16);
-    VDP_clearText(1, 2, 16);
-    VDP_clearText(1, 4, 16);
-    VDP_clearText(1, 6, 16);
-    VDP_clearText(1, 7, 16);
-    VDP_clearText(1, 9, 16);
-    VDP_clearText(1,10, 16);
+    VDP_clearText(1, 5, 24);
+    VDP_clearText(1, 6, 24);
+    VDP_clearText(1, 8, 24);
+    VDP_clearText(1,10, 24);
 
     clearScreen();
 }
@@ -385,18 +379,18 @@ void HUD_refresh() {
         writeStrWithLimit(16, 6, "Nothing", 31);
     }
 
-    writeStrWithLimit(16, 1, "Object in room:", 31);
+    writeStrWithLimit(16, 8, "Object in room:", 31);
 
     if (roomItem != NULL) {
         struct Item *item = getItem(roomItem->item);
 
 
         if (item->active) {
-            writeStrWithLimit(16, 2, "*", 31);
+            writeStrWithLimit(16, 9, "*", 31);
         }
 
-        writeStrWithLimit(17, 2, item->name, 31);
+        writeStrWithLimit(17,9, item->name, 31);
     } else {
-        writeStrWithLimit(16, 2, "Nothing", 31);
+        writeStrWithLimit(16, 9, "Nothing", 31);
     }
 }
