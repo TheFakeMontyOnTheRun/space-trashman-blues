@@ -50,6 +50,15 @@ void graphicsPut(uint8_t x, uint8_t y) {
 #endif
 }
 
+void clearTextScreen() {
+}
+
+void enterTextMode() {
+}
+
+void exitTextMode() {
+}
+
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint shouldStipple) {
     int16_t y;
     int16_t _y0 = y0;

@@ -297,6 +297,15 @@ char *menuItems[] = {
     }
 }
 
+void clearTextScreen() {
+    clearScreen();
+}
+
+void enterTextMode() {
+}
+
+void exitTextMode() {
+}
 
 uint8_t getKey() {
     unsigned int key = read_joypad1();

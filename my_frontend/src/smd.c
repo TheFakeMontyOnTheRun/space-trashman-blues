@@ -36,6 +36,7 @@ extern int accessGrantedToSafe;
 uint8_t buffered = '.';
 int cursorPosition = 0;
 uint16_t cooldown;
+uint16_t movementCooldown = 0;
 
 char *menuItems[] = {
         "Use/Toggle",
@@ -121,6 +122,10 @@ static void handleInput()
         cooldown--;
     }
 
+    if (movementCooldown) {
+        movementCooldown--;
+    }
+
     // need to call it manually as we don't use SYS_doVBlankProcess() here
     JOY_update();
 
@@ -135,19 +140,19 @@ static void handleInput()
         }
     } else {
 
-        if (value & BUTTON_UP) {
+        if (value & BUTTON_UP && !movementCooldown) {
             buffered = 'w';
         }
 
-        if (value & BUTTON_DOWN) {
+        if (value & BUTTON_DOWN && !movementCooldown) {
             buffered = 's';
         }
 
-        if (value & BUTTON_LEFT) {
+        if (value & BUTTON_LEFT && !movementCooldown) {
             buffered = 'q';
         }
 
-        if (value & BUTTON_RIGHT) {
+        if (value & BUTTON_RIGHT && !movementCooldown) {
             buffered = 'e';
         }
 
@@ -159,6 +164,7 @@ static void handleInput()
             performAction();
             HUD_refresh();
             cooldown = COOLDOWN_MAX;
+            buffered = 'p';
         }
 
         if ((value & BUTTON_C) && !cooldown) {
@@ -170,6 +176,7 @@ static void handleInput()
 
             HUD_refresh();
             cooldown = COOLDOWN_MAX;
+            buffered = 'p';
         }
     }
 }
@@ -256,6 +263,7 @@ static void joyEvent(u16 joy, u16 changed, u16 state) {
 }
 
 void showMessage(const char *message) {
+    enterTextMode();
     int keepGoing = 1;
 
     for (uint8_t i = 0; i < 19; ++i) {
@@ -277,6 +285,7 @@ void showMessage(const char *message) {
         VDP_clearText(16, i, 16);
     }
 
+    exitTextMode();
     HUD_initialPaint();
 }
 
@@ -285,6 +294,24 @@ void clearScreen() {
 
 void clearGraphics() {
     BMP_clear();
+}
+
+void clearTextScreen() {
+    for (int c = 0; c < 23; ++c ) {
+        VDP_clearText( 0, c, 256 / 8);
+    }
+    cooldown = COOLDOWN_MAX;
+    movementCooldown = COOLDOWN_MAX;
+}
+
+void enterTextMode() {
+    clearGraphics();
+    BMP_flip(1);
+    clearTextScreen();
+}
+
+void exitTextMode() {
+    clearTextScreen();
 }
 
 void drawWindow(int tx, int ty, int tw, int th, const char* title ) {}
