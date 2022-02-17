@@ -198,49 +198,34 @@
             android:minHeight="50dp"
             android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/btnFire"
+            <Button
+                android:id="@+id/btnUse"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="#000000FF"
-                android:scaleType="fitCenter"
-                android:soundEffectsEnabled="false"
-                android:src="@drawable/action_fire"
-                android:text="Pick" />
+                android:text="Use/Toggle" />
 
 
-            <ImageButton
-                android:id="@+id/btnAim"
+            <Button
+                android:id="@+id/btnUseWith"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="#000000FF"
-                android:scaleType="fitCenter"
-                android:soundEffectsEnabled="false"
-                android:src="@drawable/action_aim"
-                android:text="Next item" />
+                android:text="Use with..." />
 
-            <ImageButton
-                android:id="@+id/btnPick"
+            <Button
+                android:id="@+id/btnNextItem"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="#000000FF"
-                android:scaleType="fitCenter"
-                android:soundEffectsEnabled="false"
-                android:src="@drawable/action_pick"
-                android:text="Hit" />
+                android:text="Next Item" />
 
-            <LinearLayout
+            <Button
+                android:id="@+id/btnItemInfo"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:minHeight="50dp"
-                android:orientation="vertical">
-
-            </LinearLayout>
+                android:text="Item Info" />
 
 
         </LinearLayout>

@@ -201,39 +201,34 @@
                 android:orientation="vertical">
 
 
-                <ImageButton
-                    android:id="@+id/btnFire"
+                <Button
+                    android:id="@+id/btnUse"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:background="#000000FF"
-                    android:scaleType="fitStart"
-                    android:soundEffectsEnabled="false"
-                    android:src="@drawable/action_fire"
-                    android:text="Pick" />
+                    android:text="Use/Toggle" />
 
 
-                <ImageButton
-                    android:id="@+id/btnAim"
+                <Button
+                    android:id="@+id/btnUseWith"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:background="#000000FF"
-                    android:scaleType="fitEnd"
-                    android:soundEffectsEnabled="false"
-                    android:src="@drawable/action_aim"
+                    android:text="Use with..." />
+
+                <Button
+                    android:id="@+id/btnNextItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:text="Next item" />
 
-                <ImageButton
-                    android:id="@+id/btnPick"
+                <Button
+                    android:id="@+id/btnItemInfo"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:background="#000000FF"
-                    android:scaleType="fitStart"
-                    android:soundEffectsEnabled="false"
-                    android:src="@drawable/action_pick"
-                    android:text="Hit" />
+                    android:text="Item info" />
 
             </LinearLayout>
 

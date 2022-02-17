@@ -76,5 +76,5 @@ enum ESoundDriver {
 #define PLAYER_GOT_DETECTED_SOUND 4
 #define PLAYER_FIRING_GUN 5
 #define ENEMY_FIRING_GUN 6
-#define PLAYER_GET_HURT_SOUND 7
+#define MAIN_MENU_THEME 7
 #endif

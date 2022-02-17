@@ -141,6 +141,7 @@ int8_t HackingScreen_tickCallback(char cmd) {
 void runHackingMinigame(void) {
     uint8_t cmd;
     clearScreen();
+    enterTextMode();
     HackingScreen_initStateCallback();
     HackingScreen_repaintCallback();
     uint8_t state = 0;
@@ -153,10 +154,10 @@ void runHackingMinigame(void) {
         }
 
         state = HackingScreen_tickCallback(cmd);
-        clearScreen();
+        clearTextScreen();
         HackingScreen_repaintCallback();
     }
-
+    exitTextMode();
     clearScreen();
     HUD_initialPaint();
 }

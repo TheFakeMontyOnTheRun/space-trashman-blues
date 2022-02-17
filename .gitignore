@@ -143,3 +143,9 @@ derelict.com
 my_frontend/out.bin
 my_frontend/out.elf
 my_frontend/symbol.txt
+game.html.mem
+Breakpoints_v2.xcbkptlist
+my_frontend/CMakeFiles
+my_frontend/cmake_install.cmake
+my_frontend/CMakeCache.txt
+my_frontend/derelict8

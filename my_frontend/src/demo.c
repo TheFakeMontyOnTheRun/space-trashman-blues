@@ -1314,6 +1314,7 @@ next_cluster:
 #ifdef TRACE_OBJECTS_OVER_FLOOR
     repaintMapItems();
 #endif
+    memset(stencilHigh, 0, XRES);
 }
 
 void renderCameraWest() {
@@ -1786,13 +1787,9 @@ void tickRenderer() {
     int previousLocation = playerLocation;
     uint8_t newCell = 0;
 
-#ifndef SMS
     clearGraphics();
-#endif
     renderScene();
-
     graphicsFlush();
-    memset(stencilHigh, 0, XRES);
 
     prevX = cameraX;
     prevZ = cameraZ;
@@ -1805,29 +1802,6 @@ void tickRenderer() {
         case 'l':
             shutdownGraphics();
             exit(0);
-#endif
-#endif
-        case 'q':
-            turnLeft();
-            break;
-
-        case 'e':
-            turnRight();
-            break;
-
-        case 'a':
-            walkBy(3);
-            break;
-        case 'd':
-            walkBy(1);
-            break;
-        case 's':
-            walkBy(2);
-            break;
-        case 'w':
-            walkBy(0);
-            break;
-
         case '7':
             nextItemInHand();
             HUD_refresh();
@@ -1858,6 +1832,28 @@ void tickRenderer() {
         case '6':
             dropItem();
             HUD_refresh();
+            break;
+#endif
+#endif
+        case 'q':
+            turnLeft();
+            break;
+
+        case 'e':
+            turnRight();
+            break;
+
+        case 'a':
+            walkBy(3);
+            break;
+        case 'd':
+            walkBy(1);
+            break;
+        case 's':
+            walkBy(2);
+            break;
+        case 'w':
+            walkBy(0);
             break;
 
 #if !defined(SDLSW)

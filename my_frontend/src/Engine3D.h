@@ -58,6 +58,8 @@ void HUD_refresh();
 
 void tickRenderer();
 
+void renderScene();
+
 void shutdownGraphics();
 
 void clearGraphics();
@@ -65,6 +67,12 @@ void clearGraphics();
 void sleepForMS(uint32_t ms);
 
 void clearScreen();
+
+void clearTextScreen();
+
+void enterTextMode();
+
+void exitTextMode();
 
 void writeStr(uint8_t nColumn, uint8_t nLine, const char *str, uint8_t fg, uint8_t bg);
 

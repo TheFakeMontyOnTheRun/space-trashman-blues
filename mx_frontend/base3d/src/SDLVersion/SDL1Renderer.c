@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "Core.h"
 #include "Common.h"
 #include "Enums.h"
 #include "FixP.h"

@@ -25,6 +25,7 @@ extern int accessGrantedToSafe;
 #define BUFFER_RESX 128
 #define BUFFER_RESY 128
 #define COOLDOWN_MAX 0x2EF
+#define MARGIN_TEXT_SCREEN_LIMIT 30
 
 uint8_t font[] = {
         // ASCII table starting on SPACE.
@@ -94,31 +95,6 @@ uint8_t font[] = {
         , 0x10,0x28,0x44,0x00,0x00,0x00,0x00,0x00
         , 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xfc
         , 0x30,0x30,0x10,0x00,0x00,0x00,0x00,0x00
-        , 0x00,0x00,0x38,0x04,0x3c,0x44,0x3c,0x00
-        , 0x40,0x40,0x78,0x44,0x44,0x44,0x78,0x00
-        , 0x00,0x00,0x38,0x44,0x40,0x44,0x38,0x00
-        , 0x04,0x04,0x3c,0x44,0x44,0x44,0x3c,0x00
-        , 0x00,0x00,0x38,0x44,0x78,0x40,0x38,0x00
-        , 0x18,0x20,0x20,0x78,0x20,0x20,0x20,0x00
-        , 0x00,0x00,0x3c,0x44,0x44,0x3c,0x04,0x38
-        , 0x40,0x40,0x70,0x48,0x48,0x48,0x48,0x00
-        , 0x10,0x00,0x10,0x10,0x10,0x10,0x18,0x00
-        , 0x08,0x00,0x18,0x08,0x08,0x08,0x48,0x30
-        , 0x40,0x40,0x48,0x50,0x60,0x50,0x48,0x00
-        , 0x10,0x10,0x10,0x10,0x10,0x10,0x18,0x00
-        , 0x00,0x00,0x68,0x54,0x54,0x44,0x44,0x00
-        , 0x00,0x00,0x70,0x48,0x48,0x48,0x48,0x00
-        , 0x00,0x00,0x38,0x44,0x44,0x44,0x38,0x00
-        , 0x00,0x00,0x78,0x44,0x44,0x44,0x78,0x40
-        , 0x00,0x00,0x3c,0x44,0x44,0x44,0x3c,0x04
-        , 0x00,0x00,0x58,0x24,0x20,0x20,0x70,0x00
-        , 0x00,0x00,0x38,0x40,0x38,0x04,0x38,0x00
-        , 0x00,0x20,0x78,0x20,0x20,0x28,0x10,0x00
-        , 0x00,0x00,0x48,0x48,0x48,0x58,0x28,0x00
-        , 0x00,0x00,0x44,0x44,0x44,0x28,0x10,0x00
-        , 0x00,0x00,0x44,0x44,0x54,0x7c,0x28,0x00
-        , 0x00,0x00,0x48,0x48,0x30,0x48,0x48,0x00
-        , 0x00,0x00,0x48,0x48,0x48,0x38,0x10,0x60
         , 0x00,0x00,0x78,0x08,0x30,0x40,0x78,0x00
         , 0x18,0x20,0x20,0x60,0x20,0x20,0x18,0x00
         , 0x10,0x10,0x10,0x00,0x10,0x10,0x10,0x00
@@ -188,8 +164,14 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
             x = _x;
             ++ptr;
             continue;
-        } else {
-            ++x;
+        }
+
+        if (cha >= 'a') {
+            if (cha <= 'z') {
+                cha = (cha - 'a') + 'A';
+            } else {
+                cha -= ('z' - 'a');
+            }
         }
 
         uint8_t baseY = (y << 3);
@@ -197,51 +179,51 @@ void writeStrWithLimit(int _x, int y, char *text, int limitX) {
         uint8_t *fontTop = &font[((cha - 32) << 3)];
         vwrite(fontTop, map_pixel( x << 3, y << 3), 8 );
 
+        ++x;
         ++ptr;
     }
 }
 
 void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
-    writeStrWithLimit(_x, y, text, 31);
+    writeStrWithLimit(_x, y, text, MARGIN_TEXT_SCREEN_LIMIT);
 }
 
 void drawWindow(int tx, int ty, int tw, int th, const char* title ) {}
 
+
 void showMessage(const char *message) {
     int keepGoing = 1;
-    clearGraphics();
+    clearScreen();
 
-    writeStr(1, 1, (char *) message, 2, 0);
-    writeStr(1, 3, "Press B button to continue", 2, 0);
+    writeStr(1, 1, message, 2 , 0);
+    writeStr(2, 22, "Press any button to continue", 2, 0);
 
     while (keepGoing) {
-        if (read_joypad1() & JOY_FIREB) {
+        if (getKey() == 'p') {
             keepGoing = 0;
         }
     }
 
-    clearGraphics();
+    clearScreen();
     HUD_initialPaint();
-    tickRenderer();
+    renderScene();
 }
 
 void titleScreen() {
     int keepGoing = 1;
     clearGraphics();
 
-    writeStr(1, 1, "Space Mare Imperium:", 2, 0);
-    writeStr(1, 2, "     Derelict", 2, 0);
+    writeStr(1, 1, "Space Mare Imperium: Derelict", 2, 0);
     writeStr(1, 4, "by Daniel Monteiro", 2, 0);
-    writeStr(1, 6, "  Press B button ", 2, 0);
-    writeStr(1, 7, "    to start", 2, 0);
+    writeStr(1, 6, "  Press B to start ", 2, 0);
 
     while (keepGoing) {
-        if (read_joypad1() & JOY_FIREB) {
+        if (getKey() == 'p') {
             keepGoing = 0;
         }
     }
 
-    clearGraphics();
+    clearScreen();
 }
 
 void performAction() {
@@ -266,7 +248,7 @@ void performAction() {
             showMessage("You failed! While you fled the ship\n"
                         "alive, you failed to prevent the \n"
                         "worstscenario and now EVERYBODY is\n"
-                        "dead (and that includes you!)\n\n\n\n\n");
+                        "dead!)\n\n\n\n\n");
             while (1);
 
         default:
@@ -294,9 +276,17 @@ char *menuItems[] = {
             break;
         case 2:
             pickItem();
+            clearGraphics();
+            renderScene();
+            graphicsFlush();
+            HUD_refresh();
             break;
         case 3:
             dropItem();
+            clearGraphics();
+            renderScene();
+            graphicsFlush();
+            HUD_refresh();
             break;
         case 4:
             nextItemInHand();
@@ -307,6 +297,15 @@ char *menuItems[] = {
     }
 }
 
+void clearTextScreen() {
+    clearScreen();
+}
+
+void enterTextMode() {
+}
+
+void exitTextMode() {
+}
 
 uint8_t getKey() {
     unsigned int key = read_joypad1();
@@ -320,17 +319,11 @@ uint8_t getKey() {
     }
 
     if (key & JOY_LEFT) {
-        if (key & JOY_FIREB) {
-            return 'a';
-        }
         return 'q';
     }
 
 
     if (key & JOY_RIGHT) {
-        if (key & JOY_FIREB) {
-            return 'd';
-        }
         return 'e';
     }
 
@@ -340,7 +333,6 @@ uint8_t getKey() {
 
     if ((key & JOY_FIREA) && !cooldown) {
         performAction();
-        HUD_refresh();
         cooldown = COOLDOWN_MAX;
         return 'p';
     }
@@ -379,7 +371,6 @@ void graphicsFlush() {
         vwrite( ptr, addr, 16 * 8);
         ptr += 8 * 16;
     }
-    memset( &buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
 void sleepForMS(uint32_t ms) {
@@ -641,62 +632,52 @@ void HUD_initialPaint() {
     draw(BUFFER_RESX, 0, BUFFER_RESX, 191);
 
     for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(16, 14 + i, i == cursorPosition ? ">" : " ", 2, 0);
-        writeStr(17, 14 + i, menuItems[i], 2, 0);
+        writeStr(18, 14 + i, menuItems[i], 2, 0);
     }
 
-//
-//    for (uint8_t y = 0; y < 32; ++y ) {
-//        for (uint8_t x = 0; x < 32; ++x ) {
-//
-//            if (patterns[map[y][x]].blockMovement) {
-//                set_color(15, 1, 1);
-//            } else {
-//                set_color(0, 1, 1);
-//            }
-//            pset( 128 + 8 + (x * 2), 16 + (y * 2) );
-//            pset( 128 + 8 + (x * 2) + 1, 16 + (y * 2) );
-//            pset( 128 + 8 + (x * 2), 16 + (y * 2) + 1);
-//            pset( 128 + 8 + (x * 2) + 1, 16 + (y * 2) + 1);
-//        }
-//    }
-//
-//    set_color(15, 1, 1);
     HUD_refresh();
 }
 
 void HUD_refresh() {
 
-    fill(map_pixel(17 * 8,  21 * 8), 0, 255 - (17 * 8) );
-    fill(map_pixel(17 * 8,  22 * 8), 0, 255 - (17 * 8) );
-    fill(map_pixel(0,  1 * 8), 0, 127 );
-    fill(map_pixel(0,  2 * 8), 0, 127 );
-
+    for ( int c = 0; c < 13; ++c ) {
+        for (int d = 0; d < 15; ++d ) {
+            writeStr(17 + d, c, " ", 2, 0);
+        }
+    }
 
     for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(16, 14 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
+        writeStr(17, 14 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
     }
+
+    writeStrWithLimit(17, 5, "Object in hand", 31);
 
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
 
 
         if (item->active) {
-            writeStr(16, 21, "*", 2, 0);
+            writeStr(17, 6, "*", 2, 0);
         }
 
-        writeStrWithLimit(17, 21, item->name, 30);
+        writeStrWithLimit(18, 6, item->name, 31);
+    } else {
+        writeStrWithLimit(18, 6, "Nothing", 31);
     }
+
+    writeStrWithLimit(17, 1, "Object in room", 31);
 
     if (roomItem != NULL) {
         struct Item *item = getItem(roomItem->item);
 
 
         if (item->active) {
-            writeStr(0, 1, "*", 2, 0);
+            writeStrWithLimit(17, 2, "*", 31);
         }
 
-        writeStrWithLimit(1, 1, item->name, 14);
+        writeStrWithLimit(18, 2, item->name, 31);
+    } else {
+        writeStrWithLimit(18, 2, "Nothing", 31);
     }
 }
 

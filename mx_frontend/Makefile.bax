@@ -2,7 +2,7 @@ CXX = m68k-amigaos-g++
 CC = m68k-amigaos-gcc
 STRIP=m68k-amigaos-strip
 AS = vasmm68k_mot
-CFLAGS = -DAMIGA -Ibase3d/include -I../core/include -I../core/include -Imenu/include -ISoundSystem -c -m68000 -mtune=68000 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -fstrength-reduce -Ofast -DAGA8BPP -DINCLUDE_ITEM_DESCRIPTIONS
+CFLAGS = -DAMIGA -DCLI_BUILD -Ibase3d/include -I../common/include -I../core/include -I../core/include -Imenu/include -ISoundSystem -c -m68000 -mtune=68000 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -fstrength-reduce -Ofast -DAGA8BPP -DINCLUDE_ITEM_DESCRIPTIONS
 LDFLAGS =  -msmall-code -fexpensive-optimizations -Ofast -s -fomit-frame-pointer -noixemul
 ASFLAGS = -phxass -Fhunk -m68020 -chklabels -no-fpu -wfail -I/opt/amiga/m68k-amigaos/ndk-include
 
@@ -12,8 +12,9 @@ MENU_TARGET=game12k
 MENU_OBJ= menu/src/Main.o \
 	../common/src/FixP.o \
 	../common/src/Vec.o \
-	../common/src/MapWithCharKey.o \
+	../common/src/Common.o \
 	../common/src/PackedFileReader.o \
+	../common/src/MapWithCharKey.o \
 	base3d/src/AmigaVersion/c2p1x1_8_c5_bm.o \
 	base3d/src/AmigaVersion/c2p1x1_4_c5_bm.o \
 	SoundSystem/MusicAGA.o \
@@ -34,6 +35,7 @@ MENU_OBJ= menu/src/Main.o \
 	menu/src/Crawler.o \
 	menu/src/UI.o \
 	base3d/src/Globals.o \
+	menu/src/BattleScreen.o \
 	menu/src/HelpScreen.o \
 	menu/src/CreditsScreen.o \
 	menu/src/MainMenu.o \

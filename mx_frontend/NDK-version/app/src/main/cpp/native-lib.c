@@ -277,6 +277,10 @@ JNIEXPORT void JNICALL
             mBufferedCommand = kCommandFire3;
             break;
 
+        case 'v':
+            mBufferedCommand = kCommandFire4;
+            break;
+
         case 'a':
             mBufferedCommand = kCommandLeft;
             turnStep = 0;
