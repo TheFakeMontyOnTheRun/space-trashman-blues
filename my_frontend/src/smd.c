@@ -259,7 +259,7 @@ void showMessage(const char *message) {
     int keepGoing = 1;
 
     for (uint8_t i = 0; i < 19; ++i) {
-        BMP_clearText(16, i, 16);
+        VDP_clearText(16, i, 16);
     }
 
     writeStrWithLimit(16, 1, message, 31);
@@ -274,7 +274,7 @@ void showMessage(const char *message) {
     clearScreen();
 
     for (uint8_t i = 0; i < 19; ++i) {
-        BMP_clearText(16, i, 16);
+        VDP_clearText(16, i, 16);
     }
 
     HUD_initialPaint();
@@ -363,7 +363,7 @@ void HUD_initialPaint() {
 void HUD_refresh() {
 
     for (uint8_t i = 0; i < 13; ++i) {
-        BMP_clearText(16, i, 16);
+        VDP_clearText(16, i, 16);
     }
 
     for (uint8_t i = 0; i < 6; ++i) {
