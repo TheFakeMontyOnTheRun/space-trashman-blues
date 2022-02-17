@@ -224,7 +224,7 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 }
 
 void graphicsPut( uint8_t x, uint8_t y) {
-    BMP_setPixelFast(x, 16 + y, 0b11111011);
+    BMP_setPixelFast(x, 16 + y, 0b11101110);
 }
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
@@ -253,7 +253,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
         }
 
         if (stipple) {
-            BMP_setPixelFast(x0, 16 + y, 0b10011111);
+            BMP_setPixelFast(x0, 16 + y, 0b11101110);
         }
     }
 }
@@ -362,6 +362,8 @@ void init() {
     DMA_setBufferSize(2048);
 
     BMP_init(FALSE, BG_B, PAL0, 0);
+
+    VDP_setPaletteColor(15,RGB24_TO_VDPCOLOR(0x00ff00));
 }
 
 void graphicsFlush() {
