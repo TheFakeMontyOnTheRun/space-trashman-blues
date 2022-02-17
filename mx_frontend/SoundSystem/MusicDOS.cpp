@@ -194,7 +194,7 @@ extern "C" void playSound( const int action ) {
 			playMusic(action,"t300i20o1b20");
 			break;
 
-		case PLAYER_GET_HURT_SOUND:
+		case MAIN_MENU_THEME: /* as if... */
 			playMusic(action,"t300i20o1d20c20");
 			break;
 	}
