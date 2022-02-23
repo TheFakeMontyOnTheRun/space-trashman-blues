@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         }
 
-        if  ( (application as MistralApplication).mayEnableSound() ) {
+        if  ( (application as DerelictApplication).mayEnableSound() ) {
             initAudio()
         } else {
             soundPool = null
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null ) {
-            MistralJNI.initAssets(resources.assets)
+            DerelictJNI.initAssets(resources.assets)
         }
 
         imageView.setImageBitmap(bitmap)
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 Thread.sleep(1000)
 
                 runOnUiThread {
-                    if (!(application as MistralApplication).hasPhysicalController()) {
+                    if (!(application as DerelictApplication).hasPhysicalController()) {
 
                         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                             llActions.visibility = View.VISIBLE
@@ -141,7 +141,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 Thread.sleep(2000)
                 while (running) {
                     Thread.sleep(10)
-                    when (val sound = MistralJNI.getSoundToPlay()) {
+                    when (val sound = DerelictJNI.getSoundToPlay()) {
                         0, 1, 2, 3, 4, 5, 6, 7, 8 -> runOnUiThread {
                             soundPool!!.play(
                                 sounds[sound],
@@ -159,10 +159,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onBackPressed() {
-        if (MistralJNI.isOnMainMenu() != 0 ) {
+        if (DerelictJNI.isOnMainMenu() != 0 ) {
             super.onBackPressed()
         } else {
-            MistralJNI.sendCommand('q')
+            DerelictJNI.sendCommand('q')
         }
     }
     override fun onPause() {
@@ -174,7 +174,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun redraw() {
-        MistralJNI.getPixelsFromNative(pixels)
+        DerelictJNI.getPixelsFromNative(pixels)
         bitmap.copyPixelsFromBuffer(ByteBuffer.wrap(pixels))
         imageView.invalidate()
     }
@@ -197,7 +197,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             KeyEvent.KEYCODE_BUTTON_START, KeyEvent.KEYCODE_BUTTON_X, KeyEvent.KEYCODE_ENTER -> 'q'
             else -> return super.onKeyUp(keyCode, event )
         }
-        MistralJNI.sendCommand(toSend)
+        DerelictJNI.sendCommand(toSend)
         return true
     }
 
@@ -218,7 +218,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.btnStrafeLeft-> toSend = 'n'
             R.id.btnStrafeRight-> toSend = 'm'
         }
-        MistralJNI.sendCommand(toSend)
+        DerelictJNI.sendCommand(toSend)
     }
 
 

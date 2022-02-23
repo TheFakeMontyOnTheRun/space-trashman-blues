@@ -204,8 +204,8 @@ void flipRenderer(void) {
 void clearRenderer(void) {}
 
 JNIEXPORT void JNICALL
-Java_pt_b13h_spacetrashmanblues_MistralJNI_initAssets(JNIEnv *env, jclass clazz,
-                                                    jobject assetManager) {
+Java_pt_b13h_spacetrashmanblues_DerelictJNI_initAssets(JNIEnv *env, jclass clazz,
+                                                       jobject assetManager) {
 
     AAssetManager *asset_manager = AAssetManager_fromJava(env, assetManager);
     defaultAssetManager = asset_manager;
@@ -220,8 +220,8 @@ Java_pt_b13h_spacetrashmanblues_MistralJNI_initAssets(JNIEnv *env, jclass clazz,
 }
 
 JNIEXPORT void JNICALL
-Java_pt_b13h_spacetrashmanblues_MistralJNI_getPixelsFromNative(JNIEnv *env, jclass clazz,
-                                                             jbyteArray array) {
+Java_pt_b13h_spacetrashmanblues_DerelictJNI_getPixelsFromNative(JNIEnv *env, jclass clazz,
+                                                                jbyteArray array) {
     menuTick ( 33 );
     jbyte *narr = (*env)->GetByteArrayElements(env, array, NULL);
     memcpy(narr, &framebufferFinal[0], 320 * 240 * 4);
@@ -242,19 +242,19 @@ void soundTick() {}
 void muteSound() {}
 
     JNIEXPORT jint JNICALL
-    Java_pt_b13h_spacetrashmanblues_MistralJNI_getSoundToPlay(JNIEnv *env, jclass clazz) {
+    Java_pt_b13h_spacetrashmanblues_DerelictJNI_getSoundToPlay(JNIEnv *env, jclass clazz) {
     int toReturn = soundToPlay;
     soundToPlay = -1;
     return toReturn;
 }
 
     JNIEXPORT jint JNICALL
-    Java_pt_b13h_spacetrashmanblues_MistralJNI_isOnMainMenu(JNIEnv *env, jclass clazz) {
+    Java_pt_b13h_spacetrashmanblues_DerelictJNI_isOnMainMenu(JNIEnv *env, jclass clazz) {
     return currentGameMenuState == (kMainMenu);
 }
 
 JNIEXPORT void JNICALL
-    Java_pt_b13h_spacetrashmanblues_MistralJNI_sendCommand(JNIEnv *env, jclass clazz, jchar cmd) {
+    Java_pt_b13h_spacetrashmanblues_DerelictJNI_sendCommand(JNIEnv *env, jclass clazz, jchar cmd) {
     switch (cmd) {
         case 'w':
             mBufferedCommand = kCommandUp;

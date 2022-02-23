@@ -5,7 +5,7 @@
 
     <application
         android:icon="@drawable/icon"
-        android:name="pt.b13h.spacetrashmanblues.MistralApplication"
+        android:name="pt.b13h.spacetrashmanblues.DerelictApplication"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
 

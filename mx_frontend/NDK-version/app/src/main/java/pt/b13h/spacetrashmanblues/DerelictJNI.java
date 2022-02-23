@@ -2,7 +2,7 @@ package pt.b13h.spacetrashmanblues;
 
 import android.content.res.AssetManager;
 
-public class MistralJNI {
+public class DerelictJNI {
     static {
         System.loadLibrary("native-lib");
     }
