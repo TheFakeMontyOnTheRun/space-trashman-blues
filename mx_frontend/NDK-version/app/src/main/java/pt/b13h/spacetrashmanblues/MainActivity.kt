@@ -87,8 +87,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         Thread {
             while (running) {
-                Thread.sleep(1000)
-
                 runOnUiThread {
                     if (!(application as DerelictApplication).hasPhysicalController()) {
 
@@ -125,7 +123,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     runOnUiThread { (this@MainActivity).recreate() }
                 }
 
-
+                Thread.sleep(1000)
             }
         }.start()
 
