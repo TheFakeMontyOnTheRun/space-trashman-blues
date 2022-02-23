@@ -210,8 +210,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             R.id.btnUse -> toSend = 'z'
             R.id.btnUseWith -> toSend = 'x'
-            R.id.btnNextItem -> toSend = 'c'
-            R.id.btnItemInfo -> toSend = 'v'
+            R.id.btnNextItem -> toSend = 'v'
+            R.id.btnItemInfo -> toSend = 'c'
 
             R.id.btnStrafeLeft-> toSend = 'n'
             R.id.btnStrafeRight-> toSend = 'm'
