@@ -1,0 +1,391 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F10AFB1516DAF0C700415CD4 /* OutcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10AFB1316DAF0C700415CD4 /* OutcomeViewController.m */; };
+		F10AFB1616DAF0C700415CD4 /* OutcomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F10AFB1416DAF0C700415CD4 /* OutcomeViewController.xib */; };
+		F10AFB1916DAF43D00415CD4 /* Board.m in Sources */ = {isa = PBXBuildFile; fileRef = F10AFB1816DAF43C00415CD4 /* Board.m */; };
+		F19DEB9E16D92CFB00785ECD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F19DEB9D16D92CFB00785ECD /* UIKit.framework */; };
+		F19DEBA016D92CFB00785ECD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F19DEB9F16D92CFB00785ECD /* Foundation.framework */; };
+		F19DEBA216D92CFB00785ECD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F19DEBA116D92CFB00785ECD /* CoreGraphics.framework */; };
+		F19DEBA816D92CFB00785ECD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F19DEBA616D92CFB00785ECD /* InfoPlist.strings */; };
+		F19DEBAA16D92CFB00785ECD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F19DEBA916D92CFB00785ECD /* main.m */; };
+		F19DEBAE16D92CFB00785ECD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F19DEBAD16D92CFB00785ECD /* AppDelegate.m */; };
+		F19DEBB016D92CFB00785ECD /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F19DEBAF16D92CFB00785ECD /* Default.png */; };
+		F19DEBB216D92CFB00785ECD /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F19DEBB116D92CFB00785ECD /* Default@2x.png */; };
+		F19DEBB416D92CFB00785ECD /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F19DEBB316D92CFB00785ECD /* Default-568h@2x.png */; };
+		F19DEBB716D92CFB00785ECD /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F19DEBB616D92CFB00785ECD /* SplashViewController.m */; };
+		F19DEBBA16D92CFB00785ECD /* SplashViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F19DEBB816D92CFB00785ECD /* SplashViewController.xib */; };
+		F19DEBC316D92D5F00785ECD /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F19DEBC116D92D5F00785ECD /* GameViewController.m */; };
+		F19DEBC416D92D5F00785ECD /* GameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F19DEBC216D92D5F00785ECD /* GameViewController.xib */; };
+		F1D26CA927C6EB6300E29DEF /* images in Resources */ = {isa = PBXBuildFile; fileRef = F1D26CA827C6EB6300E29DEF /* images */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F10AFB1216DAF0C700415CD4 /* OutcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutcomeViewController.h; sourceTree = "<group>"; };
+		F10AFB1316DAF0C700415CD4 /* OutcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutcomeViewController.m; sourceTree = "<group>"; };
+		F10AFB1416DAF0C700415CD4 /* OutcomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OutcomeViewController.xib; sourceTree = "<group>"; };
+		F10AFB1716DAF43B00415CD4 /* Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Board.h; sourceTree = "<group>"; };
+		F10AFB1816DAF43C00415CD4 /* Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Board.m; sourceTree = "<group>"; };
+		F19DEB9A16D92CFB00785ECD /* Derelict3D.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Derelict3D.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F19DEB9D16D92CFB00785ECD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		F19DEB9F16D92CFB00785ECD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		F19DEBA116D92CFB00785ECD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		F19DEBA516D92CFB00785ECD /* Derelict3D-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Derelict3D-Info.plist"; sourceTree = "<group>"; };
+		F19DEBA716D92CFB00785ECD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F19DEBA916D92CFB00785ECD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F19DEBAC16D92CFB00785ECD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		F19DEBAD16D92CFB00785ECD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		F19DEBAF16D92CFB00785ECD /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		F19DEBB116D92CFB00785ECD /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		F19DEBB316D92CFB00785ECD /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		F19DEBB516D92CFB00785ECD /* SplashViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SplashViewController.h; sourceTree = "<group>"; };
+		F19DEBB616D92CFB00785ECD /* SplashViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SplashViewController.m; sourceTree = "<group>"; };
+		F19DEBB916D92CFB00785ECD /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SplashViewController.xib; sourceTree = "<group>"; };
+		F19DEBC016D92D5E00785ECD /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		F19DEBC116D92D5F00785ECD /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		F19DEBC216D92D5F00785ECD /* GameViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GameViewController.xib; sourceTree = "<group>"; };
+		F1D26CA727C6EB1400E29DEF /* Derelict3D.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Derelict3D.entitlements; sourceTree = "<group>"; };
+		F1D26CA827C6EB6300E29DEF /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = Derelic3D/images; sourceTree = "<group>"; };
+		F1D9CA6127C6D6C6009C3248 /* GameStateListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameStateListener.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F19DEB9716D92CFA00785ECD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F19DEB9E16D92CFB00785ECD /* UIKit.framework in Frameworks */,
+				F19DEBA016D92CFB00785ECD /* Foundation.framework in Frameworks */,
+				F19DEBA216D92CFB00785ECD /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F19DEB9116D92CFA00785ECD = {
+			isa = PBXGroup;
+			children = (
+				F1D26CA827C6EB6300E29DEF /* images */,
+				F19DEBA316D92CFB00785ECD /* Derelic3D */,
+				F19DEB9C16D92CFB00785ECD /* Frameworks */,
+				F19DEB9B16D92CFB00785ECD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F19DEB9B16D92CFB00785ECD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F19DEB9A16D92CFB00785ECD /* Derelict3D.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F19DEB9C16D92CFB00785ECD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F19DEB9D16D92CFB00785ECD /* UIKit.framework */,
+				F19DEB9F16D92CFB00785ECD /* Foundation.framework */,
+				F19DEBA116D92CFB00785ECD /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F19DEBA316D92CFB00785ECD /* Derelic3D */ = {
+			isa = PBXGroup;
+			children = (
+				F1D26CA727C6EB1400E29DEF /* Derelict3D.entitlements */,
+				F1D9CA6127C6D6C6009C3248 /* GameStateListener.h */,
+				F19DEBAC16D92CFB00785ECD /* AppDelegate.h */,
+				F19DEBAD16D92CFB00785ECD /* AppDelegate.m */,
+				F19DEBB516D92CFB00785ECD /* SplashViewController.h */,
+				F19DEBB616D92CFB00785ECD /* SplashViewController.m */,
+				F19DEBB816D92CFB00785ECD /* SplashViewController.xib */,
+				F19DEBA416D92CFB00785ECD /* Supporting Files */,
+				F19DEBC016D92D5E00785ECD /* GameViewController.h */,
+				F19DEBC116D92D5F00785ECD /* GameViewController.m */,
+				F19DEBC216D92D5F00785ECD /* GameViewController.xib */,
+				F10AFB1216DAF0C700415CD4 /* OutcomeViewController.h */,
+				F10AFB1316DAF0C700415CD4 /* OutcomeViewController.m */,
+				F10AFB1416DAF0C700415CD4 /* OutcomeViewController.xib */,
+				F10AFB1716DAF43B00415CD4 /* Board.h */,
+				F10AFB1816DAF43C00415CD4 /* Board.m */,
+			);
+			path = Derelic3D;
+			sourceTree = "<group>";
+		};
+		F19DEBA416D92CFB00785ECD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F19DEBA516D92CFB00785ECD /* Derelict3D-Info.plist */,
+				F19DEBA616D92CFB00785ECD /* InfoPlist.strings */,
+				F19DEBA916D92CFB00785ECD /* main.m */,
+				F19DEBAF16D92CFB00785ECD /* Default.png */,
+				F19DEBB116D92CFB00785ECD /* Default@2x.png */,
+				F19DEBB316D92CFB00785ECD /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F19DEB9916D92CFA00785ECD /* Derelict3D */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F19DEBBD16D92CFB00785ECD /* Build configuration list for PBXNativeTarget "Derelict3D" */;
+			buildPhases = (
+				F19DEB9616D92CFA00785ECD /* Sources */,
+				F19DEB9716D92CFA00785ECD /* Frameworks */,
+				F19DEB9816D92CFA00785ECD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Derelict3D;
+			productName = SonarMinefield;
+			productReference = F19DEB9A16D92CFB00785ECD /* Derelict3D.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F19DEB9216D92CFA00785ECD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1320;
+				ORGANIZATIONNAME = "Daniel Monteiro";
+			};
+			buildConfigurationList = F19DEB9516D92CFA00785ECD /* Build configuration list for PBXProject "Derelict3D" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F19DEB9116D92CFA00785ECD;
+			productRefGroup = F19DEB9B16D92CFB00785ECD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F19DEB9916D92CFA00785ECD /* Derelict3D */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F19DEB9816D92CFA00785ECD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F19DEBA816D92CFB00785ECD /* InfoPlist.strings in Resources */,
+				F19DEBB016D92CFB00785ECD /* Default.png in Resources */,
+				F19DEBB216D92CFB00785ECD /* Default@2x.png in Resources */,
+				F19DEBB416D92CFB00785ECD /* Default-568h@2x.png in Resources */,
+				F1D26CA927C6EB6300E29DEF /* images in Resources */,
+				F19DEBBA16D92CFB00785ECD /* SplashViewController.xib in Resources */,
+				F19DEBC416D92D5F00785ECD /* GameViewController.xib in Resources */,
+				F10AFB1616DAF0C700415CD4 /* OutcomeViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F19DEB9616D92CFA00785ECD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F19DEBAA16D92CFB00785ECD /* main.m in Sources */,
+				F19DEBAE16D92CFB00785ECD /* AppDelegate.m in Sources */,
+				F19DEBB716D92CFB00785ECD /* SplashViewController.m in Sources */,
+				F19DEBC316D92D5F00785ECD /* GameViewController.m in Sources */,
+				F10AFB1516DAF0C700415CD4 /* OutcomeViewController.m in Sources */,
+				F10AFB1916DAF43D00415CD4 /* Board.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		F19DEBA616D92CFB00785ECD /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F19DEBA716D92CFB00785ECD /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		F19DEBB816D92CFB00785ECD /* SplashViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F19DEBB916D92CFB00785ECD /* en */,
+			);
+			name = SplashViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F19DEBBB16D92CFB00785ECD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F19DEBBC16D92CFB00785ECD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F19DEBBE16D92CFB00785ECD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Sabers and Pistols/Sabers and Pistols.entitlements";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				INFOPLIST_FILE = "/Users/monty/git/sabers-and-pistols/AppleQuartz/Sabers and Pistols/SabersAndPistols-Info.plist";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = pt.b13h.Derelict3D;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		F19DEBBF16D92CFB00785ECD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Sabers and Pistols/Sabers and Pistols.entitlements";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				INFOPLIST_FILE = "/Users/monty/git/sabers-and-pistols/AppleQuartz/Sabers and Pistols/SabersAndPistols-Info.plist";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = pt.b13h.Derelict3D;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F19DEB9516D92CFA00785ECD /* Build configuration list for PBXProject "Derelict3D" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F19DEBBB16D92CFB00785ECD /* Debug */,
+				F19DEBBC16D92CFB00785ECD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F19DEBBD16D92CFB00785ECD /* Build configuration list for PBXNativeTarget "Derelict3D" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F19DEBBE16D92CFB00785ECD /* Debug */,
+				F19DEBBF16D92CFB00785ECD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F19DEB9216D92CFA00785ECD /* Project object */;
+}
