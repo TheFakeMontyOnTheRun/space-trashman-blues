@@ -42,13 +42,7 @@ extern int shouldContinue;
 extern char *thisMissionName;
 extern int16_t thisMissionNameLen;
 
-struct CrawlerAgent {
-    struct Vec2i position;
-    enum EDirection rotation;
-    char symbol;
-};
-
-struct CrawlerAgent playerCrawler;
+struct CActor playerCrawler;
 
 int isPositionAllowed(int x, int y) {
 
@@ -125,7 +119,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 struct Item *item2 = NULL;
                 offseted.x += playerCrawler.position.x;
                 offseted.y += playerCrawler.position.y;
-                
+
                 needToRedrawHUD = TRUE;
 
                 while (head2 != NULL && (index < currentSelectedItem)) {
@@ -149,7 +143,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                         char buffer[255];
                         char *operator1;
                         char *operand1;
-                        
+
                         sprintf(&buffer[0], "use-with %s %s", item2->name, item1->name);
                         operator1 = strtok(&buffer[0], "\n ");
                         operand1 = strtok(NULL, "\n ");
@@ -162,14 +156,14 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             }
                 break;
             case kCommandFire2: {
-                struct ObjectNode *head = getRoom(getPlayerRoom())->itemsPresent->next;
-                struct Item *item = NULL;
+				head= getRoom(getPlayerRoom())->itemsPresent->next;
+				struct Item *item = NULL;
                 struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
                 offseted.x += playerCrawler.position.x;
                 offseted.y += playerCrawler.position.y;
 
                 needToRedrawHUD = TRUE;
-                
+
                 while (head != NULL && item == NULL) {
                     if (offseted.x == (getItem(head->item)->position.x) && offseted.y == (getItem(head->item)->position.y)) {
                         item = getItem(head->item);
@@ -178,7 +172,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 }
 
                 if (item != NULL) {
-                    
+
                     if (item == getItemNamed("computer-terminal")) {
                         enterState(kHackingGame);
                     } else {
@@ -191,16 +185,16 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                     int index = 0;
                     head = getPlayerItems();
                     item = NULL;
-                    
+
                     while (head != NULL && (index < currentSelectedItem)) {
                         ++index;
                         head = head->next;
                     }
-                    
+
                     if (head != NULL) {
                         item = getItem(head->item);
                     }
-                    
+
                     if (item != NULL) {
                         parseCommand("drop", item->name);
                         item->position.x = offseted.x;
@@ -217,20 +211,20 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 needToRedrawHUD = TRUE;
             }
                 break;
-                
+
             case kCommandFire4: {
                 struct ObjectNode *playerItems = getPlayerItems();
                 int index = 0;
-                
+
                 needToRedrawHUD = TRUE;
-                
+
                 ++currentSelectedItem;
-                
+
                 while (playerItems != NULL) {
                     ++index;
                     playerItems = playerItems->next;
                 }
-                
+
                 if (currentSelectedItem >= index) {
                     currentSelectedItem = 0;
                 }
@@ -342,19 +336,19 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 focusItemName = item->name;
             }
         }
-        
+
         //for the elevators
         if (currentPlayerRoom != getPlayerRoom()) {
             enable3DRendering = FALSE;
             enteredThru = 0 ;
             setPlayerDirection(enteredThru);
             initRoom(getPlayerRoom());
-            
+
             thisMissionName = getRoomDescription();
             thisMissionNameLen = strlen(getRoomDescription());
-            
+
             setPlayerPosition(&oldPosition);
-            
+
             return gameSnapshot;
         }
 
@@ -368,13 +362,13 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 int c = 0;
                 int room = getPlayerRoom();
                 struct Room* roomPtr = getRoom(room);
-                
+
                 for (c = 0; c < 6; ++c ) {
                     if (roomPtr->connections[c] == currentPlayerRoom) {
                         enteredThru = oppositeOf(c);
                     }
                 }
-                
+
                 enable3DRendering = FALSE;
                 setPlayerDirection(enteredThru);
                 zCameraOffset = intToFix(4);
@@ -410,16 +404,15 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
 void dungeon_loadMap(const uint8_t *__restrict__ mapData,
                      const char *__restrict__ collisions,
                      const int mapIndex) {
-    int x, y;
+    int8_t x, y;
     const uint8_t *ptr = mapData;
     struct WorldPosition worldPos;
     struct ObjectNode *head;
-    
+
     gameSnapshot.should_continue = kCrawlerGameInProgress;
     gameSnapshot.mapIndex = mapIndex;
     gameSnapshot.camera_rotation = 0;
-    playerCrawler.symbol = '^';
-    playerCrawler.rotation = 0;
+	playerCrawler.rotation = 0;
     memcpy (&collisionMap, collisions, 256);
 
     for (y = 0; y < MAP_SIZE; ++y) {
@@ -453,13 +446,13 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     playerCrawler.position.y = y;
 
 	head = getRoom(getPlayerRoom())->itemsPresent->next;
-    
+
     while (head != NULL) {
       struct Item *item = getItem(head->item);
       setItem(item->position.x, item->position.y, item->index);
       head = head->next;
     }
-    
+
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = TRUE;
 }

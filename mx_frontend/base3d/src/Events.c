@@ -73,11 +73,6 @@ void tickMission(enum ECommand cmd) {
     }
 }
 
-void addEffectSprite(const int x, const int y, const int billboard) {
-    effects[(y * MAP_SIZE) + x] = billboard;
-    playSound(ENEMY_FIRING_GUN);
-}
-
 void setElement(const int x, const int y, uint8_t element) {
     elements[(MAP_SIZE * y) + x] = element;
 }
@@ -144,15 +139,15 @@ int loopTick(enum ECommand command) {
             yCameraOffset = ((struct CTile3DProperties *) getFromMap(&tileProperties,
                                                                      elements[(z * MAP_SIZE) + x]))->mFloorHeight -
                             ((struct CTile3DProperties *) getFromMap(&tileProperties,
-                                                                     elements[(actor.mPosition.y * MAP_SIZE) +
-                                                                              actor.mPosition.x]))->mFloorHeight;
+                                                                     elements[(actor.position.y * MAP_SIZE) +
+                                                                              actor.position.x]))->mFloorHeight;
         } else {
             yCameraOffset = 0;
         }
 
-        actor.mPosition.x = x;
-        actor.mPosition.y = z;
-        actor.mDirection = (enum EDirection) (rotation);
+        actor.position.x = x;
+        actor.position.y = z;
+        actor.rotation = (enum EDirection) (rotation);
 
         needRedraw = 1;
     }

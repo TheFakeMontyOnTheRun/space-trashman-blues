@@ -135,9 +135,9 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     char *head;
     char *end;
     char *nameStart;
-    char buffer[256];    
+    char buffer[256];
 	int c;
-	
+
     sprintf (tilesFilename, "tiles%d.lst", levelNumber);
 
     data = loadBinaryFileFromPath(tilesFilename);
@@ -182,8 +182,8 @@ void drawMap(const uint8_t *__restrict__ elements,
              const struct CActor *current) {
 
     int8_t z, x;
-    const struct Vec2i mapCamera = current->mPosition;
-    cameraDirection = current->mDirection;
+    const struct Vec2i mapCamera = current->position;
+    cameraDirection = current->rotation;
     visibleElementsMap = (uint8_t *)elements;
     hasSnapshot = TRUE;
 
@@ -717,11 +717,11 @@ void render(const long ms) {
                             tmp.mX = position.mX;
                             tmp.mY = position.mY;
                             tmp.mZ = position.mZ;
-                            
+
                             addToVec3(&tmp, zero,
                                       ((tileProp->mFloorHeight * 2) + heightDiff),
                                       zero);
-                            
+
                             switch (cameraDirection) {
                                 case kNorth:
                                     facesMask = MASK_BEHIND;
@@ -739,23 +739,23 @@ void render(const long ms) {
                                     facesMask = 0;
                                     break;
                             }
-                            
+
                             drawColumnAt(tmp, (heightDiff + Div(adjust, two)),
                                          nativeTextures[tileProp->mMainWallTextureIndex],
                                          facesMask, tileProp->mNeedsAlphaTest,
                                          tileProp->mRepeatMainTexture);
                             break;
                         case kWallWest:
-                            
+
 
                             tmp.mX = position.mX;
                             tmp.mY = position.mY;
                             tmp.mZ = position.mZ;
-                            
+
                             addToVec3(&tmp, zero,
                                       ((tileProp->mFloorHeight * 2) + heightDiff),
                                       zero);
-                            
+
                             switch (cameraDirection) {
                                 case kNorth:
                                     facesMask = MASK_FORCE_RIGHT;
@@ -773,24 +773,24 @@ void render(const long ms) {
                                     facesMask = 0;
                                     break;
                             }
-                            
+
                             drawColumnAt(tmp, (heightDiff + Div(adjust, two)),
                                          nativeTextures[tileProp->mMainWallTextureIndex],
                                          facesMask, tileProp->mNeedsAlphaTest,
                                          tileProp->mRepeatMainTexture);
                             break;
-                            
+
                         case kWallCorner:
-                            
+
 
                             tmp.mX = position.mX;
                             tmp.mY = position.mY;
                             tmp.mZ = position.mZ;
-                            
+
                             addToVec3(&tmp, zero,
                                       ((tileProp->mFloorHeight * 2) + heightDiff),
                                       zero);
-                            
+
                             switch (cameraDirection) {
                                 case kNorth:
                                     facesMask = MASK_BEHIND | MASK_FORCE_RIGHT;
@@ -808,13 +808,13 @@ void render(const long ms) {
                                     facesMask = 0;
                                     break;
                             }
-                            
+
                             drawColumnAt(tmp, (heightDiff + Div(adjust, two)),
                                          nativeTextures[tileProp->mMainWallTextureIndex],
                                          facesMask, tileProp->mNeedsAlphaTest,
                                          tileProp->mRepeatMainTexture);
                             break;
-                            
+
                         case kRightNearWall:
 
                             tmp.mX = position.mX;
@@ -987,7 +987,7 @@ void loadMesh(struct Mesh *mesh, char *filename) {
     FixP_t *coord;
     uint8_t read;
     int c;
-    
+
     read = (*(bufferHead++));
     trigCount += read;
     read = (*(bufferHead++)) << 8;

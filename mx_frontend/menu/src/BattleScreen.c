@@ -28,10 +28,6 @@ const char *BattleScreen_options[2] = {"Attack", "Defend"};
 
 struct Bitmap *enemySprite;
 
-enum EGameMenuState BattleScreen_nextStateNavigation[2] = {
-        kAttackOnBattle, kDefendOnBattle
-};
-
 int16_t Battlecreen_optionsCount = 2;
 
 
@@ -113,7 +109,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, long delta) {
 
     if (currentPresentationState == kWaitingForInput) {
 
-        
+
         switch (cmd) {
             case kCommandLeft:
             case kCommandUp:

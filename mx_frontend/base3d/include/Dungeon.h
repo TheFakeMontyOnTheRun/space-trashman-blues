@@ -2,7 +2,7 @@
 #define HASHASHIN_DUNGEON_H
 
 struct GameSnapshot {
-	uint8_t camera_x;
+	int8_t camera_x;
 	uint8_t camera_z;
 	uint8_t camera_rotation;
 	enum CrawlerState should_continue;

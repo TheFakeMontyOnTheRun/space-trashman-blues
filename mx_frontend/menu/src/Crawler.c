@@ -81,7 +81,7 @@ void Crawler_initStateCallback(int32_t tag) {
     thisMissionNameLen = (int16_t) (strlen(thisMissionName));
 
     currentBackgroundBitmap = loadBitmap("pattern.img");
-    
+
 
     if (tag == kPlayGame) {
         initRoom(getPlayerRoom());
@@ -104,7 +104,7 @@ void Crawler_initialPaintCallback() {
 
 void Crawler_repaintCallback() {
 
-   
+
 
     if (showPromptToAbandonMission) {
         int c = 0;
@@ -154,9 +154,9 @@ void Crawler_repaintCallback() {
                     isCursor ? 200 : 0);
         }
     } else {
-        
+
         if  (currentPresentationState == kRoomTransitioning ) {
-            
+
             struct Vec3 center;
 
             if ( !enableSmoothMovement ) {
@@ -165,73 +165,73 @@ void Crawler_repaintCallback() {
                 needToRedrawHUD = TRUE;
                 return;
             }
-            
+
             xCameraOffset = yCameraOffset = 0;
-            
+
             fill(0, 0, XRES + 1, 200, 0, 0);
-            
-            
-            
+
+
+
             center.mY = 0;
             center.mZ = intToFix(3);
             center.mX = -intToFix(3);
             drawColumnAt( center, intToFix(3), nativeTextures[1], MASK_LEFT, 0, 1);
-  
+
 
 
             center.mY = 0;
             center.mX = intToFix(3);
             drawColumnAt( center, intToFix(3), nativeTextures[1], MASK_RIGHT, 0, 1);
-            
+
 
             center.mZ = intToFix(2);
             center.mX = -intToFix(1);
-            
+
             center.mY = intToFix(4) - zCameraOffset;
             drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
-            
+
             center.mX = intToFix(1);
             drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
-            
+
             center.mY = intToFix(2) - zCameraOffset;
-            
+
             center.mZ = intToFix(3);
             drawCeilingAt( center, nativeTextures[0], 0);
 
             center.mZ = intToFix(2);
-            
+
             center.mY = intToFix(3) - zCameraOffset;
-            
-            center.mX = -intToFix(1);
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
-            
-            center.mX = intToFix(1);
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
-            
-            
-            center.mY = intToFix(6) - zCameraOffset;
-            
-            center.mX = -intToFix(1);
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
-            
-            center.mX = intToFix(1);
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
-            
-            
 
             center.mX = -intToFix(1);
-            
+            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+
+            center.mX = intToFix(1);
+            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+
+
+            center.mY = intToFix(6) - zCameraOffset;
+
+            center.mX = -intToFix(1);
+            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+
+            center.mX = intToFix(1);
+            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+
+
+
+            center.mX = -intToFix(1);
+
             center.mY = intToFix(2) - zCameraOffset;
-            
+
             center.mZ = intToFix(3);
             drawCeilingAt( center, nativeTextures[0], 0);
 
             drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, 255);
-            
+
             zCameraOffset -= Div(intToFix(1), intToFix(16));
             if (zCameraOffset == 0 ) {
                 int chanceForRandomBattle = getRoom(getPlayerRoom())->chanceOfRandomBattle;
-                int diceRoll = rand() % 0xFF;
+                int diceRoll;
 
                 //tmp
                 diceRoll = 0xFF;
@@ -328,7 +328,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
                     currentPresentationState = kConfirmInputBlink1;
                     break;
             }
-            
+
             return kResumeCurrentState;
         }
 
