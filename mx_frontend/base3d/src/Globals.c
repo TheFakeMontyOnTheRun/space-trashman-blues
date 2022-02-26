@@ -15,7 +15,6 @@
 #include "Core.h"
 #include "Engine.h"
 
-int renderingMethod = FIXED;
 struct Bitmap *currentBackgroundBitmap = NULL;
 int32_t currentGameMenuState = -1;
 enum EGameMenuState menuStateToReturn = kResumeCurrentState;

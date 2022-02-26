@@ -37,8 +37,6 @@ void enterFullScreenMode() {
 SDL_Window *window;
 SDL_Renderer *renderer;
 
-uint8_t turnBuffer[320 * 200];
-
 uint8_t getPaletteEntry(const uint32_t origin) {
 	uint8_t shade;
 
@@ -185,14 +183,6 @@ void handleSystemEvents() {
 
 				case SDLK_2:
 					enableSmoothMovement = FALSE;
-					break;
-
-				case SDLK_3:
-					renderingMethod = FIXED;
-					break;
-
-				case SDLK_4:
-					renderingMethod = LUT;
 					break;
 
 				case SDLK_DOWN:

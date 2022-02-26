@@ -35,18 +35,15 @@ enum EGameMenuState {
 	kHelp,
 	kCredits,
 	kQuit,
-	kStatusMenu,
-    kBackToGame,
+	kBackToGame,
 	kEndGame,
-    kInspectItem,
-    kHackingGame,
+	kInspectItem,
+	kHackingGame,
 	kGoodVictoryEpilogue,
-    kBadVictoryEpilogue,
-    kGoodGameOverEpilogue,
+	kBadVictoryEpilogue,
+	kGoodGameOverEpilogue,
 	kBadGameOverEpilogue,
 	kRandomBattle,
-	kAttackOnBattle,
-	kDefendOnBattle,
 	kPrologue,
 	kEpilogue
 };
@@ -61,20 +58,15 @@ enum EPresentationState {
 	kConfirmInputBlink5,
 	kConfirmInputBlink6,
 	kFade,
-    kRoomTransitioning,
+	kRoomTransitioning,
 	kEnteringRandomBattle
 };
 
 enum ESoundDriver {
-	kNoSound, kPcSpeaker, kOpl2Lpt, kAdlib, kTandy, kCovox
+	kNoSound, kPcSpeaker, kOpl2Lpt, kAdlib
 };
 
 #define MENU_SELECTION_CHANGE_SOUND 0
 #define STATE_CHANGE_SOUND 1
-#define INFORMATION_ACQUIRED_SOUND 2
-#define FAILED_TO_GET_INFORMATION_SOUND 3
-#define PLAYER_GOT_DETECTED_SOUND 4
-#define PLAYER_FIRING_GUN 5
-#define ENEMY_FIRING_GUN 6
 #define MAIN_MENU_THEME 7
 #endif

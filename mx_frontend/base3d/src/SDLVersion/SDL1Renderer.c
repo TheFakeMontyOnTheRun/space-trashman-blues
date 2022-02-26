@@ -107,7 +107,7 @@ void graphicsInit() {
   enterFullScreenMode ();
 #endif
   defaultFont = loadBitmap("font.img");
-
+	enableSmoothMovement = TRUE;
 
 //    if ( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 ) {
 //        audioEnabled = 0;
@@ -139,17 +139,17 @@ void handleSystemEvents() {
 
 
 
-      
+
       switch(event.key.keysym.scancode){
       case 461:
 	mBufferedCommand = kCommandBack;
-	visibilityCached = FALSE;	
+	visibilityCached = FALSE;
 	break;
 
       case 403:
 	mBufferedCommand = kCommandFire1;
 	visibilityCached = FALSE;
-	needsToRedrawVisibleMeshes = TRUE;	
+	needsToRedrawVisibleMeshes = TRUE;
 	break;
       case 404:
 	mBufferedCommand = kCommandFire2;
@@ -173,9 +173,9 @@ void handleSystemEvents() {
       case 417:
 	mBufferedCommand = kCommandStrafeRight;
 	visibilityCached = FALSE;
-	break;	
+	break;
       }
-      
+
       switch (key) {
       case SDLK_RETURN:
       case SDLK_z:
@@ -275,8 +275,8 @@ void flipRenderer() {
 
     uint8_t *src;
     uint32_t *dst;
-    
-    
+
+
     SDL_LockSurface(stretchedBuffer);
 
 
