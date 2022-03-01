@@ -9,7 +9,7 @@
 #define HALF_XRES 100
 #define HALF_YRES 64
 #else
-#define XRES 200
+#define XRES 216
 #define YRES 200
 #define HALF_XRES 100
 #define HALF_YRES 100
@@ -126,6 +126,7 @@ void drawMap(const uint8_t * __restrict__ elements,
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour);
 
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour, char charToReplaceHifenWith);
 
 void drawTextAt(const int x,
 				const int y,

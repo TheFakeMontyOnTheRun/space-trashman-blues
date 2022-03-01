@@ -105,17 +105,12 @@ void redrawHUD() {
     struct WorldPosition visPos = *getPlayerPosition();
     int x, z;
     struct Item* itemPtr;
-    fill(XRES, 0, 320 - XRES, 200, 0, FALSE);
+    fill(XRES, 0, 320 - XRES, YRES, 0, FALSE);
     drawTextAt(1 + (XRES / 8), 1, " Map:", 255);
 
     if (mapTopLevel != NULL) {
-        drawBitmap(208, 72, mapTopLevel, 0);
+        drawBitmap(XRES, 72, mapTopLevel, 0);
     }
-
-    drawTextAt(1 + 1 + (XRES / 8), 17, "Health:", 255);
-    drawRect(XRES + 8, 138, 100, 8, 255);
-    fill(XRES + 8, 138, playerHealth, 8, 255, TRUE);
-
 
     //draw current item on the corner of the screen
     head = getPlayerItems();
@@ -128,10 +123,10 @@ void redrawHUD() {
                 sprintf(&textBuffer[0], "%s", itemPtr->name);
                 textBuffer[14] = 0;
 
-                drawBitmapRaw(XRES + 8, 199 - 32 - 16, 32, 32, itemSprites[itemPtr->index]->rotations[0], 1);
+                drawBitmapRaw(XRES + 8, 199 - 32 - 16 - 16, 32, 32, itemSprites[itemPtr->index]->rotations[0], 1);
 
-                drawTextAtWithMargin(2 + ((XRES) / 8), 24, 311, itemPtr->name,
-                                     itemPtr->active ? 192 : 255);
+                drawTextAtWithMarginWithFiltering(2 + ((XRES) / 8), 23, 311, itemPtr->name,
+                                     itemPtr->active ? 192 : 255, '\n');
             }
             ++line;
         }
@@ -140,8 +135,8 @@ void redrawHUD() {
 
 
     for (z = -8; z < 8; ++z) {
-        for (x = -13; x < 13; ++x) {
-            fill(XRES + 8 + (13 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4,
+        for (x = -10; x < 10; ++x) {
+            fill(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4,
                  (x == 0 && z == 0) ? 32 : isPositionAllowed(visPos.x + x, visPos.y + z) ? 192 : 64, FALSE);
         }
     }

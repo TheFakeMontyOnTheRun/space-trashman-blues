@@ -1489,7 +1489,7 @@ void drawRepeatBitmap(
     }
 }
 
-void drawTextAtWithMargin(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour) {
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour, char charToReplaceHifenWith) {
 
     size_t len = strlen(text);
     int32_t dstX = (x - 1) * 8;
@@ -1501,19 +1501,31 @@ void drawTextAtWithMargin(const int x, const int y, int margin, const char *__re
     int32_t srcX, srcY;
 
     for (c = 0; c < len; ++c) {
-        uint8_t ascii = text[c] - ' ';
-        uint8_t line = ascii >> 5;
-        uint8_t col = ascii & 31;
-        uint8_t *letter =
-                fontPixelData + (col * 8) + (fontWidth * (line * 8));
+        uint8_t ascii;
+        uint8_t line;
+        uint8_t col;
+        uint8_t *letter;
 
-        if (text[c] == '\n' || dstX >= margin) {
+        char currentChar  = text[c];
+        
+        if (currentChar == '-') {
+            currentChar = charToReplaceHifenWith;
+        }
+        
+        
+        ascii = text[c] - ' ';
+        line = ascii >> 5;
+        col = ascii & 31;
+        letter = fontPixelData + (col * 8) + (fontWidth * (line * 8));
+        
+    
+        if (currentChar == '\n' || dstX >= margin) {
             dstX = (x - 1) * 8;
             dstY += 8;
             continue;
         }
 
-        if (text[c] == ' ') {
+        if (currentChar == ' ') {
             dstX += 8;
             continue;
         }
@@ -1535,6 +1547,10 @@ void drawTextAtWithMargin(const int x, const int y, int margin, const char *__re
         }
         dstX += 8;
     }
+}
+
+void drawTextAtWithMargin(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour) {
+    drawTextAtWithMarginWithFiltering( x, y, margin, text, colour, '-');
 }
 
 void drawTextAt(const int x, const int y, const char *__restrict__ text, const uint8_t colour) {
