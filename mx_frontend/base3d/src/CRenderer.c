@@ -958,38 +958,40 @@ void render(const long ms) {
             }
         }
 
-		if (focusItemName != NULL) {
-			size_t len = strlen(focusItemName);
-			int lines = 1 + (len / 27);
-			fill(0, YRES - (8 * lines), XRES, lines * 8, 0, 1);
-			drawTextAtWithMarginWithFiltering(1, 26 - lines, XRES, focusItemName, 255, ' ');
-		}
 
-
-		if (currentPresentationState == kRoomTransitioning) {
-			messageLogBufferCoolDown = 0;
-		}
-
-		if (messageLogBufferCoolDown > 0) {
-			int len = strlen(&messageLogBuffer[0]);
-			int lines = 1;
-			int chars = 0;
-
-			for (int c = 0; c < len; ++c) {
-
-				++chars;
-
-				if (chars == 27 || messageLogBuffer[c] == '\n') {
-					chars = 0;
-					++lines;
-				}
+		if (turnTarget == turnStep) {
+			if (focusItemName != NULL) {
+				size_t len = strlen(focusItemName);
+				int lines = 1 + (len / 27);
+				fill( 0, YRES - (8 * lines), XRES, lines * 8, 0, 1 );
+				drawTextAtWithMarginWithFiltering(1, 26 - lines, XRES, focusItemName, 255, ' ');
 			}
 
-			fill(0, 0, 216, lines * 8, 0, 1);
 
-			drawTextAt(1, 1, &messageLogBuffer[0], 255);
+			if (currentPresentationState == kRoomTransitioning) {
+				messageLogBufferCoolDown = 0;
+			}
+
+			if (messageLogBufferCoolDown > 0) {
+				int len = strlen(&messageLogBuffer[0]);
+				int lines = 1;
+				int chars = 0;
+
+				for (int c = 0; c < len; ++c) {
+
+					++chars;
+
+					if (chars == 27 || messageLogBuffer[c] == '\n') {
+						chars = 0;
+						++lines;
+					}
+				}
+
+				fill(0, 0, 216, lines * 8, 0, 1);
+
+				drawTextAt(1, 1, &messageLogBuffer[0], 255);
+			}
 		}
-
 
         clippingY1 = 200;
 

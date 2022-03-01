@@ -36,7 +36,7 @@ void enterFullScreenMode() {
 
 SDL_Window *window;
 SDL_Renderer *renderer;
-
+int snapshotSignal = '.';
 uint8_t getPaletteEntry(const uint32_t origin) {
 	uint8_t shade;
 
@@ -152,7 +152,7 @@ void handleSystemEvents() {
 
 
 				case SDLK_LEFT:
-					mBufferedCommand = kCommandLeft;
+					snapshotSignal = kCommandLeft;
 					visibilityCached = FALSE;
 					if ((currentGameMenuState == kPlayGame ||
 						 currentGameMenuState == kBackToGame) &&
@@ -163,7 +163,7 @@ void handleSystemEvents() {
 					}
 					break;
 				case SDLK_RIGHT:
-					mBufferedCommand = kCommandRight;
+					snapshotSignal = kCommandRight;
 					visibilityCached = FALSE;
 					if ((currentGameMenuState == kPlayGame ||
 						 currentGameMenuState == kBackToGame) &&
@@ -218,7 +218,8 @@ void flipRenderer() {
 	SDL_Rect rect;
 	int x, y;
 
-	if ( !enableSmoothMovement || turnTarget == turnStep ) {
+	if ( !enableSmoothMovement || turnTarget == turnStep || (snapshotSignal != '.') ) {
+
 		uint8_t *pixelPtr = &framebuffer[0];
 
 		for ( y = dirtyLineY0; y < dirtyLineY1; ++y ) {
@@ -241,6 +242,8 @@ void flipRenderer() {
 			}
 		}
 
+		mBufferedCommand = snapshotSignal;
+		snapshotSignal = '.';
 		memcpy( previousFrame, framebuffer, 320 * 200);
 	} else if ( turnStep < turnTarget ) {
 
