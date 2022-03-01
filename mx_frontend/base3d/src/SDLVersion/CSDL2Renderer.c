@@ -25,18 +25,19 @@
 
 #ifdef __EMSCRIPTEN__
 void enterFullScreenMode() {
-    EmscriptenFullscreenStrategy s;
-    memset(&s, 0, sizeof(s));
-    s.scaleMode = EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
-    s.canvasResolutionScaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_NONE;
-    s.filteringMode = EMSCRIPTEN_FULLSCREEN_FILTERING_DEFAULT;
-    emscripten_enter_soft_fullscreen(0, &s);
+	EmscriptenFullscreenStrategy s;
+	memset(&s, 0, sizeof(s));
+	s.scaleMode = EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
+	s.canvasResolutionScaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_NONE;
+	s.filteringMode = EMSCRIPTEN_FULLSCREEN_FILTERING_DEFAULT;
+	emscripten_enter_soft_fullscreen(0, &s);
 }
 #endif
 
 SDL_Window *window;
 SDL_Renderer *renderer;
 int snapshotSignal = '.';
+
 uint8_t getPaletteEntry(const uint32_t origin) {
 	uint8_t shade;
 
@@ -56,7 +57,7 @@ void graphicsInit() {
 	int r, g, b;
 
 	SDL_Init(SDL_INIT_EVERYTHING);
-    SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
+	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 
 	window =
 			SDL_CreateWindow("Sub Mare Imperium - Derelict", SDL_WINDOWPOS_CENTERED,
@@ -190,14 +191,14 @@ void handleSystemEvents() {
 					visibilityCached = FALSE;
 					break;
 
-                case SDLK_n:
-                    needsToRedrawVisibleMeshes = TRUE;
-                    visibilityCached = FALSE;
-                    break;
-                case SDLK_m:
-                    needsToRedrawVisibleMeshes = TRUE;
-                    visibilityCached = FALSE;
-                    break;
+				case SDLK_n:
+					needsToRedrawVisibleMeshes = TRUE;
+					visibilityCached = FALSE;
+					break;
+				case SDLK_m:
+					needsToRedrawVisibleMeshes = TRUE;
+					visibilityCached = FALSE;
+					break;
 
 				default:
 					return;
@@ -218,12 +219,12 @@ void flipRenderer() {
 	SDL_Rect rect;
 	int x, y;
 
-	if ( !enableSmoothMovement || turnTarget == turnStep || (snapshotSignal != '.') ) {
+	if (!enableSmoothMovement || turnTarget == turnStep || (snapshotSignal != '.')) {
 
 		uint8_t *pixelPtr = &framebuffer[0];
 
-		for ( y = dirtyLineY0; y < dirtyLineY1; ++y ) {
-			for ( x = 0; x < 320; ++x ) {
+		for (y = dirtyLineY0; y < dirtyLineY1; ++y) {
+			for (x = 0; x < 320; ++x) {
 				uint32_t pixel;
 
 				rect.x = 2 * x;
@@ -244,26 +245,26 @@ void flipRenderer() {
 
 		mBufferedCommand = snapshotSignal;
 		snapshotSignal = '.';
-		memcpy( previousFrame, framebuffer, 320 * 200);
-	} else if ( turnStep < turnTarget ) {
+		memcpy(previousFrame, framebuffer, 320 * 200);
+	} else if (turnStep < turnTarget) {
 
-		for ( y = dirtyLineY0; y < dirtyLineY1; ++y ) {
-			for ( x = 0; x < 320; ++x ) {
+		for (y = dirtyLineY0; y < dirtyLineY1; ++y) {
+			for (x = 0; x < 320; ++x) {
 				uint8_t index;
 
-				if (x < XRES  ) {
+				if (x < XRES) {
 
-					if ( x  >= turnStep ) {
-						index = previousFrame[ (320 * y) - turnStep + x ];
+					if (x >= turnStep) {
+						index = previousFrame[(320 * y) - turnStep + x];
 					} else {
-						index = framebuffer[ (320 * y) + x - (320 - XRES) - turnStep];
+						index = framebuffer[(320 * y) + x - (320 - XRES) - turnStep];
 					}
 
 				} else {
-					index = framebuffer[ (320 * y) + x];
+					index = framebuffer[(320 * y) + x];
 				}
 
-				uint32_t pixel = palette[ index ];
+				uint32_t pixel = palette[index];
 
 				rect.x = 2 * x;
 				rect.y = (24 * y) / 10;
@@ -277,28 +278,28 @@ void flipRenderer() {
 			}
 		}
 
-		turnStep+= 20;
+		turnStep += 20;
 	} else {
 
 		uint8_t *pixelPtr = &framebuffer[0];
 
-		for ( y = dirtyLineY0; y < dirtyLineY1; ++y ) {
-			for ( x = 0; x < 320; ++x ) {
+		for (y = dirtyLineY0; y < dirtyLineY1; ++y) {
+			for (x = 0; x < 320; ++x) {
 				uint8_t index;
 
-				if (x < XRES ) {
+				if (x < XRES) {
 
-					if ( x  >= turnStep ) {
-						index = framebuffer[ (320 * y) - turnStep + x ];
+					if (x >= turnStep) {
+						index = framebuffer[(320 * y) - turnStep + x];
 					} else {
-						index = previousFrame[ (320 * y) + x - (320 - XRES) - turnStep];
+						index = previousFrame[(320 * y) + x - (320 - XRES) - turnStep];
 					}
 
 				} else {
-					index = framebuffer[ (320 * y) + x];
+					index = framebuffer[(320 * y) + x];
 				}
 
-				uint32_t pixel = palette[ index ];
+				uint32_t pixel = palette[index];
 
 				rect.x = 2 * x;
 				rect.y = (24 * y) / 10;
@@ -313,9 +314,8 @@ void flipRenderer() {
 			}
 		}
 
-		turnStep-= 20;
+		turnStep -= 20;
 	}
-
 
 
 	SDL_RenderPresent(renderer);
