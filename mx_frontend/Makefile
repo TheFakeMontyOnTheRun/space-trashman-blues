@@ -1,48 +1,51 @@
 LDFLAGS=`sdl2-config --libs` -lm
 
-CFLAGS=-g -c `sdl2-config --cflags `  \
-	-Ibase3d/include                                     \
-	-ISoundSystem                                     \
-	-Imenu/include                                       \
-	$(SDL_INCLUDE)                                       \
-	-DSDLSW                                              \
-	-DVGA                                                \
-	-Wall                                                \
-	-fomit-frame-pointer                                 \
-	-fno-exceptions                                      \
-	-ffast-math	\
-	-I../core/include -I../core/include  -DINCLUDE_ITEM_DESCRIPTIONS
+CFLAGS= `sdl2-config --cflags `  \
+    -O6 -Ofast      \
+    -Ibase3d/include        \
+    -ISoundSystem           \
+    -Imenu/include          \
+    -funroll-loops          \
+    -fomit-frame-pointer    \
+    -fno-exceptions         \
+    -ffast-math             \
+    -flto		    \
+    --pedantic		    \
+    -DCLI_BUILD \
+    -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS
 
 MENU_TARGET=game
 
-MENU_OBJ=menu/src/MainMenu.o \
-	../common/src/FixP.o \
-	../common/src/MapWithCharKey.o \
-	../common/src/PackedFileReader.o \
-	../common/src/Vec.o \
-	menu/src/Crawler.o \
-	menu/src/UI.o \
-	menu/src/Main.o \
-	base3d/src/SDLVersion/CSDL2Renderer.o \
-	base3d/src/Globals.o \
-	base3d/src/CTile3DProperties.o \
-	base3d/src/LoadBitmap.o \
-	base3d/src/CRenderer.o \
-	base3d/src/VisibilityStrategy.o \
-	base3d/src/Events.o \
-	base3d/src/CRenderer_Rasterization.o \
-	base3d/src/EDirection_Utils.o \
-	base3d/src/CRenderer_Tesselation.o \
-	../core/src/Derelict.o \
-	../core/src/Core.o \
-	../core/src/Parser.o \
-	SoundSystem/NullMusic.o \
-	menu/src/HelpScreen.o \
-	menu/src/GameMenu.o \
-	menu/src/Engine.o \
-	menu/src/CreditsScreen.o \
-	menu/src/HackingScreen.o \
-	base3d/src/Dungeon.o
+MENU_OBJ= menu/src/Main.o \
+         	  ../common/src/FixP.o \
+         	  ../common/src/Vec.o \
+         	  ../common/src/Common.o \
+         	  ../common/src/PackedFileReader.o \
+         	  ../common/src/MapWithCharKey.o \
+         	  base3d/src/CTile3DProperties.o \
+         	  base3d/src/LoadBitmap.o \
+         	  base3d/src/CRenderer.o \
+         	  base3d/src/VisibilityStrategy.o \
+         	  base3d/src/Globals.o \
+         	  base3d/src/Events.o \
+         	  base3d/src/CRenderer_Rasterization.o \
+         	  base3d/src/CRenderer_Tesselation.o \
+         	  base3d/src/EDirection_Utils.o \
+         	  base3d/src/Dungeon.o \
+         	  menu/src/GameMenu.o \
+         	  menu/src/MainMenu.o \
+         	  menu/src/Engine.o \
+         	  menu/src/UI.o \
+         	  menu/src/HackingScreen.o \
+         	  menu/src/BattleScreen.o \
+         	  menu/src/HelpScreen.o \
+         	  menu/src/CreditsScreen.o \
+         	  menu/src/Crawler.o \
+         	  ../core/src/Derelict.o \
+         	  ../core/src/Core.o \
+         	  ../core/src/Parser.o \
+         	  SoundSystem/NullMusic.o \
+         	  base3d/src/SDLVersion/CSDL2Renderer.o
 
 
 $(MENU_TARGET):	$(MENU_OBJ)
