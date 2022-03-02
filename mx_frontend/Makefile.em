@@ -13,7 +13,7 @@ CFLAGS=-g -c -O3     \
 	-DVGA                                                \
 	-fomit-frame-pointer                                 \
 	-fno-exceptions                                      \
-	-ffast-math -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0 \
+	-ffast-math \
 	-I../core/include -DINCLUDE_ITEM_DESCRIPTIONS -DCLI_BUILD
 
 MENU_TARGET=game.html
