@@ -101,7 +101,6 @@ drawImageWindow(const int x, const int y, const unsigned int dx, const unsigned 
 void redrawHUD() {
     int line = 0;
     struct ObjectNode *head;
-    int playerHealth = getPlayerHealth();
     struct WorldPosition visPos = *getPlayerPosition();
     int x, z;
     struct Item* itemPtr;

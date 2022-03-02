@@ -25,15 +25,6 @@ int main() {
 
 		puts("------\nYou are at:");
 		puts(getRoomDescription());
-		printf("Health: %d\n", getPlayerHealth());
-
-		if (getPlayerRoom() != 1 && (!getItem(6)->active || !playerHasObject("helmet"))) {
-		  setPlayerHealth(getPlayerHealth() - 1);
-		}
-
-		if (getPlayerHealth() <= 0) {
-		  setGameStatus(kBadGameOver);
-		}
 
 		for ( y = -1; y <= getRoom(getPlayerRoom())->sizeY; ++y ) {
 		  putchar( getRoom(getPlayerRoom())->connections[3] ? '|' : '#');

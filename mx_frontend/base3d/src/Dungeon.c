@@ -312,10 +312,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         }
 
 
-        if (getPlayerRoom() != 1 && (!getItemNamed("helmet")->active || !playerHasObject("helmet"))) {
-            setPlayerHealth(getPlayerHealth() - 1);
-        }
-
         {
             struct ObjectNode *roomItems = getRoom(getPlayerRoom())->itemsPresent->next;
             struct Item *item = NULL;

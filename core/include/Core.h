@@ -133,10 +133,6 @@ int hasItemInRoom(const char *roomName, const char *itemName);
 
 int playerHasObject( const char* itemName);
 
-int getPlayerHealth(void);
-
-void setPlayerHealth(int health);
-
 int isPlayerAtRoom(const char *roomName);
 
 char *getRoomDescription(void);

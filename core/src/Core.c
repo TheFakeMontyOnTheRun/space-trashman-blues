@@ -43,7 +43,6 @@ int playerLocation = 1;
 int playerDirection;
 int playerRank;
 int gameStatus;
-int playerHealth = 100;
 struct WorldPosition playerPosition;
 ErrorHandlerCallback errorHandlerCallback = NULL;
 
@@ -124,14 +123,6 @@ void setErrorHandlerCallback(ErrorHandlerCallback callback) {
 
 struct WorldPosition *getPlayerPosition(void) {
     return &playerPosition;
-}
-
-int getPlayerHealth(void) {
-    return playerHealth;
-}
-
-void setPlayerHealth(int health) {
-    playerHealth = health;
 }
 
 void setPlayerPosition(struct WorldPosition* pos) {
@@ -756,7 +747,6 @@ void initCore(void) {
     playerLocation = 1;
     itemsCount = 0;
     roomCount = 1; /* there's an implicit dummy first */
-    playerHealth = 100;
     playerRank = 0;
     gameStatus = 0;
     playerDirection = 0;

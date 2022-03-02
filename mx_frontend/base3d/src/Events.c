@@ -64,10 +64,6 @@ void tickMission(enum ECommand cmd) {
 
     updateCursorForRenderer(snapshot.playerTarget.x, snapshot.playerTarget.y);
 
-    if (playerHealth <= 0) {
-        shouldContinue = kCrawlerGameOver;
-    }
-
     if (shouldContinue != kCrawlerGameInProgress) {
         gameTicks = 0;
     }
