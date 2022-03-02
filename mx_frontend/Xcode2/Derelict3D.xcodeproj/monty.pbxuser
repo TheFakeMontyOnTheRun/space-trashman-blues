@@ -4,6 +4,9 @@
 		activeBuildConfigurationName = Debug;
 		activeExecutable = F1CA76B42610A8BF00FD1E04 /* Derelict */;
 		activeTarget = F1CA76B22610A8BF00FD1E04 /* Derelict */;
+		addToTargets = (
+			F1CA76B22610A8BF00FD1E04 /* Derelict */,
+		);
 		breakpointsGroup = F1CA76A82610A7FF00FD1E04 /* XCBreakpointsBucket */;
 		codeSenseManager = F1CA768D2610A70400FD1E04 /* Code sense */;
 		executables = (
@@ -148,53 +151,19 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 643913307;
-			PBXWorkspaceStateSaveDate = 643913307;
+			PBXPerProjectTemplateStateSaveDate = 667930772;
+			PBXWorkspaceStateSaveDate = 667930772;
 		};
 		perUserProjectItems = {
-			F10E419F2661583B004CBD19 /* PBXTextBookmark */ = F10E419F2661583B004CBD19 /* PBXTextBookmark */;
-			F11BA51A2610E39700BF65B6 /* PBXTextBookmark */ = F11BA51A2610E39700BF65B6 /* PBXTextBookmark */;
-			F11BA51C2610E39700BF65B6 /* PBXTextBookmark */ = F11BA51C2610E39700BF65B6 /* PBXTextBookmark */;
 			F11BA5302610EAE900BF65B6 /* PBXTextBookmark */ = F11BA5302610EAE900BF65B6 /* PBXTextBookmark */;
 			F11BA5312610EAE900BF65B6 /* PBXTextBookmark */ = F11BA5312610EAE900BF65B6 /* PBXTextBookmark */;
 			F11BA5332610EAE900BF65B6 /* PBXTextBookmark */ = F11BA5332610EAE900BF65B6 /* PBXTextBookmark */;
 			F11BA5342610EAE900BF65B6 /* PBXTextBookmark */ = F11BA5342610EAE900BF65B6 /* PBXTextBookmark */;
-			F1D3239A2661563E00159412 /* PBXTextBookmark */ = F1D3239A2661563E00159412 /* PBXTextBookmark */;
 		};
 		sourceControlManager = F1CA768C2610A70400FD1E04 /* Source Control */;
 		userBuildSettings = {
 			OBJROOT = "$(SYMROOT)";
 		};
-	};
-	F10E419F2661583B004CBD19 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = F12779E8236DE60800478B2C /* PackedFileReader.c */;
-		name = "PackedFileReader.c: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 0;
-		vrLoc = 0;
-	};
-	F11BA51A2610E39700BF65B6 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = F12779FA236DE62100478B2C /* Common.h */;
-		name = "Common.h: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 210;
-		vrLoc = 0;
-	};
-	F11BA51C2610E39700BF65B6 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = F12779FA236DE62100478B2C /* Common.h */;
-		name = "Common.h: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 210;
-		vrLoc = 0;
 	};
 	F11BA5302610EAE900BF65B6 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -238,30 +207,23 @@
 	};
 	F12779E2236DE60800478B2C /* CRenderer.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 14924}}";
-			sepNavSelRange = "{35013, 0}";
-			sepNavVisRect = "{{0, 13339}, {1235, 632}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 14798}}";
+			sepNavSelRange = "{35251, 0}";
+			sepNavVisRect = "{{0, 13230}, {1235, 632}}";
 		};
 	};
-	F12779E8236DE60800478B2C /* PackedFileReader.c */ = {
+	F1277A0C236DE63E00478B2C /* GameMenu.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1031, 2828}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRect = "{{0, 0}, {0, 0}}";
-		};
-	};
-	F12779FA236DE62100478B2C /* Common.h */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1031, 588}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRect = "{{0, 0}, {1031, 237}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 4816}}";
+			sepNavSelRange = "{5444, 52}";
+			sepNavVisRect = "{{0, 2127}, {1235, 632}}";
 		};
 	};
 	F1277A26236DE6DD00478B2C /* GameView.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {944, 4256}}";
-			sepNavSelRange = "{6898, 0}";
-			sepNavVisRect = "{{0, 0}, {841, 857}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 4270}}";
+			sepNavSelRange = "{194, 20}";
+			sepNavVisRect = "{{0, 0}, {1235, 632}}";
 		};
 	};
 	F1B679BD24E4AAE400FCEF8E /* GameWindow.m */ = {
@@ -325,16 +287,6 @@
 			sepNavSelRange = "{0, 0}";
 			sepNavVisRect = "{{0, 0}, {986, 869}}";
 		};
-	};
-	F1D3239A2661563E00159412 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = F12779E8236DE60800478B2C /* PackedFileReader.c */;
-		name = "PackedFileReader.c: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 0;
-		vrLoc = 0;
 	};
 	F1D5B5D72531D2CA0094ED78 /* Derelict.h */ = {
 		uiCtxt = {
