@@ -216,15 +216,6 @@ void handleSystemEvents() {
 				enableSmoothMovement = FALSE;
 				break;
 
-			case '3':
-				renderingMethod = FIXED;
-				break;
-
-			case '4':
-				renderingMethod = LUT;
-				break;
-
-
 			case 's':
 				mBufferedCommand = kCommandStrafeLeft;
 				visibilityCached = FALSE;
@@ -317,7 +308,7 @@ void handleSystemEvents() {
 			}
 				break;
 		}
-        
+
         if (mBufferedCommand != kCommandLeft && mBufferedCommand != kCommandRight && mBufferedCommand != kCommandNone) {
             turnStep = 0;
             turnTarget = 0;
@@ -339,23 +330,23 @@ void waitVSync() {
 }
 
 void flipRenderer() {
-    
+
     int x, y;
-    
-    
-    
+
+
+
     if ( !enableSmoothMovement || turnTarget == turnStep ) {
         dosmemput(&framebuffer[0], 320 * 200, 0xa0000);
         memcpy( previousFrame, framebuffer, 320 * 200);
     } else if ( turnStep < turnTarget ) {
-        
+
         uint8_t *bufferPtr = &turnBuffer[0];
         for ( y = 0; y < 200; ++y ) {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
-                
+
                 if (x < XRES ) {
-                    
+
                     if ( x  >= turnStep ) {
                         index = previousFrame[ (320 * y) - turnStep + x ];
                     } else {
@@ -364,42 +355,42 @@ void flipRenderer() {
                 } else {
                     index = framebuffer[ (320 * y) + x];
                 }
-                
+
                 *bufferPtr = index;
                 ++bufferPtr;
             }
         }
-        
+
         turnStep+= 20;
         dosmemput(&turnBuffer[0], 320 * 200, 0xa0000);
     } else {
-        
+
         uint8_t *bufferPtr = &turnBuffer[0];
         for ( y = 0; y < 200; ++y ) {
             for ( x = 0; x < 320; ++x ) {
                 uint8_t index;
 
                 if (x < XRES  ) {
-                    
+
                     if ( x  >= turnStep ) {
                         index = framebuffer[ (320 * y) - turnStep + x ];
                     } else {
                         index = previousFrame[ (320 * y) + x - (320 - XRES) - turnStep];
                     }
-                    
+
                 } else {
                     index = framebuffer[ (320 * y) + x];
                 }
-                
+
                 *bufferPtr = index;
                 ++bufferPtr;
             }
         }
-        
+
         turnStep-= 20;
         dosmemput(&turnBuffer[0], 320 * 200, 0xa0000);
     }
-	
+
 }
 
 void clear() {}

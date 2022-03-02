@@ -174,25 +174,10 @@ extern "C" void playSound( const int action ) {
 		case STATE_CHANGE_SOUND:
 			playMusic(action, "t300i12o2b20");
 			break;
-		case PLAYER_GOT_DETECTED_SOUND:
-			playMusic(action,"t100i21o1b20i20o1b20i15o1b20i20o1b20i20o1b20i20o1b20i10o1b20i20o1b20");
-			break;
-		case ENEMY_FIRING_GUN:
-			playMusic(action,"t300i12o2b20");
-			break;
 		case MENU_SELECTION_CHANGE_SOUND:
 			playMusic(action,"t300i12o1b20");
 			break;
 
-		case PLAYER_FIRING_GUN:
-			playMusic(action,"t300i12o2b20");
-			break;
-		case INFORMATION_ACQUIRED_SOUND:
-			playMusic(action,"t200i20o3fdi20o3fdi20o3fdi20o3fdi20o3fdi20o3fdi20o3fdi20o3fdi20o3fd");
-			break;
-		case FAILED_TO_GET_INFORMATION_SOUND:
-			playMusic(action,"t300i20o1b20");
-			break;
 
 		case MAIN_MENU_THEME: /* as if... */
 			playMusic(action,"t300i20o1d20c20");
