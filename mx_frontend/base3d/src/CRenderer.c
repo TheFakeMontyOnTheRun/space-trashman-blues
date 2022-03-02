@@ -976,8 +976,9 @@ void render(const long ms) {
 				int len = strlen(&messageLogBuffer[0]);
 				int lines = 1;
 				int chars = 0;
-
-				for (int c = 0; c < len; ++c) {
+                int c;
+                
+				for (c = 0; c < len; ++c) {
 
 					++chars;
 
