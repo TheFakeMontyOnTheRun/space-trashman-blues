@@ -7,6 +7,7 @@
         android:icon="@drawable/icon"
         android:name="pt.b13h.spacetrashmanblues.DerelictApplication"
         android:label="@string/app_name"
+        android:isGame="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
 
         <activity android:name="pt.b13h.spacetrashmanblues.MainActivity"
