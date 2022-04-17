@@ -235,7 +235,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
 	uint8_t colour;
 
-	if (shouldStipple < 4) {
+	if (shouldStipple <= 7) {
 		colour = shouldStipple;
 		shouldStipple = 0;
 	} else {
@@ -243,13 +243,15 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 		shouldStipple = 1;
 	}
 
+	colour += (colour << 4);
+
 	for (int y = y0; y < y1; ++y) {
 		if (shouldStipple) {
 			stipple = !stipple;
 		}
 
 		if (stipple) {
-			BMP_setPixelFast(x0, 16 + y, 0b11101110);
+			BMP_setPixelFast(x0, 16 + y, colour);
 		}
 	}
 }
@@ -359,7 +361,22 @@ void init() {
 
 	BMP_init(FALSE, BG_B, PAL0, 0);
 
-	VDP_setPaletteColor(15, RGB24_TO_VDPCOLOR(0x00ff00));
+	VDP_setPaletteColor( 0, RGB24_TO_VDPCOLOR(0x000000));
+	VDP_setPaletteColor( 1, RGB24_TO_VDPCOLOR(0x0000ff));
+	VDP_setPaletteColor( 2, RGB24_TO_VDPCOLOR(0x00ff00));
+	VDP_setPaletteColor( 3, RGB24_TO_VDPCOLOR(0x00ffff));
+	VDP_setPaletteColor( 4, RGB24_TO_VDPCOLOR(0xff0000));
+	VDP_setPaletteColor( 5, RGB24_TO_VDPCOLOR(0xff00ff));
+	VDP_setPaletteColor( 6, RGB24_TO_VDPCOLOR(0xffff00));
+	VDP_setPaletteColor( 7, RGB24_TO_VDPCOLOR(0xffffff));
+	VDP_setPaletteColor( 8, RGB24_TO_VDPCOLOR(0x00007f));
+	VDP_setPaletteColor( 9, RGB24_TO_VDPCOLOR(0x007f00));
+	VDP_setPaletteColor(10, RGB24_TO_VDPCOLOR(0x007f7f));
+	VDP_setPaletteColor(11, RGB24_TO_VDPCOLOR(0x7f0000));
+	VDP_setPaletteColor(12, RGB24_TO_VDPCOLOR(0x7f007f));
+	VDP_setPaletteColor(13, RGB24_TO_VDPCOLOR(0x7f7f00));
+	VDP_setPaletteColor(14, RGB24_TO_VDPCOLOR(0x7f7f7f));
+	VDP_setPaletteColor(15, RGB24_TO_VDPCOLOR(0x414141));
 }
 
 void graphicsFlush() {
