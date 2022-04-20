@@ -298,6 +298,7 @@ uint8_t getKey() {
 	if ((key & JOY_FIREA) && !cooldown) {
 		performAction();
 		cooldown = COOLDOWN_MAX;
+		HUD_refresh();
 		return 'p';
 	}
 
