@@ -87,6 +87,8 @@ void pickItem();
 
 void clearGraphics();
 
+void backToGraphics();
+
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 uint16_t cooldown;
 
@@ -160,7 +162,7 @@ void showMessage(const char *message) {
 	clearScreen();
 
 	writeStr(1, 1, message, 2, 0);
-	writeStr(2, 22, "Press any button to continue", 2, 0);
+	writeStr(2, 22, "Press B button to continue", 2, 0);
 
 	while (keepGoing) {
 		if (getKey() == 'p') {
@@ -168,26 +170,35 @@ void showMessage(const char *message) {
 		}
 	}
 
-	clearScreen();
-	HUD_initialPaint();
-	renderScene();
+	backToGraphics();
 }
 
 void titleScreen() {
 	int keepGoing = 1;
-	clearGraphics();
+	clearScreen();
 
 	writeStr(1, 1, "Space Mare Imperium: Derelict", 2, 0);
 	writeStr(1, 4, "by Daniel Monteiro", 2, 0);
-	writeStr(1, 6, "  Press B to start ", 2, 0);
+	writeStr(1, 6, " Press B to start ", 2, 0);
 
 	while (keepGoing) {
 		if (getKey() == 'p') {
 			keepGoing = 0;
 		}
 	}
+	backToGraphics();
+}
 
+void refreshJustGraphics() {
+	clearGraphics();
+	renderScene();
+	graphicsFlush();
+}
+
+void backToGraphics() {
 	clearScreen();
+	HUD_initialPaint();
+	refreshJustGraphics();
 }
 
 void performAction() {
@@ -195,24 +206,24 @@ void performAction() {
 
 	switch (getGameStatus()) {
 		case kBadVictory:
-			showMessage("Victory! Too bad you didn't survive\nto tell the story\n\n\n\n\n\n");
+			showMessage("Victory! Too bad you didn't survive");
 			while (1);
 
 		case kBadGameOver:
-			showMessage("You're dead! And so are millions of\n"
+			showMessage("You're dead! And so are the\n"
 						"other people on the path of\n"
-						"destruction faulty reactor\n\n\n\n\n\n");
+						"destruction faulty reactor");
 			while (1);
 
 		case kGoodVictory:
-			showMessage("Victory! You managed to destroy the\nship and get out alive\n\n\n\n\n\n");
+			showMessage("Victory! You managed to destroy the\nship and get out alive");
 			while (1);
 
 		case kGoodGameOver:
-			showMessage("You failed! While you fled the ship\n"
-						"alive, you failed to prevent the \n"
-						"worstscenario and now EVERYBODY is\n"
-						"dead!)\n\n\n\n\n");
+			showMessage("You failed! While you're alive\n"
+						"you failed to prevent the worst\n"
+						"scenario and now EVERYBODY is\n"
+						"dead!)");
 			while (1);
 
 		default:
@@ -237,19 +248,16 @@ char *menuItems[] = {
 			break;
 		case 1:
 			interactWithItemInRoom();
+			HUD_refresh();
 			break;
 		case 2:
 			pickItem();
-			clearGraphics();
-			renderScene();
-			graphicsFlush();
+			refreshJustGraphics();
 			HUD_refresh();
 			break;
 		case 3:
 			dropItem();
-			clearGraphics();
-			renderScene();
-			graphicsFlush();
+			refreshJustGraphics();
 			HUD_refresh();
 			break;
 		case 4:
