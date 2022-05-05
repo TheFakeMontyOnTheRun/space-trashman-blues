@@ -1762,9 +1762,8 @@ void startRoomTransitionAnimation() {
 		for (uint8_t x = y; x < (95 + (32 - y)); ++x) {
 			graphicsPut(x, y);
 			graphicsPut(x, 95 + (32 - y));
-
 			//door opening
-			vLine(x, y, 95 - 3 * (32 - y), 7);
+			graphicsPut(x, 95 - 3 * (32 - y));
 		}
 
 
