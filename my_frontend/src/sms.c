@@ -283,12 +283,20 @@ uint8_t getKey() {
 	}
 
 	if (key & JOY_LEFT) {
-		return 'q';
+		if (key & JOY_FIREB) {
+			return 'a';
+		} else {
+			return 'q';
+		}
 	}
 
 
 	if (key & JOY_RIGHT) {
-		return 'e';
+		if (key & JOY_FIREB) {
+			return 'd';
+		} else {
+			return 'e';
+		}
 	}
 
 	if (key & JOY_DOWN) {
