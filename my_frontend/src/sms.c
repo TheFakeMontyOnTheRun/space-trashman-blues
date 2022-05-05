@@ -370,21 +370,12 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 	uint8_t _y1 = y1;
 
 
-	if (x0 >= BUFFER_RESX) return;
 
 	if (y0 > y1) {
 		_y0 = y1;
 		_y1 = y0;
 	}
 
-	if (_y1 >= BUFFER_RESY) {
-		_y1 = BUFFER_RESY - 1;
-	};
-
-
-	if (_y0 >= BUFFER_RESY) {
-		_y0 = BUFFER_RESY - 1;
-	};
 
 	uint8_t patternLine = (_y0 & 7); //which line inside the pattern;
 	uint8_t *ptr = &buffer[(16 * 8 * (_y0 >> 3)) + //skip the entire row of patterns along the y
@@ -528,7 +519,6 @@ uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr) {
 #endif
 
 	if (ptr == NULL) {
-		if (y >= BUFFER_RESY) return NULL;
 
 		ptr = &buffer[(16 * 8 * (y >> 3)) + //skip the entire row of patterns along the y
 					  (8 * (x >> 3)) + //skip to the correct pattern in the row
@@ -572,7 +562,6 @@ void graphicsPut(uint8_t x, uint8_t y) {
 	y = y >> 1;
 #endif
 
-	if (y >= BUFFER_RESY || x >= BUFFER_RESX) return;
 
 	uint8_t *ptr = &buffer[(16 * 8 * (y >> 3)) + //skip the entire row of patterns along the y
 						   (8 * (x >> 3)) + //skip to the correct pattern in the row
