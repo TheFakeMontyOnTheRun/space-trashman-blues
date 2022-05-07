@@ -1805,8 +1805,7 @@ void tickRenderer() {
 waitkey:
 	switch (getKey()) {
 
-#ifndef SMD
-#ifndef SMS
+#ifndef GAMEPAD
 		case 'l':
 			shutdownGraphics();
 			exit(0);
@@ -1841,7 +1840,6 @@ waitkey:
 			dropItem();
 			HUD_refresh();
 			break;
-#endif
 #endif
 		case 'q':
 			turnLeft();
