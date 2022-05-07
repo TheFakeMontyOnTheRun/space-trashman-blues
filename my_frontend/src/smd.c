@@ -239,7 +239,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 		colour = shouldStipple;
 		shouldStipple = 0;
 	} else {
-		colour = shouldStipple - 4;
+		colour = shouldStipple - 8;
 		shouldStipple = 1;
 	}
 
@@ -369,14 +369,14 @@ void init() {
 	VDP_setPaletteColor( 5, RGB24_TO_VDPCOLOR(0xff00ff));
 	VDP_setPaletteColor( 6, RGB24_TO_VDPCOLOR(0xffff00));
 	VDP_setPaletteColor( 7, RGB24_TO_VDPCOLOR(0xffffff));
-	VDP_setPaletteColor( 8, RGB24_TO_VDPCOLOR(0x00007f));
-	VDP_setPaletteColor( 9, RGB24_TO_VDPCOLOR(0x007f00));
-	VDP_setPaletteColor(10, RGB24_TO_VDPCOLOR(0x007f7f));
-	VDP_setPaletteColor(11, RGB24_TO_VDPCOLOR(0x7f0000));
-	VDP_setPaletteColor(12, RGB24_TO_VDPCOLOR(0x7f007f));
-	VDP_setPaletteColor(13, RGB24_TO_VDPCOLOR(0x7f7f00));
-	VDP_setPaletteColor(14, RGB24_TO_VDPCOLOR(0x7f7f7f));
-	VDP_setPaletteColor(15, RGB24_TO_VDPCOLOR(0x414141));
+	VDP_setPaletteColor( 8, RGB24_TO_VDPCOLOR(0x000000));
+	VDP_setPaletteColor( 9, RGB24_TO_VDPCOLOR(0x00007f));
+	VDP_setPaletteColor(10, RGB24_TO_VDPCOLOR(0x007f00));
+	VDP_setPaletteColor(11, RGB24_TO_VDPCOLOR(0x007f7f));
+	VDP_setPaletteColor(12, RGB24_TO_VDPCOLOR(0x7f0000));
+	VDP_setPaletteColor(13, RGB24_TO_VDPCOLOR(0x7f007f));
+	VDP_setPaletteColor(14, RGB24_TO_VDPCOLOR(0x7f7f00));
+	VDP_setPaletteColor(15, RGB24_TO_VDPCOLOR(0x7f7f7f));
 }
 
 void graphicsFlush() {

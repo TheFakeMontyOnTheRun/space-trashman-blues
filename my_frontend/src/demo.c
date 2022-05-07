@@ -271,7 +271,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 #ifndef USE_FILLED_POLYS
 	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
 #else
-	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 5;
+	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 12 : 4;
 #endif
 
 	uint8_t stipple = 1;
@@ -1308,10 +1308,10 @@ next_cluster:
 		signal = !signal;
 
 		if (stencilY > 86) {
-			vLine(x, stencilY, 128, 3);
+			vLine(x, stencilY, 128, 2);
 		} else {
-			vLine(x, stencilY + (signal), 86, 7);
-			vLine(x, 86, 128, 3);
+			vLine(x, stencilY + (signal), 86, 10);
+			vLine(x, 86, 128, 2);
 		}
 #else
 		graphicsPut(x, stencilY);
