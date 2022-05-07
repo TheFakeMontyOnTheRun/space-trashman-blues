@@ -243,7 +243,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 		shouldStipple = 1;
 	}
 
-	colour += (colour << 4);
+	colour += (colour << 4); //double the pixel
 
 	for (int y = y0; y < y1; ++y) {
 		if (shouldStipple) {

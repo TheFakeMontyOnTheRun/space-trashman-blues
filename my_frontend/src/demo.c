@@ -517,7 +517,7 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
 #ifndef USE_FILLED_POLYS
 	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
 #else
-	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 5 : 1;
+	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 12 : 4;
 #endif
 
 	uint8_t stipple = 1;
@@ -792,7 +792,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 #ifndef USE_FILLED_POLYS
 	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
 #else
-	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 6 : 2;
+	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 9 : 1;
 #endif
 	uint8_t stipple = 1;
 
@@ -900,8 +900,10 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 			}
 		}
 
-		shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 6;
+		shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 9;
 #endif
+
+
 
 		/* The left segment */
 		x0 = px0z0;
@@ -936,7 +938,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 #ifdef USE_FILLED_POLYS
 						if (drawContour) {
 							uint8_t top = stencilHigh[x0];
-							vLine(x0, top, y0, 6);
+							vLine(x0, top, y0, shouldStipple);
 							graphicsPut(x0, top);
 						}
 #endif
@@ -1000,7 +1002,7 @@ right_stroke:
 #ifdef USE_FILLED_POLYS
 					if (drawContour) {
 						uint8_t top = stencilHigh[x0];
-						vLine(x0, top, y0, 6);
+						vLine(x0, top, y0, shouldStipple);
 						graphicsPut(x0, top);
 					}
 #endif
