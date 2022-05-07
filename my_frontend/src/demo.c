@@ -1944,9 +1944,8 @@ void logDelegate(const char *mesg) {
 
 
 int main(
-#ifndef SMS
+
 		int argc, char **argv
-#endif
 ) {
 
 	running = 1;
