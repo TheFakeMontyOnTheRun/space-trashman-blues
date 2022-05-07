@@ -6,6 +6,12 @@
 #include <stdio.h>
 #include <msx/gfx.h>
 
+#include <games.h>
+#include <psg.h>
+#include <sound.h>
+#include <stdlib.h>
+#include <time.h>
+
 #include "Core.h"
 #include "Derelict.h"
 #include "Engine3D.h"
@@ -22,12 +28,14 @@ extern struct ObjectNode *roomItem;
 
 extern int accessGrantedToSafe;
 
+int cursorPosition = 0;
+
 #define BUFFER_SIZEX 16
 #define BUFFER_SIZEY 128
 #define BUFFER_RESX 128
 #define BUFFER_RESY 128
 #define COOLDOWN_MAX 0x2EF
-#define MARGIN_TEXT_SCREEN_LIMIT 30
+#define MARGIN_TEXT_SCREEN_LIMIT 35
 
 uint8_t font[] = {
 		// ASCII table starting on SPACE.
@@ -69,8 +77,6 @@ uint8_t font[] = {
 		0x10, 0x38, 0x6c, 0x44, 0x44, 0x7c, 0x00, 0x00
 };
 
-int cursorPosition = 0;
-
 void graphicsFlush();
 
 void nextItemInHand();
@@ -102,12 +108,12 @@ void init() {
 }
 
 char *menuItems[] = {
-		"Use/Toggle",
-		"Use with...",
-		"Use/pick...",
-		"Drop",
-		"Next item",
-		"Next in room",
+		"8) Use/Toggle",
+		"5) Use with...",
+		"9) Use/pick...",
+		"6) Drop",
+		"7) Next item",
+		"4) Next in room",
 };
 
 void graphicsFlush();
@@ -164,10 +170,10 @@ void showMessage(const char *message) {
 	clearScreen();
 
 	writeStr(1, 1, message, 2, 0);
-	writeStr(2, 22, "Press B button to continue", 2, 0);
+	writeStr(2, 22, "Press SPACE button to continue", 2, 0);
 
 	while (keepGoing) {
-		if (getKey() == 'p') {
+		if (getKey() == ' ') {
 			keepGoing = 0;
 		}
 	}
@@ -181,10 +187,27 @@ void titleScreen() {
 
 	writeStr(1, 1, "Space Mare Imperium: Derelict", 2, 0);
 	writeStr(1, 4, "by Daniel Monteiro", 2, 0);
-	writeStr(1, 6, " Press B to start ", 2, 0);
+	writeStr(1, 6, " Press SPACE to start ", 2, 0);
+
+
+	psg_init();
+	psg_channels(chanAll, chanNone); // set all channels to tone generation
+	psg_volume(0, 10);
+	psg_volume(1, 10);
+	psg_volume(2, 10);
+
+	psg_tone(0, psgT(262));
+
+	for (int y = 0; y < 30; ++y ) {
+		for (int x = 0; x < BEEP_TSTATES / 40000; x++) {
+		}
+	}
+
+
+	psg_tone(0, 0);
 
 	while (keepGoing) {
-		if (getKey() == 'p') {
+		if (getKey() == ' ') {
 			keepGoing = 0;
 		}
 	}
@@ -232,43 +255,6 @@ void performAction() {
 		case kNormalGameplay:
 			break;
 	}
-
-/*
-char *menuItems[] = {
- 0       "Use/Toggle current item",
- 1       "Use current item with...",
- 2       "Pick",
- 3       "Drop",
- 4       "Next item in inventory",
- 5       "Next room item in focus",
-};
-*/
-
-	switch (cursorPosition) {
-		case 0:
-			useObjectNamed(getItem(focusedItem->item)->name);
-			break;
-		case 1:
-			interactWithItemInRoom();
-			HUD_refresh();
-			break;
-		case 2:
-			pickItem();
-			refreshJustGraphics();
-			HUD_refresh();
-			break;
-		case 3:
-			dropItem();
-			refreshJustGraphics();
-			HUD_refresh();
-			break;
-		case 4:
-			nextItemInHand();
-			break;
-		case 5:
-			nextItemInRoom();
-			break;
-	}
 }
 
 void clearTextScreen() {
@@ -282,7 +268,9 @@ void exitTextMode() {
 }
 
 uint8_t getKey() {
-	return getch();
+	uint8_t input = getch();
+	performAction();
+	return input;
 }
 
 void shutdownGraphics() {
@@ -320,7 +308,6 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
 	uint8_t _y0 = y0;
 	uint8_t _y1 = y1;
-
 
 
 	if (y0 > y1) {
@@ -554,7 +541,7 @@ void HUD_initialPaint() {
 	draw(BUFFER_RESX, 0, BUFFER_RESX, 191);
 
 	for (uint8_t i = 0; i < 6; ++i) {
-		writeStr(18, 14 + i, menuItems[i], 2, 0);
+		writeStr(17, 14 + i, menuItems[i], 2, 0);
 	}
 
 	HUD_refresh();
@@ -562,17 +549,7 @@ void HUD_initialPaint() {
 
 void HUD_refresh() {
 
-	for (int c = 0; c < 13; ++c) {
-		for (int d = 0; d < 15; ++d) {
-			writeStr(17 + d, c, " ", 2, 0);
-		}
-	}
-
-	for (uint8_t i = 0; i < 6; ++i) {
-		writeStr(17, 14 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
-	}
-
-	writeStrWithLimit(17, 5, "Object in hand", 31);
+	writeStrWithLimit(17, 5, "Object in hand", MARGIN_TEXT_SCREEN_LIMIT);
 
 	if (focusedItem != NULL) {
 		struct Item *item = getItem(focusedItem->item);
@@ -582,24 +559,24 @@ void HUD_refresh() {
 			writeStr(17, 6, "*", 2, 0);
 		}
 
-		writeStrWithLimit(18, 6, item->name, 31);
+		writeStrWithLimit(17, 6, item->name, MARGIN_TEXT_SCREEN_LIMIT);
 	} else {
-		writeStrWithLimit(18, 6, "Nothing", 31);
+		writeStrWithLimit(17, 6, "Nothing", MARGIN_TEXT_SCREEN_LIMIT);
 	}
 
-	writeStrWithLimit(17, 1, "Object in room", 31);
+	writeStrWithLimit(17, 1, "Object in room", MARGIN_TEXT_SCREEN_LIMIT);
 
 	if (roomItem != NULL) {
 		struct Item *item = getItem(roomItem->item);
 
 
 		if (item->active) {
-			writeStrWithLimit(17, 2, "*", 31);
+			writeStrWithLimit(17, 2, "*", MARGIN_TEXT_SCREEN_LIMIT);
 		}
 
-		writeStrWithLimit(18, 2, item->name, 31);
+		writeStrWithLimit(17, 2, item->name, MARGIN_TEXT_SCREEN_LIMIT);
 	} else {
-		writeStrWithLimit(18, 2, "Nothing", 31);
+		writeStrWithLimit(17, 2, "Nothing", MARGIN_TEXT_SCREEN_LIMIT);
 	}
 }
 
