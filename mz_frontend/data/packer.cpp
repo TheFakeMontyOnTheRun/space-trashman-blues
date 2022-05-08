@@ -9,6 +9,7 @@
 
 using std::vector;
 
+
 vector<char> readToBuffer(FILE *fileDescriptor) {
 	const unsigned N = 1024;
 
