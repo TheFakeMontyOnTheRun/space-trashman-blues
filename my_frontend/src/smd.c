@@ -225,7 +225,7 @@ void graphicsPut(uint8_t x, uint8_t y) {
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
-	uint8_t stipple = 1;
+	uint8_t stipple;
 
 	if (y0 > y1) {
 		int tmp = y0;
@@ -238,9 +238,11 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 	if (shouldStipple <= 7) {
 		colour = shouldStipple;
 		shouldStipple = 0;
+		stipple = 1;
 	} else {
 		colour = shouldStipple - 8;
 		shouldStipple = 1;
+		stipple = (x0 & 1);
 	}
 
 	colour += (colour << 4); //double the pixel

@@ -1302,17 +1302,15 @@ next_cluster:
 	}
 #else
 	int8_t *stencilPtr = &stencilHigh[0];
-	uint8_t signal = 0;
 
 	for (x = 0; x < XRES; ++x) {
 		int8_t stencilY = (*stencilPtr);
 #ifdef USE_FILLED_POLYS
-		signal = !signal;
 
 		if (stencilY > 86) {
 			vLine(x, stencilY, 128, 2);
 		} else {
-			vLine(x, stencilY + (signal), 86, 10);
+			vLine(x, stencilY, 86, 10);
 			vLine(x, 86, 128, 2);
 		}
 #else
