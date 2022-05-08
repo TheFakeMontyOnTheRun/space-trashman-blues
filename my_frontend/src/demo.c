@@ -271,7 +271,14 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 #ifndef USE_FILLED_POLYS
 	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
 #else
-	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 12 : 4;
+	uint8_t shouldStipple;
+
+	if (type == LEFT_WALL) {
+		shouldStipple = 12;//(z0 >= STIPPLE_DISTANCE) ? 12 : 4;
+	} else {
+		shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 12;
+	}
+
 #endif
 
 	uint8_t stipple = 1;
@@ -1139,7 +1146,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 			case 0:
 			case 2:
 				return drawWedge(x0 - (cameraRotation == 0 ? 1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-								 0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
+								 0, diff, 1, patterns[pattern].elementsMask, LEFT_WALL);
 			case 1:
 			case 3:
 				return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT,
@@ -1159,7 +1166,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 			case 3:
 				return drawWedge(x0 - (cameraRotation == 1 ? 1 : 0),
 								 patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-								 0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
+								 0, diff, 1, patterns[pattern].elementsMask, LEFT_WALL);
 
 
 		}
@@ -1172,7 +1179,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 			case 0:
 				returnVal = drawWedge(x0 - (cameraRotation == 3 ? 0 : 1),
 									  patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-									  0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
+									  0, diff, 1, patterns[pattern].elementsMask, LEFT_WALL);
 
 				returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
 									   x1 - x0, diff, patterns[pattern].elementsMask) || returnVal;
@@ -1185,7 +1192,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 
 				returnVal =
 						drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-								  0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR) || returnVal;
+								  0, diff, 1, patterns[pattern].elementsMask, LEFT_WALL) || returnVal;
 
 				break;
 		}
