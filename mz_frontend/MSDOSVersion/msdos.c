@@ -45,24 +45,25 @@ void shutdownGraphics() {
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
-    uint8_t stipple = 1;
+	uint8_t stipple;
 
-    if (y0 > y1) {
-        int tmp = y0;
-        y0 = y1;
-        y1 = tmp;
-    }
+	if (y0 > y1) {
+		int tmp = y0;
+		y0 = y1;
+		y1 = tmp;
+	}
 
-    uint8_t colour;
+	uint8_t colour;
 
-    if (shouldStipple < 4) {
-        colour = shouldStipple;
-        shouldStipple = 0;
-    } else {
-        colour = shouldStipple - 4;
-        shouldStipple = 1;
-    }
-
+	if (shouldStipple <= 3) {
+		colour = shouldStipple;
+		shouldStipple = 0;
+		stipple = 1;
+	} else {
+		colour = shouldStipple - 4;
+		shouldStipple = 1;
+		stipple = (x0 & 1);
+	}
 
     uint16_t offset = (32 * y0) + (x0 / 4);
     uint8_t dy = (y1 - y0);

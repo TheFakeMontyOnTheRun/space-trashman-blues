@@ -1113,17 +1113,15 @@ void renderScene() {
     
 
     int8_t *stencilPtr = &stencilHigh[0];
-    uint8_t signal = 0;
 
     for (x = 0; x < XRES; ++x) {
         int8_t stencilY = (*stencilPtr);
 #ifdef MSDOS
-        signal = !signal;
 
         if (stencilY > 86) {
             vLine(x, stencilY, 128, 3);
         } else {
-            vLine(x, stencilY + (signal), 86, 7);
+            vLine(x, stencilY, 86, 7);
             vLine(x, 86, 128, 3);
         }
 #else
@@ -1581,6 +1579,20 @@ void startRoomTransitionAnimation() {
 
             //door opening
             vLine(x, y, 95 - 3 * (32 - y), 7);
+
+#ifndef USE_FILLED_POLYS
+			graphicsPut(x, 95 - 3 * (32 - y));
+#else
+			if (y > STIPPLE_DISTANCE) {
+				vLine(x, y, 95 - 3 * (32 - y), 6);
+			} else {
+				vLine(x, y, 95 - 3 * (32 - y), 2);
+			}
+
+			vLine(x, 95 - 3 * (32 - y), 95, 7);
+			vLine(x, 95, 95 + (32 - y), 3);
+#endif
+
         }
 
 
