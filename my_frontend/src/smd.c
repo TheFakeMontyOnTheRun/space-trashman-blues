@@ -321,6 +321,10 @@ uint8_t getKey() {
 	return buffered;
 }
 
+void sleepForMS(uint32_t ms) {
+	//we cant afford to sleep
+}
+
 void titleScreen() {
 	int keepGoing = 1;
 	clearGraphics();

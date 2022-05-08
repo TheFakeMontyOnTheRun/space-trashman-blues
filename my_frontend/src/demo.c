@@ -1770,7 +1770,21 @@ void startRoomTransitionAnimation() {
 			graphicsPut(x, y);
 			graphicsPut(x, 95 + (32 - y));
 			//door opening
+
+#ifndef USE_FILLED_POLYS
 			graphicsPut(x, 95 - 3 * (32 - y));
+#else
+
+
+			if (y > STIPPLE_DISTANCE) {
+				vLine(x, y, 95 - 3 * (32 - y), 12);
+			} else {
+				vLine(x, y, 95 - 3 * (32 - y), 4);
+			}
+
+			vLine(x, 95 - 3 * (32 - y), 95, 10);
+			vLine(x, 95, 95 + (32 - y), 2);
+#endif
 		}
 
 
