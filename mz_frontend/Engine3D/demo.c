@@ -1588,7 +1588,6 @@ void startRoomTransitionAnimation() {
 			vLine(x, y, 95 - 3 * (32 - y), 7);
 		}
 
-
 		graphicsFlush();
 		sleepForMS(20000);
 	}
