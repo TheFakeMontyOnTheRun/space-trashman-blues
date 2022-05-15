@@ -9,7 +9,7 @@ TARGET = derelict.com
 
 $(TARGET):	$(OBJS)
 	$(CC) -o $(TARGET) $(OBJS) $(LDFLAGS)
-	$(STRIP) -s -v $(TARGET)
+
 all:	$(TARGET)
 
 clean:
