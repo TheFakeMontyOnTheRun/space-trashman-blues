@@ -67,6 +67,7 @@ FILE *android_fopen(const char* filename) {
 #define kDataPath_MaxLength 13
 #endif
 
+#ifndef LEAN_BUILD
 char mDataPath[kDataPath_MaxLength];
 
 void initFileReader(const char *__restrict__ dataFilePath) {
@@ -216,4 +217,50 @@ FILE *openBinaryFileFromPath(const char *__restrict__ path) {
 
     return mDataPack;
 }
+#endif
+
+#else
+
+struct StaticBuffer loadBinaryFileFromPath(const uint8_t slot) {
+
+	FILE *mDataPack = fopen("base.pfs", "rb");
+
+	struct StaticBuffer toReturn;
+
+	uint32_t offset = 0;
+	uint16_t entries = 0;
+	char buffer[85];
+	int c;
+	uint32_t size = 0;
+
+
+	fread(&entries, 2, 1, mDataPack);
+
+	for (c = 0; c < entries; ++c) {
+		uint8_t stringSize = 0;
+
+		fread(&offset, 4, 1, mDataPack);
+		offset = toNativeEndianess(offset);
+		fread(&stringSize, 1, 1, mDataPack);
+		fread(&buffer, stringSize + 1, 1, mDataPack);
+
+		if (c == slot) {
+			goto found;
+		}
+	}
+
+found:
+	fseek(mDataPack, offset, SEEK_SET);
+
+	fread(&size, 4, 1, mDataPack);
+	size = toNativeEndianess(size);
+	toReturn.size = size;
+	toReturn.data = (uint8_t *) malloc(size);
+
+	fread(toReturn.data, sizeof(uint8_t), size, mDataPack);
+	fclose(mDataPack);
+
+	return toReturn;
+}
+
 #endif
