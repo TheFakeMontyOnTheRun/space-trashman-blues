@@ -1509,35 +1509,12 @@ void initMap() {
 	int x, y;
 	const uint8_t *head;
 	uint8_t current;
-	char *buffer = alloca(30);
-
-	buffer[0] = 'm';
-	buffer[1] = 'a';
-	buffer[2] = 'p';
-
-	if (playerLocation > 9) {
-		buffer[3] = (playerLocation / 10) + '0';
-		buffer[4] = (playerLocation % 10) + '0';
-		buffer[5] = '.';
-		buffer[6] = 't';
-		buffer[7] = 'x';
-		buffer[8] = 't';
-		buffer[9] = 0;
-
-	} else {
-		buffer[3] = (playerLocation % 10) + '0';
-		buffer[4] = '.';
-		buffer[5] = 't';
-		buffer[6] = 'x';
-		buffer[7] = 't';
-		buffer[8] = 0;
-	}
 
 	/* first item in the list is always a dummy */
 	roomItem = getRoom(playerLocation)->itemsPresent->next;
 
 
-	struct StaticBuffer datafile = loadBinaryFileFromPath(buffer);
+	struct StaticBuffer datafile = loadBinaryFileFromPath(playerLocation);
 	head = datafile.data;
 
 	for (y = 0; y < 32; ++y) {
@@ -1766,7 +1743,6 @@ int main(int argc, char **argv) {
 	enteredFrom = 0;
 	cameraRotation = 0;
 	init();
-	initFileReader("base.pfs");
 	initStation();
 
 	titleScreen();

@@ -3,10 +3,10 @@
 CRUNCHER=wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
 PACKAGER=packer
 
-$(CRUNCHER): 
+$(CRUNCHER):
 	mvn -q -f wobj-compiler/pom.xml clean compile package install
 	mkdir -p wobj-compiler/dist
-	cp wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar wobj-compiler/dist 
+	cp wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar wobj-compiler/dist
 
 $(PACKAGER):
 	rm -f $(PACKAGER)
@@ -14,12 +14,12 @@ $(PACKAGER):
 
 data:	$(PACKAGER) $(CRUNCHER)
 	rm -f ./base.pfs
-	ls src/*.obj  | xargs java -jar wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
-	ls assets/*.*  | xargs ./packer
+	ls -r src/*.obj  | xargs java -jar wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
+	ls -r assets/*.*  | xargs ./packer
 	mv ./data.pfs ../base.pfs
 
 images:
-	python ./make_package.py
+	python3 ./make_package.py
 
 full: images data
 
