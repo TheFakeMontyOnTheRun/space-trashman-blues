@@ -47,6 +47,18 @@ char *menuItems[] = {
 		"Next in room",
 };
 
+void refreshJustGraphics() {
+	clearGraphics();
+	renderScene();
+	graphicsFlush();
+}
+
+void backToGraphics() {
+	clearScreen();
+	HUD_initialPaint();
+	refreshJustGraphics();
+}
+
 void performAction() {
 	struct Room *room = getRoom(getPlayerRoom());
 
@@ -94,12 +106,17 @@ char *menuItems[] = {
 			break;
 		case 1:
 			interactWithItemInRoom();
+			HUD_refresh();
 			break;
 		case 2:
 			pickItem();
+			refreshJustGraphics();
+			HUD_refresh();
 			break;
 		case 3:
 			dropItem();
+			refreshJustGraphics();
+			HUD_refresh();
 			break;
 		case 4:
 			nextItemInHand();
@@ -286,7 +303,7 @@ void showMessage(const char *message) {
 	}
 
 	exitTextMode();
-	HUD_initialPaint();
+	backToGraphics();
 }
 
 void clearScreen() {
