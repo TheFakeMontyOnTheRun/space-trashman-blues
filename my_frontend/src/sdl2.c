@@ -35,6 +35,10 @@ void pickOrDrop();
 
 void pickItem();
 
+void sleepForMS(long ms) {
+
+}
+
 void graphicsPut(uint8_t x, uint8_t y) {
 
 	assert(x >= 0);
