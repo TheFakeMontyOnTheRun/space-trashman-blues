@@ -239,7 +239,7 @@ void init() {
 	memset(framebuffer, 5, 160 * 200);
 	window =
 			SDL_CreateWindow("Derelict 8-bits SDL2 test", SDL_WINDOWPOS_CENTERED,
-							 SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
+							 SDL_WINDOWPOS_CENTERED, 259, 309, SDL_WINDOW_SHOWN);
 
 	renderer = SDL_CreateRenderer(window, -1, 0);
 
