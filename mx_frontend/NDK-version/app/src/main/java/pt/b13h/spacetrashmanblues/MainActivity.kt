@@ -156,13 +156,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    override fun onBackPressed() {
-        if (DerelictJNI.isOnMainMenu() != 0 ) {
-            super.onBackPressed()
-        } else {
-            DerelictJNI.sendCommand('q')
-        }
-    }
     override fun onPause() {
         super.onPause()
         running = false
