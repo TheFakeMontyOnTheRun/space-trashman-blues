@@ -31,8 +31,6 @@
 #define XRESMINUSONE XRES - 1
 #define YRESMINUSONE YRES - 1
 
-
-#define WALKSTEP 1
 #define CAMERA_HEIGHT 2
 #define VISIBILITY_LIMIT 32
 

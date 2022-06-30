@@ -30,6 +30,7 @@ Created by Daniel Monteiro on 2019-07-26.
 #include "Core.h"
 #endif
 
+#define WALKSTEP 1
 
 int roomCount = 1; /* there's an implicit dummy first */
 struct Room rooms[TOTAL_ROOMS];
@@ -596,64 +597,64 @@ void walkBy(int direction) {
         case 0:
             switch (playerDirection) {
                 case 0:
-                    playerPosition.y--;
+                    playerPosition.y-= WALKSTEP;
                     break;
                 case 1:
-                    playerPosition.x++;
+                    playerPosition.x+= WALKSTEP;
                     break;
                 case 2:
-                    playerPosition.y++;
+                    playerPosition.y+= WALKSTEP;
                     break;
                 case 3:
-                    playerPosition.x--;
+                    playerPosition.x-= WALKSTEP;
                     break;
             }
             break;
         case 1:
             switch (playerDirection) {
                 case 0:
-                    playerPosition.x++;
+                    playerPosition.x+= WALKSTEP;
                     break;
                 case 1:
-                    playerPosition.y++;
+                    playerPosition.y+= WALKSTEP;
                     break;
                 case 2:
-                    playerPosition.x--;
+                    playerPosition.x-= WALKSTEP;
                     break;
                 case 3:
-                    playerPosition.y--;
+                    playerPosition.y-= WALKSTEP;
                     break;
             }
             break;
         case 2:
             switch (playerDirection) {
                 case 0:
-                    playerPosition.y++;
+                    playerPosition.y+= WALKSTEP;
                     break;
                 case 1:
-                    playerPosition.x--;
+                    playerPosition.x-= WALKSTEP;
                     break;
                 case 2:
-                    playerPosition.y--;
+                    playerPosition.y-= WALKSTEP;
                     break;
                 case 3:
-                    playerPosition.x++;
+                    playerPosition.x+= WALKSTEP;
                     break;
             }
             break;
         case 3:
             switch (playerDirection) {
                 case 0:
-                    playerPosition.x--;
+                    playerPosition.x-= WALKSTEP;
                     break;
                 case 1:
-                    playerPosition.y--;
+                    playerPosition.y-= WALKSTEP;
                     break;
                 case 2:
-                    playerPosition.x++;
+                    playerPosition.x+= WALKSTEP;
                     break;
                 case 3:
-                    playerPosition.y++;
+                    playerPosition.y+= WALKSTEP;
                     break;
             }
             break;
