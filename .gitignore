@@ -162,3 +162,5 @@ mz_frontend/CMakeFiles
 derelict16
 CMakeCache.txt
 cmake_install.cmake
+mx_frontend/CMakeFiles
+derelict32
