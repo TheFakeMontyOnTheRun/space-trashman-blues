@@ -274,7 +274,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 	uint8_t shouldStipple;
 
 	if (type == LEFT_WALL) {
-		shouldStipple = 12;//(z0 >= STIPPLE_DISTANCE) ? 12 : 4;
+		shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 12 : 4;
 	} else {
 		shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 12;
 	}
