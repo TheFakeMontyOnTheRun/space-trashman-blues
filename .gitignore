@@ -164,3 +164,4 @@ CMakeCache.txt
 cmake_install.cmake
 mx_frontend/CMakeFiles
 derelict32
+derelict32.cbp
