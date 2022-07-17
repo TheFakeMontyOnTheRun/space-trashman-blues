@@ -19,3 +19,12 @@ jobs:
       run: cd core && make
     - name: make check
       run: cd core && make check
+    - name: Create Awesome Badge
+      uses: schneegans/dynamic-badges-action@v1.4.0
+      with:
+        auth: ${{ secrets.GIST_SECRET }}
+        gistID: d5c8f0e046da0ddc04c43cff251f661c
+        filename: space-trashman-blues-tests.json
+        label: Core tests
+        message: passing
+        color: orange
