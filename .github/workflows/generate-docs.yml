@@ -1,4 +1,4 @@
-name: Build ia16 package of the MY frontend
+name: publish docs for the CORE
 
 on:
   push:
