@@ -28,7 +28,7 @@ jobs:
         filename: space-trashman-blues-tests.json
         label: Core tests
         message: failing
-        color: orange
+        color: green
     - name: Create Awesome Badge for success
       uses: schneegans/dynamic-badges-action@v1.4.0
       if: ${{contains(env.TEST_RESULTS, 'FAILED')}}
@@ -38,4 +38,4 @@ jobs:
         filename: space-trashman-blues-tests.json
         label: Core tests
         message: passing
-        color: green
+        color: red
