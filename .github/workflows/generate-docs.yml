@@ -12,10 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@v2
+    - name: Checkout submodules
+      run: git submodule update --init --recursive    
     - name: Install MKDocs
       run: pip install mkdocs
-    - name: Checkout submodules
-      run: git submodule update --init --recursive
     - name: Generate HTML files
       run: cd core && mkdocs build
     - name: Deploy 	
