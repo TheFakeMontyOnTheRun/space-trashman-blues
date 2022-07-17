@@ -21,7 +21,7 @@ jobs:
       run: cd core && make check && export TEST_RESULTS=`./unittests`
     - name: Create Awesome Badge for failure
       uses: schneegans/dynamic-badges-action@v1.4.0
-      if: ${{contains(env.TEST_RESULTS, 'FAILED'}}
+      if: ${{contains(env.TEST_RESULTS, 'FAILED')}}
       with:
         auth: ${{ secrets.GIST_SECRET }}
         gistID: d5c8f0e046da0ddc04c43cff251f661c
@@ -31,7 +31,7 @@ jobs:
         color: orange
     - name: Create Awesome Badge for success
       uses: schneegans/dynamic-badges-action@v1.4.0
-      if: ${{contains(env.TEST_RESULTS, 'FAILED'}}
+      if: ${{contains(env.TEST_RESULTS, 'FAILED')}}
       with:
         auth: ${{ secrets.GIST_SECRET }}
         gistID: d5c8f0e046da0ddc04c43cff251f661c
