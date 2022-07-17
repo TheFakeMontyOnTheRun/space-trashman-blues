@@ -14,6 +14,8 @@ jobs:
     steps:
     - name: Install MKDocs
       run: pip install mkdocs
+    - name: Checkout submodules
+      run: git submodule update --init --recursive
     - name: Generate HTML files
       run: cd core && mkdocs build
     - name: Deploy 	
