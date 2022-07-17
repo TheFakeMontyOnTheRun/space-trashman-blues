@@ -1,5 +1,5 @@
-site_name: Space Trashman Blues
+site_name: Sub Mare Imperium - Derelict
 repo_url: https://github.com/TheFakeMontyOnTheRun/space-trashman-blues
 theme: readthedocs
-pages:
+nav:
 - Index: index.md

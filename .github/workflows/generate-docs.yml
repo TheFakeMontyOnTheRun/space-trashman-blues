@@ -1,0 +1,22 @@
+name: Build ia16 package of the MY frontend
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install MKDocs
+      run: pip install mkdocs
+    - name: Generate HTML files
+      run: cd core && mkdocs build
+    - name: Deploy 	
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: site 
