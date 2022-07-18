@@ -17,8 +17,8 @@ jobs:
       run: git submodule update --init --recursive    
     - name: Install MKDocs
       run: pip install mkdocs
-    - name: Install gcov and textinfo
-      run: sudo apt-get install gcov textinfo
+    - name: Install lcov and texinfo
+      run: sudo apt-get install lcov texinfo
     - name: Generate HTML from game design markdown files
       run: cd core && mkdocs build
     - name: Generate text coverage report
