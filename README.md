@@ -3,6 +3,8 @@ A 3D turn based adventure for MS-DOS; you're a space trashman with a simple miss
 
 ![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/TheFakeMontyOnTheRun/d5c8f0e046da0ddc04c43cff251f661c/raw/space-trashman-blues-tests.json)
 
+[Read the docs](https://thefakemontyontherun.github.io/space-trashman-blues/) for more info on the tech and the status of the project!
+
 MY frontend - Derelict 8-bit (Sega Master System, MSX)
 
 Download link: https://montyontherun.itch.io/sub-mare-imperium-derelict-8-bit
