@@ -44,7 +44,7 @@ extern int16_t thisMissionNameLen;
 
 struct CActor playerCrawler;
 
-int isPositionAllowed(int x, int y) {
+uint8_t isPositionAllowed(int8_t x, int8_t y) {
 
     return (0 <= x) && (x < MAP_SIZE) && (0 <= y) && (y < MAP_SIZE)
            && collisionMap[map[y][x]] != '1';

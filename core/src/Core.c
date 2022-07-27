@@ -34,13 +34,13 @@ Created by Daniel Monteiro on 2019-07-26.
 
 int roomCount = 1; /* there's an implicit dummy first */
 struct Room rooms[TOTAL_ROOMS];
-int itemsCount = 0;
+uint8_t itemsCount = 0;
 struct Item item[TOTAL_ITEMS];
 struct ObjectNode objectNodes[TOTAL_ITEMS];
 struct ObjectNode collectedObjectHead;
 struct ObjectNode roomObjectHeads[TOTAL_ROOMS];
 struct ObjectNode *collectedObject = NULL;
-int playerLocation = 1;
+uint8_t playerLocation = 1;
 int playerDirection;
 int playerRank;
 int gameStatus;
@@ -69,9 +69,9 @@ struct Item* addItem(char *description,
 #ifdef ITEMS_HAVE_WEIGHT
                      int weight,
 #endif
-                     int pickable,
-                     int positionX,
-                     int positionY) {
+					 uint8_t pickable,
+					 int8_t positionX,
+					 int8_t positionY) {
 
     struct Item* toReturn = &item[itemsCount];
 
@@ -92,7 +92,7 @@ struct Room *addRoom(
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
         char *info,
 #endif
-                int sizeX, int sizeY, int chanceOfRandomBattle, int connections[6]) {
+		uint8_t sizeX, uint8_t sizeY, uint8_t chanceOfRandomBattle, int8_t connections[6]) {
 
     struct Room* toReturn = &rooms[roomCount];
     toReturn->name = name;
@@ -131,7 +131,7 @@ void setPlayerPosition(struct WorldPosition* pos) {
     playerPosition.y = pos->y;
 }
 
-int isCloseToObject(struct WorldPosition* pos, struct Item *item) {
+uint8_t isCloseToObject(struct WorldPosition* pos, struct Item *item) {
     return (abs(pos->x - item->position.x) + abs(pos->y - item->position.y)) <= 1;
 }
 
@@ -209,14 +209,14 @@ void removeObjectFromRoom(struct Item *itemToRemove) {
 }
 
 
-void addObjectToRoom(int roomId, struct Item *itemToAdd) {
+void addObjectToRoom(uint8_t roomId, struct Item *itemToAdd) {
     struct Room *roomToAddObject = &rooms[roomId];
     removeObjectFromRoom(itemToAdd);
     addObjectToList(itemToAdd, roomToAddObject->itemsPresent);
     itemToAdd->roomId = roomId;
 }
 
-void dropObjectToRoom(int roomId, struct Item *itemToDrop) {
+void dropObjectToRoom(uint8_t roomId, struct Item *itemToDrop) {
 #ifdef CLI_BUILD
     if (itemToDrop->roomId != 0) {
         defaultLogger("Object not present to drop");
@@ -251,15 +251,15 @@ void pickObject(struct Item *itemToPick) {
     }
 }
 
-int getPlayerRank(void) {
+uint8_t getPlayerRank(void) {
     return playerRank;
 }
 
-void setPlayerRank(int newRank) {
+void setPlayerRank(uint8_t newRank) {
     playerRank = newRank;
 }
 
-void moveBy(int direction) {
+void moveBy(uint8_t direction) {
     int c;
     int previousLocation = playerLocation;
     struct Room *room = &rooms[playerLocation];
@@ -357,7 +357,7 @@ void dropObjectByName(const char *objName) {
 
 }
 
-int hasItemInRoom(const char *roomName, const char *itemName) {
+uint8_t hasItemInRoom(const char *roomName, const char *itemName) {
     struct ObjectNode *itemToPick;
 
 #ifdef CLI_BUILD
@@ -393,7 +393,7 @@ int hasItemInRoom(const char *roomName, const char *itemName) {
     return 0;
 }
 
-int playerHasObject(const char *itemName) {
+uint8_t playerHasObject(const char *itemName) {
     struct ObjectNode *itemToPick = collectedObject->next;
 
     while (itemToPick != NULL) {
@@ -406,7 +406,7 @@ int playerHasObject(const char *itemName) {
 }
 
 
-int isPlayerAtRoom(const char *roomName) {
+uint8_t isPlayerAtRoom(const char *roomName) {
     struct Room *room = &rooms[playerLocation];
     char *name = room->name;
     int returnValue = !strcmp(name, roomName);
@@ -418,15 +418,15 @@ char *getRoomDescription() {
     return room->name;
 }
 
-struct Room *getRoom(int index) {
+struct Room *getRoom(uint8_t index) {
     return &rooms[index];
 }
 
-struct Item *getItem(int index) {
+struct Item *getItem(uint8_t index) {
     return &item[index];
 }
 
-int getPlayerRoom(void) { return playerLocation; }
+uint8_t getPlayerRoom(void) { return playerLocation; }
 
 void useObjectNamed(const char *operand) {
     struct ObjectNode *itemToPick = collectedObject->next;
@@ -582,11 +582,11 @@ void turnRight(void) {
     playerDirection = playerDirection & 3;
 }
 
-void setPlayerLocation(int location) {
+void setPlayerLocation(uint8_t location) {
     playerLocation = location;
 }
 
-void walkBy(int direction) {
+void walkBy(uint8_t direction) {
 
     if (!getItemNamed("magnetic-boots")->active || !playerHasObject("magnetic-boots")) {
         defaultLogger("You can't move without your\nmagnetic-boots!");
@@ -696,7 +696,7 @@ void walkBy(int direction) {
 #endif
 }
 
-int getPlayerDirection(void) {
+uint8_t getPlayerDirection(void) {
     return playerDirection;
 }
 
@@ -729,7 +729,7 @@ void setLoggerDelegate(LogDelegate newDelegate) {
 }
 
 
-void setPlayerDirection(int direction) {
+void setPlayerDirection(uint8_t direction) {
     playerDirection = direction;
 }
 

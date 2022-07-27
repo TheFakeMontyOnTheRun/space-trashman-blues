@@ -32,7 +32,7 @@ enum DIRECTION {
 struct ObjectNode *focusedItem = NULL;
 struct ObjectNode *roomItem = NULL;
 
-extern int accessGrantedToSafe;
+extern uint8_t accessGrantedToSafe;
 
 void performAction();
 
@@ -55,7 +55,7 @@ uint8_t running = 1;
 
 uint8_t enteredFrom = 0xFF;
 
-extern int playerLocation;
+extern uint8_t playerLocation;
 
 struct Projection {
 	uint8_t px;
@@ -1171,7 +1171,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 
 		}
 	} else if (type == CORNER) {
-		int returnVal = 0;
+		uint8_t returnVal = 0;
 
 		switch (cameraRotation) {
 
@@ -1293,7 +1293,7 @@ next_cluster:
 			continue;
 		}
 
-		for (int c = 2; c < 8; ++c ) {
+		for (uint8_t c = 2; c < 8; ++c ) {
 			++x;
 			++stencilPtr;
 			prevY = y;
@@ -1697,7 +1697,7 @@ void nextItemInHand() {
 void updateMapItems();
 
 void initMap() {
-	int x, y, c;
+	uint8_t x, y, c;
 	const uint8_t *head;
 	uint16_t offsetOnDataStrip = 0;
 	int16_t repetitions = -1;
@@ -1813,7 +1813,7 @@ void tickRenderer() {
 	uint8_t prevX;
 	uint8_t prevZ;
 	struct WorldPosition *pos;
-	int previousLocation = playerLocation;
+	uint8_t previousLocation = playerLocation;
 	uint8_t newCell = 0;
 
 	clearGraphics();

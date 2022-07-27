@@ -26,9 +26,9 @@ extern struct ObjectNode *focusedItem;
 
 extern struct ObjectNode *roomItem;
 
-extern int accessGrantedToSafe;
+extern uint8_t accessGrantedToSafe;
 
-int cursorPosition = 0;
+uint8_t cursorPosition = 0;
 
 #define BUFFER_SIZEX 16
 #define BUFFER_SIZEY 128
@@ -118,7 +118,7 @@ char *menuItems[] = {
 
 void graphicsFlush();
 
-void writeStrWithLimit(int _x, int y, char *text, int limitX) {
+void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 
 	uint8_t len = strlen(text);
 	char *ptr = text;
@@ -162,11 +162,11 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 	writeStrWithLimit(_x, y, text, MARGIN_TEXT_SCREEN_LIMIT);
 }
 
-void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
+void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
 
 
 void showMessage(const char *message) {
-	int keepGoing = 1;
+	uint8_t keepGoing = 1;
 	clearScreen();
 
 	writeStr(1, 1, message, 2, 0);
@@ -182,7 +182,7 @@ void showMessage(const char *message) {
 }
 
 void titleScreen() {
-	int keepGoing = 1;
+	uint8_t keepGoing = 1;
 	clearScreen();
 
 	writeStr(1, 1, "Space Mare Imperium: Derelict", 2, 0);
@@ -197,12 +197,6 @@ void titleScreen() {
 	psg_volume(2, 10);
 
 	psg_tone(0, psgT(262));
-
-	for (int y = 0; y < 30; ++y ) {
-		for (int x = 0; x < BEEP_TSTATES / 40000; x++) {
-		}
-	}
-
 
 	psg_tone(0, 0);
 

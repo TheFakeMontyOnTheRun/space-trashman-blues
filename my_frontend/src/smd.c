@@ -29,12 +29,12 @@ extern struct ObjectNode *focusedItem;
 
 extern struct ObjectNode *roomItem;
 
-extern int accessGrantedToSafe;
+extern uint8_t accessGrantedToSafe;
 
 #define COOLDOWN_MAX 0x2EF
 
 uint8_t buffered = '.';
-int cursorPosition = 0;
+uint8_t cursorPosition = 0;
 uint16_t cooldown;
 uint16_t movementCooldown = 0;
 
@@ -200,7 +200,7 @@ void shutdownGraphics() {
 }
 
 
-void writeStrWithLimit(int _x, int y, char *str, int limitX) {
+void writeStrWithLimit(uint8_t _x, uint8_t y, char *str, uint8_t limitX) {
 
 	char textBuffer[2];
 	char *charPtr = &textBuffer[0];
@@ -245,7 +245,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 	uint8_t stipple;
 
 	if (y0 > y1) {
-		int tmp = y0;
+		uint8_t tmp = y0;
 		y0 = y1;
 		y1 = tmp;
 	}
@@ -264,7 +264,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
 	colour += (colour << 4); //double the pixel
 
-	for (int y = y0; y < y1; ++y) {
+	for (uint8_t y = y0; y < y1; ++y) {
 		if (shouldStipple) {
 			stipple = !stipple;
 		}
@@ -281,7 +281,7 @@ static void joyEvent(u16 joy, u16 changed, u16 state) {
 
 void showMessage(const char *message) {
 	enterTextMode();
-	int keepGoing = 1;
+	uint8_t keepGoing = 1;
 
 	for (uint8_t i = 0; i < 19; ++i) {
 		VDP_clearText(16, i, 16);
@@ -314,7 +314,7 @@ void clearGraphics() {
 }
 
 void clearTextScreen() {
-	for (int c = 0; c < 23; ++c) {
+	for (uint8_t c = 0; c < 23; ++c) {
 		VDP_clearText(0, c, 256 / 8);
 	}
 	cooldown = COOLDOWN_MAX;
@@ -331,7 +331,7 @@ void exitTextMode() {
 	clearTextScreen();
 }
 
-void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
+void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
 
 uint8_t getKey() {
 	handleInput();
@@ -343,7 +343,7 @@ void sleepForMS(uint32_t ms) {
 }
 
 void titleScreen() {
-	int keepGoing = 1;
+	uint8_t keepGoing = 1;
 	clearGraphics();
 	//               |
 	writeStr(1, 5, "   Space Mare Imperium  ", 2, 0);

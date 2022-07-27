@@ -18,7 +18,7 @@ extern struct ObjectNode *focusedItem;
 
 extern struct ObjectNode *roomItem;
 
-extern int accessGrantedToSafe;
+extern uint8_t accessGrantedToSafe;
 
 #define BUFFER_SIZEX 16
 #define BUFFER_SIZEY 128
@@ -67,7 +67,7 @@ uint8_t font[] = {
 		0x10, 0x38, 0x6c, 0x44, 0x44, 0x7c, 0x00, 0x00
 };
 
-int cursorPosition = 0;
+uint8_t cursorPosition = 0;
 
 void graphicsFlush();
 
@@ -110,7 +110,7 @@ char *menuItems[] = {
 
 void graphicsFlush();
 
-void writeStrWithLimit(int _x, int y, char *text, int limitX) {
+void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 
 	uint8_t len = strlen(text);
 	char *ptr = text;
@@ -154,11 +154,11 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 	writeStrWithLimit(_x, y, text, MARGIN_TEXT_SCREEN_LIMIT);
 }
 
-void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
+void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
 
 
 void showMessage(const char *message) {
-	int keepGoing = 1;
+	uint8_t keepGoing = 1;
 	clearScreen();
 
 	writeStr(1, 1, message, 2, 0);
@@ -174,7 +174,7 @@ void showMessage(const char *message) {
 }
 
 void titleScreen() {
-	int keepGoing = 1;
+	uint8_t keepGoing = 1;
 	clearScreen();
 
 	writeStr(1, 1, "Space Mare Imperium: Derelict", 2, 0);
@@ -609,8 +609,8 @@ void HUD_initialPaint() {
 
 void HUD_refresh() {
 
-	for (int c = 0; c < 13; ++c) {
-		for (int d = 0; d < 15; ++d) {
+	for (uint8_t c = 0; c < 13; ++c) {
+		for (uint8_t d = 0; d < 15; ++d) {
 			writeStr(17 + d, c, " ", 2, 0);
 		}
 	}

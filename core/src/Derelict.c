@@ -32,11 +32,11 @@ Created by Daniel Monteiro on 2019-07-26.
 #include "Derelict.h"
 #endif
 
-int accessGrantedToSafe = FALSE;
+uint8_t accessGrantedToSafe = FALSE;
 
 void updateRankFromKeycards() {
-    int rank = 0;
-    
+    uint8_t rank = 0;
+
     if (playerHasObject("low-rank-keycard")) {
         rank = 1;
     }
@@ -97,11 +97,11 @@ void useBootsWithMagneticCoupling(struct Item *item1, struct Item *item2) {
  */
 void bombActivatedCallback(struct Item *item) {
 
-    int empOnReactor = hasItemInRoom( "reactor-core", "emp-bomb");
-    int playerLocation = getPlayerRoom();
-    int playerAtDaedaus = (playerLocation == 1);
-    int playerAtSameLocationAsBomb = hasItemInRoom( getRoom( playerLocation)->name, "emp-bomb");
-    
+    uint8_t empOnReactor = hasItemInRoom( "reactor-core", "emp-bomb");
+	uint8_t playerLocation = getPlayerRoom();
+	uint8_t playerAtDaedaus = (playerLocation == 1);
+	uint8_t playerAtSameLocationAsBomb = hasItemInRoom( getRoom( playerLocation)->name, "emp-bomb");
+
     if (empOnReactor) {
         if (playerAtDaedaus) {
             setGameStatus(kGoodVictory);
@@ -128,9 +128,9 @@ void bombControllerActivatedCallback(struct Item *item) {
 void elevatorGoDownCallback(struct Item *item) {
     struct ObjectNode* currentItem;
     struct ObjectNode* nextItem;
-    int newRoom;
+	uint8_t newRoom;
 
-    
+
     if (!getItemNamed("comm-terminal-2")->active) {
         defaultLogger("Central computer is offline");
         return;
@@ -159,8 +159,8 @@ void elevatorGoUpCallback(struct Item *item) {
     
     struct ObjectNode* currentItem;
     struct ObjectNode* nextItem;
-    int newRoom;
-    
+	uint8_t newRoom;
+
     if (!getItemNamed("comm-terminal-2")->active) {
         defaultLogger("Central computer is offline");
         return;
@@ -240,14 +240,14 @@ void reactorValveCallback(struct Item *item) {
 void initStation(void) {
 
     struct Item* newItem;
-    int connections[6];
+    int8_t connections[6];
     accessGrantedToSafe = FALSE;
 
     initCore();
 
     /*Rooms*/
     /* 1 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    memset(&connections[0], 0, 6 * sizeof(int8_t));
     connections[0] = 2;
     addRoom(
             "lss-daedalus",
@@ -295,7 +295,7 @@ void initStation(void) {
             32, 32, 0, connections);
 
     /* 4 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    memset(&connections[0], 0, 6 * sizeof(int8_t));
     connections[2] = 3;
     connections[4] = 19;
     connections[5] = 13;
@@ -309,7 +309,7 @@ void initStation(void) {
             64, 64, 0, connections)->rankRequired = 1;
     
     /* 5 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    memset(&connections[0], 0, 6 * sizeof(int8_t));
     connections[3] = 3;
     connections[1] = 9;
     connections[0] = 7;
@@ -326,7 +326,7 @@ void initStation(void) {
 
     
     /* 6 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    memset(&connections[0], 0, 6 * sizeof(int8_t));
     connections[3] = 2;
     addRoom("rls-bohr-2",
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
@@ -381,7 +381,7 @@ void initStation(void) {
             32, 32, 0, connections);
     
     /* 10 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    memset(&connections[0], 0, 6 * sizeof(int8_t));
     connections[2] = 9;
     addRoom("pod-3",
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
@@ -426,7 +426,7 @@ void initStation(void) {
             32, 32, 0, connections)->rankRequired = 1;
     
     /* 14 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    memset(&connections[0], 0, 6 * sizeof(int8_t));
     connections[0] = 13;
     connections[1] = 17;
     connections[2] = 16;
@@ -442,7 +442,7 @@ void initStation(void) {
             32, 32, 0, connections)->rankRequired = 1;
     
     /* 15 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    memset(&connections[0], 0, 6 * sizeof(int8_t));
     connections[1] = 14;
     addRoom("bridge",
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
@@ -491,7 +491,7 @@ void initStation(void) {
             32, 32, 0, connections)->rankRequired = 1;
     
     /* 20 */
-    memset(&connections[0], 0, 6 * sizeof(int));
+    memset(&connections[0], 0, 6 * sizeof(int8_t));
     connections[0] = 19;
     connections[1] = 21;
     connections[3] = 23;
