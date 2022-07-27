@@ -7,8 +7,8 @@ Created by Daniel Monteiro on 2019-07-26.
 
 void initStation(void);
 
-int getPlayerRank();
+uint8_t getPlayerRank();
 
-void setPlayerRank(int newRank);
+void setPlayerRank(uint8_t newRank);
 
 #endif

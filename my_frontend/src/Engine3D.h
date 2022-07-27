@@ -90,7 +90,7 @@ void showMessage(const char *msg);
 
 void printSituation();
 
-void drawWindow(int tx, int ty, int tw, int th, const char *title);
+void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title);
 
 #ifdef SMS
 uint8_t* graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr);

@@ -76,22 +76,22 @@ struct Room *addRoom(
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
         char *info,
 #endif
-        int sizeX, int sizeY, int chanceOfRandomBattle, int connections[6]);
+        uint8_t sizeX, uint8_t sizeY, uint8_t chanceOfRandomBattle, int8_t connections[6]);
 
 struct Item* addItem(char *description,
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
                      char *info,
 #endif
 #ifdef ITEMS_HAVE_WEIGHT
-        int weight,
+		uint8_t weight,
 #endif
-                     int pickable,
-                     int positionX,
-                     int positionY);
+					 uint8_t pickable,
+					 int8_t positionX,
+					 int8_t positionY);
 
 struct WorldPosition* getPlayerPosition();
 
-struct Item* getItem(int index);
+struct Item* getItem(uint8_t index);
 
 struct ObjectNode* getPlayerItems();
 
@@ -99,11 +99,11 @@ void setPlayerPosition(struct WorldPosition* pos);
 
 void addToRoom( const char* roomName, struct Item *itemName );
 
-int isCloseToObject( struct WorldPosition* pos, struct Item* item );
+uint8_t isCloseToObject( struct WorldPosition* pos, struct Item* item );
 
-void addObjectToRoom(int roomId, struct Item *itemToAdd);
+void addObjectToRoom(uint8_t roomId, struct Item *itemToAdd);
 
-void dropObjectToRoom(int roomId, struct Item *itemToDrop);
+void dropObjectToRoom(uint8_t roomId, struct Item *itemToDrop);
 
 void pickObject(struct Item *itemToPick);
 
@@ -115,29 +115,29 @@ enum EGameStates  getGameStatus(void);
 
 struct Item *getItemNamed(const char* name);
 
-int getPlayerDirection(void);
+uint8_t getPlayerDirection(void);
 
-void setPlayerDirection(int direction);
+void setPlayerDirection(uint8_t direction);
 
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
 void infoAboutItemNamed(const char* itemName);
 #endif
 
-void moveBy(int direction);
+void moveBy(uint8_t direction);
 
-int getPlayerRoom(void);
+uint8_t getPlayerRoom(void);
 
-void setPlayerLocation(int location);
+void setPlayerLocation(uint8_t location);
 
-int hasItemInRoom(const char *roomName, const char *itemName);
+uint8_t hasItemInRoom(const char *roomName, const char *itemName);
 
-int playerHasObject( const char* itemName);
+uint8_t playerHasObject( const char* itemName);
 
-int isPlayerAtRoom(const char *roomName);
+uint8_t isPlayerAtRoom(const char *roomName);
 
 char *getRoomDescription(void);
 
-struct Room *getRoom(int index);
+struct Room *getRoom(uint8_t index);
 
 void useObjectNamed(const char* operand);
 
@@ -161,13 +161,13 @@ void turnLeft(void);
 
 void turnRight(void);
 
-void walkBy(int direction);
+void walkBy(uint8_t direction);
 
-int getPlayerRank(void);
+uint8_t getPlayerRank(void);
 
-void setPlayerRank(int newRank);
+void setPlayerRank(uint8_t newRank);
 
-int isPositionAllowed(int x, int y);
+uint8_t isPositionAllowed(int8_t x, int8_t y);
 
 uint8_t listIsEmpty(struct ObjectNode *listHead);
 
@@ -182,6 +182,6 @@ void useObjectNamed(const char *operand);
 
 
 /* TODO: make accessory method for this */
-extern int itemsCount;
+extern uint8_t itemsCount;
 extern struct ObjectNode objectNodes[TOTAL_ITEMS];
 #endif
