@@ -195,7 +195,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                         item = getItem(head->item);
                     }
 
-                    if (item != NULL) {
+                    if (item != NULL && item->pickable) {
                         parseCommand("drop", item->name);
                         item->position.x = offseted.x;
                         item->position.y = offseted.y;

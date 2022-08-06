@@ -206,6 +206,10 @@ void cantBeUsedWithOthersCallback(struct Item *item1, struct Item *item2) {
     defaultLogger("Nothing happens.");
 }
 
+void cantToggleCallback(struct Item *item) {
+	defaultLogger("Can't disable this.");
+}
+
 void useObjectToggleCallback(struct Item *item) {
     item->active = !item->active;
 }
@@ -600,9 +604,10 @@ void initStation(void) {
     
     newItem->active = TRUE;
     pickObject(newItem);
+    newItem->pickable = FALSE;
     newItem->useWithCallback = useBootsWithMagneticCoupling;
-    newItem->useCallback = useObjectToggleCallback;
     
+	newItem->useCallback = cantToggleCallback;
 
     newItem = addItem("helmet",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
@@ -615,7 +620,8 @@ void initStation(void) {
                       TRUE, 15, 15);
     newItem->active = TRUE;
     pickObject(newItem);
-    newItem->useCallback = useObjectToggleCallback;
+	newItem->pickable = FALSE;
+    newItem->useCallback = cantToggleCallback;
 
     
     newItem = addItem("low-rank-keycard",

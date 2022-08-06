@@ -223,6 +223,11 @@ void dropObjectToRoom(uint8_t roomId, struct Item *itemToDrop) {
     }
 #endif
 
+	if (!itemToDrop->pickable) {
+		defaultLogger("Can't drop this");
+    	return;
+    }
+
     removeObjectFromList(itemToDrop, collectedObject);
     addObjectToRoom(roomId, itemToDrop);
 
@@ -587,11 +592,6 @@ void setPlayerLocation(uint8_t location) {
 }
 
 void walkBy(uint8_t direction) {
-
-    if (!getItemNamed("magnetic-boots")->active || !playerHasObject("magnetic-boots")) {
-        defaultLogger("You can't move without your\nmagnetic-boots!");
-        return;
-    }
 
     switch (direction) {
         case 0:
