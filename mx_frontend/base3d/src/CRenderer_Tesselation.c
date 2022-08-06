@@ -154,10 +154,7 @@ void drawColumnAt(const struct Vec3 center,
            front
   */
 
-    memcpy (&projectionVertices[0].first, &scaledCenter, sizeof(struct Vec3));
-    memcpy (&projectionVertices[1].first, &scaledCenter, sizeof(struct Vec3));
-    memcpy (&projectionVertices[2].first, &scaledCenter, sizeof(struct Vec3));
-    memcpy (&projectionVertices[3].first, &scaledCenter, sizeof(struct Vec3));
+	projectionVertices[0].first = projectionVertices[1].first = projectionVertices[2].first = projectionVertices[3].first = scaledCenter;
 
     addToVec3(&projectionVertices[0].first, minusOne, halfScale, minusOne);
     addToVec3(&projectionVertices[1].first, one, minusHalfScale, minusOne);
@@ -245,10 +242,8 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 
     if (cameraDirection == kNorth) {
 
-        memcpy (&projectionVertices[0].first, &p0, sizeof(struct Vec3));
-        memcpy (&projectionVertices[1].first, &p0, sizeof(struct Vec3));
-        memcpy (&projectionVertices[2].first, &p1, sizeof(struct Vec3));
-        memcpy (&projectionVertices[3].first, &p1, sizeof(struct Vec3));
+		projectionVertices[0].first = projectionVertices[1].first = p0;
+		projectionVertices[2].first = projectionVertices[3].first = p1;
 
         if (flipTexture) {
             cameraDirection = kSouth;
@@ -256,10 +251,8 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 
     } else if (cameraDirection == kSouth) {
 
-        memcpy (&projectionVertices[0].first, &p1, sizeof(struct Vec3));
-        memcpy (&projectionVertices[1].first, &p1, sizeof(struct Vec3));
-        memcpy (&projectionVertices[2].first, &p0, sizeof(struct Vec3));
-        memcpy (&projectionVertices[3].first, &p0, sizeof(struct Vec3));
+		projectionVertices[0].first = projectionVertices[1].first = p1;
+		projectionVertices[2].first = projectionVertices[3].first = p0;
 
         if (flipTexture) {
             cameraDirection = kNorth;
@@ -268,17 +261,11 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
     } else {
         if (cameraDirection == kEast) {
 
-            memcpy (&projectionVertices[0].first, &p1, sizeof(struct Vec3));
-            memcpy (&projectionVertices[1].first, &p0, sizeof(struct Vec3));
-            memcpy (&projectionVertices[2].first, &p1, sizeof(struct Vec3));
-            memcpy (&projectionVertices[3].first, &p0, sizeof(struct Vec3));
-        } else {
-
-            memcpy (&projectionVertices[0].first, &p0, sizeof(struct Vec3));
-            memcpy (&projectionVertices[1].first, &p1, sizeof(struct Vec3));
-            memcpy (&projectionVertices[2].first, &p0, sizeof(struct Vec3));
-            memcpy (&projectionVertices[3].first, &p1, sizeof(struct Vec3));
-
+			projectionVertices[0].first = projectionVertices[2].first = p1;
+			projectionVertices[1].first = projectionVertices[3].first = p0;
+		} else {
+			projectionVertices[0].first = projectionVertices[2].first = p0;
+			projectionVertices[1].first = projectionVertices[3].first = p1;
         }
 
         addToVec3(&projectionVertices[0].first, minusOne, zero, minusOne);
@@ -387,10 +374,7 @@ void drawFloorAt(const struct Vec3 center,
         return;
     }
 
-    memcpy (&projectionVertices[0].first, &center, sizeof(struct Vec3));
-    memcpy (&projectionVertices[1].first, &center, sizeof(struct Vec3));
-    memcpy (&projectionVertices[2].first, &center, sizeof(struct Vec3));
-    memcpy (&projectionVertices[3].first, &center, sizeof(struct Vec3));
+	projectionVertices[0].first = projectionVertices[1].first = projectionVertices[2].first = projectionVertices[3].first = center;
 
     addToVec3(&projectionVertices[0].first, minusOne, zero, minusOne);
     addToVec3(&projectionVertices[1].first, one, zero, minusOne);
@@ -433,10 +417,7 @@ void drawCeilingAt(const struct Vec3 center,
         return;
     }
 
-    memcpy (&projectionVertices[0].first, &center, sizeof(struct Vec3));
-    memcpy (&projectionVertices[1].first, &center, sizeof(struct Vec3));
-    memcpy (&projectionVertices[2].first, &center, sizeof(struct Vec3));
-    memcpy (&projectionVertices[3].first, &center, sizeof(struct Vec3));
+	projectionVertices[0].first = projectionVertices[1].first = projectionVertices[2].first = projectionVertices[3].first = center;
 
     addToVec3(&projectionVertices[0].first, minusOne, zero, minusOne);
     addToVec3(&projectionVertices[1].first, one, zero, minusOne);
@@ -488,8 +469,7 @@ void drawLeftNear(const struct Vec3 center,
 
     if (mask & MASK_BEHIND) {
 
-        memcpy (&projectionVertices[0].first, &center, sizeof(struct Vec3));
-        memcpy (&projectionVertices[1].first, &center, sizeof(struct Vec3));
+		projectionVertices[0].first = projectionVertices[1].first = center;
 
         addToVec3(&projectionVertices[0].first, minusOne, minusHalfScale, minusOne);
         addToVec3(&projectionVertices[1].first, one, halfScale, minusOne);
@@ -507,10 +487,7 @@ void drawLeftNear(const struct Vec3 center,
         minusDepth = one;
     }
 
-    memcpy (&projectionVertices[0].first, &center, sizeof(struct Vec3));
-    memcpy (&projectionVertices[1].first, &center, sizeof(struct Vec3));
-    memcpy (&projectionVertices[2].first, &center, sizeof(struct Vec3));
-    memcpy (&projectionVertices[3].first, &center, sizeof(struct Vec3));
+	projectionVertices[0].first = projectionVertices[1].first = projectionVertices[2].first = projectionVertices[3].first = center;
 
     addToVec3(&projectionVertices[0].first, minusOne, halfScale, minusDepth);
     addToVec3(&projectionVertices[1].first, one, halfScale, depth);
@@ -619,8 +596,7 @@ void drawRightNear(const struct Vec3 center,
 
     if (mask & MASK_BEHIND) {
 
-        memcpy (&projectionVertices[0].first, &center, sizeof(struct Vec3));
-        memcpy (&projectionVertices[1].first, &center, sizeof(struct Vec3));
+		projectionVertices[0].first = projectionVertices[1].first = center;
 
         addToVec3(&projectionVertices[0].first, minusOne, minusHalfScale, minusOne);
         addToVec3(&projectionVertices[1].first, one, halfScale, minusOne);
@@ -639,10 +615,7 @@ void drawRightNear(const struct Vec3 center,
         minusDepth = one;
     }
 
-    memcpy (&projectionVertices[0].first, &center, sizeof(struct Vec3));
-    memcpy (&projectionVertices[1].first, &center, sizeof(struct Vec3));
-    memcpy (&projectionVertices[2].first, &center, sizeof(struct Vec3));
-    memcpy (&projectionVertices[3].first, &center, sizeof(struct Vec3));
+	projectionVertices[0].first = projectionVertices[1].first = projectionVertices[2].first = projectionVertices[3].first = center;
 
     addToVec3(&projectionVertices[0].first, minusOne, halfScale, depth);
     addToVec3(&projectionVertices[1].first, one, halfScale, minusDepth);
