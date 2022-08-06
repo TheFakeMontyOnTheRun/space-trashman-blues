@@ -1,6 +1,6 @@
 CC = zcc
 
-CFLAGS = +sms -compiler=sdcc -SO3 --max-allocs-per-node200000 --opt-code-speed -DTRACE_OBJECTS_OVER_FLOOR -lndos -pragma-define:CLIB_EXIT_STACK_SIZE=0 -DGAMEPAD -pragma-define:CRT_MODEL=2 --opt-code-speed -vn -I../core/include -DSMS -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_HACKING_MINIGAME -DSUPPORTS_ROOM_TRANSITION_ANIMATION
+CFLAGS = +sms -compiler=sdcc -SO3 --max-allocs-per-node200000 --opt-code-speed -DTRACE_OBJECTS_OVER_FLOOR -lndos -pragma-define:CLIB_EXIT_STACK_SIZE=0 -DGAMEPAD -pragma-define:CRT_MODEL=2 -vn -I../core/include -DSMS -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_HACKING_MINIGAME -DSUPPORTS_ROOM_TRANSITION_ANIMATION
 
 all: derelict.sms
 
