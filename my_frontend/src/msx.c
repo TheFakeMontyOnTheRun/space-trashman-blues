@@ -263,7 +263,25 @@ void exitTextMode() {
 
 uint8_t getKey() {
 	uint8_t input = getch();
+
 	performAction();
+
+	switch (input) {
+		case 30:
+			return 'w';
+		case 31:
+			return 's';
+		case 29:
+			return 'q';
+		case 28:
+			return 'e';
+		case 'z':
+			return 'a';
+
+		case 'x':
+			return 'd';
+
+	}
 	return input;
 }
 
@@ -533,6 +551,8 @@ void HUD_initialPaint() {
 	struct Room *room = getRoom(getPlayerRoom());
 
 	draw(BUFFER_RESX, 0, BUFFER_RESX, 191);
+	draw(0, 31, 128, 31);
+	draw(0, 160, 128, 160);
 
 	for (uint8_t i = 0; i < 6; ++i) {
 		writeStr(17, 14 + i, menuItems[i], 2, 0);
