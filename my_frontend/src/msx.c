@@ -263,7 +263,25 @@ void exitTextMode() {
 
 uint8_t getKey() {
 	uint8_t input = getch();
+
 	performAction();
+
+	switch (input) {
+		case 30:
+			return 'w';
+		case 31:
+			return 's';
+		case 29:
+			return 'q';
+		case 28:
+			return 'e';
+		case 'z':
+			return 'a';
+
+		case 'x':
+			return 'd';
+
+	}
 	return input;
 }
 
