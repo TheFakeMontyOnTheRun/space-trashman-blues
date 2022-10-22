@@ -117,6 +117,8 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 	uint8_t c = 0;
 	uint8_t chary = 0;
 	uint8_t x = _x;
+	char lastChar;
+	uint8_t *fontTop;
 
 	for (; c < len && y < 64; ++c) {
 
@@ -140,9 +142,10 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 			}
 		}
 
-		uint8_t baseY = (y << 3);
-
-		uint8_t *fontTop = &font[((cha - 32) << 3)];
+		if (cha != lastChar) {
+			fontTop = &font[((cha - 32) << 3)];
+			lastChar = cha;
+		}
 		vwrite(fontTop, map_pixel(x << 3, y << 3), 8);
 		++x;
 		++ptr;
@@ -345,9 +348,10 @@ void clearGraphics() {
 
 void graphicsFlush() {
 	uint8_t *ptr = &buffer[0];
-	for (uint8_t y = 0; y < BUFFER_RESY; y += 8) {
-		uint16_t addr = map_pixel(0, y + 32);
-		vwrite(ptr, addr, 16 * 8);
+
+	for (uint8_t y = 32; y < (BUFFER_RESY + 32); y += 8) {
+		// 248 = ~7
+		vwrite(ptr, ((y & 248) << 5), 16 * 8);
 		ptr += 8 * 16;
 	}
 }
