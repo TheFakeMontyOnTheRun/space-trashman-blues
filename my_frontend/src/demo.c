@@ -316,7 +316,6 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 
 		py0z0 = z0py + ((y0) * z0dx);
 		py0z1 = z1py + ((y0) * z1dx);
-
 		py1z0 = z0py + ((y0 + dY) * z0dx);
 		py1z1 = z1py + ((y0 + dY) * z1dx);
 
@@ -334,7 +333,6 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 
 		py0z0 = z0py + ((y0) * z0dx);
 		py0z1 = z1py + ((y0) * z1dx);
-
 		py1z0 = z0py + ((y0 + dY) * z0dx);
 		py1z1 = z1py + ((y0 + dY) * z1dx);
 	}
@@ -909,9 +907,6 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
 		shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 9;
 #endif
-
-
-
 		/* The left segment */
 		x0 = px0z0;
 		x1 = px0z1;
@@ -949,7 +944,6 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 							graphicsPut(x0, top);
 						}
 #endif
-
 						stencilHigh[x0] = y0;
 					}
 				}
@@ -975,7 +969,6 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 		}
 
 right_stroke:
-
 		/* The right segment */
 		x0 = px1z0;
 		x1 = px1z1;
@@ -1013,7 +1006,6 @@ right_stroke:
 						graphicsPut(x0, top);
 					}
 #endif
-
 					stencilHigh[x0] = y0;
 				}
 
@@ -1064,10 +1056,8 @@ final_stroke:
 		if (py0z0 <= py0z1) {
 			/* Ceiling is higher than the camera*/
 			/* Draw the last segment */
-
 			if (drawContour) {
 				for (x = px0z1; x <= px1z1; ++x) {
-
 					if (IN_RANGE(0, XRESMINUSONE, x)) {
 
 						int8_t stencilY = stencilHigh[x];
@@ -1112,7 +1102,6 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 
 	diff = patterns[0].ceiling - patterns[pattern].ceiling;
 	type = patterns[pattern].geometryType;
-
 	uint8_t mask = patterns[pattern].elementsMask;
 
 	if (x0 == 2) {
@@ -1154,8 +1143,6 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 								  x1 - x0, diff, mask);
 		}
 	} else if (type == BACK_WALL) {
-
-
 		switch (cameraRotation) {
 			case 0:
 			case 2:
@@ -1167,8 +1154,6 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 				return drawWedge(x0 - (cameraRotation == 1 ? 1 : 0),
 								 patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
 								 0, diff, 1, patterns[pattern].elementsMask, LEFT_WALL);
-
-
 		}
 	} else if (type == CORNER) {
 		uint8_t returnVal = 0;
@@ -1189,7 +1174,6 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 			case 2:
 				returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
 									   x1 - x0, diff, patterns[pattern].elementsMask);
-
 				returnVal =
 						drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
 								  0, diff, 1, patterns[pattern].elementsMask, LEFT_WALL) || returnVal;
@@ -1211,7 +1195,6 @@ void repaintMapItems() {
 	/* ignore header node */
 	node = getRoom(playerLocation)->itemsPresent->next;
 
-	//        drawObjectAt(x0 - 1, y + 2);
 	switch (cameraRotation) {
 		case 0:
 			//drawPattern(lastPattern, lastIndex - cameraX + 2, x - cameraX + 2, cameraZ - y);
@@ -1411,7 +1394,6 @@ renderCameraSouth() {
 					x = VISIBILITY_LIMIT;
 				}
 				lastIndex = x;
-
 				lastPattern = pattern;
 			}
 
@@ -1420,12 +1402,10 @@ renderCameraSouth() {
 
 		drawPattern(lastPattern, -(x - cameraX) + 2, -(lastIndex - cameraX) + 2, y - cameraZ);
 
-
 		lastIndex = cameraX - 1;
 		lastPattern = *(mapY + lastIndex);
 
 		mapXY = &map[y][lastIndex];
-
 		maxX = max(cameraX - (y - cameraZ), 0);
 
 		for (x = lastIndex; x >= maxX; --x) {
@@ -1438,15 +1418,12 @@ renderCameraSouth() {
 				}
 
 				lastIndex = x;
-
 				lastPattern = pattern;
 			}
 			--mapXY;
 		}
-
 		drawPattern(lastPattern, cameraX - lastIndex + 1, cameraX - x + 1, y - cameraZ);
 	}
-
 }
 
 void renderCameraEast() {
@@ -1472,7 +1449,6 @@ void renderCameraEast() {
 					y = VISIBILITY_LIMIT;
 				}
 				lastIndex = y;
-
 				lastPattern = pattern;
 			}
 		}
@@ -1495,7 +1471,6 @@ void renderCameraEast() {
 				}
 
 				lastIndex = y;
-
 				lastPattern = pattern;
 			}
 		}
@@ -1531,21 +1506,17 @@ void renderCameraNorth() {
 					x = minX - 1;
 				}
 				lastIndex = x;
-
 				lastPattern = pattern;
 			}
 
 			++mapXY;
 		}
-
 		drawPattern(lastPattern, lastIndex - cameraX + 2, x - cameraX + 2, cameraZ - y);
-
 
 		lastIndex = cameraX - 1;
 		lastPattern = *(mapY + lastIndex);
 
 		mapXY = &map[y][lastIndex];
-
 		maxX = max(cameraX - ((cameraZ) - y), 0);
 
 		for (x = lastIndex; x >= maxX; --x) {
@@ -1558,12 +1529,10 @@ void renderCameraNorth() {
 				}
 
 				lastIndex = x;
-
 				lastPattern = pattern;
 			}
 			--mapXY;
 		}
-
 		drawPattern(lastPattern, x + 1 - cameraX + 2, lastIndex + 1 - cameraX + 2, cameraZ - y);
 	}
 }
@@ -1640,8 +1609,6 @@ void dropItem() {
 				item->position.y = pos->y;
 				break;
 		}
-
-
 		pattern = map[item->position.y][item->position.x];
 		map[item->position.y][item->position.x] = pattern | 128;
 	}
@@ -1770,12 +1737,9 @@ void startRoomTransitionAnimation() {
 			graphicsPut(x, y);
 			graphicsPut(x, 95 + (32 - y));
 			//door opening
-
 #ifndef USE_FILLED_POLYS
 			graphicsPut(x, 95 - 3 * (32 - y));
 #else
-
-
 			if (y > STIPPLE_DISTANCE) {
 				vLine(x, y, 95 - 3 * (32 - y), 12);
 			} else {
@@ -1786,8 +1750,6 @@ void startRoomTransitionAnimation() {
 			vLine(x, 95, 95 + (32 - y), 2);
 #endif
 		}
-
-
 		graphicsFlush();
 		sleepForMS(20000);
 	}
@@ -1889,7 +1851,6 @@ waitkey:
 			goto waitkey;
 #endif
 	}
-
 	cameraRotation = getPlayerDirection();
 	pos = getPlayerPosition();
 
@@ -1937,7 +1898,6 @@ waitkey:
 				startRoomTransitionAnimation();
 #endif
 		}
-
 		setPlayerDirection(cameraRotation = (newCell - '0'));
 	} else {
 		enteredFrom = 0xFF;
@@ -1962,10 +1922,7 @@ void logDelegate(const char *mesg) {
 }
 
 
-int main(
-
-		int argc, char **argv
-) {
+int main(int argc, char **argv) {
 
 	running = 1;
 	enteredFrom = 0;

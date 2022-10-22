@@ -144,7 +144,6 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 
 		uint8_t *fontTop = &font[((cha - 32) << 3)];
 		vwrite(fontTop, map_pixel(x << 3, y << 3), 8);
-
 		++x;
 		++ptr;
 	}
@@ -297,7 +296,6 @@ uint8_t getKey() {
 			return 'q';
 		}
 	}
-
 
 	if (key & JOY_RIGHT) {
 		if (key & JOY_FIREB) {
@@ -561,7 +559,6 @@ void graphicsPut(uint8_t x, uint8_t y) {
 	y = y >> 1;
 #endif
 
-
 	uint8_t *ptr = &buffer[(16 * 8 * (y >> 3)) + //skip the entire row of patterns along the y
 						   (8 * (x >> 3)) + //skip to the correct pattern in the row
 						   (y & 7)]; //skip to the line in pattern
@@ -599,8 +596,6 @@ void HUD_initialPaint() {
 	struct Room *room = getRoom(getPlayerRoom());
 
 	draw(BUFFER_RESX, 0, BUFFER_RESX, 191);
-	draw(0, 31, 128, 31);
-	draw(0, 160, 128, 160);
 
 	for (uint8_t i = 0; i < 6; ++i) {
 		writeStr(18, 14 + i, menuItems[i], 2, 0);
