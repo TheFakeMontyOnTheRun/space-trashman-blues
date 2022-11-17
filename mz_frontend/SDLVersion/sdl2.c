@@ -1,5 +1,4 @@
-#ifdef SDLSW
-
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <Core.h>
@@ -339,4 +338,3 @@ void HUD_refresh() {
 }
 
 
-#endif
