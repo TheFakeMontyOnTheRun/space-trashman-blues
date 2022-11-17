@@ -24,3 +24,4 @@ void addToVec3(struct Vec3 *__restrict__ to, FixP_t x, FixP_t y, FixP_t z) {
     to->mY = (to->mY + y);
     to->mZ = (to->mZ + z);
 }
+

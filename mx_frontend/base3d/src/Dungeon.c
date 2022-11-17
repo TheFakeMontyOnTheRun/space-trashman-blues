@@ -156,9 +156,9 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             }
                 break;
             case kCommandFire2: {
-				head= getRoom(getPlayerRoom())->itemsPresent->next;
-				struct Item *item = NULL;
+            	struct Item *item = NULL;
                 struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
+				head= getRoom(getPlayerRoom())->itemsPresent->next;
                 offseted.x += playerCrawler.position.x;
                 offseted.y += playerCrawler.position.y;
 

@@ -22,3 +22,4 @@ void setInMap(struct MapWithCharKey *__restrict__ map,
 void clearMap(struct MapWithCharKey *__restrict__ map) {
     memset (map->mMap, 0, sizeof(const void *) * 256);
 }
+

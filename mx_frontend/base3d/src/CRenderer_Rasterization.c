@@ -23,6 +23,10 @@
 #include "CRenderer.h"
 #include "VisibilityStrategy.h"
 
+#define PAGE_FLIP_INCREMENT 32
+
+char mTurnBuffer;
+
 uint16_t clippingY1 = 200;
 
 /*
@@ -1556,4 +1560,223 @@ void drawTextAtWithMargin(const int x, const int y, int margin, const char *__re
 void drawTextAt(const int x, const int y, const char *__restrict__ text, const uint8_t colour) {
 
     drawTextAtWithMargin( x, y, 319, text, colour);
+}
+
+void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
+					uint8_t *prevFrame, int turnState, int turnTarget, int scale200To240) {
+
+	uint8_t index;
+	uint8_t *src;
+	uint8_t *dst;
+	int x, y, chunky;
+	
+	if (abs(turnTarget - turnStep) < PAGE_FLIP_INCREMENT) {
+		turnStep =  turnTarget;
+	}
+
+	if (scale200To240) {
+		int dstY = 0;
+		int scaller = 0;
+		int heightY;
+
+		if (turnTarget == turnState || (mTurnBuffer != kCommandNone) ) {
+
+			for (y = 0; y < 200; ++y) {
+
+				if (scaller == 4) {
+					heightY = 2;
+				} else {
+					heightY = 1;
+				}
+
+				for (chunky = 0; chunky < heightY; ++chunky) {
+
+					dst = stretchedBuffer;
+					src = &currentFrame[(320 * y)];
+					dst += (320 * (dstY + chunky));
+
+					for (x = 0; x < 320; ++x) {
+						index = *src;
+						*dst = palette[index];
+						++src;
+						++dst;
+					}
+				}
+
+				dstY++;
+				scaller++;
+
+				if (scaller == 5) {
+					scaller = 0;
+					dstY++;
+				}
+			}
+
+			if (mTurnBuffer != kCommandNone) {
+				mBufferedCommand = mTurnBuffer;
+			}
+
+			mTurnBuffer = kCommandNone;
+
+			memcpy(prevFrame, currentFrame, 320 * 200 * sizeof(uint8_t));
+
+		} else if (turnState < turnTarget) {
+
+			for (y = 0; y < 200; ++y) {
+
+				if (scaller == 4) {
+					heightY = 2;
+				} else {
+					heightY = 1;
+				}
+
+				for (chunky = 0; chunky < heightY; ++chunky) {
+
+					dst = stretchedBuffer;
+					dst += (320 * (dstY + chunky));
+
+					for (x = 0; x < 320; ++x) {
+						if (x < XRES && y >= 8) {
+							if (x >= turnStep ) {
+								index = prevFrame[(320 * y) + x - turnStep];
+							} else {
+								index = currentFrame[(320 * y) + x - ( 320 - XRES)- turnStep];
+							}
+
+						} else {
+							index = currentFrame[(320 * y) + x];
+						}
+
+						*dst = palette[index];
+						++dst;
+					}
+				}
+
+				dstY++;
+				scaller++;
+
+				if (scaller == 5) {
+					scaller = 0;
+					dstY++;
+				}
+			}
+
+			turnStep += PAGE_FLIP_INCREMENT;
+		} else {
+
+			for (y = 0; y < 200; ++y) {
+
+				if (scaller == 4) {
+					heightY = 2;
+				} else {
+					heightY = 1;
+				}
+
+				for (chunky = 0; chunky < heightY; ++chunky) {
+
+					dst = stretchedBuffer;
+					dst += (320 * (dstY + chunky));
+
+					for (x = 0; x < 320; ++x) {
+
+						if (x < XRES && y >= 8) {
+
+							if (x >= turnStep) {
+								index = currentFrame[(320 * y) + x - turnStep];
+							} else {
+								index = prevFrame[(320 * y) + x - (320 - XRES) - turnStep];
+							}
+
+						} else {
+							index = currentFrame[(320 * y) + x];
+						}
+
+						*dst = palette[index];
+						++dst;
+					}
+				}
+
+				dstY++;
+				scaller++;
+
+				if (scaller == 5) {
+					scaller = 0;
+					dstY++;
+				}
+			}
+			turnStep -= PAGE_FLIP_INCREMENT;
+		}
+	} else {
+
+		if (turnTarget == turnStep || (mTurnBuffer != kCommandNone)) {
+
+			for (y = 0; y < 200; ++y) {
+
+				dst = stretchedBuffer;
+				src = &currentFrame[(320 * y)];
+				dst += (320 * y);
+
+				for (x = 0; x < 320; ++x) {
+					index = *src;
+					*dst = palette[index];
+					++src;
+					++dst;
+				}
+			}
+
+			if (mTurnBuffer != kCommandNone) {
+				mBufferedCommand = mTurnBuffer;
+			}
+
+			mTurnBuffer = kCommandNone;
+
+        	memcpy(prevFrame, currentFrame, 320 * 200 * sizeof(uint8_t));
+
+		} else if (turnState < turnTarget) {
+
+			for (y = 0; y < 200; ++y) {
+				dst = stretchedBuffer;
+				dst += (320 * y);
+				for (x = 0; x < 320; ++x) {
+					if (x < XRES && y >= 8) {
+						if (x >= turnStep) {
+							index = prevFrame[(320 * y) + x - turnStep];
+						} else {
+							index = currentFrame[(320 * y) + x - (320 - XRES) - turnStep];
+						}
+
+					} else {
+						index = currentFrame[(320 * y) + x];
+					}
+					*dst = palette[index];
+					++dst;
+				}
+			}
+
+			turnStep += PAGE_FLIP_INCREMENT;
+		} else {
+
+			for (y = 0; y < 200; ++y) {
+				dst = stretchedBuffer;
+				dst += (320 * y);
+				for (x = 0; x < 320; ++x) {
+					if (x < XRES && y >= 8) {
+
+						if (x >= turnStep) {
+							index = currentFrame[(320 * y) + x - turnStep];
+						} else {
+							index = prevFrame[(320 * y) + x - (320 - XRES) - turnStep];
+						}
+
+					} else {
+						index = currentFrame[(320 * y) + x];
+					}
+
+					*dst = palette[index];
+					++dst;
+				}
+			}
+			turnStep -= PAGE_FLIP_INCREMENT;
+		}
+	}
 }

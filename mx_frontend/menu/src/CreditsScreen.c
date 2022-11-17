@@ -38,6 +38,7 @@ struct Bitmap *monty;
 
 void CreditsScreen_initStateCallback(int32_t tag) {
 
+    struct StaticBuffer textFile;
     cursorPosition = 0;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
@@ -47,7 +48,7 @@ void CreditsScreen_initStateCallback(int32_t tag) {
 
     mainText = &textBuffer[0];
     memset (&textBuffer[0], 0, (40 * 25));
-    struct StaticBuffer textFile = loadBinaryFileFromPath("Help.txt");
+	textFile = loadBinaryFileFromPath("Help.txt");
     memcpy(&textBuffer[0], textFile.data, textFile.size);
 
     CreditsScreen_optionsCount = 1;

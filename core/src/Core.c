@@ -1,31 +1,20 @@
 /*
 Created by Daniel Monteiro on 2019-07-26.
 */
-
-#ifndef DONT_INCLUDE
+#ifdef __MWERKS__
+#define CLI_BUILD
+#endif
 
 #ifndef SMD
-
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <unistd.h>
 
 #ifdef WIN32
 #include "Win32Int.h"
-#else
-
-#include <stdint.h>
-
-#endif
-
-#ifndef CPC_PLATFORM
-#ifndef NGB
-
-#include <unistd.h>
-
-#endif
 #endif
 
 #else
@@ -33,8 +22,6 @@ Created by Daniel Monteiro on 2019-07-26.
 #endif
 
 #include "Core.h"
-
-#endif
 
 #define WALKSTEP 1
 
@@ -283,12 +270,10 @@ void moveBy(uint8_t direction) {
 			return;
 		}
 
-#ifndef CPC_PLATFORM
 		if (!getItemNamed("magnetic-boots")->active || !playerHasObject("magnetic-boots")) {
 			defaultLogger("You can't move without your\nmagnetic-boots!");
 			return;
 		}
-#endif
 
 		if (room == getRoomByName("hangar") && coupling->active && direction == 0) {
 			defaultLogger("The magnetic coupling is\nengaged. The door won't open.");
@@ -762,6 +747,7 @@ void initCore(void) {
 	memset(&rooms, 0, TOTAL_ROOMS * sizeof(struct Room));
 	memset(&item, 0, TOTAL_ITEMS * sizeof(struct Item));
 }
+
 
 
 

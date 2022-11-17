@@ -34,7 +34,7 @@
 #define TEXT_BUFFER_SIZE 40 * 25
 
 const char **GameMenu_options;
-const int32_t *GameMenu_nextStateNavigation;
+enum EGameMenuState *GameMenu_nextStateNavigation;
 const char *GameMenu_StateTitle;
 struct Bitmap *featuredBitmap = NULL;
 
@@ -172,8 +172,9 @@ void GameMenu_initStateCallback(int32_t tag) {
             if (head != NULL && getItem(head->item) != NULL ) {
                 struct Item *item = getItem(head->item);
                 mainText = item->name;
+#ifdef INCLUDE_ITEM_DESCRIPTIONS                
                 strcpy(&textBuffer[0], item->info);
-
+#endif
                 GameMenu_optionsCount = 1;
                 GameMenu_options = &inspectItem_options[0];
                 GameMenu_nextStateNavigation =

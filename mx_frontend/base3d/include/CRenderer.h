@@ -70,6 +70,7 @@ extern uint8_t enableSmoothMovement;
 extern struct Bitmap *mapTopLevel;
 extern int dirtyLineY0;
 extern int dirtyLineY1;
+extern char mTurnBuffer;
 
 struct Mesh {
     uint16_t triangleCount;
@@ -109,6 +110,8 @@ void loadMesh(struct Mesh* mesh, char* filename );
 void projectAllVertices(const uint8_t count);
 
 uint8_t getPaletteEntry(const uint32_t origin);
+
+void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame, uint8_t *prevFrame, int turnState, int turnTarget, int scale200To240);
 
 void fill(
 		const int x, const int y,
