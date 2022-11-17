@@ -36,7 +36,7 @@ add_executable(derelict32
 		base3d/src/CRenderer.c
 		base3d/src/VisibilityStrategy.c
 		../common/src/Vec.c
-		../common/src/common.c
+		../common/src/Common.c
 		../common/src/FixP.c
 		../common/src/MapWithCharKey.c
 		../common/src/PackedFileReader.c
