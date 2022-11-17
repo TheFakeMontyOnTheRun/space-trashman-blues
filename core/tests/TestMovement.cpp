@@ -4,7 +4,7 @@
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <memory>
+#include <tr1/memory>
 
 extern "C" {
 #include "Core.h"
@@ -26,25 +26,21 @@ public:
   MOCK_METHOD0(handleError, int());
 };
 
-
-
-
 class TestMovement : public ::testing::Test {
 
 public:
-  static std::shared_ptr<ErrorHandlerMock> mockedObj;
+  static std::tr1::shared_ptr<ErrorHandlerMock> mockedObj;
 
   virtual void SetUp() {
     initStation();
-    mockedObj = std::make_shared<ErrorHandlerMock>();
+    mockedObj = std::tr1::shared_ptr<ErrorHandlerMock>(new ErrorHandlerMock());
   }
 
   virtual void TearDown() {
-    mockedObj = nullptr;
   }
 };
 
-std::shared_ptr<ErrorHandlerMock> TestMovement::mockedObj;
+std::tr1::shared_ptr<ErrorHandlerMock> TestMovement::mockedObj;
 
 
 void myErrorHandler(const char* errorMsg) {

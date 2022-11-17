@@ -3,7 +3,7 @@
 //
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <memory>
+#include <tr1/memory>
 
 extern "C" {
 #include "Core.h"
@@ -28,19 +28,18 @@ public:
 class TestInventoryManipulation : public ::testing::Test {
 
 public:
-  static std::shared_ptr<ErrorHandlerMock> mockedObj;
+  static std::tr1::shared_ptr<ErrorHandlerMock> mockedObj;
 
   virtual void SetUp() {
     initStation();
-    mockedObj = std::make_shared<ErrorHandlerMock>();
+    mockedObj = std::tr1::shared_ptr<ErrorHandlerMock>(new ErrorHandlerMock);
   }
 
   virtual void TearDown() {
-    mockedObj = nullptr;
   }
 };
 
-std::shared_ptr<ErrorHandlerMock> TestInventoryManipulation::mockedObj;
+std::tr1::shared_ptr<ErrorHandlerMock> TestInventoryManipulation::mockedObj;
 
 extern struct ObjectNode *collectedObject;
 

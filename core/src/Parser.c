@@ -22,7 +22,7 @@ Created by Daniel Monteiro on 08/10/2019.
 #include <string.h>
 #endif
 
-int parseCommand(char *cmd, char *operand) {
+int parseCommand(const char *cmd, const char *operand) {
     if (!strcmp(cmd, "pick")) {
         pickObjectByName(operand);
     } else if (!strcmp(cmd, "drop")) {

@@ -1,7 +1,7 @@
-GTEST_DIR = googletest/googletest
-GMOCK_DIR = googletest/googlemock
+GTEST_DIR = googletest
+GMOCK_DIR = googlemock
 
-CXXFLAGS = -Iinclude -O3 -g -c -std=c++14 -Wno-narrowing   \
+CXXFLAGS = -Iinclude -O3 -g -c -std=c++0x -Wno-narrowing   \
 		-I$(GTEST_DIR)/include \
 		-I$(GTEST_DIR) \
 		-I$(GTEST_DIR)/include/gtest \
@@ -9,9 +9,10 @@ CXXFLAGS = -Iinclude -O3 -g -c -std=c++14 -Wno-narrowing   \
 		-I$(GMOCK_DIR)/include \
 		-I$(GMOCK_DIR) \
 		-I$(GMOCK_DIR)/include/gtest \
-		-I$(GMOCK_DIR)/include/gtest/internal -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS
+		-I$(GMOCK_DIR)/include/gtest/internal -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS \
+		-DGTEST_LANG_CXX11=0
 
-CFLAGS = -Iinclude -O3 -g -c  -DCLI_BUILD -std=c90 -ansi -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS
+CFLAGS = -Iinclude -O3 -g -c  -DCLI_BUILD -std=c90 -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS
 
 
 
