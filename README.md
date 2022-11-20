@@ -1,7 +1,11 @@
 # Sub Mare Imperium: Derelict
 A 3D turn based adventure for MS-DOS; you're a space trashman with a simple mission (Remake of a remake of a remake of a remake)
 
-![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/TheFakeMontyOnTheRun/d5c8f0e046da0ddc04c43cff251f661c/raw/space-trashman-blues-tests.json)
+![badge](https://github.com/TheFakeMontyOnTheRun/space-trashman-blues/actions/workflows/run-unit-tests.yml/badge.svg)
+
+
+
+
 
 [Read the docs](https://thefakemontyontherun.github.io/space-trashman-blues/) for more info on the tech and the status of the project!
 
