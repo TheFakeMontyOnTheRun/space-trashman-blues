@@ -384,22 +384,22 @@ void init() {
 
 	BMP_init(FALSE, BG_B, PAL0, 0);
 
-	VDP_setPaletteColor( 0, RGB24_TO_VDPCOLOR(0x000000));
-	VDP_setPaletteColor( 1, RGB24_TO_VDPCOLOR(0x0000ff));
-	VDP_setPaletteColor( 2, RGB24_TO_VDPCOLOR(0x00ff00));
-	VDP_setPaletteColor( 3, RGB24_TO_VDPCOLOR(0x00ffff));
-	VDP_setPaletteColor( 4, RGB24_TO_VDPCOLOR(0xff0000));
-	VDP_setPaletteColor( 5, RGB24_TO_VDPCOLOR(0xff00ff));
-	VDP_setPaletteColor( 6, RGB24_TO_VDPCOLOR(0xffff00));
-	VDP_setPaletteColor( 7, RGB24_TO_VDPCOLOR(0xffffff));
-	VDP_setPaletteColor( 8, RGB24_TO_VDPCOLOR(0x000000));
-	VDP_setPaletteColor( 9, RGB24_TO_VDPCOLOR(0x00007f));
-	VDP_setPaletteColor(10, RGB24_TO_VDPCOLOR(0x007f00));
-	VDP_setPaletteColor(11, RGB24_TO_VDPCOLOR(0x007f7f));
-	VDP_setPaletteColor(12, RGB24_TO_VDPCOLOR(0x7f0000));
-	VDP_setPaletteColor(13, RGB24_TO_VDPCOLOR(0x7f007f));
-	VDP_setPaletteColor(14, RGB24_TO_VDPCOLOR(0x7f7f00));
-	VDP_setPaletteColor(15, RGB24_TO_VDPCOLOR(0x7f7f7f));
+	PAL_setColor( 0, RGB24_TO_VDPCOLOR(0x000000));
+	PAL_setColor( 1, RGB24_TO_VDPCOLOR(0x0000ff));
+	PAL_setColor( 2, RGB24_TO_VDPCOLOR(0x00ff00));
+	PAL_setColor( 3, RGB24_TO_VDPCOLOR(0x00ffff));
+	PAL_setColor( 4, RGB24_TO_VDPCOLOR(0xff0000));
+	PAL_setColor( 5, RGB24_TO_VDPCOLOR(0xff00ff));
+	PAL_setColor( 6, RGB24_TO_VDPCOLOR(0xffff00));
+	PAL_setColor( 7, RGB24_TO_VDPCOLOR(0xffffff));
+	PAL_setColor( 8, RGB24_TO_VDPCOLOR(0x000000));
+	PAL_setColor( 9, RGB24_TO_VDPCOLOR(0x00007f));
+	PAL_setColor(10, RGB24_TO_VDPCOLOR(0x007f00));
+	PAL_setColor(11, RGB24_TO_VDPCOLOR(0x007f7f));
+	PAL_setColor(12, RGB24_TO_VDPCOLOR(0x7f0000));
+	PAL_setColor(13, RGB24_TO_VDPCOLOR(0x7f007f));
+	PAL_setColor(14, RGB24_TO_VDPCOLOR(0x7f7f00));
+	PAL_setColor(15, RGB24_TO_VDPCOLOR(0x7f7f7f));
 }
 
 void graphicsFlush() {
