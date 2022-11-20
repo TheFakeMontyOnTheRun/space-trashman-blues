@@ -1,20 +1,15 @@
-GTEST_DIR = googletest
-GMOCK_DIR = googlemock
+GTEST_DIR = gtest
+GMOCK_DIR = gmock/googlemock
 
 CXXFLAGS = -Iinclude -O3 -g -c -std=c++0x -Wno-narrowing   \
-		-I$(GTEST_DIR)/include \
+		-DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS \
+		-DGTEST_LANG_CXX11=0 \
 		-I$(GTEST_DIR) \
-		-I$(GTEST_DIR)/include/gtest \
-		-I$(GTEST_DIR)/include/gtest/internal \
-		-I$(GMOCK_DIR)/include \
+		-I$(GTEST_DIR)/include \
 		-I$(GMOCK_DIR) \
-		-I$(GMOCK_DIR)/include/gtest \
-		-I$(GMOCK_DIR)/include/gtest/internal -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS \
-		-DGTEST_LANG_CXX11=0
+		-I$(GMOCK_DIR)/include
 
 CFLAGS = -Iinclude -O3 -g -c  -DCLI_BUILD -std=c90 -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS
-
-
 
 TESTOBJS = tests/TestMovement.o \
 		tests/TestInventoryManipulation.o \

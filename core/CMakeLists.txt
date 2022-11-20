@@ -8,26 +8,34 @@ SET(CMAKE_C_STANDARD_REQUIRED ON)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -DCLI_BUILD -W -Wall -Wextra -pedantic -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS -Wno-unused-parameter")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAS_STDIO -Wno-writable-strings -DCLI_BUILD -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING -DMORE_OBJECTS")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_LANG_CXX11=0")
 
 if (APPLE)
-	add_definitions(-DGTEST_USE_OWN_TR1_TUPLE)
 	add_definitions(-D__GLIBCXX__)
 endif (APPLE)
 
 
 enable_testing()
 
-add_subdirectory(googletest)
-
 include_directories(include)
-include_directories(googletest/googletest/include)
-include_directories(googletest/googlemock/include)
+
+include_directories(gtest)
+include_directories(gtest/include)
+
+include_directories(gmock/googlemock)
+include_directories(gmock/googlemock/include)
 
 set(TEST_SOURCE_FILES
 		tests/TestMovement.cpp
 		tests/TestObjectManipulation.cpp
 		tests/TestVictoryConditionsAndEndings.cpp
-		tests/TestInventoryManipulation.cpp)
+		tests/TestInventoryManipulation.cpp
+
+		gtest/src/gtest-all.cc
+		gmock/googlemock/src/gmock-all.cc
+		gmock/googlemock/src/gmock_main.cc
+
+		)
 
 set(SOURCE_FILES
 		src/Derelict.c
@@ -39,4 +47,4 @@ add_executable(derelict-core src/main.c ${SOURCE_FILES} )
 
 add_executable(derelict_test  ${TEST_SOURCE_FILES} ${SOURCE_FILES} )
 
-target_link_libraries(derelict_test gtest gmock gmock_main )
+target_link_libraries(derelict_test)
