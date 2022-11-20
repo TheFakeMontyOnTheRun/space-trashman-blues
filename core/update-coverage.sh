@@ -8,6 +8,6 @@ make CFLAGS='-Iinclude -g -c -fprofile-arcs -ftest-coverage -DMORE_OBJECTS -DCLI
 find gtest | grep gcno | xargs rm
 find gmock | grep gcda | xargs rm
 find tests | grep gcda | xargs rm
-lcov --no-external --capture --directory . --output-file lcov-output.info
+lcov --no-external --capture --directory src --output-file lcov-output.info
 genhtml lcov-output.info --output-directory coverage
 rm lcov-output.info
