@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 #ifdef __APPLE__
-#if __clang__ > 1 && __clang_major__ > 4
+#if __clang_major__ > 4
 #include <memory>
 using std::shared_ptr;
 #else
