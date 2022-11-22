@@ -4,7 +4,7 @@ GTEST_DIR="gtest"
 GMOCK_DIR="gmock/googlemock"
 find . | grep gcno | xargs rm
 find . | grep gcda | xargs rm
-make CFLAGS='-Iinclude -g -c -fprofile-arcs -ftest-coverage -DMORE_OBJECTS -DCLI_BUILD -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING' CC='gcc' CXX='g++' CXXFLAGS='-Iinclude -g -std=c++14 -c -Wno-writable-strings -fprofile-arcs -ftest-coverage -I$(GTEST_DIR)/include -I$(GTEST_DIR) -I$(GMOCK_DIR) -I$(GMOCK_DIR)/include -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEM_PICKING' LDFLAGS='-lncurses -lpthread --coverage' check
+make CFLAGS='-Iinclude -g -c -fprofile-arcs -ftest-coverage -DMORE_OBJECTS -DCLI_BUILD -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEN_PICKING' CC='gcc' CXX='g++' CXXFLAGS='-Iinclude -g -std=c++14 -c -Wno-writable-strings -fprofile-arcs -ftest-coverage -I$(GTEST_DIR)/include -I$(GTEST_DIR) -I$(GMOCK_DIR) -I$(GMOCK_DIR)/include -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEN_PICKING' LDFLAGS='-lncurses -lpthread --coverage' check
 find gtest | grep gcno | xargs rm
 find gmock | grep gcda | xargs rm
 find tests | grep gcda | xargs rm
