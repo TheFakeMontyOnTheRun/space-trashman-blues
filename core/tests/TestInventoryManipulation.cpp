@@ -53,8 +53,6 @@ public:
 
 shared_ptr<ErrorHandlerMock> TestInventoryManipulation::mockedObj;
 
-extern struct ObjectNode *collectedObject;
-
 static void myErrorHandler(const char* errorMsg) {
   TestInventoryManipulation::mockedObj->handleError();
 }
@@ -69,7 +67,8 @@ TEST_F(TestInventoryManipulation, checkingForInvalidObjectsInRoomWillCauseError)
 	EXPECT_CALL(*mockedObj, handleError());
 	ASSERT_FALSE(hasItemInRoom("hangar", NULL));
 
-	//this is not supposed to cause an error, but simply return false. Objects can have any name.
+	// this is not supposed to cause an error, but simply return false.
+	// Objects can have any name.
 	EXPECT_CALL( *mockedObj, handleError()).Times(0);
 	ASSERT_FALSE(hasItemInRoom("hangar", "farofinha_fofa"));
 }
@@ -80,7 +79,7 @@ TEST_F(TestInventoryManipulation, droppingAnInvalidObjectWillResultInAnError) {
 	setErrorHandlerCallback(myErrorHandler);
 
 	EXPECT_CALL(*mockedObj, handleError());
-    parseCommand("drop", "farofinha");
+	parseCommand("drop", "farofinha");
 }
 
 TEST_F(TestInventoryManipulation, checkingInvalidRoomForObjectsWillCauseError) {
@@ -94,7 +93,8 @@ TEST_F(TestInventoryManipulation, checkingInvalidRoomForObjectsWillCauseError) {
 	ASSERT_FALSE(hasItemInRoom(NULL, "low-rank-keycard"));
 
 
-	//differently from objects, we know very well our rooms. This will cause an error
+	// differently from objects, we know very well our rooms.
+	// This will cause an error
 	EXPECT_CALL(*mockedObj, handleError());
 	ASSERT_FALSE(hasItemInRoom("teu_cu", "low-rank-keycard"));
 }
@@ -122,20 +122,18 @@ TEST_F(TestInventoryManipulation, canPickObjects) {
 	ASSERT_TRUE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
 	parseCommand("pick", "low-rank-keycard");
 	ASSERT_FALSE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
-	ASSERT_TRUE(getItem(collectedObject->item) == item);
+	ASSERT_TRUE(playerHasObject("low-rank-keycard"));
 
 	parseCommand("drop", "low-rank-keycard");
 	ASSERT_TRUE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
 }
 
 TEST_F(TestInventoryManipulation, objectsCanOnlyExistInOneRoom) {
+        struct Item *item;
 
-  struct Item *item;
+	initStation();
 
-  initStation();
-
-
-  item = addItem("farofinha",
+	item = addItem("farofinha",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
           "",
 #endif
@@ -143,22 +141,22 @@ TEST_F(TestInventoryManipulation, objectsCanOnlyExistInOneRoom) {
             0,
 #endif
                       TRUE, 15, 19);
-  addToRoom("lss-daedalus", item);
+	addToRoom("lss-daedalus", item);
 
-  ASSERT_TRUE(hasItemInRoom("lss-daedalus", "farofinha"));
-  ASSERT_FALSE(hasItemInRoom("hangar", "farofinha"));
+	ASSERT_TRUE(hasItemInRoom("lss-daedalus", "farofinha"));
+	ASSERT_FALSE(hasItemInRoom("hangar", "farofinha"));
   
-  addObjectToRoom(2, item);
-  ASSERT_TRUE(hasItemInRoom("hangar", "farofinha"));
-  ASSERT_FALSE(hasItemInRoom("lss-daedalus", "farofinha"));
+	addObjectToRoom(2, item);
+	ASSERT_TRUE(hasItemInRoom("hangar", "farofinha"));
+	ASSERT_FALSE(hasItemInRoom("lss-daedalus", "farofinha"));
   
-  parseCommand("move", "0");
-  parseCommand("pick", "farofinha");
-  ASSERT_FALSE(hasItemInRoom("lss-daedalus", "farofinha"));
-  ASSERT_FALSE(hasItemInRoom("hangar", "farofinha"));
+	parseCommand("move", "0");
+	parseCommand("pick", "farofinha");
+	ASSERT_FALSE(hasItemInRoom("lss-daedalus", "farofinha"));
+	ASSERT_FALSE(hasItemInRoom("hangar", "farofinha"));
 
-  parseCommand("move", "2");
-  parseCommand("drop", "farofinha");
-  ASSERT_TRUE(hasItemInRoom("lss-daedalus", "farofinha"));
-  ASSERT_FALSE(hasItemInRoom("hangar", "farofinha"));
+	parseCommand("move", "2");
+	parseCommand("drop", "farofinha");
+	ASSERT_TRUE(hasItemInRoom("lss-daedalus", "farofinha"));
+	ASSERT_FALSE(hasItemInRoom("hangar", "farofinha"));
 }
