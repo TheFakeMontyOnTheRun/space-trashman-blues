@@ -261,7 +261,7 @@ void moveBy(uint8_t direction) {
 	int c;
 	int previousLocation = playerLocation;
 	struct Room *room = &rooms[playerLocation];
-	if (direction >= 0 && direction <= 5 && room->connections[direction] != 0) {
+	if (direction <= 5 && room->connections[direction] != 0) {
 		struct Item *coupling = getItemNamed("magnetic-coupling");
 		room = &rooms[playerLocation];
 
