@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-11-21 19:36:25</td>
+            <td class="headerValue">2022-11-22 18:54:54</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">36</td>
@@ -450,14 +450,14 @@
 <a name="388"><span class="lineNum">     388 </span><span class="lineCov">         13 :         return 0;</span></a>
 <a name="389"><span class="lineNum">     389 </span>            : }</a>
 <a name="390"><span class="lineNum">     390 </span>            : </a>
-<a name="391"><span class="lineNum">     391 </span><span class="lineCov">         65 : uint8_t playerHasObject(const char *itemName) {</span></a>
-<a name="392"><span class="lineNum">     392 </span><span class="lineCov">         65 :         struct ObjectNode *itemToPick = collectedObject-&gt;next;</span></a>
+<a name="391"><span class="lineNum">     391 </span><span class="lineCov">         66 : uint8_t playerHasObject(const char *itemName) {</span></a>
+<a name="392"><span class="lineNum">     392 </span><span class="lineCov">         66 :         struct ObjectNode *itemToPick = collectedObject-&gt;next;</span></a>
 <a name="393"><span class="lineNum">     393 </span>            : </a>
-<a name="394"><span class="lineNum">     394 </span><span class="lineCov">        213 :         while (itemToPick != NULL) {</span></a>
-<a name="395"><span class="lineNum">     395 </span><span class="lineCov">        169 :                 if (!strcmp(getItem(itemToPick-&gt;item)-&gt;name, itemName)) {</span></a>
-<a name="396"><span class="lineNum">     396 </span><span class="lineCov">         21 :                         return 1;</span></a>
+<a name="394"><span class="lineNum">     394 </span><span class="lineCov">        216 :         while (itemToPick != NULL) {</span></a>
+<a name="395"><span class="lineNum">     395 </span><span class="lineCov">        172 :                 if (!strcmp(getItem(itemToPick-&gt;item)-&gt;name, itemName)) {</span></a>
+<a name="396"><span class="lineNum">     396 </span><span class="lineCov">         22 :                         return 1;</span></a>
 <a name="397"><span class="lineNum">     397 </span>            :                 }</a>
-<a name="398"><span class="lineNum">     398 </span><span class="lineCov">        148 :                 itemToPick = itemToPick-&gt;next;</span></a>
+<a name="398"><span class="lineNum">     398 </span><span class="lineCov">        150 :                 itemToPick = itemToPick-&gt;next;</span></a>
 <a name="399"><span class="lineNum">     399 </span>            :         }</a>
 <a name="400"><span class="lineNum">     400 </span><span class="lineCov">         44 :         return 0;</span></a>
 <a name="401"><span class="lineNum">     401 </span>            : }</a>
@@ -479,8 +479,8 @@
 <a name="417"><span class="lineNum">     417 </span><span class="lineCov">          9 :         return &amp;rooms[index];</span></a>
 <a name="418"><span class="lineNum">     418 </span>            : }</a>
 <a name="419"><span class="lineNum">     419 </span>            : </a>
-<a name="420"><span class="lineNum">     420 </span><span class="lineCov">        765 : struct Item *getItem(uint8_t index) {</span></a>
-<a name="421"><span class="lineNum">     421 </span><span class="lineCov">        765 :         return &amp;item[index];</span></a>
+<a name="420"><span class="lineNum">     420 </span><span class="lineCov">        767 : struct Item *getItem(uint8_t index) {</span></a>
+<a name="421"><span class="lineNum">     421 </span><span class="lineCov">        767 :         return &amp;item[index];</span></a>
 <a name="422"><span class="lineNum">     422 </span>            : }</a>
 <a name="423"><span class="lineNum">     423 </span>            : </a>
 <a name="424"><span class="lineNum">     424 </span><span class="lineCov">         27 : uint8_t getPlayerRoom(void) { return playerLocation; }</span></a>
