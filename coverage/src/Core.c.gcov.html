@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-11-22 19:12:56</td>
+            <td class="headerValue">2022-11-22 19:46:03</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">36</td>
@@ -323,7 +323,7 @@
 <a name="261"><span class="lineNum">     261 </span>            :         int c;</a>
 <a name="262"><span class="lineNum">     262 </span><span class="lineCov">         14 :         int previousLocation = playerLocation;</span></a>
 <a name="263"><span class="lineNum">     263 </span><span class="lineCov">         14 :         struct Room *room = &amp;rooms[playerLocation];</span></a>
-<a name="264"><span class="lineNum">     264 </span><span class="lineCov">         14 :         if (direction &gt;= 0 &amp;&amp; direction &lt;= 5 &amp;&amp; room-&gt;connections[direction] != 0) {</span></a>
+<a name="264"><span class="lineNum">     264 </span><span class="lineCov">         14 :         if (direction &lt;= 5 &amp;&amp; room-&gt;connections[direction] != 0) {</span></a>
 <a name="265"><span class="lineNum">     265 </span><span class="lineCov">          9 :                 struct Item *coupling = getItemNamed(&quot;magnetic-coupling&quot;);</span></a>
 <a name="266"><span class="lineNum">     266 </span><span class="lineCov">          9 :                 room = &amp;rooms[playerLocation];</span></a>
 <a name="267"><span class="lineNum">     267 </span>            : </a>
