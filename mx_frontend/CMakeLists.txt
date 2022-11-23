@@ -3,7 +3,7 @@ project(derelict32)
 
 set(CMAKE_C_STANDARD 11)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake_find")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../cmake-sdl2")
 
 include_directories(
 		${SDL2_INCLUDE_DIR}

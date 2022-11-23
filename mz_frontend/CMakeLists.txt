@@ -3,7 +3,7 @@ project(derelict16)
 
 set(CMAKE_C_STANDARD 90)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake_sdl2")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../cmake-sdl2")
 
 include_directories( src ../core/src ../core/include ../common/include
 		${SDL2_INCLUDE_DIR}
