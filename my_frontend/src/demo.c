@@ -1263,7 +1263,7 @@ void renderScene() {
 	int8_t *stencilPtr = &stencilHigh[0];
 
 	for (x = 0; x < XRESMINUSONE;) {
-		uint8_t y, prevY;
+	  uint8_t y, prevY, c;
 		uint8_t *ptr;
 next_cluster:
 		//pixel 1
@@ -1276,7 +1276,7 @@ next_cluster:
 			continue;
 		}
 
-		for (uint8_t c = 2; c < 8; ++c ) {
+		for (c = 2; c < 8; ++c ) {
 			++x;
 			++stencilPtr;
 			prevY = y;
@@ -1727,13 +1727,14 @@ void initMap() {
 
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
 void startRoomTransitionAnimation() {
-
-	for ( uint8_t y = 32; y >= 2; --y ) {
+  uint8_t x,y;
+  
+  for (y = 32; y >= 2; --y ) {
 		clearGraphics();
 		vLine(y, y, 95 + (32 - y), 1);
 		vLine(95 + (32 - y), y, 95 + (32 - y), 1);
 
-		for (uint8_t x = y; x < (95 + (32 - y)); ++x) {
+		for (x = y; x < (95 + (32 - y)); ++x) {
 			graphicsPut(x, y);
 			graphicsPut(x, 95 + (32 - y));
 			//door opening
