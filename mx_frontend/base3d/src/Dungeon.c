@@ -34,12 +34,12 @@ struct GameSnapshot gameSnapshot;
 uint8_t map[MAP_SIZE][MAP_SIZE];
 uint8_t collisionMap[256];
 int enteredThru = 0;
-extern char *focusItemName;
+extern const char *focusItemName;
 
 extern int currentSelectedItem;
 
 extern int shouldContinue;
-extern char *thisMissionName;
+extern const char *thisMissionName;
 extern int16_t thisMissionNameLen;
 
 struct CActor playerCrawler;
@@ -51,13 +51,14 @@ uint8_t isPositionAllowed(int8_t x, int8_t y) {
 }
 
 struct GameSnapshot dungeon_tick(const enum ECommand command) {
-	int currentPlayerRoom;
-	int cell;
-	struct WorldPosition worldPos;
-	struct ObjectNode *head;
-    int oldTurn = gameSnapshot.turn;
-    struct WorldPosition oldPosition = *getPlayerPosition();
-    setActor(playerCrawler.position.x, playerCrawler.position.y, 0xFF);
+  int currentPlayerRoom;
+  int cell;
+  struct WorldPosition worldPos;
+  struct ObjectNode *head;
+  
+  int oldTurn = gameSnapshot.turn;
+  struct WorldPosition oldPosition = *getPlayerPosition();
+  setActor(playerCrawler.position.x, playerCrawler.position.y, 0xFF);
     currentPlayerRoom = getPlayerRoom();
 
     {
@@ -277,7 +278,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         }
     }
 
-	worldPos = *getPlayerPosition();
+    worldPos = *getPlayerPosition();
     playerCrawler.position.x = worldPos.x;
     playerCrawler.position.y = worldPos.y;
     playerCrawler.rotation = getPlayerDirection();

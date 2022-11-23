@@ -29,7 +29,7 @@
 
 FixP_t kCameraYDeltaPlayerDeath;
 FixP_t kCameraYSpeedPlayerDeath;
-char *thisMissionName;
+const char *thisMissionName;
 int16_t thisMissionNameLen;
 int showPromptToAbandonMission = FALSE;
 extern size_t biggestOption;
