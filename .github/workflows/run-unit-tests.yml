@@ -20,8 +20,4 @@ jobs:
     - name: make check
       run: cd core && make check && export TEST_RESULTS=`./unittests`
     - name: valgrind check
-      run: |
-        sudo apt-get install -y valgrind \
-        cd core \
-        make check \
-        export TEST_RESULTS=`valgrind ./unittests`
+      run: sudo apt-get install -y valgrind && cd core && make check && export TEST_RESULTS=`valgrind ./unittests`
