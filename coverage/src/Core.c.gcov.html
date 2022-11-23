@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-11-22 19:46:03</td>
+            <td class="headerValue">2022-11-23 08:22:30</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">36</td>
@@ -117,9 +117,9 @@
 <a name="55"><span class="lineNum">      55 </span>            : #endif</a>
 <a name="56"><span class="lineNum">      56 </span><span class="lineCov">         13 : }</span></a>
 <a name="57"><span class="lineNum">      57 </span>            : </a>
-<a name="58"><span class="lineNum">      58 </span><span class="lineCov">        603 : struct Item *addItem(char *description,</span></a>
+<a name="58"><span class="lineNum">      58 </span><span class="lineCov">        603 : struct Item *addItem(const char *description,</span></a>
 <a name="59"><span class="lineNum">      59 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
-<a name="60"><span class="lineNum">      60 </span>            :                 char *info,</a>
+<a name="60"><span class="lineNum">      60 </span>            :                 const char *info,</a>
 <a name="61"><span class="lineNum">      61 </span>            : #endif</a>
 <a name="62"><span class="lineNum">      62 </span>            : #ifdef ITEMS_HAVE_WEIGHT</a>
 <a name="63"><span class="lineNum">      63 </span>            :                 int weight,</a>
@@ -143,9 +143,9 @@
 <a name="81"><span class="lineNum">      81 </span>            : }</a>
 <a name="82"><span class="lineNum">      82 </span>            : </a>
 <a name="83"><span class="lineNum">      83 </span><span class="lineCov">        391 : struct Room *addRoom(</span></a>
-<a name="84"><span class="lineNum">      84 </span>            :                 char *name,</a>
+<a name="84"><span class="lineNum">      84 </span>            :                 const char *name,</a>
 <a name="85"><span class="lineNum">      85 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
-<a name="86"><span class="lineNum">      86 </span>            :                 char *info,</a>
+<a name="86"><span class="lineNum">      86 </span>            :                 const char *info,</a>
 <a name="87"><span class="lineNum">      87 </span>            : #endif</a>
 <a name="88"><span class="lineNum">      88 </span>            :                 uint8_t sizeX, uint8_t sizeY, uint8_t chanceOfRandomBattle, int8_t connections[6]) {</a>
 <a name="89"><span class="lineNum">      89 </span>            : </a>
@@ -465,12 +465,12 @@
 <a name="403"><span class="lineNum">     403 </span>            : </a>
 <a name="404"><span class="lineNum">     404 </span><span class="lineCov">          6 : uint8_t isPlayerAtRoom(const char *roomName) {</span></a>
 <a name="405"><span class="lineNum">     405 </span><span class="lineCov">          6 :         struct Room *room = &amp;rooms[playerLocation];</span></a>
-<a name="406"><span class="lineNum">     406 </span><span class="lineCov">          6 :         char *name = room-&gt;name;</span></a>
+<a name="406"><span class="lineNum">     406 </span><span class="lineCov">          6 :         const char *name = room-&gt;name;</span></a>
 <a name="407"><span class="lineNum">     407 </span><span class="lineCov">          6 :         int returnValue = !strcmp(name, roomName);</span></a>
 <a name="408"><span class="lineNum">     408 </span><span class="lineCov">          6 :         return returnValue;</span></a>
 <a name="409"><span class="lineNum">     409 </span>            : }</a>
 <a name="410"><span class="lineNum">     410 </span>            : </a>
-<a name="411"><span class="lineNum">     411 </span><span class="lineNoCov">          0 : char *getRoomDescription() {</span></a>
+<a name="411"><span class="lineNum">     411 </span><span class="lineNoCov">          0 : const char *getRoomDescription() {</span></a>
 <a name="412"><span class="lineNum">     412 </span><span class="lineNoCov">          0 :         struct Room *room = &amp;rooms[playerLocation];</span></a>
 <a name="413"><span class="lineNum">     413 </span><span class="lineNoCov">          0 :         return room-&gt;name;</span></a>
 <a name="414"><span class="lineNum">     414 </span>            : }</a>
@@ -763,7 +763,7 @@
 <a name="701"><span class="lineNum">     701 </span>            : #endif</a>
 <a name="702"><span class="lineNum">     702 </span>            : </a>
 <a name="703"><span class="lineNum">     703 </span><span class="lineCov">       5913 :         for (r = 1; r &lt; TOTAL_ROOMS; ++r) {</span></a>
-<a name="704"><span class="lineNum">     704 </span><span class="lineCov">       5913 :                 char *desc = rooms[r].name;</span></a>
+<a name="704"><span class="lineNum">     704 </span><span class="lineCov">       5913 :                 const char *desc = rooms[r].name;</span></a>
 <a name="705"><span class="lineNum">     705 </span>            : </a>
 <a name="706"><span class="lineNum">     706 </span><span class="lineCov">       5913 :                 if (desc != NULL &amp;&amp; !strcmp(desc, roomName)) {</span></a>
 <a name="707"><span class="lineNum">     707 </span><span class="lineCov">        507 :                         addObjectToRoom(r, itemName);</span></a>
