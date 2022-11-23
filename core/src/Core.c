@@ -55,9 +55,9 @@ void writeToLog(const char *errorMsg) {
 #endif
 }
 
-struct Item *addItem(char *description,
+struct Item *addItem(const char *description,
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-		char *info,
+		const char *info,
 #endif
 #ifdef ITEMS_HAVE_WEIGHT
 		int weight,
@@ -81,9 +81,9 @@ struct Item *addItem(char *description,
 }
 
 struct Room *addRoom(
-		char *name,
+		const char *name,
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
-		char *info,
+		const char *info,
 #endif
 		uint8_t sizeX, uint8_t sizeY, uint8_t chanceOfRandomBattle, int8_t connections[6]) {
 
@@ -403,12 +403,12 @@ uint8_t playerHasObject(const char *itemName) {
 
 uint8_t isPlayerAtRoom(const char *roomName) {
 	struct Room *room = &rooms[playerLocation];
-	char *name = room->name;
+	const char *name = room->name;
 	int returnValue = !strcmp(name, roomName);
 	return returnValue;
 }
 
-char *getRoomDescription() {
+const char *getRoomDescription() {
 	struct Room *room = &rooms[playerLocation];
 	return room->name;
 }
@@ -701,7 +701,7 @@ void addToRoom(const char *roomName, struct Item *itemName) {
 #endif
 
 	for (r = 1; r < TOTAL_ROOMS; ++r) {
-		char *desc = rooms[r].name;
+		const char *desc = rooms[r].name;
 
 		if (desc != NULL && !strcmp(desc, roomName)) {
 			addObjectToRoom(r, itemName);

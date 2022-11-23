@@ -43,9 +43,9 @@ struct Item {
   uint8_t index : 6;
   uint8_t active : 1;
   uint8_t pickable : 1;
-  char *name;
+  const char *name;
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-  char *info;
+  const char *info;
 #endif
   UseWithObjectCallback useWithCallback;
   UseObjectCallback useCallback;
@@ -59,9 +59,9 @@ struct ObjectNode {
 };
 
 struct Room {
-  char *name;
+  const char *name;
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
-    char *info;
+    const char *info;
 #endif
   uint8_t connections[6];
   struct ObjectNode *itemsPresent;
@@ -72,15 +72,15 @@ struct Room {
 };
 
 struct Room *addRoom(
-        char *description,
+        const char *description,
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
-        char *info,
+        const char *info,
 #endif
         uint8_t sizeX, uint8_t sizeY, uint8_t chanceOfRandomBattle, int8_t connections[6]);
 
-struct Item* addItem(char *description,
+struct Item* addItem(const char *description,
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-                     char *info,
+                     const char *info,
 #endif
 #ifdef ITEMS_HAVE_WEIGHT
 		uint8_t weight,
@@ -135,7 +135,7 @@ uint8_t playerHasObject( const char* itemName);
 
 uint8_t isPlayerAtRoom(const char *roomName);
 
-char *getRoomDescription(void);
+const char *getRoomDescription(void);
 
 struct Room *getRoom(uint8_t index);
 
