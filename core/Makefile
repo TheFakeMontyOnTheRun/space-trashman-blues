@@ -24,7 +24,6 @@ OBJS = src/Derelict.o src/Parser.o src/Core.o
 
 MAIN_GAME_OBJ = src/main.o
 
-LDFLAGS = -lncurses
 TESTLDFLAGS = -lpthread
 TARGET = blues
 TESTTARGET = unittests
