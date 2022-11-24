@@ -46,3 +46,8 @@ clean:
 	find . | grep ~ | xargs rm -f
 	find . | grep gcno | xargs rm -f
 	find . | grep gcda | xargs rm -f
+
+report:
+	./build-with-coverage.sh
+	find gtest | grep gcno | xargs rm && find gmock | grep gcda | xargs rm && find tests | grep gcda | xargs rm
+	lcov --no-external --capture --directory src --output-file lcov-output.info && genhtml lcov-output.info --output-directory coverage && rm lcov-output.info

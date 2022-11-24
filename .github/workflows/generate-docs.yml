@@ -22,7 +22,7 @@ jobs:
     - name: Generate HTML from game design markdown files
       run: cd core && mkdocs build
     - name: Generate text coverage report
-      run: cd core && ./update-coverage.sh && mv coverage site
+      run: cd core && make report && mv coverage site
     - name: Deploy 	
       uses: JamesIves/github-pages-deploy-action@v4
       with:
