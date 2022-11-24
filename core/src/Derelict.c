@@ -40,7 +40,7 @@ Created by Daniel Monteiro on 2019-07-26.
 
 uint8_t accessGrantedToSafe = FALSE;
 
-void updateRankFromKeycards() {
+void updateRankFromKeycards(void) {
 	uint8_t rank = 0;
 
 	if (playerHasObject("low-rank-keycard")) {

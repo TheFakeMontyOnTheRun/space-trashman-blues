@@ -74,7 +74,6 @@ enum EGameStates {
 	kBadGameOver
 };
 
-
 void initCore(void);
 
 void setGameStatus(enum EGameStates newStatus);
@@ -87,7 +86,7 @@ void setPlayerDirection(uint8_t direction);
 
 void moveBy(uint8_t direction);
 
-struct WorldPosition* getPlayerPosition();
+struct WorldPosition* getPlayerPosition(void);
 
 void setPlayerPosition(struct WorldPosition* pos);
 
@@ -126,7 +125,7 @@ struct Item* addItem(const char *description,
 					 int8_t positionX,
 					 int8_t positionY);
 
-struct ObjectNode* getPlayerItems();
+struct ObjectNode* getPlayerItems(void);
 
 struct Item* getItem(uint8_t index);
 
@@ -170,8 +169,6 @@ void useObjectNamed(const char* operand);
 
 void useObjectsTogether(const char* operands);
 
-extern LogDelegate defaultLogger;
-
 void setLoggerDelegate(LogDelegate newDelegate);
 
 void setErrorHandlerCallback(ErrorHandlerCallback callback);
@@ -184,6 +181,8 @@ uint8_t listIsEmpty(struct ObjectNode *listHead);
 
 /* TODO: make accessory method for this */
 extern uint8_t itemsCount;
+
+extern LogDelegate defaultLogger;
 
 extern struct ObjectNode objectNodes[TOTAL_ITEMS];
 #endif

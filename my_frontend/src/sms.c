@@ -69,30 +69,10 @@ uint8_t font[] = {
 
 uint8_t cursorPosition = 0;
 
-void graphicsFlush();
-
-void nextItemInHand();
-
-void useItemInHand();
-
-void nextItemInRoom();
-
-void interactWithItemInRoom();
-
-void pickOrDrop();
-
-void dropItem();
-
-void pickItem();
-
-void clearGraphics();
-
-void backToGraphics();
-
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 uint16_t cooldown;
 
-void init() {
+void init(void) {
 	set_color(15, 1, 1);
 	set_mode(mode_2);
 	fill(MODE2_ATTR, 0xF1, MODE2_MAX);
@@ -107,8 +87,6 @@ char *menuItems[] = {
 		"Next item",
 		"Next in room",
 };
-
-void graphicsFlush();
 
 void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 
@@ -158,7 +136,6 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
 
-
 void showMessage(const char *message) {
 	uint8_t keepGoing = 1;
 	clearScreen();
@@ -175,7 +152,7 @@ void showMessage(const char *message) {
 	backToGraphics();
 }
 
-void titleScreen() {
+void titleScreen(void) {
 	uint8_t keepGoing = 1;
 	clearScreen();
 
@@ -191,21 +168,19 @@ void titleScreen() {
 	backToGraphics();
 }
 
-void refreshJustGraphics() {
+void refreshJustGraphics(void) {
 	clearGraphics();
 	renderScene();
 	graphicsFlush();
 }
 
-void backToGraphics() {
+void backToGraphics(void) {
 	clearScreen();
 	HUD_initialPaint();
 	refreshJustGraphics();
 }
 
-void performAction() {
-	struct Room *room = getRoom(getPlayerRoom());
-
+void performAction(void) {
 	switch (getGameStatus()) {
 		case kBadVictory:
 			showMessage("Victory! Too bad you didn't survive");
@@ -271,17 +246,17 @@ char *menuItems[] = {
 	}
 }
 
-void clearTextScreen() {
+void clearTextScreen(void) {
 	clearScreen();
 }
 
-void enterTextMode() {
+void enterTextMode(void) {
 }
 
-void exitTextMode() {
+void exitTextMode(void) {
 }
 
-uint8_t getKey() {
+uint8_t getKey(void) {
 	unsigned int key = read_joypad1();
 
 	if (cooldown) {
@@ -334,19 +309,19 @@ uint8_t getKey() {
 	return '.';
 }
 
-void shutdownGraphics() {
+void shutdownGraphics(void) {
 }
 
-void clearScreen() {
+void clearScreen(void) {
 	set_mode(mode_2);
 	fill(MODE2_ATTR, 0xF1, MODE2_MAX);
 }
 
-void clearGraphics() {
+void clearGraphics(void) {
 	memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
-void graphicsFlush() {
+void graphicsFlush(void) {
 	uint8_t *ptr = &buffer[0];
 
 	for (uint8_t y = 32; y < (BUFFER_RESY + 32); y += 8) {
@@ -596,7 +571,7 @@ void graphicsPut(uint8_t x, uint8_t y) {
 }
 
 
-void HUD_initialPaint() {
+void HUD_initialPaint(void) {
 	struct Room *room = getRoom(getPlayerRoom());
 
 	draw(BUFFER_RESX, 0, BUFFER_RESX, 191);
@@ -608,7 +583,7 @@ void HUD_initialPaint() {
 	HUD_refresh();
 }
 
-void HUD_refresh() {
+void HUD_refresh(void) {
 
 	for (uint8_t c = 0; c < 13; ++c) {
 		for (uint8_t d = 0; d < 15; ++d) {

@@ -10,7 +10,7 @@
 
 extern struct ObjectNode *collectedObject;
 
-int main() {
+int main(int argc, char**argv) {
 	int d;
 	struct Room *currentRoom;
 	initStation();

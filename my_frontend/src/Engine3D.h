@@ -50,47 +50,57 @@ struct Pattern {
 	uint8_t blockMovement : 1;
 };
 
-void HUD_initialPaint();
+void HUD_initialPaint(void);
 
-void HUD_refresh();
+void HUD_refresh(void);
 
-void tickRenderer();
+void tickRenderer(void);
 
-void renderScene();
+void renderScene(void);
 
-void shutdownGraphics();
+void shutdownGraphics(void);
 
-void clearGraphics();
+void clearGraphics(void);
 
 void sleepForMS(uint32_t ms);
 
-void clearScreen();
+void clearScreen(void);
 
-void clearTextScreen();
+void clearTextScreen(void);
 
-void enterTextMode();
+void enterTextMode(void);
 
-void exitTextMode();
+void exitTextMode(void);
 
 void writeStr(uint8_t nColumn, uint8_t nLine, const char *str, uint8_t fg, uint8_t bg);
 
-uint8_t getKey();
+uint8_t getKey(void);
 
-void init();
+void init(void);
 
-void graphicsFlush();
+void graphicsFlush(void);
 
 void graphicsPut(uint8_t x, uint8_t y);
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple);
 
-void titleScreen();
+void titleScreen(void);
 
 void showMessage(const char *msg);
 
-void printSituation();
+void printSituation(void);
 
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title);
+
+void interactWithItemInRoom(void);
+
+void pickItem(void);
+
+void dropItem(void);
+
+void nextItemInHand(void);
+
+void nextItemInRoom(void);
 
 #ifdef SMS
 uint8_t* graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr);

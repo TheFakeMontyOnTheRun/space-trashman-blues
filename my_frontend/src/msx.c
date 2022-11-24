@@ -220,9 +220,7 @@ void backToGraphics() {
 	refreshJustGraphics();
 }
 
-void performAction() {
-	struct Room *room = getRoom(getPlayerRoom());
-
+void performAction(void) {
 	switch (getGameStatus()) {
 		case kBadVictory:
 			showMessage("Victory! Too bad you didn't survive");

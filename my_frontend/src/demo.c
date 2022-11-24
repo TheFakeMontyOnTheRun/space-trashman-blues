@@ -34,17 +34,17 @@ struct ObjectNode *roomItem = NULL;
 
 extern uint8_t accessGrantedToSafe;
 
-void performAction();
+void performAction(void);
 
-void startMusic();
+void startMusic(void);
 
-void renderCameraNorth();
+void renderCameraNorth(void);
 
-void renderCameraEast();
+void renderCameraEast(void);
 
-void renderCameraSouth();
+void renderCameraSouth(void);
 
-void renderCameraWest();
+void renderCameraWest(void);
 
 int8_t stencilHigh[XRES];
 
@@ -1189,7 +1189,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 
 #ifdef TRACE_OBJECTS_OVER_FLOOR
 
-void repaintMapItems() {
+void repaintMapItems(void) {
 	struct ObjectNode *node;
 
 	/* ignore header node */
@@ -1237,7 +1237,7 @@ void repaintMapItems() {
 #endif
 
 /* all those refactors are due to a SDCC bug with very long functions */
-void renderScene() {
+void renderScene(void) {
 	uint8_t x;
 
 	switch (cameraRotation) {
@@ -1316,7 +1316,7 @@ next_cluster:
 	memset(stencilHigh, 0, XRES);
 }
 
-void renderCameraWest() {
+void renderCameraWest(void) {
 	int8_t x;
 	uint8_t lastPattern, lastIndex;
 	int8_t maxX = 0;
@@ -1367,8 +1367,7 @@ void renderCameraWest() {
 	}
 }
 
-void
-renderCameraSouth() {
+void renderCameraSouth(void) {
 	int8_t y;
 	uint8_t lastPattern, lastIndex;
 	int8_t const *mapXY;
@@ -1426,7 +1425,7 @@ renderCameraSouth() {
 	}
 }
 
-void renderCameraEast() {
+void renderCameraEast(void) {
 	int8_t x;
 	uint8_t lastPattern, lastIndex;
 	int8_t maxX = 0;
@@ -1479,7 +1478,7 @@ void renderCameraEast() {
 	}
 }
 
-void renderCameraNorth() {
+void renderCameraNorth(void) {
 
 	uint8_t lastPattern, lastIndex;
 	int8_t const *mapXY;
@@ -1537,7 +1536,7 @@ void renderCameraNorth() {
 	}
 }
 
-void pickItem() {
+void pickItem(void) {
 	struct Room *room = getRoom(getPlayerRoom());
 
 	if (roomItem && roomItem->item) {
@@ -1570,7 +1569,7 @@ void pickItem() {
 	}
 }
 
-void dropItem() {
+void dropItem(void) {
 
 	struct Item *item = NULL;
 
@@ -1614,7 +1613,7 @@ void dropItem() {
 	}
 }
 
-void nextItemInRoom() {
+void nextItemInRoom(void) {
 	struct Room *room = getRoom(getPlayerRoom());
 
 	if (roomItem == NULL) {
@@ -1632,7 +1631,7 @@ void nextItemInRoom() {
 	}
 }
 
-void interactWithItemInRoom() {
+void interactWithItemInRoom(void) {
 	struct Item *item = NULL;
 	struct Item *itemToPick = NULL;
 
@@ -1649,11 +1648,11 @@ void interactWithItemInRoom() {
 	}
 }
 
-void useItemInHand() {
+void useItemInHand(void) {
 	useObjectNamed(getItem(focusedItem->item)->name);
 }
 
-void nextItemInHand() {
+void nextItemInHand(void) {
 	focusedItem = focusedItem->next;
 
 	if (!focusedItem) {
@@ -1661,9 +1660,9 @@ void nextItemInHand() {
 	}
 }
 
-void updateMapItems();
+void updateMapItems(void);
 
-void initMap() {
+void initMap(void) {
 	uint8_t x, y, c;
 	const uint8_t *head;
 	uint16_t offsetOnDataStrip = 0;
@@ -1726,7 +1725,7 @@ void initMap() {
 }
 
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
-void startRoomTransitionAnimation() {
+void startRoomTransitionAnimation(void) {
   uint8_t x,y;
   
   for (y = 32; y >= 2; --y ) {
@@ -1757,7 +1756,7 @@ void startRoomTransitionAnimation() {
 }
 #endif
 
-void updateMapItems() {
+void updateMapItems(void) {
 	struct ObjectNode *node;
 
 	/* ignore header node */
@@ -1772,7 +1771,7 @@ void updateMapItems() {
 
 }
 
-void tickRenderer() {
+void tickRenderer(void) {
 	uint8_t prevX;
 	uint8_t prevZ;
 	struct WorldPosition *pos;

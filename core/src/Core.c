@@ -408,7 +408,7 @@ uint8_t isPlayerAtRoom(const char *roomName) {
 	return returnValue;
 }
 
-const char *getRoomDescription() {
+const char *getRoomDescription(void) {
 	struct Room *room = &rooms[playerLocation];
 	return room->name;
 }
@@ -421,7 +421,9 @@ struct Item *getItem(uint8_t index) {
 	return &item[index];
 }
 
-uint8_t getPlayerRoom(void) { return playerLocation; }
+uint8_t getPlayerRoom(void) {
+	return playerLocation;
+}
 
 void useObjectNamed(const char *operand) {
 	struct ObjectNode *itemToPick = collectedObject->next;
