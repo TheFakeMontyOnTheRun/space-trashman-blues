@@ -290,7 +290,6 @@ uint8_t getKey(void) {
 	if ((key & JOY_FIREA) && !cooldown) {
 		performAction();
 		cooldown = COOLDOWN_MAX;
-		HUD_refresh();
 		return 'p';
 	}
 
@@ -328,6 +327,23 @@ void graphicsFlush(void) {
 		// 248 = ~7
 		vwrite(ptr, ((y & 248) << 5), 16 * 8);
 		ptr += 8 * 16;
+	}
+
+	writeStrWithLimit(17, 12, "Direction: ", 31);
+
+	switch (getPlayerDirection()) {
+		case 0:
+			writeStrWithLimit(29, 12, "N", 31);
+			break;
+		case 1:
+			writeStrWithLimit(29, 12, "E", 31);
+			break;
+		case 2:
+			writeStrWithLimit(29, 12, "S", 31);
+			break;
+		case 3:
+			writeStrWithLimit(29, 12, "W", 31);
+			break;
 	}
 }
 
@@ -585,11 +601,15 @@ void HUD_initialPaint(void) {
 
 void HUD_refresh(void) {
 
-	for (uint8_t c = 0; c < 13; ++c) {
-		for (uint8_t d = 0; d < 15; ++d) {
-			writeStr(17 + d, c, " ", 2, 0);
-		}
+
+
+	for (uint8_t d = 0; d < 15; ++d) {
+		writeStr(17 + d, 2, " ", 2, 0);
+		writeStr(17 + d, 3, " ", 2, 0);
+		writeStr(17 + d, 6, " ", 2, 0);
+		writeStr(17 + d, 7, " ", 2, 0);
 	}
+
 
 	for (uint8_t i = 0; i < 6; ++i) {
 		writeStr(17, 14 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
