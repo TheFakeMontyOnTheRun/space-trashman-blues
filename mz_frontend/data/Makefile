@@ -21,6 +21,9 @@ data:	$(PACKAGER) $(CRUNCHER)
 images:
 	python3 ./make_package.py
 
+maps:
+	python3 ./compile_map.py
+
 full: images data
 
 default: full
