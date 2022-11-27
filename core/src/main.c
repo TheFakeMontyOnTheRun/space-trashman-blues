@@ -1,7 +1,5 @@
 #include <stdint.h>
-#include <assert.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "Core.h"
@@ -101,7 +99,6 @@ int main(int argc, char**argv) {
 			int connection = currentRoom->connections[d];
 
 			if (connection) {
-				char buffer[255];
 				struct Room *r;
 				r = getRoom(connection);
 				snprintf(&buffer[0], 255, "%d - %s", d, r->name);

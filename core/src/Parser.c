@@ -7,18 +7,10 @@ Created by Daniel Monteiro on 08/10/2019.
 #include "Win32Int.h"
 #else
 #include <stdint.h>
-
-#ifndef CPC_PLATFORM
-#include <unistd.h>
-#endif
-
 #endif
 
 #include "Core.h"
 #include "Parser.h"
-#include "Derelict.h"
-
-#include <stdio.h>
 #include <string.h>
 #endif
 

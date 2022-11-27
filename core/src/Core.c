@@ -11,7 +11,6 @@ Created by Daniel Monteiro on 2019-07-26.
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
-#include <unistd.h>
 
 #ifdef WIN32
 #include "Win32Int.h"
@@ -23,7 +22,7 @@ Created by Daniel Monteiro on 2019-07-26.
 
 #include "Core.h"
 
-#define WALKSTEP 1
+#define WALK_STEP 1
 
 int roomCount = 1; /* there's an implicit dummy first */
 struct Room rooms[TOTAL_ROOMS];
@@ -85,7 +84,7 @@ struct Room *addRoom(
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
 		const char *info,
 #endif
-		uint8_t sizeX, uint8_t sizeY, uint8_t chanceOfRandomBattle, int8_t connections[6]) {
+		uint8_t sizeX, uint8_t sizeY, uint8_t chanceOfRandomBattle, const int8_t connections[6]) {
 
 	struct Room *toReturn = &rooms[roomCount];
 	toReturn->name = name;
@@ -124,8 +123,8 @@ void setPlayerPosition(struct WorldPosition *pos) {
 	playerPosition.y = pos->y;
 }
 
-uint8_t isCloseToObject(struct WorldPosition *pos, struct Item *item) {
-	return (abs(pos->x - item->position.x) + abs(pos->y - item->position.y)) <= 1;
+uint8_t isCloseToObject(struct WorldPosition *pos, struct Item *_item) {
+	return (abs(pos->x - _item->position.x) + abs(pos->y - _item->position.y)) <= 1;
 }
 
 enum EGameStates getGameStatus(void) {
@@ -137,7 +136,7 @@ struct ObjectNode *getPlayerItems(void) {
 }
 
 struct Item *getItemNamed(const char *name) {
-	int c = 0;
+	int c;
 
 	for (c = 0; c < itemsCount; ++c) {
 		if (!strcmp(item[c].name, name)) {
@@ -150,7 +149,7 @@ struct Item *getItemNamed(const char *name) {
 
 
 struct Room *getRoomByName(const char *name) {
-	int c = 0;
+	int c;
 
 	for (c = 1; c < roomCount; ++c) {
 		if (!strcmp(rooms[c].name, name)) {
@@ -191,7 +190,7 @@ void removeObjectFromList(struct Item *itemToRemove, struct ObjectNode *listHead
 		prev = head;
 		head = head->next;
 	}
-	/* Object doesn't belongs to the list! */
+	/* Object doesn't belong to the list! */
 }
 
 void removeObjectFromRoom(struct Item *itemToRemove) {
@@ -301,14 +300,14 @@ void moveBy(uint8_t direction) {
 				playerPosition.y = rooms[playerLocation].sizeY / 2;
 				break;
 
-			case 0:
-				playerPosition.x = rooms[playerLocation].sizeX / 2;
-				playerPosition.y = 0;
-				break;
-
 			case 1:
 				playerPosition.x = rooms[playerLocation].sizeX - 1;
 				playerPosition.y = rooms[playerLocation].sizeY / 2;
+				break;
+			case 0:
+			default:
+				playerPosition.x = rooms[playerLocation].sizeX / 2;
+				playerPosition.y = 0;
 				break;
 		}
 #ifdef CLI_BUILD
@@ -429,10 +428,10 @@ void useObjectNamed(const char *operand) {
 	struct ObjectNode *itemToPick = collectedObject->next;
 
 	while (itemToPick != NULL) {
-		struct Item *item = getItem(itemToPick->item);
-		if (!strcmp(item->name, operand)) {
-			if (item->useCallback != NULL) {
-				item->useCallback(item);
+		struct Item *_item = getItem(itemToPick->item);
+		if (!strcmp(_item->name, operand)) {
+			if (_item->useCallback != NULL) {
+				_item->useCallback(_item);
 			}
 			return;
 		}
@@ -442,10 +441,10 @@ void useObjectNamed(const char *operand) {
 	itemToPick = getRoom(playerLocation)->itemsPresent->next;
 
 	while (itemToPick != NULL) {
-		struct Item *item = getItem(itemToPick->item);
-		if (!strcmp(item->name, operand)) {
-			if (item->useCallback != NULL) {
-				item->useCallback(item);
+		struct Item *_item = getItem(itemToPick->item);
+		if (!strcmp(_item->name, operand)) {
+			if (_item->useCallback != NULL) {
+				_item->useCallback(_item);
 			}
 			return;
 		}
@@ -534,10 +533,10 @@ void useObjectsTogether(const char *operands) {
 	}
 
 	while (object1 != NULL) {
-		struct Item* item = getItem(object1->item);
-		assert(item->name != NULL);
+		struct Item* _item = getItem(object1->item);
+		assert(_item->name != NULL);
 
-		if (!strcmp(item->name, operand1)) {
+		if (!strcmp(_item->name, operand1)) {
 			goto got_first_object;
 		}
 		object1 = object1->next;
@@ -545,10 +544,10 @@ void useObjectsTogether(const char *operands) {
 
 	got_first_object:
 	while (object2 != NULL) {
-		struct Item* item = getItem(object2->item);
-		assert(item->name != NULL);
+		struct Item* _item = getItem(object2->item);
+		assert(_item->name != NULL);
 
-		if (!strcmp(item->name, operand2)) {
+		if (!strcmp(_item->name, operand2)) {
 			goto got_second_object;
 		}
 		object2 = object2->next;
@@ -556,10 +555,10 @@ void useObjectsTogether(const char *operands) {
 
 	got_second_object:
 	if (object1 != NULL){
-		struct Item* item = getItem(object1->item);
+		struct Item* _item = getItem(object1->item);
 
-		if (item != NULL && item->useWithCallback != NULL && object2 != NULL) {
-			item->useWithCallback(item, getItem(object2->item));
+		if (_item != NULL && _item->useWithCallback != NULL && object2 != NULL) {
+			_item->useWithCallback(_item, getItem(object2->item));
 		}
 	}
 }
@@ -586,67 +585,72 @@ void setPlayerLocation(uint8_t location) {
 void walkBy(uint8_t direction) {
 
 	switch (direction) {
-		case 0:
-			switch (playerDirection) {
-				case 0:
-					playerPosition.y -= WALKSTEP;
-					break;
-				case 1:
-					playerPosition.x += WALKSTEP;
-					break;
-				case 2:
-					playerPosition.y += WALKSTEP;
-					break;
-				case 3:
-					playerPosition.x -= WALKSTEP;
-					break;
-			}
-			break;
 		case 1:
 			switch (playerDirection) {
-				case 0:
-					playerPosition.x += WALKSTEP;
-					break;
 				case 1:
-					playerPosition.y += WALKSTEP;
+					playerPosition.y += WALK_STEP;
 					break;
 				case 2:
-					playerPosition.x -= WALKSTEP;
+					playerPosition.x -= WALK_STEP;
 					break;
 				case 3:
-					playerPosition.y -= WALKSTEP;
+					playerPosition.y -= WALK_STEP;
+					break;
+				case 0:
+				default:
+					playerPosition.x += WALK_STEP;
 					break;
 			}
 			break;
 		case 2:
 			switch (playerDirection) {
-				case 0:
-					playerPosition.y += WALKSTEP;
-					break;
 				case 1:
-					playerPosition.x -= WALKSTEP;
+					playerPosition.x -= WALK_STEP;
 					break;
 				case 2:
-					playerPosition.y -= WALKSTEP;
+					playerPosition.y -= WALK_STEP;
 					break;
 				case 3:
-					playerPosition.x += WALKSTEP;
+					playerPosition.x += WALK_STEP;
+					break;
+				case 0:
+				default:
+					playerPosition.y += WALK_STEP;
 					break;
 			}
 			break;
 		case 3:
 			switch (playerDirection) {
-				case 0:
-					playerPosition.x -= WALKSTEP;
-					break;
 				case 1:
-					playerPosition.y -= WALKSTEP;
+					playerPosition.y -= WALK_STEP;
 					break;
 				case 2:
-					playerPosition.x += WALKSTEP;
+					playerPosition.x += WALK_STEP;
 					break;
 				case 3:
-					playerPosition.y += WALKSTEP;
+					playerPosition.y += WALK_STEP;
+					break;
+				case 0:
+				default:
+					playerPosition.x -= WALK_STEP;
+					break;
+			}
+			break;
+		case 0:
+		default:
+			switch (playerDirection) {
+				case 1:
+					playerPosition.x += WALK_STEP;
+					break;
+				case 2:
+					playerPosition.y += WALK_STEP;
+					break;
+				case 3:
+					playerPosition.x -= WALK_STEP;
+					break;
+				case 0:
+				default:
+					playerPosition.y -= WALK_STEP;
 					break;
 			}
 			break;
@@ -693,7 +697,7 @@ uint8_t getPlayerDirection(void) {
 }
 
 void addToRoom(const char *roomName, struct Item *itemName) {
-	int r = 0;
+	int r;
 
 #ifdef CLI_BUILD
 	if (roomName == NULL || itemName == NULL || strlen(roomName) == 0) {

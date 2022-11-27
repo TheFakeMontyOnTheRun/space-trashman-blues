@@ -129,7 +129,7 @@ struct ObjectNode* getPlayerItems(void);
 
 struct Item* getItem(uint8_t index);
 
-uint8_t isCloseToObject( struct WorldPosition* pos, struct Item* item );
+uint8_t isCloseToObject( struct WorldPosition* pos, struct Item* _item );
 
 void pickObject(struct Item *itemToPick);
 
@@ -146,7 +146,7 @@ struct Room *addRoom(
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
 		const char *info,
 #endif
-		uint8_t sizeX, uint8_t sizeY, uint8_t chanceOfRandomBattle, int8_t connections[6]);
+		uint8_t sizeX, uint8_t sizeY, uint8_t chanceOfRandomBattle, const int8_t *connections);
 
 void addObjectToRoom(uint8_t roomId, struct Item *itemToAdd);
 
@@ -172,8 +172,6 @@ void useObjectsTogether(const char* operands);
 void setLoggerDelegate(LogDelegate newDelegate);
 
 void setErrorHandlerCallback(ErrorHandlerCallback callback);
-
-void useObjectNamed(const char *operand);
 
 void removeObjectFromList(struct Item *itemToRemove, struct ObjectNode *listHead);
 
