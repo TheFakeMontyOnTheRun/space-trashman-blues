@@ -31,7 +31,6 @@
 #define XRESMINUSONE XRES - 1
 #define YRESMINUSONE YRES - 1
 
-
 #define WALKSTEP 1
 #define CAMERA_HEIGHT 2
 #define VISIBILITY_LIMIT 32
@@ -74,9 +73,9 @@ void init();
 
 void graphicsFlush();
 
-void graphicsPut(uint8_t x, uint8_t y);
+void graphicsPut(int16_t x, int16_t y);
 
-void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple);
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t shouldStipple);
 
 void titleScreen();
 
