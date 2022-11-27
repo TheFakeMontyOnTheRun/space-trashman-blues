@@ -34,22 +34,38 @@ void pickOrDrop();
 
 void pickItem();
 
-void graphicsPut(uint8_t x, uint8_t y) {
+void graphicsPut(int16_t x, int16_t y) {
+	if (x < 0 ) {
+		x = 0;
+	}
 
-    assert(x >= 0);
-    assert(x < 128);
-    assert(y >= 0);
-    assert(y < 128);
+	if (x >= 128) {
+		x = 127;
+	}
+
+	if (y < 0 ) {
+		y = 0;
+	}
+
+	if (y >= 128) {
+		y = 127;
+	}
 
 
-    framebuffer[(160 * y) + x] = 1;
+
+	framebuffer[(160 * y) + x] = 1;
 #ifdef PUTAFLIP
     graphicsFlush();
     SDL_Delay(100);
 #endif
 }
 
-void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint shouldStipple) {
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t shouldStipple) {
+
+	if (x0 <0 ) {
+		return;
+	}
+
     int16_t y;
     int16_t _y0 = y0;
     int16_t _y1 = y1;
@@ -59,10 +75,17 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint shouldStipple) {
         _y1 = y0;
     }
 
+	if (_y0 < 0 ) {
+		_y0 = 0;
+	}
+
+	if (_y1 >= 128) {
+		_y1 = 127;
+	}
 
     for ( y = _y0; y <= _y1; ++y) {
         if ( !shouldStipple || (y & 1) ) {
-            graphicsPut(x0, y);
+			framebuffer[(160 * y) + x0] = 2;
         }
     }
 }

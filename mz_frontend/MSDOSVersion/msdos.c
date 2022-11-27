@@ -43,7 +43,11 @@ unsigned char imageBuffer[128 * 32];
 void shutdownGraphics() {
 }
 
-void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t shouldStipple) {
+
+	if (x0 <0 ) {
+		return;
+	}
 
 	uint8_t stipple;
 
@@ -51,6 +55,14 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 		int tmp = y0;
 		y0 = y1;
 		y1 = tmp;
+	}
+
+	if (y0 < 0 ) {
+		y0 = 0;
+	}
+
+	if (y1 >= 128) {
+		y1 = 127;
 	}
 
 	uint8_t colour;
@@ -140,13 +152,21 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 	}
 }
 
-void graphicsPut(uint8_t x, uint8_t y) {
-	if (y > 127) {
-		return;
+void graphicsPut(int16_t x, int16_t y) {
+	if (x < 0 ) {
+		x = 0;
 	}
 
-	if (x > 127) {
-		return;
+	if (x >= 128) {
+		x = 127;
+	}
+
+	if (y < 0 ) {
+		y = 0;
+	}
+
+	if (y >= 128) {
+		y = 127;
 	}
 
 	uint8_t *ptrToByte = &imageBuffer[(32 * y) + (x / 4)];
@@ -440,13 +460,13 @@ void titleScreen() {
 }
 
 void HUD_initialPaint() {
-
-	for (int c = 15; c < (128 + 16 + 1); ++c) {
+	int c;
+	for (c = 15; c < (128 + 16 + 1); ++c) {
 		realPut(c, 35, 3);
 		realPut(c, 36 + 128, 3);
 	}
 
-	for (int c = 35; c < (128 + 36 + 1); ++c) {
+	for (c = 35; c < (128 + 36 + 1); ++c) {
 		realPut(15, c, 3);
 		realPut(16 + 128, c, 3);
 	}

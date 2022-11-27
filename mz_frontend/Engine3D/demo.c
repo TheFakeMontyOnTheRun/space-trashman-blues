@@ -44,8 +44,6 @@ void renderCameraSouth();
 
 void renderCameraWest();
 
-int8_t stencilHigh[XRES];
-
 int8_t cameraX = 33;
 int8_t cameraZ = 22;
 int8_t cameraRotation = 0;
@@ -96,23 +94,21 @@ const struct Projection projections[31] =
 				{58, 67,  -4},    //	31
 		};
 
-#ifdef LEAN_BUILD
-int8_t max(int8_t x1, int8_t x2) {
+int16_t max(int16_t x1, int16_t x2) {
 	return x1 > x2 ? x1 : x2;
 }
 
-int8_t min(int8_t x1, int8_t x2) {
+int16_t min(int16_t x1, int16_t x2) {
 	return x1 < x2 ? x1 : x2;
 }
-#endif
 
 uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask, uint8_t type) {
 
 	int16_t z1;
+
 	int16_t z0px;
 	int16_t z1px;
 	int16_t z0py;
-
 	int16_t z1py;
 	int16_t z0dx;
 	int16_t z1dx;
@@ -120,18 +116,11 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 	int16_t px0z0;
 	int16_t py0z0;
 	int16_t py0z1;
-
 	int16_t py1z0;
 	int16_t py1z1;
-
 	int16_t px1z1;
 
-#ifndef USE_FILLED_POLYS
 	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 5 : 1;
-#else
-	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 5;
-#endif
-
 	uint8_t stipple = 1;
 
 	if (z0 >= 32) {
@@ -226,20 +215,6 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 			py0z1 = YRESMINUSONE;
 		}
 
-#ifndef USE_FILLED_POLYS
-		if (elementMask & 2) {
-			if (IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
-				vLine(px0z0, py0z0, max(py1z0, stencilHigh[px0z0]), shouldStipple);
-			}
-		}
-
-		if (elementMask & 1) {
-			if (IN_RANGE(0, XRESMINUSONE, px1z1) && py0z1 > stencilHigh[px1z1]) {
-				vLine(px1z1, py0z1, max(py1z1, stencilHigh[px1z1]), shouldStipple);
-			}
-		}
-#endif
-
 		/* The upper segment */
 		x0 = px0z0;
 		x1 = px1z1;
@@ -262,28 +237,9 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 			int16_t lowerErr2 = 0;
 
 			while (x0 != x1) {
-
-#ifndef USE_FILLED_POLYS
-				if (shouldStipple) {
-					stipple = !stipple;
-				}
-#endif
-
 				if (IN_RANGE(0, XRESMINUSONE, x0)) {
-#ifndef USE_FILLED_POLYS
-					if (stipple && stencilHigh[x0] <= upperY0) {
-						graphicsPut(x0, upperY0);
-					}
-#endif
-
-					if (stencilHigh[x0] < lowerY0) {
-#ifdef USE_FILLED_POLYS
-						uint8_t top = max( upperY0, stencilHigh[x0]);
-						vLine(x0, top, lowerY0, shouldStipple);
-						graphicsPut(x0, top);
-#endif
-						stencilHigh[x0] = lowerY0;
-					}
+					vLine(x0, upperY0, lowerY0, shouldStipple);
+					graphicsPut(x0, upperY0);
 				}
 
 				/* loop */
@@ -317,34 +273,36 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 		}
 	}
 
-#ifdef USE_FILLED_POLYS
+
 	if (elementMask & 2) {
-			if (IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
-				vLine(px0z0, py0z0, max(py1z0, stencilHigh[px0z0]), 0);
+		if (IN_RANGE(0, XRESMINUSONE, px0z0)) {
+			vLine(px0z0, py0z0, py1z0, 0);
 
-			}
 		}
+	}
 
-		if (elementMask & 1) {
-			if (IN_RANGE(0, XRESMINUSONE, px1z1) && py0z1 > stencilHigh[px1z1]) {
-				vLine(px1z1, py0z1, max(py1z1, stencilHigh[px1z1]), 0);
-			}
+	if (elementMask & 1) {
+		if (IN_RANGE(0, XRESMINUSONE, px1z1)) {
+			vLine(px1z1, py0z1, py1z1, 0);
 		}
-#endif
+	}
+
 
 	return 1;
 }
 
 uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_t elementMask) {
 
-	uint8_t z0px;
-	uint8_t z0py;
-	int8_t z0dx;
+	int16_t z0px;
+	int16_t z0py;
+	int16_t z0dx;
 
 	int16_t px0z0;
-	int8_t py0z0;
+	int16_t py0z0;
 	int16_t px1z0;
-	int8_t py1z0;
+	int16_t py1z0;
+
+	int16_t x;
 
 	uint8_t drawContour;
 
@@ -356,7 +314,6 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
 	z0dx = ((projections[z0].dx));
 
 	px0z0 = z0px - ((x0) * z0dx);
-
 	px1z0 = px0z0 - (dX * z0dx);
 
 	z0py = (projections[z0].py);
@@ -368,80 +325,30 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
 		return 0;
 	}
 
-#ifndef USE_FILLED_POLYS
 	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 5 : 1;
-#else
-	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 5 : 1;
-#endif
-
 	uint8_t stipple = 1;
 
 	drawContour = (dY);
 
-
-	{
-		int16_t x;
-#ifndef USE_FILLED_POLYS
-		if (drawContour) {
-			if (elementMask & 2) {
-				if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
-					vLine(px0z0, py0z0, stencilHigh[px0z0] < py1z0 ? py1z0 : stencilHigh[px0z0], shouldStipple);
-				}
-
-				if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
-					vLine(px1z0, py0z0, stencilHigh[px1z0] < py1z0 ? py1z0 : stencilHigh[px1z0], shouldStipple);
-				}
-			}
-		}
-#endif
-
-		/* Draw the horizontal outlines of z0 and z1 */
-
-		/* Ceiling is lower than camera */
+	/* Draw the horizontal outlines of z0 and z1 */
+	/* Ceiling is lower than camera */
+	if (drawContour) {
 		for (x = px0z0; x <= px1z0; ++x) {
 			if (IN_RANGE(0, XRESMINUSONE, x)) {
-
-#ifndef USE_FILLED_POLYS
-				if (shouldStipple) {
-					stipple = !stipple;
-				}
-#endif
-
-#ifndef USE_FILLED_POLYS
-				if (stencilHigh[x] <= py1z0) {
-					if (drawContour && stipple) {
-						graphicsPut(x, py1z0);
-					}
-					stencilHigh[x] = py1z0;
-				}
-
-
-				if (stencilHigh[x] <= py0z0) {
-					stencilHigh[x] = py0z0;
-				}
-#else
-				if (drawContour && stencilHigh[x] <= py0z0) {
-					vLine(x, max( py1z0, stencilHigh[x]), py0z0, shouldStipple);
-					stencilHigh[x] = py0z0;
-				}
-#endif
+				vLine(x, py0z0, py1z0, shouldStipple);
 			}
 		}
 
-#ifdef USE_FILLED_POLYS
-		if (drawContour) {
-			if (elementMask & 2) {
-				if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
-					vLine(px0z0, py0z0, stencilHigh[px0z0] < py1z0 ? py1z0 : stencilHigh[px0z0], 0 );
+		if (elementMask & 2) {
+			if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0)) {
+				vLine(px0z0, py0z0, py1z0, 0);
+			}
 
-				}
-
-				if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
-					vLine(px1z0, py0z0, stencilHigh[px1z0] < py1z0 ? py1z0 : stencilHigh[px1z0], 0 );
-				}
+			if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0)) {
+				vLine(px1z0, py0z0, py1z0, 0);
 			}
 		}
-#endif
+
 	}
 
 	return 1;
@@ -501,7 +408,6 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
 		int16_t x, x0, x1;
 
 		/* Draw the horizontal outlines of z0 and z1 */
-
 		for (x = px0z0; x <= px1z0; ++x) {
 			if (IN_RANGE(0, XRESMINUSONE, x)) {
 
@@ -509,7 +415,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
 					stipple = !stipple;
 				}
 
-				if (stipple && stencilHigh[x] < py0z0) {
+				if (stipple) {
 					graphicsPut(x, py0z0);
 				}
 			}
@@ -522,13 +428,11 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
 					stipple = !stipple;
 				}
 
-				if (stipple && stencilHigh[x] < py0z1) {
+				if (stipple) {
 					graphicsPut(x, py0z1);
 				}
 			}
 		}
-
-
 
 		/* The left segment */
 		x0 = px0z0;
@@ -552,7 +456,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
 						stipple = !stipple;
 					}
 
-					if (stipple && stencilHigh[x0] < y0) {
+					if (stipple) {
 						graphicsPut(x0, y0);
 					}
 				}
@@ -579,7 +483,6 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
 
 right_stroke:
 
-		/* The right segment */
 		x0 = px1z0;
 		x1 = px1z1;
 
@@ -599,11 +502,10 @@ right_stroke:
 					stipple = !stipple;
 				}
 
-				if (stipple && IN_RANGE(0, XRESMINUSONE, x0) && stencilHigh[x0] < y0) {
+				if (stipple && IN_RANGE(0, XRESMINUSONE, x0)) {
 					graphicsPut(x0, y0);
 				}
 
-				/* loop */
 				e2 = err << 2;
 
 				if (e2 >= dy) {
@@ -629,25 +531,25 @@ right_stroke:
 
 uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask) {
 
+	int8_t y1 = y0 + dY;
 	int8_t z1;
-	uint8_t z0px;
-	uint8_t z0py;
-	uint8_t z1px;
-	uint8_t z1py;
-	int8_t z0dx;
-	int8_t z1dx;
 
+	int16_t z0px;
+	int16_t z0py;
+	int16_t z1px;
+	int16_t z1py;
+	int16_t z0dx;
+	int16_t z1dx;
+	int16_t py1z0;
+	int16_t py1z1;
 	int16_t px0z0;
-	int8_t py0z0;
+	int16_t py0z0;
 	int16_t px1z0;
 	int16_t px0z1;
-	int8_t py0z1;
+	int16_t py0z1;
 	int16_t px1z1;
-#ifndef USE_FILLED_POLYS
+
 	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 6 : 2;
-#else
-	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 6 : 2;
-#endif
 	uint8_t stipple = 1;
 
 	uint8_t drawContour;
@@ -662,101 +564,38 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 		return 0;
 	}
 
-
 	z0px = (projections[z0].px);
 	z1px = (projections[z1].px);
 	z0dx = ((projections[z0].dx));
 	z1dx = ((projections[z1].dx));
 
-	px0z0 = z0px - ((x0) * z0dx);
-	px0z1 = z1px - ((x0) * z1dx);
-
-	px1z0 = px0z0 - (dX * z0dx);
-	px1z1 = px0z1 - (dX * z1dx);
-
 	z1py = (projections[z1].py);
 	z0py = (projections[z0].py);
 
+	px0z0 = z0px - ((x0) * z0dx);
+	px0z1 = z1px - ((x0) * z1dx);
+	px1z0 = px0z0 - (dX * z0dx);
+	px1z1 = px0z1 - (dX * z1dx);
 	py0z0 = z0py + ((y0) * z0dx);
 	py0z1 = z1py + ((y0) * z1dx);
+	py1z0 = z0py + ((y1) * z0dx);
+	py1z1 = z1py + ((y1) * z1dx);
 
 	drawContour = (dY);
 
 	{
 		int16_t x, x0, x1;
-#ifndef USE_FILLED_POLYS
+
 		if (drawContour) {
-			if (elementMask & 2) {
-				if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
-					vLine(px0z0, py0z0, stencilHigh[px0z0], shouldStipple);
-				}
-
-				if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
-					vLine(px1z0, py0z0, stencilHigh[px1z0], shouldStipple);
-				}
-			}
-
-			if (elementMask & 1) {
-				if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z1) && px0z1 < px0z0 &&
-					py0z1 > stencilHigh[px0z1]) {
-					vLine(px0z1, py0z1, stencilHigh[px0z1], shouldStipple);
-				}
-
-				if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z1) && px1z1 > px1z0 &&
-					py0z1 > stencilHigh[px1z1]) {
-					vLine(px1z1, py0z1, stencilHigh[px1z1], shouldStipple);
-				}
-			}
-		}
-
-		/* Draw the horizontal outlines of z0 and z1 */
-
-		if (py0z0 > py0z1) {
-			/* Ceiling is lower than camera */
 			for (x = px0z0; x <= px1z0; ++x) {
-				if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
-
-					if (shouldStipple) {
-						stipple = !stipple;
-					}
-
-					if (drawContour && stipple) {
-						graphicsPut(x, stencilHigh[x]);
-					}
-					stencilHigh[x] = py0z0;
+				if (IN_RANGE(0, XRESMINUSONE, x)) {
+					vLine(x, py0z0, py1z0, shouldStipple);
 				}
-			}
-		} else if (drawContour) {
-			/* Ceiling is higher than the camera*/
-			/* Let's just draw the nearer segment */
-			for (x = px0z0; x <= px1z0; ++x) {
-				if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
-
-					if (shouldStipple) {
-						stipple = !stipple;
-					}
-
-					if (stipple) {
-						graphicsPut(x, stencilHigh[x]);
-					}
-				}
-			}
-		}
-
-#else
-		for (x = px0z0; x <= px1z0; ++x) {
-			if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
-				if (drawContour) {
-					vLine(x, stencilHigh[x], py0z0, shouldStipple);
-				}
-				stencilHigh[x] = py0z0;
 			}
 		}
 
 		shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 6;
-#endif
 
-		/* The left segment */
 		x0 = px0z0;
 		x1 = px0z1;
 
@@ -767,42 +606,22 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 			int16_t sx = x0 < x1 ? 1 : -1;
 			int16_t dy = -abs(y1 - y0);
 			int16_t sy = y0 < y1 ? 1 : -1;
-			int16_t err = dx + dy;  /* error value e_xy */
+			int16_t err = dx + dy;
 			int16_t e2;
 
 			while ((x0 != x1 || y0 != y1)) {
 
-				if (IN_RANGE(0, XRESMINUSONE, x0)) {
-#ifndef USE_FILLED_POLYS
-					if (shouldStipple) {
-						stipple = !stipple;
-					}
-#endif
-
-					if (stencilHigh[x0] < y0) {
-#ifndef USE_FILLED_POLYS
-						if (drawContour && stipple) {
-							graphicsPut(x0, stencilHigh[x0]);
-						}
-#endif
-
-#ifdef USE_FILLED_POLYS
-						if (drawContour) {
-							uint8_t top = stencilHigh[x0];
-							vLine(x0, top, y0, 6);
-							graphicsPut(x0, top);
-						}
-#endif
-
-						stencilHigh[x0] = y0;
+				if (drawContour) {
+					if (IN_RANGE(0, XRESMINUSONE, x0)) {
+						vLine(x0, y0, py1z0, 6);
+						graphicsPut(x0, y0);
 					}
 				}
 
-				/* loop */
 				e2 = err << 2;
 
 				if (e2 >= dy) {
-					err += dy; /* e_xy+e_x > 0 */
+					err += dy;
 					x0 += sx;
 				}
 
@@ -811,16 +630,14 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 				}
 
 				if (e2 <= dx) {
-					/* e_xy+e_y < 0 */
 					err += dx;
 					y0 += sy;
 				}
 			}
 		}
 
-right_stroke:
+		right_stroke:
 
-		/* The right segment */
 		x0 = px1z0;
 		x1 = px1z1;
 
@@ -831,40 +648,22 @@ right_stroke:
 			int16_t sx = x0 < x1 ? 1 : -1;
 			int16_t dy = -abs(y1 - y0);
 			int16_t sy = y0 < y1 ? 1 : -1;
-			int16_t err = dx + dy;  /* error value e_xy */
+			int16_t err = dx + dy;
 			int16_t e2;
 
 			while ((x0 != x1 || y0 != y1)) {
 
-				if (IN_RANGE(0, XRESMINUSONE, x0) && stencilHigh[x0] < y0) {
-#ifndef USE_FILLED_POLYS
-					if (shouldStipple) {
-						stipple = !stipple;
+				if (drawContour) {
+					if (IN_RANGE(0, XRESMINUSONE, x0)) {
+						vLine(x0, y0, py1z0, 6);
+						graphicsPut(x0, y0);
 					}
-#endif
-
-#ifndef USE_FILLED_POLYS
-					if (drawContour && stipple) {
-						graphicsPut(x0, stencilHigh[x0]);
-					}
-#endif
-
-#ifdef USE_FILLED_POLYS
-					if (drawContour) {
-						uint8_t top = stencilHigh[x0];
-						vLine(x0, top, y0, 6);
-						graphicsPut(x0, top);
-					}
-#endif
-
-					stencilHigh[x0] = y0;
 				}
 
-				/* loop */
 				e2 = err << 2;
 
 				if (e2 >= dy) {
-					err += dy; /* e_xy+e_x > 0 */
+					err += dy;
 					x0 += sx;
 				}
 
@@ -873,65 +672,48 @@ right_stroke:
 				}
 
 				if (e2 <= dx) {
-					/* e_xy+e_y < 0 */
+
 					err += dx;
 					y0 += sy;
 				}
 			}
 		}
 
-final_stroke:
-#ifdef USE_FILLED_POLYS
+		final_stroke:
+
 		if (drawContour) {
 			if (elementMask & 2) {
-				if ((elementMask != 255 ) &&IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
-					vLine(px0z0, py0z0, stencilHigh[px0z0], 0);
+				if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0)) {
+					vLine(px0z0, py0z0, py1z0, 0);
 				}
 
-				if ( (elementMask != 127 ) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
-					vLine(px1z0, py0z0, stencilHigh[px1z0], 0);
+				if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0)) {
+					vLine(px1z0, py0z0, py1z0, 0);
 				}
 			}
 
 			if (elementMask & 1) {
-				if ((elementMask != 255 ) &&IN_RANGE(0, XRESMINUSONE, px0z1) && px0z1 < px0z0 && py0z1 > stencilHigh[px0z1]) {
-					vLine(px0z1, py0z1, stencilHigh[px0z1], 0);
+				if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z1) && px0z1 < px0z0) {
+					vLine(px0z1, py0z1, py1z1, 0);
 				}
 
-				if ((elementMask != 127 ) && IN_RANGE(0, XRESMINUSONE, px1z1) && px1z1 > px1z0 && py0z1 > stencilHigh[px1z1]) {
-					vLine(px1z1, py0z1, stencilHigh[px1z1], 0);
+				if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z1) && px1z1 > px1z0) {
+					vLine(px1z1, py0z1, py1z1, 0);
 				}
 			}
 		}
-#endif
-		if (py0z0 <= py0z1) {
-			/* Ceiling is higher than the camera*/
-			/* Draw the last segment */
 
+		
+		if (py0z0 <= py0z1) {
 			if (drawContour) {
 				for (x = px0z1; x <= px1z1; ++x) {
-
 					if (IN_RANGE(0, XRESMINUSONE, x)) {
-
-						int8_t stencilY = stencilHigh[x];
-
-						if (stencilY < py0z0) {
-							graphicsPut(x, py0z0);
-						}
-
-						if (stencilY < py0z1) {
-							stencilHigh[x] = py0z1;
-						}
-					}
-				}
-			} else {
-				for (x = px0z1; x <= px1z1; ++x) {
-					if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z1) {
-						stencilHigh[x] = py0z1;
+						graphicsPut(x, py0z0);
 					}
 				}
 			}
 		}
+
 	}
 
 	return 1;
@@ -946,12 +728,10 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 	/* 127 = 01111111 - the first bit is used for indicating the presence of an object.
 	 * And since there are only 127 patterns anyway...
 	 * */
-#ifndef TRACE_OBJECTS_OVER_FLOOR
 	if (_pattern & 128) {
 		drawObjectAt(x0 - 1, y + 2);
 		return 1;
 	}
-#endif
 
 	diff = patterns[0].ceiling - patterns[pattern].ceiling;
 	type = patterns[pattern].geometryType;
@@ -1046,8 +826,6 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 	return 0;
 }
 
-#ifdef TRACE_OBJECTS_OVER_FLOOR
-
 void repaintMapItems() {
 	struct ObjectNode *node;
 
@@ -1094,8 +872,6 @@ void repaintMapItems() {
 	}
 }
 
-#endif
-
 /* all those refactors are due to a SDCC bug with very long functions */
 void renderScene() {
 	uint8_t x;
@@ -1118,28 +894,7 @@ void renderScene() {
 			break;
 	}
 
-
-	int8_t *stencilPtr = &stencilHigh[0];
-
-	for (x = 0; x < XRES; ++x) {
-		int8_t stencilY = (*stencilPtr);
-#ifdef MSDOS
-
-		if (stencilY > 86) {
-			vLine(x, stencilY, 128, 3);
-		} else {
-			vLine(x, stencilY, 86, 7);
-			vLine(x, 86, 128, 3);
-		}
-#else
-		graphicsPut(x, stencilY);
-#endif
-		++stencilPtr;
-	}
-
-#ifdef TRACE_OBJECTS_OVER_FLOOR
 	repaintMapItems();
-#endif
 }
 
 void renderCameraWest() {
@@ -1322,7 +1077,7 @@ void renderCameraNorth() {
 	int8_t x;
 	uint8_t pattern;
 
-	for (y = cameraZ; y >= 0; --y) {
+	for (y = 0; y < cameraZ; ++y) {
 
 		int8_t const *mapY = &map[y][0];
 		int8_t minX = min(cameraX + ((cameraZ) - y), 31);
@@ -1549,10 +1304,9 @@ void initMap() {
 	HUD_initialPaint();
 }
 
-#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
 void startRoomTransitionAnimation() {
 
-	for ( uint8_t y = 32; y >= 2; --y ) {
+	for (uint8_t y = 32; y >= 2; --y) {
 		clearGraphics();
 		vLine(y, y, 95 + (32 - y), 1);
 		vLine(95 + (32 - y), y, 95 + (32 - y), 1);
@@ -1570,7 +1324,6 @@ void startRoomTransitionAnimation() {
 		sleepForMS(20000);
 	}
 }
-#endif
 
 void updateMapItems() {
 	struct ObjectNode *node;
@@ -1598,12 +1351,11 @@ void tickRenderer() {
 	renderScene();
 
 	graphicsFlush();
-	memset(stencilHigh, 0, XRES);
 
 	prevX = cameraX;
 	prevZ = cameraZ;
 
-waitkey:
+	waitkey:
 	switch (getKey()) {
 
 		case 'l':
@@ -1663,9 +1415,9 @@ waitkey:
 			break;
 
 #if !defined(SDLSW)
-		case 'p':
-		default:
-			goto waitkey;
+			case 'p':
+			default:
+				goto waitkey;
 #endif
 	}
 
@@ -1711,10 +1463,8 @@ waitkey:
 
 		if (newCell == '.') {
 			newCell = '0';
-#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
-			} else {
-				startRoomTransitionAnimation();
-#endif
+		} else {
+			startRoomTransitionAnimation();
 		}
 
 		setPlayerDirection(cameraRotation = (newCell - '0'));
@@ -1751,8 +1501,6 @@ int main(int argc, char **argv) {
 	setErrorHandlerCallback(onError);
 	setLoggerDelegate(logDelegate);
 	initMap();
-
-	memset(stencilHigh, 0, XRES);
 
 	do {
 		tickRenderer();
