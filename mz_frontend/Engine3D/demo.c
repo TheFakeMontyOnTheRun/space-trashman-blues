@@ -904,7 +904,7 @@ void renderCameraWest() {
 	int8_t y;
 	uint8_t pattern;
 
-	for (x = cameraX; x >= 0; --x) {
+	for (x = 0; x < cameraX; ++x) {
 
 		int8_t minX = min(cameraZ + ((cameraX) - x), 31);
 		lastIndex = cameraZ;
@@ -957,7 +957,7 @@ renderCameraSouth() {
 	int8_t x;
 	uint8_t pattern;
 
-	for (y = cameraZ; y < VISIBILITY_LIMIT; ++y) {
+	for (y = 31; y > cameraZ; --y) {
 
 		int8_t const *mapY = &map[y][0];
 		int8_t minX = min(cameraX + (y - cameraZ), 31);
@@ -1020,7 +1020,7 @@ void renderCameraEast() {
 	int8_t y;
 	uint8_t pattern;
 
-	for (x = cameraX; x < VISIBILITY_LIMIT; ++x) {
+	for (x = 31; x > cameraX; --x) {
 
 		int8_t minY = min(cameraZ + (x - cameraX), 31);
 		lastIndex = cameraZ;
