@@ -586,14 +586,6 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 	{
 		int16_t x, x0, x1;
 
-		if (drawContour) {
-			for (x = px0z0; x <= px1z0; ++x) {
-				if (IN_RANGE(0, XRESMINUSONE, x)) {
-					vLine(x, py0z0, py1z0, shouldStipple);
-				}
-			}
-		}
-
 		shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 6;
 
 		x0 = px0z0;
@@ -681,39 +673,24 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
 		final_stroke:
 
-		if (drawContour) {
-			if (elementMask & 2) {
-				if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0)) {
-					vLine(px0z0, py0z0, py1z0, 0);
-				}
-
-				if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0)) {
-					vLine(px1z0, py0z0, py1z0, 0);
-				}
-			}
-
-			if (elementMask & 1) {
-				if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z1) && px0z1 < px0z0) {
-					vLine(px0z1, py0z1, py1z1, 0);
-				}
-
-				if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z1) && px1z1 > px1z0) {
-					vLine(px1z1, py0z1, py1z1, 0);
-				}
-			}
-		}
-
-		
-		if (py0z0 <= py0z1) {
+		if (py0z0 <= py0z0) {
 			if (drawContour) {
-				for (x = px0z1; x <= px1z1; ++x) {
+				for (x = px0z0; x <= px1z0; ++x) {
 					if (IN_RANGE(0, XRESMINUSONE, x)) {
+						vLine(x, py0z0, py1z0, shouldStipple);
 						graphicsPut(x, py0z0);
 					}
 				}
 			}
 		}
 
+		if (IN_RANGE(0, XRESMINUSONE, px0z0)) {
+			vLine(px0z0, py0z0, py1z0, 0);
+		}
+
+		if (IN_RANGE(0, XRESMINUSONE, px1z0)) {
+			vLine(px1z0, py0z0, py1z0, 0);
+		}
 	}
 
 	return 1;
