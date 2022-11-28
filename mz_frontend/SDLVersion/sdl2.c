@@ -83,13 +83,29 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t shouldStipple) {
 		_y1 = 127;
 	}
 
+	uint8_t stipple;
+	uint8_t colour;
+
+	if (shouldStipple <= 7) {
+		colour = shouldStipple;
+		shouldStipple = 0;
+		stipple = 1;
+	} else {
+		colour = shouldStipple - 8;
+		shouldStipple = 1;
+		stipple = (x0 & 1);
+	}
+
     for ( y = _y0; y <= _y1; ++y) {
-        if ( !shouldStipple || (y & 1) ) {
-			framebuffer[(160 * y) + x0] = 2;
-        }
+		if (shouldStipple) {
+			stipple = !stipple;
+		}
+
+		if (stipple) {
+			framebuffer[(160 * y) + x0] = colour;
+		}
     }
 }
-
 
 void shutdownGraphics() {
     SDL_Quit();
@@ -240,7 +256,6 @@ uint8_t getKey() {
 }
 
 void sleepForMS() {
-
 }
 
 void init() {
@@ -248,35 +263,33 @@ void init() {
     mBufferedCommand = '.';
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
-    memset(framebuffer, 5, 160 * 200);
+    memset(framebuffer, 0, 160 * 200);
     window =
             SDL_CreateWindow("Derelict 8-bits SDL2 test", SDL_WINDOWPOS_CENTERED,
                              SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
 
     renderer = SDL_CreateRenderer(window, -1, 0);
 
-    palette[0] = 0xFF000099;
-    palette[1] = 0xFFFFFFBF;
-    palette[2] = 0xFFE0FFFF;
-    palette[3] = 0xFFFF0000;
-    palette[4] = 0xFFFFFFFF;
-    palette[5] = 0xFF000000;
-    palette[6] = 0xFF0000FF;
-    palette[7] = 0xFFFF00FF;
-    palette[8] = 0xFF00b7eb;
-    palette[9] = 0xFFFFFF00;
-    palette[10] = 0xFFAFEEEE;
-    palette[11] = 0xFFffc0cb;
-    palette[12] = 0xFF00FF00;
-    palette[13] = 0xFFAAFFAA;
-    palette[14] = 0xFF0000FF;
-    palette[15] = 0xFFAAAAFF;
+    palette[0] = 0xff000000;
+    palette[1] = 0xff0000ff;
+    palette[2] = 0xff00ff00;
+    palette[3] = 0xff00ffff;
+    palette[4] = 0xffff0000;
+    palette[5] = 0xffff00ff;
+    palette[6] = 0xffffff00;
+    palette[7] = 0xffffffff;
+    palette[8] = 0xff000000;
+    palette[9] = 0xff00007f;
+    palette[10] = 0xff007f00;
+    palette[11] = 0xff007f7f;
+    palette[12] = 0xff7f0000;
+    palette[13] = 0xff7f007f;
+    palette[14] = 0xff7f7f00;
+    palette[15] = 0xff7f7f7f;
 
 #ifdef __EMSCRIPTEN__
     enterFullScreenMode ();
 #endif
-
-
 }
 
 
@@ -309,9 +322,7 @@ void flipRenderer() {
     rect.w = 259;
     rect.h = 309;
 
-    SDL_SetRenderDrawColor(renderer, 0xFF,
-                           0xFF,
-                           0xFF, 255);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderFillRect(renderer, &rect);
 
     for (y = 0; y < 128; ++y) {
@@ -353,11 +364,9 @@ void graphicsFlush() {
 
 
 void HUD_initialPaint() {
-
 }
 
 void HUD_refresh() {
-
 }
 
 
