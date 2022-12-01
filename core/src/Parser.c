@@ -21,14 +21,13 @@ int parseCommand(const char *cmd, const char *operand) {
         dropObjectByName(operand);
     } else if (!strcmp(cmd, "move")) {
 
-        if (operand != NULL) {
+        if (operand != NULL && operand[0] != '\0') {
             moveBy(operand[0] - '0');
         } else {
-            defaultLogger("Please specify a valid direction");
+			errorHandlerCallback("Please specify a valid direction");
         }
     } else if (!strcmp(cmd, "use")) {
         useObjectNamed(operand);
-
     } else if (!strcmp(cmd, "w")) {
         walkBy(0);
     } else if (!strcmp(cmd, "s")) {

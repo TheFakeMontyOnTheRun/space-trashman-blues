@@ -311,8 +311,8 @@ void moveBy(uint8_t direction) {
 				break;
 		}
 #ifdef CLI_BUILD
-		} else {
-			defaultLogger("Please specify a valid direction");
+		} else if ( errorHandlerCallback) {
+			errorHandlerCallback("Please specify a valid direction");
 #endif
 	}
 }

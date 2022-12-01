@@ -74,6 +74,8 @@ enum EGameStates {
 	kBadGameOver
 };
 
+extern ErrorHandlerCallback errorHandlerCallback;
+
 void initCore(void);
 
 void setGameStatus(enum EGameStates newStatus);
