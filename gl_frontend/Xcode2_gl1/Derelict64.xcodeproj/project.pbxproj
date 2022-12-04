@@ -308,9 +308,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F1CA76B22610A8BF00FD1E04 /* Derelict */ = {
+		F1CA76B22610A8BF00FD1E04 /* Derelict64 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F1CA76B62610A8C100FD1E04 /* Build configuration list for PBXNativeTarget "Derelict" */;
+			buildConfigurationList = F1CA76B62610A8C100FD1E04 /* Build configuration list for PBXNativeTarget "Derelict64" */;
 			buildPhases = (
 				F1CA76AF2610A8BF00FD1E04 /* Resources */,
 				F1CA76B02610A8BF00FD1E04 /* Sources */,
@@ -320,7 +320,7 @@
 			);
 			dependencies = (
 			);
-			name = Derelict;
+			name = Derelict64;
 			productName = Derelict;
 			productReference = F1CA76B32610A8BF00FD1E04 /* Derelict.app */;
 			productType = "com.apple.product-type.application";
@@ -332,7 +332,7 @@
 			isa = PBXProject;
 			attributes = {
 			};
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Derelict3D" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Derelict64" */;
 			compatibilityVersion = "Xcode 2.4";
 			developmentRegion = en;
 			hasScannedForEncodings = 1;
@@ -345,7 +345,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F1CA76B22610A8BF00FD1E04 /* Derelict */,
+				F1CA76B22610A8BF00FD1E04 /* Derelict64 */,
 			);
 		};
 /* End PBXProject section */
@@ -510,7 +510,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Derelict3D" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Derelict64" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
@@ -519,7 +519,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		F1CA76B62610A8C100FD1E04 /* Build configuration list for PBXNativeTarget "Derelict" */ = {
+		F1CA76B62610A8C100FD1E04 /* Build configuration list for PBXNativeTarget "Derelict64" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1CA76B72610A8C100FD1E04 /* Debug */,
