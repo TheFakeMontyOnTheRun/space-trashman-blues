@@ -14,8 +14,8 @@ struct GameSnapshot {
 struct GameSnapshot dungeon_tick(const enum ECommand cmd);
 
 void dungeon_loadMap(
-		const uint8_t * __restrict__ mapData,
-		const char * __restrict__ collisions,
+		const uint8_t *  mapData,
+		const char *  collisions,
 		const int map);
 
 void addEffectSprite(const int x, const int y, const int billboard);
@@ -39,4 +39,7 @@ extern int enteredThru;
 
 extern int cursorPosition;
 
+extern uint8_t map[MAP_SIZE][MAP_SIZE];
+
+extern const char *focusItemName;
 #endif

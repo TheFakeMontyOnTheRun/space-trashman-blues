@@ -16,7 +16,7 @@
 #include "PackedFileReader.h"
 #include "MapWithCharKey.h"
 
-void loadPropertyList(const char *__restrict__ propertyFile, struct MapWithCharKey *__restrict__ map) {
+void loadPropertyList(const char * propertyFile, struct MapWithCharKey * map) {
 
     struct StaticBuffer buffer = loadBinaryFileFromPath(propertyFile);
     uint8_t *limit = buffer.data + buffer.size;

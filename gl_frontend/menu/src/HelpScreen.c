@@ -16,10 +16,10 @@
 #include "CActor.h"
 #include "Common.h"
 #include "PackedFileReader.h"
+#include "LoadBitmap.h"
 #include "CRenderer.h"
 #include "CTile3DProperties.h"
 #include "FixP.h"
-#include "LoadBitmap.h"
 #include "MapWithCharKey.h"
 #include "VisibilityStrategy.h"
 #include "UI.h"
@@ -35,8 +35,6 @@ extern char textBuffer[40 * 25];
 
 void HelpScreen_initStateCallback(int32_t tag) {
     struct StaticBuffer textFile = loadBinaryFileFromPath("Help.txt");
-    dirtyLineY0 = 0;
-    dirtyLineY1 = 200;
 
     cursorPosition = 0;
     currentPresentationState = kAppearing;

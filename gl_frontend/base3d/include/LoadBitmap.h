@@ -1,24 +1,28 @@
 #ifndef BITMAP_H
 #define BITMAP_H
 
+typedef uint32_t TexturePixelFormat;
+
+typedef uint32_t BitmapPixelFormat;
+
 struct Bitmap {
 	uint8_t *data;
 	uint16_t width;
 	uint16_t height;
+    int uploadId;
 };
 
-
-
 struct Texture {
-	uint8_t rotations[4][32 * 32];
-	uint8_t rowMajor[32 * 32];
+	TexturePixelFormat rotations[4][32 * 32];
+    TexturePixelFormat rowMajor[32 * 32];
+    int uploadId;
 };
 
 void clearTextures(void);
 
-struct Texture *makeTextureFrom(const char * __restrict__ filename);
+struct Texture *makeTextureFrom(const char *  filename);
 
-struct Bitmap *loadBitmap(const char * __restrict__ filename);
+struct Bitmap *loadBitmap(const char *  filename);
 
 void releaseBitmap(struct Bitmap *ptr);
 

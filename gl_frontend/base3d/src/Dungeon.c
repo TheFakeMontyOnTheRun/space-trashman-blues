@@ -14,8 +14,8 @@
 #include "FixP.h"
 #include "Vec.h"
 #include "Enums.h"
-#include "Dungeon.h"
 #include "Common.h"
+#include "Dungeon.h"
 #include "EDirection_Utils.h"
 #include "Core.h"
 #include "Engine.h"
@@ -27,14 +27,14 @@
 
 /* This include must be here just to satisfy the .h - your IDE might trick you into thinking this is not needed. And it's not, but ISO requires. */
 #include "CActor.h"
-
+#include "LoadBitmap.h"
 #include "CRenderer.h"
 
 struct GameSnapshot gameSnapshot;
 uint8_t map[MAP_SIZE][MAP_SIZE];
 uint8_t collisionMap[256];
 int enteredThru = 0;
-extern const char *focusItemName;
+const char *focusItemName;
 
 extern int currentSelectedItem;
 
@@ -398,8 +398,8 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
     return gameSnapshot;
 }
 
-void dungeon_loadMap(const uint8_t *__restrict__ mapData,
-                     const char *__restrict__ collisions,
+void dungeon_loadMap(const uint8_t * mapData,
+                     const char * collisions,
                      const int mapIndex) {
     int8_t x, y;
     const uint8_t *ptr = mapData;

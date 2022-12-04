@@ -16,10 +16,10 @@
 #include "CActor.h"
 #include "Common.h"
 #include "PackedFileReader.h"
+#include "LoadBitmap.h"
 #include "CRenderer.h"
 #include "CTile3DProperties.h"
 #include "FixP.h"
-#include "LoadBitmap.h"
 #include "MapWithCharKey.h"
 #include "VisibilityStrategy.h"
 #include "UI.h"
@@ -32,8 +32,6 @@ int16_t Battlecreen_optionsCount = 2;
 
 
 void BattleScreen_initStateCallback(int32_t tag) {
-    dirtyLineY0 = 0;
-    dirtyLineY1 = 200;
     cursorPosition = 1;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;

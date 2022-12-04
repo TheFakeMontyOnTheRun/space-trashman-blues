@@ -17,10 +17,10 @@
 #include "CActor.h"
 #include "Common.h"
 #include "PackedFileReader.h"
+#include "LoadBitmap.h"
 #include "CRenderer.h"
 #include "CTile3DProperties.h"
 #include "FixP.h"
-#include "LoadBitmap.h"
 #include "MapWithCharKey.h"
 #include "VisibilityStrategy.h"
 
@@ -55,9 +55,6 @@ void CreditsScreen_initStateCallback(int32_t tag) {
 }
 
 void CreditsScreen_initialPaintCallback(void) {
-    dirtyLineY0 = 0;
-    dirtyLineY1 = 200;
-
     if (currentBackgroundBitmap != NULL) {
         drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
     }

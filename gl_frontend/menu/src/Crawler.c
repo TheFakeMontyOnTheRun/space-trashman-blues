@@ -42,8 +42,6 @@ extern struct GameSnapshot gameSnapshot;
 
 void Crawler_initStateCallback(int32_t tag) {
     int c;
-    dirtyLineY0 = 0;
-    dirtyLineY1 = 200;
 
     if (tag == kPlayGame) {
         initStation();
@@ -373,8 +371,6 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     if (cmd == kCommandBack) {
         showPromptToAbandonMission = TRUE;
         timeUntilNextState = 0;
-        dirtyLineY0 = 0;
-        dirtyLineY1 = 200;
         return kMenuStateUnchanged;
     }
 
@@ -384,8 +380,6 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
 
     if (currentPresentationState == kWaitingForInput) {
         if (cmd == kCommandFire4) {
-            dirtyLineY0 = 0;
-            dirtyLineY1 = 200;
             needToRedrawHUD = TRUE;
         }
 

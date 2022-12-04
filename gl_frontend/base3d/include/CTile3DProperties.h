@@ -27,6 +27,6 @@ struct CTile3DProperties {
 	FixP_t mFloorHeight;
 };
 
-void loadPropertyList(const char * __restrict__ propertyFile, struct MapWithCharKey *map);
+void loadPropertyList(const char *  propertyFile, struct MapWithCharKey *map);
 
 #endif

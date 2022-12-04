@@ -62,12 +62,12 @@ struct Vec2i transform(const enum EDirection from, const struct Vec2i currentPos
 }
 
 void castVisibility(const enum EDirection from,
-                    enum EVisibility *__restrict__ visMap,
-                    const uint8_t *__restrict__ occluders,
+                    enum EVisibility * visMap,
+                    const uint8_t * occluders,
                     const struct Vec2i pos,
-                    struct Vec2i *__restrict__ distances,
+                    struct Vec2i * distances,
                     const int cleanPrevious,
-                    const struct MapWithCharKey *__restrict__ occluderTiles) {
+                    const struct MapWithCharKey * occluderTiles) {
 
     const struct Vec2i originalPos = transform(from, pos);
     struct Vec2i positions[MAP_SIZE + MAP_SIZE];
