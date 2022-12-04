@@ -72,7 +72,7 @@ void HackingScreen_initialPaintCallback(void) {
 }
 
 void HackingScreen_repaintCallback(void) {
-    uint8_t isSelected = 0;
+    uint8_t isSelected;
     int pin;
 
     drawWindow(1, 1, 40, 15, "Disassembly: CONTROLLER.PRG (stack)");

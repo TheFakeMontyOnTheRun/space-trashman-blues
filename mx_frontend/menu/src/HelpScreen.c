@@ -24,8 +24,6 @@
 #include "VisibilityStrategy.h"
 #include "UI.h"
 
-extern const char *mainText;
-
 const char *HelpScreen_options[1] = {"Back"};
 
 enum EGameMenuState HelpScreen_nextStateNavigation[1] = {
@@ -62,7 +60,7 @@ void HelpScreen_initialPaintCallback(void) {
 }
 
 void HelpScreen_repaintCallback(void) {
-    int c = 0;
+    int c;
     int lines;
     size_t len = strlen(HelpScreen_options[0]);
     int optionsHeight = 8 * (HelpScreen_optionsCount);

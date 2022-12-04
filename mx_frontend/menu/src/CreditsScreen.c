@@ -24,8 +24,6 @@
 #include "MapWithCharKey.h"
 #include "VisibilityStrategy.h"
 
-extern const char *mainText;
-
 const char *CreditsScreen_options[1] = {"Back"};
 
 int32_t CreditsScreen_nextStateNavigation[1] = {
@@ -67,7 +65,7 @@ void CreditsScreen_initialPaintCallback(void) {
 
 void CreditsScreen_repaintCallback(void) {
     int lines = countLines();
-    int c = 0;
+    int c;
     int optionsHeight = 8 * (CreditsScreen_optionsCount);
     size_t len = strlen(CreditsScreen_options[0]);
 

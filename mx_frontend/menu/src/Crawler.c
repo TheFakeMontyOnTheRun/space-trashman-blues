@@ -39,10 +39,9 @@ const char *AbandonMission_options[6] = {"Continue", "End game"};
 int AbandonMission_navigation[2] = {-1, kMainMenu};
 int AbandonMission_count = 2;
 extern struct GameSnapshot gameSnapshot;
-extern int cursorPosition;
 
 void Crawler_initStateCallback(int32_t tag) {
-    int c = 0;
+    int c;
     dirtyLineY0 = 0;
     dirtyLineY1 = 200;
 
@@ -107,7 +106,7 @@ void Crawler_repaintCallback() {
 
 
     if (showPromptToAbandonMission) {
-        int c = 0;
+        int c;
         int optionsHeight = 8 * (AbandonMission_count);
         turnStep = turnTarget;
         drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);

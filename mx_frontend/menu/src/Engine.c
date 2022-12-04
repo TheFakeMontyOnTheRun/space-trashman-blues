@@ -42,16 +42,11 @@ RepaintCallback repaintCallback = NULL;
 TickCallback tickCallback = NULL;
 UnloadStateCallback unloadStateCallback = NULL;
 
-
-extern enum EPresentationState currentPresentationState;
-extern const char *mainText;
-extern int32_t currentGameMenuState;
-
 int countLines() {
     size_t len = strlen(mainText);
     int lines = 2;    /* initial line + final line must be accounted for */
     int charsInLine = 0;
-    size_t c = 0;
+    size_t c;
     for (c = 0; c < len; ++c) {
         if (mainText[c] == '\n') {
             lines++;

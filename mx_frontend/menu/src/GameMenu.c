@@ -31,23 +31,19 @@
 #include "Core.h"
 #include "Derelict.h"
 
-#define TEXT_BUFFER_SIZE 40 * 25
+#define TEXT_BUFFER_SIZE (40 * 25)
 
 const char **GameMenu_options;
 enum EGameMenuState *GameMenu_nextStateNavigation;
 const char *GameMenu_StateTitle;
 struct Bitmap *featuredBitmap = NULL;
 
-void goTo(int location);
-
 extern int playerLocation;
-
 
 const char *inspectItem_options[1] = {"Back"};
 
 enum EGameMenuState InspectItem_nextStateNavigation[1] = {
         kBackToGame};
-
 
 enum EGameMenuState GameMenu_EndGame_nextStateNavigation[2] = {kInspectItem, kMainMenu};
 

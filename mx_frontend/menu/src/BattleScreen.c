@@ -48,7 +48,7 @@ void BattleScreen_initialPaintCallback(void) {
 
 void BattleScreen_repaintCallback(void) {
 
-    int c = 0;
+    int c;
     size_t len = 7;
     int optionsHeight = 8 * (Battlecreen_optionsCount);
 
