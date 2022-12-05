@@ -6,7 +6,7 @@ typedef uint32_t TexturePixelFormat;
 typedef uint32_t BitmapPixelFormat;
 
 struct Bitmap {
-	uint8_t *data;
+	BitmapPixelFormat *data;
 	uint16_t width;
 	uint16_t height;
     int uploadId;
