@@ -117,15 +117,16 @@ struct Texture *makeTextureFrom(const char *filename) {
         uint32_t texel = index;//palette[index];
         
         if (index == TRANSPARENCY_COLOR) {
-            expanded[4 * c + 3] = 0xFF;
-            expanded[4 * c + 2] = 0;
+            expanded[4 * c + 0] = 0xFF;
             expanded[4 * c + 1] = 0;
-            expanded[4 * c + 0] = 0;
+            expanded[4 * c + 2] = 0;
+            expanded[4 * c + 3] = 0;
         } else {
-            expanded[4 * c + 3] = (texel & 0xFF);
-            expanded[4 * c + 2] = (texel & 0x00FF00) >> 8;
-            expanded[4 * c + 1] = (texel & 0xFF0000) >> 16;
-            expanded[4 * c + 0] = 1;
+            expanded[4 * c + 0] = (texel & 0xFF);
+            expanded[4 * c + 1] = (texel & 0x00FF00) >> 8;
+            expanded[4 * c + 2] = (texel & 0xFF0000) >> 16;
+
+            expanded[4 * c + 3] = 1;
         }
     }
     
@@ -198,16 +199,16 @@ void drawBillboardAt(const struct Vec3 center,
 			 scaledCenter.mZ);
 	initVec3(&projectionVertices[1].first, scaledCenter.mX, scaledCenter.mY,
 			 scaledCenter.mZ);
-    addToVec3(&projectionVertices[0].first, minusOne, scale, zero);
-    addToVec3(&projectionVertices[1].first, one, minusScale, zero);
+	addToVec3(&projectionVertices[0].first, minusOne, scale, zero);
+	addToVec3(&projectionVertices[1].first, one, minusScale, zero);
 
     float centerX, centerY, centerZ;
     float textureScale = fixToInt(scale);
     float geometryScale = fixToInt(scale) * ratio;
     
-    centerX = fixToInt(center.mX + cameraOffset.mX);
-    centerY = fixToInt(center.mY + playerHeight + walkingBias + cameraOffset.mY) * (240.0f/200.0f);
-    centerZ = -fixToInt(center.mZ + cameraOffset.mZ);
+    centerX = fixToInt(center.mX + xCameraOffset);
+    centerY = fixToInt(center.mY + playerHeight + walkingBias + yCameraOffset) * (240.0f/200.0f);
+    centerZ = -fixToInt(center.mZ + zCameraOffset);
     
     glBindTexture(GL_TEXTURE_2D, bitmap->uploadId);
     
@@ -243,9 +244,9 @@ void drawColumnAt(const struct Vec3 center,
         textureScale = 1.0f;
     }
     
-    centerX = fixToInt(center.mX + cameraOffset.mX);
-    centerY = fixToInt(center.mY + playerHeight + walkingBias + cameraOffset.mY) * ratio;
-    centerZ = -fixToInt(center.mZ + cameraOffset.mZ);
+    centerX = fixToInt(center.mX + xCameraOffset);
+    centerY = fixToInt(center.mY + playerHeight + walkingBias + yCameraOffset) * ratio;
+    centerZ = -fixToInt(center.mZ + zCameraOffset);
     
     glBindTexture(GL_TEXTURE_2D, texture->uploadId);
     
@@ -308,9 +309,9 @@ void drawFloorAt(const struct Vec3 center,
 				 const struct Texture *texture, enum EDirection cameraDirection) {
     
     float centerX, centerY, centerZ;
-    centerX = fixToInt(center.mX + cameraOffset.mX);
-    centerY = fixToInt(center.mY + playerHeight + walkingBias + cameraOffset.mY) * ratio;
-    centerZ = -fixToInt(center.mZ + cameraOffset.mZ);
+    centerX = fixToInt(center.mX + xCameraOffset);
+    centerY = fixToInt(center.mY + playerHeight + walkingBias + yCameraOffset) * ratio;
+    centerZ = -fixToInt(center.mZ + zCameraOffset);
     
     if (center.mY <= 0) {
 
@@ -334,9 +335,9 @@ void drawCeilingAt(const struct Vec3 center,
 				   const struct Texture *texture, enum EDirection cameraDirection) {
 
     float centerX, centerY, centerZ;
-    centerX = fixToInt(center.mX+ cameraOffset.mX);
-    centerY = fixToInt(center.mY + playerHeight + walkingBias+ cameraOffset.mY) * ratio;
-    centerZ = -fixToInt(center.mZ+ cameraOffset.mZ);
+    centerX = fixToInt(center.mX+ xCameraOffset);
+    centerY = fixToInt(center.mY + playerHeight + walkingBias+ yCameraOffset) * ratio;
+    centerZ = -fixToInt(center.mZ+ zCameraOffset);
     
     if (center.mY >= 0) {
         
@@ -366,9 +367,9 @@ void drawLeftNear(const struct Vec3 center,
     float centerX, centerY, centerZ;
     float textureScale = fixToInt(scale);
     float geometryScale = fixToInt(scale) * ratio;
-    centerX = fixToInt(center.mX+ cameraOffset.mX);
-    centerY = fixToInt(center.mY + playerHeight + walkingBias+ cameraOffset.mY) * ratio;
-    centerZ = -fixToInt(center.mZ+ cameraOffset.mZ);
+    centerX = fixToInt(center.mX+ xCameraOffset);
+    centerY = fixToInt(center.mY + playerHeight + walkingBias+ yCameraOffset) * ratio;
+    centerZ = -fixToInt(center.mZ+ zCameraOffset);
     
     glBindTexture(GL_TEXTURE_2D, texture->uploadId);
     glBegin(GL_QUADS);
@@ -393,9 +394,9 @@ void drawRightNear(const struct Vec3 center,
 	float centerX, centerY, centerZ;
     float textureScale = fixToInt(scale);
     float geometryScale = fixToInt(scale) * ratio;
-    centerX = fixToInt(center.mX+ cameraOffset.mX);
-    centerY = fixToInt(center.mY + playerHeight + walkingBias+ cameraOffset.mY) * ratio;
-    centerZ = -fixToInt(center.mZ+ cameraOffset.mZ);
+    centerX = fixToInt(center.mX+ xCameraOffset);
+    centerY = fixToInt(center.mY + playerHeight + walkingBias+ yCameraOffset) * ratio;
+    centerZ = -fixToInt(center.mZ+ zCameraOffset);
     
     glBindTexture(GL_TEXTURE_2D, texture->uploadId);
     glBegin(GL_QUADS);

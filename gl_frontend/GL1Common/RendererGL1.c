@@ -113,68 +113,74 @@ void enter2D(void) {
      glDisable(GL_FOG);
 }
 
-
 void loadTileProperties(const uint8_t levelNumber) {
-    clearMap(&tileProperties);
-    clearMap(&occluders);
-    clearMap(&colliders);
-
-    gunTargetPosition.x = gunPosition.x;
-
-    char buffer[64];
-
-    sprintf(buffer, "props%d.bin", levelNumber);
-
+	char buffer[64];
     struct StaticBuffer data = loadBinaryFileFromPath(buffer);
+	int c;
 
-    loadPropertyList(&buffer[0], &tileProperties);
+	clearMap(&tileProperties);
+	clearMap(&occluders);
+	clearMap(&colliders);
+	clearMap(&enemySightBlockers);
 
-    for (int c = 0; c < 256; ++c) {
+	sprintf(buffer, "props%d.bin", levelNumber);
+
+	
+	loadPropertyList(&buffer[0], &tileProperties);
+
     
-        if (getFromMap(&tileProperties, c)) {
-            const struct CTile3DProperties prop = *((struct CTile3DProperties*)getFromMap(&tileProperties, c));
-            setInMap(&occluders, c, &occluders);
-        } else {
-            setInMap(&occluders, c, NULL);
-        }
-    }
+	for (c = 0; c < 256; ++c) {
+		struct CTile3DProperties *prop =
+				(struct CTile3DProperties *) getFromMap(&tileProperties, c);
 
-    free(data.data);
+		if (prop) {
+
+			if (prop->mBlockVisibility) {
+				setInMap(&occluders, c, &occluders);
+			}
+
+			setInMap(&enemySightBlockers, c,
+					 prop->mBlockEnemySight ? &enemySightBlockers : NULL);
+		} else {
+			setInMap(&occluders, c, NULL);
+			setInMap(&enemySightBlockers, c, NULL);
+		}
+	}
+
+	free(data.data);
 }
 
-
 void loadTexturesForLevel(const uint8_t levelNumber) {
-    char tilesFilename[64];
 
-    sprintf(tilesFilename, "tiles%d.lst", levelNumber);
-    int c;
-    struct StaticBuffer data = loadBinaryFileFromPath(tilesFilename);
-    size_t size = data.size;
-    char *head = (char *) data.data;
-    char *end = head + size;
-    char *nameStart = head;
-    char buffer[256];
+    struct StaticBuffer data;
+	char tilesFilename[64];
+	char *head;
+	char *end;
+	char *nameStart;
 
-    clearTextures();
-
-    while (head != end) {
-        char val = *head;
-        if (val == '\n' || val == 0) {
-            *head = 0;
-            makeTextureFrom(nameStart);
-            nameStart = head + 1;
-        }
-        ++head;
-    }
-
-    free(data.data);
-    backdrop = loadBitmap("backdrop.img");
+	sprintf(tilesFilename, "tiles%d.lst", levelNumber);
+	data = loadBinaryFileFromPath(tilesFilename);
     
-    //item 0 is a dummy
-    for (c = 1; c < itemsCount; ++c) {
-        sprintf(&buffer[0], "%s.img", getItem(c)->name);
-        itemSprites[c] = (makeTextureFrom(&buffer[0]));
-    }
+	head = (char *) data.data;
+	end = head + data.size;
+	nameStart = head;
+
+	texturesUsed = 0;
+	clearTextures();
+
+	while (head != end && (texturesUsed < TOTAL_TEXTURES)) {
+		char val = *head;
+		if (val == '\n' || val == 0) {
+			*head = 0;
+			nativeTextures[texturesUsed] = (makeTextureFrom(nameStart));
+			nameStart = head + 1;
+			texturesUsed++;
+		}
+		++head;
+	}
+
+	free(data.data);
+    backdrop = loadBitmap("backdrop.img");
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -188,83 +194,83 @@ void updateCursorForRenderer(const int x, const int z) {
 	}
 }
 
-void tickCamera() {
-    static FixP_t One = intToFix(1);
-    static FixP_t Two = intToFix(2);
-    FixP_t halfOne = Div(One, Two);
-    
-    if (abs(cameraOffset.mY) <= 1000) {
-        cameraOffset.mY = 0;
-    }
-
-    if (cameraOffset.mY > 0) {
-        cameraOffset.mY -= halfOne;
-    } else if (cameraOffset.mZ > 0) {
-        cameraOffset.mZ -= halfOne;
-    } else if (cameraOffset.mZ < 0) {
-        cameraOffset.mZ += halfOne;
-    } else if (cameraOffset.mX > 0) {
-        cameraOffset.mX -= halfOne;
-    } else if (cameraOffset.mX < 0) {
-        cameraOffset.mX += halfOne;
-    } else if (cameraOffset.mY < 0) {
-        cameraOffset.mY += halfOne;
-    }
-    needsToRedrawVisibleMeshes = TRUE;
-}
-
 void drawMap(const uint8_t *  elements,
-			 const uint8_t *  items,
-			 const uint8_t *  actors,
-			 uint8_t *  effects,
-			 const struct CActor *  current) {
+             const uint8_t *  items,
+             const uint8_t *  actors,
+             uint8_t *  effects,
+             const struct CActor *  current) {
 
-    const struct Vec2i mapCamera = current->position;
-    cameraDirection = current->rotation;
-    hasSnapshot = TRUE;
 
-    if (visibilityCached) {
-        return;
-    }
+	const struct Vec2i mapCamera = current->position;
+	cameraDirection = current->rotation;
+	hasSnapshot = TRUE;
 
-    visibilityCached = TRUE;
-    needsToRedrawVisibleMeshes = TRUE;
+	if (abs(yCameraOffset) <= 1000) {
+		yCameraOffset = 0;
+	}
 
-    cameraPosition = mapCamera;
+	if (yCameraOffset > 0) {
+		yCameraOffset -= Div(intToFix(1), intToFix(2));
+		needsToRedrawVisibleMeshes = TRUE;
+	} else if (zCameraOffset > 0) {
+		zCameraOffset -= Div(intToFix(1), intToFix(2));
+		needsToRedrawVisibleMeshes = TRUE;
+	} else if (zCameraOffset < 0) {
+		zCameraOffset += Div(intToFix(1), intToFix(2));
+		needsToRedrawVisibleMeshes = TRUE;
+	} else if (xCameraOffset > 0) {
+		xCameraOffset -= Div(intToFix(1), intToFix(2));
+		needsToRedrawVisibleMeshes = TRUE;
+	} else if (xCameraOffset < 0) {
+		xCameraOffset += Div(intToFix(1), intToFix(2));
+		needsToRedrawVisibleMeshes = TRUE;
+	} else if (yCameraOffset < 0) {
+		yCameraOffset += Div(intToFix(1), intToFix(2));
+		needsToRedrawVisibleMeshes = TRUE;
+	}
 
-    switch (cameraDirection) {
-        case kNorth:
-            mCamera.mX = intToFix(((MAP_SIZE - 1) * 2) - (2 * cameraPosition.x));
-            mCamera.mZ = intToFix((2 * cameraPosition.y) - ((MAP_SIZE * 2) - 1));
-            break;
 
-        case kSouth:
-            mCamera.mX = intToFix((2 * cameraPosition.x));
-            mCamera.mZ = intToFix(-2 * cameraPosition.y - 1);
-            break;
+	if (visibilityCached) {
+		return;
+	}
 
-        case kWest:
-            mCamera.mX = intToFix((2 * cameraPosition.y));
-            mCamera.mZ = intToFix((2 * cameraPosition.x) - 1);
-            break;
+	visibilityCached = TRUE;
+	needsToRedrawVisibleMeshes = TRUE;
 
-        case kEast:
-            mCamera.mX = intToFix(-(2 * cameraPosition.y));
-            mCamera.mZ = intToFix(((MAP_SIZE * 2) - 1) - (2 * cameraPosition.x));
-            break;
-    }
+	cameraPosition = mapCamera;
 
-    if ((cameraPosition.x + cameraPosition.y) & 1) {
-        walkingBias = WALKING_BIAS;
-    } else {
-        walkingBias = 0;
-    }
-    
+	switch (cameraDirection) {
+		case kNorth:
+			mCamera.mX = intToFix(((MAP_SIZE - 1) * 2) - (2 * cameraPosition.x));
+			mCamera.mZ = intToFix((2 * cameraPosition.y) - ((MAP_SIZE * 2) - 1));
+			break;
+
+		case kSouth:
+			mCamera.mX = intToFix((2 * cameraPosition.x));
+			mCamera.mZ = intToFix(-2 * cameraPosition.y - 1);
+			break;
+
+		case kWest:
+			mCamera.mX = intToFix((2 * cameraPosition.y));
+			mCamera.mZ = intToFix((2 * cameraPosition.x) - 1);
+			break;
+
+		case kEast:
+			mCamera.mX = intToFix(-(2 * cameraPosition.y));
+			mCamera.mZ = intToFix(((MAP_SIZE * 2) - 1) - (2 * cameraPosition.x));
+			break;
+	}
+
+	if ((cameraPosition.x + cameraPosition.y) & 1) {
+		walkingBias = WALKING_BIAS;
+	} else {
+		walkingBias = 0;
+	}
+
     castVisibility(cameraDirection, visMap, &elements[0], cameraPosition,
                    distances, TRUE, &occluders);
-    
 
-    ++gameTicks;
+	++gameTicks;
 }
 
 enum ECommand getInput() {
@@ -305,6 +311,7 @@ void render(const long ms) {
 		char buffer[64];
 		char directions[4] = {'N', 'E', 'S', 'W'};
 		struct Vec3 tmp;
+		struct CTile3DProperties *tileProp;
 		FixP_t heightDiff;
 		uint8_t lastElement = 0xFF;
         uint8_t itemsSnapshotElement = 0xFF;
@@ -329,13 +336,13 @@ void render(const long ms) {
 
 		element = map[cameraPosition.y][cameraPosition.x];
 
+		tileProp = ((struct CTile3DProperties *) getFromMap(&tileProperties,
+															element));
 
-        assert(getFromMap(&tileProperties, element));
-        
-        struct CTile3DProperties tileProp = * ((struct CTile3DProperties*)getFromMap(&tileProperties, element));
+		if (tileProp) {
+			tileHeight = tileProp->mFloorHeight;
+		}
 
-		tileHeight = tileProp.mFloorHeight;
-		
 		cameraHeight = -2 * tileHeight;
 
 		mCamera.mY = cameraHeight - standardHeight;
@@ -516,20 +523,22 @@ void render(const long ms) {
 						assert(FALSE);
 				}
 
-                assert(getFromMap(&tileProperties, element) != NULL);
+				if (lastElement != element) {
+					tileProp = (struct CTile3DProperties *) getFromMap(&tileProperties,
+																	   element);
+				}
 
-                if (lastElement != element) {
-                    tileProp = *((struct CTile3DProperties*)getFromMap(&tileProperties, element));
-                }
+				if (tileProp == NULL) {
+					continue;
+				}
 
-                FixP_t heightDiff = tileProp.mCeilingHeight - tileProp.mFloorHeight;
-                lastElement = element;
+				heightDiff = tileProp->mCeilingHeight - tileProp->mFloorHeight;
+				lastElement = element;
 
+				if (tileProp->mFloorRepeatedTextureIndex != 0xFF
+					&& tileProp->mFloorRepetitions > 0) {
 
-				if (tileProp.mFloorRepeatedTextureIndex != 0xFF
-					&& tileProp.mFloorRepetitions > 0) {
-
-					switch (tileProp.mGeometryType) {
+					switch (tileProp->mGeometryType) {
 						case kRightNearWall:
 
 							tmp.mX = position.mX;
@@ -537,13 +546,13 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp.mFloorHeight * 2)
-									   - intToFix(tileProp.mFloorRepetitions)),
+									  ((tileProp->mFloorHeight * 2)
+									   - intToFix(tileProp->mFloorRepetitions)),
 									  zero);
 
 							drawRightNear(
-									tmp, intToFix(tileProp.mFloorRepetitions),
-									nativeTextures[tileProp.mFloorRepeatedTextureIndex],
+									tmp, intToFix(tileProp->mFloorRepetitions),
+									nativeTextures[tileProp->mFloorRepeatedTextureIndex],
 									facesMask, TRUE);
 
 							break;
@@ -555,13 +564,13 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp.mFloorHeight * 2)
-									   - intToFix(tileProp.mFloorRepetitions)),
+									  ((tileProp->mFloorHeight * 2)
+									   - intToFix(tileProp->mFloorRepetitions)),
 									  zero);
 
 							drawLeftNear(
-									tmp, intToFix(tileProp.mFloorRepetitions),
-									nativeTextures[tileProp.mFloorRepeatedTextureIndex], facesMask, TRUE);
+									tmp, intToFix(tileProp->mFloorRepetitions),
+									nativeTextures[tileProp->mFloorRepeatedTextureIndex], facesMask, TRUE);
 							break;
 
 						case kCube:
@@ -572,22 +581,22 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp.mFloorHeight * 2)
-									   - intToFix(tileProp.mFloorRepetitions)),
+									  ((tileProp->mFloorHeight * 2)
+									   - intToFix(tileProp->mFloorRepetitions)),
 									  zero);
 
 							drawColumnAt(
-									tmp, intToFix(tileProp.mFloorRepetitions),
-									nativeTextures[tileProp.mFloorRepeatedTextureIndex],
+									tmp, intToFix(tileProp->mFloorRepetitions),
+									nativeTextures[tileProp->mFloorRepeatedTextureIndex],
 									facesMask, FALSE, TRUE);
 							break;
 					}
 				}
 
-				if (tileProp.mCeilingRepeatedTextureIndex != 0xFF
-					&& tileProp.mCeilingRepetitions > 0) {
+				if (tileProp->mCeilingRepeatedTextureIndex != 0xFF
+					&& tileProp->mCeilingRepetitions > 0) {
 
-					switch (tileProp.mGeometryType) {
+					switch (tileProp->mGeometryType) {
 						case kRightNearWall:
 
 							tmp.mX = position.mX;
@@ -595,13 +604,13 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp.mCeilingHeight * 2)
-									   + intToFix(tileProp.mCeilingRepetitions)),
+									  ((tileProp->mCeilingHeight * 2)
+									   + intToFix(tileProp->mCeilingRepetitions)),
 									  zero);
 
 							drawRightNear(
-									tmp, intToFix(tileProp.mCeilingRepetitions),
-									nativeTextures[tileProp.mCeilingRepeatedTextureIndex],
+									tmp, intToFix(tileProp->mCeilingRepetitions),
+									nativeTextures[tileProp->mCeilingRepeatedTextureIndex],
 									facesMask, TRUE);
 							break;
 
@@ -612,13 +621,13 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp.mCeilingHeight * 2)
-									   + intToFix(tileProp.mCeilingRepetitions)),
+									  ((tileProp->mCeilingHeight * 2)
+									   + intToFix(tileProp->mCeilingRepetitions)),
 									  zero);
 
 							drawLeftNear(
-									tmp, intToFix(tileProp.mCeilingRepetitions),
-									nativeTextures[tileProp.mCeilingRepeatedTextureIndex],
+									tmp, intToFix(tileProp->mCeilingRepetitions),
+									nativeTextures[tileProp->mCeilingRepeatedTextureIndex],
 									facesMask, TRUE);
 							break;
 
@@ -630,39 +639,39 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp.mCeilingHeight * 2)
-									   + intToFix(tileProp.mCeilingRepetitions)),
+									  ((tileProp->mCeilingHeight * 2)
+									   + intToFix(tileProp->mCeilingRepetitions)),
 									  zero);
 
 							drawColumnAt(
-									tmp, intToFix(tileProp.mCeilingRepetitions),
-									nativeTextures[tileProp.mCeilingRepeatedTextureIndex],
+									tmp, intToFix(tileProp->mCeilingRepetitions),
+									nativeTextures[tileProp->mCeilingRepeatedTextureIndex],
 									facesMask, FALSE, TRUE);
 							break;
 					}
 				}
 
-				if (tileProp.mFloorTextureIndex != 0xFF) {
+				if (tileProp->mFloorTextureIndex != 0xFF) {
 
 					tmp.mX = position.mX;
 					tmp.mY = position.mY;
 					tmp.mZ = position.mZ;
 
-					addToVec3(&tmp, 0, (tileProp.mFloorHeight * 2), 0);
+					addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2), 0);
 
 
-					drawFloorAt(tmp, nativeTextures[tileProp.mFloorTextureIndex], cameraDirection);
+					drawFloorAt(tmp, nativeTextures[tileProp->mFloorTextureIndex], cameraDirection);
 				}
 
-				if (tileProp.mCeilingTextureIndex != 0xFF) {
+				if (tileProp->mCeilingTextureIndex != 0xFF) {
 
-                    enum EDirection newDirection = cameraDirection;
+					uint8_t newDirection = cameraDirection;
 
 					tmp.mX = position.mX;
 					tmp.mY = position.mY;
 					tmp.mZ = position.mZ;
 
-					addToVec3(&tmp, 0, (tileProp.mCeilingHeight * 2), 0);
+					addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
 
 					if (cameraDirection == kNorth) {
 						newDirection = kSouth;
@@ -672,14 +681,14 @@ void render(const long ms) {
 					}
 
 					drawCeilingAt(
-							tmp, nativeTextures[tileProp.mCeilingTextureIndex], newDirection);
+							tmp, nativeTextures[tileProp->mCeilingTextureIndex], newDirection);
 				}
 
-				if (tileProp.mGeometryType != kNoGeometry
-					&& tileProp.mMainWallTextureIndex != 0xFF) {
+				if (tileProp->mGeometryType != kNoGeometry
+					&& tileProp->mMainWallTextureIndex != 0xFF) {
 
-					int integerPart = fixToInt(tileProp.mCeilingHeight)
-									  - fixToInt(tileProp.mFloorHeight);
+					int integerPart = fixToInt(tileProp->mCeilingHeight)
+									  - fixToInt(tileProp->mFloorHeight);
 
 					FixP_t adjust = 0;
 
@@ -687,7 +696,7 @@ void render(const long ms) {
 						adjust = Div(halfOne, four);
 					}
 
-					switch (tileProp.mGeometryType) {
+					switch (tileProp->mGeometryType) {
 						case kRightNearWall:
 
 							tmp.mX = position.mX;
@@ -695,13 +704,13 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp.mFloorHeight * 2) + heightDiff),
+									  ((tileProp->mFloorHeight * 2) + heightDiff),
 									  zero);
 
 							drawRightNear(
 									tmp, (heightDiff + Div(adjust, two)),
-									nativeTextures[tileProp.mMainWallTextureIndex],
-									facesMask, tileProp.mRepeatMainTexture);
+									nativeTextures[tileProp->mMainWallTextureIndex],
+									facesMask, tileProp->mRepeatMainTexture);
 							break;
 
 						case kLeftNearWall:
@@ -711,13 +720,13 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp.mFloorHeight * 2) + heightDiff),
+									  ((tileProp->mFloorHeight * 2) + heightDiff),
 									  zero);
 
 							drawLeftNear(
 									tmp, (heightDiff + Div(adjust, two)),
-									nativeTextures[tileProp.mMainWallTextureIndex],
-									facesMask, tileProp.mRepeatMainTexture);
+									nativeTextures[tileProp->mMainWallTextureIndex],
+									facesMask, tileProp->mRepeatMainTexture);
 							break;
 
 						case kCube:
@@ -727,13 +736,13 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp.mFloorHeight * 2) + heightDiff),
+									  ((tileProp->mFloorHeight * 2) + heightDiff),
 									  zero);
 
 							drawColumnAt(tmp, (heightDiff + Div(adjust, two)),
-										 nativeTextures[tileProp.mMainWallTextureIndex],
-										 facesMask, tileProp.mNeedsAlphaTest,
-										 tileProp.mRepeatMainTexture);
+										 nativeTextures[tileProp->mMainWallTextureIndex],
+										 facesMask, tileProp->mNeedsAlphaTest,
+										 tileProp->mRepeatMainTexture);
 						default:
 							break;
 					}
@@ -744,7 +753,7 @@ void render(const long ms) {
                     tmp.mY = position.mY;
                     tmp.mZ = position.mZ;
                     
-                    addToVec3(&tmp, 0, (tileProp.mFloorHeight * 2) + one, 0);
+                    addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
                     
                     drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
                 }
