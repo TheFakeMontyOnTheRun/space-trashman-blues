@@ -79,10 +79,10 @@ struct Texture *makeTextureFrom(const char *filename) {
         if (diskBuffer[c + 3] < 255) {
             pixel = TRANSPARENCY_COLOR;
         } else {
-            pixel += diskBuffer[c + 0] << 24;
-            pixel += diskBuffer[c + 1] << 16;
-            pixel += diskBuffer[c + 2] << 8;
-            pixel += diskBuffer[c + 3] << 0;
+            pixel += diskBuffer[c + 3] << 24;
+            pixel += diskBuffer[c + 2] << 16;
+            pixel += diskBuffer[c + 1] << 8;
+            pixel += diskBuffer[c + 0] << 0;
         }
 
         unsigned int repetitions = diskBuffer[c + 4];
@@ -117,16 +117,15 @@ struct Texture *makeTextureFrom(const char *filename) {
         uint32_t texel = index;//palette[index];
         
         if (index == TRANSPARENCY_COLOR) {
-            expanded[4 * c + 0] = 0xFF;
-            expanded[4 * c + 1] = 0;
+            expanded[4 * c + 3] = 0xFF;
             expanded[4 * c + 2] = 0;
-            expanded[4 * c + 3] = 0;
+            expanded[4 * c + 1] = 0;
+            expanded[4 * c + 0] = 0;
         } else {
-            expanded[4 * c + 0] = (texel & 0xFF);
-            expanded[4 * c + 1] = (texel & 0x00FF00) >> 8;
-            expanded[4 * c + 2] = (texel & 0xFF0000) >> 16;
-
-            expanded[4 * c + 3] = 1;
+            expanded[4 * c + 3] = (texel & 0xFF);
+            expanded[4 * c + 2] = (texel & 0x00FF00) >> 8;
+            expanded[4 * c + 1] = (texel & 0xFF0000) >> 16;
+            expanded[4 * c + 0] = 1;
         }
     }
     
@@ -145,7 +144,7 @@ struct Texture *makeTextureFrom(const char *filename) {
 }
 
 void drawBillboardAt(const struct Vec3 center,
-					 struct Bitmap *bitmap,
+					 struct Texture *bitmap,
 					 const FixP_t scale,
 					 const int size) {
 	FixP_t one = intToFix(1);
@@ -160,10 +159,10 @@ void drawBillboardAt(const struct Vec3 center,
     
     if (bitmap->uploadId == -1 ) {
         uint32_t newId;
-        uint8_t* expanded = (uint8_t*)malloc(bitmap->width * bitmap->height * sizeof(TexturePixelFormat));
+        uint8_t* expanded = (uint8_t*)malloc(NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE * sizeof(TexturePixelFormat));
 
-        for (int c = 0; c < bitmap->width * bitmap->height; ++c ) {
-            uint32_t index = bitmap->data[c];
+        for (int c = 0; c < NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE; ++c ) {
+            uint32_t index = bitmap->rotations[0][c];
                       
             uint32_t texel = index;//palette[index];
             
@@ -183,7 +182,7 @@ void drawBillboardAt(const struct Vec3 center,
         
         glGenTextures(1, (GLuint*)&newId);
         glBindTexture(GL_TEXTURE_2D, newId);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bitmap->width, bitmap->height, 0, GL_RGBA,   GL_UNSIGNED_BYTE, &expanded[0]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, NATIVE_TEXTURE_SIZE, NATIVE_TEXTURE_SIZE, 0, GL_RGBA,   GL_UNSIGNED_BYTE, &expanded[0]);
         
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);

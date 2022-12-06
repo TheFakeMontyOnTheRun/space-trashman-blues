@@ -86,22 +86,17 @@ void Crawler_initStateCallback(int32_t tag) {
 }
 
 void Crawler_initialPaintCallback() {
-    fill(0, 0, 320, 200, 0, FALSE);
-
-    fill(11 * 8 - 1, 12 * 8, 18 * 8 + 3, 8, 255, FALSE);
-    drawRect(11 * 8 - 1, 11 * 8 - 1, 18 * 8 + 2, 8 + 2, 255);
-
-    drawTextAt(13, 13, "Loading", 0);
-    drawTextAt(13, 12, "Please wait...", 255);
-
-    needToRedrawHUD = TRUE;
-    needsToRedrawVisibleMeshes = TRUE;
-    flipRenderer();
 }
 
 void Crawler_repaintCallback() {
+    
+    visibilityCached = FALSE;
+    needsToRedrawVisibleMeshes = TRUE;
 
-
+    
+    fill(0, 0, 320, 200, getPaletteEntry(0xFF000000), FALSE);
+    fill(11 * 8 - 1, 12 * 8, 18 * 8 + 3, 8, getPaletteEntry(0xFFFFFFFF), FALSE);
+    drawRect(11 * 8 - 1, 11 * 8 - 1, 18 * 8 + 2, 8 + 2, getPaletteEntry(0xFFFFFFFF));
 
     if (showPromptToAbandonMission) {
         int c;
@@ -109,26 +104,26 @@ void Crawler_repaintCallback() {
         turnStep = turnTarget;
         drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
 
-        fill(0, 0, 320, 200, 0, TRUE);
+        fill(0, 0, 320, 200, getPaletteEntry(0xFF000000), TRUE);
 
         fill(320 - (biggestOption * 8) - 8 - 16, 200 - optionsHeight - 8 - 16,
-             (biggestOption * 8) + 16, optionsHeight + 16, 0, TRUE);
+             (biggestOption * 8) + 16, optionsHeight + 16, getPaletteEntry(0xFF000000), TRUE);
 
         fill(320 - (biggestOption * 8) - 16 - 16, 200 - optionsHeight - 16 - 16,
-             (biggestOption * 8) + 16, optionsHeight + 16, 255, FALSE);
+             (biggestOption * 8) + 16, optionsHeight + 16, getPaletteEntry(0xFFFFFFFF), FALSE);
 
         drawRect(320 - (biggestOption * 8) - 16 - 16,
                  200 - optionsHeight - 16 - 16, (biggestOption * 8) + 16,
-                 optionsHeight + 16, 0);
+                 optionsHeight + 16, getPaletteEntry(0xFF000000));
 
         if (AbandonMission_Title != NULL) {
 
             fill((40 - biggestOption - 2 - 2) * 8,
                  ((26 - AbandonMission_count) - 2 - 1 - 2) * 8,
-                 (biggestOption + 2) * 8, 8, 0, FALSE);
+                 (biggestOption + 2) * 8, 8, getPaletteEntry(0xFF000000), FALSE);
 
             drawTextAt(40 - biggestOption - 2, (26 - AbandonMission_count) - 4,
-                       AbandonMission_Title, 255);
+                       AbandonMission_Title, getPaletteEntry(0xFFFFFFFF));
         }
 
         for (c = 0; c < AbandonMission_count; ++c) {
@@ -142,13 +137,13 @@ void Crawler_repaintCallback() {
             if (isCursor) {
                 fill(320 - (biggestOption * 8) - 16 - 8 - 8,
                      (200 - optionsHeight) + (c * 8) - 8 - 8,
-                     (biggestOption * 8) + 16, 8, 0, FALSE);
+                     (biggestOption * 8) + 16, 8, getPaletteEntry(0xFF000000), FALSE);
             }
 
             drawTextAt(
                     40 - biggestOption - 2, (26 - AbandonMission_count) + c - 2,
                     &AbandonMission_options[c][0],
-                    isCursor ? 200 : 0);
+                    isCursor ? getPaletteEntry(0xFFAAAAAA) : getPaletteEntry(0xFF000000));
         }
     } else {
 
@@ -165,7 +160,7 @@ void Crawler_repaintCallback() {
 
             xCameraOffset = yCameraOffset = 0;
 
-            fill(0, 0, XRES + 1, 200, 0, 0);
+            fill(0, 0, XRES + 1, 200, getPaletteEntry(0xFF000000), FALSE);
 
 
 
@@ -185,10 +180,10 @@ void Crawler_repaintCallback() {
             center.mX = -intToFix(1);
 
             center.mY = intToFix(4) - zCameraOffset;
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
 
             center.mX = intToFix(1);
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
 
             center.mY = intToFix(2) - zCameraOffset;
 
@@ -200,19 +195,19 @@ void Crawler_repaintCallback() {
             center.mY = intToFix(3) - zCameraOffset;
 
             center.mX = -intToFix(1);
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
 
             center.mX = intToFix(1);
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
 
 
             center.mY = intToFix(6) - zCameraOffset;
 
             center.mX = -intToFix(1);
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
 
             center.mX = intToFix(1);
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
 
 
 
@@ -223,7 +218,7 @@ void Crawler_repaintCallback() {
             center.mZ = intToFix(3);
             drawCeilingAt( center, nativeTextures[0], 0);
 
-            drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, 255);
+            drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, getPaletteEntry(0xFFFFFFFF));
 
             zCameraOffset -= Div(intToFix(1), intToFix(16));
             if (zCameraOffset == 0 ) {

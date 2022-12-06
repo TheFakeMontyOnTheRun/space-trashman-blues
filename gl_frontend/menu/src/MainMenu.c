@@ -78,16 +78,18 @@ void MainMenu_initStateCallback(int32_t tag) {
 void MainMenu_initialPaintCallback() {
 
     //drawRepeatBitmap(0, 32, 320, 200, currentBackgroundBitmap);
-    fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), 0);
+ 
 }
 
 void MainMenu_repaintCallback(void) {
     int16_t c;
 
     uint8_t optionsHeight = 8 * kMainMenuOptionsCount;
+    
+    fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), 0);
 
     if (currentPresentationState == kAppearing) {
-        int invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;
+        long invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;
         int movementX =
                 lerpInt(0, (biggestOption * 8), invertedProgression, 256);
         int movementY = lerpInt(0, optionsHeight, invertedProgression, 256);
@@ -125,12 +127,12 @@ void MainMenu_repaintCallback(void) {
         if (isCursor) {
             fill((uint16_t) (320 - (biggestOption * 8)) - 8 - 24,
                  (200 - optionsHeight) + (c * 8) - 24,
-                 (biggestOption * 8) + 16, 8, 0, FALSE);
+                 (biggestOption * 8) + 16, 8, getPaletteEntry(0xFF000000), FALSE);
         }
 
         drawTextAt(40 - biggestOption + 1 - 3,
                    (26 - kMainMenuOptionsCount) + c - 3,
-                   &MainMenu_options[c][0], isCursor ? 200 : 0);
+                   &MainMenu_options[c][0], isCursor ? getPaletteEntry(0xFFFFFFFF) : getPaletteEntry(0xFF000000));
     }
 
 }

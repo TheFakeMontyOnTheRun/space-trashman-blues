@@ -191,7 +191,6 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
             expanded[4 * c + 0] = (texel & 0xFF);
             expanded[4 * c + 1] = (texel & 0x00FF00) >> 8;
             expanded[4 * c + 2] = (texel & 0xFF0000) >> 16;
-
             expanded[4 * c + 3] = 1;
         }
     }
@@ -258,10 +257,10 @@ struct Bitmap *loadBitmap(const char *filename) {
         if (buffer[c + 3] < 255) {
             pixel = TRANSPARENCY_COLOR;
         } else {
-            pixel += buffer[c + 0] << 24;
-            pixel += buffer[c + 1] << 16;
-            pixel += buffer[c + 2] << 8;
-            pixel += buffer[c + 3] << 0;
+            pixel += buffer[c + 3] << 24;
+            pixel += buffer[c + 2] << 16;
+            pixel += buffer[c + 1] << 8;
+            pixel += buffer[c + 0] << 0;
         }
         repetitions = buffer[c + 4];
 

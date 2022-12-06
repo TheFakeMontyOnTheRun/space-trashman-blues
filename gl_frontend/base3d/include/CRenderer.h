@@ -173,7 +173,7 @@ void drawColumnAt(const struct Vec3 center,
 				  const uint8_t repeatedTexture);
 
 void drawBillboardAt(const struct Vec3 center,
-					 struct Bitmap *bitmap,
+					 struct Texture *bitmap,
 					 const FixP_t scale,
 					 const int size);
 

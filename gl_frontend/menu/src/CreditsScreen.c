@@ -55,9 +55,6 @@ void CreditsScreen_initStateCallback(int32_t tag) {
 }
 
 void CreditsScreen_initialPaintCallback(void) {
-    if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
-    }
 }
 
 void CreditsScreen_repaintCallback(void) {
@@ -65,6 +62,11 @@ void CreditsScreen_repaintCallback(void) {
     int c;
     int optionsHeight = 8 * (CreditsScreen_optionsCount);
     size_t len = strlen(CreditsScreen_options[0]);
+    
+    if (currentBackgroundBitmap != NULL) {
+        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
+    }
+
 
     if (currentPresentationState == kAppearing) {
 
@@ -82,69 +84,69 @@ void CreditsScreen_repaintCallback(void) {
         }
 
         drawRect(160 - lerp320 / 2, (((lines + 3) * 8) / 2) - lerpLines / 2,
-                 lerp320, lerpLines, 0);
+                 lerp320, lerpLines, getPaletteEntry(0xFF000000));
 
         drawRect(8 + lerping32, 128 + lerping32, lerpoSixtyFooooooouuuuuuur,
-                 lerpoSixtyFooooooouuuuuuur, 0);
+                 lerpoSixtyFooooooouuuuuuur, getPaletteEntry(0xFF000000));
 
         drawRect(80 + lerping32, 128 + lerping32, lerpoSixtyFooooooouuuuuuur,
-                 lerpoSixtyFooooooouuuuuuur, 0);
+                 lerpoSixtyFooooooouuuuuuur, getPaletteEntry(0xFF000000));
 
         drawRect(152 + lerping32, 128 + lerping32, lerpoSixtyFooooooouuuuuuur,
-                 lerpoSixtyFooooooouuuuuuur, 0);
+                 lerpoSixtyFooooooouuuuuuur, getPaletteEntry(0xFF000000));
 
         drawRect(320 - 16 - (len * 8) - 16 + (len * 8 / 2) - lerpLen / 2,
                  200 - optionsHeight - 16 - 16 + optionsHeight / 2
                  - lerpOptionsHeight / 2,
-                 lerpLen + 16, lerpOptionsHeight + 16, 0);
+                 lerpLen + 16, lerpOptionsHeight + 16, getPaletteEntry(0xFF000000));
 
         return;
     }
 
-    fill(0, (lines + 3) * 8, 320, 8, 0, TRUE);
-    fill(8 + 8, 128 + 8, 64, 64, 0, TRUE);
-    fill(80 + 8, 128 + 8, 64, 64, 0, TRUE);
-    fill(152 + 8, 128 + 8, 64, 64, 0, TRUE);
+    fill(0, (lines + 3) * 8, 320, 8, getPaletteEntry(0xFF000000), TRUE);
+    fill(8 + 8, 128 + 8, 64, 64, getPaletteEntry(0xFF000000), TRUE);
+    fill(80 + 8, 128 + 8, 64, 64, getPaletteEntry(0xFF000000), TRUE);
+    fill(152 + 8, 128 + 8, 64, 64, getPaletteEntry(0xFF000000), TRUE);
 
     if (mainText != NULL) {
 
-        fill(0, 0, 320, (lines + 3) * 8, 255, FALSE);
+        fill(0, 0, 320, (lines + 3) * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
 
-        drawRect(0, 0, 320, (lines + 3) * 8, 0);
-        fill(0, 0, 320, 8, 0, FALSE);
-        drawTextAt(2, 1, "Credits", 255);
-        drawTextAt(1, 3, mainText, 0);
+        drawRect(0, 0, 320, (lines + 3) * 8, getPaletteEntry(0xFF000000));
+        fill(0, 0, 320, 8, getPaletteEntry(0xFF000000), FALSE);
+        drawTextAt(2, 1, "Credits", getPaletteEntry(0xFFFFFFFF));
+        drawTextAt(1, 3, mainText, getPaletteEntry(0xFF000000));
     }
 
-    fill(8, 128, 64, 64, 255, FALSE);
+    fill(8, 128, 64, 64, getPaletteEntry(0xFFFFFFFF), FALSE);
     drawBitmap(8, 128, monty, TRUE);
-    drawRect(8, 128, 64, 64, 0);
+    drawRect(8, 128, 64, 64, getPaletteEntry(0xFF000000));
 
-    fill(8, 128, 64, 8, 0, FALSE);
-    drawTextAt(3, 17, "Monty", 255);
+    fill(8, 128, 64, 8, getPaletteEntry(0xFF000000), FALSE);
+    drawTextAt(3, 17, "Monty", getPaletteEntry(0xFFFFFFFF));
 
-    fill(80, 128, 64, 64, 255, FALSE);
-    drawRect(80, 128, 64, 64, 0);
+    fill(80, 128, 64, 64, getPaletteEntry(0xFFFFFFFF), FALSE);
+    drawRect(80, 128, 64, 64, getPaletteEntry(0xFF000000));
 
-    fill(80, 128, 64, 8, 0, FALSE);
+    fill(80, 128, 64, 8, getPaletteEntry(0xFF000000), FALSE);
 
-    fill(152, 128, 64, 64, 255, FALSE);
-    drawRect(152, 128, 64, 64, 0);
+    fill(152, 128, 64, 64, getPaletteEntry(0xFFFFFFFF), FALSE);
+    drawRect(152, 128, 64, 64, getPaletteEntry(0xFF000000));
 
-    fill(152, 128, 64, 8, 0, FALSE);
+    fill(152, 128, 64, 8, getPaletteEntry(0xFF000000), FALSE);
 
     fill(320 - (len * 8) - 8 - 16, 200 - optionsHeight - 8 - 16,
-         (len * 8) + 16, optionsHeight + 16, 0, TRUE);
+         (len * 8) + 16, optionsHeight + 16, getPaletteEntry(0xFF000000), TRUE);
 
     fill(320 - (len * 8) - 16 - 16, 200 - optionsHeight - 16 - 16,
-         (len * 8) + 16, optionsHeight + 16, 255, FALSE);
+         (len * 8) + 16, optionsHeight + 16, getPaletteEntry(0xFFFFFFFF), FALSE);
 
     drawRect(320 - (len * 8) - 16 - 16, 200 - optionsHeight - 16 - 16,
-             (len * 8) + 16, optionsHeight + 16, 0);
+             (len * 8) + 16, optionsHeight + 16, getPaletteEntry(0xFF000000));
 
     fill((40 - len - 2 - 2) * 8,
          ((26 - CreditsScreen_optionsCount) - 2 - 1 - 2) * 8,
-         (len + 2) * 8, 8, 0, FALSE);
+         (len + 2) * 8, 8, getPaletteEntry(0xFF000000), FALSE);
 
     for (c = 0; c < CreditsScreen_optionsCount; ++c) {
 
@@ -157,11 +159,11 @@ void CreditsScreen_repaintCallback(void) {
         if (isCursor) {
             fill(320 - (len * 8) - 16 - 8 - 8,
                  (200 - optionsHeight) + (c * 8) - 8 - 8, (len * 8) + 16, 8,
-                 0, FALSE);
+                 getPaletteEntry(0xFF000000), FALSE);
         }
 
         drawTextAt(40 - len - 2, (26 - CreditsScreen_optionsCount) + c - 2,
-                   &CreditsScreen_options[c][0], isCursor ? 255 : 0);
+                   &CreditsScreen_options[c][0], isCursor ? getPaletteEntry(0xFFFFFFFF) : getPaletteEntry(0xFF000000));
     }
 }
 

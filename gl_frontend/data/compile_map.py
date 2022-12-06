@@ -10,18 +10,18 @@ textureIndices = {
 tilesProperties = {}
 
 geometryIndex = {
-	"null" : 0,
-	"cube": 1,
-	"leftnear": 2,
-	"leftfar": 3,
-	"floor": 4,
-	"rampnorth": 5,
-	"rampeast": 6,
-	"rampsouth": 7,
-	"rampwest": 8,
-	"wallnorth": 9,
-	"wallwest": 10,
-	"wallcorner": 11,
+    "null" : 0,
+    "cube": 1,
+    "leftnear": 2,
+    "leftfar": 3,
+    "floor": 4,
+    "rampnorth": 5,
+    "rampeast": 6,
+    "rampsouth": 7,
+    "rampwest": 8,
+    "wallnorth": 9,
+    "wallwest": 10,
+    "wallcorner": 11,
 }
 
 class Properties:
@@ -197,7 +197,7 @@ def compileMap( sourcePath, textureListPath, mapPath, outputPath):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        for i in range(0, 10):
+        for i in range(0, 24):
             iAsString = str(i)
             compileMap("src/tiles" + iAsString + ".prp", "assets/tiles" +
                        iAsString + ".lst", "assets/map" + iAsString + ".txt",

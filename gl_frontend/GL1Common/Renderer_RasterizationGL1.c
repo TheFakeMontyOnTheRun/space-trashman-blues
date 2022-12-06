@@ -354,6 +354,7 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 		dstX += 8;
 	}
     
+    glColor3f(1.0f, 1.0f, 1.0f);
     glEnd();
     glDisable(GL_ALPHA_TEST);
 

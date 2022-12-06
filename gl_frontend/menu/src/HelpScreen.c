@@ -51,10 +51,6 @@ void HelpScreen_initStateCallback(int32_t tag) {
 }
 
 void HelpScreen_initialPaintCallback(void) {
-
-    if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
-    }
 }
 
 void HelpScreen_repaintCallback(void) {
@@ -64,6 +60,10 @@ void HelpScreen_repaintCallback(void) {
     int optionsHeight = 8 * (HelpScreen_optionsCount);
 
     lines = countLines();
+    
+    if (currentBackgroundBitmap != NULL) {
+        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
+    }
 
     if (currentPresentationState == kAppearing) {
 
@@ -106,11 +106,11 @@ void HelpScreen_repaintCallback(void) {
         if (isCursor) {
             fill(320 - (len * 8) - 16 - 8 - 8,
                  (200 - optionsHeight) + (c * 8) - 8 - 8, (len * 8) + 16, 8,
-                 0, FALSE);
+                 getPaletteEntry(0xFF000000), FALSE);
         }
 
         drawTextAt(40 - len - 2, (26 - HelpScreen_optionsCount) + c - 2,
-                   &HelpScreen_options[c][0], isCursor ? 255 : 0);
+                   &HelpScreen_options[c][0], isCursor ? getPaletteEntry(0xFFFFFFFF) : getPaletteEntry(0xFF000000));
     }
 }
 

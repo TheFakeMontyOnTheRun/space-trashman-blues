@@ -190,16 +190,15 @@ void GameMenu_initStateCallback(int32_t tag) {
 
 void GameMenu_initialPaintCallback(void) {
 
-    if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
-    }
-
-    featuredBitmap = NULL;
 }
 
 void GameMenu_repaintCallback(void) {
     int c;
     int16_t optionsHeight = 8 * (GameMenu_optionsCount);
+
+    if (currentBackgroundBitmap != NULL) {
+        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
+    }
 
     if (currentPresentationState == kAppearing) {
         int invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;

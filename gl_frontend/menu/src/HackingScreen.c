@@ -63,15 +63,15 @@ void HackingScreen_initStateCallback(int32_t tag) {
 }
 
 void HackingScreen_initialPaintCallback(void) {
-
-    if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
-    }
 }
 
 void HackingScreen_repaintCallback(void) {
     uint8_t isSelected;
     int pin;
+    
+    if (currentBackgroundBitmap != NULL) {
+        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
+    }
 
     drawWindow(1, 1, 40, 15, "Disassembly: CONTROLLER.PRG (stack)");
     

@@ -321,10 +321,11 @@ void render(const long ms) {
 		highlightDisplayTime -= ms;
 		needsToRedrawVisibleMeshes = FALSE;
 
-		for (c = 0; c < (XRES / 32); ++c) {
-			drawBitmap(c * 32, 0, backdrop, FALSE);
+		for (c = 0; c <= (XRES / 20); ++c) {
+			drawBitmap(c * 20, 0, backdrop, FALSE);
 		}
-		fill(0, YRES / 2, XRES, YRES / 2, 0, FALSE);
+        
+		fill(0, YRES / 2, XRES, YRES / 2, getPaletteEntry(0xFF000000), FALSE);
 
 		element = map[cameraPosition.y][cameraPosition.x];
 
@@ -745,7 +746,7 @@ void render(const long ms) {
                     
                     addToVec3(&tmp, 0, (tileProp.mFloorHeight * 2) + one, 0);
                     
-                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement]->rotations[0], one, 32);
+                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
                 }
 
 			}
@@ -773,13 +774,13 @@ void render(const long ms) {
 			needsToRedrawVisibleMeshes = TRUE;
 		}
 
-		fill(0, 0, XRES_FRAMEBUFFER, 8, 0, FALSE);
-		drawTextAt(2, 1, "Agent in the field", 255);
+		fill(0, 0, XRES_FRAMEBUFFER, 8, getPaletteEntry(0xFF000000), FALSE);
+		drawTextAt(2, 1, "Agent in the field", getPaletteEntry(0xFFFFFFFF));
 
 
-		drawTextAt(34, 1, "Map", 255);
+		drawTextAt(34, 1, "Map", getPaletteEntry(0xFFFFFFFF));
 
-		fill(XRES, 8, XRES_FRAMEBUFFER - XRES, YRES_FRAMEBUFFER - 8, 255, FALSE);
+		fill(XRES, 8, XRES_FRAMEBUFFER - XRES, YRES_FRAMEBUFFER - 8, getPaletteEntry(0xFFFFFFFF), FALSE);
 
 
 		for (y = 0; y < MAP_SIZE; ++y) {
@@ -791,57 +792,57 @@ void render(const long ms) {
 					continue;
 				}
 
-				fill(256 + (x), 16 + (2 * y), 1, 2, 64, FALSE);
+				fill(256 + (x), 16 + (2 * y), 1, 2, getPaletteEntry(0xFF444444), FALSE);
 
 				if (getFromMap(&colliders, tile)) {
-					fill(256 + (x), 16 + (2 * y), 1, 2, 0, FALSE);
+					fill(256 + (x), 16 + (2 * y), 1, 2, getPaletteEntry(0xFF000000), FALSE);
 				}
 
 				if (linesOfSight[y][x]) {
-					fill(256 + (x), 16 + (2 * y), 1, 2, 128, FALSE);
+					fill(256 + (x), 16 + (2 * y), 1, 2, getPaletteEntry(0xFFFFFFFF), FALSE);
 				}
 
 				if (cursorZ == y && x == cursorX) {
-					fill(256 + (x), 16 + (2 * y), 1, 2, 255, FALSE);
+					fill(256 + (x), 16 + (2 * y), 1, 2, getPaletteEntry(0xFFFFFFFF), FALSE);
 				}
 
 				if (tile == 'K' || tile == 'E' || tile == 'i') {
-					fill(256 + (x), 16 + (2 * y), 1, 2, 128, FALSE);
+					fill(256 + (x), 16 + (2 * y), 1, 2, getPaletteEntry(0xFF999999), FALSE);
 				}
 
 				linesOfSight[y][x] = FALSE;
 			}
 		}
 
-		drawRect(256, 16, 63, 128, 0);
+        drawRect(256, 16, 63, 128, getPaletteEntry(0xFF000000));
 
 		fill(256, 16 + (2 * cameraPosition.y), (cameraPosition.x), 1,
-			 (cameraDirection == kWest) ? 48 : 32, FALSE);
+			 (cameraDirection == kWest) ? getPaletteEntry(0xFF888888) : getPaletteEntry(0xFF444444), FALSE);
 
 		fill(256 + (cameraPosition.x), 16 + (2 * cameraPosition.y),
 			 XRES_FRAMEBUFFER - (256 + (cameraPosition.x)), 1,
-			 (cameraDirection == kEast) ? 48 : 32, FALSE);
+			 (cameraDirection == kEast) ? getPaletteEntry(0xFF888888) : getPaletteEntry(0xFF444444), FALSE);
 
 		fill(256 + (cameraPosition.x), 16, 1, (2 * cameraPosition.y),
-			 (cameraDirection == kNorth) ? 48 : 32, FALSE);
+			 (cameraDirection == kNorth) ? getPaletteEntry(0xFF888888) : getPaletteEntry(0xFF444444), FALSE);
 
 		fill(256 + (cameraPosition.x), 16 + (2 * cameraPosition.y), 1,
 			 96 - (16 + (2 * cameraPosition.y)),
-			 (cameraDirection == kSouth) ? 48 : 32, FALSE);
+			 (cameraDirection == kSouth) ? getPaletteEntry(0xFF888888) : getPaletteEntry(0xFF444444), FALSE);
 
 		fill(256 + (cameraPosition.x), 16 + (2 * cameraPosition.y), 1,
-			 2, 48, FALSE);
+			 2, getPaletteEntry(0xFF888888), FALSE);
 
 
 		sprintf(buffer, "HP: %d \nAmmo: %d", playerHealth, playerAmmo);
-		drawTextAt(34, 22, buffer, 15);
+		drawTextAt(34, 22, buffer, getPaletteEntry(0xFF888888));
 		sprintf(buffer, "Dir: %c", directions[(int) (cameraDirection)]);
 
 
-		drawTextAt(34, 24, buffer, 0);
+		drawTextAt(34, 24, buffer, getPaletteEntry(0xFF000000));
 
 		if (covered) {
-			drawTextAt(34, 21, "Covered", 15);
+            drawTextAt(34, 21, "Covered", getPaletteEntry(0xFF888888));
 		}
 	}
 }

@@ -38,11 +38,11 @@
 void
 drawWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char * title) {
 
-    fill((x) * 8, (y) * 8, dx * 8, dy * 8, 0, TRUE);
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, 255, FALSE);
-    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, 0);
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, 0, FALSE);
-    drawTextAt(x + 1, y, title, 255);
+    fill((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
+    fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
+    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
+    fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
+    drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
 }
 
 int
@@ -66,16 +66,16 @@ drawAppearingWindow(const int x, const int y, const unsigned int dx, const unsig
         drawRect(lerpPositionX * 8,
                  lerpPositionY * 8,
                  lerpPositionWidth * 8,
-                 lerpPositionHeight * 8, 0);
+                 lerpPositionHeight * 8, getPaletteEntry(0xFF000000));
 
         return 0;
     }
 
-    fill((x) * 8, (y) * 8, dx * 8, dy * 8, 0, TRUE);
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, 255, FALSE);
-    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, 0);
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, 0, FALSE);
-    drawTextAt(x + 1, y, title, 255);
+    fill((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
+    fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
+    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
+    fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
+    drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
 
     return 1;
 }
@@ -90,12 +90,12 @@ drawTextWindow(const int x, const int y, const unsigned int dx, const unsigned i
 void
 drawImageWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char * title,
                 const struct Bitmap * content) {
-    fill((x) * 8, (y) * 8, dx * 8, dy * 8, 0, TRUE);
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, 255, FALSE);
+    fill((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
+    fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
     drawBitmap((x - 1) * 8, (y) * 8, content, TRUE);
-    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, 0);
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, 0, FALSE);
-    drawTextAt(x + 1, y, title, 255);
+    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
+    fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
+    drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
 }
 
 void redrawHUD() {
@@ -104,8 +104,8 @@ void redrawHUD() {
     struct WorldPosition visPos = *getPlayerPosition();
     int x, z;
     struct Item* itemPtr;
-    fill(XRES, 0, 320 - XRES, YRES, 0, FALSE);
-    drawTextAt(1 + (XRES / 8), 1, " Map:", 255);
+    fill(XRES, 0, 320 - XRES, YRES, getPaletteEntry(0xFF000000), FALSE);
+    drawTextAt(1 + (XRES / 8), 1, " Map:", getPaletteEntry(0xFFFFFFFF));
 
     if (mapTopLevel != NULL) {
         drawBitmap(XRES, 72, mapTopLevel, 0);
@@ -125,7 +125,7 @@ void redrawHUD() {
 //                drawBitmapRaw(XRES + 8, 199 - 32 - 16 - 16, 32, 32, itemSprites[itemPtr->index]->rotations[0], 1);
 
                 drawTextAtWithMarginWithFiltering(2 + ((XRES) / 8), 23, 311, itemPtr->name,
-                                     itemPtr->active ? 192 : 255, '\n');
+                                     itemPtr->active ? getPaletteEntry(0xFFAAAAAA) : getPaletteEntry(0xFFFFFFFF), '\n');
             }
             ++line;
         }
@@ -136,7 +136,7 @@ void redrawHUD() {
     for (z = -8; z < 8; ++z) {
         for (x = -10; x < 10; ++x) {
             fill(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4,
-                 (x == 0 && z == 0) ? 32 : isPositionAllowed(visPos.x + x, visPos.y + z) ? 192 : 64, FALSE);
+                 (x == 0 && z == 0) ? 32 : isPositionAllowed(visPos.x + x, visPos.y + z) ? getPaletteEntry(0xFFAAAAAA) : getPaletteEntry(0xFF999999), FALSE);
         }
     }
 }
