@@ -156,10 +156,6 @@ void graphicsShutdown() {
 void flipRenderer() {
 }
 
-void clearRenderer() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-}
-
 -(void)keyDown:(NSEvent*)event {
 }
 
@@ -201,16 +197,7 @@ void clearRenderer() {
     [[self openGLContext] makeCurrentContext];
     
     
-
-    glEnable(GL_TEXTURE_2D);                        // Enable Texture Mapping ( NEW )
-    glShadeModel(GL_SMOOTH);                        // Enable Smooth Shading
-    glClearColor(0.0f, 0.0f, 0.0f, 0.5f);                   // Black Background
-    glClearDepth(1.0f);                         // Depth Buffer Setup
-    glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
-    glDepthFunc(GL_LEQUAL);                         // The Type Of Depth Testing To Do
-    glAlphaFunc(GL_GREATER, 0);
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
-    glDisable(GL_LINE_SMOOTH);
+    initGL();
     
     initHW();
     enterState(kMainMenu);
@@ -226,33 +213,16 @@ void clearRenderer() {
 }
 
 - (void) drawRect: (NSRect) rect {
+    startFrameGL((GLsizei) rect.size.width, (GLsizei) rect.size.height);
     
-    
-    
-    glViewport(0, 0, (GLsizei) rect.size.width, (GLsizei) rect.size.height);
-
-    glLineWidth(rect.size.width / 240.0f);
-    
-    glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    
-    
-    visibilityCached = false;
-    needsToRedrawVisibleMeshes = true;
-    enter2D();
     isRunning = menuTick(20);
 
     if (!isRunning) {
         exit(0);
     }
-
-	glFinish();
     
-	[[self openGLContext] flushBuffer];
+    endFrameGL();
     
-    int error = glGetError();
-    
-    if (error) {
-        printf("glError: %d, %s\n", error, gluErrorString(error) );
-    }
+    [[self openGLContext] flushBuffer];
 }
 @end

@@ -199,7 +199,10 @@ int main(int argc, char **argv) {
             delta_time = 50;
         }
 #endif
+
+		startFrameGL(640, 480);
         isRunning = isRunning && menuTick(delta_time);
+		endFrameGL();
     }
 #endif
     unloadStateCallback();

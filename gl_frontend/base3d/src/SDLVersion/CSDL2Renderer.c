@@ -35,23 +35,8 @@ void enterFullScreenMode() {
 #endif
 
 SDL_Window *window;
-SDL_Renderer *renderer;
+SDL_GLContext glContext;
 int snapshotSignal = '.';
-
-uint8_t getPaletteEntry(const uint32_t origin) {
-	uint8_t shade;
-
-	if (!(origin & 0xFF000000)) {
-		return TRANSPARENCY_COLOR;
-	}
-
-	shade = 0;
-	shade += (((((origin & 0x0000FF)) << 2) >> 8)) << 6;
-	shade += (((((origin & 0x00FF00) >> 8) << 3) >> 8)) << 3;
-	shade += (((((origin & 0xFF0000) >> 16) << 3) >> 8)) << 0;
-
-	return shade;
-}
 
 void graphicsInit() {
 	int r, g, b;
@@ -61,25 +46,17 @@ void graphicsInit() {
 
 	window =
 			SDL_CreateWindow("Sub Mare Imperium - Derelict", SDL_WINDOWPOS_CENTERED,
-							 SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
+							 SDL_WINDOWPOS_CENTERED, 640, 480, 0);
 
-	renderer = SDL_CreateRenderer(window, -1, 0);
-
-	for (r = 0; r < 256; r += 16) {
-		for (g = 0; g < 256; g += 8) {
-			for (b = 0; b < 256; b += 8) {
-				uint32_t pixel = 0xFF000000 + (r << 16) + (g << 8) + (b);
-				uint8_t paletteEntry = getPaletteEntry(pixel);
-				palette[paletteEntry] = pixel;
-			}
-		}
-	}
+	glContext = SDL_GL_CreateContext(window);
 
 #ifdef __EMSCRIPTEN__
 	enterFullScreenMode ();
 #endif
 	defaultFont = loadBitmap("font.img");
 	enableSmoothMovement = TRUE;
+
+	initGL();
 }
 
 void handleSystemEvents() {
@@ -153,7 +130,7 @@ void handleSystemEvents() {
 
 
 				case SDLK_LEFT:
-					snapshotSignal = kCommandLeft;
+					mBufferedCommand = kCommandLeft;
 					visibilityCached = FALSE;
 					if ((currentGameMenuState == kPlayGame ||
 						 currentGameMenuState == kBackToGame) &&
@@ -164,7 +141,7 @@ void handleSystemEvents() {
 					}
 					break;
 				case SDLK_RIGHT:
-					snapshotSignal = kCommandRight;
+					mBufferedCommand = kCommandRight;
 					visibilityCached = FALSE;
 					if ((currentGameMenuState == kPlayGame ||
 						 currentGameMenuState == kBackToGame) &&
@@ -216,113 +193,10 @@ void graphicsShutdown() {
 }
 
 void flipRenderer() {
-	SDL_Rect rect;
-	int x, y;
 
-	if (!enableSmoothMovement || turnTarget == turnStep || (snapshotSignal != '.')) {
-
-		uint8_t *pixelPtr = &framebuffer[0];
-
-		for (y = dirtyLineY0; y < dirtyLineY1; ++y) {
-			for (x = 0; x < 320; ++x) {
-				uint32_t pixel;
-
-				rect.x = 2 * x;
-				rect.y = (24 * y) / 10;
-				rect.w = 2;
-				rect.h = 3;
-
-				pixel = palette[framebuffer[(320 * y) + x]];
-
-				SDL_SetRenderDrawColor(renderer, (pixel & 0x000000FF) - 0x38,
-									   ((pixel & 0x0000FF00) >> 8) - 0x18,
-									   ((pixel & 0x00FF0000) >> 16) - 0x10, 255);
-				SDL_RenderFillRect(renderer, &rect);
-
-				++pixelPtr;
-			}
-		}
-
-		mBufferedCommand = snapshotSignal;
-		snapshotSignal = '.';
-		memcpy(previousFrame, framebuffer, 320 * 200);
-	} else if (turnStep < turnTarget) {
-
-		for (y = dirtyLineY0; y < dirtyLineY1; ++y) {
-			for (x = 0; x < 320; ++x) {
-				uint8_t index;
-
-				if (x < XRES) {
-
-					if (x >= turnStep) {
-						index = previousFrame[(320 * y) - turnStep + x];
-					} else {
-						index = framebuffer[(320 * y) + x - (320 - XRES) - turnStep];
-					}
-
-				} else {
-					index = framebuffer[(320 * y) + x];
-				}
-
-				uint32_t pixel = palette[index];
-
-				rect.x = 2 * x;
-				rect.y = (24 * y) / 10;
-				rect.w = 2;
-				rect.h = 3;
-
-				SDL_SetRenderDrawColor(renderer, (pixel & 0x000000FF) - 0x38,
-									   ((pixel & 0x0000FF00) >> 8) - 0x18,
-									   ((pixel & 0x00FF0000) >> 16) - 0x10, 255);
-				SDL_RenderFillRect(renderer, &rect);
-			}
-		}
-
-		turnStep += 20;
-	} else {
-
-		uint8_t *pixelPtr = &framebuffer[0];
-
-		for (y = dirtyLineY0; y < dirtyLineY1; ++y) {
-			for (x = 0; x < 320; ++x) {
-				uint8_t index;
-
-				if (x < XRES) {
-
-					if (x >= turnStep) {
-						index = framebuffer[(320 * y) - turnStep + x];
-					} else {
-						index = previousFrame[(320 * y) + x - (320 - XRES) - turnStep];
-					}
-
-				} else {
-					index = framebuffer[(320 * y) + x];
-				}
-
-				uint32_t pixel = palette[index];
-
-				rect.x = 2 * x;
-				rect.y = (24 * y) / 10;
-				rect.w = 2;
-				rect.h = 3;
-
-				SDL_SetRenderDrawColor(renderer, (pixel & 0x000000FF) - 0x38,
-									   ((pixel & 0x0000FF00) >> 8) - 0x18,
-									   ((pixel & 0x00FF0000) >> 16) - 0x10, 255);
-				SDL_RenderFillRect(renderer, &rect);
-				++pixelPtr;
-			}
-		}
-
-		turnStep -= 20;
-	}
-
-
-	SDL_RenderPresent(renderer);
+	SDL_GL_SwapWindow(window);
 
 #ifndef __EMSCRIPTEN__
 	SDL_Delay(1000 / 60);
 #endif
 }
-
-void clearRenderer() {}

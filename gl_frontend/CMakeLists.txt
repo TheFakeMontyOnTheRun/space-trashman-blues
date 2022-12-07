@@ -19,6 +19,7 @@ include_directories(SoundSystem)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS" )
 
 find_package(SDL2 REQUIRED)
+find_package(OpenGL REQUIRED)
 
 add_executable(derelict32
 		menu/src/MainMenu.c
@@ -32,8 +33,8 @@ add_executable(derelict32
 		base3d/src/SDLVersion/CSDL2Renderer.c
 		base3d/src/Globals.c
 		base3d/src/CTile3DProperties.c
-		base3d/src/LoadBitmap.c
-		base3d/src/CRenderer.c
+		GL1Common/LoadBitmapGL1.c
+		GL1Common/RendererGL1.c
 		base3d/src/VisibilityStrategy.c
 		../common/src/Vec.c
 		../common/src/Common.c
@@ -41,9 +42,9 @@ add_executable(derelict32
 		../common/src/MapWithCharKey.c
 		../common/src/PackedFileReader.c
 		base3d/src/Events.c
-		base3d/src/CRenderer_Rasterization.c
+		GL1Common/Renderer_RasterizationGL1.c
 		base3d/src/EDirection_Utils.c
-		base3d/src/CRenderer_Tesselation.c
+		GL1Common/Renderer_TesselationGL1.c
 		SoundSystem/NullMusic.c
 		base3d/src/Dungeon.c
 		menu/src/UI.c
@@ -57,6 +58,6 @@ add_executable(derelict32
 
 include(FindPkgConfig)
 
-target_include_directories(derelict32 PUBLIC ${SDL2_INCLUDE_DIR})
-target_link_libraries(derelict32 LINK_PUBLIC ${SDL2_LIBRARY} m)
+target_include_directories(derelict32 PUBLIC ${SDL2_INCLUDE_DIR} )
+target_link_libraries(derelict32 LINK_PUBLIC ${SDL2_LIBRARY} ${OPENGL_LIBRARY} m)
 

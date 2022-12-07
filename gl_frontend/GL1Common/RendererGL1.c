@@ -79,6 +79,58 @@ uint32_t getPaletteEntry(const uint32_t origin) {
     return origin;
 }
 
+
+void enter2D(void) {
+     glMatrixMode(GL_PROJECTION);
+     glLoadIdentity();
+     glOrtho(0, 320, 200, 0, -100, 100);
+
+     glMatrixMode(GL_MODELVIEW);
+     glLoadIdentity();
+
+     glDisable(GL_DEPTH_TEST);
+     glDisable(GL_FOG);
+}
+
+void initGL() {
+    glEnable(GL_TEXTURE_2D);                        // Enable Texture Mapping ( NEW )
+    glShadeModel(GL_SMOOTH);                        // Enable Smooth Shading
+    glClearColor(0.0f, 0.0f, 0.0f, 0.5f);                   // Black Background
+    glClearDepth(1.0f);                         // Depth Buffer Setup
+    glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
+    glDepthFunc(GL_LEQUAL);                         // The Type Of Depth Testing To Do
+    glAlphaFunc(GL_GREATER, 0);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+    glDisable(GL_LINE_SMOOTH);
+}
+
+void clearRenderer() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+}
+
+
+void startFrameGL(int width, int height) {
+    glViewport(0, 0, width, height);
+    glLineWidth(width / 240.0f);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    
+    
+    visibilityCached = FALSE;
+    needsToRedrawVisibleMeshes = FALSE;
+    enter2D();
+}
+
+void endFrameGL() {
+    glFinish();
+
+    int error = glGetError();
+    
+    if (error) {
+        printf("glError: %d, %s\n", error, gluErrorString(error) );
+    }
+}
+
+
 void enter3D(void) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -99,18 +151,6 @@ void enter3D(void) {
     glFogf(GL_FOG_DENSITY, 0.05f);              // How Dense Will The Fog Be
     glHint(GL_FOG_HINT, GL_FASTEST);          // Fog Hint Value
     glEnable(GL_FOG);                   // Enables GL_FOG
-}
-
-void enter2D(void) {
-     glMatrixMode(GL_PROJECTION);
-     glLoadIdentity();
-     glOrtho(0, 320, 200, 0, -100, 100);
-
-     glMatrixMode(GL_MODELVIEW);
-     glLoadIdentity();
-
-     glDisable(GL_DEPTH_TEST);
-     glDisable(GL_FOG);
 }
 
 void loadTileProperties(const uint8_t levelNumber) {

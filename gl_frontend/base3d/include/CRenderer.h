@@ -274,4 +274,10 @@ void maskFloor(
 
 int submitBitmapToGPU(struct Bitmap* bitmap);
 
+void initGL();
+
+void startFrameGL(int width, int height);
+
+void endFrameGL();
+
 #endif
