@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		F12702CF293D4308004D7151 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F12702CE293D4308004D7151 /* OpenGL.framework */; };
-		F136B28E293CDAE300131388 /* MyOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = F136B28D293CDAE300131388 /* MyOpenGLView.m */; };
 		F136B294293CDB1A00131388 /* LoadBitmapGL1.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B28F293CDB1A00131388 /* LoadBitmapGL1.c */; };
 		F136B295293CDB1A00131388 /* Renderer_RasterizationGL1.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B290293CDB1A00131388 /* Renderer_RasterizationGL1.c */; };
 		F136B296293CDB1A00131388 /* Renderer_TesselationGL1.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B291293CDB1A00131388 /* Renderer_TesselationGL1.c */; };
@@ -21,6 +20,7 @@
 		F1B8CB1E27CFCCBD00C06E6F /* PackedFileReader.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1927CFCCBD00C06E6F /* PackedFileReader.c */; };
 		F1B8CB1F27CFCCBD00C06E6F /* Vec.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1A27CFCCBD00C06E6F /* Vec.c */; };
 		F1B8CB7327CFD4F200C06E6F /* BattleScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB7227CFD4F200C06E6F /* BattleScreen.c */; };
+		F1C704D9294298C000E2F806 /* MyOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C704D7294298C000E2F806 /* MyOpenGLView.m */; };
 		F1CA76C22610A91800FD1E04 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		F1CA76C42610A92000FD1E04 /* Events.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E5236DE60800478B2C /* Events.c */; };
 		F1CA76C52610A92000FD1E04 /* HackingScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F18C31BB2608BDE8002C2CDA /* HackingScreen.c */; };
@@ -92,8 +92,6 @@
 		F1277A0D236DE63E00478B2C /* HelpScreen.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = HelpScreen.c; path = ../menu/src/HelpScreen.c; sourceTree = SOURCE_ROOT; };
 		F1277A10236DE63E00478B2C /* MainMenu.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = MainMenu.c; path = ../menu/src/MainMenu.c; sourceTree = SOURCE_ROOT; };
 		F1277A12236DE63E00478B2C /* UI.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = UI.c; path = ../menu/src/UI.c; sourceTree = SOURCE_ROOT; };
-		F136B28C293CDAE300131388 /* MyOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyOpenGLView.h; path = ../GL1Common/MyOpenGLView.h; sourceTree = "<group>"; };
-		F136B28D293CDAE300131388 /* MyOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyOpenGLView.m; path = ../GL1Common/MyOpenGLView.m; sourceTree = "<group>"; };
 		F136B28F293CDB1A00131388 /* LoadBitmapGL1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = LoadBitmapGL1.c; path = ../GL1Common/LoadBitmapGL1.c; sourceTree = "<group>"; };
 		F136B290293CDB1A00131388 /* Renderer_RasterizationGL1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Renderer_RasterizationGL1.c; path = ../GL1Common/Renderer_RasterizationGL1.c; sourceTree = "<group>"; };
 		F136B291293CDB1A00131388 /* Renderer_TesselationGL1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Renderer_TesselationGL1.c; path = ../GL1Common/Renderer_TesselationGL1.c; sourceTree = "<group>"; };
@@ -137,6 +135,8 @@
 		F1BD0D30236EF697002329C6 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		F1BD0D31236EF697002329C6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		F1BF22812450F4AF0088A1C4 /* SoundSystem.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SoundSystem.h; path = ../SoundSystem/SoundSystem.h; sourceTree = SOURCE_ROOT; };
+		F1C704D7294298C000E2F806 /* MyOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOpenGLView.m; sourceTree = "<group>"; };
+		F1C704D8294298C000E2F806 /* MyOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOpenGLView.h; sourceTree = "<group>"; };
 		F1CA76B32610A8BF00FD1E04 /* Derelict.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Derelict.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Derelict-Info.plist"; sourceTree = "<group>"; };
 		F1CD088E2450E32D00D4794D /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Globals.h; path = ../base3d/include/Globals.h; sourceTree = SOURCE_ROOT; };
@@ -163,8 +163,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				F136B28C293CDAE300131388 /* MyOpenGLView.h */,
-				F136B28D293CDAE300131388 /* MyOpenGLView.m */,
+				F1C704D8294298C000E2F806 /* MyOpenGLView.h */,
+				F1C704D7294298C000E2F806 /* MyOpenGLView.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -405,13 +405,13 @@
 				F1CA76D82610A93C00FD1E04 /* UI.c in Sources */,
 				F1CA76DA2610A94100FD1E04 /* Crawler.c in Sources */,
 				F1CA76DC2610A98100FD1E04 /* CTile3DProperties.c in Sources */,
+				F1C704D9294298C000E2F806 /* MyOpenGLView.m in Sources */,
 				F1B8CB1B27CFCCBD00C06E6F /* Common.c in Sources */,
 				F1B8CB1C27CFCCBD00C06E6F /* FixP.c in Sources */,
 				F1B8CB1D27CFCCBD00C06E6F /* MapWithCharKey.c in Sources */,
 				F1B8CB1E27CFCCBD00C06E6F /* PackedFileReader.c in Sources */,
 				F1B8CB1F27CFCCBD00C06E6F /* Vec.c in Sources */,
 				F1B8CB7327CFD4F200C06E6F /* BattleScreen.c in Sources */,
-				F136B28E293CDAE300131388 /* MyOpenGLView.m in Sources */,
 				F136B294293CDB1A00131388 /* LoadBitmapGL1.c in Sources */,
 				F136B295293CDB1A00131388 /* Renderer_RasterizationGL1.c in Sources */,
 				F136B296293CDB1A00131388 /* Renderer_TesselationGL1.c in Sources */,
