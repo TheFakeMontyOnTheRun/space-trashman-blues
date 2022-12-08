@@ -16,7 +16,7 @@ include_directories(common/include)
 include_directories(menu/include)
 include_directories(SoundSystem)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS" )
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS" )
 
 find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -35,6 +35,8 @@ add_executable(derelict64
 		base3d/src/CTile3DProperties.c
 		GL1Common/LoadBitmapGL1.c
 		GL1Common/RendererGL1.c
+		GL1Common/Renderer_RasterizationGL1.c
+		GL1Common/Renderer_TesselationGL1.c
 		base3d/src/VisibilityStrategy.c
 		../common/src/Vec.c
 		../common/src/Common.c
@@ -42,9 +44,7 @@ add_executable(derelict64
 		../common/src/MapWithCharKey.c
 		../common/src/PackedFileReader.c
 		base3d/src/Events.c
-		GL1Common/Renderer_RasterizationGL1.c
 		base3d/src/EDirection_Utils.c
-		GL1Common/Renderer_TesselationGL1.c
 		SoundSystem/NullMusic.c
 		base3d/src/Dungeon.c
 		menu/src/UI.c

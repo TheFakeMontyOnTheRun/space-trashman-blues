@@ -144,6 +144,65 @@ struct Texture *makeTextureFrom(const char *filename) {
     return toReturn;
 }
 
+void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
+				const struct Texture *texture, uint8_t direction, uint8_t flipTexture) {
+
+	float centerX, centerY0, centerY1, centerZ;
+	centerX = fixToInt(p0.mX + xCameraOffset);
+	centerZ = -fixToInt(p0.mZ + zCameraOffset);
+
+	centerY0 = fixToInt(p0.mY + playerHeight + walkingBias + yCameraOffset) * ratio;
+	centerY1 = fixToInt(p1.mY + playerHeight + walkingBias + yCameraOffset) * ratio;
+
+
+	glBindTexture(GL_TEXTURE_2D, texture->uploadId);
+	glBegin(GL_QUADS);
+
+	glTexCoord2f(0.0f, 0.0f);
+
+	switch (direction) {
+		case kNorth:
+			glVertex3f(centerX - 1.0f, centerY0, centerZ - 1.0f);
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(centerX + 1.0f, centerY1, centerZ - 1.0f);
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(centerX + 1.0f, centerY1, centerZ + 1.0f);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(centerX - 1.0f, centerY0, centerZ + 1.0f);
+			break;
+		case kSouth:
+			glVertex3f(centerX - 1.0f, centerY0, centerZ - 1.0f);
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(centerX + 1.0f, centerY1, centerZ - 1.0f);
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(centerX + 1.0f, centerY1, centerZ + 1.0f);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(centerX - 1.0f, centerY0, centerZ + 1.0f);
+			break;
+		case kEast:
+			glVertex3f(centerX - 1.0f, centerY0, centerZ - 1.0f);
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(centerX + 1.0f, centerY1, centerZ - 1.0f);
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(centerX + 1.0f, centerY1, centerZ + 1.0f);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(centerX - 1.0f, centerY0, centerZ + 1.0f);
+			break;
+		case kWest:
+			glVertex3f(centerX - 1.0f, centerY0, centerZ - 1.0f);
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(centerX + 1.0f, centerY1, centerZ - 1.0f);
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(centerX + 1.0f, centerY1, centerZ + 1.0f);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(centerX - 1.0f, centerY0, centerZ + 1.0f);
+			break;
+	}
+
+	glEnd();
+
+}
+
 void drawBillboardAt(const struct Vec3 center,
 					 struct Texture *bitmap,
 					 const FixP_t scale,
