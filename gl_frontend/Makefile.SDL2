@@ -12,7 +12,9 @@ CFLAGS= `sdl2-config --cflags `  \
     -flto		    \
     --pedantic		    \
     -DCLI_BUILD \
-    -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS
+    -I../core/include
+    -I../common/include
+    -DINCLUDE_ITEM_DESCRIPTIONS
 
 MENU_TARGET=game
 
