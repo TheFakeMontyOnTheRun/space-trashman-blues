@@ -14,6 +14,7 @@ CFLAGS += -Ofast      \
     -w \
     -I../core/include \
     -I../common/include \
+    -DN64 \
     -DINCLUDE_ITEM_DESCRIPTIONS
 
 src = menu/src/MainMenu.c \
@@ -48,23 +49,12 @@ src = menu/src/MainMenu.c \
                   		../core/src/Core.c \
                   		../core/src/Parser.c
 
-assets_png = $(wildcard assets/*.png)
-
-assets_conv = $(addprefix filesystem/,$(notdir $(assets_png:%.png=%.sprite)))
-
-MKSPRITE_FLAGS ?=
-
 all: derelict64.z64
 
-filesystem/%.sprite: assets/%.png
-	@mkdir -p $(dir $@)
-	@echo "    [SPRITE] $@"
-	@$(N64_MKSPRITE) -f RGBA16 -o "$(dir $@)" "$<"
-
-$(BUILD_DIR)/derelict64.dfs: $(assets_conv)
+$(BUILD_DIR)/derelict64.dfs: $(wildcard filesystem/*)
 $(BUILD_DIR)/derelict64.elf: $(src:%.c=$(BUILD_DIR)/%.o)
 
-derelict64.z64: N64_ROM_TITLE="Sub Mare Imperium - Derelict 64"
+derelict64.z64: N64_ROM_TITLE="Derelict 64"
 derelict64.z64: $(BUILD_DIR)/derelict64.dfs
 
 clean:
