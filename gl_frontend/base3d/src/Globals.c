@@ -16,7 +16,7 @@
 #include "Engine.h"
 
 struct Bitmap *currentBackgroundBitmap = NULL;
-int32_t currentGameMenuState = -1;
+enum EGameMenuState currentGameMenuState = -1;
 enum EGameMenuState menuStateToReturn = kResumeCurrentState;
 int cursorPosition = 0;
 enum EGameMenuState nextNavigationSelection = kResumeCurrentState;
