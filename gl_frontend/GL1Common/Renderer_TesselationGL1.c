@@ -6,10 +6,8 @@
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
 #include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
 #else
 #include <GL/gl.h>
-#include <GL/glu.h>
 #endif
 
 #include "Core.h"
@@ -55,7 +53,14 @@ struct Texture *makeTextureFrom(const char *filename) {
     uint8_t *ptr = src.data + 4; //skip header;
     size_t sizeInDisk = src.size - 4;
 
-    uint8_t *diskBuffer = (uint8_t *) calloc(1, sizeInDisk);
+#ifndef N64
+	uint8_t * diskBuffer = (struct Texture*)calloc(1, sizeof(struct Texture));
+#else
+	uint8_t * diskBuffer = (struct Texture*)malloc_uncached(sizeInDisk);
+	memset( diskBuffer, 0, sizeInDisk);
+#endif
+
+
     memcpy(diskBuffer, ptr, sizeInDisk);
 
     BitmapPixelFormat pixel;
@@ -95,7 +100,13 @@ struct Texture *makeTextureFrom(const char *filename) {
     free(diskBuffer);
 
     assert((usedTexture + 1 ) < TOTAL_TEXTURES);
+#ifndef N64
     toReturn = (struct Texture*)calloc(1, sizeof(struct Texture));
+#else
+	toReturn = (struct Texture*)malloc_uncached(sizeof(struct Texture));
+	memset( toReturn, 0, sizeof(struct Texture));
+#endif
+
     nativeTextures[usedTexture++] = toReturn;
     toReturn->uploadId = usedTexture;
     
@@ -140,6 +151,8 @@ struct Texture *makeTextureFrom(const char *filename) {
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 
     return toReturn;
 }
@@ -200,7 +213,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 	}
 
 	glEnd();
-
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void drawBillboardAt(const struct Vec3 center,
@@ -219,7 +232,11 @@ void drawBillboardAt(const struct Vec3 center,
     
     if (bitmap->uploadId == -1 ) {
         uint32_t newId;
+#ifndef N64
         uint8_t* expanded = (uint8_t*)malloc(NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE * sizeof(TexturePixelFormat));
+#else
+		uint8_t* expanded = (uint8_t*)malloc_uncached(NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE * sizeof(TexturePixelFormat));
+#endif
 
         for (int c = 0; c < NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE; ++c ) {
             uint32_t index = bitmap->rotations[0][c];
@@ -286,6 +303,7 @@ void drawBillboardAt(const struct Vec3 center,
     
     glEnd();
     glDisable(GL_ALPHA_TEST);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void drawColumnAt(const struct Vec3 center,
@@ -387,6 +405,7 @@ void drawFloorAt(const struct Vec3 center,
         glVertex3f(centerX - 1.0f, centerY, centerZ + 1.0f);
         
         glEnd();
+		glBindTexture(GL_TEXTURE_2D, 0);
     }
 }
 
@@ -412,6 +431,7 @@ void drawCeilingAt(const struct Vec3 center,
         glTexCoord2f(0.0f, 1.0f);
         glVertex3f(centerX - 1.0f, centerY, centerZ + 1.0f);
         glEnd();
+		glBindTexture(GL_TEXTURE_2D, 0);
     }	
 }
 
@@ -442,6 +462,7 @@ void drawLeftNear(const struct Vec3 center,
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ + 1.0f);
     glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void drawRightNear(const struct Vec3 center,
@@ -469,4 +490,5 @@ void drawRightNear(const struct Vec3 center,
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ - 1.0f);
     glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);
 }

@@ -6,10 +6,10 @@
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
 #include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+#include <math.h>
+
 #else
 #include <GL/gl.h>
-#include <GL/glu.h>
 #endif
 
 #include "Core.h"
@@ -98,21 +98,20 @@ void initGL() {
     glClearColor(0.0f, 0.0f, 0.0f, 0.5f);                   // Black Background
     glClearDepth(1.0f);                         // Depth Buffer Setup
     glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
-    glDepthFunc(GL_LEQUAL);                         // The Type Of Depth Testing To Do
+//    glDepthFunc(GL_LEQUAL);                         // The Type Of Depth Testing To Do
     glAlphaFunc(GL_GREATER, 0);
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
     glDisable(GL_LINE_SMOOTH);
 }
 
 void clearRenderer() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
 
 void startFrameGL(int width, int height) {
     glViewport(0, 0, width, height);
     glLineWidth(width / 240.0f);
-    glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT);
     
     
     visibilityCached = FALSE;
@@ -126,11 +125,16 @@ void endFrameGL() {
     int error = glGetError();
     
     if (error) {
-        printf("glError: %d, %s\n", error, gluErrorString(error) );
+        printf("glError: %d\n", error );
     }
 }
 
 
+void gluPerspective(	float fovy,
+	float aspect,
+	float zNear,
+	float zFar) {
+}
 void enter3D(void) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -143,14 +147,6 @@ void enter3D(void) {
     
     glEnable(GL_DEPTH_TEST);
     glColor3f(1,1,1);
-    
-    
-    GLfloat fogColor[4]= {0.0f, 0.0f, 0.0f, 1.0f};
-    glFogi(GL_FOG_MODE, GL_EXP);        // Fog Mode
-    glFogfv(GL_FOG_COLOR, fogColor);            // Set Fog Color
-    glFogf(GL_FOG_DENSITY, 0.05f);              // How Dense Will The Fog Be
-    glHint(GL_FOG_HINT, GL_FASTEST);          // Fog Hint Value
-    glEnable(GL_FOG);                   // Enables GL_FOG
 }
 
 void loadTileProperties(const uint8_t levelNumber) {

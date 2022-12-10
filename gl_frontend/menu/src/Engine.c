@@ -177,7 +177,6 @@ int menuTick(long delta_time) {
     }
 
     repaintCallback();
-    flipRenderer();
 
     return isRunning;
 }

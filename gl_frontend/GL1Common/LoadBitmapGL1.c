@@ -6,10 +6,8 @@
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
 #include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
 #else
 #include <GL/gl.h>
-#include <GL/glu.h>
 #endif
 
 #include "Core.h"
@@ -166,7 +164,11 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
     BitmapPixelFormat *dataSource = bitmap->data;
     width = bitmap->width;
     height = bitmap->height;
-    	
+
+#ifdef N64
+	data_cache_hit_writeback_invalidate(bitmap->data, width * height * sizeof(TexturePixelFormat) );
+#endif
+
     if (!isPowerOf2(bitmap->width) || isPowerOf2(bitmap->height)) {
         
         scaleBitmap(intToFix(0), intToFix(0), intToFix(TEXTURE_BUFFER_SIZE), intToFix(TEXTURE_BUFFER_SIZE), bitmap);
@@ -174,8 +176,13 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
         width = height = TEXTURE_BUFFER_SIZE;
         dataSource = &textureBuffer[0];
     }
-    
+
+#ifndef N64
     uint8_t* expanded = (uint8_t*)malloc(width * height * sizeof(TexturePixelFormat));
+#else
+	uint8_t* expanded = (uint8_t*)malloc_uncached(width * height * sizeof(TexturePixelFormat));
+	data_cache_hit_writeback_invalidate(dataSource, width * height * sizeof(TexturePixelFormat) );
+#endif
 
     for (int c = 0; c < width * height; ++c ) {
         BitmapPixelFormat index = dataSource[c];
@@ -203,18 +210,25 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    free( expanded );
-    
+    //free( expanded );
+	glBindTexture(GL_TEXTURE_2D, 0);
+
     return newId;
 }
 
 struct Bitmap *loadBitmap(const char *filename) {
 
     struct StaticBuffer src = loadBinaryFileFromPath(filename);
-    size_t sizeInDisk  = src.size - 4; //total size minus the header
 
-    struct Bitmap *toReturn =
-            (struct Bitmap *) calloc(1, sizeof(struct Bitmap));
+	struct Bitmap *toReturn =
+#ifndef N64
+			(struct Bitmap *) calloc(1, sizeof(struct Bitmap));
+#else
+			(struct Bitmap *) malloc_uncached(sizeof(struct Bitmap));
+			memset(toReturn, 0, sizeof(struct Bitmap));
+#endif
+
+    size_t sizeInDisk  = src.size - 4; //total size minus the header
 
     uint16_t tmp;
     uint8_t *ptr = src.data;
@@ -230,12 +244,21 @@ struct Bitmap *loadBitmap(const char *filename) {
     toReturn->height += tmp & 0xFF;
 
     size_t size = toReturn->width * toReturn->height * sizeof(BitmapPixelFormat);
+#ifndef N64
     uint8_t *buffer = (uint8_t *) calloc(1, sizeInDisk);
-
+#else
+	uint8_t *buffer = (uint8_t *) malloc_uncached(sizeInDisk);
+	memset(buffer, 0, sizeInDisk);
+#endif
 
     memcpy( buffer, ptr, sizeInDisk);
 
+#ifndef N64
     toReturn->data = (TexturePixelFormat *) calloc(1, size);
+#else
+	toReturn->data = (TexturePixelFormat *) malloc_uncached(size);
+	memset(buffer, 0, size);
+#endif
 
     uint8_t repetitions;
     int pixelIndex = 0;
@@ -269,7 +292,12 @@ struct Bitmap *loadBitmap(const char *filename) {
         }
     }
 #endif
+
+#ifndef N64
     free(buffer);
+#else
+	free_uncached(buffer);
+#endif
 
     toReturn->uploadId = -1;
 

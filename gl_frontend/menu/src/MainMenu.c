@@ -77,8 +77,7 @@ void MainMenu_initStateCallback(int32_t tag) {
 
 void MainMenu_initialPaintCallback() {
 
-    //drawRepeatBitmap(0, 32, 320, 200, currentBackgroundBitmap);
- 
+
 }
 
 void MainMenu_repaintCallback(void) {
@@ -108,14 +107,16 @@ void MainMenu_repaintCallback(void) {
                  sizeX, sizeY, 0);
         return;
     }
-
+//	 drawRepeatBitmap(0, 32, 320, 200, currentBackgroundBitmap);
+	drawBitmap(10, 10, currentBackgroundBitmap, 0);
+/*
     drawBitmap(0, 0, logoBitmap, 0);
-
     drawBitmap(118, 45, logo2Bitmap, 1);
 
-    drawWindow(40 - biggestOption - 3, 25 - 4 - (optionsHeight / 8), biggestOption + 2, (optionsHeight / 8) + 2,
-               "Episode 0");
 
+	drawWindow(40 - biggestOption - 3, 25 - 4 - (optionsHeight / 8), biggestOption + 2, (optionsHeight / 8) + 2,
+               "Episode 0");
+*/
     for (c = 0; c < kMainMenuOptionsCount; ++c) {
 
         int isCursor = (cursorPosition == c)
@@ -129,10 +130,11 @@ void MainMenu_repaintCallback(void) {
                  (200 - optionsHeight) + (c * 8) - 24,
                  (biggestOption * 8) + 16, 8, getPaletteEntry(0xFF000000), FALSE);
         }
-
+/*
         drawTextAt(40 - biggestOption + 1 - 3,
                    (26 - kMainMenuOptionsCount) + c - 3,
                    &MainMenu_options[c][0], isCursor ? getPaletteEntry(0xFFFFFFFF) : getPaletteEntry(0xFF000000));
+		*/
     }
 
 }

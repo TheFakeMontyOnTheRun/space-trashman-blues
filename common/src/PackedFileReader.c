@@ -169,7 +169,11 @@ found:
 	assert (fread(&size, 4, 1, mDataPack));
 	size = toNativeEndianess(size);
 	toReturn.size = size;
+#ifndef N64
 	toReturn.data = (uint8_t *) malloc(size);
+#else
+	toReturn.data = (uint8_t *) malloc_uncached(size);
+#endif
 
 	assert (fread(toReturn.data, sizeof(uint8_t), size, mDataPack));
 	fclose(mDataPack);
@@ -263,7 +267,11 @@ found:
 	fread(&size, 4, 1, mDataPack);
 	size = toNativeEndianess(size);
 	toReturn.size = size;
+#ifndef N64
 	toReturn.data = (uint8_t *) malloc(size);
+#else
+	toReturn.data = (uint8_t *) malloc_uncached(size);
+#endif
 
 	fread(toReturn.data, sizeof(uint8_t), size, mDataPack);
 	fclose(mDataPack);

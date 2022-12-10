@@ -4,10 +4,8 @@
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
 #include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
 #else
 #include <GL/gl.h>
-#include <GL/glu.h>
 #endif
 
 #include "Core.h"
@@ -33,22 +31,7 @@ int useDither = TRUE;
 struct Bitmap *defaultFont;
 
 int submitBitmapToGPU(struct Bitmap* bitmap);
-/*
-FramebufferPixelFormat getPaletteEntry(const ABGRPixelFormat origin) {
-	FramebufferPixelFormat shade;
 
-	if (!(origin & 0xFF000000)) {
-		return kTransparencyColour;
-	}
-
-	shade = 0;
-	shade += (((((origin & 0x0000FF)      ) << 2) >> 8)) << 6; //b
-	shade += (((((origin & 0x00FF00) >>  8) << 3) >> 8)) << 3; //g
-	shade += (((((origin & 0xFF0000) >> 16) << 3) >> 8)) << 0; //r
-
-	return shade;
-}
-*/
 /*
     *         /|x1y0
     * x0y0   / |
@@ -220,6 +203,7 @@ void fill(
             
             glEnd();
             glDisable(GL_ALPHA_TEST);
+			glBindTexture(GL_TEXTURE_2D, 0);
         } else {
             glDisable(GL_TEXTURE_2D);
             glColor3f(r,
@@ -265,13 +249,11 @@ void drawBitmap(const int dx,
         glTexCoord2f(0.0f, 1.0f);
         glVertex3f(dx, dy + bitmap->height, -2);
         glEnd();
-        
+		glBindTexture(GL_TEXTURE_2D, 0);
         if (transparent) {
             glDisable(GL_ALPHA_TEST);
         }
-
     }
-
 }
 
 void drawRepeatBitmap(
@@ -357,7 +339,7 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
     glColor3f(1.0f, 1.0f, 1.0f);
     glEnd();
     glDisable(GL_ALPHA_TEST);
-
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour, char charToReplaceHifenWith) {
