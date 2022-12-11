@@ -289,6 +289,11 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
     float blockWidth = 8.0f / fontWidth;
     float blockHeight = 8.0f / fontHeight;
 
+	if (defaultFont->uploadId == -1) {
+		defaultFont->uploadId = submitBitmapToGPU(defaultFont);
+	}
+
+
 	size_t c;
     
     uint32_t fragment = colour;// palette[colour];
