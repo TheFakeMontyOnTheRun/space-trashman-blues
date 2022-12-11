@@ -261,7 +261,7 @@ struct Bitmap *loadBitmap(const char *filename) {
     toReturn->data = (TexturePixelFormat *) calloc(1, size);
 #else
 	toReturn->data = (TexturePixelFormat *) malloc_uncached(size);
-	memset(buffer, 0, size);
+	memset(toReturn->data, 0, size);
 #endif
 
     uint8_t repetitions;
