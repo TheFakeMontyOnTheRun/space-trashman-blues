@@ -169,7 +169,7 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
 	data_cache_hit_writeback_invalidate(bitmap->data, width * height * sizeof(TexturePixelFormat) );
 #endif
 
-    if (!isPowerOf2(bitmap->width) || isPowerOf2(bitmap->height)) {
+    if (!isPowerOf2(bitmap->width) || !isPowerOf2(bitmap->height)) {
         
         scaleBitmap(intToFix(0), intToFix(0), intToFix(TEXTURE_BUFFER_SIZE), intToFix(TEXTURE_BUFFER_SIZE), bitmap);
         
