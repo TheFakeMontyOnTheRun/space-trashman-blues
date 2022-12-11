@@ -8,6 +8,7 @@ data:	packager
 	rm -f ./base.pfs
 	ls assets/*.*  | xargs ./packer
 	mv ./data.pfs ../base.pfs
+	cp ../base.pfs ../filesystem
 
 images:
 	python3 ./make_package.py
