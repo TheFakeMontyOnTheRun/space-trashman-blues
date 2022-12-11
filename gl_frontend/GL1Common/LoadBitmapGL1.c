@@ -177,45 +177,51 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
         dataSource = &textureBuffer[0];
     }
 
-#ifndef N64
-    uint8_t* expanded = (uint8_t*)malloc(width * height * sizeof(TexturePixelFormat));
-#else
-	uint8_t* expanded = (uint8_t*)malloc_uncached(width * height * sizeof(TexturePixelFormat));
-	data_cache_hit_writeback_invalidate(dataSource, width * height * sizeof(TexturePixelFormat) );
-#endif
-
-    for (int c = 0; c < width * height; ++c ) {
-        BitmapPixelFormat index = dataSource[c];
-                  
-        uint32_t texel = index;//palette[index];
-        
-        if (index == TRANSPARENCY_COLOR) {
-            expanded[4 * c + 0] = 0xFF;
-            expanded[4 * c + 1] = 0;
-            expanded[4 * c + 2] = 0;
-            expanded[4 * c + 3] = 0;
-        } else {
-            expanded[4 * c + 0] = (texel & 0xFF);
-            expanded[4 * c + 1] = (texel & 0x00FF00) >> 8;
-            expanded[4 * c + 2] = (texel & 0xFF0000) >> 16;
-            expanded[4 * c + 3] = 1;
-        }
-    }
-    
     glGenTextures(1, (GLuint*)&newId);
     glBindTexture(GL_TEXTURE_2D, newId);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,   GL_UNSIGNED_BYTE, &expanded[0]);
-    
+
+#ifndef N64
+    uint16_t* expanded = (uint16_t*)malloc(width * height * sizeof(uint16_t));
+#else
+    uint16_t* expanded = (uint16_t*)malloc_uncached(width * height * sizeof(uint16_t));
+#endif
+
+    uint16_t* ptr = expanded;
+
+	for (int c = 0; c < width * height; ++c ) {
+		BitmapPixelFormat index = dataSource[c];
+
+		uint32_t texel = index;//palette[index];
+		uint16_t finalFragment = 0;
+
+		if (index != TRANSPARENCY_COLOR) {
+			uint8_t r = ((((texel & 0x0000FF)      ) * 32 ) / 256);
+			uint8_t g = ((((texel & 0x00FF00) >>  8) * 32 ) / 256);
+			uint8_t b = ((((texel & 0xFF0000) >> 16) * 32 ) / 256);
+
+			finalFragment = 1 + ( r << 11) + ( g << 6 ) + (b << 1); // alpha;
+		}
+
+		*ptr = finalFragment;
+		++ptr;
+	}
+
+#ifndef N64
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,  GL_RGBA,   GL_UNSIGNED_SHORT_5_5_5_1, expanded);
+    free( expanded );
+    free(bitmap->data);
+#else
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,  GL_RGBA,   GL_UNSIGNED_SHORT_5_5_5_1_EXT, expanded);
+    free_uncached( expanded );
+    free_uncached(bitmap->data);
+#endif
+    bitmap->data = NULL;
+
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-#ifndef N64
-    free( expanded );
-#else
-	free_uncached( expanded );
-#endif
-	glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     return newId;
 }
