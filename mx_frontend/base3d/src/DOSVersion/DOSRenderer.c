@@ -35,7 +35,7 @@ typedef int ESoundDriver;
 
 extern ESoundDriver soundDriver;
 
-uint8_t turnBuffer[320 * 200];
+uint8_t turnBuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 
 enum EColor {
 	COLOR_BLACK,
@@ -336,24 +336,24 @@ void flipRenderer() {
 
 
     if ( !enableSmoothMovement || turnTarget == turnStep ) {
-        dosmemput(&framebuffer[0], 320 * 200, 0xa0000);
-        memcpy( previousFrame, framebuffer, 320 * 200);
+        dosmemput(&framebuffer[0], XRES_FRAMEBUFFER * YRES_FRAMEBUFFER, 0xa0000);
+        memcpy( previousFrame, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
     } else if ( turnStep < turnTarget ) {
 
         uint8_t *bufferPtr = &turnBuffer[0];
-        for ( y = 0; y < 200; ++y ) {
-            for ( x = 0; x < 320; ++x ) {
+        for ( y = 0; y < YRES_FRAMEBUFFER; ++y ) {
+            for ( x = 0; x < XRES_FRAMEBUFFER; ++x ) {
                 uint8_t index;
 
                 if (x < XRES ) {
 
                     if ( x  >= turnStep ) {
-                        index = previousFrame[ (320 * y) - turnStep + x ];
+                        index = previousFrame[ (XRES_FRAMEBUFFER * y) - turnStep + x ];
                     } else {
-                        index = framebuffer[ (320 * y) + x - (320 - XRES) - turnStep];
+                        index = framebuffer[ (XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
                     }
                 } else {
-                    index = framebuffer[ (320 * y) + x];
+                    index = framebuffer[ (XRES_FRAMEBUFFER * y) + x];
                 }
 
                 *bufferPtr = index;
@@ -362,24 +362,24 @@ void flipRenderer() {
         }
 
         turnStep+= 20;
-        dosmemput(&turnBuffer[0], 320 * 200, 0xa0000);
+        dosmemput(&turnBuffer[0], XRES_FRAMEBUFFER * YRES_FRAMEBUFFER, 0xa0000);
     } else {
 
         uint8_t *bufferPtr = &turnBuffer[0];
-        for ( y = 0; y < 200; ++y ) {
-            for ( x = 0; x < 320; ++x ) {
+        for ( y = 0; y < YRES_FRAMEBUFFER; ++y ) {
+            for ( x = 0; x < XRES_FRAMEBUFFER; ++x ) {
                 uint8_t index;
 
                 if (x < XRES  ) {
 
                     if ( x  >= turnStep ) {
-                        index = framebuffer[ (320 * y) - turnStep + x ];
+                        index = framebuffer[ (XRES_FRAMEBUFFER * y) - turnStep + x ];
                     } else {
-                        index = previousFrame[ (320 * y) + x - (320 - XRES) - turnStep];
+                        index = previousFrame[ (XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
                     }
 
                 } else {
-                    index = framebuffer[ (320 * y) + x];
+                    index = framebuffer[ (XRES_FRAMEBUFFER * y) + x];
                 }
 
                 *bufferPtr = index;
@@ -388,7 +388,7 @@ void flipRenderer() {
         }
 
         turnStep-= 20;
-        dosmemput(&turnBuffer[0], 320 * 200, 0xa0000);
+        dosmemput(&turnBuffer[0], XRES_FRAMEBUFFER * YRES_FRAMEBUFFER, 0xa0000);
     }
 
 }

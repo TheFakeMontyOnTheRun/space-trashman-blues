@@ -35,8 +35,8 @@ HACCEL hAccelTable;
 int needsRedraw = 1;
 RGBQUAD paletteRef[256];
 int havePalette = 0;
-uint8_t slideBitmap[320 * 200];
-uint8_t previousFrame[320 * 200];
+uint8_t slideBitmap[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 COLORREF transparencyRef;
 extern HWND HWnd;
 typedef int ESoundDriver;
@@ -357,27 +357,27 @@ WindProcedure(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) {
 	
 
 	if ( !enableSmoothMovement || turnTarget == turnStep ) {
-		memcpy( slideBitmap, framebuffer, 320 * 200);
-		memcpy( previousFrame, framebuffer, 320 * 200);
+		memcpy( slideBitmap, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
+		memcpy( previousFrame, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
 	} else if ( turnStep < turnTarget ) {
 
 		for ( y = dirtyLineY0; y < dirtyLineY1; ++y ) {
-			for ( x = 0; x < 320; ++x ) {
+			for ( x = 0; x < XRES_FRAMEBUFFER; ++x ) {
 				uint8_t index;
 
 				if (x < XRES  ) {
 
 					if ( x  >= turnStep ) {
-						index = previousFrame[ (320 * y) - turnStep + x ];
+						index = previousFrame[ (XRES_FRAMEBUFFER * y) - turnStep + x ];
 					} else {
-						index = framebuffer[ (320 * y) + x - (320 - XRES) - turnStep];
+						index = framebuffer[ (XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
 					}
 
 				} else {
-					index = framebuffer[ (320 * y) + x];
+					index = framebuffer[ (XRES_FRAMEBUFFER * y) + x];
 				}
 
-				slideBitmap[(320*y) + x] = index;
+				slideBitmap[(XRES_FRAMEBUFFER*y) + x] = index;
 			}
 		}
 
@@ -386,22 +386,22 @@ WindProcedure(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) {
 
 
 		for ( y = dirtyLineY0; y < dirtyLineY1; ++y ) {
-			for ( x = 0; x < 320; ++x ) {
+			for ( x = 0; x < XRES_FRAMEBUFFER; ++x ) {
 				uint8_t index;
 
 				if (x < XRES ) {
 
 					if ( x  >= turnStep ) {
-						index = framebuffer[ (320 * y) - turnStep + x ];
+						index = framebuffer[ (XRES_FRAMEBUFFER * y) - turnStep + x ];
 					} else {
-						index = previousFrame[ (320 * y) + x - (320 - XRES) - turnStep];
+						index = previousFrame[ (XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
 					}
 
 				} else {
-					index = framebuffer[ (320 * y) + x];
+					index = framebuffer[ (XRES_FRAMEBUFFER * y) + x];
 				}
 
-				slideBitmap[(320*y) + x] = index;
+				slideBitmap[(XRES_FRAMEBUFFER*y) + x] = index;
 			}
 		}
 
@@ -417,20 +417,20 @@ WindProcedure(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) {
 
 //////////////
 
-        hBitmap = CreateBitmapFromPixels(hdcMem, 320, 200, 8, &slideBitmap[0]);
+        hBitmap = CreateBitmapFromPixels(hdcMem, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, 8, &slideBitmap[0]);
 
         oldBitmap = SelectObject(hdcMem, hBitmap);
 
         GetObject(hBitmap, sizeof(bitmap), &bitmap);
 
 
-		bufferW = (320 * multiplier);
-		bufferH = (200 * yMultiplier);
+		bufferW = (XRES_FRAMEBUFFER * multiplier);
+		bufferH = (YRES_FRAMEBUFFER * yMultiplier);
 		trueW = (rect.right - rect.left);
 		trueH = (rect.bottom - rect.top);
 
 
-		StretchBlt(hdc, ( trueW - bufferW) / 2, (trueH - bufferH) / 2, bufferW, bufferH, hdcMem, 0, 0, 320, 200, SRCCOPY); 
+		StretchBlt(hdc, ( trueW - bufferW) / 2, (trueH - bufferH) / 2, bufferW, bufferH, hdcMem, 0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, SRCCOPY);
 
         SelectObject(hdcMem, oldBitmap);
         DeleteObject(hBitmap);
