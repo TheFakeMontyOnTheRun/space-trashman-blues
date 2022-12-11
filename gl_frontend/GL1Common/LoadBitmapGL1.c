@@ -165,10 +165,6 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
     width = bitmap->width;
     height = bitmap->height;
 
-#ifdef N64
-	data_cache_hit_writeback_invalidate(bitmap->data, width * height * sizeof(TexturePixelFormat) );
-#endif
-
     if (!isPowerOf2(bitmap->width) || !isPowerOf2(bitmap->height)) {
         
         scaleBitmap(intToFix(0), intToFix(0), intToFix(TEXTURE_BUFFER_SIZE), intToFix(TEXTURE_BUFFER_SIZE), bitmap);
@@ -194,7 +190,7 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
 		uint32_t texel = index;//palette[index];
 		uint16_t finalFragment = 0;
 
-		if (index != TRANSPARENCY_COLOR) {
+		if (index & 0xFF000000) {
 			uint8_t r = ((((texel & 0x0000FF)      ) * 32 ) / 256);
 			uint8_t g = ((((texel & 0x00FF00) >>  8) * 32 ) / 256);
 			uint8_t b = ((((texel & 0xFF0000) >> 16) * 32 ) / 256);

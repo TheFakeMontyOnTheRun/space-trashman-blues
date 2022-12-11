@@ -289,7 +289,7 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 	int32_t dstX = (x - 1) * 8;
 	int32_t dstY = (y - 1) * 8;
 	float fontWidth = defaultFont->width;
-    float fontHeight = 24.0f;//defaultFont->height;
+    float fontHeight = 32.0f;//defaultFont->height;
     float blockWidth = 8.0f / fontWidth;
     float blockHeight = 8.0f / fontHeight;
 
