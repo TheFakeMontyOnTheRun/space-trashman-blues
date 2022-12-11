@@ -169,7 +169,11 @@ void fill(
             float fontHeight = defaultFont->height;
             float blockWidth = 8.0f / fontWidth;
             float blockHeight = 8.0f / fontHeight;
-            
+
+			if (defaultFont->uploadId == -1) {
+				defaultFont->uploadId = submitBitmapToGPU(defaultFont);
+			}
+
             glEnable(GL_ALPHA_TEST);
 
             size_t repeatX = (dx / 4);
