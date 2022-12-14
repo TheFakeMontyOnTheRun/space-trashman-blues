@@ -103,12 +103,20 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
     sprintf (nameBuffer, "map%d.img", map);
 
     if (mapTopLevel) {
+#ifndef N64
         free(mapTopLevel);
+#else
+		free_uncached(mapTopLevel);
+#endif
     }
 
     mapTopLevel = loadBitmap(nameBuffer);
 
+#ifndef N64
     free(buffer.data);
+#else
+	free_uncached(buffer.data);
+#endif
 }
 
 void renderTick(long ms) {

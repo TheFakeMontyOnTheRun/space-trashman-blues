@@ -120,11 +120,9 @@ void handleSystemEvents() {
 					break;
 
 				case SDLK_j:
-					useDither = FALSE;
 					visibilityCached = FALSE;
 					break;
 				case SDLK_k:
-					useDither = TRUE;
 					visibilityCached = FALSE;
 					break;
 

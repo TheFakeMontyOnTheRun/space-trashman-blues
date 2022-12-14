@@ -13,9 +13,7 @@ struct Bitmap {
 };
 
 struct Texture {
-	TexturePixelFormat rotations[4][32 * 32];
-    TexturePixelFormat rowMajor[32 * 32];
-    int uploadId;
+	struct Bitmap *raw;
 };
 
 void clearTextures(void);

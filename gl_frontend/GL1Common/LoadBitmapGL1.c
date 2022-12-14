@@ -203,11 +203,11 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
 	}
 
 #ifndef N64
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,  GL_RGBA,   GL_UNSIGNED_SHORT_5_5_5_1, expanded);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA2, width, height, 0,  GL_RGBA,   GL_UNSIGNED_SHORT_5_5_5_1, expanded);
     free( expanded );
     free(bitmap->data);
 #else
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,  GL_RGBA,   GL_UNSIGNED_SHORT_5_5_5_1_EXT, expanded);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA2, width, height, 0,  GL_RGBA,   GL_UNSIGNED_SHORT_5_5_5_1_EXT, expanded);
     free_uncached( expanded );
     free_uncached(bitmap->data);
 #endif
@@ -312,9 +312,13 @@ struct Bitmap *loadBitmap(const char *filename) {
 
 void releaseBitmap(struct Bitmap *ptr) {
 	assert(ptr != NULL);
-
+#ifndef N64
 	free(ptr->data);
 	free(ptr);
+#else
+	free_uncached(ptr->data);
+	free_uncached(ptr);
+#endif
 }
 
 FixP_t lerpFix(const FixP_t v0, const FixP_t v1, const FixP_t dt, const FixP_t total) {

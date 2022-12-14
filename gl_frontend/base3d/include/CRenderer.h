@@ -1,7 +1,6 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#define NATIVE_TEXTURE_SIZE 32
 
 #ifdef AMIGA
 #define XRES 200
@@ -21,31 +20,21 @@
 #define TOTAL_TEXTURES 64
 #define TRANSPARENCY_COLOR 199
 
-struct Projection {
-	struct Vec3 first;
-	struct Vec2 second;
-};
-
 typedef uint32_t OutputPixelFormat;
 typedef uint32_t FramebufferPixelFormat;
 typedef uint8_t UVCoord;
 
 extern struct MapWithCharKey occluders;
-extern struct MapWithCharKey enemySightBlockers;
 extern struct MapWithCharKey colliders;
-extern int useDither;
 extern int visibilityCached;
 extern int needsToRedrawVisibleMeshes;
 extern uint8_t *visibleElementsMap;
+#ifndef N64
 extern struct Bitmap *defaultFont;
-extern uint8_t framebuffer[320 * 200];
-extern uint8_t previousFrame[320 * 200];
+#endif
 extern enum EDirection cameraDirection;
 extern long gameTicks;
-extern int playerHealth;
 extern int hasSnapshot;
-extern int distanceForPenumbra;
-extern int distanceForDarkness;
 extern int turnTarget;
 extern int turnStep;
 extern int needToRedrawHUD;
@@ -61,23 +50,18 @@ extern int needToRedrawHUD;
 
 extern struct MapWithCharKey tileProperties;
 extern struct Vec2i cameraPosition;
-extern uint32_t palette[256];
 extern uint8_t texturesUsed;
 extern enum ECommand mBufferedCommand;
 extern struct Texture *nativeTextures[TOTAL_TEXTURES];
-extern struct Projection projectionVertices[8];
 extern FixP_t playerHeight;
 extern FixP_t walkingBias;
 extern FixP_t playerHeightChangeRate;
-extern FixP_t playerHeightTarget;
 extern FixP_t xCameraOffset;
 extern FixP_t yCameraOffset;
 extern FixP_t zCameraOffset;
 extern int enable3DRendering;
 extern uint8_t enableSmoothMovement;
 extern struct Bitmap *mapTopLevel;
-extern char mTurnBuffer;
-extern struct Vec3 cameraOffset;
 
 struct Mesh {
     uint16_t triangleCount;
@@ -114,12 +98,7 @@ void shutdownHW(void);
 
 void loadMesh(struct Mesh* mesh, char* filename );
 
-void projectAllVertices(const int count);
-
 uint32_t getPaletteEntry(const uint32_t origin);
-
-void renderPageFlip(OutputPixelFormat *stretchedBuffer, FramebufferPixelFormat *currentFrame,
-					FramebufferPixelFormat *prevFrame, int turnState, int turnTarget, uint8_t scale200To240);
 
 void fill(
 		const int x, const int y,

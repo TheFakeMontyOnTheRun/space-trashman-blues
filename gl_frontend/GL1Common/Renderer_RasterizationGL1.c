@@ -8,6 +8,10 @@
 #include <GL/gl.h>
 #endif
 
+#ifdef N64
+#include <libdragon.h>
+#endif
+
 #include "Core.h"
 #include "FixP.h"
 #include "Enums.h"
@@ -16,11 +20,11 @@
 #include "CActor.h"
 #include "MapWithCharKey.h"
 #include "Vec.h"
-#include "LoadBitmap.h"
 #include "MapWithCharKey.h"
 #include "Dungeon.h"
 
 #include "CTile3DProperties.h"
+#include "LoadBitmap.h"
 #include "CRenderer.h"
 
 #include "Engine.h"
@@ -28,7 +32,13 @@
 
 uint8_t shouldDrawLights = TRUE;
 int useDither = TRUE;
+
+#ifndef N64
 struct Bitmap *defaultFont;
+#else
+extern surface_t fontScratch;
+extern GLuint fontTextureId;
+#endif
 
 int submitBitmapToGPU(struct Bitmap* bitmap);
 
@@ -165,6 +175,7 @@ void fill(
                   b);
         
         if (stipple) {
+#ifndef N64
             float fontWidth = defaultFont->width;
             float fontHeight = defaultFont->height;
             float blockWidth = 8.0f / fontWidth;
@@ -208,6 +219,20 @@ void fill(
             glEnd();
             glDisable(GL_ALPHA_TEST);
 			glBindTexture(GL_TEXTURE_2D, 0);
+#else
+			glDisable(GL_TEXTURE_2D);
+            glColor3f(0,
+                      0,
+                      0);
+
+            glBegin(GL_QUADS);
+            glVertex3f(x, y, -2);
+            glVertex3f(x + dx, y, -2);
+            glVertex3f(x + dx, y + dy, -2);
+            glVertex3f(x, y + dy, -2);
+            glEnd();
+            glEnable(GL_TEXTURE_2D);
+#endif
         } else {
             glDisable(GL_TEXTURE_2D);
             glColor3f(r,
@@ -288,6 +313,10 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 	size_t len = strlen(text);
 	int32_t dstX = (x - 1) * 8;
 	int32_t dstY = (y - 1) * 8;
+	size_t c;
+
+#ifndef N64
+
 	float fontWidth = defaultFont->width;
     float fontHeight = 32.0f;//defaultFont->height;
     float blockWidth = 8.0f / fontWidth;
@@ -297,26 +326,23 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 		defaultFont->uploadId = submitBitmapToGPU(defaultFont);
 	}
 
+	glBindTexture(GL_TEXTURE_2D, defaultFont->uploadId);
 
-	size_t c;
-    
-    uint32_t fragment = colour;// palette[colour];
+	uint32_t fragment = colour;// palette[colour];
 
-    float r, g, b;
+	float r, g, b;
 
-    r = (fragment & 0xFF) / 256.0f;
-    g = ((fragment & 0x00FF00) >> 8) / 256.0f;
-    b = ((fragment & 0xFF0000) >> 16)  / 256.0f;
+	r = (fragment & 0xFF) / 256.0f;
+	g = ((fragment & 0x00FF00) >> 8) / 256.0f;
+	b = ((fragment & 0xFF0000) >> 16)  / 256.0f;
 
-    glColor3f(r,
-              g,
-              b);
-    
-    glEnable(GL_ALPHA_TEST);
-    glBindTexture(GL_TEXTURE_2D, defaultFont->uploadId);
-    glBegin(GL_QUADS);
+	glColor3f(r,
+			  g,
+			  b);
 
-    
+	glEnable(GL_ALPHA_TEST);
+	glBegin(GL_QUADS);
+
 	for (c = 0; c < len; ++c) {
 		uint32_t ascii = text[c] - ' ';
 		float line = (((ascii >> 5) + 1) * blockHeight);
@@ -349,6 +375,9 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
     glEnd();
     glDisable(GL_ALPHA_TEST);
 	glBindTexture(GL_TEXTURE_2D, 0);
+#else
+#endif
+
 }
 
 void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour, char charToReplaceHifenWith) {

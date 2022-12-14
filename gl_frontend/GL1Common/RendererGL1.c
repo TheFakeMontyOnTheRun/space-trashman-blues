@@ -27,42 +27,25 @@
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 
-char mTurnBuffer = kCommandNone;
-int currentTarget;
 int visibilityCached = FALSE;
 int needsToRedrawVisibleMeshes = TRUE;
 uint8_t texturesUsed = 0;
-int gunSpeedY = 0;
 int hasSnapshot = FALSE;
-int gunSpeedX = 0;
 FixP_t playerHeightChangeRate = 0;
 FixP_t playerHeightTarget = 0;
 int cursorX = -1;
 int cursorZ = -1;
 uint8_t enableSmoothMovement;
-struct Vec2i gunPosition;
-struct Vec2i gunTargetPosition;
-uint8_t grabbingDisk = FALSE;
-uint8_t covered = FALSE;
 struct MapWithCharKey occluders;
 struct MapWithCharKey colliders;
-struct MapWithCharKey enemySightBlockers;
 enum EDirection cameraDirection;
-int playerHealth = 0;
 struct Vec3 mCamera;
 long gameTicks = 0;
-int distanceForPenumbra = 16;
-int distanceForDarkness = 32;
-int playerAmmo = 0;
 uint8_t linesOfSight[MAP_SIZE][MAP_SIZE];
 uint8_t revealed[MAP_SIZE][MAP_SIZE];
-struct Bitmap *backdrop = NULL;
 struct MapWithCharKey tileProperties;
 struct Vec2i cameraPosition;
 uint8_t mItems[MAP_SIZE][MAP_SIZE];
-uint8_t shouldShowDamageHighlight = FALSE;
-uint8_t shouldShowDetectedHighlight = FALSE;
-int highlightDisplayTime = 0;
 enum ECommand mBufferedCommand = kCommandNone;
 struct Texture *itemSprites[TOTAL_ITEMS];
 int turnTarget = 0;
@@ -101,6 +84,7 @@ void initGL() {
 //    glDepthFunc(GL_LEQUAL);                         // The Type Of Depth Testing To Do
     glAlphaFunc(GL_GREATER, 0);
     glDisable(GL_LINE_SMOOTH);
+	glDisable(GL_CULL_FACE);
 }
 
 void clearRenderer() {
@@ -134,6 +118,12 @@ void gluPerspective(	float fovy,
 	float aspect,
 	float zNear,
 	float zFar) {
+
+	float aspect_ratio = aspect;
+	float near_plane = zNear;
+	float far_plane = zFar;
+
+	glFrustum(-near_plane*aspect_ratio, near_plane*aspect_ratio, -near_plane, near_plane, near_plane, far_plane);
 }
 void enter3D(void) {
     glMatrixMode(GL_PROJECTION);
@@ -157,7 +147,6 @@ void loadTileProperties(const uint8_t levelNumber) {
 	clearMap(&tileProperties);
 	clearMap(&occluders);
 	clearMap(&colliders);
-	clearMap(&enemySightBlockers);
 
 	sprintf(buffer, "props%d.bin", levelNumber);
 
@@ -169,21 +158,18 @@ void loadTileProperties(const uint8_t levelNumber) {
 		struct CTile3DProperties *prop =
 				(struct CTile3DProperties *) getFromMap(&tileProperties, c);
 
-		if (prop) {
-
-			if (prop->mBlockVisibility) {
-				setInMap(&occluders, c, &occluders);
-			}
-
-			setInMap(&enemySightBlockers, c,
-					 prop->mBlockEnemySight ? &enemySightBlockers : NULL);
+		if (prop && prop->mBlockVisibility) {
+			setInMap(&occluders, c, &occluders);
 		} else {
 			setInMap(&occluders, c, NULL);
-			setInMap(&enemySightBlockers, c, NULL);
 		}
 	}
 
+#ifndef N64
 	free(data.data);
+#else
+	free_uncached(data.data);
+#endif
 }
 
 void loadTexturesForLevel(const uint8_t levelNumber) {
@@ -215,8 +201,11 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 		++head;
 	}
 
+#ifndef N64
 	free(data.data);
-    backdrop = loadBitmap("backdrop.img");
+#else
+	free_uncached(data.data);
+#endif
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -224,10 +213,6 @@ void updateCursorForRenderer(const int x, const int z) {
 	visibilityCached = FALSE;
 	cursorX = x;
 	cursorZ = z;
-
-	if (x == -1) {
-		gunTargetPosition.x = XRES / 4;
-	}
 }
 
 void drawMap(const uint8_t *  elements,
@@ -331,18 +316,6 @@ void render(const long ms) {
 		playerHeight += playerHeightChangeRate;
 	}
 
-	if (abs(gunTargetPosition.y - gunPosition.y) > 3) {
-		gunSpeedY = (gunTargetPosition.y > gunPosition.y) ? 4 : -4;
-		gunPosition.y += gunSpeedY;
-		needsToRedrawVisibleMeshes = TRUE;
-	}
-
-	if (gunTargetPosition.x != gunPosition.x) {
-		gunSpeedX = (gunTargetPosition.x > gunPosition.x) ? 4 : -4;
-		gunPosition.x += gunSpeedX;
-		needsToRedrawVisibleMeshes = TRUE;
-	}
-
 	if (needsToRedrawVisibleMeshes) {
 		char buffer[64];
 		char directions[4] = {'N', 'E', 'S', 'W'};
@@ -361,14 +334,7 @@ void render(const long ms) {
 		int c;
 		uint8_t facesMask;
 
-		highlightDisplayTime -= ms;
 		needsToRedrawVisibleMeshes = FALSE;
-
-		for (c = 0; c <= (XRES / 20); ++c) {
-			drawBitmap(c * 20, 0, backdrop, FALSE);
-		}
-        
-		fill(0, YRES / 2, XRES, YRES / 2, getPaletteEntry(0xFF000000), FALSE);
 
 		element = map[cameraPosition.y][cameraPosition.x];
 
@@ -965,49 +931,25 @@ void render(const long ms) {
 					}
 				}
 
-                if (itemsSnapshotElement != 0xFF && itemsSnapshotElement != 0) {
-                    tmp.mX = position.mX;
-                    tmp.mY = position.mY;
-                    tmp.mZ = position.mZ;
-                    
-                    addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
-                    
-                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
-                }
+//                if (itemsSnapshotElement != 0xFF && itemsSnapshotElement != 0) {
+//                    tmp.mX = position.mX;
+//                    tmp.mY = position.mY;
+//                    tmp.mZ = position.mZ;
+//
+//                    addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
+//
+//                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
+//                }
 
 			}
 		}
-
 		enter2D();
 
-		if (shouldShowDamageHighlight) {
-
-			fill(0, 0, XRES, YRES, getPaletteEntry(0xFF0000FF), TRUE);
-
-			if (highlightDisplayTime <= 0) {
-				shouldShowDamageHighlight = FALSE;
-			}
-
-			needsToRedrawVisibleMeshes = TRUE;
-		}
-
-		if (shouldShowDetectedHighlight) {
-
-			fill(0, 0, XRES, YRES, getPaletteEntry(0xFF00FFFF), TRUE);
-			if (highlightDisplayTime <= 0) {
-				shouldShowDetectedHighlight = FALSE;
-			}
-			needsToRedrawVisibleMeshes = TRUE;
-		}
-
 		fill(0, 0, XRES_FRAMEBUFFER, 8, getPaletteEntry(0xFF000000), FALSE);
-		drawTextAt(2, 1, "Agent in the field", getPaletteEntry(0xFFFFFFFF));
-
 
 		drawTextAt(34, 1, "Map", getPaletteEntry(0xFFFFFFFF));
 
 		fill(XRES, 8, XRES_FRAMEBUFFER - XRES, YRES_FRAMEBUFFER - 8, getPaletteEntry(0xFFFFFFFF), FALSE);
-
 
 		for (y = 0; y < MAP_SIZE; ++y) {
 			for (x = 0; x < MAP_SIZE; ++x) {
@@ -1059,16 +1001,7 @@ void render(const long ms) {
 		fill(256 + (cameraPosition.x), 16 + (2 * cameraPosition.y), 1,
 			 2, getPaletteEntry(0xFF888888), FALSE);
 
-
-		sprintf(buffer, "HP: %d \nAmmo: %d", playerHealth, playerAmmo);
-		drawTextAt(34, 22, buffer, getPaletteEntry(0xFF888888));
 		sprintf(buffer, "Dir: %c", directions[(int) (cameraDirection)]);
-
-
 		drawTextAt(34, 24, buffer, getPaletteEntry(0xFF000000));
-
-		if (covered) {
-            drawTextAt(34, 21, "Covered", getPaletteEntry(0xFF888888));
-		}
 	}
 }

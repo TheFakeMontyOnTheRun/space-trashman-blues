@@ -71,7 +71,6 @@ void Crawler_initStateCallback(int32_t tag) {
     }
 
     playerHeight = 0;
-    playerHeightTarget = kCameraYDeltaPlayerDeath;
     playerHeightChangeRate = 0;
 
     thisMissionName = getRoomDescription();

@@ -17,7 +17,6 @@
 
 #include "Enums.h"
 #include "FixP.h"
-#include "LoadBitmap.h"
 #include "Engine.h"
 #include "FixP.h"
 #include "Vec.h"
@@ -30,6 +29,7 @@
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
+#include "LoadBitmap.h"
 #include "VisibilityStrategy.h"
 
 

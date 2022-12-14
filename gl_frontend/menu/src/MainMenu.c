@@ -43,10 +43,10 @@ const int kMainMenuOptionsCount = 3;
 #endif
 
 extern size_t biggestOption;
-
+/*
 struct Bitmap *logoBitmap;
 struct Bitmap *logo2Bitmap;
-
+*/
 void MainMenu_initStateCallback(int32_t tag) {
     int c;
     cursorPosition = 0;
@@ -54,9 +54,10 @@ void MainMenu_initStateCallback(int32_t tag) {
     if (currentBackgroundBitmap != NULL) {
         releaseBitmap(currentBackgroundBitmap);
     }
-
+/*
     logoBitmap = loadBitmap("title.img");
     logo2Bitmap = loadBitmap("logo.img");
+    */
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
 
@@ -103,10 +104,10 @@ void MainMenu_repaintCallback(void) {
                  sizeX, sizeY, 0);
         return;
     }
-
+/*
     drawBitmap(0, 0, logoBitmap, 0);
     drawBitmap(118, 45, logo2Bitmap, 1);
-
+*/
 	drawWindow(40 - biggestOption - 3, 25 - 4 - (optionsHeight / 8), biggestOption + 2, (optionsHeight / 8) + 2,
                "Episode 0");
 
@@ -193,6 +194,8 @@ enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void MainMenu_unloadStateCallback() {
+	/*
     releaseBitmap(logoBitmap);
 	releaseBitmap(logo2Bitmap);
+	 */
 }

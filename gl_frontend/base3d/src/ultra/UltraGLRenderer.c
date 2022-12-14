@@ -32,17 +32,10 @@ void graphicsInit() {
 
 	display_init(RESOLUTION_320x240, DEPTH_16_BPP, 3, GAMMA_NONE, ANTIALIAS_RESAMPLE_FETCH_ALWAYS);
 
-	defaultFont = loadBitmap("font.img");
-
 	enableSmoothMovement = TRUE;
 
 	// that is from the N64 SDK...not our own initGL
 	gl_init();
-
-#if DEBUG_RDP
-	rdpq_debug_start();
-    rdpq_debug_log(true);
-#endif
 
 	initGL();
 	controller_init();
@@ -54,11 +47,11 @@ void handleSystemEvents() {
 	struct controller_data pressed = get_keys_pressed();
 	struct controller_data down = get_keys_down();
 
-	if (pressed.c[0].A) {
+	if (pressed.c[0].C_up) {
 		mBufferedCommand = kCommandUp;
 	}
 
-	if (pressed.c[0].B) {
+	if (pressed.c[0].C_down) {
 		mBufferedCommand = kCommandDown;
 	}
 
@@ -66,17 +59,26 @@ void handleSystemEvents() {
 		mBufferedCommand = kCommandFire1;
 	}
 
-	if (down.c[0].R) {
+	if (down.c[0].A) {
+		mBufferedCommand = kCommandFire1;
 	}
 
-	if (down.c[0].C_up) {
+	if (down.c[0].B) {
+		mBufferedCommand = kCommandBack;
+	}
+
+	if (down.c[0].C_left) {
+		mBufferedCommand = kCommandLeft;
+	}
+
+	if (down.c[0].C_right) {
+		mBufferedCommand = kCommandRight;
 	}
 
 
 }
 
 void graphicsShutdown() {
-	releaseBitmap(defaultFont);
 	texturesUsed = 0;
 }
 
