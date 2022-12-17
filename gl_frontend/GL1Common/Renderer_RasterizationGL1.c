@@ -36,8 +36,7 @@ int useDither = TRUE;
 #ifndef N64
 struct Bitmap *defaultFont;
 #else
-extern surface_t fontScratch;
-extern GLuint fontTextureId;
+extern rdpq_font_t *fnt1;
 #endif
 
 int submitBitmapToGPU(struct Bitmap* bitmap);
@@ -376,8 +375,25 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
     glDisable(GL_ALPHA_TEST);
 	glBindTexture(GL_TEXTURE_2D, 0);
 #else
-#endif
+	dstX = (x - 1) * 8;
+	dstY = (y + 1) * 9;
 
+	rdpq_mode_end();
+
+	uint8_t r, g, b;
+
+	r = (colour & 0xFF);
+	g = ((colour & 0x00FF00) >> 8);
+	b = ((colour & 0xFF0000) >> 16);
+
+	rdpq_font_begin(RGBA32(r, g, b, 0xFF));
+	rdpq_font_position(dstX, dstY);
+	rdpq_font_print(fnt1, text);
+	rdpq_font_end();
+
+ 	rdpq_mode_begin();
+
+#endif
 }
 
 void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour, char charToReplaceHifenWith) {

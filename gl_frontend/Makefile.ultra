@@ -51,7 +51,16 @@ src = menu/src/MainMenu.c \
 
 all: derelict64.z64
 
-$(BUILD_DIR)/derelict64.dfs: $(wildcard filesystem/*)
+filesystem/%.font64: assets/%.ttf
+	@mkdir -p $(dir $@)
+	@echo "    [FONT] $@"
+	@$(N64_MKFONT) $(MKFONT_FLAGS) -o filesystem "$<"
+
+MKFONT_FLAGS ?=
+
+filesystem/font.font64: MKFONT_FLAGS+=--size 9
+
+$(BUILD_DIR)/derelict64.dfs: $(wildcard filesystem/*) filesystem/font.font64
 $(BUILD_DIR)/derelict64.elf: $(src:%.c=$(BUILD_DIR)/%.o)
 
 derelict64.z64: N64_ROM_TITLE="Derelict 64"

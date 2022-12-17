@@ -24,7 +24,7 @@
 #include "CRenderer.h"
 
 int snapshotSignal = '.';
-
+rdpq_font_t *fnt1;
 void graphicsInit() {
 
 	debug_init_isviewer();
@@ -36,9 +36,10 @@ void graphicsInit() {
 
 	// that is from the N64 SDK...not our own initGL
 	gl_init();
-
+	rdpq_init();
 	initGL();
 	controller_init();
+	fnt1 = rdpq_font_load("rom:/font.font64");
 }
 
 void handleSystemEvents() {
