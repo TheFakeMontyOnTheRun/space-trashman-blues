@@ -108,7 +108,6 @@ void redrawHUD() {
     drawTextAt(1 + (XRES / 8), 1, " Map:", getPaletteEntry(0xFFFFFFFF));
 
     if (mapTopLevel != NULL) {
-        drawBitmap(XRES, 72, mapTopLevel, 0);
     }
 
     //draw current item on the corner of the screen

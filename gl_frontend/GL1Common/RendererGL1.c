@@ -26,6 +26,8 @@
 #include "CRenderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
+#include "UI.h"
+#include "Engine.h"
 
 int visibilityCached = FALSE;
 int needsToRedrawVisibleMeshes = TRUE;
@@ -945,63 +947,14 @@ void render(const long ms) {
 		}
 		enter2D();
 
-		fill(0, 0, XRES_FRAMEBUFFER, 8, getPaletteEntry(0xFF000000), FALSE);
-
-		drawTextAt(34, 1, "Map", getPaletteEntry(0xFFFFFFFF));
-
-		fill(XRES, 8, XRES_FRAMEBUFFER - XRES, YRES_FRAMEBUFFER - 8, getPaletteEntry(0xFFFFFFFF), FALSE);
-
-		for (y = 0; y < MAP_SIZE; ++y) {
-			for (x = 0; x < MAP_SIZE; ++x) {
-				uint8_t tile = map[y][x];
-
-				if (!revealed[y][x]) {
-					linesOfSight[y][x] = FALSE;
-					continue;
-				}
-
-				fill(256 + (x), 16 + (2 * y), 1, 2, getPaletteEntry(0xFF444444), FALSE);
-
-				if (getFromMap(&colliders, tile)) {
-					fill(256 + (x), 16 + (2 * y), 1, 2, getPaletteEntry(0xFF000000), FALSE);
-				}
-
-				if (linesOfSight[y][x]) {
-					fill(256 + (x), 16 + (2 * y), 1, 2, getPaletteEntry(0xFFFFFFFF), FALSE);
-				}
-
-				if (cursorZ == y && x == cursorX) {
-					fill(256 + (x), 16 + (2 * y), 1, 2, getPaletteEntry(0xFFFFFFFF), FALSE);
-				}
-
-				if (tile == 'K' || tile == 'E' || tile == 'i') {
-					fill(256 + (x), 16 + (2 * y), 1, 2, getPaletteEntry(0xFF999999), FALSE);
-				}
-
-				linesOfSight[y][x] = FALSE;
-			}
+		if (focusItemName != NULL) {
+			size_t len = strlen(focusItemName);
+			int lines = 1 + (len / 27);
+			fill( 0, YRES - (8 * lines), XRES, lines * 8, 0, 1 );
+			drawTextAtWithMarginWithFiltering(1, 26 - lines, XRES, focusItemName, 255, ' ');
 		}
 
-        drawRect(256, 16, 63, 128, getPaletteEntry(0xFF000000));
 
-		fill(256, 16 + (2 * cameraPosition.y), (cameraPosition.x), 1,
-			 (cameraDirection == kWest) ? getPaletteEntry(0xFF888888) : getPaletteEntry(0xFF444444), FALSE);
-
-		fill(256 + (cameraPosition.x), 16 + (2 * cameraPosition.y),
-			 XRES_FRAMEBUFFER - (256 + (cameraPosition.x)), 1,
-			 (cameraDirection == kEast) ? getPaletteEntry(0xFF888888) : getPaletteEntry(0xFF444444), FALSE);
-
-		fill(256 + (cameraPosition.x), 16, 1, (2 * cameraPosition.y),
-			 (cameraDirection == kNorth) ? getPaletteEntry(0xFF888888) : getPaletteEntry(0xFF444444), FALSE);
-
-		fill(256 + (cameraPosition.x), 16 + (2 * cameraPosition.y), 1,
-			 96 - (16 + (2 * cameraPosition.y)),
-			 (cameraDirection == kSouth) ? getPaletteEntry(0xFF888888) : getPaletteEntry(0xFF444444), FALSE);
-
-		fill(256 + (cameraPosition.x), 16 + (2 * cameraPosition.y), 1,
-			 2, getPaletteEntry(0xFF888888), FALSE);
-
-		sprintf(buffer, "Dir: %c", directions[(int) (cameraDirection)]);
-		drawTextAt(34, 24, buffer, getPaletteEntry(0xFF000000));
+		redrawHUD();
 	}
 }
