@@ -314,12 +314,13 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 	int32_t dstY = (y - 1) * 8;
 	size_t c;
 
-#ifndef N64
+	uint32_t fragment = colour;// palette[colour];
 
+#ifndef N64
 	float fontWidth = defaultFont->width;
-    float fontHeight = 32.0f;//defaultFont->height;
-    float blockWidth = 8.0f / fontWidth;
-    float blockHeight = 8.0f / fontHeight;
+	float fontHeight = 32.0f;//defaultFont->height;
+	float blockWidth = 8.0f / fontWidth;
+	float blockHeight = 8.0f / fontHeight;
 
 	if (defaultFont->uploadId == -1) {
 		defaultFont->uploadId = submitBitmapToGPU(defaultFont);
@@ -327,7 +328,8 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 
 	glBindTexture(GL_TEXTURE_2D, defaultFont->uploadId);
 
-	uint32_t fragment = colour;// palette[colour];
+	glEnable(GL_ALPHA_TEST);
+	glBegin(GL_QUADS);
 
 	float r, g, b;
 
@@ -339,14 +341,23 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 			  g,
 			  b);
 
-	glEnable(GL_ALPHA_TEST);
-	glBegin(GL_QUADS);
+#else
+	char shortStr[2];
+	shortStr[1] = 0;
 
+	dstX = (x - 1) * 8;
+	dstY = (y + 1) * 9;
+
+	uint8_t r, g, b;
+
+		r = (colour & 0xFF);
+		g = ((colour & 0x00FF00) >> 8);
+		b = ((colour & 0xFF0000) >> 16);
+
+	rdpq_mode_end();
+	rdpq_font_begin(RGBA32(r, g, b, 0xFF));
+#endif
 	for (c = 0; c < len; ++c) {
-		uint32_t ascii = text[c] - ' ';
-		float line = (((ascii >> 5) + 1) * blockHeight);
-		float col = (((ascii & 31)) * blockWidth);
-
 		if (text[c] == '\n' || dstX >= XRES_FRAMEBUFFER) {
 			dstX = (x - 1) * 8;
 			dstY += 8;
@@ -357,7 +368,12 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 			dstX += 8;
 			continue;
 		}
-        
+
+#ifndef N64
+		uint32_t ascii = text[c] - ' ';
+		float line = (((ascii >> 5) + 1) * blockHeight);
+		float col = (((ascii & 31)) * blockWidth);
+
         glTexCoord2f(col, line - blockHeight);
         glVertex3f( dstX, dstY, -2);
         glTexCoord2f(col + blockWidth, line - blockHeight);
@@ -366,34 +382,27 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
         glVertex3f( dstX + 8, dstY + 8, -2);
         glTexCoord2f(col, line);
         glVertex3f(dstX, dstY + 8, -2);
-        
+#else
+		shortStr[0] = text[c];
+		rdpq_font_position(dstX, dstY);
+		rdpq_font_print(fnt1, &shortStr[0]);
+#endif
+
+
 		dstX += 8;
 	}
-    
+#ifndef N64
+	glEnd();
+#else
+	rdpq_font_end();
+	rdpq_mode_begin();
+#endif
+
+
+
     glColor3f(1.0f, 1.0f, 1.0f);
-    glEnd();
     glDisable(GL_ALPHA_TEST);
 	glBindTexture(GL_TEXTURE_2D, 0);
-#else
-	dstX = (x - 1) * 8;
-	dstY = (y + 1) * 9;
-
-	rdpq_mode_end();
-
-	uint8_t r, g, b;
-
-	r = (colour & 0xFF);
-	g = ((colour & 0x00FF00) >> 8);
-	b = ((colour & 0xFF0000) >> 16);
-
-	rdpq_font_begin(RGBA32(r, g, b, 0xFF));
-	rdpq_font_position(dstX, dstY);
-	rdpq_font_print(fnt1, text);
-	rdpq_font_end();
-
- 	rdpq_mode_begin();
-
-#endif
 }
 
 void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour, char charToReplaceHifenWith) {
