@@ -845,9 +845,6 @@ void render(const long ms) {
 							tmp2.mY = position.mY;
 							tmp2.mZ = position.mZ;
 
-
-							flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kEast);
-
 							addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2), 0);
 							addToVec3(&tmp2, 0, (tileProp->mCeilingHeight * 2), 0);
 
@@ -865,11 +862,8 @@ void render(const long ms) {
 							tmp2.mY = position.mY;
 							tmp2.mZ = position.mZ;
 
-
 							addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
 							addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
-
-							flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kWest);
 
 							drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection, flipTextureVertical);
 						}
@@ -884,8 +878,6 @@ void render(const long ms) {
 							tmp2.mX = position.mX;
 							tmp2.mY = position.mY;
 							tmp2.mZ = position.mZ;
-
-							flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kEast);
 
 							addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
 							addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
@@ -907,8 +899,6 @@ void render(const long ms) {
 
 							addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
 							addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
-
-							flipTextureVertical = (cameraDirection == kNorth || cameraDirection == kWest );
 
 							drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex],
 									   (cameraDirection + 3) & 3, flipTextureVertical);
