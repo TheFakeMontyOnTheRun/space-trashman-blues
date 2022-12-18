@@ -135,9 +135,6 @@ void drawBillboardAt(const struct Vec3 center,
 					 const FixP_t scale,
 					 const int size) {
 	FixP_t one = intToFix(1);
-    FixP_t zero = 0;
-    FixP_t minusOne = -one;
-    FixP_t minusScale = (-scale);
 	struct Vec3 scaledCenter;
 
 	if (center.mZ <= kMinZCull) {
@@ -147,19 +144,20 @@ void drawBillboardAt(const struct Vec3 center,
 	initVec3(&scaledCenter, center.mX, (center.mY), center.mZ);
 
     float centerX, centerY, centerZ;
-    float textureScale = fixToInt(scale);
-    float geometryScale = fixToInt(scale) * ratio;
-    
-//	FixP_t acc;
-//	FixP_t bias = intToFix(128);
-//	FixP_t scaled;
-//
-//	acc = (p0.mY + playerHeight + walkingBias + yCameraOffset);
-//	scaled = Mul( acc, bias );
-//	centerY1 = fixToInt(scaled) / 128.0f;
+	FixP_t acc;
+	FixP_t bias = intToFix(128);
+	FixP_t scaled = Mul( scale, bias );
+	float textureScale = (fixToInt(scaled) / 128.0f) * ratio;
+	float geometryScale = textureScale;
+
 
     centerX = fixToInt(center.mX + xCameraOffset);
-    centerY = fixToInt(center.mY + playerHeight + walkingBias + yCameraOffset) * (240.0f/200.0f);
+
+
+	acc = (center.mY + playerHeight + walkingBias + yCameraOffset);
+	scaled = Mul( acc, bias );
+	centerY = (fixToInt(scaled) / 128.0f) * (240.0f/200.0f);
+
     centerZ = -fixToInt(center.mZ + zCameraOffset);
     
     glBindTexture(GL_TEXTURE_2D, bitmap->raw->uploadId);

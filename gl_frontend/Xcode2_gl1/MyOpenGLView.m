@@ -33,6 +33,8 @@
 
 @implementation MyOpenGLView
 
+void initStation(void);
+
 NSMutableSet *playingSounds;
 int nextAudioChannel = -1;
 float multiplier = 1.0f;
@@ -92,7 +94,7 @@ void initHW() {
     NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"base.pfs"];
     initFileReader([path UTF8String]);
     
-    graphicsInit();
+    
     setupOPL2(0);
 }
 
@@ -196,10 +198,12 @@ void flipRenderer() {
     
     [[self openGLContext] makeCurrentContext];
     
-    
-    initGL();
-    
+    initStation();
     initHW();
+    initGL();
+    graphicsInit();
+    
+    
     enterState(kMainMenu);
     
     [NSTimer scheduledTimerWithTimeInterval:1.0/20.0f

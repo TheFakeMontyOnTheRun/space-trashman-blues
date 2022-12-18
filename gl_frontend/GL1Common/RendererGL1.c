@@ -78,6 +78,8 @@ void enter2D(void) {
 }
 
 void initGL() {
+	char buffer[256];
+	int c;
     glEnable(GL_TEXTURE_2D);                        // Enable Texture Mapping ( NEW )
     glShadeModel(GL_SMOOTH);                        // Enable Smooth Shading
     glClearColor(0.0f, 0.0f, 0.0f, 0.5f);                   // Black Background
@@ -87,6 +89,12 @@ void initGL() {
     glAlphaFunc(GL_GREATER, 0);
     glDisable(GL_LINE_SMOOTH);
 	glDisable(GL_CULL_FACE);
+
+	//item 0 is a dummy
+	for (c = 1; c < itemsCount; ++c) {
+		sprintf(&buffer[0], "%s.img", getItem(c)->name);
+		itemSprites[c] = (makeTextureFrom(&buffer[0]));
+	}
 }
 
 void clearRenderer() {
@@ -223,7 +231,7 @@ void drawMap(const uint8_t *  elements,
              uint8_t *  effects,
              const struct CActor *  current) {
 
-
+	int8_t z, x;
 	const struct Vec2i mapCamera = current->position;
 	cameraDirection = current->rotation;
 	hasSnapshot = TRUE;
@@ -261,6 +269,22 @@ void drawMap(const uint8_t *  elements,
 	needsToRedrawVisibleMeshes = TRUE;
 
 	cameraPosition = mapCamera;
+
+
+	for (z = 0; z < MAP_SIZE; ++z) {
+		for (x = 0; x < MAP_SIZE; ++x) {
+			const uint16_t offset = (MAP_SIZE * z) + x;
+			const uint8_t actor = actors[offset];
+			const uint8_t item = items[offset];
+			const uint8_t effect = effects[offset];
+
+			mItems[z][x] = 0xFF;
+
+			if (item != 0xFF) {
+				mItems[z][x] = item;
+			}
+		}
+	}
 
 	switch (cameraDirection) {
 		case kNorth:
@@ -923,15 +947,15 @@ void render(const long ms) {
 					}
 				}
 
-//                if (itemsSnapshotElement != 0xFF && itemsSnapshotElement != 0) {
-//                    tmp.mX = position.mX;
-//                    tmp.mY = position.mY;
-//                    tmp.mZ = position.mZ;
-//
-//                    addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
-//
-//                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
-//                }
+				if (itemsSnapshotElement != 0xFF) {
+                    tmp.mX = position.mX;
+                    tmp.mY = position.mY;
+                    tmp.mZ = position.mZ;
+
+                    addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
+
+                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
+                }
 
 			}
 		}

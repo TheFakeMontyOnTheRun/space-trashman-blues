@@ -62,9 +62,10 @@ void mainLoop();
 
 int main(int argc, char **argv) {
 
+	initStation();
+
     initHW();
 
-    initStation();
     enterState(kMainMenu);
 
     end_clock = uclock();
