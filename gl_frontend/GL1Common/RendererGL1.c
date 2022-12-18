@@ -982,6 +982,31 @@ void render(const long ms) {
 		}
 
 
+		if (currentPresentationState == kRoomTransitioning) {
+			messageLogBufferCoolDown = 0;
+		}
+
+		if (messageLogBufferCoolDown > 0) {
+			int len = strlen(&messageLogBuffer[0]);
+			int lines = 1;
+			int chars = 0;
+			int c;
+
+			for (c = 0; c < len; ++c) {
+
+				++chars;
+
+				if (chars == 27 || messageLogBuffer[c] == '\n') {
+					chars = 0;
+					++lines;
+				}
+			}
+
+			fill(0, 0, 216, lines * 8, 0, 1);
+
+			drawTextAt(1, 1, &messageLogBuffer[0], 255);
+		}
+
 		redrawHUD();
 	}
 }
