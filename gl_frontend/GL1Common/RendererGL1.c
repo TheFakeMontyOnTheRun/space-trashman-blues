@@ -56,6 +56,12 @@ FixP_t xCameraOffset;
 FixP_t yCameraOffset;
 FixP_t zCameraOffset;
 struct Bitmap *mapTopLevel;
+char messageLogBuffer[256];
+
+int messageLogBufferCoolDown = 0;
+
+void printMessageTo3DView(const char *message);
+
 
 enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
 struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
@@ -149,10 +155,17 @@ void enter3D(void) {
     glColor3f(1,1,1);
 }
 
+void printMessageTo3DView(const char *message) {
+	strcpy(&messageLogBuffer[0], message);
+	messageLogBufferCoolDown = 5000;
+}
+
 void loadTileProperties(const uint8_t levelNumber) {
 	char buffer[64];
     struct StaticBuffer data = loadBinaryFileFromPath(buffer);
 	int c;
+
+	setLoggerDelegate(printMessageTo3DView);
 
 	clearMap(&tileProperties);
 	clearMap(&occluders);
