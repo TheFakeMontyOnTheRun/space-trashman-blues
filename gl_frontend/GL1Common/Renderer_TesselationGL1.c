@@ -83,43 +83,43 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 	glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
 	glBegin(GL_QUADS);
 
-	glTexCoord2f(0.0f, 0.0f);
+	glTexCoord2f(0.0f, 1.0f);
 
 	switch (direction) {
 		case kNorth:
 			glVertex3f(centerX - 1.0f, centerY0, centerZ - 1.0f);
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(centerX + 1.0f, centerY0, centerZ - 1.0f);
 			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(centerX + 1.0f, centerY0, centerZ - 1.0f);
+			glTexCoord2f(1.0f, 0.0f);
 			glVertex3f(centerX + 1.0f, centerY1, centerZ + 1.0f);
-			glTexCoord2f(0.0f, 1.0f);
+			glTexCoord2f(0.0f, 0.0f);
 			glVertex3f(centerX - 1.0f, centerY1, centerZ + 1.0f);
 			break;
 		case kSouth:
 			glVertex3f(centerX - 1.0f, centerY1, centerZ - 1.0f);
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(centerX + 1.0f, centerY1, centerZ - 1.0f);
 			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(centerX + 1.0f, centerY1, centerZ - 1.0f);
+			glTexCoord2f(1.0f, 0.0f);
 			glVertex3f(centerX + 1.0f, centerY0, centerZ + 1.0f);
-			glTexCoord2f(0.0f, 1.0f);
+			glTexCoord2f(0.0f, 0.0f);
 			glVertex3f(centerX - 1.0f, centerY0, centerZ + 1.0f);
 			break;
 		case kEast:
 			glVertex3f(centerX - 1.0f, centerY0, centerZ - 1.0f);
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(centerX + 1.0f, centerY1, centerZ - 1.0f);
 			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(centerX + 1.0f, centerY1, centerZ - 1.0f);
+			glTexCoord2f(1.0f, 0.0f);
 			glVertex3f(centerX + 1.0f, centerY1, centerZ + 1.0f);
-			glTexCoord2f(0.0f, 1.0f);
+			glTexCoord2f(0.0f, 0.0f);
 			glVertex3f(centerX - 1.0f, centerY0, centerZ + 1.0f);
 			break;
 		case kWest:
 			glVertex3f(centerX - 1.0f, centerY1, centerZ - 1.0f);
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(centerX + 1.0f, centerY0, centerZ - 1.0f);
 			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(centerX + 1.0f, centerY0, centerZ - 1.0f);
+			glTexCoord2f(1.0f, 0.0f);
 			glVertex3f(centerX + 1.0f, centerY0, centerZ + 1.0f);
-			glTexCoord2f(0.0f, 1.0f);
+			glTexCoord2f(0.0f, 0.0f);
 			glVertex3f(centerX - 1.0f, centerY1, centerZ + 1.0f);
 			break;
 	}
@@ -214,46 +214,46 @@ void drawColumnAt(const struct Vec3 center,
     
     glBegin(GL_QUADS);
 	if ((mask & MASK_BEHIND)) {
-        glTexCoord2f(textureScale, 1.0f);
+        glTexCoord2f(0, textureScale);
         glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ - 1.0f);
-        glTexCoord2f(textureScale, 0.0f);
+        glTexCoord2f(1.0f, textureScale);
         glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ - 1.0f);
-        glTexCoord2f(0.0f, 0.0f);
+        glTexCoord2f(1.0f, 0.0f);
         glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ - 1.0f);
-        glTexCoord2f(0.0f, 1.0f);
+        glTexCoord2f(0.0f, 0.0f);
         glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ - 1.0f);
     }
 
     if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0 ) || (mask & MASK_FORCE_RIGHT)) {
-        glTexCoord2f(textureScale, 0.0f);
+        glTexCoord2f(0, textureScale);
         glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ - 1.0f);
-        glTexCoord2f(textureScale, 1.0f);
+        glTexCoord2f(1.0f, textureScale);
         glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ + 1.0f);
-        glTexCoord2f(0.0f, 1.0f);
+        glTexCoord2f(1.0f, 0.0f);
         glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ + 1.0f);
         glTexCoord2f(0.0f, 0.0f);
         glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ - 1.0f);
     }
 
     if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0 ) || (mask & MASK_FORCE_LEFT)) {
-        glTexCoord2f(textureScale, 0.0f);
+        glTexCoord2f(0, textureScale);
         glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ - 1.0f);
-        glTexCoord2f(textureScale, 1.0f);
+        glTexCoord2f(1.0f, textureScale);
         glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ + 1.0f);
-        glTexCoord2f(0.0f, 1.0f);
+        glTexCoord2f(1.0f, 0.0f);
         glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ + 1.0f);
         glTexCoord2f(0.0f, 0.0f);
         glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ - 1.0f);
     }
 
 	if ((mask & MASK_FRONT)) {
-        glTexCoord2f(textureScale, 1.0f);
+        glTexCoord2f(0, textureScale);
         glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ + 1.0f);
-        glTexCoord2f(textureScale, 0.0f);
+        glTexCoord2f(1.0f, textureScale);
         glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ + 1.0f);
-        glTexCoord2f(0.0f, 0.0f);
+        glTexCoord2f(1.0f, 0.0f);
         glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ + 1.0f);
-        glTexCoord2f(0.0f, 1.0f);
+        glTexCoord2f(0.0f, 0.0f);
         glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ + 1.0f);
     }
 
@@ -275,18 +275,65 @@ void drawFloorAt(const struct Vec3 center,
 
 	centerX = fixToInt(center.mX + xCameraOffset);
     centerZ = -fixToInt(center.mZ + zCameraOffset);
-    
+
+
+	int x[4], y[4];
+
+	switch (cameraDirection) {
+		case kNorth:
+			x[0] = 0;
+			y[0] = 1;
+			x[1] = 1;
+			y[1] = 1;
+			x[2] = 1;
+			y[2] = 0;
+			x[3] = 0;
+			y[3] = 0;
+			break;
+		case kSouth:
+			x[0] = 1;
+			y[0] = 0;
+			x[1] = 0;
+			y[1] = 0;
+			x[2] = 0;
+			y[2] = 1;
+			x[3] = 1;
+			y[3] = 1;
+			break;
+		case kWest:
+			x[0] = 0;
+			y[0] = 0;
+			x[1] = 0;
+			y[1] = 1;
+			x[2] = 1;
+			y[2] = 1;
+			x[3] = 1;
+			y[3] = 0;
+			break;
+		case kEast:
+			x[0] = 1;
+			y[0] = 1;
+			x[1] = 1;
+			y[1] = 0;
+			x[2] = 0;
+			y[2] = 0;
+			x[3] = 0;
+			y[3] = 1;
+			break;
+	}
+
+
     if (center.mY <= 0) {
         glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
         glBegin(GL_QUADS);
         
-        glTexCoord2f(0.0f, 0.0f);
+        glTexCoord2f(x[0], y[0]);
         glVertex3f(centerX - 1.0f, centerY, centerZ - 1.0f);
-        glTexCoord2f(1.0f, 0.0f);
+		glTexCoord2f(x[1], y[1]);
         glVertex3f(centerX + 1.0f, centerY, centerZ - 1.0f);
-        glTexCoord2f(1.0f, 1.0f);
+		glTexCoord2f(x[2], y[2]);
         glVertex3f(centerX + 1.0f, centerY, centerZ + 1.0f);
-        glTexCoord2f(0.0f, 1.0f);
+		glTexCoord2f(x[3], y[3]);
         glVertex3f(centerX - 1.0f, centerY, centerZ + 1.0f);
         
         glEnd();
@@ -308,18 +355,64 @@ void drawCeilingAt(const struct Vec3 center,
 
     centerX = fixToInt(center.mX+ xCameraOffset);
     centerZ = -fixToInt(center.mZ+ zCameraOffset);
-    
+
+
+	int x[4], y[4];
+
+	switch (cameraDirection) {
+		case kNorth:
+			x[0] = 0;
+			y[0] = 1;
+			x[1] = 1;
+			y[1] = 1;
+			x[2] = 1;
+			y[2] = 0;
+			x[3] = 0;
+			y[3] = 0;
+			break;
+		case kSouth:
+			x[0] = 1;
+			y[0] = 0;
+			x[1] = 0;
+			y[1] = 0;
+			x[2] = 0;
+			y[2] = 1;
+			x[3] = 1;
+			y[3] = 1;
+			break;
+		case kWest:
+			x[0] = 0;
+			y[0] = 0;
+			x[1] = 0;
+			y[1] = 1;
+			x[2] = 1;
+			y[2] = 1;
+			x[3] = 1;
+			y[3] = 0;
+			break;
+		case kEast:
+			x[0] = 1;
+			y[0] = 1;
+			x[1] = 1;
+			y[1] = 0;
+			x[2] = 0;
+			y[2] = 0;
+			x[3] = 0;
+			y[3] = 1;
+			break;
+	}
+
     if (center.mY >= 0) {
         glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
         glBegin(GL_QUADS);
-        
-        glTexCoord2f(0.0f, 0.0f);
+
+		glTexCoord2f(x[0], y[0]);
         glVertex3f(centerX - 1.0f, centerY, centerZ - 1.0f);
-        glTexCoord2f(1.0f, 0.0f);
+		glTexCoord2f(x[1], y[1]);
         glVertex3f(centerX + 1.0f, centerY, centerZ - 1.0f);
-        glTexCoord2f(1.0f, 1.0f);
+		glTexCoord2f(x[2], y[2]);
         glVertex3f(centerX + 1.0f, centerY, centerZ + 1.0f);
-        glTexCoord2f(0.0f, 1.0f);
+		glTexCoord2f(x[3], y[3]);
         glVertex3f(centerX - 1.0f, centerY, centerZ + 1.0f);
         glEnd();
 		glBindTexture(GL_TEXTURE_2D, 0);
@@ -354,20 +447,20 @@ void drawLeftNear(const struct Vec3 center,
     glBegin(GL_QUADS);
 
 	if (cameraDirection == kWest || cameraDirection == kEast) {
-		glTexCoord2f(textureScale, 0.0f);
+		glTexCoord2f(0, textureScale);
 		glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ - 1.0f);
-		glTexCoord2f(textureScale, 1.0f);
+		glTexCoord2f(1, textureScale);
 		glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ + 1.0f);
-		glTexCoord2f(0.0f, 1.0f);
+		glTexCoord2f(1, 0.0f);
 		glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ + 1.0f);
 		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ - 1.0f);
 	} else {
-		glTexCoord2f(textureScale, 0.0f);
+		glTexCoord2f(0, textureScale);
 		glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ + 1.0f);
-		glTexCoord2f(textureScale, 1.0f);
+		glTexCoord2f(1, textureScale);
 		glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ - 1.0f);
-		glTexCoord2f(0.0f, 1.0f);
+		glTexCoord2f(1, 0.0f);
 		glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ - 1.0f);
 		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ + 1.0f);
@@ -404,22 +497,22 @@ void drawRightNear(const struct Vec3 center,
 
 
 	if (cameraDirection == kWest || cameraDirection == kEast) {
-		glTexCoord2f(textureScale, 0.0f);
+		glTexCoord2f(0, textureScale);
 		glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ + 1.0f);
-		glTexCoord2f(textureScale, 1.0f);
+		glTexCoord2f(1, textureScale);
 		glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ - 1.0f);
-		glTexCoord2f(0.0f, 1.0f);
+		glTexCoord2f(1, 0);
 		glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ - 1.0f);
-		glTexCoord2f(0.0f, 0.0f);
+		glTexCoord2f(0, 0);
 		glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ + 1.0f);
 	} else {
-		glTexCoord2f(textureScale, 0.0f);
+		glTexCoord2f(0, textureScale);
 		glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ - 1.0f);
-		glTexCoord2f(textureScale, 1.0f);
+		glTexCoord2f(1, textureScale);
 		glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ + 1.0f);
-		glTexCoord2f(0.0f, 1.0f);
+		glTexCoord2f(1, 0);
 		glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ + 1.0f);
-		glTexCoord2f(0.0f, 0.0f);
+		glTexCoord2f(0, 0);
 		glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ - 1.0f);
 	}
 
