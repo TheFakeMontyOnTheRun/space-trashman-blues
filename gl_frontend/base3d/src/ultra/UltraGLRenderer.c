@@ -46,46 +46,64 @@ void handleSystemEvents() {
 
 	controller_scan();
 	struct controller_data pressed = get_keys_pressed();
-	struct controller_data down = get_keys_down();
+//	struct controller_data down = get_keys_down();
 
-	if (pressed.c[0].C_up || down.c[0].up ) {
-		mBufferedCommand = kCommandUp;
+	switch(get_dpad_direction(0)) {
+		case 2:
+			mBufferedCommand = kCommandUp;
+			break;
+		case 0:
+			mBufferedCommand = kCommandRight;
+			break;
+		case 6:
+			mBufferedCommand = kCommandDown;
+			break;
+		case 4:
+			mBufferedCommand = kCommandLeft;
+			break;
+		case -1:
+			mBufferedCommand = kCommandNone;
+			break;
 	}
 
-	if (pressed.c[0].C_down || down.c[0].down ) {
-		mBufferedCommand = kCommandDown;
-	}
-
-	if (down.c[0].start) {
-		mBufferedCommand = kCommandBack;
-	}
-
-	if (down.c[0].A) {
+	if (pressed.c[0].C_up) {
 		mBufferedCommand = kCommandFire1;
 	}
 
-	if (down.c[0].B) {
+	if (pressed.c[0].C_down) {
 		mBufferedCommand = kCommandFire2;
 	}
 
-	if (down.c[0].Z) {
+	if (pressed.c[0].C_left) {
 		mBufferedCommand = kCommandFire3;
 	}
 
-	if (down.c[0].L) {
+	if (pressed.c[0].C_right) {
+		mBufferedCommand = kCommandFire4;
+	}
+
+	if (pressed.c[0].start) {
+		mBufferedCommand = kCommandBack;
+	}
+
+	if (pressed.c[0].A) {
+		mBufferedCommand = kCommandFire1;
+	}
+
+	if (pressed.c[0].B) {
+		mBufferedCommand = kCommandFire2;
+	}
+
+	if (pressed.c[0].Z) {
+		mBufferedCommand = kCommandFire3;
+	}
+
+	if (pressed.c[0].L) {
 		mBufferedCommand = kCommandStrafeLeft;
 	}
 
-	if (down.c[0].R) {
+	if (pressed.c[0].R) {
 		mBufferedCommand = kCommandStrafeRight;
-	}
-
-	if (pressed.c[0].C_left|| down.c[0].left) {
-		mBufferedCommand = kCommandLeft;
-	}
-
-	if (pressed.c[0].C_right|| down.c[0].right) {
-		mBufferedCommand = kCommandRight;
 	}
 }
 

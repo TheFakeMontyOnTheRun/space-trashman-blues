@@ -283,8 +283,6 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
         if (currentPresentationState == kWaitingForInput) {
 
             switch (cmd) {
-                case kCommandBack:
-                    return kMainMenu;
                 case kCommandUp:
                     playSound(MENU_SELECTION_CHANGE_SOUND);
                     cursorPosition = (cursorPosition - 1);
@@ -307,7 +305,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
                 case kCommandFire1:
                 case kCommandFire2:
                 case kCommandFire3:
-
+				case kCommandBack:
                     if (cursorPosition == 0) {
                         showPromptToAbandonMission = FALSE;
                         needsToRedrawVisibleMeshes = TRUE;

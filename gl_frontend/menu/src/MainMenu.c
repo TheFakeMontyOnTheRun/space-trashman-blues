@@ -182,7 +182,7 @@ enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
             case kCommandFire1:
             case kCommandFire2:
             case kCommandFire3:
-
+			case kCommandBack:
                 nextNavigationSelection =
                         MainMenu_nextStateNavigation[cursorPosition];
                 currentPresentationState = kConfirmInputBlink1;
