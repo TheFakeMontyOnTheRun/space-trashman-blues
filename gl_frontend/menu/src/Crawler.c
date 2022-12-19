@@ -161,36 +161,26 @@ void Crawler_repaintCallback() {
 
             fill(0, 0, XRES + 1, 200, getPaletteEntry(0xFF000000), FALSE);
 
-
+			enter3D();
 
             center.mY = 0;
             center.mZ = intToFix(3);
             center.mX = -intToFix(3);
             drawColumnAt( center, intToFix(3), nativeTextures[1], MASK_LEFT, 0, 1);
 
-
-
             center.mY = 0;
             center.mX = intToFix(3);
             drawColumnAt( center, intToFix(3), nativeTextures[1], MASK_RIGHT, 0, 1);
 
-
             center.mZ = intToFix(2);
             center.mX = -intToFix(1);
-
             center.mY = intToFix(4) - zCameraOffset;
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
 
             center.mX = intToFix(1);
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
 
-            center.mY = intToFix(2) - zCameraOffset;
-
-            center.mZ = intToFix(3);
-            drawCeilingAt( center, nativeTextures[0], 0);
-
             center.mZ = intToFix(2);
-
             center.mY = intToFix(3) - zCameraOffset;
 
             center.mX = -intToFix(1);
@@ -208,18 +198,12 @@ void Crawler_repaintCallback() {
             center.mX = intToFix(1);
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
 
-
-
-            center.mX = -intToFix(1);
-
-            center.mY = intToFix(2) - zCameraOffset;
-
-            center.mZ = intToFix(3);
-            drawCeilingAt( center, nativeTextures[0], 0);
+			enter2D();
 
             drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, getPaletteEntry(0xFFFFFFFF));
 
-            zCameraOffset -= Div(intToFix(1), intToFix(16));
+            zCameraOffset -= Div(intToFix(1), intToFix(64));
+
             if (zCameraOffset == 0 ) {
                 int chanceForRandomBattle = getRoom(getPlayerRoom())->chanceOfRandomBattle;
                 int diceRoll;

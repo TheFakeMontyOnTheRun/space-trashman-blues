@@ -259,4 +259,8 @@ void startFrameGL(int width, int height);
 
 void endFrameGL();
 
+void enter3D();
+
+void enter2D();
+
 #endif
