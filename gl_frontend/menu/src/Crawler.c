@@ -92,11 +92,6 @@ void Crawler_repaintCallback() {
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = TRUE;
 
-    
-    fill(0, 0, 320, 200, getPaletteEntry(0xFF000000), FALSE);
-    fill(11 * 8 - 1, 12 * 8, 18 * 8 + 3, 8, getPaletteEntry(0xFFFFFFFF), FALSE);
-    drawRect(11 * 8 - 1, 11 * 8 - 1, 18 * 8 + 2, 8 + 2, getPaletteEntry(0xFFFFFFFF));
-
     if (showPromptToAbandonMission) {
         int c;
         int optionsHeight = 8 * (AbandonMission_count);
