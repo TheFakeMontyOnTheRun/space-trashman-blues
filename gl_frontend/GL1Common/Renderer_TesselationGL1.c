@@ -168,9 +168,9 @@ void drawBillboardAt(const struct Vec3 center,
 
     glTexCoord2f(0.0f, 1.0f);
     glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ + 1.0f);
-    glTexCoord2f(textureScale, 1.0f);
+    glTexCoord2f(1, 1.0f);
     glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ + 1.0f);
-    glTexCoord2f(textureScale, 0.0f);
+    glTexCoord2f(1, 0.0f);
     glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ + 1.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ + 1.0f);
