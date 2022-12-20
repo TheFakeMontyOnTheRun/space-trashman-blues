@@ -84,8 +84,7 @@ void enter2D(void) {
 }
 
 void initGL() {
-	char buffer[256];
-	int c;
+
     glEnable(GL_TEXTURE_2D);                        // Enable Texture Mapping ( NEW )
     glShadeModel(GL_SMOOTH);                        // Enable Smooth Shading
     glClearColor(0.0f, 0.0f, 0.0f, 0.5f);                   // Black Background
@@ -95,12 +94,6 @@ void initGL() {
     glAlphaFunc(GL_GREATER, 0);
     glDisable(GL_LINE_SMOOTH);
 	glDisable(GL_CULL_FACE);
-
-	//item 0 is a dummy
-	for (c = 1; c < itemsCount; ++c) {
-		sprintf(&buffer[0], "%s.img", getItem(c)->name);
-		itemSprites[c] = (makeTextureFrom(&buffer[0]));
-	}
 }
 
 void clearRenderer() {
@@ -162,7 +155,6 @@ void printMessageTo3DView(const char *message) {
 
 void loadTileProperties(const uint8_t levelNumber) {
 	char buffer[64];
-    struct StaticBuffer data = loadBinaryFileFromPath(buffer);
 	int c;
 
 	setLoggerDelegate(printMessageTo3DView);
@@ -172,8 +164,7 @@ void loadTileProperties(const uint8_t levelNumber) {
 	clearMap(&colliders);
 
 	sprintf(buffer, "props%d.bin", levelNumber);
-
-	
+	struct StaticBuffer data = loadBinaryFileFromPath(buffer);
 	loadPropertyList(&buffer[0], &tileProperties);
 
     
