@@ -104,7 +104,6 @@ void redrawHUD() {
     struct WorldPosition visPos = *getPlayerPosition();
     int x, z;
     struct Item* itemPtr;
-    fill(XRES, 0, 320 - XRES, YRES, getPaletteEntry(0xFF000000), FALSE);
     drawTextAt(1 + (XRES / 8), 1, " Map:", getPaletteEntry(0xFFFFFFFF));
 
     if (mapTopLevel != NULL) {

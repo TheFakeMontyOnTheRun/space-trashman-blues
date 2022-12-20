@@ -34,7 +34,7 @@ int needsToRedrawVisibleMeshes = TRUE;
 uint8_t texturesUsed = 0;
 int hasSnapshot = FALSE;
 FixP_t playerHeightChangeRate = 0;
-FixP_t playerHeightTarget = 0;
+FixP_t playerHeightTarget = -intToFix(1);
 int cursorX = -1;
 int cursorZ = -1;
 uint8_t enableSmoothMovement;
@@ -145,7 +145,7 @@ void enter3D(void) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    gluPerspective(45.0f, 1.0f, 0.1f, 100.0f);
+    gluPerspective(45.0f, 240.0f/200.0f, 1, 256.0f);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();

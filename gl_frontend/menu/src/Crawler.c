@@ -70,7 +70,7 @@ void Crawler_initStateCallback(int32_t tag) {
         }
     }
 
-    playerHeight = 0;
+    playerHeight = -intToFix(1);
     playerHeightChangeRate = 0;
 
     thisMissionName = getRoomDescription();
@@ -96,18 +96,18 @@ void Crawler_repaintCallback() {
         int c;
         int optionsHeight = 8 * (AbandonMission_count);
         turnStep = turnTarget;
-        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
+        drawRepeatBitmap(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, currentBackgroundBitmap);
 
-        fill(0, 0, 320, 200, getPaletteEntry(0xFF000000), TRUE);
+        fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), TRUE);
 
-        fill(320 - (biggestOption * 8) - 8 - 16, 200 - optionsHeight - 8 - 16,
+        fill(XRES_FRAMEBUFFER - (biggestOption * 8) - 8 - 16, YRES_FRAMEBUFFER - optionsHeight - 8 - 16,
              (biggestOption * 8) + 16, optionsHeight + 16, getPaletteEntry(0xFF000000), TRUE);
 
-        fill(320 - (biggestOption * 8) - 16 - 16, 200 - optionsHeight - 16 - 16,
+        fill(XRES_FRAMEBUFFER - (biggestOption * 8) - 16 - 16, YRES_FRAMEBUFFER - optionsHeight - 16 - 16,
              (biggestOption * 8) + 16, optionsHeight + 16, getPaletteEntry(0xFFFFFFFF), FALSE);
 
-        drawRect(320 - (biggestOption * 8) - 16 - 16,
-                 200 - optionsHeight - 16 - 16, (biggestOption * 8) + 16,
+        drawRect(XRES_FRAMEBUFFER - (biggestOption * 8) - 16 - 16,
+				 YRES_FRAMEBUFFER - optionsHeight - 16 - 16, (biggestOption * 8) + 16,
                  optionsHeight + 16, getPaletteEntry(0xFF000000));
 
         if (AbandonMission_Title != NULL) {
@@ -129,8 +129,8 @@ void Crawler_repaintCallback() {
                                || (currentPresentationState == kWaitingForInput));
 
             if (isCursor) {
-                fill(320 - (biggestOption * 8) - 16 - 8 - 8,
-                     (200 - optionsHeight) + (c * 8) - 8 - 8,
+                fill(XRES_FRAMEBUFFER - (biggestOption * 8) - 16 - 8 - 8,
+                     (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - 8 - 8,
                      (biggestOption * 8) + 16, 8, getPaletteEntry(0xFF000000), FALSE);
             }
 
@@ -154,7 +154,7 @@ void Crawler_repaintCallback() {
 
             xCameraOffset = yCameraOffset = 0;
 
-            fill(0, 0, XRES + 1, 200, getPaletteEntry(0xFF000000), FALSE);
+            fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
 
 			enter3D();
 
@@ -197,7 +197,7 @@ void Crawler_repaintCallback() {
 
             drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, getPaletteEntry(0xFFFFFFFF));
 
-            zCameraOffset -= Div(intToFix(1), intToFix(64));
+            zCameraOffset -= Div(intToFix(1), intToFix(32));
 
             if (zCameraOffset == 0 ) {
                 int chanceForRandomBattle = getRoom(getPlayerRoom())->chanceOfRandomBattle;
@@ -210,6 +210,8 @@ void Crawler_repaintCallback() {
                     currentPresentationState = kEnteringRandomBattle;
                 } else {
                     currentPresentationState = kWaitingForInput;
+					needsToRedrawVisibleMeshes = TRUE;
+					gameTicks = 0;
                     needToRedrawHUD = TRUE;
                 }
             }
