@@ -32,7 +32,7 @@ int32_t CreditsScreen_nextStateNavigation[1] = {
 
 int16_t CreditsScreen_optionsCount = 1;
 extern char textBuffer[40 * 25];
-struct Bitmap *monty;
+struct Bitmap *monty[4];
 
 void CreditsScreen_initStateCallback(int32_t tag) {
 
@@ -41,9 +41,6 @@ void CreditsScreen_initStateCallback(int32_t tag) {
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
     memset (&textBuffer[0], ' ', 40 * 25);
-
-    currentBackgroundBitmap = loadBitmap("pattern.img");
-
     mainText = &textBuffer[0];
     memset (&textBuffer[0], 0, (40 * 25));
 	textFile = loadBinaryFileFromPath("Help.txt");
@@ -51,7 +48,11 @@ void CreditsScreen_initStateCallback(int32_t tag) {
 
     CreditsScreen_optionsCount = 1;
 
-    monty = loadBitmap("monty.img");
+    monty[0] = loadBitmap("monty_tile0000.img");
+	monty[1] = loadBitmap("monty_tile0001.img");
+	monty[2] = loadBitmap("monty_tile0002.img");
+	monty[3] = loadBitmap("monty_tile0003.img");
+
 }
 
 void CreditsScreen_initialPaintCallback(void) {
@@ -62,11 +63,8 @@ void CreditsScreen_repaintCallback(void) {
     int c;
     int optionsHeight = 8 * (CreditsScreen_optionsCount);
     size_t len = strlen(CreditsScreen_options[0]);
-    
-    if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
-    }
 
+	fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), 0);
 
     if (currentPresentationState == kAppearing) {
 
@@ -119,7 +117,12 @@ void CreditsScreen_repaintCallback(void) {
     }
 
     fill(8, 128, 64, 64, getPaletteEntry(0xFFFFFFFF), FALSE);
-    drawBitmap(8, 128, monty, TRUE);
+
+	drawBitmap(8, 128, monty[0], TRUE);
+	drawBitmap(40, 128, monty[1], TRUE);
+	drawBitmap(8, 160, monty[2], TRUE);
+	drawBitmap(40, 160, monty[3], TRUE);
+
     drawRect(8, 128, 64, 64, getPaletteEntry(0xFF000000));
 
     fill(8, 128, 64, 8, getPaletteEntry(0xFF000000), FALSE);
@@ -228,10 +231,4 @@ enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void CreditsScreen_unloadStateCallback() {
-    if (currentBackgroundBitmap != NULL) {
-        releaseBitmap(currentBackgroundBitmap);
-        currentBackgroundBitmap = NULL;
-        releaseBitmap(monty);
-        monty = NULL;
-    }
 }

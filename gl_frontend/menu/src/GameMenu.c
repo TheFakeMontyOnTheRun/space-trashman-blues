@@ -75,7 +75,6 @@ void GameMenu_initStateCallback(int32_t tag) {
             drawFilter = TRUE;
             GameMenu_StateTitle = "End session?";
             mainText = &textBuffer[0];
-            currentBackgroundBitmap = loadBitmap("pattern.img");
             GameMenu_optionsCount = 2;
             GameMenu_options = &GameMenu_EndGame_options[0];
             GameMenu_nextStateNavigation = &GameMenu_EndGame_nextStateNavigation[0];
@@ -87,7 +86,6 @@ void GameMenu_initStateCallback(int32_t tag) {
             mainText = &textBuffer[0];
 
             GameMenu_StateTitle = "Victory";
-            currentBackgroundBitmap = loadBitmap("pattern.img");
 
             GameMenu_optionsCount = 1;
             GameMenu_options = &GameMenu_Story_options[0];
@@ -99,7 +97,7 @@ void GameMenu_initStateCallback(int32_t tag) {
             mainText = &textBuffer[0];
 
             GameMenu_StateTitle = "Victory";
-            currentBackgroundBitmap = loadBitmap("pattern.img");
+
 
             GameMenu_optionsCount = 1;
             GameMenu_options = &GameMenu_Story_options[0];
@@ -115,7 +113,6 @@ void GameMenu_initStateCallback(int32_t tag) {
             mainText = &textBuffer[0];
 
             GameMenu_StateTitle = "Game Over";
-            currentBackgroundBitmap = loadBitmap("pattern.img");
 
             GameMenu_optionsCount = 1;
             GameMenu_options = &GameMenu_Story_options[0];
@@ -130,7 +127,6 @@ void GameMenu_initStateCallback(int32_t tag) {
             mainText = &textBuffer[0];
 
             GameMenu_StateTitle = "Game Over";
-            currentBackgroundBitmap = loadBitmap("pattern.img");
 
             GameMenu_optionsCount = 1;
             GameMenu_options = &GameMenu_Story_options[0];
@@ -142,7 +138,6 @@ void GameMenu_initStateCallback(int32_t tag) {
             mainText = &textBuffer[0];
 
             GameMenu_StateTitle = "Everything's changed...but still feels the same.";
-            currentBackgroundBitmap = loadBitmap("pattern.img");
 
             GameMenu_optionsCount = 1;
             GameMenu_options = &GameMenu_Story_options[0];
@@ -154,7 +149,6 @@ void GameMenu_initStateCallback(int32_t tag) {
             int index = 0;
 
             GameMenu_StateTitle = "CyDeck";
-            currentBackgroundBitmap = loadBitmap("pattern.img");
 
             head = getPlayerItems();
             
@@ -196,9 +190,7 @@ void GameMenu_repaintCallback(void) {
     int c;
     int16_t optionsHeight = 8 * (GameMenu_optionsCount);
 
-    if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
-    }
+	fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), 0);
 
     if (currentPresentationState == kAppearing) {
         int invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;
@@ -323,13 +315,11 @@ enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void GameMenu_unloadStateCallback() {
-    if (currentBackgroundBitmap != NULL) {
-        releaseBitmap(currentBackgroundBitmap);
-        currentBackgroundBitmap = NULL;
+
 
         if (featuredBitmap) {
             releaseBitmap(featuredBitmap);
             featuredBitmap = NULL;
         }
-    }
+
 }

@@ -41,7 +41,6 @@ void HelpScreen_initStateCallback(int32_t tag) {
     timeUntilNextState = 500;
     memset (&textBuffer[0], ' ', 40 * 25);
 
-    currentBackgroundBitmap = loadBitmap("pattern.img");
 
     mainText = &textBuffer[0];
     memset (&textBuffer[0], 0, (40 * 25));
@@ -60,10 +59,8 @@ void HelpScreen_repaintCallback(void) {
     int optionsHeight = 8 * (HelpScreen_optionsCount);
 
     lines = countLines();
-    
-    if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
-    }
+
+	fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), 0);
 
     if (currentPresentationState == kAppearing) {
 
@@ -176,8 +173,4 @@ enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void HelpScreen_unloadStateCallback() {
-    if (currentBackgroundBitmap != NULL) {
-        releaseBitmap(currentBackgroundBitmap);
-        currentBackgroundBitmap = NULL;
-    }
 }
