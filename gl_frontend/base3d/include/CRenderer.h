@@ -61,7 +61,7 @@ extern FixP_t yCameraOffset;
 extern FixP_t zCameraOffset;
 extern int enable3DRendering;
 extern uint8_t enableSmoothMovement;
-extern struct Bitmap *mapTopLevel;
+extern struct Bitmap *mapTopLevel[8];
 
 struct Mesh {
     uint16_t triangleCount;
