@@ -55,13 +55,13 @@ void MainMenu_initStateCallback(int32_t tag) {
         releaseBitmap(currentBackgroundBitmap);
     }
 
-	for ( int c  = 0; c < 28; ++c ) {
+	for (c  = 0; c < 28; ++c ) {
 		char buffer[32];
 		sprintf(buffer, "title_tile%04d.img", c);
 		logoBitmap[c] = loadBitmap(buffer);
 	}
 
-	for ( int c  = 0; c < 15; ++c ) {
+	for (c  = 0; c < 15; ++c ) {
 		char buffer[32];
 		sprintf(buffer, "logo_tile%04d.img", c);
 		logo2Bitmap[c] = loadBitmap(buffer);
@@ -114,11 +114,11 @@ void MainMenu_repaintCallback(void) {
         return;
     }
 
-	for (int c = 0; c < 28; ++c ) {
+	for (c = 0; c < 28; ++c ) {
 		drawBitmap((c & 3) * 32, (c >> 2) * 32, logoBitmap[c], 1);
 	}
 
-	for (int c = 0; c < 15; ++c ) {
+	for (c = 0; c < 15; ++c ) {
 		drawBitmap(118 + (c & 7) * 32, 45 + (c >> 3) * 32, logo2Bitmap[c], 1);
 	}
 

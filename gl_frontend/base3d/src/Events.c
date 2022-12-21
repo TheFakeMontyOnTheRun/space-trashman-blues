@@ -103,7 +103,7 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
     sprintf (nameBuffer, "map%d.img", map);
 
     if (mapTopLevel[0]) {
-		for (int c = 0; c < 8; ++c ) {
+		for (c = 0; c < 8; ++c ) {
 #ifndef N64
 			free(mapTopLevel[c]);
 #else
@@ -112,7 +112,7 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
 		}
     }
 
-	for ( int c  = 0; c < 8; ++c ) {
+	for (c  = 0; c < 8; ++c ) {
 		char buffer[32];
 		sprintf(buffer, "map%d_tile%04d.img", map, c);
 		mapTopLevel[c] = loadBitmap(buffer);

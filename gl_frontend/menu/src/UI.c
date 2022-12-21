@@ -102,12 +102,12 @@ void redrawHUD() {
     int line = 0;
     struct ObjectNode *head;
     struct WorldPosition visPos = *getPlayerPosition();
-    int x, z;
+    int x, z, c;
     struct Item* itemPtr;
     drawTextAt(1 + (XRES / 8), 1, " Map:", getPaletteEntry(0xFFFFFFFF));
 
     if (mapTopLevel[0] != NULL) {
-		for (int c = 0; c < 8; ++c ) {
+		for (c = 0; c < 8; ++c ) {
         	drawBitmap( (( c & 3) * 32), 8 + (c >> 2) * 32, mapTopLevel[c], 1);
 		}
     }

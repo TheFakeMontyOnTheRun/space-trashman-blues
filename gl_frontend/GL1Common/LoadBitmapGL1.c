@@ -160,6 +160,7 @@ void scaleBitmap(FixP_t x0,
 
 int submitBitmapToGPU(struct Bitmap* bitmap) {
     uint32_t newId;
+	int c;
     int width, height;
     BitmapPixelFormat *dataSource = bitmap->data;
     width = bitmap->width;
@@ -184,7 +185,7 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
 
     uint16_t* ptr = expanded;
 
-	for (int c = 0; c < width * height; ++c ) {
+	for (c = 0; c < width * height; ++c ) {
 		BitmapPixelFormat index = dataSource[c];
 
 		uint32_t texel = index;//palette[index];
@@ -223,7 +224,8 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
 }
 
 struct Bitmap *loadBitmap(const char *filename) {
-
+	size_t c;
+	uint8_t d;
     struct StaticBuffer src = loadBinaryFileFromPath(filename);
 
 	struct Bitmap *toReturn =
@@ -280,7 +282,7 @@ struct Bitmap *loadBitmap(const char *filename) {
         }
     }
 #else
-    for (size_t c = 0; c < sizeInDisk; c += 5) {
+    for (c = 0; c < sizeInDisk; c += 5) {
         pixel = 0;
 
         if (buffer[c + 3] < 255) {
@@ -293,7 +295,7 @@ struct Bitmap *loadBitmap(const char *filename) {
         }
         repetitions = buffer[c + 4];
 
-        for (uint8_t d = 0; d < repetitions; ++d) {
+        for (d = 0; d < repetitions; ++d) {
             toReturn->data[pixelIndex++] = pixel;
         }
     }
