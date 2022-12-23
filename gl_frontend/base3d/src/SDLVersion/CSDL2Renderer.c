@@ -46,7 +46,7 @@ void graphicsInit() {
 
 	window =
 			SDL_CreateWindow("Sub Mare Imperium - Derelict", SDL_WINDOWPOS_CENTERED,
-							 SDL_WINDOWPOS_CENTERED, 640, 480, 0);
+							 SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
 	glContext = SDL_GL_CreateContext(window);
 
