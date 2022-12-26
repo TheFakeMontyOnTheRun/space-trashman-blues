@@ -299,56 +299,17 @@ void clearGraphics() {
 void graphicsFlush() {
 
 	for (int y = 0; y < BUFFER_SIZEY; ++y ) {
+		uint8_t *line = (unsigned char *)0xC000 + ((y / 8) * 80) + ((y % 8) * 2048);
+		uint8_t *pixel = line;
 		for (int x = 0; x < BUFFER_SIZEX; ++x ) {
 			uint8_t chunk = buffer[(y * BUFFER_SIZEX) + x];
 
-			if (chunk & 1 ) {
-				plot( (x * 8), y );
-			} else {
-				unplot( (x * 8), y );
-			}
+			*pixel = chunk;
 
-			if (chunk & 2 ) {
-				plot( (x * 8) + 1, y );
-			} else {
-				unplot( (x * 8) + 1, y );
-			}
+			// another byte
+			++pixel;
 
-			if (chunk & 4 ) {
-				plot( (x * 8) + 2, y );
-			} else {
-				unplot( (x * 8) + 2, y );
-			}
-
-			if (chunk & 8 ) {
-				plot( (x * 8) + 3, y );
-			} else {
-				unplot( (x * 8) + 3, y );
-			}
-
-			if (chunk & 16 ) {
-				plot( (x * 8) + 4, y );
-			} else {
-				unplot( (x * 8) + 4, y );
-			}
-
-			if (chunk & 32 ) {
-				plot( (x * 8) + 5, y );
-			} else {
-				unplot( (x * 8) + 5, y );
-			}
-
-			if (chunk & 64 ) {
-				plot( (x * 8) + 6, y );
-			} else {
-				unplot( (x * 8) + 6, y );
-			}
-
-			if (chunk & 128 ) {
-				plot( (x * 8) + 7, y );
-			} else {
-				unplot( (x * 8) + 7, y );
-			}
+			*pixel = chunk >> 4;
 		}
 	}
 }
@@ -442,28 +403,28 @@ uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr) {
 	ptr = &buffer[(y * (BUFFER_SIZEX)) + (x / 8)]; //skip to the line in pattern
 
 	switch (x & 7) {
-		case 7:
+		case 0:
 			*ptr |= 128;
 			break;
-		case 6:
+		case 1:
 			*ptr |= 64;
 			break;
-		case 5:
+		case 2:
 			*ptr |= 32;
 			break;
-		case 4:
+		case 3:
 			*ptr |= 16;
 			break;
-		case 3:
+		case 4:
 			*ptr |= 8;
 			break;
-		case 2:
+		case 5:
 			*ptr |= 4;
 			break;
-		case 1:
+		case 6:
 			*ptr |= 2;
 			break;
-		case 0:
+		case 7:
 			*ptr |= 1;
 			break;
 	}
@@ -476,28 +437,28 @@ void graphicsPut(uint8_t x, uint8_t y) {
 	uint8_t *ptr = &buffer[(y * (BUFFER_SIZEX)) + (x / 8)]; //skip to the line in pattern
 
 	switch (x & 7) {
-		case 7:
+		case 0:
 			*ptr |= 128;
 			break;
-		case 6:
+		case 1:
 			*ptr |= 64;
 			break;
-		case 5:
+		case 2:
 			*ptr |= 32;
 			break;
-		case 4:
+		case 3:
 			*ptr |= 16;
 			break;
-		case 3:
+		case 4:
 			*ptr |= 8;
 			break;
-		case 2:
+		case 5:
 			*ptr |= 4;
 			break;
-		case 1:
+		case 6:
 			*ptr |= 2;
 			break;
-		case 0:
+		case 7:
 			*ptr |= 1;
 			break;
 	}
