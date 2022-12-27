@@ -123,9 +123,6 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 	uint8_t len = strlen(text);
 	char *ptr = text;
 	uint8_t c = 0;
-	uint8_t chary = 0;
-	uint8_t cx;
-	uint8_t cy;
 	uint8_t x = _x;
 
 	for (; c < len && y < 64; ++c) {
@@ -152,18 +149,12 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 
 		uint8_t *fontTop = &font[((cha - 32) << 3)];
 
-		for (cy = 0; cy < 8; cy++ ) {
-			uint8_t charLine = *fontTop;
-
-			for (cx = 0; cx < 8; cx++ ) {
-				if ( charLine & 1) {
-					plot(((x) * 8) + (8 - cx), (y * 8) + cy);
-				} else {
-					unplot(((x) * 8) + (8 - cx), (y * 8) + cy);
-				}
-				charLine = charLine >> 1;
-			}
+		for ( int d = 0; d < 8; ++d ) {
+			uint8_t chunk =*fontTop;
 			fontTop++;
+			uint8_t *line = (unsigned char *)0xC000 + ((((y * 8) + d) / 8) * 80) + ((((y * 8) + d) % 8) * 2048);
+			uint8_t *pixel = line + (x);
+			*pixel = chunk;
 		}
 
 		++x;
