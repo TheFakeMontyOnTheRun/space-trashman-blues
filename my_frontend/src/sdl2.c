@@ -62,7 +62,7 @@ void enterTextMode() {
 void exitTextMode() {
 }
 
-void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint shouldStipple) {
+void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 	int16_t y;
 	int16_t _y0 = y0;
 	int16_t _y1 = y1;
