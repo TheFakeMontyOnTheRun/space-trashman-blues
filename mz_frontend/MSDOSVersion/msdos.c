@@ -189,7 +189,7 @@ void graphicsPut(int16_t x, int16_t y) {
 	*ptrToByte = byteInVRAM;
 }
 
-void realPut(int x, int y, int value) {
+void realPut(int x, int y, uint8_t value) {
 
 	int pixelRead = 0;
 #ifndef __DJGPP__
@@ -329,10 +329,10 @@ uint8_t getKey() {
 	return toReturn;
 }
 
-void writeStrWithLimit(int _x, int y, char *text, int limitX) {
+void writeStrWithLimit(int _x, int y, const char *text, int limitX) {
 
 	uint8_t len = strlen(text);
-	char *ptr = text;
+	const char *ptr = text;
 	uint8_t c = 0;
 	uint8_t chary = 0;
 	uint8_t x = _x;
