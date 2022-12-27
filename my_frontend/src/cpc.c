@@ -300,17 +300,7 @@ void graphicsFlush() {
 
 	for (int y = 0; y < BUFFER_SIZEY; ++y ) {
 		uint8_t *line = (unsigned char *)0xC000 + ((y / 8) * 80) + ((y % 8) * 2048);
-		uint8_t *pixel = line;
-		for (int x = 0; x < BUFFER_SIZEX; ++x ) {
-			uint8_t chunk = buffer[(y * BUFFER_SIZEX) + x];
-
-			*pixel = chunk;
-
-			// another byte
-			++pixel;
-
-			*pixel = chunk >> 4;
-		}
+		memcpy( line, buffer + (y * BUFFER_SIZEX),  BUFFER_SIZEX);
 	}
 }
 
