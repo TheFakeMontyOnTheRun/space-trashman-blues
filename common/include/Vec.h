@@ -17,10 +17,10 @@ struct Vec2i {
 	int8_t y;
 };
 
-void initVec2i(struct Vec2i * __restrict__ vec, int8_t x, int8_t y);
+void initVec2i(struct Vec2i *  vec, int8_t x, int8_t y);
 
-void initVec3(struct Vec3 * __restrict__ vec, FixP_t x, FixP_t y, FixP_t z);
+void initVec3(struct Vec3 *  vec, FixP_t x, FixP_t y, FixP_t z);
 
-void addToVec3(struct Vec3 * __restrict__ to, FixP_t x, FixP_t y, FixP_t z);
+void addToVec3(struct Vec3 *  to, FixP_t x, FixP_t y, FixP_t z);
 
 #endif

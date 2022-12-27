@@ -15,6 +15,10 @@
 #define HALF_YRES 100
 #endif
 
+
+#define XRES_FRAMEBUFFER 320
+#define YRES_FRAMEBUFFER 200
+
 #define TOTAL_TEXTURES 32
 #define TRANSPARENCY_COLOR 199
 
@@ -31,8 +35,8 @@ extern int visibilityCached;
 extern int needsToRedrawVisibleMeshes;
 extern uint8_t *visibleElementsMap;
 extern struct Bitmap *defaultFont;
-extern uint8_t framebuffer[320 * 200];
-extern uint8_t previousFrame[320 * 200];
+extern uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+extern uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 extern enum EDirection cameraDirection;
 extern long gameTicks;
 extern int playerHealth;

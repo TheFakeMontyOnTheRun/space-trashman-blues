@@ -1,0 +1,74 @@
+BUILD_DIR=build
+include $(N64_INST)/include/n64.mk
+
+CFLAGS += -Ofast      \
+    -Ibase3d/include        \
+    -ISoundSystem           \
+    -Imenu/include          \
+    -funroll-loops          \
+    -fomit-frame-pointer    \
+    -ffast-math             \
+    -flto		    \
+    -DCLI_BUILD \
+    -Wno-error \
+    -w \
+    -I../core/include \
+    -I../common/include \
+    -DN64 \
+    -DINCLUDE_ITEM_DESCRIPTIONS
+
+src = menu/src/MainMenu.c \
+                  		menu/src/Crawler.c \
+                  		menu/src/HelpScreen.c \
+                  		menu/src/BattleScreen.c \
+                  		menu/src/CreditsScreen.c \
+                  		menu/src/GameMenu.c \
+                  		menu/src/Main.c \
+                  		menu/src/Engine.c \
+                  		base3d/src/ultra/UltraGLRenderer.c \
+                  		base3d/src/Globals.c \
+                  		base3d/src/CTile3DProperties.c \
+                  		GL1Common/LoadBitmapGL1.c \
+                  		GL1Common/RendererGL1.c \
+                  		GL1Common/Renderer_RasterizationGL1.c \
+                  		GL1Common/Renderer_TesselationGL1.c \
+                  		base3d/src/VisibilityStrategy.c \
+                  		../common/src/Vec.c \
+                  		../common/src/Common.c \
+                  		../common/src/FixP.c \
+                  		../common/src/MapWithCharKey.c \
+                  		../common/src/PackedFileReader.c \
+                  		base3d/src/Events.c \
+                  		base3d/src/EDirection_Utils.c \
+                  		SoundSystem/NullMusic.c \
+                  		base3d/src/Dungeon.c \
+                  		menu/src/UI.c \
+                  		menu/src/HackingScreen.c \
+                  		SoundSystem/PCMAudio.c \
+                  		../core/src/Derelict.c \
+                  		../core/src/Core.c \
+                  		../core/src/Parser.c
+
+all: derelict64.z64
+
+filesystem/%.font64: assets/%.ttf
+	@mkdir -p $(dir $@)
+	@echo "    [FONT] $@"
+	@$(N64_MKFONT) $(MKFONT_FLAGS) -o filesystem "$<"
+
+MKFONT_FLAGS ?=
+
+filesystem/font.font64: MKFONT_FLAGS+=--size 9
+
+$(BUILD_DIR)/derelict64.dfs: $(wildcard filesystem/*) filesystem/font.font64
+$(BUILD_DIR)/derelict64.elf: $(src:%.c=$(BUILD_DIR)/%.o)
+
+derelict64.z64: N64_ROM_TITLE="Derelict 64"
+derelict64.z64: $(BUILD_DIR)/derelict64.dfs
+
+clean:
+	rm -rf $(BUILD_DIR) derelict64.z64
+
+-include $(wildcard $(BUILD_DIR)/*.d)
+
+.PHONY: all clean

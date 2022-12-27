@@ -109,7 +109,7 @@ void flipRenderer(void) {
         for (int y = 0; y < 240; ++y) {
             for (int x = 0; x < 320; ++x) {
 
-                int32_t pixel = palette[framebuffer[(int)(320 * ((200 * y) / 240 )) + x]];
+                int32_t pixel = palette[framebuffer[(int)(XRES_FRAMEBUFFER * ((200 * y) / 240 )) + x]];
 
                 int r = (pixel & 0x000000FF) - 0x38;
                 int g = ((pixel & 0x0000FF00) >> 8) - 0x18;
@@ -126,7 +126,7 @@ void flipRenderer(void) {
             }
         }
 
-        memcpy( previousFrame, framebuffer, 320 * 200);
+        memcpy( previousFrame, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
 
     } else if ( turnStep < turnTarget ) {
 
@@ -136,12 +136,12 @@ void flipRenderer(void) {
 
                 if (x < XRES) {
                     if ( x  >= turnStep ) {
-                        index = previousFrame[ (int)(320 * ((200 * y) / 240 )) - turnStep + x ];
+                        index = previousFrame[ (int)(XRES_FRAMEBUFFER * ((200 * y) / 240 )) - turnStep + x ];
                     } else {
-                        index = framebuffer[ (int)(320 * ((200 * y) / 240 )) + x - (320 - XRES) - turnStep];
+                        index = framebuffer[ (int)(XRES_FRAMEBUFFER * ((200 * y) / 240 )) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
                     }
                 } else {
-                    index = framebuffer[ (int)(320 * ((200 * y) / 240 )) + x];
+                    index = framebuffer[ (int)(XRES_FRAMEBUFFER * ((200 * y) / 240 )) + x];
                 }
 
                 uint32_t pixel = palette[ index ];
@@ -171,13 +171,13 @@ void flipRenderer(void) {
                 if (x < XRES) {
 
                     if ( x  >= turnStep ) {
-                        index = framebuffer[ (int)(320 * ((200 * y) / 240 )) - turnStep + x ];
+                        index = framebuffer[ (int)(XRES_FRAMEBUFFER * ((200 * y) / 240 )) - turnStep + x ];
                     } else {
-                        index = previousFrame[ (int)(320 * ((200 * y) / 240 )) + x - (320 - XRES) - turnStep];
+                        index = previousFrame[ (int)(XRES_FRAMEBUFFER * ((200 * y) / 240 )) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
                     }
 
                 } else {
-                    index = framebuffer[ (int)(320 * ((200 * y) / 240 )) + x];
+                    index = framebuffer[ (int)(XRES_FRAMEBUFFER * ((200 * y) / 240 )) + x];
                 }
 
                 uint32_t pixel = palette[ index ];

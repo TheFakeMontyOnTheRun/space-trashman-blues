@@ -51,7 +51,7 @@ void MainMenu_initStateCallback(int32_t tag) {
     int c;
     cursorPosition = 0;
     dirtyLineY0 = 0;
-    dirtyLineY1 = 200;
+    dirtyLineY1 = YRES_FRAMEBUFFER;
 
     if (currentBackgroundBitmap != NULL) {
         releaseBitmap(currentBackgroundBitmap);
@@ -78,9 +78,7 @@ void MainMenu_initStateCallback(int32_t tag) {
 }
 
 void MainMenu_initialPaintCallback() {
-
-    //drawRepeatBitmap(0, 32, 320, 200, currentBackgroundBitmap);
-    fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), 0);
+    fill(0, 0, (XRES_FRAMEBUFFER-1), (YRES_FRAMEBUFFER-1), getPaletteEntry(0xFF6cb1a3), 0);
 }
 
 void MainMenu_repaintCallback(void) {
@@ -101,9 +99,9 @@ void MainMenu_repaintCallback(void) {
         }
 
 
-        drawRect(320 - movementX - 8 - 24 - ((biggestOption * 8) / 2)
+        drawRect(XRES_FRAMEBUFFER - movementX - 8 - 24 - ((biggestOption * 8) / 2)
                  + (sizeX / 2),
-                 200 - movementY - 8 - 16 - 8 - ((optionsHeight + 8) / 2)
+				 YRES_FRAMEBUFFER - movementY - 8 - 16 - 8 - ((optionsHeight + 8) / 2)
                  + (sizeY / 2),
                  sizeX, sizeY, 0);
         return;
@@ -125,8 +123,8 @@ void MainMenu_repaintCallback(void) {
                            || (currentPresentationState == kWaitingForInput));
 
         if (isCursor) {
-            fill((uint16_t) (320 - (biggestOption * 8)) - 8 - 24,
-                 (200 - optionsHeight) + (c * 8) - 24,
+            fill((uint16_t) (XRES_FRAMEBUFFER - (biggestOption * 8)) - 8 - 24,
+                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - 24,
                  (biggestOption * 8) + 16, 8, 0, FALSE);
         }
 

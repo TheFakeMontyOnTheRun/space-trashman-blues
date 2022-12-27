@@ -104,7 +104,7 @@ void redrawHUD() {
     struct WorldPosition visPos = *getPlayerPosition();
     int x, z;
     struct Item* itemPtr;
-    fill(XRES, 0, 320 - XRES, YRES, 0, FALSE);
+    fill(XRES, 0, XRES_FRAMEBUFFER - XRES, YRES, 0, FALSE);
     drawTextAt(1 + (XRES / 8), 1, " Map:", 255);
 
     if (mapTopLevel != NULL) {
@@ -122,7 +122,7 @@ void redrawHUD() {
                 sprintf(&textBuffer[0], "%s", itemPtr->name);
                 textBuffer[14] = 0;
 
-                drawBitmapRaw(XRES + 8, 199 - 32 - 16 - 16, 32, 32, itemSprites[itemPtr->index]->rotations[0], 1);
+                drawBitmapRaw(XRES + 8, YRES - 1 - 32 - 16 - 16, 32, 32, itemSprites[itemPtr->index]->rotations[0], 1);
 
                 drawTextAtWithMarginWithFiltering(2 + ((XRES) / 8), 23, 311, itemPtr->name,
                                      itemPtr->active ? 192 : 255, '\n');

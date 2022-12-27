@@ -1,0 +1,518 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F136B294293CDB1A00131388 /* LoadBitmapGL1.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B28F293CDB1A00131388 /* LoadBitmapGL1.c */; };
+		F136B295293CDB1A00131388 /* Renderer_RasterizationGL1.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B290293CDB1A00131388 /* Renderer_RasterizationGL1.c */; };
+		F136B296293CDB1A00131388 /* Renderer_TesselationGL1.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B291293CDB1A00131388 /* Renderer_TesselationGL1.c */; };
+		F136B297293CDB1A00131388 /* RendererGL1.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B292293CDB1A00131388 /* RendererGL1.c */; };
+		F136B29A293CDB3900131388 /* MainMenuGL1.nib in Resources */ = {isa = PBXBuildFile; fileRef = F136B298293CDB3900131388 /* MainMenuGL1.nib */; };
+		F149B82A263CB11700A3F597 /* Core.c in Sources */ = {isa = PBXBuildFile; fileRef = F149B829263CB11700A3F597 /* Core.c */; };
+		F1B8CB1B27CFCCBD00C06E6F /* Common.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1627CFCCBD00C06E6F /* Common.c */; };
+		F1B8CB1C27CFCCBD00C06E6F /* FixP.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1727CFCCBD00C06E6F /* FixP.c */; };
+		F1B8CB1D27CFCCBD00C06E6F /* MapWithCharKey.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1827CFCCBD00C06E6F /* MapWithCharKey.c */; };
+		F1B8CB1E27CFCCBD00C06E6F /* PackedFileReader.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1927CFCCBD00C06E6F /* PackedFileReader.c */; };
+		F1B8CB1F27CFCCBD00C06E6F /* Vec.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1A27CFCCBD00C06E6F /* Vec.c */; };
+		F1B8CB7327CFD4F200C06E6F /* BattleScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB7227CFD4F200C06E6F /* BattleScreen.c */; };
+		F1C704D9294298C000E2F806 /* MyOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C704D7294298C000E2F806 /* MyOpenGLView.m */; };
+		F1CA76C22610A91800FD1E04 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		F1CA76C42610A92000FD1E04 /* Events.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E5236DE60800478B2C /* Events.c */; };
+		F1CA76C52610A92000FD1E04 /* HackingScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F18C31BB2608BDE8002C2CDA /* HackingScreen.c */; };
+		F1CA76C62610A92400FD1E04 /* HelpScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A0D236DE63E00478B2C /* HelpScreen.c */; };
+		F1CA76CB2610A92D00FD1E04 /* VisibilityStrategy.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E9236DE60800478B2C /* VisibilityStrategy.c */; };
+		F1CA76CC2610A92E00FD1E04 /* Engine.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B679BA24E4AA3F00FCEF8E /* Engine.c */; };
+		F1CA76CD2610A92E00FD1E04 /* CreditsScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A0A236DE63E00478B2C /* CreditsScreen.c */; };
+		F1CA76CF2610A93600FD1E04 /* Globals.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E4236DE60800478B2C /* Globals.c */; };
+		F1CA76D02610A93600FD1E04 /* Derelict.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D5B5D22531D2BF0094ED78 /* Derelict.c */; };
+		F1CA76D12610A93600FD1E04 /* EDirection_Utils.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779DF236DE60800478B2C /* EDirection_Utils.c */; };
+		F1CA76D22610A93700FD1E04 /* MainMenu.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A10236DE63E00478B2C /* MainMenu.c */; };
+		F1CA76D32610A93700FD1E04 /* Dungeon.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E3236DE60800478B2C /* Dungeon.c */; };
+		F1CA76D52610A93900FD1E04 /* GameMenu.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A0C236DE63E00478B2C /* GameMenu.c */; };
+		F1CA76D62610A93B00FD1E04 /* Parser.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D5B5D32531D2BF0094ED78 /* Parser.c */; };
+		F1CA76D82610A93C00FD1E04 /* UI.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A12236DE63E00478B2C /* UI.c */; };
+		F1CA76DA2610A94100FD1E04 /* Crawler.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A09236DE63E00478B2C /* Crawler.c */; };
+		F1CA76DC2610A98100FD1E04 /* CTile3DProperties.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E0236DE60800478B2C /* CTile3DProperties.c */; };
+		F1CA76DD2610A98800FD1E04 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D1107310486CEB800E47090 /* Info.plist */; };
+		F1CA76DE2610A98900FD1E04 /* enemyfire.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850E25581D370012292B /* enemyfire.wav */; };
+		F1CA76DF2610A98900FD1E04 /* gotclue.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850C25581D370012292B /* gotclue.wav */; };
+		F1CA76E02610A98A00FD1E04 /* detected2.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851525581D370012292B /* detected2.wav */; };
+		F1CA76E12610A98A00FD1E04 /* menu_move.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850A25581D370012292B /* menu_move.wav */; };
+		F1CA76E22610A98B00FD1E04 /* drop.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850F25581D370012292B /* drop.wav */; };
+		F1CA76E32610A98B00FD1E04 /* bong.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851125581D370012292B /* bong.wav */; };
+		F1CA76E42610A98C00FD1E04 /* pick.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851325581D370012292B /* pick.wav */; };
+		F1CA76E52610A98C00FD1E04 /* magbootson.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850725581D370012292B /* magbootson.wav */; };
+		F1CA76E62610A98D00FD1E04 /* derelicttheme.wav in Resources */ = {isa = PBXBuildFile; fileRef = F19BC7A0260F901800C734C4 /* derelicttheme.wav */; };
+		F1CA76E72610A98D00FD1E04 /* bonk.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851625581D370012292B /* bonk.wav */; };
+		F1CA76E82610A98E00FD1E04 /* hurt.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850D25581D370012292B /* hurt.wav */; };
+		F1CA76E92610A99000FD1E04 /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850925581D370012292B /* click.wav */; };
+		F1CA76EA2610A99000FD1E04 /* shot.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851225581D370012292B /* shot.wav */; };
+		F1CA76EB2610A99100FD1E04 /* dead.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851025581D370012292B /* dead.wav */; };
+		F1CA76EC2610A99100FD1E04 /* detected.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851425581D370012292B /* detected.wav */; };
+		F1CA76ED2610A99200FD1E04 /* enemydead.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850B25581D370012292B /* enemydead.wav */; };
+		F1CA76EE2610A99200FD1E04 /* base.pfs in Resources */ = {isa = PBXBuildFile; fileRef = F1CD08C62450E41C00D4794D /* base.pfs */; };
+		F1CA76EF2610A99300FD1E04 /* menu_select.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850825581D370012292B /* menu_select.wav */; };
+		F1CA76F02610A99300FD1E04 /* fire.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851725581D380012292B /* fire.wav */; };
+		F1CA76F22610A99900FD1E04 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		F1CA774E2610AFA000FD1E04 /* Derelict-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */; };
+		F1DE9C4B2951FD9100EC0235 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1DE9C4A2951FD9100EC0235 /* OpenGL.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F12779DF236DE60800478B2C /* EDirection_Utils.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = EDirection_Utils.c; path = ../base3d/src/EDirection_Utils.c; sourceTree = SOURCE_ROOT; };
+		F12779E0236DE60800478B2C /* CTile3DProperties.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = CTile3DProperties.c; path = ../base3d/src/CTile3DProperties.c; sourceTree = SOURCE_ROOT; };
+		F12779E3236DE60800478B2C /* Dungeon.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Dungeon.c; path = ../base3d/src/Dungeon.c; sourceTree = SOURCE_ROOT; };
+		F12779E4236DE60800478B2C /* Globals.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Globals.c; path = ../base3d/src/Globals.c; sourceTree = SOURCE_ROOT; };
+		F12779E5236DE60800478B2C /* Events.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Events.c; path = ../base3d/src/Events.c; sourceTree = SOURCE_ROOT; };
+		F12779E9236DE60800478B2C /* VisibilityStrategy.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = VisibilityStrategy.c; path = ../base3d/src/VisibilityStrategy.c; sourceTree = SOURCE_ROOT; };
+		F12779F9236DE62100478B2C /* CActor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CActor.h; path = ../base3d/include/CActor.h; sourceTree = SOURCE_ROOT; };
+		F12779FD236DE62100478B2C /* CTile3DProperties.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CTile3DProperties.h; path = ../base3d/include/CTile3DProperties.h; sourceTree = SOURCE_ROOT; };
+		F12779FE236DE62100478B2C /* Dungeon.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Dungeon.h; path = ../base3d/include/Dungeon.h; sourceTree = SOURCE_ROOT; };
+		F12779FF236DE62100478B2C /* EDirection_Utils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = EDirection_Utils.h; path = ../base3d/include/EDirection_Utils.h; sourceTree = SOURCE_ROOT; };
+		F1277A00236DE62100478B2C /* Enums.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Enums.h; path = ../base3d/include/Enums.h; sourceTree = SOURCE_ROOT; };
+		F1277A02236DE62100478B2C /* LoadBitmap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = LoadBitmap.h; path = ../base3d/include/LoadBitmap.h; sourceTree = SOURCE_ROOT; };
+		F1277A05236DE62100478B2C /* VisibilityStrategy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = VisibilityStrategy.h; path = ../base3d/include/VisibilityStrategy.h; sourceTree = SOURCE_ROOT; };
+		F1277A06236DE63700478B2C /* Engine.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Engine.h; path = ../menu/include/Engine.h; sourceTree = SOURCE_ROOT; };
+		F1277A08236DE63700478B2C /* UI.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = UI.h; path = ../menu/include/UI.h; sourceTree = SOURCE_ROOT; };
+		F1277A09236DE63E00478B2C /* Crawler.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Crawler.c; path = ../menu/src/Crawler.c; sourceTree = SOURCE_ROOT; };
+		F1277A0A236DE63E00478B2C /* CreditsScreen.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = CreditsScreen.c; path = ../menu/src/CreditsScreen.c; sourceTree = SOURCE_ROOT; };
+		F1277A0C236DE63E00478B2C /* GameMenu.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = GameMenu.c; path = ../menu/src/GameMenu.c; sourceTree = SOURCE_ROOT; };
+		F1277A0D236DE63E00478B2C /* HelpScreen.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = HelpScreen.c; path = ../menu/src/HelpScreen.c; sourceTree = SOURCE_ROOT; };
+		F1277A10236DE63E00478B2C /* MainMenu.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = MainMenu.c; path = ../menu/src/MainMenu.c; sourceTree = SOURCE_ROOT; };
+		F1277A12236DE63E00478B2C /* UI.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = UI.c; path = ../menu/src/UI.c; sourceTree = SOURCE_ROOT; };
+		F136B28F293CDB1A00131388 /* LoadBitmapGL1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = LoadBitmapGL1.c; path = ../GL1Common/LoadBitmapGL1.c; sourceTree = "<group>"; };
+		F136B290293CDB1A00131388 /* Renderer_RasterizationGL1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Renderer_RasterizationGL1.c; path = ../GL1Common/Renderer_RasterizationGL1.c; sourceTree = "<group>"; };
+		F136B291293CDB1A00131388 /* Renderer_TesselationGL1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Renderer_TesselationGL1.c; path = ../GL1Common/Renderer_TesselationGL1.c; sourceTree = "<group>"; };
+		F136B292293CDB1A00131388 /* RendererGL1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = RendererGL1.c; path = ../GL1Common/RendererGL1.c; sourceTree = "<group>"; };
+		F136B293293CDB1A00131388 /* RendererGL1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RendererGL1.h; path = ../GL1Common/RendererGL1.h; sourceTree = "<group>"; };
+		F136B298293CDB3900131388 /* MainMenuGL1.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = MainMenuGL1.nib; sourceTree = "<group>"; };
+		F136B29C293CDC2300131388 /* CRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CRenderer.h; path = ../base3d/include/CRenderer.h; sourceTree = "<group>"; };
+		F149B829263CB11700A3F597 /* Core.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Core.c; path = ../../core/src/Core.c; sourceTree = "<group>"; };
+		F149B82B263CB12B00A3F597 /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Core.h; path = ../../core/include/Core.h; sourceTree = "<group>"; };
+		F18B850725581D370012292B /* magbootson.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = magbootson.wav; path = ../data/wavogg/magbootson.wav; sourceTree = "<group>"; };
+		F18B850825581D370012292B /* menu_select.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = menu_select.wav; path = ../data/wavogg/menu_select.wav; sourceTree = "<group>"; };
+		F18B850925581D370012292B /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = click.wav; path = ../data/wavogg/click.wav; sourceTree = "<group>"; };
+		F18B850A25581D370012292B /* menu_move.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = menu_move.wav; path = ../data/wavogg/menu_move.wav; sourceTree = "<group>"; };
+		F18B850B25581D370012292B /* enemydead.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = enemydead.wav; path = ../data/wavogg/enemydead.wav; sourceTree = "<group>"; };
+		F18B850C25581D370012292B /* gotclue.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = gotclue.wav; path = ../data/wavogg/gotclue.wav; sourceTree = "<group>"; };
+		F18B850D25581D370012292B /* hurt.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = hurt.wav; path = ../data/wavogg/hurt.wav; sourceTree = "<group>"; };
+		F18B850E25581D370012292B /* enemyfire.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = enemyfire.wav; path = ../data/wavogg/enemyfire.wav; sourceTree = "<group>"; };
+		F18B850F25581D370012292B /* drop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = drop.wav; path = ../data/wavogg/drop.wav; sourceTree = "<group>"; };
+		F18B851025581D370012292B /* dead.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = dead.wav; path = ../data/wavogg/dead.wav; sourceTree = "<group>"; };
+		F18B851125581D370012292B /* bong.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = bong.wav; path = ../data/wavogg/bong.wav; sourceTree = "<group>"; };
+		F18B851225581D370012292B /* shot.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = shot.wav; path = ../data/wavogg/shot.wav; sourceTree = "<group>"; };
+		F18B851325581D370012292B /* pick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = pick.wav; path = ../data/wavogg/pick.wav; sourceTree = "<group>"; };
+		F18B851425581D370012292B /* detected.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = detected.wav; path = ../data/wavogg/detected.wav; sourceTree = "<group>"; };
+		F18B851525581D370012292B /* detected2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = detected2.wav; path = ../data/wavogg/detected2.wav; sourceTree = "<group>"; };
+		F18B851625581D370012292B /* bonk.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = bonk.wav; path = ../data/wavogg/bonk.wav; sourceTree = "<group>"; };
+		F18B851725581D380012292B /* fire.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = fire.wav; path = ../data/wavogg/fire.wav; sourceTree = "<group>"; };
+		F18C31BB2608BDE8002C2CDA /* HackingScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = HackingScreen.c; path = ../menu/src/HackingScreen.c; sourceTree = "<group>"; };
+		F19BC7A0260F901800C734C4 /* derelicttheme.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = derelicttheme.wav; path = ../data/wavogg/derelicttheme.wav; sourceTree = "<group>"; };
+		F1B679BA24E4AA3F00FCEF8E /* Engine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Engine.c; path = ../menu/src/Engine.c; sourceTree = "<group>"; };
+		F1B8CB1627CFCCBD00C06E6F /* Common.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Common.c; path = ../../common/src/Common.c; sourceTree = SOURCE_ROOT; };
+		F1B8CB1727CFCCBD00C06E6F /* FixP.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = FixP.c; path = ../../common/src/FixP.c; sourceTree = SOURCE_ROOT; };
+		F1B8CB1827CFCCBD00C06E6F /* MapWithCharKey.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = MapWithCharKey.c; path = ../../common/src/MapWithCharKey.c; sourceTree = SOURCE_ROOT; };
+		F1B8CB1927CFCCBD00C06E6F /* PackedFileReader.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = PackedFileReader.c; path = ../../common/src/PackedFileReader.c; sourceTree = SOURCE_ROOT; };
+		F1B8CB1A27CFCCBD00C06E6F /* Vec.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Vec.c; path = ../../common/src/Vec.c; sourceTree = SOURCE_ROOT; };
+		F1B8CB2F27CFCFE700C06E6F /* Common.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Common.h; path = ../../common/include/Common.h; sourceTree = SOURCE_ROOT; };
+		F1B8CB3027CFCFE700C06E6F /* FixP.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = FixP.h; path = ../../common/include/FixP.h; sourceTree = SOURCE_ROOT; };
+		F1B8CB3127CFCFE700C06E6F /* MapWithCharKey.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = MapWithCharKey.h; path = ../../common/include/MapWithCharKey.h; sourceTree = SOURCE_ROOT; };
+		F1B8CB3227CFCFE700C06E6F /* PackedFileReader.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = PackedFileReader.h; path = ../../common/include/PackedFileReader.h; sourceTree = SOURCE_ROOT; };
+		F1B8CB3327CFCFE700C06E6F /* Vec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Vec.h; path = ../../common/include/Vec.h; sourceTree = SOURCE_ROOT; };
+		F1B8CB7227CFD4F200C06E6F /* BattleScreen.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = BattleScreen.c; path = ../menu/src/BattleScreen.c; sourceTree = SOURCE_ROOT; };
+		F1BD0D30236EF697002329C6 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
+		F1BD0D31236EF697002329C6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
+		F1BF22812450F4AF0088A1C4 /* SoundSystem.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SoundSystem.h; path = ../SoundSystem/SoundSystem.h; sourceTree = SOURCE_ROOT; };
+		F1C704D7294298C000E2F806 /* MyOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOpenGLView.m; sourceTree = "<group>"; };
+		F1C704D8294298C000E2F806 /* MyOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOpenGLView.h; sourceTree = "<group>"; };
+		F1CA76B32610A8BF00FD1E04 /* Derelict.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Derelict.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Derelict-Info.plist"; sourceTree = "<group>"; };
+		F1CD088E2450E32D00D4794D /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Globals.h; path = ../base3d/include/Globals.h; sourceTree = SOURCE_ROOT; };
+		F1CD08C62450E41C00D4794D /* base.pfs */ = {isa = PBXFileReference; lastKnownFileType = file; name = base.pfs; path = ../base.pfs; sourceTree = SOURCE_ROOT; };
+		F1D5B5D22531D2BF0094ED78 /* Derelict.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Derelict.c; path = ../../core/src/Derelict.c; sourceTree = "<group>"; };
+		F1D5B5D32531D2BF0094ED78 /* Parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Parser.c; path = ../../core/src/Parser.c; sourceTree = "<group>"; };
+		F1D5B5D62531D2C90094ED78 /* Parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Parser.h; path = ../../core/include/Parser.h; sourceTree = "<group>"; };
+		F1D5B5D72531D2CA0094ED78 /* Derelict.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Derelict.h; path = ../../core/include/Derelict.h; sourceTree = "<group>"; };
+		F1DE9C4A2951FD9100EC0235 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F1CA76B12610A8BF00FD1E04 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1CA76F22610A99900FD1E04 /* Cocoa.framework in Frameworks */,
+				F1DE9C4B2951FD9100EC0235 /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				F1C704D8294298C000E2F806 /* MyOpenGLView.h */,
+				F1C704D7294298C000E2F806 /* MyOpenGLView.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F1DE9C4A2951FD9100EC0235 /* OpenGL.framework */,
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F1BD0D30236EF697002329C6 /* Quartz.framework */,
+				F1BD0D31236EF697002329C6 /* QuartzCore.framework */,
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F1CA76B32610A8BF00FD1E04 /* Derelict.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* The Mistral Report OSX */ = {
+			isa = PBXGroup;
+			children = (
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+				F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */,
+			);
+			name = "The Mistral Report OSX";
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				F136B28F293CDB1A00131388 /* LoadBitmapGL1.c */,
+				F136B290293CDB1A00131388 /* Renderer_RasterizationGL1.c */,
+				F136B291293CDB1A00131388 /* Renderer_TesselationGL1.c */,
+				F136B292293CDB1A00131388 /* RendererGL1.c */,
+				F136B293293CDB1A00131388 /* RendererGL1.h */,
+				F1B8CB2F27CFCFE700C06E6F /* Common.h */,
+				F1B8CB3027CFCFE700C06E6F /* FixP.h */,
+				F1B8CB3127CFCFE700C06E6F /* MapWithCharKey.h */,
+				F1B8CB3227CFCFE700C06E6F /* PackedFileReader.h */,
+				F1B8CB3327CFCFE700C06E6F /* Vec.h */,
+				F12779F9236DE62100478B2C /* CActor.h */,
+				F1277A09236DE63E00478B2C /* Crawler.c */,
+				F149B82B263CB12B00A3F597 /* Core.h */,
+				F1277A0A236DE63E00478B2C /* CreditsScreen.c */,
+				F136B29C293CDC2300131388 /* CRenderer.h */,
+				F1B8CB1627CFCCBD00C06E6F /* Common.c */,
+				F1B8CB1727CFCCBD00C06E6F /* FixP.c */,
+				F1B8CB1827CFCCBD00C06E6F /* MapWithCharKey.c */,
+				F1B8CB1927CFCCBD00C06E6F /* PackedFileReader.c */,
+				F1B8CB1A27CFCCBD00C06E6F /* Vec.c */,
+				F12779E0236DE60800478B2C /* CTile3DProperties.c */,
+				F12779FD236DE62100478B2C /* CTile3DProperties.h */,
+				F149B829263CB11700A3F597 /* Core.c */,
+				F1D5B5D22531D2BF0094ED78 /* Derelict.c */,
+				F1D5B5D72531D2CA0094ED78 /* Derelict.h */,
+				F12779E3236DE60800478B2C /* Dungeon.c */,
+				F12779FE236DE62100478B2C /* Dungeon.h */,
+				F12779DF236DE60800478B2C /* EDirection_Utils.c */,
+				F12779FF236DE62100478B2C /* EDirection_Utils.h */,
+				F1B679BA24E4AA3F00FCEF8E /* Engine.c */,
+				F1277A06236DE63700478B2C /* Engine.h */,
+				F1277A00236DE62100478B2C /* Enums.h */,
+				F12779E5236DE60800478B2C /* Events.c */,
+				F1277A0C236DE63E00478B2C /* GameMenu.c */,
+				F12779E4236DE60800478B2C /* Globals.c */,
+				F1CD088E2450E32D00D4794D /* Globals.h */,
+				F18C31BB2608BDE8002C2CDA /* HackingScreen.c */,
+				F1277A0D236DE63E00478B2C /* HelpScreen.c */,
+				F1277A02236DE62100478B2C /* LoadBitmap.h */,
+				F1B8CB7227CFD4F200C06E6F /* BattleScreen.c */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+				F1277A10236DE63E00478B2C /* MainMenu.c */,
+				F1D5B5D32531D2BF0094ED78 /* Parser.c */,
+				F1D5B5D62531D2C90094ED78 /* Parser.h */,
+				F1BF22812450F4AF0088A1C4 /* SoundSystem.h */,
+				F1277A12236DE63E00478B2C /* UI.c */,
+				F1277A08236DE63700478B2C /* UI.h */,
+				F12779E9236DE60800478B2C /* VisibilityStrategy.c */,
+				F1277A05236DE62100478B2C /* VisibilityStrategy.h */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F136B298293CDB3900131388 /* MainMenuGL1.nib */,
+				F18B851125581D370012292B /* bong.wav */,
+				F19BC7A0260F901800C734C4 /* derelicttheme.wav */,
+				F18B851625581D370012292B /* bonk.wav */,
+				F18B850925581D370012292B /* click.wav */,
+				F18B851025581D370012292B /* dead.wav */,
+				F18B851425581D370012292B /* detected.wav */,
+				F18B851525581D370012292B /* detected2.wav */,
+				F18B850F25581D370012292B /* drop.wav */,
+				F18B850B25581D370012292B /* enemydead.wav */,
+				F18B850E25581D370012292B /* enemyfire.wav */,
+				F18B851725581D380012292B /* fire.wav */,
+				F18B850C25581D370012292B /* gotclue.wav */,
+				F18B850D25581D370012292B /* hurt.wav */,
+				F18B850725581D370012292B /* magbootson.wav */,
+				F18B850A25581D370012292B /* menu_move.wav */,
+				F18B850825581D370012292B /* menu_select.wav */,
+				F18B851325581D370012292B /* pick.wav */,
+				F18B851225581D370012292B /* shot.wav */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+				F1CD08C62450E41C00D4794D /* base.pfs */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F1CA76B22610A8BF00FD1E04 /* Derelict64 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1CA76B62610A8C100FD1E04 /* Build configuration list for PBXNativeTarget "Derelict64" */;
+			buildPhases = (
+				F1CA76AF2610A8BF00FD1E04 /* Resources */,
+				F1CA76B02610A8BF00FD1E04 /* Sources */,
+				F1CA76B12610A8BF00FD1E04 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Derelict64;
+			productName = Derelict;
+			productReference = F1CA76B32610A8BF00FD1E04 /* Derelict.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Derelict64" */;
+			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = en;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+				Base,
+				English,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* The Mistral Report OSX */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F1CA76B22610A8BF00FD1E04 /* Derelict64 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F1CA76AF2610A8BF00FD1E04 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1CA76DD2610A98800FD1E04 /* Info.plist in Resources */,
+				F1CA76DE2610A98900FD1E04 /* enemyfire.wav in Resources */,
+				F1CA76DF2610A98900FD1E04 /* gotclue.wav in Resources */,
+				F1CA76E02610A98A00FD1E04 /* detected2.wav in Resources */,
+				F1CA76E12610A98A00FD1E04 /* menu_move.wav in Resources */,
+				F1CA76E22610A98B00FD1E04 /* drop.wav in Resources */,
+				F1CA76E32610A98B00FD1E04 /* bong.wav in Resources */,
+				F1CA76E42610A98C00FD1E04 /* pick.wav in Resources */,
+				F1CA76E52610A98C00FD1E04 /* magbootson.wav in Resources */,
+				F1CA76E62610A98D00FD1E04 /* derelicttheme.wav in Resources */,
+				F1CA76E72610A98D00FD1E04 /* bonk.wav in Resources */,
+				F1CA76E82610A98E00FD1E04 /* hurt.wav in Resources */,
+				F1CA76E92610A99000FD1E04 /* click.wav in Resources */,
+				F1CA76EA2610A99000FD1E04 /* shot.wav in Resources */,
+				F1CA76EB2610A99100FD1E04 /* dead.wav in Resources */,
+				F1CA76EC2610A99100FD1E04 /* detected.wav in Resources */,
+				F1CA76ED2610A99200FD1E04 /* enemydead.wav in Resources */,
+				F1CA76EE2610A99200FD1E04 /* base.pfs in Resources */,
+				F1CA76EF2610A99300FD1E04 /* menu_select.wav in Resources */,
+				F1CA76F02610A99300FD1E04 /* fire.wav in Resources */,
+				F1CA774E2610AFA000FD1E04 /* Derelict-Info.plist in Resources */,
+				F136B29A293CDB3900131388 /* MainMenuGL1.nib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F1CA76B02610A8BF00FD1E04 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F149B82A263CB11700A3F597 /* Core.c in Sources */,
+				F1CA76C22610A91800FD1E04 /* main.m in Sources */,
+				F1CA76C42610A92000FD1E04 /* Events.c in Sources */,
+				F1CA76C52610A92000FD1E04 /* HackingScreen.c in Sources */,
+				F1CA76C62610A92400FD1E04 /* HelpScreen.c in Sources */,
+				F1CA76CB2610A92D00FD1E04 /* VisibilityStrategy.c in Sources */,
+				F1CA76CC2610A92E00FD1E04 /* Engine.c in Sources */,
+				F1CA76CD2610A92E00FD1E04 /* CreditsScreen.c in Sources */,
+				F1CA76CF2610A93600FD1E04 /* Globals.c in Sources */,
+				F1CA76D02610A93600FD1E04 /* Derelict.c in Sources */,
+				F1CA76D12610A93600FD1E04 /* EDirection_Utils.c in Sources */,
+				F1CA76D22610A93700FD1E04 /* MainMenu.c in Sources */,
+				F1CA76D32610A93700FD1E04 /* Dungeon.c in Sources */,
+				F1CA76D52610A93900FD1E04 /* GameMenu.c in Sources */,
+				F1CA76D62610A93B00FD1E04 /* Parser.c in Sources */,
+				F1CA76D82610A93C00FD1E04 /* UI.c in Sources */,
+				F1CA76DA2610A94100FD1E04 /* Crawler.c in Sources */,
+				F1CA76DC2610A98100FD1E04 /* CTile3DProperties.c in Sources */,
+				F1C704D9294298C000E2F806 /* MyOpenGLView.m in Sources */,
+				F1B8CB1B27CFCCBD00C06E6F /* Common.c in Sources */,
+				F1B8CB1C27CFCCBD00C06E6F /* FixP.c in Sources */,
+				F1B8CB1D27CFCCBD00C06E6F /* MapWithCharKey.c in Sources */,
+				F1B8CB1E27CFCCBD00C06E6F /* PackedFileReader.c in Sources */,
+				F1B8CB1F27CFCCBD00C06E6F /* Vec.c in Sources */,
+				F1B8CB7327CFD4F200C06E6F /* BattleScreen.c in Sources */,
+				F136B294293CDB1A00131388 /* LoadBitmapGL1.c in Sources */,
+				F136B295293CDB1A00131388 /* Renderer_RasterizationGL1.c in Sources */,
+				F136B296293CDB1A00131388 /* Renderer_TesselationGL1.c in Sources */,
+				F136B297293CDB1A00131388 /* RendererGL1.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					CLI_BUILD,
+					INCLUDE_ITEM_DESCRIPTIONS,
+				);
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					CLI_BUILD,
+					INCLUDE_ITEM_DESCRIPTIONS,
+				);
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Release;
+		};
+		F1CA76B72610A8C100FD1E04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
+				INFOPLIST_FILE = "Derelict-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = "";
+				PRODUCT_NAME = Derelict;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		F1CA76B82610A8C100FD1E04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
+				INFOPLIST_FILE = "Derelict-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = "";
+				PRODUCT_NAME = Derelict;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Derelict64" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F1CA76B62610A8C100FD1E04 /* Build configuration list for PBXNativeTarget "Derelict64" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1CA76B72610A8C100FD1E04 /* Debug */,
+				F1CA76B82610A8C100FD1E04 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

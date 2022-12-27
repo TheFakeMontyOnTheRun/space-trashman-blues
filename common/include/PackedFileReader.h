@@ -2,13 +2,13 @@
 #define FILEREADER_H
 
 #ifndef LEAN_BUILD
-void initFileReader(const char *__restrict__ dataFilePath);
+void initFileReader(const char * dataFilePath);
 
-size_t sizeOfFile(const char *__restrict__ path);
+size_t sizeOfFile(const char * path);
 
-struct StaticBuffer loadBinaryFileFromPath(const char *__restrict__ path);
+struct StaticBuffer loadBinaryFileFromPath(const char * path);
 
-FILE *openBinaryFileFromPath(const char *__restrict__ path);
+FILE *openBinaryFileFromPath(const char * path);
 
 #else
 

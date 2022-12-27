@@ -56,10 +56,10 @@ void CreditsScreen_initStateCallback(int32_t tag) {
 
 void CreditsScreen_initialPaintCallback(void) {
     dirtyLineY0 = 0;
-    dirtyLineY1 = 200;
+    dirtyLineY1 = YRES_FRAMEBUFFER;
 
     if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
+        drawRepeatBitmap(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, currentBackgroundBitmap);
     }
 }
 
@@ -75,7 +75,7 @@ void CreditsScreen_repaintCallback(void) {
         int lerpoSixtyFooooooouuuuuuur =
                 lerpInt(0, 64, invertedProgression, 256);
         int lerping32 = 32 - (lerpoSixtyFooooooouuuuuuur / 2);
-        int lerp320 = lerpInt(0, 320, invertedProgression, 256);
+        int lerp320 = lerpInt(0, XRES_FRAMEBUFFER, invertedProgression, 256);
         int lerpLines = lerpInt(0, (lines + 3) * 8, invertedProgression, 256);
         int lerpLen = lerpInt(0, len * 8, invertedProgression, 256);
         int lerpOptionsHeight =
@@ -96,25 +96,25 @@ void CreditsScreen_repaintCallback(void) {
         drawRect(152 + lerping32, 128 + lerping32, lerpoSixtyFooooooouuuuuuur,
                  lerpoSixtyFooooooouuuuuuur, 0);
 
-        drawRect(320 - 16 - (len * 8) - 16 + (len * 8 / 2) - lerpLen / 2,
-                 200 - optionsHeight - 16 - 16 + optionsHeight / 2
+        drawRect(XRES_FRAMEBUFFER - 16 - (len * 8) - 16 + (len * 8 / 2) - lerpLen / 2,
+				 YRES_FRAMEBUFFER - optionsHeight - 16 - 16 + optionsHeight / 2
                  - lerpOptionsHeight / 2,
                  lerpLen + 16, lerpOptionsHeight + 16, 0);
 
         return;
     }
 
-    fill(0, (lines + 3) * 8, 320, 8, 0, TRUE);
+    fill(0, (lines + 3) * 8, XRES_FRAMEBUFFER, 8, 0, TRUE);
     fill(8 + 8, 128 + 8, 64, 64, 0, TRUE);
     fill(80 + 8, 128 + 8, 64, 64, 0, TRUE);
     fill(152 + 8, 128 + 8, 64, 64, 0, TRUE);
 
     if (mainText != NULL) {
 
-        fill(0, 0, 320, (lines + 3) * 8, 255, FALSE);
+        fill(0, 0, XRES_FRAMEBUFFER, (lines + 3) * 8, 255, FALSE);
 
-        drawRect(0, 0, 320, (lines + 3) * 8, 0);
-        fill(0, 0, 320, 8, 0, FALSE);
+        drawRect(0, 0, XRES_FRAMEBUFFER, (lines + 3) * 8, 0);
+        fill(0, 0, XRES_FRAMEBUFFER, 8, 0, FALSE);
         drawTextAt(2, 1, "Credits", 255);
         drawTextAt(1, 3, mainText, 0);
     }
@@ -136,13 +136,13 @@ void CreditsScreen_repaintCallback(void) {
 
     fill(152, 128, 64, 8, 0, FALSE);
 
-    fill(320 - (len * 8) - 8 - 16, 200 - optionsHeight - 8 - 16,
+    fill(XRES_FRAMEBUFFER - (len * 8) - 8 - 16, YRES_FRAMEBUFFER - optionsHeight - 8 - 16,
          (len * 8) + 16, optionsHeight + 16, 0, TRUE);
 
-    fill(320 - (len * 8) - 16 - 16, 200 - optionsHeight - 16 - 16,
+    fill(XRES_FRAMEBUFFER - (len * 8) - 16 - 16, YRES_FRAMEBUFFER - optionsHeight - 16 - 16,
          (len * 8) + 16, optionsHeight + 16, 255, FALSE);
 
-    drawRect(320 - (len * 8) - 16 - 16, 200 - optionsHeight - 16 - 16,
+    drawRect(XRES_FRAMEBUFFER - (len * 8) - 16 - 16, YRES_FRAMEBUFFER - optionsHeight - 16 - 16,
              (len * 8) + 16, optionsHeight + 16, 0);
 
     fill((40 - len - 2 - 2) * 8,
@@ -158,8 +158,8 @@ void CreditsScreen_repaintCallback(void) {
                            || (currentPresentationState == kWaitingForInput));
 
         if (isCursor) {
-            fill(320 - (len * 8) - 16 - 8 - 8,
-                 (200 - optionsHeight) + (c * 8) - 8 - 8, (len * 8) + 16, 8,
+            fill(XRES_FRAMEBUFFER - (len * 8) - 16 - 8 - 8,
+                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - 8 - 8, (len * 8) + 16, 8,
                  0, FALSE);
         }
 

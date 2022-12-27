@@ -33,7 +33,7 @@ int16_t Battlecreen_optionsCount = 2;
 
 void BattleScreen_initStateCallback(int32_t tag) {
     dirtyLineY0 = 0;
-    dirtyLineY1 = 200;
+    dirtyLineY1 = YRES_FRAMEBUFFER;
     cursorPosition = 1;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
@@ -43,7 +43,7 @@ void BattleScreen_initStateCallback(int32_t tag) {
 }
 
 void BattleScreen_initialPaintCallback(void) {
-    fill(0, 0, XRES, 200, 128, FALSE );
+    fill(0, 0, XRES, YRES, 128, FALSE );
 }
 
 void BattleScreen_repaintCallback(void) {
@@ -69,7 +69,7 @@ void BattleScreen_repaintCallback(void) {
 
             if (isCursor) {
                 fill(8,
-                     (200 - optionsHeight) + (c * 8) - 8 - 8, (len * 8) + 16, 8,
+                     (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - 8 - 8, (len * 8) + 16, 8,
                      0, FALSE);
             }
 
