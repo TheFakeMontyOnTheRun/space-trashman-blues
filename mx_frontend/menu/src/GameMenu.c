@@ -31,23 +31,19 @@
 #include "Core.h"
 #include "Derelict.h"
 
-#define TEXT_BUFFER_SIZE 40 * 25
+#define TEXT_BUFFER_SIZE (40 * 25)
 
 const char **GameMenu_options;
 enum EGameMenuState *GameMenu_nextStateNavigation;
 const char *GameMenu_StateTitle;
 struct Bitmap *featuredBitmap = NULL;
 
-void goTo(int location);
-
 extern int playerLocation;
-
 
 const char *inspectItem_options[1] = {"Back"};
 
 enum EGameMenuState InspectItem_nextStateNavigation[1] = {
         kBackToGame};
-
 
 enum EGameMenuState GameMenu_EndGame_nextStateNavigation[2] = {kInspectItem, kMainMenu};
 
@@ -65,7 +61,7 @@ int drawFilter = FALSE;
 void GameMenu_initStateCallback(int32_t tag) {
     int c;
     dirtyLineY0 = 0;
-    dirtyLineY1 = 200;
+    dirtyLineY1 = YRES_FRAMEBUFFER;
 
     GameMenu_StateTitle = NULL;
     cursorPosition = 0;
@@ -197,7 +193,7 @@ void GameMenu_initStateCallback(int32_t tag) {
 void GameMenu_initialPaintCallback(void) {
 
     if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
+        drawRepeatBitmap(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, currentBackgroundBitmap);
     }
 
     featuredBitmap = NULL;
@@ -219,9 +215,9 @@ void GameMenu_repaintCallback(void) {
             return;
         }
 
-        drawRect(320 - movementX - 8 - 24 - ((biggestOption * 8) / 2)
+        drawRect(XRES_FRAMEBUFFER - movementX - 8 - 24 - ((biggestOption * 8) / 2)
                  + (sizeX / 2),
-                 200 - movementY - 8 - 16 - 8 - ((optionsHeight + 8) / 2)
+                 YRES_FRAMEBUFFER - movementY - 8 - 16 - 8 - ((optionsHeight + 8) / 2)
                  + (sizeY / 2),
                  sizeX, sizeY, 0);
 
@@ -229,7 +225,7 @@ void GameMenu_repaintCallback(void) {
     }
 
     if (drawFilter) {
-        fill(0, 0, 320, 200, 0, TRUE);
+        fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, 0, TRUE);
     }
 
     if (mainText != NULL) {
@@ -250,8 +246,8 @@ void GameMenu_repaintCallback(void) {
         int shouldGreyOut = FALSE;
 
         if (isCursor) {
-            fill(320 - (biggestOption * 8) - 16 - 8 - 8,
-                 (200 - optionsHeight) + (c * 8) - 8 - 8,
+            fill(XRES_FRAMEBUFFER - (biggestOption * 8) - 16 - 8 - 8,
+                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - 8 - 8,
                  (biggestOption * 8) + 16, 8, 0, FALSE);
         }
 

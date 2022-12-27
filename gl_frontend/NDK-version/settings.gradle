@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name='Derelict3D'

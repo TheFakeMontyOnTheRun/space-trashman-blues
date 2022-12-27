@@ -44,8 +44,8 @@ struct MapWithCharKey colliders;
 struct MapWithCharKey enemySightBlockers;
 uint8_t *visibleElementsMap;
 struct Bitmap *defaultFont;
-uint8_t framebuffer[320 * 200];
-uint8_t previousFrame[320 * 200];
+uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 uint8_t mActors[MAP_SIZE][MAP_SIZE];
 uint8_t mItems[MAP_SIZE][MAP_SIZE];
 uint8_t mEffects[MAP_SIZE][MAP_SIZE];
@@ -53,7 +53,7 @@ enum EDirection cameraDirection;
 struct Vec3 mCamera;
 long gameTicks = 0;
 int dirtyLineY0 = 0;
-int dirtyLineY1 = 200;
+int dirtyLineY1 = YRES_FRAMEBUFFER;
 
 int distanceForPenumbra = 16;
 int distanceForDarkness = 48;
@@ -340,13 +340,12 @@ void render(const long ms) {
 #endif
 
 #ifndef CD32
-        clippingY1 = 200;
+        clippingY1 = YRES_FRAMEBUFFER;
         for (c = 0; c < 10; ++c) {
             drawBitmap(c * 20, 0, backdrop, FALSE);
         }
-
 #else
-        fill(0, 0, 256, 128, 64, FALSE);
+        fill(0, 0, XRES, 128, 64, FALSE);
 #endif
 
         element = visibleElementsMap[(cameraPosition.y * MAP_SIZE) + cameraPosition.x];
@@ -994,10 +993,10 @@ void render(const long ms) {
 			}
 		}
 
-        clippingY1 = 200;
+        clippingY1 = YRES_FRAMEBUFFER;
 
         dirtyLineY0 = 0;
-        dirtyLineY1 = YRES;
+        dirtyLineY1 = YRES_FRAMEBUFFER;
         redrawHUD();
     }
 }

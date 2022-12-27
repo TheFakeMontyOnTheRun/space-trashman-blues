@@ -26,8 +26,6 @@ struct StaticBuffer {
     size_t size;
 };
 
-#define __restrict__ /*__restrict__*/ 
-
 void initVector(struct ItemVector *vector, size_t capacity);
 
 int removeFromVector(struct ItemVector *vector, void *item);
@@ -38,7 +36,7 @@ int pushVector(struct ItemVector *vector, void *item);
 
 int isBigEndian(void);
 
-void initFileReader(const char * __restrict__ dataFilePath);
+void initFileReader(const char *  dataFilePath);
 
 uint32_t toNativeEndianess(const uint32_t val);
 

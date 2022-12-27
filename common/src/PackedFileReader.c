@@ -74,14 +74,14 @@ FILE *android_fopen(const char* filename) {
 #ifndef LEAN_BUILD
 char mDataPath[kDataPath_MaxLength];
 
-void initFileReader(const char *__restrict__ dataFilePath) {
+void initFileReader(const char * dataFilePath) {
 	uint8_t len = strlen(dataFilePath);
 	memcpy(&mDataPath[0], dataFilePath, len);
 }
 
 #ifndef LEAN_BUILD
 
-size_t sizeOfFile(const char *__restrict__ path) {
+size_t sizeOfFile(const char * path) {
 
 #ifndef ANDROID
 	FILE *mDataPack = fopen(mDataPath, "rb");
@@ -125,7 +125,7 @@ found:
 
 #endif
 
-struct StaticBuffer loadBinaryFileFromPath(const char *__restrict__ path) {
+struct StaticBuffer loadBinaryFileFromPath(const char * path) {
 
 #ifndef ANDROID
 	FILE *mDataPack = fopen(mDataPath, "rb");
@@ -169,7 +169,11 @@ found:
 	assert (fread(&size, 4, 1, mDataPack));
 	size = toNativeEndianess(size);
 	toReturn.size = size;
+#ifndef N64
 	toReturn.data = (uint8_t *) malloc(size);
+#else
+	toReturn.data = (uint8_t *) malloc_uncached(size);
+#endif
 
 	assert (fread(toReturn.data, sizeof(uint8_t), size, mDataPack));
 	fclose(mDataPack);
@@ -179,7 +183,7 @@ found:
 
 #ifndef LEAN_BUILD
 
-FILE *openBinaryFileFromPath(const char *__restrict__ path) {
+FILE *openBinaryFileFromPath(const char * path) {
 
 #ifndef ANDROID
 	FILE *mDataPack = fopen(mDataPath, "rb");
@@ -263,7 +267,11 @@ found:
 	fread(&size, 4, 1, mDataPack);
 	size = toNativeEndianess(size);
 	toReturn.size = size;
+#ifndef N64
 	toReturn.data = (uint8_t *) malloc(size);
+#else
+	toReturn.data = (uint8_t *) malloc_uncached(size);
+#endif
 
 	fread(toReturn.data, sizeof(uint8_t), size, mDataPack);
 	fclose(mDataPack);

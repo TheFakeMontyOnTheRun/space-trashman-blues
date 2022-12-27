@@ -1,0 +1,9 @@
+I 0 0 1 1 1 null null bricks cube null null 0 0 5 0
+F 0 0 0 1 1 ceiling asphalt null null bricks null 3 0 2 0
+s 0 0 0 0 1 ceiling asphalt null null null null 0 0 0 0
+2 0 0 0 0 1 ceiling asphalt null null null null 0 0 0 0
+, 0 1 1 1 0 null null null null null null 0 0 0 0
+U 0 0 1 1 1 null null upno cube bricks2 bricks2 0 1 2 1
+D 0 0 1 1 1 null null down cube bricks2 bricks2 0 1 2 1
+L 0 0 1 1 1 null null l1 cube bricks2 bricks2 0 1 2 1
+X 0 0 1 1 1 null null null null bricks grating 3 2 2 2

@@ -33,5 +33,10 @@ void setItem(const int x, const int y, const uint8_t item);
 
 void initRoom(int room);
 
+void goTo(int location);
+
 extern int enteredThru;
+
+extern int cursorPosition;
+
 #endif

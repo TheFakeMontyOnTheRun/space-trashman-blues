@@ -70,19 +70,6 @@ long uclock() {
 #include <emscripten/emscripten.h>
 #endif
 
-
-void shutdownHW();
-
-extern int isRunning;
-extern long timeUntilNextState;
-extern enum EPresentationState currentPresentationState;
-extern struct Bitmap *currentBackgroundBitmap;
-extern enum EGameMenuState nextNavigationSelection;
-extern enum EGameMenuState currentGameMenuState;
-extern const char *mainText;
-
-int menuTick(long delta_time);
-
 void initHW() {
 #ifndef CD32
     initFileReader("base.pfs");

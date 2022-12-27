@@ -24,8 +24,6 @@
 #include "VisibilityStrategy.h"
 #include "UI.h"
 
-extern const char *mainText;
-
 const char *HelpScreen_options[1] = {"Back"};
 
 enum EGameMenuState HelpScreen_nextStateNavigation[1] = {
@@ -38,7 +36,7 @@ extern char textBuffer[40 * 25];
 void HelpScreen_initStateCallback(int32_t tag) {
     struct StaticBuffer textFile = loadBinaryFileFromPath("Help.txt");
     dirtyLineY0 = 0;
-    dirtyLineY1 = 200;
+    dirtyLineY1 = YRES_FRAMEBUFFER;
 
     cursorPosition = 0;
     currentPresentationState = kAppearing;
@@ -57,12 +55,12 @@ void HelpScreen_initStateCallback(int32_t tag) {
 void HelpScreen_initialPaintCallback(void) {
 
     if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
+        drawRepeatBitmap(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, currentBackgroundBitmap);
     }
 }
 
 void HelpScreen_repaintCallback(void) {
-    int c = 0;
+    int c;
     int lines;
     size_t len = strlen(HelpScreen_options[0]);
     int optionsHeight = 8 * (HelpScreen_optionsCount);
@@ -72,7 +70,7 @@ void HelpScreen_repaintCallback(void) {
     if (currentPresentationState == kAppearing) {
 
         int invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;
-        int lerp320 = lerpInt(0, 319, invertedProgression, 256);
+        int lerp320 = lerpInt(0, (XRES_FRAMEBUFFER-1), invertedProgression, 256);
         int lerpLines = lerpInt(0, (lines + 3) * 8, invertedProgression, 256);
         int lerpLen8 = lerpInt(0, (len * 8), invertedProgression, 256);
         int lerpOptionsHeight =
@@ -85,8 +83,8 @@ void HelpScreen_repaintCallback(void) {
         drawRect(160 - lerp320 / 2, ((lines + 3) * 8) / 2 - lerpLines / 2,
                  lerp320, lerpLines, 0);
 
-        drawRect(320 - (len * 8) - 16 - 16 + (len * 8) / 2 - lerpLen8 / 2,
-                 200 - optionsHeight - 16 - 16 + optionsHeight / 2
+        drawRect(XRES_FRAMEBUFFER - (len * 8) - 16 - 16 + (len * 8) / 2 - lerpLen8 / 2,
+				 YRES_FRAMEBUFFER - optionsHeight - 16 - 16 + optionsHeight / 2
                  - lerpOptionsHeight / 2,
                  lerpLen8 + 16, lerpOptionsHeight + 16, 0);
 
@@ -108,8 +106,8 @@ void HelpScreen_repaintCallback(void) {
                            || (currentPresentationState == kWaitingForInput));
 
         if (isCursor) {
-            fill(320 - (len * 8) - 16 - 8 - 8,
-                 (200 - optionsHeight) + (c * 8) - 8 - 8, (len * 8) + 16, 8,
+            fill(XRES_FRAMEBUFFER - (len * 8) - 16 - 8 - 8,
+                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - 8 - 8, (len * 8) + 16, 8,
                  0, FALSE);
         }
 

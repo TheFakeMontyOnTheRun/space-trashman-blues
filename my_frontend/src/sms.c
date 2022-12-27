@@ -511,10 +511,13 @@ uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr) {
 #endif
 
 	if (ptr == NULL) {
-
+		/*
+		// originally was this
 		ptr = &buffer[(16 * 8 * (y >> 3)) + //skip the entire row of patterns along the y
 					  (8 * (x >> 3)) + //skip to the correct pattern in the row
 					  (y & 7)]; //skip to the line in pattern
+		*/
+		ptr = &buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)];
 	}
 
 	switch (x & 7) {
@@ -554,9 +557,14 @@ void graphicsPut(uint8_t x, uint8_t y) {
 	y = y >> 1;
 #endif
 
-	uint8_t *ptr = &buffer[(16 * 8 * (y >> 3)) + //skip the entire row of patterns along the y
+	/*
+	 // was originally this
+	uint8_t *ptr = &buffer[(16 * 8 * (y >> 3) + //skip the entire row of patterns along the y
 						   (8 * (x >> 3)) + //skip to the correct pattern in the row
 						   (y & 7)]; //skip to the line in pattern
+	*/
+
+	uint8_t *ptr = &buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)];
 
 	switch (x & 7) {
 		case 0:

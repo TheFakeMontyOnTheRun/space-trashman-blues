@@ -165,3 +165,5 @@ cmake_install.cmake
 mx_frontend/CMakeFiles
 derelict32
 derelict32.cbp
+gl_frontend/Xcode2_gl1/Derelict64.xcodeproj/monty.mode1
+gl_frontend/Xcode2_gl1/Derelict64.xcodeproj/monty.pbxuser

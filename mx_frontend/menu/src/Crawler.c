@@ -39,12 +39,11 @@ const char *AbandonMission_options[6] = {"Continue", "End game"};
 int AbandonMission_navigation[2] = {-1, kMainMenu};
 int AbandonMission_count = 2;
 extern struct GameSnapshot gameSnapshot;
-extern int cursorPosition;
 
 void Crawler_initStateCallback(int32_t tag) {
-    int c = 0;
+    int c;
     dirtyLineY0 = 0;
-    dirtyLineY1 = 200;
+    dirtyLineY1 = YRES_FRAMEBUFFER;
 
     if (tag == kPlayGame) {
         initStation();
@@ -89,7 +88,7 @@ void Crawler_initStateCallback(int32_t tag) {
 }
 
 void Crawler_initialPaintCallback() {
-    fill(0, 0, 320, 200, 0, FALSE);
+    fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, 0, FALSE);
 
     fill(11 * 8 - 1, 12 * 8, 18 * 8 + 3, 8, 255, FALSE);
     drawRect(11 * 8 - 1, 11 * 8 - 1, 18 * 8 + 2, 8 + 2, 255);
@@ -107,21 +106,21 @@ void Crawler_repaintCallback() {
 
 
     if (showPromptToAbandonMission) {
-        int c = 0;
+        int c;
         int optionsHeight = 8 * (AbandonMission_count);
         turnStep = turnTarget;
-        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
+        drawRepeatBitmap(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, currentBackgroundBitmap);
 
-        fill(0, 0, 320, 200, 0, TRUE);
+        fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, 0, TRUE);
 
-        fill(320 - (biggestOption * 8) - 8 - 16, 200 - optionsHeight - 8 - 16,
+        fill(XRES_FRAMEBUFFER - (biggestOption * 8) - 8 - 16, YRES_FRAMEBUFFER - optionsHeight - 8 - 16,
              (biggestOption * 8) + 16, optionsHeight + 16, 0, TRUE);
 
-        fill(320 - (biggestOption * 8) - 16 - 16, 200 - optionsHeight - 16 - 16,
+        fill(XRES_FRAMEBUFFER - (biggestOption * 8) - 16 - 16, YRES_FRAMEBUFFER - optionsHeight - 16 - 16,
              (biggestOption * 8) + 16, optionsHeight + 16, 255, FALSE);
 
-        drawRect(320 - (biggestOption * 8) - 16 - 16,
-                 200 - optionsHeight - 16 - 16, (biggestOption * 8) + 16,
+        drawRect(XRES_FRAMEBUFFER - (biggestOption * 8) - 16 - 16,
+                 YRES_FRAMEBUFFER - optionsHeight - 16 - 16, (biggestOption * 8) + 16,
                  optionsHeight + 16, 0);
 
         if (AbandonMission_Title != NULL) {
@@ -143,8 +142,8 @@ void Crawler_repaintCallback() {
                                || (currentPresentationState == kWaitingForInput));
 
             if (isCursor) {
-                fill(320 - (biggestOption * 8) - 16 - 8 - 8,
-                     (200 - optionsHeight) + (c * 8) - 8 - 8,
+                fill(XRES_FRAMEBUFFER - (biggestOption * 8) - 16 - 8 - 8,
+                     (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - 8 - 8,
                      (biggestOption * 8) + 16, 8, 0, FALSE);
             }
 
@@ -168,7 +167,7 @@ void Crawler_repaintCallback() {
 
             xCameraOffset = yCameraOffset = 0;
 
-            fill(0, 0, XRES + 1, 200, 0, 0);
+            fill(0, 0, XRES + 1, YRES, 0, 0);
 
 
 
@@ -375,7 +374,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
         showPromptToAbandonMission = TRUE;
         timeUntilNextState = 0;
         dirtyLineY0 = 0;
-        dirtyLineY1 = 200;
+        dirtyLineY1 = YRES_FRAMEBUFFER;
         return kMenuStateUnchanged;
     }
 
@@ -386,7 +385,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     if (currentPresentationState == kWaitingForInput) {
         if (cmd == kCommandFire4) {
             dirtyLineY0 = 0;
-            dirtyLineY1 = 200;
+            dirtyLineY1 = YRES_FRAMEBUFFER;
             needToRedrawHUD = TRUE;
         }
 

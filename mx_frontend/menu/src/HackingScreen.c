@@ -41,7 +41,7 @@ int wasSmoothMovementPreviouslyEnabled;
 
 void HackingScreen_initStateCallback(int32_t tag) {
     dirtyLineY0 = 0;
-    dirtyLineY1 = 200;
+    dirtyLineY1 = YRES_FRAMEBUFFER;
 
     cursorPosition = 1;
     currentPresentationState = kAppearing;
@@ -67,12 +67,12 @@ void HackingScreen_initStateCallback(int32_t tag) {
 void HackingScreen_initialPaintCallback(void) {
 
     if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, 320, 200, currentBackgroundBitmap);
+        drawRepeatBitmap(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, currentBackgroundBitmap);
     }
 }
 
 void HackingScreen_repaintCallback(void) {
-    uint8_t isSelected = 0;
+    uint8_t isSelected;
     int pin;
 
     drawWindow(1, 1, 40, 15, "Disassembly: CONTROLLER.PRG (stack)");

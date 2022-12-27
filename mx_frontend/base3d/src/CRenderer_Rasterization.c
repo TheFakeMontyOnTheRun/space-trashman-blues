@@ -27,7 +27,7 @@
 
 char mTurnBuffer;
 
-uint16_t clippingY1 = 200;
+uint16_t clippingY1 = YRES_FRAMEBUFFER;
 
 /*
     *         /|x1y0
@@ -144,11 +144,11 @@ void maskWall(
                 iY1 = YRES;
             }
 
-            destinationLine = bufferData + (320 * iY0) + ix;
+            destinationLine = bufferData + (XRES_FRAMEBUFFER * iY0) + ix;
 
             for (iy = iY0; iy < iY1; ++iy) {
                 *(destinationLine) = pixel;
-                destinationLine += (320);
+                destinationLine += (XRES_FRAMEBUFFER);
             }
         }
         y0 += upperDyDx;
@@ -267,7 +267,7 @@ void drawWall(FixP_t x0,
             int32_t iY1 = fixToInt(y1);
             const uint8_t *sourceLineStart = data + (iu * NATIVE_TEXTURE_SIZE);
             const uint8_t *lineOffset = sourceLineStart;
-            uint8_t *destinationLine = bufferData + (320 * iY0) + ix;
+            uint8_t *destinationLine = bufferData + (XRES_FRAMEBUFFER * iY0) + ix;
             FixP_t dv;
             int32_t iy;
 
@@ -303,7 +303,7 @@ void drawWall(FixP_t x0,
                         *(destinationLine) = color;
                     }
                 }
-                destinationLine += (320);
+                destinationLine += (XRES_FRAMEBUFFER);
                 v += dv;
             }
         }
@@ -435,7 +435,7 @@ void drawFrontWall(FixP_t x0,
             FixP_t u = 0;
             const uint8_t iv = fixToInt(v) & (NATIVE_TEXTURE_SIZE - 1);
             const uint8_t *sourceLineStart = data + (iv * NATIVE_TEXTURE_SIZE);
-            uint8_t *destinationLine = bufferData + (320 * iy) + iX0;
+            uint8_t *destinationLine = bufferData + (XRES_FRAMEBUFFER * iy) + iX0;
             int ix;
             lastU = 0;
 
@@ -443,10 +443,10 @@ void drawFrontWall(FixP_t x0,
                 && ((!enableAlpha && iv == lastV)
                     && (iX1 < XRES && iX0 >= 0))) {
                 int start = (0 >= iX0) ? 0 : iX0;
-                int finish = ((256 - 1) >= iX1) ? iX1 : (256 - 1);
+                int finish = ((XRES - 1) >= iX1) ? iX1 : (XRES - 1);
                 v += dv;
-                destinationLine = bufferData + (320 * iy);
-                sourceLineStart = destinationLine - 320;
+                destinationLine = bufferData + (XRES_FRAMEBUFFER * iy);
+                sourceLineStart = destinationLine - XRES_FRAMEBUFFER;
                 memcpy (destinationLine + start, sourceLineStart + start,
                         finish - start);
 
@@ -601,7 +601,7 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
                 iX0 = XRES - 1;
             }
 
-            memset (bufferData + (320 * iy) + iX0, pixel, iX1 - iX0);
+            memset (bufferData + (XRES_FRAMEBUFFER * iy) + iX0, pixel, iX1 - iX0);
         }
 
         x0 += leftDxDy;
@@ -717,7 +717,7 @@ void drawFloor(FixP_t y0,
 
             du = Div(textureSize, diffX);
             iv = fixToInt(v);
-            destinationLine = bufferData + (320 * iy) + iX0;
+            destinationLine = bufferData + (XRES_FRAMEBUFFER * iy) + iX0;
             sourceLineStart = data + (iv * NATIVE_TEXTURE_SIZE);
             pixel = *(sourceLineStart);
 
@@ -821,12 +821,12 @@ void drawSlantedFloor(
                 pixel = texture[cachedVi + (fixToInt(Mul(percentileX, textureSizeFP)))];
                 
                 if (sizeY < one) {
-                    framebuffer[(320 * (fixToInt(Y + currDy0))) + fixToInt(X)] = pixel;
+                    framebuffer[(XRES_FRAMEBUFFER * (fixToInt(Y + currDy0))) + fixToInt(X)] = pixel;
                 } else {
                     int i = 0;
                     FixP_t frag;
                     for (frag = 0; frag <= (sizeY); frag += one) {
-                        framebuffer[(320 * (fixToInt(Y + currDy0) + i++)) + fixToInt(X)] = stipple ? pixel : 0;
+                        framebuffer[(XRES_FRAMEBUFFER * (fixToInt(Y + currDy0) + i++)) + fixToInt(X)] = stipple ? pixel : 0;
                         stipple = !stipple;
                     }
                 }
@@ -853,12 +853,12 @@ void drawSlantedFloor(
                 pixel = texture[cachedVi + (fixToInt(Mul(percentileX, textureSizeFP)))];
                 
                 if (sizeY < one) {
-                    framebuffer[(320 * (fixToInt(Y + currDy0))) + fixToInt(X)] = pixel;
+                    framebuffer[(XRES_FRAMEBUFFER * (fixToInt(Y + currDy0))) + fixToInt(X)] = pixel;
                 } else {
                     int i = 0;
                     FixP_t frag;
                     for (frag = 0; frag <= (sizeY); frag += one) {
-                        framebuffer[(320 * (fixToInt(Y + currDy0) + i++)) + fixToInt(X)] = pixel;
+                        framebuffer[(XRES_FRAMEBUFFER * (fixToInt(Y + currDy0) + i++)) + fixToInt(X)] = pixel;
                     }
                 }
                 
@@ -876,7 +876,7 @@ void drawRect(
         const uint8_t pixel) {
 
     uint8_t *destination = &framebuffer[0];
-    uint8_t *destinationLineStart = destination + (320 * (y)) + x;
+    uint8_t *destinationLineStart = destination + (XRES_FRAMEBUFFER * (y)) + x;
     uint16_t py;
 
     if (pixel == TRANSPARENCY_COLOR) {
@@ -886,12 +886,12 @@ void drawRect(
     memset (destinationLineStart, pixel, dx);
 
     for (py = 0; py < (dy); ++py) {
-        destinationLineStart = destination + (320 * (y + py)) + x;
+        destinationLineStart = destination + (XRES_FRAMEBUFFER * (y + py)) + x;
         *destinationLineStart = pixel;
         destinationLineStart += dx;
         *destinationLineStart = pixel;
     }
-    memset (destination + (320 * (y + dy)) + x, pixel, dx);
+    memset (destination + (XRES_FRAMEBUFFER * (y + dy)) + x, pixel, dx);
 }
 
 void fillBottomFlat(const int *coords, uint8_t colour) {
@@ -929,12 +929,12 @@ void fillBottomFlat(const int *coords, uint8_t colour) {
     fX1 = x0;
 
     for (; y < yFinal; ++y) {
-        if (y >= 200) {
+        if (y >= YRES) {
             return;
         } else if (y >= 0) {
-            int iFX1 = max(min(255, fixToInt(fX1)), 0);
-            int iFX0 = max(min(255, fixToInt(fX0)), 0);
-            uint8_t *destination = &framebuffer[(320 * y) + min(iFX0, iFX1)];
+            int iFX1 = max(min((XRES - 1), fixToInt(fX1)), 0);
+            int iFX0 = max(min((XRES - 1), fixToInt(fX0)), 0);
+            uint8_t *destination = &framebuffer[(XRES_FRAMEBUFFER * y) + min(iFX0, iFX1)];
             memset(destination, colour, abs(iFX1 - iFX0));
         }
         fX0 -= dXDy2;
@@ -979,10 +979,10 @@ void fillTopFlat(int *coords, uint8_t colour) {
     for (; y >= yFinal; --y) {
         if (y < 0) {
             return;
-        } else if (y < 200) {
-            int iFX1 = max(min(255, fixToInt(fX1)), 0);
-            int iFX0 = max(min(255, fixToInt(fX0)), 0);
-            uint8_t *destination = &framebuffer[(320 * y) + min(iFX0, iFX1)];
+        } else if (y < YRES) {
+            int iFX1 = max(min((XRES - 1), fixToInt(fX1)), 0);
+            int iFX0 = max(min((XRES - 1), fixToInt(fX0)), 0);
+            uint8_t *destination = &framebuffer[(XRES_FRAMEBUFFER * y) + min(iFX0, iFX1)];
             memset(destination, colour, abs(iFX1 - iFX0));
         }
 
@@ -1144,7 +1144,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
 	        uint8_t *destination;
             oneOverLimit = Div(one, intToFix(limit));
 
-            destination = &framebuffer[(320 * y) + iFX0];
+            destination = &framebuffer[(XRES_FRAMEBUFFER * y) + iFX0];
 
             if (flipped) {
                 texelLineDX = Mul((fU1 - fU2), oneOverLimit);
@@ -1282,7 +1282,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
 	        uint8_t *destination;
             oneOverLimit = Div(one, intToFix(limit));
 
-            destination = &framebuffer[(320 * y) + iFX0];
+            destination = &framebuffer[(XRES_FRAMEBUFFER * y) + iFX0];
 
             if (flipped) {
                 texelLineDX = Mul((fU1 - fU2), oneOverLimit);
@@ -1406,12 +1406,12 @@ void fill(
         return;
     }
 
-	destinationLineStart = destination + (320 * y) + x;
+	destinationLineStart = destination + (XRES_FRAMEBUFFER * y) + x;
 	
     for (py = 0; py < dy; ++py) {
         if (!stipple) {
             memset (destinationLineStart, pixel, dx);
-            destinationLineStart += 320;
+            destinationLineStart += XRES_FRAMEBUFFER;
         } else {
             unsigned int px;
             for (px = 0; px < dx; ++px) {
@@ -1420,7 +1420,7 @@ void fill(
                     *destinationLineStart = pixel;
                 }
             }
-            destinationLineStart += 320 - dx;
+            destinationLineStart += XRES_FRAMEBUFFER - dx;
         }
     }
 }
@@ -1437,11 +1437,11 @@ void drawBitmapRaw(const int dx,
 
     int y;
 
-    if ((dy + height) >= 200) {
-        height = (200 - dy);
+    if ((dy + height) >= YRES_FRAMEBUFFER) {
+        height = (YRES_FRAMEBUFFER - dy);
     }
     for (y = 0; y < height; ++y) {
-        uint8_t *destinationLineStart = destination + (320 * (dy + y)) + dx;
+        uint8_t *destinationLineStart = destination + (XRES_FRAMEBUFFER * (dy + y)) + dx;
         uint8_t *sourceLineStart = sourceLine + (width * y);
         int x;
 
@@ -1486,7 +1486,7 @@ void drawRepeatBitmap(
             int px = d * tile->width;
             int py = c * tile->height;
 
-            if (px < 320 && py < 200) {
+            if (px < XRES_FRAMEBUFFER && py < YRES_FRAMEBUFFER) {
                 drawBitmap(x + px, y + py, tile, FALSE);
             }
         }
@@ -1537,7 +1537,7 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
         for (srcY = 0; srcY < 8; ++srcY) {
 
             uint8_t *letterSrc = letter + (fontWidth * srcY);
-            uint8_t *letterDst = dstBuffer + dstX + (320 * (dstY + srcY));
+            uint8_t *letterDst = dstBuffer + dstX + (XRES_FRAMEBUFFER * (dstY + srcY));
 
             for (srcX = 0; srcX < 8; ++srcX) {
 
@@ -1559,7 +1559,7 @@ void drawTextAtWithMargin(const int x, const int y, int margin, const char *__re
 
 void drawTextAt(const int x, const int y, const char *__restrict__ text, const uint8_t colour) {
 
-    drawTextAtWithMargin( x, y, 319, text, colour);
+    drawTextAtWithMargin( x, y, (XRES_FRAMEBUFFER - 1), text, colour);
 }
 
 void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
@@ -1581,7 +1581,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 
 		if (turnTarget == turnState || (mTurnBuffer != kCommandNone) ) {
 
-			for (y = 0; y < 200; ++y) {
+			for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
 
 				if (scaller == 4) {
 					heightY = 2;
@@ -1592,10 +1592,10 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 				for (chunky = 0; chunky < heightY; ++chunky) {
 
 					dst = stretchedBuffer;
-					src = &currentFrame[(320 * y)];
-					dst += (320 * (dstY + chunky));
+					src = &currentFrame[(XRES_FRAMEBUFFER * y)];
+					dst += (XRES_FRAMEBUFFER * (dstY + chunky));
 
-					for (x = 0; x < 320; ++x) {
+					for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
 						index = *src;
 						*dst = palette[index];
 						++src;
@@ -1618,11 +1618,11 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 
 			mTurnBuffer = kCommandNone;
 
-			memcpy(prevFrame, currentFrame, 320 * 200 * sizeof(uint8_t));
+			memcpy(prevFrame, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
 
 		} else if (turnState < turnTarget) {
 
-			for (y = 0; y < 200; ++y) {
+			for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
 
 				if (scaller == 4) {
 					heightY = 2;
@@ -1633,18 +1633,18 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 				for (chunky = 0; chunky < heightY; ++chunky) {
 
 					dst = stretchedBuffer;
-					dst += (320 * (dstY + chunky));
+					dst += (XRES_FRAMEBUFFER * (dstY + chunky));
 
-					for (x = 0; x < 320; ++x) {
+					for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
 						if (x < XRES && y >= 8) {
 							if (x >= turnStep ) {
-								index = prevFrame[(320 * y) + x - turnStep];
+								index = prevFrame[(XRES_FRAMEBUFFER * y) + x - turnStep];
 							} else {
-								index = currentFrame[(320 * y) + x - ( 320 - XRES)- turnStep];
+								index = currentFrame[(XRES_FRAMEBUFFER * y) + x - ( XRES_FRAMEBUFFER - XRES)- turnStep];
 							}
 
 						} else {
-							index = currentFrame[(320 * y) + x];
+							index = currentFrame[(XRES_FRAMEBUFFER * y) + x];
 						}
 
 						*dst = palette[index];
@@ -1664,7 +1664,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 			turnStep += PAGE_FLIP_INCREMENT;
 		} else {
 
-			for (y = 0; y < 200; ++y) {
+			for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
 
 				if (scaller == 4) {
 					heightY = 2;
@@ -1675,20 +1675,20 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 				for (chunky = 0; chunky < heightY; ++chunky) {
 
 					dst = stretchedBuffer;
-					dst += (320 * (dstY + chunky));
+					dst += (XRES_FRAMEBUFFER * (dstY + chunky));
 
-					for (x = 0; x < 320; ++x) {
+					for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
 
 						if (x < XRES && y >= 8) {
 
 							if (x >= turnStep) {
-								index = currentFrame[(320 * y) + x - turnStep];
+								index = currentFrame[(XRES_FRAMEBUFFER * y) + x - turnStep];
 							} else {
-								index = prevFrame[(320 * y) + x - (320 - XRES) - turnStep];
+								index = prevFrame[(XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
 							}
 
 						} else {
-							index = currentFrame[(320 * y) + x];
+							index = currentFrame[(XRES_FRAMEBUFFER * y) + x];
 						}
 
 						*dst = palette[index];
@@ -1710,13 +1710,13 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 
 		if (turnTarget == turnStep || (mTurnBuffer != kCommandNone)) {
 
-			for (y = 0; y < 200; ++y) {
+			for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
 
 				dst = stretchedBuffer;
-				src = &currentFrame[(320 * y)];
-				dst += (320 * y);
+				src = &currentFrame[(XRES_FRAMEBUFFER * y)];
+				dst += (XRES_FRAMEBUFFER * y);
 
-				for (x = 0; x < 320; ++x) {
+				for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
 					index = *src;
 					*dst = palette[index];
 					++src;
@@ -1730,23 +1730,23 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 
 			mTurnBuffer = kCommandNone;
 
-        	memcpy(prevFrame, currentFrame, 320 * 200 * sizeof(uint8_t));
+        	memcpy(prevFrame, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
 
 		} else if (turnState < turnTarget) {
 
-			for (y = 0; y < 200; ++y) {
+			for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
 				dst = stretchedBuffer;
-				dst += (320 * y);
-				for (x = 0; x < 320; ++x) {
+				dst += (XRES_FRAMEBUFFER * y);
+				for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
 					if (x < XRES && y >= 8) {
 						if (x >= turnStep) {
-							index = prevFrame[(320 * y) + x - turnStep];
+							index = prevFrame[(XRES_FRAMEBUFFER * y) + x - turnStep];
 						} else {
-							index = currentFrame[(320 * y) + x - (320 - XRES) - turnStep];
+							index = currentFrame[(XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
 						}
 
 					} else {
-						index = currentFrame[(320 * y) + x];
+						index = currentFrame[(XRES_FRAMEBUFFER * y) + x];
 					}
 					*dst = palette[index];
 					++dst;
@@ -1756,20 +1756,20 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 			turnStep += PAGE_FLIP_INCREMENT;
 		} else {
 
-			for (y = 0; y < 200; ++y) {
+			for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
 				dst = stretchedBuffer;
-				dst += (320 * y);
-				for (x = 0; x < 320; ++x) {
+				dst += (XRES_FRAMEBUFFER * y);
+				for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
 					if (x < XRES && y >= 8) {
 
 						if (x >= turnStep) {
-							index = currentFrame[(320 * y) + x - turnStep];
+							index = currentFrame[(XRES_FRAMEBUFFER * y) + x - turnStep];
 						} else {
-							index = prevFrame[(320 * y) + x - (320 - XRES) - turnStep];
+							index = prevFrame[(XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
 						}
 
 					} else {
-						index = currentFrame[(320 * y) + x];
+						index = currentFrame[(XRES_FRAMEBUFFER * y) + x];
 					}
 
 					*dst = palette[index];

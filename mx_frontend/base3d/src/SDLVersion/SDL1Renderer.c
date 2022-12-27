@@ -282,7 +282,7 @@ void flipRenderer() {
 
 
 
-    for (y = 0; y < 200; ++y) {
+    for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
         if (scaller == 4 ) {
             heightY = 2;
         } else {
@@ -292,10 +292,10 @@ void flipRenderer() {
 
         for (int chunky = 0; chunky < heightY; ++chunky ) {
             dst = (uint32_t*)stretchedBuffer->pixels;
-            src = &framebuffer[(320 * y)];
-            dst += (320 * (dstY + chunky));
+            src = &framebuffer[(XRES_FRAMEBUFFER * y)];
+            dst += (XRES_FRAMEBUFFER * (dstY + chunky));
 
-            for (x = 0; x < 320; ++x) {
+            for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
                 *dst++ = palette[*src++];
             }
         }

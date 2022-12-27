@@ -36,12 +36,10 @@
 #define rUserAlert 129
 
 #define APP_NAME_STRING "\pThe Mistral Report - Invisible Affairs"
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 200
 struct RGBColor mPalette[256];
 PaletteHandle myPalette;
 SndChannelPtr sndChannelPtr;
-uint8_t stretchedBuffer[320*200];
+uint8_t stretchedBuffer[XRES_FRAMEBUFFER*YRES_FRAMEBUFFER];
 GWorldPtr offscreenBuffer;
 extern enum ECommand mBufferedCommand;
 extern char* filePrefix;
@@ -122,8 +120,8 @@ void DrawWindow() {
 	winBits = &mainWindowPtr-> portBits;
 	pixelRect.top = 0;
 	pixelRect.left = 0;
-	pixelRect.bottom = 199;
-	pixelRect.right = 319;
+	pixelRect.bottom = (YRES_FRAMEBUFFER - 1);
+	pixelRect.right = (XRES_FRAMEBUFFER - 1);
 
 	r.top = 0;
 	r.left = 0;
@@ -401,8 +399,8 @@ void flipRenderer() {
 	baseAddr = GetPixBaseAddr(pixmap);
 	rowBytes = ((*pixmap)->rowBytes & 0x3FFF);
 
-	for (c = 0; c < 200; ++c ) {
-		memcpy( baseAddr + offset, &stretchedBuffer[320 * c], 320);
+	for (c = 0; c < YRES_FRAMEBUFFER; ++c ) {
+		memcpy( baseAddr + offset, &stretchedBuffer[XRES_FRAMEBUFFER * c], XRES_FRAMEBUFFER);
 		offset = offset + rowBytes;
 	}
 

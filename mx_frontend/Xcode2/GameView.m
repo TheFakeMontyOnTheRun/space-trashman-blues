@@ -24,7 +24,7 @@ extern         GameView* osxview;
 
 @implementation GameView
 
-uint32_t stretchedBuffer[ 320 * 200 ];
+uint32_t stretchedBuffer[ XRES_FRAMEBUFFER * YRES_FRAMEBUFFER ];
 CGColorSpaceRef rgb;
 CGDataProviderRef provider;
 CGImageRef ref;
@@ -210,8 +210,8 @@ void shutdownHW() {
     if ( turnTarget == turnStep ) {
         uint8_t *pixelPtr = &buffer[0];
         uint32_t *bufferPtr = &stretchedBuffer[0];
-        for ( y = 0; y < 200; ++y ) {
-            for ( x = 0; x < 320; ++x ) {
+        for ( y = 0; y < YRES_FRAMEBUFFER; ++y ) {
+            for ( x = 0; x < XRES_FRAMEBUFFER; ++x ) {
                 uint8_t index = *pixelPtr;
                 uint32_t pixel = palette[ index ];
                 *bufferPtr = pixel;
@@ -220,24 +220,24 @@ void shutdownHW() {
             }
         }
         
-        memcpy( previousFrame, framebuffer, 320 * 200);
+        memcpy( previousFrame, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
     } else if ( turnStep < turnTarget ) {
         
         uint32_t *bufferPtr = &stretchedBuffer[0];
-        for ( y = 0; y < 200; ++y ) {
-            for ( x = 0; x < 320; ++x ) {
+        for ( y = 0; y < YRES_FRAMEBUFFER; ++y ) {
+            for ( x = 0; x < XRES_FRAMEBUFFER; ++x ) {
                 uint8_t index;
                 
                 if (x < XRES ) {
                     
                     if ( x  >= turnStep ) {
-                        index = previousFrame[ (320 * y) - turnStep + x ];
+                        index = previousFrame[ (XRES_FRAMEBUFFER * y) - turnStep + x ];
                     } else {
-                        index = buffer[ (320 * y) + x - (320 - XRES) - turnStep];
+                        index = buffer[ (XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
                     }
                     
                 } else {
-                    index = buffer[ (320 * y) + x];
+                    index = buffer[ (XRES_FRAMEBUFFER * y) + x];
                 }
                 
                 uint32_t pixel = palette[ index ];
@@ -251,20 +251,20 @@ void shutdownHW() {
         
         uint8_t *pixelPtr = &buffer[0];
         uint32_t *bufferPtr = &stretchedBuffer[0];
-        for ( y = 0; y < 200; ++y ) {
-            for ( x = 0; x < 320; ++x ) {
+        for ( y = 0; y < YRES_FRAMEBUFFER; ++y ) {
+            for ( x = 0; x < XRES_FRAMEBUFFER; ++x ) {
                 uint8_t index;
 
                 if (x < XRES ) {
                     
                     if ( x  >= turnStep ) {
-                        index = buffer[ (320 * y) - turnStep + x ];
+                        index = buffer[ (XRES_FRAMEBUFFER * y) - turnStep + x ];
                     } else {
-                        index = previousFrame[ (320 * y) + x - (320 - XRES) - turnStep];
+                        index = previousFrame[ (XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
                     }
                     
                 } else {
-                    index = buffer[ (320 * y) + x];
+                    index = buffer[ (XRES_FRAMEBUFFER * y) + x];
                 }
 
 
@@ -292,10 +292,10 @@ void shutdownHW() {
     CGContextSetRGBFillColor(context, 0.0f, 0.0f, 0.0f, 1.0f);
     CGContextFillRect(context, bounds);
     
-    provider = CGDataProviderCreateWithData( NULL, &stretchedBuffer[0], 4 * 320 * 200, NULL );
-    ref = CGImageCreate( 320, 200, 8, 32, 4 * 320, rgb, kCGBitmapByteOrder32Host | kCGImageAlphaNoneSkipLast, provider, NULL, 0, kCGRenderingIntentDefault );
+    provider = CGDataProviderCreateWithData( NULL, &stretchedBuffer[0], 4 * XRES_FRAMEBUFFER * YRES_FRAMEBUFFER, NULL );
+    ref = CGImageCreate( XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, 8, 32, 4 * XRES_FRAMEBUFFER, rgb, kCGBitmapByteOrder32Host | kCGImageAlphaNoneSkipLast, provider, NULL, 0, kCGRenderingIntentDefault );
     CGContextScaleCTM(context, multiplier, yMultiplier);
-    CGContextDrawImage(context, CGRectMake( ((bounds.size.width / multiplier) - 320) / 2, ((bounds.size.height / yMultiplier) - 200) / 2, 320, 200), ref);
+    CGContextDrawImage(context, CGRectMake( ((bounds.size.width / multiplier) - XRES_FRAMEBUFFER) / 2, ((bounds.size.height / yMultiplier) - YRES_FRAMEBUFFER) / 2, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER), ref);
     CGImageRelease(ref);
     CGDataProviderRelease(provider);
     
