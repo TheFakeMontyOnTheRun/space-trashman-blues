@@ -50,8 +50,8 @@ void keycardDropCallback(struct Item *item) {
 }
 
 
-void useCardWithCardWritter(struct Item *item1, struct Item *item2) {
-	if (item2 == getItemNamed("card-writter")) {
+void useCardWithCardWriter(struct Item *item1, struct Item *item2) {
+	if (item2 == getItemNamed("card-writer")) {
 		struct Item *card = getItemNamed("hacked-keycard");
 		addToRoom("computer-core", card);
 		dropObjectByName("low-rank-keycard");
@@ -619,7 +619,7 @@ void initStation(void) {
 					  TRUE, 4, 7);
 	addToRoom("hall-2", newItem);
 	newItem->useCallback = cantBeUsedCallback;
-	newItem->useWithCallback = useCardWithCardWritter;
+	newItem->useWithCallback = useCardWithCardWriter;
 	newItem->pickCallback = keycardPickCallback;
 	newItem->dropCallback = keycardDropCallback;
 
@@ -792,9 +792,9 @@ void initStation(void) {
 	addToRoom("crew-bunks", newItem);
 
 	/* Misc */
-	newItem = addItem("card-writter",
+	newItem = addItem("card-writer",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-	"Terminal with card writter, connected\n"
+	"Terminal with card writer, connected\n"
 	" to the main computer",
 #endif
 #ifdef ITEMS_HAVE_WEIGHT
