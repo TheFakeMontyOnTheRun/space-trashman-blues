@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-12-27 22:41:01</td>
+            <td class="headerValue">2022-12-28 23:14:24</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">4</td>
@@ -112,8 +112,8 @@
 <a name="50"><span class="lineNum">      50 </span><span class="lineCov">          6 : }</span></a>
 <a name="51"><span class="lineNum">      51 </span>            : </a>
 <a name="52"><span class="lineNum">      52 </span>            : </a>
-<a name="53"><span class="lineNum">      53 </span><span class="lineNoCov">          0 : void useCardWithCardWritter(struct Item *item1, struct Item *item2) {</span></a>
-<a name="54"><span class="lineNum">      54 </span><span class="lineNoCov">          0 :         if (item2 == getItemNamed(&quot;card-writter&quot;)) {</span></a>
+<a name="53"><span class="lineNum">      53 </span><span class="lineNoCov">          0 : void useCardWithCardWriter(struct Item *item1, struct Item *item2) {</span></a>
+<a name="54"><span class="lineNum">      54 </span><span class="lineNoCov">          0 :         if (item2 == getItemNamed(&quot;card-writer&quot;)) {</span></a>
 <a name="55"><span class="lineNum">      55 </span><span class="lineNoCov">          0 :                 struct Item *card = getItemNamed(&quot;hacked-keycard&quot;);</span></a>
 <a name="56"><span class="lineNum">      56 </span><span class="lineNoCov">          0 :                 addToRoom(&quot;computer-core&quot;, card);</span></a>
 <a name="57"><span class="lineNum">      57 </span><span class="lineNoCov">          0 :                 dropObjectByName(&quot;low-rank-keycard&quot;);</span></a>
@@ -681,7 +681,7 @@
 <a name="619"><span class="lineNum">     619 </span>            :                                           TRUE, 4, 7);</a>
 <a name="620"><span class="lineNum">     620 </span><span class="lineCov">         17 :         addToRoom(&quot;hall-2&quot;, newItem);</span></a>
 <a name="621"><span class="lineNum">     621 </span><span class="lineCov">         17 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="622"><span class="lineNum">     622 </span><span class="lineCov">         17 :         newItem-&gt;useWithCallback = useCardWithCardWritter;</span></a>
+<a name="622"><span class="lineNum">     622 </span><span class="lineCov">         17 :         newItem-&gt;useWithCallback = useCardWithCardWriter;</span></a>
 <a name="623"><span class="lineNum">     623 </span><span class="lineCov">         17 :         newItem-&gt;pickCallback = keycardPickCallback;</span></a>
 <a name="624"><span class="lineNum">     624 </span><span class="lineCov">         17 :         newItem-&gt;dropCallback = keycardDropCallback;</span></a>
 <a name="625"><span class="lineNum">     625 </span>            : </a>
@@ -854,9 +854,9 @@
 <a name="792"><span class="lineNum">     792 </span><span class="lineCov">         17 :         addToRoom(&quot;crew-bunks&quot;, newItem);</span></a>
 <a name="793"><span class="lineNum">     793 </span>            : </a>
 <a name="794"><span class="lineNum">     794 </span>            :         /* Misc */</a>
-<a name="795"><span class="lineNum">     795 </span><span class="lineCov">         17 :         newItem = addItem(&quot;card-writter&quot;,</span></a>
+<a name="795"><span class="lineNum">     795 </span><span class="lineCov">         17 :         newItem = addItem(&quot;card-writer&quot;,</span></a>
 <a name="796"><span class="lineNum">     796 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
-<a name="797"><span class="lineNum">     797 </span>            :         &quot;Terminal with card writter, connected\n&quot;</a>
+<a name="797"><span class="lineNum">     797 </span>            :         &quot;Terminal with card writer, connected\n&quot;</a>
 <a name="798"><span class="lineNum">     798 </span>            :         &quot; to the main computer&quot;,</a>
 <a name="799"><span class="lineNum">     799 </span>            : #endif</a>
 <a name="800"><span class="lineNum">     800 </span>            : #ifdef ITEMS_HAVE_WEIGHT</a>
