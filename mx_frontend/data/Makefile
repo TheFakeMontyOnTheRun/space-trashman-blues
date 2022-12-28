@@ -19,10 +19,10 @@ data:	$(PACKAGER) $(CRUNCHER)
 	mv ./data.pfs ../base.pfs
 
 images:
-	python ./make_package.py
+	python3 ./make_package.py
 
 maps:
-	python ./compile_map.py
+	python3 ./compile_map.py
 
 full: images maps data
 
