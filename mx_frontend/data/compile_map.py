@@ -47,8 +47,7 @@ def writeByte( file, value ):
 
 
 def writeRawByte( file, value ):
-    file.write(bytearray([value]))
-
+    file.write(value.encode())
 
 def writeAsFixedPoint(file, value):
 
@@ -59,8 +58,8 @@ def writeAsFixedPoint(file, value):
     writeByte(file, ( valueAsInt & 0xFF000000) >> 24)
 
 def dumpProps(path):
-    print "writing to " + str(path)
-    f = open(str(path), "w")
+    print ("writing to " + str(path))
+    f = open(str(path), "wb")
 
     for prop in tilesProperties:
         prp = tilesProperties[prop]
@@ -135,7 +134,7 @@ def getProperties(path):
         tokens = propertiesLine.split(" ")
 
         if (tokens[0] in tilesProperties.keys()):
-            print "already had " + tokens[0]
+            print ("already had " + tokens[0])
             sys.exit(1)
 
         tilesProperties[tokens[0]] = parseLine(tokens)
@@ -193,7 +192,7 @@ def compileMap( sourcePath, textureListPath, mapPath, outputPath):
     getProperties(sourcePath)
     cleanup(mapPath)
     dumpProps(outputPath)
-    print "--done--"
+    print ("--done--")
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
