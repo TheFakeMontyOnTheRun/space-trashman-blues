@@ -513,7 +513,10 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
 
 uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr) {
-	ptr = &buffer[(y * (BUFFER_SIZEX)) + (x / 8)]; //skip to the line in pattern
+
+	if (ptr == NULL) {
+		ptr = &buffer[(y * (BUFFER_SIZEX)) + (x / 8)]; //skip to the line in pattern
+	}
 
 	switch (x & 7) {
 		case 0:
@@ -578,7 +581,6 @@ void graphicsPut(uint8_t x, uint8_t y) {
 }
 
 void HUD_initialPaint() {
-	struct Room *room = getRoom(getPlayerRoom());
 
 	for (uint8_t i = 0; i < 6; ++i) {
 		writeStr(17, 14 + i, menuItems[i], 2, 0);
