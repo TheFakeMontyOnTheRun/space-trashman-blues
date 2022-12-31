@@ -29,6 +29,7 @@ extern struct ObjectNode *roomItem;
 extern uint8_t accessGrantedToSafe;
 
 uint8_t cursorPosition = 0;
+extern uint8_t playerLocation;
 
 #define BUFFER_SIZEX 16
 #define BUFFER_SIZEY 128
@@ -81,14 +82,6 @@ uint8_t font[] = {
 
 
 const uint16_t lineStart[200] = {
-		49152l,
-		51200l,
-		53248l,
-		55296l,
-		57344l,
-		59392l,
-		61440l,
-		63488l,
 		49232l,
 		51280l,
 		53328l,
@@ -208,7 +201,15 @@ const uint16_t lineStart[200] = {
 		58544l,
 		60592l,
 		62640l,
-		64688l
+		64688l,
+		50432l,
+		52480l,
+		54528l,
+		56576l,
+		58624l,
+		60672l,
+		62720l,
+		64768l
 };
 
 void graphicsFlush();
@@ -284,7 +285,7 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 		for ( int d = 0; d < 8; ++d ) {
 			uint8_t chunk =*fontTop;
 			fontTop++;
-			uint8_t *line = (uint8_t *)lineStart[((y * 8) + d)];
+			uint8_t *line = (unsigned char *)0xC000 + ((((y * 8) + d) / 8) * 80) + ((((y * 8) + d) & 7) * 2048);
 			uint8_t *pixel = line + (x);
 			*pixel = chunk;
 		}
@@ -298,7 +299,100 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 	writeStrWithLimit(_x, y, text, MARGIN_TEXT_SCREEN_LIMIT);
 }
 
-void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
+uint8_t* realPut(uint16_t x, uint16_t y, uint8_t colour, uint8_t* ptr) {
+
+	if (ptr == NULL) {
+		ptr = (unsigned char *) 0xC000 + ((y / 8) * 80) + ((y & 7) * 2048) + (x / 8);
+	}
+
+	if (colour) {
+		switch (x & 7) {
+			case 0:
+				*ptr |= 128;
+				break;
+			case 1:
+				*ptr |= 64;
+				break;
+			case 2:
+				*ptr |= 32;
+				break;
+			case 3:
+				*ptr |= 16;
+				break;
+			case 4:
+				*ptr |= 8;
+				break;
+			case 5:
+				*ptr |= 4;
+				break;
+			case 6:
+				*ptr |= 2;
+				break;
+			case 7:
+				*ptr |= 1;
+				break;
+		}
+	} else {
+		switch (x & 7) {
+			case 0:
+				*ptr &= ~128;
+				break;
+			case 1:
+				*ptr &= ~64;
+				break;
+			case 2:
+				*ptr &= ~32;
+				break;
+			case 3:
+				*ptr &= ~16;
+				break;
+			case 4:
+				*ptr &= ~8;
+				break;
+			case 5:
+				*ptr &= ~4;
+				break;
+			case 6:
+				*ptr &= ~2;
+				break;
+			case 7:
+				*ptr &= ~1;
+				break;
+		}
+	}
+
+	return ptr;
+}
+
+void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {
+
+	int x, y;
+	uint8_t *ptr;
+
+	for (x = 0; x < tw * 8; ++x ) {
+		if ((x & 7) == 0) {
+			ptr = NULL;
+		}
+		ptr = realPut( ((tx * 8) + x), (ty * 8), 1, ptr );
+	}
+
+	for (x = 0; x < tw * 8; ++x ) {
+		if ((x & 7) == 0) {
+			ptr = NULL;
+		}
+		ptr = realPut( ((tx * 8) + x), (ty + th) * 8, 1, ptr );
+	}
+
+	for (y = 0; y < th * 8; ++y) {
+		realPut( (tx + tw) * 8, ((ty * 8) + y ), 1, NULL );
+	}
+
+	for (y = 0; y < th * 8; ++y) {
+		realPut( (tx * 8), ((ty * 8) + y), 1, NULL);
+	}
+
+	writeStr(tx + 1, ty, title, 0, 0);
+}
 
 
 void showMessage(const char *message) {
@@ -384,6 +478,37 @@ void enterTextMode() {
 void exitTextMode() {
 }
 
+void drawMap() {
+
+	uint8_t *ptr;
+
+	if (playerLocation == 0 ) {
+		return;
+	}
+
+	for (int y = 0; y < 32; ++y) {
+		for (int x = 0; x < 32; ++x) {
+
+			if ((x & 7) == 0) {
+				ptr = NULL;
+			}
+
+			uint8_t newCell = map[y][x];
+			newCell = newCell & 127;
+			uint8_t block = patterns[newCell - 32].blockMovement;
+
+
+			for (int cy = 0; cy < 4; ++cy) {
+				for (int cx = 0; cx < 4; ++cx) {
+					realPut(20 + (x * 4) + cx, 8 + (y * 4) + cy, block, ptr);
+				}
+			}
+
+
+		}
+	}
+}
+
 uint8_t getKey() {
 	uint8_t input = getch();
 
@@ -403,7 +528,9 @@ uint8_t getKey() {
 
 		case 'x':
 			return 'd';
-
+		case 'm':
+			drawMap();
+			return '.';
 	}
 	return input;
 }
@@ -423,8 +550,9 @@ void graphicsFlush() {
 
 	for (int y = 0; y < BUFFER_SIZEY; ++y ) {
 		uint8_t *line = (unsigned char *)lineStart[y];
-		memcpy( line, buffer + (y * BUFFER_SIZEX),  BUFFER_SIZEX);
+		memcpy( line + 25, buffer + (y * BUFFER_SIZEX),  BUFFER_SIZEX);
 	}
+	memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
 void sleepForMS(uint32_t ms) {
@@ -581,44 +709,47 @@ void graphicsPut(uint8_t x, uint8_t y) {
 }
 
 void HUD_initialPaint() {
-
 	for (uint8_t i = 0; i < 6; ++i) {
-		writeStr(17, 14 + i, menuItems[i], 2, 0);
+		writeStr(46, 9 + i, menuItems[i], 2, 0);
 	}
 
 	HUD_refresh();
+
+	drawWindow(1, 0,  19, 24, "Map");
+	drawWindow(23, 0,  19, 24, "3D View");
+	drawWindow(45, 0,  34, 24, "Controls and status");
 }
 
 void HUD_refresh() {
 
-	writeStrWithLimit(17, 5, "Object in hand", MARGIN_TEXT_SCREEN_LIMIT);
+	writeStrWithLimit(46, 6, "Object in hand", MARGIN_TEXT_SCREEN_LIMIT);
 
 	if (focusedItem != NULL) {
 		struct Item *item = getItem(focusedItem->item);
 
 
 		if (item->active) {
-			writeStr(17, 6, "*", 2, 0);
+			writeStr(46, 7, "*", 2, 0);
 		}
 
-		writeStrWithLimit(17, 6, item->name, MARGIN_TEXT_SCREEN_LIMIT);
+		writeStrWithLimit(46, 7, item->name, MARGIN_TEXT_SCREEN_LIMIT);
 	} else {
-		writeStrWithLimit(17, 6, "Nothing", MARGIN_TEXT_SCREEN_LIMIT);
+		writeStrWithLimit(46, 7, "Nothing", MARGIN_TEXT_SCREEN_LIMIT);
 	}
 
-	writeStrWithLimit(17, 1, "Object in room", MARGIN_TEXT_SCREEN_LIMIT);
+	writeStrWithLimit(46, 2, "Object in room", MARGIN_TEXT_SCREEN_LIMIT);
 
 	if (roomItem != NULL) {
 		struct Item *item = getItem(roomItem->item);
 
 
 		if (item->active) {
-			writeStrWithLimit(17, 2, "*", MARGIN_TEXT_SCREEN_LIMIT);
+			writeStrWithLimit(46, 3, "*", MARGIN_TEXT_SCREEN_LIMIT);
 		}
 
-		writeStrWithLimit(17, 2, item->name, MARGIN_TEXT_SCREEN_LIMIT);
+		writeStrWithLimit(46, 3, item->name, MARGIN_TEXT_SCREEN_LIMIT);
 	} else {
-		writeStrWithLimit(17, 2, "Nothing", MARGIN_TEXT_SCREEN_LIMIT);
+		writeStrWithLimit(46, 3, "Nothing", MARGIN_TEXT_SCREEN_LIMIT);
 	}
 }
 

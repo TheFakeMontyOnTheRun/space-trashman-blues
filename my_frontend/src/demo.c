@@ -1672,7 +1672,6 @@ void initMap(void) {
 	/* first item in the list is always a dummy */
 	roomItem = getRoom(playerLocation)->itemsPresent->next;
 
-
 /* TODO: precalc absolute offsets */
 	for (c = 0; c < playerLocation; ++c) {
 		offsetOnDataStrip += dataPositions[c];
@@ -1753,6 +1752,7 @@ void startRoomTransitionAnimation(void) {
 		graphicsFlush();
 		sleepForMS(20000);
 	}
+  HUD_initialPaint();
 }
 #endif
 
