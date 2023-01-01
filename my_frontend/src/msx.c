@@ -302,6 +302,7 @@ void graphicsFlush() {
 		vwrite(ptr, addr, 16 * 8);
 		ptr += 8 * 16;
 	}
+	memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
 void sleepForMS(uint32_t ms) {
