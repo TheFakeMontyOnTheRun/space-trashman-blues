@@ -20,6 +20,8 @@ extern struct ObjectNode *roomItem;
 
 extern uint8_t accessGrantedToSafe;
 
+void clearGraphics(void);
+
 #define BUFFER_SIZEX 16
 #define BUFFER_SIZEY 128
 #define BUFFER_RESX 128
@@ -345,6 +347,7 @@ void graphicsFlush(void) {
 			writeStrWithLimit(29, 12, "W", 31);
 			break;
 	}
+	memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
 void sleepForMS(uint32_t ms) {

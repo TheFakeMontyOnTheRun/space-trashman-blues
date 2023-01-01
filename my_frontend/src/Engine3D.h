@@ -60,8 +60,6 @@ void renderScene(void);
 
 void shutdownGraphics(void);
 
-void clearGraphics(void);
-
 void sleepForMS(uint32_t ms);
 
 void clearScreen(void);

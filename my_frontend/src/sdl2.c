@@ -4,6 +4,9 @@
 #include <Core.h>
 #include <assert.h>
 
+#include "Core.h"
+#include "Derelict.h"
+#include "Engine3D.h"
 
 #include "SDL.h"
 
@@ -34,7 +37,7 @@ void pickOrDrop();
 
 void pickItem();
 
-void sleepForMS(long ms) {
+void sleepForMS(uint32_t ms) {
 
 }
 
@@ -89,13 +92,13 @@ void showMessage(const char *mesg) {
 	puts(mesg);
 }
 
-void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
+void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
 
 void clearGraphics() {
 	memset(framebuffer, 0, 160 * 200);
 }
 
-void writeStr(uint8_t nColumn, uint8_t nLine, char *str, uint8_t fg, uint8_t bg) {
+void writeStr(uint8_t nColumn, uint8_t nLine, const char *str, uint8_t fg, uint8_t bg) {
 	puts(str);
 }
 
@@ -336,6 +339,7 @@ void flipRenderer() {
 
 void graphicsFlush() {
 	flipRenderer();
+	clearGraphics();
 }
 
 
