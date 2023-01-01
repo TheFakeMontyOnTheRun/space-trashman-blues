@@ -1728,7 +1728,6 @@ void startRoomTransitionAnimation(void) {
   uint8_t x,y;
   
   for (y = 32; y >= 2; --y ) {
-		clearGraphics();
 		vLine(y, y, 95 + (32 - y), 1);
 		vLine(95 + (32 - y), y, 95 + (32 - y), 1);
 
@@ -1777,8 +1776,6 @@ void tickRenderer(void) {
 	struct WorldPosition *pos;
 	uint8_t previousLocation = playerLocation;
 	uint8_t newCell = 0;
-
-	clearGraphics();
 	renderScene();
 	graphicsFlush();
 

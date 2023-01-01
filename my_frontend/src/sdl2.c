@@ -339,6 +339,7 @@ void flipRenderer() {
 
 void graphicsFlush() {
 	flipRenderer();
+	clearGraphics();
 }
 
 
