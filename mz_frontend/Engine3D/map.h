@@ -100,5 +100,5 @@ const struct Pattern patterns[96] = {
 		{3, 3,  CUBE,       0}, //  126
 };
 
-int8_t *map[32];
+int8_t map[32][32];
 #endif

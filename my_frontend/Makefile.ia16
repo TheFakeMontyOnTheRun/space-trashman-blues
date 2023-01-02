@@ -1,0 +1,19 @@
+CFLAGS = -fomit-frame-pointer -fno-exceptions -ffast-math -I../core/include -I../common/include -Isrc -DLEAN_BUILD -DMSDOS -DRES128X128 -DTRACE_OBJECTS_OVER_FLOOR -DCAN_PICK_OBJECT_AT_ANY_DISTANCE  -DSUPPORTS_ROOM_TRANSITION_ANIMATION
+
+CC = ia16-elf-gcc
+STRIP = ia16-elf-strip
+
+OBJS = src/demo.o src/msdos.o ../core/src/Core.o ../core/src/Derelict.o ../common/src/PackedFileReader.o ../common/src/Common.o
+
+TARGET = derelict.com
+
+$(TARGET):	$(OBJS)
+	$(CC) -o $(TARGET) $(OBJS) $(LDFLAGS)
+
+all:	$(TARGET)
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+	$(RM) -f *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.rom
+	$(RM) -f ../core/src/*.o src/*.o
+	rm *~

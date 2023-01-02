@@ -358,7 +358,7 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 	writeStrWithLimit(_x, y, text, 40);
 }
 
-void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
+void drawWindow(uint8_t tx, uint8_t  ty, uint8_t  tw, uint8_t  th, const char *title) {}
 
 void graphicsFlush() {
 	uint8_t origin = 0;
@@ -414,6 +414,7 @@ void graphicsFlush() {
 #endif
 		index += 32;
 	}
+
 	memset(imageBuffer, 0, 128 * 32);
 }
 

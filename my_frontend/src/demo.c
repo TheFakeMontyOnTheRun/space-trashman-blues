@@ -18,6 +18,10 @@
 #include "HackingMinigame.h"
 #endif
 
+#ifndef EMBEDDED_DATA
+#include "PackedFileReader.h"
+#endif
+
 enum DIRECTION {
 	DIRECTION_N,
 	DIRECTION_E,
@@ -1665,23 +1669,29 @@ void updateMapItems(void);
 void initMap(void) {
 	uint8_t x, y, c;
 	const uint8_t *head;
-	uint16_t offsetOnDataStrip = 0;
-	int16_t repetitions = -1;
 	uint8_t current = '.';
 
-	/* first item in the list is always a dummy */
-	roomItem = getRoom(playerLocation)->itemsPresent->next;
+	uint16_t offsetOnDataStrip = 0;
+	int16_t repetitions = -1;
 
+#ifdef EMBEDDED_DATA
 /* TODO: precalc absolute offsets */
 	for (c = 0; c < playerLocation; ++c) {
 		offsetOnDataStrip += dataPositions[c];
 	}
 
 	head = &data[offsetOnDataStrip];
+#else
+	struct StaticBuffer datafile = loadBinaryFileFromPath(playerLocation);
+	head = datafile.data;
+#endif
+	/* first item in the list is always a dummy */
+	roomItem = getRoom(playerLocation)->itemsPresent->next;
 
 	for (y = 0; y < 32; ++y) {
 		for (x = 0; x < 32; ++x) {
 
+#ifdef RLE_COMPRESSED_MAPS
 			if (repetitions < 1) {
 				repetitions = *head;
 
@@ -1698,7 +1708,9 @@ void initMap(void) {
 			} else {
 				repetitions--;
 			}
-
+#else
+			current = *head;
+#endif
 
 			if ((current == 's' && enteredFrom == 0) ||
 				(current == 'w' && enteredFrom == 1) ||
