@@ -19,6 +19,7 @@
 #endif
 
 #ifndef EMBEDDED_DATA
+#include "Common.h"
 #include "PackedFileReader.h"
 #endif
 
@@ -275,6 +276,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 #ifndef USE_FILLED_POLYS
 	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
 #else
+#ifndef MSDOS
 	uint8_t shouldStipple;
 
 	if (type == LEFT_WALL) {
@@ -282,7 +284,9 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 	} else {
 		shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 12;
 	}
-
+#else
+	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 5;
+#endif
 #endif
 
 	uint8_t stipple = 1;
@@ -526,7 +530,11 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
 #ifndef USE_FILLED_POLYS
 	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
 #else
+#ifdef MSDOS
+	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 5 : 1;
+#else
 	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 12 : 4;
+#endif
 #endif
 
 	uint8_t stipple = 1;
@@ -801,7 +809,11 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 #ifndef USE_FILLED_POLYS
 	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
 #else
+#ifdef MSDOS
 	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 9 : 1;
+#else
+	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 6 : 2;
+#endif
 #endif
 	uint8_t stipple = 1;
 
@@ -909,7 +921,12 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 			}
 		}
 
+#ifdef MSDOS
+		shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 6;
+#else
 		shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 9;
+#endif
+
 #endif
 		/* The left segment */
 		x0 = px0z0;
@@ -944,7 +961,11 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 #ifdef USE_FILLED_POLYS
 						if (drawContour) {
 							uint8_t top = stencilHigh[x0];
+#ifdef MSDOS
+							vLine(x0, top, y0, 6);
+#else
 							vLine(x0, top, y0, shouldStipple);
+#endif
 							graphicsPut(x0, top);
 						}
 #endif
@@ -1006,7 +1027,11 @@ right_stroke:
 #ifdef USE_FILLED_POLYS
 					if (drawContour) {
 						uint8_t top = stencilHigh[x0];
+#ifdef MSDOS
+						vLine(x0, top, y0, 6);
+#else
 						vLine(x0, top, y0, shouldStipple);
+#endif
 						graphicsPut(x0, top);
 					}
 #endif
@@ -1300,13 +1325,21 @@ next_cluster:
 	for (x = 0; x < XRES; ++x) {
 		int8_t stencilY = (*stencilPtr);
 #ifdef USE_FILLED_POLYS
-
+#ifdef MSDOS
+		if (stencilY > 86) {
+			vLine(x, stencilY, 128, 3);
+		} else {
+			vLine(x, stencilY, 86, 7);
+			vLine(x, 86, 128, 3);
+		}
+#else
 		if (stencilY > 86) {
 			vLine(x, stencilY, 128, 2);
 		} else {
 			vLine(x, stencilY, 86, 10);
 			vLine(x, 86, 128, 2);
 		}
+#endif
 #else
 		graphicsPut(x, stencilY);
 #endif
@@ -1728,8 +1761,13 @@ void initMap(void) {
 			}
 
 			map[y][x] = current;
-
+#ifndef EMBEDDED_DATA
+			++head;
+#endif
 		}
+#ifndef EMBEDDED_DATA
+		++head; // line break
+#endif
 	}
 	updateMapItems();
 	HUD_initialPaint();
@@ -1747,6 +1785,10 @@ void startRoomTransitionAnimation(void) {
 			graphicsPut(x, y);
 			graphicsPut(x, 95 + (32 - y));
 			//door opening
+
+#ifdef MSDOS
+			vLine(x, y, 95 - 3 * (32 - y), 7);
+#else
 #ifndef USE_FILLED_POLYS
 			graphicsPut(x, 95 - 3 * (32 - y));
 #else
@@ -1758,6 +1800,7 @@ void startRoomTransitionAnimation(void) {
 
 			vLine(x, 95 - 3 * (32 - y), 95, 10);
 			vLine(x, 95, 95 + (32 - y), 2);
+#endif
 #endif
 		}
 		graphicsFlush();
