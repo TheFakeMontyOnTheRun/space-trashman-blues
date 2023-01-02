@@ -809,7 +809,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 #ifndef USE_FILLED_POLYS
 	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
 #else
-#ifdef MSDOS
+#ifndef MSDOS
 	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 9 : 1;
 #else
 	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 6 : 2;
