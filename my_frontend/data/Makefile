@@ -1,62 +1,62 @@
 .DEFAULT_GOAL := default
 
-PACKAGER = ./packer
+RLE_COMPRESSOR=./rlecompressor
+CRUNCHER=wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
+PACKAGER=packer
 
-packager: 
-	$(CC) packer.c -opacker
-
-short_data: $(PACKAGER)
+datastrip_data: $(RLE_COMPRESSOR)
 	echo "const uint8_t data[] ={" > ../src/maps.h
 	echo "" > ./datastrip
-	$(PACKAGER) src/map1.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map2.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map3.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/01.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/02.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/03.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/04.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/05.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/06.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/07.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/08.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/09.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/10.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/11.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/12.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/13.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/14.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/15.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/16.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/17.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/18.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/19.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/20.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/21.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/22.txt >> ../src/maps.h 2>>./datastrip
+	$(RLE_COMPRESSOR) assets/23.txt >> ../src/maps.h 2>>./datastrip
 	echo " 0};\n" >> ../src/maps.h
-
 #TODO: precalc absolute offsets
 	echo "const long dataPositions[] ={ 0,\n" >> ../src/maps.h
 	cat ./datastrip >> ../src/maps.h
 	echo " 0\n};" >> ../src/maps.h
+	rm ./datastrip
+	rm $(RLE_COMPRESSOR)
 
-data: $(PACKAGER)
-	echo "const uint8_t data[] ={" > ../src/maps.h
-	echo "" > ./datastrip
-	$(PACKAGER) src/map1.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map2.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map3.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map4.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map5.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map6.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map7.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map8.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map9.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map10.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map11.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map12.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map13.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map14.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map15.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map16.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map17.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map18.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map19.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map20.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map21.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map22.txt >> ../src/maps.h 2>>./datastrip
-	$(PACKAGER) src/map23.txt >> ../src/maps.h 2>>./datastrip
-	echo " 0};\n" >> ../src/maps.h
+$(CRUNCHER):
+	mvn -q -f wobj-compiler/pom.xml clean compile package install
+	mkdir -p wobj-compiler/dist
+	cp wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar wobj-compiler/dist
 
+$(PACKAGER):
+	$(CXX) -std=c++14 -o$(PACKAGER) packer.cpp
 
+pfs_data:	$(PACKAGER) $(CRUNCHER)
+	rm -f ./base.pfs
+	ls -r src/*.obj  | xargs java -jar wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
+	ls -r assets/*.*  | xargs ./packer
+	mv ./data.pfs ../base.pfs
+	rm -f $(PACKAGER)
 
-#TODO: precalc absolute offsets
-	echo "const long dataPositions[] ={ 0,\n" >> ../src/maps.h
-	cat ./datastrip >> ../src/maps.h
-	echo " 0\n};" >> ../src/maps.h
+images:
+	python3 ./make_package.py
 
+all: $(RLE_COMPRESSOR) datastrip_data images pfs_data
 
-short: packager short_data
-
-all: packager data
-
-default: packager data
+default: all
 
