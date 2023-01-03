@@ -60,10 +60,5 @@ int main(int argc, char **argv) {
     //not proud of this
     fprintf(stderr, "%d,\n", used);
 
-    if (used > 256) {
-//    printf("Map is bigger than allowed! %d\n", used );
-//    return 1;
-    }
-
     return 0;
 }
