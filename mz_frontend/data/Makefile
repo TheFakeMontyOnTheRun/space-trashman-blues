@@ -9,10 +9,10 @@ $(CRUNCHER):
 	cp wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar wobj-compiler/dist
 
 $(PACKAGER):
-	$(CXX) -std=c++14 -o$(PACKAGER) packer.cpp
 	rm -f $(PACKAGER)
+	$(CXX) -std=c++14 -o$(PACKAGER) packer.cpp
 
-pfs_data:	$(PACKAGER) $(CRUNCHER)
+data:	$(PACKAGER) $(CRUNCHER)
 	rm -f ./base.pfs
 	ls -r src/*.obj  | xargs java -jar wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
 	ls -r assets/*.*  | xargs ./packer
@@ -21,6 +21,6 @@ pfs_data:	$(PACKAGER) $(CRUNCHER)
 images:
 	python3 ./make_package.py
 
-full: images pfs_data
+full: images data
 
 default: full

@@ -326,7 +326,6 @@ void flipRenderer() {
 
 void graphicsFlush() {
     flipRenderer();
-	memset(framebuffer, 0, 160 * 200);
 }
 
 

@@ -414,7 +414,6 @@ void graphicsFlush() {
 #endif
 		index += 32;
 	}
-	memset(imageBuffer, 0, 128 * 32);
 }
 
 void showMessage(const char *message) {
