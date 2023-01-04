@@ -16,6 +16,8 @@ data:	$(PACKAGER) $(CRUNCHER)
 	rm -f ./base.pfs
 	ls src/*.obj  | xargs java -jar wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
 	ls assets/*.*  | xargs ./packer
+	mkdir -p output
+	cp ./data.pfs output/base.pfs
 	mv ./data.pfs ../base.pfs
 
 images:

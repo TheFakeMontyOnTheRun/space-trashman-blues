@@ -1,69 +1,169 @@
-LDFLAGS=`sdl2-config --libs` -lm
+#---------------------------------------------------------------------------------
+# Clear the implicit built in rules
+#---------------------------------------------------------------------------------
+.SUFFIXES:
+#---------------------------------------------------------------------------------
+ifeq ($(strip $(DEVKITARM)),)
+$(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM)
+endif
 
-CFLAGS= `sdl2-config --cflags `  \
-    -O6 -Ofast      \
-    -Ibase3d/include        \
-    -ISoundSystem           \
-    -Imenu/include          \
-    -funroll-loops          \
-    -fomit-frame-pointer    \
-    -fno-exceptions         \
-    -ffast-math             \
-    -flto		    \
-    --pedantic		    \
-    -DCLI_BUILD \
-    -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS
+include $(DEVKITARM)/gba_rules
 
-MENU_TARGET=game
+#---------------------------------------------------------------------------------
+# TARGET is the name of the output, if this ends with _mb a multiboot image is generated
+# BUILD is the directory where object files & intermediate files will be placed
+# SOURCES is a list of directories containing source code
+# DATA is a list of directories containing data files
+# INCLUDES is a list of directories containing header files
+#---------------------------------------------------------------------------------
+TARGET		:=	$(shell basename $(CURDIR))
+BUILD		:=	build
+SOURCES		:=	menu/src base3d/src base3d/src/ags SoundSystem
+DATA		:=
+INCLUDES	:= ../core/include ../common/include base3d/include common/include menu/include SoundSystem
 
-MENU_OBJ= menu/src/Main.o \
-         	  ../common/src/FixP.o \
-         	  ../common/src/Vec.o \
-         	  ../common/src/Common.o \
-         	  ../common/src/PackedFileReader.o \
-         	  ../common/src/MapWithCharKey.o \
-         	  base3d/src/CTile3DProperties.o \
-         	  base3d/src/LoadBitmap.o \
-         	  base3d/src/CRenderer.o \
-         	  base3d/src/VisibilityStrategy.o \
-         	  base3d/src/Globals.o \
-         	  base3d/src/Events.o \
-         	  base3d/src/CRenderer_Rasterization.o \
-         	  base3d/src/CRenderer_Tesselation.o \
-         	  base3d/src/EDirection_Utils.o \
-         	  base3d/src/Dungeon.o \
-         	  menu/src/GameMenu.o \
-         	  menu/src/MainMenu.o \
-         	  menu/src/Engine.o \
-         	  menu/src/UI.o \
-         	  menu/src/HackingScreen.o \
-         	  menu/src/BattleScreen.o \
-         	  menu/src/HelpScreen.o \
-         	  menu/src/CreditsScreen.o \
-         	  menu/src/Crawler.o \
-         	  ../core/src/Derelict.o \
-         	  ../core/src/Core.o \
-         	  ../core/src/Parser.o \
-         	  SoundSystem/NullMusic.o \
-         	  base3d/src/SDLVersion/CSDL2Renderer.o
+#---------------------------------------------------------------------------------
+# options for code generation
+#---------------------------------------------------------------------------------
+ARCH	:=	-mthumb -mthumb-interwork
 
+CFLAGS	:=	-g -Wall -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -O3\
+			-mcpu=arm7tdmi -mtune=arm7tdmi\
+ 			-fomit-frame-pointer\
+			-ffast-math \
+			$(ARCH)
 
-$(MENU_TARGET):	$(MENU_OBJ)
-	$(CC) -o$(MENU_TARGET) $(MENU_OBJ) $(LDFLAGS)
+CFLAGS	+=	$(INCLUDE)
 
-all:   $(MENU_TARGET)
+ASFLAGS	:=	$(ARCH)
+LDFLAGS	=	-g $(ARCH) -Wl,-Map,$(notdir $@).map
 
+#---------------------------------------------------------------------------------
+# path to tools - this can be deleted if you set the path to the toolchain in windows
+#---------------------------------------------------------------------------------
+export PATH		:=	$(DEVKITARM)/bin:$(PATH)
 
-menudata: packager
-	rm -f ./menu.pfs
-	ls res/*.*  | xargs ./packer
-	mv ./data.pfs ./menu.pfs
+#---------------------------------------------------------------------------------
+# any extra libraries we wish to link with the project
+#---------------------------------------------------------------------------------
+LIBS	:=	-lgba
 
+#---------------------------------------------------------------------------------
+# list of directories containing libraries, this must be the top level containing
+# include and lib
+#---------------------------------------------------------------------------------
+LIBDIRS	:=	$(LIBGBA)
+
+#---------------------------------------------------------------------------------
+# no real need to edit anything past this point unless you need to add additional
+# rules for different file extensions
+#---------------------------------------------------------------------------------
+ifneq ($(BUILD),$(notdir $(CURDIR)))
+#---------------------------------------------------------------------------------
+
+export OUTPUT	:=	$(CURDIR)/$(TARGET)
+export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
+					$(foreach dir,$(DATA),$(CURDIR)/$(dir))
+
+export DEPSDIR	:=	$(CURDIR)/$(BUILD)
+
+#---------------------------------------------------------------------------------
+# automatically build a list of object files for our project
+#---------------------------------------------------------------------------------
+CFILES		:=			../menu/src/MainMenu.c \
+                		../menu/src/Crawler.c \
+                		../menu/src/HelpScreen.c \
+                		../menu/src/BattleScreen.c \
+                		../menu/src/CreditsScreen.c \
+                		../menu/src/GameMenu.c \
+                		../menu/src/Main.c \
+                		../menu/src/Engine.c \
+                		../base3d/src/AGSVersion/AGSRenderer.c \
+                		../base3d/src/Globals.c \
+                		../base3d/src/CTile3DProperties.c \
+                		../base3d/src/LoadBitmap.c \
+                		../base3d/src/CRenderer.c \
+                		../base3d/src/VisibilityStrategy.c \
+                		../../common/src/Vec.c \
+                		../../common/src/Common.c \
+                		../../common/src/FixP.c \
+                		../../common/src/MapWithCharKey.c \
+                		../../common/src/PackedFileReader.c \
+                		../base3d/src/Events.c \
+                		../base3d/src/CRenderer_Rasterization.c \
+                		../base3d/src/EDirection_Utils.c \
+                		../base3d/src/CRenderer_Tesselation.c \
+                		../SoundSystem/NullMusic.c \
+                		../base3d/src/Dungeon.c \
+                		../menu/src/UI.c \
+                		../menu/src/HackingScreen.c \
+                		../SoundSystem/PCMAudio.c \
+                		../../core/src/Derelict.c \
+                		../../core/src/Core.c \
+                		../../core/src/Parser.c
+CPPFILES	:=
+SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
+BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
+
+#---------------------------------------------------------------------------------
+# use CXX for linking C++ projects, CC for standard C
+#---------------------------------------------------------------------------------
+ifeq ($(strip $(CPPFILES)),)
+#---------------------------------------------------------------------------------
+	export LD	:=	$(CC)
+#---------------------------------------------------------------------------------
+else
+#---------------------------------------------------------------------------------
+	export LD	:=	$(CXX)
+#---------------------------------------------------------------------------------
+endif
+#---------------------------------------------------------------------------------
+
+export OFILES	:= $(addsuffix .o,$(BINFILES)) $(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
+
+#---------------------------------------------------------------------------------
+# build a list of include paths
+#---------------------------------------------------------------------------------
+export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
+					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
+					-I$(CURDIR)/$(BUILD)
+
+#---------------------------------------------------------------------------------
+# build a list of library paths
+#---------------------------------------------------------------------------------
+export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
+
+.PHONY: $(BUILD) clean
+
+#---------------------------------------------------------------------------------
+$(BUILD):
+	@[ -d $@ ] || mkdir -p $@
+	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
+
+all	: $(BUILD)
+#---------------------------------------------------------------------------------
 clean:
-	rm -f menu/src/*.o
-	rm -f ../core/src/*.o
-	rm -f ../common/src/*.o
-	rm -f base3d/src/*.o
-	rm -f common/src/*.o
-	rm -f SoundSystem/*.o
-	rm -f base3d/src/SDLVersion/*.o
+	@echo clean ...
+	@rm -fr $(BUILD) $(TARGET).elf $(TARGET).gba
+
+#---------------------------------------------------------------------------------
+else
+
+DEPENDS	:=	$(OFILES:.o=.d)
+
+#---------------------------------------------------------------------------------
+# main targets
+#---------------------------------------------------------------------------------
+$(OUTPUT).gba	:	$(OUTPUT).elf
+
+$(OUTPUT).elf	:	$(OFILES)
+
+%.o	:	%.pcx
+	@echo $(notdir $<)
+	@$(bin2o)
+
+-include $(DEPENDS)
+
+#---------------------------------------------------------------------------------
+endif
+#---------------------------------------------------------------------------------
