@@ -48,7 +48,6 @@ add_library( # Sets the name of the library.
         ../../../../../../common/src/MapWithCharKey.c
         ../../../../../../common/src/FixP.c
         ../../../../../base3d/src/CTile3DProperties.c
-        ../../../../../base3d/src/LoadBitmap.c
         ../../../../../base3d/src/CRenderer.c
         ../../../../../base3d/src/VisibilityStrategy.c
         ../../../../../menu/src/Engine.c

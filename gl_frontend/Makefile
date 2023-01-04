@@ -1,0 +1,167 @@
+#---------------------------------------------------------------------------------
+.SUFFIXES:
+#---------------------------------------------------------------------------------
+
+ifeq ($(strip $(DEVKITARM)),)
+$(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM")
+endif
+
+include $(DEVKITARM)/ds_rules
+
+#---------------------------------------------------------------------------------
+# TARGET is the name of the output
+# BUILD is the directory where object files & intermediate files will be placed
+# SOURCES is a list of directories containing source code
+# INCLUDES is a list of directories containing extra header files
+# DATA is a list of directories containing binary files embedded using bin2o
+# GRAPHICS is a list of directories containing image files to be converted with grit
+# AUDIO is a list of directories containing audio to be converted by maxmod
+# ICON is the image used to create the game icon, leave blank to use default rule
+# NITRO is a directory that will be accessible via NitroFS
+#---------------------------------------------------------------------------------
+TARGET   := $(shell basename $(CURDIR))
+BUILD    := build
+SOURCES  := menu/src base3d/src base3d/src/intro SoundSystem GL1Common
+INCLUDES := menu/include base3d/include SoundSystem
+DATA     :=
+GRAPHICS :=
+AUDIO    :=
+ICON     := icon_512.png
+
+# specify a directory which contains the nitro filesystem
+# this is relative to the Makefile
+NITRO    := filesystem
+
+#---------------------------------------------------------------------------------
+# options for code generation
+#---------------------------------------------------------------------------------
+ARCH := -marm -mthumb-interwork -march=armv5te -mtune=arm946e-s
+
+CFLAGS   := -g -Wall -O3\
+            $(ARCH) $(INCLUDE) -DARM9 -DNDS -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -I../base3d/include        \
+                                                                                                     -I../SoundSystem           \
+                                                                                                     -I../menu/include          \
+                                                                                                     -I../../core/include \
+                                                                                                     -I../../common/include
+
+ASFLAGS  := -g $(ARCH)
+LDFLAGS   = -specs=ds_arm9.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
+
+#---------------------------------------------------------------------------------
+# any extra libraries we wish to link with the project (order is important)
+#---------------------------------------------------------------------------------
+LIBS := -lnds9 -lfilesystem -lfat  -lmm9
+
+#---------------------------------------------------------------------------------
+# list of directories containing libraries, this must be the top level containing
+# include and lib
+#---------------------------------------------------------------------------------
+LIBDIRS	:=	$(LIBNDS)
+
+#---------------------------------------------------------------------------------
+# no real need to edit anything past this point unless you need to add additional
+# rules for different file extensions
+#---------------------------------------------------------------------------------
+ifneq ($(BUILD),$(notdir $(CURDIR)))
+#---------------------------------------------------------------------------------
+
+export OUTPUT	:=	$(CURDIR)/$(TARGET)
+
+export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir))
+export DEPSDIR	:=	$(CURDIR)/$(BUILD)
+
+#CFILES   := menu/src/MainMenu.c \
+#                              		menu/src/Crawler.c \
+#                              		menu/src/HelpScreen.c \
+#                              		menu/src/BattleScreen.c \
+#                              		menu/src/CreditsScreen.c \
+#                              		menu/src/GameMenu.c \
+#                              		menu/src/Main.c \
+#                              		menu/src/Engine.c \
+#                              		base3d/src/nitro/NitroGLRenderer.c \
+#                              		base3d/src/Globals.c \
+#                              		base3d/src/CTile3DProperties.c \
+#                              		GL1Common/LoadBitmapGL1.c \
+#                              		GL1Common/RendererGL1.c \
+#                              		GL1Common/Renderer_RasterizationGL1.c \
+#                              		GL1Common/Renderer_TesselationGL1.c \
+#                              		base3d/src/VisibilityStrategy.c \
+#                              		../common/src/Vec.c \
+#                              		../common/src/Common.c \
+#                              		../common/src/FixP.c \
+#                              		../common/src/MapWithCharKey.c \
+#                              		../common/src/PackedFileReader.c \
+#                              		base3d/src/Events.c \
+#                              		base3d/src/EDirection_Utils.c \
+#                              		SoundSystem/NullMusic.c \
+#                              		base3d/src/Dungeon.c \
+#                              		menu/src/UI.c \
+#                              		menu/src/HackingScreen.c \
+#                              		SoundSystem/PCMAudio.c \
+#                              		../core/src/Derelict.c \
+#                              		../core/src/Core.c \
+#                              		../core/src/Parser.c
+CFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
+CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
+SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
+BINFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.bin)))
+
+#---------------------------------------------------------------------------------
+# use CXX for linking C++ projects, CC for standard C
+#---------------------------------------------------------------------------------
+ifeq ($(strip $(CPPFILES)),)
+#---------------------------------------------------------------------------------
+	export LD	:=	$(CC)
+#---------------------------------------------------------------------------------
+else
+#---------------------------------------------------------------------------------
+	export LD	:=	$(CXX)
+#---------------------------------------------------------------------------------
+endif
+#---------------------------------------------------------------------------------
+
+export OFILES	:=	$(BINFILES:.bin=.o) \
+					$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
+
+export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
+					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
+					-I$(CURDIR)/$(BUILD)
+
+export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
+
+.PHONY: $(BUILD) clean
+
+#---------------------------------------------------------------------------------
+$(BUILD):
+	@[ -d $@ ] || mkdir -p $@
+	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
+
+#---------------------------------------------------------------------------------
+clean:
+	@echo clean ...
+	@rm -fr $(BUILD) $(TARGET).elf $(TARGET).nds $(TARGET).ds.gba
+
+
+#---------------------------------------------------------------------------------
+else
+
+DEPENDS	:=	$(OFILES:.o=.d)
+
+#---------------------------------------------------------------------------------
+# main targets
+#---------------------------------------------------------------------------------
+$(OUTPUT).nds	: 	$(OUTPUT).elf
+$(OUTPUT).elf	:	$(OFILES)
+
+#---------------------------------------------------------------------------------
+%.o	:	%.bin
+#---------------------------------------------------------------------------------
+	@echo $(notdir $<)
+	$(bin2o)
+
+
+-include $(DEPENDS)
+
+#---------------------------------------------------------------------------------------
+endif
+#---------------------------------------------------------------------------------------
