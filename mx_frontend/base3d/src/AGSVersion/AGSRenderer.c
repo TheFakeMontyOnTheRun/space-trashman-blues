@@ -1,7 +1,7 @@
 //
 // Created by Daniel Monteiro on 04/01/2023.
 //
-
+#include <stdlib.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
@@ -41,12 +41,13 @@ uint8_t getPaletteEntry(const uint32_t origin) {
 void graphicsInit() {
 	int r, g, b;
 
+	framebuffer = (uint8_t*)malloc(XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
+
 	for (r = 0; r < 256; r += 16) {
 		for (g = 0; g < 256; g += 8) {
 			for (b = 0; b < 256; b += 8) {
 				uint32_t pixel = 0xFF000000 + (r << 16) + (g << 8) + (b);
 				uint8_t paletteEntry = getPaletteEntry(pixel);
-				palette[paletteEntry] = pixel;
 			}
 		}
 	}

@@ -1561,7 +1561,7 @@ void drawTextAt(const int x, const int y, const char *__restrict__ text, const u
 
     drawTextAtWithMargin( x, y, (XRES_FRAMEBUFFER - 1), text, colour);
 }
-
+#ifndef AGS
 void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 					uint8_t *prevFrame, int turnState, int turnTarget, int scale200To240) {
 
@@ -1780,3 +1780,4 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 		}
 	}
 }
+#endif

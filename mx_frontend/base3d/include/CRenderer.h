@@ -3,11 +3,11 @@
 
 #define NATIVE_TEXTURE_SIZE 32
 
-#ifdef AMIGA
-#define XRES 200
-#define YRES 128
-#define HALF_XRES 100
-#define HALF_YRES 64
+#ifdef AGS
+#define XRES 216
+#define YRES 160
+#define HALF_XRES 108
+#define HALF_YRES 80
 #else
 #define XRES 216
 #define YRES 200
@@ -15,9 +15,13 @@
 #define HALF_YRES 100
 #endif
 
-
+#ifndef AGS
 #define XRES_FRAMEBUFFER 320
 #define YRES_FRAMEBUFFER 200
+#else
+#define XRES_FRAMEBUFFER 240
+#define YRES_FRAMEBUFFER 160
+#endif
 
 #define TOTAL_TEXTURES 32
 #define TRANSPARENCY_COLOR 199
@@ -35,11 +39,16 @@ extern int visibilityCached;
 extern int needsToRedrawVisibleMeshes;
 extern uint8_t *visibleElementsMap;
 extern struct Bitmap *defaultFont;
+
+#ifndef AGS
 extern uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 extern uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+extern uint32_t palette[256];
+#else
+extern uint8_t *framebuffer;
+#endif
 extern enum EDirection cameraDirection;
 extern long gameTicks;
-extern int playerHealth;
 extern int hasSnapshot;
 extern int distanceForPenumbra;
 extern int distanceForDarkness;
@@ -56,7 +65,6 @@ extern int needToRedrawHUD;
 
 extern struct MapWithCharKey tileProperties;
 extern struct Vec2i cameraPosition;
-extern uint32_t palette[256];
 extern uint8_t texturesUsed;
 extern enum ECommand mBufferedCommand;
 extern struct Texture *nativeTextures[TOTAL_TEXTURES];

@@ -44,11 +44,16 @@ struct MapWithCharKey colliders;
 struct MapWithCharKey enemySightBlockers;
 uint8_t *visibleElementsMap;
 struct Bitmap *defaultFont;
+#ifndef AGS
 uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 uint8_t mActors[MAP_SIZE][MAP_SIZE];
-uint8_t mItems[MAP_SIZE][MAP_SIZE];
 uint8_t mEffects[MAP_SIZE][MAP_SIZE];
+uint32_t palette[256];
+#else
+uint8_t *framebuffer;
+#endif
+uint8_t mItems[MAP_SIZE][MAP_SIZE];
 enum EDirection cameraDirection;
 struct Vec3 mCamera;
 long gameTicks = 0;
@@ -61,7 +66,7 @@ struct Bitmap *mapTopLevel = NULL;
 struct Bitmap *backdrop = NULL;
 struct MapWithCharKey tileProperties;
 struct Vec2i cameraPosition;
-uint32_t palette[256];
+
 uint8_t texturesUsed = 0;
 enum ECommand mBufferedCommand = kCommandNone;
 struct Texture *nativeTextures[TOTAL_TEXTURES];
@@ -231,22 +236,24 @@ void drawMap(const uint8_t *__restrict__ elements,
             const uint8_t actor = actors[offset];
             const uint8_t item = items[offset];
             const uint8_t effect = effects[offset];
-
+#ifndef AGS
             mActors[z][x] = 0xFF;
-            mItems[z][x] = 0xFF;
             mEffects[z][x] = 0xFF;
 
             if (actor != 0xFF) {
                 mActors[z][x] = actor;
             }
 
+            if (effect != 0xFF) {
+                mEffects[z][x] = effect;
+            }
+#endif
+            mItems[z][x] = 0xFF;
+
             if (item != 0xFF) {
                 mItems[z][x] = item;
             }
 
-            if (effect != 0xFF) {
-                mEffects[z][x] = effect;
-            }
         }
     }
 

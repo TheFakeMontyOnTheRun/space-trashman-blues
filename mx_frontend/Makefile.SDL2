@@ -1,4 +1,5 @@
-LDFLAGS=`sdl2-config --libs` -lm
+LDFLAGS=`sdl2-config --libs` -lm -Wl,-map,$@.map $(LDFLAGS_EXTRA)
+
 
 CFLAGS= `sdl2-config --cflags `  \
     -O6 -Ofast      \
