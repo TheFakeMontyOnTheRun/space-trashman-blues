@@ -92,7 +92,7 @@ enum ECommand getInput(void);
 
 void handleSystemEvents(void);
 
-void initHW(void);
+void initHW(int argc, char **argv);
 
 void shutdownHW(void);
 

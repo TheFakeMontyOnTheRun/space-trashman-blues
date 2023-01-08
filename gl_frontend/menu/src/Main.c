@@ -37,9 +37,14 @@ long uclock() {
 #include <emscripten/emscripten.h>
 #endif
 
-void initHW() {
+void initHW(int argc, char** argv ) {
 #ifndef N64
-    initFileReader("base.pfs");
+#ifndef NDS
+	initFileReader("base.pfs");
+#else
+	nitroFSInit(argv[0]);
+	initFileReader("nitro:/base.pfs");
+#endif
 #else
 	dfs_init(DFS_DEFAULT_LOCATION);
     initFileReader("rom:/base.pfs");
@@ -62,7 +67,7 @@ void mainLoop();
 
 int main(int argc, char **argv) {
 
-    initHW();
+    initHW(argc, argv);
 
     enterState(kMainMenu);
 

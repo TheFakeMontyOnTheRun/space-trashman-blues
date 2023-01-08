@@ -27,8 +27,6 @@
 int snapshotSignal = '.';
 
 void graphicsInit() {
-	consoleDemoInit();
-	nitroFSInit(NULL);
 	videoSetMode(MODE_0_3D);
 	glInit();
 
