@@ -50,7 +50,7 @@ LDFLAGS   = -specs=ds_arm9.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project (order is important)
 #---------------------------------------------------------------------------------
-LIBS := -lnds9 -lfilesystem -lfat  -lmm9
+LIBS := -lfilesystem -lfat -lnds9
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
@@ -104,6 +104,11 @@ CFILES   := ../menu/src/MainMenu.c \
 CPPFILES	:=
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
 BINFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.bin)))
+
+# prepare NitroFS directory
+ifneq ($(strip $(NITRO)),)
+      export NITRO_FILES := $(CURDIR)/$(NITRO)
+endif
 
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C

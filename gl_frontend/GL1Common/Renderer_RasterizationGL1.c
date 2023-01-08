@@ -1,11 +1,19 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef NDS
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
 #include <OpenGL/gl.h>
 #else
 #include <GL/gl.h>
+#endif
+#else
+#include <nds.h>
+#include <malloc.h>
+#include <stdio.h>
+#include <nds/arm9/image.h>
+#include <nds/arm9/trig_lut.h>
 #endif
 
 #ifdef N64

@@ -24,7 +24,7 @@
 #include "UI.h"
 #include "SoundSystem.h"
 
-#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && !defined(N64)
+#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && !defined(N64) && !defined(NDS)
 const char *MainMenu_options[4] = {
         "Play game", "Credits", "Help", "Quit"};
 

@@ -3,11 +3,19 @@
 #include <stdio.h>
 #include <assert.h>
 
+#ifndef NDS
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
 #include <OpenGL/gl.h>
 #else
 #include <GL/gl.h>
+#endif
+#else
+#include <nds.h>
+#include <malloc.h>
+#include <stdio.h>
+#include <nds/arm9/image.h>
+#include <nds/arm9/trig_lut.h>
 #endif
 
 #include "Core.h"
@@ -52,8 +60,10 @@ struct Texture *makeTextureFrom(const char *filename) {
 	toReturn->raw = loadBitmap(filename);
 	toReturn->raw->uploadId = submitBitmapToGPU(toReturn->raw);
 	glBindTexture(GL_TEXTURE_2D, toReturn->raw->uploadId);
+#ifndef NDS
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+#endif
 	glBindTexture(GL_TEXTURE_2D, 0);
 	return toReturn;
 }

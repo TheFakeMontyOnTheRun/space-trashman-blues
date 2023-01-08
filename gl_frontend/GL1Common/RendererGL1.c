@@ -2,14 +2,21 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <math.h>
 
+#ifndef NDS
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
 #include <OpenGL/gl.h>
-#include <math.h>
-
 #else
 #include <GL/gl.h>
+#endif
+#else
+#include <nds.h>
+#include <malloc.h>
+#include <stdio.h>
+#include <nds/arm9/image.h>
+#include <nds/arm9/trig_lut.h>
 #endif
 
 #include "Core.h"
@@ -79,33 +86,50 @@ void enter2D(void) {
      glMatrixMode(GL_MODELVIEW);
      glLoadIdentity();
 
-     glDisable(GL_DEPTH_TEST);
      glDisable(GL_FOG);
+#ifndef NDS
+     glDisable(GL_DEPTH_TEST);
+#endif
 }
 
 void initGL() {
 
     glEnable(GL_TEXTURE_2D);                        // Enable Texture Mapping ( NEW )
-    glShadeModel(GL_SMOOTH);                        // Enable Smooth Shading
-    glClearColor(0.0f, 0.0f, 0.0f, 0.5f);                   // Black Background
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);                   // Black Background
+
+#ifndef NDS
     glClearDepth(1.0f);                         // Depth Buffer Setup
+    glShadeModel(GL_SMOOTH);                        // Enable Smooth Shading
     glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
-//    glDepthFunc(GL_LEQUAL);                         // The Type Of Depth Testing To Do
+    glDepthFunc(GL_LEQUAL);                         // The Type Of Depth Testing To Do
     glAlphaFunc(GL_GREATER, 0);
     glDisable(GL_LINE_SMOOTH);
 	glDisable(GL_CULL_FACE);
+#else
+	glClearDepth(0x7FFF);
+#endif
 }
 
 void clearRenderer() {
+#ifndef NDS
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+#else
+	glClearDepth(0x7FFF);
+#endif
 }
 
 
 void startFrameGL(int width, int height) {
     glViewport(0, 0, width, height);
+	glClearColor(1,1,1,1);
+
+#ifndef NDS
     glLineWidth(width / 240.0f);
     glClear(GL_DEPTH_BUFFER_BIT);
-    
+#else
+	glClearDepth(0x7FFF);
+	glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE);
+#endif
     
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;
@@ -113,6 +137,7 @@ void startFrameGL(int width, int height) {
 }
 
 void endFrameGL() {
+#ifndef NDS
     glFinish();
 
     int error = glGetError();
@@ -120,10 +145,13 @@ void endFrameGL() {
     if (error) {
         printf("glError: %d\n", error );
     }
+#else
+	glFlush(0);
+#endif
 }
 
 
-void gluPerspective(	float fovy,
+void setPerspective(	float fovy,
 	float aspect,
 	float zNear,
 	float zFar) {
@@ -134,17 +162,19 @@ void gluPerspective(	float fovy,
 
 	glFrustum(-near_plane*aspect_ratio, near_plane*aspect_ratio, -near_plane, near_plane, near_plane, far_plane);
 }
+
 void enter3D(void) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    gluPerspective(45.0f, 240.0f/200.0f, 1, 256.0f);
+    setPerspective(45.0f, 240.0f/200.0f, 1, 1024.0f);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    
-    
+
+#ifndef NDS
     glEnable(GL_DEPTH_TEST);
+#endif
     glColor3f(1,1,1);
 }
 

@@ -62,8 +62,6 @@ void mainLoop();
 
 int main(int argc, char **argv) {
 
-	initStation();
-
     initHW();
 
     enterState(kMainMenu);
@@ -90,7 +88,11 @@ int main(int argc, char **argv) {
         }
 
 #ifndef N64
+#ifndef NDS
 		startFrameGL(640, 480);
+#else
+		startFrameGL(255, 191);
+#endif
 #else
 		startFrameGL(320, 240);
 #endif
