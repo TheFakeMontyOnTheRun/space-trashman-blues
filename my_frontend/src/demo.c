@@ -1703,17 +1703,25 @@ void initMap(void) {
 	uint8_t x, y, c;
 	const uint8_t *head;
 	uint8_t current = '.';
+	const uint8_t *headEnd;
 
 	uint16_t offsetOnDataStrip = 0;
 	int16_t repetitions = -1;
 
 #ifdef EMBEDDED_DATA
-/* TODO: precalc absolute offsets */
 	for (c = 0; c < playerLocation; ++c) {
 		offsetOnDataStrip += dataPositions[c];
 	}
 
 	head = &data[offsetOnDataStrip];
+
+	//the last location
+	if (dataPositions[playerLocation + 1] == 0 ) {
+		size_t extra = sizeof(data) - 1;
+		headEnd = &data[0] + extra;
+	} else {
+		headEnd = head + (dataPositions[playerLocation]);
+	}
 #else
 	struct StaticBuffer datafile = loadBinaryFileFromPath(playerLocation);
 	head = datafile.data;
@@ -1723,8 +1731,13 @@ void initMap(void) {
 
 	for (y = 0; y < 32; ++y) {
 		for (x = 0; x < 32; ++x) {
+	memset(map, NEUTRAL_CELL, 32 * 32);
 
 #ifdef RLE_COMPRESSED_MAPS
+			if (head == headEnd) {
+				goto done_loading;
+			}
+
 			if (repetitions < 1) {
 				repetitions = *head;
 
@@ -1769,6 +1782,8 @@ void initMap(void) {
 		++head; // line break
 #endif
 	}
+
+	done_loading:
 	updateMapItems();
 	HUD_initialPaint();
 }
