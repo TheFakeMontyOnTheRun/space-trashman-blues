@@ -571,72 +571,13 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
 	uint8_t *ptr = &buffer[(_y0 * (BUFFER_SIZEX)) + (x0 / 8)]; //skip to the line in pattern
 	uint8_t y;
-	switch (x0 & 7) {
-		case 0:
-			for (y = _y0; y <= _y1; ++y) {
-				if (!shouldStipple || (y & 1)) {
-					*ptr |= 128;
-				}
-				ptr += BUFFER_SIZEX;
-			}
-			break;
-		case 1:
-			for (y = _y0; y <= _y1; ++y) {
-				if (!shouldStipple || (y & 1)) {
-					*ptr |= 64;
-				}
-				ptr += BUFFER_SIZEX;
-			}
-			break;
-		case 2:
-			for (y = _y0; y <= _y1; ++y) {
-				if (!shouldStipple || (y & 1)) {
-					*ptr |= 32;
-				}
-				ptr += BUFFER_SIZEX;
-			}
-			break;
-		case 3:
-			for (y = _y0; y <= _y1; ++y) {
-				if (!shouldStipple || (y & 1)) {
-					*ptr |= 16;
-				}
-				ptr += BUFFER_SIZEX;
-			}
-			break;
-		case 4:
-			for (y = _y0; y <= _y1; ++y) {
-				if (!shouldStipple || (y & 1)) {
-					*ptr |= 8;
-				}
-				ptr += BUFFER_SIZEX;
-			}
-			break;
-		case 5:
-			for (y = _y0; y <= _y1; ++y) {
-				if (!shouldStipple || (y & 1)) {
-					*ptr |= 4;
-				}
-				ptr += BUFFER_SIZEX;
-			}
-			break;
-		case 6:
-			for (y = _y0; y <= _y1; ++y) {
-				if (!shouldStipple || (y & 1)) {
-					*ptr |= 2;
-				}
-				ptr += BUFFER_SIZEX;
-			}
-			break;
-		case 7:
-			for (y = _y0; y <= _y1; ++y) {
-				if (!shouldStipple || (y & 1)) {
-					*ptr |= 1;
-				}
-				ptr += BUFFER_SIZEX;
-			}
-			break;
+	for (y = _y0; y <= _y1; ++y) {
+		if (!shouldStipple || (y & 1)) {
+			*ptr |= (128 >> (x0 & 7));
+		}
+		ptr += BUFFER_SIZEX;
 	}
+
 }
 
 
@@ -646,66 +587,13 @@ uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr) {
 		ptr = &buffer[(y * (BUFFER_SIZEX)) + (x / 8)]; //skip to the line in pattern
 	}
 
-	switch (x & 7) {
-		case 0:
-			*ptr |= 128;
-			break;
-		case 1:
-			*ptr |= 64;
-			break;
-		case 2:
-			*ptr |= 32;
-			break;
-		case 3:
-			*ptr |= 16;
-			break;
-		case 4:
-			*ptr |= 8;
-			break;
-		case 5:
-			*ptr |= 4;
-			break;
-		case 6:
-			*ptr |= 2;
-			break;
-		case 7:
-			*ptr |= 1;
-			break;
-	}
+	*ptr |= (128 >> (x & 7));
 
 	return ptr;
 }
 
 void graphicsPut(uint8_t x, uint8_t y) {
-
-	uint8_t *ptr = &buffer[(y * (BUFFER_SIZEX)) + (x / 8)]; //skip to the line in pattern
-
-	switch (x & 7) {
-		case 0:
-			*ptr |= 128;
-			break;
-		case 1:
-			*ptr |= 64;
-			break;
-		case 2:
-			*ptr |= 32;
-			break;
-		case 3:
-			*ptr |= 16;
-			break;
-		case 4:
-			*ptr |= 8;
-			break;
-		case 5:
-			*ptr |= 4;
-			break;
-		case 6:
-			*ptr |= 2;
-			break;
-		case 7:
-			*ptr |= 1;
-			break;
-	}
+	buffer[(y * (BUFFER_SIZEX)) + (x / 8)] |= (128 >> (x & 7));
 }
 
 void HUD_initialPaint() {

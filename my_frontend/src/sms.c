@@ -371,137 +371,30 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 		_y1 = y0;
 	}
 
-
 	uint8_t patternLine = (_y0 & 7); //which line inside the pattern;
-	uint8_t *ptr = &buffer[(16 * 8 * (_y0 >> 3)) + //skip the entire row of patterns along the y
-						   (8 * (x0 >> 3)) + //skip to the correct pattern in the row
-						   patternLine]; //skip to the line in pattern
 
-	switch (x0 & 7) {
-		case 0:
-			for (uint8_t y = _y0; y <= _y1; ++y) {
-				if (!shouldStipple || (y & 1)) {
-					*ptr |= 128;
-				}
+	/*
+	// originally was this
+	ptr = &buffer[(16 * 8 * (y >> 3)) + //skip the entire row of patterns along the y
+				  (8 * (x >> 3)) + //skip to the correct pattern in the row
+				  (y & 7)]; //skip to the line in pattern
+	*/
+	uint8_t *ptr = &buffer[((_y0 & ~7) << 4) + (x0 & ~7) + (_y0 & 7)];
 
-				++patternLine;
-				++ptr;
+	uint8_t shiftXAnd7 = 128 >> (x0 & 7);
 
-				if (patternLine >= 8) {
-					patternLine = 0;
-					ptr += (16 * 8) - 8;
-				}
-			}
-			break;
-		case 1:
-			for (uint8_t y = _y0; y <= _y1; ++y) {
-				if (!shouldStipple || (y & 1)) {
-					*ptr |= 64;
-				}
+	for (uint8_t y = _y0; y <= _y1; ++y) {
+		if (!shouldStipple || (y & 1)) {
+			*ptr |= shiftXAnd7;
+		}
 
-				++patternLine;
-				++ptr;
+		++patternLine;
+		++ptr;
 
-				if (patternLine >= 8) {
-					patternLine = 0;
-					ptr += (16 * 8) - 8;
-				}
-			}
-			break;
-		case 2:
-			for (uint8_t y = _y0; y <= _y1; ++y) {
-				if (!shouldStipple || (y & 1)) {
-					*ptr |= 32;
-				}
-
-				++patternLine;
-				++ptr;
-
-				if (patternLine >= 8) {
-					patternLine = 0;
-					ptr += (16 * 8) - 8;
-				}
-			}
-			break;
-		case 3:
-			for (uint8_t y = _y0; y <= _y1; ++y) {
-				if (!shouldStipple || (y & 1)) {
-					*ptr |= 16;
-				}
-
-				++patternLine;
-				++ptr;
-
-				if (patternLine >= 8) {
-					patternLine = 0;
-					ptr += (16 * 8) - 8;
-				}
-			}
-			break;
-		case 4:
-			for (uint8_t y = _y0; y <= _y1; ++y) {
-				if (!shouldStipple || (y & 1)) {
-					*ptr |= 8;
-				}
-
-				++patternLine;
-				++ptr;
-
-				if (patternLine >= 8) {
-					patternLine = 0;
-					ptr += (16 * 8) - 8;
-				}
-			}
-
-			break;
-		case 5:
-			for (uint8_t y = _y0; y <= _y1; ++y) {
-				if (!shouldStipple || (y & 1)) {
-					*ptr |= 4;
-				}
-
-				++patternLine;
-				++ptr;
-
-				if (patternLine >= 8) {
-					patternLine = 0;
-					ptr += (16 * 8) - 8;
-				}
-			}
-
-			break;
-		case 6:
-			for (uint8_t y = _y0; y <= _y1; ++y) {
-				if (!shouldStipple || (y & 1)) {
-					*ptr |= 2;
-				}
-
-				++patternLine;
-				++ptr;
-
-				if (patternLine >= 8) {
-					patternLine = 0;
-					ptr += (16 * 8) - 8;
-				}
-			}
-
-			break;
-		case 7:
-			for (uint8_t y = _y0; y <= _y1; ++y) {
-				if (!shouldStipple || (y & 1)) {
-					*ptr |= 1;
-				}
-
-				++patternLine;
-				++ptr;
-
-				if (patternLine >= 8) {
-					patternLine = 0;
-					ptr += (16 * 8) - 8;
-				}
-			}
-
-			break;
+		if (patternLine >= 8) {
+			patternLine = 0;
+			ptr += (16 * 8) - 8;
+		}
 	}
 }
 
@@ -523,32 +416,7 @@ uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr) {
 		ptr = &buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)];
 	}
 
-	switch (x & 7) {
-		case 0:
-			*ptr |= 128;
-			break;
-		case 1:
-			*ptr |= 64;
-			break;
-		case 2:
-			*ptr |= 32;
-			break;
-		case 3:
-			*ptr |= 16;
-			break;
-		case 4:
-			*ptr |= 8;
-			break;
-		case 5:
-			*ptr |= 4;
-			break;
-		case 6:
-			*ptr |= 2;
-			break;
-		case 7:
-			*ptr |= 1;
-			break;
-	}
+	*ptr |= (128 >> (x & 7));
 
 	return ptr;
 }
@@ -567,34 +435,7 @@ void graphicsPut(uint8_t x, uint8_t y) {
 						   (y & 7)]; //skip to the line in pattern
 	*/
 
-	uint8_t *ptr = &buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)];
-
-	switch (x & 7) {
-		case 0:
-			*ptr |= 128;
-			break;
-		case 1:
-			*ptr |= 64;
-			break;
-		case 2:
-			*ptr |= 32;
-			break;
-		case 3:
-			*ptr |= 16;
-			break;
-		case 4:
-			*ptr |= 8;
-			break;
-		case 5:
-			*ptr |= 4;
-			break;
-		case 6:
-			*ptr |= 2;
-			break;
-		case 7:
-			*ptr |= 1;
-			break;
-	}
+	buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)] |= (128 >> (x & 7));
 }
 
 
