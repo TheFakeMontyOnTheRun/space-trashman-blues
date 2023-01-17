@@ -32,7 +32,6 @@
 #define YRESMINUSONE YRES - 1
 
 #define CAMERA_HEIGHT 2
-#define VISIBILITY_LIMIT 32
 
 enum GeometryType {
 	CUBE = 0,
