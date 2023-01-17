@@ -106,7 +106,7 @@ void initGL() {
     glDisable(GL_LINE_SMOOTH);
 	glDisable(GL_CULL_FACE);
 #else
-	glClearDepth(0x7FFF);
+	glClearDepth(GL_MAX_DEPTH);
 #endif
 }
 
@@ -114,7 +114,7 @@ void clearRenderer() {
 #ifndef NDS
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 #else
-	glClearDepth(0x7FFF);
+	glClearDepth(GL_MAX_DEPTH);
 #endif
 }
 
@@ -127,8 +127,8 @@ void startFrameGL(int width, int height) {
     glLineWidth(width / 240.0f);
     glClear(GL_DEPTH_BUFFER_BIT);
 #else
-	glClearDepth(0x7FFF);
 	glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE);
+	glClearDepth(GL_MAX_DEPTH);
 #endif
     
     visibilityCached = FALSE;
