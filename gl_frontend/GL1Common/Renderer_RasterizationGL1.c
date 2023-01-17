@@ -141,13 +141,40 @@ void drawRect(
         glColor3f(r,
                   g,
                   b);
-       
+
+#ifndef NDS
         glBegin(GL_LINE_LOOP);
         glVertex3f(x, y, -2);
         glVertex3f(x + dx, y, -2);
         glVertex3f(x + dx, y + dy, -2);
         glVertex3f(x, y + dy, -2);
         glEnd();
+#else
+		glBegin(GL_QUADS);
+
+        glVertex3f(x, y, -2);
+		glVertex3f(x + dx, y, -2);
+        glVertex3f(x + dx, y + 1, -2);
+		glVertex3f(x, y + 1, -2);
+
+        glVertex3f(x + dx - 1, y + dy - 1, -2);
+		glVertex3f(x + dx, y + dy - 1, -2);
+		glVertex3f(x + dx, y + dy, -2);
+		glVertex3f(x + dx - 1, y + dy, -2);
+
+        glVertex3f(x, y + dy - 1, -2);
+		glVertex3f(x + dx, y + dy - 1, -2);
+        glVertex3f(x + dx, y + dy, -2);
+		glVertex3f(x, y + dy - 1, -2);
+
+        glVertex3f(x, y + dy - 1, -2);
+		glVertex3f(x + 1, y + dy - 1, -2);
+		glVertex3f(x + 1, y + dy, -2);
+		glVertex3f(x, y + dy, -2);
+
+        glEnd();
+
+#endif
         
         glColor3f(1, 1, 1);
     }
