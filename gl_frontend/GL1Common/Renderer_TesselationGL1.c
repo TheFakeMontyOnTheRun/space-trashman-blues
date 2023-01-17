@@ -87,6 +87,8 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 	scaled = Mul( acc, bias );
 	centerY0 = (fixToInt(scaled) / 128.0f);
 
+	glPushMatrix();
+	glTranslatef(centerX, 0.0f, centerZ);
 
 	glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
 	glBegin(GL_QUADS);
@@ -95,44 +97,48 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 
 	switch (direction) {
 		case kNorth:
-			glVertex3f(centerX - 1.0f, centerY0, centerZ - 1.0f);
+			glVertex3f(- 1.0f, centerY0, - 1.0f);
 			glTexCoord2f(1.0f, 1.0f);
-			glVertex3f(centerX + 1.0f, centerY0, centerZ - 1.0f);
+			glVertex3f(+ 1.0f, centerY0, - 1.0f);
 			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(centerX + 1.0f, centerY1, centerZ + 1.0f);
+			glVertex3f(+ 1.0f, centerY1, + 1.0f);
 			glTexCoord2f(0.0f, 0.0f);
-			glVertex3f(centerX - 1.0f, centerY1, centerZ + 1.0f);
+			glVertex3f(- 1.0f, centerY1, + 1.0f);
 			break;
 		case kSouth:
-			glVertex3f(centerX - 1.0f, centerY1, centerZ - 1.0f);
+			glVertex3f(- 1.0f, centerY1, - 1.0f);
 			glTexCoord2f(1.0f, 1.0f);
-			glVertex3f(centerX + 1.0f, centerY1, centerZ - 1.0f);
+			glVertex3f(+ 1.0f, centerY1, - 1.0f);
 			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(centerX + 1.0f, centerY0, centerZ + 1.0f);
+			glVertex3f(+ 1.0f, centerY0, + 1.0f);
 			glTexCoord2f(0.0f, 0.0f);
-			glVertex3f(centerX - 1.0f, centerY0, centerZ + 1.0f);
+			glVertex3f(- 1.0f, centerY0, + 1.0f);
 			break;
 		case kEast:
-			glVertex3f(centerX - 1.0f, centerY0, centerZ - 1.0f);
+			glVertex3f(- 1.0f, centerY0, - 1.0f);
 			glTexCoord2f(1.0f, 1.0f);
-			glVertex3f(centerX + 1.0f, centerY1, centerZ - 1.0f);
+			glVertex3f(+ 1.0f, centerY1, - 1.0f);
 			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(centerX + 1.0f, centerY1, centerZ + 1.0f);
+			glVertex3f(+ 1.0f, centerY1, + 1.0f);
 			glTexCoord2f(0.0f, 0.0f);
-			glVertex3f(centerX - 1.0f, centerY0, centerZ + 1.0f);
+			glVertex3f(- 1.0f, centerY0, + 1.0f);
 			break;
 		case kWest:
-			glVertex3f(centerX - 1.0f, centerY1, centerZ - 1.0f);
+			glVertex3f(- 1.0f, centerY1, - 1.0f);
 			glTexCoord2f(1.0f, 1.0f);
-			glVertex3f(centerX + 1.0f, centerY0, centerZ - 1.0f);
+			glVertex3f(+ 1.0f, centerY0, - 1.0f);
 			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(centerX + 1.0f, centerY0, centerZ + 1.0f);
+			glVertex3f(+ 1.0f, centerY0, + 1.0f);
 			glTexCoord2f(0.0f, 0.0f);
-			glVertex3f(centerX - 1.0f, centerY1, centerZ + 1.0f);
+			glVertex3f(- 1.0f, centerY1, + 1.0f);
 			break;
 	}
 
-
+#ifndef NDS
+	glPopMatrix();
+#else
+	glPopMatrix(1);
+#endif
 
 	glEnd();
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -168,24 +174,32 @@ void drawBillboardAt(const struct Vec3 center,
 
     centerZ = -fixToInt(center.mZ + zCameraOffset);
 
+	glPushMatrix();
+	glTranslatef(centerX, 0.0f, centerZ);
+
     glBindTexture(GL_TEXTURE_2D, bitmap->raw->uploadId);
-    
+
     glEnable(GL_ALPHA_TEST);
 
     glBegin(GL_QUADS);
 
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ + 1.0f);
+    glVertex3f(- 1.0f, centerY - geometryScale, + 1.0f);
     glTexCoord2f(1, 1.0f);
-    glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ + 1.0f);
+    glVertex3f(+ 1.0f, centerY - geometryScale, + 1.0f);
     glTexCoord2f(1, 0.0f);
-    glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ + 1.0f);
+    glVertex3f(+ 1.0f, centerY + geometryScale, + 1.0f);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ + 1.0f);
-    
+    glVertex3f(- 1.0f, centerY + geometryScale, + 1.0f);
+
     glEnd();
     glDisable(GL_ALPHA_TEST);
 	glBindTexture(GL_TEXTURE_2D, 0);
+#ifndef NDS
+	glPopMatrix();
+#else
+	glPopMatrix(1);
+#endif
 }
 
 void drawColumnAt(const struct Vec3 center,
@@ -215,6 +229,9 @@ void drawColumnAt(const struct Vec3 center,
 
     centerZ = -fixToInt(center.mZ + zCameraOffset);
 
+	glPushMatrix();
+	glTranslatef(centerX, 0.0f, centerZ);
+
     glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
 
     if (enableAlpha) {
@@ -224,50 +241,55 @@ void drawColumnAt(const struct Vec3 center,
     glBegin(GL_QUADS);
 	if ((mask & MASK_BEHIND)) {
         glTexCoord2f(0, textureScale);
-        glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ - 1.0f);
+        glVertex3f(- 1.0f, centerY - geometryScale, - 1.0f);
         glTexCoord2f(1.0f, textureScale);
-        glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ - 1.0f);
+        glVertex3f(+ 1.0f, centerY - geometryScale, - 1.0f);
         glTexCoord2f(1.0f, 0.0f);
-        glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ - 1.0f);
+        glVertex3f(+ 1.0f, centerY + geometryScale, - 1.0f);
         glTexCoord2f(0.0f, 0.0f);
-        glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ - 1.0f);
+        glVertex3f(- 1.0f, centerY + geometryScale, - 1.0f);
     }
 
     if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0 ) || (mask & MASK_FORCE_RIGHT)) {
         glTexCoord2f(0, textureScale);
-        glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ - 1.0f);
+        glVertex3f(centerX - 1.0f, centerY - geometryScale, - 1.0f);
         glTexCoord2f(1.0f, textureScale);
-        glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ + 1.0f);
+        glVertex3f(centerX - 1.0f, centerY - geometryScale, + 1.0f);
         glTexCoord2f(1.0f, 0.0f);
-        glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ + 1.0f);
+        glVertex3f(centerX - 1.0f, centerY + geometryScale, + 1.0f);
         glTexCoord2f(0.0f, 0.0f);
-        glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ - 1.0f);
+        glVertex3f(centerX - 1.0f, centerY + geometryScale, - 1.0f);
     }
 
     if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0 ) || (mask & MASK_FORCE_LEFT)) {
         glTexCoord2f(0, textureScale);
-        glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ - 1.0f);
+        glVertex3f(+ 1.0f, centerY - geometryScale, - 1.0f);
         glTexCoord2f(1.0f, textureScale);
-        glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ + 1.0f);
+        glVertex3f(+ 1.0f, centerY - geometryScale, + 1.0f);
         glTexCoord2f(1.0f, 0.0f);
-        glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ + 1.0f);
+        glVertex3f(+ 1.0f, centerY + geometryScale, + 1.0f);
         glTexCoord2f(0.0f, 0.0f);
-        glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ - 1.0f);
+        glVertex3f(+ 1.0f, centerY + geometryScale, - 1.0f);
     }
 
 	if ((mask & MASK_FRONT)) {
         glTexCoord2f(0, textureScale);
-        glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ + 1.0f);
+        glVertex3f(- 1.0f, centerY - geometryScale, + 1.0f);
         glTexCoord2f(1.0f, textureScale);
-        glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ + 1.0f);
+        glVertex3f(+ 1.0f, centerY - geometryScale, + 1.0f);
         glTexCoord2f(1.0f, 0.0f);
-        glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ + 1.0f);
+        glVertex3f(+ 1.0f, centerY + geometryScale, + 1.0f);
         glTexCoord2f(0.0f, 0.0f);
-        glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ + 1.0f);
+        glVertex3f(- 1.0f, centerY + geometryScale, + 1.0f);
     }
 
     glEnd();
     glDisable(GL_ALPHA_TEST);
+#ifndef NDS
+	glPopMatrix();
+#else
+	glPopMatrix(1);
+#endif
 }
 
 void drawFloorAt(const struct Vec3 center,
@@ -333,20 +355,27 @@ void drawFloorAt(const struct Vec3 center,
 
 
     if (center.mY <= 0) {
+		glPushMatrix();
+		glTranslatef(centerX, 0.0f, centerZ);
         glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
         glBegin(GL_QUADS);
         
         glTexCoord2f(x[0], y[0]);
-        glVertex3f(centerX - 1.0f, centerY, centerZ - 1.0f);
+        glVertex3f(- 1.0f, centerY, - 1.0f);
 		glTexCoord2f(x[1], y[1]);
-        glVertex3f(centerX + 1.0f, centerY, centerZ - 1.0f);
+        glVertex3f(+ 1.0f, centerY, - 1.0f);
 		glTexCoord2f(x[2], y[2]);
-        glVertex3f(centerX + 1.0f, centerY, centerZ + 1.0f);
+        glVertex3f(+ 1.0f, centerY, + 1.0f);
 		glTexCoord2f(x[3], y[3]);
-        glVertex3f(centerX - 1.0f, centerY, centerZ + 1.0f);
         
+        glVertex3f(- 1.0f, centerY, + 1.0f);
         glEnd();
 		glBindTexture(GL_TEXTURE_2D, 0);
+#ifndef NDS
+		glPopMatrix();
+#else
+		glPopMatrix(1);
+#endif
     }
 }
 
@@ -412,20 +441,28 @@ void drawCeilingAt(const struct Vec3 center,
 	}
 
     if (center.mY >= 0) {
+		glPushMatrix();
+		glTranslatef(centerX, 0.0f, centerZ);
+
         glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
         glBegin(GL_QUADS);
 
 		glTexCoord2f(x[0], y[0]);
-        glVertex3f(centerX - 1.0f, centerY, centerZ - 1.0f);
+        glVertex3f(- 1.0f, centerY, - 1.0f);
 		glTexCoord2f(x[1], y[1]);
-        glVertex3f(centerX + 1.0f, centerY, centerZ - 1.0f);
+        glVertex3f(+ 1.0f, centerY, - 1.0f);
 		glTexCoord2f(x[2], y[2]);
-        glVertex3f(centerX + 1.0f, centerY, centerZ + 1.0f);
+        glVertex3f(+ 1.0f, centerY, + 1.0f);
 		glTexCoord2f(x[3], y[3]);
-        glVertex3f(centerX - 1.0f, centerY, centerZ + 1.0f);
+        glVertex3f(- 1.0f, centerY, + 1.0f);
         glEnd();
 		glBindTexture(GL_TEXTURE_2D, 0);
-    }	
+#ifndef NDS
+		glPopMatrix();
+#else
+		glPopMatrix(1);
+#endif
+    }
 }
 
 void drawLeftNear(const struct Vec3 center,
@@ -451,29 +488,37 @@ void drawLeftNear(const struct Vec3 center,
 
     centerX = fixToInt(center.mX+ xCameraOffset);
     centerZ = -fixToInt(center.mZ+ zCameraOffset);
-    
+
+	glPushMatrix();
+	glTranslatef(centerX, 0.0f, centerZ);
+
     glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
     glBegin(GL_QUADS);
 
 	if (cameraDirection == kWest || cameraDirection == kEast) {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ - 1.0f);
+		glVertex3f(- 1.0f, centerY - geometryScale, - 1.0f);
 		glTexCoord2f(1, textureScale);
-		glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ + 1.0f);
+		glVertex3f(+ 1.0f, centerY - geometryScale, + 1.0f);
 		glTexCoord2f(1, 0.0f);
-		glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ + 1.0f);
+		glVertex3f(+ 1.0f, centerY + geometryScale, + 1.0f);
 		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ - 1.0f);
+		glVertex3f(- 1.0f, centerY + geometryScale, - 1.0f);
 	} else {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ + 1.0f);
+		glVertex3f(- 1.0f, centerY - geometryScale, + 1.0f);
 		glTexCoord2f(1, textureScale);
-		glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ - 1.0f);
+		glVertex3f(+ 1.0f, centerY - geometryScale, - 1.0f);
 		glTexCoord2f(1, 0.0f);
-		glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ - 1.0f);
+		glVertex3f(+ 1.0f, centerY + geometryScale, - 1.0f);
 		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ + 1.0f);
+		glVertex3f(- 1.0f, centerY + geometryScale, + 1.0f);
 	}
+#ifndef NDS
+	glPopMatrix();
+#else
+	glPopMatrix(1);
+#endif
     glEnd();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -500,31 +545,38 @@ void drawRightNear(const struct Vec3 center,
 
     centerX = fixToInt(center.mX+ xCameraOffset);
     centerZ = -fixToInt(center.mZ+ zCameraOffset);
-    
+
+	glPushMatrix();
+	glTranslatef(centerX, 0.0f, centerZ);
+
     glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
     glBegin(GL_QUADS);
 
 
 	if (cameraDirection == kWest || cameraDirection == kEast) {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ + 1.0f);
+		glVertex3f(- 1.0f, centerY - geometryScale, + 1.0f);
 		glTexCoord2f(1, textureScale);
-		glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ - 1.0f);
+		glVertex3f(+ 1.0f, centerY - geometryScale, - 1.0f);
 		glTexCoord2f(1, 0);
-		glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ - 1.0f);
+		glVertex3f(+ 1.0f, centerY + geometryScale, - 1.0f);
 		glTexCoord2f(0, 0);
-		glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ + 1.0f);
+		glVertex3f(- 1.0f, centerY + geometryScale, + 1.0f);
 	} else {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(centerX - 1.0f, centerY - geometryScale, centerZ - 1.0f);
+		glVertex3f(- 1.0f, centerY - geometryScale, - 1.0f);
 		glTexCoord2f(1, textureScale);
-		glVertex3f(centerX + 1.0f, centerY - geometryScale, centerZ + 1.0f);
+		glVertex3f(+ 1.0f, centerY - geometryScale, + 1.0f);
 		glTexCoord2f(1, 0);
-		glVertex3f(centerX + 1.0f, centerY + geometryScale, centerZ + 1.0f);
+		glVertex3f(+ 1.0f, centerY + geometryScale, + 1.0f);
 		glTexCoord2f(0, 0);
-		glVertex3f(centerX - 1.0f, centerY + geometryScale, centerZ - 1.0f);
+		glVertex3f(- 1.0f, centerY + geometryScale, - 1.0f);
 	}
-
+#ifndef NDS
+	glPopMatrix();
+#else
+	glPopMatrix(1);
+#endif
     glEnd();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
