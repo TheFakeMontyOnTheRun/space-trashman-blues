@@ -7,6 +7,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../cmake
 
 include_directories(
 		${SDL2_INCLUDE_DIR}
+		${OPENGL_INCLUDE_DIR}
 )
 
 include_directories(../core/include)
