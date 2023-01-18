@@ -79,29 +79,27 @@ uint32_t getPaletteEntry(const uint32_t origin) {
 
 
 void enter2D(void) {
-     glMatrixMode(GL_PROJECTION);
-     glLoadIdentity();
-     glOrtho(0, 320, 200, 0, -100, 100);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, 320, 200, 0, -100, 100);
 
-     glMatrixMode(GL_MODELVIEW);
-     glLoadIdentity();
-
-     glDisable(GL_FOG);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glDisable(GL_FOG);
 #ifndef NDS
-     glDisable(GL_DEPTH_TEST);
+	glDisable(GL_DEPTH_TEST);
 #endif
 }
 
 void initGL() {
 
     glEnable(GL_TEXTURE_2D);                        // Enable Texture Mapping ( NEW )
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);                   // Black Background
+    glClearColor(0, 0, 0, 1);                   // Black Background
 
 #ifndef NDS
     glClearDepth(1.0f);                         // Depth Buffer Setup
     glShadeModel(GL_SMOOTH);                        // Enable Smooth Shading
     glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
-    glDepthFunc(GL_LEQUAL);                         // The Type Of Depth Testing To Do
     glAlphaFunc(GL_GREATER, 0);
     glDisable(GL_LINE_SMOOTH);
 	glDisable(GL_CULL_FACE);
@@ -121,7 +119,7 @@ void clearRenderer() {
 
 void startFrameGL(int width, int height) {
     glViewport(0, 0, width, height);
-	glClearColor(1,1,1,1);
+	glClearColor(0, 0, 0, 1);                   // Black Background
 
 #ifndef NDS
     glLineWidth(width / 240.0f);
