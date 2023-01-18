@@ -595,6 +595,9 @@ void render(const long ms) {
 				heightDiff = tileProp->mCeilingHeight - tileProp->mFloorHeight;
 				lastElement = element;
 
+				glPushMatrix();
+				glTranslatef(fixToInt(xCameraOffset + position.mX), 0.0f, -fixToInt(zCameraOffset + position.mZ));
+
 				if (tileProp->mFloorRepeatedTextureIndex != 0xFF
 					&& tileProp->mFloorRepetitions > 0) {
 
@@ -988,7 +991,11 @@ void render(const long ms) {
 
                     drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
                 }
-
+#ifndef NDS
+				glPopMatrix();
+#else
+				glPopMatrix(1);
+#endif
 			}
 		}
 		enter2D();

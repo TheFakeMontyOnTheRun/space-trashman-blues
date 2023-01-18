@@ -87,9 +87,6 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 	scaled = Mul( acc, bias );
 	centerY0 = (fixToInt(scaled) / 128.0f);
 
-	glPushMatrix();
-	glTranslatef(centerX, 0.0f, centerZ);
-
 	glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
 	glBegin(GL_QUADS);
 
@@ -134,12 +131,6 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 			break;
 	}
 
-#ifndef NDS
-	glPopMatrix();
-#else
-	glPopMatrix(1);
-#endif
-
 	glEnd();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -174,9 +165,6 @@ void drawBillboardAt(const struct Vec3 center,
 
     centerZ = -fixToInt(center.mZ + zCameraOffset);
 
-	glPushMatrix();
-	glTranslatef(centerX, 0.0f, centerZ);
-
     glBindTexture(GL_TEXTURE_2D, bitmap->raw->uploadId);
 
     glEnable(GL_ALPHA_TEST);
@@ -195,11 +183,6 @@ void drawBillboardAt(const struct Vec3 center,
     glEnd();
     glDisable(GL_ALPHA_TEST);
 	glBindTexture(GL_TEXTURE_2D, 0);
-#ifndef NDS
-	glPopMatrix();
-#else
-	glPopMatrix(1);
-#endif
 }
 
 void drawColumnAt(const struct Vec3 center,
@@ -228,9 +211,6 @@ void drawColumnAt(const struct Vec3 center,
 	centerY = (fixToInt(scaled) / 128.0f);
 
     centerZ = -fixToInt(center.mZ + zCameraOffset);
-
-	glPushMatrix();
-	glTranslatef(centerX, 0.0f, centerZ);
 
     glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
 
@@ -285,11 +265,6 @@ void drawColumnAt(const struct Vec3 center,
 
     glEnd();
     glDisable(GL_ALPHA_TEST);
-#ifndef NDS
-	glPopMatrix();
-#else
-	glPopMatrix(1);
-#endif
 }
 
 void drawFloorAt(const struct Vec3 center,
@@ -355,8 +330,6 @@ void drawFloorAt(const struct Vec3 center,
 
 
     if (center.mY <= 0) {
-		glPushMatrix();
-		glTranslatef(centerX, 0.0f, centerZ);
         glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
         glBegin(GL_QUADS);
         
@@ -371,11 +344,6 @@ void drawFloorAt(const struct Vec3 center,
         glVertex3f(- 1.0f, centerY, + 1.0f);
         glEnd();
 		glBindTexture(GL_TEXTURE_2D, 0);
-#ifndef NDS
-		glPopMatrix();
-#else
-		glPopMatrix(1);
-#endif
     }
 }
 
@@ -441,8 +409,6 @@ void drawCeilingAt(const struct Vec3 center,
 	}
 
     if (center.mY >= 0) {
-		glPushMatrix();
-		glTranslatef(centerX, 0.0f, centerZ);
 
         glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
         glBegin(GL_QUADS);
@@ -457,11 +423,6 @@ void drawCeilingAt(const struct Vec3 center,
         glVertex3f(- 1.0f, centerY, + 1.0f);
         glEnd();
 		glBindTexture(GL_TEXTURE_2D, 0);
-#ifndef NDS
-		glPopMatrix();
-#else
-		glPopMatrix(1);
-#endif
     }
 }
 
@@ -489,9 +450,6 @@ void drawLeftNear(const struct Vec3 center,
     centerX = fixToInt(center.mX+ xCameraOffset);
     centerZ = -fixToInt(center.mZ+ zCameraOffset);
 
-	glPushMatrix();
-	glTranslatef(centerX, 0.0f, centerZ);
-
     glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
     glBegin(GL_QUADS);
 
@@ -514,11 +472,6 @@ void drawLeftNear(const struct Vec3 center,
 		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(- 1.0f, centerY + geometryScale, + 1.0f);
 	}
-#ifndef NDS
-	glPopMatrix();
-#else
-	glPopMatrix(1);
-#endif
     glEnd();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -546,9 +499,6 @@ void drawRightNear(const struct Vec3 center,
     centerX = fixToInt(center.mX+ xCameraOffset);
     centerZ = -fixToInt(center.mZ+ zCameraOffset);
 
-	glPushMatrix();
-	glTranslatef(centerX, 0.0f, centerZ);
-
     glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
     glBegin(GL_QUADS);
 
@@ -572,11 +522,6 @@ void drawRightNear(const struct Vec3 center,
 		glTexCoord2f(0, 0);
 		glVertex3f(- 1.0f, centerY + geometryScale, - 1.0f);
 	}
-#ifndef NDS
-	glPopMatrix();
-#else
-	glPopMatrix(1);
-#endif
     glEnd();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
