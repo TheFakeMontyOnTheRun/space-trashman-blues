@@ -213,7 +213,15 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
 	}
 
 #ifndef N64
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA2, width, height, 0,  GL_RGBA,   GL_UNSIGNED_SHORT_5_5_5_1, expanded);
+#ifndef NDS
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA2, width, height, 0,  GL_RGBA,   GL_UNSIGNED_SHORT_5_5_5_1, expanded);
+#else
+	if (width == 16) {
+		glTexImage2D(0, 0, GL_RGB, TEXTURE_SIZE_16 , TEXTURE_SIZE_16, 0, TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T, expanded);
+	} else {
+		glTexImage2D(0, 0, GL_RGB, TEXTURE_SIZE_32 , TEXTURE_SIZE_32, 0, TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T, expanded);
+	}
+#endif
     free( expanded );
     free(bitmap->data);
 #else
@@ -223,11 +231,14 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
 #endif
     bitmap->data = NULL;
 
+#ifndef NDS
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glBindTexture(GL_TEXTURE_2D, 0);
+#endif
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 
     return newId;
 }
