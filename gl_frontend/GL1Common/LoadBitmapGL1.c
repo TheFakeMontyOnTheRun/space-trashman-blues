@@ -198,7 +198,11 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
 		BitmapPixelFormat index = dataSource[c];
 
 		uint32_t texel = index;//palette[index];
+#ifndef NDS
 		uint16_t finalFragment = 0;
+#else
+		uint16_t finalFragment = ARGB16(0, 0, 0, 0);
+#endif
 
 		if (index & 0xFF000000) {
 			uint8_t r = ((((texel & 0x0000FF)      ) * 32 ) / 256);
@@ -207,7 +211,7 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
 #ifndef NDS
 			finalFragment = 1 + ( r << 11) + ( g << 6 ) + (b << 1); // alpha;
 #else
-			finalFragment = RGB15(r, g, b);
+			finalFragment = ARGB16(1, r, g, b);
 #endif
 		}
 
@@ -220,9 +224,9 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA2, width, height, 0,  GL_RGBA,   GL_UNSIGNED_SHORT_5_5_5_1, expanded);
 #else
 	if (width == 16) {
-		glTexImage2D(0, 0, GL_RGB, TEXTURE_SIZE_16 , TEXTURE_SIZE_16, 0, TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T, expanded);
+		glTexImage2D(0, 0, GL_RGBA, TEXTURE_SIZE_16 , TEXTURE_SIZE_16, 0, TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T, expanded);
 	} else {
-		glTexImage2D(0, 0, GL_RGB, TEXTURE_SIZE_32 , TEXTURE_SIZE_32, 0, TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T, expanded);
+		glTexImage2D(0, 0, GL_RGBA, TEXTURE_SIZE_32 , TEXTURE_SIZE_32, 0, TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T, expanded);
 	}
 #endif
     free( expanded );
