@@ -7,7 +7,21 @@
 #else
 #include <stdint.h>
 #include <unistd.h>
+#endif
 
+#ifndef NDS
+#ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+#else
+#include <nds.h>
+#include <malloc.h>
+#include <stdio.h>
+#include <nds/arm9/image.h>
+#include <nds/arm9/trig_lut.h>
 #endif
 
 #include "FixP.h"
@@ -166,40 +180,51 @@ void Crawler_repaintCallback() {
             fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
 
 			enter3D();
-
             center.mY = 0;
-            center.mZ = intToFix(3);
-            center.mX = -intToFix(3);
-            drawColumnAt( center, intToFix(3), nativeTextures[1], MASK_LEFT, 0, 1);
 
-            center.mY = 0;
-            center.mX = intToFix(3);
-            drawColumnAt( center, intToFix(3), nativeTextures[1], MASK_RIGHT, 0, 1);
 
-            center.mZ = intToFix(2);
-            center.mX = -intToFix(1);
+			FixP_t acc;
+			FixP_t bias = intToFix(128);
+			FixP_t scaled;
+
+			acc = (zCameraOffset);
+			scaled = Mul( acc, bias );
+
+			float zOffset = (fixToInt(scaled) / 128.0f);
+			glTranslatef(0, 0.0f, -zOffset );
+
+			glTranslatef(-3, 0.0f, -3);
+            drawColumnAt( center, intToFix(3), nativeTextures[1], MASK_FORCE_LEFT, 0, 1);
+			glTranslatef(3, 0.0f, 3);
+
+			glTranslatef(3, 0.0f, -3);
+            drawColumnAt( center, intToFix(3), nativeTextures[1], MASK_FORCE_RIGHT, 0, 1);
+			glTranslatef(-3, 0.0f, 3);
+
             center.mY = intToFix(4) - zCameraOffset;
+			glTranslatef(-1, 0.0f, -2);
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
+			glTranslatef(1, 0.0f, 2);
 
-            center.mX = intToFix(1);
+			glTranslatef(1, 0.0f, -2);
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
+			glTranslatef(-1, 0.0f, 2);
 
-            center.mZ = intToFix(2);
             center.mY = intToFix(3) - zCameraOffset;
-
-            center.mX = -intToFix(1);
+			glTranslatef(-1, 0.0f, -2);
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
+			glTranslatef(1, 0.0f, 2);
 
-            center.mX = intToFix(1);
+			glTranslatef(1, 0.0f, -2);
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
-
+			glTranslatef(-1, 0.0f, 2);
 
             center.mY = intToFix(6) - zCameraOffset;
-
-            center.mX = -intToFix(1);
+			glTranslatef(-1, 0.0f, -2);
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
+			glTranslatef(1, 0.0f, 2);
 
-            center.mX = intToFix(1);
+			glTranslatef(1, 0.0f, -2);
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
 
 			enter2D();
