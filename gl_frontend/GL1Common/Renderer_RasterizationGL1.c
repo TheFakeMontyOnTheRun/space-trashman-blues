@@ -123,11 +123,16 @@ void drawFloor(FixP_t y0,
 }
 
 void drawRect(
-		const int x,
-		const int y,
-		const size_t dx,
-		const size_t dy,
+		const int _x,
+		const int _y,
+		const size_t _dx,
+		const size_t _dy,
 		const FramebufferPixelFormat pixel) {
+
+	float x = _x / 100.0f;
+	float y = _y / 100.0f;
+	float dx = _dx / 100.0f;
+	float dy = _dy / 100.0f;
     
     uint32_t fragment = pixel;//palette[pixel];
     
@@ -154,22 +159,22 @@ void drawRect(
 
         glVertex3f(x, y, -2);
 		glVertex3f(x + dx, y, -2);
-        glVertex3f(x + dx, y + 1, -2);
-		glVertex3f(x, y + 1, -2);
+        glVertex3f(x + dx, y, -2);
+		glVertex3f(x, y, -2);
 
-        glVertex3f(x + dx - 1, y + dy - 1, -2);
-		glVertex3f(x + dx, y + dy - 1, -2);
-		glVertex3f(x + dx, y + dy, -2);
-		glVertex3f(x + dx - 1, y + dy, -2);
-
-        glVertex3f(x, y + dy - 1, -2);
-		glVertex3f(x + dx, y + dy - 1, -2);
         glVertex3f(x + dx, y + dy, -2);
-		glVertex3f(x, y + dy - 1, -2);
+		glVertex3f(x + dx, y + dy, -2);
+		glVertex3f(x + dx, y + dy, -2);
+		glVertex3f(x + dx, y + dy, -2);
 
-        glVertex3f(x, y + dy - 1, -2);
-		glVertex3f(x + 1, y + dy - 1, -2);
-		glVertex3f(x + 1, y + dy, -2);
+        glVertex3f(x, y + dy, -2);
+		glVertex3f(x + dx, y + dy, -2);
+        glVertex3f(x + dx, y + dy, -2);
+		glVertex3f(x, y + dy, -2);
+
+        glVertex3f(x, y + dy, -2);
+		glVertex3f(x, y + dy, -2);
+		glVertex3f(x, y + dy, -2);
 		glVertex3f(x, y + dy, -2);
 
         glEnd();
@@ -187,14 +192,19 @@ void drawTexturedTriangle(int *coords, UVCoord *uvCoords, struct Texture *textur
 }
 
 void fill(
-		const int x,
-		const int y,
-		const size_t dx,
-		const size_t dy,
+		const int _x,
+		const int _y,
+		const size_t _dx,
+		const size_t _dy,
 		const FramebufferPixelFormat pixel,
 		const uint8_t stipple) {
     
     uint32_t fragment = pixel;//palette[pixel];
+
+	float x = _x / 100.0f;
+	float y = _y / 100.0f;
+	float dx = _dx / 100.0f;
+	float dy = _dy / 100.0f;
 
     if (fragment != TRANSPARENCY_COLOR) {
         
@@ -285,14 +295,19 @@ void fill(
     glColor3f(1, 1, 1);
 }
 
-void drawBitmap(const int dx,
-				const int dy,
+void drawBitmap(const int _dx,
+				const int _dy,
                 struct Bitmap *bitmap,
 				const uint8_t transparent) {
     
     if (bitmap->uploadId == -1) {
         bitmap->uploadId = submitBitmapToGPU(bitmap);
     }
+
+	float x = _dx / 100.0f;
+	float y = _dy / 100.0f;
+	float dx = bitmap->width / 100.0f;
+	float dy = bitmap->height / 100.0f;
     
     if (bitmap->uploadId != -1) {
         
@@ -304,13 +319,13 @@ void drawBitmap(const int dx,
        
         glBegin(GL_QUADS);
         glTexCoord2f(0.0f, 0.0f);
-        glVertex3f( dx, dy, -2);
+        glVertex3f( x, y, -2);
         glTexCoord2f(1.0f, 0.0f);
-        glVertex3f( dx + bitmap->width, dy, -2);
+        glVertex3f( x + dx, y, -2);
         glTexCoord2f(1.0f, 1.0f);
-        glVertex3f(dx + bitmap->width, dy + bitmap->height, -2);
+        glVertex3f(x + dx, y + dy, -2);
         glTexCoord2f(0.0f, 1.0f);
-        glVertex3f(dx, dy + bitmap->height, -2);
+        glVertex3f(x, y + dy, -2);
         glEnd();
 		glBindTexture(GL_TEXTURE_2D, 0);
         if (transparent) {
@@ -410,13 +425,13 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 		float col = (((ascii & 31)) * blockWidth);
 
         glTexCoord2f(col, line - blockHeight);
-        glVertex3f( dstX, dstY, -2);
+        glVertex3f( dstX / 100.0f, dstY / 100.0f, -2);
         glTexCoord2f(col + blockWidth, line - blockHeight);
-        glVertex3f( dstX + 8, dstY, -2);
+        glVertex3f( (dstX + 8) / 100.0f, dstY / 100.0f, -2);
         glTexCoord2f(col + blockWidth, line);
-        glVertex3f( dstX + 8, dstY + 8, -2);
+        glVertex3f( (dstX + 8) / 100.0f, (dstY + 8) / 100.0f, -2);
         glTexCoord2f(col, line);
-        glVertex3f(dstX, dstY + 8, -2);
+        glVertex3f(dstX / 100.0f, (dstY + 8) / 100.0f, -2);
 #else
 		shortStr[0] = text[c];
 		rdpq_font_position(dstX, dstY);

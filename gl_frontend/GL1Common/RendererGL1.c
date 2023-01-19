@@ -81,7 +81,7 @@ uint32_t getPaletteEntry(const uint32_t origin) {
 void enter2D(void) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0, 320, 200, 0, -100, 100);
+	glOrtho(0, 3.2,2, 0, -100, 100);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
