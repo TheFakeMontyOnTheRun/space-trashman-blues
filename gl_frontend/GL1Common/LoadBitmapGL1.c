@@ -204,8 +204,11 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
 			uint8_t r = ((((texel & 0x0000FF)      ) * 32 ) / 256);
 			uint8_t g = ((((texel & 0x00FF00) >>  8) * 32 ) / 256);
 			uint8_t b = ((((texel & 0xFF0000) >> 16) * 32 ) / 256);
-
+#ifndef NDS
 			finalFragment = 1 + ( r << 11) + ( g << 6 ) + (b << 1); // alpha;
+#else
+			finalFragment = RGB15(r, g, b);
+#endif
 		}
 
 		*ptr = finalFragment;
