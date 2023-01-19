@@ -34,6 +34,7 @@ void graphicsInit() {
 
 	enableSmoothMovement = TRUE;
 	initGL();
+	defaultFont = loadBitmap("font.img");
 }
 
 int cooldown = 0;
