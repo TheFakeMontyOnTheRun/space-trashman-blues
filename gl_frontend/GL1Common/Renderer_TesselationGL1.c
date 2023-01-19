@@ -232,13 +232,13 @@ void drawColumnAt(const struct Vec3 center,
 
     if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0 ) || (mask & MASK_FORCE_RIGHT)) {
         glTexCoord2f(0, textureScale);
-        glVertex3f(centerX - 1.0f, centerY - geometryScale, - 1.0f);
+        glVertex3f(- 1.0f, centerY - geometryScale, - 1.0f);
         glTexCoord2f(1.0f, textureScale);
-        glVertex3f(centerX - 1.0f, centerY - geometryScale, + 1.0f);
+        glVertex3f(- 1.0f, centerY - geometryScale, + 1.0f);
         glTexCoord2f(1.0f, 0.0f);
-        glVertex3f(centerX - 1.0f, centerY + geometryScale, + 1.0f);
+        glVertex3f(- 1.0f, centerY + geometryScale, + 1.0f);
         glTexCoord2f(0.0f, 0.0f);
-        glVertex3f(centerX - 1.0f, centerY + geometryScale, - 1.0f);
+        glVertex3f(- 1.0f, centerY + geometryScale, - 1.0f);
     }
 
     if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0 ) || (mask & MASK_FORCE_LEFT)) {
