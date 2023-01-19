@@ -199,7 +199,7 @@ void flipRenderer() {
     [[self openGLContext] makeCurrentContext];
     
     initStation();
-    initHW();
+    initHW(0, NULL);
     initGL();
     graphicsInit();
     
