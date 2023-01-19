@@ -24,6 +24,7 @@
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
 
+#define COOLDOWN 0x10
 int snapshotSignal = '.';
 
 void graphicsInit() {
@@ -46,24 +47,24 @@ void handleSystemEvents() {
 		u16 keys = keysHeld();
 
 		if((keys & KEY_UP)) {
-			cooldown = 0x1F;
+			cooldown = COOLDOWN;
 			mBufferedCommand = kCommandUp;
 		}
 		if((keys & KEY_DOWN)) {
-			cooldown = 0x1F;
+			cooldown = COOLDOWN;
 			mBufferedCommand = kCommandDown;
 		}
 
 		if((keys & KEY_LEFT)) {
-			cooldown = 0x1F;
+			cooldown = COOLDOWN;
 			mBufferedCommand = kCommandLeft;
 		}
 		if((keys & KEY_RIGHT)) {
-			cooldown = 0x1F;
+			cooldown = COOLDOWN;
 			mBufferedCommand = kCommandRight;
 		}
 		if((keys & KEY_START)) {
-			cooldown = 0x1F;
+			cooldown = COOLDOWN;
 			mBufferedCommand = kCommandFire1;
 		}
 	}
