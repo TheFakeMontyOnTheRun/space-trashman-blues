@@ -346,6 +346,9 @@ struct Bitmap *loadBitmap(const char *filename) {
 
 void releaseBitmap(struct Bitmap *ptr) {
 	assert(ptr != NULL);
+
+	glDeleteTextures( 1, &ptr->uploadId);
+
 #ifndef N64
 	free(ptr->data);
 	free(ptr);
