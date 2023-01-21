@@ -30,6 +30,7 @@ int snapshotSignal = '.';
 void graphicsInit() {
 	videoSetMode(MODE_0_3D);
 	vramSetBankA(VRAM_A_TEXTURE);
+	vramSetBankB(VRAM_B_TEXTURE);
 	glInit();
 
 	enableSmoothMovement = TRUE;
