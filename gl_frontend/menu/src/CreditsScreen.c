@@ -231,4 +231,8 @@ enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void CreditsScreen_unloadStateCallback() {
+	releaseBitmap(monty[0]);
+	releaseBitmap(monty[1]);
+	releaseBitmap(monty[2]);
+	releaseBitmap(monty[3]);
 }

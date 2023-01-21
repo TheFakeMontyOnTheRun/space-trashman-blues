@@ -208,8 +208,12 @@ enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void MainMenu_unloadStateCallback() {
-	/*
-    releaseBitmap(logoBitmap);
-	releaseBitmap(logo2Bitmap);
-	 */
+	int c;
+	for (c  = 0; c < 28; ++c ) {
+		releaseBitmap(logoBitmap[c]);
+	}
+
+	for (c  = 0; c < 15; ++c ) {
+		releaseBitmap(logo2Bitmap[c]);
+	}
 }
