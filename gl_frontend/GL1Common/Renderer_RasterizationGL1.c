@@ -162,20 +162,20 @@ void drawRect(
         glVertex3f(x + dx, y, -2);
 		glVertex3f(x, y, -2);
 
-        glVertex3f(x + dx, y + dy, -2);
+        glVertex3f(x + dx, y, -2);
 		glVertex3f(x + dx, y + dy, -2);
 		glVertex3f(x + dx, y + dy, -2);
-		glVertex3f(x + dx, y + dy, -2);
+		glVertex3f(x + dx, y, -2);
 
         glVertex3f(x, y + dy, -2);
 		glVertex3f(x + dx, y + dy, -2);
         glVertex3f(x + dx, y + dy, -2);
 		glVertex3f(x, y + dy, -2);
 
-        glVertex3f(x, y + dy, -2);
+        glVertex3f(x, y, -2);
 		glVertex3f(x, y + dy, -2);
 		glVertex3f(x, y + dy, -2);
-		glVertex3f(x, y + dy, -2);
+		glVertex3f(x, y, -2);
 
         glEnd();
 
