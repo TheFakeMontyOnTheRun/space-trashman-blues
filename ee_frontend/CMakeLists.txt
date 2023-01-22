@@ -21,7 +21,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS" )
 find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
 
-add_executable(derelict64
+add_executable(derelict128
 		menu/src/MainMenu.c
 		menu/src/Crawler.c
 		menu/src/HelpScreen.c
@@ -58,6 +58,6 @@ add_executable(derelict64
 
 include(FindPkgConfig)
 
-target_include_directories(derelict64 PUBLIC ${SDL2_INCLUDE_DIR} )
-target_link_libraries(derelict64 LINK_PUBLIC ${SDL2_LIBRARY} ${OPENGL_LIBRARY} m)
+target_include_directories(derelict128 PUBLIC ${SDL2_INCLUDE_DIR} )
+target_link_libraries(derelict128 LINK_PUBLIC ${SDL2_LIBRARY} ${OPENGL_LIBRARY} m)
 
