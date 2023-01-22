@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:export-ydpi="191.86"
+   inkscape:export-xdpi="191.86"
+   inkscape:export-filename="/Users/monty/map23.png"
+   sodipodi:docname="floor3.svg"
+   inkscape:version="1.0 (4035a4f, 2020-05-01)"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 112 55"
+   height="55mm"
+   width="112mm">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     inkscape:window-maximized="0"
+     inkscape:window-y="23"
+     inkscape:window-x="0"
+     inkscape:window-height="855"
+     inkscape:window-width="1440"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox="true"
+     inkscape:snap-global="false"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="mm"
+     inkscape:cy="82.566929"
+     inkscape:cx="69.496926"
+     inkscape:zoom="0.9899495"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <rect
+       style="fill:#000000;stroke-width:1"
+       id="rect98"
+       width="111.71867"
+       height="54.790253"
+       x="1.7866487e-06"
+       y="0.26726976" />
+    <rect
+       style="fill:#ff0000;fill-opacity:1;stroke:#ffffff;stroke-width:0.27662;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect833-6"
+       width="10.821451"
+       height="11.455804"
+       x="31.327887"
+       y="-33.264881"
+       transform="rotate(90)" />
+    <rect
+       y="-54.809528"
+       x="31.24107"
+       height="11.455804"
+       width="10.821451"
+       id="rect835-6"
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.27662;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       transform="rotate(90)"
+       inkscape:export-filename="/Users/monty/map14.png"
+       inkscape:export-xdpi="191.86"
+       inkscape:export-ydpi="191.86" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.27662;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect837-7"
+       width="10.821451"
+       height="11.455804"
+       x="31.537477"
+       y="-75.205589"
+       transform="rotate(90)" />
+    <rect
+       y="-93.091362"
+       x="31.537477"
+       height="11.455804"
+       width="10.821451"
+       id="rect839-8"
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.27662;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       transform="rotate(90)" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.150954px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 33.301661,36.587893 H 43.397192"
+       id="path851-4" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.150954px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 54.934944,36.902283 h 8.764255"
+       id="path853-1" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.150954px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 75.347893,36.797487 h 6.323576"
+       id="path855-7" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.27662;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect959"
+       width="10.821451"
+       height="11.455804"
+       x="13.1794"
+       y="-54.922436"
+       transform="rotate(90)" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.237654px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 49.433837,24.260415 v 6.764438"
+       id="path961" />
+  </g>
+</svg>
