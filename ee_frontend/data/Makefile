@@ -9,6 +9,7 @@ data:	packager
 	ls assets/*.*  | xargs ./packer
 	mv ./data.pfs ../base.pfs
 	cp ../base.pfs ../filesystem
+	bin2c ../base.pfs ../base3d/include/basepfs.h basepfs
 
 images:
 	python3 ./make_package.py
