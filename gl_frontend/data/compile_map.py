@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+import os
 
 textureList = []
 
@@ -142,6 +143,18 @@ def getProperties(path):
         #print "got tile for " + str(tokens[0])
     f.close()
 
+def cleanupTextureList(path):
+    existingTexturesList = os.listdir('assets')
+    f = open(str(path))
+    missingTextures=[]
+    for line in f:
+        texture_name = line.replace("\n", "")
+        if texture_name not in existingTexturesList:
+            missingTextures.append(texture_name)
+
+    if len(missingTextures) > 0:
+        print("Textures not found: " + str(missingTextures) )
+        sys.exit(1)
 
 def cleanup(path):
     print( "cleanup against map: " + str(path) )
@@ -192,6 +205,7 @@ def compileMap( sourcePath, textureListPath, mapPath, outputPath):
     getTextureList(textureListPath)
     getProperties(sourcePath)
     cleanup(mapPath)
+    cleanupTextureList(textureListPath)
     dumpProps(outputPath)
     print ("--done--")
 
