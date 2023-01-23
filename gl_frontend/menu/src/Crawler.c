@@ -174,7 +174,8 @@ void Crawler_repaintCallback() {
             fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
 
 			enter3D();
-            center.mY = 0;
+            center.mX = center.mY = 0;
+			center.mZ = 1;
 
 
 			FixP_t acc;
@@ -196,29 +197,29 @@ void Crawler_repaintCallback() {
 			glTranslatef(-3, 0.0f, 3);
 
             center.mY = intToFix(4) - zCameraOffset;
-			glTranslatef(-1, 0.0f, -2);
+			glTranslatef(-1, 0.0f, -3);
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
-			glTranslatef(1, 0.0f, 2);
+			glTranslatef(1, 0.0f, 3);
 
-			glTranslatef(1, 0.0f, -2);
+			glTranslatef(1, 0.0f, -3);
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
-			glTranslatef(-1, 0.0f, 2);
+			glTranslatef(-1, 0.0f, 3);
 
             center.mY = intToFix(3) - zCameraOffset;
-			glTranslatef(-1, 0.0f, -2);
+			glTranslatef(-1, 0.0f, -3);
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
-			glTranslatef(1, 0.0f, 2);
+			glTranslatef(1, 0.0f, 3);
 
-			glTranslatef(1, 0.0f, -2);
+			glTranslatef(1, 0.0f, -3);
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
-			glTranslatef(-1, 0.0f, 2);
+			glTranslatef(-1, 0.0f, 3);
 
             center.mY = intToFix(6) - zCameraOffset;
-			glTranslatef(-1, 0.0f, -2);
+			glTranslatef(-1, 0.0f, -3);
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
-			glTranslatef(1, 0.0f, 2);
+			glTranslatef(1, 0.0f, 3);
 
-			glTranslatef(1, 0.0f, -2);
+			glTranslatef(1, 0.0f, -3);
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
 
 			enter2D();
