@@ -180,7 +180,7 @@ int loopTick(enum ECommand command) {
 
 void initRoom(int room) {
     int16_t c;
-
+	char buffer[256];
     shouldContinue = kCrawlerGameInProgress;
     mBufferedCommand = kCommandNone;
     gameTicks = 0;
@@ -202,4 +202,23 @@ void initRoom(int room) {
     }
 
     loadMap(room, &colliders);
+
+	for (c = 1; c < itemsCount; ++c) {
+
+		int itemRoom = getItem(c)->roomId;
+
+		if ( itemRoom == room ||
+			 itemRoom == 0 // player has Item
+			) {
+
+			if (itemSprites[c] == NULL) {
+				sprintf(&buffer[0], "%s.img", getItem(c)->name);
+				itemSprites[c] = (makeTextureFrom(&buffer[0]));
+			}
+
+		} else if (itemSprites[c] != NULL) {
+			releaseBitmap(itemSprites[c]);
+			itemSprites[c] = NULL;
+		}
+	}
 }
