@@ -89,7 +89,7 @@ drawTextWindow(const int x, const int y, const unsigned int dx, const unsigned i
 
 void
 drawImageWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char * title,
-                const struct Bitmap * content) {
+				struct Bitmap * content) {
     fill((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
     fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
     drawBitmap((x - 1) * 8, (y) * 8, content, TRUE);

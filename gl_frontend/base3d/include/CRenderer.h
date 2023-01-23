@@ -186,7 +186,7 @@ void drawRepeatBitmap(
 		const int y,
 		const size_t dx,
 		const size_t dy,
-		const struct Bitmap *  tile);
+		struct Bitmap *  tile);
 
 void drawRect(const int x,
 			const int y,
