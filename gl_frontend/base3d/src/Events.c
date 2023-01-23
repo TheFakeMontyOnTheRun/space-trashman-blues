@@ -220,7 +220,7 @@ void initRoom(int room) {
 
 			// if we have the texture and don't need it...
 		} else if (itemSprites[c] != NULL) {
-			releaseBitmap(itemSprites[c]);
+			releaseBitmap(itemSprites[c]->raw);
 			itemSprites[c] = NULL;
 		}
 	}
