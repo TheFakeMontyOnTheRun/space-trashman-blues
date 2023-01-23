@@ -315,11 +315,8 @@ enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void GameMenu_unloadStateCallback() {
-
-
-        if (featuredBitmap) {
-            releaseBitmap(featuredBitmap);
-            featuredBitmap = NULL;
-        }
-
+	if (featuredBitmap) {
+    	releaseBitmap(featuredBitmap);
+        featuredBitmap = NULL;
+	}
 }
