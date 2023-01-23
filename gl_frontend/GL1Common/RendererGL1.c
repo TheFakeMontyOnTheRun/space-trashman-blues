@@ -232,6 +232,14 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 	texturesUsed = 0;
 	clearTextures();
 
+	for ( int c = 0; c < TOTAL_TEXTURES; ++c ) {
+		if (nativeTextures[c] != NULL ) {
+			releaseBitmap(nativeTextures[c]->raw);
+			free(nativeTextures[c]);
+			nativeTextures[c] = NULL;
+		}
+	}
+
 	while (head != end && (texturesUsed < TOTAL_TEXTURES)) {
 		char val = *head;
 		if (val == '\n' || val == 0) {
