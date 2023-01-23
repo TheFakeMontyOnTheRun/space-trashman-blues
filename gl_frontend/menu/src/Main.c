@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
 	}
 #endif
 
-    unloadStateCallback();
+    unloadStateCallback(kShutdown);
 
     shutdownHW();
 

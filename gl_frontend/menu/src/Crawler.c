@@ -66,6 +66,7 @@ void Crawler_initStateCallback(int32_t tag) {
         gameTicks = 0;
         enteredThru = 0;
         memset(&gameSnapshot, 0, sizeof(struct GameSnapshot));
+		memset(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
     } else {
         currentPresentationState = kWaitingForInput;
         timeUntilNextState = 0;
@@ -422,9 +423,23 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     return kMenuStateUnchanged;
 }
 
-void Crawler_unloadStateCallback() {
+void Crawler_unloadStateCallback(int32_t newState) {
     if (currentBackgroundBitmap != NULL) {
         releaseBitmap(currentBackgroundBitmap);
         currentBackgroundBitmap = NULL;
     }
+
+	if (newState != kBackToGame &&
+		newState != kRandomBattle &&
+		newState != kInspectItem &&
+		newState != kHackingGame) {
+
+		for ( int c = 0; c < TOTAL_TEXTURES; ++c ) {
+			if (nativeTextures[c] != NULL ) {
+				releaseBitmap(nativeTextures[c]->raw);
+				free(nativeTextures[c]);
+				nativeTextures[c] = NULL;
+			}
+		}
+	}
 }

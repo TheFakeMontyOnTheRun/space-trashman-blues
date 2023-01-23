@@ -314,7 +314,7 @@ enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long delta) {
     return kResumeCurrentState;
 }
 
-void GameMenu_unloadStateCallback() {
+void GameMenu_unloadStateCallback(int32_t newState) {
 	if (featuredBitmap) {
     	releaseBitmap(featuredBitmap);
         featuredBitmap = NULL;

@@ -207,7 +207,7 @@ enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
     return kResumeCurrentState;
 }
 
-void MainMenu_unloadStateCallback() {
+void MainMenu_unloadStateCallback(int32_t newState) {
 	int c;
 	for (c  = 0; c < 28; ++c ) {
 		releaseBitmap(logoBitmap[c]);

@@ -235,7 +235,11 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 	for ( int c = 0; c < TOTAL_TEXTURES; ++c ) {
 		if (nativeTextures[c] != NULL ) {
 			releaseBitmap(nativeTextures[c]->raw);
+#ifndef N64
 			free(nativeTextures[c]);
+#else
+			free_uncached(nativeTextures[c]);
+#endif
 			nativeTextures[c] = NULL;
 		}
 	}
