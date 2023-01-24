@@ -55,7 +55,7 @@ struct Texture *makeTextureFrom(const char *filename) {
 	(struct Texture *) calloc(1, sizeof(struct Texture));
 #else
 	(struct Texture *) malloc_uncached(sizeof(struct Texture));
-			memset(toReturn, 0, sizeof(struct Texture));
+	memset(toReturn, 0, sizeof(struct Texture));
 #endif
 	toReturn->raw = loadBitmap(filename);
 	toReturn->raw->uploadId = submitBitmapToGPU(toReturn->raw);
@@ -299,6 +299,7 @@ void drawFloorAt(const struct Vec3 center,
 			y[3] = 0;
 			break;
 		case kEast:
+		default:
 			x[0] = 1;
 			y[0] = 1;
 			x[1] = 1;
@@ -375,6 +376,7 @@ void drawCeilingAt(const struct Vec3 center,
 			x[3] = 1;
 			y[3] = 0;
 			break;
+		default:
 		case kEast:
 			x[0] = 1;
 			y[0] = 1;

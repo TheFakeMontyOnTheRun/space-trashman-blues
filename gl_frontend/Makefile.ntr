@@ -42,7 +42,8 @@ CFLAGS   := -g -Wall -O3\
                                                                                                      -I../SoundSystem           \
                                                                                                      -I../menu/include          \
                                                                                                      -I../../core/include \
-                                                                                                     -I../../common/include
+                                                                                                     -I../../common/include \
+            -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic
 
 ASFLAGS  := -g $(ARCH)
 LDFLAGS   = -specs=ds_arm9.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)

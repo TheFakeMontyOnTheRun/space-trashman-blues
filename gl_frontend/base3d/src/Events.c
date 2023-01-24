@@ -207,19 +207,11 @@ void initRoom(int room) {
 
 		int itemRoom = getItem(c)->roomId;
 
-		// if we need the texture...
-		if ( itemRoom == room ||
-			 itemRoom == 0 // player has Item
-			) {
+		// if we have the texture, but don't need it, unload it
+		if ( !(itemRoom == room ||
+			 itemRoom == 0) && // player has Item
+			 itemSprites[c] != NULL) {
 
-			// but do not have it...
-			if (itemSprites[c] == NULL) {
-				sprintf(&buffer[0], "%s.img", getItem(c)->name);
-				itemSprites[c] = (makeTextureFrom(&buffer[0]));
-			}
-
-			// if we have the texture and don't need it...
-		} else if (itemSprites[c] != NULL) {
 			releaseBitmap(itemSprites[c]->raw);
 			itemSprites[c] = NULL;
 		}
