@@ -3,6 +3,10 @@
 #include <stdio.h>
 #include <assert.h>
 
+#ifdef N64
+#include <libdragon.h>
+#endif
+
 #ifndef NDS
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
@@ -40,7 +44,6 @@
 struct Vec3 cameraOffset;
 FixP_t walkingBias = 0;
 FixP_t playerHeight = 0;
-
 struct Texture *nativeTextures[TOTAL_TEXTURES];
 int usedTexture = 0;
 

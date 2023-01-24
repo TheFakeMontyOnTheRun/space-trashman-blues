@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef N64
+#include <libdragon.h>
+#endif
+
 #ifndef NDS
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
@@ -183,7 +187,7 @@ int submitBitmapToGPU(struct Bitmap* bitmap) {
         dataSource = &textureBuffer[0];
     }
 
-    glGenTextures(1, (unsigned int*)&newId);
+    glGenTextures(1, (GLuint*)&newId);
     glBindTexture(GL_TEXTURE_2D, newId);
 
 #ifndef N64

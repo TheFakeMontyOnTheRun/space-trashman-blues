@@ -3,6 +3,10 @@
 #include <string.h>
 #include <assert.h>
 
+#ifdef N64
+#include <libdragon.h>
+#endif
+
 #ifdef WIN32
 #include "Win32Int.h"
 #else

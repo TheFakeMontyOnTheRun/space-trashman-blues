@@ -4,6 +4,10 @@
 #include <assert.h>
 #include <math.h>
 
+#ifdef N64
+#include <libdragon.h>
+#endif
+
 #ifndef NDS
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
@@ -195,7 +199,7 @@ void loadTileProperties(const uint8_t levelNumber) {
 	struct StaticBuffer data = loadBinaryFileFromPath(buffer);
 
 	for (c = 0; c < 256; ++c) {
-		free(getFromMap(&tileProperties, c));
+		free((void*)getFromMap(&tileProperties, c));
 	}
 
 	loadPropertyList(&buffer[0], &tileProperties);
@@ -397,7 +401,6 @@ void render(const long ms) {
 		uint8_t lastElement = 0xFF;
         uint8_t itemsSnapshotElement = 0xFF;
 		uint8_t element = 0;
-		int onTarget;
 		struct Vec3 position;
 		FixP_t tileHeight = 0;
 		int16_t x, z;
@@ -444,7 +447,6 @@ void render(const long ms) {
 					case kNorth:
 						x = visPos.x;
 						z = visPos.y;
-						onTarget = (cursorX == x && cursorZ == z);
 						element = map[z][x];
 
 						itemsSnapshotElement = mItems[z][x];
@@ -486,7 +488,6 @@ void render(const long ms) {
 						z = visPos.y;
 
 						element = map[z][x];
-						onTarget = (cursorX == x && cursorZ == z);
 						itemsSnapshotElement = mItems[z][x];
 
 						position.mX = mCamera.mX + intToFix(-2 * x);
@@ -524,7 +525,6 @@ void render(const long ms) {
 						z = visPos.x;
 
 						element = map[x][z];
-						onTarget = (cursorX == z && cursorZ == x);
 						itemsSnapshotElement = mItems[x][z];
 
 						position.mX = mCamera.mX + intToFix(-2 * x);
@@ -561,7 +561,6 @@ void render(const long ms) {
 						z = visPos.x;
 
                         element = map[x][z];
-						onTarget = (cursorX == z && cursorZ == x);
 						itemsSnapshotElement = mItems[x][z];
 
 						position.mX = mCamera.mX + intToFix(2 * x);

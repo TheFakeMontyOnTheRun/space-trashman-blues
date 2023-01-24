@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef N64
+#include <libdragon.h>
+#endif
+
 #ifndef LEAN_BUILD
 
 #include <assert.h>
