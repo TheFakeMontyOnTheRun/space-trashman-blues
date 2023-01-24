@@ -193,9 +193,13 @@ void loadTileProperties(const uint8_t levelNumber) {
 
 	sprintf(buffer, "props%d.bin", levelNumber);
 	struct StaticBuffer data = loadBinaryFileFromPath(buffer);
+
+	for (c = 0; c < 256; ++c) {
+		free(getFromMap(&tileProperties, c));
+	}
+
 	loadPropertyList(&buffer[0], &tileProperties);
 
-    
 	for (c = 0; c < 256; ++c) {
 		struct CTile3DProperties *prop =
 				(struct CTile3DProperties *) getFromMap(&tileProperties, c);
