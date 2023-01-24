@@ -148,6 +148,7 @@ clean:
 	@rm -f ../core/src/*.o
 	@rm -f ../common/src/*.o
 	@rm -f base3d/src/*.o
+	@rm -f GL1Common/*.o
 	@rm -f common/src/*.o
 	@rm -f SoundSystem/*.o
 	@rm -f base3d/src/nitro/*.o

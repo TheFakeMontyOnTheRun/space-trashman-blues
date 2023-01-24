@@ -1,4 +1,4 @@
-LDFLAGS=`sdl-config --libs` -lm -lGL
+LDFLAGS=`sdl-config --libs` -lm -framework OpenGL
 
 CFLAGS= `sdl-config --cflags `  \
     -O6 -Ofast      \
@@ -67,5 +67,6 @@ clean:
 	rm -f ../common/src/*.o
 	rm -f base3d/src/*.o
 	rm -f common/src/*.o
+	rm -f GL1Common/*.o
 	rm -f SoundSystem/*.o
 	rm -f base3d/src/SDLVersion/*.o
