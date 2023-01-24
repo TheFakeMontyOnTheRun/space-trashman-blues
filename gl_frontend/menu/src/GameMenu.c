@@ -63,6 +63,7 @@ void GameMenu_initStateCallback(int32_t tag) {
 
     GameMenu_StateTitle = NULL;
     cursorPosition = 0;
+	biggestOption = 0;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
     memset (&textBuffer[0], ' ', 40 * 25);
@@ -171,7 +172,9 @@ void GameMenu_initStateCallback(int32_t tag) {
         }
     }
 
-    biggestOption = strlen(GameMenu_StateTitle);
+	if (GameMenu_StateTitle != NULL) {
+		biggestOption = strlen(GameMenu_StateTitle);
+	}
 
     for (c = 0; c < GameMenu_optionsCount; ++c) {
         size_t len = strlen(GameMenu_options[c]);
