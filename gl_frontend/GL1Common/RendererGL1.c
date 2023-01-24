@@ -391,8 +391,6 @@ void render(const long ms) {
 	}
 
 	if (needsToRedrawVisibleMeshes) {
-		char buffer[64];
-		char directions[4] = {'N', 'E', 'S', 'W'};
 		struct Vec3 tmp;
 		struct CTile3DProperties *tileProp;
 		FixP_t heightDiff;
@@ -402,10 +400,9 @@ void render(const long ms) {
 		int onTarget;
 		struct Vec3 position;
 		FixP_t tileHeight = 0;
-		int16_t x, y, z;
+		int16_t x, z;
 		int distance;
 		FixP_t cameraHeight;
-		int c;
 		uint8_t facesMask;
 
 		needsToRedrawVisibleMeshes = FALSE;

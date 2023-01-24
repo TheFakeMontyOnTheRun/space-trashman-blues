@@ -99,8 +99,6 @@ void initHW() {
 }
 
 void graphicsInit() {
-    int r, g, b;
-        
     defaultFont = loadBitmap("font.img");
     defaultFont->uploadId = submitBitmapToGPU(defaultFont);
 }
