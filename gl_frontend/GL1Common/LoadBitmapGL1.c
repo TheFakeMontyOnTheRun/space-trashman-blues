@@ -335,8 +335,10 @@ struct Bitmap *loadBitmap(const char *filename) {
 
 #ifndef N64
     free(buffer);
+	free(src.data);
 #else
 	free_uncached(buffer);
+	free_uncached(src.data);
 #endif
 
     toReturn->uploadId = -1;
@@ -348,7 +350,7 @@ void releaseBitmap(struct Bitmap *ptr) {
 	assert(ptr != NULL);
 
 #ifndef N64
-	glDeleteTextures( 1, &ptr->uploadId);
+	glDeleteTextures( 1, (unsigned int*)&ptr->uploadId);
 	free(ptr->data);
 	free(ptr);
 #else
