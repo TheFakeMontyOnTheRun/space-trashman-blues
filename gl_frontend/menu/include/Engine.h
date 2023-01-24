@@ -111,9 +111,9 @@ int loopTick(enum ECommand cmd);
 
 void renderTick(long ms);
 
-void redrawHUD();
+void redrawHUD(void);
 
-void shutdownHW();
+void shutdownHW(void);
 
 extern int isRunning;
 extern long timeUntilNextState;

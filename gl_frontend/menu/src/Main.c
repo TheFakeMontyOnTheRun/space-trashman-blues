@@ -52,7 +52,7 @@ void initHW(int argc, char** argv ) {
     graphicsInit();
 }
 
-void shutdownHW() {
+void shutdownHW(void) {
     graphicsShutdown();
 }
 

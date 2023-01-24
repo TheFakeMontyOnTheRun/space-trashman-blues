@@ -91,7 +91,7 @@ void enter2D(void) {
 #endif
 }
 
-void initGL() {
+void initGL(void) {
 
     glEnable(GL_TEXTURE_2D);                        // Enable Texture Mapping ( NEW )
     glClearColor(0, 0, 0, 1);                   // Black Background
@@ -108,7 +108,7 @@ void initGL() {
 #endif
 }
 
-void clearRenderer() {
+void clearRenderer(void) {
 #ifndef NDS
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 #else
@@ -134,7 +134,7 @@ void startFrameGL(int width, int height) {
     enter2D();
 }
 
-void endFrameGL() {
+void endFrameGL(void) {
 #ifndef NDS
     glFinish();
 

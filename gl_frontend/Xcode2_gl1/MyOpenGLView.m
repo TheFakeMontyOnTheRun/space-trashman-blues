@@ -40,7 +40,7 @@ int nextAudioChannel = -1;
 float multiplier = 1.0f;
 extern int isRunning;
 NSSound *playerSounds[8];
-void enter2D();
+void enter2D(void);
 int submitBitmapToGPU(struct Bitmap* bitmap);
 
 NSString *fileNamesForSounds[] = {
@@ -69,7 +69,7 @@ void setupOPL2(int port) {
     }
 }
 
-void stopSounds() {}
+void stopSounds(void) {}
 
 void playSound(const int action) {
     NSSound *original = playerSounds[action];
@@ -84,9 +84,9 @@ void playSound(const int action) {
     [playingSounds removeObject:sound];
 }
 
-void soundTick() {}
+void soundTick(void) {}
 
-void muteSound() {}
+void muteSound(void) {}
 
 
 void initHW() {

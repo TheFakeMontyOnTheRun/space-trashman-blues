@@ -38,7 +38,7 @@ int rotation = 0;
 enum CrawlerState shouldContinue = kCrawlerGameInProgress;
 struct CActor actor;
 
-void clearMapCache() {
+void clearMapCache(void) {
     size_t sizeForSet = sizeof(uint8_t) * (MAP_SIZE * MAP_SIZE);
     memset (&items[0], 0xFF, sizeForSet);
     memset (&actorsInMap[0], 0xFF, sizeForSet);

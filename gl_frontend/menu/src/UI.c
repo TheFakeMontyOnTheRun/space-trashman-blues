@@ -98,7 +98,7 @@ drawImageWindow(const int x, const int y, const unsigned int dx, const unsigned 
     drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
 }
 
-void redrawHUD() {
+void redrawHUD(void) {
     int line = 0;
     struct ObjectNode *head;
     struct WorldPosition visPos = *getPlayerPosition();
