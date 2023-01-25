@@ -6,12 +6,12 @@ import os
 textureList = []
 
 textureIndices = {
-    "null" : 0xFF
+    "null": 0xFF
 }
 tilesProperties = {}
 
 geometryIndex = {
-    "null" : 0,
+    "null": 0,
     "cube": 1,
     "leftnear": 2,
     "leftfar": 3,
@@ -25,6 +25,7 @@ geometryIndex = {
     "wallcorner": 11,
 }
 
+
 class Properties:
     needsAlpha = False
     blocksVisibility = False
@@ -37,58 +38,58 @@ class Properties:
     geometryType = ""
     ceilingRepeatTexture = ""
     floorRepeatTexture = ""
-    ceilingRepeats= ""
+    ceilingRepeats = ""
     floorRepeats = ""
     ceilingHeight = ""
     floorHeight = ""
 
 
-def writeByte( file, value ):
+def writeByte(file, value):
     file.write(bytearray([int(value)]))
 
 
-def writeRawByte( file, value ):
-	file.write(value.encode())
+def writeRawByte(file, value):
+    file.write(value.encode())
 
 
 def writeAsFixedPoint(file, value):
+    valueAsInt = int(float(value) * float(0xFFFF))
+    writeByte(file, (valueAsInt & 0x000000FF) >> 0)
+    writeByte(file, (valueAsInt & 0x0000FF00) >> 8)
+    writeByte(file, (valueAsInt & 0x00FF0000) >> 16)
+    writeByte(file, (valueAsInt & 0xFF000000) >> 24)
 
-    valueAsInt = int( float( value ) * float(0xFFFF) )
-    writeByte(file, ( valueAsInt & 0x000000FF) >> 0 )
-    writeByte(file, ( valueAsInt & 0x0000FF00) >> 8)
-    writeByte(file, ( valueAsInt & 0x00FF0000) >> 16)
-    writeByte(file, ( valueAsInt & 0xFF000000) >> 24)
 
 def dumpProps(path):
-    print ("writing to " + str(path))
+    print("writing to " + str(path))
     f = open(str(path), "wb")
 
     for prop in tilesProperties:
         prp = tilesProperties[prop]
         if prp:
-          #  print("prop[" + str(prop) + "]= " + str(tilesProperties[prop]))
+            #  print("prop[" + str(prop) + "]= " + str(tilesProperties[prop]))
             writeRawByte(f, prop)
-            writeByte(f, '1' if prp.needsAlpha else '0' )
-            writeByte(f, '1' if prp.blocksVisibility else '0' )
-            writeByte(f, '1' if prp.blocksMovement else '0' )
-            writeByte(f, '1' if prp.blocksEnemySight else '0' )
-            writeByte(f, '1' if prp.repeatMainTexture else '0' )
-            writeByte(f, textureIndices[prp.ceilingTexture.replace(".img","")] )
-            writeByte(f, textureIndices[prp.floorTexture.replace(".img", "") ] )
-            writeByte(f, textureIndices[prp.mainTexture.replace(".img", "") ] )
-            writeByte(f, geometryIndex[ prp.geometryType ] )
+            writeByte(f, '1' if prp.needsAlpha else '0')
+            writeByte(f, '1' if prp.blocksVisibility else '0')
+            writeByte(f, '1' if prp.blocksMovement else '0')
+            writeByte(f, '1' if prp.blocksEnemySight else '0')
+            writeByte(f, '1' if prp.repeatMainTexture else '0')
+            writeByte(f, textureIndices[prp.ceilingTexture.replace(".img", "")])
+            writeByte(f, textureIndices[prp.floorTexture.replace(".img", "")])
+            writeByte(f, textureIndices[prp.mainTexture.replace(".img", "")])
+            writeByte(f, geometryIndex[prp.geometryType])
             writeByte(f, textureIndices[
-                          prp.ceilingRepeatTexture.replace(".img", "") ] )
+                prp.ceilingRepeatTexture.replace(".img", "")])
             writeByte(f, textureIndices[
-                prp.floorRepeatTexture.replace(".img", "") ] )
-            writeByte(f, prp.ceilingRepeats )
-            writeByte(f, prp.floorRepeats )
-            writeAsFixedPoint( f, prp.ceilingHeight )
-            writeAsFixedPoint(f, prp.floorHeight )
+                prp.floorRepeatTexture.replace(".img", "")])
+            writeByte(f, prp.ceilingRepeats)
+            writeByte(f, prp.floorRepeats)
+            writeAsFixedPoint(f, prp.ceilingHeight)
+            writeAsFixedPoint(f, prp.floorHeight)
 
 
 def parseLine(line):
-   # print("{" + str(line) + "}")
+    # print("{" + str(line) + "}")
 
     prp = Properties()
 
@@ -103,7 +104,7 @@ def parseLine(line):
     prp.geometryType = line[9]
     prp.ceilingRepeatTexture = line[10]
     prp.floorRepeatTexture = line[11]
-    prp.ceilingRepeats= line[12]
+    prp.ceilingRepeats = line[12]
     prp.floorRepeats = line[13]
     prp.ceilingHeight = line[14]
     prp.floorHeight = line[15]
@@ -112,13 +113,13 @@ def parseLine(line):
 
 
 def getTextureList(path):
-    print( "get texture list: " + str(path) )
+    print("get texture list: " + str(path))
 
     f = open(str(path))
 
     for line in f:
         textureName = str(line.replace("\n", "")).replace(".img", "")
-        #print("{" + textureName + "}")
+        # print("{" + textureName + "}")
         textureIndex = len(textureList)
         textureList.append(textureName)
         textureIndices[textureName] = textureIndex
@@ -127,7 +128,7 @@ def getTextureList(path):
 
 
 def getProperties(path):
-    print( "get properties: " + str(path) )
+    print("get properties: " + str(path))
 
     f = open(str(path))
 
@@ -136,28 +137,30 @@ def getProperties(path):
         tokens = propertiesLine.split(" ")
 
         if (tokens[0] in tilesProperties.keys()):
-            print ("already had " + tokens[0])
+            print("already had " + tokens[0])
             sys.exit(1)
 
         tilesProperties[tokens[0]] = parseLine(tokens)
-        #print "got tile for " + str(tokens[0])
+        # print "got tile for " + str(tokens[0])
     f.close()
+
 
 def cleanupTextureList(path):
     existingTexturesList = os.listdir('assets')
     f = open(str(path))
-    missingTextures=[]
+    missingTextures = []
     for line in f:
         texture_name = line.replace("\n", "")
         if texture_name not in existingTexturesList:
             missingTextures.append(texture_name)
 
     if len(missingTextures) > 0:
-        print("Textures not found: " + str(missingTextures) )
+        print("Textures not found: " + str(missingTextures))
         sys.exit(1)
 
+
 def cleanup(path):
-    print( "cleanup against map: " + str(path) )
+    print("cleanup against map: " + str(path))
     tokensList = []
     tokensNotFound = []
     f = open(str(path))
@@ -165,49 +168,49 @@ def cleanup(path):
     for line in f:
         mapLine = str(line.replace("\n", ""))
 
-        #all the tiles present in a line
+        # all the tiles present in a line
         for tile in mapLine:
             if tile not in tokensList:
                 tokensList.append(tile)
 
-        #remove all known tiles from the "tiles in the line" list
+        # remove all known tiles from the "tiles in the line" list
         for prop in tilesProperties:
             mapLine = mapLine.replace(prop, "")
 
-        #if we got something left, it is not known
+        # if we got something left, it is not known
         if len(mapLine) > 0:
             print("Tile not found in the properties: " + str(mapLine))
             sys.exit(1)
-
 
     for prop in tilesProperties:
         if prop not in tokensList:
             tokensNotFound.append(prop)
 
     for prop in tokensNotFound:
-        print("Property to remove: " + str(prop) )
+        print("Property to remove: " + str(prop))
         tilesProperties[prop] = None
 
-
-    if len(tokensNotFound ) > 0:
+    if len(tokensNotFound) > 0:
         sys.exit(1)
 
     f.close()
 
-def compileMap( sourcePath, textureListPath, mapPath, outputPath):
+
+def compileMap(sourcePath, textureListPath, mapPath, outputPath):
     global textureList
     global textureIndices
     global tilesProperties
 
     textureList = []
-    textureIndices = {"null" : 0xFF}
+    textureIndices = {"null": 0xFF}
     tilesProperties = {}
     getTextureList(textureListPath)
     getProperties(sourcePath)
     cleanup(mapPath)
     cleanupTextureList(textureListPath)
     dumpProps(outputPath)
-    print ("--done--")
+    print("--done--")
+
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
@@ -218,7 +221,6 @@ if __name__ == "__main__":
                        "assets/props" + iAsString + ".bin")
     else:
         if len(sys.argv) == 5:
-            compileMap( sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+            compileMap(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
         else:
-            print( "parms [properties] [textures] [map] [dst]" )
-
+            print("parms [properties] [textures] [map] [dst]")

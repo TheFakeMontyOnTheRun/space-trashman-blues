@@ -11,7 +11,9 @@
 #ifndef NDS
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
+
 #include <OpenGL/gl.h>
+
 #else
 #include <GL/gl.h>
 #endif
@@ -78,14 +80,14 @@ enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
 struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
 
 uint32_t getPaletteEntry(const uint32_t origin) {
-    return origin;
+	return origin;
 }
 
 
 void enter2D(void) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0, 3.2,2, 0, -100, 100);
+	glOrtho(0, 3.2, 2, 0, -100, 100);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -97,15 +99,15 @@ void enter2D(void) {
 
 void initGL(void) {
 
-    glEnable(GL_TEXTURE_2D);                        // Enable Texture Mapping ( NEW )
-    glClearColor(0, 0, 0, 1);                   // Black Background
+	glEnable(GL_TEXTURE_2D);                        // Enable Texture Mapping ( NEW )
+	glClearColor(0, 0, 0, 1);                   // Black Background
 
 #ifndef NDS
-    glClearDepth(1.0f);                         // Depth Buffer Setup
-    glShadeModel(GL_SMOOTH);                        // Enable Smooth Shading
-    glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
-    glAlphaFunc(GL_GREATER, 0);
-    glDisable(GL_LINE_SMOOTH);
+	glClearDepth(1.0f);                         // Depth Buffer Setup
+	glShadeModel(GL_SMOOTH);                        // Enable Smooth Shading
+	glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
+	glAlphaFunc(GL_GREATER, 0);
+	glDisable(GL_LINE_SMOOTH);
 	glDisable(GL_CULL_FACE);
 #else
 	glClearDepth(GL_MAX_DEPTH);
@@ -114,7 +116,7 @@ void initGL(void) {
 
 void clearRenderer(void) {
 #ifndef NDS
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 #else
 	glClearDepth(GL_MAX_DEPTH);
 #endif
@@ -122,62 +124,62 @@ void clearRenderer(void) {
 
 
 void startFrameGL(int width, int height) {
-    glViewport(0, 0, width, height);
+	glViewport(0, 0, width, height);
 	glClearColor(0, 0, 0, 1);                   // Black Background
 
 #ifndef NDS
-    glLineWidth(width / 240.0f);
-    glClear(GL_DEPTH_BUFFER_BIT);
+	glLineWidth(width / 240.0f);
+	glClear(GL_DEPTH_BUFFER_BIT);
 #else
 	glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE);
 	glClearDepth(GL_MAX_DEPTH);
 #endif
-    
-    visibilityCached = FALSE;
-    needsToRedrawVisibleMeshes = FALSE;
-    enter2D();
+
+	visibilityCached = FALSE;
+	needsToRedrawVisibleMeshes = FALSE;
+	enter2D();
 }
 
 void endFrameGL(void) {
 #ifndef NDS
-    glFinish();
+	glFinish();
 
-    int error = glGetError();
-    
-    if (error) {
-        printf("glError: %d\n", error );
-    }
+	int error = glGetError();
+
+	if (error) {
+		printf("glError: %d\n", error);
+	}
 #else
 	glFlush(0);
 #endif
 }
 
 
-void setPerspective(	float fovy,
-	float aspect,
-	float zNear,
-	float zFar) {
+void setPerspective(float fovy,
+					float aspect,
+					float zNear,
+					float zFar) {
 
 	float aspect_ratio = aspect;
 	float near_plane = zNear;
 	float far_plane = zFar;
 
-	glFrustum(-near_plane*aspect_ratio, near_plane*aspect_ratio, -near_plane, near_plane, near_plane, far_plane);
+	glFrustum(-near_plane * aspect_ratio, near_plane * aspect_ratio, -near_plane, near_plane, near_plane, far_plane);
 }
 
 void enter3D(void) {
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
 
-    setPerspective(45.0f, 240.0f/200.0f, 1, 1024.0f);
+	setPerspective(45.0f, 240.0f / 200.0f, 1, 1024.0f);
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
 #ifndef NDS
-    glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 #endif
-    glColor3f(1,1,1);
+	glColor3f(1, 1, 1);
 }
 
 void printMessageTo3DView(const char *message) {
@@ -199,7 +201,7 @@ void loadTileProperties(const uint8_t levelNumber) {
 	struct StaticBuffer data = loadBinaryFileFromPath(buffer);
 
 	for (c = 0; c < 256; ++c) {
-		free((void*)getFromMap(&tileProperties, c));
+		free((void *) getFromMap(&tileProperties, c));
 	}
 
 	loadPropertyList(&buffer[0], &tileProperties);
@@ -224,7 +226,7 @@ void loadTileProperties(const uint8_t levelNumber) {
 
 void loadTexturesForLevel(const uint8_t levelNumber) {
 
-    struct StaticBuffer data;
+	struct StaticBuffer data;
 	char tilesFilename[64];
 	char *head;
 	char *end;
@@ -232,7 +234,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 
 	sprintf(tilesFilename, "tiles%d.lst", levelNumber);
 	data = loadBinaryFileFromPath(tilesFilename);
-    
+
 	head = (char *) data.data;
 	end = head + data.size;
 	nameStart = head;
@@ -240,8 +242,8 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 	texturesUsed = 0;
 	clearTextures();
 
-	for ( int c = 0; c < TOTAL_TEXTURES; ++c ) {
-		if (nativeTextures[c] != NULL ) {
+	for (int c = 0; c < TOTAL_TEXTURES; ++c) {
+		if (nativeTextures[c] != NULL) {
 			releaseBitmap(nativeTextures[c]->raw);
 #ifndef N64
 			free(nativeTextures[c]);
@@ -277,11 +279,11 @@ void updateCursorForRenderer(const int x, const int z) {
 	cursorZ = z;
 }
 
-void drawMap(const uint8_t *  elements,
-             const uint8_t *  items,
-             const uint8_t *  actors,
-             uint8_t *  effects,
-             const struct CActor *  current) {
+void drawMap(const uint8_t *elements,
+			 const uint8_t *items,
+			 const uint8_t *actors,
+			 uint8_t *effects,
+			 const struct CActor *current) {
 
 	int8_t z, x;
 	const struct Vec2i mapCamera = current->position;
@@ -366,8 +368,8 @@ void drawMap(const uint8_t *  elements,
 		walkingBias = 0;
 	}
 
-    castVisibility(cameraDirection, visMap, &elements[0], cameraPosition,
-                   distances, TRUE, &occluders);
+	castVisibility(cameraDirection, visMap, &elements[0], cameraPosition,
+				   distances, TRUE, &occluders);
 
 	++gameTicks;
 }
@@ -399,7 +401,7 @@ void render(const long ms) {
 		struct CTile3DProperties *tileProp;
 		FixP_t heightDiff;
 		uint8_t lastElement = 0xFF;
-        uint8_t itemsSnapshotElement = 0xFF;
+		uint8_t itemsSnapshotElement = 0xFF;
 		uint8_t element = 0;
 		struct Vec3 position;
 		FixP_t tileHeight = 0;
@@ -560,7 +562,7 @@ void render(const long ms) {
 						x = visPos.y;
 						z = visPos.x;
 
-                        element = map[x][z];
+						element = map[x][z];
 						itemsSnapshotElement = mItems[x][z];
 
 						position.mX = mCamera.mX + intToFix(2 * x);
@@ -918,7 +920,8 @@ void render(const long ms) {
 							addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2), 0);
 							addToVec3(&tmp2, 0, (tileProp->mCeilingHeight * 2), 0);
 
-							drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection, flipTextureVertical);
+							drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection,
+									   flipTextureVertical);
 						}
 							break;
 
@@ -935,7 +938,8 @@ void render(const long ms) {
 							addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
 							addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
 
-							drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection, flipTextureVertical);
+							drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection,
+									   flipTextureVertical);
 						}
 							break;
 
@@ -994,11 +998,11 @@ void render(const long ms) {
 				}
 
 				if (itemsSnapshotElement != 0xFF) {
-                    tmp.mX = position.mX;
-                    tmp.mY = position.mY;
-                    tmp.mZ = position.mZ;
+					tmp.mX = position.mX;
+					tmp.mY = position.mY;
+					tmp.mZ = position.mZ;
 
-                    addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
+					addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
 
 					// lazy loading the item sprites
 					// we can't preload it because...reasons on the NDS
@@ -1009,8 +1013,8 @@ void render(const long ms) {
 						itemSprites[itemsSnapshotElement] = makeTextureFrom(&buffer[0]);
 					}
 
-                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
-                }
+					drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
+				}
 				glTranslatef(-fixToInt(xCameraOffset + position.mX), 0.0f, fixToInt(zCameraOffset + position.mZ));
 			}
 		}
@@ -1019,7 +1023,7 @@ void render(const long ms) {
 		if (focusItemName != NULL) {
 			size_t len = strlen(focusItemName);
 			int lines = 1 + (len / 27);
-			fill( 0, YRES - (8 * lines), XRES, lines * 8, 0, 1 );
+			fill(0, YRES - (8 * lines), XRES, lines * 8, 0, 1);
 			drawTextAtWithMarginWithFiltering(1, 26 - lines, XRES, focusItemName, 255, ' ');
 		}
 

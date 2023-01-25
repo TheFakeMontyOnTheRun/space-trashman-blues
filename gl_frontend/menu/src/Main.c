@@ -13,8 +13,8 @@ const long UCLOCKS_PER_SEC = 1000;
 long timeEllapsed = 0;
 
 long uclock() {
-    timeEllapsed += (1000 / 60);
-    return timeEllapsed;
+	timeEllapsed += (1000 / 60);
+	return timeEllapsed;
 }
 
 #include "FixP.h"
@@ -37,7 +37,7 @@ long uclock() {
 #include <emscripten/emscripten.h>
 #endif
 
-void initHW(int argc, char** argv ) {
+void initHW(int argc, char **argv) {
 #ifndef N64
 #ifndef NDS
 	initFileReader("base.pfs");
@@ -47,13 +47,13 @@ void initHW(int argc, char** argv ) {
 #endif
 #else
 	dfs_init(DFS_DEFAULT_LOCATION);
-    initFileReader("rom:/base.pfs");
+	initFileReader("rom:/base.pfs");
 #endif
-    graphicsInit();
+	graphicsInit();
 }
 
 void shutdownHW(void) {
-    graphicsShutdown();
+	graphicsShutdown();
 }
 
 long start_clock, end_clock, prev;
@@ -67,30 +67,30 @@ void mainLoop();
 
 int main(int argc, char **argv) {
 
-    initHW(argc, argv);
+	initHW(argc, argv);
 
-    enterState(kMainMenu);
+	enterState(kMainMenu);
 
-    end_clock = uclock();
-    prev = 0;
-    start_clock = uclock();
+	end_clock = uclock();
+	prev = 0;
+	start_clock = uclock();
 
 #ifdef __EMSCRIPTEN__
-    emscripten_set_main_loop(mainLoop, 0, 1);
+	emscripten_set_main_loop(mainLoop, 0, 1);
 #else
 	clearRenderer();
 
-    while (isRunning) {
+	while (isRunning) {
 
-        long now, delta_time;
+		long now, delta_time;
 
-        now = (end_clock - start_clock) / (UCLOCKS_PER_SEC / 1000);
-        delta_time = now - prev;
-        prev = now;
+		now = (end_clock - start_clock) / (UCLOCKS_PER_SEC / 1000);
+		delta_time = now - prev;
+		prev = now;
 
-        if (delta_time < 50) {
-            delta_time = 50;
-        }
+		if (delta_time < 50) {
+			delta_time = 50;
+		}
 
 #ifndef N64
 #ifndef NDS
@@ -102,7 +102,7 @@ int main(int argc, char **argv) {
 		startFrameGL(320, 240);
 #endif
 
-        isRunning = isRunning && menuTick(20);
+		isRunning = isRunning && menuTick(20);
 
 		endFrameGL();
 		flipRenderer();
@@ -110,11 +110,11 @@ int main(int argc, char **argv) {
 	}
 #endif
 
-    unloadStateCallback(kShutdown);
+	unloadStateCallback(kShutdown);
 
-    shutdownHW();
+	shutdownHW();
 
-    return 0;
+	return 0;
 }
 
 #endif
