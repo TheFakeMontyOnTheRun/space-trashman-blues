@@ -228,6 +228,9 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 #ifndef NDS
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA2, width, height, 0, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1, expanded);
 #else
+
+	DC_FlushAll();
+
 	if (width == 16) {
 		// most in game objects
 		glTexImage2D(0, 0, GL_RGBA, TEXTURE_SIZE_16 , TEXTURE_SIZE_16, 0, TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T, expanded);
