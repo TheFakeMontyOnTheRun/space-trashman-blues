@@ -229,6 +229,8 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA2, width, height, 0, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1, expanded);
 #else
 
+	// at this point, we need to flush back the changed `expanded` array before submitting to the GPU, otherwise, it might
+	// get incomplete or corrupted texture data - our processed texels still live in the data cache
 	DC_FlushAll();
 
 	if (width == 16) {
