@@ -357,13 +357,13 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 		float col = (((ascii & 31)) * blockWidth);
 
 		glTexCoord2f(col, line - blockHeight);
-		glVertex3f(dstX * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -2);
+		glVertex3f(dstX * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -1);
 		glTexCoord2f(col + blockWidth, line - blockHeight);
-		glVertex3f((dstX + 8) * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -2);
+		glVertex3f((dstX + 8) * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -1);
 		glTexCoord2f(col + blockWidth, line);
-		glVertex3f((dstX + 8) * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -2);
+		glVertex3f((dstX + 8) * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -1);
 		glTexCoord2f(col, line);
-		glVertex3f(dstX * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -2);
+		glVertex3f(dstX * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -1);
 #else
 		shortStr[0] = text[c];
 		rdpq_font_position(dstX, dstY);
