@@ -253,7 +253,6 @@ void Crawler_repaintCallback() {
 		}
 
 		if (currentPresentationState == kWaitingForInput) {
-			drawTextAtWithMargin(1, 1, XRES, thisMissionName, getPaletteEntry(0xFFFFFFFF));
 			renderTick(30);
 		}
 	}

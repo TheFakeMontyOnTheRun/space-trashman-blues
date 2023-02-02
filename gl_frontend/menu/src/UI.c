@@ -35,6 +35,8 @@
 
 #include "UI.h"
 
+extern const char *thisMissionName;
+
 void
 drawWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title) {
 
@@ -105,6 +107,8 @@ void redrawHUD(void) {
 	struct WorldPosition visPos = *getPlayerPosition();
 	int x, z, c;
 	struct Item *itemPtr;
+	drawTextAtWithMargin(1, 1, XRES, thisMissionName, getPaletteEntry(0xFFFFFFFF));
+
 	drawTextAt(1 + (XRES / 8), 1, " Map:", getPaletteEntry(0xFFFFFFFF));
 
 	if (mapTopLevel[0] != NULL) {
