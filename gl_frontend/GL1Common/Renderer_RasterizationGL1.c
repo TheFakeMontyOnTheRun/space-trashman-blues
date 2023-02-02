@@ -49,6 +49,9 @@ struct Bitmap *defaultFont;
 extern rdpq_font_t *fnt1;
 #endif
 
+#define NORMALIZE_ORTHO (1.0f / 100.0f)
+#define NORMALIZE_COLOUR (1.0f / 256.0f)
+
 int submitBitmapToGPU(struct Bitmap *bitmap);
 
 void drawRect(
@@ -58,19 +61,19 @@ void drawRect(
 		const size_t _dy,
 		const FramebufferPixelFormat pixel) {
 
-	float x = _x / 100.0f;
-	float y = _y / 100.0f;
-	float dx = _dx / 100.0f;
-	float dy = _dy / 100.0f;
+	float x = _x * NORMALIZE_ORTHO;
+	float y = _y * NORMALIZE_ORTHO;
+	float dx = _dx * NORMALIZE_ORTHO;
+	float dy = _dy * NORMALIZE_ORTHO;
 
 	uint32_t fragment = pixel;//palette[pixel];
 
 	if (fragment != TRANSPARENCY_COLOR) {
 		float r, g, b;
 
-		r = (fragment & 0xFF) / 256.0f;
-		g = ((fragment & 0x00FF00) >> 8) / 256.0f;
-		b = ((fragment & 0xFF0000) >> 16) / 256.0f;
+		r = (fragment & 0xFF) * NORMALIZE_COLOUR;
+		g = ((fragment & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+		b = ((fragment & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
 
 		glColor3f(r,
 				  g,
@@ -130,18 +133,18 @@ void fill(
 
 	uint32_t fragment = pixel;//palette[pixel];
 
-	float x = _x / 100.0f;
-	float y = _y / 100.0f;
-	float dx = _dx / 100.0f;
-	float dy = _dy / 100.0f;
+	float x = _x * NORMALIZE_ORTHO;
+	float y = _y * NORMALIZE_ORTHO;
+	float dx = _dx * NORMALIZE_ORTHO;
+	float dy = _dy * NORMALIZE_ORTHO;
 
 	if (fragment != TRANSPARENCY_COLOR) {
 
 		float r, g, b;
 
-		r = (fragment & 0xFF) / 256.0f;
-		g = ((fragment & 0x00FF00) >> 8) / 256.0f;
-		b = ((fragment & 0xFF0000) >> 16) / 256.0f;
+		r = (fragment & 0xFF) * NORMALIZE_COLOUR;
+		g = ((fragment & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+		b = ((fragment & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
 
 		glColor3f(r,
 				  g,
@@ -191,7 +194,6 @@ void fill(
 
 			glEnd();
 			glDisable(GL_ALPHA_TEST);
-			glBindTexture(GL_TEXTURE_2D, 0);
 #else
 			glDisable(GL_TEXTURE_2D);
 			glColor3f(0,
@@ -208,6 +210,7 @@ void fill(
 #endif
 		} else {
 			glDisable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, 0);
 			glColor3f(r,
 					  g,
 					  b);
@@ -233,10 +236,10 @@ void drawBitmap(const int _dx,
 		bitmap->uploadId = submitBitmapToGPU(bitmap);
 	}
 
-	float x = _dx / 100.0f;
-	float y = _dy / 100.0f;
-	float dx = bitmap->width / 100.0f;
-	float dy = bitmap->height / 100.0f;
+	float x = _dx * NORMALIZE_ORTHO;
+	float y = _dy * NORMALIZE_ORTHO;
+	float dx = bitmap->width * NORMALIZE_ORTHO;
+	float dy = bitmap->height * NORMALIZE_ORTHO;
 
 	if (bitmap->uploadId != -1) {
 
@@ -247,16 +250,16 @@ void drawBitmap(const int _dx,
 		glBindTexture(GL_TEXTURE_2D, bitmap->uploadId);
 
 		glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 0.0f);
+		glTexCoord2f(0, 0);
 		glVertex3f(x, y, -2);
-		glTexCoord2f(1.0f, 0.0f);
+		glTexCoord2f(1, 0);
 		glVertex3f(x + dx, y, -2);
-		glTexCoord2f(1.0f, 1.0f);
+		glTexCoord2f(1, 1);
 		glVertex3f(x + dx, y + dy, -2);
-		glTexCoord2f(0.0f, 1.0f);
+		glTexCoord2f(0, 1);
 		glVertex3f(x, y + dy, -2);
 		glEnd();
-		glBindTexture(GL_TEXTURE_2D, 0);
+
 		if (transparent) {
 			glDisable(GL_ALPHA_TEST);
 		}
@@ -312,9 +315,9 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 
 	float r, g, b;
 
-	r = (fragment & 0xFF) / 256.0f;
-	g = ((fragment & 0x00FF00) >> 8) / 256.0f;
-	b = ((fragment & 0xFF0000) >> 16) / 256.0f;
+	r = (fragment & 0xFF) * NORMALIZE_COLOUR;
+	g = ((fragment & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+	b = ((fragment & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
 
 	glColor3f(r,
 			  g,
@@ -354,13 +357,13 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 		float col = (((ascii & 31)) * blockWidth);
 
 		glTexCoord2f(col, line - blockHeight);
-		glVertex3f(dstX / 100.0f, dstY / 100.0f, -2);
+		glVertex3f(dstX * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -2);
 		glTexCoord2f(col + blockWidth, line - blockHeight);
-		glVertex3f((dstX + 8) / 100.0f, dstY / 100.0f, -2);
+		glVertex3f((dstX + 8) * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -2);
 		glTexCoord2f(col + blockWidth, line);
-		glVertex3f((dstX + 8) / 100.0f, (dstY + 8) / 100.0f, -2);
+		glVertex3f((dstX + 8) * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -2);
 		glTexCoord2f(col, line);
-		glVertex3f(dstX / 100.0f, (dstY + 8) / 100.0f, -2);
+		glVertex3f(dstX * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -2);
 #else
 		shortStr[0] = text[c];
 		rdpq_font_position(dstX, dstY);
@@ -378,9 +381,8 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 #endif
 
 
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glColor3f(1, 1, 1);
 	glDisable(GL_ALPHA_TEST);
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text,

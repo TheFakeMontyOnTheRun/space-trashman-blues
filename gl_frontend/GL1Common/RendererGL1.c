@@ -103,7 +103,7 @@ void initGL(void) {
 	glClearColor(0, 0, 0, 1);                   // Black Background
 
 #ifndef NDS
-	glClearDepth(1.0f);                         // Depth Buffer Setup
+	glClearDepth(1);                         // Depth Buffer Setup
 	glShadeModel(GL_SMOOTH);                        // Enable Smooth Shading
 	glEnable(GL_DEPTH_TEST);                        // Enables Depth Testing
 	glAlphaFunc(GL_GREATER, 0);
@@ -171,7 +171,7 @@ void enter3D(void) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	setPerspective(45.0f, 240.0f / 200.0f, 1, 1024.0f);
+	setPerspective(45, 240.0f / 200.0f, 1, 1024);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -609,7 +609,7 @@ void render(const long ms) {
 				heightDiff = tileProp->mCeilingHeight - tileProp->mFloorHeight;
 				lastElement = element;
 
-				glTranslatef(fixToInt(xCameraOffset + position.mX), 0.0f, -fixToInt(zCameraOffset + position.mZ));
+				glTranslatef(fixToInt(xCameraOffset + position.mX), 0, -fixToInt(zCameraOffset + position.mZ));
 
 				if (tileProp->mFloorRepeatedTextureIndex != 0xFF
 					&& tileProp->mFloorRepetitions > 0) {
@@ -1015,7 +1015,7 @@ void render(const long ms) {
 
 					drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
 				}
-				glTranslatef(-fixToInt(xCameraOffset + position.mX), 0.0f, fixToInt(zCameraOffset + position.mZ));
+				glTranslatef(-fixToInt(xCameraOffset + position.mX), 0, fixToInt(zCameraOffset + position.mZ));
 			}
 		}
 		enter2D();

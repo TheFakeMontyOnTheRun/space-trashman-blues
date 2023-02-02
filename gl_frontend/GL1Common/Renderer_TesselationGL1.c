@@ -49,6 +49,9 @@ FixP_t playerHeight = 0;
 struct Texture *nativeTextures[TOTAL_TEXTURES];
 int usedTexture = 0;
 
+#define BIAS (intToFix(128))
+#define REVERSE_BIAS (1.0f/128.0f)
+
 void clearTextures() {
 	usedTexture = 0;
 }
@@ -68,7 +71,6 @@ struct Texture *makeTextureFrom(const char *filename) {
 	glBindTexture(GL_TEXTURE_2D, toReturn->raw->uploadId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glBindTexture(GL_TEXTURE_2D, 0);
 #endif
 	return toReturn;
 }
@@ -78,63 +80,61 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 
 	float centerY0, centerY1;
 	FixP_t acc;
-	FixP_t bias = intToFix(128);
 	FixP_t scaled;
 
 	acc = (p0.mY + playerHeight + walkingBias + yCameraOffset);
-	scaled = Mul(acc, bias);
-	centerY1 = (fixToInt(scaled) / 128.0f);
+	scaled = Mul(acc, BIAS);
+	centerY1 = (fixToInt(scaled) * REVERSE_BIAS);
 
 	acc = (p1.mY + playerHeight + walkingBias + yCameraOffset);
-	scaled = Mul(acc, bias);
-	centerY0 = (fixToInt(scaled) / 128.0f);
+	scaled = Mul(acc, BIAS);
+	centerY0 = (fixToInt(scaled) * REVERSE_BIAS);
 
 	glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
 	glBegin(GL_QUADS);
 
-	glTexCoord2f(0.0f, 1.0f);
+	glTexCoord2f(0, 1);
 
 	switch (direction) {
 		case kNorth:
-			glVertex3f(-1.0f, centerY0, -1.0f);
-			glTexCoord2f(1.0f, 1.0f);
-			glVertex3f(+1.0f, centerY0, -1.0f);
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(+1.0f, centerY1, +1.0f);
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex3f(-1.0f, centerY1, +1.0f);
+			glVertex3f(-1, centerY0, -1);
+			glTexCoord2f(1, 1);
+			glVertex3f(1, centerY0, -1);
+			glTexCoord2f(1, 0);
+			glVertex3f(1, centerY1, 1);
+			glTexCoord2f(0, 0);
+			glVertex3f(-1, centerY1, 1);
 			break;
 		case kSouth:
-			glVertex3f(-1.0f, centerY1, -1.0f);
-			glTexCoord2f(1.0f, 1.0f);
-			glVertex3f(+1.0f, centerY1, -1.0f);
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(+1.0f, centerY0, +1.0f);
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex3f(-1.0f, centerY0, +1.0f);
+			glVertex3f(-1, centerY1, -1);
+			glTexCoord2f(1, 1);
+			glVertex3f(1, centerY1, -1);
+			glTexCoord2f(1, 0);
+			glVertex3f(1, centerY0, 1);
+			glTexCoord2f(0, 0);
+			glVertex3f(-1, centerY0, 1);
 			break;
 		case kEast:
-			glVertex3f(-1.0f, centerY0, -1.0f);
-			glTexCoord2f(1.0f, 1.0f);
-			glVertex3f(+1.0f, centerY1, -1.0f);
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(+1.0f, centerY1, +1.0f);
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex3f(-1.0f, centerY0, +1.0f);
+			glVertex3f(-1, centerY0, -1);
+			glTexCoord2f(1, 1);
+			glVertex3f(1, centerY1, -1);
+			glTexCoord2f(1, 0);
+			glVertex3f(1, centerY1, 1);
+			glTexCoord2f(0, 0);
+			glVertex3f(-1, centerY0, 1);
 			break;
 		case kWest:
-			glVertex3f(-1.0f, centerY1, -1.0f);
-			glTexCoord2f(1.0f, 1.0f);
-			glVertex3f(+1.0f, centerY0, -1.0f);
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(+1.0f, centerY0, +1.0f);
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex3f(-1.0f, centerY1, +1.0f);
+			glVertex3f(-1, centerY1, -1);
+			glTexCoord2f(1, 1);
+			glVertex3f(1, centerY0, -1);
+			glTexCoord2f(1, 0);
+			glVertex3f(1, centerY0, 1);
+			glTexCoord2f(0, 0);
+			glVertex3f(-1, centerY1, 1);
 			break;
 	}
 
 	glEnd();
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void drawBillboardAt(const struct Vec3 center,
@@ -151,15 +151,14 @@ void drawBillboardAt(const struct Vec3 center,
 
 	float centerY;
 	FixP_t acc;
-	FixP_t bias = intToFix(128);
-	FixP_t scaled = Mul(scale, bias);
-	float textureScale = (fixToInt(scaled) / 128.0f);
+	FixP_t scaled = Mul(scale, BIAS);
+	float textureScale = (fixToInt(scaled) * REVERSE_BIAS);
 	float geometryScale = textureScale;
 
 
 	acc = (center.mY + playerHeight + walkingBias + yCameraOffset);
-	scaled = Mul(acc, bias);
-	centerY = (fixToInt(scaled) / 128.0f);
+	scaled = Mul(acc, BIAS);
+	centerY = (fixToInt(scaled) * REVERSE_BIAS);
 
 	glBindTexture(GL_TEXTURE_2D, bitmap->raw->uploadId);
 
@@ -167,18 +166,17 @@ void drawBillboardAt(const struct Vec3 center,
 
 	glBegin(GL_QUADS);
 
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(-1.0f, centerY - geometryScale, +1.0f);
-	glTexCoord2f(1, 1.0f);
-	glVertex3f(+1.0f, centerY - geometryScale, +1.0f);
-	glTexCoord2f(1, 0.0f);
-	glVertex3f(+1.0f, centerY + geometryScale, +1.0f);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(-1.0f, centerY + geometryScale, +1.0f);
+	glTexCoord2f(0, 1);
+	glVertex3f(-1, centerY - geometryScale, 1);
+	glTexCoord2f(1, 1);
+	glVertex3f(1, centerY - geometryScale, 1);
+	glTexCoord2f(1, 0);
+	glVertex3f(1, centerY + geometryScale, 1);
+	glTexCoord2f(0, 0);
+	glVertex3f(-1, centerY + geometryScale, 1);
 
 	glEnd();
 	glDisable(GL_ALPHA_TEST);
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void drawColumnAt(const struct Vec3 center,
@@ -190,18 +188,17 @@ void drawColumnAt(const struct Vec3 center,
 
 	float centerY;
 	FixP_t acc;
-	FixP_t bias = intToFix(128);
-	FixP_t scaled = Mul(scale, bias);
-	float textureScale = (fixToInt(scaled) / 128.0f);
+	FixP_t scaled = Mul(scale, BIAS);
+	float textureScale = (fixToInt(scaled) * REVERSE_BIAS);
 	float geometryScale = textureScale;
 
 	if (!repeatTexture) {
-		textureScale = 1.0f;
+		textureScale = 1;
 	}
 
 	acc = (center.mY + playerHeight + walkingBias + yCameraOffset);
-	scaled = Mul(acc, bias);
-	centerY = (fixToInt(scaled) / 128.0f);
+	scaled = Mul(acc, BIAS);
+	centerY = (fixToInt(scaled) * REVERSE_BIAS);
 
 	glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
 
@@ -212,46 +209,46 @@ void drawColumnAt(const struct Vec3 center,
 	glBegin(GL_QUADS);
 	if ((mask & MASK_BEHIND)) {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(-1.0f, centerY - geometryScale, -1.0f);
-		glTexCoord2f(1.0f, textureScale);
-		glVertex3f(+1.0f, centerY - geometryScale, -1.0f);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(+1.0f, centerY + geometryScale, -1.0f);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(-1.0f, centerY + geometryScale, -1.0f);
+		glVertex3f(-1, centerY - geometryScale, -1);
+		glTexCoord2f(1, textureScale);
+		glVertex3f(1, centerY - geometryScale, -1);
+		glTexCoord2f(1, 0);
+		glVertex3f(1, centerY + geometryScale, -1);
+		glTexCoord2f(0, 0);
+		glVertex3f(-1, centerY + geometryScale, -1);
 	}
 
 	if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0) || (mask & MASK_FORCE_RIGHT)) {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(-1.0f, centerY - geometryScale, -1.0f);
-		glTexCoord2f(1.0f, textureScale);
-		glVertex3f(-1.0f, centerY - geometryScale, +1.0f);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(-1.0f, centerY + geometryScale, +1.0f);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(-1.0f, centerY + geometryScale, -1.0f);
+		glVertex3f(-1, centerY - geometryScale, -1);
+		glTexCoord2f(1, textureScale);
+		glVertex3f(-1, centerY - geometryScale, 1);
+		glTexCoord2f(1, 0);
+		glVertex3f(-1, centerY + geometryScale, 1);
+		glTexCoord2f(0, 0);
+		glVertex3f(-1, centerY + geometryScale, -1);
 	}
 
 	if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0) || (mask & MASK_FORCE_LEFT)) {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(+1.0f, centerY - geometryScale, -1.0f);
-		glTexCoord2f(1.0f, textureScale);
-		glVertex3f(+1.0f, centerY - geometryScale, +1.0f);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(+1.0f, centerY + geometryScale, +1.0f);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(+1.0f, centerY + geometryScale, -1.0f);
+		glVertex3f(1, centerY - geometryScale, -1);
+		glTexCoord2f(1, textureScale);
+		glVertex3f(1, centerY - geometryScale, 1);
+		glTexCoord2f(1, 0);
+		glVertex3f(1, centerY + geometryScale, 1);
+		glTexCoord2f(0, 0);
+		glVertex3f(1, centerY + geometryScale, -1);
 	}
 
 	if ((mask & MASK_FRONT)) {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(-1.0f, centerY - geometryScale, +1.0f);
-		glTexCoord2f(1.0f, textureScale);
-		glVertex3f(+1.0f, centerY - geometryScale, +1.0f);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(+1.0f, centerY + geometryScale, +1.0f);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(-1.0f, centerY + geometryScale, +1.0f);
+		glVertex3f(-1, centerY - geometryScale, 1);
+		glTexCoord2f(1, textureScale);
+		glVertex3f(1, centerY - geometryScale, 1);
+		glTexCoord2f(1, 0);
+		glVertex3f(1, centerY + geometryScale, 1);
+		glTexCoord2f(0, 0);
+		glVertex3f(-1, centerY + geometryScale, 1);
 	}
 
 	glEnd();
@@ -263,12 +260,11 @@ void drawFloorAt(const struct Vec3 center,
 
 	float centerY;
 	FixP_t acc;
-	FixP_t bias = intToFix(128);
 	FixP_t scaled;
 
 	acc = center.mY + playerHeight + walkingBias + yCameraOffset;
-	scaled = Mul(acc, bias);
-	centerY = (fixToInt(scaled) / 128.0f);
+	scaled = Mul(acc, BIAS);
+	centerY = (fixToInt(scaled) * REVERSE_BIAS);
 
 	int x[4], y[4];
 
@@ -322,16 +318,15 @@ void drawFloorAt(const struct Vec3 center,
 		glBegin(GL_QUADS);
 
 		glTexCoord2f(x[0], y[0]);
-		glVertex3f(-1.0f, centerY, -1.0f);
+		glVertex3f(-1, centerY, -1);
 		glTexCoord2f(x[1], y[1]);
-		glVertex3f(+1.0f, centerY, -1.0f);
+		glVertex3f(1, centerY, -1);
 		glTexCoord2f(x[2], y[2]);
-		glVertex3f(+1.0f, centerY, +1.0f);
+		glVertex3f(1, centerY, 1);
 		glTexCoord2f(x[3], y[3]);
+		glVertex3f(-1, centerY, 1);
 
-		glVertex3f(-1.0f, centerY, +1.0f);
 		glEnd();
-		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
 
@@ -340,13 +335,11 @@ void drawCeilingAt(const struct Vec3 center,
 
 	float centerY;
 	FixP_t acc;
-	FixP_t bias = intToFix(128);
 	FixP_t scaled;
 
 	acc = (center.mY + playerHeight + walkingBias + yCameraOffset);
-	scaled = Mul(acc, bias);
-	centerY = (fixToInt(scaled) / 128.0f);
-
+	scaled = Mul(acc, BIAS);
+	centerY = (fixToInt(scaled) * REVERSE_BIAS);
 
 	int x[4], y[4];
 
@@ -400,15 +393,14 @@ void drawCeilingAt(const struct Vec3 center,
 		glBegin(GL_QUADS);
 
 		glTexCoord2f(x[0], y[0]);
-		glVertex3f(-1.0f, centerY, -1.0f);
+		glVertex3f(-1, centerY, -1);
 		glTexCoord2f(x[1], y[1]);
-		glVertex3f(+1.0f, centerY, -1.0f);
+		glVertex3f(1, centerY, -1);
 		glTexCoord2f(x[2], y[2]);
-		glVertex3f(+1.0f, centerY, +1.0f);
+		glVertex3f(1, centerY, 1);
 		glTexCoord2f(x[3], y[3]);
-		glVertex3f(-1.0f, centerY, +1.0f);
+		glVertex3f(-1, centerY, 1);
 		glEnd();
-		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
 
@@ -420,42 +412,40 @@ void drawLeftNear(const struct Vec3 center,
 
 
 	FixP_t acc;
-	FixP_t bias = intToFix(128);
 	FixP_t scaled;
 
 	float centerY;
-	scaled = Mul(scale, bias);
-	float textureScale = (fixToInt(scaled) / 128.0f);
+	scaled = Mul(scale, BIAS);
+	float textureScale = (fixToInt(scaled) * REVERSE_BIAS);
 	float geometryScale = textureScale;
 
 	acc = (center.mY + playerHeight + walkingBias + yCameraOffset);
-	scaled = Mul(acc, bias);
-	centerY = (fixToInt(scaled) / 128.0f);
+	scaled = Mul(acc, BIAS);
+	centerY = (fixToInt(scaled) * REVERSE_BIAS);
 
 	glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
 	glBegin(GL_QUADS);
 
 	if (cameraDirection == kWest || cameraDirection == kEast) {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(-1.0f, centerY - geometryScale, -1.0f);
+		glVertex3f(-1, centerY - geometryScale, -1);
 		glTexCoord2f(1, textureScale);
-		glVertex3f(+1.0f, centerY - geometryScale, +1.0f);
-		glTexCoord2f(1, 0.0f);
-		glVertex3f(+1.0f, centerY + geometryScale, +1.0f);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(-1.0f, centerY + geometryScale, -1.0f);
+		glVertex3f(1, centerY - geometryScale, 1);
+		glTexCoord2f(1, 0);
+		glVertex3f(1, centerY + geometryScale, 1);
+		glTexCoord2f(0, 0);
+		glVertex3f(-1, centerY + geometryScale, -1);
 	} else {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(-1.0f, centerY - geometryScale, +1.0f);
+		glVertex3f(-1, centerY - geometryScale, 1);
 		glTexCoord2f(1, textureScale);
-		glVertex3f(+1.0f, centerY - geometryScale, -1.0f);
-		glTexCoord2f(1, 0.0f);
-		glVertex3f(+1.0f, centerY + geometryScale, -1.0f);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(-1.0f, centerY + geometryScale, +1.0f);
+		glVertex3f(1, centerY - geometryScale, -1);
+		glTexCoord2f(1, 0);
+		glVertex3f(1, centerY + geometryScale, -1);
+		glTexCoord2f(0, 0);
+		glVertex3f(-1, centerY + geometryScale, 1);
 	}
 	glEnd();
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void drawRightNear(const struct Vec3 center,
@@ -466,17 +456,16 @@ void drawRightNear(const struct Vec3 center,
 
 	float centerY;
 	FixP_t acc;
-	FixP_t bias = intToFix(128);
 	FixP_t scaled;
 
-	scaled = Mul(scale, bias);
-	float textureScale = (fixToInt(scaled) / 128.0f);
+	scaled = Mul(scale, BIAS);
+	float textureScale = (fixToInt(scaled) * REVERSE_BIAS);
 	float geometryScale = textureScale;
 
 
 	acc = (center.mY + playerHeight + walkingBias + yCameraOffset);
-	scaled = Mul(acc, bias);
-	centerY = (fixToInt(scaled) / 128.0f);
+	scaled = Mul(acc, BIAS);
+	centerY = (fixToInt(scaled) * REVERSE_BIAS);
 
 	glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
 	glBegin(GL_QUADS);
@@ -484,23 +473,22 @@ void drawRightNear(const struct Vec3 center,
 
 	if (cameraDirection == kWest || cameraDirection == kEast) {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(-1.0f, centerY - geometryScale, +1.0f);
+		glVertex3f(-1, centerY - geometryScale, 1);
 		glTexCoord2f(1, textureScale);
-		glVertex3f(+1.0f, centerY - geometryScale, -1.0f);
+		glVertex3f(1, centerY - geometryScale, -1);
 		glTexCoord2f(1, 0);
-		glVertex3f(+1.0f, centerY + geometryScale, -1.0f);
+		glVertex3f(1, centerY + geometryScale, -1);
 		glTexCoord2f(0, 0);
-		glVertex3f(-1.0f, centerY + geometryScale, +1.0f);
+		glVertex3f(-1, centerY + geometryScale, 1);
 	} else {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(-1.0f, centerY - geometryScale, -1.0f);
+		glVertex3f(-1, centerY - geometryScale, -1);
 		glTexCoord2f(1, textureScale);
-		glVertex3f(+1.0f, centerY - geometryScale, +1.0f);
+		glVertex3f(1, centerY - geometryScale, 1);
 		glTexCoord2f(1, 0);
-		glVertex3f(+1.0f, centerY + geometryScale, +1.0f);
+		glVertex3f(1, centerY + geometryScale, 1);
 		glTexCoord2f(0, 0);
-		glVertex3f(-1.0f, centerY + geometryScale, -1.0f);
+		glVertex3f(-1, centerY + geometryScale, -1);
 	}
 	glEnd();
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
