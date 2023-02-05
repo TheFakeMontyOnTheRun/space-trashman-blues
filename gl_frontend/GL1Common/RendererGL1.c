@@ -91,7 +91,6 @@ void enter2D(void) {
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glDisable(GL_FOG);
 #ifndef NDS
 	glDisable(GL_DEPTH_TEST);
 #endif
@@ -101,7 +100,7 @@ void initGL(void) {
 
 	glEnable(GL_TEXTURE_2D);                        // Enable Texture Mapping ( NEW )
 	glClearColor(0, 0, 0, 1);                   // Black Background
-
+	glDisable(GL_FOG);
 #ifndef NDS
 	glClearDepth(1);                         // Depth Buffer Setup
 	glShadeModel(GL_SMOOTH);                        // Enable Smooth Shading
@@ -1018,6 +1017,9 @@ void render(const long ms) {
 				glTranslatef(-fixToInt(xCameraOffset + position.mX), 0, fixToInt(zCameraOffset + position.mZ));
 			}
 		}
+#ifdef NDS
+		swiWaitForVBlank();
+#endif
 		enter2D();
 
 		if (focusItemName != NULL) {
