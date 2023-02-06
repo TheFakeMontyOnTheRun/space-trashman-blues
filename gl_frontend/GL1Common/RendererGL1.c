@@ -504,12 +504,7 @@ void render(const long ms) {
 						if ((x < (MAP_SIZE - 1)) && (map[z][(x + 1)] == element)) {
 							facesMask &= ~MASK_RIGHT;
 						}
-						/*
-										if (z < 0) {
-											facesMask[1] = (visibleElementsMap[(z - 1)][x] !=
-															element);
-										}
-				*/
+
 						if (z == (cameraPosition.y) + 1) {
 
 							if (getFromMap(&occluders, element)) {

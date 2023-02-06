@@ -171,7 +171,10 @@ void Crawler_repaintCallback() {
 
 			xCameraOffset = yCameraOffset = 0;
 
+#ifndef NDS
+			enter2D();
 			fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
+#endif
 
 			enter3D();
 			center.mX = center.mY = 0;
@@ -222,6 +225,9 @@ void Crawler_repaintCallback() {
 			glTranslatef(1, 0.0f, -3);
 			drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
 
+#ifdef NDS
+			swiWaitForVBlank();
+#endif
 			enter2D();
 
 			drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName,
