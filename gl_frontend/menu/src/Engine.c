@@ -69,10 +69,8 @@ void enterState(enum EGameMenuState newState) {
 
 	timeUntilNextState = MENU_ITEM_TIME_TO_BECOME_ACTIVE_MS;
 	currentPresentationState = kAppearing;
-	currentBackgroundBitmap = NULL;
 	cursorPosition = 0;
 	nextNavigationSelection = -1;
-
 	switch (newState) {
 		default:
 		case kMainMenu:

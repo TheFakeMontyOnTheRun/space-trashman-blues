@@ -53,10 +53,6 @@ void MainMenu_initStateCallback(int32_t tag) {
 	int c;
 	cursorPosition = 0;
 
-	if (currentBackgroundBitmap != NULL) {
-		releaseBitmap(currentBackgroundBitmap);
-	}
-
 	for (c = 0; c < 28; ++c) {
 		char buffer[32];
 		sprintf(buffer, "title_tile%04d.img", c);

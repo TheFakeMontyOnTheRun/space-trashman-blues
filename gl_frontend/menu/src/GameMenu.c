@@ -192,12 +192,15 @@ void GameMenu_initialPaintCallback(void) {
 }
 
 void GameMenu_repaintCallback(void) {
+
 	int c;
 	int16_t optionsHeight = 8 * (GameMenu_optionsCount);
+	enter2D();
 
 	fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), 0);
 
 	if (currentPresentationState == kAppearing) {
+
 		int invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;
 		int movementX =
 				lerpInt(0, (biggestOption * 8), invertedProgression, 256);

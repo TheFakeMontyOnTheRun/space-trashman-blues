@@ -38,7 +38,6 @@ void BattleScreen_initStateCallback(int32_t tag) {
 	cursorPosition = 1;
 	currentPresentationState = kAppearing;
 	timeUntilNextState = 500;
-	currentBackgroundBitmap = loadBitmap("pattern.img");
 	enemySprite = loadBitmap("enemy.img");
 	enableSmoothMovement = FALSE;
 }
@@ -142,8 +141,4 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void BattleScreen_unloadStateCallback(int32_t newState) {
-	if (currentBackgroundBitmap != NULL) {
-		releaseBitmap(currentBackgroundBitmap);
-		currentBackgroundBitmap = NULL;
-	}
 }
