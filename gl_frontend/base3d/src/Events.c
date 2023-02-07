@@ -110,11 +110,7 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
 
 	if (mapTopLevel[0]) {
 		for (c = 0; c < 8; ++c) {
-#ifndef N64
-			free(mapTopLevel[c]);
-#else
-			free_uncached(mapTopLevel[c]);
-#endif
+			releaseBitmap(mapTopLevel[c]);
 		}
 	}
 
@@ -219,6 +215,11 @@ void initRoom(int room) {
 			itemSprites[c] != NULL) {
 
 			releaseBitmap(itemSprites[c]->raw);
+#ifndef N64
+			free(itemSprites[c]);
+#else
+			free_uncached(itemSprites[c]);
+#endif
 			itemSprites[c] = NULL;
 		}
 	}
