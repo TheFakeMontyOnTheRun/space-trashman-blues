@@ -142,7 +142,7 @@ void redrawHUD(void) {
 
 	for (z = -8; z < 8; ++z) {
 		for (x = -10; x < 10; ++x) {
-			fill(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4,
+			fill(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 5,
 				 (x == 0 && z == 0) ? 32 : isPositionAllowed(visPos.x + x, visPos.y + z) ? getPaletteEntry(0xFFAAAAAA)
 																						 : getPaletteEntry(0xFF999999),
 				 FALSE);
