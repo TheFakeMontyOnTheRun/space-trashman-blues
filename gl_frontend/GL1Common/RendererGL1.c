@@ -230,7 +230,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 	char *head;
 	char *end;
 	char *nameStart;
-
+	int c;
 	sprintf(tilesFilename, "tiles%d.lst", levelNumber);
 	data = loadBinaryFileFromPath(tilesFilename);
 
@@ -241,7 +241,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 	texturesUsed = 0;
 	clearTextures();
 
-	for (int c = 0; c < TOTAL_TEXTURES; ++c) {
+	for (c = 0; c < TOTAL_TEXTURES; ++c) {
 		if (nativeTextures[c] != NULL) {
 			releaseBitmap(nativeTextures[c]->raw);
 #ifndef N64

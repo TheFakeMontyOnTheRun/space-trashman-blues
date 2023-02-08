@@ -440,8 +440,8 @@ void Crawler_unloadStateCallback(int32_t newState) {
 		newState != kRandomBattle &&
 		newState != kInspectItem &&
 		newState != kHackingGame) {
-
-		for (int c = 0; c < TOTAL_TEXTURES; ++c) {
+		int c;
+		for (c = 0; c < TOTAL_TEXTURES; ++c) {
 			if (nativeTextures[c] != NULL) {
 				releaseBitmap(nativeTextures[c]->raw);
 				free(nativeTextures[c]);
