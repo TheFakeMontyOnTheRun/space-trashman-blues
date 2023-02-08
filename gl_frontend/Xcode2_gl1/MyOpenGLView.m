@@ -93,7 +93,7 @@ void soundTick(void) {}
 void muteSound(void) {}
 
 
-void initHW() {
+void initHW(int argc, char** argv) {
 
 	NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"base.pfs"];
 	initFileReader([path UTF8String]);
@@ -105,6 +105,8 @@ void initHW() {
 void graphicsInit() {
 	defaultFont = loadBitmap("font.img");
 	defaultFont->uploadId = submitBitmapToGPU(defaultFont);
+    enableSmoothMovement = TRUE;
+    initGL();
 }
 
 void handleSystemEvents() {
@@ -196,13 +198,9 @@ void flipRenderer() {
 		NSLog(@"No OpenGL pixel format");
 	}
 
-	srand((unsigned int) time(NULL));
-
 	[[self openGLContext] makeCurrentContext];
 
-	initStation();
 	initHW(0, NULL);
-	initGL();
 	graphicsInit();
 
 
@@ -221,7 +219,7 @@ void flipRenderer() {
 - (void)drawRect:(NSRect)rect {
 	startFrameGL((GLsizei) rect.size.width, (GLsizei) rect.size.height);
 
-	isRunning = menuTick(20);
+    isRunning = isRunning && menuTick(20);
 
 	if (!isRunning) {
 		exit(0);
