@@ -81,33 +81,33 @@ void drawRect(
 
 #ifndef NDS
 		glBegin(GL_LINE_LOOP);
-		glVertex3f(x, y, -0.25);
-		glVertex3f(x + dx, y, -0.25);
-		glVertex3f(x + dx, y + dy, -0.25);
-		glVertex3f(x, y + dy, -0.25);
+		glVertex3f(x, y, -0.13);
+		glVertex3f(x + dx, y, -0.13);
+		glVertex3f(x + dx, y + dy, -0.13);
+		glVertex3f(x, y + dy, -0.13);
 		glEnd();
 #else
 		glBegin(GL_QUADS);
 
-		glVertex3f(x, y, -0.25f);
-		glVertex3f(x + dx, y, -0.25f);
-		glVertex3f(x + dx, y, -0.25f);
-		glVertex3f(x, y, -0.25f);
+		glVertex3f(x, y, -0.13);
+		glVertex3f(x + dx, y, -0.13);
+		glVertex3f(x + dx, y, -0.13);
+		glVertex3f(x, y, -0.13);
 
-		glVertex3f(x + dx, y, -0.25f);
-		glVertex3f(x + dx, y + dy, -0.25f);
-		glVertex3f(x + dx, y + dy, -0.25f);
-		glVertex3f(x + dx, y, -0.25f);
+		glVertex3f(x + dx, y, -0.13);
+		glVertex3f(x + dx, y + dy, -0.13);
+		glVertex3f(x + dx, y + dy, -0.13);
+		glVertex3f(x + dx, y, -0.13);
 
-		glVertex3f(x, y + dy, -0.25f);
-		glVertex3f(x + dx, y + dy, -0.25f);
-		glVertex3f(x + dx, y + dy, -0.25f);
-		glVertex3f(x, y + dy, -0.25f);
+		glVertex3f(x, y + dy, -0.13);
+		glVertex3f(x + dx, y + dy, -0.13);
+		glVertex3f(x + dx, y + dy, -0.13);
+		glVertex3f(x, y + dy, -0.13);
 
-		glVertex3f(x, y, -0.25f);
-		glVertex3f(x, y + dy, -0.25f);
-		glVertex3f(x, y + dy, -0.25f);
-		glVertex3f(x, y, -0.25f);
+		glVertex3f(x, y, -0.13);
+		glVertex3f(x, y + dy, -0.13);
+		glVertex3f(x, y + dy, -0.13);
+		glVertex3f(x, y, -0.13);
 
 		glEnd();
 
@@ -182,13 +182,13 @@ void fill(
 					size_t dstY = y + c * 4;
 
 					glTexCoord2f(col, line - blockHeight);
-					glVertex3f(dstX, dstY, -0.3);
+					glVertex3f(dstX, dstY, -0.15);
 					glTexCoord2f(col + blockWidth, line - blockHeight);
-					glVertex3f(dstX + 4, dstY, -0.3);
+					glVertex3f(dstX + 4, dstY, -0.15);
 					glTexCoord2f(col + blockWidth, line);
-					glVertex3f(dstX + 4, dstY + 4, -0.3);
+					glVertex3f(dstX + 4, dstY + 4, -0.15);
 					glTexCoord2f(col, line);
-					glVertex3f(dstX, dstY + 4, -0.3);
+					glVertex3f(dstX, dstY + 4, -0.15);
 				}
 			}
 
@@ -201,10 +201,10 @@ void fill(
 					  0);
 
 			glBegin(GL_QUADS);
-			glVertex3f(x, y, -0.3);
-			glVertex3f(x + dx, y, -0.3f);
-			glVertex3f(x + dx, y + dy, -0.3f);
-			glVertex3f(x, y + dy, -0.3f);
+			glVertex3f(x, y, -0.15);
+			glVertex3f(x + dx, y, -0.15);
+			glVertex3f(x + dx, y + dy, -0.15);
+			glVertex3f(x, y + dy, -0.15);
 			glEnd();
 			glEnable(GL_TEXTURE_2D);
 #endif
@@ -216,10 +216,10 @@ void fill(
 					  b);
 
 			glBegin(GL_QUADS);
-			glVertex3f(x, y, -0.3);
-			glVertex3f(x + dx, y, -0.3);
-			glVertex3f(x + dx, y + dy, -0.3);
-			glVertex3f(x, y + dy, -0.3);
+			glVertex3f(x, y, -0.15);
+			glVertex3f(x + dx, y, -0.15);
+			glVertex3f(x + dx, y + dy, -0.15);
+			glVertex3f(x, y + dy, -0.15);
 			glEnd();
 			glEnable(GL_TEXTURE_2D);
 		}
@@ -251,13 +251,13 @@ void drawBitmap(const int _dx,
 
 		glBegin(GL_QUADS);
 		glTexCoord2f(0, 0);
-		glVertex3f(x, y, -0.2);
+		glVertex3f(x, y, -0.125);
 		glTexCoord2f(1, 0);
-		glVertex3f(x + dx, y, -0.2);
+		glVertex3f(x + dx, y, -0.125);
 		glTexCoord2f(1, 1);
-		glVertex3f(x + dx, y + dy, -0.2);
+		glVertex3f(x + dx, y + dy, -0.125);
 		glTexCoord2f(0, 1);
-		glVertex3f(x, y + dy, -0.2);
+		glVertex3f(x, y + dy, -0.125);
 		glEnd();
 
 		if (transparent) {
