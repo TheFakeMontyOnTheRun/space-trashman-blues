@@ -13,8 +13,8 @@ const long UCLOCKS_PER_SEC = 1000;
 long timeEllapsed = 0;
 
 long uclock() {
-    timeEllapsed += (1000 / 60);
-    return timeEllapsed;
+	timeEllapsed += (1000 / 60);
+	return timeEllapsed;
 }
 
 #include "FixP.h"
@@ -37,18 +37,23 @@ long uclock() {
 #include <emscripten/emscripten.h>
 #endif
 
-void initHW() {
+void initHW(int argc, char **argv) {
 #ifndef N64
-    initFileReader("base.pfs");
+#ifndef NDS
+	initFileReader("base.pfs");
+#else
+	nitroFSInit(argv[0]);
+	initFileReader("nitro:/base.pfs");
+#endif
 #else
 	dfs_init(DFS_DEFAULT_LOCATION);
-    initFileReader("rom:/base.pfs");
+	initFileReader("rom:/base.pfs");
 #endif
-    graphicsInit();
+	graphicsInit();
 }
 
-void shutdownHW() {
-    graphicsShutdown();
+void shutdownHW(void) {
+	graphicsShutdown();
 }
 
 long start_clock, end_clock, prev;
@@ -62,40 +67,42 @@ void mainLoop();
 
 int main(int argc, char **argv) {
 
-	initStation();
+	initHW(argc, argv);
 
-    initHW();
+	enterState(kMainMenu);
 
-    enterState(kMainMenu);
-
-    end_clock = uclock();
-    prev = 0;
-    start_clock = uclock();
+	end_clock = uclock();
+	prev = 0;
+	start_clock = uclock();
 
 #ifdef __EMSCRIPTEN__
-    emscripten_set_main_loop(mainLoop, 0, 1);
+	emscripten_set_main_loop(mainLoop, 0, 1);
 #else
 	clearRenderer();
 
-    while (isRunning) {
+	while (isRunning) {
 
-        long now, delta_time;
+		long now, delta_time;
 
-        now = (end_clock - start_clock) / (UCLOCKS_PER_SEC / 1000);
-        delta_time = now - prev;
-        prev = now;
+		now = (end_clock - start_clock) / (UCLOCKS_PER_SEC / 1000);
+		delta_time = now - prev;
+		prev = now;
 
-        if (delta_time < 50) {
-            delta_time = 50;
-        }
+		if (delta_time < 50) {
+			delta_time = 50;
+		}
 
 #ifndef N64
+#ifndef NDS
 		startFrameGL(640, 480);
+#else
+		startFrameGL(255, 191);
+#endif
 #else
 		startFrameGL(320, 240);
 #endif
 
-        isRunning = isRunning && menuTick(20);
+		isRunning = isRunning && menuTick(20);
 
 		endFrameGL();
 		flipRenderer();
@@ -103,11 +110,10 @@ int main(int argc, char **argv) {
 	}
 #endif
 
-    unloadStateCallback();
 
-    shutdownHW();
+	shutdownHW();
 
-    return 0;
+	return 0;
 }
 
 #endif

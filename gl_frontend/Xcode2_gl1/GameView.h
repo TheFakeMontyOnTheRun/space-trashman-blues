@@ -9,17 +9,23 @@
 #import <Cocoa/Cocoa.h>
 
 @interface GameView : NSView {
-    NSTimer* timer;
-    uint8_t *buffer;
-    int bufferedInput;
+	NSTimer *timer;
+	uint8_t *buffer;
+	int bufferedInput;
 }
--(void) initTimer;
--(void) stopTimer;
-- (void)drawRect:(NSRect)rect;
-- (int) getInput;
-- (void)setBuffer:(uint8_t*) buffer;
+- (void)initTimer;
 
--(void)keyUp:(NSEvent*)event;
--(void)keyDown:(NSEvent*)event;
+- (void)stopTimer;
+
+- (void)drawRect:(NSRect)rect;
+
+- (int)getInput;
+
+- (void)setBuffer:(uint8_t *)buffer;
+
+- (void)keyUp:(NSEvent *)event;
+
+- (void)keyDown:(NSEvent *)event;
+
 - (BOOL)acceptsFirstResponder;
 @end

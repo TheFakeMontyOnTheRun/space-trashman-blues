@@ -62,12 +62,12 @@ SDL_Surface *video;
 
 #ifdef __EMSCRIPTEN__
 void enterFullScreenMode() {
-    EmscriptenFullscreenStrategy s;
-    memset(&s, 0, sizeof(s));
-    s.scaleMode = EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
-    s.canvasResolutionScaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_NONE;
-    s.filteringMode = EMSCRIPTEN_FULLSCREEN_FILTERING_DEFAULT;
-    emscripten_enter_soft_fullscreen(0, &s);
+	EmscriptenFullscreenStrategy s;
+	memset(&s, 0, sizeof(s));
+	s.scaleMode = EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
+	s.canvasResolutionScaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_NONE;
+	s.filteringMode = EMSCRIPTEN_FULLSCREEN_FILTERING_DEFAULT;
+	emscripten_enter_soft_fullscreen(0, &s);
 }
 #endif
 
@@ -75,14 +75,14 @@ void enterFullScreenMode() {
 void graphicsInit() {
 
 
-  SDL_Init(SDL_INIT_EVERYTHING);
-  video = SDL_SetVideoMode(640, 480, 32, SDL_OPENGL);
+	SDL_Init(SDL_INIT_EVERYTHING);
+	video = SDL_SetVideoMode(640, 480, 32, SDL_OPENGL);
 
 #ifdef __EMSCRIPTEN__
-  enterFullScreenMode ();
+	enterFullScreenMode ();
 #endif
-  defaultFont = loadBitmap("font.img");
-  enableSmoothMovement = TRUE;
+	defaultFont = loadBitmap("font.img");
+	enableSmoothMovement = TRUE;
 
 //    if ( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 ) {
 //        audioEnabled = 0;
@@ -97,151 +97,149 @@ void graphicsInit() {
 }
 
 void handleSystemEvents() {
-  SDL_Event event;
+	SDL_Event event;
 
-  while (SDL_PollEvent(&event)) {
+	while (SDL_PollEvent(&event)) {
 
-    if (event.type == SDL_QUIT) {
-      mBufferedCommand = kCommandQuit;
-      return;
-    }
+		if (event.type == SDL_QUIT) {
+			mBufferedCommand = kCommandQuit;
+			return;
+		}
 
-    if (event.type == SDL_KEYDOWN) {
+		if (event.type == SDL_KEYDOWN) {
 
-      SDLKey key = event.key.keysym.sym;
-
-
+			SDLKey key = event.key.keysym.sym;
 
 
-      switch(event.key.keysym.scancode){
-      case 461:
-	mBufferedCommand = kCommandBack;
-	visibilityCached = FALSE;
-	break;
+			switch (event.key.keysym.scancode) {
+				case 461:
+					mBufferedCommand = kCommandBack;
+					visibilityCached = FALSE;
+					break;
 
-      case 403:
-	mBufferedCommand = kCommandFire1;
-	visibilityCached = FALSE;
-	needsToRedrawVisibleMeshes = TRUE;
-	break;
-      case 404:
-	mBufferedCommand = kCommandFire2;
-	visibilityCached = FALSE;
-	needsToRedrawVisibleMeshes = TRUE;
-	break;
-      case 405:
-	mBufferedCommand = kCommandFire3;
-	visibilityCached = FALSE;
-	needsToRedrawVisibleMeshes = TRUE;
-	break;
-      case 406:
-	mBufferedCommand = kCommandBack;
-	visibilityCached = FALSE;
-	break;
+				case 403:
+					mBufferedCommand = kCommandFire1;
+					visibilityCached = FALSE;
+					needsToRedrawVisibleMeshes = TRUE;
+					break;
+				case 404:
+					mBufferedCommand = kCommandFire2;
+					visibilityCached = FALSE;
+					needsToRedrawVisibleMeshes = TRUE;
+					break;
+				case 405:
+					mBufferedCommand = kCommandFire3;
+					visibilityCached = FALSE;
+					needsToRedrawVisibleMeshes = TRUE;
+					break;
+				case 406:
+					mBufferedCommand = kCommandBack;
+					visibilityCached = FALSE;
+					break;
 
-      case 412:
-	mBufferedCommand = kCommandStrafeLeft;
-	visibilityCached = FALSE;
-	break;
-      case 417:
-	mBufferedCommand = kCommandStrafeRight;
-	visibilityCached = FALSE;
-	break;
-      }
+				case 412:
+					mBufferedCommand = kCommandStrafeLeft;
+					visibilityCached = FALSE;
+					break;
+				case 417:
+					mBufferedCommand = kCommandStrafeRight;
+					visibilityCached = FALSE;
+					break;
+			}
 
-      switch (key) {
-      case SDLK_RETURN:
-      case SDLK_z:
-	mBufferedCommand = kCommandFire1;
-	visibilityCached = FALSE;
-	needsToRedrawVisibleMeshes = TRUE;
-	break;
+			switch (key) {
+				case SDLK_RETURN:
+				case SDLK_z:
+					mBufferedCommand = kCommandFire1;
+					visibilityCached = FALSE;
+					needsToRedrawVisibleMeshes = TRUE;
+					break;
 
-      case SDLK_ESCAPE:
-      case SDLK_q:
-	mBufferedCommand = kCommandBack;
-	visibilityCached = FALSE;
-	break;
+				case SDLK_ESCAPE:
+				case SDLK_q:
+					mBufferedCommand = kCommandBack;
+					visibilityCached = FALSE;
+					break;
 
-      case SDLK_SPACE:
+				case SDLK_SPACE:
 
-      case SDLK_s:
-	mBufferedCommand = kCommandStrafeLeft;
-	visibilityCached = FALSE;
-	break;
-      case SDLK_d:
-	mBufferedCommand = kCommandStrafeRight;
-	visibilityCached = FALSE;
-	break;
+				case SDLK_s:
+					mBufferedCommand = kCommandStrafeLeft;
+					visibilityCached = FALSE;
+					break;
+				case SDLK_d:
+					mBufferedCommand = kCommandStrafeRight;
+					visibilityCached = FALSE;
+					break;
 
-      case SDLK_v:
-	visibilityCached = FALSE;
-	break;
-      case SDLK_b:
-	visibilityCached = FALSE;
-	break;
+				case SDLK_v:
+					visibilityCached = FALSE;
+					break;
+				case SDLK_b:
+					visibilityCached = FALSE;
+					break;
 
-      case SDLK_j:
-	visibilityCached = FALSE;
-	break;
-      case SDLK_k:
-	visibilityCached = FALSE;
-	break;
+				case SDLK_j:
+					visibilityCached = FALSE;
+					break;
+				case SDLK_k:
+					visibilityCached = FALSE;
+					break;
 
-      case SDLK_x:
-	mBufferedCommand = kCommandFire2;
-	visibilityCached = FALSE;
-	needsToRedrawVisibleMeshes = TRUE;
-	break;
-      case SDLK_c:
-	mBufferedCommand = kCommandFire3;
-	visibilityCached = FALSE;
-	needsToRedrawVisibleMeshes = TRUE;
-	break;
-      case SDLK_e:
-	mBufferedCommand = kCommandFire4;
-	visibilityCached = FALSE;
-	needsToRedrawVisibleMeshes = TRUE;
-	break;
+				case SDLK_x:
+					mBufferedCommand = kCommandFire2;
+					visibilityCached = FALSE;
+					needsToRedrawVisibleMeshes = TRUE;
+					break;
+				case SDLK_c:
+					mBufferedCommand = kCommandFire3;
+					visibilityCached = FALSE;
+					needsToRedrawVisibleMeshes = TRUE;
+					break;
+				case SDLK_e:
+					mBufferedCommand = kCommandFire4;
+					visibilityCached = FALSE;
+					needsToRedrawVisibleMeshes = TRUE;
+					break;
 
-      case SDLK_LEFT:
-	mBufferedCommand = kCommandLeft;
-	visibilityCached = FALSE;
-	break;
-      case SDLK_RIGHT:
-	mBufferedCommand = kCommandRight;
-	visibilityCached = FALSE;
-	break;
-      case SDLK_UP:
-	mBufferedCommand = kCommandUp;
-	visibilityCached = FALSE;
-	break;
-      case SDLK_DOWN:
-	mBufferedCommand = kCommandDown;
-	visibilityCached = FALSE;
-	break;
+				case SDLK_LEFT:
+					mBufferedCommand = kCommandLeft;
+					visibilityCached = FALSE;
+					break;
+				case SDLK_RIGHT:
+					mBufferedCommand = kCommandRight;
+					visibilityCached = FALSE;
+					break;
+				case SDLK_UP:
+					mBufferedCommand = kCommandUp;
+					visibilityCached = FALSE;
+					break;
+				case SDLK_DOWN:
+					mBufferedCommand = kCommandDown;
+					visibilityCached = FALSE;
+					break;
 
-      default:
-	return;
-      }
-    }
-  }
+				default:
+					return;
+			}
+		}
+	}
 }
 
 void graphicsShutdown() {
-  SDL_Quit();
+	SDL_Quit();
 
-  releaseBitmap(defaultFont);
+	releaseBitmap(defaultFont);
 
-  texturesUsed = 0;
+	texturesUsed = 0;
 }
 
 void flipRenderer() {
 
-  SDL_GL_SwapBuffers();
-  
+	SDL_GL_SwapBuffers();
+
 #ifndef __EMSCRIPTEN__
-    SDL_Delay(1000 / 60);
+	SDL_Delay(1000 / 60);
 #endif
 
 
