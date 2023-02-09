@@ -10,12 +10,11 @@ CFLAGS += -Ofast      \
     -ffast-math             \
     -flto		    \
     -DCLI_BUILD \
-    -Wno-error \
-    -w \
     -I../core/include \
     -I../common/include \
     -DN64 \
-    -DINCLUDE_ITEM_DESCRIPTIONS
+    -DINCLUDE_ITEM_DESCRIPTIONS \
+    -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic
 
 src = menu/src/MainMenu.c \
                   		menu/src/Crawler.c \

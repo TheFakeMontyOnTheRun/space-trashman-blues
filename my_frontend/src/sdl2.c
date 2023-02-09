@@ -85,6 +85,8 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
 
 void shutdownGraphics() {
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
 
@@ -265,8 +267,6 @@ void init() {
 #ifdef __EMSCRIPTEN__
 	enterFullScreenMode ();
 #endif
-
-
 }
 
 

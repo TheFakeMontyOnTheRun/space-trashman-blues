@@ -183,6 +183,7 @@ void handleSystemEvents() {
 }
 
 void graphicsShutdown() {
+	SDL_DestroyWindow(window);
 	SDL_Quit();
 
 	releaseBitmap(defaultFont);

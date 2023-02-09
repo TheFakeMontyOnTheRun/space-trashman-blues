@@ -1,9 +1,9 @@
 void setupOPL2(int port) {}
 
-void stopSounds() {}
+void stopSounds(void) {}
 
-void playSound( const int action ){}
+void playSound(int action) {}
 
-void soundTick() {}
+void soundTick(void) {}
 
-void muteSound() {}
+void muteSound(void) {}

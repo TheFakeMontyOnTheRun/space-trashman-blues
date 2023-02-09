@@ -5,9 +5,9 @@
 #ifndef THE_MISTRAL_REPORT_PCMAUDIO_H
 #define THE_MISTRAL_REPORT_PCMAUDIO_H
 struct PCMAudio {
-    size_t size;
-    long lengthInMS;
-    uint8_t *data;
+	size_t size;
+	long lengthInMS;
+	uint8_t *data;
 };
 
 void initAudio(uint8_t *src, size_t size, struct PCMAudio *dst);

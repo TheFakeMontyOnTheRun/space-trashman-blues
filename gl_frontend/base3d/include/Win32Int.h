@@ -16,5 +16,5 @@
 
 #define uint8_t unsigned char
 #define int8_t signed char
-#define __restrict__  
+#define __restrict__
 #endif
