@@ -1,10 +1,9 @@
+#include <stddef.h>
 #ifndef SMD
-
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-
 #else
 #include <genesis.h>
 #endif
