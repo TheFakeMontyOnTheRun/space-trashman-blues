@@ -9,7 +9,7 @@ struct Bitmap {
 	BitmapPixelFormat *data;
 	uint16_t width;
 	uint16_t height;
-    int uploadId;
+	int uploadId;
 };
 
 struct Texture {
@@ -18,9 +18,9 @@ struct Texture {
 
 void clearTextures(void);
 
-struct Texture *makeTextureFrom(const char *  filename);
+struct Texture *makeTextureFrom(const char *filename);
 
-struct Bitmap *loadBitmap(const char *  filename);
+struct Bitmap *loadBitmap(const char *filename);
 
 void releaseBitmap(struct Bitmap *ptr);
 

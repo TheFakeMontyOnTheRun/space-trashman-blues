@@ -5,13 +5,15 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include "Common.h"
-#include "Globals.h"
 #include "Enums.h"
+#include "Globals.h"
 #include "Core.h"
 #include "Engine.h"
 

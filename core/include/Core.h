@@ -148,7 +148,7 @@ struct Room *addRoom(
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
 		const char *info,
 #endif
-		uint8_t sizeX, uint8_t sizeY, uint8_t chanceOfRandomBattle, const int8_t *connections);
+		uint8_t sizeX, uint8_t sizeY, uint8_t chanceOfRandomBattle, const int8_t connections[6]);
 
 void addObjectToRoom(uint8_t roomId, struct Item *itemToAdd);
 

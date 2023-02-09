@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface GameWindow : NSWindow  {
+@interface GameWindow : NSWindow {
 
 }
 
