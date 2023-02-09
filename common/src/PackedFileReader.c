@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef N64
+#include <libdragon.h>
+#endif
+
 #ifndef LEAN_BUILD
 
 #include <assert.h>
@@ -109,6 +113,8 @@ size_t sizeOfFile(const char * path) {
 		}
 	}
 
+	return 0;
+
 found:
 	if (offset == 0) {
 		printf("failed to load %s\n", path);
@@ -156,6 +162,8 @@ struct StaticBuffer loadBinaryFileFromPath(const char * path) {
 			goto found;
 		}
 	}
+
+	assert(FALSE);
 
 found:
 

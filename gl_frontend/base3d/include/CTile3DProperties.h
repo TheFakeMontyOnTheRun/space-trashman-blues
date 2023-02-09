@@ -6,7 +6,18 @@ typedef uint8_t TextureIndex;
 struct CTile3DProperties;
 
 enum GeometryType {
-	kNoGeometry, kCube, kLeftNearWall, kRightNearWall, kFloor, kRampNorth, kRampEast, kRampSouth, kRampWest, kWallNorth, kWallWest, kWallCorner
+	kNoGeometry,
+	kCube,
+	kLeftNearWall,
+	kRightNearWall,
+	kFloor,
+	kRampNorth,
+	kRampEast,
+	kRampSouth,
+	kRampWest,
+	kWallNorth,
+	kWallWest,
+	kWallCorner
 };
 
 struct CTile3DProperties {
@@ -18,7 +29,7 @@ struct CTile3DProperties {
 	TextureIndex mCeilingTextureIndex;
 	TextureIndex mFloorTextureIndex;
 	TextureIndex mMainWallTextureIndex;
-    enum GeometryType mGeometryType;
+	enum GeometryType mGeometryType;
 	TextureIndex mCeilingRepeatedTextureIndex;
 	TextureIndex mFloorRepeatedTextureIndex;
 	uint8_t mCeilingRepetitions;
@@ -27,6 +38,6 @@ struct CTile3DProperties {
 	FixP_t mFloorHeight;
 };
 
-void loadPropertyList(const char *  propertyFile, struct MapWithCharKey *map);
+void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map);
 
 #endif
