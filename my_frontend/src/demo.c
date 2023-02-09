@@ -1,10 +1,9 @@
+#include <stddef.h>
 #ifndef SMD
-
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-
 #else
 #include <genesis.h>
 #endif
@@ -33,6 +32,12 @@ enum DIRECTION {
 #define IN_RANGE(V0, V1, V)  ((V0) <= (V) && (V) <= (V1))
 
 #define STIPPLE_DISTANCE 13
+#define RLE_THRESHOLD 32
+#define MAP_SIZE_X 32
+#define MAP_SIZE_Y 32
+#define VISIBILITY_LIMIT_X (MAP_SIZE_X - 1)
+#define VISIBILITY_LIMIT_Y (MAP_SIZE_Y - 1)
+#define NEUTRAL_CELL '.'
 
 struct ObjectNode *focusedItem = NULL;
 struct ObjectNode *roomItem = NULL;
@@ -1116,7 +1121,7 @@ final_stroke:
 
 uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 	int8_t diff;
-	uint8_t pattern = (_pattern - 32) & 127;
+	uint8_t pattern = (_pattern - RLE_THRESHOLD) & 127;
 	uint8_t type;
 
 	/* 127 = 01111111 - the first bit is used for indicating the presence of an object.
@@ -1362,7 +1367,7 @@ void renderCameraWest(void) {
 
 	for (x = cameraX; x >= 0; --x) {
 
-		int8_t minX = min(cameraZ + ((cameraX) - x), 31);
+		int8_t minX = min(cameraZ + ((cameraX) - x), (MAP_SIZE_Y - 1));
 		lastIndex = cameraZ;
 		lastPattern = map[lastIndex][x];
 
@@ -1412,10 +1417,10 @@ void renderCameraSouth(void) {
 	int8_t x;
 	uint8_t pattern;
 
-	for (y = cameraZ; y < VISIBILITY_LIMIT; ++y) {
+	for (y = cameraZ; y < VISIBILITY_LIMIT_Y; ++y) {
 
 		int8_t const *mapY = &map[y][0];
-		int8_t minX = min(cameraX + (y - cameraZ), 31);
+		int8_t minX = min(cameraX + (y - cameraZ), (MAP_SIZE_X - 1));
 		lastIndex = cameraX;
 		lastPattern = *(mapY + lastIndex);
 		mapXY = &map[y][lastIndex];
@@ -1427,7 +1432,7 @@ void renderCameraSouth(void) {
 			if (pattern != lastPattern) {
 
 				if (!drawPattern(lastPattern, -(x - cameraX) + 2, -(lastIndex - cameraX) + 2, y - cameraZ)) {
-					x = VISIBILITY_LIMIT;
+					x = VISIBILITY_LIMIT_X;
 				}
 				lastIndex = x;
 				lastPattern = pattern;
@@ -1469,7 +1474,7 @@ void renderCameraEast(void) {
 	int8_t y;
 	uint8_t pattern;
 
-	for (x = cameraX; x < VISIBILITY_LIMIT; ++x) {
+	for (x = cameraX; x < VISIBILITY_LIMIT_X; ++x) {
 
 		int8_t minY = min(cameraZ + (x - cameraX), 31);
 		lastIndex = cameraZ;
@@ -1482,7 +1487,7 @@ void renderCameraEast(void) {
 			if (pattern != lastPattern) {
 
 				if (!drawPattern(lastPattern, (lastIndex - cameraZ) + 2, (y - cameraZ) + 2, x - cameraX)) {
-					y = VISIBILITY_LIMIT;
+					y = VISIBILITY_LIMIT_Y;
 				}
 				lastIndex = y;
 				lastPattern = pattern;
@@ -1702,18 +1707,26 @@ void updateMapItems(void);
 void initMap(void) {
 	uint8_t x, y, c;
 	const uint8_t *head;
-	uint8_t current = '.';
+	const uint8_t *headEnd;
+	uint8_t current = NEUTRAL_CELL;
 
 	uint16_t offsetOnDataStrip = 0;
 	int16_t repetitions = -1;
 
 #ifdef EMBEDDED_DATA
-/* TODO: precalc absolute offsets */
 	for (c = 0; c < playerLocation; ++c) {
 		offsetOnDataStrip += dataPositions[c];
 	}
 
 	head = &data[offsetOnDataStrip];
+
+	//the last location
+	if (dataPositions[playerLocation + 1] == 0 ) {
+		size_t extra = sizeof(data) - 1;
+		headEnd = &data[0] + extra;
+	} else {
+		headEnd = head + (dataPositions[playerLocation]);
+	}
 #else
 	struct StaticBuffer datafile = loadBinaryFileFromPath(playerLocation);
 	head = datafile.data;
@@ -1721,14 +1734,20 @@ void initMap(void) {
 	/* first item in the list is always a dummy */
 	roomItem = getRoom(playerLocation)->itemsPresent->next;
 
-	for (y = 0; y < 32; ++y) {
-		for (x = 0; x < 32; ++x) {
+	memset(map, NEUTRAL_CELL, MAP_SIZE_X * MAP_SIZE_Y);
+
+	for (y = 0; y < MAP_SIZE_Y; ++y) {
+		for (x = 0; x < MAP_SIZE_X; ++x) {
 
 #ifdef RLE_COMPRESSED_MAPS
+			if (head == headEnd) {
+				goto done_loading;
+			}
+
 			if (repetitions < 1) {
 				repetitions = *head;
 
-				if (repetitions >= 32) {
+				if (repetitions >= RLE_THRESHOLD) {
 					++head;
 					current = repetitions;
 					repetitions = 0;
@@ -1757,7 +1776,7 @@ void initMap(void) {
 				newPos.y = y;
 				setPlayerPosition(&newPos);
 				enteredFrom = 0xFF;
-				current = '.';
+				current = NEUTRAL_CELL;
 			}
 
 			map[y][x] = current;
@@ -1769,6 +1788,8 @@ void initMap(void) {
 		++head; // line break
 #endif
 	}
+
+	done_loading:
 	updateMapItems();
 	HUD_initialPaint();
 }
@@ -1776,30 +1797,30 @@ void initMap(void) {
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
 void startRoomTransitionAnimation(void) {
   uint8_t x,y;
-  
-  for (y = 32; y >= 2; --y ) {
-		vLine(y, y, 95 + (32 - y), 1);
-		vLine(95 + (32 - y), y, 95 + (32 - y), 1);
 
-		for (x = y; x < (95 + (32 - y)); ++x) {
+  for (y = MAP_SIZE_Y; y >= 2; --y ) {
+		vLine(y, y, 95 + (MAP_SIZE_Y - y), 1);
+		vLine(95 + (MAP_SIZE_Y - y), y, 95 + (MAP_SIZE_Y - y), 1);
+
+		for (x = y; x < (95 + (MAP_SIZE_Y - y)); ++x) {
 			graphicsPut(x, y);
-			graphicsPut(x, 95 + (32 - y));
+			graphicsPut(x, 95 + (MAP_SIZE_Y - y));
 			//door opening
 
 #ifdef MSDOS
-			vLine(x, y, 95 - 3 * (32 - y), 7);
+			vLine(x, y, 95 - 3 * (MAP_SIZE_Y - y), 7);
 #else
 #ifndef USE_FILLED_POLYS
-			graphicsPut(x, 95 - 3 * (32 - y));
+			graphicsPut(x, 95 - 3 * (MAP_SIZE_Y - y));
 #else
 			if (y > STIPPLE_DISTANCE) {
-				vLine(x, y, 95 - 3 * (32 - y), 12);
+				vLine(x, y, 95 - 3 * (MAP_SIZE_Y - y), 12);
 			} else {
-				vLine(x, y, 95 - 3 * (32 - y), 4);
+				vLine(x, y, 95 - 3 * (MAP_SIZE_Y - y), 4);
 			}
 
-			vLine(x, 95 - 3 * (32 - y), 95, 10);
-			vLine(x, 95, 95 + (32 - y), 2);
+			vLine(x, 95 - 3 * (MAP_SIZE_Y - y), 95, 10);
+			vLine(x, 95, 95 + (MAP_SIZE_Y - y), 2);
 #endif
 #endif
 		}
@@ -1926,7 +1947,7 @@ waitkey:
 
 	newCell = newCell & 127;
 
-	if (patterns[newCell - 32].blockMovement) {
+	if (patterns[newCell - RLE_THRESHOLD].blockMovement) {
 		pos->x = cameraX = prevX;
 		pos->y = cameraZ = prevZ;
 		setPlayerPosition(pos);
@@ -1943,7 +1964,7 @@ waitkey:
 	if (playerLocation != previousLocation) {
 		initMap();
 
-		if (newCell == '.') {
+		if (newCell == NEUTRAL_CELL) {
 			newCell = '0';
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
 			} else {

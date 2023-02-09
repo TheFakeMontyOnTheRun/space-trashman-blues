@@ -25,6 +25,7 @@
 
 int snapshotSignal = '.';
 rdpq_font_t *fnt1;
+
 void graphicsInit() {
 
 	debug_init_isviewer();
@@ -48,7 +49,7 @@ void handleSystemEvents() {
 	struct controller_data pressed = get_keys_pressed();
 //	struct controller_data down = get_keys_down();
 
-	switch(get_dpad_direction(0)) {
+	switch (get_dpad_direction(0)) {
 		case 2:
 			mBufferedCommand = kCommandUp;
 			break;

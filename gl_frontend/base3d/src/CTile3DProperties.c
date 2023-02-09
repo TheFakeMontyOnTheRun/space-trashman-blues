@@ -5,8 +5,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include "Common.h"
@@ -16,59 +18,59 @@
 #include "PackedFileReader.h"
 #include "MapWithCharKey.h"
 
-void loadPropertyList(const char * propertyFile, struct MapWithCharKey * map) {
+void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map) {
 
-    struct StaticBuffer buffer = loadBinaryFileFromPath(propertyFile);
-    uint8_t *limit = buffer.data + buffer.size;
-    uint8_t *bufferHead = buffer.data;
+	struct StaticBuffer buffer = loadBinaryFileFromPath(propertyFile);
+	uint8_t *limit = buffer.data + buffer.size;
+	uint8_t *bufferHead = buffer.data;
 
-    clearMap(map);
+	clearMap(map);
 
-    while (bufferHead != limit) {
-        FixP_t val = 0;
-        uint8_t key = *(bufferHead++);
-        struct CTile3DProperties *prop = (struct CTile3DProperties *) calloc(
-                1, sizeof(struct CTile3DProperties));
+	while (bufferHead != limit) {
+		FixP_t val = 0;
+		uint8_t key = *(bufferHead++);
+		struct CTile3DProperties *prop = (struct CTile3DProperties *) calloc(
+				1, sizeof(struct CTile3DProperties));
 
-        prop->mNeedsAlphaTest = *(bufferHead++);
-        prop->mBlockVisibility = *(bufferHead++);
-        prop->mBlockMovement = *(bufferHead++);
-        prop->mBlockEnemySight = *(bufferHead++);
-        prop->mRepeatMainTexture = *(bufferHead++);
+		prop->mNeedsAlphaTest = *(bufferHead++);
+		prop->mBlockVisibility = *(bufferHead++);
+		prop->mBlockMovement = *(bufferHead++);
+		prop->mBlockEnemySight = *(bufferHead++);
+		prop->mRepeatMainTexture = *(bufferHead++);
 
-        prop->mCeilingTextureIndex = *(bufferHead++);
-        prop->mFloorTextureIndex = *(bufferHead++);
-        prop->mMainWallTextureIndex = *(bufferHead++);
+		prop->mCeilingTextureIndex = *(bufferHead++);
+		prop->mFloorTextureIndex = *(bufferHead++);
+		prop->mMainWallTextureIndex = *(bufferHead++);
 
-        prop->mGeometryType = (enum GeometryType) (*(bufferHead++));
+		prop->mGeometryType = (enum GeometryType) (*(bufferHead++));
 
-        prop->mCeilingRepeatedTextureIndex = *(bufferHead++);
-        prop->mFloorRepeatedTextureIndex = *(bufferHead++);
-        prop->mCeilingRepetitions = *(bufferHead++);
-        prop->mFloorRepetitions = *(bufferHead++);
+		prop->mCeilingRepeatedTextureIndex = *(bufferHead++);
+		prop->mFloorRepeatedTextureIndex = *(bufferHead++);
+		prop->mCeilingRepetitions = *(bufferHead++);
+		prop->mFloorRepetitions = *(bufferHead++);
 
-        val += (*(bufferHead++) << 0);
-        val += (*(bufferHead++) << 8);
-        val += (*(bufferHead++) << 16);
-        val += (*(bufferHead++) << 24);
-        prop->mCeilingHeight = val;
+		val += (*(bufferHead++) << 0);
+		val += (*(bufferHead++) << 8);
+		val += (*(bufferHead++) << 16);
+		val += (*(bufferHead++) << 24);
+		prop->mCeilingHeight = val;
 
-        val = 0;
-        val += (*(bufferHead++) << 0);
-        val += (*(bufferHead++) << 8);
-        val += (*(bufferHead++) << 16);
-        val += (*(bufferHead++) << 24);
-        prop->mFloorHeight = val;
+		val = 0;
+		val += (*(bufferHead++) << 0);
+		val += (*(bufferHead++) << 8);
+		val += (*(bufferHead++) << 16);
+		val += (*(bufferHead++) << 24);
+		prop->mFloorHeight = val;
 
-        setInMap(map, key, prop);
-    }
+		setInMap(map, key, prop);
+	}
+#ifndef N64
+	free(buffer.data);
+#else
 	/*
 	 * This is a hack and leaks memory - but removing this causes the game to crash on the N64
 	 * TODO: fix this
-#ifndef N46
-    free(buffer.data);
-#else
 	free_uncached(buffer.data);
-#endif
 	 */
+#endif
 }
