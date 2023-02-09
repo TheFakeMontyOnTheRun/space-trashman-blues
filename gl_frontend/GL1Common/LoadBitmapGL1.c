@@ -262,7 +262,6 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 #endif
 
 
-
 	return newId;
 }
 
@@ -361,7 +360,7 @@ void releaseBitmap(struct Bitmap *ptr) {
 	assert(ptr != NULL);
 
 #ifndef N64
-	if (ptr->uploadId != -1 ) {
+	if (ptr->uploadId != -1) {
 		glDeleteTextures(1, (unsigned int *) &ptr->uploadId);
 	}
 	free(ptr->data);

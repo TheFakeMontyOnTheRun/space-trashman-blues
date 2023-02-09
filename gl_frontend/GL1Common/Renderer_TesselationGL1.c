@@ -90,8 +90,8 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 	scaled = Mul(acc, BIAS);
 	centerY0 = (fixToInt(scaled) * REVERSE_BIAS);
 
-	float geometryScale = ( centerY1 - centerY0);
-	float centerY = centerY0 + ( centerY1 - centerY0) * 0.5f;
+	float geometryScale = (centerY1 - centerY0);
+	float centerY = centerY0 + (centerY1 - centerY0) * 0.5f;
 
 	glTranslatef(0.0f, centerY, 0.0f);
 	glScalef(1.0f, geometryScale, 1.0f);
@@ -180,9 +180,9 @@ void drawBillboardAt(const struct Vec3 center,
 	glBegin(GL_QUADS);
 
 	glTexCoord2f(0, 1);
-	glVertex3f(-1, - 1, 1);
+	glVertex3f(-1, -1, 1);
 	glTexCoord2f(1, 1);
-	glVertex3f(1,  - 1, 1);
+	glVertex3f(1, -1, 1);
 	glTexCoord2f(1, 0);
 	glVertex3f(1, 1, 1);
 	glTexCoord2f(0, 0);
@@ -226,9 +226,9 @@ void drawColumnAt(const struct Vec3 center,
 	glBegin(GL_QUADS);
 	if ((mask & MASK_BEHIND)) {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(-1,  - 1, -1);
+		glVertex3f(-1, -1, -1);
 		glTexCoord2f(1, textureScale);
-		glVertex3f(1, - 1, -1);
+		glVertex3f(1, -1, -1);
 		glTexCoord2f(1, 0);
 		glVertex3f(1, 1, -1);
 		glTexCoord2f(0, 0);
@@ -237,9 +237,9 @@ void drawColumnAt(const struct Vec3 center,
 
 	if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0) || (mask & MASK_FORCE_RIGHT)) {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(-1, - 1, -1);
+		glVertex3f(-1, -1, -1);
 		glTexCoord2f(1, textureScale);
-		glVertex3f(-1, - 1, 1);
+		glVertex3f(-1, -1, 1);
 		glTexCoord2f(1, 0);
 		glVertex3f(-1, 1, 1);
 		glTexCoord2f(0, 0);
@@ -248,9 +248,9 @@ void drawColumnAt(const struct Vec3 center,
 
 	if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0) || (mask & MASK_FORCE_LEFT)) {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(1, - 1, -1);
+		glVertex3f(1, -1, -1);
 		glTexCoord2f(1, textureScale);
-		glVertex3f(1, - 1, 1);
+		glVertex3f(1, -1, 1);
 		glTexCoord2f(1, 0);
 		glVertex3f(1, 1, 1);
 		glTexCoord2f(0, 0);
@@ -259,9 +259,9 @@ void drawColumnAt(const struct Vec3 center,
 
 	if ((mask & MASK_FRONT)) {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(-1, - 1, 1);
+		glVertex3f(-1, -1, 1);
 		glTexCoord2f(1, textureScale);
-		glVertex3f(1, - 1, 1);
+		glVertex3f(1, -1, 1);
 		glTexCoord2f(1, 0);
 		glVertex3f(1, 1, 1);
 		glTexCoord2f(0, 0);
@@ -452,18 +452,18 @@ void drawLeftNear(const struct Vec3 center,
 
 	if (cameraDirection == kWest || cameraDirection == kEast) {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(-1, - 1, -1);
+		glVertex3f(-1, -1, -1);
 		glTexCoord2f(1, textureScale);
-		glVertex3f(1, - 1, 1);
+		glVertex3f(1, -1, 1);
 		glTexCoord2f(1, 0);
 		glVertex3f(1, 1, 1);
 		glTexCoord2f(0, 0);
 		glVertex3f(-1, 1, -1);
 	} else {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(-1, - 1, 1);
+		glVertex3f(-1, -1, 1);
 		glTexCoord2f(1, textureScale);
-		glVertex3f(1, - 1, -1);
+		glVertex3f(1, -1, -1);
 		glTexCoord2f(1, 0);
 		glVertex3f(1, 1, -1);
 		glTexCoord2f(0, 0);
@@ -503,18 +503,18 @@ void drawRightNear(const struct Vec3 center,
 
 	if (cameraDirection == kWest || cameraDirection == kEast) {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(-1, - 1, 1);
+		glVertex3f(-1, -1, 1);
 		glTexCoord2f(1, textureScale);
-		glVertex3f(1, - 1, -1);
+		glVertex3f(1, -1, -1);
 		glTexCoord2f(1, 0);
 		glVertex3f(1, 1, -1);
 		glTexCoord2f(0, 0);
 		glVertex3f(-1, 1, 1);
 	} else {
 		glTexCoord2f(0, textureScale);
-		glVertex3f(-1, - 1, -1);
+		glVertex3f(-1, -1, -1);
 		glTexCoord2f(1, textureScale);
-		glVertex3f(1, - 1, 1);
+		glVertex3f(1, -1, 1);
 		glTexCoord2f(1, 0);
 		glVertex3f(1, 1, 1);
 		glTexCoord2f(0, 0);
