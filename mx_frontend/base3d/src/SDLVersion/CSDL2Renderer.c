@@ -319,10 +319,6 @@ void flipRenderer() {
 
 
 	SDL_RenderPresent(renderer);
-
-#ifndef __EMSCRIPTEN__
-	SDL_Delay(1000 / 60);
-#endif
 }
 
 void clearRenderer() {}
