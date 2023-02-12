@@ -508,8 +508,9 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
 	int8_t py0z0;
 	int16_t px1z0;
 	int8_t py1z0;
-
+	uint8_t shouldStipple;
 	uint8_t drawContour;
+	uint8_t stipple;
 
 	if (z0 >= 32) {
 		return 0;
@@ -533,16 +534,16 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
 
 
 #ifndef USE_FILLED_POLYS
-	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
+	shouldStipple = (z0 >= STIPPLE_DISTANCE);
 #else
 #ifdef MSDOS
-	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 5 : 1;
+	shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 5 : 1;
 #else
-	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 12 : 4;
+	shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 12 : 4;
 #endif
 #endif
 
-	uint8_t stipple = 1;
+	stipple = 1;
 
 	drawContour = (dY);
 	{
@@ -1123,7 +1124,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 	int8_t diff;
 	uint8_t pattern = (_pattern - RLE_THRESHOLD) & 127;
 	uint8_t type;
-
+	uint8_t mask;
 	/* 127 = 01111111 - the first bit is used for indicating the presence of an object.
 	 * And since there are only 127 patterns anyway...
 	 * */
@@ -1136,7 +1137,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 
 	diff = patterns[0].ceiling - patterns[pattern].ceiling;
 	type = patterns[pattern].geometryType;
-	uint8_t mask = patterns[pattern].elementsMask;
+	mask = patterns[pattern].elementsMask;
 
 	if (x0 == 2) {
 		mask = 255;
@@ -1273,7 +1274,7 @@ void repaintMapItems(void) {
 /* all those refactors are due to a SDCC bug with very long functions */
 void renderScene(void) {
 	uint8_t x;
-
+	int8_t *stencilPtr;
 	switch (cameraRotation) {
 		case DIRECTION_N:
 			renderCameraNorth();
@@ -1294,7 +1295,7 @@ void renderScene(void) {
 
 #ifdef SMS
 
-	int8_t *stencilPtr = &stencilHigh[0];
+	stencilPtr = &stencilHigh[0];
 
 	for (x = 0; x < XRESMINUSONE;) {
 	  uint8_t y, prevY, c;
@@ -1325,7 +1326,7 @@ next_cluster:
 		++stencilPtr;
 	}
 #else
-	int8_t *stencilPtr = &stencilHigh[0];
+	stencilPtr = &stencilHigh[0];
 
 	for (x = 0; x < XRES; ++x) {
 		int8_t stencilY = (*stencilPtr);
