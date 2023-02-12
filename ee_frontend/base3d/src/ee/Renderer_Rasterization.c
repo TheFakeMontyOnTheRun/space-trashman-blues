@@ -27,79 +27,6 @@ struct Bitmap *defaultFont;
 
 int submitBitmapToGPU(struct Bitmap* bitmap);
 
-/*
-    *         /|x1y0
-    * x0y0   / |
-    *       |  |
-    *       |  |
-    * x0y1  |  |
-    *       \  |
-    *        \ |
-    *         \| x1y1
-    */
-void maskWall(
-		FixP_t x0,
-		FixP_t x1,
-		FixP_t x0y0,
-		FixP_t x0y1,
-		FixP_t x1y0,
-		FixP_t x1y1) {
-}
-
-/*
-    *         /|x1y0
-    * x0y0   / |
-    *       |  |
-    *       |  |
-    * x0y1  |  |
-    *       \  |
-    *        \ |
-    *         \| x1y1
-    */
-void drawWall(FixP_t x0,
-			  FixP_t x1,
-			  FixP_t x0y0,
-			  FixP_t x0y1,
-			  FixP_t x1y0,
-			  FixP_t x1y1,
-			  const TexturePixelFormat *texture,
-			  const FixP_t textureScaleY,
-			  const int z) {
-}
-
-void drawMask(
-		const FixP_t x0,
-		const FixP_t y0,
-		const FixP_t x1,
-		const FixP_t y1) {
-}
-
-/*
-    *     x0y0 ____________ x1y0
-    *         /            \
-    *        /             \
-    *  x0y1 /______________\ x1y1
-    */
-void maskFloor(
-		FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP_t x1y1,         FramebufferPixelFormat pixel) {
-}
-
-/*
-    *     x0y0 ____________ x1y0
-    *         /            \
-    *        /             \
-    *  x0y1 /______________\ x1y1
-    */
-void drawFloor(FixP_t y0,
-			   FixP_t y1,
-			   FixP_t x0y0,
-			   FixP_t x1y0,
-			   FixP_t x0y1,
-			   FixP_t x1y1,
-			   int z,
-			   const TexturePixelFormat *texture) {
-}
-
 void drawRect(
 		const int x,
 		const int y,
@@ -109,11 +36,6 @@ void drawRect(
 
 }
 
-void fillTriangle(int *coords, FramebufferPixelFormat colour) {
-}
-
-void drawTexturedTriangle(int *coords, UVCoord *uvCoords, struct Texture *texture) {
-}
 
 void fill(
 		const int x,
@@ -148,8 +70,4 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char * text, const FramebufferPixelFormat colour) {
     drawTextAt( x, y, text, colour);
-}
-
-void renderPageFlip(OutputPixelFormat *stretchedBuffer, FramebufferPixelFormat *currentFrame,
-					FramebufferPixelFormat *prevFrame, int turnState, int turnTarget, uint8_t scale200To240) {
 }
