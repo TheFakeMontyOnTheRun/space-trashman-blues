@@ -141,9 +141,10 @@ void startFrameGL(int width, int height) {
 
 void endFrameGL(void) {
 #ifndef NDS
+    int error;
 	glFinish();
 
-	int error = glGetError();
+	error = glGetError();
 
 	if (error) {
 		printf("glError: %d\n", error);
@@ -189,7 +190,8 @@ void printMessageTo3DView(const char *message) {
 void loadTileProperties(const uint8_t levelNumber) {
 	char buffer[64];
 	int c;
-
+    struct StaticBuffer data;
+    
 	setLoggerDelegate(printMessageTo3DView);
 
 	clearMap(&tileProperties);
@@ -197,7 +199,7 @@ void loadTileProperties(const uint8_t levelNumber) {
 	clearMap(&colliders);
 
 	sprintf(buffer, "props%d.bin", levelNumber);
-	struct StaticBuffer data = loadBinaryFileFromPath(buffer);
+	data = loadBinaryFileFromPath(buffer);
 
 	for (c = 0; c < 256; ++c) {
 		free((void *) getFromMap(&tileProperties, c));

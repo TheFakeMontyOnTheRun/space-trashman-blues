@@ -156,6 +156,12 @@ void fill(
 			float fontHeight = defaultFont->height;
 			float blockWidth = 8.0f / fontWidth;
 			float blockHeight = 8.0f / fontHeight;
+			size_t repeatX;
+			size_t repeatY;
+			size_t c, d;
+			uint32_t ascii;
+			float line;
+			float col;
 
 			if (defaultFont->uploadId == -1) {
 				defaultFont->uploadId = submitBitmapToGPU(defaultFont);
@@ -163,17 +169,15 @@ void fill(
 
 			glEnable(GL_ALPHA_TEST);
 
-			size_t repeatX = (dx / 4);
-			size_t repeatY = (dy / 4);
-
-			size_t c, d;
+			repeatX = (dx / 4);
+			repeatY = (dy / 4);
 
 			glBindTexture(GL_TEXTURE_2D, defaultFont->uploadId);
 			glBegin(GL_QUADS);
 
-			uint32_t ascii = 0;
-			float line = (((ascii >> 5) + 1) * blockHeight);
-			float col = (((ascii & 31)) * blockWidth);
+			ascii = 0;
+			line = (((ascii >> 5) + 1) * blockHeight);
+			col = (((ascii & 31)) * blockWidth);
 
 			for (c = 0; c < repeatY; ++c) {
 				for (d = 0; d < repeatX; ++d) {
@@ -231,15 +235,20 @@ void drawBitmap(const int _dx,
 				const int _dy,
 				struct Bitmap *bitmap,
 				const uint8_t transparent) {
-
+    
+	float x;
+	float y;
+	float dx;
+	float dy;
+    
 	if (bitmap->uploadId == -1) {
 		bitmap->uploadId = submitBitmapToGPU(bitmap);
 	}
 
-	float x = _dx * NORMALIZE_ORTHO;
-	float y = _dy * NORMALIZE_ORTHO;
-	float dx = bitmap->width * NORMALIZE_ORTHO;
-	float dy = bitmap->height * NORMALIZE_ORTHO;
+	x = _dx * NORMALIZE_ORTHO;
+	y = _dy * NORMALIZE_ORTHO;
+	dx = bitmap->width * NORMALIZE_ORTHO;
+	dy = bitmap->height * NORMALIZE_ORTHO;
 
 	if (bitmap->uploadId != -1) {
 
@@ -295,10 +304,14 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 	int32_t dstX = (x - 1) * 8;
 	int32_t dstY = (y - 1) * 8;
 	size_t c;
-
-	uint32_t fragment = colour;// palette[colour];
-
+    uint32_t ascii;
+    float line;
+    float col;
+    char shortStr[2];
+    
 #ifndef N64
+    float r, g, b;
+    
 	float fontWidth = defaultFont->width;
 	float fontHeight = 32.0f;//defaultFont->height;
 	float blockWidth = 8.0f / fontWidth;
@@ -313,28 +326,27 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 	glEnable(GL_ALPHA_TEST);
 	glBegin(GL_QUADS);
 
-	float r, g, b;
-
-	r = (fragment & 0xFF) * NORMALIZE_COLOUR;
-	g = ((fragment & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
-	b = ((fragment & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
+	r = (colour & 0xFF) * NORMALIZE_COLOUR;
+	g = ((colour & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+	b = ((colour & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
 
 	glColor3f(r,
 			  g,
 			  b);
 
 #else
-	char shortStr[2];
+	uint8_t r, g, b;
+    
 	shortStr[1] = 0;
 
 	dstX = (x - 1) * 8;
 	dstY = (y + 1) * 9;
 
-	uint8_t r, g, b;
 
-		r = (colour & 0xFF);
-		g = ((colour & 0x00FF00) >> 8);
-		b = ((colour & 0xFF0000) >> 16);
+
+    r = (colour & 0xFF);
+    g = ((colour & 0x00FF00) >> 8);
+    b = ((colour & 0xFF0000) >> 16);
 
 	rdpq_mode_end();
 	rdpq_font_begin(RGBA32(r, g, b, 0xFF));
@@ -352,9 +364,9 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 		}
 
 #ifndef N64
-		uint32_t ascii = text[c] - ' ';
-		float line = (((ascii >> 5) + 1) * blockHeight);
-		float col = (((ascii & 31)) * blockWidth);
+		ascii = text[c] - ' ';
+		line = (((ascii >> 5) + 1) * blockHeight);
+		col = (((ascii & 31)) * blockWidth);
 
 		glTexCoord2f(col, line - blockHeight);
 		glVertex3f(dstX * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -0.1);
@@ -379,7 +391,6 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 	rdpq_font_end();
 	rdpq_mode_begin();
 #endif
-
 
 	glColor3f(1, 1, 1);
 	glDisable(GL_ALPHA_TEST);

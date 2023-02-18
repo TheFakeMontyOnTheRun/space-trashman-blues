@@ -9,7 +9,7 @@ enum EDirection {
 enum CrawlerState {
 	kCrawlerGameOver = -1,
 	kCrawlerQuit = 0,
-	kCrawlerGameInProgress = 1,
+	kCrawlerGameInProgress = 1
 };
 
 enum ECommand {
@@ -25,7 +25,7 @@ enum ECommand {
 	kCommandStrafeLeft,
 	kCommandStrafeRight,
 	kCommandFire3,
-	kCommandFire4,
+	kCommandFire4
 };
 
 enum EGameMenuState {
