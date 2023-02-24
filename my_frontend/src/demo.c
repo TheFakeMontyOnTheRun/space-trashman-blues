@@ -1149,6 +1149,15 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 	/* 127 = 01111111 - the first bit is used for indicating the presence of an object.
 	 * And since there are only 127 patterns anyway...
 	 * */
+
+	if (_pattern == BLOCK_CELL) {
+		return 0;
+	}
+
+	if (_pattern == NEUTRAL_CELL) {
+		return 1;
+	}
+
 #ifndef TRACE_OBJECTS_OVER_FLOOR
 	if (_pattern & 128) {
 		drawObjectAt( RENDER_SCALE_X * (x0 - 1), y + 2);

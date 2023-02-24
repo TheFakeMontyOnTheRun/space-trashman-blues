@@ -1,9 +1,9 @@
 #ifndef MAP_H
 #define MAP_H
 
-#define BASE_CEILING_HEIGHT 7
+#define BASE_CEILING_HEIGHT 12
 
-//ceiling is at height 7, floor at height 0. Camera is at height 2
+//ceiling is at height 12, floor at height 0. Camera is at height 2
 
 const struct Pattern patterns[96] = {
 		{BASE_CEILING_HEIGHT, 3,  CUBE,       0}, //   32
