@@ -37,7 +37,19 @@ enum DIRECTION {
 #define MAP_SIZE_Y 32
 #define VISIBILITY_LIMIT_X (MAP_SIZE_X - 1)
 #define VISIBILITY_LIMIT_Y (MAP_SIZE_Y - 1)
+#define FAR_PLANE_Z 40
+#define RENDER_SCALE_X 2
+#define RENDER_SCALE_Z 2
+
+// Not rendered, but won't block visibility
 #define NEUTRAL_CELL '.'
+
+// not rendered and blocks visibility
+#define BLOCK_CELL '#'
+
+// used to mark the edge between the neutral cells and the walls.
+// doesn't need to be used, but I'm leaving this here for posterity.
+#define BORDER_CELL '_'
 
 struct ObjectNode *focusedItem = NULL;
 struct ObjectNode *roomItem = NULL;
@@ -73,7 +85,7 @@ struct Projection {
 	int8_t dx;
 };
 
-const struct Projection projections[31] =
+const struct Projection projections[40] =
 		{
 #ifdef RES128X64
 		{	0	,	64	,	-128	},	//	1
@@ -206,6 +218,14 @@ const struct Projection projections[31] =
 				{	60	,	67	,	-4	},	//	29
 				{	60	,	67	,	-4	},	//	30
 				{	60	,	67	,	-4	},	//	31
+				{	60	,	67	,	-4	},	//	32
+				{	60	,	67	,	-4	},	//	33
+				{	60	,	67	,	-4	},	//	34
+				{	60	,	67	,	-4	},	//	35
+				{	60	,	67	,	-4	},	//	36
+				{	61	,	66	,	-3	},	//	37
+				{	61	,	66	,	-3	},	//	38
+				{	61	,	66	,	-3	},	//	39
 #else
 
 		{	0	,	64	,	-64	},	//	1
@@ -296,7 +316,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 
 	uint8_t stipple = 1;
 
-	if (z0 >= 32) {
+	if (z0 >= FAR_PLANE_Z) {
 		return 0;
 	}
 
@@ -310,7 +330,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 		return 0;
 	}
 
-	if (z1 >= 32) {
+	if (z1 >= FAR_PLANE_Z) {
 		return 0;
 	}
 
@@ -512,7 +532,7 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
 	uint8_t drawContour;
 	uint8_t stipple;
 
-	if (z0 >= 32) {
+	if (z0 >= FAR_PLANE_Z) {
 		return 0;
 	}
 
@@ -635,14 +655,15 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
 	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
 	uint8_t stipple = 1;
 
+	z0 = z0 * RENDER_SCALE_Z;
 
-	if (z0 >= 32 || z0 <= 4) {
+	if (z0 >= FAR_PLANE_Z || z0 <= 4) {
 		return 0;
 	}
 
-	z1 = z0 + 1;
+	z1 = z0 + RENDER_SCALE_Z;
 
-	if (z1 >= 32) {
+	if (z1 >= FAR_PLANE_Z) {
 		return 0;
 	}
 
@@ -655,8 +676,8 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
 	px0z0 = z0px - ((x0) * z0dx);
 	px0z1 = z1px - ((x0) * z1dx);
 
-	px1z0 = px0z0 - (1 * z0dx);
-	px1z1 = px0z1 - (1 * z1dx);
+	px1z0 = px0z0 - (RENDER_SCALE_X * z0dx);
+	px1z1 = px0z1 - (RENDER_SCALE_X * z1dx);
 
 	z1py = (projections[z1].py);
 	z0py = (projections[z0].py);
@@ -825,13 +846,13 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
 	uint8_t drawContour;
 
-	if (z0 >= 32 || z0 <= 4) {
+	if (z0 >= FAR_PLANE_Z || z0 <= 4) {
 		return 0;
 	}
 
 	z1 = z0 + dZ;
 
-	if (z1 >= 32) {
+	if (z1 >= FAR_PLANE_Z) {
 		return 0;
 	}
 
@@ -1130,7 +1151,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 	 * */
 #ifndef TRACE_OBJECTS_OVER_FLOOR
 	if (_pattern & 128) {
-		drawObjectAt(x0 - 1, y + 2);
+		drawObjectAt( RENDER_SCALE_X * (x0 - 1), y + 2);
 		return 1;
 	}
 #endif
@@ -1148,8 +1169,9 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 	}
 
 	if (type == CUBE) {
-		return drawCubeAt(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2, x1 - x0,
-						  diff, 1, mask);
+		return drawCubeAt(RENDER_SCALE_X * (x0 - 1), patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + 2),
+						  RENDER_SCALE_X * (x1 - x0), diff, RENDER_SCALE_Z,
+						  mask);
 	} else if (type == RIGHT_NEAR || type == LEFT_NEAR) {
 
 		if (cameraRotation == 1 || cameraRotation == 3) {
@@ -1161,34 +1183,35 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 			}
 		}
 
-		return drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2, x1 - x0,
-						 diff, 1, patterns[pattern].elementsMask, type);
+		return drawWedge(RENDER_SCALE_X * (x0 - 1), patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + 2),
+						 RENDER_SCALE_X * (x1 - x0), diff, RENDER_SCALE_Z,
+						 patterns[pattern].elementsMask, type);
 
 	} else if (type == LEFT_WALL) {
 
 		switch (cameraRotation) {
 			case 0:
 			case 2:
-				return drawWedge(x0 - (cameraRotation == 0 ? 1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-								 0, diff, 1, patterns[pattern].elementsMask, LEFT_WALL);
+				return drawWedge(RENDER_SCALE_X * (x0 - (cameraRotation == 0 ? 1 : 0)), patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + 2),
+								 0, diff, RENDER_SCALE_Z,
+								 patterns[pattern].elementsMask, LEFT_WALL);
 			case 1:
 			case 3:
-				return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT,
-								  y + (cameraRotation == 3 ? 1 : 0) + 2,
-								  x1 - x0, diff, mask);
+				return drawSquare(RENDER_SCALE_X * (x0 - 1), patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + (cameraRotation == 3 ? 1 : 0) + 2),
+								  RENDER_SCALE_X * (x1 - x0), diff, mask);
 		}
 	} else if (type == BACK_WALL) {
 		switch (cameraRotation) {
 			case 0:
 			case 2:
-				return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT,
-								  y + (cameraRotation == 0 ? 1 : 0) + 2,
-								  x1 - x0, diff, mask);
+				return drawSquare(RENDER_SCALE_X  * (x0 - 1), patterns[pattern].ceiling - CAMERA_HEIGHT,
+								  RENDER_SCALE_Z * (y + (cameraRotation == 0 ? 1 : 0) + 2),
+								  RENDER_SCALE_X * (x1 - x0), diff, mask);
 			case 1:
 			case 3:
-				return drawWedge(x0 - (cameraRotation == 1 ? 1 : 0),
-								 patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-								 0, diff, 1, patterns[pattern].elementsMask, LEFT_WALL);
+				return drawWedge(RENDER_SCALE_X * (x0 - (cameraRotation == 1 ? 1 : 0)),
+								 patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + 2),
+								 0, diff, RENDER_SCALE_Z, patterns[pattern].elementsMask, LEFT_WALL);
 		}
 	} else if (type == CORNER) {
 		uint8_t returnVal = 0;
@@ -1197,21 +1220,21 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 
 			case 3:
 			case 0:
-				returnVal = drawWedge(x0 - (cameraRotation == 3 ? 0 : 1),
-									  patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-									  0, diff, 1, patterns[pattern].elementsMask, LEFT_WALL);
+				returnVal = drawWedge(RENDER_SCALE_X * (x0 - (cameraRotation == 3 ? 0 : 1)),
+									  patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + 2),
+									  0, diff, RENDER_SCALE_Z, patterns[pattern].elementsMask, LEFT_WALL);
 
-				returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
-									   x1 - x0, diff, patterns[pattern].elementsMask) || returnVal;
+				returnVal = drawSquare(RENDER_SCALE_X * (x0 - 1), patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + 1 + 2),
+									   RENDER_SCALE_X * (x1 - x0), diff, patterns[pattern].elementsMask) || returnVal;
 				break;
 
 			case 1:
 			case 2:
-				returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-									   x1 - x0, diff, patterns[pattern].elementsMask);
+				returnVal = drawSquare(RENDER_SCALE_X * (x0 - 1), patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + 2),
+									   RENDER_SCALE_X * (x1 - x0), diff, patterns[pattern].elementsMask);
 				returnVal =
-						drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-								  0, diff, 1, patterns[pattern].elementsMask, LEFT_WALL) || returnVal;
+						drawWedge(RENDER_SCALE_X * (x0 - (cameraRotation == 1 ? 1 : 0)), patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + 2),
+								  0, diff, RENDER_SCALE_Z, patterns[pattern].elementsMask, LEFT_WALL) || returnVal;
 
 				break;
 		}
@@ -1235,7 +1258,7 @@ void repaintMapItems(void) {
 			//drawPattern(lastPattern, lastIndex - cameraX + 2, x - cameraX + 2, cameraZ - y);
 			while (node != NULL) {
 				struct Item *item = getItem(node->item);
-				drawObjectAt(item->position.x - cameraX + 2 - 1, cameraZ - item->position.y + 2);
+				drawObjectAt(RENDER_SCALE_X * (item->position.x - cameraX + 2 - 1), cameraZ - item->position.y + 2);
 				node = node->next;
 			}
 			break;
@@ -1244,7 +1267,7 @@ void repaintMapItems(void) {
 			//drawPattern(lastPattern, (lastIndex - cameraZ) + 2 , (y - cameraZ) + 2, x - cameraX);
 			while (node != NULL) {
 				struct Item *item = getItem(node->item);
-				drawObjectAt((item->position.y - cameraZ) + 1, (item->position.x - cameraX) + 2);
+				drawObjectAt(RENDER_SCALE_X * ((item->position.y - cameraZ) + 1), (item->position.x - cameraX) + 2);
 				node = node->next;
 			}
 			break;
@@ -1253,7 +1276,7 @@ void repaintMapItems(void) {
 			//drawPattern(lastPattern, -(x - cameraX) + 2, -(lastIndex - cameraX) + 2, y - cameraZ);
 			while (node != NULL) {
 				struct Item *item = getItem(node->item);
-				drawObjectAt(-(item->position.x - cameraX) + 1, (item->position.y - cameraZ) + 2);
+				drawObjectAt(RENDER_SCALE_X * ( -(item->position.x - cameraX) + 1), (item->position.y - cameraZ) + 2);
 				node = node->next;
 			}
 			break;
@@ -1262,7 +1285,7 @@ void repaintMapItems(void) {
 			//        drawPattern(lastPattern, -(y - cameraZ) + 2, -(lastIndex - cameraZ)  + 2, cameraX - x);
 			while (node != NULL) {
 				struct Item *item = getItem(node->item);
-				drawObjectAt(-(item->position.y - cameraZ) + 1, (cameraX - item->position.x) + 2);
+				drawObjectAt(RENDER_SCALE_X * (-(item->position.y - cameraZ) + 1), (cameraX - item->position.x) + 2);
 				node = node->next;
 			}
 			break;
