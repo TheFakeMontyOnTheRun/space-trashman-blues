@@ -10,4 +10,6 @@ void drawTextWindow( const int x, const int y, const unsigned int dx, const unsi
 void drawImageWindow( const int x, const int y, const unsigned int dx, const unsigned int dy, const char* __restrict__ title, const struct Bitmap* __restrict__ content);
 int drawAppearingWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char * title, long remainingTime);
 
+void redrawHUD(void);
+
 #endif /*THE_MISTRAL_REPORT_UI_H*/

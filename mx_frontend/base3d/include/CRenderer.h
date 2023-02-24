@@ -107,6 +107,8 @@ void handleSystemEvents(void);
 
 void initHW(void);
 
+void clear(void);
+
 void shutdownHW(void);
 
 void loadMesh(struct Mesh* mesh, char* filename );
