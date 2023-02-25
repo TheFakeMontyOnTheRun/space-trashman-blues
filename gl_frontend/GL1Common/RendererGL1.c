@@ -172,7 +172,7 @@ void enter3D(void) {
 	glLoadIdentity();
 
 	setPerspective(45, 240.0f / 200.0f, 1, 1024);
-
+    glScalef(1, 1.25f, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
