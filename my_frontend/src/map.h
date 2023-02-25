@@ -1,7 +1,7 @@
 #ifndef MAP_H
 #define MAP_H
 
-#define BASE_CEILING_HEIGHT 12
+#define BASE_CEILING_HEIGHT 7
 
 //ceiling is at height 12, floor at height 0. Camera is at height 2
 

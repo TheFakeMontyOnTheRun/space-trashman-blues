@@ -37,9 +37,9 @@ enum DIRECTION {
 #define MAP_SIZE_Y 32
 #define VISIBILITY_LIMIT_X (MAP_SIZE_X - 1)
 #define VISIBILITY_LIMIT_Y (MAP_SIZE_Y - 1)
-#define FAR_PLANE_Z 40
-#define RENDER_SCALE_X 2
-#define RENDER_SCALE_Z 2
+#define FAR_PLANE_Z 32
+#define RENDER_SCALE_X 1
+#define RENDER_SCALE_Z 1
 
 // Not rendered, but won't block visibility
 #define NEUTRAL_CELL '.'
