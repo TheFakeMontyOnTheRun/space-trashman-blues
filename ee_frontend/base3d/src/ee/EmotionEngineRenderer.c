@@ -186,12 +186,63 @@ void graphicsShutdown() {
 	texturesUsed = 0;
 }
 
+qword_t* drawQuad(qword_t *q, packet_t *current, MATRIX local_screen, float x, float y, float z ) {
+
+
+
+	int points_count = 6;
+
+	int points[6] = {
+			0, 1, 2,
+			1, 2, 3
+	};
+
+
+	VECTOR vertices[4] = {
+			{10.00f + x, 10.00f,  10.00f,  1.00f},
+			{10.00f + x, 10.00f,  -10.00f, 1.00f},
+			{10.00f + x, -10.00f, 10.00f,  1.00f},
+			{10.00f + x, -10.00f, -10.00f, 1.00f}
+	};
+
+	VECTOR colours[4] = {
+			{1.00f, 0.00f, 0.00f, 1.00f},
+			{1.00f, 0.00f, 0.00f, 1.00f},
+			{1.00f, 0.00f, 0.00f, 1.00f},
+			{1.00f, 0.00f, 0.00f, 1.00f}
+	};
+
+	// Calculate the vertex values.
+	calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
+
+	// Convert floating point vertices to fixed point and translate to center of screen.
+	draw_convert_xyz(verts, 2048, 2048, 32, vertex_count, (vertex_f_t *) temp_vertices);
+
+	// Convert floating point colours to fixed point.
+	draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
+
+
+	// Draw the triangles using triangle primitive type.
+	q = draw_prim_start(q, 0, &prim, &color);
+
+	for (int i = 0; i < points_count; i++) {
+		q->dw[0] = colors[points[i]].rgbaq;
+		q->dw[1] = verts[points[i]].xyz;
+		q++;
+	}
+
+	q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
+	++q;
+
+	return q;
+}
+
 void flipRenderer() {
 
 	packet_t *current = packets[context];
+	MATRIX local_screen;
 	MATRIX local_world;
 	MATRIX world_view;
-	MATRIX local_screen;
 
 
 	VECTOR object_position = {0.00f, 0.00f, 0.00f, 1.00f};
@@ -213,38 +264,6 @@ void flipRenderer() {
 	// Create the local_screen matrix.
 	create_local_screen(local_screen, local_world, world_view, view_screen);
 
-
-	int points_count = 6;
-
-	int points[6] = {
-			0, 1, 2,
-			1, 2, 3
-	};
-
-
-	VECTOR vertices[4] = {
-			{10.00f, 10.00f,  10.00f,  1.00f},
-			{10.00f, 10.00f,  -10.00f, 1.00f},
-			{10.00f, -10.00f, 10.00f,  1.00f},
-			{10.00f, -10.00f, -10.00f, 1.00f}
-	};
-
-	VECTOR colours[4] = {
-			{1.00f, 0.00f, 0.00f, 1.00f},
-			{1.00f, 0.00f, 0.00f, 1.00f},
-			{1.00f, 0.00f, 0.00f, 1.00f},
-			{1.00f, 0.00f, 0.00f, 1.00f}
-	};
-
-	// Calculate the vertex values.
-	calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
-
-	// Convert floating point vertices to fixed point and translate to center of screen.
-	draw_convert_xyz(verts, 2048, 2048, 32, vertex_count, (vertex_f_t *) temp_vertices);
-
-	// Convert floating point colours to fixed point.
-	draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
-
 	// Grab our dmatag pointer for the dma chain.
 	qword_t *dmatag;
 
@@ -260,31 +279,11 @@ void flipRenderer() {
 	q = draw_clear(q, 0, 2048.0f - 320.0f, 2048.0f - 256.0f, frame.width, frame.height, 0x00, 0x00, 0x00);
 	q = draw_enable_tests(q, 0, &zBuffer);
 
-
-
-
-
-
-	// Draw the triangles using triangle primitive type.
-	q = draw_prim_start(q, 0, &prim, &color);
-
-	for (int i = 0; i < points_count; i++) {
-		q->dw[0] = colors[points[i]].rgbaq;
-		q->dw[1] = verts[points[i]].xyz;
-		q++;
-	}
-
-	q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
-
-
-
-
+	q = drawQuad( q, current, local_screen, 0.0f, 0.0f, 0.0f );
+	q = drawQuad( q, current, local_screen, 10.0f, 0.0f, 0.0f );
 
 	// Setup a finish event.
 	q = draw_finish(q);
-
-
-
 
 
 	// Define our dmatag for the dma chain.
@@ -293,6 +292,7 @@ void flipRenderer() {
 	// Now send our current dma chain.
 	dma_wait_fast();
 	dma_channel_send_chain(DMA_CHANNEL_GIF, current->data, q - current->data, 0, 0);
+
 
 	// Now switch our packets so we can process data while the DMAC is working.
 	context ^= 1;
