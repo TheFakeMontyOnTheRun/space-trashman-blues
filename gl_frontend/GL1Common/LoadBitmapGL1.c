@@ -158,11 +158,7 @@ void scaleBitmap(FixP_t x0,
 						lastV = iv;
 					}
 
-
-					FramebufferPixelFormat color = pixel;
-
-					*(destinationLine) = color;
-
+					*(destinationLine) = pixel;
 				}
 				++destinationLine;
 				u += du;
@@ -176,6 +172,8 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 	uint32_t newId;
 	int c;
 	int width, height;
+    uint16_t *ptr;
+    uint16_t *expanded;
 	BitmapPixelFormat *dataSource = bitmap->data;
 	width = bitmap->width;
 	height = bitmap->height;
@@ -192,12 +190,12 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 	glBindTexture(GL_TEXTURE_2D, newId);
 
 #ifndef N64
-	uint16_t *expanded = (uint16_t *) malloc(width * height * sizeof(uint16_t));
+	expanded = (uint16_t *) malloc(width * height * sizeof(uint16_t));
 #else
-	uint16_t* expanded = (uint16_t*)malloc_uncached(width * height * sizeof(uint16_t));
+	expanded = (uint16_t*)malloc_uncached(width * height * sizeof(uint16_t));
 #endif
 
-	uint16_t *ptr = expanded;
+	ptr = expanded;
 
 	for (c = 0; c < width * height; ++c) {
 		BitmapPixelFormat index = dataSource[c];
@@ -268,6 +266,11 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 struct Bitmap *loadBitmap(const char *filename) {
 	size_t c;
 	uint8_t d;
+    size_t size;
+    uint8_t *buffer;
+    uint8_t repetitions;
+	int pixelIndex;
+	BitmapPixelFormat pixel;
 	struct StaticBuffer src = loadBinaryFileFromPath(filename);
 
 	struct Bitmap *toReturn =
@@ -293,11 +296,11 @@ struct Bitmap *loadBitmap(const char *filename) {
 	tmp = *ptr++;
 	toReturn->height += tmp & 0xFF;
 
-	size_t size = toReturn->width * toReturn->height * sizeof(BitmapPixelFormat);
+	size = toReturn->width * toReturn->height * sizeof(BitmapPixelFormat);
 #ifndef N64
-	uint8_t *buffer = (uint8_t *) calloc(1, sizeInDisk);
+	buffer = (uint8_t *) calloc(1, sizeInDisk);
 #else
-	uint8_t *buffer = (uint8_t *) malloc_uncached(sizeInDisk);
+	buffer = (uint8_t *) malloc_uncached(sizeInDisk);
 	memset(buffer, 0, sizeInDisk);
 #endif
 
@@ -310,9 +313,7 @@ struct Bitmap *loadBitmap(const char *filename) {
 	memset(toReturn->data, 0, size);
 #endif
 
-	uint8_t repetitions;
-	int pixelIndex = 0;
-	BitmapPixelFormat pixel;
+	pixelIndex = 0;
 
 #ifdef PALETTE_COLOURS_FRAMEBUFFER
 	for (size_t c = 0; c < sizeInDisk; c += 2) {
