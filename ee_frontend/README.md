@@ -1,1 +1,1 @@
-# opal-standoff
+# Emotion Engine Frontend
