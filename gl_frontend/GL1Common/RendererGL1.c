@@ -176,9 +176,30 @@ void enter3D(void) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+	glEnable(GL_FOG);
+
 #ifndef NDS
+	GLfloat fogColor[4] = {0.0, 0.0, 0.0, 1.0};
 	glEnable(GL_DEPTH_TEST);
+	glFogi(GL_FOG_MODE, GL_LINEAR);
+	glFogfv(GL_FOG_COLOR, fogColor);
+	glFogf(GL_FOG_START, 16);
+	glFogf(GL_FOG_END, 48);
+	glFogf(GL_FOG_DENSITY, 0.75);
+#else
+	glFogShift(2);
+	glFogColor(0,0,0,0);
+
+	for(int i=0;i<32;i++) {
+		glFogDensity(i,i*4);
+	}
+
+	glFogDensity(31,127);
+	glFogOffset(0x6000);
+
+	glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE | POLY_FOG);
 #endif
+
 	glColor3f(1, 1, 1);
 }
 
