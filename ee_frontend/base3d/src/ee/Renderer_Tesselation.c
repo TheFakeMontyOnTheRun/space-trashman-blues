@@ -46,7 +46,10 @@ FixP_t playerHeight = 0;
 struct Texture *nativeTextures[TOTAL_TEXTURES];
 int usedTexture = 0;
 
+extern MATRIX local_screen;
+extern packet_t *current;
 
+extern qword_t *_q;
 extern xyz_t *verts;
 extern color_t *colors;
 extern VECTOR *temp_vertices;
@@ -69,8 +72,8 @@ struct Texture *makeTextureFrom(const char *filename) {
 }
 
 
-qword_t *drawQuad(qword_t *q, packet_t *current, MATRIX local_screen, float x, float y, float z) {
-
+void drawQuad(float x, float y, float z) {
+	qword_t *q = _q;
 
 	int points_count = 6;
 
@@ -116,7 +119,7 @@ qword_t *drawQuad(qword_t *q, packet_t *current, MATRIX local_screen, float x, f
 	q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
 	++q;
 
-	return q;
+	_q = q;
 }
 
 

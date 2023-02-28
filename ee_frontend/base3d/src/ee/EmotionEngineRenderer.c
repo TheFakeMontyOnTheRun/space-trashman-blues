@@ -35,7 +35,7 @@
 framebuffer_t frame;
 zbuffer_t zBuffer;
 int context = 0;
-
+qword_t *_q;
 
 prim_t prim;
 color_t color;
@@ -46,8 +46,11 @@ VECTOR *temp_vertices;
 
 // The data packets for double buffering dma sends.
 packet_t *packets[2];
+MATRIX local_world;
+MATRIX world_view;
 MATRIX view_screen;
-
+MATRIX local_screen;
+packet_t *current;
 
 int vertex_count = 4;
 
@@ -186,14 +189,11 @@ void graphicsShutdown() {
 	texturesUsed = 0;
 }
 
-qword_t *drawQuad(qword_t *q, packet_t *current, MATRIX local_screen, float x, float y, float z);
+void drawQuad(float x, float y, float z);
 
 void flipRenderer() {
 
-	packet_t *current = packets[context];
-	MATRIX local_screen;
-	MATRIX local_world;
-	MATRIX world_view;
+	current = packets[context];
 
 
 	VECTOR object_position = {0.00f, 0.00f, 0.00f, 1.00f};
@@ -221,28 +221,28 @@ void flipRenderer() {
 	dmatag = current->data;
 
 	// Now grab our qword pointer and increment past the dmatag.
-	qword_t *q;
-	q = dmatag;
-	q++;
+
+	_q = dmatag;
+	_q++;
 
 	// Clear framebuffer but don't update zbuffer.
-	q = draw_disable_tests(q, 0, &zBuffer);
-	q = draw_clear(q, 0, 2048.0f - 320.0f, 2048.0f - 256.0f, frame.width, frame.height, 0x00, 0x00, 0x00);
-	q = draw_enable_tests(q, 0, &zBuffer);
+	_q = draw_disable_tests(_q, 0, &zBuffer);
+	_q = draw_clear(_q, 0, 2048.0f - 320.0f, 2048.0f - 256.0f, frame.width, frame.height, 0x00, 0x00, 0x00);
+	_q = draw_enable_tests(_q, 0, &zBuffer);
 
-	q = drawQuad(q, current, local_screen, 0.0f, 0.0f, 0.0f);
-	q = drawQuad(q, current, local_screen, 10.0f, 0.0f, 0.0f);
+	drawQuad(0.0f, 0.0f, 0.0f);
+	drawQuad(10.0f, 0.0f, 0.0f);
 
 	// Setup a finish event.
-	q = draw_finish(q);
+	_q = draw_finish(_q);
 
 
 	// Define our dmatag for the dma chain.
-	DMATAG_END(dmatag, (q - current->data) - 1, 0, 0, 0);
+	DMATAG_END(dmatag, (_q - current->data) - 1, 0, 0, 0);
 
 	// Now send our current dma chain.
 	dma_wait_fast();
-	dma_channel_send_chain(DMA_CHANNEL_GIF, current->data, q - current->data, 0, 0);
+	dma_channel_send_chain(DMA_CHANNEL_GIF, current->data, _q - current->data, 0, 0);
 
 
 	// Now switch our packets so we can process data while the DMAC is working.
