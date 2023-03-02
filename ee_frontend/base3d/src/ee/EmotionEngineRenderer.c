@@ -124,8 +124,8 @@ void graphicsInit() {
 	init_drawing_environment();
 	puts("DrawEnv init done");
 
-	packets[0] = packet_init(100, PACKET_NORMAL);
-	packets[1] = packet_init(100, PACKET_NORMAL);
+	packets[0] = packet_init(40000, PACKET_NORMAL);
+	packets[1] = packet_init(40000, PACKET_NORMAL);
 
 	// Allocate calculation space.
 	temp_vertices = memalign(128, sizeof(VECTOR) * vertex_count);
@@ -151,7 +151,7 @@ void graphicsInit() {
 	color.q = 1.0f;
 
 	// Create the view_screen matrix.
-	create_view_screen(view_screen, graph_aspect_ratio(), -3.00f, 3.00f, -3.00f, 3.00f, 1.00f, 2000.00f);
+	create_view_screen(view_screen, graph_aspect_ratio(), -3.00f, 3.00f, -3.00f, 3.00f, 1.00f, 1024.00f);
 
 	// Wait for any previous dma transfers to finish before starting.
 	dma_wait_fast();
@@ -195,9 +195,6 @@ void flipRenderer() {
 
 
 
-	drawQuad(0.0f, 0.0f, 0.0f);
-	drawQuad(10.0f, 0.0f, 0.0f);
-
 	// Setup a finish event.
 	_q = draw_finish(_q);
 
@@ -217,6 +214,4 @@ void flipRenderer() {
 	draw_wait_finish();
 
 	graph_wait_vsync();
-
-
 }
