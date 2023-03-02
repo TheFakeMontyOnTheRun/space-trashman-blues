@@ -3,6 +3,21 @@
 #include <stdio.h>
 #include <assert.h>
 
+
+#include <kernel.h>
+#include <stdlib.h>
+#include <malloc.h>
+#include <tamtypes.h>
+#include <math3d.h>
+#include <packet.h>
+#include <dma_tags.h>
+#include <gif_tags.h>
+#include <gs_psm.h>
+#include <dma.h>
+#include <graph.h>
+#include <draw.h>
+#include <draw3d.h>
+
 #include "Core.h"
 #include "FixP.h"
 #include "Enums.h"
@@ -19,6 +34,29 @@
 #include "PackedFileReader.h"
 #include "UI.h"
 #include "Engine.h"
+
+
+extern packet_t *packets[2];
+extern packet_t *current;
+extern MATRIX local_world;
+extern MATRIX world_view;
+extern MATRIX view_screen;
+extern int context;
+extern zbuffer_t zBuffer;
+extern framebuffer_t frame;
+extern qword_t *dmatag;
+
+extern MATRIX local_screen;
+extern packet_t *current;
+extern qword_t *_q;
+extern xyz_t *verts;
+extern color_t *colors;
+extern VECTOR *temp_vertices;
+extern int vertex_count;
+extern prim_t prim;
+extern color_t color;
+
+
 
 int visibilityCached = FALSE;
 int needsToRedrawVisibleMeshes = TRUE;
@@ -70,6 +108,45 @@ void clearRenderer() {
 }
 
 void startFrameGL(int width, int height) {
+
+	current = packets[context];
+
+
+	VECTOR object_position = {0.00f, 0.00f, 0.00f, 1.00f};
+	VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+
+	VECTOR camera_position = {0.00f, 0.00f, 100.00f, 1.00f};
+	VECTOR camera_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+
+	// Spin the cube a bit.
+	object_rotation[0] += 0.008f; //while (object_rotation[0] > 3.14f) { object_rotation[0] -= 6.28f; }
+	object_rotation[1] += 0.012f; //while (object_rotation[1] > 3.14f) { object_rotation[1] -= 6.28f; }
+
+	// Create the local_world matrix.
+	create_local_world(local_world, object_position, object_rotation);
+
+	// Create the world_view matrix.
+	create_world_view(world_view, camera_position, camera_rotation);
+
+	// Create the local_screen matrix.
+	create_local_screen(local_screen, local_world, world_view, view_screen);
+
+	// Grab our dmatag pointer for the dma chain.
+
+
+	dmatag = current->data;
+
+	// Now grab our qword pointer and increment past the dmatag.
+
+	_q = dmatag;
+	_q++;
+
+	// Clear framebuffer but don't update zbuffer.
+	_q = draw_disable_tests(_q, 0, &zBuffer);
+	_q = draw_clear(_q, 0, 2048.0f - 320.0f, 2048.0f - 256.0f, frame.width, frame.height, 0x00, 0x00, 0x00);
+	_q = draw_enable_tests(_q, 0, &zBuffer);
+
+
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;
     enter2D();
