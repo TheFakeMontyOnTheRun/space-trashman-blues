@@ -734,7 +734,7 @@ void setGameStatus(enum EGameStates newStatus) {
 }
 
 void initCore(void) {
-
+        defaultLogger = writeToLog;
 	/* prepare for a single player in the game */
 	memset(&playerPosition, 0, sizeof(struct WorldPosition));
 	setErrorHandlerCallback(NULL);
