@@ -31,18 +31,18 @@
             <td class="headerValue">lcov-output.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">335</td>
-            <td class="headerCovTableEntry">387</td>
+            <td class="headerCovTableEntry">336</td>
+            <td class="headerCovTableEntry">388</td>
             <td class="headerCovTableEntryMed">86.6 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2023-02-25 22:59:47</td>
+            <td class="headerValue">2023-03-12 11:55:06</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">36</td>
+            <td class="headerCovTableEntry">37</td>
             <td class="headerCovTableEntry">42</td>
-            <td class="headerCovTableEntryMed">85.7 %</td>
+            <td class="headerCovTableEntryMed">88.1 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -101,12 +101,12 @@
 <a name="39"><span class="lineNum">      39 </span>            : struct WorldPosition playerPosition;</a>
 <a name="40"><span class="lineNum">      40 </span>            : ErrorHandlerCallback errorHandlerCallback = NULL;</a>
 <a name="41"><span class="lineNum">      41 </span>            : </a>
-<a name="42"><span class="lineNum">      42 </span><span class="lineCov">          7 : void writeToLog(const char *errorMsg) {</span></a>
+<a name="42"><span class="lineNum">      42 </span><span class="lineCov">          4 : void writeToLog(const char *errorMsg) {</span></a>
 <a name="43"><span class="lineNum">      43 </span>            : #ifdef HAS_STDIO</a>
-<a name="44"><span class="lineNum">      44 </span><span class="lineCov">          7 :         if (errorHandlerCallback == NULL) {</span></a>
-<a name="45"><span class="lineNum">      45 </span><span class="lineCov">          3 :                 puts(&quot;-------&quot;);</span></a>
-<a name="46"><span class="lineNum">      46 </span><span class="lineCov">          3 :                 puts(errorMsg);</span></a>
-<a name="47"><span class="lineNum">      47 </span><span class="lineCov">          3 :                 puts(&quot;--!!---&quot;);</span></a>
+<a name="44"><span class="lineNum">      44 </span><span class="lineCov">          4 :         if (errorHandlerCallback == NULL) {</span></a>
+<a name="45"><span class="lineNum">      45 </span><span class="lineNoCov">          0 :                 puts(&quot;-------&quot;);</span></a>
+<a name="46"><span class="lineNum">      46 </span><span class="lineNoCov">          0 :                 puts(errorMsg);</span></a>
+<a name="47"><span class="lineNum">      47 </span><span class="lineNoCov">          0 :                 puts(&quot;--!!---&quot;);</span></a>
 <a name="48"><span class="lineNum">      48 </span>            :         } else {</a>
 <a name="49"><span class="lineNum">      49 </span><span class="lineCov">          4 :                 errorHandlerCallback(errorMsg);</span></a>
 <a name="50"><span class="lineNum">      50 </span>            :         }</a>
@@ -114,7 +114,7 @@
 <a name="52"><span class="lineNum">      52 </span>            :         /* We assume the error handler was already set. If you don't have stdio, you probably know what you're doing */</a>
 <a name="53"><span class="lineNum">      53 </span>            :         errorHandlerCallback(errorMsg);</a>
 <a name="54"><span class="lineNum">      54 </span>            : #endif</a>
-<a name="55"><span class="lineNum">      55 </span><span class="lineCov">          7 : }</span></a>
+<a name="55"><span class="lineNum">      55 </span><span class="lineCov">          4 : }</span></a>
 <a name="56"><span class="lineNum">      56 </span>            : </a>
 <a name="57"><span class="lineNum">      57 </span><span class="lineCov">        603 : struct Item *addItem(const char *description,</span></a>
 <a name="58"><span class="lineNum">      58 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
@@ -782,9 +782,9 @@
 <a name="720"><span class="lineNum">     720 </span>            : #endif</a>
 <a name="721"><span class="lineNum">     721 </span>            : }</a>
 <a name="722"><span class="lineNum">     722 </span>            : </a>
-<a name="723"><span class="lineNum">     723 </span><span class="lineNoCov">          0 : void setLoggerDelegate(LogDelegate newDelegate) {</span></a>
-<a name="724"><span class="lineNum">     724 </span><span class="lineNoCov">          0 :         defaultLogger = newDelegate;</span></a>
-<a name="725"><span class="lineNum">     725 </span><span class="lineNoCov">          0 : }</span></a>
+<a name="723"><span class="lineNum">     723 </span><span class="lineCov">         10 : void setLoggerDelegate(LogDelegate newDelegate) {</span></a>
+<a name="724"><span class="lineNum">     724 </span><span class="lineCov">         10 :         defaultLogger = newDelegate;</span></a>
+<a name="725"><span class="lineNum">     725 </span><span class="lineCov">         10 : }</span></a>
 <a name="726"><span class="lineNum">     726 </span>            : </a>
 <a name="727"><span class="lineNum">     727 </span>            : </a>
 <a name="728"><span class="lineNum">     728 </span><span class="lineNoCov">          0 : void setPlayerDirection(uint8_t direction) {</span></a>
@@ -796,7 +796,7 @@
 <a name="734"><span class="lineNum">     734 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="735"><span class="lineNum">     735 </span>            : </a>
 <a name="736"><span class="lineNum">     736 </span><span class="lineCov">         17 : void initCore(void) {</span></a>
-<a name="737"><span class="lineNum">     737 </span>            : </a>
+<a name="737"><span class="lineNum">     737 </span><span class="lineCov">         17 :         defaultLogger = writeToLog;</span></a>
 <a name="738"><span class="lineNum">     738 </span>            :         /* prepare for a single player in the game */</a>
 <a name="739"><span class="lineNum">     739 </span><span class="lineCov">         17 :         memset(&amp;playerPosition, 0, sizeof(struct WorldPosition));</span></a>
 <a name="740"><span class="lineNum">     740 </span><span class="lineCov">         17 :         setErrorHandlerCallback(NULL);</span></a>
