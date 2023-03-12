@@ -45,6 +45,9 @@ FixP_t playerHeight = 0;
 struct Texture *nativeTextures[TOTAL_TEXTURES];
 int usedTexture = 0;
 
+extern MATRIX local_world;
+extern MATRIX world_view;
+extern MATRIX view_screen;
 extern MATRIX local_screen;
 extern packet_t *current;
 
@@ -78,58 +81,6 @@ struct Texture *makeTextureFrom(const char *filename) {
 	return toReturn;
 }
 
-
-void drawQuad(float x, float y, float z) {
-	qword_t *q = _q;
-
-	int points_count = 6;
-
-	int points[6] = {
-			0, 1, 2,
-			1, 2, 3
-	};
-
-
-	VECTOR vertices[4] = {
-			{10.00f + x, y + 10.00f, z + 10.00f, 1.00f},
-			{10.00f + x, y + 10.00f, z - 10.00f, 1.00f},
-			{10.00f + x, y - 10.00f, z + 10.00f, 1.00f},
-			{10.00f + x, y - 10.00f, z - 10.00f, 1.00f}
-	};
-
-	VECTOR colours[4] = {
-			{1.00f, 0.00f, 0.00f, 1.00f},
-			{1.00f, 0.00f, 0.00f, 1.00f},
-			{1.00f, 0.00f, 0.00f, 1.00f},
-			{1.00f, 0.00f, 0.00f, 1.00f}
-	};
-
-	// Calculate the vertex values.
-	calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
-
-	// Convert floating point vertices to fixed point and translate to center of screen.
-	draw_convert_xyz(verts, 2048, 2048, 32, vertex_count, (vertex_f_t *) temp_vertices);
-
-	// Convert floating point colours to fixed point.
-	draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
-
-
-	// Draw the triangles using triangle primitive type.
-	q = draw_prim_start(q, 0, &prim, &color);
-
-	for (int i = 0; i < points_count; i++) {
-		q->dw[0] = colors[points[i]].rgbaq;
-		q->dw[1] = verts[points[i]].xyz;
-		q++;
-	}
-
-	q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
-	++q;
-
-	_q = q;
-}
-
-
 void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 				const struct Texture *texture, uint8_t direction, uint8_t flipTexture) {
 }
@@ -161,10 +112,10 @@ void drawColumnAt(const struct Vec3 center,
 	};
 
 	VECTOR colours[4] = {
-			{1.00f, 0.00f, 0.00f, 1.00f},
-			{1.00f, 0.00f, 0.00f, 1.00f},
-			{1.00f, 0.00f, 0.00f, 1.00f},
-			{1.00f, 0.00f, 0.00f, 1.00f}
+			{0.00f, 0.00f, 0.00f, 1.00f},
+			{0.30f, 0.00f, 0.00f, 1.00f},
+			{0.60f, 0.00f, 0.00f, 1.00f},
+			{0.90f, 0.00f, 0.00f, 1.00f}
 	};
 
 	// Convert floating point colours to fixed point.
@@ -182,24 +133,31 @@ void drawColumnAt(const struct Vec3 center,
 		textureScale = 1;
 	}
 */
-	acc = (center.mY + playerHeight + walkingBias + yCameraOffset);
+	acc = center.mY + playerHeight + walkingBias + yCameraOffset;
 	scaled = Mul(acc, BIAS);
 	centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
-	scaled = Mul(center.mX, BIAS);
-	centerX = GEOMETRY_SCALE_X * (fixToInt(scaled) * REVERSE_BIAS);
+	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
+	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
 
-	scaled = Mul(center.mZ, BIAS);
-	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(scaled) * REVERSE_BIAS);
+	VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
+	VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+
+
+	// Create the local_world matrix.
+	create_local_world(local_world, object_position, object_rotation);
+
+	// Create the local_screen matrix.
+	create_local_screen(local_screen, local_world, world_view, view_screen);
 
 
 	if ((mask & MASK_BEHIND)) {
 
 		VECTOR vertices[4] = {
-				{centerX + GEOMETRY_SCALE_X, centerY + geometryScale * 0.5f, centerZ + GEOMETRY_SCALE_Z, 1.00f},
-				{centerX - GEOMETRY_SCALE_X, centerY + geometryScale * 0.5f, centerZ + GEOMETRY_SCALE_Z, 1.00f},
-				{centerX + GEOMETRY_SCALE_X, centerY - geometryScale * 0.5f, centerZ + GEOMETRY_SCALE_Z, 1.00f},
-				{centerX - GEOMETRY_SCALE_X, centerY - geometryScale * 0.5f, centerZ + GEOMETRY_SCALE_Z, 1.00f}
+				{ + GEOMETRY_SCALE_X * 0.5f, + geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ - GEOMETRY_SCALE_X * 0.5f, + geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ + GEOMETRY_SCALE_X * 0.5f, - geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ - GEOMETRY_SCALE_X * 0.5f, - geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f}
 		};
 
 		q = _q;
@@ -208,7 +166,7 @@ void drawColumnAt(const struct Vec3 center,
 		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 
 		// Convert floating point vertices to fixed point and translate to center of screen.
-		draw_convert_xyz(verts, 2048, 2048, 32, vertex_count, (vertex_f_t *) temp_vertices);
+		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Draw the triangles using triangle primitive type.
 		q = draw_prim_start(q, 0, &prim, &color);
@@ -227,10 +185,10 @@ void drawColumnAt(const struct Vec3 center,
 
 	if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0) || (mask & MASK_FORCE_RIGHT)) {
 		VECTOR vertices[4] = {
-				{centerX - GEOMETRY_SCALE_X, centerY + geometryScale * 0.5f, centerZ + GEOMETRY_SCALE_Z, 1.00f},
-				{centerX - GEOMETRY_SCALE_X, centerY + geometryScale * 0.5f, centerZ - GEOMETRY_SCALE_Z, 1.00f},
-				{centerX - GEOMETRY_SCALE_X, centerY - geometryScale * 0.5f, centerZ + GEOMETRY_SCALE_Z, 1.00f},
-				{centerX - GEOMETRY_SCALE_X, centerY - geometryScale * 0.5f, centerZ - GEOMETRY_SCALE_Z, 1.00f}
+				{ - GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ - GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ - GEOMETRY_SCALE_X * 0.5f,  - geometryScale,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ - GEOMETRY_SCALE_X * 0.5f,  - geometryScale,  - GEOMETRY_SCALE_Z * 0.5f, 1.00f}
 		};
 
 		q = _q;
@@ -239,7 +197,7 @@ void drawColumnAt(const struct Vec3 center,
 		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 
 		// Convert floating point vertices to fixed point and translate to center of screen.
-		draw_convert_xyz(verts, 2048, 2048, 32, vertex_count, (vertex_f_t *) temp_vertices);
+		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Draw the triangles using triangle primitive type.
 		q = draw_prim_start(q, 0, &prim, &color);
@@ -258,10 +216,10 @@ void drawColumnAt(const struct Vec3 center,
 
 	if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0) || (mask & MASK_FORCE_LEFT)) {
 		VECTOR vertices[4] = {
-				{centerX + GEOMETRY_SCALE_X, centerY + geometryScale * 0.5f, centerZ + GEOMETRY_SCALE_Z, 1.00f},
-				{centerX + GEOMETRY_SCALE_X, centerY + geometryScale * 0.5f, centerZ - GEOMETRY_SCALE_Z, 1.00f},
-				{centerX + GEOMETRY_SCALE_X, centerY - geometryScale * 0.5f, centerZ + GEOMETRY_SCALE_Z, 1.00f},
-				{centerX + GEOMETRY_SCALE_X, centerY - geometryScale * 0.5f, centerZ - GEOMETRY_SCALE_Z, 1.00f}
+				{ + GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ + GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ + GEOMETRY_SCALE_X * 0.5f,  - geometryScale,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ + GEOMETRY_SCALE_X * 0.5f,  - geometryScale,  - GEOMETRY_SCALE_Z * 0.5f, 1.00f}
 		};
 
 		q = _q;
@@ -270,7 +228,7 @@ void drawColumnAt(const struct Vec3 center,
 		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 
 		// Convert floating point vertices to fixed point and translate to center of screen.
-		draw_convert_xyz(verts, 2048, 2048, 32, vertex_count, (vertex_f_t *) temp_vertices);
+		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Draw the triangles using triangle primitive type.
 		q = draw_prim_start(q, 0, &prim, &color);
@@ -289,10 +247,10 @@ void drawColumnAt(const struct Vec3 center,
 
 	if ((mask & MASK_FRONT)) {
 		VECTOR vertices[4] = {
-				{centerX + GEOMETRY_SCALE_X, centerY + geometryScale * 0.5f, centerZ - GEOMETRY_SCALE_Z, 1.00f},
-				{centerX - GEOMETRY_SCALE_X, centerY + geometryScale * 0.5f, centerZ - GEOMETRY_SCALE_Z, 1.00f},
-				{centerX + GEOMETRY_SCALE_X, centerY - geometryScale * 0.5f, centerZ - GEOMETRY_SCALE_Z, 1.00f},
-				{centerX - GEOMETRY_SCALE_X, centerY - geometryScale * 0.5f, centerZ - GEOMETRY_SCALE_Z, 1.00f}
+				{ + GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ - GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ + GEOMETRY_SCALE_X * 0.5f,  - geometryScale,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ - GEOMETRY_SCALE_X * 0.5f,  - geometryScale,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f}
 		};
 
 		q = _q;
@@ -301,7 +259,7 @@ void drawColumnAt(const struct Vec3 center,
 		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 
 		// Convert floating point vertices to fixed point and translate to center of screen.
-		draw_convert_xyz(verts, 2048, 2048, 32, vertex_count, (vertex_f_t *) temp_vertices);
+		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Draw the triangles using triangle primitive type.
 		q = draw_prim_start(q, 0, &prim, &color);
@@ -323,7 +281,7 @@ void drawColumnAt(const struct Vec3 center,
 void drawFloorAt(const struct Vec3 center,
 				 const struct Texture *texture, enum EDirection cameraDirection) {
 
-	if (center.mY <= 0 && center.mZ >= 0 ) {
+	if (center.mY <= 0 && center.mZ > 0  ) {
 
 		float centerY;
 		FixP_t acc;
@@ -337,10 +295,17 @@ void drawFloorAt(const struct Vec3 center,
 		float centerX;
 		float centerZ;
 
-		scaled = Mul(center.mX, BIAS);
-		centerX = GEOMETRY_SCALE_X *  (fixToInt(scaled) * REVERSE_BIAS);
+		centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
+		centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
 
-		centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * REVERSE_BIAS);
+		VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
+		VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+
+		// Create the local_world matrix.
+		create_local_world(local_world, object_position, object_rotation);
+
+		// Create the local_screen matrix.
+		create_local_screen(local_screen, local_world, world_view, view_screen);
 
 		switch (cameraDirection) {
 			case kNorth:
@@ -396,20 +361,20 @@ void drawFloorAt(const struct Vec3 center,
 		};
 
 		VECTOR colours[4] = {
-				{0.00f, 0.00f, 1.00f, 1.00f},
-				{0.00f, 0.00f, 1.00f, 1.00f},
-				{0.00f, 0.00f, 1.00f, 1.00f},
-				{0.00f, 0.00f, 1.00f, 1.00f}
+				{0.00f, 0.00f, 0.00f, 1.00f},
+				{0.00f, 0.00f, 0.3f, 1.00f},
+				{0.00f, 0.00f, 0.6f, 1.00f},
+				{0.00f, 0.00f, 0.9f, 1.00f}
 		};
 
 		// Convert floating point colours to fixed point.
 		draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
 
 		VECTOR vertices[4] = {
-				{centerX - GEOMETRY_SCALE_X, centerY, centerZ - GEOMETRY_SCALE_Z, 1.00f},
-				{centerX + GEOMETRY_SCALE_X, centerY, centerZ - GEOMETRY_SCALE_Z, 1.00f},
-				{centerX - GEOMETRY_SCALE_X, centerY, centerZ + GEOMETRY_SCALE_Z, 1.00f},
-				{centerX + GEOMETRY_SCALE_X, centerY, centerZ + GEOMETRY_SCALE_Z, 1.00f}
+				{- GEOMETRY_SCALE_X * 0.5f, 0, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{+ GEOMETRY_SCALE_X * 0.5f, 0, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{- GEOMETRY_SCALE_X * 0.5f, 0, + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{+ GEOMETRY_SCALE_X * 0.5f, 0, + GEOMETRY_SCALE_Z * 0.5f, 1.00f}
 		};
 
 		q = _q;
@@ -418,7 +383,7 @@ void drawFloorAt(const struct Vec3 center,
 		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 
 		// Convert floating point vertices to fixed point and translate to center of screen.
-		draw_convert_xyz(verts, 2048, 2048, 32, vertex_count, (vertex_f_t *) temp_vertices);
+		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Draw the triangles using triangle primitive type.
 		q = draw_prim_start(q, 0, &prim, &color);
@@ -439,7 +404,7 @@ void drawFloorAt(const struct Vec3 center,
 void drawCeilingAt(const struct Vec3 center,
 				   const struct Texture *texture, enum EDirection cameraDirection) {
 
-	if (center.mY >= 0 && center.mZ >= 0 ) {
+	if (center.mY >= 0 && center.mZ > 0 ) {
 
 		float centerY;
 		FixP_t acc;
@@ -453,11 +418,17 @@ void drawCeilingAt(const struct Vec3 center,
 		float centerX;
 		float centerZ;
 
-		scaled = Mul(center.mX, BIAS);
-		centerX = GEOMETRY_SCALE_X *  (fixToInt(scaled) * REVERSE_BIAS);
+		centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
+		centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
 
-		scaled = Mul(center.mZ, BIAS);
-		centerZ = -GEOMETRY_SCALE_Z * (fixToInt(scaled) * REVERSE_BIAS);
+		VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
+		VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+
+		// Create the local_world matrix.
+		create_local_world(local_world, object_position, object_rotation);
+
+		// Create the local_screen matrix.
+		create_local_screen(local_screen, local_world, world_view, view_screen);
 
 		switch (cameraDirection) {
 			case kNorth:
@@ -513,20 +484,20 @@ void drawCeilingAt(const struct Vec3 center,
 		};
 
 		VECTOR colours[4] = {
-				{0.00f, 1.00f, 0.00f, 1.00f},
-				{0.00f, 1.00f, 0.00f, 1.00f},
-				{0.00f, 1.00f, 0.00f, 1.00f},
-				{0.00f, 1.00f, 0.00f, 1.00f}
+				{0.00f, 0.00f, 0.00f, 1.00f},
+				{0.00f, 0.3f, 0.00f, 1.00f},
+				{0.00f, 0.6f, 0.00f, 1.00f},
+				{0.00f, 0.9f, 0.00f, 1.00f}
 		};
 
 		// Convert floating point colours to fixed point.
 		draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
 
 		VECTOR vertices[4] = {
-				{centerX - GEOMETRY_SCALE_X, centerY, centerZ - GEOMETRY_SCALE_Z, 1.00f},
-				{centerX + GEOMETRY_SCALE_X, centerY, centerZ - GEOMETRY_SCALE_Z, 1.00f},
-				{centerX - GEOMETRY_SCALE_X, centerY, centerZ + GEOMETRY_SCALE_Z, 1.00f},
-				{centerX + GEOMETRY_SCALE_X, centerY, centerZ + GEOMETRY_SCALE_Z, 1.00f}
+				{ - GEOMETRY_SCALE_X * 0.5f, 0,  - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ + GEOMETRY_SCALE_X * 0.5f, 0,  - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ - GEOMETRY_SCALE_X * 0.5f, 0,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ + GEOMETRY_SCALE_X * 0.5f, 0,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f}
 		};
 
 		q = _q;
@@ -535,7 +506,7 @@ void drawCeilingAt(const struct Vec3 center,
 		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 
 		// Convert floating point vertices to fixed point and translate to center of screen.
-		draw_convert_xyz(verts, 2048, 2048, 32, vertex_count, (vertex_f_t *) temp_vertices);
+		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Draw the triangles using triangle primitive type.
 		q = draw_prim_start(q, 0, &prim, &color);

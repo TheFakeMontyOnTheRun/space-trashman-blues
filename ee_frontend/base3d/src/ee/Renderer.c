@@ -112,24 +112,13 @@ void startFrameGL(int width, int height) {
 	current = packets[context];
 
 
-	VECTOR object_position = {0.00f, 0.00f, 0.00f, 1.00f};
-	VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
-
-	VECTOR camera_position = {0.00f, 0.00f, 100.00f, 1.00f};
+	VECTOR camera_position = {0.00f, 0.00f, 20.00f, 1.00f};
 	VECTOR camera_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
 
-	// Spin the cube a bit.
-	object_rotation[0] += 0.008f; //while (object_rotation[0] > 3.14f) { object_rotation[0] -= 6.28f; }
-	object_rotation[1] += 0.012f; //while (object_rotation[1] > 3.14f) { object_rotation[1] -= 6.28f; }
-
-	// Create the local_world matrix.
-	create_local_world(local_world, object_position, object_rotation);
 
 	// Create the world_view matrix.
 	create_world_view(world_view, camera_position, camera_rotation);
 
-	// Create the local_screen matrix.
-	create_local_screen(local_screen, local_world, world_view, view_screen);
 
 	// Grab our dmatag pointer for the dma chain.
 
@@ -143,7 +132,7 @@ void startFrameGL(int width, int height) {
 
 	// Clear framebuffer but don't update zbuffer.
 	_q = draw_disable_tests(_q, 0, &zBuffer);
-	_q = draw_clear(_q, 0, 2048.0f - 320.0f, 2048.0f - 256.0f, frame.width, frame.height, 0x00, 0x00, 0x00);
+	_q = draw_clear(_q, 0, 2048.0f - 320.0f, 2048.0f - 256.0f, frame.width, frame.height, 0x80, 0x80, 0x80);
 	_q = draw_enable_tests(_q, 0, &zBuffer);
 
 
@@ -380,7 +369,7 @@ void render(const long ms) {
 
 		enter3D();
 
-		for (distance = (MAP_SIZE + MAP_SIZE - 1); distance >= 0; --distance) {
+		for (distance = 0; distance < (MAP_SIZE + MAP_SIZE); ++distance ) {
 			uint8_t bucketPos;
 
 			for (bucketPos = 0; bucketPos < MAP_SIZE; ++bucketPos) {
@@ -688,7 +677,7 @@ void render(const long ms) {
 					tmp.mY = position.mY;
 					tmp.mZ = position.mZ;
 
-					addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2), 0);
+					addToVec3(&tmp, 0, (tileProp->mFloorHeight), 0);
 
 
 					drawFloorAt(tmp, nativeTextures[tileProp->mFloorTextureIndex], cameraDirection);
@@ -702,7 +691,7 @@ void render(const long ms) {
 					tmp.mY = position.mY;
 					tmp.mZ = position.mZ;
 
-					addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
+					addToVec3(&tmp, 0, (tileProp->mCeilingHeight), 0);
 
 					if (cameraDirection == kNorth) {
 						newDirection = kSouth;
@@ -962,6 +951,7 @@ void render(const long ms) {
 
 			}
 		}
+
 		enter2D();
 
 		if (focusItemName != NULL) {
