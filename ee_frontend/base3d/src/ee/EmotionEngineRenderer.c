@@ -151,7 +151,7 @@ void graphicsInit() {
 	color.q = 1.0f;
 
 	// Create the view_screen matrix.
-	create_view_screen(view_screen, graph_aspect_ratio(), -3.00f, 3.00f, -3.00f, 3.00f, 1.00f, 256.00f);
+	create_view_screen(view_screen, graph_aspect_ratio(), -8.00f, 8.00f, -8.00f, 8.00f, 1.00f, 1024.00f);
 
 	// Wait for any previous dma transfers to finish before starting.
 	dma_wait_fast();

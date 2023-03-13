@@ -65,8 +65,8 @@ extern color_t color;
 #define GEOMETRY_TEXTURE_SCALE_X 1.0f
 #define GEOMETRY_TEXTURE_SCALE_Y 1.0f
 
-#define BIAS (intToFix(128))
-#define REVERSE_BIAS (1.0f/128.0f)
+#define BIAS (intToFix(8))
+#define REVERSE_BIAS (1.0f/8.0f)
 
 
 void clearTextures() {
@@ -143,11 +143,8 @@ void drawColumnAt(const struct Vec3 center,
 	VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
 	VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
 
-
-	// Create the local_world matrix.
 	create_local_world(local_world, object_position, object_rotation);
 
-	// Create the local_screen matrix.
 	create_local_screen(local_screen, local_world, world_view, view_screen);
 
 

@@ -111,34 +111,26 @@ void startFrameGL(int width, int height) {
 
 	current = packets[context];
 
-
-	VECTOR camera_position = {0.00f, 0.00f, 20.00f, 1.00f};
-	VECTOR camera_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
-
-
-	// Create the world_view matrix.
-	create_world_view(world_view, camera_position, camera_rotation);
-
-
 	// Grab our dmatag pointer for the dma chain.
-
-
 	dmatag = current->data;
 
 	// Now grab our qword pointer and increment past the dmatag.
-
 	_q = dmatag;
 	_q++;
 
-	// Clear framebuffer but don't update zbuffer.
 	_q = draw_disable_tests(_q, 0, &zBuffer);
 	_q = draw_clear(_q, 0, 2048.0f - 320.0f, 2048.0f - 256.0f, frame.width, frame.height, 0x80, 0x80, 0x80);
 	_q = draw_enable_tests(_q, 0, &zBuffer);
 
-
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;
     enter2D();
+
+	VECTOR camera_position = {0.00f, 0.00f, 6, 1.00f};
+	VECTOR camera_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+
+	// Create the world_view matrix.
+	create_world_view(world_view, camera_position, camera_rotation);
 }
 
 void endFrameGL() {
@@ -566,7 +558,7 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp->mFloorHeight * 2)
+									  ((tileProp->mFloorHeight)
 									   - intToFix(tileProp->mFloorRepetitions)),
 									  zero);
 
@@ -584,7 +576,7 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp->mFloorHeight * 2)
+									  ((tileProp->mFloorHeight)
 									   - intToFix(tileProp->mFloorRepetitions)),
 									  zero);
 
@@ -601,7 +593,7 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp->mFloorHeight * 2)
+									  ((tileProp->mFloorHeight)
 									   - intToFix(tileProp->mFloorRepetitions)),
 									  zero);
 
@@ -624,7 +616,7 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp->mCeilingHeight * 2)
+									  ((tileProp->mCeilingHeight)
 									   + intToFix(tileProp->mCeilingRepetitions)),
 									  zero);
 
@@ -641,7 +633,7 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp->mCeilingHeight * 2)
+									  ((tileProp->mCeilingHeight)
 									   + intToFix(tileProp->mCeilingRepetitions)),
 									  zero);
 
@@ -659,7 +651,7 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp->mCeilingHeight * 2)
+									  ((tileProp->mCeilingHeight)
 									   + intToFix(tileProp->mCeilingRepetitions)),
 									  zero);
 
@@ -712,7 +704,7 @@ void render(const long ms) {
 
 					FixP_t adjust = 0;
 
-					if (((heightDiff * 2) - intToFix(integerPart)) >= halfOne) {
+					if (((heightDiff) - intToFix(integerPart)) >= halfOne) {
 						adjust = Div(halfOne, four);
 					}
 
@@ -724,7 +716,7 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp->mFloorHeight * 2) + heightDiff),
+									  ((tileProp->mFloorHeight) + heightDiff),
 									  zero);
 
 							switch (cameraDirection) {
@@ -758,7 +750,7 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp->mFloorHeight * 2) + heightDiff),
+									  ((tileProp->mFloorHeight) + heightDiff),
 									  zero);
 
 							switch (cameraDirection) {
@@ -793,7 +785,7 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp->mFloorHeight * 2) + heightDiff),
+									  ((tileProp->mFloorHeight) + heightDiff),
 									  zero);
 
 							switch (cameraDirection) {
@@ -827,7 +819,7 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp->mFloorHeight * 2) + heightDiff),
+									  ((tileProp->mFloorHeight) + heightDiff),
 									  zero);
 
 							drawRightNear(
@@ -843,7 +835,7 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp->mFloorHeight * 2) + heightDiff),
+									  ((tileProp->mFloorHeight) + heightDiff),
 									  zero);
 
 							drawLeftNear(
@@ -861,8 +853,8 @@ void render(const long ms) {
 							tmp2.mY = position.mY;
 							tmp2.mZ = position.mZ;
 
-							addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2), 0);
-							addToVec3(&tmp2, 0, (tileProp->mCeilingHeight * 2), 0);
+							addToVec3(&tmp, 0, (tileProp->mFloorHeight), 0);
+							addToVec3(&tmp2, 0, (tileProp->mCeilingHeight), 0);
 
 							drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection, flipTextureVertical);
 						}
@@ -878,8 +870,8 @@ void render(const long ms) {
 							tmp2.mY = position.mY;
 							tmp2.mZ = position.mZ;
 
-							addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
-							addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
+							addToVec3(&tmp2, 0, (tileProp->mFloorHeight), 0);
+							addToVec3(&tmp, 0, (tileProp->mCeilingHeight), 0);
 
 							drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection, flipTextureVertical);
 						}
@@ -895,8 +887,8 @@ void render(const long ms) {
 							tmp2.mY = position.mY;
 							tmp2.mZ = position.mZ;
 
-							addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
-							addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
+							addToVec3(&tmp2, 0, (tileProp->mFloorHeight), 0);
+							addToVec3(&tmp, 0, (tileProp->mCeilingHeight), 0);
 
 							drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex],
 									   (cameraDirection + 1) & 3, flipTextureVertical);
@@ -913,8 +905,8 @@ void render(const long ms) {
 							tmp2.mZ = position.mZ;
 
 
-							addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
-							addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
+							addToVec3(&tmp2, 0, (tileProp->mFloorHeight), 0);
+							addToVec3(&tmp, 0, (tileProp->mCeilingHeight), 0);
 
 							drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex],
 									   (cameraDirection + 3) & 3, flipTextureVertical);
@@ -927,7 +919,7 @@ void render(const long ms) {
 							tmp.mZ = position.mZ;
 
 							addToVec3(&tmp, zero,
-									  ((tileProp->mFloorHeight * 2) + heightDiff),
+									  ((tileProp->mFloorHeight) + heightDiff),
 									  zero);
 
 							drawColumnAt(tmp, (heightDiff + Div(adjust, two)),
@@ -944,7 +936,7 @@ void render(const long ms) {
                     tmp.mY = position.mY;
                     tmp.mZ = position.mZ;
 
-                    addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
+                    addToVec3(&tmp, 0, (tileProp->mFloorHeight) + one, 0);
 
                     drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
                 }
