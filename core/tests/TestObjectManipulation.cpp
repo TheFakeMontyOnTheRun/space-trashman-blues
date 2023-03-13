@@ -2,6 +2,7 @@
 // Created by Daniel Monteiro on 2019-07-26.
 //
 
+#include <memory>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
@@ -12,8 +13,44 @@ extern "C" {
 }
 
 extern struct ObjectNode *collectedObject;
-
+using namespace std;
 using testing::Eq;
+
+static void myDummyOutputHandler(const char* msg) {}
+
+class ErrorHandlerInterface {
+public:
+  virtual ~ErrorHandlerInterface() {}
+  virtual int handleError() = 0;
+};
+
+class ErrorHandlerMock : public ErrorHandlerInterface {
+public:
+  virtual ~ErrorHandlerMock() {}
+  MOCK_METHOD0(handleError, int());
+};
+
+class TestObjectManipulation : public ::testing::Test {
+
+public:
+  static shared_ptr<ErrorHandlerMock> mockedObj;
+
+  virtual void SetUp() {
+    initStation();
+    setLoggerDelegate(myDummyOutputHandler);
+    mockedObj = shared_ptr<ErrorHandlerMock>(new ErrorHandlerMock());
+  }
+
+  virtual void TearDown() {
+  }
+};
+
+shared_ptr<ErrorHandlerMock> TestObjectManipulation::mockedObj;
+
+
+static void myErrorHandler(const char* errorMsg) {
+  TestObjectManipulation::mockedObj->handleError();
+}
 
 void usableCallback(struct Item* item) {
   item->name = "used";
@@ -25,12 +62,9 @@ void useWithCallback(struct Item* item1, struct Item* item2 ) {
   }
 }
 
-TEST(TestObjectManipulation, canUseObjectsTogether) {
+TEST_F(TestObjectManipulation, canUseObjectsTogether) {
 
   struct Item *item;
-
-  initStation();
-
 
   item = addItem("usableWith",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
@@ -91,12 +125,9 @@ TEST(TestObjectManipulation, canUseObjectsTogether) {
   parseCommand(operator1, operand1);
 }
 
-TEST(TestObjectManipulation, canUseObjects) {
+TEST_F(TestObjectManipulation, canUseObjects) {
 
     struct Item *item;
-
-    initStation();
-
 
     item = addItem("usable",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
@@ -132,12 +163,9 @@ TEST(TestObjectManipulation, canUseObjects) {
   ASSERT_TRUE(hasItemInRoom("lss-daedalus", "used"));
 }
 
-TEST(TestObjectManipulation, cantPickUnpickableObjects) {
+TEST_F(TestObjectManipulation, cantPickUnpickableObjects) {
 
   struct Item *item;
-
-  initStation();
-
 
   item = addItem("unpickable",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
