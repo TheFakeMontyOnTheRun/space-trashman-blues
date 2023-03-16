@@ -41,10 +41,10 @@ ALL : "$(OUTDIR)\Sub Mare Imperium Derelict.exe"
 
 
 CLEAN :
+	-@erase "$(INTDIR)\BattleScreen.obj"
 	-@erase "$(INTDIR)\CGDIRenderer.obj"
 	-@erase "$(INTDIR)\Common.obj"
 	-@erase "$(INTDIR)\Core.obj"
-	-@erase "$(INTDIR)\PackedFileReader.obj"
 	-@erase "$(INTDIR)\Crawler.obj"
 	-@erase "$(INTDIR)\CreditsScreen.obj"
 	-@erase "$(INTDIR)\CRenderer.obj"
@@ -65,6 +65,7 @@ CLEAN :
 	-@erase "$(INTDIR)\Main.obj"
 	-@erase "$(INTDIR)\MainMenu.obj"
 	-@erase "$(INTDIR)\MapWithCharKey.obj"
+	-@erase "$(INTDIR)\PackedFileReader.obj"
 	-@erase "$(INTDIR)\Parser.obj"
 	-@erase "$(INTDIR)\Sub Mare Imperium.res"
 	-@erase "$(INTDIR)\UI.obj"
@@ -76,7 +77,7 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP_PROJ=/nologo /ML /W3 /O2 /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\space-trashman-blues\core\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /ML /W3 /O2 /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32 
 RSC_PROJ=/l 0x816 /fo"$(INTDIR)\Sub Mare Imperium.res" /d "NDEBUG" 
 BSC32=bscmake.exe
@@ -87,7 +88,6 @@ LINK32=link.exe
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib shell32.lib winmm.lib /nologo /subsystem:windows /pdb:none /machine:I386 /out:"$(OUTDIR)\Sub Mare Imperium Derelict.exe" 
 LINK32_OBJS= \
 	"$(INTDIR)\CGDIRenderer.obj" \
-	"$(INTDIR)\Common.obj" \
 	"$(INTDIR)\Core.obj" \
 	"$(INTDIR)\PackedFileReader.obj" \
 	"$(INTDIR)\Crawler.obj" \
@@ -114,7 +114,9 @@ LINK32_OBJS= \
 	"$(INTDIR)\UI.obj" \
 	"$(INTDIR)\Vec.obj" \
 	"$(INTDIR)\VisibilityStrategy.obj" \
-	"$(INTDIR)\Sub Mare Imperium.res"
+	"$(INTDIR)\Sub Mare Imperium.res" \
+	"$(INTDIR)\Common.obj" \
+	"$(INTDIR)\BattleScreen.obj"
 
 "$(OUTDIR)\Sub Mare Imperium Derelict.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -133,10 +135,10 @@ ALL : "$(OUTDIR)\Sub Mare Imperium Derelict.exe"
 
 
 CLEAN :
+	-@erase "$(INTDIR)\BattleScreen.obj"
 	-@erase "$(INTDIR)\CGDIRenderer.obj"
 	-@erase "$(INTDIR)\Common.obj"
 	-@erase "$(INTDIR)\Core.obj"
-	-@erase "$(INTDIR)\PackedFileReader.obj"
 	-@erase "$(INTDIR)\Crawler.obj"
 	-@erase "$(INTDIR)\CreditsScreen.obj"
 	-@erase "$(INTDIR)\CRenderer.obj"
@@ -157,6 +159,7 @@ CLEAN :
 	-@erase "$(INTDIR)\Main.obj"
 	-@erase "$(INTDIR)\MainMenu.obj"
 	-@erase "$(INTDIR)\MapWithCharKey.obj"
+	-@erase "$(INTDIR)\PackedFileReader.obj"
 	-@erase "$(INTDIR)\Parser.obj"
 	-@erase "$(INTDIR)\Sub Mare Imperium.res"
 	-@erase "$(INTDIR)\UI.obj"
@@ -169,7 +172,7 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP_PROJ=/nologo /MLd /W3 /Gm /ZI /Od /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\space-trashman-blues\core\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /MLd /W3 /Gm /GX /ZI /Od /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32 
 RSC_PROJ=/l 0x409 /fo"$(INTDIR)\Sub Mare Imperium.res" /d "_DEBUG" 
 BSC32=bscmake.exe
@@ -177,10 +180,9 @@ BSC32_FLAGS=/nologo /o"$(OUTDIR)\Sub Mare Imperium Derelict.bsc"
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib shell32.lib winmm.lib /nologo /subsystem:windows /pdb:none /debug /machine:I386 /out:"$(OUTDIR)\Sub Mare Imperium Derelict.exe" 
+LINK32_FLAGS=winmm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /pdb:none /debug /machine:I386 /out:"$(OUTDIR)\Sub Mare Imperium Derelict.exe" 
 LINK32_OBJS= \
 	"$(INTDIR)\CGDIRenderer.obj" \
-	"$(INTDIR)\Common.obj" \
 	"$(INTDIR)\Core.obj" \
 	"$(INTDIR)\PackedFileReader.obj" \
 	"$(INTDIR)\Crawler.obj" \
@@ -207,7 +209,9 @@ LINK32_OBJS= \
 	"$(INTDIR)\UI.obj" \
 	"$(INTDIR)\Vec.obj" \
 	"$(INTDIR)\VisibilityStrategy.obj" \
-	"$(INTDIR)\Sub Mare Imperium.res"
+	"$(INTDIR)\Sub Mare Imperium.res" \
+	"$(INTDIR)\Common.obj" \
+	"$(INTDIR)\BattleScreen.obj"
 
 "$(OUTDIR)\Sub Mare Imperium Derelict.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -257,13 +261,19 @@ LINK32_OBJS= \
 
 
 !IF "$(CFG)" == "Sub Mare Imperium Derelict - Win32 Release" || "$(CFG)" == "Sub Mare Imperium Derelict - Win32 Debug"
+SOURCE=..\..\menu\src\BattleScreen.c
+
+"$(INTDIR)\BattleScreen.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
 SOURCE=..\..\base3d\src\Win32Version\CGDIRenderer.c
 
 "$(INTDIR)\CGDIRenderer.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\base3d\src\Common.c
+SOURCE=..\..\..\common\src\Common.c
 
 "$(INTDIR)\Common.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
@@ -272,12 +282,6 @@ SOURCE=..\..\base3d\src\Common.c
 SOURCE=..\..\..\core\src\Core.c
 
 "$(INTDIR)\Core.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-SOURCE=..\..\base3d\src\PackedFileReader.c
-
-"$(INTDIR)\PackedFileReader.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -347,7 +351,7 @@ SOURCE=..\..\base3d\src\Events.c
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\base3d\src\FixP.c
+SOURCE=..\..\..\common\src\FixP.c
 
 "$(INTDIR)\FixP.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
@@ -387,7 +391,7 @@ SOURCE=..\..\menu\src\Main.c
 
 !IF  "$(CFG)" == "Sub Mare Imperium Derelict - Win32 Release"
 
-CPP_SWITCHES=/nologo /ML /W3 /O2 /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\space-trashman-blues\core\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_SWITCHES=/nologo /ML /W3 /O2 /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 
 "$(INTDIR)\Main.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) @<<
@@ -397,7 +401,7 @@ CPP_SWITCHES=/nologo /ML /W3 /O2 /I "c:\space-trashman-blues\space-trashman-blue
 
 !ELSEIF  "$(CFG)" == "Sub Mare Imperium Derelict - Win32 Debug"
 
-CPP_SWITCHES=/nologo /MLd /W3 /Gm /ZI /Od /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\space-trashman-blues\core\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_SWITCHES=/nologo /MLd /W3 /Gm /GX /ZI /Od /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 
 "$(INTDIR)\Main.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) @<<
@@ -413,9 +417,15 @@ SOURCE=..\..\menu\src\MainMenu.c
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\base3d\src\MapWithCharKey.c
+SOURCE=..\..\..\common\src\MapWithCharKey.c
 
 "$(INTDIR)\MapWithCharKey.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+SOURCE=..\..\..\common\src\PackedFileReader.c
+
+"$(INTDIR)\PackedFileReader.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -431,7 +441,7 @@ SOURCE=..\..\menu\src\UI.c
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\base3d\src\Vec.c
+SOURCE=..\..\..\common\src\Vec.c
 
 "$(INTDIR)\Vec.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)

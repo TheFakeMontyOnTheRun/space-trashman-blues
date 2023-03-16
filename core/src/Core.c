@@ -9,11 +9,12 @@ Created by Daniel Monteiro on 2019-07-26.
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdint.h>
 #include <string.h>
 
 #ifdef WIN32
 #include "Win32Int.h"
+#else
+#include <stdint.h>
 #endif
 
 #else
