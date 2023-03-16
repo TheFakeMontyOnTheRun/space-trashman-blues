@@ -126,7 +126,7 @@ void startFrameGL(int width, int height) {
     needsToRedrawVisibleMeshes = FALSE;
     enter2D();
 
-	VECTOR camera_position = {0.00f, 0.00f, 6, 1.00f};
+	VECTOR camera_position = {0.00f, -2.00f, 2, 1.00f};
 	VECTOR camera_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
 
 	// Create the world_view matrix.

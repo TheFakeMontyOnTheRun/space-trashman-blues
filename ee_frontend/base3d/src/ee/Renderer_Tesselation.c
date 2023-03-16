@@ -83,12 +83,259 @@ struct Texture *makeTextureFrom(const char *filename) {
 
 void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 				const struct Texture *texture, uint8_t direction, uint8_t flipTexture) {
+
+
+
+	if (p0.mZ > 0 && p1.mZ > 0  ) {
+
+		float centerY0, centerY1;
+		FixP_t acc;
+		FixP_t scaled;
+		float geometryScale;
+		float centerY;
+
+		acc = (p1.mY);
+		scaled = Mul(acc, BIAS);
+		centerY1 = (fixToInt(scaled) * REVERSE_BIAS);
+
+		acc = (p0.mY);
+		scaled = Mul(acc, BIAS);
+		centerY0 = (fixToInt(scaled) * REVERSE_BIAS);
+
+		geometryScale = 1.0f;
+		centerY = centerY0;
+
+		int x[4], y[4];
+		float centerX;
+		float centerZ;
+
+		centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(p0.mX, BIAS)) * 0.5f * REVERSE_BIAS);
+		centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(p0.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
+
+		VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
+		VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+
+		// Create the local_world matrix.
+		create_local_world(local_world, object_position, object_rotation);
+
+		// Create the local_screen matrix.
+		create_local_screen(local_screen, local_world, world_view, view_screen);
+
+		qword_t *q;
+
+		int points_count = 6;
+
+		int points[6] = {
+				0, 1, 2,
+				1, 2, 3
+		};
+
+		VECTOR colours[4] = {
+				{0.00f, 0.00f, 0.00f, 1.00f},
+				{0.00f, 0.00f, 0.3f, 1.00f},
+				{0.00f, 0.00f, 0.6f, 1.00f},
+				{0.00f, 0.00f, 0.9f, 1.00f}
+		};
+
+		// Convert floating point colours to fixed point.
+		draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
+
+		switch (direction) {
+			case kNorth: {
+				x[0] = 0;
+				y[0] = 1;
+				x[1] = 1;
+				y[1] = 1;
+				x[2] = 1;
+				y[2] = 0;
+				x[3] = 0;
+				y[3] = 0;
+
+				VECTOR vertices[4] = {
+						{- GEOMETRY_SCALE_X * 0.5f, - geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+						{+ GEOMETRY_SCALE_X * 0.5f, - geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+						{- GEOMETRY_SCALE_X * 0.5f,   geometryScale, + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+						{+ GEOMETRY_SCALE_X * 0.5f,   geometryScale, + GEOMETRY_SCALE_Z * 0.5f, 1.00f}
+				};
+
+				q = _q;
+
+				// Calculate the vertex values.
+				calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
+			}
+				break;
+			case kSouth: {
+				x[0] = 1;
+				y[0] = 0;
+				x[1] = 0;
+				y[1] = 0;
+				x[2] = 0;
+				y[2] = 1;
+				x[3] = 1;
+				y[3] = 1;
+
+				VECTOR vertices[4] = {
+						{- GEOMETRY_SCALE_X * 0.5f,   geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+						{+ GEOMETRY_SCALE_X * 0.5f,   geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+						{- GEOMETRY_SCALE_X * 0.5f, - geometryScale, + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+						{+ GEOMETRY_SCALE_X * 0.5f, - geometryScale, + GEOMETRY_SCALE_Z * 0.5f, 1.00f}
+				};
+
+				q = _q;
+
+				// Calculate the vertex values.
+				calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
+			}
+				break;
+			case kEast: {
+				x[0] = 0;
+				y[0] = 0;
+				x[1] = 0;
+				y[1] = 1;
+				x[2] = 1;
+				y[2] = 1;
+				x[3] = 1;
+				y[3] = 0;
+
+				VECTOR vertices[4] = {
+						{- GEOMETRY_SCALE_X * 0.5f, - geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+						{+ GEOMETRY_SCALE_X * 0.5f,   geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+						{- GEOMETRY_SCALE_X * 0.5f, - geometryScale, + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+						{+ GEOMETRY_SCALE_X * 0.5f,   geometryScale, + GEOMETRY_SCALE_Z * 0.5f, 1.00f}
+				};
+
+				q = _q;
+
+				// Calculate the vertex values.
+				calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
+			}
+				break;
+			case kWest:
+			default: {
+				x[0] = 1;
+				y[0] = 1;
+				x[1] = 1;
+				y[1] = 0;
+				x[2] = 0;
+				y[2] = 0;
+				x[3] = 0;
+				y[3] = 1;
+
+				VECTOR vertices[4] = {
+						{- GEOMETRY_SCALE_X * 0.5f,   geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+						{+ GEOMETRY_SCALE_X * 0.5f, - geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+						{- GEOMETRY_SCALE_X * 0.5f,   geometryScale, + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+						{+ GEOMETRY_SCALE_X * 0.5f, - geometryScale, + GEOMETRY_SCALE_Z * 0.5f, 1.00f}
+				};
+
+				q = _q;
+
+				// Calculate the vertex values.
+				calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
+			}
+				break;
+		}
+
+		// Convert floating point vertices to fixed point and translate to center of screen.
+		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
+
+		// Draw the triangles using triangle primitive type.
+		q = draw_prim_start(q, 0, &prim, &color);
+
+		for (int i = 0; i < points_count; i++) {
+			q->dw[0] = colors[points[i]].rgbaq;
+			q->dw[1] = verts[points[i]].xyz;
+			q++;
+		}
+
+		q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
+		++q;
+
+		_q = q;
+	}
 }
 
 void drawBillboardAt(const struct Vec3 center,
 					 struct Texture *bitmap,
 					 const FixP_t scale,
 					 const int size) {
+	if (center.mZ <= 0 ) {
+		return;
+	}
+
+	qword_t *q;
+
+	int points_count = 6;
+
+	int points[6] = {
+			0, 1, 2,
+			1, 2, 3
+	};
+
+	VECTOR colours[4] = {
+			{0.00f, 0.00f, 0.00f, 1.00f},
+			{0.30f, 0.00f, 0.00f, 1.00f},
+			{0.60f, 0.00f, 0.00f, 1.00f},
+			{0.90f, 0.00f, 0.00f, 1.00f}
+	};
+
+	// Convert floating point colours to fixed point.
+	draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
+
+
+	float centerY;
+	float centerX;
+	float centerZ;
+	FixP_t acc;
+	FixP_t scaled = Mul(scale, BIAS);
+	float geometryScale = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
+/*
+	if (!repeatTexture) {
+		textureScale = 1;
+	}
+*/
+	acc = center.mY + playerHeight + walkingBias + yCameraOffset;
+	scaled = Mul(acc, BIAS);
+	centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
+
+	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
+	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
+
+	VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
+	VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+
+	create_local_world(local_world, object_position, object_rotation);
+
+	create_local_screen(local_screen, local_world, world_view, view_screen);
+
+	VECTOR vertices[4] = {
+			{ + GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  0, 1.00f},
+			{ - GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  0, 1.00f},
+			{ + GEOMETRY_SCALE_X * 0.5f,  - geometryScale,  0, 1.00f},
+			{ - GEOMETRY_SCALE_X * 0.5f,  - geometryScale,  0, 1.00f}
+	};
+
+	q = _q;
+
+	// Calculate the vertex values.
+	calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
+
+	// Convert floating point vertices to fixed point and translate to center of screen.
+	draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
+
+	// Draw the triangles using triangle primitive type.
+	q = draw_prim_start(q, 0, &prim, &color);
+
+	for (int i = 0; i < points_count; i++) {
+		q->dw[0] = colors[points[i]].rgbaq;
+		q->dw[1] = verts[points[i]].xyz;
+		q++;
+	}
+
+	q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
+	++q;
+
+	_q = q;
 }
 
 void drawColumnAt(const struct Vec3 center,
@@ -272,7 +519,6 @@ void drawColumnAt(const struct Vec3 center,
 
 		_q = q;
 	}
-
 }
 
 void drawFloorAt(const struct Vec3 center,
@@ -526,6 +772,99 @@ void drawLeftNear(const struct Vec3 center,
 				  const struct Texture *texture,
 				  const uint8_t mask,
 				  const uint8_t repeatTexture) {
+
+
+	if (center.mZ <= 0 ) {
+		return;
+	}
+
+	qword_t *q;
+
+	int points_count = 6;
+
+	int points[6] = {
+			0, 1, 2,
+			1, 2, 3
+	};
+
+	VECTOR colours[4] = {
+			{0.00f, 0.00f, 0.00f, 1.00f},
+			{0.30f, 0.00f, 0.00f, 1.00f},
+			{0.60f, 0.00f, 0.00f, 1.00f},
+			{0.90f, 0.00f, 0.00f, 1.00f}
+	};
+
+	// Convert floating point colours to fixed point.
+	draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
+
+
+	float centerY;
+	float centerX;
+	float centerZ;
+	FixP_t acc;
+	FixP_t scaled = Mul(scale, BIAS);
+	float geometryScale = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
+/*
+	if (!repeatTexture) {
+		textureScale = 1;
+	}
+*/
+	acc = center.mY + playerHeight + walkingBias + yCameraOffset;
+	scaled = Mul(acc, BIAS);
+	centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
+
+	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
+	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
+
+	VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
+	VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+
+	create_local_world(local_world, object_position, object_rotation);
+
+	create_local_screen(local_screen, local_world, world_view, view_screen);
+
+	if (cameraDirection == kWest || cameraDirection == kEast) {
+		VECTOR vertices[4] = {
+				{+GEOMETRY_SCALE_X * 0.5f, +geometryScale, +GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{-GEOMETRY_SCALE_X * 0.5f, +geometryScale, -GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{+GEOMETRY_SCALE_X * 0.5f, -geometryScale, +GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{-GEOMETRY_SCALE_X * 0.5f, -geometryScale, -GEOMETRY_SCALE_Z * 0.5f, 1.00f}
+		};
+
+		q = _q;
+
+		// Calculate the vertex values.
+		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
+	} else {
+		VECTOR vertices[4] = {
+				{+GEOMETRY_SCALE_X * 0.5f, +geometryScale, -GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{-GEOMETRY_SCALE_X * 0.5f, +geometryScale, +GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{+GEOMETRY_SCALE_X * 0.5f, -geometryScale, -GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{-GEOMETRY_SCALE_X * 0.5f, -geometryScale, +GEOMETRY_SCALE_Z * 0.5f, 1.00f}
+		};
+
+		q = _q;
+
+		// Calculate the vertex values.
+		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
+	}
+
+	// Convert floating point vertices to fixed point and translate to center of screen.
+	draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
+
+	// Draw the triangles using triangle primitive type.
+	q = draw_prim_start(q, 0, &prim, &color);
+
+	for (int i = 0; i < points_count; i++) {
+		q->dw[0] = colors[points[i]].rgbaq;
+		q->dw[1] = verts[points[i]].xyz;
+		q++;
+	}
+
+	q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
+	++q;
+
+	_q = q;
 }
 
 void drawRightNear(const struct Vec3 center,
@@ -533,4 +872,97 @@ void drawRightNear(const struct Vec3 center,
 				   const struct Texture *texture,
 				   const uint8_t mask,
 				   const uint8_t repeatTexture) {
+
+	if (center.mZ <= 0 ) {
+		return;
+	}
+
+	qword_t *q;
+
+	int points_count = 6;
+
+	int points[6] = {
+			0, 1, 2,
+			1, 2, 3
+	};
+
+	VECTOR colours[4] = {
+			{0.00f, 0.00f, 0.00f, 1.00f},
+			{0.30f, 0.00f, 0.00f, 1.00f},
+			{0.60f, 0.00f, 0.00f, 1.00f},
+			{0.90f, 0.00f, 0.00f, 1.00f}
+	};
+
+	// Convert floating point colours to fixed point.
+	draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
+
+
+	float centerY;
+	float centerX;
+	float centerZ;
+	FixP_t acc;
+	FixP_t scaled = Mul(scale, BIAS);
+	float geometryScale = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
+/*
+	if (!repeatTexture) {
+		textureScale = 1;
+	}
+*/
+	acc = center.mY + playerHeight + walkingBias + yCameraOffset;
+	scaled = Mul(acc, BIAS);
+	centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
+
+	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
+	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
+
+	VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
+	VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+
+	create_local_world(local_world, object_position, object_rotation);
+
+	create_local_screen(local_screen, local_world, world_view, view_screen);
+
+
+	if (cameraDirection == kWest || cameraDirection == kEast) {
+		VECTOR vertices[4] = {
+				{+GEOMETRY_SCALE_X * 0.5f, +geometryScale, -GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{-GEOMETRY_SCALE_X * 0.5f, +geometryScale, +GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{+GEOMETRY_SCALE_X * 0.5f, -geometryScale, -GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{-GEOMETRY_SCALE_X * 0.5f, -geometryScale, +GEOMETRY_SCALE_Z * 0.5f, 1.00f}
+		};
+
+		q = _q;
+
+		// Calculate the vertex values.
+		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
+	} else {
+		VECTOR vertices[4] = {
+				{+GEOMETRY_SCALE_X * 0.5f, +geometryScale, +GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{-GEOMETRY_SCALE_X * 0.5f, +geometryScale, -GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{+GEOMETRY_SCALE_X * 0.5f, -geometryScale, +GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{-GEOMETRY_SCALE_X * 0.5f, -geometryScale, -GEOMETRY_SCALE_Z * 0.5f, 1.00f}
+		};
+
+		q = _q;
+
+		// Calculate the vertex values.
+		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
+	}
+
+	// Convert floating point vertices to fixed point and translate to center of screen.
+	draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
+
+	// Draw the triangles using triangle primitive type.
+	q = draw_prim_start(q, 0, &prim, &color);
+
+	for (int i = 0; i < points_count; i++) {
+		q->dw[0] = colors[points[i]].rgbaq;
+		q->dw[1] = verts[points[i]].xyz;
+		q++;
+	}
+
+	q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
+	++q;
+
+	_q = q;
 }

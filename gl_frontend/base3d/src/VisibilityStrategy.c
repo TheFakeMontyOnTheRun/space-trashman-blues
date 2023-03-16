@@ -103,7 +103,7 @@ void castVisibility(const enum EDirection from,
 
 		transformed = transform(from, currentPos);
 
-		if (!(0 <= transformed.x && transformed.x < MAP_SIZE && 0 <= transformed.y && transformed.y < MAP_SIZE) ) {
+		if (!(0 <= transformed.x && transformed.x < MAP_SIZE && 0 <= transformed.y && transformed.y < MAP_SIZE)) {
 			continue;
 		}
 
