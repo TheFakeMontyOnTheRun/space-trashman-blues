@@ -2,9 +2,10 @@
 #include <stdint.h>
 #include <string.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include <kernel.h>
-#include <stdlib.h>
 #include <malloc.h>
 #include <tamtypes.h>
 #include <math3d.h>
@@ -20,7 +21,7 @@
 #include <kernel.h>
 #include <sifrpc.h>
 #include <loadfile.h>
-#include <stdio.h>
+
 
 #include "libpad.h"
 

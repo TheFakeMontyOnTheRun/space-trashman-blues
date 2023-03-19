@@ -21,134 +21,71 @@
 #include "FixP.h"
 #include "VisibilityStrategy.h"
 
-#define TEXTURE_BUFFER_SIZE 128
+void bindTexture(struct Bitmap *bitmap) {
+	packet_t *packet = packet_init(10,PACKET_NORMAL);
 
-uint32_t textureBuffer[TEXTURE_BUFFER_SIZE * TEXTURE_BUFFER_SIZE];
+	qword_t *q = packet->data;
 
-#define isPowerOf2(X) (((X)&((X)-1))==0)
+	// Using a texture involves setting up a lot of information.
+	clutbuffer_t clut;
 
-void scaleBitmap(FixP_t x0,
-                   FixP_t y0,
-                   FixP_t x1,
-                   FixP_t y1,
-                   struct Bitmap *bitmap) {
-    int y;
-    int limit;
-    FixP_t dY;
-    FramebufferPixelFormat pixel = 0;
-    FixP_t v = 0;
-    UVCoord lastU;
-    UVCoord lastV = 0xFF;
-    int iy;
-    const TexturePixelFormat *data = bitmap->data;
-    FixP_t dv;
-    FixP_t diffX;
-    int iX0;
-    int iX1;
-    FixP_t du;
-    FixP_t bitmapWidth = intToFix(bitmap->width);
-    FixP_t bitmapHeight = intToFix(bitmap->height);
-    BitmapPixelFormat *bufferData = &textureBuffer[0];
+	lod_t lod;
 
-    /* if we have a quad in which the base is smaller */
-    if (y0 > y1) {
-        /* switch y0 with y1 */
-        y0 = y0 + y1;
-        y1 = y0 - y1;
-        y0 = y0 - y1;
-    }
+	lod.calculation = LOD_USE_K;
+	lod.max_level = 0;
+	lod.mag_filter = LOD_MAG_NEAREST;
+	lod.min_filter = LOD_MIN_NEAREST;
+	lod.l = 0;
+	lod.k = 0;
 
-    y = fixToInt(y0);
-    limit = fixToInt(y1);
+	bitmap->nativeBuffer->info.width = draw_log2(bitmap->width);
+	bitmap->nativeBuffer->info.height = draw_log2(bitmap->height);
+	bitmap->nativeBuffer->info.components = TEXTURE_COMPONENTS_RGBA;
+	bitmap->nativeBuffer->info.function = TEXTURE_FUNCTION_DECAL;
 
-    if (y == limit) {
-        /* degenerate */
-        return;
-    }
+	clut.storage_mode = CLUT_STORAGE_MODE1;
+	clut.start = 0;
+	clut.psm = 0;
+	clut.load_method = CLUT_NO_LOAD;
+	clut.address = 0;
 
-    /* what if the quad is flipped horizontally? */
-    if (x0 > x1) {
-        x0 = x0 + x1;
-        x1 = x0 - x1;
-        x0 = x0 - x1;
-    }
+	q = draw_texture_sampling(q,0,&lod);
+	q = draw_texturebuffer(q,0,bitmap->nativeBuffer,&clut);
 
-    dY = (y1 - y0);
+	// Now send the packet, no need to wait since it's the first.
+	dma_channel_send_normal(DMA_CHANNEL_GIF,packet->data,q - packet->data, 0, 0);
+	dma_wait_fast();
 
-    /*
-      0xFF here acts as a dirty value, indicating there is no last value.
-      But even if we had textures this big, it would be only at the end of
-      the run.
-   */
-    iy = (int32_t) (y);
-    dv = Div(bitmapHeight, dY);
-    diffX = (x1 - x0);
-    iX0 = fixToInt(x0);
-    iX1 = fixToInt(x1);
-
-    if (iX0 == iX1) {
-        /* degenerate case */
-        return;
-    }
-
-    du = Div(bitmapWidth + intToFix(2), diffX);
-
-    for (; iy < limit; ++iy) {
-
-        if (iy < TEXTURE_BUFFER_SIZE && iy >= 0) {
-            FixP_t u = 0;
-            const UVCoord iv = fixToInt(v) % bitmap->height;
-            const TexturePixelFormat *sourceLineStart = data + (iv * bitmap->width);
-            FramebufferPixelFormat *destinationLine = bufferData + (TEXTURE_BUFFER_SIZE * iy) + iX0;
-            int ix;
-            lastU = 0;
-
-            if (((iv == lastV)
-                    && (iX1 < TEXTURE_BUFFER_SIZE && iX0 >= 0))) {
-                int16_t start = (0 >= iX0) ? 0 : iX0;
-                int16_t finish = ((TEXTURE_BUFFER_SIZE - 1) >= iX1) ? iX1 : (TEXTURE_BUFFER_SIZE - 1);
-                v += dv;
-                destinationLine = bufferData + (TEXTURE_BUFFER_SIZE * iy);
-                sourceLineStart = destinationLine - TEXTURE_BUFFER_SIZE;
-                memcpy(destinationLine + start, sourceLineStart + start,
-                       finish - start);
-
-                continue;
-            }
-
-            pixel = *(sourceLineStart);
-
-            for (ix = iX0; ix < iX1; ++ix) {
-
-                if (ix < TEXTURE_BUFFER_SIZE && ix >= 0) {
-
-                    const UVCoord iu = fixToInt(u) % bitmap->width;
-                    /*
-                                  only fetch the next texel if we really changed the
-                                  u, v coordinates (otherwise, would fetch the same
-                                  thing anyway)
-                                   */
-                    if (iu != lastU) {
-
-                        pixel = *(sourceLineStart);
-                        sourceLineStart += (iu - lastU);
-                        lastU = iu;
-                        lastV = iv;
-                    }
+	packet_free(packet);
+}
 
 
 
-                        FramebufferPixelFormat color = pixel;
+int submitBitmapToGPU(struct Bitmap *bitmap) {
 
-                        *(destinationLine) = color;
+	bitmap->nativeBuffer->width = bitmap->width;
+	bitmap->nativeBuffer->psm = GS_PSM_32;
+	bitmap->nativeBuffer->address = graph_vram_allocate(bitmap->width, bitmap->height, GS_PSM_32,GRAPH_ALIGN_BLOCK);
 
-                }
-                ++destinationLine;
-                u += du;
-            }
-        }
-        v += dv;
-    }
+	packet_t *packet = packet_init(50,PACKET_NORMAL);
+
+	qword_t *q;
+
+	q = packet->data;
+
+	q = draw_texture_transfer(q, bitmap->data, bitmap->width, bitmap->height,GS_PSM_32,bitmap->nativeBuffer->address,bitmap->nativeBuffer->width);
+	q = draw_texture_flush(q);
+
+	dma_channel_send_chain(DMA_CHANNEL_GIF,packet->data, q - packet->data, 0,0);
+	dma_wait_fast();
+
+	packet_free(packet);
+
+	free(bitmap->data);
+	bitmap->data = NULL;
+
+
+	return 0;
 }
 
 struct Bitmap *loadBitmap(const char *filename) {
