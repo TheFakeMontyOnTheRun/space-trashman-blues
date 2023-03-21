@@ -57,6 +57,7 @@ color_t color;
 
 xyz_t *verts;
 color_t *colors;
+texel_t *st;
 VECTOR *temp_vertices;
 
 // The data packets for double buffering dma sends.
@@ -294,14 +295,15 @@ void graphicsInit() {
 	// Allocate register space.
 	verts = memalign(128, sizeof(vertex_t) * vertex_count);
 	colors = memalign(128, sizeof(color_t) * vertex_count);
+	st    = memalign(128, sizeof(texel_t) * vertex_count);
 
 	// Define the triangle primitive we want to use.
 	prim.type = PRIM_TRIANGLE;
 	prim.shading = PRIM_SHADE_GOURAUD;
-	prim.mapping = DRAW_DISABLE;
+	prim.mapping = DRAW_ENABLE;
 	prim.fogging = DRAW_DISABLE;
-	prim.blending = DRAW_DISABLE;
-	prim.antialiasing = DRAW_ENABLE;
+	prim.blending = DRAW_ENABLE;
+	prim.antialiasing = DRAW_DISABLE;
 	prim.mapping_type = PRIM_MAP_ST;
 	prim.colorfix = PRIM_UNFIXED;
 
@@ -466,9 +468,8 @@ void graphicsShutdown() {
 
 void flipRenderer() {
 	_q = draw_finish(_q);
-	DMATAG_END(dmatag, (_q - current->data) - 1, 0, 0, 0);
 	dma_wait_fast();
-	dma_channel_send_chain(DMA_CHANNEL_GIF, current->data, _q - current->data, 0, 0);
+	dma_channel_send_normal(DMA_CHANNEL_GIF, current->data, _q - current->data, 0, 0);
 	context ^= 1;
 	draw_wait_finish();
 	graph_wait_vsync();

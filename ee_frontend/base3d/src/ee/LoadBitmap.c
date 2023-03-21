@@ -63,6 +63,8 @@ void bindTexture(struct Bitmap *bitmap) {
 
 int submitBitmapToGPU(struct Bitmap *bitmap) {
 
+
+	bitmap->nativeBuffer = (texbuffer_t*)calloc(1, sizeof(texbuffer_t));
 	bitmap->nativeBuffer->width = bitmap->width;
 	bitmap->nativeBuffer->psm = GS_PSM_32;
 	bitmap->nativeBuffer->address = graph_vram_allocate(bitmap->width, bitmap->height, GS_PSM_32,GRAPH_ALIGN_BLOCK);
