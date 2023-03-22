@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2023-03-12 11:55:06</td>
+            <td class="headerValue">2023-03-22 23:36:50</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">1</td>
@@ -76,15 +76,15 @@
 <a name="14"><span class="lineNum">      14 </span>            : #include &lt;string.h&gt;</a>
 <a name="15"><span class="lineNum">      15 </span>            : #endif</a>
 <a name="16"><span class="lineNum">      16 </span>            : </a>
-<a name="17"><span class="lineNum">      17 </span><span class="lineCov">         74 : int parseCommand(const char *cmd, const char *operand) {</span></a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineCov">         74 :     if (!strcmp(cmd, &quot;pick&quot;)) {</span></a>
+<a name="17"><span class="lineNum">      17 </span><span class="lineCov">         76 : int parseCommand(const char *cmd, const char *operand) {</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">         76 :     if (!strcmp(cmd, &quot;pick&quot;)) {</span></a>
 <a name="19"><span class="lineNum">      19 </span><span class="lineCov">         15 :         pickObjectByName(operand);</span></a>
-<a name="20"><span class="lineNum">      20 </span><span class="lineCov">         59 :     } else if (!strcmp(cmd, &quot;drop&quot;)) {</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">         61 :     } else if (!strcmp(cmd, &quot;drop&quot;)) {</span></a>
 <a name="21"><span class="lineNum">      21 </span><span class="lineCov">          9 :         dropObjectByName(operand);</span></a>
-<a name="22"><span class="lineNum">      22 </span><span class="lineCov">         50 :     } else if (!strcmp(cmd, &quot;move&quot;)) {</span></a>
+<a name="22"><span class="lineNum">      22 </span><span class="lineCov">         52 :     } else if (!strcmp(cmd, &quot;move&quot;)) {</span></a>
 <a name="23"><span class="lineNum">      23 </span>            : </a>
-<a name="24"><span class="lineNum">      24 </span><span class="lineCov">         13 :         if (operand != NULL &amp;&amp; operand[0] != '\0') {</span></a>
-<a name="25"><span class="lineNum">      25 </span><span class="lineCov">         11 :             moveBy(operand[0] - '0');</span></a>
+<a name="24"><span class="lineNum">      24 </span><span class="lineCov">         15 :         if (operand != NULL &amp;&amp; operand[0] != '\0') {</span></a>
+<a name="25"><span class="lineNum">      25 </span><span class="lineCov">         13 :             moveBy(operand[0] - '0');</span></a>
 <a name="26"><span class="lineNum">      26 </span>            :         } else {</a>
 <a name="27"><span class="lineNum">      27 </span><span class="lineCov">          2 :                         errorHandlerCallback(&quot;Please specify a valid direction&quot;);</span></a>
 <a name="28"><span class="lineNum">      28 </span>            :         }</a>
@@ -115,7 +115,7 @@
 <a name="53"><span class="lineNum">      53 </span><span class="lineCov">          1 :         return FALSE;</span></a>
 <a name="54"><span class="lineNum">      54 </span>            :     }</a>
 <a name="55"><span class="lineNum">      55 </span>            : </a>
-<a name="56"><span class="lineNum">      56 </span><span class="lineCov">         73 :     return TRUE;</span></a>
+<a name="56"><span class="lineNum">      56 </span><span class="lineCov">         75 :     return TRUE;</span></a>
 <a name="57"><span class="lineNum">      57 </span>            : }</a>
 </pre>
       </td>
