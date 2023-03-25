@@ -99,6 +99,8 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 		float geometryScale;
 		float centerY;
 
+		bindTexture(texture->raw);
+
 		acc = (p1.mY);
 		scaled = Mul(acc, BIAS);
 		centerY1 = (fixToInt(scaled) * REVERSE_BIAS);
@@ -113,7 +115,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 		int x[4], y[4];
 		float centerX;
 		float centerZ;
-
+		u64 *dw;
 		centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(p0.mX, BIAS)) * 0.5f * REVERSE_BIAS);
 		centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(p0.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
 
@@ -141,6 +143,15 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 				{0.00f, 0.00f, 0.6f, 1.00f},
 				{0.00f, 0.00f, 0.9f, 1.00f}
 		};
+
+		VECTOR coordinates[4] = {
+				{ 1,  1,  0, 0},
+				{ 0,  1,  0, 0},
+				{ 1,  0,  0, 0},
+				{ 0,  0,  0, 0}
+		};
+
+		draw_convert_st(st, vertex_count, (vertex_f_t*)temp_vertices, (texel_f_t*)coordinates);
 
 		// Convert floating point colours to fixed point.
 		draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
@@ -245,15 +256,22 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Draw the triangles using triangle primitive type.
-		q = draw_prim_start(q, 0, &prim, &color);
+		dw = (u64*)draw_prim_start(q,0,&prim, &color);
 
-		for (int i = 0; i < points_count; i++) {
-			q->dw[0] = colors[points[i]].rgbaq;
-			q->dw[1] = verts[points[i]].xyz;
-			q++;
+		for(int i = 0; i < points_count; i++)
+		{
+			*dw++ = colors[points[i]].rgbaq;
+			*dw++ = st[points[i]].uv;
+			*dw++ = verts[points[i]].xyz;
 		}
 
-		q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
+		// Check if we're in middle of a qword or not.
+		if ((u32)dw % 16) {
+			*dw++ = 0;
+		}
+
+		q = draw_prim_end((qword_t*)dw,3,DRAW_STQ_REGLIST);
+
 		++q;
 
 		_q = q;
@@ -322,6 +340,8 @@ void drawBillboardAt(const struct Vec3 center,
 			{ - GEOMETRY_SCALE_X * 0.5f,  - geometryScale,  0, 1.00f}
 	};
 
+	q = _q;
+
 	VECTOR coordinates[4] = {
 			{ 1,  1,  0, 0},
 			{ 0,  1,  0, 0},
@@ -329,15 +349,13 @@ void drawBillboardAt(const struct Vec3 center,
 			{ 0,  0,  0, 0}
 	};
 
-	q = _q;
+	draw_convert_st(st, vertex_count, (vertex_f_t*)temp_vertices, (texel_f_t*)coordinates);
 
 	// Calculate the vertex values.
 	calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 
 	// Convert floating point vertices to fixed point and translate to center of screen.
 	draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
-
-	draw_convert_st(st, vertex_count, (vertex_f_t*)temp_vertices, (texel_f_t*)coordinates);
 
 	// Draw the triangles using triangle primitive type.
 	dw = (u64*)draw_prim_start(q,0,&prim, &color);
@@ -373,7 +391,7 @@ void drawColumnAt(const struct Vec3 center,
 	}
 
 	qword_t *q;
-
+	u64 *dw;
 	int points_count = 6;
 
 	int points[6] = {
@@ -420,6 +438,8 @@ void drawColumnAt(const struct Vec3 center,
 
 	if ((mask & MASK_BEHIND)) {
 
+		bindTexture(texture->raw);
+
 		VECTOR vertices[4] = {
 				{ + GEOMETRY_SCALE_X * 0.5f, + geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
 				{ - GEOMETRY_SCALE_X * 0.5f, + geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
@@ -429,6 +449,15 @@ void drawColumnAt(const struct Vec3 center,
 
 		q = _q;
 
+		VECTOR coordinates[4] = {
+				{ 1,  1,  0, 0},
+				{ 0,  1,  0, 0},
+				{ 1,  0,  0, 0},
+				{ 0,  0,  0, 0}
+		};
+
+		draw_convert_st(st, vertex_count, (vertex_f_t*)temp_vertices, (texel_f_t*)coordinates);
+
 		// Calculate the vertex values.
 		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 
@@ -436,21 +465,31 @@ void drawColumnAt(const struct Vec3 center,
 		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Draw the triangles using triangle primitive type.
-		q = draw_prim_start(q, 0, &prim, &color);
+		dw = (u64*)draw_prim_start(q,0,&prim, &color);
 
-		for (int i = 0; i < points_count; i++) {
-			q->dw[0] = colors[points[i]].rgbaq;
-			q->dw[1] = verts[points[i]].xyz;
-			q++;
+		for(int i = 0; i < points_count; i++)
+		{
+			*dw++ = colors[points[i]].rgbaq;
+			*dw++ = st[points[i]].uv;
+			*dw++ = verts[points[i]].xyz;
 		}
 
-		q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
+		// Check if we're in middle of a qword or not.
+		if ((u32)dw % 16) {
+			*dw++ = 0;
+		}
+
+		q = draw_prim_end((qword_t*)dw,3,DRAW_STQ_REGLIST);
+
 		++q;
 
 		_q = q;
 	}
 
 	if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0) || (mask & MASK_FORCE_RIGHT)) {
+
+		bindTexture(texture->raw);
+
 		VECTOR vertices[4] = {
 				{ - GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
 				{ - GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
@@ -460,6 +499,15 @@ void drawColumnAt(const struct Vec3 center,
 
 		q = _q;
 
+		VECTOR coordinates[4] = {
+				{ 1,  1,  0, 0},
+				{ 0,  1,  0, 0},
+				{ 1,  0,  0, 0},
+				{ 0,  0,  0, 0}
+		};
+
+		draw_convert_st(st, vertex_count, (vertex_f_t*)temp_vertices, (texel_f_t*)coordinates);
+
 		// Calculate the vertex values.
 		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 
@@ -467,21 +515,31 @@ void drawColumnAt(const struct Vec3 center,
 		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Draw the triangles using triangle primitive type.
-		q = draw_prim_start(q, 0, &prim, &color);
+		dw = (u64*)draw_prim_start(q,0,&prim, &color);
 
-		for (int i = 0; i < points_count; i++) {
-			q->dw[0] = colors[points[i]].rgbaq;
-			q->dw[1] = verts[points[i]].xyz;
-			q++;
+		for(int i = 0; i < points_count; i++)
+		{
+			*dw++ = colors[points[i]].rgbaq;
+			*dw++ = st[points[i]].uv;
+			*dw++ = verts[points[i]].xyz;
 		}
 
-		q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
+		// Check if we're in middle of a qword or not.
+		if ((u32)dw % 16) {
+			*dw++ = 0;
+		}
+
+		q = draw_prim_end((qword_t*)dw,3,DRAW_STQ_REGLIST);
+
 		++q;
 
 		_q = q;
 	}
 
 	if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0) || (mask & MASK_FORCE_LEFT)) {
+
+		bindTexture(texture->raw);
+
 		VECTOR vertices[4] = {
 				{ + GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
 				{ + GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
@@ -491,6 +549,15 @@ void drawColumnAt(const struct Vec3 center,
 
 		q = _q;
 
+		VECTOR coordinates[4] = {
+				{ 1,  1,  0, 0},
+				{ 0,  1,  0, 0},
+				{ 1,  0,  0, 0},
+				{ 0,  0,  0, 0}
+		};
+
+		draw_convert_st(st, vertex_count, (vertex_f_t*)temp_vertices, (texel_f_t*)coordinates);
+
 		// Calculate the vertex values.
 		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 
@@ -498,21 +565,31 @@ void drawColumnAt(const struct Vec3 center,
 		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Draw the triangles using triangle primitive type.
-		q = draw_prim_start(q, 0, &prim, &color);
+		dw = (u64*)draw_prim_start(q,0,&prim, &color);
 
-		for (int i = 0; i < points_count; i++) {
-			q->dw[0] = colors[points[i]].rgbaq;
-			q->dw[1] = verts[points[i]].xyz;
-			q++;
+		for(int i = 0; i < points_count; i++)
+		{
+			*dw++ = colors[points[i]].rgbaq;
+			*dw++ = st[points[i]].uv;
+			*dw++ = verts[points[i]].xyz;
 		}
 
-		q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
+		// Check if we're in middle of a qword or not.
+		if ((u32)dw % 16) {
+			*dw++ = 0;
+		}
+
+		q = draw_prim_end((qword_t*)dw,3,DRAW_STQ_REGLIST);
+
 		++q;
 
 		_q = q;
 	}
 
 	if ((mask & MASK_FRONT)) {
+
+		bindTexture(texture->raw);
+
 		VECTOR vertices[4] = {
 				{ + GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
 				{ - GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
@@ -522,6 +599,15 @@ void drawColumnAt(const struct Vec3 center,
 
 		q = _q;
 
+		VECTOR coordinates[4] = {
+				{ 1,  1,  0, 0},
+				{ 0,  1,  0, 0},
+				{ 1,  0,  0, 0},
+				{ 0,  0,  0, 0}
+		};
+
+		draw_convert_st(st, vertex_count, (vertex_f_t*)temp_vertices, (texel_f_t*)coordinates);
+
 		// Calculate the vertex values.
 		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 
@@ -529,15 +615,22 @@ void drawColumnAt(const struct Vec3 center,
 		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Draw the triangles using triangle primitive type.
-		q = draw_prim_start(q, 0, &prim, &color);
+		dw = (u64*)draw_prim_start(q,0,&prim, &color);
 
-		for (int i = 0; i < points_count; i++) {
-			q->dw[0] = colors[points[i]].rgbaq;
-			q->dw[1] = verts[points[i]].xyz;
-			q++;
+		for(int i = 0; i < points_count; i++)
+		{
+			*dw++ = colors[points[i]].rgbaq;
+			*dw++ = st[points[i]].uv;
+			*dw++ = verts[points[i]].xyz;
 		}
 
-		q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
+		// Check if we're in middle of a qword or not.
+		if ((u32)dw % 16) {
+			*dw++ = 0;
+		}
+
+		q = draw_prim_end((qword_t*)dw,3,DRAW_STQ_REGLIST);
+
 		++q;
 
 		_q = q;
@@ -554,10 +647,12 @@ void drawFloorAt(const struct Vec3 center,
 		FixP_t scaled;
 		int x[4], y[4];
 
+		bindTexture(texture->raw);
+
 		acc = center.mY + playerHeight + walkingBias + yCameraOffset;
 		scaled = Mul(acc, BIAS);
 		centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
-
+		u64 *dw;
 		float centerX;
 		float centerZ;
 
@@ -574,7 +669,7 @@ void drawFloorAt(const struct Vec3 center,
 		create_local_screen(local_screen, local_world, world_view, view_screen);
 
 		switch (cameraDirection) {
-			case kNorth:
+			case kNorth: {
 				x[0] = 0;
 				y[0] = 1;
 				x[1] = 1;
@@ -583,8 +678,18 @@ void drawFloorAt(const struct Vec3 center,
 				y[2] = 0;
 				x[3] = 0;
 				y[3] = 0;
-				break;
-			case kSouth:
+
+				VECTOR coordinates[4] = {
+						{1, 1, 0, 0},
+						{0, 1, 0, 0},
+						{1, 0, 0, 0},
+						{0, 0, 0, 0}
+				};
+
+				draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
+			} break;
+
+			case kSouth: {
 				x[0] = 1;
 				y[0] = 0;
 				x[1] = 0;
@@ -593,8 +698,18 @@ void drawFloorAt(const struct Vec3 center,
 				y[2] = 1;
 				x[3] = 1;
 				y[3] = 1;
-				break;
-			case kWest:
+
+				VECTOR coordinates[4] = {
+						{1, 1, 0, 0},
+						{0, 1, 0, 0},
+						{1, 0, 0, 0},
+						{0, 0, 0, 0}
+				};
+
+				draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
+			} break;
+
+			case kWest: {
 				x[0] = 0;
 				y[0] = 0;
 				x[1] = 0;
@@ -603,9 +718,18 @@ void drawFloorAt(const struct Vec3 center,
 				y[2] = 1;
 				x[3] = 1;
 				y[3] = 0;
-				break;
+
+				VECTOR coordinates[4] = {
+						{1, 1, 0, 0},
+						{0, 1, 0, 0},
+						{1, 0, 0, 0},
+						{0, 0, 0, 0}
+				};
+
+				draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
+			} break;
 			case kEast:
-			default:
+			default: {
 				x[0] = 1;
 				y[0] = 1;
 				x[1] = 1;
@@ -614,7 +738,16 @@ void drawFloorAt(const struct Vec3 center,
 				y[2] = 0;
 				x[3] = 0;
 				y[3] = 1;
-				break;
+
+				VECTOR coordinates[4] = {
+						{1, 1, 0, 0},
+						{0, 1, 0, 0},
+						{1, 0, 0, 0},
+						{0, 0, 0, 0}
+				};
+
+				draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
+			} break;
 		}
 
 		qword_t *q;
@@ -652,15 +785,22 @@ void drawFloorAt(const struct Vec3 center,
 		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Draw the triangles using triangle primitive type.
-		q = draw_prim_start(q, 0, &prim, &color);
+		dw = (u64*)draw_prim_start(q,0,&prim, &color);
 
-		for (int i = 0; i < points_count; i++) {
-			q->dw[0] = colors[points[i]].rgbaq;
-			q->dw[1] = verts[points[i]].xyz;
-			q++;
+		for(int i = 0; i < points_count; i++)
+		{
+			*dw++ = colors[points[i]].rgbaq;
+			*dw++ = st[points[i]].uv;
+			*dw++ = verts[points[i]].xyz;
 		}
 
-		q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
+		// Check if we're in middle of a qword or not.
+		if ((u32)dw % 16) {
+			*dw++ = 0;
+		}
+
+		q = draw_prim_end((qword_t*)dw,3,DRAW_STQ_REGLIST);
+
 		++q;
 
 		_q = q;
@@ -676,6 +816,9 @@ void drawCeilingAt(const struct Vec3 center,
 		FixP_t acc;
 		FixP_t scaled;
 		int x[4], y[4];
+		u64 *dw;
+
+		bindTexture(texture->raw);
 
 		acc = center.mY + playerHeight + walkingBias + yCameraOffset;
 		scaled = Mul(acc, BIAS);
@@ -697,7 +840,7 @@ void drawCeilingAt(const struct Vec3 center,
 		create_local_screen(local_screen, local_world, world_view, view_screen);
 
 		switch (cameraDirection) {
-			case kNorth:
+			case kNorth: {
 				x[0] = 0;
 				y[0] = 1;
 				x[1] = 1;
@@ -706,8 +849,17 @@ void drawCeilingAt(const struct Vec3 center,
 				y[2] = 0;
 				x[3] = 0;
 				y[3] = 0;
-				break;
-			case kSouth:
+
+				VECTOR coordinates[4] = {
+						{1, 1, 0, 0},
+						{0, 1, 0, 0},
+						{1, 0, 0, 0},
+						{0, 0, 0, 0}
+				};
+
+				draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
+			} break;
+			case kSouth: {
 				x[0] = 1;
 				y[0] = 0;
 				x[1] = 0;
@@ -716,8 +868,17 @@ void drawCeilingAt(const struct Vec3 center,
 				y[2] = 1;
 				x[3] = 1;
 				y[3] = 1;
-				break;
-			case kWest:
+
+				VECTOR coordinates[4] = {
+						{1, 1, 0, 0},
+						{0, 1, 0, 0},
+						{1, 0, 0, 0},
+						{0, 0, 0, 0}
+				};
+
+				draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
+			} break;
+			case kWest: {
 				x[0] = 0;
 				y[0] = 0;
 				x[1] = 0;
@@ -726,9 +887,18 @@ void drawCeilingAt(const struct Vec3 center,
 				y[2] = 1;
 				x[3] = 1;
 				y[3] = 0;
-				break;
+
+				VECTOR coordinates[4] = {
+						{1, 1, 0, 0},
+						{0, 1, 0, 0},
+						{1, 0, 0, 0},
+						{0, 0, 0, 0}
+				};
+
+				draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
+			} break;
 			case kEast:
-			default:
+			default: {
 				x[0] = 1;
 				y[0] = 1;
 				x[1] = 1;
@@ -737,7 +907,16 @@ void drawCeilingAt(const struct Vec3 center,
 				y[2] = 0;
 				x[3] = 0;
 				y[3] = 1;
-				break;
+
+				VECTOR coordinates[4] = {
+						{1, 1, 0, 0},
+						{0, 1, 0, 0},
+						{1, 0, 0, 0},
+						{0, 0, 0, 0}
+				};
+
+				draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
+			} break;
 		}
 
 		qword_t *q;
@@ -775,15 +954,22 @@ void drawCeilingAt(const struct Vec3 center,
 		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Draw the triangles using triangle primitive type.
-		q = draw_prim_start(q, 0, &prim, &color);
+		dw = (u64*)draw_prim_start(q,0,&prim, &color);
 
-		for (int i = 0; i < points_count; i++) {
-			q->dw[0] = colors[points[i]].rgbaq;
-			q->dw[1] = verts[points[i]].xyz;
-			q++;
+		for(int i = 0; i < points_count; i++)
+		{
+			*dw++ = colors[points[i]].rgbaq;
+			*dw++ = st[points[i]].uv;
+			*dw++ = verts[points[i]].xyz;
 		}
 
-		q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
+		// Check if we're in middle of a qword or not.
+		if ((u32)dw % 16) {
+			*dw++ = 0;
+		}
+
+		q = draw_prim_end((qword_t*)dw,3,DRAW_STQ_REGLIST);
+
 		++q;
 
 		_q = q;
@@ -801,8 +987,10 @@ void drawLeftNear(const struct Vec3 center,
 		return;
 	}
 
-	qword_t *q;
+	bindTexture(texture->raw);
 
+	qword_t *q;
+	u64 *dw;
 	int points_count = 6;
 
 	int points[6] = {
@@ -816,6 +1004,15 @@ void drawLeftNear(const struct Vec3 center,
 			{0.60f, 0.00f, 0.00f, 1.00f},
 			{0.90f, 0.00f, 0.00f, 1.00f}
 	};
+
+	VECTOR coordinates[4] = {
+			{ 1,  1,  0, 0},
+			{ 0,  1,  0, 0},
+			{ 1,  0,  0, 0},
+			{ 0,  0,  0, 0}
+	};
+
+	draw_convert_st(st, vertex_count, (vertex_f_t*)temp_vertices, (texel_f_t*)coordinates);
 
 	// Convert floating point colours to fixed point.
 	draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
@@ -876,15 +1073,22 @@ void drawLeftNear(const struct Vec3 center,
 	draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 	// Draw the triangles using triangle primitive type.
-	q = draw_prim_start(q, 0, &prim, &color);
+	dw = (u64*)draw_prim_start(q,0,&prim, &color);
 
-	for (int i = 0; i < points_count; i++) {
-		q->dw[0] = colors[points[i]].rgbaq;
-		q->dw[1] = verts[points[i]].xyz;
-		q++;
+	for(int i = 0; i < points_count; i++)
+	{
+		*dw++ = colors[points[i]].rgbaq;
+		*dw++ = st[points[i]].uv;
+		*dw++ = verts[points[i]].xyz;
 	}
 
-	q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
+	// Check if we're in middle of a qword or not.
+	if ((u32)dw % 16) {
+		*dw++ = 0;
+	}
+
+	q = draw_prim_end((qword_t*)dw,3,DRAW_STQ_REGLIST);
+
 	++q;
 
 	_q = q;
@@ -900,8 +1104,10 @@ void drawRightNear(const struct Vec3 center,
 		return;
 	}
 
-	qword_t *q;
+	bindTexture(texture->raw);
 
+	qword_t *q;
+	u64 *dw;
 	int points_count = 6;
 
 	int points[6] = {
@@ -945,6 +1151,7 @@ void drawRightNear(const struct Vec3 center,
 
 	create_local_screen(local_screen, local_world, world_view, view_screen);
 
+	q = _q;
 
 	if (cameraDirection == kWest || cameraDirection == kEast) {
 		VECTOR vertices[4] = {
@@ -954,10 +1161,9 @@ void drawRightNear(const struct Vec3 center,
 				{-GEOMETRY_SCALE_X * 0.5f, -geometryScale, +GEOMETRY_SCALE_Z * 0.5f, 1.00f}
 		};
 
-		q = _q;
-
-		// Calculate the vertex values.
+   		// Calculate the vertex values.
 		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
+
 	} else {
 		VECTOR vertices[4] = {
 				{+GEOMETRY_SCALE_X * 0.5f, +geometryScale, +GEOMETRY_SCALE_Z * 0.5f, 1.00f},
@@ -966,25 +1172,39 @@ void drawRightNear(const struct Vec3 center,
 				{-GEOMETRY_SCALE_X * 0.5f, -geometryScale, -GEOMETRY_SCALE_Z * 0.5f, 1.00f}
 		};
 
-		q = _q;
-
 		// Calculate the vertex values.
 		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 	}
+
+	VECTOR coordinates[4] = {
+			{ 1,  1,  0, 0},
+			{ 0,  1,  0, 0},
+			{ 1,  0,  0, 0},
+			{ 0,  0,  0, 0}
+	};
+
+	draw_convert_st(st, vertex_count, (vertex_f_t*)temp_vertices, (texel_f_t*)coordinates);
 
 	// Convert floating point vertices to fixed point and translate to center of screen.
 	draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 	// Draw the triangles using triangle primitive type.
-	q = draw_prim_start(q, 0, &prim, &color);
+	dw = (u64*)draw_prim_start(q,0,&prim, &color);
 
-	for (int i = 0; i < points_count; i++) {
-		q->dw[0] = colors[points[i]].rgbaq;
-		q->dw[1] = verts[points[i]].xyz;
-		q++;
+	for(int i = 0; i < points_count; i++)
+	{
+		*dw++ = colors[points[i]].rgbaq;
+		*dw++ = st[points[i]].uv;
+		*dw++ = verts[points[i]].xyz;
 	}
 
-	q = draw_prim_end(q, 2, DRAW_RGBAQ_REGLIST);
+	// Check if we're in middle of a qword or not.
+	if ((u32)dw % 16) {
+		*dw++ = 0;
+	}
+
+	q = draw_prim_end((qword_t*)dw,3,DRAW_STQ_REGLIST);
+
 	++q;
 
 	_q = q;
