@@ -145,8 +145,8 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 		};
 
 		VECTOR coordinates[4] = {
-				{ 1,  1,  0, 0},
-				{ 0,  1,  0, 0},
+				{ 1,  geometryScale,  0, 0},
+				{ 0,  geometryScale,  0, 0},
 				{ 1,  0,  0, 0},
 				{ 0,  0,  0, 0}
 		};
@@ -343,8 +343,8 @@ void drawBillboardAt(const struct Vec3 center,
 	q = _q;
 
 	VECTOR coordinates[4] = {
-			{ 1,  1,  0, 0},
-			{ 0,  1,  0, 0},
+			{ 1,  geometryScale,  0, 0},
+			{ 0,  geometryScale,  0, 0},
 			{ 1,  0,  0, 0},
 			{ 0,  0,  0, 0}
 	};
@@ -450,8 +450,8 @@ void drawColumnAt(const struct Vec3 center,
 		q = _q;
 
 		VECTOR coordinates[4] = {
-				{ 1,  1,  0, 0},
-				{ 0,  1,  0, 0},
+				{ 1,  geometryScale,  0, 0},
+				{ 0,  geometryScale,  0, 0},
 				{ 1,  0,  0, 0},
 				{ 0,  0,  0, 0}
 		};
@@ -500,8 +500,8 @@ void drawColumnAt(const struct Vec3 center,
 		q = _q;
 
 		VECTOR coordinates[4] = {
-				{ 1,  1,  0, 0},
-				{ 0,  1,  0, 0},
+				{ 1,  geometryScale,  0, 0},
+				{ 0,  geometryScale,  0, 0},
 				{ 1,  0,  0, 0},
 				{ 0,  0,  0, 0}
 		};
@@ -550,8 +550,8 @@ void drawColumnAt(const struct Vec3 center,
 		q = _q;
 
 		VECTOR coordinates[4] = {
-				{ 1,  1,  0, 0},
-				{ 0,  1,  0, 0},
+				{ 1,  geometryScale,  0, 0},
+				{ 0,  geometryScale,  0, 0},
 				{ 1,  0,  0, 0},
 				{ 0,  0,  0, 0}
 		};
@@ -600,8 +600,8 @@ void drawColumnAt(const struct Vec3 center,
 		q = _q;
 
 		VECTOR coordinates[4] = {
-				{ 1,  1,  0, 0},
-				{ 0,  1,  0, 0},
+				{ 1,  geometryScale,  0, 0},
+				{ 0,  geometryScale,  0, 0},
 				{ 1,  0,  0, 0},
 				{ 0,  0,  0, 0}
 		};
@@ -1005,15 +1005,6 @@ void drawLeftNear(const struct Vec3 center,
 			{0.90f, 0.00f, 0.00f, 1.00f}
 	};
 
-	VECTOR coordinates[4] = {
-			{ 1,  1,  0, 0},
-			{ 0,  1,  0, 0},
-			{ 1,  0,  0, 0},
-			{ 0,  0,  0, 0}
-	};
-
-	draw_convert_st(st, vertex_count, (vertex_f_t*)temp_vertices, (texel_f_t*)coordinates);
-
 	// Convert floating point colours to fixed point.
 	draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
 
@@ -1024,6 +1015,15 @@ void drawLeftNear(const struct Vec3 center,
 	FixP_t acc;
 	FixP_t scaled = Mul(scale, BIAS);
 	float geometryScale = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
+
+	VECTOR coordinates[4] = {
+			{ 1,  geometryScale,  0, 0},
+			{ 0,  geometryScale,  0, 0},
+			{ 1,  0,  0, 0},
+			{ 0,  0,  0, 0}
+	};
+
+	draw_convert_st(st, vertex_count, (vertex_f_t*)temp_vertices, (texel_f_t*)coordinates);
 /*
 	if (!repeatTexture) {
 		textureScale = 1;
@@ -1177,8 +1177,8 @@ void drawRightNear(const struct Vec3 center,
 	}
 
 	VECTOR coordinates[4] = {
-			{ 1,  1,  0, 0},
-			{ 0,  1,  0, 0},
+			{ 1,  geometryScale,  0, 0},
+			{ 0,  geometryScale,  0, 0},
 			{ 1,  0,  0, 0},
 			{ 0,  0,  0, 0}
 	};
