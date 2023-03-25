@@ -81,7 +81,7 @@ struct Texture *makeTextureFrom(const char *filename) {
 
 	toReturn->raw = loadBitmap(filename);
 	submitBitmapToGPU(toReturn->raw);
-	bindTexture(toReturn->raw);
+
 
 	return toReturn;
 }
@@ -267,6 +267,8 @@ void drawBillboardAt(const struct Vec3 center,
 	if (center.mZ <= 0 ) {
 		return;
 	}
+
+	bindTexture(bitmap->raw);
 
 	qword_t *q;
 

@@ -21,10 +21,10 @@
 #include "FixP.h"
 #include "VisibilityStrategy.h"
 
-void bindTexture(struct Bitmap *bitmap) {
-	packet_t *packet = packet_init(10,PACKET_NORMAL);
+extern qword_t *_q;
 
-	qword_t *q = packet->data;
+void bindTexture(struct Bitmap *bitmap) {
+	qword_t *q = _q;
 
 	// Using a texture involves setting up a lot of information.
 	clutbuffer_t clut;
@@ -51,12 +51,7 @@ void bindTexture(struct Bitmap *bitmap) {
 
 	q = draw_texture_sampling(q,0,&lod);
 	q = draw_texturebuffer(q,0,bitmap->nativeBuffer,&clut);
-
-	// Now send the packet, no need to wait since it's the first.
-	dma_channel_send_normal(DMA_CHANNEL_GIF,packet->data,q - packet->data, 0, 0);
-	dma_wait_fast();
-
-	packet_free(packet);
+	_q = q;
 }
 
 
