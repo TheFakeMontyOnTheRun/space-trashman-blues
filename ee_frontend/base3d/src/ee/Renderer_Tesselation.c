@@ -43,7 +43,6 @@ FixP_t walkingBias = 0;
 FixP_t playerHeight = 0;
 
 struct Texture *nativeTextures[TOTAL_TEXTURES];
-int usedTexture = 0;
 
 extern MATRIX local_world;
 extern MATRIX world_view;
@@ -71,7 +70,15 @@ extern color_t color;
 
 
 void clearTextures() {
-	usedTexture = 0;
+	for ( int c = 0; c < texturesUsed; ++c ) {
+		if (nativeTextures[c]) {
+			printf("releasing texture %d of %d\n", c, texturesUsed);
+			releaseBitmap(nativeTextures[c]->raw);
+			free(nativeTextures[c]);
+		}
+	}
+
+	texturesUsed = 0;
 }
 
 

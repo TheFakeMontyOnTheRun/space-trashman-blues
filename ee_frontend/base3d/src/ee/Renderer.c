@@ -187,7 +187,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 	end = head + data.size;
 	nameStart = head;
 
-	texturesUsed = 0;
 	clearTextures();
 
 	while (head != end && (texturesUsed < TOTAL_TEXTURES)) {
