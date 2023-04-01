@@ -72,7 +72,6 @@ extern color_t color;
 void clearTextures() {
 	for ( int c = 0; c < texturesUsed; ++c ) {
 		if (nativeTextures[c]) {
-			printf("releasing texture %d of %d\n", c, texturesUsed);
 			releaseBitmap(nativeTextures[c]->raw);
 			free(nativeTextures[c]);
 		}
@@ -317,7 +316,7 @@ void drawBillboardAt(const struct Vec3 center,
 	float centerZ;
 	FixP_t acc;
 	FixP_t scaled = Mul(scale, BIAS);
-	float geometryScale = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
+	float geometryScale =  (fixToInt(scaled) * REVERSE_BIAS);
 /*
 	if (!repeatTexture) {
 		textureScale = 1;
@@ -347,10 +346,10 @@ void drawBillboardAt(const struct Vec3 center,
 	q = _q;
 
 	VECTOR coordinates[4] = {
-			{ 1,  geometryScale,  0, 0},
-			{ 0,  geometryScale,  0, 0},
 			{ 1,  0,  0, 0},
-			{ 0,  0,  0, 0}
+			{ 0,  0,  0, 0},
+			{ 1,  1,  0, 0},
+			{ 0,  1,  0, 0}
 	};
 
 	// Calculate the vertex values.
