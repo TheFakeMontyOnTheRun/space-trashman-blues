@@ -52,7 +52,7 @@ void keycardDropCallback(struct Item *item) {
 
 
 void useCardWithCardWriter(struct Item *item1, struct Item *item2) {
-	if (item2 == getItemNamed("card-writer")) {
+	if (item1 == getItemNamed("low-rank-keycard") && item2 == getItemNamed("card-writer")) {
 		struct Item *card = getItemNamed("hacked-keycard");
 		addToRoom("computer-core", card);
 		dropObjectByName("low-rank-keycard");
@@ -65,7 +65,8 @@ void useCardWithCardWriter(struct Item *item1, struct Item *item2) {
 
 void useBootsWithMagneticCoupling(struct Item *item1, struct Item *item2) {
 	struct Item *coupling = getItemNamed("magnetic-coupling");
-	if (item2 == coupling) {
+	struct Item *boots = getItemNamed("magnetic-boots");
+	if (item1 == boots && item2 == coupling) {
 		coupling->active = FALSE;
 		defaultLogger("Magnetic lock disengaged");
 	} else {
@@ -208,7 +209,10 @@ void useCommWithRank(struct Item *item) {
 	item->active = !item->active;
 }
 
-
+/**
+ * TODO: change name for this function
+ * @param item
+ */
 void useComputerRack(struct Item *item) {
 
 	if (accessGrantedToSafe) {

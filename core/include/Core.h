@@ -165,6 +165,8 @@ const char *getRoomDescription(void);
 
 struct Room *getRoom(uint8_t index);
 
+struct Room *getRoomByName(const char *name);
+
 void removeObjectFromRoom(struct Item *itemToRemove);
 
 void useObjectNamed(const char* operand);

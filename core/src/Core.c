@@ -426,7 +426,7 @@ uint8_t getPlayerRoom(void) {
 }
 
 void useObjectNamed(const char *operand) {
-	struct ObjectNode *itemToPick = collectedObject->next;
+	struct ObjectNode *itemToPick = getPlayerItems();
 
 	while (itemToPick != NULL) {
 		struct Item *_item = getItem(itemToPick->item);
