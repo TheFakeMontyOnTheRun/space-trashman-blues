@@ -111,6 +111,7 @@ TEST_F(TestDerelict, usingTheRegularFlushWillNotProduceTheHighRankKeycard) {
 TEST_F(TestDerelict, usingElevatorToGoDownWillMovePlayerDown) {
 	struct Room* elevatorLevel3 = getRoomByName("elevator-level-3");
 
+	setPlayerRank(3);
 	getItemNamed("comm-terminal-2")->active = TRUE;
 	setPlayerLocation(elevatorLevel3->connections[5]);
 	parseCommand("use", "elevator-level2-go-down");
@@ -121,6 +122,7 @@ TEST_F(TestDerelict, usingElevatorToGoDownWillMovePlayerDown) {
 TEST_F(TestDerelict, usingElevatorToGoUpWillMovePlayerUp) {
 	struct Room* elevatorLevel1 = getRoomByName("elevator-level-1");
 
+	setPlayerRank(3);
 	getItemNamed("comm-terminal-2")->active = TRUE;
 	setPlayerLocation(elevatorLevel1->connections[4]);
 	parseCommand("use", "elevator-level2-go-up");
