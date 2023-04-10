@@ -19,18 +19,6 @@ using testing::Eq;
 extern struct Item item[TOTAL_ITEMS];
 extern struct Room rooms[TOTAL_ROOMS];
 
-int getRoomIdByName(const char* name) {
-
-  int c = 1;
-  for (; c < TOTAL_ROOMS; ++c) {
-    if (!strcmp(rooms[c].name, name )) {
-      return c;
-    }
-  }
-  assert(FALSE);
-  return 0;
-}
-
 TEST(TestVictoryCondition, activatingTheRemoteControlWithTheActiveBombWillExplodeEverything) {
 
   initStation();

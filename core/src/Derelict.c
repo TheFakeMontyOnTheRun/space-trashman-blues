@@ -130,7 +130,7 @@ void elevatorGoDownCallback(struct Item *item) {
 
 		if (getItem(currentItem->item)->pickable) {
 			item = getItem(currentItem->item);
-			removeObjectFromRoom(item);
+			/* this will already remove it from the room */
 			addObjectToRoom(newRoom, item);
 		}
 
@@ -160,7 +160,7 @@ void elevatorGoUpCallback(struct Item *item) {
 
 		if (getItem(currentItem->item)->pickable) {
 			item = getItem(currentItem->item);
-			removeObjectFromRoom(item);
+			/*This will alreadu remove it from the room*/
 			addObjectToRoom(newRoom, item);
 		}
 

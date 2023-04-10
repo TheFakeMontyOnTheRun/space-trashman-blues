@@ -118,15 +118,94 @@ TEST_F(TestDerelict, usingElevatorToGoDownWillMovePlayerDown) {
 	ASSERT_EQ(getRoom(getPlayerRoom()), elevatorLevel3);
 }
 
+TEST_F(TestDerelict, usingElevatorToGoDownWillNotMoveIfPlayerDoesntHaveEnoughRank) {
+	struct Room* elevatorLevel3 = getRoomByName("elevator-level-3");
+
+	getItemNamed("comm-terminal-2")->active = TRUE;
+	setPlayerLocation(elevatorLevel3->connections[5]);
+	parseCommand("use", "elevator-level2-go-down");
+	ASSERT_NE(getRoom(getPlayerRoom()), elevatorLevel3);
+}
+
+TEST_F(TestDerelict, usingElevatorToGoDownWillNotMoveIfCommTerminalIsOffline) {
+	struct Room* elevatorLevel3 = getRoomByName("elevator-level-3");
+
+	setPlayerRank(3);
+	setPlayerLocation(elevatorLevel3->connections[5]);
+	parseCommand("use", "elevator-level2-go-down");
+	ASSERT_NE(getRoom(getPlayerRoom()), elevatorLevel3);
+}
+
+TEST_F(TestDerelict, usingElevatorToGoDownWillNotMovePastTheLimit) {
+	struct Room* elevatorLevel2 = getRoomByName("elevator-level-2");
+	struct Room* elevatorLevel3 = getRoomByName("elevator-level-3");
+
+	setPlayerRank(3);
+	getItemNamed("comm-terminal-3")->active = TRUE;
+	setPlayerLocation(elevatorLevel2->connections[4]);
+	parseCommand("use", "elevator-level3-go-down");
+	ASSERT_EQ(getRoom(getPlayerRoom()), elevatorLevel3);
+}
 
 TEST_F(TestDerelict, usingElevatorToGoUpWillMovePlayerUp) {
 	struct Room* elevatorLevel1 = getRoomByName("elevator-level-1");
-
 	setPlayerRank(3);
 	getItemNamed("comm-terminal-2")->active = TRUE;
 	setPlayerLocation(elevatorLevel1->connections[4]);
 	parseCommand("use", "elevator-level2-go-up");
 	ASSERT_EQ(getRoom(getPlayerRoom()), elevatorLevel1);
+}
 
+TEST_F(TestDerelict, usingElevatorToGoUpWillNotMovePastTheLimit) {
+	struct Room* elevatorLevel1 = getRoomByName("elevator-level-1");
+	struct Room* elevatorLevel2 = getRoomByName("elevator-level-2");
 
+	setPlayerRank(3);
+	getItemNamed("comm-terminal-1")->active = TRUE;
+	setPlayerLocation(elevatorLevel2->connections[5]);
+	parseCommand("use", "elevator-level1-go-up");
+	ASSERT_EQ(getRoom(getPlayerRoom()), elevatorLevel1);
+}
+
+TEST_F(TestDerelict, usingElevatorToGoUpWillNotMoveIfPlayerDoesntHaveEnoughRank) {
+	struct Room* elevatorLevel1 = getRoomByName("elevator-level-1");
+
+	getItemNamed("comm-terminal-2")->active = TRUE;
+	setPlayerLocation(elevatorLevel1->connections[4]);
+	parseCommand("use", "elevator-level2-go-up");
+	ASSERT_NE(getRoom(getPlayerRoom()), elevatorLevel1);
+}
+
+TEST_F(TestDerelict, usingElevatorToGoUpWillNotMoveIfCommTerminalIsOffline) {
+	struct Room* elevatorLevel1 = getRoomByName("elevator-level-1");
+
+	setPlayerRank(3);
+	setPlayerLocation(elevatorLevel1->connections[4]);
+	parseCommand("use", "elevator-level2-go-up");
+	ASSERT_NE(getRoom(getPlayerRoom()), elevatorLevel1);
+}
+
+TEST_F(TestDerelict, usingElevatorToGoUpWillMoveObjectsAlongWithPlayer) {
+	struct Room* elevatorLevel1 = getRoomByName("elevator-level-1");
+	setPlayerRank(3);
+	getItemNamed("comm-terminal-2")->active = TRUE;
+	parseCommand("pick", "emp-bomb");
+	setPlayerLocation(elevatorLevel1->connections[4]);
+	parseCommand("drop", "emp-bomb");
+	parseCommand("use", "elevator-level2-go-up");
+	ASSERT_EQ(getRoom(getPlayerRoom()), elevatorLevel1);
+	ASSERT_TRUE(hasItemInRoom("elevator-level-1", "emp-bomb"));
+}
+
+TEST_F(TestDerelict, usingElevatorToGoDownWillMoveObjectsAlongWithPlayer) {
+	struct Room* elevatorLevel3 = getRoomByName("elevator-level-3");
+
+	setPlayerRank(3);
+	getItemNamed("comm-terminal-2")->active = TRUE;
+	parseCommand("pick", "emp-bomb");
+	setPlayerLocation(getRoomIdByName("elevator-level-2"));
+	parseCommand("drop", "emp-bomb");
+	parseCommand("use", "elevator-level2-go-down");
+	ASSERT_EQ(getRoom(getPlayerRoom()), elevatorLevel3);
+	ASSERT_TRUE(hasItemInRoom("elevator-level-3", "emp-bomb"));
 }
