@@ -17,6 +17,7 @@
 #include <graph.h>
 #include <draw.h>
 #include <draw3d.h>
+#include <gs_gp.h>
 
 #include "Core.h"
 #include "FixP.h"
@@ -95,7 +96,7 @@ enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
 struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
 
 uint32_t getPaletteEntry(const uint32_t origin) {
-    return origin;
+    return (0x80 << 24) + (origin & 0x00FFFFFF);
 }
 
 void enter2D(void) {
@@ -118,9 +119,23 @@ void startFrameGL(int width, int height) {
 	_q = dmatag;
 	_q++;
 
-	_q = draw_disable_tests(_q, 0, &zBuffer);
-	_q = draw_clear(_q, 0, 2048.0f - 320.0f, 2048.0f - 256.0f, frame.width, frame.height, 0x80, 0x80, 0x80);
-	_q = draw_enable_tests(_q, 0, &zBuffer);
+    PACK_GIFTAG(_q,GIF_SET_TAG(1,0,0,0,GIF_FLG_PACKED,1), GIF_REG_AD);
+    _q++;
+    PACK_GIFTAG(_q, GS_SET_TEST(DRAW_ENABLE,ATEST_METHOD_NOTEQUAL,0x00,ATEST_KEEP_FRAMEBUFFER,
+                               DRAW_DISABLE,DRAW_DISABLE,
+                               DRAW_ENABLE,ZTEST_METHOD_ALLPASS), GS_REG_TEST + 0);
+    _q++;
+
+
+    _q = draw_clear(_q, 0, 2048.0f - 320.0f, 2048.0f - 256.0f, frame.width, frame.height, 0x80, 0x80, 0x80);
+
+    PACK_GIFTAG(_q,GIF_SET_TAG(1,0,0,0,GIF_FLG_PACKED,1), GIF_REG_AD);
+    _q++;
+    PACK_GIFTAG(_q, GS_SET_TEST(DRAW_ENABLE,ATEST_METHOD_NOTEQUAL,0x00,ATEST_KEEP_ALL,
+                               DRAW_DISABLE,DRAW_DISABLE,
+                               DRAW_ENABLE,ZTEST_METHOD_GREATER_EQUAL), GS_REG_TEST + 0);
+    _q++;
+
 
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;

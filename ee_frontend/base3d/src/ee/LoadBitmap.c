@@ -126,7 +126,7 @@ struct Bitmap *loadBitmap(const char *filename) {
         if (buffer[c + 3] < 255) {
             pixel = TRANSPARENCY_COLOR;
         } else {
-            pixel += buffer[c + 3] << 24;
+            pixel += (0x80) << 24;
             pixel += buffer[c + 2] << 16;
             pixel += buffer[c + 1] << 8;
             pixel += buffer[c + 0] << 0;
