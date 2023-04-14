@@ -72,7 +72,7 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 
 	q = draw_texture_transfer(q, bitmap->data, bitmap->width, bitmap->height,GS_PSM_32,bitmap->nativeBuffer->address,bitmap->nativeBuffer->width);
 	q = draw_texture_flush(q);
-
+    FlushCache(0);
 	dma_channel_send_chain(DMA_CHANNEL_GIF,packet->data, q - packet->data, 0,0);
 	dma_wait_fast();
 
