@@ -143,12 +143,13 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 				1, 2, 3
 		};
 
-		VECTOR colours[4] = {
-				{0.00f, 0.00f, 0.00f, 1.00f},
-				{0.00f, 0.00f, 0.3f, 1.00f},
-				{0.00f, 0.00f, 0.6f, 1.00f},
-				{0.00f, 0.00f, 0.9f, 1.00f}
-		};
+        VECTOR colours[4] = {
+                {1.00f, 1.00f, 1.00f, 1.00f},
+                {1.00f, 1.00f, 1.00f, 1.00f},
+                {1.00f, 1.00f, 1.00f, 1.00f},
+                {1.00f, 1.00f, 1.00f, 1.00f}
+        };
+
 
 		VECTOR coordinates[4] = {
 				{ 1,  geometryScale,  0, 0},
@@ -259,7 +260,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Convert floating point colours to fixed point.
-		draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
+		draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
 
 		// Draw the triangles using triangle primitive type.
 		dw = (u64*)draw_prim_start(q,0,&prim, &color);
@@ -304,10 +305,10 @@ void drawBillboardAt(const struct Vec3 center,
 	};
 
 	VECTOR colours[4] = {
-			{0.00f, 0.00f, 0.00f, 1.00f},
-			{0.30f, 0.00f, 0.00f, 1.00f},
-			{0.60f, 0.00f, 0.00f, 1.00f},
-			{0.90f, 0.00f, 0.00f, 1.00f}
+            {1.00f, 1.00f, 1.00f, 1.00f},
+            {1.00f, 1.00f, 1.00f, 1.00f},
+            {1.00f, 1.00f, 1.00f, 1.00f},
+            {1.00f, 1.00f, 1.00f, 1.00f}
 	};
 
 	u64 *dw;
@@ -361,7 +362,7 @@ void drawBillboardAt(const struct Vec3 center,
 	draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 	// Convert floating point colours to fixed point.
-	draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
+	draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
 
 	// Draw the triangles using triangle primitive type.
 	dw = (u64*)draw_prim_start(q,0,&prim, &color);
@@ -405,12 +406,13 @@ void drawColumnAt(const struct Vec3 center,
 			1, 2, 3
 	};
 
-	VECTOR colours[4] = {
-			{0.00f, 0.00f, 0.00f, 1.00f},
-			{0.30f, 0.00f, 0.00f, 1.00f},
-			{0.60f, 0.00f, 0.00f, 1.00f},
-			{0.90f, 0.00f, 0.00f, 1.00f}
-	};
+    VECTOR colours[4] = {
+            {1.00f, 1.00f, 1.00f, 1.00f},
+            {1.00f, 1.00f, 1.00f, 1.00f},
+            {1.00f, 1.00f, 1.00f, 1.00f},
+            {1.00f, 1.00f, 1.00f, 1.00f}
+    };
+
 
 	float centerY;
 	float centerX;
@@ -467,7 +469,7 @@ void drawColumnAt(const struct Vec3 center,
 		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Convert floating point colours to fixed point.
-		draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
+		draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
 
 		// Draw the triangles using triangle primitive type.
 		dw = (u64*)draw_prim_start(q,0,&prim, &color);
@@ -520,7 +522,7 @@ void drawColumnAt(const struct Vec3 center,
 		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Convert floating point colours to fixed point.
-		draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
+		draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
 
 		// Draw the triangles using triangle primitive type.
 		dw = (u64*)draw_prim_start(q,0,&prim, &color);
@@ -573,7 +575,7 @@ void drawColumnAt(const struct Vec3 center,
 		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 		// Convert floating point colours to fixed point.
-		draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
+		draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
 
 		// Draw the triangles using triangle primitive type.
 		dw = (u64*)draw_prim_start(q,0,&prim, &color);
@@ -625,7 +627,7 @@ void drawColumnAt(const struct Vec3 center,
 		// Convert floating point vertices to fixed point and translate to center of screen.
 		draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
-		draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
+		draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
 
 		// Draw the triangles using triangle primitive type.
 		dw = (u64*)draw_prim_start(q,0,&prim, &color);
@@ -772,15 +774,16 @@ void drawFloorAt(const struct Vec3 center,
 				1, 2, 3
 		};
 
-		VECTOR colours[4] = {
-				{0.00f, 0.00f, 0.00f, 1.00f},
-				{0.00f, 0.00f, 0.3f, 1.00f},
-				{0.00f, 0.00f, 0.6f, 1.00f},
-				{0.00f, 0.00f, 0.9f, 1.00f}
-		};
+        VECTOR colours[4] = {
+                {1.00f, 1.00f, 1.00f, 1.00f},
+                {1.00f, 1.00f, 1.00f, 1.00f},
+                {1.00f, 1.00f, 1.00f, 1.00f},
+                {1.00f, 1.00f, 1.00f, 1.00f}
+        };
+
 
 		// Convert floating point colours to fixed point.
-		draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
+		draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
 
 		VECTOR vertices[4] = {
 				{- GEOMETRY_SCALE_X * 0.5f, 0, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
@@ -941,15 +944,16 @@ void drawCeilingAt(const struct Vec3 center,
 				1, 2, 3
 		};
 
-		VECTOR colours[4] = {
-				{0.00f, 0.00f, 0.00f, 1.00f},
-				{0.00f, 0.3f, 0.00f, 1.00f},
-				{0.00f, 0.6f, 0.00f, 1.00f},
-				{0.00f, 0.9f, 0.00f, 1.00f}
-		};
+        VECTOR colours[4] = {
+                {1.00f, 1.00f, 1.00f, 1.00f},
+                {1.00f, 1.00f, 1.00f, 1.00f},
+                {1.00f, 1.00f, 1.00f, 1.00f},
+                {1.00f, 1.00f, 1.00f, 1.00f}
+        };
+
 
 		// Convert floating point colours to fixed point.
-		draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
+		draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
 
 		VECTOR vertices[4] = {
 				{ - GEOMETRY_SCALE_X * 0.5f, 0,  - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
@@ -1011,12 +1015,13 @@ void drawLeftNear(const struct Vec3 center,
 			1, 2, 3
 	};
 
-	VECTOR colours[4] = {
-			{0.00f, 0.00f, 0.00f, 1.00f},
-			{0.30f, 0.00f, 0.00f, 1.00f},
-			{0.60f, 0.00f, 0.00f, 1.00f},
-			{0.90f, 0.00f, 0.00f, 1.00f}
-	};
+    VECTOR colours[4] = {
+            {1.00f, 1.00f, 1.00f, 1.00f},
+            {1.00f, 1.00f, 1.00f, 1.00f},
+            {1.00f, 1.00f, 1.00f, 1.00f},
+            {1.00f, 1.00f, 1.00f, 1.00f}
+    };
+
 
 	float centerY;
 	float centerX;
@@ -1083,7 +1088,7 @@ void drawLeftNear(const struct Vec3 center,
 	draw_convert_st(st, vertex_count, (vertex_f_t*)temp_vertices, (texel_f_t*)coordinates);
 
 	// Convert floating point colours to fixed point.
-	draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
+	draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
 
 	// Draw the triangles using triangle primitive type.
 	dw = (u64*)draw_prim_start(q,0,&prim, &color);
@@ -1128,12 +1133,13 @@ void drawRightNear(const struct Vec3 center,
 			1, 2, 3
 	};
 
-	VECTOR colours[4] = {
-			{0.00f, 0.00f, 0.00f, 1.00f},
-			{0.30f, 0.00f, 0.00f, 1.00f},
-			{0.60f, 0.00f, 0.00f, 1.00f},
-			{0.90f, 0.00f, 0.00f, 1.00f}
-	};
+    VECTOR colours[4] = {
+            {1.00f, 1.00f, 1.00f, 1.00f},
+            {1.00f, 1.00f, 1.00f, 1.00f},
+            {1.00f, 1.00f, 1.00f, 1.00f},
+            {1.00f, 1.00f, 1.00f, 1.00f}
+    };
+
 
 	float centerY;
 	float centerX;
@@ -1198,7 +1204,7 @@ void drawRightNear(const struct Vec3 center,
 	draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
 	// Convert floating point colours to fixed point.
-	draw_convert_rgbq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours, 0x80);
+	draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
 
 	// Draw the triangles using triangle primitive type.
 	dw = (u64*)draw_prim_start(q,0,&prim, &color);
