@@ -67,7 +67,7 @@ extern color_t color;
 
 #define BIAS (intToFix(8))
 #define REVERSE_BIAS (1.0f/8.0f)
-
+#define FOG_MAX_DISTANCE 32.0f
 
 void clearTextures() {
 	for ( int c = 0; c < texturesUsed; ++c ) {
@@ -78,6 +78,16 @@ void clearTextures() {
 	}
 
 	texturesUsed = 0;
+}
+
+float clampf(float v0, float v1, float v) {
+    if (v < v0) {
+        return v0;
+    } else if (v > v1) {
+        return v1;
+    } else {
+        return v;
+    }
 }
 
 
@@ -143,13 +153,14 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 				1, 2, 3
 		};
 
-        VECTOR colours[4] = {
-                {1.00f, 1.00f, 1.00f, 1.00f},
-                {1.00f, 1.00f, 1.00f, 1.00f},
-                {1.00f, 1.00f, 1.00f, 1.00f},
-                {1.00f, 1.00f, 1.00f, 1.00f}
-        };
+        float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
 
+        VECTOR colours[4] = {
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+        };
 
 		VECTOR coordinates[4] = {
 				{ 1,  geometryScale,  0, 0},
@@ -304,13 +315,6 @@ void drawBillboardAt(const struct Vec3 center,
 			1, 2, 3
 	};
 
-	VECTOR colours[4] = {
-            {1.00f, 1.00f, 1.00f, 1.00f},
-            {1.00f, 1.00f, 1.00f, 1.00f},
-            {1.00f, 1.00f, 1.00f, 1.00f},
-            {1.00f, 1.00f, 1.00f, 1.00f}
-	};
-
 	u64 *dw;
 	float centerY;
 	float centerX;
@@ -318,11 +322,6 @@ void drawBillboardAt(const struct Vec3 center,
 	FixP_t acc;
 	FixP_t scaled = Mul(scale, BIAS);
 	float geometryScale =  (fixToInt(scaled) * REVERSE_BIAS);
-/*
-	if (!repeatTexture) {
-		textureScale = 1;
-	}
-*/
 	acc = center.mY + playerHeight + walkingBias + yCameraOffset;
 	scaled = Mul(acc, BIAS);
 	centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
@@ -352,6 +351,15 @@ void drawBillboardAt(const struct Vec3 center,
 			{ 1,  1,  0, 0},
 			{ 0,  1,  0, 0}
 	};
+
+    float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
+
+    VECTOR colours[4] = {
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+    };
 
 	// Calculate the vertex values.
 	calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
@@ -406,31 +414,28 @@ void drawColumnAt(const struct Vec3 center,
 			1, 2, 3
 	};
 
-    VECTOR colours[4] = {
-            {1.00f, 1.00f, 1.00f, 1.00f},
-            {1.00f, 1.00f, 1.00f, 1.00f},
-            {1.00f, 1.00f, 1.00f, 1.00f},
-            {1.00f, 1.00f, 1.00f, 1.00f}
-    };
-
-
 	float centerY;
 	float centerX;
 	float centerZ;
 	FixP_t acc;
 	FixP_t scaled = Mul(scale, BIAS);
 	float geometryScale = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
-/*
-	if (!repeatTexture) {
-		textureScale = 1;
-	}
-*/
+
 	acc = center.mY + playerHeight + walkingBias + yCameraOffset;
 	scaled = Mul(acc, BIAS);
 	centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
 	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
 	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
+
+    float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
+
+    VECTOR colours[4] = {
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+    };
 
 	VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
 	VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
@@ -774,11 +779,13 @@ void drawFloorAt(const struct Vec3 center,
 				1, 2, 3
 		};
 
+        float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
+
         VECTOR colours[4] = {
-                {1.00f, 1.00f, 1.00f, 1.00f},
-                {1.00f, 1.00f, 1.00f, 1.00f},
-                {1.00f, 1.00f, 1.00f, 1.00f},
-                {1.00f, 1.00f, 1.00f, 1.00f}
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
         };
 
 
@@ -944,13 +951,14 @@ void drawCeilingAt(const struct Vec3 center,
 				1, 2, 3
 		};
 
-        VECTOR colours[4] = {
-                {1.00f, 1.00f, 1.00f, 1.00f},
-                {1.00f, 1.00f, 1.00f, 1.00f},
-                {1.00f, 1.00f, 1.00f, 1.00f},
-                {1.00f, 1.00f, 1.00f, 1.00f}
-        };
+        float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
 
+        VECTOR colours[4] = {
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+        };
 
 		// Convert floating point colours to fixed point.
 		draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
@@ -1015,14 +1023,6 @@ void drawLeftNear(const struct Vec3 center,
 			1, 2, 3
 	};
 
-    VECTOR colours[4] = {
-            {1.00f, 1.00f, 1.00f, 1.00f},
-            {1.00f, 1.00f, 1.00f, 1.00f},
-            {1.00f, 1.00f, 1.00f, 1.00f},
-            {1.00f, 1.00f, 1.00f, 1.00f}
-    };
-
-
 	float centerY;
 	float centerX;
 	float centerZ;
@@ -1037,17 +1037,22 @@ void drawLeftNear(const struct Vec3 center,
 			{ 0,  0,  0, 0}
 	};
 
-/*
-	if (!repeatTexture) {
-		textureScale = 1;
-	}
-*/
 	acc = center.mY + playerHeight + walkingBias + yCameraOffset;
 	scaled = Mul(acc, BIAS);
 	centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
 	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
 	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
+
+    float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
+
+    VECTOR colours[4] = {
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+    };
+
 
 	VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
 	VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
@@ -1133,25 +1138,13 @@ void drawRightNear(const struct Vec3 center,
 			1, 2, 3
 	};
 
-    VECTOR colours[4] = {
-            {1.00f, 1.00f, 1.00f, 1.00f},
-            {1.00f, 1.00f, 1.00f, 1.00f},
-            {1.00f, 1.00f, 1.00f, 1.00f},
-            {1.00f, 1.00f, 1.00f, 1.00f}
-    };
-
-
 	float centerY;
 	float centerX;
 	float centerZ;
 	FixP_t acc;
 	FixP_t scaled = Mul(scale, BIAS);
 	float geometryScale = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
-/*
-	if (!repeatTexture) {
-		textureScale = 1;
-	}
-*/
+
 	acc = center.mY + playerHeight + walkingBias + yCameraOffset;
 	scaled = Mul(acc, BIAS);
 	centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
@@ -1159,7 +1152,16 @@ void drawRightNear(const struct Vec3 center,
 	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
 	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
 
-	VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
+    float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
+
+    VECTOR colours[4] = {
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+    };
+
+    VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
 	VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
 
 	create_local_world(local_world, object_position, object_rotation);
