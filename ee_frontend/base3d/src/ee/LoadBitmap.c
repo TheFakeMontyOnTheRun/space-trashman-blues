@@ -41,7 +41,7 @@ void bindTexture(struct Bitmap *bitmap) {
 	bitmap->nativeBuffer->info.width = draw_log2(bitmap->width);
 	bitmap->nativeBuffer->info.height = draw_log2(bitmap->height);
 	bitmap->nativeBuffer->info.components = TEXTURE_COMPONENTS_RGBA;
-	bitmap->nativeBuffer->info.function = TEXTURE_FUNCTION_DECAL;
+	bitmap->nativeBuffer->info.function = TEXTURE_FUNCTION_MODULATE;
 
 	clut.storage_mode = CLUT_STORAGE_MODE1;
 	clut.start = 0;
