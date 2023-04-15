@@ -5,6 +5,7 @@ packager:
 	$(CXX) -std=c++14 -opacker packer.cpp
 
 data:	packager
+	python3 ./check_textures.py
 	rm -f ./base.pfs
 	ls assets/*.*  | xargs ./packer
 	mv ./data.pfs ../base.pfs
