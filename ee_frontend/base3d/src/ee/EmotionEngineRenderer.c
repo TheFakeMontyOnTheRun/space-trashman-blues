@@ -102,8 +102,8 @@ qword_t *draw_setup_environment_with_repeat(qword_t *q, int context, framebuffer
 	texwrap_t wrap;
 
 	atest.enable = DRAW_ENABLE;
-	atest.method = ATEST_METHOD_NOTEQUAL;
-	atest.compval = 0x00;
+	atest.method = ATEST_METHOD_EQUAL;
+	atest.compval = 0x80;
 	atest.keep = ATEST_KEEP_ALL;
 
 	dtest.enable = DRAW_DISABLE;
