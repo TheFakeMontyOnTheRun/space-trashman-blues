@@ -163,11 +163,11 @@ void Crawler_repaintCallback() {
             center.mY = 0;
             center.mZ = intToFix(3);
             center.mX = -intToFix(3);
-            drawColumnAt( center, intToFix(3), nativeTextures[1], MASK_LEFT, 0, 1);
+            drawColumnAt( center, intToFix(2), nativeTextures[1], MASK_LEFT, 0, 1);
 
             center.mY = 0;
             center.mX = intToFix(3);
-            drawColumnAt( center, intToFix(3), nativeTextures[1], MASK_RIGHT, 0, 1);
+            drawColumnAt( center, intToFix(2), nativeTextures[1], MASK_RIGHT, 0, 1);
 
             center.mZ = intToFix(2);
             center.mX = -intToFix(1);
@@ -187,7 +187,7 @@ void Crawler_repaintCallback() {
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
 
 
-            center.mY = intToFix(6) - zCameraOffset;
+            center.mY = intToFix(5) - zCameraOffset;
 
             center.mX = -intToFix(1);
             drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);

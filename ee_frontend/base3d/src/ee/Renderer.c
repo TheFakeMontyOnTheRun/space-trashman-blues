@@ -127,7 +127,7 @@ void startFrameGL(int width, int height) {
     _q++;
 
 
-    _q = draw_clear(_q, 0, 2048.0f - 320.0f, 2048.0f - 256.0f, frame.width, frame.height, 0x80, 0x80, 0x80);
+    _q = draw_clear(_q, 0, 2048.0f - 320.0f, 2048.0f - 256.0f, frame.width, frame.height, 0, 0, 0);
 
     PACK_GIFTAG(_q,GIF_SET_TAG(1,0,0,0,GIF_FLG_PACKED,1), GIF_REG_AD);
     _q++;
