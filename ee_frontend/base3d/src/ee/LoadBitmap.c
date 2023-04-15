@@ -33,8 +33,8 @@ void bindTexture(struct Bitmap *bitmap) {
 
 	lod.calculation = LOD_USE_K;
 	lod.max_level = 0;
-	lod.mag_filter = LOD_MAG_NEAREST;
-	lod.min_filter = LOD_MIN_NEAREST;
+	lod.mag_filter = LOD_MAG_LINEAR;
+	lod.min_filter = LOD_MIN_LINEAR;
 	lod.l = 0;
 	lod.k = 0;
 
