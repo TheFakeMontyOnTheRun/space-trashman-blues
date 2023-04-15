@@ -70,6 +70,18 @@ extern color_t color;
 #define FOG_MAX_DISTANCE 32.0f
 
 void clearTextures() {
+    char buffer[256];
+
+    for (int c = 1; c < itemsCount; ++c) {
+        sprintf(&buffer[0], "%s.img", getItem(c)->name);
+        itemSprites[c] = (makeTextureFrom(&buffer[0]));
+
+        if (itemSprites[c]) {
+            releaseBitmap(itemSprites[c]->raw);
+            free(itemSprites[c]);
+        }
+    }
+
 	for ( int c = 0; c < texturesUsed; ++c ) {
 		if (nativeTextures[c]) {
 			releaseBitmap(nativeTextures[c]->raw);

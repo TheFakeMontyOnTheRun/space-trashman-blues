@@ -188,7 +188,7 @@ void loadTileProperties(const uint8_t levelNumber) {
 }
 
 void loadTexturesForLevel(const uint8_t levelNumber) {
-
+    char buffer[256];
     struct StaticBuffer data;
 	char tilesFilename[64];
 	char *head;
@@ -204,7 +204,13 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 
 	clearTextures();
 
-	while (head != end && (texturesUsed < TOTAL_TEXTURES)) {
+    //item 0 is a dummy
+    for (int c = 1; c < itemsCount; ++c) {
+        sprintf(&buffer[0], "%s.img", getItem(c)->name);
+        itemSprites[c] = (makeTextureFrom(&buffer[0]));
+    }
+
+    while (head != end && (texturesUsed < TOTAL_TEXTURES)) {
 		char val = *head;
 		if (val == '\n' || val == 0) {
 			*head = 0;

@@ -43,7 +43,6 @@ int AbandonMission_count = 2;
 extern struct GameSnapshot gameSnapshot;
 
 void Crawler_initStateCallback(int32_t tag) {
-	char buffer[256];
 	int c;
 
     if (tag == kPlayGame) {
@@ -84,12 +83,6 @@ void Crawler_initStateCallback(int32_t tag) {
 
     if (tag == kPlayGame) {
         initRoom(getPlayerRoom());
-
-		//item 0 is a dummy
-		for (c = 1; c < itemsCount; ++c) {
-			sprintf(&buffer[0], "%s.img", getItem(c)->name);
-			itemSprites[c] = (makeTextureFrom(&buffer[0]));
-		}
     }
 }
 
