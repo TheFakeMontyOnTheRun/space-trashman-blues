@@ -339,7 +339,7 @@ void drawBillboardAt(const struct Vec3 center,
 	centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
 	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
-	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
+	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 
 	VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
 	VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
@@ -438,7 +438,7 @@ void drawColumnAt(const struct Vec3 center,
 	centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
 	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
-	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
+	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 
     float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
 
@@ -689,7 +689,7 @@ void drawFloorAt(const struct Vec3 center,
 		float centerZ;
 
 		centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
-		centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
+		centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 
 		VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
 		VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
@@ -863,7 +863,7 @@ void drawCeilingAt(const struct Vec3 center,
 		float centerZ;
 
 		centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
-		centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
+		centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 
 		VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
 		VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
@@ -1054,7 +1054,7 @@ void drawLeftNear(const struct Vec3 center,
 	centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
 	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
-	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
+	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 
     float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
 
@@ -1162,7 +1162,7 @@ void drawRightNear(const struct Vec3 center,
 	centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
 	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
-	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
+	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 
     float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
 
