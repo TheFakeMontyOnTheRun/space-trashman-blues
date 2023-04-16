@@ -432,6 +432,7 @@ void drawColumnAt(const struct Vec3 center,
 	float centerZ;
 	FixP_t acc;
 	FixP_t scaled = Mul(scale, BIAS);
+    float textureScale = 1;
 	float geometryScale = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
 	acc = center.mY + playerHeight + walkingBias + yCameraOffset;
@@ -457,8 +458,11 @@ void drawColumnAt(const struct Vec3 center,
 
 	create_local_screen(local_screen, local_world, world_view, view_screen);
 
+    if (repeatTexture) {
+        textureScale = geometryScale;
+    }
 
-	if ((mask & MASK_BEHIND)) {
+    if ((mask & MASK_BEHIND)) {
 
 		bindTexture(texture->raw);
 
@@ -471,12 +475,12 @@ void drawColumnAt(const struct Vec3 center,
 
 		q = _q;
 
-		VECTOR coordinates[4] = {
-				{ 1,  geometryScale,  0, 0},
-				{ 0,  geometryScale,  0, 0},
-				{ 1,  0,  0, 0},
-				{ 0,  0,  0, 0}
-		};
+        VECTOR coordinates[4] = {
+                { 1,  textureScale,  0, 0},
+                { 0,  textureScale,  0, 0},
+                { 1,  0,  0, 0},
+                { 0,  0,  0, 0}
+        };
 
 		// Calculate the vertex values.
 		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
@@ -525,8 +529,8 @@ void drawColumnAt(const struct Vec3 center,
 		q = _q;
 
 		VECTOR coordinates[4] = {
-				{ 1,  geometryScale,  0, 0},
-				{ 0,  geometryScale,  0, 0},
+				{ 1,  textureScale,  0, 0},
+				{ 0,  textureScale,  0, 0},
 				{ 1,  0,  0, 0},
 				{ 0,  0,  0, 0}
 		};
@@ -577,12 +581,12 @@ void drawColumnAt(const struct Vec3 center,
 
 		q = _q;
 
-		VECTOR coordinates[4] = {
-				{ 1,  geometryScale,  0, 0},
-				{ 0,  geometryScale,  0, 0},
-				{ 1,  0,  0, 0},
-				{ 0,  0,  0, 0}
-		};
+        VECTOR coordinates[4] = {
+                { 1,  textureScale,  0, 0},
+                { 0,  textureScale,  0, 0},
+                { 1,  0,  0, 0},
+                { 0,  0,  0, 0}
+        };
 
 		// Calculate the vertex values.
 		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
@@ -630,12 +634,12 @@ void drawColumnAt(const struct Vec3 center,
 
 		q = _q;
 
-		VECTOR coordinates[4] = {
-				{ 1,  geometryScale,  0, 0},
-				{ 0,  geometryScale,  0, 0},
-				{ 1,  0,  0, 0},
-				{ 0,  0,  0, 0}
-		};
+        VECTOR coordinates[4] = {
+                { 1,  textureScale,  0, 0},
+                { 0,  textureScale,  0, 0},
+                { 1,  0,  0, 0},
+                { 0,  0,  0, 0}
+        };
 
 		// Calculate the vertex values.
 		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
@@ -1041,11 +1045,16 @@ void drawLeftNear(const struct Vec3 center,
 	float centerZ;
 	FixP_t acc;
 	FixP_t scaled = Mul(scale, BIAS);
+    float textureScale = 1;
 	float geometryScale = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
-	VECTOR coordinates[4] = {
-			{ 1,  geometryScale,  0, 0},
-			{ 0,  geometryScale,  0, 0},
+    if (repeatTexture) {
+        textureScale = geometryScale;
+    }
+
+    VECTOR coordinates[4] = {
+			{ 1,  textureScale,  0, 0},
+			{ 0,  textureScale,  0, 0},
 			{ 1,  0,  0, 0},
 			{ 0,  0,  0, 0}
 	};
@@ -1156,6 +1165,7 @@ void drawRightNear(const struct Vec3 center,
 	float centerZ;
 	FixP_t acc;
 	FixP_t scaled = Mul(scale, BIAS);
+    float textureScale = 1;
 	float geometryScale = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
 	acc = center.mY + playerHeight + walkingBias + yCameraOffset;
@@ -1206,9 +1216,13 @@ void drawRightNear(const struct Vec3 center,
 		calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 	}
 
+    if (repeatTexture) {
+        textureScale = geometryScale;
+    }
+
 	VECTOR coordinates[4] = {
-			{ 1,  geometryScale,  0, 0},
-			{ 0,  geometryScale,  0, 0},
+			{ 1,  textureScale,  0, 0},
+			{ 0,  textureScale,  0, 0},
 			{ 1,  0,  0, 0},
 			{ 0,  0,  0, 0}
 	};
