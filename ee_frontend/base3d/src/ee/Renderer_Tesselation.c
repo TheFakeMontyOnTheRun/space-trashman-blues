@@ -129,16 +129,17 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 
 		bindTexture(texture->raw);
 
-		acc = (p1.mY);
-		scaled = Mul(acc, BIAS);
-		centerY1 = (fixToInt(scaled) * REVERSE_BIAS);
 
-		acc = (p0.mY);
+		acc = (p1.mY)  + playerHeight + walkingBias + yCameraOffset;;
 		scaled = Mul(acc, BIAS);
-		centerY0 = (fixToInt(scaled) * REVERSE_BIAS);
+		centerY1 = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
-		geometryScale = 1.0f;
-		centerY = centerY0;
+		acc = (p0.mY)  + playerHeight + walkingBias + yCameraOffset;;
+		scaled = Mul(acc, BIAS);
+		centerY0 = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
+
+        geometryScale = (centerY1 - centerY0) * 0.5f;
+        centerY = (centerY1 + centerY0) * 0.5f;
 
 		int x[4], y[4];
 		float centerX;
@@ -175,14 +176,14 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         };
 
 		VECTOR coordinates[4] = {
-				{ 1,  geometryScale,  0, 0},
-				{ 0,  geometryScale,  0, 0},
+				{ 1,  geometryScale * 0.5f,  0, 0},
+				{ 0,  geometryScale * 0.5f,  0, 0},
 				{ 1,  0,  0, 0},
 				{ 0,  0,  0, 0}
 		};
 
 		switch (direction) {
-			case kNorth: {
+			case kSouth: {
 				x[0] = 0;
 				y[0] = 1;
 				x[1] = 1;
@@ -205,7 +206,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 				calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 			}
 				break;
-			case kSouth: {
+			case kNorth: {
 				x[0] = 1;
 				y[0] = 0;
 				x[1] = 0;
@@ -228,7 +229,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 				calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 			}
 				break;
-			case kEast: {
+			case kWest: {
 				x[0] = 0;
 				y[0] = 0;
 				x[1] = 0;
@@ -251,7 +252,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 				calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 			}
 				break;
-			case kWest:
+			case kEast:
 			default: {
 				x[0] = 1;
 				y[0] = 1;
