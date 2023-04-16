@@ -119,7 +119,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 
 
 
-	if (p0.mZ > 0 && p1.mZ > 0  ) {
+	if ((p0.mZ + zCameraOffset) > 0 && (p1.mZ + zCameraOffset) > 0  ) {
 
 		float centerY0, centerY1;
 		FixP_t acc;
@@ -130,11 +130,11 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 		bindTexture(texture->raw);
 
 
-		acc = (p1.mY)  + playerHeight + walkingBias + yCameraOffset;;
+		acc = (p1.mY)  + playerHeight + walkingBias + yCameraOffset;
 		scaled = Mul(acc, BIAS);
 		centerY1 = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
-		acc = (p0.mY)  + playerHeight + walkingBias + yCameraOffset;;
+		acc = (p0.mY)  + playerHeight + walkingBias + yCameraOffset;
 		scaled = Mul(acc, BIAS);
 		centerY0 = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
@@ -145,8 +145,8 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 		float centerX;
 		float centerZ;
 		u64 *dw;
-		centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(p0.mX, BIAS)) * 0.5f * REVERSE_BIAS);
-		centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(p0.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
+		centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(p0.mX + xCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
+		centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(p0.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 
 		VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
 		VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
@@ -313,7 +313,7 @@ void drawBillboardAt(const struct Vec3 center,
 					 struct Texture *bitmap,
 					 const FixP_t scale,
 					 const int size) {
-	if (center.mZ <= 0 ) {
+	if ((center.mZ + zCameraOffset) <= 0 ) {
 		return;
 	}
 
@@ -339,7 +339,7 @@ void drawBillboardAt(const struct Vec3 center,
 	scaled = Mul(acc, BIAS);
 	centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
-	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
+	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX + xCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 
 	VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
@@ -414,7 +414,7 @@ void drawColumnAt(const struct Vec3 center,
 				  const uint8_t enableAlpha,
 				  const uint8_t repeatTexture) {
 
-	if (center.mZ <= 0 ) {
+	if ((center.mZ + zCameraOffset) <= 0 ) {
 		return;
 	}
 
@@ -438,7 +438,7 @@ void drawColumnAt(const struct Vec3 center,
 	scaled = Mul(acc, BIAS);
 	centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
-	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
+	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX + xCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 
     float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
@@ -673,7 +673,7 @@ void drawColumnAt(const struct Vec3 center,
 void drawFloorAt(const struct Vec3 center,
 				 const struct Texture *texture, enum EDirection cameraDirection) {
 
-	if (center.mY <= 0 && center.mZ > 0  ) {
+	if (center.mY <= 0 && (center.mZ + zCameraOffset) > 0  ) {
 
 		float centerY;
 		FixP_t acc;
@@ -689,7 +689,7 @@ void drawFloorAt(const struct Vec3 center,
 		float centerX;
 		float centerZ;
 
-		centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
+		centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX + xCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 		centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 
 		VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
@@ -863,7 +863,7 @@ void drawCeilingAt(const struct Vec3 center,
 		float centerX;
 		float centerZ;
 
-		centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
+		centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX + xCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 		centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 
 		VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
@@ -1021,7 +1021,7 @@ void drawLeftNear(const struct Vec3 center,
 				  const uint8_t repeatTexture) {
 
 
-	if (center.mZ <= 0 ) {
+	if ((center.mZ + zCameraOffset) <= 0 ) {
 		return;
 	}
 
@@ -1054,7 +1054,7 @@ void drawLeftNear(const struct Vec3 center,
 	scaled = Mul(acc, BIAS);
 	centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
-	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
+	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX + xCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 
     float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
@@ -1136,7 +1136,7 @@ void drawRightNear(const struct Vec3 center,
 				   const uint8_t mask,
 				   const uint8_t repeatTexture) {
 
-	if (center.mZ <= 0 ) {
+	if ((center.mZ + zCameraOffset) <= 0 ) {
 		return;
 	}
 
@@ -1162,7 +1162,7 @@ void drawRightNear(const struct Vec3 center,
 	scaled = Mul(acc, BIAS);
 	centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
 
-	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
+	centerX = GEOMETRY_SCALE_X *  (fixToInt(Mul(center.mX + xCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 	centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 
     float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
