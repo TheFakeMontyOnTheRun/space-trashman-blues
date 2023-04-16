@@ -129,7 +129,7 @@ void castVisibility(const enum EDirection from,
 			continue;
 		}
 
-		narrowing = abs(verticalDistance) + 3;
+		narrowing = abs(verticalDistance) + 6;
 
 		if (((currentPos.x - originalPos.x) >= -narrowing)
 			&& (currentPos.x - originalPos.x) <= 0
