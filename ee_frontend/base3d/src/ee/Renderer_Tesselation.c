@@ -60,7 +60,7 @@ extern prim_t prim;
 extern color_t color;
 
 #define GEOMETRY_SCALE_X 2.0f
-#define GEOMETRY_SCALE_Y 2.0f
+#define GEOMETRY_SCALE_Y 1.0f
 #define GEOMETRY_SCALE_Z 2.0f
 #define GEOMETRY_TEXTURE_SCALE_X 1.0f
 #define GEOMETRY_TEXTURE_SCALE_Y 1.0f
