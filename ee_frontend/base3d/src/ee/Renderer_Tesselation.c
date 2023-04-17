@@ -174,24 +174,16 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
                 {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
                 {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
         };
-
-		VECTOR coordinates[4] = {
-				{ 1,  geometryScale * 0.5f,  0, 0},
-				{ 0,  geometryScale * 0.5f,  0, 0},
-				{ 1,  0,  0, 0},
-				{ 0,  0,  0, 0}
-		};
-
 		switch (direction) {
 			case kSouth: {
-				x[0] = 0;
-				y[0] = 1;
-				x[1] = 1;
-				y[1] = 1;
-				x[2] = 1;
-				y[2] = 0;
-				x[3] = 0;
-				y[3] = 0;
+                x[0] = 0;
+                y[0] = 0;
+                x[1] = 1;
+                y[1] = 0;
+                x[2] = 0;
+                y[2] = 1;
+                x[3] = 1;
+                y[3] = 1;
 
 				VECTOR vertices[4] = {
 						{- GEOMETRY_SCALE_X * 0.5f, - geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
@@ -207,14 +199,15 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 			}
 				break;
 			case kNorth: {
-				x[0] = 1;
-				y[0] = 0;
-				x[1] = 0;
-				y[1] = 0;
-				x[2] = 0;
-				y[2] = 1;
-				x[3] = 1;
-				y[3] = 1;
+                x[0] = 1;
+                y[0] = 1;
+                x[1] = 0;
+                y[1] = 1;
+                x[2] = 1;
+                y[2] = 0;
+                x[3] = 0;
+                y[3] = 0;
+
 
 				VECTOR vertices[4] = {
 						{- GEOMETRY_SCALE_X * 0.5f,   geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
@@ -230,15 +223,14 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 			}
 				break;
 			case kWest: {
-				x[0] = 0;
-				y[0] = 0;
-				x[1] = 0;
-				y[1] = 1;
-				x[2] = 1;
-				y[2] = 1;
-				x[3] = 1;
-				y[3] = 0;
-
+                x[0] = 1;
+                y[0] = 0;
+                x[1] = 1;
+                y[1] = 1;
+                x[2] = 0;
+                y[2] = 0;
+                x[3] = 0;
+                y[3] = 1;
 				VECTOR vertices[4] = {
 						{- GEOMETRY_SCALE_X * 0.5f, - geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
 						{+ GEOMETRY_SCALE_X * 0.5f,   geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
@@ -254,14 +246,14 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 				break;
 			case kEast:
 			default: {
-				x[0] = 1;
-				y[0] = 1;
-				x[1] = 1;
-				y[1] = 0;
-				x[2] = 0;
-				y[2] = 0;
-				x[3] = 0;
-				y[3] = 1;
+                x[0] = 0;
+                y[0] = 1;
+                x[1] = 0;
+                y[1] = 0;
+                x[2] = 1;
+                y[2] = 1;
+                x[3] = 1;
+                y[3] = 0;
 
 				VECTOR vertices[4] = {
 						{- GEOMETRY_SCALE_X * 0.5f,   geometryScale, - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
@@ -277,6 +269,13 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 			}
 				break;
 		}
+
+        VECTOR coordinates[4] = {
+                {x[0], y[0], 0, 0},
+                {x[1], y[1], 0, 0},
+                {x[2], y[2], 0, 0},
+                {x[3], y[3], 0, 0}
+        };
 
 		draw_convert_st(st, vertex_count, (vertex_f_t*)temp_vertices, (texel_f_t*)coordinates);
 
@@ -476,10 +475,10 @@ void drawColumnAt(const struct Vec3 center,
 		q = _q;
 
         VECTOR coordinates[4] = {
-                { 1,  textureScale,  0, 0},
-                { 0,  textureScale,  0, 0},
                 { 1,  0,  0, 0},
-                { 0,  0,  0, 0}
+                { 0,  0,  0, 0},
+                { 1,  textureScale,  0, 0},
+                { 0,  textureScale,  0, 0}
         };
 
 		// Calculate the vertex values.
@@ -529,10 +528,10 @@ void drawColumnAt(const struct Vec3 center,
 		q = _q;
 
 		VECTOR coordinates[4] = {
-				{ 1,  textureScale,  0, 0},
-				{ 0,  textureScale,  0, 0},
 				{ 1,  0,  0, 0},
-				{ 0,  0,  0, 0}
+				{ 0,  0,  0, 0},
+				{ 1,  textureScale,  0, 0},
+				{ 0,  textureScale,  0, 0}
 		};
 
 		// Calculate the vertex values.
@@ -573,19 +572,19 @@ void drawColumnAt(const struct Vec3 center,
 		bindTexture(texture->raw);
 
 		VECTOR vertices[4] = {
-				{ + GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
 				{ + GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
-				{ + GEOMETRY_SCALE_X * 0.5f,  - geometryScale,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
-				{ + GEOMETRY_SCALE_X * 0.5f,  - geometryScale,  - GEOMETRY_SCALE_Z * 0.5f, 1.00f}
+				{ + GEOMETRY_SCALE_X * 0.5f,  + geometryScale,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ + GEOMETRY_SCALE_X * 0.5f,  - geometryScale,  - GEOMETRY_SCALE_Z * 0.5f, 1.00f},
+				{ + GEOMETRY_SCALE_X * 0.5f,  - geometryScale,  + GEOMETRY_SCALE_Z * 0.5f, 1.00f}
 		};
 
 		q = _q;
 
         VECTOR coordinates[4] = {
-                { 1,  textureScale,  0, 0},
-                { 0,  textureScale,  0, 0},
                 { 1,  0,  0, 0},
-                { 0,  0,  0, 0}
+                { 0,  0,  0, 0},
+                { 1,  textureScale,  0, 0},
+                { 0,  textureScale,  0, 0}
         };
 
 		// Calculate the vertex values.
@@ -635,10 +634,10 @@ void drawColumnAt(const struct Vec3 center,
 		q = _q;
 
         VECTOR coordinates[4] = {
-                { 1,  textureScale,  0, 0},
-                { 0,  textureScale,  0, 0},
                 { 1,  0,  0, 0},
-                { 0,  0,  0, 0}
+                { 0,  0,  0, 0},
+                { 1,  textureScale,  0, 0},
+                { 0,  textureScale,  0, 0}
         };
 
 		// Calculate the vertex values.
@@ -699,95 +698,67 @@ void drawFloorAt(const struct Vec3 center,
 		VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
 		VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
 
-		// Create the local_world matrix.
-		create_local_world(local_world, object_position, object_rotation);
+        switch (cameraDirection) {
+            case kNorth: {
+                x[0] = 0;
+                y[0] = 0;
+                x[1] = 1;
+                y[1] = 0;
+                x[2] = 0;
+                y[2] = 1;
+                x[3] = 1;
+                y[3] = 1;
+            } break;
+            case kSouth: {
+                x[0] = 1;
+                y[0] = 1;
+                x[1] = 0;
+                y[1] = 1;
+                x[2] = 1;
+                y[2] = 0;
+                x[3] = 0;
+                y[3] = 0;
+            } break;
 
-		// Create the local_screen matrix.
-		create_local_screen(local_screen, local_world, world_view, view_screen);
+            case kWest: {
+                x[0] = 0;
+                y[0] = 1;
+                x[1] = 0;
+                y[1] = 0;
+                x[2] = 1;
+                y[2] = 1;
+                x[3] = 1;
+                y[3] = 0;
+            } break;
+            case kEast:
+            default: {
+                x[0] = 1;
+                y[0] = 0;
+                x[1] = 1;
+                y[1] = 1;
+                x[2] = 0;
+                y[2] = 0;
+                x[3] = 0;
+                y[3] = 1;
+            } break;
+        }
 
-		switch (cameraDirection) {
-			case kNorth: {
-				x[0] = 0;
-				y[0] = 1;
-				x[1] = 1;
-				y[1] = 1;
-				x[2] = 1;
-				y[2] = 0;
-				x[3] = 0;
-				y[3] = 0;
+        // Create the local_world matrix.
+        create_local_world(local_world, object_position, object_rotation);
 
-				VECTOR coordinates[4] = {
-						{1, 1, 0, 0},
-						{0, 1, 0, 0},
-						{1, 0, 0, 0},
-						{0, 0, 0, 0}
-				};
+        // Create the local_screen matrix.
+        create_local_screen(local_screen, local_world, world_view, view_screen);
 
-				draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
-			} break;
+        VECTOR coordinates[4] = {
+                {x[0], y[0], 0, 0},
+                {x[1], y[1], 0, 0},
+                {x[2], y[2], 0, 0},
+                {x[3], y[3], 0, 0}
+        };
 
-			case kSouth: {
-				x[0] = 1;
-				y[0] = 0;
-				x[1] = 0;
-				y[1] = 0;
-				x[2] = 0;
-				y[2] = 1;
-				x[3] = 1;
-				y[3] = 1;
+        draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
 
-				VECTOR coordinates[4] = {
-						{1, 1, 0, 0},
-						{0, 1, 0, 0},
-						{1, 0, 0, 0},
-						{0, 0, 0, 0}
-				};
-
-				draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
-			} break;
-
-			case kWest: {
-				x[0] = 0;
-				y[0] = 0;
-				x[1] = 0;
-				y[1] = 1;
-				x[2] = 1;
-				y[2] = 1;
-				x[3] = 1;
-				y[3] = 0;
-
-				VECTOR coordinates[4] = {
-						{1, 1, 0, 0},
-						{0, 1, 0, 0},
-						{1, 0, 0, 0},
-						{0, 0, 0, 0}
-				};
-
-				draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
-			} break;
-			case kEast:
-			default: {
-				x[0] = 1;
-				y[0] = 1;
-				x[1] = 1;
-				y[1] = 0;
-				x[2] = 0;
-				y[2] = 0;
-				x[3] = 0;
-				y[3] = 1;
-
-				VECTOR coordinates[4] = {
-						{1, 1, 0, 0},
-						{0, 1, 0, 0},
-						{1, 0, 0, 0},
-						{0, 0, 0, 0}
-				};
-
-				draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
-			} break;
-		}
-
-		qword_t *q;
+        qword_t *q;
 
 		int points_count = 6;
 
@@ -873,91 +844,65 @@ void drawCeilingAt(const struct Vec3 center,
 		VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
 		VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
 
-		// Create the local_world matrix.
-		create_local_world(local_world, object_position, object_rotation);
+        switch (cameraDirection) {
+            case kNorth: {
+                x[0] = 0;
+                y[0] = 0;
+                x[1] = 1;
+                y[1] = 0;
+                x[2] = 0;
+                y[2] = 1;
+                x[3] = 1;
+                y[3] = 1;
+            } break;
+            case kSouth: {
+                x[0] = 1;
+                y[0] = 1;
+                x[1] = 0;
+                y[1] = 1;
+                x[2] = 1;
+                y[2] = 0;
+                x[3] = 0;
+                y[3] = 0;
+            } break;
 
-		// Create the local_screen matrix.
-		create_local_screen(local_screen, local_world, world_view, view_screen);
+            case kWest: {
+                x[0] = 0;
+                y[0] = 1;
+                x[1] = 0;
+                y[1] = 0;
+                x[2] = 1;
+                y[2] = 1;
+                x[3] = 1;
+                y[3] = 0;
+            } break;
+            case kEast:
+            default: {
+                x[0] = 1;
+                y[0] = 0;
+                x[1] = 1;
+                y[1] = 1;
+                x[2] = 0;
+                y[2] = 0;
+                x[3] = 0;
+                y[3] = 1;
+            } break;
+        }
 
-		switch (cameraDirection) {
-			case kNorth: {
-				x[0] = 0;
-				y[0] = 1;
-				x[1] = 1;
-				y[1] = 1;
-				x[2] = 1;
-				y[2] = 0;
-				x[3] = 0;
-				y[3] = 0;
+        // Create the local_world matrix.
+        create_local_world(local_world, object_position, object_rotation);
 
-				VECTOR coordinates[4] = {
-						{1, 1, 0, 0},
-						{0, 1, 0, 0},
-						{1, 0, 0, 0},
-						{0, 0, 0, 0}
-				};
+        // Create the local_screen matrix.
+        create_local_screen(local_screen, local_world, world_view, view_screen);
 
-				draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
-			} break;
-			case kSouth: {
-				x[0] = 1;
-				y[0] = 0;
-				x[1] = 0;
-				y[1] = 0;
-				x[2] = 0;
-				y[2] = 1;
-				x[3] = 1;
-				y[3] = 1;
+        VECTOR coordinates[4] = {
+                {x[0], y[0], 0, 0},
+                {x[1], y[1], 0, 0},
+                {x[2], y[2], 0, 0},
+                {x[3], y[3], 0, 0}
+        };
 
-				VECTOR coordinates[4] = {
-						{1, 1, 0, 0},
-						{0, 1, 0, 0},
-						{1, 0, 0, 0},
-						{0, 0, 0, 0}
-				};
-
-				draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
-			} break;
-			case kWest: {
-				x[0] = 0;
-				y[0] = 0;
-				x[1] = 0;
-				y[1] = 1;
-				x[2] = 1;
-				y[2] = 1;
-				x[3] = 1;
-				y[3] = 0;
-
-				VECTOR coordinates[4] = {
-						{1, 1, 0, 0},
-						{0, 1, 0, 0},
-						{1, 0, 0, 0},
-						{0, 0, 0, 0}
-				};
-
-				draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
-			} break;
-			case kEast:
-			default: {
-				x[0] = 1;
-				y[0] = 1;
-				x[1] = 1;
-				y[1] = 0;
-				x[2] = 0;
-				y[2] = 0;
-				x[3] = 0;
-				y[3] = 1;
-
-				VECTOR coordinates[4] = {
-						{1, 1, 0, 0},
-						{0, 1, 0, 0},
-						{1, 0, 0, 0},
-						{0, 0, 0, 0}
-				};
-
-				draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
-			} break;
-		}
+        draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
 
 		qword_t *q;
 
@@ -1053,10 +998,10 @@ void drawLeftNear(const struct Vec3 center,
     }
 
     VECTOR coordinates[4] = {
-			{ 1,  textureScale,  0, 0},
-			{ 0,  textureScale,  0, 0},
 			{ 1,  0,  0, 0},
-			{ 0,  0,  0, 0}
+			{ 0,  0,  0, 0},
+			{ 1,  textureScale,  0, 0},
+			{ 0,  textureScale,  0, 0}
 	};
 
 	acc = center.mY + playerHeight + walkingBias + yCameraOffset;
@@ -1221,10 +1166,10 @@ void drawRightNear(const struct Vec3 center,
     }
 
 	VECTOR coordinates[4] = {
-			{ 1,  textureScale,  0, 0},
-			{ 0,  textureScale,  0, 0},
 			{ 1,  0,  0, 0},
-			{ 0,  0,  0, 0}
+			{ 0,  0,  0, 0},
+			{ 1,  textureScale,  0, 0},
+			{ 0,  textureScale,  0, 0}
 	};
 
 	draw_convert_st(st, vertex_count, (vertex_f_t*)temp_vertices, (texel_f_t*)coordinates);

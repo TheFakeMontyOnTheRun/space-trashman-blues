@@ -705,13 +705,6 @@ void render(const long ms) {
 
 					addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
 
-					if (cameraDirection == kNorth) {
-						newDirection = kSouth;
-					}
-					if (cameraDirection == kSouth) {
-						newDirection = kNorth;
-					}
-
 					drawCeilingAt(
 							tmp, nativeTextures[tileProp->mCeilingTextureIndex], newDirection);
 				}
