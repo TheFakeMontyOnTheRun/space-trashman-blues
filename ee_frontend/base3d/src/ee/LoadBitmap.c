@@ -80,7 +80,7 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 
 	free(bitmap->data);
 	bitmap->data = NULL;
-
+	bitmap->uploadId = 1;
 
 	return 0;
 }

@@ -100,6 +100,14 @@ uint32_t getPaletteEntry(const uint32_t origin) {
 }
 
 void enter2D(void) {
+    VECTOR camera_position = {0.00f, 0.0f, 2, 1.00f};
+    VECTOR camera_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+
+    // Create the world_view matrix.
+    create_world_view(world_view, camera_position, camera_rotation);
+
+    create_view_screen(view_screen, graph_aspect_ratio(), -1.0f, 1.0f, 1.00f, -1.00f, 1.0f, 512.00f);
+
 }
 
 void initGL() {
@@ -140,18 +148,19 @@ void startFrameGL(int width, int height) {
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;
     enter2D();
-
-	VECTOR camera_position = {0.00f, -0.25f, 2, 1.00f};
-	VECTOR camera_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
-
-	// Create the world_view matrix.
-	create_world_view(world_view, camera_position, camera_rotation);
 }
 
 void endFrameGL() {
 }
 
 void enter3D(void) {
+    VECTOR camera_position = {0.00f, -0.25f, 2, 1.00f};
+    VECTOR camera_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+
+    // Create the world_view matrix.
+    create_world_view(world_view, camera_position, camera_rotation);
+
+    create_view_screen(view_screen, graph_aspect_ratio(), -8.00f, 8.00f, -8.00f, 8.00f, 1.00f, 1024.00f);
 }
 
 void printMessageTo3DView(const char *message) {
@@ -461,12 +470,7 @@ void render(const long ms) {
 						if ((x < (MAP_SIZE - 1)) && (map[z][(x + 1)] == element)) {
 							facesMask &= ~MASK_RIGHT;
 						}
-						/*
-										if (z < 0) {
-											facesMask[1] = (visibleElementsMap[(z - 1)][x] !=
-															element);
-										}
-				*/
+
 						if (z == (cameraPosition.y) + 1) {
 
 							if (getFromMap(&occluders, element)) {
