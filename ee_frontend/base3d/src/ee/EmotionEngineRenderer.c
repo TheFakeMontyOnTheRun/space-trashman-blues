@@ -529,12 +529,10 @@ void handleSystemEvents() {
 			mBufferedCommand = kCommandFire3;
 		}
 		if (new_pad & PAD_CROSS) {
-			padEnterPressMode(port, slot);
 			printf("CROSS - Enter press mode\n");
 			mBufferedCommand = kCommandFire4;
 		}
 		if (new_pad & PAD_CIRCLE) {
-			padExitPressMode(port, slot);
 			printf("CIRCLE - Exit press mode\n");
 			mBufferedCommand = kCommandFire1;
 		}
@@ -544,14 +542,10 @@ void handleSystemEvents() {
 			mBufferedCommand = kCommandFire2;
 		}
 		if (new_pad & PAD_R1) {
-			actAlign[0] = 1; // Start small engine
-			padSetActDirect(port, slot, actAlign);
 			printf("R1 - Start little engine\n");
 			mBufferedCommand = kCommandStrafeRight;
 		}
 		if (new_pad & PAD_L1) {
-			actAlign[0] = 0; // Stop engine 0
-			padSetActDirect(port, slot, actAlign);
 			printf("L1 - Stop little engine\n");
 			mBufferedCommand = kCommandStrafeLeft;
 		}
@@ -560,20 +554,6 @@ void handleSystemEvents() {
 		}
 		if (new_pad & PAD_L2) {
 			printf("L2\n");
-		}
-
-		// Test the press mode
-		if (buttons.triangle_p) {
-			printf("TRIANGLE %d\n", buttons.triangle_p);
-		}
-		// Start little engine if we move right analogue stick right
-		if (buttons.rjoy_h > 0xf0) {
-			// Stupid check to see if engine is already running,
-			// just to prevent overloading the IOP with requests
-			if (actAlign[0] == 0) {
-				actAlign[0] = 1;
-				padSetActDirect(port, slot, actAlign);
-			}
 		}
 	}
 }
