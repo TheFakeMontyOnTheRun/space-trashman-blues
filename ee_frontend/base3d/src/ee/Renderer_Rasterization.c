@@ -93,6 +93,13 @@ void drawRect(
 		const size_t dy,
 		const FramebufferPixelFormat pixel) {
 
+    fill(x, y, x + 1, y + dy, pixel, 0);
+
+    fill(x, y, x + dx, y + 1, pixel, 0);
+
+    fill(x + dx, y, x + dx - 1, y + dy, pixel, 0);
+
+    fill(x, y + dy, x + dx, y + dy - 1, pixel, 0);
 }
 
 void fill(
@@ -305,6 +312,21 @@ void drawRepeatBitmap(
 		const size_t dx,
 		const size_t dy,
 		const struct Bitmap *tile) {
+
+    size_t repeatX = (dx / tile->width) + 1;
+    size_t repeatY = (dy / tile->height) + 1;
+    size_t c, d;
+    for (c = 0; c < repeatY; ++c) {
+        for (d = 0; d < repeatX; ++d) {
+
+            size_t px = x + d * tile->width;
+            size_t py = y + c * tile->height;
+
+            if (px < XRES_FRAMEBUFFER && py < YRES_FRAMEBUFFER) {
+                drawBitmap(px, py, tile, FALSE);
+            }
+        }
+    }
 }
 
 void drawTextAt(const int _x, const int _y, const char *text, const FramebufferPixelFormat colour) {
