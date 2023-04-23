@@ -466,6 +466,7 @@ void graphicsInit() {
 	}
 
 	puts("ALL GOOD IN EE LAND!");
+    defaultFont = loadBitmap("font.img");
 }
 
 int framePad = 0;
