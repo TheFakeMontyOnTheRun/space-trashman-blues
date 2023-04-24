@@ -118,8 +118,25 @@ void handleSystemEvents() {
         leanX = leanY = 0;
 
         if(keys & KEY_TOUCH) {
+
+            touch = touchReadXY();
+
+            if (touch.px < 85) {
                 leanX = -1;
+            }
+
+            if (touch.px > 170) {
+                leanX = 1;
+            }
+
+            if (touch.py < 64) {
                 leanY = -1;
+            }
+
+            if (touch.py > 128) {
+                leanY = 1;
+            }
+
         }
 	}
 }
