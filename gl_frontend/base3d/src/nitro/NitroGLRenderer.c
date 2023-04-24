@@ -26,6 +26,9 @@
 
 #define COOLDOWN 0x10
 int snapshotSignal = '.';
+int leanX = 0;
+int leanY = 0;
+
 
 void graphicsInit() {
 	videoSetMode(MODE_0_3D);
@@ -41,6 +44,8 @@ void graphicsInit() {
 int cooldown = 0;
 
 void handleSystemEvents() {
+
+    touchPosition touch;
 
 	while (REG_DISPCAPCNT & DCAP_ENABLE);
 
@@ -109,8 +114,14 @@ void handleSystemEvents() {
 			cooldown = COOLDOWN;
 			mBufferedCommand = kCommandBack;
 		}
-	}
 
+        leanX = leanY = 0;
+
+        if(keys & KEY_TOUCH) {
+                leanX = -1;
+                leanY = -1;
+        }
+	}
 }
 
 void graphicsShutdown() {

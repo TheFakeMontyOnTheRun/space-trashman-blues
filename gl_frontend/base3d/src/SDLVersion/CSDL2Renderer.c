@@ -37,6 +37,8 @@ void enterFullScreenMode() {
 SDL_Window *window;
 SDL_GLContext glContext;
 int snapshotSignal = '.';
+int leanX;
+int leanY;
 
 void graphicsInit() {
 	int r, g, b;
@@ -69,9 +71,14 @@ void handleSystemEvents() {
 			return;
 		}
 
-		if (event.type == SDL_KEYDOWN) {
+        if (event.type == SDL_KEYUP) {
+            leanY = leanX = 0;
+            visibilityCached = FALSE;
+            needsToRedrawVisibleMeshes = TRUE;
+        }
 
-			switch (event.key.keysym.sym) {
+        if (event.type == SDL_KEYDOWN) {
+            switch (event.key.keysym.sym) {
 				case SDLK_RETURN:
 				case SDLK_z:
 					mBufferedCommand = kCommandFire1;
@@ -94,6 +101,29 @@ void handleSystemEvents() {
 					needsToRedrawVisibleMeshes = TRUE;
 					break;
 
+                case SDLK_t:
+                    leanY = -1;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+
+                case SDLK_g:
+                    leanY = 1;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+
+                case SDLK_f:
+                    leanX = -1;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+
+                case SDLK_h:
+                    leanX = 1;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
 
 				case SDLK_ESCAPE:
 				case SDLK_q:

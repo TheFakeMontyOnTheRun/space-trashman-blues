@@ -129,17 +129,13 @@ void castVisibility(const enum EDirection from,
 			continue;
 		}
 
-		narrowing = abs(verticalDistance) + 3;
-
-		if (((currentPos.x - originalPos.x) >= -narrowing)
-			&& (currentPos.x - originalPos.x) <= 0
+		if ( (currentPos.x - originalPos.x) <= 0
 			&& (stackHead != stackEnd)) {
 			initVec2i(stackHead++, (int8_t) (currentPos.x + leftOffset.x),
 					  (int8_t) (currentPos.y + leftOffset.y));
 		}
 
-		if (((currentPos.x - originalPos.x) <= narrowing)
-			&& (currentPos.x - originalPos.x) >= 0
+		if ( (currentPos.x - originalPos.x) >= 0
 			&& (stackHead != stackEnd)) {
 			initVec2i(stackHead++, (int8_t) (currentPos.x + rightOffset.x),
 					  (int8_t) (currentPos.y + rightOffset.y));
