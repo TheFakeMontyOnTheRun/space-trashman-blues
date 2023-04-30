@@ -86,30 +86,6 @@ void MainMenu_repaintCallback(void) {
 
 	struct Vec3 center;
 
-
-	center.mX = -intToFix(32);
-	center.mY = intToFix(1);
-	center.mZ = intToFix(64);
-	drawColumnAt(center, intToFix(2), NULL, MASK_FRONT | MASK_BEHIND | MASK_FORCE_LEFT | MASK_FORCE_RIGHT, 0, 0 );
-
-	center.mX = intToFix(32);
-	center.mY = intToFix(1);
-	center.mZ = intToFix(64);
-	drawColumnAt(center, intToFix(2), NULL, MASK_FRONT | MASK_BEHIND | MASK_FORCE_LEFT | MASK_FORCE_RIGHT, 0, 0 );
-
-
-	for (int z = 0; z < 32; z += 1 ) {
-		for (int x = -16; x < 16; x += 1 ) {
-			center.mX = intToFix(2 * x);
-			center.mZ = intToFix(2 * z);
-
-			center.mY = -intToFix(1);
-			drawFloorAt(center, NULL, kNorth);
-			center.mY = intToFix(3);
-			drawCeilingAt(center, NULL, kNorth);
-		}
-	}
-
     int16_t c;
 
     uint8_t optionsHeight = 8 * kMainMenuOptionsCount;

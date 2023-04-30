@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
 
     initHW();
 
-    enterState(kCredits);
+    enterState(kMainMenu);
 
     end_clock = uclock();
     prev = 0;
