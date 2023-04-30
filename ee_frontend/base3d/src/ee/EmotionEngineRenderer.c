@@ -500,7 +500,6 @@ void handleSystemEvents() {
 			mBufferedCommand = kCommandLeft;
 		}
 		if (new_pad & PAD_DOWN) {
-			printf("DOWN\n");
 			mBufferedCommand = kCommandDown;
 		}
 		if (new_pad & PAD_RIGHT) {
@@ -508,7 +507,6 @@ void handleSystemEvents() {
 			mBufferedCommand = kCommandRight;
 		}
 		if (new_pad & PAD_UP) {
-			printf("UP\n");
 			mBufferedCommand = kCommandUp;
 		}
 		if (new_pad & PAD_START) {
@@ -566,10 +564,4 @@ void graphicsShutdown() {
 }
 
 void flipRenderer() {
-	_q = draw_finish(_q);
-    graph_wait_vsync();
-	dma_channel_send_normal(DMA_CHANNEL_GIF, current->data, _q - current->data, 0, 0);
-	context ^= 1;
-	draw_wait_finish();
-
 }

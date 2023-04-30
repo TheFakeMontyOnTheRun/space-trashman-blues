@@ -93,13 +93,13 @@ void drawRect(
 		const size_t dy,
 		const FramebufferPixelFormat pixel) {
 
-    fill(x, y, x + 1, y + dy, pixel, 0);
+    fill(x, y, 1, dy - 1, pixel, 0);
 
-    fill(x, y, x + dx, y + 1, pixel, 0);
+    fill(x, y, dx - 1, 1, pixel, 0);
 
-    fill(x + dx, y, x + dx - 1, y + dy, pixel, 0);
+    fill(x + dx - 1, y, 1, dy - 1, pixel, 0);
 
-    fill(x, y + dy, x + dx, y + dy - 1, pixel, 0);
+    fill(x, y + dy - 1, dx - 1, 1, pixel, 0);
 }
 
 void fill(
@@ -118,9 +118,11 @@ void fill(
     b = ((pixel & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
     a = stipple ? 0.5f : 1.0f;
 
-    struct Texture *bitmap = itemSprites[1];
+    if (defaultFont->uploadId == -1) {
+        submitBitmapToGPU(defaultFont);
+    }
 
-    bindTexture(bitmap->raw);
+    bindTexture(defaultFont);
 
     qword_t *q;
 
@@ -211,15 +213,18 @@ void fill(
     _q = q;
 }
 
-void drawBitmap(const int _x,
-				const int _y,
-                struct Bitmap *bitmap,
-				const uint8_t transparent) {
-
+void drawBitmapRegion(const int _x,
+                      const int _y,
+                      const int _dx,
+                      const int _dy,
+                      BitmapPixelFormat tint,
+                      struct Bitmap *bitmap,
+                      const uint8_t transparent,
+                      float u0, float u1, float v0, float v1) {
     float r, g, b, a;
-    r = 1.0f;
-    g = 1.0f;
-    b = 1.0f;
+    r = (tint & 0xFF) * NORMALIZE_COLOUR * 0.5f;
+    g = ((tint & 0x00FF00) >> 8) * NORMALIZE_COLOUR * 0.5f;
+    b = ((tint & 0xFF0000) >> 16) * NORMALIZE_COLOUR * 0.5f;
     a = 1.0f;
 
     if (bitmap->uploadId == -1) {
@@ -241,8 +246,8 @@ void drawBitmap(const int _x,
 
     float x = -0.5f + _x * NORMALIZE_ORTHO_X;
     float y = -0.375f + _y * NORMALIZE_ORTHO_Y;
-    float dx = bitmap->width * NORMALIZE_ORTHO_X;
-    float dy = bitmap->height * NORMALIZE_ORTHO_Y;
+    float dx = _dx * NORMALIZE_ORTHO_X;
+    float dy = _dy * NORMALIZE_ORTHO_Y;
 
     VECTOR object_position = {x, y, -1.0f, 1.0f};
     VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
@@ -261,10 +266,10 @@ void drawBitmap(const int _x,
     q = _q;
 
     VECTOR coordinates[4] = {
-            { 1,  1,  0, 0},
-            { 0,  1,  0, 0},
-            { 1,  0,  0, 0},
-            { 0,  0,  0, 0}
+            { u1,  v1,  0, 0},
+            { u0,  v1,  0, 0},
+            { u1,  v0,  0, 0},
+            { u0,  v0,  0, 0}
     };
 
     VECTOR colours[4] = {
@@ -304,6 +309,13 @@ void drawBitmap(const int _x,
     ++q;
 
     _q = q;
+}
+
+void drawBitmap(const int _x,
+				const int _y,
+                struct Bitmap *bitmap,
+				const uint8_t transparent) {
+    drawBitmapRegion(_x, _y, bitmap->width, bitmap->height, getPaletteEntry(0xFFFFFFFF), bitmap, transparent, 0.0f, 1.0f, 0.0f, 1.0f);
 }
 
 void drawRepeatBitmap(
@@ -350,44 +362,6 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
     float blockWidth = 8.0f / fontWidth;
     float blockHeight = 16.0f / fontHeight;
 
-    if (defaultFont->uploadId == -1) {
-        submitBitmapToGPU(defaultFont);
-    }
-
-    bindTexture(defaultFont);
-
-    qword_t *q;
-
-    int points_count = 6;
-
-    int points[6] = {
-            0, 1, 2,
-            1, 2, 3
-    };
-
-    u64 *dw;
-
-    float dx = 8 * NORMALIZE_ORTHO_X;
-    float dy = 8 * NORMALIZE_ORTHO_Y;
-
-    VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
-
-    VECTOR vertices[4] = {
-            { dx, dy,  0, 1.00f},
-            { 0, dy,  0, 1.00f},
-            { dx, 0,  0, 1.00f},
-            { 0, 0,  0, 1.00f}
-    };
-
-    VECTOR colours[4] = {
-            {r, g, b, a},
-            {r, g, b, a},
-            {r, g, b, a},
-            {r, g, b, a},
-    };
-
-    q = _q;
-
     for (c = 0; c < len; ++c) {
         if (text[c] == '\n' || dstX >= XRES_FRAMEBUFFER) {
             dstX = (_x - 1) * 8;
@@ -404,17 +378,6 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
 
         line = (((float)((ascii >> 5))) * blockHeight);
         col = (((ascii & 31)) * blockWidth);
-        printf("line: %f of %f\n", ((float)((ascii >> 5))), blockHeight );
-        printf("line: %d col: %d block width: %f block height: %f\n", ((ascii >> 5)), ((ascii & 31)), blockWidth, blockHeight);
-
-        float x = -0.5f + dstX * NORMALIZE_ORTHO_X;
-        float y = -0.375f + dstY * NORMALIZE_ORTHO_Y;
-
-        VECTOR object_position = {x, y, -1.0f, 1.0f};
-
-        create_local_world(local_world, object_position, object_rotation);
-
-        create_local_screen(local_screen, local_world, world_view, view_screen);
 
         VECTOR coordinates[4] = {
                 {col + blockWidth, line + blockHeight, 0, 0},
@@ -423,37 +386,10 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
                 {col, line, 0, 0}
         };
 
-        // Calculate the vertex values.
-        calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
-
-        draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
-
-        // Convert floating point vertices to fixed point and translate to center of screen.
-        draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
-
-        // Convert floating point colours to fixed point.
-        draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
-
-        dw = (u64 *) draw_prim_start(q, 0, &prim, &color);
-
-        for (int i = 0; i < points_count; i++) {
-            *dw++ = colors[points[i]].rgbaq;
-            *dw++ = st[points[i]].uv;
-            *dw++ = verts[points[i]].xyz;
-        }
-
-        // Check if we're in middle of a qword or not.
-        if ((u32) dw % 16) {
-            *dw++ = 0;
-        }
-
-        q = draw_prim_end((qword_t *) dw, 3, DRAW_STQ_REGLIST);
-
-        ++q;
+        drawBitmapRegion(dstX, dstY, 8, 8, colour, defaultFont, 1, col, col + blockWidth, line, line + blockHeight);
 
         dstX += 8;
     }
-    _q = q;
 }
 
 void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour, char charToReplaceHifenWith) {

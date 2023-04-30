@@ -99,6 +99,25 @@ uint32_t getPaletteEntry(const uint32_t origin) {
     return (0x80 << 24) + (origin & 0x00FFFFFF);
 }
 
+void startDMAChain() {
+    current = packets[context];
+
+    // Grab our dmatag pointer for the dma chain.
+    dmatag = current->data;
+
+    // Now grab our qword pointer and increment past the dmatag.
+    _q = dmatag;
+    _q++;
+}
+
+void endDMAChain() {
+    _q = draw_finish(_q);
+    graph_wait_vsync();
+    dma_channel_send_normal(DMA_CHANNEL_GIF, current->data, _q - current->data, 0, 0);
+    context ^= 1;
+    draw_wait_finish();
+}
+
 void enter2D(void) {
     VECTOR camera_position = {0.00f, 0.0f, 2, 1.00f};
     VECTOR camera_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
@@ -114,24 +133,11 @@ void initGL() {
 }
 
 void clearRenderer() {
-}
-
-void startFrameGL(int width, int height) {
-
-	current = packets[context];
-
-	// Grab our dmatag pointer for the dma chain.
-	dmatag = current->data;
-
-	// Now grab our qword pointer and increment past the dmatag.
-	_q = dmatag;
-	_q++;
-
     PACK_GIFTAG(_q,GIF_SET_TAG(1,0,0,0,GIF_FLG_PACKED,1), GIF_REG_AD);
     _q++;
     PACK_GIFTAG(_q, GS_SET_TEST(DRAW_ENABLE,ATEST_METHOD_NOTEQUAL,0x00,ATEST_KEEP_FRAMEBUFFER,
-                               DRAW_DISABLE,DRAW_DISABLE,
-                               DRAW_ENABLE,ZTEST_METHOD_ALLPASS), GS_REG_TEST + 0);
+                                DRAW_DISABLE,DRAW_DISABLE,
+                                DRAW_ENABLE,ZTEST_METHOD_ALLPASS), GS_REG_TEST + 0);
     _q++;
 
 
@@ -140,9 +146,15 @@ void startFrameGL(int width, int height) {
     PACK_GIFTAG(_q,GIF_SET_TAG(1,0,0,0,GIF_FLG_PACKED,1), GIF_REG_AD);
     _q++;
     PACK_GIFTAG(_q, GS_SET_TEST(DRAW_ENABLE,ATEST_METHOD_EQUAL,0x80,ATEST_KEEP_ALL,
-                               DRAW_DISABLE,DRAW_DISABLE,
-                               DRAW_ENABLE,ZTEST_METHOD_GREATER_EQUAL), GS_REG_TEST + 0);
+                                DRAW_DISABLE,DRAW_DISABLE,
+                                DRAW_ENABLE,ZTEST_METHOD_GREATER_EQUAL), GS_REG_TEST + 0);
     _q++;
+}
+
+void startFrameGL(int width, int height) {
+
+    startDMAChain();
+    clearRenderer();
 
 
     visibilityCached = FALSE;
@@ -151,6 +163,7 @@ void startFrameGL(int width, int height) {
 }
 
 void endFrameGL() {
+    endDMAChain();
 }
 
 void enter3D(void) {

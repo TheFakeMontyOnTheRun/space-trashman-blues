@@ -123,8 +123,6 @@ void redrawHUD() {
                 sprintf(&textBuffer[0], "%s", itemPtr->name);
                 textBuffer[14] = 0;
 
-//                drawBitmapRaw(XRES + 8, 199 - 32 - 16 - 16, 32, 32, itemSprites[itemPtr->index]->rotations[0], 1);
-
                 drawTextAtWithMarginWithFiltering(2 + ((XRES) / 8), 23, 311, itemPtr->name,
                                      itemPtr->active ? getPaletteEntry(0xFFAAAAAA) : getPaletteEntry(0xFFFFFFFF), '\n');
             }
@@ -133,11 +131,18 @@ void redrawHUD() {
         head = head->next;
     }
 
+    fill(XRES + 8 + (10 * 4) - (4 * 10), 2 + 8 + (8 * 4) - (4 * 8), 4 * 20, 4 * 16,
+         getPaletteEntry(0xFF999999) , FALSE);
 
     for (z = -8; z < 8; ++z) {
         for (x = -10; x < 10; ++x) {
-            fill(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4,
-                 (x == 0 && z == 0) ? 32 : isPositionAllowed(visPos.x + x, visPos.y + z) ? getPaletteEntry(0xFFAAAAAA) : getPaletteEntry(0xFF999999), FALSE);
+            if ( !(x == 0 && z == 0) && isPositionAllowed(visPos.x + x, visPos.y + z) ) {
+                fill(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4,
+                     getPaletteEntry(0xFFAAAAAA) , FALSE);
+            }
         }
     }
+
+    fill(XRES + 8 + (10 * 4), 2 + 8 + (8 * 4), 4, 4,
+         getPaletteEntry(0xFF0000FF) , FALSE);
 }
