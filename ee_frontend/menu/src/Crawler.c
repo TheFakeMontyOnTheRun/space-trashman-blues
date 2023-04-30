@@ -152,8 +152,6 @@ void Crawler_repaintCallback() {
 
             xCameraOffset = yCameraOffset = 0;
 
-            fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
-
 			enter3D();
 
             center.mY = 0;
