@@ -44,24 +44,15 @@ const int kMainMenuOptionsCount = 3;
 #endif
 
 extern size_t biggestOption;
-struct Bitmap *logoBitmap[28];
-struct Bitmap *logo2Bitmap[15];
+struct Bitmap *logoBitmap;
+struct Bitmap *logo2Bitmap;
 
 void MainMenu_initStateCallback(int32_t tag) {
     int c;
     cursorPosition = 0;
 
-	for (c  = 0; c < 28; ++c ) {
-		char buffer[32];
-		sprintf(buffer, "title_tile%04d.img", c);
-		logoBitmap[c] = loadBitmap(buffer);
-	}
-
-	for (c  = 0; c < 15; ++c ) {
-		char buffer[32];
-		sprintf(buffer, "logo_tile%04d.img", c);
-		logo2Bitmap[c] = loadBitmap(buffer);
-	}
+    logoBitmap = loadBitmap("title.img");
+    logo2Bitmap = loadBitmap("logo.img");
 
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
@@ -113,13 +104,8 @@ void MainMenu_repaintCallback(void) {
         return;
     }
 
-	for (c = 0; c < 28; ++c ) {
-		drawBitmap((c & 3) * 32, (c >> 2) * 32, logoBitmap[c], 1);
-	}
-
-	for (c = 0; c < 15; ++c ) {
-		drawBitmap(118 + (c & 7) * 32, 45 + (c >> 3) * 32, logo2Bitmap[c], 1);
-	}
+    drawBitmap(0, 0, logoBitmap, 1);
+    drawBitmap(118, 45, logo2Bitmap, 1);
 
 	drawWindow(40 - biggestOption - 3, 25 - 4 - (optionsHeight / 8), biggestOption + 2, (optionsHeight / 8) + 2,
                "Episode 0");

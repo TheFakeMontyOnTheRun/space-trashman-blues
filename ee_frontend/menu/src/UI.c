@@ -106,11 +106,7 @@ void redrawHUD() {
     struct Item* itemPtr;
     drawTextAt(1 + (XRES / 8), 1, " Map:", getPaletteEntry(0xFFFFFFFF));
 
-    if (mapTopLevel[0] != NULL) {
-		for (c = 0; c < 8; ++c ) {
-        	drawBitmap( (( c & 3) * 32), 8 + (c >> 2) * 32, mapTopLevel[c], 1);
-		}
-    }
+    drawBitmap( 0, 8, mapTopLevel, 1);
 
     //draw current item on the corner of the screen
     head = getPlayerItems();

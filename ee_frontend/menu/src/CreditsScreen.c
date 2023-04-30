@@ -32,7 +32,7 @@ int32_t CreditsScreen_nextStateNavigation[1] = {
 
 int16_t CreditsScreen_optionsCount = 1;
 extern char textBuffer[40 * 25];
-struct Bitmap *monty[4];
+struct Bitmap *monty;
 
 void CreditsScreen_initStateCallback(int32_t tag) {
 
@@ -48,11 +48,7 @@ void CreditsScreen_initStateCallback(int32_t tag) {
 
     CreditsScreen_optionsCount = 1;
 
-    monty[0] = loadBitmap("monty_tile0000.img");
-	monty[1] = loadBitmap("monty_tile0001.img");
-	monty[2] = loadBitmap("monty_tile0002.img");
-	monty[3] = loadBitmap("monty_tile0003.img");
-
+    monty = loadBitmap("monty.img");
 }
 
 void CreditsScreen_initialPaintCallback(void) {
@@ -118,10 +114,7 @@ void CreditsScreen_repaintCallback(void) {
 
     fill(8, 128, 64, 64, getPaletteEntry(0xFFFFFFFF), FALSE);
 
-	drawBitmap(8, 128, monty[0], TRUE);
-	drawBitmap(40, 128, monty[1], TRUE);
-	drawBitmap(8, 160, monty[2], TRUE);
-	drawBitmap(40, 160, monty[3], TRUE);
+	drawBitmap(8, 128, monty, TRUE);
 
     drawRect(8, 128, 64, 64, getPaletteEntry(0xFF000000));
 

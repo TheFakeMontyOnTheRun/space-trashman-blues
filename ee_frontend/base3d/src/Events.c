@@ -101,22 +101,8 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
     dungeon_loadMap(buffer.data, collisions, map);
 
     sprintf (nameBuffer, "map%d.img", map);
-
-    if (mapTopLevel[0]) {
-		for (c = 0; c < 8; ++c ) {
-#ifndef N64
-			free(mapTopLevel[c]);
-#else
-			free_uncached(mapTopLevel[c]);
-#endif
-		}
-    }
-
-	for (c  = 0; c < 8; ++c ) {
-		char buffer[32];
-		sprintf(buffer, "map%d_tile%04d.img", map, c);
-		mapTopLevel[c] = loadBitmap(buffer);
-	}
+    free(mapTopLevel);
+    mapTopLevel = loadBitmap(nameBuffer);
 
 #ifndef N64
     free(buffer.data);
