@@ -343,7 +343,10 @@ void drawRepeatBitmap(
 
 void drawTextAt(const int _x, const int _y, const char *text, const FramebufferPixelFormat colour) {
 
-    float r, g, b, a;
+    if (defaultFont == NULL) {
+        defaultFont = loadBitmap("font.img");
+    }
+
     size_t len = strlen(text);
     int32_t dstX = (_x - 1) * 8;
     int32_t dstY = (_y - 1) * 8;
@@ -352,15 +355,10 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
     float line;
     float col;
 
-    r = (colour & 0xFF) * NORMALIZE_COLOUR;
-    g = ((colour & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
-    b = ((colour & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
-    a = 1.0f;
-
     float fontWidth = defaultFont->width;
     float fontHeight = defaultFont->height;
     float blockWidth = 8.0f / fontWidth;
-    float blockHeight = 16.0f / fontHeight;
+    float blockHeight = 8.0f / fontHeight;
 
     for (c = 0; c < len; ++c) {
         if (text[c] == '\n' || dstX >= XRES_FRAMEBUFFER) {
@@ -378,13 +376,6 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
 
         line = (((float)((ascii >> 5))) * blockHeight);
         col = (((ascii & 31)) * blockWidth);
-
-        VECTOR coordinates[4] = {
-                {col + blockWidth, line + blockHeight, 0, 0},
-                {col, line + blockHeight, 0, 0},
-                {col + blockWidth, line, 0, 0},
-                {col, line, 0, 0}
-        };
 
         drawBitmapRegion(dstX, dstY, 8, 8, colour, defaultFont, 1, col, col + blockWidth, line, line + blockHeight);
 
