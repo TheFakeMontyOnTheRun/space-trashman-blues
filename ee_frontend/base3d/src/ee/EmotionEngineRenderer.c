@@ -564,4 +564,10 @@ void graphicsShutdown() {
 }
 
 void flipRenderer() {
+	_q = draw_finish(_q);
+    graph_wait_vsync();
+	dma_channel_send_normal(DMA_CHANNEL_GIF, current->data, _q - current->data, 0, 0);
+	context ^= 1;
+	draw_wait_finish();
+
 }

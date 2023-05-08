@@ -118,6 +118,10 @@ void fill(
     b = ((pixel & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
     a = stipple ? 0.5f : 1.0f;
 
+    if (defaultFont == NULL) {
+        defaultFont = loadBitmap("font.img");
+    }
+
     if (defaultFont->uploadId == -1) {
         submitBitmapToGPU(defaultFont);
     }
@@ -345,6 +349,10 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
 
     if (defaultFont == NULL) {
         defaultFont = loadBitmap("font.img");
+    }
+
+    if (defaultFont->uploadId == -1) {
+        submitBitmapToGPU(defaultFont);
     }
 
     size_t len = strlen(text);

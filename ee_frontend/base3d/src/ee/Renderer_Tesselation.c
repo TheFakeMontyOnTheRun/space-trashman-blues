@@ -69,7 +69,7 @@ extern color_t color;
 #define REVERSE_BIAS (1.0f/8.0f)
 #define FOG_MAX_DISTANCE 32.0f
 
-void clearTextures() {
+void clearTextures(void) {
     char buffer[256];
 
     for (int c = 1; c < itemsCount; ++c) {
