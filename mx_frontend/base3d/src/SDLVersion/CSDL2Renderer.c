@@ -251,7 +251,7 @@ void flipRenderer() {
 		for (y = dirtyLineY0; y < dirtyLineY1; ++y) {
 			for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
 				uint8_t index;
-
+				uint32_t pixel;
 				if (x < XRES) {
 
 					if (x >= turnStep) {
@@ -264,7 +264,7 @@ void flipRenderer() {
 					index = framebuffer[(XRES_FRAMEBUFFER * y) + x];
 				}
 
-				uint32_t pixel = palette[index];
+				pixel = palette[index];
 
 				rect.x = 2 * x;
 				rect.y = (24 * y) / 10;
@@ -286,7 +286,7 @@ void flipRenderer() {
 		for (y = dirtyLineY0; y < dirtyLineY1; ++y) {
 			for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
 				uint8_t index;
-
+				uint32_t pixel;
 				if (x < XRES) {
 
 					if (x >= turnStep) {
@@ -299,7 +299,7 @@ void flipRenderer() {
 					index = framebuffer[(XRES_FRAMEBUFFER * y) + x];
 				}
 
-				uint32_t pixel = palette[index];
+				pixel = palette[index];
 
 				rect.x = 2 * x;
 				rect.y = (24 * y) / 10;
@@ -319,10 +319,6 @@ void flipRenderer() {
 
 
 	SDL_RenderPresent(renderer);
-
-#ifndef __EMSCRIPTEN__
-	SDL_Delay(1000 / 60);
-#endif
 }
 
 void clearRenderer() {}

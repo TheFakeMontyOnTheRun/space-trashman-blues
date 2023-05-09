@@ -39,7 +39,7 @@ enum GeometryType {
 	LEFT_NEAR = 8,
 	LEFT_WALL = 16,
 	BACK_WALL = 32,
-	CORNER = 64,
+	CORNER = 64
 };
 
 struct Pattern {

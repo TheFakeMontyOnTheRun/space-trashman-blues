@@ -33,6 +33,7 @@ set(TEST_SOURCE_FILES
 		tests/TestObjectManipulation.cpp
 		tests/TestVictoryConditionsAndEndings.cpp
 		tests/TestInventoryManipulation.cpp
+		tests/TestVictoryConditionsAndEndings.cpp
 
 		gtest/src/gtest-all.cc
 		gmock/googlemock/src/gmock-all.cc

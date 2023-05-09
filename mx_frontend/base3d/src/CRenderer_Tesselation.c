@@ -57,7 +57,7 @@ void projectAllVertices(const uint8_t count) {
 			//same as
 			//projected = Div(z, two);
 			//but saving some shifts and a division...
-			projected = z >> 1;
+            projected = z;
 
 			if (projected == zero) {
 				projected += bias;

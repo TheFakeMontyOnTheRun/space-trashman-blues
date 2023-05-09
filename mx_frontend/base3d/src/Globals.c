@@ -10,8 +10,8 @@
 #endif
 
 #include "Common.h"
-#include "Globals.h"
 #include "Enums.h"
+#include "Globals.h"
 #include "Core.h"
 #include "Engine.h"
 
