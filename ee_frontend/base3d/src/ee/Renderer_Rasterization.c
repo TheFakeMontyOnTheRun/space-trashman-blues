@@ -54,7 +54,10 @@ struct Bitmap *defaultFont;
 
 
 #define NORMALIZE_ORTHO_X (1.0f / 320.0f)
-#define NORMALIZE_ORTHO_Y (1.0f / 305.0f)
+#define NORMALIZE_ORTHO_Y (1.0f / 200.0f)
+#define ADJUST_RESOLUTION_Y (((200.0f/256.0f) * 200.0f) / 240.0f )
+#define OFFSET_X (-0.5f)
+#define OFFSET_Y (-0.375f)
 #define NORMALIZE_COLOUR (2.0f / 256.0f)
 
 #define GEOMETRY_SCALE_X 2.0f
@@ -139,10 +142,10 @@ void fill(
 
     u64 *dw;
 
-    float x = -0.5f + _x * NORMALIZE_ORTHO_X;
-    float y = -0.375f + _y * NORMALIZE_ORTHO_Y;
+    float x = OFFSET_X + _x * NORMALIZE_ORTHO_X;
+    float y = OFFSET_Y + _y * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
     float dx = _dx * NORMALIZE_ORTHO_X;
-    float dy = _dy * NORMALIZE_ORTHO_Y;
+    float dy = _dy * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
 
     VECTOR object_position = {x, y, -1.0f, 1.0f};
     VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
@@ -248,10 +251,10 @@ void drawBitmapRegion(const int _x,
 
     u64 *dw;
 
-    float x = -0.5f + _x * NORMALIZE_ORTHO_X;
-    float y = -0.375f + _y * NORMALIZE_ORTHO_Y;
+    float x = OFFSET_X + _x * NORMALIZE_ORTHO_X;
+    float y = OFFSET_Y + _y * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
     float dx = _dx * NORMALIZE_ORTHO_X;
-    float dy = _dy * NORMALIZE_ORTHO_Y;
+    float dy = _dy * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
 
     VECTOR object_position = {x, y, -1.0f, 1.0f};
     VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
@@ -319,7 +322,7 @@ void drawBitmap(const int _x,
 				const int _y,
                 struct Bitmap *bitmap,
 				const uint8_t transparent) {
-    drawBitmapRegion(_x, _y, bitmap->width, bitmap->height, getPaletteEntry(0xFFFFFFFF), bitmap, transparent, 0.0f, 1.0f, 0.0f, 1.0f);
+    drawBitmapRegion(_x, _y, bitmap->width, bitmap->height, getPaletteEntry(0xFFFFFFFF), bitmap, transparent, 0.0f, 0.999f, 0.0f, 0.999f);
 }
 
 void drawRepeatBitmap(
@@ -365,8 +368,8 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
 
     float fontWidth = defaultFont->width;
     float fontHeight = defaultFont->height;
-    float blockWidth = 8.0f / fontWidth;
-    float blockHeight = 8.0f / fontHeight;
+    float blockWidth = (8.0f / fontWidth) * 0.999f;
+    float blockHeight = (8.0f / fontHeight) * 0.999f;
 
     for (c = 0; c < len; ++c) {
         if (text[c] == '\n' || dstX >= XRES_FRAMEBUFFER) {
