@@ -24,7 +24,7 @@
 #include "UI.h"
 #include "SoundSystem.h"
 
-#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && !defined(N64)
+#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && !defined(N64) && !defined(PLAYSTATION2)
 const char *MainMenu_options[4] = {
         "Play game", "Credits", "Help", "Quit"};
 
@@ -104,7 +104,9 @@ void MainMenu_repaintCallback(void) {
         return;
     }
 
-    drawBitmap(0, 0, logoBitmap, 1);
+    // Terrible hack due to weird Playstation 2 weirdness
+    drawBitmapRegion(0, 0, 112, YRES_FRAMEBUFFER, getPaletteEntry(0xFFFFFFFF), logoBitmap, 1, 0.0f, 0.875f, 0.0f, 0.89f);
+
     drawBitmap(118, 45, logo2Bitmap, 1);
 
 	drawWindow(40 - biggestOption - 3, 25 - 4 - (optionsHeight / 8), biggestOption + 2, (optionsHeight / 8) + 2,

@@ -102,7 +102,7 @@ void drawRect(
 
     fill(x + dx - 1, y, 1, dy - 1, pixel, 0);
 
-    fill(x, y + dy - 1, dx - 1, 1, pixel, 0);
+    fill(x, y + dy - 1, dx, 1, pixel, 0);
 }
 
 void fill(
@@ -322,7 +322,7 @@ void drawBitmap(const int _x,
 				const int _y,
                 struct Bitmap *bitmap,
 				const uint8_t transparent) {
-    drawBitmapRegion(_x, _y, bitmap->width, bitmap->height, getPaletteEntry(0xFFFFFFFF), bitmap, transparent, 0.0f, 0.999f, 0.0f, 0.999f);
+    drawBitmapRegion(_x, _y, bitmap->width, bitmap->height, getPaletteEntry(0xFFFFFFFF), bitmap, transparent, 0.0f, 1.0f, 0.0f, 1.0f);
 }
 
 void drawRepeatBitmap(

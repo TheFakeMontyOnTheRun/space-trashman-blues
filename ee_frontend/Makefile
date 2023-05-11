@@ -7,6 +7,7 @@ EE_CFLAGS += -Ibase3d/include        \
     -DCLI_BUILD \
     -I../core/include \
     -I../common/include \
+    -DPLAYSTATION2 \
     -DINCLUDE_ITEM_DESCRIPTIONS
 
 EE_BIN = derelict128.elf

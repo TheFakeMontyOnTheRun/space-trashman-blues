@@ -169,6 +169,15 @@ void drawBitmap(const int x,
 				struct Bitmap *  tile,
 						const uint8_t transparent);
 
+void drawBitmapRegion(const int _x,
+                      const int _y,
+                      const int _dx,
+                      const int _dy,
+                      BitmapPixelFormat tint,
+                      struct Bitmap *bitmap,
+                      const uint8_t transparent,
+                      float u0, float u1, float v0, float v1);
+
 void drawSlantedFloor(
                       FixP_t p0x,
                       FixP_t p0y,
