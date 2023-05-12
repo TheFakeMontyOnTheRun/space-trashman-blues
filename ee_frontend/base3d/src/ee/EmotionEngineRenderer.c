@@ -208,7 +208,7 @@ void init_gs() {
 	frame.address = graph_vram_allocate(frame.width, frame.height, frame.psm, GRAPH_ALIGN_PAGE);
 	puts("Frame allocated");
 	// Enable the zbuffer.
-	zBuffer.enable = DRAW_ENABLE;
+	zBuffer.enable = DRAW_DISABLE;
 	zBuffer.mask = 0;
 	zBuffer.method = ZTEST_METHOD_GREATER_EQUAL;
 	zBuffer.zsm = GS_ZBUF_32;
