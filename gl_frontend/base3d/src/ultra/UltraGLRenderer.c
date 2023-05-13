@@ -25,6 +25,8 @@
 
 int snapshotSignal = '.';
 rdpq_font_t *fnt1;
+int leanX = 0;
+int leanY = 0;
 
 void graphicsInit() {
 
@@ -106,6 +108,24 @@ void handleSystemEvents() {
 	if (pressed.c[0].R) {
 		mBufferedCommand = kCommandStrafeRight;
 	}
+
+    leanX = leanY = 0;
+
+    if (pressed.c[0].x < 0) {
+        leanX = -1;
+    }
+
+    if (pressed.c[0].x > 0) {
+        leanX = 1;
+    }
+
+    if (pressed.c[0].y < 0) {
+        leanY = 1;
+    }
+
+    if (pressed.c[0].y > 0) {
+        leanY = -1;
+    }
 }
 
 void graphicsShutdown() {

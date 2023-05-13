@@ -4,10 +4,11 @@ Created by Daniel Monteiro on 2019-07-26.
 
 #ifndef DONT_INCLUDE
 #ifndef SMD
-#include <stdint.h>
 #include <string.h>
 #ifdef WIN32
 #include "Win32Int.h"
+#else
+#include <stdint.h>
 #endif
 #else
 #include <genesis.h>
@@ -51,7 +52,7 @@ void keycardDropCallback(struct Item *item) {
 
 
 void useCardWithCardWriter(struct Item *item1, struct Item *item2) {
-	if (item2 == getItemNamed("card-writer")) {
+	if (item1 == getItemNamed("low-rank-keycard") && item2 == getItemNamed("card-writer")) {
 		struct Item *card = getItemNamed("hacked-keycard");
 		addToRoom("computer-core", card);
 		dropObjectByName("low-rank-keycard");
@@ -64,7 +65,8 @@ void useCardWithCardWriter(struct Item *item1, struct Item *item2) {
 
 void useBootsWithMagneticCoupling(struct Item *item1, struct Item *item2) {
 	struct Item *coupling = getItemNamed("magnetic-coupling");
-	if (item2 == coupling) {
+	struct Item *boots = getItemNamed("magnetic-boots");
+	if (item1 == boots && item2 == coupling) {
 		coupling->active = FALSE;
 		defaultLogger("Magnetic lock disengaged");
 	} else {
@@ -128,7 +130,7 @@ void elevatorGoDownCallback(struct Item *item) {
 
 		if (getItem(currentItem->item)->pickable) {
 			item = getItem(currentItem->item);
-			removeObjectFromRoom(item);
+			/* this will already remove it from the room */
 			addObjectToRoom(newRoom, item);
 		}
 
@@ -158,7 +160,7 @@ void elevatorGoUpCallback(struct Item *item) {
 
 		if (getItem(currentItem->item)->pickable) {
 			item = getItem(currentItem->item);
-			removeObjectFromRoom(item);
+			/*This will alreadu remove it from the room*/
 			addObjectToRoom(newRoom, item);
 		}
 
@@ -207,7 +209,10 @@ void useCommWithRank(struct Item *item) {
 	item->active = !item->active;
 }
 
-
+/**
+ * TODO: change name for this function
+ * @param item
+ */
 void useComputerRack(struct Item *item) {
 
 	if (accessGrantedToSafe) {

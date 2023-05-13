@@ -16,6 +16,7 @@ TESTOBJS = tests/TestMovement.o \
 		tests/TestObjectManipulation.o \
 		tests/TestVictoryConditionsAndEndings.o \
 		tests/TestParser.o \
+		tests/TestDerelict.o \
 		$(GTEST_DIR)/src/gtest-all.o \
 		$(GMOCK_DIR)/src/gmock-all.o \
 		$(GMOCK_DIR)/src/gmock_main.o
