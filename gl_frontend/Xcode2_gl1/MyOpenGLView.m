@@ -37,6 +37,8 @@
 
 void initStation(void);
 
+float leanX, leanY = 0.0f;
+
 NSMutableSet *playingSounds;
 int nextAudioChannel = -1;
 float multiplier = 1.0f;

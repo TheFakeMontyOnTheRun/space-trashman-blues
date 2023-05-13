@@ -1,1 +1,1 @@
-# opal-standoff
+# 32-Bit version
