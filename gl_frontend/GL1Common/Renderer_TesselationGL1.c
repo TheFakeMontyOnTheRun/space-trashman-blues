@@ -81,6 +81,8 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 	float centerY0, centerY1;
 	FixP_t acc;
 	FixP_t scaled;
+	float geometryScale;
+	float centerY;
 
 	acc = (p0.mY + playerHeight + walkingBias + yCameraOffset);
 	scaled = Mul(acc, BIAS);
@@ -90,8 +92,8 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 	scaled = Mul(acc, BIAS);
 	centerY0 = (fixToInt(scaled) * REVERSE_BIAS);
 
-	float geometryScale = (centerY1 - centerY0);
-	float centerY = centerY0 + (centerY1 - centerY0) * 0.5f;
+	geometryScale = (centerY1 - centerY0);
+	centerY = centerY0 + (centerY1 - centerY0) * 0.5f;
 
 	glTranslatef(0.0f, centerY, 0.0f);
 	glScalef(1.0f, geometryScale, 1.0f);
@@ -152,6 +154,11 @@ void drawBillboardAt(const struct Vec3 center,
 					 const FixP_t scale,
 					 const int size) {
 	struct Vec3 scaledCenter;
+	float centerY;
+	FixP_t acc;
+	FixP_t scaled;
+	float textureScale;
+	float geometryScale;
 
 	if (center.mZ <= kMinZCull) {
 		return;
@@ -159,11 +166,9 @@ void drawBillboardAt(const struct Vec3 center,
 
 	initVec3(&scaledCenter, center.mX, (center.mY), center.mZ);
 
-	float centerY;
-	FixP_t acc;
-	FixP_t scaled = Mul(scale, BIAS);
-	float textureScale = (fixToInt(scaled) * REVERSE_BIAS);
-	float geometryScale = textureScale;
+        scaled = Mul(scale, BIAS);
+	textureScale = (fixToInt(scaled) * REVERSE_BIAS);
+	geometryScale = textureScale;
 
 
 	acc = (center.mY + playerHeight + walkingBias + yCameraOffset);
@@ -281,12 +286,12 @@ void drawFloorAt(const struct Vec3 center,
 		float centerY;
 		FixP_t acc;
 		FixP_t scaled;
+		int x[4], y[4];
 
 		acc = center.mY + playerHeight + walkingBias + yCameraOffset;
 		scaled = Mul(acc, BIAS);
 		centerY = (fixToInt(scaled) * REVERSE_BIAS);
 
-		int x[4], y[4];
 
 		switch (cameraDirection) {
 			case kNorth:
@@ -357,12 +362,11 @@ void drawCeilingAt(const struct Vec3 center,
 		float centerY;
 		FixP_t acc;
 		FixP_t scaled;
+		int x[4], y[4];
 
 		acc = (center.mY + playerHeight + walkingBias + yCameraOffset);
 		scaled = Mul(acc, BIAS);
 		centerY = (fixToInt(scaled) * REVERSE_BIAS);
-
-		int x[4], y[4];
 
 		switch (cameraDirection) {
 			case kNorth:
@@ -434,11 +438,12 @@ void drawLeftNear(const struct Vec3 center,
 
 	FixP_t acc;
 	FixP_t scaled;
-
+	float textureScale;
+	float geometryScale;
 	float centerY;
 	scaled = Mul(scale, BIAS);
-	float textureScale = (fixToInt(scaled) * REVERSE_BIAS);
-	float geometryScale = textureScale;
+	textureScale = (fixToInt(scaled) * REVERSE_BIAS);
+	geometryScale = textureScale;
 
 	acc = (center.mY + playerHeight + walkingBias + yCameraOffset);
 	scaled = Mul(acc, BIAS);
@@ -484,10 +489,11 @@ void drawRightNear(const struct Vec3 center,
 	float centerY;
 	FixP_t acc;
 	FixP_t scaled;
-
+	float textureScale;
+	float geometryScale;
 	scaled = Mul(scale, BIAS);
-	float textureScale = (fixToInt(scaled) * REVERSE_BIAS);
-	float geometryScale = textureScale;
+        textureScale = (fixToInt(scaled) * REVERSE_BIAS);
+	geometryScale = textureScale;
 
 
 	acc = (center.mY + playerHeight + walkingBias + yCameraOffset);

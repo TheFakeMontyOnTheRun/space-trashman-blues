@@ -30,10 +30,6 @@
 #include "MapWithCharKey.h"
 #include "Vec.h"
 
-int isValid(const struct Vec2i pos) {
-	return 0 <= pos.x && pos.x < MAP_SIZE && 0 <= pos.y && pos.y < MAP_SIZE;
-}
-
 struct Vec2i transform(const enum EDirection from, const struct Vec2i currentPos) {
 
 	struct Vec2i toReturn;
@@ -107,7 +103,7 @@ void castVisibility(const enum EDirection from,
 
 		transformed = transform(from, currentPos);
 
-		if (!isValid(transformed)) {
+		if (!(0 <= transformed.x && transformed.x < MAP_SIZE && 0 <= transformed.y && transformed.y < MAP_SIZE)) {
 			continue;
 		}
 
@@ -133,17 +129,13 @@ void castVisibility(const enum EDirection from,
 			continue;
 		}
 
-		narrowing = abs(verticalDistance) + 1;
-
-		if (((currentPos.x - originalPos.x) >= -narrowing)
-			&& (currentPos.x - originalPos.x) <= 0
+		if ( (currentPos.x - originalPos.x) <= 0
 			&& (stackHead != stackEnd)) {
 			initVec2i(stackHead++, (int8_t) (currentPos.x + leftOffset.x),
 					  (int8_t) (currentPos.y + leftOffset.y));
 		}
 
-		if (((currentPos.x - originalPos.x) <= narrowing)
-			&& (currentPos.x - originalPos.x) >= 0
+		if ( (currentPos.x - originalPos.x) >= 0
 			&& (stackHead != stackEnd)) {
 			initVec2i(stackHead++, (int8_t) (currentPos.x + rightOffset.x),
 					  (int8_t) (currentPos.y + rightOffset.y));

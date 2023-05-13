@@ -42,6 +42,8 @@
 #include "UI.h"
 #include "Engine.h"
 
+extern int leanX;
+extern int leanY;
 int visibilityCached = FALSE;
 int needsToRedrawVisibleMeshes = TRUE;
 uint8_t texturesUsed = 0;
@@ -141,9 +143,10 @@ void startFrameGL(int width, int height) {
 
 void endFrameGL(void) {
 #ifndef NDS
+    int error;
 	glFinish();
 
-	int error = glGetError();
+	error = glGetError();
 
 	if (error) {
 		printf("glError: %d\n", error);
@@ -171,13 +174,35 @@ void enter3D(void) {
 	glLoadIdentity();
 
 	setPerspective(45, 240.0f / 200.0f, 1, 1024);
-
+    glScalef(1, 1.25f, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+    glRotatef(((float)leanX) * 20.0f, 0.0f, 1.0f, 0.0f);
+    glRotatef(((float)leanY) * 20.0f, 1.0f, 0.0f, 0.0f);
+	glEnable(GL_FOG);
 
 #ifndef NDS
+	GLfloat fogColor[4] = {0.0, 0.0, 0.0, 1.0};
 	glEnable(GL_DEPTH_TEST);
+	glFogi(GL_FOG_MODE, GL_LINEAR);
+	glFogfv(GL_FOG_COLOR, fogColor);
+	glFogf(GL_FOG_START, 16);
+	glFogf(GL_FOG_END, 48);
+	glFogf(GL_FOG_DENSITY, 0.75);
+#else
+	glFogShift(2);
+	glFogColor(0,0,0,0);
+
+	for(int i=0;i<32;i++) {
+		glFogDensity(i,i*4);
+	}
+
+	glFogDensity(31,127);
+	glFogOffset(0x6000);
+
+	glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE | POLY_FOG);
 #endif
+
 	glColor3f(1, 1, 1);
 }
 
@@ -189,7 +214,8 @@ void printMessageTo3DView(const char *message) {
 void loadTileProperties(const uint8_t levelNumber) {
 	char buffer[64];
 	int c;
-
+    struct StaticBuffer data;
+    
 	setLoggerDelegate(printMessageTo3DView);
 
 	clearMap(&tileProperties);
@@ -197,7 +223,7 @@ void loadTileProperties(const uint8_t levelNumber) {
 	clearMap(&colliders);
 
 	sprintf(buffer, "props%d.bin", levelNumber);
-	struct StaticBuffer data = loadBinaryFileFromPath(buffer);
+	data = loadBinaryFileFromPath(buffer);
 
 	for (c = 0; c < 256; ++c) {
 		free((void *) getFromMap(&tileProperties, c));

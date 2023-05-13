@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /W3 /O2 /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\space-trashman-blues\core\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /FD /c
+# ADD CPP /nologo /W3 /O2 /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /FD /c
 # SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /ZI /Od /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\space-trashman-blues\core\include" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /FD /GZ /c
 # SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib shell32.lib winmm.lib /nologo /subsystem:windows /pdb:none /debug /machine:I386
+# ADD LINK32 winmm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /pdb:none /debug /machine:I386
 
 !ENDIF 
 
@@ -94,19 +94,19 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=..\..\menu\src\BattleScreen.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\base3d\src\Win32Version\CGDIRenderer.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\base3d\src\Common.c
+SOURCE=..\..\..\common\src\Common.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\core\src\Core.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\base3d\src\PackedFileReader.c
 # End Source File
 # Begin Source File
 
@@ -154,7 +154,7 @@ SOURCE=..\..\base3d\src\Events.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\base3d\src\FixP.c
+SOURCE=..\..\..\common\src\FixP.c
 # End Source File
 # Begin Source File
 
@@ -195,7 +195,11 @@ SOURCE=..\..\menu\src\MainMenu.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\base3d\src\MapWithCharKey.c
+SOURCE=..\..\..\common\src\MapWithCharKey.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\common\src\PackedFileReader.c
 # End Source File
 # Begin Source File
 
@@ -207,7 +211,7 @@ SOURCE=..\..\menu\src\UI.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\base3d\src\Vec.c
+SOURCE=..\..\..\common\src\Vec.c
 # End Source File
 # Begin Source File
 

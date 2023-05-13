@@ -26,6 +26,8 @@ extern "C" {
 
 using testing::Eq;
 
+void myDummyOutputHandler(const char* msg) {}
+
 class ErrorHandlerInterface {
 public:
   virtual ~ErrorHandlerInterface() {}
@@ -45,6 +47,7 @@ public:
 
   virtual void SetUp() {
     initStation();
+    setLoggerDelegate(myDummyOutputHandler);
     mockedObj = shared_ptr<ErrorHandlerMock>(new ErrorHandlerMock());
   }
 
@@ -58,7 +61,6 @@ shared_ptr<ErrorHandlerMock> TestMovement::mockedObj;
 void myErrorHandler(const char* errorMsg) {
   TestMovement::mockedObj->handleError();
 }
-
 
 TEST_F(TestMovement, canMoveOnlyWhenEnabled) {
 

@@ -39,7 +39,7 @@ void initHW() {
     setupOPL2();
 }
 
-void shutdownHW();
+void shutdownHW(void);
 
 #include "OSXRenderer.h"
 
