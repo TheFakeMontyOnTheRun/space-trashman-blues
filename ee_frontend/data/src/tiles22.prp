@@ -1,0 +1,16 @@
+I 0 0 1 1 1 null null bricks cube null null 0 0 5 0
+F 0 0 0 1 1 ceiling asphalt null null bricks null 3 0 2 0
+\ 0 0 1 1 1 ceiling asphalt bricks leftfar null null 0 0 5 0
+[ 0 0 1 1 1 ceiling asphalt electric leftfar null null 0 0 5 0
+/ 0 0 1 1 1 ceiling asphalt bricks leftnear null null 0 0 5 0
+] 0 0 1 1 1 ceiling asphalt electric leftnear null null 0 0 5 0
+# 0 0 1 1 1 ceiling asphalt glass cube bricks null 3 0 2 0
+3 0 0 0 0 1 ceiling asphalt null null null null 0 0 5 0
+w 0 0 0 0 1 ceiling asphalt null null null null 0 0 5 0
+e 0 0 0 0 1 ceiling asphalt null null null null 0 0 5 0
+s 0 0 0 0 1 ceiling asphalt null null null null 0 0 5 0
+n 0 0 0 0 1 ceiling asphalt null null null null 0 0 5 0
+. 0 0 0 0 1 ceiling asphalt null null null null 0 0 5 0
+, 0 1 1 1 0 null null null null null null 0 0 0 0
+L 0 0 0 0 1 ceiling asphalt null null null asphalt 0 1 5 1
+X 0 0 1 1 1 null null null null bricks grating 3 2 2 2
