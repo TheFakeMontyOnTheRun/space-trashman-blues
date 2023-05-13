@@ -142,11 +142,12 @@ int8_t HackingScreen_tickCallback(char cmd) {
 
 void runHackingMinigame(void) {
 	uint8_t cmd;
+	uint8_t state = 0;
 	clearScreen();
 	enterTextMode();
 	HackingScreen_initStateCallback();
 	HackingScreen_repaintCallback();
-	uint8_t state = 0;
+
 
 	while (state == 0) {
 		cmd = '.';

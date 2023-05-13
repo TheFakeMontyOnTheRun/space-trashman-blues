@@ -185,7 +185,7 @@ void setMultiplier(CGSize size) {
 -(void) stopTimer {
 }
 
-void shutdownHW() {
+void shutdownHW(void) {
     CGColorSpaceRelease(rgb);
 }
 

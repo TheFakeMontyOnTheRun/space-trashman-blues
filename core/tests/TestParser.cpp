@@ -10,8 +10,12 @@ extern "C" {
 #include "Parser.h"
 }
 
+static void myDummyOutputHandler(const char*msg) {}
 
 
 TEST(TestParser, willNotRunCommandsWithInvalidInput) {
-  ASSERT_FALSE(parseCommand("", ""));
+
+	setLoggerDelegate(myDummyOutputHandler);
+
+  	ASSERT_FALSE(parseCommand("", ""));
 }

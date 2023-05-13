@@ -9,11 +9,12 @@ Created by Daniel Monteiro on 2019-07-26.
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdint.h>
 #include <string.h>
 
 #ifdef WIN32
 #include "Win32Int.h"
+#else
+#include <stdint.h>
 #endif
 
 #else
@@ -147,6 +148,17 @@ struct Item *getItemNamed(const char *name) {
 	return NULL;
 }
 
+int getRoomIdByName(const char *name) {
+	int c;
+
+	for (c = 1; c < roomCount; ++c) {
+		if (!strcmp(rooms[c].name, name)) {
+			return c;
+		}
+	}
+
+	return 0;
+}
 
 struct Room *getRoomByName(const char *name) {
 	int c;
@@ -425,7 +437,7 @@ uint8_t getPlayerRoom(void) {
 }
 
 void useObjectNamed(const char *operand) {
-	struct ObjectNode *itemToPick = collectedObject->next;
+	struct ObjectNode *itemToPick = getPlayerItems();
 
 	while (itemToPick != NULL) {
 		struct Item *_item = getItem(itemToPick->item);
@@ -734,7 +746,7 @@ void setGameStatus(enum EGameStates newStatus) {
 }
 
 void initCore(void) {
-
+        defaultLogger = writeToLog;
 	/* prepare for a single player in the game */
 	memset(&playerPosition, 0, sizeof(struct WorldPosition));
 	setErrorHandlerCallback(NULL);

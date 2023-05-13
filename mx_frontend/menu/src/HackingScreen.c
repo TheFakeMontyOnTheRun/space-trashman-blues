@@ -30,7 +30,7 @@ char* functionNames[6] = {
         "snprintf",
         "hackLogin",
         "LoadDBFile",
-        "MainRunLoop",
+        "MainRunLoop"
 };
 
 uint8_t holdingDisk = 3;

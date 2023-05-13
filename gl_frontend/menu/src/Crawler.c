@@ -161,7 +161,11 @@ void Crawler_repaintCallback() {
 		if (currentPresentationState == kRoomTransitioning) {
 
 			struct Vec3 center;
-
+			FixP_t acc;
+            FixP_t bias;
+			FixP_t scaled;
+            float zOffset;
+            
 			if (!enableSmoothMovement) {
 				currentPresentationState = kWaitingForInput;
 				zCameraOffset = xCameraOffset = yCameraOffset = 0;
@@ -180,15 +184,12 @@ void Crawler_repaintCallback() {
 			center.mX = center.mY = 0;
 			center.mZ = 1;
 
-
-			FixP_t acc;
-			FixP_t bias = intToFix(128);
-			FixP_t scaled;
+			bias = intToFix(128);
 
 			acc = (zCameraOffset);
 			scaled = Mul(acc, bias);
 
-			float zOffset = (fixToInt(scaled) / 128.0f);
+			zOffset = (fixToInt(scaled) / 128.0f);
 			glTranslatef(0, 0.0f, -zOffset);
 
 			glTranslatef(-3, 0.0f, -3);
