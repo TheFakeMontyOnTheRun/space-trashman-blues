@@ -24,7 +24,7 @@
 #include "VisibilityStrategy.h"
 #include "UI.h"
 
-char* functionNames[6] = {
+const char* functionNames[6] = {
         "???",
         "writeB",
         "snprintf",

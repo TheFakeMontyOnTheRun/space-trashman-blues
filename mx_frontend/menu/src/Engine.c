@@ -34,7 +34,7 @@
 
 #include "SoundSystem.h"
 
-char textBuffer[40 * 25];
+char *textBuffer;
 
 InitStateCallback initStateCallback = NULL;
 InitialPaintCallback initialPaintCallback = NULL;
@@ -129,14 +129,6 @@ void enterState(enum EGameMenuState newState) {
             repaintCallback = HackingScreen_repaintCallback;
             tickCallback = HackingScreen_tickCallback;
             unloadStateCallback = HackingScreen_unloadStateCallback;
-        }
-            break;
-        case kRandomBattle: {
-            initStateCallback = BattleScreen_initStateCallback;
-            initialPaintCallback = BattleScreen_initialPaintCallback;
-            repaintCallback = BattleScreen_repaintCallback;
-            tickCallback = BattleScreen_tickCallback;
-            unloadStateCallback = BattleScreen_unloadStateCallback;
         }
             break;
         case kQuit:

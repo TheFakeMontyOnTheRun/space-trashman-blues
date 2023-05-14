@@ -27,7 +27,7 @@
 const char *MainMenu_options[4] = {
         "Play game", "Credits", "Help", "Quit"};
 
-enum EGameMenuState MainMenu_nextStateNavigation[4] = {
+const enum EGameMenuState MainMenu_nextStateNavigation[4] = {
         kPlayGame, kCredits, kHelp,
         kQuit};
 
@@ -36,7 +36,7 @@ const int kMainMenuOptionsCount = 4;
 const char *MainMenu_options[3] = {
         "Play game", "Credits", "Help"};
 
-int32_t MainMenu_nextStateNavigation[3] = {
+const int32_t MainMenu_nextStateNavigation[3] = {
         kPlayGame, kCredits, kHelp};
 
 const int kMainMenuOptionsCount = 3;

@@ -122,7 +122,7 @@ void redrawHUD(void) {
                 sprintf(&textBuffer[0], "%s", itemPtr->name);
                 textBuffer[14] = 0;
 
-                drawBitmapRaw(XRES + 8, YRES - 1 - 32 - 16 - 16, 32, 32, itemSprites[itemPtr->index]->rotations[0], 1);
+                drawBitmapRaw(XRES + 8, YRES - 1 - 32 - 16 - 16, 32, 32, itemSprites[itemPtr->index]->data, 1);
 
                 drawTextAtWithMarginWithFiltering(2 + ((XRES) / 8), 23, 311, itemPtr->name,
                                      itemPtr->active ? 192 : 255, '\n');

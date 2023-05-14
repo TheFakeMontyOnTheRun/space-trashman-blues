@@ -30,8 +30,8 @@ int32_t CreditsScreen_nextStateNavigation[1] = {
         kMainMenu,
 };
 
-int16_t CreditsScreen_optionsCount = 1;
-extern char textBuffer[40 * 25];
+const int16_t CreditsScreen_optionsCount = 1;
+extern char *textBuffer;
 struct Bitmap *monty;
 
 void CreditsScreen_initStateCallback(int32_t tag) {
@@ -40,16 +40,15 @@ void CreditsScreen_initStateCallback(int32_t tag) {
     cursorPosition = 0;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
-    memset (&textBuffer[0], ' ', 40 * 25);
+    memset (textBuffer, ' ', 40 * 25);
 
     currentBackgroundBitmap = loadBitmap("pattern.img");
 
-    mainText = &textBuffer[0];
-    memset (&textBuffer[0], 0, (40 * 25));
+    mainText = textBuffer;
+    memset (textBuffer, 0, (40 * 25));
 	textFile = loadBinaryFileFromPath("Help.txt");
-    memcpy(&textBuffer[0], textFile.data, textFile.size);
+    memcpy(textBuffer, textFile.data, textFile.size);
 
-    CreditsScreen_optionsCount = 1;
 
     monty = loadBitmap("monty.img");
 }

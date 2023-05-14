@@ -37,7 +37,6 @@ extern struct MapWithCharKey colliders;
 extern int useDither;
 extern int visibilityCached;
 extern int needsToRedrawVisibleMeshes;
-extern uint8_t *visibleElementsMap;
 extern struct Bitmap *defaultFont;
 
 #ifndef AGS
@@ -50,8 +49,8 @@ extern uint8_t *framebuffer;
 extern enum EDirection cameraDirection;
 extern long gameTicks;
 extern int hasSnapshot;
-extern int distanceForPenumbra;
-extern int distanceForDarkness;
+extern const int distanceForPenumbra;
+extern const int distanceForDarkness;
 extern int turnTarget;
 extern int turnStep;
 extern int needToRedrawHUD;
@@ -135,11 +134,7 @@ void fill(
 
 void drawMesh(const struct Mesh* mesh, const struct Vec3 at );
 
-void drawMap(const uint8_t * __restrict__ elements,
-			 const uint8_t * __restrict__ items,
-			 const uint8_t * __restrict__ actors,
-			 uint8_t * __restrict__ effects,
-			 const struct CActor * __restrict__ current);
+void drawMap(const struct CActor * __restrict__ current);
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour);
 

@@ -31,8 +31,8 @@
 #include "CRenderer.h"
 
 struct GameSnapshot gameSnapshot;
-uint8_t map[MAP_SIZE][MAP_SIZE];
-uint8_t collisionMap[256];
+uint8_t **map;
+uint8_t *collisionMap;
 int enteredThru = 0;
 extern const char *focusItemName;
 
@@ -410,7 +410,7 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     gameSnapshot.mapIndex = mapIndex;
     gameSnapshot.camera_rotation = 0;
 	playerCrawler.rotation = 0;
-    memcpy (&collisionMap, collisions, 256);
+    memcpy (collisionMap, collisions, 256);
 
     for (y = 0; y < MAP_SIZE; ++y) {
         for (x = 0; x < MAP_SIZE; ++x) {
@@ -418,7 +418,6 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
             map[y][x] = current;
             setItem(x, y, 0xFF);
             setActor(x, y, 0xFF);
-            setElement(x, y, current);
 
             if ((current == 's' && enteredThru == 0) ||
                 (current == 'w' && enteredThru == 1) ||

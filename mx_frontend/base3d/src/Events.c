@@ -28,10 +28,9 @@
 #include "Dungeon.h"
 #include "SoundSystem.h"
 
-uint8_t elements[(MAP_SIZE * MAP_SIZE)];
-uint8_t actorsInMap[(MAP_SIZE * MAP_SIZE)];
-uint8_t items[(MAP_SIZE * MAP_SIZE)];
-uint8_t effects[(MAP_SIZE * MAP_SIZE)];
+uint8_t *actorsInMap;
+extern uint8_t **map;
+extern uint8_t **mItems;
 int x = 0;
 int z = 0;
 int rotation = 0;
@@ -39,10 +38,11 @@ enum CrawlerState shouldContinue = kCrawlerGameInProgress;
 struct CActor actor;
 
 void clearMapCache() {
-    size_t sizeForSet = sizeof(uint8_t) * (MAP_SIZE * MAP_SIZE);
-    memset (&items[0], 0xFF, sizeForSet);
-    memset (&actorsInMap[0], 0xFF, sizeForSet);
-    memset (&effects[0], 0xFF, sizeForSet);
+    memset (actorsInMap, 0xFF, MAP_SIZE * MAP_SIZE);
+
+    for (int c = 0; c < MAP_SIZE; ++c ) {
+        memset (mItems[c], 0xFF, MAP_SIZE);
+    }
 }
 
 void onLevelLoaded(int index) {
@@ -69,16 +69,12 @@ void tickMission(enum ECommand cmd) {
     }
 }
 
-void setElement(const int x, const int y, uint8_t element) {
-    elements[(MAP_SIZE * y) + x] = element;
-}
-
 void setActor(const int x, const int y, uint8_t actor) {
     actorsInMap[(MAP_SIZE * y) + x] = actor;
 }
 
 void setItem(const int x, const int y, uint8_t item) {
-    items[(MAP_SIZE * y) + x] = item;
+    mItems[y][x] = item;
 }
 
 void loadMap(int map, struct MapWithCharKey *collisionMap) {
@@ -133,10 +129,10 @@ int loopTick(enum ECommand command) {
 
         if (gameTicks != 0) {
             yCameraOffset = ((struct CTile3DProperties *) getFromMap(&tileProperties,
-                                                                     elements[(z * MAP_SIZE) + x]))->mFloorHeight -
+                                                                     map[z][x]))->mFloorHeight -
                             ((struct CTile3DProperties *) getFromMap(&tileProperties,
-                                                                     elements[(actor.position.y * MAP_SIZE) +
-                                                                              actor.position.x]))->mFloorHeight;
+                                                                     map[(actor.position.y)]
+                                                                             [actor.position.x]))->mFloorHeight;
         } else {
             yCameraOffset = 0;
         }
@@ -154,8 +150,7 @@ int loopTick(enum ECommand command) {
 
 
     if (needRedraw) {
-        drawMap(&elements[0], &items[0], &actorsInMap[0], &effects[0],
-                &actor);
+        drawMap(&actor);
         if (!enable3DRendering) {
             enable3DRendering = TRUE;
             visibilityCached = FALSE;

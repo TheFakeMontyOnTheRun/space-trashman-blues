@@ -42,20 +42,20 @@ extern int playerLocation;
 
 const char *inspectItem_options[1] = {"Back"};
 
-enum EGameMenuState InspectItem_nextStateNavigation[1] = {
+const enum EGameMenuState InspectItem_nextStateNavigation[1] = {
         kBackToGame};
 
-enum EGameMenuState GameMenu_EndGame_nextStateNavigation[2] = {kInspectItem, kMainMenu};
+const enum EGameMenuState GameMenu_EndGame_nextStateNavigation[2] = {kInspectItem, kMainMenu};
 
 const char *GameMenu_EndGame_options[2] = {"No", "Yes"};
 
 const char *GameMenu_Story_options[1] = {"Continue"};
 
-enum EGameMenuState GameMenu_Story_nextStateNavigation[1] = {kMainMenu};
+const enum EGameMenuState GameMenu_Story_nextStateNavigation[1] = {kMainMenu};
 
 int16_t GameMenu_optionsCount = 2;
 extern size_t biggestOption;
-extern char textBuffer[TEXT_BUFFER_SIZE];
+extern char *textBuffer;
 int drawFilter = FALSE;
 
 void GameMenu_initStateCallback(int32_t tag) {
@@ -67,7 +67,7 @@ void GameMenu_initStateCallback(int32_t tag) {
     cursorPosition = 0;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
-    memset (&textBuffer[0], ' ', 40 * 25);
+    memset (textBuffer, ' ', 40 * 25);
     drawFilter = FALSE;
 
     switch (tag) {
@@ -76,7 +76,7 @@ void GameMenu_initStateCallback(int32_t tag) {
             timeUntilNextState = 0;
             drawFilter = TRUE;
             GameMenu_StateTitle = "End session?";
-            mainText = &textBuffer[0];
+            mainText = textBuffer;
             currentBackgroundBitmap = loadBitmap("pattern.img");
             GameMenu_optionsCount = 2;
             GameMenu_options = &GameMenu_EndGame_options[0];
@@ -86,7 +86,7 @@ void GameMenu_initStateCallback(int32_t tag) {
 
         case kGoodVictoryEpilogue:
             sprintf (textBuffer, "Victory! You managed to destroy the\nship and get out alive\n\n\n\n\n\n");
-            mainText = &textBuffer[0];
+            mainText = textBuffer;
 
             GameMenu_StateTitle = "Victory";
             currentBackgroundBitmap = loadBitmap("pattern.img");
@@ -98,7 +98,7 @@ void GameMenu_initStateCallback(int32_t tag) {
 
         case kBadVictoryEpilogue:
             sprintf (textBuffer, "Victory! Too bad you didn't survive\nto tell the story\n\n\n\n\n\n");
-            mainText = &textBuffer[0];
+            mainText = textBuffer;
 
             GameMenu_StateTitle = "Victory";
             currentBackgroundBitmap = loadBitmap("pattern.img");
@@ -114,7 +114,7 @@ void GameMenu_initStateCallback(int32_t tag) {
                      "alive, you failed to prevent the \n"
                      "worstscenario and now EVERYBODY is\n"
                      "dead (and that includes you!)\n\n\n\n\n");
-            mainText = &textBuffer[0];
+            mainText = textBuffer;
 
             GameMenu_StateTitle = "Game Over";
             currentBackgroundBitmap = loadBitmap("pattern.img");
@@ -129,7 +129,7 @@ void GameMenu_initStateCallback(int32_t tag) {
                      "You're dead! And so are millions of\n"
                      "other people on the path of\n"
                      "destruction faulty reactor\n\n\n\n\n\n");
-            mainText = &textBuffer[0];
+            mainText = textBuffer;
 
             GameMenu_StateTitle = "Game Over";
             currentBackgroundBitmap = loadBitmap("pattern.img");
@@ -141,7 +141,7 @@ void GameMenu_initStateCallback(int32_t tag) {
 
         case kPrologue:
             sprintf (textBuffer, "Out of prison");
-            mainText = &textBuffer[0];
+            mainText = textBuffer;
 
             GameMenu_StateTitle = "Everything's changed...but still feels the same.";
             currentBackgroundBitmap = loadBitmap("pattern.img");
@@ -169,7 +169,7 @@ void GameMenu_initStateCallback(int32_t tag) {
                 struct Item *item = getItem(head->item);
                 mainText = item->name;
 #ifdef INCLUDE_ITEM_DESCRIPTIONS                
-                strcpy(&textBuffer[0], item->info);
+                strcpy(textBuffer, item->info);
 #endif
                 GameMenu_optionsCount = 1;
                 GameMenu_options = &inspectItem_options[0];

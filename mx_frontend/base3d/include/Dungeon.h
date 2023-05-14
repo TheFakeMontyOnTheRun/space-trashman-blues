@@ -25,8 +25,6 @@ int canSeeSpy(const struct Vec2i seer,
 			  const struct Vec2i target,
 			  int enemy);
 
-void setElement(const int x, const int y, const uint8_t element);
-
 void setActor(const int x, const int y, const uint8_t actor);
 
 void setItem(const int x, const int y, const uint8_t item);

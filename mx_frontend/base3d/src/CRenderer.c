@@ -42,8 +42,8 @@ int needsToRedrawVisibleMeshes = TRUE;
 struct MapWithCharKey occluders;
 struct MapWithCharKey colliders;
 struct MapWithCharKey enemySightBlockers;
-uint8_t *visibleElementsMap;
 struct Bitmap *defaultFont;
+
 #ifndef AGS
 uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
@@ -53,24 +53,25 @@ uint32_t palette[256];
 #else
 uint8_t *framebuffer;
 #endif
-uint8_t mItems[MAP_SIZE][MAP_SIZE];
+
+uint8_t **mItems;
 enum EDirection cameraDirection;
 struct Vec3 mCamera;
 long gameTicks = 0;
 int dirtyLineY0 = 0;
 int dirtyLineY1 = YRES_FRAMEBUFFER;
-
-int distanceForPenumbra = 16;
-int distanceForDarkness = 48;
+extern uint8_t **map;
+const int distanceForPenumbra = 16;
+const int distanceForDarkness = 48;
 struct Bitmap *mapTopLevel = NULL;
 struct Bitmap *backdrop = NULL;
 struct MapWithCharKey tileProperties;
 struct Vec2i cameraPosition;
-
+extern uint8_t *actorsInMap;
 uint8_t texturesUsed = 0;
 enum ECommand mBufferedCommand = kCommandNone;
 struct Texture *nativeTextures[TOTAL_TEXTURES];
-struct Texture *itemSprites[TOTAL_ITEMS];
+struct Bitmap *itemSprites[TOTAL_ITEMS];
 int turnTarget = 0;
 int turnStep = 0;
 FixP_t xCameraOffset;
@@ -81,17 +82,17 @@ char *focusItemName = NULL;
 
 struct Projection projectionVertices[8];
 
-enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
-struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
+enum EVisibility *visMap;
+struct Vec2i *distances;
 
-char messageLogBuffer[256];
+char *messageLogBuffer;
 
 int messageLogBufferCoolDown = 0;
 
 void printMessageTo3DView(const char *message);
 
 void printMessageTo3DView(const char *message) {
-    strcpy(&messageLogBuffer[0], message);
+    strcpy(messageLogBuffer, message);
     messageLogBufferCoolDown = 5000;
 }
 
@@ -171,7 +172,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     //item 0 is a dummy
     for (c = 1; c < itemsCount; ++c) {
         sprintf(&buffer[0], "%s.img", getItem(c)->name);
-        itemSprites[c] = (makeTextureFrom(&buffer[0]));
+        itemSprites[c] = loadBitmap(&buffer[0]);
     }
 }
 
@@ -180,16 +181,11 @@ void updateCursorForRenderer(const int x, const int z) {
     visibilityCached = FALSE;
 }
 
-void drawMap(const uint8_t *__restrict__ elements,
-             const uint8_t *__restrict__ items,
-             const uint8_t *__restrict__ actors,
-             uint8_t *__restrict__ effects,
-             const struct CActor *current) {
+void drawMap(const struct CActor *current) {
 
     int8_t z, x;
     const struct Vec2i mapCamera = current->position;
     cameraDirection = current->rotation;
-    visibleElementsMap = (uint8_t *)elements;
     hasSnapshot = TRUE;
 
     if (!enable3DRendering) {
@@ -232,10 +228,8 @@ void drawMap(const uint8_t *__restrict__ elements,
 
     for (z = 0; z < MAP_SIZE; ++z) {
         for (x = 0; x < MAP_SIZE; ++x) {
-            const uint16_t offset = (MAP_SIZE * z) + x;
-            const uint8_t actor = actors[offset];
-            const uint8_t item = items[offset];
-            const uint8_t effect = effects[offset];
+            const uint8_t actor = actorsInMap[(MAP_SIZE * z) + x];
+            const uint8_t item = mItems[z][x];
 #ifndef AGS
             mActors[z][x] = 0xFF;
             mEffects[z][x] = 0xFF;
@@ -244,9 +238,6 @@ void drawMap(const uint8_t *__restrict__ elements,
                 mActors[z][x] = actor;
             }
 
-            if (effect != 0xFF) {
-                mEffects[z][x] = effect;
-            }
 #endif
             mItems[z][x] = 0xFF;
 
@@ -289,8 +280,8 @@ void drawMap(const uint8_t *__restrict__ elements,
     walkingBias = 0;
 #endif
 
-    castVisibility(cameraDirection, visMap, &elements[0], cameraPosition,
-                   distances, TRUE, &occluders);
+    castVisibility(cameraDirection, cameraPosition,
+                    TRUE, &occluders);
 
     ++gameTicks;
 }
@@ -355,7 +346,7 @@ void render(const long ms) {
         fill(0, 0, XRES, 128, 64, FALSE);
 #endif
 
-        element = visibleElementsMap[(cameraPosition.y * MAP_SIZE) + cameraPosition.x];
+        element = map[(cameraPosition.y)][cameraPosition.x];
 
         tileProp = ((struct CTile3DProperties *) getFromMap(&tileProperties,
                                                             element));
@@ -388,7 +379,7 @@ void render(const long ms) {
                     case kNorth:
                         x = visPos.x;
                         z = visPos.y;
-                        element = visibleElementsMap[(z * MAP_SIZE) + x];
+                        element = map[(z)][x];
 
                         itemsSnapshotElement = mItems[z][x];
 
@@ -399,17 +390,17 @@ void render(const long ms) {
                                 mCamera.mZ + intToFix(2 * (MAP_SIZE) - (2 * z));
 
                         if (x > 0) {
-                            facesMask |= (visibleElementsMap[(z * MAP_SIZE) + (x - 1)] != element) ?
+                            facesMask |= (map[(z)][(x - 1)] != element) ?
                                          MASK_RIGHT :
                                          0;
                         }
 
                         /* remember, bounds - 1! */
-                        if ((x < (MAP_SIZE - 1)) && (visibleElementsMap[(z * MAP_SIZE) + (x + 1)] == element)) {
+                        if ((x < (MAP_SIZE - 1)) && (map[(z)][(x + 1)] == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((z < (MAP_SIZE - 1)) && (visibleElementsMap[((z + 1) * MAP_SIZE) + x] == element)) {
+                        if ((z < (MAP_SIZE - 1)) && (map[((z + 1))][x] == element)) {
                             facesMask &= ~MASK_FRONT;
                         }
 
@@ -428,7 +419,7 @@ void render(const long ms) {
                         x = visPos.x;
                         z = visPos.y;
 
-                        element = visibleElementsMap[(z * MAP_SIZE) + x];
+                        element = map[(z)][x];
                         itemsSnapshotElement = mItems[z][x];
 
                         position.mX = mCamera.mX + intToFix(-2 * x);
@@ -437,19 +428,14 @@ void render(const long ms) {
 
                         /*						remember, bounds - 1!*/
 
-                        if ((x > 0) && (visibleElementsMap[(z * MAP_SIZE) + (x - 1)] == element)) {
+                        if ((x > 0) && (map[(z)][ (x - 1)] == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((x < (MAP_SIZE - 1)) && (visibleElementsMap[(z * MAP_SIZE) + (x + 1)] == element)) {
+                        if ((x < (MAP_SIZE - 1)) && (map[(z)][(x + 1)] == element)) {
                             facesMask &= ~MASK_RIGHT;
                         }
-                        /*
-                                        if (z < 0) {
-                                            facesMask[1] = (visibleElementsMap[(z - 1)][x] !=
-                                                            element);
-                                        }
-                */
+
                         if (z == (cameraPosition.y) + 1) {
 
                             if (getFromMap(&occluders, element)) {
@@ -465,7 +451,7 @@ void render(const long ms) {
                         x = visPos.y;
                         z = visPos.x;
 
-                        element = visibleElementsMap[(x * MAP_SIZE) + z];
+                        element = map[(x)][z];
                         itemsSnapshotElement = mItems[x][z];
 
                         position.mX = mCamera.mX + intToFix(-2 * x);
@@ -474,15 +460,15 @@ void render(const long ms) {
 
                         /* remember, bounds - 1! */
 
-                        if ((x > 0) && (visibleElementsMap[((x - 1) * MAP_SIZE) + z] == element)) {
+                        if ((x > 0) && (map[((x - 1))][z] == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((x < (MAP_SIZE - 1)) && (visibleElementsMap[((x + 1) * MAP_SIZE) + z] == element)) {
+                        if ((x < (MAP_SIZE - 1)) && (map[((x + 1))][z] == element)) {
                             facesMask &= ~MASK_RIGHT;
                         }
 
-                        if ((z < (MAP_SIZE - 1)) && (visibleElementsMap[(x * MAP_SIZE) + (z + 1)] == element)) {
+                        if ((z < (MAP_SIZE - 1)) && (map[(x)][(z + 1)] == element)) {
                             facesMask &= ~MASK_FRONT;
                         }
 
@@ -501,7 +487,7 @@ void render(const long ms) {
                         x = visPos.y;
                         z = visPos.x;
 
-                        element = visibleElementsMap[(x * MAP_SIZE) + z];
+                        element = map[(x)][z];
                         itemsSnapshotElement = mItems[x][z];
 
                         position.mX = mCamera.mX + intToFix(2 * x);
@@ -510,15 +496,15 @@ void render(const long ms) {
 
 
                         /* remember, bounds - 1! */
-                        if ((x > 0) && (visibleElementsMap[((x - 1) * MAP_SIZE) + z] == element)) {
+                        if ((x > 0) && (map[((x - 1))][ z] == element)) {
                             facesMask &= ~MASK_RIGHT;
                         }
 
-                        if ((x < (MAP_SIZE - 1)) && (visibleElementsMap[((x + 1) * MAP_SIZE) + z] == element)) {
+                        if ((x < (MAP_SIZE - 1)) && (map[((x + 1))][ z] == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((z < (MAP_SIZE - 1)) && (visibleElementsMap[(x * MAP_SIZE) + (z - 1)] == element)) {
+                        if ((z < (MAP_SIZE - 1)) && (map[(x ) ][ (z - 1)] == element)) {
                             facesMask &= ~MASK_FRONT;
                         }
 
@@ -959,7 +945,7 @@ void render(const long ms) {
 
                     addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
 
-                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement]->rotations[0], one, 32);
+                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement]->data, one, 32);
                 }
             }
         }
@@ -979,7 +965,7 @@ void render(const long ms) {
 			}
 
 			if (messageLogBufferCoolDown > 0) {
-				int len = strlen(&messageLogBuffer[0]);
+				int len = strlen(messageLogBuffer);
 				int lines = 1;
 				int chars = 0;
                 int c;
@@ -996,7 +982,7 @@ void render(const long ms) {
 
 				fill(0, 0, 216, lines * 8, 0, 1);
 
-				drawTextAt(1, 1, &messageLogBuffer[0], 255);
+				drawTextAt(1, 1, messageLogBuffer, 255);
 			}
 		}
 

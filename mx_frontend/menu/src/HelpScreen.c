@@ -26,12 +26,12 @@
 
 const char *HelpScreen_options[1] = {"Back"};
 
-enum EGameMenuState HelpScreen_nextStateNavigation[1] = {
+const enum EGameMenuState HelpScreen_nextStateNavigation[1] = {
         kMainMenu,
 };
 
-int16_t HelpScreen_optionsCount = 1;
-extern char textBuffer[40 * 25];
+const int16_t HelpScreen_optionsCount = 1;
+extern char *textBuffer;
 
 void HelpScreen_initStateCallback(int32_t tag) {
     struct StaticBuffer textFile = loadBinaryFileFromPath("Help.txt");
@@ -41,15 +41,13 @@ void HelpScreen_initStateCallback(int32_t tag) {
     cursorPosition = 0;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
-    memset (&textBuffer[0], ' ', 40 * 25);
+    memset (textBuffer, ' ', 40 * 25);
 
     currentBackgroundBitmap = loadBitmap("pattern.img");
 
-    mainText = &textBuffer[0];
-    memset (&textBuffer[0], 0, (40 * 25));
-    memcpy(&textBuffer[0], textFile.data, textFile.size);
-
-    HelpScreen_optionsCount = 1;
+    mainText = textBuffer;
+    memset (textBuffer, 0, (40 * 25));
+    memcpy(textBuffer, textFile.data, textFile.size);
 }
 
 void HelpScreen_initialPaintCallback(void) {

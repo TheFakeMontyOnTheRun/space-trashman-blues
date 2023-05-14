@@ -36,8 +36,8 @@ extern size_t biggestOption;
 int needToRedrawHUD = FALSE;
 const char *AbandonMission_Title = "Abandon game?";
 const char *AbandonMission_options[6] = {"Continue", "End game"};
-int AbandonMission_navigation[2] = {-1, kMainMenu};
-int AbandonMission_count = 2;
+const int AbandonMission_navigation[2] = {-1, kMainMenu};
+const int AbandonMission_count = 2;
 extern struct GameSnapshot gameSnapshot;
 
 void Crawler_initStateCallback(int32_t tag) {
@@ -253,10 +253,6 @@ void Crawler_repaintCallback() {
 
 enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     int returnCode;
-
-    if (kEnteringRandomBattle == currentPresentationState ) {
-        return kRandomBattle;
-    }
 
     if (showPromptToAbandonMission) {
 

@@ -28,6 +28,11 @@
 #include "MapWithCharKey.h"
 #include "Vec.h"
 
+
+extern enum EVisibility *visMap;
+extern struct Vec2i *distances;
+extern uint8_t **map;
+
 struct Vec2i transform(const enum EDirection from, const struct Vec2i currentPos) {
 
     struct Vec2i toReturn;
@@ -58,10 +63,7 @@ struct Vec2i transform(const enum EDirection from, const struct Vec2i currentPos
 }
 
 void castVisibility(const enum EDirection from,
-                    enum EVisibility *__restrict__ visMap,
-                    const uint8_t *__restrict__ occluders,
                     const struct Vec2i pos,
-                    struct Vec2i *__restrict__ distances,
                     const int cleanPrevious,
                     const struct MapWithCharKey *__restrict__ occluderTiles) {
 
@@ -123,7 +125,7 @@ void castVisibility(const enum EDirection from,
 
         if (getFromMap(
                 occluderTiles,
-                occluders[(transformed.y * MAP_SIZE) + transformed.x])) {
+                map[(transformed.y) ][ transformed.x])) {
             continue;
         }
 
