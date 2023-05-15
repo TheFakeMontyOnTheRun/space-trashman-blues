@@ -1,6 +1,12 @@
 //
 // Created by Daniel Monteiro on 04/01/2023.
 //
+#include "gba_video.h"
+#include "gba_systemcalls.h"
+#include "gba_input.h"
+#include "gba_interrupt.h"
+#include "fade.h"
+
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -21,7 +27,9 @@
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
 
+#define COOLDOWN 0x10
 int snapshotSignal = '.';
+int cooldown = 0;
 
 uint8_t getPaletteEntry(const uint32_t origin) {
 	uint8_t shade;
@@ -38,25 +46,102 @@ uint8_t getPaletteEntry(const uint32_t origin) {
 	return shade;
 }
 
+void VblankInterrupt() {
+    scanKeys();
+}
+
 void graphicsInit() {
 	int r, g, b;
+    uint16_t palette[256];
+    // Set up the interrupt handlers
+    irqInit();
+
+    irqSet( IRQ_VBLANK, VblankInterrupt);
+
+    // Enable Vblank Interrupt to allow VblankIntrWait
+    irqEnable(IRQ_VBLANK);
+
+    // Allow Interrupts
+    REG_IME = 1;
+
+    SetMode( MODE_4 | BG2_ON );		// screen mode & background to display
 
 	framebuffer = (uint8_t*)malloc(XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
+    memset(palette, 0, sizeof(uint16_t) * 256);
 
-	for (r = 0; r < 256; r += 16) {
-		for (g = 0; g < 256; g += 8) {
-			for (b = 0; b < 256; b += 8) {
-				uint32_t pixel = 0xFF000000 + (r << 16) + (g << 8) + (b);
-				uint8_t paletteEntry = getPaletteEntry(pixel);
-			}
-		}
-	}
+    for (r = 0; r < 256; r += 16) {
+        for (g = 0; g < 256; g += 8) {
+            for (b = 0; b < 256; b += 8) {
+                uint32_t pixel = 0xFF000000 + (r << 16) + (g << 8) + (b);
+                uint8_t paletteEntry = getPaletteEntry(pixel);
+                palette[paletteEntry] = RGB8(b, g, r);
+            }
+        }
+    }
 
-	defaultFont = loadBitmap("font.img");
+    FadeToPalette( palette, 60);
+
+	defaultFont = loadBitmap("fontags.img");
 	enableSmoothMovement = TRUE;
 }
 
 void handleSystemEvents() {
+
+    scanKeys();
+
+    if (cooldown > 0) {
+        cooldown--;
+    } else {
+
+        u16 keys = keysHeld();
+
+        if ((keys & KEY_UP)) {
+            cooldown = COOLDOWN;
+            mBufferedCommand = kCommandUp;
+        }
+        if ((keys & KEY_DOWN)) {
+            cooldown = COOLDOWN;
+            mBufferedCommand = kCommandDown;
+        }
+
+        if ((keys & KEY_LEFT)) {
+            cooldown = COOLDOWN;
+            mBufferedCommand = kCommandLeft;
+        }
+        if ((keys & KEY_RIGHT)) {
+            cooldown = COOLDOWN;
+            mBufferedCommand = kCommandRight;
+        }
+        if ((keys & KEY_A)) {
+            cooldown = COOLDOWN;
+            mBufferedCommand = kCommandFire1;
+        }
+
+        if ((keys & KEY_B)) {
+            cooldown = COOLDOWN;
+            mBufferedCommand = kCommandFire2;
+        }
+
+        if ((keys & KEY_SELECT)) {
+            cooldown = COOLDOWN;
+            mBufferedCommand = kCommandFire3;
+        }
+
+        if ((keys & KEY_START)) {
+            cooldown = COOLDOWN;
+            mBufferedCommand = kCommandFire4;
+        }
+
+        if ((keys & KEY_L)) {
+            cooldown = COOLDOWN;
+            mBufferedCommand = kCommandStrafeLeft;
+        }
+
+        if ((keys & KEY_R)) {
+            cooldown = COOLDOWN;
+            mBufferedCommand = kCommandStrafeRight;
+        }
+    }
 }
 
 void graphicsShutdown() {
@@ -67,6 +152,8 @@ void graphicsShutdown() {
 }
 
 void flipRenderer() {
+    memcpy((uint8_t*)0x06000000, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
+    VBlankIntrWait();
 }
 
 void clearRenderer() {}
