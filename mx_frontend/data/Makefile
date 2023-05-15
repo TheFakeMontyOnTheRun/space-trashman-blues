@@ -18,6 +18,7 @@ data:	$(PACKAGER) $(CRUNCHER)
 	ls assets/*.*  | xargs ./packer
 	mkdir -p output
 	cp ./data.pfs output/base.pfs
+	bin2c ../base.pfs ../base3d/include/basepfs.h basepfs
 	mv ./data.pfs ../base.pfs
 
 images:

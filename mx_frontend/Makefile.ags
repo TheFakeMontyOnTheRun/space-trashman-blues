@@ -30,7 +30,7 @@ ARCH	:=	-mthumb -mthumb-interwork
 CFLAGS	:=	-Wall -O3\
 			-mcpu=arm7tdmi -mtune=arm7tdmi\
  			-fomit-frame-pointer\
-			-ffast-math \
+			-ffast-math -Wno-switch\
 			$(ARCH)
 
 CFLAGS	+=	$(INCLUDE) -DAGS -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS
@@ -83,11 +83,11 @@ CFILES		:=			../menu/src/MainMenu.c \
                 		../base3d/src/LoadBitmap.c \
                 		../base3d/src/CRenderer.c \
                 		../base3d/src/VisibilityStrategy.c \
+                		../../common/src/ArrayPackedFileReader.c \
                 		../../common/src/Vec.c \
                 		../../common/src/Common.c \
                 		../../common/src/FixP.c \
                 		../../common/src/MapWithCharKey.c \
-                		../../common/src/PackedFileReader.c \
                 		../base3d/src/Events.c \
                 		../base3d/src/CRenderer_Rasterization.c \
                 		../base3d/src/EDirection_Utils.c \

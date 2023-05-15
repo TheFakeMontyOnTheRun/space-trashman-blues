@@ -52,22 +52,19 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
     uint8_t repetitions;
     size_t c;
     int d = 0;
-    size_t sizeInDisk = sizeOfFile(filename) - 4;
     int pixelIndex = 0;
     uint8_t buffer[NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
     uint8_t dummy;
-
     int x, y;
-    FILE *src = openBinaryFileFromPath(filename);
 
-    assert (fread(&dummy, 1, 1, src));
-    assert (fread(&dummy, 1, 1, src));
-    assert (fread(&dummy, 1, 1, src));
-    assert (fread(&dummy, 1, 1, src));
 
-#ifndef AGA5BPP
+    struct StaticBuffer staticBuffer = loadBinaryFileFromPath(filename);
+    uint8_t *src = staticBuffer.data;
+    size_t sizeInDisk = staticBuffer.size - 4;
+    src += 4;
+
     diskBuffer = (uint8_t *) calloc(1, sizeInDisk);
-    assert (fread(diskBuffer, sizeInDisk, 1, src));
+    memcpy( diskBuffer, src, sizeInDisk);
 
     for (c = 0; c < sizeInDisk; c += 2) {
         pixel = diskBuffer[c];
@@ -78,30 +75,6 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
         }
     }
     free(diskBuffer);
-#else
-    diskBuffer = (uint8_t *) calloc(1, sizeInDisk);
-    assert (fread(diskBuffer, sizeInDisk, 1, src));
-
-    for ( c = 0; c < sizeInDisk; c += 2 ) {
-        pixel = diskBuffer[ c ];
-        repetitions = diskBuffer[ c + 1 ];
-
-        uint8_t r	  = ( pixel & 192 ) >> 6;
-          uint8_t g	  = ( pixel & 56 ) >> 3;
-          uint8_t b	  = ( pixel & 7 );
-
-        for ( d = 0; d < repetitions; ++d ) {
-          if ( pixel == 199 ) {
-                buffer[ pixelIndex++ ] = 199;
-              } else {
-                buffer[ pixelIndex++ ] = ( ( ( r >> 1 ) << 4 ) ) + ( ( g >> 1 ) << 2 ) + ( b >> 1 );
-              }
-        }
-    }
-    free(diskBuffer);
-#endif
-
-    fclose(src);
 
     toReturn = &textures[usedTexture++];
 
@@ -168,32 +141,26 @@ struct Bitmap *loadBitmap(const char *__restrict__ filename) {
     struct Bitmap *toReturn =
             (struct Bitmap *) calloc(1, sizeof(struct Bitmap));
 
-    FILE *src = openBinaryFileFromPath(filename);
-    size_t size;
-    size_t sizeInDisk = sizeOfFile(filename) - 4;
+    struct StaticBuffer staticBuffer = loadBinaryFileFromPath(filename);
+    uint8_t *ptr = staticBuffer.data;
+    size_t sizeInDisk = staticBuffer.size - 4;
     int pixelIndex = 0;
     uint8_t *buffer;
-    uint8_t width = 0;
-    uint8_t height = 0;
+    uint16_t tmp;
+    tmp = *ptr++;
+    toReturn->width = (tmp & 0xFF) << 8;
+    tmp = *ptr++;
+    toReturn->width += tmp & 0xFF;
 
-    toReturn->width = 0;
-    assert (fread(&width, 1, 1, src));
-    toReturn->width += (width & 0xFF) << 8;
-    assert (fread(&width, 1, 1, src));
-    toReturn->width += width & 0xFF;
+    tmp = *ptr++;
+    toReturn->height = (tmp & 0xFF) << 8;
+    tmp = *ptr++;
+    toReturn->height += tmp & 0xFF;
 
-    toReturn->height = 0;
-    assert (fread(&height, 1, 1, src));
-    toReturn->height += (height & 0xFF) << 8;
-    assert (fread(&height, 1, 1, src));
-    toReturn->height += height & 0xFF;
-
-    size = toReturn->width * toReturn->height;
+    size_t size = toReturn->width * toReturn->height;
     buffer = (uint8_t *) calloc(1, sizeInDisk);
+    memcpy(buffer, ptr, sizeInDisk);
 
-    assert (fread(&buffer[0], sizeInDisk, 1, src));
-
-#ifndef AGA5BPP
     toReturn->data = (uint8_t *) calloc(1, size);
     for (c = 0; c < sizeInDisk; c += 2) {
         pixel = buffer[c];
@@ -204,27 +171,6 @@ struct Bitmap *loadBitmap(const char *__restrict__ filename) {
         }
     }
     free(buffer);
-#else
-    toReturn->data = (uint8_t *) calloc(1, size);
-    for ( c = 0; c < sizeInDisk; c += 2 ) {
-      pixel = buffer[ c ];
-      repetitions = buffer[ c + 1 ];
-        uint8_t r	  = ( pixel & 192 ) >> 6;
-        uint8_t g	  = ( pixel & 56 ) >> 3;
-        uint8_t b	  = ( pixel & 7 );
-
-      for ( d = 0; d < repetitions; ++d ) {
-          if ( pixel == 199 ) {
-            toReturn->data[ pixelIndex++ ] = 199;
-        } else {
-            toReturn->data[ pixelIndex++ ] = ( ( ( r >> 1 ) << 4 ) ) + ( ( g >> 1 ) << 2 ) + ( b >> 1 );
-        }
-      }
-    }
-    free(buffer);
-#endif
-
-    fclose(src);
 
     return toReturn;
 }
