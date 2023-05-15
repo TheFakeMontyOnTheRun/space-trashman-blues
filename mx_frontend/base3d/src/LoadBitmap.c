@@ -25,7 +25,7 @@
 #include "FixP.h"
 #include "VisibilityStrategy.h"
 
-struct Texture textures[2 * TOTAL_TEXTURES];
+struct Texture *textures;
 uint8_t usedTexture = 0;
 
 FixP_t lerpFix(const FixP_t v0, const FixP_t v1, const FixP_t dt, const FixP_t total) {

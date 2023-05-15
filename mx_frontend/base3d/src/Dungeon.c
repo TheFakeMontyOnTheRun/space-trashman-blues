@@ -407,7 +407,6 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     struct ObjectNode *head;
 
     gameSnapshot.should_continue = kCrawlerGameInProgress;
-    gameSnapshot.mapIndex = mapIndex;
     gameSnapshot.camera_rotation = 0;
 	playerCrawler.rotation = 0;
     memcpy (collisionMap, collisions, 256);

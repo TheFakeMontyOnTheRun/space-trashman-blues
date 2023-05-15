@@ -7,7 +7,6 @@ struct GameSnapshot {
 	uint8_t camera_rotation;
 	enum CrawlerState should_continue;
 	int turn;
-	int mapIndex;
 	struct Vec2i playerTarget;
 };
 
