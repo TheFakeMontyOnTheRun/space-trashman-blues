@@ -42,8 +42,6 @@ void CreditsScreen_initStateCallback(int32_t tag) {
     timeUntilNextState = 500;
     memset (textBuffer, ' ', 40 * 25);
 
-    currentBackgroundBitmap = loadBitmap("pattern.img");
-
     mainText = textBuffer;
     memset (textBuffer, 0, (40 * 25));
 	textFile = loadBinaryFileFromPath("Help.txt");
@@ -56,10 +54,6 @@ void CreditsScreen_initStateCallback(int32_t tag) {
 void CreditsScreen_initialPaintCallback(void) {
     dirtyLineY0 = 0;
     dirtyLineY1 = YRES_FRAMEBUFFER;
-
-    if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, currentBackgroundBitmap);
-    }
 }
 
 void CreditsScreen_repaintCallback(void) {
@@ -230,10 +224,6 @@ enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void CreditsScreen_unloadStateCallback() {
-    if (currentBackgroundBitmap != NULL) {
-        releaseBitmap(currentBackgroundBitmap);
-        currentBackgroundBitmap = NULL;
-        releaseBitmap(monty);
-        monty = NULL;
-    }
+    releaseBitmap(monty);
+    monty = NULL;
 }

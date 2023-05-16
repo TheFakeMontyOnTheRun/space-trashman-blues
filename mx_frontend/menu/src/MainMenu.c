@@ -53,11 +53,6 @@ void MainMenu_initStateCallback(int32_t tag) {
     dirtyLineY0 = 0;
     dirtyLineY1 = YRES_FRAMEBUFFER;
 
-    if (currentBackgroundBitmap != NULL) {
-        releaseBitmap(currentBackgroundBitmap);
-    }
-
-    currentBackgroundBitmap = loadBitmap("pattern.img");
     logoBitmap = loadBitmap("title.img");
     logo2Bitmap = loadBitmap("logo.img");
     currentPresentationState = kAppearing;
@@ -199,6 +194,4 @@ enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
 
 void MainMenu_unloadStateCallback() {
     releaseBitmap(logoBitmap);
-    releaseBitmap(currentBackgroundBitmap);
-    currentBackgroundBitmap = NULL;
 }

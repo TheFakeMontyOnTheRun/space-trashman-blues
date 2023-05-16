@@ -17,20 +17,10 @@ void dungeon_loadMap(
 		const char * __restrict__ collisions,
 		const int map);
 
-void addEffectSprite(const int x, const int y, const int billboard);
-
-int canSeeSpy(const struct Vec2i seer,
-			  int direction,
-			  const struct Vec2i target,
-			  int enemy);
-
-void setActor(const int x, const int y, const uint8_t actor);
 
 void setItem(const int x, const int y, const uint8_t item);
 
 void initRoom(int room);
-
-void goTo(int location);
 
 extern int enteredThru;
 

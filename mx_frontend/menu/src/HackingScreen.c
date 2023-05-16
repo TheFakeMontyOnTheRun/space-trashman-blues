@@ -47,7 +47,6 @@ void HackingScreen_initStateCallback(int32_t tag) {
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
 
-    currentBackgroundBitmap = loadBitmap("pattern.img");
     memset(&pins[0][0], 0xFF, sizeof(pins));
     
     pins[0][0] = 5;
@@ -65,10 +64,6 @@ void HackingScreen_initStateCallback(int32_t tag) {
 }
 
 void HackingScreen_initialPaintCallback(void) {
-
-    if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, currentBackgroundBitmap);
-    }
 }
 
 void HackingScreen_repaintCallback(void) {
@@ -206,9 +201,5 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void HackingScreen_unloadStateCallback() {
-    if (currentBackgroundBitmap != NULL) {
-        releaseBitmap(currentBackgroundBitmap);
-        currentBackgroundBitmap = NULL;
-    }
     enableSmoothMovement = wasSmoothMovementPreviouslyEnabled;
 }

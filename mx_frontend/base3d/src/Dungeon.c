@@ -58,7 +58,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
   
   int oldTurn = gameSnapshot.turn;
   struct WorldPosition oldPosition = *getPlayerPosition();
-  setActor(playerCrawler.position.x, playerCrawler.position.y, 0xFF);
     currentPlayerRoom = getPlayerRoom();
 
     {
@@ -287,8 +286,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
     gameSnapshot.camera_z = playerCrawler.position.y;
     gameSnapshot.camera_rotation = playerCrawler.rotation;
 
-    setActor(playerCrawler.position.x, playerCrawler.position.y, 0xFF);
-
     if (oldTurn != gameSnapshot.turn) {
 
         switch (getGameStatus()) {
@@ -378,7 +375,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 setPlayerPosition(&oldPosition);
                 playerCrawler.position.x = oldPosition.x;
                 playerCrawler.position.y = oldPosition.y;
-                setActor(playerCrawler.position.x, playerCrawler.position.y, 0xFF);
                 gameSnapshot.camera_x = playerCrawler.position.x;
                 gameSnapshot.camera_z = playerCrawler.position.y;
             }
@@ -416,7 +412,6 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
             char current = *ptr;
             map[y][x] = current;
             setItem(x, y, 0xFF);
-            setActor(x, y, 0xFF);
 
             if ((current == 's' && enteredThru == 0) ||
                 (current == 'w' && enteredThru == 1) ||
@@ -435,7 +430,6 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
 
     x = worldPos.x;
     y = worldPos.y;
-    setActor(x, y, 0xFF);
     setPlayerPosition(&worldPos);
     playerCrawler.position.x = x;
     playerCrawler.position.y = y;

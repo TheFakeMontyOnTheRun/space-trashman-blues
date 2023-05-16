@@ -77,7 +77,6 @@ void GameMenu_initStateCallback(int32_t tag) {
             drawFilter = TRUE;
             GameMenu_StateTitle = "End session?";
             mainText = textBuffer;
-            currentBackgroundBitmap = loadBitmap("pattern.img");
             GameMenu_optionsCount = 2;
             GameMenu_options = &GameMenu_EndGame_options[0];
             GameMenu_nextStateNavigation = &GameMenu_EndGame_nextStateNavigation[0];
@@ -89,7 +88,6 @@ void GameMenu_initStateCallback(int32_t tag) {
             mainText = textBuffer;
 
             GameMenu_StateTitle = "Victory";
-            currentBackgroundBitmap = loadBitmap("pattern.img");
 
             GameMenu_optionsCount = 1;
             GameMenu_options = &GameMenu_Story_options[0];
@@ -99,10 +97,7 @@ void GameMenu_initStateCallback(int32_t tag) {
         case kBadVictoryEpilogue:
             sprintf (textBuffer, "Victory! Too bad you didn't survive\nto tell the story\n\n\n\n\n\n");
             mainText = textBuffer;
-
             GameMenu_StateTitle = "Victory";
-            currentBackgroundBitmap = loadBitmap("pattern.img");
-
             GameMenu_optionsCount = 1;
             GameMenu_options = &GameMenu_Story_options[0];
             GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
@@ -115,10 +110,7 @@ void GameMenu_initStateCallback(int32_t tag) {
                      "worstscenario and now EVERYBODY is\n"
                      "dead (and that includes you!)\n\n\n\n\n");
             mainText = textBuffer;
-
             GameMenu_StateTitle = "Game Over";
-            currentBackgroundBitmap = loadBitmap("pattern.img");
-
             GameMenu_optionsCount = 1;
             GameMenu_options = &GameMenu_Story_options[0];
             GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
@@ -130,10 +122,7 @@ void GameMenu_initStateCallback(int32_t tag) {
                      "other people on the path of\n"
                      "destruction faulty reactor\n\n\n\n\n\n");
             mainText = textBuffer;
-
             GameMenu_StateTitle = "Game Over";
-            currentBackgroundBitmap = loadBitmap("pattern.img");
-
             GameMenu_optionsCount = 1;
             GameMenu_options = &GameMenu_Story_options[0];
             GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
@@ -142,10 +131,7 @@ void GameMenu_initStateCallback(int32_t tag) {
         case kPrologue:
             sprintf (textBuffer, "Out of prison");
             mainText = textBuffer;
-
             GameMenu_StateTitle = "Everything's changed...but still feels the same.";
-            currentBackgroundBitmap = loadBitmap("pattern.img");
-
             GameMenu_optionsCount = 1;
             GameMenu_options = &GameMenu_Story_options[0];
             GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
@@ -156,7 +142,6 @@ void GameMenu_initStateCallback(int32_t tag) {
             int index = 0;
 
             GameMenu_StateTitle = "CyDeck";
-            currentBackgroundBitmap = loadBitmap("pattern.img");
 
             head = getPlayerItems();
             
@@ -191,11 +176,6 @@ void GameMenu_initStateCallback(int32_t tag) {
 }
 
 void GameMenu_initialPaintCallback(void) {
-
-    if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, currentBackgroundBitmap);
-    }
-
     featuredBitmap = NULL;
 }
 
@@ -328,13 +308,8 @@ enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void GameMenu_unloadStateCallback() {
-    if (currentBackgroundBitmap != NULL) {
-        releaseBitmap(currentBackgroundBitmap);
-        currentBackgroundBitmap = NULL;
-
-        if (featuredBitmap) {
-            releaseBitmap(featuredBitmap);
-            featuredBitmap = NULL;
-        }
+    if (featuredBitmap) {
+        releaseBitmap(featuredBitmap);
+        featuredBitmap = NULL;
     }
 }

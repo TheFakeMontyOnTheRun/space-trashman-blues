@@ -79,9 +79,6 @@ void Crawler_initStateCallback(int32_t tag) {
     thisMissionName = getRoomDescription();
     thisMissionNameLen = (int16_t) (strlen(thisMissionName));
 
-    currentBackgroundBitmap = loadBitmap("pattern.img");
-
-
     if (tag == kPlayGame) {
         initRoom(getPlayerRoom());
     }
@@ -102,14 +99,10 @@ void Crawler_initialPaintCallback() {
 }
 
 void Crawler_repaintCallback() {
-
-
-
     if (showPromptToAbandonMission) {
         int c;
         int optionsHeight = 8 * (AbandonMission_count);
         turnStep = turnTarget;
-        drawRepeatBitmap(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, currentBackgroundBitmap);
 
         fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, 0, TRUE);
 
@@ -424,8 +417,4 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void Crawler_unloadStateCallback() {
-    if (currentBackgroundBitmap != NULL) {
-        releaseBitmap(currentBackgroundBitmap);
-        currentBackgroundBitmap = NULL;
-    }
 }

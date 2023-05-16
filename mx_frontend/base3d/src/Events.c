@@ -28,7 +28,6 @@
 #include "Dungeon.h"
 #include "SoundSystem.h"
 
-uint8_t *actorsInMap;
 extern uint8_t **map;
 extern uint8_t **mItems;
 int x = 0;
@@ -38,8 +37,6 @@ enum CrawlerState shouldContinue = kCrawlerGameInProgress;
 struct CActor actor;
 
 void clearMapCache() {
-    memset (actorsInMap, 0xFF, MAP_SIZE * MAP_SIZE);
-
     for (int c = 0; c < MAP_SIZE; ++c ) {
         memset (mItems[c], 0xFF, MAP_SIZE);
     }
@@ -67,10 +64,6 @@ void tickMission(enum ECommand cmd) {
     if (shouldContinue != kCrawlerGameInProgress) {
         gameTicks = 0;
     }
-}
-
-void setActor(const int x, const int y, uint8_t actor) {
-    actorsInMap[(MAP_SIZE * y) + x] = actor;
 }
 
 void setItem(const int x, const int y, uint8_t item) {

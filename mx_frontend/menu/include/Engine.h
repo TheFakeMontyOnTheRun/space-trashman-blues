@@ -25,7 +25,6 @@ extern int isRunning;
 
 extern long timeUntilNextState;
 extern enum EPresentationState currentPresentationState;
-extern struct Bitmap *currentBackgroundBitmap;
 
 extern int cursorPosition;
 extern enum EGameMenuState nextNavigationSelection;
@@ -108,7 +107,7 @@ void shutdownHW();
 extern int isRunning;
 extern long timeUntilNextState;
 extern enum EPresentationState currentPresentationState;
-extern struct Bitmap *currentBackgroundBitmap;
+
 extern enum EGameMenuState nextNavigationSelection;
 extern enum EGameMenuState currentGameMenuState;
 extern const char *mainText;

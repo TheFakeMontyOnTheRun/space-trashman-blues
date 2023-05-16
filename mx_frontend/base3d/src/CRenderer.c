@@ -47,8 +47,6 @@ struct Bitmap *defaultFont;
 #ifndef AGS
 uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
-uint8_t mActors[MAP_SIZE][MAP_SIZE];
-uint8_t mEffects[MAP_SIZE][MAP_SIZE];
 uint32_t palette[256];
 #else
 uint8_t *framebuffer;
@@ -67,7 +65,6 @@ struct Bitmap *mapTopLevel = NULL;
 struct Bitmap *backdrop = NULL;
 struct MapWithCharKey tileProperties;
 struct Vec2i cameraPosition;
-extern uint8_t *actorsInMap;
 uint8_t texturesUsed = 0;
 enum ECommand mBufferedCommand = kCommandNone;
 struct Texture *nativeTextures[TOTAL_TEXTURES];
@@ -228,17 +225,7 @@ void drawMap(const struct CActor *current) {
 
     for (z = 0; z < MAP_SIZE; ++z) {
         for (x = 0; x < MAP_SIZE; ++x) {
-            const uint8_t actor = actorsInMap[(MAP_SIZE * z) + x];
             const uint8_t item = mItems[z][x];
-#ifndef AGS
-            mActors[z][x] = 0xFF;
-            mEffects[z][x] = 0xFF;
-
-            if (actor != 0xFF) {
-                mActors[z][x] = actor;
-            }
-
-#endif
             mItems[z][x] = 0xFF;
 
             if (item != 0xFF) {

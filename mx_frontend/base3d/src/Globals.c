@@ -15,7 +15,6 @@
 #include "Core.h"
 #include "Engine.h"
 
-struct Bitmap *currentBackgroundBitmap = NULL;
 enum EGameMenuState currentGameMenuState = kResumeCurrentState;
 enum EGameMenuState menuStateToReturn = kResumeCurrentState;
 int cursorPosition = 0;

@@ -78,14 +78,12 @@ extern struct Vec2i *distances;
 extern uint8_t **mItems;
 extern uint8_t **map;
 extern uint8_t *collisionMap;
-extern uint8_t *actorsInMap;
 extern struct Texture* textures;
 
 void initHW(void) {
     textBuffer = (char*)calloc(40 * 25, 1);
     messageLogBuffer = (char*)calloc(256, 1);
     collisionMap = (uint8_t*)calloc(256, 1);
-    actorsInMap = (uint8_t*)calloc(MAP_SIZE * MAP_SIZE, 1);
     visMap = (enum EVisibility*)calloc(MAP_SIZE * MAP_SIZE, sizeof(enum EVisibility));
     distances = (struct Vec2i*)calloc(2 * MAP_SIZE * MAP_SIZE, sizeof(struct Vec2i));
     textures = (struct Texture*)calloc(TOTAL_TEXTURES, sizeof(struct Texture));
@@ -96,7 +94,6 @@ void initHW(void) {
         mItems[c] = (uint8_t*)calloc(MAP_SIZE, 1);
         map[c] = (uint8_t*)calloc(MAP_SIZE, 1);
     }
-
 
 #ifndef CD32
     initFileReader("base.pfs");

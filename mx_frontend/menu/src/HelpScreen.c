@@ -43,18 +43,13 @@ void HelpScreen_initStateCallback(int32_t tag) {
     timeUntilNextState = 500;
     memset (textBuffer, ' ', 40 * 25);
 
-    currentBackgroundBitmap = loadBitmap("pattern.img");
-
     mainText = textBuffer;
     memset (textBuffer, 0, (40 * 25));
     memcpy(textBuffer, textFile.data, textFile.size);
 }
 
 void HelpScreen_initialPaintCallback(void) {
-
-    if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, currentBackgroundBitmap);
-    }
+    fill(0, 0, (XRES_FRAMEBUFFER-1), (YRES_FRAMEBUFFER-1), getPaletteEntry(0xFF6cb1a3), 0);
 }
 
 void HelpScreen_repaintCallback(void) {
@@ -178,8 +173,4 @@ enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void HelpScreen_unloadStateCallback() {
-    if (currentBackgroundBitmap != NULL) {
-        releaseBitmap(currentBackgroundBitmap);
-        currentBackgroundBitmap = NULL;
-    }
 }
