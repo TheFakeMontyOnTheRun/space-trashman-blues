@@ -23,7 +23,7 @@
 #include "UI.h"
 #include "SoundSystem.h"
 
-#if !defined(ANDROID) && !defined(__EMSCRIPTEN__)
+#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && !defined(AGS)
 const char *MainMenu_options[4] = {
         "Play game", "Credits", "Help", "Quit"};
 
@@ -106,7 +106,10 @@ void MainMenu_repaintCallback(void) {
 
     drawBitmap(118, 45, logo2Bitmap, 1);
 
-    drawWindow(40 - biggestOption - 3, 25 - 4 - (optionsHeight / 8), biggestOption + 2, (optionsHeight / 8) + 2,
+    drawWindow(
+            (XRES_FRAMEBUFFER / 8) - (int) biggestOption - 3,
+            (YRES_FRAMEBUFFER / 8) - 3 - (optionsHeight / 8),
+            biggestOption + 2, (optionsHeight / 8) + 2,
                "Episode 0");
 
     for (c = 0; c < kMainMenuOptionsCount; ++c) {
@@ -119,12 +122,12 @@ void MainMenu_repaintCallback(void) {
 
         if (isCursor) {
             fill((uint16_t) (XRES_FRAMEBUFFER - (biggestOption * 8)) - 8 - 24,
-                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - 24,
+                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - (8 * 2),
                  (biggestOption * 8) + 16, 8, 0, FALSE);
         }
 
-        drawTextAt(40 - biggestOption + 1 - 3,
-                   (26 - kMainMenuOptionsCount) + c - 3,
+        drawTextAt((XRES_FRAMEBUFFER / 8) - biggestOption + 1 - 3,
+                   (((YRES_FRAMEBUFFER / 8) + 1) - kMainMenuOptionsCount) + c - 2,
                    &MainMenu_options[c][0], isCursor ? 200 : 0);
     }
 
