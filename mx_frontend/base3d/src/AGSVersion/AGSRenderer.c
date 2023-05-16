@@ -81,7 +81,7 @@ void graphicsInit() {
 
     FadeToPalette( palette, 60);
 
-	defaultFont = loadBitmap("fontags.img");
+	defaultFont = loadBitmap("font.img");
 	enableSmoothMovement = TRUE;
 }
 
