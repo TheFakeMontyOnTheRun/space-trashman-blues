@@ -137,8 +137,6 @@ void setMultiplier(CGSize size) {
         
         osxview = self;
         
-        srand(time(NULL));
-        
         initHW();
         enterState(kMainMenu);
         
