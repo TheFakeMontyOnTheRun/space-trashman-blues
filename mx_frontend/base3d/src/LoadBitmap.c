@@ -43,6 +43,12 @@ int lerpInt(const int v0, const int v1, const long t, const long total) {
 
 void clearTextures() {
     usedTexture = 0;
+    for (int c = 0; c < TOTAL_ITEMS; ++c ) {
+        if (itemSprites[c] != NULL) {
+            releaseBitmap(itemSprites[c]);
+            itemSprites[c] = NULL;
+        }
+    }
 }
 
 struct Texture *makeTextureFrom(const char *__restrict__ filename) {

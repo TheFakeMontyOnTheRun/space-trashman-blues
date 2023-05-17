@@ -165,12 +165,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     free(data.data);
 
     backdrop = loadBitmap("backdrop.img");
-
-    //item 0 is a dummy
-    for (c = 1; c < itemsCount; ++c) {
-        sprintf(&buffer[0], "%s.img", getItem(c)->name);
-        itemSprites[c] = loadBitmap(&buffer[0]);
-    }
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -931,6 +925,15 @@ void render(const long ms) {
                     tmp.mZ = position.mZ;
 
                     addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
+
+                    // lazy loading the item sprites
+                    // we can't preload it because...reasons on the NDS
+                    // perhaps some state machine issue? IDK. Placing this here works better for the NDS.
+                    if (itemSprites[itemsSnapshotElement] == NULL) {
+                        char buffer[64];
+                        sprintf(&buffer[0], "%s.img", getItem(itemsSnapshotElement)->name);
+                        itemSprites[itemsSnapshotElement] = loadBitmap(&buffer[0]);
+                    }
 
                     drawBillboardAt(tmp, itemSprites[itemsSnapshotElement]->data, one, 32);
                 }
