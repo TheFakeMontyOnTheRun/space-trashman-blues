@@ -104,7 +104,7 @@ void MainMenu_repaintCallback(void) {
 
     drawBitmap(0, 0, logoBitmap, 0);
 
-    drawBitmap(118, 45, logo2Bitmap, 1);
+    drawBitmap(XRES_FRAMEBUFFER - logo2Bitmap->width, logo2Bitmap->height / 2, logo2Bitmap, 1);
 
     drawWindow(
             (XRES_FRAMEBUFFER / 8) - (int) biggestOption - 3,
@@ -197,4 +197,5 @@ enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
 
 void MainMenu_unloadStateCallback() {
     releaseBitmap(logoBitmap);
+    releaseBitmap(logo2Bitmap);
 }

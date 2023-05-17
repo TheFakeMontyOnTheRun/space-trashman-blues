@@ -87,11 +87,13 @@ void Crawler_initStateCallback(int32_t tag) {
 void Crawler_initialPaintCallback() {
     fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, 0, FALSE);
 
-    fill(11 * 8 - 1, 12 * 8, 18 * 8 + 3, 8, 255, FALSE);
-    drawRect(11 * 8 - 1, 11 * 8 - 1, 18 * 8 + 2, 8 + 2, 255);
+    int textPosY = ((YRES_FRAMEBUFFER / 8) / 2) - 1;
 
-    drawTextAt(13, 13, "Loading", 0);
-    drawTextAt(13, 12, "Please wait...", 255);
+    fill((XRES_FRAMEBUFFER / 2) - (9 * 8) - 1, textPosY * 8, 18 * 8 + 3, 8, 255, FALSE);
+    drawRect((XRES_FRAMEBUFFER / 2) - (9 * 8) - 1, (textPosY  * 8 ) - 8 - 1, 18 * 8 + 2, 8 + 2, 255);
+
+    drawTextAt(((XRES_FRAMEBUFFER / 8) / 2)- 7, textPosY + 1, "Loading", 0);
+    drawTextAt(((XRES_FRAMEBUFFER / 8) / 2) - 7, textPosY, "Please wait...", 255);
 
     needToRedrawHUD = TRUE;
     needsToRedrawVisibleMeshes = TRUE;

@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdlib.h>
 
 #include "Enums.h"
 #include "FixP.h"
@@ -46,6 +47,7 @@ void HelpScreen_initStateCallback(int32_t tag) {
     mainText = textBuffer;
     memset (textBuffer, 0, (40 * 25));
     memcpy(textBuffer, textFile.data, textFile.size);
+    free(textFile.data);
 }
 
 void HelpScreen_initialPaintCallback(void) {
@@ -73,7 +75,7 @@ void HelpScreen_repaintCallback(void) {
             return;
         }
 
-        drawRect(160 - lerp320 / 2, ((lines + 3) * 8) / 2 - lerpLines / 2,
+        drawRect((XRES_FRAMEBUFFER / 2) - lerp320 / 2, ((lines + 3) * 8) / 2 - lerpLines / 2,
                  lerp320, lerpLines, 0);
 
         drawRect(XRES_FRAMEBUFFER - (len * 8) - 16 - 16 + (len * 8) / 2 - lerpLen8 / 2,
@@ -85,10 +87,10 @@ void HelpScreen_repaintCallback(void) {
     }
 
     if (mainText != NULL) {
-        drawTextWindow(1, 1, 40, lines + 3, "Help", mainText);
+        drawTextWindow(1, 1, XRES_FRAMEBUFFER / 8, lines + 3, "Help", mainText);
     }
 
-    drawWindow(40 - len - 3, 25 - (optionsHeight / 8) - 3, len + 2, (optionsHeight / 8) + 2, "");
+    drawWindow((XRES_FRAMEBUFFER / 8) - len - 3, ((YRES_FRAMEBUFFER / 8) + 1) - (optionsHeight / 8) - 3, len + 2, (optionsHeight / 8) + 2, "");
 
     for (c = 0; c < HelpScreen_optionsCount; ++c) {
 
@@ -100,11 +102,13 @@ void HelpScreen_repaintCallback(void) {
 
         if (isCursor) {
             fill(XRES_FRAMEBUFFER - (len * 8) - 16 - 8 - 8,
-                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - 8 - 8, (len * 8) + 16, 8,
+                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - (8 * 1),
+                 (len * 8) + 16,
+                 8,
                  0, FALSE);
         }
 
-        drawTextAt(40 - len - 2, (26 - HelpScreen_optionsCount) + c - 2,
+        drawTextAt((XRES_FRAMEBUFFER / 8) - len - 2, (((YRES_FRAMEBUFFER / 8) + 1) - HelpScreen_optionsCount) + c - 1,
                    &HelpScreen_options[c][0], isCursor ? 255 : 0);
     }
 }
