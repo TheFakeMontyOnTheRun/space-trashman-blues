@@ -57,10 +57,9 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
     uint8_t pixel;
     uint8_t repetitions;
     size_t c;
-    int d = 0;
+    int d;
     int pixelIndex = 0;
     uint8_t buffer[NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
-    uint8_t dummy;
     int x, y;
 
 
@@ -135,6 +134,8 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
         }
     }
 
+    free(staticBuffer.data);
+
     return toReturn;
 }
 
@@ -177,6 +178,7 @@ struct Bitmap *loadBitmap(const char *__restrict__ filename) {
         }
     }
     free(buffer);
+    free(staticBuffer.data);
 
     return toReturn;
 }
