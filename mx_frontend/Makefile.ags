@@ -144,6 +144,19 @@ all	: $(BUILD)
 clean:
 	@echo clean ...
 	@rm -fr $(BUILD) $(TARGET).elf $(TARGET).gba
+	rm -f menu/src/*.d
+	rm -f ../core/src/*.d
+	rm -f ../common/src/*.d
+	rm -f base3d/src/*.d
+	rm -f common/src/*.d
+	rm -f SoundSystem/*.d
+	rm -f menu/src/*.o
+	rm -f ../core/src/*.o
+	rm -f ../common/src/*.o
+	rm -f base3d/src/*.o
+	rm -f common/src/*.o
+	rm -f SoundSystem/*.o
+	rm -f base3d/src/AGSVersion/*.o
 
 #---------------------------------------------------------------------------------
 else
