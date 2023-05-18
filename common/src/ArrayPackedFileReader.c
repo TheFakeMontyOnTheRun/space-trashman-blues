@@ -48,7 +48,7 @@ struct StaticBuffer loadBinaryFileFromPath(const char * path) {
 
 	assert(FALSE);
 
-	found:
+found:
 
 	if (offset == 0) {
 		printf("failed to load %s\n", path);

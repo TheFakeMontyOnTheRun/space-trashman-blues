@@ -101,9 +101,9 @@ void MainMenu_repaintCallback(void) {
                  sizeX, sizeY, 0);
         return;
     }
-
+#ifndef AGS
     drawBitmap(0, 0, logoBitmap, 0);
-
+#endif
     drawBitmap(XRES_FRAMEBUFFER - logo2Bitmap->width, logo2Bitmap->height / 2, logo2Bitmap, 1);
 
     drawWindow(

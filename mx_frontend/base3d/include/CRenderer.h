@@ -4,9 +4,9 @@
 #define NATIVE_TEXTURE_SIZE 16
 
 #ifdef AGS
-#define XRES 216
+#define XRES 130
 #define YRES 160
-#define HALF_XRES 108
+#define HALF_XRES 65
 #define HALF_YRES 80
 #else
 #define XRES 216

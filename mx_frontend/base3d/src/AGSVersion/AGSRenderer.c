@@ -69,12 +69,12 @@ void graphicsInit() {
 	framebuffer = (uint8_t*)malloc(XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
     memset(palette, 0, sizeof(uint16_t) * 256);
 
-    for (r = 0; r < 256; r += 16) {
+    for (b = 0; b < 256; b += 16) {
         for (g = 0; g < 256; g += 8) {
-            for (b = 0; b < 256; b += 8) {
-                uint32_t pixel = 0xFF000000 + (r << 16) + (g << 8) + (b);
+            for (r = 0; r < 256; r += 8) {
+                uint32_t pixel = 0xFF000000 + (b << 16) + (g << 8) + (r);
                 uint8_t paletteEntry = getPaletteEntry(pixel);
-                palette[paletteEntry] = RGB8(b, g, r);
+                palette[paletteEntry] = RGB8(r - 0x38, g - 0x18, b - 0x10);
             }
         }
     }
@@ -124,12 +124,12 @@ void handleSystemEvents() {
 
         if ((keys & KEY_SELECT)) {
             cooldown = COOLDOWN;
-            mBufferedCommand = kCommandFire3;
+            mBufferedCommand = kCommandFire4;
         }
 
         if ((keys & KEY_START)) {
             cooldown = COOLDOWN;
-            mBufferedCommand = kCommandFire4;
+            mBufferedCommand = kCommandFire3;
         }
 
         if ((keys & KEY_L)) {

@@ -107,7 +107,7 @@ void GameMenu_initStateCallback(int32_t tag) {
             sprintf (textBuffer,
                      "You failed! While you fled the ship\n"
                      "alive, you failed to prevent the \n"
-                     "worstscenario and now EVERYBODY is\n"
+                     "worst scenario and now EVERYBODY is\n"
                      "dead (and that includes you!)\n\n\n\n\n");
             mainText = textBuffer;
             GameMenu_StateTitle = "Game Over";
@@ -173,10 +173,12 @@ void GameMenu_initStateCallback(int32_t tag) {
             biggestOption = len;
         }
     }
+
+    featuredBitmap = NULL;
 }
 
 void GameMenu_initialPaintCallback(void) {
-    featuredBitmap = NULL;
+    fill(0, 0, (XRES_FRAMEBUFFER-1), (YRES_FRAMEBUFFER-1), getPaletteEntry(0xFF6cb1a3), 0);
 }
 
 void GameMenu_repaintCallback(void) {
@@ -209,10 +211,10 @@ void GameMenu_repaintCallback(void) {
     }
 
     if (mainText != NULL) {
-        drawTextWindow(1, 1, 38, 20, mainText, textBuffer);
+        drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, (YRES_FRAMEBUFFER / 8) - 5, GameMenu_StateTitle, textBuffer);
     }
 
-    drawWindow(40 - biggestOption - 3, 25 - (optionsHeight / 8) - 3, biggestOption + 2, (optionsHeight / 8) + 2,
+    drawWindow((XRES_FRAMEBUFFER / 8) - biggestOption - 3, (YRES_FRAMEBUFFER / 8) - (optionsHeight / 8) - 3, biggestOption + 2, (optionsHeight / 8) + 2,
                GameMenu_StateTitle);
 
     for (c = 0; c < GameMenu_optionsCount; ++c) {
@@ -232,7 +234,7 @@ void GameMenu_repaintCallback(void) {
         }
 
         drawTextAt(
-                40 - biggestOption - 2, (26 - GameMenu_optionsCount) + c - 2,
+                (XRES_FRAMEBUFFER / 8) - biggestOption - 2, (((YRES_FRAMEBUFFER / 8) + 1) - GameMenu_optionsCount) + c - 2,
                 &GameMenu_options[c][0],
                 isCursor ? (shouldGreyOut ? 128 : 200) : (shouldGreyOut ? 64 : 0));
     }
