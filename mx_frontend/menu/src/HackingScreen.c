@@ -87,9 +87,7 @@ void HackingScreen_repaintCallback(void) {
         for (disk = 0; disk < 6; ++disk) {
             
             int diskIndex = pins[pin][disk];
-            
-            
-            char *funcName = (disk >= pinTop[pin]) ? NULL : functionNames[diskIndex];
+            const char *funcName = (disk >= pinTop[pin]) ? NULL : functionNames[diskIndex];
                 
             if (isCursorOnThisPin) {
                 isSelected = 128;

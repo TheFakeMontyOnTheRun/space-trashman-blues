@@ -85,9 +85,9 @@ void Crawler_initStateCallback(int32_t tag) {
 }
 
 void Crawler_initialPaintCallback() {
-    fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, 0, FALSE);
-
     int textPosY = ((YRES_FRAMEBUFFER / 8) / 2) - 1;
+
+    fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, 0, FALSE);
 
     fill((XRES_FRAMEBUFFER / 2) - (9 * 8) - 1, textPosY * 8, 18 * 8 + 3, 8, 255, FALSE);
     drawRect((XRES_FRAMEBUFFER / 2) - (9 * 8) - 1, (textPosY  * 8 ) - 8 - 1, 18 * 8 + 2, 8 + 2, 255);

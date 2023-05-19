@@ -37,7 +37,8 @@ enum CrawlerState shouldContinue = kCrawlerGameInProgress;
 struct CActor actor;
 
 void clearMapCache() {
-    for (int c = 0; c < MAP_SIZE; ++c ) {
+    int c;
+    for (c = 0; c < MAP_SIZE; ++c ) {
         memset (mItems[c], 0xFF, MAP_SIZE);
     }
 }

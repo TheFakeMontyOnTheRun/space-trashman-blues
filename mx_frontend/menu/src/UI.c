@@ -119,10 +119,9 @@ void redrawHUD(void) {
         if (itemPtr != NULL) {
             if (line == currentSelectedItem) {
                 char textBuffer[255];
+                int itemIndex = itemPtr->index;
                 sprintf(&textBuffer[0], "%s", itemPtr->name);
                 textBuffer[14] = 0;
-
-                int itemIndex = itemPtr->index;
 
                 // lazy loading the item sprites
                 // we can't preload it because...reasons on the NDS

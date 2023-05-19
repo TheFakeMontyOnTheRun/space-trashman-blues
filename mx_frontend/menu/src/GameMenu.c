@@ -34,7 +34,7 @@
 #define TEXT_BUFFER_SIZE (40 * 25)
 
 const char **GameMenu_options;
-enum EGameMenuState *GameMenu_nextStateNavigation;
+const enum EGameMenuState *GameMenu_nextStateNavigation;
 const char *GameMenu_StateTitle;
 struct Bitmap *featuredBitmap = NULL;
 

@@ -138,8 +138,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     char *head;
     char *end;
     char *nameStart;
-    char buffer[256];
-	int c;
 
     sprintf (tilesFilename, "tiles%d.lst", levelNumber);
 
@@ -168,8 +166,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 }
 
 void updateCursorForRenderer(const int x, const int z) {
-    needsToRedrawVisibleMeshes = TRUE;
-    visibilityCached = FALSE;
 }
 
 void drawMap(const struct CActor *current) {

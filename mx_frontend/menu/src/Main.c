@@ -81,6 +81,7 @@ extern uint8_t *collisionMap;
 extern struct Texture* textures;
 
 void initHW(void) {
+    int c;
     textBuffer = (char*)calloc(40 * 25, 1);
     messageLogBuffer = (char*)calloc(256, 1);
     collisionMap = (uint8_t*)calloc(256, 1);
@@ -90,7 +91,7 @@ void initHW(void) {
     mItems = (uint8_t**)calloc(MAP_SIZE, sizeof(uint8_t*));
     map = (uint8_t**)calloc(MAP_SIZE, sizeof(uint8_t*));
 
-    for ( int c = 0; c < MAP_SIZE; ++c ) {
+    for ( c = 0; c < MAP_SIZE; ++c ) {
         mItems[c] = (uint8_t*)calloc(MAP_SIZE, 1);
         map[c] = (uint8_t*)calloc(MAP_SIZE, 1);
     }
