@@ -166,6 +166,8 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 }
 
 void updateCursorForRenderer(const int x, const int z) {
+    needsToRedrawVisibleMeshes = TRUE;
+    visibilityCached = FALSE;
 }
 
 void drawMap(const struct CActor *current) {
