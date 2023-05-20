@@ -1,8 +1,6 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#define NATIVE_TEXTURE_SIZE 16
-
 #ifdef AGS
 #define XRES 130
 #define YRES 160

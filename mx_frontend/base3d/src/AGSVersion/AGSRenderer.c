@@ -27,6 +27,10 @@
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
 
+#define VRAM_PAGE_A ((uint8_t*)0x6000000)
+#define VRAM_PAGE_B ((uint8_t*)0x600A000)
+
+
 #define COOLDOWN 0x10
 int snapshotSignal = '.';
 int cooldown = 0;
@@ -152,7 +156,7 @@ void graphicsShutdown() {
 }
 
 void flipRenderer() {
-    memcpy((uint8_t*)0x06000000, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
+    memcpy(VRAM_PAGE_A, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
     VBlankIntrWait();
 }
 
