@@ -89,6 +89,9 @@ struct Mesh {
     uint8_t colour;
 };
 
+extern uint8_t *map;
+
+#define LEVEL_MAP(x, y) map[ ( (MAP_SIZE) * (y) ) + (x) ]
 
 void graphicsInit(void);
 

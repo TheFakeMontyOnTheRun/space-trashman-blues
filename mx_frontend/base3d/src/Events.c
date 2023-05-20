@@ -28,7 +28,6 @@
 #include "Dungeon.h"
 #include "SoundSystem.h"
 
-extern uint8_t **map;
 extern uint8_t **mItems;
 int x = 0;
 int z = 0;
@@ -123,10 +122,9 @@ int loopTick(enum ECommand command) {
 
         if (gameTicks != 0) {
             yCameraOffset = ((struct CTile3DProperties *) getFromMap(&tileProperties,
-                                                                     map[z][x]))->mFloorHeight -
+                                                                     LEVEL_MAP(x, z) ))->mFloorHeight -
                             ((struct CTile3DProperties *) getFromMap(&tileProperties,
-                                                                     map[(actor.position.y)]
-                                                                             [actor.position.x]))->mFloorHeight;
+                                                                     LEVEL_MAP(actor.position.x, actor.position.y)))->mFloorHeight;
         } else {
             yCameraOffset = 0;
         }

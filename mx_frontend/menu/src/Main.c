@@ -76,7 +76,6 @@ extern char *messageLogBuffer;
 extern enum EVisibility *visMap;
 extern struct Vec2i *distances;
 extern uint8_t **mItems;
-extern uint8_t **map;
 extern uint8_t *collisionMap;
 extern struct Texture* textures;
 
@@ -89,11 +88,10 @@ void initHW(void) {
     distances = (struct Vec2i*)calloc(2 * MAP_SIZE * MAP_SIZE, sizeof(struct Vec2i));
     textures = (struct Texture*)calloc(TOTAL_TEXTURES, sizeof(struct Texture));
     mItems = (uint8_t**)calloc(MAP_SIZE, sizeof(uint8_t*));
-    map = (uint8_t**)calloc(MAP_SIZE, sizeof(uint8_t*));
+    map = (uint8_t*)calloc(MAP_SIZE * MAP_SIZE, sizeof(uint8_t*));
 
     for ( c = 0; c < MAP_SIZE; ++c ) {
         mItems[c] = (uint8_t*)calloc(MAP_SIZE, 1);
-        map[c] = (uint8_t*)calloc(MAP_SIZE, 1);
     }
 
 #ifndef CD32

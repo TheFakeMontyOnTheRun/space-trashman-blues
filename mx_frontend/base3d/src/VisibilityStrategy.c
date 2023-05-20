@@ -31,7 +31,6 @@
 
 extern enum EVisibility *visMap;
 extern struct Vec2i *distances;
-extern uint8_t **map;
 
 struct Vec2i transform(const enum EDirection from, const struct Vec2i currentPos) {
 
@@ -125,7 +124,7 @@ void castVisibility(const enum EDirection from,
 
         if (getFromMap(
                 occluderTiles,
-                map[(transformed.y) ][ transformed.x])) {
+                LEVEL_MAP(transformed.x, transformed.y))) {
             continue;
         }
 
