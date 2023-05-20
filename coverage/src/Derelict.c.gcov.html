@@ -31,18 +31,18 @@
             <td class="headerValue">lcov-output.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">340</td>
             <td class="headerCovTableEntry">368</td>
-            <td class="headerCovTableEntry">368</td>
-            <td class="headerCovTableEntryHi">100.0 %</td>
+            <td class="headerCovTableEntryHi">92.4 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2023-05-20 00:54:14</td>
+            <td class="headerValue">2023-05-20 17:41:04</td>
             <td></td>
             <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">12</td>
             <td class="headerCovTableEntry">19</td>
-            <td class="headerCovTableEntry">19</td>
-            <td class="headerCovTableEntryHi">100.0 %</td>
+            <td class="headerCovTableEntryLo">63.2 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -81,31 +81,31 @@
 <a name="19"><span class="lineNum">      19 </span>            : </a>
 <a name="20"><span class="lineNum">      20 </span>            : uint8_t accessGrantedToSafe = FALSE;</a>
 <a name="21"><span class="lineNum">      21 </span>            : </a>
-<a name="22"><span class="lineNum">      22 </span><span class="lineCov">         21 : void updateRankFromKeycards(void) {</span></a>
-<a name="23"><span class="lineNum">      23 </span><span class="lineCov">         21 :         uint8_t rank = 0;</span></a>
+<a name="22"><span class="lineNum">      22 </span><span class="lineCov">         16 : void updateRankFromKeycards(void) {</span></a>
+<a name="23"><span class="lineNum">      23 </span><span class="lineCov">         16 :         uint8_t rank = 0;</span></a>
 <a name="24"><span class="lineNum">      24 </span>            : </a>
-<a name="25"><span class="lineNum">      25 </span><span class="lineCov">         21 :         if (playerHasObject(&quot;low-rank-keycard&quot;)) {</span></a>
-<a name="26"><span class="lineNum">      26 </span><span class="lineCov">          9 :                 rank = 1;</span></a>
+<a name="25"><span class="lineNum">      25 </span><span class="lineCov">         16 :         if (playerHasObject(&quot;low-rank-keycard&quot;)) {</span></a>
+<a name="26"><span class="lineNum">      26 </span><span class="lineCov">          7 :                 rank = 1;</span></a>
 <a name="27"><span class="lineNum">      27 </span>            :         }</a>
 <a name="28"><span class="lineNum">      28 </span>            : </a>
-<a name="29"><span class="lineNum">      29 </span><span class="lineCov">         21 :         if (playerHasObject(&quot;hacked-keycard&quot;)) {</span></a>
-<a name="30"><span class="lineNum">      30 </span><span class="lineCov">          4 :                 rank = 2;</span></a>
+<a name="29"><span class="lineNum">      29 </span><span class="lineCov">         16 :         if (playerHasObject(&quot;hacked-keycard&quot;)) {</span></a>
+<a name="30"><span class="lineNum">      30 </span><span class="lineNoCov">          0 :                 rank = 2;</span></a>
 <a name="31"><span class="lineNum">      31 </span>            :         }</a>
 <a name="32"><span class="lineNum">      32 </span>            : </a>
-<a name="33"><span class="lineNum">      33 </span><span class="lineCov">         21 :         if (playerHasObject(&quot;high-rank-keycard&quot;)) {</span></a>
+<a name="33"><span class="lineNum">      33 </span><span class="lineCov">         16 :         if (playerHasObject(&quot;high-rank-keycard&quot;)) {</span></a>
 <a name="34"><span class="lineNum">      34 </span><span class="lineCov">          2 :                 rank = 3;</span></a>
 <a name="35"><span class="lineNum">      35 </span>            :         }</a>
 <a name="36"><span class="lineNum">      36 </span>            : </a>
-<a name="37"><span class="lineNum">      37 </span><span class="lineCov">         21 :         if (playerHasObject(&quot;root-keycard&quot;)) {</span></a>
+<a name="37"><span class="lineNum">      37 </span><span class="lineCov">         16 :         if (playerHasObject(&quot;root-keycard&quot;)) {</span></a>
 <a name="38"><span class="lineNum">      38 </span><span class="lineCov">          4 :                 rank = 4;</span></a>
 <a name="39"><span class="lineNum">      39 </span>            :         }</a>
 <a name="40"><span class="lineNum">      40 </span>            : </a>
-<a name="41"><span class="lineNum">      41 </span><span class="lineCov">         21 :         setPlayerRank(rank);</span></a>
-<a name="42"><span class="lineNum">      42 </span><span class="lineCov">         21 : }</span></a>
+<a name="41"><span class="lineNum">      41 </span><span class="lineCov">         16 :         setPlayerRank(rank);</span></a>
+<a name="42"><span class="lineNum">      42 </span><span class="lineCov">         16 : }</span></a>
 <a name="43"><span class="lineNum">      43 </span>            : </a>
-<a name="44"><span class="lineNum">      44 </span><span class="lineCov">         14 : void keycardPickCallback(struct Item *item) {</span></a>
-<a name="45"><span class="lineNum">      45 </span><span class="lineCov">         14 :         updateRankFromKeycards();</span></a>
-<a name="46"><span class="lineNum">      46 </span><span class="lineCov">         14 : }</span></a>
+<a name="44"><span class="lineNum">      44 </span><span class="lineCov">          9 : void keycardPickCallback(struct Item *item) {</span></a>
+<a name="45"><span class="lineNum">      45 </span><span class="lineCov">          9 :         updateRankFromKeycards();</span></a>
+<a name="46"><span class="lineNum">      46 </span><span class="lineCov">          9 : }</span></a>
 <a name="47"><span class="lineNum">      47 </span>            : </a>
 <a name="48"><span class="lineNum">      48 </span>            : </a>
 <a name="49"><span class="lineNum">      49 </span><span class="lineCov">          7 : void keycardDropCallback(struct Item *item) {</span></a>
@@ -245,65 +245,65 @@
 <a name="183"><span class="lineNum">     183 </span><span class="lineCov">          1 : }</span></a>
 <a name="184"><span class="lineNum">     184 </span>            : </a>
 <a name="185"><span class="lineNum">     185 </span>            : </a>
-<a name="186"><span class="lineNum">     186 </span><span class="lineCov">          1 : void cantBeUsedCallback(struct Item *item) {</span></a>
-<a name="187"><span class="lineNum">     187 </span><span class="lineCov">          1 :         defaultLogger(&quot;You can't use it like this.&quot;);</span></a>
-<a name="188"><span class="lineNum">     188 </span><span class="lineCov">          1 : }</span></a>
+<a name="186"><span class="lineNum">     186 </span><span class="lineNoCov">          0 : void cantBeUsedCallback(struct Item *item) {</span></a>
+<a name="187"><span class="lineNum">     187 </span><span class="lineNoCov">          0 :         defaultLogger(&quot;You can't use it like this.&quot;);</span></a>
+<a name="188"><span class="lineNum">     188 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="189"><span class="lineNum">     189 </span>            : </a>
-<a name="190"><span class="lineNum">     190 </span><span class="lineCov">          1 : void cantBeUsedWithOthersCallback(struct Item *item1, struct Item *item2) {</span></a>
-<a name="191"><span class="lineNum">     191 </span><span class="lineCov">          1 :         defaultLogger(&quot;Nothing happens.&quot;);</span></a>
-<a name="192"><span class="lineNum">     192 </span><span class="lineCov">          1 : }</span></a>
+<a name="190"><span class="lineNum">     190 </span><span class="lineNoCov">          0 : void cantBeUsedWithOthersCallback(struct Item *item1, struct Item *item2) {</span></a>
+<a name="191"><span class="lineNum">     191 </span><span class="lineNoCov">          0 :         defaultLogger(&quot;Nothing happens.&quot;);</span></a>
+<a name="192"><span class="lineNum">     192 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="193"><span class="lineNum">     193 </span>            : </a>
-<a name="194"><span class="lineNum">     194 </span><span class="lineCov">          1 : void cantToggleCallback(struct Item *item) {</span></a>
-<a name="195"><span class="lineNum">     195 </span><span class="lineCov">          1 :         defaultLogger(&quot;Can't disable this.&quot;);</span></a>
-<a name="196"><span class="lineNum">     196 </span><span class="lineCov">          1 : }</span></a>
+<a name="194"><span class="lineNum">     194 </span><span class="lineNoCov">          0 : void cantToggleCallback(struct Item *item) {</span></a>
+<a name="195"><span class="lineNum">     195 </span><span class="lineNoCov">          0 :         defaultLogger(&quot;Can't disable this.&quot;);</span></a>
+<a name="196"><span class="lineNum">     196 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="197"><span class="lineNum">     197 </span>            : </a>
-<a name="198"><span class="lineNum">     198 </span><span class="lineCov">          1 : void useObjectToggleCallback(struct Item *item) {</span></a>
-<a name="199"><span class="lineNum">     199 </span><span class="lineCov">          1 :         item-&gt;active = !item-&gt;active;</span></a>
-<a name="200"><span class="lineNum">     200 </span><span class="lineCov">          1 : }</span></a>
+<a name="198"><span class="lineNum">     198 </span><span class="lineNoCov">          0 : void useObjectToggleCallback(struct Item *item) {</span></a>
+<a name="199"><span class="lineNum">     199 </span><span class="lineNoCov">          0 :         item-&gt;active = !item-&gt;active;</span></a>
+<a name="200"><span class="lineNum">     200 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="201"><span class="lineNum">     201 </span>            : </a>
-<a name="202"><span class="lineNum">     202 </span><span class="lineCov">          3 : void useCommWithRank(struct Item *item) {</span></a>
+<a name="202"><span class="lineNum">     202 </span><span class="lineNoCov">          0 : void useCommWithRank(struct Item *item) {</span></a>
 <a name="203"><span class="lineNum">     203 </span>            : </a>
-<a name="204"><span class="lineNum">     204 </span><span class="lineCov">          3 :         if (getPlayerRank() &lt;= 1) {</span></a>
-<a name="205"><span class="lineNum">     205 </span><span class="lineCov">          2 :                 defaultLogger(&quot;Insufficient rank to access&quot;);</span></a>
-<a name="206"><span class="lineNum">     206 </span><span class="lineCov">          2 :                 return;</span></a>
+<a name="204"><span class="lineNum">     204 </span><span class="lineNoCov">          0 :         if (getPlayerRank() &lt;= 1) {</span></a>
+<a name="205"><span class="lineNum">     205 </span><span class="lineNoCov">          0 :                 defaultLogger(&quot;Insufficient rank to access&quot;);</span></a>
+<a name="206"><span class="lineNum">     206 </span><span class="lineNoCov">          0 :                 return;</span></a>
 <a name="207"><span class="lineNum">     207 </span>            :         }</a>
-<a name="208"><span class="lineNum">     208 </span><span class="lineCov">          1 :         defaultLogger(&quot;Computer core rebooted&quot;);</span></a>
-<a name="209"><span class="lineNum">     209 </span><span class="lineCov">          1 :         item-&gt;active = !item-&gt;active;</span></a>
+<a name="208"><span class="lineNum">     208 </span><span class="lineNoCov">          0 :         defaultLogger(&quot;Computer core rebooted&quot;);</span></a>
+<a name="209"><span class="lineNum">     209 </span><span class="lineNoCov">          0 :         item-&gt;active = !item-&gt;active;</span></a>
 <a name="210"><span class="lineNum">     210 </span>            : }</a>
 <a name="211"><span class="lineNum">     211 </span>            : </a>
 <a name="212"><span class="lineNum">     212 </span>            : /**</a>
 <a name="213"><span class="lineNum">     213 </span>            :  * TODO: change name for this function</a>
 <a name="214"><span class="lineNum">     214 </span>            :  * @param item</a>
 <a name="215"><span class="lineNum">     215 </span>            :  */</a>
-<a name="216"><span class="lineNum">     216 </span><span class="lineCov">          2 : void useComputerRack(struct Item *item) {</span></a>
+<a name="216"><span class="lineNum">     216 </span><span class="lineNoCov">          0 : void useComputerRack(struct Item *item) {</span></a>
 <a name="217"><span class="lineNum">     217 </span>            : </a>
-<a name="218"><span class="lineNum">     218 </span><span class="lineCov">          2 :         if (accessGrantedToSafe) {</span></a>
-<a name="219"><span class="lineNum">     219 </span><span class="lineCov">          1 :                 defaultLogger(&quot;Safe unlocked&quot;);</span></a>
-<a name="220"><span class="lineNum">     220 </span><span class="lineCov">          1 :                 addToRoom(&quot;situation-room&quot;, getItemNamed(&quot;root-keycard&quot;));</span></a>
-<a name="221"><span class="lineNum">     221 </span><span class="lineCov">          1 :                 return;</span></a>
+<a name="218"><span class="lineNum">     218 </span><span class="lineNoCov">          0 :         if (accessGrantedToSafe) {</span></a>
+<a name="219"><span class="lineNum">     219 </span><span class="lineNoCov">          0 :                 defaultLogger(&quot;Safe unlocked&quot;);</span></a>
+<a name="220"><span class="lineNum">     220 </span><span class="lineNoCov">          0 :                 addToRoom(&quot;situation-room&quot;, getItemNamed(&quot;root-keycard&quot;));</span></a>
+<a name="221"><span class="lineNum">     221 </span><span class="lineNoCov">          0 :                 return;</span></a>
 <a name="222"><span class="lineNum">     222 </span>            :         }</a>
 <a name="223"><span class="lineNum">     223 </span>            : </a>
-<a name="224"><span class="lineNum">     224 </span><span class="lineCov">          1 :         defaultLogger(&quot;Safe secured&quot;);</span></a>
+<a name="224"><span class="lineNum">     224 </span><span class="lineNoCov">          0 :         defaultLogger(&quot;Safe secured&quot;);</span></a>
 <a name="225"><span class="lineNum">     225 </span>            : }</a>
 <a name="226"><span class="lineNum">     226 </span>            : </a>
-<a name="227"><span class="lineNum">     227 </span><span class="lineCov">          1 : void reactorValveCallback(struct Item *item) {</span></a>
-<a name="228"><span class="lineNum">     228 </span><span class="lineCov">          1 :         setGameStatus(kBadVictory);</span></a>
-<a name="229"><span class="lineNum">     229 </span><span class="lineCov">          1 : }</span></a>
+<a name="227"><span class="lineNum">     227 </span><span class="lineNoCov">          0 : void reactorValveCallback(struct Item *item) {</span></a>
+<a name="228"><span class="lineNum">     228 </span><span class="lineNoCov">          0 :         setGameStatus(kBadVictory);</span></a>
+<a name="229"><span class="lineNum">     229 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="230"><span class="lineNum">     230 </span>            : </a>
 <a name="231"><span class="lineNum">     231 </span>            : </a>
-<a name="232"><span class="lineNum">     232 </span><span class="lineCov">         50 : void initStation(void) {</span></a>
+<a name="232"><span class="lineNum">     232 </span><span class="lineCov">         43 : void initStation(void) {</span></a>
 <a name="233"><span class="lineNum">     233 </span>            : </a>
 <a name="234"><span class="lineNum">     234 </span>            :         struct Item *newItem;</a>
 <a name="235"><span class="lineNum">     235 </span>            :         int8_t connections[6];</a>
-<a name="236"><span class="lineNum">     236 </span><span class="lineCov">         50 :         accessGrantedToSafe = FALSE;</span></a>
+<a name="236"><span class="lineNum">     236 </span><span class="lineCov">         43 :         accessGrantedToSafe = FALSE;</span></a>
 <a name="237"><span class="lineNum">     237 </span>            : </a>
-<a name="238"><span class="lineNum">     238 </span><span class="lineCov">         50 :         initCore();</span></a>
+<a name="238"><span class="lineNum">     238 </span><span class="lineCov">         43 :         initCore();</span></a>
 <a name="239"><span class="lineNum">     239 </span>            : </a>
 <a name="240"><span class="lineNum">     240 </span>            :         /*Rooms*/</a>
 <a name="241"><span class="lineNum">     241 </span>            :         /* 1 */</a>
-<a name="242"><span class="lineNum">     242 </span><span class="lineCov">         50 :         memset(&amp;connections[0], 0, 6 * sizeof(int8_t));</span></a>
-<a name="243"><span class="lineNum">     243 </span><span class="lineCov">         50 :         connections[0] = 2;</span></a>
-<a name="244"><span class="lineNum">     244 </span><span class="lineCov">         50 :         addRoom(</span></a>
+<a name="242"><span class="lineNum">     242 </span><span class="lineCov">         43 :         memset(&amp;connections[0], 0, 6 * sizeof(int8_t));</span></a>
+<a name="243"><span class="lineNum">     243 </span><span class="lineCov">         43 :         connections[0] = 2;</span></a>
+<a name="244"><span class="lineNum">     244 </span><span class="lineCov">         43 :         addRoom(</span></a>
 <a name="245"><span class="lineNum">     245 </span>            :                         &quot;lss-daedalus&quot;,</a>
 <a name="246"><span class="lineNum">     246 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="247"><span class="lineNum">     247 </span>            :         &quot;The salvage operations vehicle. It's\n&quot;</a>
@@ -315,10 +315,10 @@
 <a name="253"><span class="lineNum">     253 </span>            :                         32, 32, 0, connections);</a>
 <a name="254"><span class="lineNum">     254 </span>            : </a>
 <a name="255"><span class="lineNum">     255 </span>            :         /* 2 */</a>
-<a name="256"><span class="lineNum">     256 </span><span class="lineCov">         50 :         connections[2] = 1;</span></a>
-<a name="257"><span class="lineNum">     257 </span><span class="lineCov">         50 :         connections[1] = 6;</span></a>
-<a name="258"><span class="lineNum">     258 </span><span class="lineCov">         50 :         connections[0] = 3;</span></a>
-<a name="259"><span class="lineNum">     259 </span><span class="lineCov">         50 :         addRoom(&quot;hangar&quot;,</span></a>
+<a name="256"><span class="lineNum">     256 </span><span class="lineCov">         43 :         connections[2] = 1;</span></a>
+<a name="257"><span class="lineNum">     257 </span><span class="lineCov">         43 :         connections[1] = 6;</span></a>
+<a name="258"><span class="lineNum">     258 </span><span class="lineCov">         43 :         connections[0] = 3;</span></a>
+<a name="259"><span class="lineNum">     259 </span><span class="lineCov">         43 :         addRoom(&quot;hangar&quot;,</span></a>
 <a name="260"><span class="lineNum">     260 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="261"><span class="lineNum">     261 </span>            :         &quot;The main hangar is rather \n&quot;</a>
 <a name="262"><span class="lineNum">     262 </span>            :         &quot;unremarkable. The only thing you \n&quot;</a>
@@ -335,11 +335,11 @@
 <a name="273"><span class="lineNum">     273 </span>            :                         32, 32, 0, connections);</a>
 <a name="274"><span class="lineNum">     274 </span>            : </a>
 <a name="275"><span class="lineNum">     275 </span>            :         /* 3 */</a>
-<a name="276"><span class="lineNum">     276 </span><span class="lineCov">         50 :         connections[2] = 0;</span></a>
-<a name="277"><span class="lineNum">     277 </span><span class="lineCov">         50 :         connections[3] = 2;</span></a>
-<a name="278"><span class="lineNum">     278 </span><span class="lineCov">         50 :         connections[0] = 4;</span></a>
-<a name="279"><span class="lineNum">     279 </span><span class="lineCov">         50 :         connections[1] = 5;</span></a>
-<a name="280"><span class="lineNum">     280 </span><span class="lineCov">         50 :         addRoom(&quot;hall-2&quot;,</span></a>
+<a name="276"><span class="lineNum">     276 </span><span class="lineCov">         43 :         connections[2] = 0;</span></a>
+<a name="277"><span class="lineNum">     277 </span><span class="lineCov">         43 :         connections[3] = 2;</span></a>
+<a name="278"><span class="lineNum">     278 </span><span class="lineCov">         43 :         connections[0] = 4;</span></a>
+<a name="279"><span class="lineNum">     279 </span><span class="lineCov">         43 :         connections[1] = 5;</span></a>
+<a name="280"><span class="lineNum">     280 </span><span class="lineCov">         43 :         addRoom(&quot;hall-2&quot;,</span></a>
 <a name="281"><span class="lineNum">     281 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="282"><span class="lineNum">     282 </span>            :         &quot;A well lit hall, with doors. It's \n&quot;</a>
 <a name="283"><span class="lineNum">     283 </span>            :         &quot;the main hub of the vehicle. Despite\n&quot;</a>
@@ -349,26 +349,26 @@
 <a name="287"><span class="lineNum">     287 </span>            :                         32, 32, 0, connections);</a>
 <a name="288"><span class="lineNum">     288 </span>            : </a>
 <a name="289"><span class="lineNum">     289 </span>            :         /* 4 */</a>
-<a name="290"><span class="lineNum">     290 </span><span class="lineCov">         50 :         memset(&amp;connections[0], 0, 6 * sizeof(int8_t));</span></a>
-<a name="291"><span class="lineNum">     291 </span><span class="lineCov">         50 :         connections[2] = 3;</span></a>
-<a name="292"><span class="lineNum">     292 </span><span class="lineCov">         50 :         connections[4] = 19;</span></a>
-<a name="293"><span class="lineNum">     293 </span><span class="lineCov">         50 :         connections[5] = 13;</span></a>
-<a name="294"><span class="lineNum">     294 </span><span class="lineCov">         50 :         addRoom(&quot;elevator-level-2&quot;,</span></a>
+<a name="290"><span class="lineNum">     290 </span><span class="lineCov">         43 :         memset(&amp;connections[0], 0, 6 * sizeof(int8_t));</span></a>
+<a name="291"><span class="lineNum">     291 </span><span class="lineCov">         43 :         connections[2] = 3;</span></a>
+<a name="292"><span class="lineNum">     292 </span><span class="lineCov">         43 :         connections[4] = 19;</span></a>
+<a name="293"><span class="lineNum">     293 </span><span class="lineCov">         43 :         connections[5] = 13;</span></a>
+<a name="294"><span class="lineNum">     294 </span><span class="lineCov">         43 :         addRoom(&quot;elevator-level-2&quot;,</span></a>
 <a name="295"><span class="lineNum">     295 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="296"><span class="lineNum">     296 </span>            :         &quot;It's rather surprising that this \n&quot;</a>
 <a name="297"><span class="lineNum">     297 </span>            :         &quot;ship has an elevator. This is was\n&quot;</a>
 <a name="298"><span class="lineNum">     298 </span>            :         &quot;typical only of ships with 5 levels\n&quot;</a>
 <a name="299"><span class="lineNum">     299 </span>            :         &quot;or more.&quot;,</a>
 <a name="300"><span class="lineNum">     300 </span>            : #endif</a>
-<a name="301"><span class="lineNum">     301 </span><span class="lineCov">         50 :                         64, 64, 0, connections)-&gt;rankRequired = 1;</span></a>
+<a name="301"><span class="lineNum">     301 </span><span class="lineCov">         43 :                         64, 64, 0, connections)-&gt;rankRequired = 1;</span></a>
 <a name="302"><span class="lineNum">     302 </span>            : </a>
 <a name="303"><span class="lineNum">     303 </span>            :         /* 5 */</a>
-<a name="304"><span class="lineNum">     304 </span><span class="lineCov">         50 :         memset(&amp;connections[0], 0, 6 * sizeof(int8_t));</span></a>
-<a name="305"><span class="lineNum">     305 </span><span class="lineCov">         50 :         connections[3] = 3;</span></a>
-<a name="306"><span class="lineNum">     306 </span><span class="lineCov">         50 :         connections[1] = 9;</span></a>
-<a name="307"><span class="lineNum">     307 </span><span class="lineCov">         50 :         connections[0] = 7;</span></a>
-<a name="308"><span class="lineNum">     308 </span><span class="lineCov">         50 :         connections[2] = 8;</span></a>
-<a name="309"><span class="lineNum">     309 </span><span class="lineCov">         50 :         addRoom(&quot;dorms-1&quot;,</span></a>
+<a name="304"><span class="lineNum">     304 </span><span class="lineCov">         43 :         memset(&amp;connections[0], 0, 6 * sizeof(int8_t));</span></a>
+<a name="305"><span class="lineNum">     305 </span><span class="lineCov">         43 :         connections[3] = 3;</span></a>
+<a name="306"><span class="lineNum">     306 </span><span class="lineCov">         43 :         connections[1] = 9;</span></a>
+<a name="307"><span class="lineNum">     307 </span><span class="lineCov">         43 :         connections[0] = 7;</span></a>
+<a name="308"><span class="lineNum">     308 </span><span class="lineCov">         43 :         connections[2] = 8;</span></a>
+<a name="309"><span class="lineNum">     309 </span><span class="lineCov">         43 :         addRoom(&quot;dorms-1&quot;,</span></a>
 <a name="310"><span class="lineNum">     310 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="311"><span class="lineNum">     311 </span>            :         &quot;Part of the dorms hallway. There are\n&quot;</a>
 <a name="312"><span class="lineNum">     312 </span>            :         &quot;some (busted) control panels for \n&quot;</a>
@@ -376,13 +376,13 @@
 <a name="314"><span class="lineNum">     314 </span>            :         &quot;cloth and broken plastic on the floor,\n&quot;</a>
 <a name="315"><span class="lineNum">     315 </span>            :         &quot;but nothing really useful.&quot;,</a>
 <a name="316"><span class="lineNum">     316 </span>            : #endif</a>
-<a name="317"><span class="lineNum">     317 </span><span class="lineCov">         50 :                         32, 32, 0, connections)-&gt;rankRequired = 1;</span></a>
+<a name="317"><span class="lineNum">     317 </span><span class="lineCov">         43 :                         32, 32, 0, connections)-&gt;rankRequired = 1;</span></a>
 <a name="318"><span class="lineNum">     318 </span>            : </a>
 <a name="319"><span class="lineNum">     319 </span>            : </a>
 <a name="320"><span class="lineNum">     320 </span>            :         /* 6 */</a>
-<a name="321"><span class="lineNum">     321 </span><span class="lineCov">         50 :         memset(&amp;connections[0], 0, 6 * sizeof(int8_t));</span></a>
-<a name="322"><span class="lineNum">     322 </span><span class="lineCov">         50 :         connections[3] = 2;</span></a>
-<a name="323"><span class="lineNum">     323 </span><span class="lineCov">         50 :         addRoom(&quot;rls-bohr-2&quot;,</span></a>
+<a name="321"><span class="lineNum">     321 </span><span class="lineCov">         43 :         memset(&amp;connections[0], 0, 6 * sizeof(int8_t));</span></a>
+<a name="322"><span class="lineNum">     322 </span><span class="lineCov">         43 :         connections[3] = 2;</span></a>
+<a name="323"><span class="lineNum">     323 </span><span class="lineCov">         43 :         addRoom(&quot;rls-bohr-2&quot;,</span></a>
 <a name="324"><span class="lineNum">     324 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="325"><span class="lineNum">     325 </span>            :         &quot;A rescue ship. Only for emergencies.\n&quot;</a>
 <a name="326"><span class="lineNum">     326 </span>            :         &quot;Named after some Niels Bohr scientist\n&quot;</a>
@@ -395,9 +395,9 @@
 <a name="333"><span class="lineNum">     333 </span>            : </a>
 <a name="334"><span class="lineNum">     334 </span>            : </a>
 <a name="335"><span class="lineNum">     335 </span>            :         /* 7 */</a>
-<a name="336"><span class="lineNum">     336 </span><span class="lineCov">         50 :         connections[3] = 0;</span></a>
-<a name="337"><span class="lineNum">     337 </span><span class="lineCov">         50 :         connections[2] = 5;</span></a>
-<a name="338"><span class="lineNum">     338 </span><span class="lineCov">         50 :         addRoom(&quot;pod-1&quot;,</span></a>
+<a name="336"><span class="lineNum">     336 </span><span class="lineCov">         43 :         connections[3] = 0;</span></a>
+<a name="337"><span class="lineNum">     337 </span><span class="lineCov">         43 :         connections[2] = 5;</span></a>
+<a name="338"><span class="lineNum">     338 </span><span class="lineCov">         43 :         addRoom(&quot;pod-1&quot;,</span></a>
 <a name="339"><span class="lineNum">     339 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="340"><span class="lineNum">     340 </span>            :         &quot;A living pod. Looks like from one \n&quot;</a>
 <a name="341"><span class="lineNum">     341 </span>            :         &quot;of the oficcers. It's messy, but \n&quot;</a>
@@ -406,26 +406,26 @@
 <a name="344"><span class="lineNum">     344 </span>            :         &quot;There are some burn marks on the \n&quot;</a>
 <a name="345"><span class="lineNum">     345 </span>            :         &quot;walls.&quot;,</a>
 <a name="346"><span class="lineNum">     346 </span>            : #endif</a>
-<a name="347"><span class="lineNum">     347 </span><span class="lineCov">         50 :                         32, 32, 0, connections)-&gt;rankRequired = 1;</span></a>
+<a name="347"><span class="lineNum">     347 </span><span class="lineCov">         43 :                         32, 32, 0, connections)-&gt;rankRequired = 1;</span></a>
 <a name="348"><span class="lineNum">     348 </span>            : </a>
 <a name="349"><span class="lineNum">     349 </span>            :         /* 8 */</a>
-<a name="350"><span class="lineNum">     350 </span><span class="lineCov">         50 :         connections[2] = 0;</span></a>
-<a name="351"><span class="lineNum">     351 </span><span class="lineCov">         50 :         connections[0] = 5;</span></a>
-<a name="352"><span class="lineNum">     352 </span><span class="lineCov">         50 :         addRoom(&quot;pod-2&quot;,</span></a>
+<a name="350"><span class="lineNum">     350 </span><span class="lineCov">         43 :         connections[2] = 0;</span></a>
+<a name="351"><span class="lineNum">     351 </span><span class="lineCov">         43 :         connections[0] = 5;</span></a>
+<a name="352"><span class="lineNum">     352 </span><span class="lineCov">         43 :         addRoom(&quot;pod-2&quot;,</span></a>
 <a name="353"><span class="lineNum">     353 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="354"><span class="lineNum">     354 </span>            :         &quot;A empty living pod. Looks as if it\n&quot;</a>
 <a name="355"><span class="lineNum">     355 </span>            :         &quot;was never ever used. If can even \n&quot;</a>
 <a name="356"><span class="lineNum">     356 </span>            :         &quot;see some of the factory stickers \n&quot;</a>
 <a name="357"><span class="lineNum">     357 </span>            :         &quot;in it.&quot;,</a>
 <a name="358"><span class="lineNum">     358 </span>            : #endif</a>
-<a name="359"><span class="lineNum">     359 </span><span class="lineCov">         50 :                         32, 32, 0, connections)-&gt;rankRequired = 2;</span></a>
+<a name="359"><span class="lineNum">     359 </span><span class="lineCov">         43 :                         32, 32, 0, connections)-&gt;rankRequired = 2;</span></a>
 <a name="360"><span class="lineNum">     360 </span>            : </a>
 <a name="361"><span class="lineNum">     361 </span>            :         /* 9 */</a>
-<a name="362"><span class="lineNum">     362 </span><span class="lineCov">         50 :         connections[1] = 12;</span></a>
-<a name="363"><span class="lineNum">     363 </span><span class="lineCov">         50 :         connections[3] = 5;</span></a>
-<a name="364"><span class="lineNum">     364 </span><span class="lineCov">         50 :         connections[0] = 10;</span></a>
-<a name="365"><span class="lineNum">     365 </span><span class="lineCov">         50 :         connections[2] = 11;</span></a>
-<a name="366"><span class="lineNum">     366 </span><span class="lineCov">         50 :         addRoom(&quot;dorms-2&quot;,</span></a>
+<a name="362"><span class="lineNum">     362 </span><span class="lineCov">         43 :         connections[1] = 12;</span></a>
+<a name="363"><span class="lineNum">     363 </span><span class="lineCov">         43 :         connections[3] = 5;</span></a>
+<a name="364"><span class="lineNum">     364 </span><span class="lineCov">         43 :         connections[0] = 10;</span></a>
+<a name="365"><span class="lineNum">     365 </span><span class="lineCov">         43 :         connections[2] = 11;</span></a>
+<a name="366"><span class="lineNum">     366 </span><span class="lineCov">         43 :         addRoom(&quot;dorms-2&quot;,</span></a>
 <a name="367"><span class="lineNum">     367 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="368"><span class="lineNum">     368 </span>            :         &quot;Anonther part of the dorms hallway.\n&quot;</a>
 <a name="369"><span class="lineNum">     369 </span>            :         &quot;On those, the panels were visibly\n&quot;</a>
@@ -435,57 +435,57 @@
 <a name="373"><span class="lineNum">     373 </span>            :                         32, 32, 0, connections);</a>
 <a name="374"><span class="lineNum">     374 </span>            : </a>
 <a name="375"><span class="lineNum">     375 </span>            :         /* 10 */</a>
-<a name="376"><span class="lineNum">     376 </span><span class="lineCov">         50 :         memset(&amp;connections[0], 0, 6 * sizeof(int8_t));</span></a>
-<a name="377"><span class="lineNum">     377 </span><span class="lineCov">         50 :         connections[2] = 9;</span></a>
-<a name="378"><span class="lineNum">     378 </span><span class="lineCov">         50 :         addRoom(&quot;pod-3&quot;,</span></a>
+<a name="376"><span class="lineNum">     376 </span><span class="lineCov">         43 :         memset(&amp;connections[0], 0, 6 * sizeof(int8_t));</span></a>
+<a name="377"><span class="lineNum">     377 </span><span class="lineCov">         43 :         connections[2] = 9;</span></a>
+<a name="378"><span class="lineNum">     378 </span><span class="lineCov">         43 :         addRoom(&quot;pod-3&quot;,</span></a>
 <a name="379"><span class="lineNum">     379 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="380"><span class="lineNum">     380 </span>            :         &quot;A young woman's pod. You \n&quot;</a>
 <a name="381"><span class="lineNum">     381 </span>            :         &quot;do recognize a few items, but its \n&quot;</a>
 <a name="382"><span class="lineNum">     382 </span>            :         &quot;badly mixed up. It's hard to make \n&quot;</a>
 <a name="383"><span class="lineNum">     383 </span>            :         &quot;the age of girl, but she was young.&quot;,</a>
 <a name="384"><span class="lineNum">     384 </span>            : #endif</a>
-<a name="385"><span class="lineNum">     385 </span><span class="lineCov">         50 :                         32, 32, 0, connections)-&gt;rankRequired = 3;</span></a>
+<a name="385"><span class="lineNum">     385 </span><span class="lineCov">         43 :                         32, 32, 0, connections)-&gt;rankRequired = 3;</span></a>
 <a name="386"><span class="lineNum">     386 </span>            : </a>
 <a name="387"><span class="lineNum">     387 </span>            :         /* 11 */</a>
-<a name="388"><span class="lineNum">     388 </span><span class="lineCov">         50 :         connections[2] = 0;</span></a>
-<a name="389"><span class="lineNum">     389 </span><span class="lineCov">         50 :         connections[0] = 9;</span></a>
-<a name="390"><span class="lineNum">     390 </span><span class="lineCov">         50 :         addRoom(&quot;pod-4&quot;,</span></a>
+<a name="388"><span class="lineNum">     388 </span><span class="lineCov">         43 :         connections[2] = 0;</span></a>
+<a name="389"><span class="lineNum">     389 </span><span class="lineCov">         43 :         connections[0] = 9;</span></a>
+<a name="390"><span class="lineNum">     390 </span><span class="lineCov">         43 :         addRoom(&quot;pod-4&quot;,</span></a>
 <a name="391"><span class="lineNum">     391 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="392"><span class="lineNum">     392 </span>            :         &quot;A the first officer's pod, for sure.\n&quot;</a>
 <a name="393"><span class="lineNum">     393 </span>            :         &quot;It's neat, clean and organized. Not \n&quot;</a>
 <a name="394"><span class="lineNum">     394 </span>            :         &quot;much around. He had a strange \n&quot;</a>
 <a name="395"><span class="lineNum">     395 </span>            :         &quot;fixation on redheads.&quot;,</a>
 <a name="396"><span class="lineNum">     396 </span>            : #endif</a>
-<a name="397"><span class="lineNum">     397 </span><span class="lineCov">         50 :                         32, 32, 0, connections)-&gt;rankRequired = 4;</span></a>
+<a name="397"><span class="lineNum">     397 </span><span class="lineCov">         43 :                         32, 32, 0, connections)-&gt;rankRequired = 4;</span></a>
 <a name="398"><span class="lineNum">     398 </span>            : </a>
 <a name="399"><span class="lineNum">     399 </span>            :         /* 12 */</a>
-<a name="400"><span class="lineNum">     400 </span><span class="lineCov">         50 :         connections[0] = 0;</span></a>
-<a name="401"><span class="lineNum">     401 </span><span class="lineCov">         50 :         connections[3] = 9;</span></a>
-<a name="402"><span class="lineNum">     402 </span><span class="lineCov">         50 :         addRoom(&quot;computer-core&quot;,</span></a>
+<a name="400"><span class="lineNum">     400 </span><span class="lineCov">         43 :         connections[0] = 0;</span></a>
+<a name="401"><span class="lineNum">     401 </span><span class="lineCov">         43 :         connections[3] = 9;</span></a>
+<a name="402"><span class="lineNum">     402 </span><span class="lineCov">         43 :         addRoom(&quot;computer-core&quot;,</span></a>
 <a name="403"><span class="lineNum">     403 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="404"><span class="lineNum">     404 </span>            :                         &quot;TBD.&quot;,</a>
 <a name="405"><span class="lineNum">     405 </span>            : #endif</a>
 <a name="406"><span class="lineNum">     406 </span>            :                         32, 32, 0, connections);</a>
 <a name="407"><span class="lineNum">     407 </span>            : </a>
 <a name="408"><span class="lineNum">     408 </span>            :         /* 13 */</a>
-<a name="409"><span class="lineNum">     409 </span><span class="lineCov">         50 :         connections[3] = 0;</span></a>
-<a name="410"><span class="lineNum">     410 </span><span class="lineCov">         50 :         connections[4] = 4;</span></a>
-<a name="411"><span class="lineNum">     411 </span><span class="lineCov">         50 :         connections[2] = 14;</span></a>
-<a name="412"><span class="lineNum">     412 </span><span class="lineCov">         50 :         addRoom(&quot;elevator-level-1&quot;,</span></a>
+<a name="409"><span class="lineNum">     409 </span><span class="lineCov">         43 :         connections[3] = 0;</span></a>
+<a name="410"><span class="lineNum">     410 </span><span class="lineCov">         43 :         connections[4] = 4;</span></a>
+<a name="411"><span class="lineNum">     411 </span><span class="lineCov">         43 :         connections[2] = 14;</span></a>
+<a name="412"><span class="lineNum">     412 </span><span class="lineCov">         43 :         addRoom(&quot;elevator-level-1&quot;,</span></a>
 <a name="413"><span class="lineNum">     413 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="414"><span class="lineNum">     414 </span>            :         &quot;It's rather surprising that this ship\n&quot;</a>
 <a name="415"><span class="lineNum">     415 </span>            :         &quot;has an elevator. This is was typical \n&quot;</a>
 <a name="416"><span class="lineNum">     416 </span>            :         &quot;only of ships with 5 levels or more.&quot;,</a>
 <a name="417"><span class="lineNum">     417 </span>            : #endif</a>
-<a name="418"><span class="lineNum">     418 </span><span class="lineCov">         50 :                         32, 32, 0, connections)-&gt;rankRequired = 1;</span></a>
+<a name="418"><span class="lineNum">     418 </span><span class="lineCov">         43 :                         32, 32, 0, connections)-&gt;rankRequired = 1;</span></a>
 <a name="419"><span class="lineNum">     419 </span>            : </a>
 <a name="420"><span class="lineNum">     420 </span>            :         /* 14 */</a>
-<a name="421"><span class="lineNum">     421 </span><span class="lineCov">         50 :         memset(&amp;connections[0], 0, 6 * sizeof(int8_t));</span></a>
-<a name="422"><span class="lineNum">     422 </span><span class="lineCov">         50 :         connections[0] = 13;</span></a>
-<a name="423"><span class="lineNum">     423 </span><span class="lineCov">         50 :         connections[1] = 17;</span></a>
-<a name="424"><span class="lineNum">     424 </span><span class="lineCov">         50 :         connections[2] = 16;</span></a>
-<a name="425"><span class="lineNum">     425 </span><span class="lineCov">         50 :         connections[3] = 15;</span></a>
-<a name="426"><span class="lineNum">     426 </span><span class="lineCov">         50 :         addRoom(&quot;hall-1&quot;,</span></a>
+<a name="421"><span class="lineNum">     421 </span><span class="lineCov">         43 :         memset(&amp;connections[0], 0, 6 * sizeof(int8_t));</span></a>
+<a name="422"><span class="lineNum">     422 </span><span class="lineCov">         43 :         connections[0] = 13;</span></a>
+<a name="423"><span class="lineNum">     423 </span><span class="lineCov">         43 :         connections[1] = 17;</span></a>
+<a name="424"><span class="lineNum">     424 </span><span class="lineCov">         43 :         connections[2] = 16;</span></a>
+<a name="425"><span class="lineNum">     425 </span><span class="lineCov">         43 :         connections[3] = 15;</span></a>
+<a name="426"><span class="lineNum">     426 </span><span class="lineCov">         43 :         addRoom(&quot;hall-1&quot;,</span></a>
 <a name="427"><span class="lineNum">     427 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="428"><span class="lineNum">     428 </span>            :         &quot;This hall has a busier feel.\n&quot;</a>
 <a name="429"><span class="lineNum">     429 </span>            :         &quot;Here you see objects thrown all over \n&quot;</a>
@@ -493,99 +493,99 @@
 <a name="431"><span class="lineNum">     431 </span>            :         &quot;middle of a day-to-day routine and had\n&quot;</a>
 <a name="432"><span class="lineNum">     432 </span>            :         &quot;to quickly run.&quot;,</a>
 <a name="433"><span class="lineNum">     433 </span>            : #endif</a>
-<a name="434"><span class="lineNum">     434 </span><span class="lineCov">         50 :                         32, 32, 0, connections)-&gt;rankRequired = 1;</span></a>
+<a name="434"><span class="lineNum">     434 </span><span class="lineCov">         43 :                         32, 32, 0, connections)-&gt;rankRequired = 1;</span></a>
 <a name="435"><span class="lineNum">     435 </span>            : </a>
 <a name="436"><span class="lineNum">     436 </span>            :         /* 15 */</a>
-<a name="437"><span class="lineNum">     437 </span><span class="lineCov">         50 :         memset(&amp;connections[0], 0, 6 * sizeof(int8_t));</span></a>
-<a name="438"><span class="lineNum">     438 </span><span class="lineCov">         50 :         connections[1] = 14;</span></a>
-<a name="439"><span class="lineNum">     439 </span><span class="lineCov">         50 :         addRoom(&quot;bridge&quot;,</span></a>
+<a name="437"><span class="lineNum">     437 </span><span class="lineCov">         43 :         memset(&amp;connections[0], 0, 6 * sizeof(int8_t));</span></a>
+<a name="438"><span class="lineNum">     438 </span><span class="lineCov">         43 :         connections[1] = 14;</span></a>
+<a name="439"><span class="lineNum">     439 </span><span class="lineCov">         43 :         addRoom(&quot;bridge&quot;,</span></a>
 <a name="440"><span class="lineNum">     440 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="441"><span class="lineNum">     441 </span>            :                         &quot;TBD.&quot;,</a>
 <a name="442"><span class="lineNum">     442 </span>            : #endif</a>
-<a name="443"><span class="lineNum">     443 </span><span class="lineCov">         50 :                         32, 32, 0, connections)-&gt;rankRequired = 4;</span></a>
+<a name="443"><span class="lineNum">     443 </span><span class="lineCov">         43 :                         32, 32, 0, connections)-&gt;rankRequired = 4;</span></a>
 <a name="444"><span class="lineNum">     444 </span>            : </a>
 <a name="445"><span class="lineNum">     445 </span>            :         /* 16 */</a>
-<a name="446"><span class="lineNum">     446 </span><span class="lineCov">         50 :         connections[1] = 0;</span></a>
-<a name="447"><span class="lineNum">     447 </span><span class="lineCov">         50 :         connections[0] = 14;</span></a>
-<a name="448"><span class="lineNum">     448 </span><span class="lineCov">         50 :         addRoom(&quot;situation-room&quot;,</span></a>
+<a name="446"><span class="lineNum">     446 </span><span class="lineCov">         43 :         connections[1] = 0;</span></a>
+<a name="447"><span class="lineNum">     447 </span><span class="lineCov">         43 :         connections[0] = 14;</span></a>
+<a name="448"><span class="lineNum">     448 </span><span class="lineCov">         43 :         addRoom(&quot;situation-room&quot;,</span></a>
 <a name="449"><span class="lineNum">     449 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="450"><span class="lineNum">     450 </span>            :                         &quot;TBD.&quot;,</a>
 <a name="451"><span class="lineNum">     451 </span>            : #endif</a>
-<a name="452"><span class="lineNum">     452 </span><span class="lineCov">         50 :                         32, 32, 0, connections)-&gt;rankRequired = 3;</span></a>
+<a name="452"><span class="lineNum">     452 </span><span class="lineCov">         43 :                         32, 32, 0, connections)-&gt;rankRequired = 3;</span></a>
 <a name="453"><span class="lineNum">     453 </span>            : </a>
 <a name="454"><span class="lineNum">     454 </span>            :         /* 17 */</a>
-<a name="455"><span class="lineNum">     455 </span><span class="lineCov">         50 :         connections[0] = 0;</span></a>
-<a name="456"><span class="lineNum">     456 </span><span class="lineCov">         50 :         connections[3] = 14;</span></a>
-<a name="457"><span class="lineNum">     457 </span><span class="lineCov">         50 :         connections[1] = 18;</span></a>
-<a name="458"><span class="lineNum">     458 </span><span class="lineCov">         50 :         addRoom(&quot;crew-bunks&quot;,</span></a>
+<a name="455"><span class="lineNum">     455 </span><span class="lineCov">         43 :         connections[0] = 0;</span></a>
+<a name="456"><span class="lineNum">     456 </span><span class="lineCov">         43 :         connections[3] = 14;</span></a>
+<a name="457"><span class="lineNum">     457 </span><span class="lineCov">         43 :         connections[1] = 18;</span></a>
+<a name="458"><span class="lineNum">     458 </span><span class="lineCov">         43 :         addRoom(&quot;crew-bunks&quot;,</span></a>
 <a name="459"><span class="lineNum">     459 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="460"><span class="lineNum">     460 </span>            :                         &quot;TBD.&quot;,</a>
 <a name="461"><span class="lineNum">     461 </span>            : #endif</a>
-<a name="462"><span class="lineNum">     462 </span><span class="lineCov">         50 :                         32, 32, 0, connections)-&gt;rankRequired = 1;</span></a>
+<a name="462"><span class="lineNum">     462 </span><span class="lineCov">         43 :                         32, 32, 0, connections)-&gt;rankRequired = 1;</span></a>
 <a name="463"><span class="lineNum">     463 </span>            : </a>
 <a name="464"><span class="lineNum">     464 </span>            :         /* 18 */</a>
-<a name="465"><span class="lineNum">     465 </span><span class="lineCov">         50 :         connections[1] = 0;</span></a>
-<a name="466"><span class="lineNum">     466 </span><span class="lineCov">         50 :         connections[3] = 17;</span></a>
-<a name="467"><span class="lineNum">     467 </span><span class="lineCov">         50 :         addRoom(&quot;armory&quot;,</span></a>
+<a name="465"><span class="lineNum">     465 </span><span class="lineCov">         43 :         connections[1] = 0;</span></a>
+<a name="466"><span class="lineNum">     466 </span><span class="lineCov">         43 :         connections[3] = 17;</span></a>
+<a name="467"><span class="lineNum">     467 </span><span class="lineCov">         43 :         addRoom(&quot;armory&quot;,</span></a>
 <a name="468"><span class="lineNum">     468 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="469"><span class="lineNum">     469 </span>            :                         &quot;TBD&quot;,</a>
 <a name="470"><span class="lineNum">     470 </span>            : #endif</a>
-<a name="471"><span class="lineNum">     471 </span><span class="lineCov">         50 :                         32, 32, 0, connections)-&gt;rankRequired = 3;</span></a>
+<a name="471"><span class="lineNum">     471 </span><span class="lineCov">         43 :                         32, 32, 0, connections)-&gt;rankRequired = 3;</span></a>
 <a name="472"><span class="lineNum">     472 </span>            : </a>
 <a name="473"><span class="lineNum">     473 </span>            :         /* 19 */</a>
-<a name="474"><span class="lineNum">     474 </span><span class="lineCov">         50 :         connections[3] = 0;</span></a>
-<a name="475"><span class="lineNum">     475 </span><span class="lineCov">         50 :         connections[2] = 20;</span></a>
-<a name="476"><span class="lineNum">     476 </span><span class="lineCov">         50 :         connections[5] = 4;</span></a>
-<a name="477"><span class="lineNum">     477 </span><span class="lineCov">         50 :         addRoom(&quot;elevator-level-3&quot;,</span></a>
+<a name="474"><span class="lineNum">     474 </span><span class="lineCov">         43 :         connections[3] = 0;</span></a>
+<a name="475"><span class="lineNum">     475 </span><span class="lineCov">         43 :         connections[2] = 20;</span></a>
+<a name="476"><span class="lineNum">     476 </span><span class="lineCov">         43 :         connections[5] = 4;</span></a>
+<a name="477"><span class="lineNum">     477 </span><span class="lineCov">         43 :         addRoom(&quot;elevator-level-3&quot;,</span></a>
 <a name="478"><span class="lineNum">     478 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="479"><span class="lineNum">     479 </span>            :         &quot;It's rather surprising that this ship has an\n&quot;</a>
 <a name="480"><span class="lineNum">     480 </span>            :         &quot;elevator. This is was typical only of ships \n&quot;</a>
 <a name="481"><span class="lineNum">     481 </span>            :         &quot;with 5 levels or more.&quot;,</a>
 <a name="482"><span class="lineNum">     482 </span>            : #endif</a>
-<a name="483"><span class="lineNum">     483 </span><span class="lineCov">         50 :                         32, 32, 0, connections)-&gt;rankRequired = 1;</span></a>
+<a name="483"><span class="lineNum">     483 </span><span class="lineCov">         43 :                         32, 32, 0, connections)-&gt;rankRequired = 1;</span></a>
 <a name="484"><span class="lineNum">     484 </span>            : </a>
 <a name="485"><span class="lineNum">     485 </span>            :         /* 20 */</a>
-<a name="486"><span class="lineNum">     486 </span><span class="lineCov">         50 :         memset(&amp;connections[0], 0, 6 * sizeof(int8_t));</span></a>
-<a name="487"><span class="lineNum">     487 </span><span class="lineCov">         50 :         connections[0] = 19;</span></a>
-<a name="488"><span class="lineNum">     488 </span><span class="lineCov">         50 :         connections[1] = 21;</span></a>
-<a name="489"><span class="lineNum">     489 </span><span class="lineCov">         50 :         connections[3] = 23;</span></a>
-<a name="490"><span class="lineNum">     490 </span><span class="lineCov">         50 :         addRoom(&quot;hall-3&quot;,</span></a>
+<a name="486"><span class="lineNum">     486 </span><span class="lineCov">         43 :         memset(&amp;connections[0], 0, 6 * sizeof(int8_t));</span></a>
+<a name="487"><span class="lineNum">     487 </span><span class="lineCov">         43 :         connections[0] = 19;</span></a>
+<a name="488"><span class="lineNum">     488 </span><span class="lineCov">         43 :         connections[1] = 21;</span></a>
+<a name="489"><span class="lineNum">     489 </span><span class="lineCov">         43 :         connections[3] = 23;</span></a>
+<a name="490"><span class="lineNum">     490 </span><span class="lineCov">         43 :         addRoom(&quot;hall-3&quot;,</span></a>
 <a name="491"><span class="lineNum">     491 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="492"><span class="lineNum">     492 </span>            :                         &quot;TBD&quot;,</a>
 <a name="493"><span class="lineNum">     493 </span>            : #endif</a>
 <a name="494"><span class="lineNum">     494 </span>            :                         32, 32, 0, connections);</a>
 <a name="495"><span class="lineNum">     495 </span>            : </a>
 <a name="496"><span class="lineNum">     496 </span>            :         /* 21 */</a>
-<a name="497"><span class="lineNum">     497 </span><span class="lineCov">         50 :         connections[0] = 0;</span></a>
-<a name="498"><span class="lineNum">     498 </span><span class="lineCov">         50 :         connections[3] = 20;</span></a>
-<a name="499"><span class="lineNum">     499 </span><span class="lineCov">         50 :         connections[1] = 22;</span></a>
-<a name="500"><span class="lineNum">     500 </span><span class="lineCov">         50 :         addRoom(&quot;wc&quot;,</span></a>
+<a name="497"><span class="lineNum">     497 </span><span class="lineCov">         43 :         connections[0] = 0;</span></a>
+<a name="498"><span class="lineNum">     498 </span><span class="lineCov">         43 :         connections[3] = 20;</span></a>
+<a name="499"><span class="lineNum">     499 </span><span class="lineCov">         43 :         connections[1] = 22;</span></a>
+<a name="500"><span class="lineNum">     500 </span><span class="lineCov">         43 :         addRoom(&quot;wc&quot;,</span></a>
 <a name="501"><span class="lineNum">     501 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="502"><span class="lineNum">     502 </span>            :                         &quot;TBD.&quot;,</a>
 <a name="503"><span class="lineNum">     503 </span>            : #endif</a>
 <a name="504"><span class="lineNum">     504 </span>            :                         32, 32, 0, connections);</a>
 <a name="505"><span class="lineNum">     505 </span>            : </a>
 <a name="506"><span class="lineNum">     506 </span>            :         /* 22 */</a>
-<a name="507"><span class="lineNum">     507 </span><span class="lineCov">         50 :         connections[1] = 0;</span></a>
-<a name="508"><span class="lineNum">     508 </span><span class="lineCov">         50 :         connections[3] = 21;</span></a>
-<a name="509"><span class="lineNum">     509 </span><span class="lineCov">         50 :         addRoom(&quot;reactor-core&quot;,</span></a>
+<a name="507"><span class="lineNum">     507 </span><span class="lineCov">         43 :         connections[1] = 0;</span></a>
+<a name="508"><span class="lineNum">     508 </span><span class="lineCov">         43 :         connections[3] = 21;</span></a>
+<a name="509"><span class="lineNum">     509 </span><span class="lineCov">         43 :         addRoom(&quot;reactor-core&quot;,</span></a>
 <a name="510"><span class="lineNum">     510 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="511"><span class="lineNum">     511 </span>            :                         &quot;TBD.&quot;,</a>
 <a name="512"><span class="lineNum">     512 </span>            : #endif</a>
-<a name="513"><span class="lineNum">     513 </span><span class="lineCov">         50 :                         32, 32, 0, connections)-&gt;rankRequired = 4;</span></a>
+<a name="513"><span class="lineNum">     513 </span><span class="lineCov">         43 :                         32, 32, 0, connections)-&gt;rankRequired = 4;</span></a>
 <a name="514"><span class="lineNum">     514 </span>            : </a>
 <a name="515"><span class="lineNum">     515 </span>            :         /* 23 */</a>
-<a name="516"><span class="lineNum">     516 </span><span class="lineCov">         50 :         connections[3] = 0;</span></a>
-<a name="517"><span class="lineNum">     517 </span><span class="lineCov">         50 :         connections[1] = 20;</span></a>
-<a name="518"><span class="lineNum">     518 </span><span class="lineCov">         50 :         addRoom(&quot;radar-array&quot;,</span></a>
+<a name="516"><span class="lineNum">     516 </span><span class="lineCov">         43 :         connections[3] = 0;</span></a>
+<a name="517"><span class="lineNum">     517 </span><span class="lineCov">         43 :         connections[1] = 20;</span></a>
+<a name="518"><span class="lineNum">     518 </span><span class="lineCov">         43 :         addRoom(&quot;radar-array&quot;,</span></a>
 <a name="519"><span class="lineNum">     519 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="520"><span class="lineNum">     520 </span>            :                         &quot;TBD&quot;,</a>
 <a name="521"><span class="lineNum">     521 </span>            : #endif</a>
-<a name="522"><span class="lineNum">     522 </span><span class="lineCov">         50 :                         32, 32, 0, connections)-&gt;rankRequired = 2;</span></a>
+<a name="522"><span class="lineNum">     522 </span><span class="lineCov">         43 :                         32, 32, 0, connections)-&gt;rankRequired = 2;</span></a>
 <a name="523"><span class="lineNum">     523 </span>            : </a>
 <a name="524"><span class="lineNum">     524 </span>            : </a>
 <a name="525"><span class="lineNum">     525 </span>            :         /*Items*/</a>
-<a name="526"><span class="lineNum">     526 </span><span class="lineCov">         50 :         addItem(&quot;dummy&quot;,</span></a>
+<a name="526"><span class="lineNum">     526 </span><span class="lineCov">         43 :         addItem(&quot;dummy&quot;,</span></a>
 <a name="527"><span class="lineNum">     527 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="528"><span class="lineNum">     528 </span>            :                         &quot;ERROR&quot;,</a>
 <a name="529"><span class="lineNum">     529 </span>            : #endif</a>
@@ -595,7 +595,7 @@
 <a name="533"><span class="lineNum">     533 </span>            :                                           FALSE, 0, 0);</a>
 <a name="534"><span class="lineNum">     534 </span>            : </a>
 <a name="535"><span class="lineNum">     535 </span>            :         /* LSS-Daedalus */</a>
-<a name="536"><span class="lineNum">     536 </span><span class="lineCov">         50 :         newItem = addItem(&quot;emp-bomb&quot;,</span></a>
+<a name="536"><span class="lineNum">     536 </span><span class="lineCov">         43 :         newItem = addItem(&quot;emp-bomb&quot;,</span></a>
 <a name="537"><span class="lineNum">     537 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="538"><span class="lineNum">     538 </span>            :         &quot;Time-programmable Halogen EMP bomb.\n&quot;</a>
 <a name="539"><span class="lineNum">     539 </span>            :                                                   &quot;Will disable any electrical device\n&quot;</a>
@@ -605,12 +605,12 @@
 <a name="543"><span class="lineNum">     543 </span>            :                         5,</a>
 <a name="544"><span class="lineNum">     544 </span>            : #endif</a>
 <a name="545"><span class="lineNum">     545 </span>            :                                           TRUE, 9, 6);</a>
-<a name="546"><span class="lineNum">     546 </span><span class="lineCov">         50 :         addToRoom(&quot;lss-daedalus&quot;, newItem);</span></a>
-<a name="547"><span class="lineNum">     547 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="548"><span class="lineNum">     548 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = bombActivatedCallback;</span></a>
+<a name="546"><span class="lineNum">     546 </span><span class="lineCov">         43 :         addToRoom(&quot;lss-daedalus&quot;, newItem);</span></a>
+<a name="547"><span class="lineNum">     547 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="548"><span class="lineNum">     548 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = bombActivatedCallback;</span></a>
 <a name="549"><span class="lineNum">     549 </span>            : </a>
 <a name="550"><span class="lineNum">     550 </span>            : </a>
-<a name="551"><span class="lineNum">     551 </span><span class="lineCov">         50 :         newItem = addItem(&quot;emp-controller&quot;,</span></a>
+<a name="551"><span class="lineNum">     551 </span><span class="lineCov">         43 :         newItem = addItem(&quot;emp-controller&quot;,</span></a>
 <a name="552"><span class="lineNum">     552 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="553"><span class="lineNum">     553 </span>            :         &quot;The remote controller allows you to\n&quot;</a>
 <a name="554"><span class="lineNum">     554 </span>            :         &quot;instantly detonate the bomb from very\n&quot;</a>
@@ -622,11 +622,11 @@
 <a name="560"><span class="lineNum">     560 </span>            :                         0,</a>
 <a name="561"><span class="lineNum">     561 </span>            : #endif</a>
 <a name="562"><span class="lineNum">     562 </span>            :                                           TRUE, 10, 6);</a>
-<a name="563"><span class="lineNum">     563 </span><span class="lineCov">         50 :         addToRoom(&quot;lss-daedalus&quot;, newItem);</span></a>
-<a name="564"><span class="lineNum">     564 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="565"><span class="lineNum">     565 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = bombControllerActivatedCallback;</span></a>
+<a name="563"><span class="lineNum">     563 </span><span class="lineCov">         43 :         addToRoom(&quot;lss-daedalus&quot;, newItem);</span></a>
+<a name="564"><span class="lineNum">     564 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="565"><span class="lineNum">     565 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = bombControllerActivatedCallback;</span></a>
 <a name="566"><span class="lineNum">     566 </span>            : </a>
-<a name="567"><span class="lineNum">     567 </span><span class="lineCov">         50 :         newItem = addItem(&quot;ship-ignition&quot;,</span></a>
+<a name="567"><span class="lineNum">     567 </span><span class="lineCov">         43 :         newItem = addItem(&quot;ship-ignition&quot;,</span></a>
 <a name="568"><span class="lineNum">     568 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="569"><span class="lineNum">     569 </span>            :         &quot;Token needed to ignite the ship's\n&quot;</a>
 <a name="570"><span class="lineNum">     570 </span>            :         &quot;computer and thrusters&quot;,</a>
@@ -635,11 +635,11 @@
 <a name="573"><span class="lineNum">     573 </span>            :                         0,</a>
 <a name="574"><span class="lineNum">     574 </span>            : #endif</a>
 <a name="575"><span class="lineNum">     575 </span>            :                                           TRUE, 11, 6);</a>
-<a name="576"><span class="lineNum">     576 </span><span class="lineCov">         50 :         addToRoom(&quot;lss-daedalus&quot;, newItem);</span></a>
-<a name="577"><span class="lineNum">     577 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = bombActivatedCallback;</span></a>
-<a name="578"><span class="lineNum">     578 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="576"><span class="lineNum">     576 </span><span class="lineCov">         43 :         addToRoom(&quot;lss-daedalus&quot;, newItem);</span></a>
+<a name="577"><span class="lineNum">     577 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = bombActivatedCallback;</span></a>
+<a name="578"><span class="lineNum">     578 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
 <a name="579"><span class="lineNum">     579 </span>            : </a>
-<a name="580"><span class="lineNum">     580 </span><span class="lineCov">         50 :         newItem = addItem(&quot;magnetic-boots&quot;,</span></a>
+<a name="580"><span class="lineNum">     580 </span><span class="lineCov">         43 :         newItem = addItem(&quot;magnetic-boots&quot;,</span></a>
 <a name="581"><span class="lineNum">     581 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="582"><span class="lineNum">     582 </span>            :         &quot;Boots with strong electro-magnets.\n&quot;</a>
 <a name="583"><span class="lineNum">     583 </span>            :         &quot;Ideal for walking underwater...\n&quot;</a>
@@ -652,14 +652,14 @@
 <a name="590"><span class="lineNum">     590 </span>            : #endif</a>
 <a name="591"><span class="lineNum">     591 </span>            :                                           TRUE, 15, 15);</a>
 <a name="592"><span class="lineNum">     592 </span>            : </a>
-<a name="593"><span class="lineNum">     593 </span><span class="lineCov">         50 :         newItem-&gt;active = TRUE;</span></a>
-<a name="594"><span class="lineNum">     594 </span><span class="lineCov">         50 :         pickObject(newItem);</span></a>
-<a name="595"><span class="lineNum">     595 </span><span class="lineCov">         50 :         newItem-&gt;pickable = FALSE;</span></a>
-<a name="596"><span class="lineNum">     596 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = useBootsWithMagneticCoupling;</span></a>
+<a name="593"><span class="lineNum">     593 </span><span class="lineCov">         43 :         newItem-&gt;active = TRUE;</span></a>
+<a name="594"><span class="lineNum">     594 </span><span class="lineCov">         43 :         pickObject(newItem);</span></a>
+<a name="595"><span class="lineNum">     595 </span><span class="lineCov">         43 :         newItem-&gt;pickable = FALSE;</span></a>
+<a name="596"><span class="lineNum">     596 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = useBootsWithMagneticCoupling;</span></a>
 <a name="597"><span class="lineNum">     597 </span>            : </a>
-<a name="598"><span class="lineNum">     598 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantToggleCallback;</span></a>
+<a name="598"><span class="lineNum">     598 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantToggleCallback;</span></a>
 <a name="599"><span class="lineNum">     599 </span>            : </a>
-<a name="600"><span class="lineNum">     600 </span><span class="lineCov">         50 :         newItem = addItem(&quot;helmet&quot;,</span></a>
+<a name="600"><span class="lineNum">     600 </span><span class="lineCov">         43 :         newItem = addItem(&quot;helmet&quot;,</span></a>
 <a name="601"><span class="lineNum">     601 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="602"><span class="lineNum">     602 </span>            :         &quot;Atmosphere-contained helmet for\n&quot;</a>
 <a name="603"><span class="lineNum">     603 </span>            :         &quot;safety.&quot;,</a>
@@ -668,13 +668,13 @@
 <a name="606"><span class="lineNum">     606 </span>            :                         2,</a>
 <a name="607"><span class="lineNum">     607 </span>            : #endif</a>
 <a name="608"><span class="lineNum">     608 </span>            :                                           TRUE, 15, 15);</a>
-<a name="609"><span class="lineNum">     609 </span><span class="lineCov">         50 :         newItem-&gt;active = TRUE;</span></a>
-<a name="610"><span class="lineNum">     610 </span><span class="lineCov">         50 :         pickObject(newItem);</span></a>
-<a name="611"><span class="lineNum">     611 </span><span class="lineCov">         50 :         newItem-&gt;pickable = FALSE;</span></a>
-<a name="612"><span class="lineNum">     612 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantToggleCallback;</span></a>
+<a name="609"><span class="lineNum">     609 </span><span class="lineCov">         43 :         newItem-&gt;active = TRUE;</span></a>
+<a name="610"><span class="lineNum">     610 </span><span class="lineCov">         43 :         pickObject(newItem);</span></a>
+<a name="611"><span class="lineNum">     611 </span><span class="lineCov">         43 :         newItem-&gt;pickable = FALSE;</span></a>
+<a name="612"><span class="lineNum">     612 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantToggleCallback;</span></a>
 <a name="613"><span class="lineNum">     613 </span>            : </a>
 <a name="614"><span class="lineNum">     614 </span>            : </a>
-<a name="615"><span class="lineNum">     615 </span><span class="lineCov">         50 :         newItem = addItem(&quot;low-rank-keycard&quot;,</span></a>
+<a name="615"><span class="lineNum">     615 </span><span class="lineCov">         43 :         newItem = addItem(&quot;low-rank-keycard&quot;,</span></a>
 <a name="616"><span class="lineNum">     616 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="617"><span class="lineNum">     617 </span>            :         &quot;Clearance for low rank. Oddly, \n&quot;</a>
 <a name="618"><span class="lineNum">     618 </span>            :         &quot;this one is of the rewrittable kind;\n&quot;</a>
@@ -684,14 +684,14 @@
 <a name="622"><span class="lineNum">     622 </span>            :                         0,</a>
 <a name="623"><span class="lineNum">     623 </span>            : #endif</a>
 <a name="624"><span class="lineNum">     624 </span>            :                                           TRUE, 4, 7);</a>
-<a name="625"><span class="lineNum">     625 </span><span class="lineCov">         50 :         addToRoom(&quot;hall-2&quot;, newItem);</span></a>
-<a name="626"><span class="lineNum">     626 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="627"><span class="lineNum">     627 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = useCardWithCardWriter;</span></a>
-<a name="628"><span class="lineNum">     628 </span><span class="lineCov">         50 :         newItem-&gt;pickCallback = keycardPickCallback;</span></a>
-<a name="629"><span class="lineNum">     629 </span><span class="lineCov">         50 :         newItem-&gt;dropCallback = keycardDropCallback;</span></a>
+<a name="625"><span class="lineNum">     625 </span><span class="lineCov">         43 :         addToRoom(&quot;hall-2&quot;, newItem);</span></a>
+<a name="626"><span class="lineNum">     626 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="627"><span class="lineNum">     627 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = useCardWithCardWriter;</span></a>
+<a name="628"><span class="lineNum">     628 </span><span class="lineCov">         43 :         newItem-&gt;pickCallback = keycardPickCallback;</span></a>
+<a name="629"><span class="lineNum">     629 </span><span class="lineCov">         43 :         newItem-&gt;dropCallback = keycardDropCallback;</span></a>
 <a name="630"><span class="lineNum">     630 </span>            : </a>
 <a name="631"><span class="lineNum">     631 </span>            : </a>
-<a name="632"><span class="lineNum">     632 </span><span class="lineCov">         50 :         newItem = addItem(&quot;hacked-keycard&quot;,</span></a>
+<a name="632"><span class="lineNum">     632 </span><span class="lineCov">         43 :         newItem = addItem(&quot;hacked-keycard&quot;,</span></a>
 <a name="633"><span class="lineNum">     633 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="634"><span class="lineNum">     634 </span>            :                         &quot;Hacked keycard for mid-clearance\nrank.&quot;,</a>
 <a name="635"><span class="lineNum">     635 </span>            : #endif</a>
@@ -699,15 +699,15 @@
 <a name="637"><span class="lineNum">     637 </span>            :                         0,</a>
 <a name="638"><span class="lineNum">     638 </span>            : #endif</a>
 <a name="639"><span class="lineNum">     639 </span>            :                                           TRUE, 21, 9);</a>
-<a name="640"><span class="lineNum">     640 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="641"><span class="lineNum">     641 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="642"><span class="lineNum">     642 </span><span class="lineCov">         50 :         newItem-&gt;pickCallback = keycardPickCallback;</span></a>
-<a name="643"><span class="lineNum">     643 </span><span class="lineCov">         50 :         newItem-&gt;dropCallback = keycardDropCallback;</span></a>
+<a name="640"><span class="lineNum">     640 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="641"><span class="lineNum">     641 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="642"><span class="lineNum">     642 </span><span class="lineCov">         43 :         newItem-&gt;pickCallback = keycardPickCallback;</span></a>
+<a name="643"><span class="lineNum">     643 </span><span class="lineCov">         43 :         newItem-&gt;dropCallback = keycardDropCallback;</span></a>
 <a name="644"><span class="lineNum">     644 </span>            : </a>
 <a name="645"><span class="lineNum">     645 </span>            : </a>
 <a name="646"><span class="lineNum">     646 </span>            :         /* Hangar */</a>
 <a name="647"><span class="lineNum">     647 </span>            : </a>
-<a name="648"><span class="lineNum">     648 </span><span class="lineCov">         50 :         newItem = addItem(&quot;magnetic-coupling&quot;,</span></a>
+<a name="648"><span class="lineNum">     648 </span><span class="lineCov">         43 :         newItem = addItem(&quot;magnetic-coupling&quot;,</span></a>
 <a name="649"><span class="lineNum">     649 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="650"><span class="lineNum">     650 </span>            :                         &quot;Automatic seal activated by \nspecial safety protocols&quot;,</a>
 <a name="651"><span class="lineNum">     651 </span>            : #endif</a>
@@ -715,14 +715,14 @@
 <a name="653"><span class="lineNum">     653 </span>            :                         17,</a>
 <a name="654"><span class="lineNum">     654 </span>            : #endif</a>
 <a name="655"><span class="lineNum">     655 </span>            :                                           FALSE, 2, 2);</a>
-<a name="656"><span class="lineNum">     656 </span><span class="lineCov">         50 :         addToRoom(&quot;hangar&quot;, newItem);</span></a>
-<a name="657"><span class="lineNum">     657 </span><span class="lineCov">         50 :         newItem-&gt;active = TRUE;</span></a>
-<a name="658"><span class="lineNum">     658 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="659"><span class="lineNum">     659 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="656"><span class="lineNum">     656 </span><span class="lineCov">         43 :         addToRoom(&quot;hangar&quot;, newItem);</span></a>
+<a name="657"><span class="lineNum">     657 </span><span class="lineCov">         43 :         newItem-&gt;active = TRUE;</span></a>
+<a name="658"><span class="lineNum">     658 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="659"><span class="lineNum">     659 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
 <a name="660"><span class="lineNum">     660 </span>            : </a>
 <a name="661"><span class="lineNum">     661 </span>            :         /* Comm terminals*/</a>
 <a name="662"><span class="lineNum">     662 </span>            : </a>
-<a name="663"><span class="lineNum">     663 </span><span class="lineCov">         50 :         newItem = addItem(&quot;door-panel&quot;,</span></a>
+<a name="663"><span class="lineNum">     663 </span><span class="lineCov">         43 :         newItem = addItem(&quot;door-panel&quot;,</span></a>
 <a name="664"><span class="lineNum">     664 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="665"><span class="lineNum">     665 </span>            :                         &quot;Special control for the door&quot;,</a>
 <a name="666"><span class="lineNum">     666 </span>            : #endif</a>
@@ -730,13 +730,13 @@
 <a name="668"><span class="lineNum">     668 </span>            :                         200,</a>
 <a name="669"><span class="lineNum">     669 </span>            : #endif</a>
 <a name="670"><span class="lineNum">     670 </span>            :                                           FALSE, 12, 3);</a>
-<a name="671"><span class="lineNum">     671 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="672"><span class="lineNum">     672 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="673"><span class="lineNum">     673 </span><span class="lineCov">         50 :         addToRoom(&quot;hangar&quot;, newItem);</span></a>
+<a name="671"><span class="lineNum">     671 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="672"><span class="lineNum">     672 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="673"><span class="lineNum">     673 </span><span class="lineCov">         43 :         addToRoom(&quot;hangar&quot;, newItem);</span></a>
 <a name="674"><span class="lineNum">     674 </span>            : </a>
 <a name="675"><span class="lineNum">     675 </span>            : </a>
 <a name="676"><span class="lineNum">     676 </span>            :         /* Comm terminals*/</a>
-<a name="677"><span class="lineNum">     677 </span><span class="lineCov">         50 :         newItem = addItem(&quot;comm-terminal-1&quot;,</span></a>
+<a name="677"><span class="lineNum">     677 </span><span class="lineCov">         43 :         newItem = addItem(&quot;comm-terminal-1&quot;,</span></a>
 <a name="678"><span class="lineNum">     678 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="679"><span class="lineNum">     679 </span>            :                         &quot;Terminal for communicating with\nthe central computer.&quot;,</a>
 <a name="680"><span class="lineNum">     680 </span>            : #endif</a>
@@ -744,12 +744,12 @@
 <a name="682"><span class="lineNum">     682 </span>            :                         200,</a>
 <a name="683"><span class="lineNum">     683 </span>            : #endif</a>
 <a name="684"><span class="lineNum">     684 </span>            :                                           FALSE, 6, 2);</a>
-<a name="685"><span class="lineNum">     685 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = useObjectToggleCallback;</span></a>
-<a name="686"><span class="lineNum">     686 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="687"><span class="lineNum">     687 </span><span class="lineCov">         50 :         addToRoom(&quot;hall-1&quot;, newItem);</span></a>
+<a name="685"><span class="lineNum">     685 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = useObjectToggleCallback;</span></a>
+<a name="686"><span class="lineNum">     686 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="687"><span class="lineNum">     687 </span><span class="lineCov">         43 :         addToRoom(&quot;hall-1&quot;, newItem);</span></a>
 <a name="688"><span class="lineNum">     688 </span>            : </a>
 <a name="689"><span class="lineNum">     689 </span>            : </a>
-<a name="690"><span class="lineNum">     690 </span><span class="lineCov">         50 :         newItem = addItem(&quot;comm-terminal-2&quot;,</span></a>
+<a name="690"><span class="lineNum">     690 </span><span class="lineCov">         43 :         newItem = addItem(&quot;comm-terminal-2&quot;,</span></a>
 <a name="691"><span class="lineNum">     691 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="692"><span class="lineNum">     692 </span>            :                         &quot;Terminal for communicating with\nthe central computer.&quot;,</a>
 <a name="693"><span class="lineNum">     693 </span>            : #endif</a>
@@ -757,12 +757,12 @@
 <a name="695"><span class="lineNum">     695 </span>            :                         200,</a>
 <a name="696"><span class="lineNum">     696 </span>            : #endif</a>
 <a name="697"><span class="lineNum">     697 </span>            :                                           FALSE, 6, 2);</a>
-<a name="698"><span class="lineNum">     698 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = useCommWithRank;</span></a>
-<a name="699"><span class="lineNum">     699 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="700"><span class="lineNum">     700 </span><span class="lineCov">         50 :         addToRoom(&quot;hall-2&quot;, newItem);</span></a>
+<a name="698"><span class="lineNum">     698 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = useCommWithRank;</span></a>
+<a name="699"><span class="lineNum">     699 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="700"><span class="lineNum">     700 </span><span class="lineCov">         43 :         addToRoom(&quot;hall-2&quot;, newItem);</span></a>
 <a name="701"><span class="lineNum">     701 </span>            : </a>
 <a name="702"><span class="lineNum">     702 </span>            : </a>
-<a name="703"><span class="lineNum">     703 </span><span class="lineCov">         50 :         newItem = addItem(&quot;comm-terminal-3&quot;,</span></a>
+<a name="703"><span class="lineNum">     703 </span><span class="lineCov">         43 :         newItem = addItem(&quot;comm-terminal-3&quot;,</span></a>
 <a name="704"><span class="lineNum">     704 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="705"><span class="lineNum">     705 </span>            :                         &quot;Terminal for communicating with\nthe central computer.&quot;,</a>
 <a name="706"><span class="lineNum">     706 </span>            : #endif</a>
@@ -770,12 +770,12 @@
 <a name="708"><span class="lineNum">     708 </span>            :                         200,</a>
 <a name="709"><span class="lineNum">     709 </span>            : #endif</a>
 <a name="710"><span class="lineNum">     710 </span>            :                                           FALSE, 6, 2);</a>
-<a name="711"><span class="lineNum">     711 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = useObjectToggleCallback;</span></a>
-<a name="712"><span class="lineNum">     712 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="713"><span class="lineNum">     713 </span><span class="lineCov">         50 :         addToRoom(&quot;hall-3&quot;, newItem);</span></a>
+<a name="711"><span class="lineNum">     711 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = useObjectToggleCallback;</span></a>
+<a name="712"><span class="lineNum">     712 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="713"><span class="lineNum">     713 </span><span class="lineCov">         43 :         addToRoom(&quot;hall-3&quot;, newItem);</span></a>
 <a name="714"><span class="lineNum">     714 </span>            : </a>
 <a name="715"><span class="lineNum">     715 </span>            :         /* Diaries */</a>
-<a name="716"><span class="lineNum">     716 </span><span class="lineCov">         50 :         newItem = addItem(&quot;black-diary&quot;,</span></a>
+<a name="716"><span class="lineNum">     716 </span><span class="lineCov">         43 :         newItem = addItem(&quot;black-diary&quot;,</span></a>
 <a name="717"><span class="lineNum">     717 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="718"><span class="lineNum">     718 </span>            :         &quot;...We meet every night in the rest\n&quot;</a>
 <a name="719"><span class="lineNum">     719 </span>            :         &quot;room, to make out. I asked her for\n&quot;</a>
@@ -787,12 +787,12 @@
 <a name="725"><span class="lineNum">     725 </span>            :                         0,</a>
 <a name="726"><span class="lineNum">     726 </span>            : #endif</a>
 <a name="727"><span class="lineNum">     727 </span>            :                                           TRUE, 4, 6);</a>
-<a name="728"><span class="lineNum">     728 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="729"><span class="lineNum">     729 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="730"><span class="lineNum">     730 </span><span class="lineCov">         50 :         addToRoom(&quot;pod-1&quot;, newItem);</span></a>
+<a name="728"><span class="lineNum">     728 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="729"><span class="lineNum">     729 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="730"><span class="lineNum">     730 </span><span class="lineCov">         43 :         addToRoom(&quot;pod-1&quot;, newItem);</span></a>
 <a name="731"><span class="lineNum">     731 </span>            : </a>
 <a name="732"><span class="lineNum">     732 </span>            : </a>
-<a name="733"><span class="lineNum">     733 </span><span class="lineCov">         50 :         newItem = addItem(&quot;blue-diary&quot;,</span></a>
+<a name="733"><span class="lineNum">     733 </span><span class="lineCov">         43 :         newItem = addItem(&quot;blue-diary&quot;,</span></a>
 <a name="734"><span class="lineNum">     734 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="735"><span class="lineNum">     735 </span>            :         &quot;The growing discontent is very \n&quot;</a>
 <a name="736"><span class="lineNum">     736 </span>            :         &quot;noticeable. I don't know for how\n&quot;</a>
@@ -804,12 +804,12 @@
 <a name="742"><span class="lineNum">     742 </span>            :                         0,</a>
 <a name="743"><span class="lineNum">     743 </span>            : #endif</a>
 <a name="744"><span class="lineNum">     744 </span>            :                                           TRUE, 11, 8);</a>
-<a name="745"><span class="lineNum">     745 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="746"><span class="lineNum">     746 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="747"><span class="lineNum">     747 </span><span class="lineCov">         50 :         addToRoom(&quot;pod-2&quot;, newItem);</span></a>
+<a name="745"><span class="lineNum">     745 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="746"><span class="lineNum">     746 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="747"><span class="lineNum">     747 </span><span class="lineCov">         43 :         addToRoom(&quot;pod-2&quot;, newItem);</span></a>
 <a name="748"><span class="lineNum">     748 </span>            : </a>
 <a name="749"><span class="lineNum">     749 </span>            : </a>
-<a name="750"><span class="lineNum">     750 </span><span class="lineCov">         50 :         newItem = addItem(&quot;white-diary&quot;,</span></a>
+<a name="750"><span class="lineNum">     750 </span><span class="lineCov">         43 :         newItem = addItem(&quot;white-diary&quot;,</span></a>
 <a name="751"><span class="lineNum">     751 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="752"><span class="lineNum">     752 </span>            :         &quot;Crew is growing demotivated with\n&quot;</a>
 <a name="753"><span class="lineNum">     753 </span>            :         &quot;all the combat exercises and no \n&quot;</a>
@@ -823,12 +823,12 @@
 <a name="761"><span class="lineNum">     761 </span>            :                         0,</a>
 <a name="762"><span class="lineNum">     762 </span>            : #endif</a>
 <a name="763"><span class="lineNum">     763 </span>            :                                           TRUE, 3, 2);</a>
-<a name="764"><span class="lineNum">     764 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="765"><span class="lineNum">     765 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="766"><span class="lineNum">     766 </span><span class="lineCov">         50 :         addToRoom(&quot;pod-3&quot;, newItem);</span></a>
+<a name="764"><span class="lineNum">     764 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="765"><span class="lineNum">     765 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="766"><span class="lineNum">     766 </span><span class="lineCov">         43 :         addToRoom(&quot;pod-3&quot;, newItem);</span></a>
 <a name="767"><span class="lineNum">     767 </span>            : </a>
 <a name="768"><span class="lineNum">     768 </span>            : </a>
-<a name="769"><span class="lineNum">     769 </span><span class="lineCov">         50 :         newItem = addItem(&quot;yellow-book&quot;,</span></a>
+<a name="769"><span class="lineNum">     769 </span><span class="lineCov">         43 :         newItem = addItem(&quot;yellow-book&quot;,</span></a>
 <a name="770"><span class="lineNum">     770 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="771"><span class="lineNum">     771 </span>            :         &quot;Situation is hopeless. I must enact\n&quot;</a>
 <a name="772"><span class="lineNum">     772 </span>            :         &quot;the security lockdown protocol and \n&quot;</a>
@@ -840,12 +840,12 @@
 <a name="778"><span class="lineNum">     778 </span>            :                         0,</a>
 <a name="779"><span class="lineNum">     779 </span>            : #endif</a>
 <a name="780"><span class="lineNum">     780 </span>            :                                           TRUE, 5, 10);</a>
-<a name="781"><span class="lineNum">     781 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="782"><span class="lineNum">     782 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="783"><span class="lineNum">     783 </span><span class="lineCov">         50 :         addToRoom(&quot;pod-4&quot;, newItem);</span></a>
+<a name="781"><span class="lineNum">     781 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="782"><span class="lineNum">     782 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="783"><span class="lineNum">     783 </span><span class="lineCov">         43 :         addToRoom(&quot;pod-4&quot;, newItem);</span></a>
 <a name="784"><span class="lineNum">     784 </span>            : </a>
 <a name="785"><span class="lineNum">     785 </span>            : </a>
-<a name="786"><span class="lineNum">     786 </span><span class="lineCov">         50 :         newItem = addItem(&quot;log-book&quot;,</span></a>
+<a name="786"><span class="lineNum">     786 </span><span class="lineCov">         43 :         newItem = addItem(&quot;log-book&quot;,</span></a>
 <a name="787"><span class="lineNum">     787 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="788"><span class="lineNum">     788 </span>            :         &quot;Power conduit on level 3 was restored\n&quot;</a>
 <a name="789"><span class="lineNum">     789 </span>            :         &quot;without incidents.&quot;,</a>
@@ -854,12 +854,12 @@
 <a name="792"><span class="lineNum">     792 </span>            :                         1,</a>
 <a name="793"><span class="lineNum">     793 </span>            : #endif</a>
 <a name="794"><span class="lineNum">     794 </span>            :                                           TRUE, 26, 8);</a>
-<a name="795"><span class="lineNum">     795 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="796"><span class="lineNum">     796 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="797"><span class="lineNum">     797 </span><span class="lineCov">         50 :         addToRoom(&quot;crew-bunks&quot;, newItem);</span></a>
+<a name="795"><span class="lineNum">     795 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="796"><span class="lineNum">     796 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="797"><span class="lineNum">     797 </span><span class="lineCov">         43 :         addToRoom(&quot;crew-bunks&quot;, newItem);</span></a>
 <a name="798"><span class="lineNum">     798 </span>            : </a>
 <a name="799"><span class="lineNum">     799 </span>            :         /* Misc */</a>
-<a name="800"><span class="lineNum">     800 </span><span class="lineCov">         50 :         newItem = addItem(&quot;card-writer&quot;,</span></a>
+<a name="800"><span class="lineNum">     800 </span><span class="lineCov">         43 :         newItem = addItem(&quot;card-writer&quot;,</span></a>
 <a name="801"><span class="lineNum">     801 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="802"><span class="lineNum">     802 </span>            :         &quot;Terminal with card writer, connected\n&quot;</a>
 <a name="803"><span class="lineNum">     803 </span>            :         &quot; to the main computer&quot;,</a>
@@ -868,12 +868,12 @@
 <a name="806"><span class="lineNum">     806 </span>            :                         3,</a>
 <a name="807"><span class="lineNum">     807 </span>            : #endif</a>
 <a name="808"><span class="lineNum">     808 </span>            :                                           FALSE, 22, 10);</a>
-<a name="809"><span class="lineNum">     809 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="810"><span class="lineNum">     810 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="811"><span class="lineNum">     811 </span><span class="lineCov">         50 :         addToRoom(&quot;computer-core&quot;, newItem);</span></a>
+<a name="809"><span class="lineNum">     809 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="810"><span class="lineNum">     810 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="811"><span class="lineNum">     811 </span><span class="lineCov">         43 :         addToRoom(&quot;computer-core&quot;, newItem);</span></a>
 <a name="812"><span class="lineNum">     812 </span>            : </a>
 <a name="813"><span class="lineNum">     813 </span>            : </a>
-<a name="814"><span class="lineNum">     814 </span><span class="lineCov">         50 :         newItem = addItem(&quot;high-rank-keycard&quot;,</span></a>
+<a name="814"><span class="lineNum">     814 </span><span class="lineCov">         43 :         newItem = addItem(&quot;high-rank-keycard&quot;,</span></a>
 <a name="815"><span class="lineNum">     815 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="816"><span class="lineNum">     816 </span>            :                         &quot;Clearance for high-rank officer.&quot;,</a>
 <a name="817"><span class="lineNum">     817 </span>            : #endif</a>
@@ -881,13 +881,13 @@
 <a name="819"><span class="lineNum">     819 </span>            :                         0,</a>
 <a name="820"><span class="lineNum">     820 </span>            : #endif</a>
 <a name="821"><span class="lineNum">     821 </span>            :                                           TRUE, 23, 17);</a>
-<a name="822"><span class="lineNum">     822 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="823"><span class="lineNum">     823 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="824"><span class="lineNum">     824 </span><span class="lineCov">         50 :         newItem-&gt;pickCallback = keycardPickCallback;</span></a>
-<a name="825"><span class="lineNum">     825 </span><span class="lineCov">         50 :         newItem-&gt;dropCallback = keycardDropCallback;</span></a>
+<a name="822"><span class="lineNum">     822 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="823"><span class="lineNum">     823 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="824"><span class="lineNum">     824 </span><span class="lineCov">         43 :         newItem-&gt;pickCallback = keycardPickCallback;</span></a>
+<a name="825"><span class="lineNum">     825 </span><span class="lineCov">         43 :         newItem-&gt;dropCallback = keycardDropCallback;</span></a>
 <a name="826"><span class="lineNum">     826 </span>            : </a>
 <a name="827"><span class="lineNum">     827 </span>            : </a>
-<a name="828"><span class="lineNum">     828 </span><span class="lineCov">         50 :         newItem = addItem(&quot;digital-safe&quot;,</span></a>
+<a name="828"><span class="lineNum">     828 </span><span class="lineCov">         43 :         newItem = addItem(&quot;digital-safe&quot;,</span></a>
 <a name="829"><span class="lineNum">     829 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="830"><span class="lineNum">     830 </span>            :         &quot;A very valuable vintage rare and in\n&quot;</a>
 <a name="831"><span class="lineNum">     831 </span>            :         &quot;working-conditions computer rack!&quot;,</a>
@@ -896,11 +896,11 @@
 <a name="834"><span class="lineNum">     834 </span>            :                         138,</a>
 <a name="835"><span class="lineNum">     835 </span>            : #endif</a>
 <a name="836"><span class="lineNum">     836 </span>            :                                           FALSE, 16, 4);</a>
-<a name="837"><span class="lineNum">     837 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = useComputerRack;</span></a>
-<a name="838"><span class="lineNum">     838 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="839"><span class="lineNum">     839 </span><span class="lineCov">         50 :         addToRoom(&quot;situation-room&quot;, newItem);</span></a>
+<a name="837"><span class="lineNum">     837 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = useComputerRack;</span></a>
+<a name="838"><span class="lineNum">     838 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="839"><span class="lineNum">     839 </span><span class="lineCov">         43 :         addToRoom(&quot;situation-room&quot;, newItem);</span></a>
 <a name="840"><span class="lineNum">     840 </span>            : </a>
-<a name="841"><span class="lineNum">     841 </span><span class="lineCov">         50 :         newItem = addItem(&quot;computer-terminal&quot;,</span></a>
+<a name="841"><span class="lineNum">     841 </span><span class="lineCov">         43 :         newItem = addItem(&quot;computer-terminal&quot;,</span></a>
 <a name="842"><span class="lineNum">     842 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="843"><span class="lineNum">     843 </span>            :         &quot;An offline terminal connected to the\n&quot;</a>
 <a name="844"><span class="lineNum">     844 </span>            :         &quot;computer node&quot;,</a>
@@ -909,12 +909,12 @@
 <a name="847"><span class="lineNum">     847 </span>            :                         138,</a>
 <a name="848"><span class="lineNum">     848 </span>            : #endif</a>
 <a name="849"><span class="lineNum">     849 </span>            :                                           FALSE, 16, 5);</a>
-<a name="850"><span class="lineNum">     850 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = useComputerRack;</span></a>
-<a name="851"><span class="lineNum">     851 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="852"><span class="lineNum">     852 </span><span class="lineCov">         50 :         addToRoom(&quot;situation-room&quot;, newItem);</span></a>
+<a name="850"><span class="lineNum">     850 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = useComputerRack;</span></a>
+<a name="851"><span class="lineNum">     851 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="852"><span class="lineNum">     852 </span><span class="lineCov">         43 :         addToRoom(&quot;situation-room&quot;, newItem);</span></a>
 <a name="853"><span class="lineNum">     853 </span>            : </a>
 <a name="854"><span class="lineNum">     854 </span>            : </a>
-<a name="855"><span class="lineNum">     855 </span><span class="lineCov">         50 :         newItem = addItem(&quot;journal&quot;,</span></a>
+<a name="855"><span class="lineNum">     855 </span><span class="lineCov">         43 :         newItem = addItem(&quot;journal&quot;,</span></a>
 <a name="856"><span class="lineNum">     856 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="857"><span class="lineNum">     857 </span>            :         &quot;...and so you guys could just join in\n&quot;</a>
 <a name="858"><span class="lineNum">     858 </span>            :         &quot;and see whats going on. I hope it is not\n&quot;</a>
@@ -925,11 +925,11 @@
 <a name="863"><span class="lineNum">     863 </span>            :                         0,</a>
 <a name="864"><span class="lineNum">     864 </span>            : #endif</a>
 <a name="865"><span class="lineNum">     865 </span>            :                                           TRUE, 8, 6);</a>
-<a name="866"><span class="lineNum">     866 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="867"><span class="lineNum">     867 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="868"><span class="lineNum">     868 </span><span class="lineCov">         50 :         addToRoom(&quot;situation-room&quot;, newItem);</span></a>
+<a name="866"><span class="lineNum">     866 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="867"><span class="lineNum">     867 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="868"><span class="lineNum">     868 </span><span class="lineCov">         43 :         addToRoom(&quot;situation-room&quot;, newItem);</span></a>
 <a name="869"><span class="lineNum">     869 </span>            : </a>
-<a name="870"><span class="lineNum">     870 </span><span class="lineCov">         50 :         newItem = addItem(&quot;metal-mending&quot;,</span></a>
+<a name="870"><span class="lineNum">     870 </span><span class="lineCov">         43 :         newItem = addItem(&quot;metal-mending&quot;,</span></a>
 <a name="871"><span class="lineNum">     871 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="872"><span class="lineNum">     872 </span>            :                         &quot;A piece of metal that might be valuable.&quot;,</a>
 <a name="873"><span class="lineNum">     873 </span>            : #endif</a>
@@ -937,12 +937,12 @@
 <a name="875"><span class="lineNum">     875 </span>            :                         74,</a>
 <a name="876"><span class="lineNum">     876 </span>            : #endif</a>
 <a name="877"><span class="lineNum">     877 </span>            :                                           FALSE, 5, 4);</a>
-<a name="878"><span class="lineNum">     878 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="879"><span class="lineNum">     879 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="880"><span class="lineNum">     880 </span><span class="lineCov">         50 :         addToRoom(&quot;radar-array&quot;, newItem);</span></a>
+<a name="878"><span class="lineNum">     878 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="879"><span class="lineNum">     879 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="880"><span class="lineNum">     880 </span><span class="lineCov">         43 :         addToRoom(&quot;radar-array&quot;, newItem);</span></a>
 <a name="881"><span class="lineNum">     881 </span>            : </a>
 <a name="882"><span class="lineNum">     882 </span>            : </a>
-<a name="883"><span class="lineNum">     883 </span><span class="lineCov">         50 :         newItem = addItem(&quot;scientific-treatise&quot;,</span></a>
+<a name="883"><span class="lineNum">     883 </span><span class="lineCov">         43 :         newItem = addItem(&quot;scientific-treatise&quot;,</span></a>
 <a name="884"><span class="lineNum">     884 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="885"><span class="lineNum">     885 </span>            :         &quot;Voynich Manuscript\nAnnottated Translation.\n&quot;</a>
 <a name="886"><span class="lineNum">     886 </span>            :         &quot;Classical edition. It's badly burn't.\n&quot;</a>
@@ -952,12 +952,12 @@
 <a name="890"><span class="lineNum">     890 </span>            :                         1,</a>
 <a name="891"><span class="lineNum">     891 </span>            : #endif</a>
 <a name="892"><span class="lineNum">     892 </span>            :                                           TRUE, 17, 17);</a>
-<a name="893"><span class="lineNum">     893 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="894"><span class="lineNum">     894 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="895"><span class="lineNum">     895 </span><span class="lineCov">         50 :         addToRoom(&quot;wc&quot;, newItem);</span></a>
+<a name="893"><span class="lineNum">     893 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="894"><span class="lineNum">     894 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="895"><span class="lineNum">     895 </span><span class="lineCov">         43 :         addToRoom(&quot;wc&quot;, newItem);</span></a>
 <a name="896"><span class="lineNum">     896 </span>            : </a>
 <a name="897"><span class="lineNum">     897 </span>            : </a>
-<a name="898"><span class="lineNum">     898 </span><span class="lineCov">         50 :         newItem = addItem(&quot;clogged-flush&quot;,</span></a>
+<a name="898"><span class="lineNum">     898 </span><span class="lineCov">         43 :         newItem = addItem(&quot;clogged-flush&quot;,</span></a>
 <a name="899"><span class="lineNum">     899 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="900"><span class="lineNum">     900 </span>            :                         &quot;There is so much matter in the pipe...&quot;,</a>
 <a name="901"><span class="lineNum">     901 </span>            : #endif</a>
@@ -965,11 +965,11 @@
 <a name="903"><span class="lineNum">     903 </span>            :                         1,</a>
 <a name="904"><span class="lineNum">     904 </span>            : #endif</a>
 <a name="905"><span class="lineNum">     905 </span>            :                                           FALSE, 22, 17);</a>
-<a name="906"><span class="lineNum">     906 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = useCloggedFlush;</span></a>
-<a name="907"><span class="lineNum">     907 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="908"><span class="lineNum">     908 </span><span class="lineCov">         50 :         addToRoom(&quot;wc&quot;, newItem);</span></a>
+<a name="906"><span class="lineNum">     906 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = useCloggedFlush;</span></a>
+<a name="907"><span class="lineNum">     907 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="908"><span class="lineNum">     908 </span><span class="lineCov">         43 :         addToRoom(&quot;wc&quot;, newItem);</span></a>
 <a name="909"><span class="lineNum">     909 </span>            : </a>
-<a name="910"><span class="lineNum">     910 </span><span class="lineCov">         50 :         newItem = addItem(&quot;flush&quot;,</span></a>
+<a name="910"><span class="lineNum">     910 </span><span class="lineCov">         43 :         newItem = addItem(&quot;flush&quot;,</span></a>
 <a name="911"><span class="lineNum">     911 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="912"><span class="lineNum">     912 </span>            :                         &quot;Working dispose valve for a very basic need.&quot;,</a>
 <a name="913"><span class="lineNum">     913 </span>            : #endif</a>
@@ -977,12 +977,12 @@
 <a name="915"><span class="lineNum">     915 </span>            :                         1,</a>
 <a name="916"><span class="lineNum">     916 </span>            : #endif</a>
 <a name="917"><span class="lineNum">     917 </span>            :                                           FALSE, 18, 17);</a>
-<a name="918"><span class="lineNum">     918 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = useRegularFlush;</span></a>
-<a name="919"><span class="lineNum">     919 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="920"><span class="lineNum">     920 </span><span class="lineCov">         50 :         addToRoom(&quot;wc&quot;, newItem);</span></a>
+<a name="918"><span class="lineNum">     918 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = useRegularFlush;</span></a>
+<a name="919"><span class="lineNum">     919 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="920"><span class="lineNum">     920 </span><span class="lineCov">         43 :         addToRoom(&quot;wc&quot;, newItem);</span></a>
 <a name="921"><span class="lineNum">     921 </span>            : </a>
 <a name="922"><span class="lineNum">     922 </span>            : </a>
-<a name="923"><span class="lineNum">     923 </span><span class="lineCov">         50 :         newItem = addItem(&quot;fuel-rods&quot;,</span></a>
+<a name="923"><span class="lineNum">     923 </span><span class="lineCov">         43 :         newItem = addItem(&quot;fuel-rods&quot;,</span></a>
 <a name="924"><span class="lineNum">     924 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="925"><span class="lineNum">     925 </span>            :         &quot;This is the source of all the trouble.\n&quot;</a>
 <a name="926"><span class="lineNum">     926 </span>            :         &quot;Both now and then. Gotta find a way to\n&quot;</a>
@@ -992,12 +992,12 @@
 <a name="930"><span class="lineNum">     930 </span>            :                         209,</a>
 <a name="931"><span class="lineNum">     931 </span>            : #endif</a>
 <a name="932"><span class="lineNum">     932 </span>            :                                           FALSE, 29, 10);</a>
-<a name="933"><span class="lineNum">     933 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="934"><span class="lineNum">     934 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="935"><span class="lineNum">     935 </span><span class="lineCov">         50 :         addToRoom(&quot;reactor-core&quot;, newItem);</span></a>
+<a name="933"><span class="lineNum">     933 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="934"><span class="lineNum">     934 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="935"><span class="lineNum">     935 </span><span class="lineCov">         43 :         addToRoom(&quot;reactor-core&quot;, newItem);</span></a>
 <a name="936"><span class="lineNum">     936 </span>            : </a>
 <a name="937"><span class="lineNum">     937 </span>            : </a>
-<a name="938"><span class="lineNum">     938 </span><span class="lineCov">         50 :         newItem = addItem(&quot;reactor-valve-control&quot;,</span></a>
+<a name="938"><span class="lineNum">     938 </span><span class="lineCov">         43 :         newItem = addItem(&quot;reactor-valve-control&quot;,</span></a>
 <a name="939"><span class="lineNum">     939 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="940"><span class="lineNum">     940 </span>            :         &quot;This is the computer node that could be\n&quot;</a>
 <a name="941"><span class="lineNum">     941 </span>            :         &quot;used to eject the rods into the abyss.&quot;,</a>
@@ -1006,12 +1006,12 @@
 <a name="944"><span class="lineNum">     944 </span>            :                         62,</a>
 <a name="945"><span class="lineNum">     945 </span>            : #endif</a>
 <a name="946"><span class="lineNum">     946 </span>            :                                           FALSE, 21, 4);</a>
-<a name="947"><span class="lineNum">     947 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = reactorValveCallback;</span></a>
-<a name="948"><span class="lineNum">     948 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="949"><span class="lineNum">     949 </span><span class="lineCov">         50 :         addToRoom(&quot;reactor-core&quot;, newItem);</span></a>
+<a name="947"><span class="lineNum">     947 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = reactorValveCallback;</span></a>
+<a name="948"><span class="lineNum">     948 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="949"><span class="lineNum">     949 </span><span class="lineCov">         43 :         addToRoom(&quot;reactor-core&quot;, newItem);</span></a>
 <a name="950"><span class="lineNum">     950 </span>            : </a>
 <a name="951"><span class="lineNum">     951 </span>            : </a>
-<a name="952"><span class="lineNum">     952 </span><span class="lineCov">         50 :         newItem = addItem(&quot;root-keycard&quot;,</span></a>
+<a name="952"><span class="lineNum">     952 </span><span class="lineCov">         43 :         newItem = addItem(&quot;root-keycard&quot;,</span></a>
 <a name="953"><span class="lineNum">     953 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="954"><span class="lineNum">     954 </span>            :                         &quot;Card for root access.&quot;,</a>
 <a name="955"><span class="lineNum">     955 </span>            : #endif</a>
@@ -1019,13 +1019,13 @@
 <a name="957"><span class="lineNum">     957 </span>            :                         0,</a>
 <a name="958"><span class="lineNum">     958 </span>            : #endif</a>
 <a name="959"><span class="lineNum">     959 </span>            :                                           TRUE, 16, 3);</a>
-<a name="960"><span class="lineNum">     960 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="961"><span class="lineNum">     961 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="962"><span class="lineNum">     962 </span><span class="lineCov">         50 :         newItem-&gt;pickCallback = keycardPickCallback;</span></a>
-<a name="963"><span class="lineNum">     963 </span><span class="lineCov">         50 :         newItem-&gt;dropCallback = keycardDropCallback;</span></a>
+<a name="960"><span class="lineNum">     960 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="961"><span class="lineNum">     961 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="962"><span class="lineNum">     962 </span><span class="lineCov">         43 :         newItem-&gt;pickCallback = keycardPickCallback;</span></a>
+<a name="963"><span class="lineNum">     963 </span><span class="lineCov">         43 :         newItem-&gt;dropCallback = keycardDropCallback;</span></a>
 <a name="964"><span class="lineNum">     964 </span>            : </a>
 <a name="965"><span class="lineNum">     965 </span>            :         /* Elevator controls */</a>
-<a name="966"><span class="lineNum">     966 </span><span class="lineCov">         50 :         newItem = addItem(&quot;elevator-level1-go-down&quot;,</span></a>
+<a name="966"><span class="lineNum">     966 </span><span class="lineCov">         43 :         newItem = addItem(&quot;elevator-level1-go-down&quot;,</span></a>
 <a name="967"><span class="lineNum">     967 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="968"><span class="lineNum">     968 </span>            :                         &quot;Elevator controls - Go down.&quot;,</a>
 <a name="969"><span class="lineNum">     969 </span>            : #endif</a>
@@ -1033,11 +1033,11 @@
 <a name="971"><span class="lineNum">     971 </span>            :                         0,</a>
 <a name="972"><span class="lineNum">     972 </span>            : #endif</a>
 <a name="973"><span class="lineNum">     973 </span>            :                                           FALSE, 2, 0);</a>
-<a name="974"><span class="lineNum">     974 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = elevatorGoDownCallback;</span></a>
-<a name="975"><span class="lineNum">     975 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="976"><span class="lineNum">     976 </span><span class="lineCov">         50 :         addToRoom(&quot;elevator-level-1&quot;, newItem);</span></a>
+<a name="974"><span class="lineNum">     974 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = elevatorGoDownCallback;</span></a>
+<a name="975"><span class="lineNum">     975 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="976"><span class="lineNum">     976 </span><span class="lineCov">         43 :         addToRoom(&quot;elevator-level-1&quot;, newItem);</span></a>
 <a name="977"><span class="lineNum">     977 </span>            : </a>
-<a name="978"><span class="lineNum">     978 </span><span class="lineCov">         50 :         newItem = addItem(&quot;elevator-level2-go-down&quot;,</span></a>
+<a name="978"><span class="lineNum">     978 </span><span class="lineCov">         43 :         newItem = addItem(&quot;elevator-level2-go-down&quot;,</span></a>
 <a name="979"><span class="lineNum">     979 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="980"><span class="lineNum">     980 </span>            :                         &quot;Elevator controls - Go down.&quot;,</a>
 <a name="981"><span class="lineNum">     981 </span>            : #endif</a>
@@ -1045,11 +1045,11 @@
 <a name="983"><span class="lineNum">     983 </span>            :                         0,</a>
 <a name="984"><span class="lineNum">     984 </span>            : #endif</a>
 <a name="985"><span class="lineNum">     985 </span>            :                                           FALSE, 2, 0);</a>
-<a name="986"><span class="lineNum">     986 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = elevatorGoDownCallback;</span></a>
-<a name="987"><span class="lineNum">     987 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="988"><span class="lineNum">     988 </span><span class="lineCov">         50 :         addToRoom(&quot;elevator-level-2&quot;, newItem);</span></a>
+<a name="986"><span class="lineNum">     986 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = elevatorGoDownCallback;</span></a>
+<a name="987"><span class="lineNum">     987 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="988"><span class="lineNum">     988 </span><span class="lineCov">         43 :         addToRoom(&quot;elevator-level-2&quot;, newItem);</span></a>
 <a name="989"><span class="lineNum">     989 </span>            : </a>
-<a name="990"><span class="lineNum">     990 </span><span class="lineCov">         50 :         newItem = addItem(&quot;elevator-level2-go-up&quot;,</span></a>
+<a name="990"><span class="lineNum">     990 </span><span class="lineCov">         43 :         newItem = addItem(&quot;elevator-level2-go-up&quot;,</span></a>
 <a name="991"><span class="lineNum">     991 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="992"><span class="lineNum">     992 </span>            :                         &quot;Elevator controls - Go Up.&quot;,</a>
 <a name="993"><span class="lineNum">     993 </span>            : #endif</a>
@@ -1057,11 +1057,11 @@
 <a name="995"><span class="lineNum">     995 </span>            :                         0,</a>
 <a name="996"><span class="lineNum">     996 </span>            : #endif</a>
 <a name="997"><span class="lineNum">     997 </span>            :                                           FALSE, 3, 0);</a>
-<a name="998"><span class="lineNum">     998 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = elevatorGoUpCallback;</span></a>
-<a name="999"><span class="lineNum">     999 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="1000"><span class="lineNum">    1000 </span><span class="lineCov">         50 :         addToRoom(&quot;elevator-level-2&quot;, newItem);</span></a>
+<a name="998"><span class="lineNum">     998 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = elevatorGoUpCallback;</span></a>
+<a name="999"><span class="lineNum">     999 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="1000"><span class="lineNum">    1000 </span><span class="lineCov">         43 :         addToRoom(&quot;elevator-level-2&quot;, newItem);</span></a>
 <a name="1001"><span class="lineNum">    1001 </span>            : </a>
-<a name="1002"><span class="lineNum">    1002 </span><span class="lineCov">         50 :         newItem = addItem(&quot;elevator-level3-go-up&quot;,</span></a>
+<a name="1002"><span class="lineNum">    1002 </span><span class="lineCov">         43 :         newItem = addItem(&quot;elevator-level3-go-up&quot;,</span></a>
 <a name="1003"><span class="lineNum">    1003 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="1004"><span class="lineNum">    1004 </span>            :                         &quot;Elevator controls - Go Up.&quot;,</a>
 <a name="1005"><span class="lineNum">    1005 </span>            : #endif</a>
@@ -1069,11 +1069,11 @@
 <a name="1007"><span class="lineNum">    1007 </span>            :                         0,</a>
 <a name="1008"><span class="lineNum">    1008 </span>            : #endif</a>
 <a name="1009"><span class="lineNum">    1009 </span>            :                                           FALSE, 3, 0);</a>
-<a name="1010"><span class="lineNum">    1010 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = elevatorGoUpCallback;</span></a>
-<a name="1011"><span class="lineNum">    1011 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="1012"><span class="lineNum">    1012 </span><span class="lineCov">         50 :         addToRoom(&quot;elevator-level-3&quot;, newItem);</span></a>
+<a name="1010"><span class="lineNum">    1010 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = elevatorGoUpCallback;</span></a>
+<a name="1011"><span class="lineNum">    1011 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="1012"><span class="lineNum">    1012 </span><span class="lineCov">         43 :         addToRoom(&quot;elevator-level-3&quot;, newItem);</span></a>
 <a name="1013"><span class="lineNum">    1013 </span>            : </a>
-<a name="1014"><span class="lineNum">    1014 </span><span class="lineCov">         50 :         newItem = addItem(&quot;the-mistral-report&quot;,</span></a>
+<a name="1014"><span class="lineNum">    1014 </span><span class="lineCov">         43 :         newItem = addItem(&quot;the-mistral-report&quot;,</span></a>
 <a name="1015"><span class="lineNum">    1015 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="1016"><span class="lineNum">    1016 </span>            :                         &quot;RetroZaragoza Homebrew '18 awarded\nentry: A espionage-themed \nturn-based 3D RPG for MS-DOS,\nXBox One, Mac and Amiga.&quot;,</a>
 <a name="1017"><span class="lineNum">    1017 </span>            : #endif</a>
@@ -1081,10 +1081,10 @@
 <a name="1019"><span class="lineNum">    1019 </span>            :                         200,</a>
 <a name="1020"><span class="lineNum">    1020 </span>            : #endif</a>
 <a name="1021"><span class="lineNum">    1021 </span>            :                                           TRUE, 15, 19);</a>
-<a name="1022"><span class="lineNum">    1022 </span><span class="lineCov">         50 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
-<a name="1023"><span class="lineNum">    1023 </span><span class="lineCov">         50 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
-<a name="1024"><span class="lineNum">    1024 </span><span class="lineCov">         50 :         addToRoom(&quot;crew-bunks&quot;, newItem);</span></a>
-<a name="1025"><span class="lineNum">    1025 </span><span class="lineCov">         50 : }</span></a>
+<a name="1022"><span class="lineNum">    1022 </span><span class="lineCov">         43 :         newItem-&gt;useCallback = cantBeUsedCallback;</span></a>
+<a name="1023"><span class="lineNum">    1023 </span><span class="lineCov">         43 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="1024"><span class="lineNum">    1024 </span><span class="lineCov">         43 :         addToRoom(&quot;crew-bunks&quot;, newItem);</span></a>
+<a name="1025"><span class="lineNum">    1025 </span><span class="lineCov">         43 : }</span></a>
 </pre>
       </td>
     </tr>
