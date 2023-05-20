@@ -426,7 +426,7 @@ void titleScreen() {
 	int keepGoing = 1;
 	clearGraphics();
 
-	writeStr(1, 1, "Space Mare Imperium:", 2, 0);
+	writeStr(1, 1, "Sub Mare Imperium:", 2, 0);
 	writeStr(1, 2, "     Derelict", 2, 0);
 	writeStr(1, 4, "by Daniel Monteiro", 2, 0);
 	writeStr(1, 6, "   Press any key", 2, 0);
