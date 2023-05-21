@@ -158,7 +158,7 @@ void titleScreen(void) {
 	uint8_t keepGoing = 1;
 	clearScreen();
 
-	writeStr(1, 1, "Space Mare Imperium: Derelict", 2, 0);
+	writeStr(1, 1, "Sub Mare Imperium: Derelict", 2, 0);
 	writeStr(1, 4, "by Daniel Monteiro", 2, 0);
 	writeStr(1, 6, " Press B to start ", 2, 0);
 
