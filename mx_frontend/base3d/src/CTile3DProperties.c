@@ -17,12 +17,12 @@
 #include "MapWithCharKey.h"
 
 void loadPropertyList(const char *__restrict__ propertyFile, struct MapWithCharKey *__restrict__ map) {
-
+    int c;
     struct StaticBuffer buffer = loadBinaryFileFromPath(propertyFile);
     uint8_t *limit = buffer.data + buffer.size;
     uint8_t *bufferHead = buffer.data;
 
-    for (int c = 0; c < 256; ++c ) {
+    for (c = 0; c < 256; ++c ) {
         struct CTile3DProperties *prop = getFromMap(map, c);
         if (prop != NULL) {
             free(prop);
