@@ -28,7 +28,7 @@
 #include "Dungeon.h"
 #include "SoundSystem.h"
 
-extern uint8_t **mItems;
+extern uint8_t **ITEMS_IN_MAP;
 int x = 0;
 int z = 0;
 int rotation = 0;
@@ -37,9 +37,7 @@ struct CActor actor;
 
 void clearMapCache() {
     int c;
-    for (c = 0; c < MAP_SIZE; ++c ) {
-        memset (mItems[c], 0xFF, MAP_SIZE);
-    }
+    memset (&(ITEMS_IN_MAP(0, 0)), 0xFF, MAP_SIZE * MAP_SIZE);
 }
 
 void onLevelLoaded(int index) {
@@ -67,7 +65,8 @@ void tickMission(enum ECommand cmd) {
 }
 
 void setItem(const int x, const int y, uint8_t item) {
-    mItems[y][x] = item;
+
+    ITEMS_IN_MAP(x, y) = item;
 }
 
 void loadMap(int map, struct MapWithCharKey *collisionMap) {

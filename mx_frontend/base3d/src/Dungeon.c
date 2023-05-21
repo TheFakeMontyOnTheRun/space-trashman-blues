@@ -32,6 +32,7 @@
 
 struct GameSnapshot gameSnapshot;
 uint8_t *map;
+uint8_t *itemsInMap;
 uint8_t *collisionMap;
 int enteredThru = 0;
 extern const char *focusItemName;

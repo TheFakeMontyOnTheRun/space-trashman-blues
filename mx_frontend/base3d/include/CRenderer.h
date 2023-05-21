@@ -90,8 +90,10 @@ struct Mesh {
 };
 
 extern uint8_t *map;
+extern uint8_t *itemsInMap;
+#define LEVEL_MAP(x, y) (map[ ( (MAP_SIZE) * (y) ) + (x) ])
+#define ITEMS_IN_MAP(x, y) (itemsInMap[ ( (MAP_SIZE) * (y) ) + (x) ])
 
-#define LEVEL_MAP(x, y) map[ ( (MAP_SIZE) * (y) ) + (x) ]
 
 void graphicsInit(void);
 

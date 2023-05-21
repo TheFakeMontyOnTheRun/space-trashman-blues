@@ -52,7 +52,7 @@ uint32_t palette[256];
 uint8_t *framebuffer;
 #endif
 
-uint8_t **mItems;
+uint8_t **ITEMS_IN_MAP;
 enum EDirection cameraDirection;
 struct Vec3 mCamera;
 long gameTicks = 0;
@@ -216,13 +216,12 @@ void drawMap(const struct CActor *current) {
 
     for (z = 0; z < MAP_SIZE; ++z) {
         for (x = 0; x < MAP_SIZE; ++x) {
-            const uint8_t item = mItems[z][x];
-            mItems[z][x] = 0xFF;
+            const uint8_t item = ITEMS_IN_MAP(x, z);
+            ITEMS_IN_MAP(x, z) = 0xFF;
 
             if (item != 0xFF) {
-                mItems[z][x] = item;
+                ITEMS_IN_MAP(x, z) = item;
             }
-
         }
     }
 
@@ -359,7 +358,7 @@ void render(const long ms) {
                         z = visPos.y;
                         element = LEVEL_MAP(x, z);
 
-                        itemsSnapshotElement = mItems[z][x];
+                        itemsSnapshotElement = ITEMS_IN_MAP(x, z);
 
                         position.mX =
                                 mCamera.mX + intToFix(-2 * ((MAP_SIZE - 1) - x));
@@ -398,7 +397,7 @@ void render(const long ms) {
                         z = visPos.y;
 
                         element = LEVEL_MAP(x, z);
-                        itemsSnapshotElement = mItems[z][x];
+                        itemsSnapshotElement = ITEMS_IN_MAP(x, z);
 
                         position.mX = mCamera.mX + intToFix(-2 * x);
                         position.mY = mCamera.mY;
@@ -430,7 +429,7 @@ void render(const long ms) {
                         z = visPos.x;
 
                         element = LEVEL_MAP(z, x);
-                        itemsSnapshotElement = mItems[x][z];
+                        itemsSnapshotElement = ITEMS_IN_MAP(z, x);
 
                         position.mX = mCamera.mX + intToFix(-2 * x);
                         position.mY = mCamera.mY;
@@ -467,7 +466,7 @@ void render(const long ms) {
 
                         /* yes, it's reversed */
                         element = LEVEL_MAP(z, x);
-                        itemsSnapshotElement = mItems[x][z];
+                        itemsSnapshotElement = ITEMS_IN_MAP(z, x);
 
                         position.mX = mCamera.mX + intToFix(2 * x);
                         position.mY = mCamera.mY;
