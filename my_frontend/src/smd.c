@@ -346,7 +346,7 @@ void titleScreen() {
 	uint8_t keepGoing = 1;
 	clearGraphics();
 	//               |
-	writeStr(1, 5, "   Space Mare Imperium  ", 2, 0);
+	writeStr(1, 5, "   Sub Mare Imperium  ", 2, 0);
 	writeStr(1, 6, "        Derelict        ", 2, 0);
 	writeStr(1, 8, "   by Daniel Monteiro   ", 2, 0);
 	writeStr(1, 10, "   Press start button!  ", 2, 0);
