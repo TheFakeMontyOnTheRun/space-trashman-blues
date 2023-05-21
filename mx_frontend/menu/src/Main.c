@@ -97,6 +97,15 @@ void initHW(void) {
 
 void shutdownHW() {
     graphicsShutdown();
+
+    free(textBuffer);
+    free(messageLogBuffer);
+    free(collisionMap);
+    free(visMap);
+    free(distances);
+    free(textures);
+    free(itemsInMap);
+    free(map);
 }
 
 long start_clock, end_clock, prev;
