@@ -419,4 +419,5 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void Crawler_unloadStateCallback() {
+    clearTextures();
 }

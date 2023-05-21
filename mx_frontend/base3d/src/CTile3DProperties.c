@@ -22,6 +22,13 @@ void loadPropertyList(const char *__restrict__ propertyFile, struct MapWithCharK
     uint8_t *limit = buffer.data + buffer.size;
     uint8_t *bufferHead = buffer.data;
 
+    for (int c = 0; c < 256; ++c ) {
+        struct CTile3DProperties *prop = getFromMap(map, c);
+        if (prop != NULL) {
+            free(prop);
+        }
+    }
+
     clearMap(map);
 
     while (bufferHead != limit) {

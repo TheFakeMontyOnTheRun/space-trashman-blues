@@ -99,8 +99,6 @@ void loadTileProperties(const uint8_t levelNumber) {
 
     setLoggerDelegate(printMessageTo3DView);
 
-
-    clearMap(&tileProperties);
     clearMap(&occluders);
     clearMap(&colliders);
     clearMap(&enemySightBlockers);

@@ -28,7 +28,6 @@
 #include "Dungeon.h"
 #include "SoundSystem.h"
 
-extern uint8_t **ITEMS_IN_MAP;
 int x = 0;
 int z = 0;
 int rotation = 0;
@@ -36,7 +35,6 @@ enum CrawlerState shouldContinue = kCrawlerGameInProgress;
 struct CActor actor;
 
 void clearMapCache() {
-    int c;
     memset (&(ITEMS_IN_MAP(0, 0)), 0xFF, MAP_SIZE * MAP_SIZE);
 }
 
@@ -89,10 +87,6 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
     dungeon_loadMap(buffer.data, collisions, map);
 
     sprintf (nameBuffer, "map%d.img", map);
-
-    if (mapTopLevel) {
-        free(mapTopLevel);
-    }
 
     mapTopLevel = loadBitmap(nameBuffer);
 
