@@ -31,13 +31,13 @@
             <td class="headerValue">lcov-output.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">356</td>
+            <td class="headerCovTableEntry">357</td>
             <td class="headerCovTableEntry">393</td>
-            <td class="headerCovTableEntryHi">90.6 %</td>
+            <td class="headerCovTableEntryHi">90.8 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2023-05-20 17:43:59</td>
+            <td class="headerValue">2023-05-21 09:47:46</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">41</td>
@@ -117,7 +117,7 @@
 <a name="55"><span class="lineNum">      55 </span>            : #endif</a>
 <a name="56"><span class="lineNum">      56 </span><span class="lineCov">          4 : }</span></a>
 <a name="57"><span class="lineNum">      57 </span>            : </a>
-<a name="58"><span class="lineNum">      58 </span><span class="lineCov">       1516 : struct Item *addItem(const char *description,</span></a>
+<a name="58"><span class="lineNum">      58 </span><span class="lineCov">       1761 : struct Item *addItem(const char *description,</span></a>
 <a name="59"><span class="lineNum">      59 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="60"><span class="lineNum">      60 </span>            :                 const char *info,</a>
 <a name="61"><span class="lineNum">      61 </span>            : #endif</a>
@@ -128,57 +128,57 @@
 <a name="66"><span class="lineNum">      66 </span>            :                                          int8_t positionX,</a>
 <a name="67"><span class="lineNum">      67 </span>            :                                          int8_t positionY) {</a>
 <a name="68"><span class="lineNum">      68 </span>            : </a>
-<a name="69"><span class="lineNum">      69 </span><span class="lineCov">       1516 :         struct Item *toReturn = &amp;item[itemsCount];</span></a>
+<a name="69"><span class="lineNum">      69 </span><span class="lineCov">       1761 :         struct Item *toReturn = &amp;item[itemsCount];</span></a>
 <a name="70"><span class="lineNum">      70 </span>            : </a>
-<a name="71"><span class="lineNum">      71 </span><span class="lineCov">       1516 :         toReturn-&gt;index = itemsCount++;</span></a>
-<a name="72"><span class="lineNum">      72 </span><span class="lineCov">       1516 :         toReturn-&gt;name = description;</span></a>
+<a name="71"><span class="lineNum">      71 </span><span class="lineCov">       1761 :         toReturn-&gt;index = itemsCount++;</span></a>
+<a name="72"><span class="lineNum">      72 </span><span class="lineCov">       1761 :         toReturn-&gt;name = description;</span></a>
 <a name="73"><span class="lineNum">      73 </span>            : #ifdef INCLUDE_ITEM_DESCRIPTIONS</a>
 <a name="74"><span class="lineNum">      74 </span>            :         toReturn-&gt;info = info;</a>
 <a name="75"><span class="lineNum">      75 </span>            : #endif</a>
-<a name="76"><span class="lineNum">      76 </span><span class="lineCov">       1516 :         toReturn-&gt;pickable = pickable;</span></a>
-<a name="77"><span class="lineNum">      77 </span><span class="lineCov">       1516 :         toReturn-&gt;position.x = positionX;</span></a>
-<a name="78"><span class="lineNum">      78 </span><span class="lineCov">       1516 :         toReturn-&gt;position.y = positionY;</span></a>
+<a name="76"><span class="lineNum">      76 </span><span class="lineCov">       1761 :         toReturn-&gt;pickable = pickable;</span></a>
+<a name="77"><span class="lineNum">      77 </span><span class="lineCov">       1761 :         toReturn-&gt;position.x = positionX;</span></a>
+<a name="78"><span class="lineNum">      78 </span><span class="lineCov">       1761 :         toReturn-&gt;position.y = positionY;</span></a>
 <a name="79"><span class="lineNum">      79 </span>            : </a>
-<a name="80"><span class="lineNum">      80 </span><span class="lineCov">       1516 :         return toReturn;</span></a>
+<a name="80"><span class="lineNum">      80 </span><span class="lineCov">       1761 :         return toReturn;</span></a>
 <a name="81"><span class="lineNum">      81 </span>            : }</a>
 <a name="82"><span class="lineNum">      82 </span>            : </a>
-<a name="83"><span class="lineNum">      83 </span><span class="lineCov">        989 : struct Room *addRoom(</span></a>
+<a name="83"><span class="lineNum">      83 </span><span class="lineCov">       1150 : struct Room *addRoom(</span></a>
 <a name="84"><span class="lineNum">      84 </span>            :                 const char *name,</a>
 <a name="85"><span class="lineNum">      85 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="86"><span class="lineNum">      86 </span>            :                 const char *info,</a>
 <a name="87"><span class="lineNum">      87 </span>            : #endif</a>
 <a name="88"><span class="lineNum">      88 </span>            :                 uint8_t sizeX, uint8_t sizeY, uint8_t chanceOfRandomBattle, const int8_t connections[6]) {</a>
 <a name="89"><span class="lineNum">      89 </span>            : </a>
-<a name="90"><span class="lineNum">      90 </span><span class="lineCov">        989 :         struct Room *toReturn = &amp;rooms[roomCount];</span></a>
-<a name="91"><span class="lineNum">      91 </span><span class="lineCov">        989 :         toReturn-&gt;name = name;</span></a>
+<a name="90"><span class="lineNum">      90 </span><span class="lineCov">       1150 :         struct Room *toReturn = &amp;rooms[roomCount];</span></a>
+<a name="91"><span class="lineNum">      91 </span><span class="lineCov">       1150 :         toReturn-&gt;name = name;</span></a>
 <a name="92"><span class="lineNum">      92 </span>            : #ifdef INCLUDE_ROOM_DESCRIPTIONS</a>
 <a name="93"><span class="lineNum">      93 </span>            :         toReturn-&gt;info = info;</a>
 <a name="94"><span class="lineNum">      94 </span>            : #endif</a>
-<a name="95"><span class="lineNum">      95 </span><span class="lineCov">        989 :         toReturn-&gt;sizeX = sizeX;</span></a>
-<a name="96"><span class="lineNum">      96 </span><span class="lineCov">        989 :         toReturn-&gt;sizeY = sizeY;</span></a>
-<a name="97"><span class="lineNum">      97 </span><span class="lineCov">        989 :         toReturn-&gt;chanceOfRandomBattle = chanceOfRandomBattle;</span></a>
-<a name="98"><span class="lineNum">      98 </span><span class="lineCov">        989 :         toReturn-&gt;connections[0] = connections[0];</span></a>
-<a name="99"><span class="lineNum">      99 </span><span class="lineCov">        989 :         toReturn-&gt;connections[1] = connections[1];</span></a>
-<a name="100"><span class="lineNum">     100 </span><span class="lineCov">        989 :         toReturn-&gt;connections[2] = connections[2];</span></a>
-<a name="101"><span class="lineNum">     101 </span><span class="lineCov">        989 :         toReturn-&gt;connections[3] = connections[3];</span></a>
-<a name="102"><span class="lineNum">     102 </span><span class="lineCov">        989 :         toReturn-&gt;connections[4] = connections[4];</span></a>
-<a name="103"><span class="lineNum">     103 </span><span class="lineCov">        989 :         toReturn-&gt;connections[5] = connections[5];</span></a>
+<a name="95"><span class="lineNum">      95 </span><span class="lineCov">       1150 :         toReturn-&gt;sizeX = sizeX;</span></a>
+<a name="96"><span class="lineNum">      96 </span><span class="lineCov">       1150 :         toReturn-&gt;sizeY = sizeY;</span></a>
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">       1150 :         toReturn-&gt;chanceOfRandomBattle = chanceOfRandomBattle;</span></a>
+<a name="98"><span class="lineNum">      98 </span><span class="lineCov">       1150 :         toReturn-&gt;connections[0] = connections[0];</span></a>
+<a name="99"><span class="lineNum">      99 </span><span class="lineCov">       1150 :         toReturn-&gt;connections[1] = connections[1];</span></a>
+<a name="100"><span class="lineNum">     100 </span><span class="lineCov">       1150 :         toReturn-&gt;connections[2] = connections[2];</span></a>
+<a name="101"><span class="lineNum">     101 </span><span class="lineCov">       1150 :         toReturn-&gt;connections[3] = connections[3];</span></a>
+<a name="102"><span class="lineNum">     102 </span><span class="lineCov">       1150 :         toReturn-&gt;connections[4] = connections[4];</span></a>
+<a name="103"><span class="lineNum">     103 </span><span class="lineCov">       1150 :         toReturn-&gt;connections[5] = connections[5];</span></a>
 <a name="104"><span class="lineNum">     104 </span>            : </a>
 <a name="105"><span class="lineNum">     105 </span>            :         /* add list head to make manipulations easier */</a>
-<a name="106"><span class="lineNum">     106 </span><span class="lineCov">        989 :         toReturn-&gt;itemsPresent = &amp;roomObjectHeads[roomCount++];</span></a>
-<a name="107"><span class="lineNum">     107 </span><span class="lineCov">        989 :         memset(toReturn-&gt;itemsPresent, 0, sizeof(struct ObjectNode));</span></a>
+<a name="106"><span class="lineNum">     106 </span><span class="lineCov">       1150 :         toReturn-&gt;itemsPresent = &amp;roomObjectHeads[roomCount++];</span></a>
+<a name="107"><span class="lineNum">     107 </span><span class="lineCov">       1150 :         memset(toReturn-&gt;itemsPresent, 0, sizeof(struct ObjectNode));</span></a>
 <a name="108"><span class="lineNum">     108 </span>            : </a>
-<a name="109"><span class="lineNum">     109 </span><span class="lineCov">        989 :         return toReturn;</span></a>
+<a name="109"><span class="lineNum">     109 </span><span class="lineCov">       1150 :         return toReturn;</span></a>
 <a name="110"><span class="lineNum">     110 </span>            : }</a>
 <a name="111"><span class="lineNum">     111 </span>            : </a>
 <a name="112"><span class="lineNum">     112 </span>            : LogDelegate defaultLogger = writeToLog;</a>
 <a name="113"><span class="lineNum">     113 </span>            : </a>
-<a name="114"><span class="lineNum">     114 </span><span class="lineCov">         47 : void setErrorHandlerCallback(ErrorHandlerCallback callback) {</span></a>
-<a name="115"><span class="lineNum">     115 </span><span class="lineCov">         47 :         errorHandlerCallback = callback;</span></a>
-<a name="116"><span class="lineNum">     116 </span><span class="lineCov">         47 : }</span></a>
+<a name="114"><span class="lineNum">     114 </span><span class="lineCov">         54 : void setErrorHandlerCallback(ErrorHandlerCallback callback) {</span></a>
+<a name="115"><span class="lineNum">     115 </span><span class="lineCov">         54 :         errorHandlerCallback = callback;</span></a>
+<a name="116"><span class="lineNum">     116 </span><span class="lineCov">         54 : }</span></a>
 <a name="117"><span class="lineNum">     117 </span>            : </a>
-<a name="118"><span class="lineNum">     118 </span><span class="lineCov">        122 : struct WorldPosition *getPlayerPosition(void) {</span></a>
-<a name="119"><span class="lineNum">     119 </span><span class="lineCov">        122 :         return &amp;playerPosition;</span></a>
+<a name="118"><span class="lineNum">     118 </span><span class="lineCov">        141 : struct WorldPosition *getPlayerPosition(void) {</span></a>
+<a name="119"><span class="lineNum">     119 </span><span class="lineCov">        141 :         return &amp;playerPosition;</span></a>
 <a name="120"><span class="lineNum">     120 </span>            : }</a>
 <a name="121"><span class="lineNum">     121 </span>            : </a>
 <a name="122"><span class="lineNum">     122 </span><span class="lineCov">          5 : void setPlayerPosition(struct WorldPosition *pos) {</span></a>
@@ -186,101 +186,101 @@
 <a name="124"><span class="lineNum">     124 </span><span class="lineCov">          5 :         playerPosition.y = pos-&gt;y;</span></a>
 <a name="125"><span class="lineNum">     125 </span><span class="lineCov">          5 : }</span></a>
 <a name="126"><span class="lineNum">     126 </span>            : </a>
-<a name="127"><span class="lineNum">     127 </span><span class="lineCov">        105 : uint8_t isCloseToObject(struct WorldPosition *pos, struct Item *_item) {</span></a>
-<a name="128"><span class="lineNum">     128 </span><span class="lineCov">        105 :         return (abs(pos-&gt;x - _item-&gt;position.x) + abs(pos-&gt;y - _item-&gt;position.y)) &lt;= 1;</span></a>
+<a name="127"><span class="lineNum">     127 </span><span class="lineCov">        124 : uint8_t isCloseToObject(struct WorldPosition *pos, struct Item *_item) {</span></a>
+<a name="128"><span class="lineNum">     128 </span><span class="lineCov">        124 :         return (abs(pos-&gt;x - _item-&gt;position.x) + abs(pos-&gt;y - _item-&gt;position.y)) &lt;= 1;</span></a>
 <a name="129"><span class="lineNum">     129 </span>            : }</a>
 <a name="130"><span class="lineNum">     130 </span>            : </a>
-<a name="131"><span class="lineNum">     131 </span><span class="lineCov">         12 : enum EGameStates getGameStatus(void) {</span></a>
-<a name="132"><span class="lineNum">     132 </span><span class="lineCov">         12 :         return gameStatus;</span></a>
+<a name="131"><span class="lineNum">     131 </span><span class="lineCov">         14 : enum EGameStates getGameStatus(void) {</span></a>
+<a name="132"><span class="lineNum">     132 </span><span class="lineCov">         14 :         return gameStatus;</span></a>
 <a name="133"><span class="lineNum">     133 </span>            : }</a>
 <a name="134"><span class="lineNum">     134 </span>            : </a>
-<a name="135"><span class="lineNum">     135 </span><span class="lineCov">         13 : struct ObjectNode *getPlayerItems(void) {</span></a>
-<a name="136"><span class="lineNum">     136 </span><span class="lineCov">         13 :         return collectedObject-&gt;next;</span></a>
+<a name="135"><span class="lineNum">     135 </span><span class="lineCov">         22 : struct ObjectNode *getPlayerItems(void) {</span></a>
+<a name="136"><span class="lineNum">     136 </span><span class="lineCov">         22 :         return collectedObject-&gt;next;</span></a>
 <a name="137"><span class="lineNum">     137 </span>            : }</a>
 <a name="138"><span class="lineNum">     138 </span>            : </a>
-<a name="139"><span class="lineNum">     139 </span><span class="lineCov">         89 : struct Item *getItemNamed(const char *name) {</span></a>
+<a name="139"><span class="lineNum">     139 </span><span class="lineCov">        105 : struct Item *getItemNamed(const char *name) {</span></a>
 <a name="140"><span class="lineNum">     140 </span>            :         int c;</a>
 <a name="141"><span class="lineNum">     141 </span>            : </a>
-<a name="142"><span class="lineNum">     142 </span><span class="lineCov">        905 :         for (c = 0; c &lt; itemsCount; ++c) {</span></a>
-<a name="143"><span class="lineNum">     143 </span><span class="lineCov">        904 :                 if (!strcmp(item[c].name, name)) {</span></a>
-<a name="144"><span class="lineNum">     144 </span><span class="lineCov">         88 :                         return &amp;item[c];</span></a>
+<a name="142"><span class="lineNum">     142 </span><span class="lineCov">       1067 :         for (c = 0; c &lt; itemsCount; ++c) {</span></a>
+<a name="143"><span class="lineNum">     143 </span><span class="lineCov">       1066 :                 if (!strcmp(item[c].name, name)) {</span></a>
+<a name="144"><span class="lineNum">     144 </span><span class="lineCov">        104 :                         return &amp;item[c];</span></a>
 <a name="145"><span class="lineNum">     145 </span>            :                 }</a>
 <a name="146"><span class="lineNum">     146 </span>            :         }</a>
 <a name="147"><span class="lineNum">     147 </span>            : </a>
 <a name="148"><span class="lineNum">     148 </span><span class="lineCov">          1 :         return NULL;</span></a>
 <a name="149"><span class="lineNum">     149 </span>            : }</a>
 <a name="150"><span class="lineNum">     150 </span>            : </a>
-<a name="151"><span class="lineNum">     151 </span><span class="lineCov">          9 : int getRoomIdByName(const char *name) {</span></a>
+<a name="151"><span class="lineNum">     151 </span><span class="lineCov">         15 : int getRoomIdByName(const char *name) {</span></a>
 <a name="152"><span class="lineNum">     152 </span>            :         int c;</a>
 <a name="153"><span class="lineNum">     153 </span>            : </a>
-<a name="154"><span class="lineNum">     154 </span><span class="lineCov">         88 :         for (c = 1; c &lt; roomCount; ++c) {</span></a>
-<a name="155"><span class="lineNum">     155 </span><span class="lineCov">         88 :                 if (!strcmp(rooms[c].name, name)) {</span></a>
-<a name="156"><span class="lineNum">     156 </span><span class="lineCov">          9 :                         return c;</span></a>
+<a name="154"><span class="lineNum">     154 </span><span class="lineCov">        171 :         for (c = 1; c &lt; roomCount; ++c) {</span></a>
+<a name="155"><span class="lineNum">     155 </span><span class="lineCov">        171 :                 if (!strcmp(rooms[c].name, name)) {</span></a>
+<a name="156"><span class="lineNum">     156 </span><span class="lineCov">         15 :                         return c;</span></a>
 <a name="157"><span class="lineNum">     157 </span>            :                 }</a>
 <a name="158"><span class="lineNum">     158 </span>            :         }</a>
 <a name="159"><span class="lineNum">     159 </span>            : </a>
 <a name="160"><span class="lineNum">     160 </span><span class="lineNoCov">          0 :         return 0;</span></a>
 <a name="161"><span class="lineNum">     161 </span>            : }</a>
 <a name="162"><span class="lineNum">     162 </span>            : </a>
-<a name="163"><span class="lineNum">     163 </span><span class="lineCov">         82 : struct Room *getRoomByName(const char *name) {</span></a>
+<a name="163"><span class="lineNum">     163 </span><span class="lineCov">         85 : struct Room *getRoomByName(const char *name) {</span></a>
 <a name="164"><span class="lineNum">     164 </span>            :         int c;</a>
 <a name="165"><span class="lineNum">     165 </span>            : </a>
-<a name="166"><span class="lineNum">     166 </span><span class="lineCov">        649 :         for (c = 1; c &lt; roomCount; ++c) {</span></a>
-<a name="167"><span class="lineNum">     167 </span><span class="lineCov">        648 :                 if (!strcmp(rooms[c].name, name)) {</span></a>
-<a name="168"><span class="lineNum">     168 </span><span class="lineCov">         81 :                         return &amp;rooms[c];</span></a>
+<a name="166"><span class="lineNum">     166 </span><span class="lineCov">        695 :         for (c = 1; c &lt; roomCount; ++c) {</span></a>
+<a name="167"><span class="lineNum">     167 </span><span class="lineCov">        694 :                 if (!strcmp(rooms[c].name, name)) {</span></a>
+<a name="168"><span class="lineNum">     168 </span><span class="lineCov">         84 :                         return &amp;rooms[c];</span></a>
 <a name="169"><span class="lineNum">     169 </span>            :                 }</a>
 <a name="170"><span class="lineNum">     170 </span>            :         }</a>
 <a name="171"><span class="lineNum">     171 </span>            : </a>
 <a name="172"><span class="lineNum">     172 </span><span class="lineCov">          1 :         return NULL;</span></a>
 <a name="173"><span class="lineNum">     173 </span>            : }</a>
 <a name="174"><span class="lineNum">     174 </span>            : </a>
-<a name="175"><span class="lineNum">     175 </span><span class="lineCov">       1392 : void addObjectToList(struct Item *itemToAdd, struct ObjectNode *listHead) {</span></a>
-<a name="176"><span class="lineNum">     176 </span><span class="lineCov">       1392 :         struct ObjectNode *head = listHead;</span></a>
+<a name="175"><span class="lineNum">     175 </span><span class="lineCov">       1619 : void addObjectToList(struct Item *itemToAdd, struct ObjectNode *listHead) {</span></a>
+<a name="176"><span class="lineNum">     176 </span><span class="lineCov">       1619 :         struct ObjectNode *head = listHead;</span></a>
 <a name="177"><span class="lineNum">     177 </span>            : </a>
-<a name="178"><span class="lineNum">     178 </span><span class="lineCov">       2194 :         while (head-&gt;next != NULL) {</span></a>
-<a name="179"><span class="lineNum">     179 </span><span class="lineCov">        802 :                 if (getItem(head-&gt;item) == itemToAdd) {</span></a>
+<a name="178"><span class="lineNum">     178 </span><span class="lineCov">       2554 :         while (head-&gt;next != NULL) {</span></a>
+<a name="179"><span class="lineNum">     179 </span><span class="lineCov">        935 :                 if (getItem(head-&gt;item) == itemToAdd) {</span></a>
 <a name="180"><span class="lineNum">     180 </span>            :                         /* Object already belongs to the list! */</a>
 <a name="181"><span class="lineNum">     181 </span><span class="lineNoCov">          0 :                         return;</span></a>
 <a name="182"><span class="lineNum">     182 </span>            :                 }</a>
 <a name="183"><span class="lineNum">     183 </span>            : </a>
-<a name="184"><span class="lineNum">     184 </span><span class="lineCov">        802 :                 head = head-&gt;next;</span></a>
+<a name="184"><span class="lineNum">     184 </span><span class="lineCov">        935 :                 head = head-&gt;next;</span></a>
 <a name="185"><span class="lineNum">     185 </span>            :         }</a>
 <a name="186"><span class="lineNum">     186 </span>            : </a>
-<a name="187"><span class="lineNum">     187 </span><span class="lineCov">       1392 :         head-&gt;next = &amp;objectNodes[itemToAdd-&gt;index];</span></a>
-<a name="188"><span class="lineNum">     188 </span><span class="lineCov">       1392 :         memset(head-&gt;next, 0, sizeof(struct ObjectNode));</span></a>
-<a name="189"><span class="lineNum">     189 </span><span class="lineCov">       1392 :         head-&gt;next-&gt;item = itemToAdd-&gt;index;</span></a>
+<a name="187"><span class="lineNum">     187 </span><span class="lineCov">       1619 :         head-&gt;next = &amp;objectNodes[itemToAdd-&gt;index];</span></a>
+<a name="188"><span class="lineNum">     188 </span><span class="lineCov">       1619 :         memset(head-&gt;next, 0, sizeof(struct ObjectNode));</span></a>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">       1619 :         head-&gt;next-&gt;item = itemToAdd-&gt;index;</span></a>
 <a name="190"><span class="lineNum">     190 </span>            : }</a>
 <a name="191"><span class="lineNum">     191 </span>            : </a>
-<a name="192"><span class="lineNum">     192 </span><span class="lineCov">         45 : void removeObjectFromList(struct Item *itemToRemove, struct ObjectNode *listHead) {</span></a>
-<a name="193"><span class="lineNum">     193 </span><span class="lineCov">         45 :         struct ObjectNode *head = listHead-&gt;next;</span></a>
-<a name="194"><span class="lineNum">     194 </span><span class="lineCov">         45 :         struct ObjectNode *prev = listHead;</span></a>
+<a name="192"><span class="lineNum">     192 </span><span class="lineCov">         50 : void removeObjectFromList(struct Item *itemToRemove, struct ObjectNode *listHead) {</span></a>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">         50 :         struct ObjectNode *head = listHead-&gt;next;</span></a>
+<a name="194"><span class="lineNum">     194 </span><span class="lineCov">         50 :         struct ObjectNode *prev = listHead;</span></a>
 <a name="195"><span class="lineNum">     195 </span>            : </a>
-<a name="196"><span class="lineNum">     196 </span><span class="lineCov">        121 :         while (head != NULL) {</span></a>
-<a name="197"><span class="lineNum">     197 </span><span class="lineCov">        121 :                 if (head-&gt;item == itemToRemove-&gt;index) {</span></a>
-<a name="198"><span class="lineNum">     198 </span><span class="lineCov">         45 :                         prev-&gt;next = head-&gt;next;</span></a>
-<a name="199"><span class="lineNum">     199 </span><span class="lineCov">         45 :                         return;</span></a>
+<a name="196"><span class="lineNum">     196 </span><span class="lineCov">        133 :         while (head != NULL) {</span></a>
+<a name="197"><span class="lineNum">     197 </span><span class="lineCov">        133 :                 if (head-&gt;item == itemToRemove-&gt;index) {</span></a>
+<a name="198"><span class="lineNum">     198 </span><span class="lineCov">         50 :                         prev-&gt;next = head-&gt;next;</span></a>
+<a name="199"><span class="lineNum">     199 </span><span class="lineCov">         50 :                         return;</span></a>
 <a name="200"><span class="lineNum">     200 </span>            :                 }</a>
 <a name="201"><span class="lineNum">     201 </span>            : </a>
-<a name="202"><span class="lineNum">     202 </span><span class="lineCov">         76 :                 prev = head;</span></a>
-<a name="203"><span class="lineNum">     203 </span><span class="lineCov">         76 :                 head = head-&gt;next;</span></a>
+<a name="202"><span class="lineNum">     202 </span><span class="lineCov">         83 :                 prev = head;</span></a>
+<a name="203"><span class="lineNum">     203 </span><span class="lineCov">         83 :                 head = head-&gt;next;</span></a>
 <a name="204"><span class="lineNum">     204 </span>            :         }</a>
 <a name="205"><span class="lineNum">     205 </span>            :         /* Object doesn't belong to the list! */</a>
 <a name="206"><span class="lineNum">     206 </span>            : }</a>
 <a name="207"><span class="lineNum">     207 </span>            : </a>
-<a name="208"><span class="lineNum">     208 </span><span class="lineCov">       1393 : void removeObjectFromRoom(struct Item *itemToRemove) {</span></a>
-<a name="209"><span class="lineNum">     209 </span><span class="lineCov">       1393 :         if (itemToRemove-&gt;roomId != 0) {</span></a>
-<a name="210"><span class="lineNum">     210 </span><span class="lineCov">         34 :                 removeObjectFromList(itemToRemove, rooms[itemToRemove-&gt;roomId].itemsPresent);</span></a>
-<a name="211"><span class="lineNum">     211 </span><span class="lineCov">         34 :                 itemToRemove-&gt;roomId = 0;</span></a>
+<a name="208"><span class="lineNum">     208 </span><span class="lineCov">       1620 : void removeObjectFromRoom(struct Item *itemToRemove) {</span></a>
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">       1620 :         if (itemToRemove-&gt;roomId != 0) {</span></a>
+<a name="210"><span class="lineNum">     210 </span><span class="lineCov">         39 :                 removeObjectFromList(itemToRemove, rooms[itemToRemove-&gt;roomId].itemsPresent);</span></a>
+<a name="211"><span class="lineNum">     211 </span><span class="lineCov">         39 :                 itemToRemove-&gt;roomId = 0;</span></a>
 <a name="212"><span class="lineNum">     212 </span>            :         }</a>
-<a name="213"><span class="lineNum">     213 </span><span class="lineCov">       1393 : }</span></a>
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">       1620 : }</span></a>
 <a name="214"><span class="lineNum">     214 </span>            : </a>
 <a name="215"><span class="lineNum">     215 </span>            : </a>
-<a name="216"><span class="lineNum">     216 </span><span class="lineCov">       1288 : void addObjectToRoom(uint8_t roomId, struct Item *itemToAdd) {</span></a>
-<a name="217"><span class="lineNum">     217 </span><span class="lineCov">       1288 :         struct Room *roomToAddObject = &amp;rooms[roomId];</span></a>
-<a name="218"><span class="lineNum">     218 </span><span class="lineCov">       1288 :         removeObjectFromRoom(itemToAdd);</span></a>
-<a name="219"><span class="lineNum">     219 </span><span class="lineCov">       1288 :         addObjectToList(itemToAdd, roomToAddObject-&gt;itemsPresent);</span></a>
-<a name="220"><span class="lineNum">     220 </span><span class="lineCov">       1288 :         itemToAdd-&gt;roomId = roomId;</span></a>
-<a name="221"><span class="lineNum">     221 </span><span class="lineCov">       1288 : }</span></a>
+<a name="216"><span class="lineNum">     216 </span><span class="lineCov">       1496 : void addObjectToRoom(uint8_t roomId, struct Item *itemToAdd) {</span></a>
+<a name="217"><span class="lineNum">     217 </span><span class="lineCov">       1496 :         struct Room *roomToAddObject = &amp;rooms[roomId];</span></a>
+<a name="218"><span class="lineNum">     218 </span><span class="lineCov">       1496 :         removeObjectFromRoom(itemToAdd);</span></a>
+<a name="219"><span class="lineNum">     219 </span><span class="lineCov">       1496 :         addObjectToList(itemToAdd, roomToAddObject-&gt;itemsPresent);</span></a>
+<a name="220"><span class="lineNum">     220 </span><span class="lineCov">       1496 :         itemToAdd-&gt;roomId = roomId;</span></a>
+<a name="221"><span class="lineNum">     221 </span><span class="lineCov">       1496 : }</span></a>
 <a name="222"><span class="lineNum">     222 </span>            : </a>
 <a name="223"><span class="lineNum">     223 </span><span class="lineCov">         11 : void dropObjectToRoom(uint8_t roomId, struct Item *itemToDrop) {</span></a>
 <a name="224"><span class="lineNum">     224 </span>            : #ifdef CLI_BUILD</a>
@@ -302,33 +302,33 @@
 <a name="240"><span class="lineNum">     240 </span>            :         }</a>
 <a name="241"><span class="lineNum">     241 </span>            : }</a>
 <a name="242"><span class="lineNum">     242 </span>            : </a>
-<a name="243"><span class="lineNum">     243 </span><span class="lineCov">        105 : void pickObject(struct Item *itemToPick) {</span></a>
+<a name="243"><span class="lineNum">     243 </span><span class="lineCov">        124 : void pickObject(struct Item *itemToPick) {</span></a>
 <a name="244"><span class="lineNum">     244 </span>            : #ifndef CAN_PICK_OBJECT_AT_ANY_DISTANCE</a>
-<a name="245"><span class="lineNum">     245 </span><span class="lineCov">        105 :         if (!isCloseToObject(getPlayerPosition(), itemToPick)) {</span></a>
+<a name="245"><span class="lineNum">     245 </span><span class="lineCov">        124 :         if (!isCloseToObject(getPlayerPosition(), itemToPick)) {</span></a>
 <a name="246"><span class="lineNum">     246 </span><span class="lineNoCov">          0 :                 return;</span></a>
 <a name="247"><span class="lineNum">     247 </span>            :         }</a>
 <a name="248"><span class="lineNum">     248 </span>            : #endif</a>
 <a name="249"><span class="lineNum">     249 </span>            : </a>
-<a name="250"><span class="lineNum">     250 </span><span class="lineCov">        105 :         if (!itemToPick-&gt;pickable) {</span></a>
+<a name="250"><span class="lineNum">     250 </span><span class="lineCov">        124 :         if (!itemToPick-&gt;pickable) {</span></a>
 <a name="251"><span class="lineNum">     251 </span><span class="lineCov">          1 :                 defaultLogger(&quot;Can't pick it up&quot;);</span></a>
 <a name="252"><span class="lineNum">     252 </span><span class="lineCov">          1 :                 return;</span></a>
 <a name="253"><span class="lineNum">     253 </span>            :         }</a>
 <a name="254"><span class="lineNum">     254 </span>            : </a>
-<a name="255"><span class="lineNum">     255 </span><span class="lineCov">        104 :         removeObjectFromRoom(itemToPick);</span></a>
-<a name="256"><span class="lineNum">     256 </span><span class="lineCov">        104 :         addObjectToList(itemToPick, collectedObject);</span></a>
+<a name="255"><span class="lineNum">     255 </span><span class="lineCov">        123 :         removeObjectFromRoom(itemToPick);</span></a>
+<a name="256"><span class="lineNum">     256 </span><span class="lineCov">        123 :         addObjectToList(itemToPick, collectedObject);</span></a>
 <a name="257"><span class="lineNum">     257 </span>            : </a>
-<a name="258"><span class="lineNum">     258 </span><span class="lineCov">        104 :         if (itemToPick-&gt;pickCallback != NULL) {</span></a>
-<a name="259"><span class="lineNum">     259 </span><span class="lineCov">         10 :                 itemToPick-&gt;pickCallback(itemToPick);</span></a>
+<a name="258"><span class="lineNum">     258 </span><span class="lineCov">        123 :         if (itemToPick-&gt;pickCallback != NULL) {</span></a>
+<a name="259"><span class="lineNum">     259 </span><span class="lineCov">         15 :                 itemToPick-&gt;pickCallback(itemToPick);</span></a>
 <a name="260"><span class="lineNum">     260 </span>            :         }</a>
 <a name="261"><span class="lineNum">     261 </span>            : }</a>
 <a name="262"><span class="lineNum">     262 </span>            : </a>
-<a name="263"><span class="lineNum">     263 </span><span class="lineCov">          9 : uint8_t getPlayerRank(void) {</span></a>
-<a name="264"><span class="lineNum">     264 </span><span class="lineCov">          9 :         return playerRank;</span></a>
+<a name="263"><span class="lineNum">     263 </span><span class="lineCov">         13 : uint8_t getPlayerRank(void) {</span></a>
+<a name="264"><span class="lineNum">     264 </span><span class="lineCov">         13 :         return playerRank;</span></a>
 <a name="265"><span class="lineNum">     265 </span>            : }</a>
 <a name="266"><span class="lineNum">     266 </span>            : </a>
-<a name="267"><span class="lineNum">     267 </span><span class="lineCov">         24 : void setPlayerRank(uint8_t newRank) {</span></a>
-<a name="268"><span class="lineNum">     268 </span><span class="lineCov">         24 :         playerRank = newRank;</span></a>
-<a name="269"><span class="lineNum">     269 </span><span class="lineCov">         24 : }</span></a>
+<a name="267"><span class="lineNum">     267 </span><span class="lineCov">         29 : void setPlayerRank(uint8_t newRank) {</span></a>
+<a name="268"><span class="lineNum">     268 </span><span class="lineCov">         29 :         playerRank = newRank;</span></a>
+<a name="269"><span class="lineNum">     269 </span><span class="lineCov">         29 : }</span></a>
 <a name="270"><span class="lineNum">     270 </span>            : </a>
 <a name="271"><span class="lineNum">     271 </span><span class="lineCov">         21 : void moveBy(uint8_t direction) {</span></a>
 <a name="272"><span class="lineNum">     272 </span>            :         int c;</a>
@@ -391,19 +391,19 @@
 <a name="329"><span class="lineNum">     329 </span>            :         }</a>
 <a name="330"><span class="lineNum">     330 </span>            : }</a>
 <a name="331"><span class="lineNum">     331 </span>            : </a>
-<a name="332"><span class="lineNum">     332 </span><span class="lineCov">         20 : void pickObjectByName(const char *objName) {</span></a>
-<a name="333"><span class="lineNum">     333 </span><span class="lineCov">         20 :         struct Room *room = &amp;rooms[playerLocation];</span></a>
-<a name="334"><span class="lineNum">     334 </span><span class="lineCov">         20 :         struct ObjectNode *itemToPick = room-&gt;itemsPresent-&gt;next;</span></a>
+<a name="332"><span class="lineNum">     332 </span><span class="lineCov">         25 : void pickObjectByName(const char *objName) {</span></a>
+<a name="333"><span class="lineNum">     333 </span><span class="lineCov">         25 :         struct Room *room = &amp;rooms[playerLocation];</span></a>
+<a name="334"><span class="lineNum">     334 </span><span class="lineCov">         25 :         struct ObjectNode *itemToPick = room-&gt;itemsPresent-&gt;next;</span></a>
 <a name="335"><span class="lineNum">     335 </span>            : </a>
-<a name="336"><span class="lineNum">     336 </span><span class="lineCov">         71 :         while (itemToPick != NULL) {</span></a>
-<a name="337"><span class="lineNum">     337 </span><span class="lineCov">         70 :                 if (!strcmp(getItem(itemToPick-&gt;item)-&gt;name, objName)) {</span></a>
+<a name="336"><span class="lineNum">     336 </span><span class="lineCov">         83 :         while (itemToPick != NULL) {</span></a>
+<a name="337"><span class="lineNum">     337 </span><span class="lineCov">         82 :                 if (!strcmp(getItem(itemToPick-&gt;item)-&gt;name, objName)) {</span></a>
 <a name="338"><span class="lineNum">     338 </span>            : #ifdef MOVE_TO_OBJECT_POSITION_WHEN_PICKING</a>
-<a name="339"><span class="lineNum">     339 </span><span class="lineCov">         19 :                         playerPosition = getItem(itemToPick-&gt;item)-&gt;position;</span></a>
+<a name="339"><span class="lineNum">     339 </span><span class="lineCov">         24 :                         playerPosition = getItem(itemToPick-&gt;item)-&gt;position;</span></a>
 <a name="340"><span class="lineNum">     340 </span>            : #endif</a>
-<a name="341"><span class="lineNum">     341 </span><span class="lineCov">         19 :                         pickObject(getItem(itemToPick-&gt;item));</span></a>
-<a name="342"><span class="lineNum">     342 </span><span class="lineCov">         19 :                         return;</span></a>
+<a name="341"><span class="lineNum">     341 </span><span class="lineCov">         24 :                         pickObject(getItem(itemToPick-&gt;item));</span></a>
+<a name="342"><span class="lineNum">     342 </span><span class="lineCov">         24 :                         return;</span></a>
 <a name="343"><span class="lineNum">     343 </span>            :                 }</a>
-<a name="344"><span class="lineNum">     344 </span><span class="lineCov">         51 :                 itemToPick = itemToPick-&gt;next;</span></a>
+<a name="344"><span class="lineNum">     344 </span><span class="lineCov">         58 :                 itemToPick = itemToPick-&gt;next;</span></a>
 <a name="345"><span class="lineNum">     345 </span>            :         }</a>
 <a name="346"><span class="lineNum">     346 </span>            : }</a>
 <a name="347"><span class="lineNum">     347 </span>            : </a>
@@ -425,23 +425,23 @@
 <a name="363"><span class="lineNum">     363 </span>            : </a>
 <a name="364"><span class="lineNum">     364 </span>            : }</a>
 <a name="365"><span class="lineNum">     365 </span>            : </a>
-<a name="366"><span class="lineNum">     366 </span><span class="lineCov">         60 : uint8_t hasItemInRoom(const char *roomName, const char *itemName) {</span></a>
+<a name="366"><span class="lineNum">     366 </span><span class="lineCov">         63 : uint8_t hasItemInRoom(const char *roomName, const char *itemName) {</span></a>
 <a name="367"><span class="lineNum">     367 </span>            :         struct ObjectNode *itemToPick;</a>
 <a name="368"><span class="lineNum">     368 </span>            : </a>
 <a name="369"><span class="lineNum">     369 </span>            : #ifdef CLI_BUILD</a>
 <a name="370"><span class="lineNum">     370 </span>            :         struct Room* room;</a>
 <a name="371"><span class="lineNum">     371 </span>            : </a>
-<a name="372"><span class="lineNum">     372 </span><span class="lineCov">         60 :         if (roomName == NULL || itemName == NULL || strlen(roomName) == 0 || strlen(itemName) == 0) {</span></a>
+<a name="372"><span class="lineNum">     372 </span><span class="lineCov">         63 :         if (roomName == NULL || itemName == NULL || strlen(roomName) == 0 || strlen(itemName) == 0) {</span></a>
 <a name="373"><span class="lineNum">     373 </span><span class="lineCov">          4 :                 defaultLogger(&quot;Either the object name or the room name are null. Check your stuff&quot;);</span></a>
 <a name="374"><span class="lineNum">     374 </span><span class="lineCov">          4 :                 return 0;</span></a>
 <a name="375"><span class="lineNum">     375 </span>            :         }</a>
 <a name="376"><span class="lineNum">     376 </span>            : #endif</a>
 <a name="377"><span class="lineNum">     377 </span>            : </a>
 <a name="378"><span class="lineNum">     378 </span>            : #ifdef CLI_BUILD</a>
-<a name="379"><span class="lineNum">     379 </span><span class="lineCov">         56 :         room = getRoomByName(roomName);</span></a>
+<a name="379"><span class="lineNum">     379 </span><span class="lineCov">         59 :         room = getRoomByName(roomName);</span></a>
 <a name="380"><span class="lineNum">     380 </span>            : </a>
-<a name="381"><span class="lineNum">     381 </span><span class="lineCov">         56 :         if (room != NULL) {</span></a>
-<a name="382"><span class="lineNum">     382 </span><span class="lineCov">         55 :                 itemToPick = room-&gt;itemsPresent-&gt;next;</span></a>
+<a name="381"><span class="lineNum">     381 </span><span class="lineCov">         59 :         if (room != NULL) {</span></a>
+<a name="382"><span class="lineNum">     382 </span><span class="lineCov">         58 :                 itemToPick = room-&gt;itemsPresent-&gt;next;</span></a>
 <a name="383"><span class="lineNum">     383 </span>            :         } else {</a>
 <a name="384"><span class="lineNum">     384 </span><span class="lineCov">          1 :                 errorHandlerCallback(&quot;Invalid room name&quot;);</span></a>
 <a name="385"><span class="lineNum">     385 </span><span class="lineCov">          1 :                 return 0;</span></a>
@@ -450,27 +450,27 @@
 <a name="388"><span class="lineNum">     388 </span>            :         itemToPick = getRoomByName(roomName)-&gt;itemsPresent-&gt;next;</a>
 <a name="389"><span class="lineNum">     389 </span>            : #endif</a>
 <a name="390"><span class="lineNum">     390 </span>            : </a>
-<a name="391"><span class="lineNum">     391 </span><span class="lineCov">        176 :         while (itemToPick != NULL) {</span></a>
-<a name="392"><span class="lineNum">     392 </span><span class="lineCov">        147 :                 struct Item *pick = getItem(itemToPick-&gt;item);</span></a>
-<a name="393"><span class="lineNum">     393 </span><span class="lineCov">        147 :                 if (!strcmp(pick-&gt;name, itemName)) {</span></a>
-<a name="394"><span class="lineNum">     394 </span><span class="lineCov">         26 :                         return 1;</span></a>
+<a name="391"><span class="lineNum">     391 </span><span class="lineCov">        185 :         while (itemToPick != NULL) {</span></a>
+<a name="392"><span class="lineNum">     392 </span><span class="lineCov">        155 :                 struct Item *pick = getItem(itemToPick-&gt;item);</span></a>
+<a name="393"><span class="lineNum">     393 </span><span class="lineCov">        155 :                 if (!strcmp(pick-&gt;name, itemName)) {</span></a>
+<a name="394"><span class="lineNum">     394 </span><span class="lineCov">         28 :                         return 1;</span></a>
 <a name="395"><span class="lineNum">     395 </span>            :                 }</a>
-<a name="396"><span class="lineNum">     396 </span><span class="lineCov">        121 :                 itemToPick = itemToPick-&gt;next;</span></a>
+<a name="396"><span class="lineNum">     396 </span><span class="lineCov">        127 :                 itemToPick = itemToPick-&gt;next;</span></a>
 <a name="397"><span class="lineNum">     397 </span>            :         }</a>
 <a name="398"><span class="lineNum">     398 </span>            : </a>
-<a name="399"><span class="lineNum">     399 </span><span class="lineCov">         29 :         return 0;</span></a>
+<a name="399"><span class="lineNum">     399 </span><span class="lineCov">         30 :         return 0;</span></a>
 <a name="400"><span class="lineNum">     400 </span>            : }</a>
 <a name="401"><span class="lineNum">     401 </span>            : </a>
-<a name="402"><span class="lineNum">     402 </span><span class="lineCov">         80 : uint8_t playerHasObject(const char *itemName) {</span></a>
-<a name="403"><span class="lineNum">     403 </span><span class="lineCov">         80 :         struct ObjectNode *itemToPick = collectedObject-&gt;next;</span></a>
+<a name="402"><span class="lineNum">     402 </span><span class="lineCov">        101 : uint8_t playerHasObject(const char *itemName) {</span></a>
+<a name="403"><span class="lineNum">     403 </span><span class="lineCov">        101 :         struct ObjectNode *itemToPick = collectedObject-&gt;next;</span></a>
 <a name="404"><span class="lineNum">     404 </span>            : </a>
-<a name="405"><span class="lineNum">     405 </span><span class="lineCov">        249 :         while (itemToPick != NULL) {</span></a>
-<a name="406"><span class="lineNum">     406 </span><span class="lineCov">        198 :                 if (!strcmp(getItem(itemToPick-&gt;item)-&gt;name, itemName)) {</span></a>
-<a name="407"><span class="lineNum">     407 </span><span class="lineCov">         29 :                         return 1;</span></a>
+<a name="405"><span class="lineNum">     405 </span><span class="lineCov">        329 :         while (itemToPick != NULL) {</span></a>
+<a name="406"><span class="lineNum">     406 </span><span class="lineCov">        264 :                 if (!strcmp(getItem(itemToPick-&gt;item)-&gt;name, itemName)) {</span></a>
+<a name="407"><span class="lineNum">     407 </span><span class="lineCov">         36 :                         return 1;</span></a>
 <a name="408"><span class="lineNum">     408 </span>            :                 }</a>
-<a name="409"><span class="lineNum">     409 </span><span class="lineCov">        169 :                 itemToPick = itemToPick-&gt;next;</span></a>
+<a name="409"><span class="lineNum">     409 </span><span class="lineCov">        228 :                 itemToPick = itemToPick-&gt;next;</span></a>
 <a name="410"><span class="lineNum">     410 </span>            :         }</a>
-<a name="411"><span class="lineNum">     411 </span><span class="lineCov">         51 :         return 0;</span></a>
+<a name="411"><span class="lineNum">     411 </span><span class="lineCov">         65 :         return 0;</span></a>
 <a name="412"><span class="lineNum">     412 </span>            : }</a>
 <a name="413"><span class="lineNum">     413 </span>            : </a>
 <a name="414"><span class="lineNum">     414 </span>            : </a>
@@ -486,43 +486,43 @@
 <a name="424"><span class="lineNum">     424 </span><span class="lineNoCov">          0 :         return room-&gt;name;</span></a>
 <a name="425"><span class="lineNum">     425 </span>            : }</a>
 <a name="426"><span class="lineNum">     426 </span>            : </a>
-<a name="427"><span class="lineNum">     427 </span><span class="lineCov">         49 : struct Room *getRoom(uint8_t index) {</span></a>
-<a name="428"><span class="lineNum">     428 </span><span class="lineCov">         49 :         return &amp;rooms[index];</span></a>
+<a name="427"><span class="lineNum">     427 </span><span class="lineCov">         57 : struct Room *getRoom(uint8_t index) {</span></a>
+<a name="428"><span class="lineNum">     428 </span><span class="lineCov">         57 :         return &amp;rooms[index];</span></a>
 <a name="429"><span class="lineNum">     429 </span>            : }</a>
 <a name="430"><span class="lineNum">     430 </span>            : </a>
-<a name="431"><span class="lineNum">     431 </span><span class="lineCov">       1389 : struct Item *getItem(uint8_t index) {</span></a>
-<a name="432"><span class="lineNum">     432 </span><span class="lineCov">       1389 :         return &amp;item[index];</span></a>
+<a name="431"><span class="lineNum">     431 </span><span class="lineCov">       1654 : struct Item *getItem(uint8_t index) {</span></a>
+<a name="432"><span class="lineNum">     432 </span><span class="lineCov">       1654 :         return &amp;item[index];</span></a>
 <a name="433"><span class="lineNum">     433 </span>            : }</a>
 <a name="434"><span class="lineNum">     434 </span>            : </a>
 <a name="435"><span class="lineNum">     435 </span><span class="lineCov">         56 : uint8_t getPlayerRoom(void) {</span></a>
 <a name="436"><span class="lineNum">     436 </span><span class="lineCov">         56 :         return playerLocation;</span></a>
 <a name="437"><span class="lineNum">     437 </span>            : }</a>
 <a name="438"><span class="lineNum">     438 </span>            : </a>
-<a name="439"><span class="lineNum">     439 </span><span class="lineCov">         13 : void useObjectNamed(const char *operand) {</span></a>
-<a name="440"><span class="lineNum">     440 </span><span class="lineCov">         13 :         struct ObjectNode *itemToPick = getPlayerItems();</span></a>
+<a name="439"><span class="lineNum">     439 </span><span class="lineCov">         22 : void useObjectNamed(const char *operand) {</span></a>
+<a name="440"><span class="lineNum">     440 </span><span class="lineCov">         22 :         struct ObjectNode *itemToPick = getPlayerItems();</span></a>
 <a name="441"><span class="lineNum">     441 </span>            : </a>
-<a name="442"><span class="lineNum">     442 </span><span class="lineCov">         39 :         while (itemToPick != NULL) {</span></a>
-<a name="443"><span class="lineNum">     443 </span><span class="lineCov">         27 :                 struct Item *_item = getItem(itemToPick-&gt;item);</span></a>
-<a name="444"><span class="lineNum">     444 </span><span class="lineCov">         27 :                 if (!strcmp(_item-&gt;name, operand)) {</span></a>
-<a name="445"><span class="lineNum">     445 </span><span class="lineCov">          1 :                         if (_item-&gt;useCallback != NULL) {</span></a>
-<a name="446"><span class="lineNum">     446 </span><span class="lineCov">          1 :                                 _item-&gt;useCallback(_item);</span></a>
+<a name="442"><span class="lineNum">     442 </span><span class="lineCov">         67 :         while (itemToPick != NULL) {</span></a>
+<a name="443"><span class="lineNum">     443 </span><span class="lineCov">         48 :                 struct Item *_item = getItem(itemToPick-&gt;item);</span></a>
+<a name="444"><span class="lineNum">     444 </span><span class="lineCov">         48 :                 if (!strcmp(_item-&gt;name, operand)) {</span></a>
+<a name="445"><span class="lineNum">     445 </span><span class="lineCov">          3 :                         if (_item-&gt;useCallback != NULL) {</span></a>
+<a name="446"><span class="lineNum">     446 </span><span class="lineCov">          3 :                                 _item-&gt;useCallback(_item);</span></a>
 <a name="447"><span class="lineNum">     447 </span>            :                         }</a>
-<a name="448"><span class="lineNum">     448 </span><span class="lineCov">          1 :                         return;</span></a>
+<a name="448"><span class="lineNum">     448 </span><span class="lineCov">          3 :                         return;</span></a>
 <a name="449"><span class="lineNum">     449 </span>            :                 }</a>
-<a name="450"><span class="lineNum">     450 </span><span class="lineCov">         26 :                 itemToPick = itemToPick-&gt;next;</span></a>
+<a name="450"><span class="lineNum">     450 </span><span class="lineCov">         45 :                 itemToPick = itemToPick-&gt;next;</span></a>
 <a name="451"><span class="lineNum">     451 </span>            :         }</a>
 <a name="452"><span class="lineNum">     452 </span>            : </a>
-<a name="453"><span class="lineNum">     453 </span><span class="lineCov">         12 :         itemToPick = getRoom(playerLocation)-&gt;itemsPresent-&gt;next;</span></a>
+<a name="453"><span class="lineNum">     453 </span><span class="lineCov">         19 :         itemToPick = getRoom(playerLocation)-&gt;itemsPresent-&gt;next;</span></a>
 <a name="454"><span class="lineNum">     454 </span>            : </a>
-<a name="455"><span class="lineNum">     455 </span><span class="lineCov">         24 :         while (itemToPick != NULL) {</span></a>
-<a name="456"><span class="lineNum">     456 </span><span class="lineCov">         21 :                 struct Item *_item = getItem(itemToPick-&gt;item);</span></a>
-<a name="457"><span class="lineNum">     457 </span><span class="lineCov">         21 :                 if (!strcmp(_item-&gt;name, operand)) {</span></a>
-<a name="458"><span class="lineNum">     458 </span><span class="lineCov">          9 :                         if (_item-&gt;useCallback != NULL) {</span></a>
-<a name="459"><span class="lineNum">     459 </span><span class="lineCov">          9 :                                 _item-&gt;useCallback(_item);</span></a>
+<a name="455"><span class="lineNum">     455 </span><span class="lineCov">         33 :         while (itemToPick != NULL) {</span></a>
+<a name="456"><span class="lineNum">     456 </span><span class="lineCov">         30 :                 struct Item *_item = getItem(itemToPick-&gt;item);</span></a>
+<a name="457"><span class="lineNum">     457 </span><span class="lineCov">         30 :                 if (!strcmp(_item-&gt;name, operand)) {</span></a>
+<a name="458"><span class="lineNum">     458 </span><span class="lineCov">         16 :                         if (_item-&gt;useCallback != NULL) {</span></a>
+<a name="459"><span class="lineNum">     459 </span><span class="lineCov">         16 :                                 _item-&gt;useCallback(_item);</span></a>
 <a name="460"><span class="lineNum">     460 </span>            :                         }</a>
-<a name="461"><span class="lineNum">     461 </span><span class="lineCov">          9 :                         return;</span></a>
+<a name="461"><span class="lineNum">     461 </span><span class="lineCov">         16 :                         return;</span></a>
 <a name="462"><span class="lineNum">     462 </span>            :                 }</a>
-<a name="463"><span class="lineNum">     463 </span><span class="lineCov">         12 :                 itemToPick = itemToPick-&gt;next;</span></a>
+<a name="463"><span class="lineNum">     463 </span><span class="lineCov">         14 :                 itemToPick = itemToPick-&gt;next;</span></a>
 <a name="464"><span class="lineNum">     464 </span>            :         }</a>
 <a name="465"><span class="lineNum">     465 </span>            : }</a>
 <a name="466"><span class="lineNum">     466 </span>            : </a>
@@ -587,52 +587,52 @@
 <a name="525"><span class="lineNum">     525 </span>            : }</a>
 <a name="526"><span class="lineNum">     526 </span>            : #endif</a>
 <a name="527"><span class="lineNum">     527 </span>            : </a>
-<a name="528"><span class="lineNum">     528 </span><span class="lineCov">          1 : void useObjectsTogether(const char *operands) {</span></a>
+<a name="528"><span class="lineNum">     528 </span><span class="lineCov">          2 : void useObjectsTogether(const char *operands) {</span></a>
 <a name="529"><span class="lineNum">     529 </span>            : </a>
-<a name="530"><span class="lineNum">     530 </span><span class="lineCov">          1 :         struct ObjectNode *object1 = collectedObject-&gt;next;</span></a>
-<a name="531"><span class="lineNum">     531 </span><span class="lineCov">          1 :         struct Room *room = &amp;rooms[playerLocation];</span></a>
-<a name="532"><span class="lineNum">     532 </span><span class="lineCov">          1 :         struct ObjectNode *object2 = room-&gt;itemsPresent-&gt;next;</span></a>
+<a name="530"><span class="lineNum">     530 </span><span class="lineCov">          2 :         struct ObjectNode *object1 = collectedObject-&gt;next;</span></a>
+<a name="531"><span class="lineNum">     531 </span><span class="lineCov">          2 :         struct Room *room = &amp;rooms[playerLocation];</span></a>
+<a name="532"><span class="lineNum">     532 </span><span class="lineCov">          2 :         struct ObjectNode *object2 = room-&gt;itemsPresent-&gt;next;</span></a>
 <a name="533"><span class="lineNum">     533 </span>            : </a>
-<a name="534"><span class="lineNum">     534 </span><span class="lineCov">          1 :         char *operand1 = (char*)operands;</span></a>
-<a name="535"><span class="lineNum">     535 </span><span class="lineCov">          1 :         char *operand2 = strtok(NULL, &quot;\n &quot;);</span></a>
+<a name="534"><span class="lineNum">     534 </span><span class="lineCov">          2 :         char *operand1 = (char*)operands;</span></a>
+<a name="535"><span class="lineNum">     535 </span><span class="lineCov">          2 :         char *operand2 = strtok(NULL, &quot;\n &quot;);</span></a>
 <a name="536"><span class="lineNum">     536 </span>            : </a>
-<a name="537"><span class="lineNum">     537 </span><span class="lineCov">          1 :         if (!playerHasObject(operand1)) {</span></a>
+<a name="537"><span class="lineNum">     537 </span><span class="lineCov">          2 :         if (!playerHasObject(operand1)) {</span></a>
 <a name="538"><span class="lineNum">     538 </span><span class="lineNoCov">          0 :                 defaultLogger(&quot;You do not have this object&quot;);</span></a>
 <a name="539"><span class="lineNum">     539 </span><span class="lineNoCov">          0 :                 return;</span></a>
 <a name="540"><span class="lineNum">     540 </span>            :         }</a>
 <a name="541"><span class="lineNum">     541 </span>            : </a>
-<a name="542"><span class="lineNum">     542 </span><span class="lineCov">          1 :         if (!hasItemInRoom(getRoom(playerLocation)-&gt;name, operand2)) {</span></a>
+<a name="542"><span class="lineNum">     542 </span><span class="lineCov">          2 :         if (!hasItemInRoom(getRoom(playerLocation)-&gt;name, operand2)) {</span></a>
 <a name="543"><span class="lineNum">     543 </span><span class="lineNoCov">          0 :                 defaultLogger(&quot;That object is not present in the room&quot;);</span></a>
 <a name="544"><span class="lineNum">     544 </span><span class="lineNoCov">          0 :                 return;</span></a>
 <a name="545"><span class="lineNum">     545 </span>            :         }</a>
 <a name="546"><span class="lineNum">     546 </span>            : </a>
-<a name="547"><span class="lineNum">     547 </span><span class="lineCov">          3 :         while (object1 != NULL) {</span></a>
-<a name="548"><span class="lineNum">     548 </span><span class="lineCov">          3 :                 struct Item* _item = getItem(object1-&gt;item);</span></a>
-<a name="549"><span class="lineNum">     549 </span><span class="lineCov">          3 :                 assert(_item-&gt;name != NULL);</span></a>
+<a name="547"><span class="lineNum">     547 </span><span class="lineCov">          6 :         while (object1 != NULL) {</span></a>
+<a name="548"><span class="lineNum">     548 </span><span class="lineCov">          6 :                 struct Item* _item = getItem(object1-&gt;item);</span></a>
+<a name="549"><span class="lineNum">     549 </span><span class="lineCov">          6 :                 assert(_item-&gt;name != NULL);</span></a>
 <a name="550"><span class="lineNum">     550 </span>            : </a>
-<a name="551"><span class="lineNum">     551 </span><span class="lineCov">          3 :                 if (!strcmp(_item-&gt;name, operand1)) {</span></a>
-<a name="552"><span class="lineNum">     552 </span><span class="lineCov">          1 :                         goto got_first_object;</span></a>
+<a name="551"><span class="lineNum">     551 </span><span class="lineCov">          6 :                 if (!strcmp(_item-&gt;name, operand1)) {</span></a>
+<a name="552"><span class="lineNum">     552 </span><span class="lineCov">          2 :                         goto got_first_object;</span></a>
 <a name="553"><span class="lineNum">     553 </span>            :                 }</a>
-<a name="554"><span class="lineNum">     554 </span><span class="lineCov">          2 :                 object1 = object1-&gt;next;</span></a>
+<a name="554"><span class="lineNum">     554 </span><span class="lineCov">          4 :                 object1 = object1-&gt;next;</span></a>
 <a name="555"><span class="lineNum">     555 </span>            :         }</a>
 <a name="556"><span class="lineNum">     556 </span>            : </a>
 <a name="557"><span class="lineNum">     557 </span><span class="lineNoCov">          0 :         got_first_object:</span></a>
-<a name="558"><span class="lineNum">     558 </span><span class="lineCov">          4 :         while (object2 != NULL) {</span></a>
-<a name="559"><span class="lineNum">     559 </span><span class="lineCov">          4 :                 struct Item* _item = getItem(object2-&gt;item);</span></a>
-<a name="560"><span class="lineNum">     560 </span><span class="lineCov">          4 :                 assert(_item-&gt;name != NULL);</span></a>
+<a name="558"><span class="lineNum">     558 </span><span class="lineCov">          5 :         while (object2 != NULL) {</span></a>
+<a name="559"><span class="lineNum">     559 </span><span class="lineCov">          5 :                 struct Item* _item = getItem(object2-&gt;item);</span></a>
+<a name="560"><span class="lineNum">     560 </span><span class="lineCov">          5 :                 assert(_item-&gt;name != NULL);</span></a>
 <a name="561"><span class="lineNum">     561 </span>            : </a>
-<a name="562"><span class="lineNum">     562 </span><span class="lineCov">          4 :                 if (!strcmp(_item-&gt;name, operand2)) {</span></a>
-<a name="563"><span class="lineNum">     563 </span><span class="lineCov">          1 :                         goto got_second_object;</span></a>
+<a name="562"><span class="lineNum">     562 </span><span class="lineCov">          5 :                 if (!strcmp(_item-&gt;name, operand2)) {</span></a>
+<a name="563"><span class="lineNum">     563 </span><span class="lineCov">          2 :                         goto got_second_object;</span></a>
 <a name="564"><span class="lineNum">     564 </span>            :                 }</a>
 <a name="565"><span class="lineNum">     565 </span><span class="lineCov">          3 :                 object2 = object2-&gt;next;</span></a>
 <a name="566"><span class="lineNum">     566 </span>            :         }</a>
 <a name="567"><span class="lineNum">     567 </span>            : </a>
 <a name="568"><span class="lineNum">     568 </span><span class="lineNoCov">          0 :         got_second_object:</span></a>
-<a name="569"><span class="lineNum">     569 </span><span class="lineCov">          1 :         if (object1 != NULL){</span></a>
-<a name="570"><span class="lineNum">     570 </span><span class="lineCov">          1 :                 struct Item* _item = getItem(object1-&gt;item);</span></a>
+<a name="569"><span class="lineNum">     569 </span><span class="lineCov">          2 :         if (object1 != NULL){</span></a>
+<a name="570"><span class="lineNum">     570 </span><span class="lineCov">          2 :                 struct Item* _item = getItem(object1-&gt;item);</span></a>
 <a name="571"><span class="lineNum">     571 </span>            : </a>
-<a name="572"><span class="lineNum">     572 </span><span class="lineCov">          1 :                 if (_item != NULL &amp;&amp; _item-&gt;useWithCallback != NULL &amp;&amp; object2 != NULL) {</span></a>
-<a name="573"><span class="lineNum">     573 </span><span class="lineNoCov">          0 :                         _item-&gt;useWithCallback(_item, getItem(object2-&gt;item));</span></a>
+<a name="572"><span class="lineNum">     572 </span><span class="lineCov">          2 :                 if (_item != NULL &amp;&amp; _item-&gt;useWithCallback != NULL &amp;&amp; object2 != NULL) {</span></a>
+<a name="573"><span class="lineNum">     573 </span><span class="lineCov">          1 :                         _item-&gt;useWithCallback(_item, getItem(object2-&gt;item));</span></a>
 <a name="574"><span class="lineNum">     574 </span>            :                 }</a>
 <a name="575"><span class="lineNum">     575 </span>            :         }</a>
 <a name="576"><span class="lineNum">     576 </span>            : }</a>
@@ -652,9 +652,9 @@
 <a name="590"><span class="lineNum">     590 </span><span class="lineCov">          4 :         playerDirection = playerDirection &amp; 3;</span></a>
 <a name="591"><span class="lineNum">     591 </span><span class="lineCov">          4 : }</span></a>
 <a name="592"><span class="lineNum">     592 </span>            : </a>
-<a name="593"><span class="lineNum">     593 </span><span class="lineCov">         12 : void setPlayerLocation(uint8_t location) {</span></a>
-<a name="594"><span class="lineNum">     594 </span><span class="lineCov">         12 :         playerLocation = location;</span></a>
-<a name="595"><span class="lineNum">     595 </span><span class="lineCov">         12 : }</span></a>
+<a name="593"><span class="lineNum">     593 </span><span class="lineCov">         18 : void setPlayerLocation(uint8_t location) {</span></a>
+<a name="594"><span class="lineNum">     594 </span><span class="lineCov">         18 :         playerLocation = location;</span></a>
+<a name="595"><span class="lineNum">     595 </span><span class="lineCov">         18 : }</span></a>
 <a name="596"><span class="lineNum">     596 </span>            : </a>
 <a name="597"><span class="lineNum">     597 </span><span class="lineCov">         21 : void walkBy(uint8_t direction) {</span></a>
 <a name="598"><span class="lineNum">     598 </span>            : </a>
@@ -770,22 +770,22 @@
 <a name="708"><span class="lineNum">     708 </span><span class="lineCov">          9 :         return playerDirection;</span></a>
 <a name="709"><span class="lineNum">     709 </span>            : }</a>
 <a name="710"><span class="lineNum">     710 </span>            : </a>
-<a name="711"><span class="lineNum">     711 </span><span class="lineCov">       1266 : void addToRoom(const char *roomName, struct Item *itemName) {</span></a>
+<a name="711"><span class="lineNum">     711 </span><span class="lineCov">       1474 : void addToRoom(const char *roomName, struct Item *itemName) {</span></a>
 <a name="712"><span class="lineNum">     712 </span>            :         int r;</a>
 <a name="713"><span class="lineNum">     713 </span>            : </a>
 <a name="714"><span class="lineNum">     714 </span>            : #ifdef CLI_BUILD</a>
-<a name="715"><span class="lineNum">     715 </span><span class="lineCov">       1266 :         if (roomName == NULL || itemName == NULL || strlen(roomName) == 0) {</span></a>
+<a name="715"><span class="lineNum">     715 </span><span class="lineCov">       1474 :         if (roomName == NULL || itemName == NULL || strlen(roomName) == 0) {</span></a>
 <a name="716"><span class="lineNum">     716 </span><span class="lineNoCov">          0 :                 defaultLogger(&quot;Either the object name or the room name are null. Check your stuff&quot;);</span></a>
 <a name="717"><span class="lineNum">     717 </span><span class="lineNoCov">          0 :                 return;</span></a>
 <a name="718"><span class="lineNum">     718 </span>            :         }</a>
 <a name="719"><span class="lineNum">     719 </span>            : #endif</a>
 <a name="720"><span class="lineNum">     720 </span>            : </a>
-<a name="721"><span class="lineNum">     721 </span><span class="lineCov">      14972 :         for (r = 1; r &lt; TOTAL_ROOMS; ++r) {</span></a>
-<a name="722"><span class="lineNum">     722 </span><span class="lineCov">      14972 :                 const char *desc = rooms[r].name;</span></a>
+<a name="721"><span class="lineNum">     721 </span><span class="lineCov">      17449 :         for (r = 1; r &lt; TOTAL_ROOMS; ++r) {</span></a>
+<a name="722"><span class="lineNum">     722 </span><span class="lineCov">      17449 :                 const char *desc = rooms[r].name;</span></a>
 <a name="723"><span class="lineNum">     723 </span>            : </a>
-<a name="724"><span class="lineNum">     724 </span><span class="lineCov">      14972 :                 if (desc != NULL &amp;&amp; !strcmp(desc, roomName)) {</span></a>
-<a name="725"><span class="lineNum">     725 </span><span class="lineCov">       1266 :                         addObjectToRoom(r, itemName);</span></a>
-<a name="726"><span class="lineNum">     726 </span><span class="lineCov">       1266 :                         return;</span></a>
+<a name="724"><span class="lineNum">     724 </span><span class="lineCov">      17449 :                 if (desc != NULL &amp;&amp; !strcmp(desc, roomName)) {</span></a>
+<a name="725"><span class="lineNum">     725 </span><span class="lineCov">       1474 :                         addObjectToRoom(r, itemName);</span></a>
+<a name="726"><span class="lineNum">     726 </span><span class="lineCov">       1474 :                         return;</span></a>
 <a name="727"><span class="lineNum">     727 </span>            :                 }</a>
 <a name="728"><span class="lineNum">     728 </span>            :         }</a>
 <a name="729"><span class="lineNum">     729 </span>            : </a>
@@ -794,39 +794,39 @@
 <a name="732"><span class="lineNum">     732 </span>            : #endif</a>
 <a name="733"><span class="lineNum">     733 </span>            : }</a>
 <a name="734"><span class="lineNum">     734 </span>            : </a>
-<a name="735"><span class="lineNum">     735 </span><span class="lineCov">         31 : void setLoggerDelegate(LogDelegate newDelegate) {</span></a>
-<a name="736"><span class="lineNum">     736 </span><span class="lineCov">         31 :         defaultLogger = newDelegate;</span></a>
-<a name="737"><span class="lineNum">     737 </span><span class="lineCov">         31 : }</span></a>
+<a name="735"><span class="lineNum">     735 </span><span class="lineCov">         38 : void setLoggerDelegate(LogDelegate newDelegate) {</span></a>
+<a name="736"><span class="lineNum">     736 </span><span class="lineCov">         38 :         defaultLogger = newDelegate;</span></a>
+<a name="737"><span class="lineNum">     737 </span><span class="lineCov">         38 : }</span></a>
 <a name="738"><span class="lineNum">     738 </span>            : </a>
 <a name="739"><span class="lineNum">     739 </span>            : </a>
 <a name="740"><span class="lineNum">     740 </span><span class="lineNoCov">          0 : void setPlayerDirection(uint8_t direction) {</span></a>
 <a name="741"><span class="lineNum">     741 </span><span class="lineNoCov">          0 :         playerDirection = direction;</span></a>
 <a name="742"><span class="lineNum">     742 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="743"><span class="lineNum">     743 </span>            : </a>
-<a name="744"><span class="lineNum">     744 </span><span class="lineCov">          6 : void setGameStatus(enum EGameStates newStatus) {</span></a>
-<a name="745"><span class="lineNum">     745 </span><span class="lineCov">          6 :         gameStatus = newStatus;</span></a>
-<a name="746"><span class="lineNum">     746 </span><span class="lineCov">          6 : }</span></a>
+<a name="744"><span class="lineNum">     744 </span><span class="lineCov">          7 : void setGameStatus(enum EGameStates newStatus) {</span></a>
+<a name="745"><span class="lineNum">     745 </span><span class="lineCov">          7 :         gameStatus = newStatus;</span></a>
+<a name="746"><span class="lineNum">     746 </span><span class="lineCov">          7 : }</span></a>
 <a name="747"><span class="lineNum">     747 </span>            : </a>
-<a name="748"><span class="lineNum">     748 </span><span class="lineCov">         43 : void initCore(void) {</span></a>
-<a name="749"><span class="lineNum">     749 </span><span class="lineCov">         43 :         defaultLogger = writeToLog;</span></a>
+<a name="748"><span class="lineNum">     748 </span><span class="lineCov">         50 : void initCore(void) {</span></a>
+<a name="749"><span class="lineNum">     749 </span><span class="lineCov">         50 :         defaultLogger = writeToLog;</span></a>
 <a name="750"><span class="lineNum">     750 </span>            :         /* prepare for a single player in the game */</a>
-<a name="751"><span class="lineNum">     751 </span><span class="lineCov">         43 :         memset(&amp;playerPosition, 0, sizeof(struct WorldPosition));</span></a>
-<a name="752"><span class="lineNum">     752 </span><span class="lineCov">         43 :         setErrorHandlerCallback(NULL);</span></a>
+<a name="751"><span class="lineNum">     751 </span><span class="lineCov">         50 :         memset(&amp;playerPosition, 0, sizeof(struct WorldPosition));</span></a>
+<a name="752"><span class="lineNum">     752 </span><span class="lineCov">         50 :         setErrorHandlerCallback(NULL);</span></a>
 <a name="753"><span class="lineNum">     753 </span>            : </a>
-<a name="754"><span class="lineNum">     754 </span><span class="lineCov">         43 :         collectedObject = &amp;collectedObjectHead;</span></a>
-<a name="755"><span class="lineNum">     755 </span><span class="lineCov">         43 :         memset(collectedObject, 0, sizeof(struct ObjectNode));</span></a>
-<a name="756"><span class="lineNum">     756 </span><span class="lineCov">         43 :         playerLocation = 1;</span></a>
-<a name="757"><span class="lineNum">     757 </span><span class="lineCov">         43 :         itemsCount = 0;</span></a>
-<a name="758"><span class="lineNum">     758 </span><span class="lineCov">         43 :         roomCount = 1; /* there's an implicit dummy first */</span></a>
-<a name="759"><span class="lineNum">     759 </span><span class="lineCov">         43 :         playerRank = 0;</span></a>
-<a name="760"><span class="lineNum">     760 </span><span class="lineCov">         43 :         gameStatus = 0;</span></a>
-<a name="761"><span class="lineNum">     761 </span><span class="lineCov">         43 :         playerDirection = 0;</span></a>
-<a name="762"><span class="lineNum">     762 </span><span class="lineCov">         43 :         playerPosition.x = 15;</span></a>
-<a name="763"><span class="lineNum">     763 </span><span class="lineCov">         43 :         playerPosition.y = 15;</span></a>
+<a name="754"><span class="lineNum">     754 </span><span class="lineCov">         50 :         collectedObject = &amp;collectedObjectHead;</span></a>
+<a name="755"><span class="lineNum">     755 </span><span class="lineCov">         50 :         memset(collectedObject, 0, sizeof(struct ObjectNode));</span></a>
+<a name="756"><span class="lineNum">     756 </span><span class="lineCov">         50 :         playerLocation = 1;</span></a>
+<a name="757"><span class="lineNum">     757 </span><span class="lineCov">         50 :         itemsCount = 0;</span></a>
+<a name="758"><span class="lineNum">     758 </span><span class="lineCov">         50 :         roomCount = 1; /* there's an implicit dummy first */</span></a>
+<a name="759"><span class="lineNum">     759 </span><span class="lineCov">         50 :         playerRank = 0;</span></a>
+<a name="760"><span class="lineNum">     760 </span><span class="lineCov">         50 :         gameStatus = 0;</span></a>
+<a name="761"><span class="lineNum">     761 </span><span class="lineCov">         50 :         playerDirection = 0;</span></a>
+<a name="762"><span class="lineNum">     762 </span><span class="lineCov">         50 :         playerPosition.x = 15;</span></a>
+<a name="763"><span class="lineNum">     763 </span><span class="lineCov">         50 :         playerPosition.y = 15;</span></a>
 <a name="764"><span class="lineNum">     764 </span>            : </a>
-<a name="765"><span class="lineNum">     765 </span><span class="lineCov">         43 :         memset(&amp;rooms, 0, TOTAL_ROOMS * sizeof(struct Room));</span></a>
-<a name="766"><span class="lineNum">     766 </span><span class="lineCov">         43 :         memset(&amp;item, 0, TOTAL_ITEMS * sizeof(struct Item));</span></a>
-<a name="767"><span class="lineNum">     767 </span><span class="lineCov">         43 : }</span></a>
+<a name="765"><span class="lineNum">     765 </span><span class="lineCov">         50 :         memset(&amp;rooms, 0, TOTAL_ROOMS * sizeof(struct Room));</span></a>
+<a name="766"><span class="lineNum">     766 </span><span class="lineCov">         50 :         memset(&amp;item, 0, TOTAL_ITEMS * sizeof(struct Item));</span></a>
+<a name="767"><span class="lineNum">     767 </span><span class="lineCov">         50 : }</span></a>
 <a name="768"><span class="lineNum">     768 </span>            : </a>
 <a name="769"><span class="lineNum">     769 </span>            : </a>
 <a name="770"><span class="lineNum">     770 </span>            : </a>
