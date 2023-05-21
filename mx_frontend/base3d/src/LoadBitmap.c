@@ -43,7 +43,7 @@ int lerpInt(const int v0, const int v1, const long t, const long total) {
                             intToFix(total)));
 }
 
-void clearTextures() {
+void clearTextures(void) {
     int c;
     usedTexture = 0;
     for (c = 0; c < TOTAL_ITEMS; ++c ) {
@@ -55,10 +55,12 @@ void clearTextures() {
 
     if (mapTopLevel) {
         free(mapTopLevel);
+        mapTopLevel = NULL;
     }
 
     if (backdrop) {
         free(backdrop);
+        backdrop = NULL;
     }
 }
 
