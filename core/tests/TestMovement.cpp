@@ -72,6 +72,11 @@ TEST_F(TestMovement, canMoveOnlyWhenEnabled) {
 
 }
 
+TEST_F(TestMovement, invalidRoomNamesMustYieldTheDummyFirstRoom) {
+    ASSERT_EQ(0, getRoomIdByName(NULL));
+    ASSERT_EQ(0, getRoomIdByName("Farofinha"));
+}
+
 TEST_F(TestMovement, canWalkInsideRooms) {
 
   char buffer[255];

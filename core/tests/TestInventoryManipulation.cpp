@@ -114,6 +114,17 @@ TEST_F(TestInventoryManipulation, objectsDroppedInRoomStayThere) {
 	ASSERT_FALSE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
 }
 
+TEST_F(TestInventoryManipulation, itemsWillNotBeIncludedInListTwice) {
+    struct ObjectNode *list = getPlayerItems();
+    struct Item* item1 = getItemNamed("root-keycard");
+    struct Item* item2 = getItemNamed("emp-controller");
+    addObjectToList(item1, list);
+    addObjectToList(item2, list);
+    addObjectToList(item1, list);
+    ASSERT_FALSE(objectNodes[item1->index].next == NULL);
+    ASSERT_TRUE(objectNodes[item2->index].next == NULL);
+}
+
 TEST_F(TestInventoryManipulation, canPickObjects) {
 	ASSERT_TRUE(isPlayerAtRoom("lss-daedalus"));
 	addToRoom( "lss-daedalus", getItemNamed("low-rank-keycard"));
