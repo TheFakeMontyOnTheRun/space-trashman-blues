@@ -66,7 +66,6 @@ void clearTextures(void) {
 
 struct Texture *makeTextureFrom(const char *__restrict__ filename) {
     struct Texture *toReturn;
-    uint8_t *diskBuffer;
     uint8_t pixel;
     uint8_t repetitions;
     size_t c;
@@ -81,18 +80,14 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
     size_t sizeInDisk = staticBuffer.size - 4;
     src += 4;
 
-    diskBuffer = (uint8_t *) calloc(1, sizeInDisk);
-    memcpy( diskBuffer, src, sizeInDisk);
-
     for (c = 0; c < sizeInDisk; c += 2) {
-        pixel = diskBuffer[c];
-        repetitions = diskBuffer[c + 1];
+        pixel = src[c];
+        repetitions = src[c + 1];
 
         for (d = 0; d < repetitions; ++d) {
             buffer[pixelIndex++] = pixel;
         }
     }
-    free(diskBuffer);
 
     toReturn = &textures[usedTexture++];
 
