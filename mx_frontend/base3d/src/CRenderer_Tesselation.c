@@ -269,16 +269,16 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 
         if (flipTexture) {
             uvCoords[0] = 0;
-            uvCoords[1] = 32;
+            uvCoords[1] = NATIVE_TEXTURE_SIZE;
             uvCoords[2] = 0;
             uvCoords[3] = 0;
-            uvCoords[4] = 32;
-            uvCoords[5] = 32;
+            uvCoords[4] = NATIVE_TEXTURE_SIZE;
+            uvCoords[5] = NATIVE_TEXTURE_SIZE;
         } else {
-            uvCoords[0] = 32;
+            uvCoords[0] = NATIVE_TEXTURE_SIZE;
             uvCoords[1] = 0;
-            uvCoords[2] = 32;
-            uvCoords[3] = 32;
+            uvCoords[2] = NATIVE_TEXTURE_SIZE;
+            uvCoords[3] = NATIVE_TEXTURE_SIZE;
             uvCoords[4] = 0;
             uvCoords[5] = 0;
         }
@@ -294,19 +294,19 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 
 
         if (flipTexture) {
-            uvCoords[0] = 32;
-            uvCoords[1] = 32;
+            uvCoords[0] = NATIVE_TEXTURE_SIZE;
+            uvCoords[1] = NATIVE_TEXTURE_SIZE;
             uvCoords[2] = 0;
             uvCoords[3] = 0;
-            uvCoords[4] = 32;
+            uvCoords[4] = NATIVE_TEXTURE_SIZE;
             uvCoords[5] = 0;
         } else {
             uvCoords[0] = 0;
             uvCoords[1] = 0;
-            uvCoords[2] = 32;
-            uvCoords[3] = 32;
+            uvCoords[2] = NATIVE_TEXTURE_SIZE;
+            uvCoords[3] = NATIVE_TEXTURE_SIZE;
             uvCoords[4] = 0;
-            uvCoords[5] = 32;
+            uvCoords[5] = NATIVE_TEXTURE_SIZE;
         }
 
         coords[0] = fixToInt(llz0.mX); //0
@@ -320,9 +320,6 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 
         return;
     }
-
-
-
 
     addToVec3(&projectionVertices[0].first, minusOne, zero, minusOne);
     addToVec3(&projectionVertices[1].first, one, zero, minusOne);
