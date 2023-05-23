@@ -22,20 +22,16 @@
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
-#include "VisibilityStrategy.h"
 
 #define kMinZCull 0
+#define FIXP_HALF_XRES  (intToFix(HALF_XRES))
+#define FIXP_HALF_YRES  (intToFix(HALF_YRES))
+#define FIXP_ONE (intToFix(1))
 
 void projectAllVertices(const uint8_t count) {
-	FixP_t halfWidth = intToFix(HALF_XRES);
-	FixP_t halfHeight = intToFix(HALF_YRES);
-	FixP_t zero = 0;
-	FixP_t one = intToFix(1);
-	FixP_t bias = Div(one, intToFix(128));
-	FixP_t projected;
-	FixP_t oneOver = one;
-	int c;
 
+	FixP_t oneOver = FIXP_ONE;
+	int c;
 
 	struct Projection *vertex = &projectionVertices[0];
 	FixP_t lastZ = 0xCAFEBABE;
@@ -50,24 +46,15 @@ void projectAllVertices(const uint8_t count) {
 
 			z += zCameraOffset;
 
-			if (z < one) {
-				z = one;
+			if (z < FIXP_ONE) {
+				z = FIXP_ONE;
 			}
 
-			//same as
-			//projected = Div(z, two);
-			//but saving some shifts and a division...
-            projected = z;
-
-			if (projected == zero) {
-				projected += bias;
-			}
-
-			oneOver = Div(halfHeight, projected);
+			oneOver = Div(FIXP_HALF_YRES, z);
 		}
 
-		vertex->second.mX = (halfWidth + Mul(vertex->first.mX + xCameraOffset, oneOver));
-		vertex->second.mY = (halfHeight - Mul(vertex->first.mY + compoundYFactor, oneOver));
+		vertex->second.mX = (FIXP_HALF_XRES + Mul(vertex->first.mX + xCameraOffset, oneOver));
+		vertex->second.mY = (FIXP_HALF_YRES - Mul(vertex->first.mY + compoundYFactor, oneOver));
 	}
 }
 

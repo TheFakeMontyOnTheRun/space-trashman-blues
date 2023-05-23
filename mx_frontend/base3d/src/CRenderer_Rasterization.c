@@ -24,6 +24,7 @@
 #include "VisibilityStrategy.h"
 
 #define PAGE_FLIP_INCREMENT 32
+#define FIXP_NATIVE_TEXTURE_SIZE  (intToFix(NATIVE_TEXTURE_SIZE))
 
 char mTurnBuffer;
 
@@ -193,7 +194,7 @@ void drawWall(FixP_t x0,
     FixP_t u = 0;
     uint8_t lastV;
     const uint8_t *data = texture;
-    const FixP_t textureSize = intToFix(NATIVE_TEXTURE_SIZE);
+
     FixP_t du;
     int32_t ix;
     uint8_t *bufferData = &framebuffer[0];
@@ -254,7 +255,7 @@ void drawWall(FixP_t x0,
       we don't need to fetch that data on every run.
    */
 
-    du = Div(textureSize, dX);
+    du = Div(FIXP_NATIVE_TEXTURE_SIZE, dX);
     ix = x;
 
     for (; ix < limit; ++ix) {
@@ -275,7 +276,7 @@ void drawWall(FixP_t x0,
                 continue;
             }
 
-            dv = Div(Mul(textureSize, textureScaleY), diffY);
+            dv = Div(Mul(FIXP_NATIVE_TEXTURE_SIZE, textureScaleY), diffY);
 
             lastV = 0;
             pixel = *(lineOffset);
@@ -377,7 +378,6 @@ void drawFrontWall(FixP_t x0,
     uint8_t lastV = 0xFF;
     int32_t iy;
     const uint8_t *data = texture;
-    const FixP_t textureSize = intToFix(NATIVE_TEXTURE_SIZE);
     FixP_t dv;
     FixP_t diffX;
     int iX0;
@@ -417,7 +417,7 @@ void drawFrontWall(FixP_t x0,
       the run.
    */
     iy = (int32_t) (y);
-    dv = Div(Mul(textureSize, textureScaleY) - intToFix(1), dY);
+    dv = Div(Mul(FIXP_NATIVE_TEXTURE_SIZE, textureScaleY) - intToFix(1), dY);
     diffX = (x1 - x0);
     iX0 = fixToInt(x0);
     iX1 = fixToInt(x1);
@@ -427,7 +427,7 @@ void drawFrontWall(FixP_t x0,
         return;
     }
 
-    du = Div(textureSize, diffX);
+    du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
 
     for (; iy < limit; ++iy) {
 
@@ -475,14 +475,7 @@ void drawFrontWall(FixP_t x0,
                     }
 
                     if (pixel != TRANSPARENCY_COLOR) {
-
-                        uint8_t color = pixel;
-
-                        if (farEnoughForStipple && stipple) {
-                            color = 0;
-                        }
-
-                        *(destinationLine) = color;
+                        *(destinationLine) = (farEnoughForStipple && stipple) ? 0 : pixel;
                     }
                 }
                 ++destinationLine;
@@ -644,7 +637,7 @@ void drawFloor(FixP_t y0,
     int16_t iy;
     uint8_t *bufferData = &framebuffer[0];
     const uint8_t *data = texture;
-    const FixP_t textureSize = intToFix(NATIVE_TEXTURE_SIZE);
+
     FixP_t dv;
     const uint8_t *sourceLineStart;
     int farEnoughForStipple = (z >= distanceForPenumbra);
@@ -695,7 +688,7 @@ void drawFloor(FixP_t y0,
     x0 = upperX0;
     x1 = upperX1;
     iy = y;
-    dv = Div(textureSize, dY);
+    dv = Div(FIXP_NATIVE_TEXTURE_SIZE, dY);
 
     for (; iy < limit; ++iy) {
 
@@ -715,7 +708,7 @@ void drawFloor(FixP_t y0,
                 continue;
             }
 
-            du = Div(textureSize, diffX);
+            du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
             iv = fixToInt(v);
             destinationLine = bufferData + (XRES_FRAMEBUFFER * iy) + iX0;
             sourceLineStart = data + (iv * NATIVE_TEXTURE_SIZE);
@@ -792,8 +785,6 @@ void drawSlantedFloor(
     FixP_t fragmentSizeFactor;
     FixP_t currX1;
     int cachedVi;
-    FixP_t textureSizeFP = intToFix(NATIVE_TEXTURE_SIZE - 1);
-
 
     d03XdY = Div(p0x - p3x, p0y - p3y);
     currX0 = p0x;
@@ -811,14 +802,14 @@ void drawSlantedFloor(
             currX1 = Mul((p2x - p1x), percentile) + p1x;
             currDy0 = 0;
             
-            cachedVi = (fixToInt(Mul(percentile, textureSizeFP)) * NATIVE_TEXTURE_SIZE);
+            cachedVi = (fixToInt(Mul(percentile, FIXP_NATIVE_TEXTURE_SIZE)) * NATIVE_TEXTURE_SIZE);
             
             for (X = currX0; X <= currX1; X += d01X) {
                 
                 FixP_t percentileX = Div((X - currX0), (currX1 - currX0));
                 FixP_t sizeY = Mul(percentileX, fragmentSizeFactor);
                 
-                pixel = texture[cachedVi + (fixToInt(Mul(percentileX, textureSizeFP)))];
+                pixel = texture[cachedVi + (fixToInt(Mul(percentileX, FIXP_NATIVE_TEXTURE_SIZE)))];
                 
                 if (sizeY < one) {
                     framebuffer[(XRES_FRAMEBUFFER * (fixToInt(Y + currDy0))) + fixToInt(X)] = pixel;
@@ -843,14 +834,14 @@ void drawSlantedFloor(
             currX1 = Mul((p2x - p1x), percentile) + p1x;
             currDy0 = 0;
             
-            cachedVi = (fixToInt(Mul(percentile, textureSizeFP)) * NATIVE_TEXTURE_SIZE);
+            cachedVi = (fixToInt(Mul(percentile, FIXP_NATIVE_TEXTURE_SIZE)) * NATIVE_TEXTURE_SIZE);
             
             for (X = currX0; X <= currX1; X += d01X) {
                 
                 FixP_t percentileX = Div((X - currX0), (currX1 - currX0));
                 FixP_t sizeY = Mul(percentileX, fragmentSizeFactor);
                 
-                pixel = texture[cachedVi + (fixToInt(Mul(percentileX, textureSizeFP)))];
+                pixel = texture[cachedVi + (fixToInt(Mul(percentileX, FIXP_NATIVE_TEXTURE_SIZE)))];
                 
                 if (sizeY < one) {
                     framebuffer[(XRES_FRAMEBUFFER * (fixToInt(Y + currDy0))) + fixToInt(X)] = pixel;
