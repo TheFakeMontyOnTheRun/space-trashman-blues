@@ -62,7 +62,6 @@ void maskWall(
     FixP_t dX;
     FixP_t upperDyDx;
     FixP_t lowerDyDx;
-    uint8_t pixel = 0;
     int32_t ix;
     uint8_t *bufferData = &framebuffer[0];
 
@@ -112,7 +111,6 @@ void maskWall(
     upperDyDx = Div(upperDy, dX);
     lowerDyDx = Div(lowerDy, dX);
 
-    pixel = 0;
     /*
       0xFF here acts as a dirty value, indicating there is no last value.
       But even if we had textures this big, it would be only at the end of
@@ -148,7 +146,7 @@ void maskWall(
             destinationLine = bufferData + (XRES_FRAMEBUFFER * iY0) + ix;
 
             for (iy = iY0; iy < iY1; ++iy) {
-                *(destinationLine) = pixel;
+                *(destinationLine) = 0;
                 destinationLine += (XRES_FRAMEBUFFER);
             }
         }
@@ -295,13 +293,7 @@ void drawWall(FixP_t x0,
                     }
 
                     if (pixel != TRANSPARENCY_COLOR) {
-                        uint8_t color = pixel;
-
-                        if (farForStipple && stipple) {
-                            color = 0;
-                        }
-
-                        *(destinationLine) = color;
+                        *(destinationLine) = (farForStipple && stipple) ? 0 : pixel;
                     }
                 }
                 destinationLine += (XRES_FRAMEBUFFER);
@@ -733,13 +725,7 @@ void drawFloor(FixP_t y0,
                     }
 
                     if (pixel != TRANSPARENCY_COLOR) {
-                        uint8_t color = pixel;
-
-                        if (farEnoughForStipple && stipple) {
-                            color = 0;
-                        }
-
-                        *(destinationLine) = color;
+                        *(destinationLine) = (farEnoughForStipple && stipple) ? 0 : pixel;
                     }
                 }
                 ++destinationLine;
@@ -1398,12 +1384,14 @@ void fill(
     }
 
 	destinationLineStart = destination + (XRES_FRAMEBUFFER * y) + x;
-	
-    for (py = 0; py < dy; ++py) {
-        if (!stipple) {
+
+    if (!stipple) {
+        for (py = 0; py < dy; ++py) {
             memset (destinationLineStart, pixel, dx);
             destinationLineStart += XRES_FRAMEBUFFER;
-        } else {
+        }
+    } else {
+        for (py = 0; py < dy; ++py) {
             unsigned int px;
             for (px = 0; px < dx; ++px) {
                 destinationLineStart++;
@@ -1552,6 +1540,7 @@ void drawTextAt(const int x, const int y, const char *__restrict__ text, const u
 
     drawTextAtWithMargin( x, y, (XRES_FRAMEBUFFER - 1), text, colour);
 }
+
 #ifndef AGS
 void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 					uint8_t *prevFrame, int turnState, int turnTarget, int scale200To240) {
