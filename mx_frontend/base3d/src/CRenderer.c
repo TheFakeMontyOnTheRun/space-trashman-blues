@@ -52,14 +52,12 @@ uint32_t palette[256];
 uint8_t *framebuffer;
 #endif
 
-uint8_t **ITEMS_IN_MAP;
 enum EDirection cameraDirection;
 struct Vec3 mCamera;
 long gameTicks = 0;
 int dirtyLineY0 = 0;
 int dirtyLineY1 = YRES_FRAMEBUFFER;
 const int distanceForPenumbra = 16;
-const int distanceForDarkness = 48;
 struct Bitmap *mapTopLevel = NULL;
 struct Bitmap *backdrop = NULL;
 struct MapWithCharKey tileProperties;
@@ -314,8 +312,8 @@ void render(const long ms) {
 
 #ifndef CD32
         clippingY1 = YRES_FRAMEBUFFER;
-        for (c = 0; c < 10; ++c) {
-            drawBitmap(c * 20, 0, backdrop, FALSE);
+        for (c = 0; c <= (XRES / backdrop->width); ++c) {
+            drawBitmap(c * backdrop->width, 0, backdrop, FALSE);
         }
 #else
         fill(0, 0, XRES, 128, 64, FALSE);

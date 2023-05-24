@@ -48,10 +48,11 @@ extern enum EDirection cameraDirection;
 extern long gameTicks;
 extern int hasSnapshot;
 extern const int distanceForPenumbra;
-extern const int distanceForDarkness;
 extern int turnTarget;
 extern int turnStep;
 extern int needToRedrawHUD;
+
+#define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
 
 #define MASK_LEFT 1
 #define MASK_FRONT 2
