@@ -134,11 +134,12 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     char *head;
     char *end;
     char *nameStart;
-
+    char *buffer;
+    
     sprintf (tilesFilename, "tiles%d.lst", levelNumber);
 
     data = loadBinaryFileFromPath(tilesFilename);
-    char *buffer = (char*)malloc(data.size);
+    buffer = (char*)malloc(data.size);
     head = buffer;
     memcpy(head, data.data, data.size);
     end = head + data.size;
