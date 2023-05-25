@@ -25,6 +25,8 @@
 #include "Core.h"
 #include "Engine.h"
 #include "Derelict.h"
+#include "Globals.h"
+#include "UI.h"
 
 /*	Div(intToFix(1), intToFix(16));*/
 #define WALKING_BIAS 4096
@@ -59,7 +61,6 @@ int dirtyLineY0 = 0;
 int dirtyLineY1 = YRES_FRAMEBUFFER;
 const int distanceForPenumbra = 16;
 struct Bitmap *mapTopLevel = NULL;
-struct Bitmap *backdrop = NULL;
 struct MapWithCharKey tileProperties;
 struct Vec2i cameraPosition;
 uint8_t texturesUsed = 0;
@@ -156,8 +157,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     }
 
     free(data.data);
-
-    backdrop = loadBitmap("backdrop.img");
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -308,15 +307,6 @@ void render(const long ms) {
         needsToRedrawVisibleMeshes = FALSE;
 #ifdef SDLSW
         clearRenderer();
-#endif
-
-#ifndef CD32
-        clippingY1 = YRES_FRAMEBUFFER;
-        for (c = 0; c <= (XRES / backdrop->width); ++c) {
-            drawBitmap(c * backdrop->width, 0, backdrop, FALSE);
-        }
-#else
-        fill(0, 0, XRES, 128, 64, FALSE);
 #endif
 
         element = LEVEL_MAP(cameraPosition.x, cameraPosition.y);
@@ -973,7 +963,13 @@ void render(const long ms) {
 
         dirtyLineY0 = 0;
         dirtyLineY1 = YRES_FRAMEBUFFER;
-        redrawHUD();
+
+        if (needsToRedrawHUD) {
+            needsToRedrawHUD = FALSE;
+            redrawHUD();
+        }
+
+        updateMap();
     }
 }
 

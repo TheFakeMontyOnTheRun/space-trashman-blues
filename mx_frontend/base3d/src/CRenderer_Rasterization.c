@@ -625,7 +625,6 @@ void drawFloor(FixP_t y0,
     FixP_t x1;
     uint8_t pixel;
     FixP_t v = 0;
-    uint8_t lastU;
     int16_t iy;
     uint8_t *bufferData = &framebuffer[0];
     const uint8_t *data = texture;
@@ -685,39 +684,39 @@ void drawFloor(FixP_t y0,
     for (; iy < limit; ++iy) {
 
         if (iy < YRES && iy >= 0) {
-
-            const FixP_t diffX = (x1 - x0);
-            int32_t iX0 = fixToInt(x0);
-            int32_t iX1 = fixToInt(x1);
+            int32_t iX0;
+            int32_t iX1;
             int32_t ix;
-            FixP_t u = 0;
             FixP_t du;
-            int32_t iv;
             uint8_t *destinationLine;
-            lastU = 0;
+            const FixP_t diffX = (x1 - x0);
+            uint8_t lastU = 0;
+            FixP_t u = 0;
 
             if (diffX == zero) {
                 continue;
             }
 
+            iX0 = fixToInt(x0);
+            iX1 = fixToInt(x1);
             du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
-            iv = fixToInt(v);
+
             destinationLine = bufferData + (XRES_FRAMEBUFFER * iy) + iX0;
-            sourceLineStart = data + (iv * NATIVE_TEXTURE_SIZE);
+            sourceLineStart = data + (fixToInt(v) * NATIVE_TEXTURE_SIZE);
             pixel = *(sourceLineStart);
+            int stipple = ((iX0 + iy) & 1) == 0;
 
             for (ix = iX0; ix < iX1; ++ix) {
-
                 if (ix >= 0 && ix < XRES) {
                     const int32_t iu = fixToInt(u);
-                    int stipple = ((ix + iy) & 1) == 0;
+                    stipple = !stipple;
                     /*
-                                  only fetch the next texel if we really changed the
-                                  u, v coordinates (otherwise, would fetch the same
-                                  thing anyway)
-                                  */
-                    if (iu != lastU
-                        && !(stipple && farEnoughForStipple)) {
+                    only fetch the next texel if we really changed the
+                    u, v coordinates (otherwise, would fetch the same
+                    thing anyway)
+                    */
+                    if (!(farEnoughForStipple && stipple) &&
+                        iu != lastU) {
 
                         pixel = *(sourceLineStart);
                         sourceLineStart += (iu - lastU);

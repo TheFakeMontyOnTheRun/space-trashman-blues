@@ -28,7 +28,6 @@
 struct Texture *textures;
 uint8_t usedTexture = 0;
 extern struct Bitmap *mapTopLevel;
-extern struct Bitmap *backdrop;
 
 FixP_t lerpFix(const FixP_t v0, const FixP_t v1, const FixP_t dt, const FixP_t total) {
     FixP_t delta = (v1 - v0);
@@ -56,11 +55,6 @@ void clearTextures(void) {
     if (mapTopLevel) {
         free(mapTopLevel);
         mapTopLevel = NULL;
-    }
-
-    if (backdrop) {
-        free(backdrop);
-        backdrop = NULL;
     }
 }
 

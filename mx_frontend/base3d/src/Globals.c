@@ -26,4 +26,5 @@ const char *mainText = NULL;
 int isRunning = TRUE;
 int enable3DRendering = TRUE;
 int currentSelectedItem = 0;
+int needsToRedrawHUD = 1;
 

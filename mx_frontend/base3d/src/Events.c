@@ -27,6 +27,7 @@
 #include "PackedFileReader.h"
 #include "Dungeon.h"
 #include "SoundSystem.h"
+#include "Globals.h"
 
 int x = 0;
 int z = 0;
@@ -152,6 +153,7 @@ void initRoom(int room) {
     gameTicks = 0;
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = TRUE;
+    needsToRedrawHUD = TRUE;
     onLevelLoaded(room);
 
     for (c = 0; c < 256; ++c) {
