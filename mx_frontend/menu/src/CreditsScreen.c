@@ -48,7 +48,7 @@ void CreditsScreen_initStateCallback(int32_t tag) {
     memset (textBuffer, 0, (40 * 25));
 	textFile = loadBinaryFileFromPath("Credits.txt");
     memcpy(textBuffer, textFile.data, textFile.size);
-    free(textFile.data);
+    disposeDiskBuffer(textFile);
 
 
     monty = loadBitmap("monty.img");

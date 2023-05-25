@@ -62,13 +62,6 @@ void loadPropertyList(const char * propertyFile, struct MapWithCharKey * map) {
 
         setInMap(map, key, prop);
     }
-	/*
-	 * This is a hack and leaks memory - but removing this causes the game to crash on the N64
-	 * TODO: fix this
-#ifndef N46
-    free(buffer.data);
-#else
-	free_uncached(buffer.data);
-#endif
-	 */
+
+    disposeDiskBuffer(buffer);
 }

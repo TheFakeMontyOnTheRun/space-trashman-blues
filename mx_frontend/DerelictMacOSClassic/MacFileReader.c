@@ -255,3 +255,7 @@ FILE *openBinaryFileFromPath(const char * __restrict__ path) {
 
 	return mDataPack;
 }
+
+void disposeDiskBuffer(struct StaticBuffer buffer) {
+    free(buffer.data);
+}

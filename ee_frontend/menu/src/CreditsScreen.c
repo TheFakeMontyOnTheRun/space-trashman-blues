@@ -49,6 +49,7 @@ void CreditsScreen_initStateCallback(int32_t tag) {
     CreditsScreen_optionsCount = 1;
 
     monty = loadBitmap("monty.img");
+    disposeDiskBuffer(textFile);
 }
 
 void CreditsScreen_initialPaintCallback(void) {

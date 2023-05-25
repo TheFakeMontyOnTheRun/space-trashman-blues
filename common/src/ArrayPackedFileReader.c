@@ -12,9 +12,11 @@
 void initFileReader(const char * dataFilePath) {
 }
 
+void disposeDiskBuffer(struct StaticBuffer buffer) {}
+
 struct StaticBuffer loadBinaryFileFromPath(const char * path) {
 
-	uint8_t *mDataPack = &basepfs[0];
+	const uint8_t *mDataPack = &basepfs[0];
 
 	struct StaticBuffer toReturn;
 
@@ -62,9 +64,7 @@ found:
 
 	size = toNativeEndianess(size);
 	toReturn.size = size;
-	toReturn.data = (uint8_t *) malloc(size);
-
-	memcpy(toReturn.data, mDataPack, sizeof(uint8_t) * size);
+	toReturn.data = mDataPack;
 
 	return toReturn;
 }

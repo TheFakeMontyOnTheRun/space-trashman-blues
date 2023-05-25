@@ -125,7 +125,7 @@ void loadTileProperties(const uint8_t levelNumber) {
         }
     }
 
-    free(data.data);
+    disposeDiskBuffer(data);
 }
 
 void loadTexturesForLevel(const uint8_t levelNumber) {
@@ -138,8 +138,12 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     sprintf (tilesFilename, "tiles%d.lst", levelNumber);
 
     data = loadBinaryFileFromPath(tilesFilename);
-    head = (char *) data.data;
+    char *buffer = (char*)malloc(data.size);
+    head = buffer;
+    memcpy(head, data.data, data.size);
     end = head + data.size;
+    disposeDiskBuffer(data);
+
     nameStart = head;
 
     texturesUsed = 0;
@@ -156,7 +160,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
         ++head;
     }
 
-    free(data.data);
+    free(buffer);
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -301,7 +305,6 @@ void render(const long ms) {
         int16_t x, z;
         int distance;
         FixP_t cameraHeight;
-        int c;
         uint8_t facesMask;
 
         needsToRedrawVisibleMeshes = FALSE;
@@ -976,7 +979,7 @@ void render(const long ms) {
 void loadMesh(struct Mesh *mesh, char *filename) {
     struct StaticBuffer buffer = loadBinaryFileFromPath(filename);
     FixP_t val = 0;
-    uint8_t *bufferHead = buffer.data;
+    const uint8_t *bufferHead = buffer.data;
     int16_t trigCount = 0;
     int uvCoordsCount;
     int coordsCount;
@@ -1024,4 +1027,6 @@ void loadMesh(struct Mesh *mesh, char *filename) {
                 mesh->texture = makeTextureFrom(textureName);
         free(textureName);
     }
+
+    disposeDiskBuffer(buffer);
 }

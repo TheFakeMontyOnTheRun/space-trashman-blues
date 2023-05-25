@@ -120,11 +120,7 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
 		mapTopLevel[c] = loadBitmap(buffer);
 	}
 
-#ifndef N64
-	free(buffer.data);
-#else
-	free_uncached(buffer.data);
-#endif
+    disposeDiskBuffer(buffer);
 }
 
 void renderTick(long ms) {

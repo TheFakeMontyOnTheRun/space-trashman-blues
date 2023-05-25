@@ -70,7 +70,7 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
 
 
     struct StaticBuffer staticBuffer = loadBinaryFileFromPath(filename);
-    uint8_t *src = staticBuffer.data;
+    const uint8_t *src = staticBuffer.data;
     size_t sizeInDisk = staticBuffer.size - 4;
     src += 4;
 
@@ -136,7 +136,7 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
         }
     }
 
-    free(staticBuffer.data);
+    disposeDiskBuffer(staticBuffer);
 
     return toReturn;
 }
@@ -152,10 +152,9 @@ struct Bitmap *loadBitmap(const char *__restrict__ filename) {
             (struct Bitmap *) calloc(1, sizeof(struct Bitmap));
 
     struct StaticBuffer staticBuffer = loadBinaryFileFromPath(filename);
-    uint8_t *ptr = staticBuffer.data;
+    const uint8_t *ptr = staticBuffer.data;
     size_t sizeInDisk = staticBuffer.size - 4;
     int pixelIndex = 0;
-    uint8_t *buffer;
     uint16_t tmp;
     tmp = *ptr++;
     toReturn->width = (tmp & 0xFF) << 8;
@@ -168,20 +167,18 @@ struct Bitmap *loadBitmap(const char *__restrict__ filename) {
     toReturn->height += tmp & 0xFF;
 
     size = toReturn->width * toReturn->height;
-    buffer = (uint8_t *) calloc(1, sizeInDisk);
-    memcpy(buffer, ptr, sizeInDisk);
 
     toReturn->data = (uint8_t *) calloc(1, size);
     for (c = 0; c < sizeInDisk; c += 2) {
-        pixel = buffer[c];
-        repetitions = buffer[c + 1];
+        pixel = *ptr++;
+        repetitions = *ptr++;
 
         for (d = 0; d < repetitions; ++d) {
             toReturn->data[pixelIndex++] = pixel;
         }
     }
-    free(buffer);
-    free(staticBuffer.data);
+
+    disposeDiskBuffer(staticBuffer);
 
     return toReturn;
 }

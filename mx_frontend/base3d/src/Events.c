@@ -91,7 +91,7 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
 
     mapTopLevel = loadBitmap(nameBuffer);
 
-    free(buffer.data);
+    disposeDiskBuffer(buffer);
 }
 
 void renderTick(long ms) {

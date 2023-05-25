@@ -288,3 +288,11 @@ found:
 }
 
 #endif
+
+void disposeDiskBuffer(struct StaticBuffer buffer) {
+#ifndef N64
+	free(buffer.data);
+#else
+	free_uncached(buffer.data);
+#endif
+}

@@ -19,8 +19,8 @@
 void loadPropertyList(const char *__restrict__ propertyFile, struct MapWithCharKey *__restrict__ map) {
     int c;
     struct StaticBuffer buffer = loadBinaryFileFromPath(propertyFile);
-    uint8_t *limit = buffer.data + buffer.size;
-    uint8_t *bufferHead = buffer.data;
+    const uint8_t *limit = buffer.data + buffer.size;
+    const uint8_t *bufferHead = buffer.data;
 
     for (c = 0; c < 256; ++c ) {
         struct CTile3DProperties *prop = getFromMap(map, c);
@@ -70,5 +70,5 @@ void loadPropertyList(const char *__restrict__ propertyFile, struct MapWithCharK
         setInMap(map, key, prop);
     }
 
-    free(buffer.data);
+    disposeDiskBuffer(buffer);
 }
