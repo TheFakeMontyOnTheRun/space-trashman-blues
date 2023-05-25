@@ -52,8 +52,7 @@ add_executable(derelict128
 		SoundSystem/PCMAudio.c
 		../core/src/Derelict.c
 		../core/src/Core.c
-		../core/src/Parser.c
-        base3d/src/ee/ArrayPackedFileReader.c)
+		../core/src/Parser.c)
 
 
 include(FindPkgConfig)
