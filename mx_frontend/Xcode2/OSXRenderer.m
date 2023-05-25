@@ -34,11 +34,8 @@
 
 extern char *textBuffer;
 extern char *messageLogBuffer;
-
 extern enum EVisibility *visMap;
 extern struct Vec2i *distances;
-extern uint8_t **mItems;
-extern uint8_t **map;
 extern uint8_t *collisionMap;
 extern struct Texture* textures;
 
@@ -49,14 +46,8 @@ void initHW(void) {
     visMap = (enum EVisibility*)calloc(MAP_SIZE * MAP_SIZE, sizeof(enum EVisibility));
     distances = (struct Vec2i*)calloc(2 * MAP_SIZE * MAP_SIZE, sizeof(struct Vec2i));
     textures = (struct Texture*)calloc(TOTAL_TEXTURES, sizeof(struct Texture));
-    mItems = (uint8_t**)calloc(MAP_SIZE, sizeof(uint8_t*));
-    map = (uint8_t**)calloc(MAP_SIZE, sizeof(uint8_t*));
-
-    for ( int c = 0; c < MAP_SIZE; ++c ) {
-        mItems[c] = (uint8_t*)calloc(MAP_SIZE, 1);
-        map[c] = (uint8_t*)calloc(MAP_SIZE, 1);
-    }
-
+    itemsInMap = (uint8_t*)calloc(MAP_SIZE * MAP_SIZE, sizeof(uint8_t*));
+    map = (uint8_t*)calloc(MAP_SIZE * MAP_SIZE, sizeof(uint8_t*));
 
     NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent: @"base.pfs"];
     initFileReader([path UTF8String]);
