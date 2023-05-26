@@ -28,6 +28,9 @@
 #define FIXP_HALF_YRES  (intToFix(HALF_YRES))
 #define FIXP_ONE (intToFix(1))
 
+#ifdef AGS
+__attribute__((section(".iwram"), long_call))
+#endif
 void projectAllVertices(const uint8_t count) {
 
 	FixP_t oneOver = FIXP_ONE;

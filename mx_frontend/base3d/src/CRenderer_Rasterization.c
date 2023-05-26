@@ -40,6 +40,9 @@ uint16_t clippingY1 = YRES_FRAMEBUFFER;
     *        \ |
     *         \| x1y1
     */
+#ifdef AGS
+__attribute__((section(".iwram"), long_call))
+#endif
 void maskWall(
         FixP_t x0,
         FixP_t x1,
@@ -165,6 +168,10 @@ void maskWall(
     *        \ |
     *         \| x1y1
     */
+
+#ifdef AGS
+__attribute__((section(".iwram"), long_call))
+#endif
 void drawWall(FixP_t x0,
               FixP_t x1,
               FixP_t x0y0,
@@ -352,6 +359,9 @@ void drawMask(
     fill(_x0, _y0, _x1 - _x0, _y1 - _y0, 0, FALSE);
 }
 
+#ifdef AGS
+__attribute__((section(".iwram"), long_call))
+#endif
 void drawFrontWall(FixP_t x0,
                    FixP_t y0,
                    FixP_t x1,
@@ -484,6 +494,9 @@ void drawFrontWall(FixP_t x0,
     *        /             \
     *  x0y1 /______________\ x1y1
     */
+#ifdef AGS
+__attribute__((section(".iwram"), long_call))
+#endif
 void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP_t x1y1, uint8_t pixel) {
 
     int32_t y;
@@ -600,6 +613,9 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
     *        /             \
     *  x0y1 /______________\ x1y1
     */
+#ifdef AGS
+__attribute__((section(".iwram"), long_call))
+#endif
 void drawFloor(FixP_t y0,
                FixP_t y1,
                FixP_t x0y0,
@@ -1367,6 +1383,9 @@ void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *textur
     drawTexturedTopFlatTriangle(&newCoors[0], &newUV[0], texture);
 }
 
+#ifdef AGS
+__attribute__((section(".iwram"), long_call))
+#endif
 void fill(
         const int x,
         const int y,
