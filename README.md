@@ -22,3 +22,15 @@ MX frontend - Derelict 32-bit (MS-DOS/FreeDOS with a 486+, Macintosh classic, Ma
 Download link: https://montyontherun.itch.io/sub-mare-imperium-derelict-32-bit
 
 ![ ](derelict32.png)
+
+GL frontend - Derelict 64-bit (Nintendo 64, Nintendo DS, Linux, NetBSD, Mac OSX PPC/Intel/ARM, even 32-bit variants!)
+
+Download link: https://montyontherun.itch.io/sub-mare-imperium-derelict-64
+
+![ ](derelict64.png)
+
+EE frontend - Derelict 128-bit (Sony Playstation 2)
+
+Download link: https://montyontherun.itch.io/derelict-128
+
+![ ](derelict128.png)
