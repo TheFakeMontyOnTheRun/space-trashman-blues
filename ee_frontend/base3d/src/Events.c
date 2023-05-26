@@ -101,7 +101,11 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
     dungeon_loadMap(buffer.data, collisions, map);
 
     sprintf (nameBuffer, "map%d.img", map);
-    free(mapTopLevel);
+
+    if (mapTopLevel) {
+        releaseBitmap(mapTopLevel);
+    }
+
     mapTopLevel = loadBitmap(nameBuffer);
 
     disposeDiskBuffer(buffer);

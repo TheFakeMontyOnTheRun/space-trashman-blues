@@ -53,7 +53,7 @@ void clearTextures(void) {
     }
 
     if (mapTopLevel) {
-        free(mapTopLevel);
+        releaseBitmap(mapTopLevel);
         mapTopLevel = NULL;
     }
 }
