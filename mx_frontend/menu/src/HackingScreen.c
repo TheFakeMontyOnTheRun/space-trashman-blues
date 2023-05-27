@@ -70,17 +70,15 @@ void HackingScreen_repaintCallback(void) {
     uint8_t isSelected;
     int pin;
     int pinPosition = 0;
+    drawWindow(1, 1, XRES_FRAMEBUFFER / 8, 15, "Disassembly: CONTROLLER.PRG (stack)");
 
 #ifndef AGS
-    drawWindow(1, 1, 40, 15, "Disassembly: CONTROLLER.PRG (stack)");
-
     drawTextAt( 6 + (12 * 0), 11, "CPU0", cursorPosition == 0 ? 128 : 0);
     drawTextAt( 6 + (12 * 1), 11, "CPU1", cursorPosition == 1 ? 128 : 0);
     drawTextAt( 6 + (12 * 2), 11, "CPU2", cursorPosition == 2 ? 128 : 0);
 
     for ( pin = 0; pin < 3; ++pin )
 #else
-    drawWindow(1, 1, 30, 15, "Disassembly: CONTROLLER.PRG (stack)");
     pin = cursorPosition;
 #endif
     {

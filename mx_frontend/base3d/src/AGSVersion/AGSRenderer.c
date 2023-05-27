@@ -119,21 +119,25 @@ void handleSystemEvents() {
         if ((keys & KEY_A)) {
             cooldown = COOLDOWN;
             mBufferedCommand = kCommandFire1;
+            needsToRedrawHUD = TRUE;
         }
 
         if ((keys & KEY_B)) {
             cooldown = COOLDOWN;
             mBufferedCommand = kCommandFire2;
+            needsToRedrawHUD = TRUE;
         }
 
         if ((keys & KEY_SELECT)) {
             cooldown = COOLDOWN;
             mBufferedCommand = kCommandFire4;
+            needsToRedrawHUD = TRUE;
         }
 
         if ((keys & KEY_START)) {
             cooldown = COOLDOWN;
             mBufferedCommand = kCommandFire3;
+            needsToRedrawHUD = TRUE;
         }
 
         if ((keys & KEY_L)) {

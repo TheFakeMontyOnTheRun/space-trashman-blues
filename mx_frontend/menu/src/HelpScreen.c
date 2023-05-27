@@ -35,7 +35,12 @@ const int16_t HelpScreen_optionsCount = 1;
 extern char *textBuffer;
 
 void HelpScreen_initStateCallback(int32_t tag) {
+#ifndef AGS
     struct StaticBuffer textFile = loadBinaryFileFromPath("Help.txt");
+#else
+    struct StaticBuffer textFile = loadBinaryFileFromPath("HelpAGS.txt");
+#endif
+
     dirtyLineY0 = 0;
     dirtyLineY1 = YRES_FRAMEBUFFER;
 
@@ -87,7 +92,7 @@ void HelpScreen_repaintCallback(void) {
     }
 
     if (mainText != NULL) {
-        drawTextWindow(1, 1, XRES_FRAMEBUFFER / 8, lines + 3, "Help", mainText);
+        drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, lines + 3, "Help", mainText);
     }
 
     drawWindow((XRES_FRAMEBUFFER / 8) - len - 3, ((YRES_FRAMEBUFFER / 8) + 1) - (optionsHeight / 8) - 3, len + 2, (optionsHeight / 8) + 2, "");

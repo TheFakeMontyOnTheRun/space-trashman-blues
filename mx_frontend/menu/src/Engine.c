@@ -44,7 +44,7 @@ UnloadStateCallback unloadStateCallback = NULL;
 
 int countLines() {
     size_t len = strlen(mainText);
-    int lines = 2;    /* initial line + final line must be accounted for */
+    int lines = 1;    /* initial line + final line must be accounted for */
     int charsInLine = 0;
     size_t c;
     for (c = 0; c < len; ++c) {
@@ -56,7 +56,7 @@ int countLines() {
         }
     }
 
-    return lines - 1;
+    return lines;
 }
 
 void enterState(enum EGameMenuState newState) {
