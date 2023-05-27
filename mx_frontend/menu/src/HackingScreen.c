@@ -69,17 +69,34 @@ void HackingScreen_initialPaintCallback(void) {
 void HackingScreen_repaintCallback(void) {
     uint8_t isSelected;
     int pin;
+    int pinPosition = 0;
 
+#ifndef AGS
     drawWindow(1, 1, 40, 15, "Disassembly: CONTROLLER.PRG (stack)");
-    
+
     drawTextAt( 6 + (12 * 0), 11, "CPU0", cursorPosition == 0 ? 128 : 0);
     drawTextAt( 6 + (12 * 1), 11, "CPU1", cursorPosition == 1 ? 128 : 0);
     drawTextAt( 6 + (12 * 2), 11, "CPU2", cursorPosition == 2 ? 128 : 0);
-    
-    for ( pin = 0; pin < 3; ++pin ) {
+
+    for ( pin = 0; pin < 3; ++pin )
+#else
+    drawWindow(1, 1, 30, 15, "Disassembly: CONTROLLER.PRG (stack)");
+    pin = cursorPosition;
+#endif
+    {
         int disk;
         int isCursorOnThisPin = cursorPosition == pin;
-        
+
+#ifndef AGS
+        pinPosition = pin;
+#else
+        pinPosition = 0;
+
+        char buffer[8];
+        sprintf(buffer, "CPU%d", cursorPosition);
+        drawTextAt( 6 + (12), 11, buffer, 128);
+#endif
+
         if (pins[pin][5] == 0 ) {
             accessGrantedToSafe = TRUE;
         }
@@ -101,13 +118,13 @@ void HackingScreen_repaintCallback(void) {
                 isSelected = getPaletteEntry(0xFF00AA00);
             }
                 
-            drawTextAt( 13 * (pin) + 1, 4 + (5 - disk), "|", isSelected);
+            drawTextAt( 13 * (pinPosition) + 1, 4 + (5 - disk), "|", isSelected);
                 
             if (funcName) {
-                drawTextAt( 13 * (pin) + 2, 4 + (5 - disk), funcName, isSelected);
+                drawTextAt( 13 * (pinPosition) + 2, 4 + (5 - disk), funcName, isSelected);
             }
             
-            drawTextAt( 13 * (pin) + 1, 10, "-------------", isSelected);
+            drawTextAt( 13 * (pinPosition) + 1, 10, "-------------", isSelected);
         }
     }
     
