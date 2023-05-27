@@ -1,0 +1,34 @@
+PROJECT_NAME = Derelict
+ROM = $(PROJECT_NAME).nes
+
+CC65_ROOT = /usr/local
+CC = $(CC65_ROOT)/bin/cc65
+AS = $(CC65_ROOT)/bin/ca65
+LD = $(CC65_ROOT)/bin/ld65
+
+CFLAGS = -t nes -Oirs -DTRACE_OBJECTS_OVER_FLOOR -DGAMEPAD -I../core/include -DNES -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_HACKING_MINIGAME -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DRLE_COMPRESSED_MAPS -DEMBEDDED_DATA
+
+INCLUDE = $(CC65_ROOT)/include
+ASMINC = $(CC65_ROOT)/libsrc/nes
+
+SRC = src/demo.c src/nes.c src/HackingMinigame.c ../core/src/Core.c ../core/src/Derelict.c
+ASMSRC = src/neslib/crt0.s
+OBJS = $(ASMSRC:.s=.o) $(SRC:.c=.o) 
+
+$(ROM): ld65.cfg $(OBJS)
+	$(LD) -C ld65.cfg $(OBJS) nes.lib -m link.log -o $@
+
+clean:
+	rm -f $(OBJS)
+	rm -f $(ROM)
+	rm -f link.log
+
+%.s: %.c
+	$(CC) $(CFLAGS) $< --add-source -I $(INCLUDE) -o $@
+
+%.o: %.s
+	$(AS) $< -I $(ASMINC) -o $@
+
+
+# Cancel built in rule for .c files.
+%.o: %.c
