@@ -185,6 +185,8 @@ void setLoggerDelegate(LogDelegate newDelegate);
 
 void setErrorHandlerCallback(ErrorHandlerCallback callback);
 
+void addObjectToList(struct Item *itemToAdd, struct ObjectNode *listHead);
+
 void removeObjectFromList(struct Item *itemToRemove, struct ObjectNode *listHead);
 
 uint8_t listIsEmpty(struct ObjectNode *listHead);

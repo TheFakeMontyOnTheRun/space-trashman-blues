@@ -100,21 +100,25 @@ void handleSystemEvents() {
 					mBufferedCommand = kCommandFire1;
 					visibilityCached = FALSE;
 					needsToRedrawVisibleMeshes = TRUE;
+                    needsToRedrawHUD = TRUE;
 					break;
 				case SDLK_x:
 					mBufferedCommand = kCommandFire2;
 					visibilityCached = FALSE;
 					needsToRedrawVisibleMeshes = TRUE;
+                    needsToRedrawHUD = TRUE;
 					break;
 				case SDLK_c:
 					mBufferedCommand = kCommandFire3;
 					visibilityCached = FALSE;
 					needsToRedrawVisibleMeshes = TRUE;
+                    needsToRedrawHUD = TRUE;
 					break;
 				case SDLK_v:
 					mBufferedCommand = kCommandFire4;
 					visibilityCached = FALSE;
 					needsToRedrawVisibleMeshes = TRUE;
+                    needsToRedrawHUD = TRUE;
 					break;
 
 

@@ -84,7 +84,7 @@ void
 drawTextWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *__restrict__ title,
                const char *__restrict__ content) {
     drawWindow(x, y, dx, dy, title);
-    drawTextAt(x + 1, y + 2, content, 0);
+    drawTextAtWithMargin(x + 1, y + 2, (x + dx - 2) * 8, content, 0);
 }
 
 void
@@ -98,11 +98,27 @@ drawImageWindow(const int x, const int y, const unsigned int dx, const unsigned 
     drawTextAt(x + 1, y, title, 255);
 }
 
+void updateMap(void) {
+    int x, z;
+    struct WorldPosition visPos = *getPlayerPosition();
+
+    fill(XRES + 8 + (10 * 4) + (4 * -10), 2 + 8 + (8 * 4) + (4 * -8), 4 * 20, 4 * 16,
+         64, FALSE);
+
+    for (z = -8; z < 8; ++z) {
+        for (x = -10; x < 10; ++x) {
+            if (isPositionAllowed(visPos.x + x, visPos.y + z)) {
+                fill(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4,192, FALSE);
+            }
+        }
+    }
+
+    fill(XRES + 8 + (10 * 4), 2 + 8 + (8 * 4), 4, 4,32, FALSE);
+}
+
 void redrawHUD(void) {
     int line = 0;
     struct ObjectNode *head;
-    struct WorldPosition visPos = *getPlayerPosition();
-    int x, z;
     struct Item* itemPtr;
     fill(XRES, 0, XRES_FRAMEBUFFER - XRES, YRES, 0, FALSE);
     drawTextAt(1 + (XRES / 8), 1, " Map:", 255);
@@ -119,24 +135,26 @@ void redrawHUD(void) {
         if (itemPtr != NULL) {
             if (line == currentSelectedItem) {
                 char textBuffer[255];
+                int itemIndex = itemPtr->index;
                 sprintf(&textBuffer[0], "%s", itemPtr->name);
                 textBuffer[14] = 0;
 
-                drawBitmapRaw(XRES + 8, YRES - 1 - 32 - 16 - 16, 32, 32, itemSprites[itemPtr->index]->rotations[0], 1);
+                // lazy loading the item sprites
+                // we can't preload it because...reasons on the NDS
+                // perhaps some state machine issue? IDK. Placing this here works better for the NDS.
+                if (itemSprites[itemIndex] == NULL) {
+                    char buffer[64];
+                    sprintf(&buffer[0], "%s.img", itemPtr->name);
+                    itemSprites[itemIndex] = loadBitmap(&buffer[0]);
+                }
 
-                drawTextAtWithMarginWithFiltering(2 + ((XRES) / 8), 23, 311, itemPtr->name,
+                drawBitmapRaw(XRES + 8, YRES- 16 - 16, 16, 16, itemSprites[itemIndex]->data, 1);
+
+                drawTextAtWithMarginWithFiltering(2 + ((XRES) / 8), ((YRES_FRAMEBUFFER / 8) + 1) - 2, 311, itemPtr->name,
                                      itemPtr->active ? 192 : 255, '\n');
             }
             ++line;
         }
         head = head->next;
-    }
-
-
-    for (z = -8; z < 8; ++z) {
-        for (x = -10; x < 10; ++x) {
-            fill(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4,
-                 (x == 0 && z == 0) ? 32 : isPositionAllowed(visPos.x + x, visPos.y + z) ? 192 : 64, FALSE);
-        }
     }
 }

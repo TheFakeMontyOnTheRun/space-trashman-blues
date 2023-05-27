@@ -25,6 +25,10 @@
 #include "FixP.h"
 #include "VisibilityStrategy.h"
 
+struct Texture *textures;
+uint8_t usedTexture = 0;
+extern struct Bitmap *mapTopLevel;
+
 FixP_t lerpFix(const FixP_t v0, const FixP_t v1, const FixP_t dt, const FixP_t total) {
     FixP_t delta = (v1 - v0);
     FixP_t progress = Div(dt, total);
@@ -38,70 +42,46 @@ int lerpInt(const int v0, const int v1, const long t, const long total) {
                             intToFix(total)));
 }
 
-struct Texture textures[2 * TOTAL_TEXTURES];
-uint8_t usedTexture = 0;
-
-void clearTextures() {
+void clearTextures(void) {
+    int c;
     usedTexture = 0;
+    for (c = 0; c < TOTAL_ITEMS; ++c ) {
+        if (itemSprites[c] != NULL) {
+            releaseBitmap(itemSprites[c]);
+            itemSprites[c] = NULL;
+        }
+    }
+
+    if (mapTopLevel) {
+        releaseBitmap(mapTopLevel);
+        mapTopLevel = NULL;
+    }
 }
 
 struct Texture *makeTextureFrom(const char *__restrict__ filename) {
     struct Texture *toReturn;
-    uint8_t *diskBuffer;
     uint8_t pixel;
     uint8_t repetitions;
     size_t c;
-    int d = 0;
-    size_t sizeInDisk = sizeOfFile(filename) - 4;
+    int d;
     int pixelIndex = 0;
     uint8_t buffer[NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
-    uint8_t dummy;
-
     int x, y;
-    FILE *src = openBinaryFileFromPath(filename);
 
-    assert (fread(&dummy, 1, 1, src));
-    assert (fread(&dummy, 1, 1, src));
-    assert (fread(&dummy, 1, 1, src));
-    assert (fread(&dummy, 1, 1, src));
 
-#ifndef AGA5BPP
-    diskBuffer = (uint8_t *) calloc(1, sizeInDisk);
-    assert (fread(diskBuffer, sizeInDisk, 1, src));
+    struct StaticBuffer staticBuffer = loadBinaryFileFromPath(filename);
+    const uint8_t *src = staticBuffer.data;
+    size_t sizeInDisk = staticBuffer.size - 4;
+    src += 4;
 
     for (c = 0; c < sizeInDisk; c += 2) {
-        pixel = diskBuffer[c];
-        repetitions = diskBuffer[c + 1];
+        pixel = src[c];
+        repetitions = src[c + 1];
 
         for (d = 0; d < repetitions; ++d) {
             buffer[pixelIndex++] = pixel;
         }
     }
-    free(diskBuffer);
-#else
-    diskBuffer = (uint8_t *) calloc(1, sizeInDisk);
-    assert (fread(diskBuffer, sizeInDisk, 1, src));
-
-    for ( c = 0; c < sizeInDisk; c += 2 ) {
-        pixel = diskBuffer[ c ];
-        repetitions = diskBuffer[ c + 1 ];
-
-        uint8_t r	  = ( pixel & 192 ) >> 6;
-          uint8_t g	  = ( pixel & 56 ) >> 3;
-          uint8_t b	  = ( pixel & 7 );
-
-        for ( d = 0; d < repetitions; ++d ) {
-          if ( pixel == 199 ) {
-                buffer[ pixelIndex++ ] = 199;
-              } else {
-                buffer[ pixelIndex++ ] = ( ( ( r >> 1 ) << 4 ) ) + ( ( g >> 1 ) << 2 ) + ( b >> 1 );
-              }
-        }
-    }
-    free(diskBuffer);
-#endif
-
-    fclose(src);
 
     toReturn = &textures[usedTexture++];
 
@@ -156,11 +136,14 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
         }
     }
 
+    disposeDiskBuffer(staticBuffer);
+
     return toReturn;
 }
 
 struct Bitmap *loadBitmap(const char *__restrict__ filename) {
     size_t c;
+    size_t size;
     int d = 0;
     uint8_t pixel;
     uint8_t repetitions;
@@ -168,63 +151,34 @@ struct Bitmap *loadBitmap(const char *__restrict__ filename) {
     struct Bitmap *toReturn =
             (struct Bitmap *) calloc(1, sizeof(struct Bitmap));
 
-    FILE *src = openBinaryFileFromPath(filename);
-    size_t size;
-    size_t sizeInDisk = sizeOfFile(filename) - 4;
+    struct StaticBuffer staticBuffer = loadBinaryFileFromPath(filename);
+    const uint8_t *ptr = staticBuffer.data;
+    size_t sizeInDisk = staticBuffer.size - 4;
     int pixelIndex = 0;
-    uint8_t *buffer;
-    uint8_t width = 0;
-    uint8_t height = 0;
+    uint16_t tmp;
+    tmp = *ptr++;
+    toReturn->width = (tmp & 0xFF) << 8;
+    tmp = *ptr++;
+    toReturn->width += tmp & 0xFF;
 
-    toReturn->width = 0;
-    assert (fread(&width, 1, 1, src));
-    toReturn->width += (width & 0xFF) << 8;
-    assert (fread(&width, 1, 1, src));
-    toReturn->width += width & 0xFF;
-
-    toReturn->height = 0;
-    assert (fread(&height, 1, 1, src));
-    toReturn->height += (height & 0xFF) << 8;
-    assert (fread(&height, 1, 1, src));
-    toReturn->height += height & 0xFF;
+    tmp = *ptr++;
+    toReturn->height = (tmp & 0xFF) << 8;
+    tmp = *ptr++;
+    toReturn->height += tmp & 0xFF;
 
     size = toReturn->width * toReturn->height;
-    buffer = (uint8_t *) calloc(1, sizeInDisk);
 
-    assert (fread(&buffer[0], sizeInDisk, 1, src));
-
-#ifndef AGA5BPP
     toReturn->data = (uint8_t *) calloc(1, size);
     for (c = 0; c < sizeInDisk; c += 2) {
-        pixel = buffer[c];
-        repetitions = buffer[c + 1];
+        pixel = *ptr++;
+        repetitions = *ptr++;
 
         for (d = 0; d < repetitions; ++d) {
             toReturn->data[pixelIndex++] = pixel;
         }
     }
-    free(buffer);
-#else
-    toReturn->data = (uint8_t *) calloc(1, size);
-    for ( c = 0; c < sizeInDisk; c += 2 ) {
-      pixel = buffer[ c ];
-      repetitions = buffer[ c + 1 ];
-        uint8_t r	  = ( pixel & 192 ) >> 6;
-        uint8_t g	  = ( pixel & 56 ) >> 3;
-        uint8_t b	  = ( pixel & 7 );
 
-      for ( d = 0; d < repetitions; ++d ) {
-          if ( pixel == 199 ) {
-            toReturn->data[ pixelIndex++ ] = 199;
-        } else {
-            toReturn->data[ pixelIndex++ ] = ( ( ( r >> 1 ) << 4 ) ) + ( ( g >> 1 ) << 2 ) + ( b >> 1 );
-        }
-      }
-    }
-    free(buffer);
-#endif
-
-    fclose(src);
+    disposeDiskBuffer(staticBuffer);
 
     return toReturn;
 }

@@ -35,7 +35,7 @@
 
 #define rUserAlert 129
 
-#define APP_NAME_STRING "\pThe Mistral Report - Invisible Affairs"
+#define APP_NAME_STRING "\pSub Mare Imperium - Derelict"
 struct RGBColor mPalette[256];
 PaletteHandle myPalette;
 SndChannelPtr sndChannelPtr;

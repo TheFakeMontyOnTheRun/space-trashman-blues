@@ -139,6 +139,7 @@ struct Bitmap *loadBitmap(const char *filename) {
     }
 
     free(buffer);
+    disposeDiskBuffer(src);
 
     toReturn->uploadId = -1;
 

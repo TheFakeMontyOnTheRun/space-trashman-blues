@@ -17,6 +17,7 @@ EE_OBJS= menu/src/Main.o \
          	  ../common/src/Vec.o \
          	  ../common/src/Common.o \
          	  ../common/src/MapWithCharKey.o \
+         	  ../common/src/ArrayPackedFileReader.o \
          	  base3d/src/CTile3DProperties.o \
          	  base3d/src/VisibilityStrategy.o \
          	  base3d/src/Globals.o \
@@ -36,7 +37,6 @@ EE_OBJS= menu/src/Main.o \
          	  ../core/src/Core.o \
          	  ../core/src/Parser.o \
          	  SoundSystem/NullMusic.o \
-         	  base3d/src/ee/ArrayPackedFileReader.o \
          	  base3d/src/ee/LoadBitmap.o \
          	  base3d/src/ee/Renderer_Rasterization.o \
          	  base3d/src/ee/Renderer_Tesselation.o \

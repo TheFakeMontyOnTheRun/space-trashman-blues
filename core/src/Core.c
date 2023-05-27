@@ -151,11 +151,13 @@ struct Item *getItemNamed(const char *name) {
 int getRoomIdByName(const char *name) {
 	int c;
 
-	for (c = 1; c < roomCount; ++c) {
-		if (!strcmp(rooms[c].name, name)) {
-			return c;
-		}
-	}
+    if (name != NULL) {
+        for (c = 1; c < roomCount; ++c) {
+            if (!strcmp(rooms[c].name, name)) {
+                return c;
+            }
+        }
+    }
 
 	return 0;
 }
@@ -163,11 +165,13 @@ int getRoomIdByName(const char *name) {
 struct Room *getRoomByName(const char *name) {
 	int c;
 
-	for (c = 1; c < roomCount; ++c) {
-		if (!strcmp(rooms[c].name, name)) {
-			return &rooms[c];
-		}
-	}
+    if (name != NULL) {
+        for (c = 1; c < roomCount; ++c) {
+            if (!strcmp(rooms[c].name, name)) {
+                return &rooms[c];
+            }
+        }
+    }
 
 	return NULL;
 }

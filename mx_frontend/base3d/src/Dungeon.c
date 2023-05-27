@@ -31,8 +31,9 @@
 #include "CRenderer.h"
 
 struct GameSnapshot gameSnapshot;
-uint8_t map[MAP_SIZE][MAP_SIZE];
-uint8_t collisionMap[256];
+uint8_t *map;
+uint8_t *itemsInMap;
+uint8_t *collisionMap;
 int enteredThru = 0;
 extern const char *focusItemName;
 
@@ -47,7 +48,7 @@ struct CActor playerCrawler;
 uint8_t isPositionAllowed(int8_t x, int8_t y) {
 
     return (0 <= x) && (x < MAP_SIZE) && (0 <= y) && (y < MAP_SIZE)
-           && collisionMap[map[y][x]] != '1';
+           && collisionMap[LEVEL_MAP(x,y)] != '1';
 }
 
 struct GameSnapshot dungeon_tick(const enum ECommand command) {
@@ -58,7 +59,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
   
   int oldTurn = gameSnapshot.turn;
   struct WorldPosition oldPosition = *getPlayerPosition();
-  setActor(playerCrawler.position.x, playerCrawler.position.y, 0xFF);
     currentPlayerRoom = getPlayerRoom();
 
     {
@@ -81,7 +81,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 playerCrawler.position.y += offset.y;
 
 
-                if (collisionMap[map[playerCrawler.position.y][playerCrawler.position.x]]== '1') {
+                if (collisionMap[LEVEL_MAP(playerCrawler.position.x, playerCrawler.position.y)] == '1') {
                     playerCrawler.position.x -= offset.x;
                     playerCrawler.position.y -= offset.y;
                 } else {
@@ -99,7 +99,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 playerCrawler.position.x -= offset.x;
                 playerCrawler.position.y -= offset.y;
 
-                if (collisionMap[map[playerCrawler.position.y][playerCrawler.position.x]]== '1') {
+                if (collisionMap[LEVEL_MAP(playerCrawler.position.x, playerCrawler.position.y)] == '1') {
                     playerCrawler.position.x += offset.x;
                     playerCrawler.position.y += offset.y;
                 } else {
@@ -243,7 +243,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 playerCrawler.position.x += offset.x;
                 playerCrawler.position.y += offset.y;
 
-                if (collisionMap[map[playerCrawler.position.y][playerCrawler.position.x]]== '1') {
+                if (collisionMap[LEVEL_MAP(playerCrawler.position.x, playerCrawler.position.y)] == '1') {
                     playerCrawler.position.x -= offset.x;
                     playerCrawler.position.y -= offset.y;
                 } else {
@@ -262,7 +262,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 playerCrawler.position.x += offset.x;
                 playerCrawler.position.y += offset.y;
 
-                if (collisionMap[map[playerCrawler.position.y][playerCrawler.position.x]]== '1') {
+                if (collisionMap[LEVEL_MAP(playerCrawler.position.x, playerCrawler.position.y)] == '1') {
                     playerCrawler.position.x -= offset.x;
                     playerCrawler.position.y -= offset.y;
                 } else {
@@ -286,8 +286,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
     gameSnapshot.camera_x = playerCrawler.position.x;
     gameSnapshot.camera_z = playerCrawler.position.y;
     gameSnapshot.camera_rotation = playerCrawler.rotation;
-
-    setActor(playerCrawler.position.x, playerCrawler.position.y, 0xFF);
 
     if (oldTurn != gameSnapshot.turn) {
 
@@ -349,7 +347,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             return gameSnapshot;
         }
 
-        cell = map[playerCrawler.position.y][playerCrawler.position.x];
+        cell = LEVEL_MAP(playerCrawler.position.x, playerCrawler.position.y);
 
         if ('0' <= cell && cell <= '3') {
 
@@ -378,7 +376,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 setPlayerPosition(&oldPosition);
                 playerCrawler.position.x = oldPosition.x;
                 playerCrawler.position.y = oldPosition.y;
-                setActor(playerCrawler.position.x, playerCrawler.position.y, 0xFF);
                 gameSnapshot.camera_x = playerCrawler.position.x;
                 gameSnapshot.camera_z = playerCrawler.position.y;
             }
@@ -407,18 +404,15 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     struct ObjectNode *head;
 
     gameSnapshot.should_continue = kCrawlerGameInProgress;
-    gameSnapshot.mapIndex = mapIndex;
     gameSnapshot.camera_rotation = 0;
 	playerCrawler.rotation = 0;
-    memcpy (&collisionMap, collisions, 256);
+    memcpy (collisionMap, collisions, 256);
 
     for (y = 0; y < MAP_SIZE; ++y) {
         for (x = 0; x < MAP_SIZE; ++x) {
             char current = *ptr;
-            map[y][x] = current;
+            LEVEL_MAP(x, y ) = current;
             setItem(x, y, 0xFF);
-            setActor(x, y, 0xFF);
-            setElement(x, y, current);
 
             if ((current == 's' && enteredThru == 0) ||
                 (current == 'w' && enteredThru == 1) ||
@@ -437,7 +431,6 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
 
     x = worldPos.x;
     y = worldPos.y;
-    setActor(x, y, 0xFF);
     setPlayerPosition(&worldPos);
     playerCrawler.position.x = x;
     playerCrawler.position.y = y;
