@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdlib.h>
 
 #include "Enums.h"
 #include "FixP.h"
@@ -26,37 +27,36 @@
 
 const char *HelpScreen_options[1] = {"Back"};
 
-enum EGameMenuState HelpScreen_nextStateNavigation[1] = {
+const enum EGameMenuState HelpScreen_nextStateNavigation[1] = {
         kMainMenu,
 };
 
-int16_t HelpScreen_optionsCount = 1;
-extern char textBuffer[40 * 25];
+const int16_t HelpScreen_optionsCount = 1;
+extern char *textBuffer;
 
 void HelpScreen_initStateCallback(int32_t tag) {
+#ifndef AGS
     struct StaticBuffer textFile = loadBinaryFileFromPath("Help.txt");
+#else
+    struct StaticBuffer textFile = loadBinaryFileFromPath("HelpAGS.txt");
+#endif
+
     dirtyLineY0 = 0;
     dirtyLineY1 = YRES_FRAMEBUFFER;
 
     cursorPosition = 0;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
-    memset (&textBuffer[0], ' ', 40 * 25);
+    memset (textBuffer, ' ', 40 * 25);
 
-    currentBackgroundBitmap = loadBitmap("pattern.img");
-
-    mainText = &textBuffer[0];
-    memset (&textBuffer[0], 0, (40 * 25));
-    memcpy(&textBuffer[0], textFile.data, textFile.size);
-
-    HelpScreen_optionsCount = 1;
+    mainText = textBuffer;
+    memset (textBuffer, 0, (40 * 25));
+    memcpy(textBuffer, textFile.data, textFile.size);
+    disposeDiskBuffer(textFile);
 }
 
 void HelpScreen_initialPaintCallback(void) {
-
-    if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, currentBackgroundBitmap);
-    }
+    fill(0, 0, (XRES_FRAMEBUFFER-1), (YRES_FRAMEBUFFER-1), getPaletteEntry(0xFF6cb1a3), 0);
 }
 
 void HelpScreen_repaintCallback(void) {
@@ -80,7 +80,7 @@ void HelpScreen_repaintCallback(void) {
             return;
         }
 
-        drawRect(160 - lerp320 / 2, ((lines + 3) * 8) / 2 - lerpLines / 2,
+        drawRect((XRES_FRAMEBUFFER / 2) - lerp320 / 2, ((lines + 3) * 8) / 2 - lerpLines / 2,
                  lerp320, lerpLines, 0);
 
         drawRect(XRES_FRAMEBUFFER - (len * 8) - 16 - 16 + (len * 8) / 2 - lerpLen8 / 2,
@@ -92,10 +92,10 @@ void HelpScreen_repaintCallback(void) {
     }
 
     if (mainText != NULL) {
-        drawTextWindow(1, 1, 40, lines + 3, "Help", mainText);
+        drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, lines + 3, "Help", mainText);
     }
 
-    drawWindow(40 - len - 3, 25 - (optionsHeight / 8) - 3, len + 2, (optionsHeight / 8) + 2, "");
+    drawWindow((XRES_FRAMEBUFFER / 8) - len - 3, ((YRES_FRAMEBUFFER / 8) + 1) - (optionsHeight / 8) - 3, len + 2, (optionsHeight / 8) + 2, "");
 
     for (c = 0; c < HelpScreen_optionsCount; ++c) {
 
@@ -107,11 +107,13 @@ void HelpScreen_repaintCallback(void) {
 
         if (isCursor) {
             fill(XRES_FRAMEBUFFER - (len * 8) - 16 - 8 - 8,
-                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - 8 - 8, (len * 8) + 16, 8,
+                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - (8 * 1),
+                 (len * 8) + 16,
+                 8,
                  0, FALSE);
         }
 
-        drawTextAt(40 - len - 2, (26 - HelpScreen_optionsCount) + c - 2,
+        drawTextAt((XRES_FRAMEBUFFER / 8) - len - 2, (((YRES_FRAMEBUFFER / 8) + 1) - HelpScreen_optionsCount) + c - 1,
                    &HelpScreen_options[c][0], isCursor ? 255 : 0);
     }
 }
@@ -180,8 +182,4 @@ enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void HelpScreen_unloadStateCallback() {
-    if (currentBackgroundBitmap != NULL) {
-        releaseBitmap(currentBackgroundBitmap);
-        currentBackgroundBitmap = NULL;
-    }
 }

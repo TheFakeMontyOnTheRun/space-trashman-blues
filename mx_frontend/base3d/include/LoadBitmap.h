@@ -1,6 +1,8 @@
 #ifndef BITMAP_H
 #define BITMAP_H
 
+#define NATIVE_TEXTURE_SIZE 16
+
 struct Bitmap {
 	uint8_t *data;
 	uint16_t width;
@@ -10,8 +12,8 @@ struct Bitmap {
 
 
 struct Texture {
-	uint8_t rotations[4][32 * 32];
-	uint8_t rowMajor[32 * 32];
+	uint8_t rotations[4][NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
+	uint8_t rowMajor[NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
 };
 
 void clearTextures(void);

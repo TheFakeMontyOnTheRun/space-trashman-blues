@@ -1,13 +1,11 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#define NATIVE_TEXTURE_SIZE 32
-
-#ifdef AMIGA
-#define XRES 200
-#define YRES 128
-#define HALF_XRES 100
-#define HALF_YRES 64
+#ifdef AGS
+#define XRES 130
+#define YRES 160
+#define HALF_XRES 65
+#define HALF_YRES 80
 #else
 #define XRES 216
 #define YRES 200
@@ -15,9 +13,13 @@
 #define HALF_YRES 100
 #endif
 
-
+#ifndef AGS
 #define XRES_FRAMEBUFFER 320
 #define YRES_FRAMEBUFFER 200
+#else
+#define XRES_FRAMEBUFFER 240
+#define YRES_FRAMEBUFFER 160
+#endif
 
 #define TOTAL_TEXTURES 32
 #define TRANSPARENCY_COLOR 199
@@ -33,19 +35,24 @@ extern struct MapWithCharKey colliders;
 extern int useDither;
 extern int visibilityCached;
 extern int needsToRedrawVisibleMeshes;
-extern uint8_t *visibleElementsMap;
 extern struct Bitmap *defaultFont;
+
+#ifndef AGS
 extern uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 extern uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+extern uint32_t palette[256];
+#else
+extern uint8_t *framebuffer;
+#endif
 extern enum EDirection cameraDirection;
 extern long gameTicks;
-extern int playerHealth;
 extern int hasSnapshot;
-extern int distanceForPenumbra;
-extern int distanceForDarkness;
+extern const int distanceForPenumbra;
 extern int turnTarget;
 extern int turnStep;
 extern int needToRedrawHUD;
+
+#define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
 
 #define MASK_LEFT 1
 #define MASK_FRONT 2
@@ -56,7 +63,6 @@ extern int needToRedrawHUD;
 
 extern struct MapWithCharKey tileProperties;
 extern struct Vec2i cameraPosition;
-extern uint32_t palette[256];
 extern uint8_t texturesUsed;
 extern enum ECommand mBufferedCommand;
 extern struct Texture *nativeTextures[TOTAL_TEXTURES];
@@ -83,6 +89,11 @@ struct Mesh {
     struct Texture* texture;
     uint8_t colour;
 };
+
+extern uint8_t *map;
+extern uint8_t *itemsInMap;
+#define LEVEL_MAP(x, y) (map[ ( (MAP_SIZE) * (y) ) + (x) ])
+#define ITEMS_IN_MAP(x, y) (itemsInMap[ ( (MAP_SIZE) * (y) ) + (x) ])
 
 
 void graphicsInit(void);
@@ -127,11 +138,7 @@ void fill(
 
 void drawMesh(const struct Mesh* mesh, const struct Vec3 at );
 
-void drawMap(const uint8_t * __restrict__ elements,
-			 const uint8_t * __restrict__ items,
-			 const uint8_t * __restrict__ actors,
-			 uint8_t * __restrict__ effects,
-			 const struct CActor * __restrict__ current);
+void drawMap(const struct CActor * __restrict__ current);
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour);
 

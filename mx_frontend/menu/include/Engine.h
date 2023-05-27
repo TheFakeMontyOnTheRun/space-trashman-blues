@@ -25,7 +25,6 @@ extern int isRunning;
 
 extern long timeUntilNextState;
 extern enum EPresentationState currentPresentationState;
-extern struct Bitmap *currentBackgroundBitmap;
 
 extern int cursorPosition;
 extern enum EGameMenuState nextNavigationSelection;
@@ -62,16 +61,6 @@ void HelpScreen_repaintCallback(void);
 enum EGameMenuState HelpScreen_tickCallback(enum ECommand, long data);
 
 void HelpScreen_unloadStateCallback(void);
-
-void BattleScreen_initStateCallback(int32_t tag);
-
-void BattleScreen_initialPaintCallback(void);
-
-void BattleScreen_repaintCallback(void);
-
-enum EGameMenuState BattleScreen_tickCallback(enum ECommand, long data);
-
-void BattleScreen_unloadStateCallback(void);
 
 void CreditsScreen_initStateCallback(int32_t tag);
 
@@ -118,14 +107,14 @@ void shutdownHW();
 extern int isRunning;
 extern long timeUntilNextState;
 extern enum EPresentationState currentPresentationState;
-extern struct Bitmap *currentBackgroundBitmap;
+
 extern enum EGameMenuState nextNavigationSelection;
 extern enum EGameMenuState currentGameMenuState;
 extern const char *mainText;
 
 int menuTick(long delta_time);
 
-extern struct Texture *itemSprites[TOTAL_ITEMS];
+extern struct Bitmap *itemSprites[TOTAL_ITEMS];
 
 extern int currentSelectedItem;
 

@@ -202,7 +202,7 @@ struct StaticBuffer loadBinaryFileFromPath(const char * __restrict__ path) {
     toReturn.size = size;
     toReturn.data = (uint8_t *) malloc(size);
 
-    assert (fread(toReturn.data, sizeof(uint8_t), size, mDataPack));
+    assert (fread((void*)toReturn.data, sizeof(uint8_t), size, mDataPack));
     fclose(mDataPack);
 
     return toReturn;
@@ -254,4 +254,8 @@ FILE *openBinaryFileFromPath(const char * __restrict__ path) {
 	size = toNativeEndianess(size);
 
 	return mDataPack;
+}
+
+void disposeDiskBuffer(struct StaticBuffer buffer) {
+    free((void*)buffer.data);
 }

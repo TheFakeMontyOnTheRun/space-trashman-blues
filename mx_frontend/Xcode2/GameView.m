@@ -22,6 +22,17 @@
 
 extern         GameView* osxview;
 
+extern char *textBuffer;
+extern char *messageLogBuffer;
+
+
+extern char *textBuffer;
+extern char *messageLogBuffer;
+extern enum EVisibility *visMap;
+extern struct Vec2i *distances;
+extern uint8_t *collisionMap;
+extern struct Texture* textures;
+
 @implementation GameView
 
 uint32_t stretchedBuffer[ XRES_FRAMEBUFFER * YRES_FRAMEBUFFER ];
@@ -137,8 +148,6 @@ void setMultiplier(CGSize size) {
         
         osxview = self;
         
-        srand(time(NULL));
-        
         initHW();
         enterState(kMainMenu);
         
@@ -187,6 +196,15 @@ void setMultiplier(CGSize size) {
 
 void shutdownHW(void) {
     CGColorSpaceRelease(rgb);
+    
+    free(textBuffer);
+    free(messageLogBuffer);
+    free(collisionMap);
+    free(visMap);
+    free(distances);
+    free(textures);
+    free(itemsInMap);
+    free(map);
 }
 
 

@@ -35,10 +35,10 @@ add_executable(derelict128
 		base3d/src/ee/EmotionEngineRenderer.c
 		base3d/src/ee/LoadBitmap.c
 		base3d/src/ee/Renderer.c
-		base3d/src/ee/ArrayPackedFileReader.c
 		base3d/src/ee/Renderer_Rasterization.c
 		base3d/src/ee/Renderer_Tesselation.c
 		base3d/src/VisibilityStrategy.c
+		../common/src/ArrayPackedFileReader.c
 		../common/src/Vec.c
 		../common/src/Common.c
 		../common/src/FixP.c
@@ -52,8 +52,7 @@ add_executable(derelict128
 		SoundSystem/PCMAudio.c
 		../core/src/Derelict.c
 		../core/src/Core.c
-		../core/src/Parser.c
-        base3d/src/ee/ArrayPackedFileReader.c)
+		../core/src/Parser.c)
 
 
 include(FindPkgConfig)

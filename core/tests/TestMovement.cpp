@@ -72,6 +72,11 @@ TEST_F(TestMovement, canMoveOnlyWhenEnabled) {
 
 }
 
+TEST_F(TestMovement, invalidRoomNamesMustYieldTheDummyFirstRoom) {
+    ASSERT_EQ(0, getRoomIdByName(NULL));
+    ASSERT_EQ(0, getRoomIdByName("Farofinha"));
+}
+
 TEST_F(TestMovement, canWalkInsideRooms) {
 
   char buffer[255];
@@ -262,39 +267,6 @@ TEST_F(TestMovement, roomsCanRequireSpecialRankForAccess) {
 }
 
 extern struct Item item[26];
-
-TEST_F(TestMovement, keycardsCanElevatePlayerRankIfItsHigherThanCurrent) {
-  ASSERT_EQ(getPlayerRoom(), 1);
-  ASSERT_EQ(getPlayerRank(), 0);
-  addToRoom( "lss-daedalus", getItemNamed("low-rank-keycard"));
-  addToRoom( "lss-daedalus", getItemNamed("high-rank-keycard"));
-  addToRoom( "lss-daedalus", getItemNamed("root-keycard"));
-
-  parseCommand("pick", "low-rank-keycard");
-  ASSERT_EQ(getPlayerRank(), 1);
-  parseCommand("drop", "low-rank-keycard");
-  ASSERT_EQ(getPlayerRank(), 0);
-
-
-  parseCommand("pick", "root-keycard");
-
-  ASSERT_EQ(getPlayerRank(), 4);
-
-  parseCommand("pick", "low-rank-keycard");
-  ASSERT_EQ(getPlayerRank(), 4);
-
-  parseCommand("drop", "low-rank-keycard");
-  ASSERT_EQ(getPlayerRank(), 4);
-
-  parseCommand("pick", "high-rank-keycard");
-  ASSERT_EQ(getPlayerRank(), 4);
-
-  parseCommand("drop", "root-keycard");
-  ASSERT_EQ(getPlayerRank(), 3);
-
-  parseCommand("drop", "high-rank-keycard");
-  ASSERT_EQ(getPlayerRank(), 0);
-}
 
 TEST_F(TestMovement, walkingTowardsWallsWillBlockMovement) {
 

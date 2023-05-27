@@ -43,7 +43,6 @@ enum EGameMenuState {
 	kBadVictoryEpilogue,
 	kGoodGameOverEpilogue,
 	kBadGameOverEpilogue,
-	kRandomBattle,
 	kPrologue,
 	kEpilogue
 };

@@ -27,11 +27,8 @@
 #include "PackedFileReader.h"
 #include "Dungeon.h"
 #include "SoundSystem.h"
+#include "Globals.h"
 
-uint8_t elements[(MAP_SIZE * MAP_SIZE)];
-uint8_t actorsInMap[(MAP_SIZE * MAP_SIZE)];
-uint8_t items[(MAP_SIZE * MAP_SIZE)];
-uint8_t effects[(MAP_SIZE * MAP_SIZE)];
 int x = 0;
 int z = 0;
 int rotation = 0;
@@ -39,10 +36,7 @@ enum CrawlerState shouldContinue = kCrawlerGameInProgress;
 struct CActor actor;
 
 void clearMapCache() {
-    size_t sizeForSet = sizeof(uint8_t) * (MAP_SIZE * MAP_SIZE);
-    memset (&items[0], 0xFF, sizeForSet);
-    memset (&actorsInMap[0], 0xFF, sizeForSet);
-    memset (&effects[0], 0xFF, sizeForSet);
+    memset (&(ITEMS_IN_MAP(0, 0)), 0xFF, MAP_SIZE * MAP_SIZE);
 }
 
 void onLevelLoaded(int index) {
@@ -69,16 +63,9 @@ void tickMission(enum ECommand cmd) {
     }
 }
 
-void setElement(const int x, const int y, uint8_t element) {
-    elements[(MAP_SIZE * y) + x] = element;
-}
-
-void setActor(const int x, const int y, uint8_t actor) {
-    actorsInMap[(MAP_SIZE * y) + x] = actor;
-}
-
 void setItem(const int x, const int y, uint8_t item) {
-    items[(MAP_SIZE * y) + x] = item;
+
+    ITEMS_IN_MAP(x, y) = item;
 }
 
 void loadMap(int map, struct MapWithCharKey *collisionMap) {
@@ -102,13 +89,9 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
 
     sprintf (nameBuffer, "map%d.img", map);
 
-    if (mapTopLevel) {
-        free(mapTopLevel);
-    }
-
     mapTopLevel = loadBitmap(nameBuffer);
 
-    free(buffer.data);
+    disposeDiskBuffer(buffer);
 }
 
 void renderTick(long ms) {
@@ -133,10 +116,9 @@ int loopTick(enum ECommand command) {
 
         if (gameTicks != 0) {
             yCameraOffset = ((struct CTile3DProperties *) getFromMap(&tileProperties,
-                                                                     elements[(z * MAP_SIZE) + x]))->mFloorHeight -
+                                                                     LEVEL_MAP(x, z) ))->mFloorHeight -
                             ((struct CTile3DProperties *) getFromMap(&tileProperties,
-                                                                     elements[(actor.position.y * MAP_SIZE) +
-                                                                              actor.position.x]))->mFloorHeight;
+                                                                     LEVEL_MAP(actor.position.x, actor.position.y)))->mFloorHeight;
         } else {
             yCameraOffset = 0;
         }
@@ -154,8 +136,7 @@ int loopTick(enum ECommand command) {
 
 
     if (needRedraw) {
-        drawMap(&elements[0], &items[0], &actorsInMap[0], &effects[0],
-                &actor);
+        drawMap(&actor);
         if (!enable3DRendering) {
             enable3DRendering = TRUE;
             visibilityCached = FALSE;
@@ -172,6 +153,7 @@ void initRoom(int room) {
     gameTicks = 0;
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = TRUE;
+    needsToRedrawHUD = TRUE;
     onLevelLoaded(room);
 
     for (c = 0; c < 256; ++c) {

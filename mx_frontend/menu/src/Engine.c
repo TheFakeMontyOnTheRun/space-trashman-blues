@@ -34,7 +34,7 @@
 
 #include "SoundSystem.h"
 
-char textBuffer[40 * 25];
+char *textBuffer;
 
 InitStateCallback initStateCallback = NULL;
 InitialPaintCallback initialPaintCallback = NULL;
@@ -44,7 +44,7 @@ UnloadStateCallback unloadStateCallback = NULL;
 
 int countLines() {
     size_t len = strlen(mainText);
-    int lines = 2;    /* initial line + final line must be accounted for */
+    int lines = 1;    /* initial line + final line must be accounted for */
     int charsInLine = 0;
     size_t c;
     for (c = 0; c < len; ++c) {
@@ -56,7 +56,7 @@ int countLines() {
         }
     }
 
-    return lines - 1;
+    return lines;
 }
 
 void enterState(enum EGameMenuState newState) {
@@ -69,7 +69,6 @@ void enterState(enum EGameMenuState newState) {
 
     timeUntilNextState = MENU_ITEM_TIME_TO_BECOME_ACTIVE_MS;
     currentPresentationState = kAppearing;
-    currentBackgroundBitmap = NULL;
     cursorPosition = 0;
     nextNavigationSelection = -1;
 
@@ -129,14 +128,6 @@ void enterState(enum EGameMenuState newState) {
             repaintCallback = HackingScreen_repaintCallback;
             tickCallback = HackingScreen_tickCallback;
             unloadStateCallback = HackingScreen_unloadStateCallback;
-        }
-            break;
-        case kRandomBattle: {
-            initStateCallback = BattleScreen_initStateCallback;
-            initialPaintCallback = BattleScreen_initialPaintCallback;
-            repaintCallback = BattleScreen_repaintCallback;
-            tickCallback = BattleScreen_tickCallback;
-            unloadStateCallback = BattleScreen_unloadStateCallback;
         }
             break;
         case kQuit:

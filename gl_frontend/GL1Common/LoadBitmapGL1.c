@@ -284,7 +284,7 @@ struct Bitmap *loadBitmap(const char *filename) {
 	size_t sizeInDisk = src.size - 4; //total size minus the header
 
 	uint16_t tmp;
-	uint8_t *ptr = src.data;
+	const uint8_t *ptr = src.data;
 
 	tmp = *ptr++;
 	toReturn->width = (tmp & 0xFF) << 8;
@@ -346,11 +346,11 @@ struct Bitmap *loadBitmap(const char *filename) {
 
 #ifndef N64
 	free(buffer);
-	free(src.data);
 #else
 	free_uncached(buffer);
-	free_uncached(src.data);
 #endif
+
+    disposeDiskBuffer(src);
 
 	toReturn->uploadId = -1;
 
