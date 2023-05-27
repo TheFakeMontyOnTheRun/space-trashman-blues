@@ -14,7 +14,7 @@ CFLAGS += -Ofast      \
     -I../common/include \
     -DN64 \
     -DINCLUDE_ITEM_DESCRIPTIONS \
-    -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic
+    -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic -Wno-discarded-qualifiers
 
 src = menu/src/MainMenu.c \
                   		menu/src/Crawler.c \

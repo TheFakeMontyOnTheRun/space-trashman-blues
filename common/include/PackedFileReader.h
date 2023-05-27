@@ -16,4 +16,6 @@ struct StaticBuffer loadBinaryFileFromPath(const uint8_t slot);
 
 #endif
 
+void disposeDiskBuffer(struct StaticBuffer buffer);
+
 #endif

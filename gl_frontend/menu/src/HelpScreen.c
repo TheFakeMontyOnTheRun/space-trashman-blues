@@ -48,7 +48,7 @@ void HelpScreen_initStateCallback(int32_t tag) {
 	mainText = &textBuffer[0];
 	memset (&textBuffer[0], 0, (40 * 25));
 	memcpy(&textBuffer[0], textFile.data, textFile.size);
-
+    disposeDiskBuffer(textFile);
 	HelpScreen_optionsCount = 1;
 }
 

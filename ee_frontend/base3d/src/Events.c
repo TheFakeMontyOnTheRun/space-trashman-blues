@@ -101,14 +101,14 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
     dungeon_loadMap(buffer.data, collisions, map);
 
     sprintf (nameBuffer, "map%d.img", map);
-    free(mapTopLevel);
+
+    if (mapTopLevel) {
+        releaseBitmap(mapTopLevel);
+    }
+
     mapTopLevel = loadBitmap(nameBuffer);
 
-#ifndef N64
-    free(buffer.data);
-#else
-	free_uncached(buffer.data);
-#endif
+    disposeDiskBuffer(buffer);
 }
 
 void renderTick(long ms) {

@@ -242,11 +242,7 @@ void loadTileProperties(const uint8_t levelNumber) {
 		}
 	}
 
-#ifndef N64
-	free(data.data);
-#else
-	free_uncached(data.data);
-#endif
+    disposeDiskBuffer(data);
 }
 
 void loadTexturesForLevel(const uint8_t levelNumber) {
@@ -258,10 +254,12 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 	char *nameStart;
 	int c;
 	sprintf(tilesFilename, "tiles%d.lst", levelNumber);
-	data = loadBinaryFileFromPath(tilesFilename);
-
-	head = (char *) data.data;
+    data = loadBinaryFileFromPath(tilesFilename);
+    char *buffer = (char*)malloc(data.size);
+    head = buffer;
+    memcpy(head, data.data, data.size);
 	end = head + data.size;
+    disposeDiskBuffer(data);
 	nameStart = head;
 
 	texturesUsed = 0;
@@ -290,11 +288,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 		++head;
 	}
 
-#ifndef N64
-	free(data.data);
-#else
-	free_uncached(data.data);
-#endif
+    free(buffer);
 }
 
 void updateCursorForRenderer(const int x, const int z) {

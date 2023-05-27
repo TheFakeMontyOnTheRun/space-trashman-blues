@@ -169,3 +169,5 @@ gl_frontend/Xcode2_gl1/Derelict64.xcodeproj/monty.mode1
 gl_frontend/Xcode2_gl1/Derelict64.xcodeproj/monty.pbxuser
 gl_frontend/gl_frontend.elf
 gl_frontend/gl_frontend.nds
+mx_frontend/mx_frontend.elf
+mx_frontend/mx_frontend.gba

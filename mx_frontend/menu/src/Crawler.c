@@ -36,8 +36,8 @@ extern size_t biggestOption;
 int needToRedrawHUD = FALSE;
 const char *AbandonMission_Title = "Abandon game?";
 const char *AbandonMission_options[6] = {"Continue", "End game"};
-int AbandonMission_navigation[2] = {-1, kMainMenu};
-int AbandonMission_count = 2;
+const int AbandonMission_navigation[2] = {-1, kMainMenu};
+const int AbandonMission_count = 2;
 extern struct GameSnapshot gameSnapshot;
 
 void Crawler_initStateCallback(int32_t tag) {
@@ -79,22 +79,21 @@ void Crawler_initStateCallback(int32_t tag) {
     thisMissionName = getRoomDescription();
     thisMissionNameLen = (int16_t) (strlen(thisMissionName));
 
-    currentBackgroundBitmap = loadBitmap("pattern.img");
-
-
     if (tag == kPlayGame) {
         initRoom(getPlayerRoom());
     }
 }
 
 void Crawler_initialPaintCallback() {
+    int textPosY = ((YRES_FRAMEBUFFER / 8) / 2) - 1;
+
     fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, 0, FALSE);
 
-    fill(11 * 8 - 1, 12 * 8, 18 * 8 + 3, 8, 255, FALSE);
-    drawRect(11 * 8 - 1, 11 * 8 - 1, 18 * 8 + 2, 8 + 2, 255);
+    fill((XRES_FRAMEBUFFER / 2) - (9 * 8) - 1, textPosY * 8, 18 * 8 + 3, 8, 255, FALSE);
+    drawRect((XRES_FRAMEBUFFER / 2) - (9 * 8) - 1, (textPosY  * 8 ) - 8 - 1, 18 * 8 + 2, 8 + 2, 255);
 
-    drawTextAt(13, 13, "Loading", 0);
-    drawTextAt(13, 12, "Please wait...", 255);
+    drawTextAt(((XRES_FRAMEBUFFER / 8) / 2)- 7, textPosY + 1, "Loading", 0);
+    drawTextAt(((XRES_FRAMEBUFFER / 8) / 2) - 7, textPosY, "Please wait...", 255);
 
     needToRedrawHUD = TRUE;
     needsToRedrawVisibleMeshes = TRUE;
@@ -102,14 +101,10 @@ void Crawler_initialPaintCallback() {
 }
 
 void Crawler_repaintCallback() {
-
-
-
     if (showPromptToAbandonMission) {
         int c;
         int optionsHeight = 8 * (AbandonMission_count);
         turnStep = turnTarget;
-        drawRepeatBitmap(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, currentBackgroundBitmap);
 
         fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, 0, TRUE);
 
@@ -253,10 +248,6 @@ void Crawler_repaintCallback() {
 
 enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     int returnCode;
-
-    if (kEnteringRandomBattle == currentPresentationState ) {
-        return kRandomBattle;
-    }
 
     if (showPromptToAbandonMission) {
 
@@ -428,8 +419,5 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void Crawler_unloadStateCallback() {
-    if (currentBackgroundBitmap != NULL) {
-        releaseBitmap(currentBackgroundBitmap);
-        currentBackgroundBitmap = NULL;
-    }
+    clearTextures();
 }

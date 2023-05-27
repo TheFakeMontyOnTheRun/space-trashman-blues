@@ -1823,6 +1823,10 @@ void initMap(void) {
 	}
 
 	done_loading:
+#ifndef EMBEDDED_DATA
+    disposeDiskBuffer(datafile);
+#endif
+
 	updateMapItems();
 	HUD_initialPaint();
 }

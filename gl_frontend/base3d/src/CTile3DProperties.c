@@ -21,8 +21,8 @@
 void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map) {
 
 	struct StaticBuffer buffer = loadBinaryFileFromPath(propertyFile);
-	uint8_t *limit = buffer.data + buffer.size;
-	uint8_t *bufferHead = buffer.data;
+	const uint8_t *limit = buffer.data + buffer.size;
+	const uint8_t *bufferHead = buffer.data;
 
 	clearMap(map);
 
@@ -64,13 +64,6 @@ void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map) {
 
 		setInMap(map, key, prop);
 	}
-#ifndef N64
-	free(buffer.data);
-#else
-	/*
-	 * This is a hack and leaks memory - but removing this causes the game to crash on the N64
-	 * TODO: fix this
-	free_uncached(buffer.data);
-	 */
-#endif
+
+    disposeDiskBuffer(buffer);
 }

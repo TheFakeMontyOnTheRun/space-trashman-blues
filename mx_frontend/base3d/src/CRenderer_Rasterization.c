@@ -24,6 +24,7 @@
 #include "VisibilityStrategy.h"
 
 #define PAGE_FLIP_INCREMENT 32
+#define FIXP_NATIVE_TEXTURE_SIZE  (intToFix(NATIVE_TEXTURE_SIZE))
 
 char mTurnBuffer;
 
@@ -39,6 +40,9 @@ uint16_t clippingY1 = YRES_FRAMEBUFFER;
     *        \ |
     *         \| x1y1
     */
+#ifdef AGS
+__attribute__((section(".iwram"), long_call))
+#endif
 void maskWall(
         FixP_t x0,
         FixP_t x1,
@@ -61,7 +65,6 @@ void maskWall(
     FixP_t dX;
     FixP_t upperDyDx;
     FixP_t lowerDyDx;
-    uint8_t pixel = 0;
     int32_t ix;
     uint8_t *bufferData = &framebuffer[0];
 
@@ -111,7 +114,6 @@ void maskWall(
     upperDyDx = Div(upperDy, dX);
     lowerDyDx = Div(lowerDy, dX);
 
-    pixel = 0;
     /*
       0xFF here acts as a dirty value, indicating there is no last value.
       But even if we had textures this big, it would be only at the end of
@@ -147,7 +149,7 @@ void maskWall(
             destinationLine = bufferData + (XRES_FRAMEBUFFER * iY0) + ix;
 
             for (iy = iY0; iy < iY1; ++iy) {
-                *(destinationLine) = pixel;
+                *(destinationLine) = 0;
                 destinationLine += (XRES_FRAMEBUFFER);
             }
         }
@@ -166,6 +168,10 @@ void maskWall(
     *        \ |
     *         \| x1y1
     */
+
+#ifdef AGS
+__attribute__((section(".iwram"), long_call))
+#endif
 void drawWall(FixP_t x0,
               FixP_t x1,
               FixP_t x0y0,
@@ -193,7 +199,7 @@ void drawWall(FixP_t x0,
     FixP_t u = 0;
     uint8_t lastV;
     const uint8_t *data = texture;
-    const FixP_t textureSize = intToFix(NATIVE_TEXTURE_SIZE);
+
     FixP_t du;
     int32_t ix;
     uint8_t *bufferData = &framebuffer[0];
@@ -254,7 +260,7 @@ void drawWall(FixP_t x0,
       we don't need to fetch that data on every run.
    */
 
-    du = Div(textureSize, dX);
+    du = Div(FIXP_NATIVE_TEXTURE_SIZE, dX);
     ix = x;
 
     for (; ix < limit; ++ix) {
@@ -275,7 +281,7 @@ void drawWall(FixP_t x0,
                 continue;
             }
 
-            dv = Div(Mul(textureSize, textureScaleY), diffY);
+            dv = Div(Mul(FIXP_NATIVE_TEXTURE_SIZE, textureScaleY), diffY);
 
             lastV = 0;
             pixel = *(lineOffset);
@@ -294,13 +300,7 @@ void drawWall(FixP_t x0,
                     }
 
                     if (pixel != TRANSPARENCY_COLOR) {
-                        uint8_t color = pixel;
-
-                        if (farForStipple && stipple) {
-                            color = 0;
-                        }
-
-                        *(destinationLine) = color;
+                        *(destinationLine) = (farForStipple && stipple) ? 0 : pixel;
                     }
                 }
                 destinationLine += (XRES_FRAMEBUFFER);
@@ -359,6 +359,9 @@ void drawMask(
     fill(_x0, _y0, _x1 - _x0, _y1 - _y0, 0, FALSE);
 }
 
+#ifdef AGS
+__attribute__((section(".iwram"), long_call))
+#endif
 void drawFrontWall(FixP_t x0,
                    FixP_t y0,
                    FixP_t x1,
@@ -377,7 +380,6 @@ void drawFrontWall(FixP_t x0,
     uint8_t lastV = 0xFF;
     int32_t iy;
     const uint8_t *data = texture;
-    const FixP_t textureSize = intToFix(NATIVE_TEXTURE_SIZE);
     FixP_t dv;
     FixP_t diffX;
     int iX0;
@@ -417,7 +419,7 @@ void drawFrontWall(FixP_t x0,
       the run.
    */
     iy = (int32_t) (y);
-    dv = Div(Mul(textureSize, textureScaleY) - intToFix(1), dY);
+    dv = Div(Mul(FIXP_NATIVE_TEXTURE_SIZE, textureScaleY) - intToFix(1), dY);
     diffX = (x1 - x0);
     iX0 = fixToInt(x0);
     iX1 = fixToInt(x1);
@@ -427,7 +429,7 @@ void drawFrontWall(FixP_t x0,
         return;
     }
 
-    du = Div(textureSize, diffX);
+    du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
 
     for (; iy < limit; ++iy) {
 
@@ -475,14 +477,7 @@ void drawFrontWall(FixP_t x0,
                     }
 
                     if (pixel != TRANSPARENCY_COLOR) {
-
-                        uint8_t color = pixel;
-
-                        if (farEnoughForStipple && stipple) {
-                            color = 0;
-                        }
-
-                        *(destinationLine) = color;
+                        *(destinationLine) = (farEnoughForStipple && stipple) ? 0 : pixel;
                     }
                 }
                 ++destinationLine;
@@ -499,6 +494,9 @@ void drawFrontWall(FixP_t x0,
     *        /             \
     *  x0y1 /______________\ x1y1
     */
+#ifdef AGS
+__attribute__((section(".iwram"), long_call))
+#endif
 void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP_t x1y1, uint8_t pixel) {
 
     int32_t y;
@@ -615,6 +613,9 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
     *        /             \
     *  x0y1 /______________\ x1y1
     */
+#ifdef AGS
+__attribute__((section(".iwram"), long_call))
+#endif
 void drawFloor(FixP_t y0,
                FixP_t y1,
                FixP_t x0y0,
@@ -640,11 +641,10 @@ void drawFloor(FixP_t y0,
     FixP_t x1;
     uint8_t pixel;
     FixP_t v = 0;
-    uint8_t lastU;
     int16_t iy;
     uint8_t *bufferData = &framebuffer[0];
     const uint8_t *data = texture;
-    const FixP_t textureSize = intToFix(NATIVE_TEXTURE_SIZE);
+
     FixP_t dv;
     const uint8_t *sourceLineStart;
     int farEnoughForStipple = (z >= distanceForPenumbra);
@@ -695,44 +695,45 @@ void drawFloor(FixP_t y0,
     x0 = upperX0;
     x1 = upperX1;
     iy = y;
-    dv = Div(textureSize, dY);
+    dv = Div(FIXP_NATIVE_TEXTURE_SIZE, dY);
 
     for (; iy < limit; ++iy) {
 
         if (iy < YRES && iy >= 0) {
-
-            const FixP_t diffX = (x1 - x0);
-            int32_t iX0 = fixToInt(x0);
-            int32_t iX1 = fixToInt(x1);
+            int32_t iX0;
+            int32_t iX1;
             int32_t ix;
-            FixP_t u = 0;
             FixP_t du;
-            int32_t iv;
             uint8_t *destinationLine;
-            lastU = 0;
-
+            const FixP_t diffX = (x1 - x0);
+            uint8_t lastU = 0;
+            FixP_t u = 0;
+            int stipple;
+            
             if (diffX == zero) {
                 continue;
             }
 
-            du = Div(textureSize, diffX);
-            iv = fixToInt(v);
+            iX0 = fixToInt(x0);
+            iX1 = fixToInt(x1);
+            du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
+
             destinationLine = bufferData + (XRES_FRAMEBUFFER * iy) + iX0;
-            sourceLineStart = data + (iv * NATIVE_TEXTURE_SIZE);
+            sourceLineStart = data + (fixToInt(v) * NATIVE_TEXTURE_SIZE);
             pixel = *(sourceLineStart);
+            stipple = ((iX0 + iy) & 1) == 0;
 
             for (ix = iX0; ix < iX1; ++ix) {
-
                 if (ix >= 0 && ix < XRES) {
                     const int32_t iu = fixToInt(u);
-                    int stipple = ((ix + iy) & 1) == 0;
+                    stipple = !stipple;
                     /*
-                                  only fetch the next texel if we really changed the
-                                  u, v coordinates (otherwise, would fetch the same
-                                  thing anyway)
-                                  */
-                    if (iu != lastU
-                        && !(stipple && farEnoughForStipple)) {
+                    only fetch the next texel if we really changed the
+                    u, v coordinates (otherwise, would fetch the same
+                    thing anyway)
+                    */
+                    if (!(farEnoughForStipple && stipple) &&
+                        iu != lastU) {
 
                         pixel = *(sourceLineStart);
                         sourceLineStart += (iu - lastU);
@@ -740,13 +741,7 @@ void drawFloor(FixP_t y0,
                     }
 
                     if (pixel != TRANSPARENCY_COLOR) {
-                        uint8_t color = pixel;
-
-                        if (farEnoughForStipple && stipple) {
-                            color = 0;
-                        }
-
-                        *(destinationLine) = color;
+                        *(destinationLine) = (farEnoughForStipple && stipple) ? 0 : pixel;
                     }
                 }
                 ++destinationLine;
@@ -792,8 +787,6 @@ void drawSlantedFloor(
     FixP_t fragmentSizeFactor;
     FixP_t currX1;
     int cachedVi;
-    FixP_t textureSizeFP = intToFix(NATIVE_TEXTURE_SIZE - 1);
-
 
     d03XdY = Div(p0x - p3x, p0y - p3y);
     currX0 = p0x;
@@ -811,14 +804,14 @@ void drawSlantedFloor(
             currX1 = Mul((p2x - p1x), percentile) + p1x;
             currDy0 = 0;
             
-            cachedVi = (fixToInt(Mul(percentile, textureSizeFP)) * NATIVE_TEXTURE_SIZE);
+            cachedVi = (fixToInt(Mul(percentile, FIXP_NATIVE_TEXTURE_SIZE)) * NATIVE_TEXTURE_SIZE);
             
             for (X = currX0; X <= currX1; X += d01X) {
                 
                 FixP_t percentileX = Div((X - currX0), (currX1 - currX0));
                 FixP_t sizeY = Mul(percentileX, fragmentSizeFactor);
                 
-                pixel = texture[cachedVi + (fixToInt(Mul(percentileX, textureSizeFP)))];
+                pixel = texture[cachedVi + (fixToInt(Mul(percentileX, FIXP_NATIVE_TEXTURE_SIZE)))];
                 
                 if (sizeY < one) {
                     framebuffer[(XRES_FRAMEBUFFER * (fixToInt(Y + currDy0))) + fixToInt(X)] = pixel;
@@ -843,14 +836,14 @@ void drawSlantedFloor(
             currX1 = Mul((p2x - p1x), percentile) + p1x;
             currDy0 = 0;
             
-            cachedVi = (fixToInt(Mul(percentile, textureSizeFP)) * NATIVE_TEXTURE_SIZE);
+            cachedVi = (fixToInt(Mul(percentile, FIXP_NATIVE_TEXTURE_SIZE)) * NATIVE_TEXTURE_SIZE);
             
             for (X = currX0; X <= currX1; X += d01X) {
                 
                 FixP_t percentileX = Div((X - currX0), (currX1 - currX0));
                 FixP_t sizeY = Mul(percentileX, fragmentSizeFactor);
                 
-                pixel = texture[cachedVi + (fixToInt(Mul(percentileX, textureSizeFP)))];
+                pixel = texture[cachedVi + (fixToInt(Mul(percentileX, FIXP_NATIVE_TEXTURE_SIZE)))];
                 
                 if (sizeY < one) {
                     framebuffer[(XRES_FRAMEBUFFER * (fixToInt(Y + currDy0))) + fixToInt(X)] = pixel;
@@ -1390,6 +1383,9 @@ void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *textur
     drawTexturedTopFlatTriangle(&newCoors[0], &newUV[0], texture);
 }
 
+#ifdef AGS
+__attribute__((section(".iwram"), long_call))
+#endif
 void fill(
         const int x,
         const int y,
@@ -1407,12 +1403,14 @@ void fill(
     }
 
 	destinationLineStart = destination + (XRES_FRAMEBUFFER * y) + x;
-	
-    for (py = 0; py < dy; ++py) {
-        if (!stipple) {
+
+    if (!stipple) {
+        for (py = 0; py < dy; ++py) {
             memset (destinationLineStart, pixel, dx);
             destinationLineStart += XRES_FRAMEBUFFER;
-        } else {
+        }
+    } else {
+        for (py = 0; py < dy; ++py) {
             unsigned int px;
             for (px = 0; px < dx; ++px) {
                 destinationLineStart++;
@@ -1562,6 +1560,7 @@ void drawTextAt(const int x, const int y, const char *__restrict__ text, const u
     drawTextAtWithMargin( x, y, (XRES_FRAMEBUFFER - 1), text, colour);
 }
 
+#ifndef AGS
 void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 					uint8_t *prevFrame, int turnState, int turnTarget, int scale200To240) {
 
@@ -1780,3 +1779,4 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 		}
 	}
 }
+#endif
