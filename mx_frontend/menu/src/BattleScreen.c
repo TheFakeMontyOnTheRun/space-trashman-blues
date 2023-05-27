@@ -28,7 +28,7 @@ const char *BattleScreen_options[2] = {"Attack", "Defend"};
 
 struct Bitmap *enemySprite;
 
-int16_t Battlecreen_optionsCount = 2;
+const int16_t Battlecreen_optionsCount = 2;
 
 
 void BattleScreen_initStateCallback(int32_t tag) {

@@ -40,7 +40,6 @@ MENU_OBJ=menu/src/MainMenu.o \
 	base3d/src/CRenderer_Tesselation.o \
 	SoundSystem/NullMusic.o \
 	menu/src/HelpScreen.o \
-	menu/src/BattleScreen.o \
 	menu/src/HackingScreen.o \
 	menu/src/GameMenu.o \
 	menu/src/CreditsScreen.o \

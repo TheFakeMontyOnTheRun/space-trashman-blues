@@ -15,7 +15,6 @@
 #include "Core.h"
 #include "Engine.h"
 
-struct Bitmap *currentBackgroundBitmap = NULL;
 enum EGameMenuState currentGameMenuState = kResumeCurrentState;
 enum EGameMenuState menuStateToReturn = kResumeCurrentState;
 int cursorPosition = 0;
@@ -27,4 +26,5 @@ const char *mainText = NULL;
 int isRunning = TRUE;
 int enable3DRendering = TRUE;
 int currentSelectedItem = 0;
+int needsToRedrawHUD = 1;
 

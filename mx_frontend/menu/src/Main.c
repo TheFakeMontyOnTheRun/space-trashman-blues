@@ -70,7 +70,23 @@ long uclock() {
 #include <emscripten/emscripten.h>
 #endif
 
-void initHW() {
+extern char *textBuffer;
+extern char *messageLogBuffer;
+extern enum EVisibility *visMap;
+extern struct Vec2i *distances;
+extern uint8_t *collisionMap;
+extern struct Texture* textures;
+
+void initHW(void) {
+    textBuffer = (char*)calloc(40 * 25, 1);
+    messageLogBuffer = (char*)calloc(256, 1);
+    collisionMap = (uint8_t*)calloc(256, 1);
+    visMap = (enum EVisibility*)calloc(MAP_SIZE * MAP_SIZE, sizeof(enum EVisibility));
+    distances = (struct Vec2i*)calloc(2 * MAP_SIZE * MAP_SIZE, sizeof(struct Vec2i));
+    textures = (struct Texture*)calloc(TOTAL_TEXTURES, sizeof(struct Texture));
+    itemsInMap = (uint8_t*)calloc(MAP_SIZE * MAP_SIZE, sizeof(uint8_t*));
+    map = (uint8_t*)calloc(MAP_SIZE * MAP_SIZE, sizeof(uint8_t*));
+
 #ifndef CD32
     initFileReader("base.pfs");
 #else
@@ -81,6 +97,15 @@ void initHW() {
 
 void shutdownHW() {
     graphicsShutdown();
+
+    free(textBuffer);
+    free(messageLogBuffer);
+    free(collisionMap);
+    free(visMap);
+    free(distances);
+    free(textures);
+    free(itemsInMap);
+    free(map);
 }
 
 long start_clock, end_clock, prev;

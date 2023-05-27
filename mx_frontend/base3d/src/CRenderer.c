@@ -25,6 +25,8 @@
 #include "Core.h"
 #include "Engine.h"
 #include "Derelict.h"
+#include "Globals.h"
+#include "UI.h"
 
 /*	Div(intToFix(1), intToFix(16));*/
 #define WALKING_BIAS 4096
@@ -42,30 +44,29 @@ int needsToRedrawVisibleMeshes = TRUE;
 struct MapWithCharKey occluders;
 struct MapWithCharKey colliders;
 struct MapWithCharKey enemySightBlockers;
-uint8_t *visibleElementsMap;
 struct Bitmap *defaultFont;
+
+#ifndef AGS
 uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
-uint8_t mActors[MAP_SIZE][MAP_SIZE];
-uint8_t mItems[MAP_SIZE][MAP_SIZE];
-uint8_t mEffects[MAP_SIZE][MAP_SIZE];
+uint32_t palette[256];
+#else
+uint8_t *framebuffer;
+#endif
+
 enum EDirection cameraDirection;
 struct Vec3 mCamera;
 long gameTicks = 0;
 int dirtyLineY0 = 0;
 int dirtyLineY1 = YRES_FRAMEBUFFER;
-
-int distanceForPenumbra = 16;
-int distanceForDarkness = 48;
+const int distanceForPenumbra = 16;
 struct Bitmap *mapTopLevel = NULL;
-struct Bitmap *backdrop = NULL;
 struct MapWithCharKey tileProperties;
 struct Vec2i cameraPosition;
-uint32_t palette[256];
 uint8_t texturesUsed = 0;
 enum ECommand mBufferedCommand = kCommandNone;
 struct Texture *nativeTextures[TOTAL_TEXTURES];
-struct Texture *itemSprites[TOTAL_ITEMS];
+struct Bitmap *itemSprites[TOTAL_ITEMS];
 int turnTarget = 0;
 int turnStep = 0;
 FixP_t xCameraOffset;
@@ -76,17 +77,17 @@ char *focusItemName = NULL;
 
 struct Projection projectionVertices[8];
 
-enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
-struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
+enum EVisibility *visMap;
+struct Vec2i *distances;
 
-char messageLogBuffer[256];
+char *messageLogBuffer;
 
 int messageLogBufferCoolDown = 0;
 
 void printMessageTo3DView(const char *message);
 
 void printMessageTo3DView(const char *message) {
-    strcpy(&messageLogBuffer[0], message);
+    strcpy(messageLogBuffer, message);
     messageLogBufferCoolDown = 5000;
 }
 
@@ -97,8 +98,6 @@ void loadTileProperties(const uint8_t levelNumber) {
 
     setLoggerDelegate(printMessageTo3DView);
 
-
-    clearMap(&tileProperties);
     clearMap(&occluders);
     clearMap(&colliders);
     clearMap(&enemySightBlockers);
@@ -126,7 +125,7 @@ void loadTileProperties(const uint8_t levelNumber) {
         }
     }
 
-    free(data.data);
+    disposeDiskBuffer(data);
 }
 
 void loadTexturesForLevel(const uint8_t levelNumber) {
@@ -135,14 +134,17 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     char *head;
     char *end;
     char *nameStart;
-    char buffer[256];
-	int c;
-
+    char *buffer;
+    
     sprintf (tilesFilename, "tiles%d.lst", levelNumber);
 
     data = loadBinaryFileFromPath(tilesFilename);
-    head = (char *) data.data;
+    buffer = (char*)malloc(data.size);
+    head = buffer;
+    memcpy(head, data.data, data.size);
     end = head + data.size;
+    disposeDiskBuffer(data);
+
     nameStart = head;
 
     texturesUsed = 0;
@@ -159,32 +161,21 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
         ++head;
     }
 
-    free(data.data);
-
-    backdrop = loadBitmap("backdrop.img");
-
-    //item 0 is a dummy
-    for (c = 1; c < itemsCount; ++c) {
-        sprintf(&buffer[0], "%s.img", getItem(c)->name);
-        itemSprites[c] = (makeTextureFrom(&buffer[0]));
-    }
+    free(buffer);
 }
 
 void updateCursorForRenderer(const int x, const int z) {
+#ifndef AGS
     needsToRedrawVisibleMeshes = TRUE;
     visibilityCached = FALSE;
+#endif
 }
 
-void drawMap(const uint8_t *__restrict__ elements,
-             const uint8_t *__restrict__ items,
-             const uint8_t *__restrict__ actors,
-             uint8_t *__restrict__ effects,
-             const struct CActor *current) {
+void drawMap(const struct CActor *current) {
 
     int8_t z, x;
     const struct Vec2i mapCamera = current->position;
     cameraDirection = current->rotation;
-    visibleElementsMap = (uint8_t *)elements;
     hasSnapshot = TRUE;
 
     if (!enable3DRendering) {
@@ -227,25 +218,11 @@ void drawMap(const uint8_t *__restrict__ elements,
 
     for (z = 0; z < MAP_SIZE; ++z) {
         for (x = 0; x < MAP_SIZE; ++x) {
-            const uint16_t offset = (MAP_SIZE * z) + x;
-            const uint8_t actor = actors[offset];
-            const uint8_t item = items[offset];
-            const uint8_t effect = effects[offset];
-
-            mActors[z][x] = 0xFF;
-            mItems[z][x] = 0xFF;
-            mEffects[z][x] = 0xFF;
-
-            if (actor != 0xFF) {
-                mActors[z][x] = actor;
-            }
+            const uint8_t item = ITEMS_IN_MAP(x, z);
+            ITEMS_IN_MAP(x, z) = 0xFF;
 
             if (item != 0xFF) {
-                mItems[z][x] = item;
-            }
-
-            if (effect != 0xFF) {
-                mEffects[z][x] = effect;
+                ITEMS_IN_MAP(x, z) = item;
             }
         }
     }
@@ -282,8 +259,8 @@ void drawMap(const uint8_t *__restrict__ elements,
     walkingBias = 0;
 #endif
 
-    castVisibility(cameraDirection, visMap, &elements[0], cameraPosition,
-                   distances, TRUE, &occluders);
+    castVisibility(cameraDirection, cameraPosition,
+                    TRUE, &occluders);
 
     ++gameTicks;
 }
@@ -331,7 +308,6 @@ void render(const long ms) {
         int16_t x, z;
         int distance;
         FixP_t cameraHeight;
-        int c;
         uint8_t facesMask;
 
         needsToRedrawVisibleMeshes = FALSE;
@@ -339,16 +315,7 @@ void render(const long ms) {
         clearRenderer();
 #endif
 
-#ifndef CD32
-        clippingY1 = YRES_FRAMEBUFFER;
-        for (c = 0; c < 10; ++c) {
-            drawBitmap(c * 20, 0, backdrop, FALSE);
-        }
-#else
-        fill(0, 0, XRES, 128, 64, FALSE);
-#endif
-
-        element = visibleElementsMap[(cameraPosition.y * MAP_SIZE) + cameraPosition.x];
+        element = LEVEL_MAP(cameraPosition.x, cameraPosition.y);
 
         tileProp = ((struct CTile3DProperties *) getFromMap(&tileProperties,
                                                             element));
@@ -381,9 +348,9 @@ void render(const long ms) {
                     case kNorth:
                         x = visPos.x;
                         z = visPos.y;
-                        element = visibleElementsMap[(z * MAP_SIZE) + x];
+                        element = LEVEL_MAP(x, z);
 
-                        itemsSnapshotElement = mItems[z][x];
+                        itemsSnapshotElement = ITEMS_IN_MAP(x, z);
 
                         position.mX =
                                 mCamera.mX + intToFix(-2 * ((MAP_SIZE - 1) - x));
@@ -392,17 +359,17 @@ void render(const long ms) {
                                 mCamera.mZ + intToFix(2 * (MAP_SIZE) - (2 * z));
 
                         if (x > 0) {
-                            facesMask |= (visibleElementsMap[(z * MAP_SIZE) + (x - 1)] != element) ?
+                            facesMask |= (LEVEL_MAP( x - 1, z ) != element) ?
                                          MASK_RIGHT :
                                          0;
                         }
 
                         /* remember, bounds - 1! */
-                        if ((x < (MAP_SIZE - 1)) && (visibleElementsMap[(z * MAP_SIZE) + (x + 1)] == element)) {
+                        if ((x < (MAP_SIZE - 1)) && (LEVEL_MAP(x + 1, z) == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((z < (MAP_SIZE - 1)) && (visibleElementsMap[((z + 1) * MAP_SIZE) + x] == element)) {
+                        if ((z < (MAP_SIZE - 1)) && (LEVEL_MAP(x, z + 1) == element)) {
                             facesMask &= ~MASK_FRONT;
                         }
 
@@ -421,8 +388,8 @@ void render(const long ms) {
                         x = visPos.x;
                         z = visPos.y;
 
-                        element = visibleElementsMap[(z * MAP_SIZE) + x];
-                        itemsSnapshotElement = mItems[z][x];
+                        element = LEVEL_MAP(x, z);
+                        itemsSnapshotElement = ITEMS_IN_MAP(x, z);
 
                         position.mX = mCamera.mX + intToFix(-2 * x);
                         position.mY = mCamera.mY;
@@ -430,19 +397,14 @@ void render(const long ms) {
 
                         /*						remember, bounds - 1!*/
 
-                        if ((x > 0) && (visibleElementsMap[(z * MAP_SIZE) + (x - 1)] == element)) {
+                        if ((x > 0) && (LEVEL_MAP( x - 1, z ) == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((x < (MAP_SIZE - 1)) && (visibleElementsMap[(z * MAP_SIZE) + (x + 1)] == element)) {
+                        if ((x < (MAP_SIZE - 1)) && (LEVEL_MAP(x + 1, z) == element)) {
                             facesMask &= ~MASK_RIGHT;
                         }
-                        /*
-                                        if (z < 0) {
-                                            facesMask[1] = (visibleElementsMap[(z - 1)][x] !=
-                                                            element);
-                                        }
-                */
+
                         if (z == (cameraPosition.y) + 1) {
 
                             if (getFromMap(&occluders, element)) {
@@ -458,8 +420,8 @@ void render(const long ms) {
                         x = visPos.y;
                         z = visPos.x;
 
-                        element = visibleElementsMap[(x * MAP_SIZE) + z];
-                        itemsSnapshotElement = mItems[x][z];
+                        element = LEVEL_MAP(z, x);
+                        itemsSnapshotElement = ITEMS_IN_MAP(z, x);
 
                         position.mX = mCamera.mX + intToFix(-2 * x);
                         position.mY = mCamera.mY;
@@ -467,15 +429,15 @@ void render(const long ms) {
 
                         /* remember, bounds - 1! */
 
-                        if ((x > 0) && (visibleElementsMap[((x - 1) * MAP_SIZE) + z] == element)) {
+                        if ((x > 0) && (LEVEL_MAP(z, x - 1) == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((x < (MAP_SIZE - 1)) && (visibleElementsMap[((x + 1) * MAP_SIZE) + z] == element)) {
+                        if ((x < (MAP_SIZE - 1)) && (LEVEL_MAP(z, x + 1) == element)) {
                             facesMask &= ~MASK_RIGHT;
                         }
 
-                        if ((z < (MAP_SIZE - 1)) && (visibleElementsMap[(x * MAP_SIZE) + (z + 1)] == element)) {
+                        if ((z < (MAP_SIZE - 1)) && (LEVEL_MAP(z + 1, x) == element)) {
                             facesMask &= ~MASK_FRONT;
                         }
 
@@ -494,8 +456,9 @@ void render(const long ms) {
                         x = visPos.y;
                         z = visPos.x;
 
-                        element = visibleElementsMap[(x * MAP_SIZE) + z];
-                        itemsSnapshotElement = mItems[x][z];
+                        /* yes, it's reversed */
+                        element = LEVEL_MAP(z, x);
+                        itemsSnapshotElement = ITEMS_IN_MAP(z, x);
 
                         position.mX = mCamera.mX + intToFix(2 * x);
                         position.mY = mCamera.mY;
@@ -503,15 +466,15 @@ void render(const long ms) {
 
 
                         /* remember, bounds - 1! */
-                        if ((x > 0) && (visibleElementsMap[((x - 1) * MAP_SIZE) + z] == element)) {
+                        if ((x > 0) && (LEVEL_MAP(z, x - 1) == element)) {
                             facesMask &= ~MASK_RIGHT;
                         }
 
-                        if ((x < (MAP_SIZE - 1)) && (visibleElementsMap[((x + 1) * MAP_SIZE) + z] == element)) {
+                        if ((x < (MAP_SIZE - 1)) && (LEVEL_MAP(z, x + 1) == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((z < (MAP_SIZE - 1)) && (visibleElementsMap[(x * MAP_SIZE) + (z - 1)] == element)) {
+                        if ((z < (MAP_SIZE - 1)) && (LEVEL_MAP( z - 1, x ) == element)) {
                             facesMask &= ~MASK_FRONT;
                         }
 
@@ -952,7 +915,16 @@ void render(const long ms) {
 
                     addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
 
-                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement]->rotations[0], one, 32);
+                    // lazy loading the item sprites
+                    // we can't preload it because...reasons on the NDS
+                    // perhaps some state machine issue? IDK. Placing this here works better for the NDS.
+                    if (itemSprites[itemsSnapshotElement] == NULL) {
+                        char buffer[64];
+                        sprintf(&buffer[0], "%s.img", getItem(itemsSnapshotElement)->name);
+                        itemSprites[itemsSnapshotElement] = loadBitmap(&buffer[0]);
+                    }
+
+                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement]->data, one, 32);
                 }
             }
         }
@@ -972,7 +944,7 @@ void render(const long ms) {
 			}
 
 			if (messageLogBufferCoolDown > 0) {
-				int len = strlen(&messageLogBuffer[0]);
+				int len = strlen(messageLogBuffer);
 				int lines = 1;
 				int chars = 0;
                 int c;
@@ -989,7 +961,7 @@ void render(const long ms) {
 
 				fill(0, 0, 216, lines * 8, 0, 1);
 
-				drawTextAt(1, 1, &messageLogBuffer[0], 255);
+				drawTextAt(1, 1, messageLogBuffer, 255);
 			}
 		}
 
@@ -997,14 +969,20 @@ void render(const long ms) {
 
         dirtyLineY0 = 0;
         dirtyLineY1 = YRES_FRAMEBUFFER;
-        redrawHUD();
+
+        if (needsToRedrawHUD) {
+            needsToRedrawHUD = FALSE;
+            redrawHUD();
+        }
+
+        updateMap();
     }
 }
 
 void loadMesh(struct Mesh *mesh, char *filename) {
     struct StaticBuffer buffer = loadBinaryFileFromPath(filename);
     FixP_t val = 0;
-    uint8_t *bufferHead = buffer.data;
+    const uint8_t *bufferHead = buffer.data;
     int16_t trigCount = 0;
     int uvCoordsCount;
     int coordsCount;
@@ -1043,13 +1021,16 @@ void loadMesh(struct Mesh *mesh, char *filename) {
     }
 
     read = (*(bufferHead++));
+
     if (read == 0) {
         mesh->colour = *bufferHead;
         mesh->texture = NULL;
     } else {
         textureName = calloc(1, read + 1);
-        memcpy(textureName, bufferHead, read),
-                mesh->texture = makeTextureFrom(textureName);
+        memcpy(textureName, bufferHead, read);
+        mesh->texture = makeTextureFrom(textureName);
         free(textureName);
     }
+
+    disposeDiskBuffer(buffer);
 }

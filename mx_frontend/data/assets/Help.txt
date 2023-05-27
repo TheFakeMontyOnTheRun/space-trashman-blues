@@ -1,9 +1,7 @@
-Place the EMP near the reactor control
-valve to cause it to drop the fuel rods
+Place the EMP by the reactor control
+valve to cause it to drop fuel rods
 
 Controls (besides the arrow keys):
-
-S and D: strafe.
 
 Z: if you have an object in front of
 you, use what's your hand with it. 

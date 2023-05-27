@@ -14,7 +14,6 @@
 		F1B8CB1D27CFCCBD00C06E6F /* MapWithCharKey.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1827CFCCBD00C06E6F /* MapWithCharKey.c */; };
 		F1B8CB1E27CFCCBD00C06E6F /* PackedFileReader.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1927CFCCBD00C06E6F /* PackedFileReader.c */; };
 		F1B8CB1F27CFCCBD00C06E6F /* Vec.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1A27CFCCBD00C06E6F /* Vec.c */; };
-		F1B8CB7327CFD4F200C06E6F /* BattleScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB7227CFD4F200C06E6F /* BattleScreen.c */; };
 		F1CA76BB2610A8E200FD1E04 /* GameView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1277A26236DE6DD00478B2C /* GameView.m */; };
 		F1CA76BC2610A8ED00FD1E04 /* OSXRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = F1277A28236DE6DD00478B2C /* OSXRenderer.m */; };
 		F1CA76BD2610A8EE00FD1E04 /* GameWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B679BD24E4AAE400FCEF8E /* GameWindow.m */; };
@@ -136,12 +135,11 @@
 		F1B8CB3127CFCFE700C06E6F /* MapWithCharKey.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = MapWithCharKey.h; path = ../../common/include/MapWithCharKey.h; sourceTree = SOURCE_ROOT; };
 		F1B8CB3227CFCFE700C06E6F /* PackedFileReader.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = PackedFileReader.h; path = ../../common/include/PackedFileReader.h; sourceTree = SOURCE_ROOT; };
 		F1B8CB3327CFCFE700C06E6F /* Vec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Vec.h; path = ../../common/include/Vec.h; sourceTree = SOURCE_ROOT; };
-		F1B8CB7227CFD4F200C06E6F /* BattleScreen.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = BattleScreen.c; path = ../menu/src/BattleScreen.c; sourceTree = SOURCE_ROOT; };
 		F1BD0D30236EF697002329C6 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		F1BD0D31236EF697002329C6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		F1BF22812450F4AF0088A1C4 /* SoundSystem.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SoundSystem.h; path = ../SoundSystem/SoundSystem.h; sourceTree = SOURCE_ROOT; };
 		F1CA76B32610A8BF00FD1E04 /* Derelict.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Derelict.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Derelict-Info.plist"; sourceTree = "<group>"; };
+		F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Derelict-Info.plist"; sourceTree = "<group>"; };
 		F1CD088E2450E32D00D4794D /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Globals.h; path = ../base3d/include/Globals.h; sourceTree = SOURCE_ROOT; };
 		F1CD08C62450E41C00D4794D /* base.pfs */ = {isa = PBXFileReference; lastKnownFileType = file; name = base.pfs; path = ../base.pfs; sourceTree = SOURCE_ROOT; };
 		F1D5B5D22531D2BF0094ED78 /* Derelict.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Derelict.c; path = ../../core/src/Derelict.c; sourceTree = "<group>"; };
@@ -257,7 +255,6 @@
 				F1277A0D236DE63E00478B2C /* HelpScreen.c */,
 				F12779DD236DE60800478B2C /* LoadBitmap.c */,
 				F1277A02236DE62100478B2C /* LoadBitmap.h */,
-				F1B8CB7227CFD4F200C06E6F /* BattleScreen.c */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 				F1277A10236DE63E00478B2C /* MainMenu.c */,
 				F1D5B5D32531D2BF0094ED78 /* Parser.c */,
@@ -334,8 +331,6 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			attributes = {
-			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Derelict32" */;
 			compatibilityVersion = "Xcode 2.4";
 			developmentRegion = en;
@@ -421,7 +416,6 @@
 				F1B8CB1D27CFCCBD00C06E6F /* MapWithCharKey.c in Sources */,
 				F1B8CB1E27CFCCBD00C06E6F /* PackedFileReader.c in Sources */,
 				F1B8CB1F27CFCCBD00C06E6F /* Vec.c in Sources */,
-				F1B8CB7327CFD4F200C06E6F /* BattleScreen.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

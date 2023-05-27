@@ -1544,7 +1544,7 @@ void initMap() {
 		++head; // line break
 	}
 
-	free(datafile.data);
+    disposeDiskBuffer(datafile);
 	updateMapItems();
 	HUD_initialPaint();
 }

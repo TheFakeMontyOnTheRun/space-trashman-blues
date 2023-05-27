@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdlib.h>
 
 #include "Enums.h"
 #include "FixP.h"
@@ -23,6 +24,7 @@
 #include "LoadBitmap.h"
 #include "MapWithCharKey.h"
 #include "VisibilityStrategy.h"
+#include "UI.h"
 
 const char *CreditsScreen_options[1] = {"Back"};
 
@@ -30,8 +32,8 @@ int32_t CreditsScreen_nextStateNavigation[1] = {
         kMainMenu,
 };
 
-int16_t CreditsScreen_optionsCount = 1;
-extern char textBuffer[40 * 25];
+const int16_t CreditsScreen_optionsCount = 1;
+extern char *textBuffer;
 struct Bitmap *monty;
 
 void CreditsScreen_initStateCallback(int32_t tag) {
@@ -40,16 +42,14 @@ void CreditsScreen_initStateCallback(int32_t tag) {
     cursorPosition = 0;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
-    memset (&textBuffer[0], ' ', 40 * 25);
+    memset (textBuffer, ' ', 40 * 25);
 
-    currentBackgroundBitmap = loadBitmap("pattern.img");
+    mainText = textBuffer;
+    memset (textBuffer, 0, (40 * 25));
+	textFile = loadBinaryFileFromPath("Credits.txt");
+    memcpy(textBuffer, textFile.data, textFile.size);
+    disposeDiskBuffer(textFile);
 
-    mainText = &textBuffer[0];
-    memset (&textBuffer[0], 0, (40 * 25));
-	textFile = loadBinaryFileFromPath("Help.txt");
-    memcpy(&textBuffer[0], textFile.data, textFile.size);
-
-    CreditsScreen_optionsCount = 1;
 
     monty = loadBitmap("monty.img");
 }
@@ -57,17 +57,14 @@ void CreditsScreen_initStateCallback(int32_t tag) {
 void CreditsScreen_initialPaintCallback(void) {
     dirtyLineY0 = 0;
     dirtyLineY1 = YRES_FRAMEBUFFER;
-
-    if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, currentBackgroundBitmap);
-    }
+    fill(0, 0, (XRES_FRAMEBUFFER-1), (YRES_FRAMEBUFFER-1), getPaletteEntry(0xFF6cb1a3), 0);
 }
 
 void CreditsScreen_repaintCallback(void) {
     int lines = countLines();
     int c;
     int optionsHeight = 8 * (CreditsScreen_optionsCount);
-    size_t len = strlen(CreditsScreen_options[0]);
+    size_t len = max( strlen("Options"), strlen(CreditsScreen_options[0]));
 
     if (currentPresentationState == kAppearing) {
 
@@ -87,13 +84,7 @@ void CreditsScreen_repaintCallback(void) {
         drawRect(160 - lerp320 / 2, (((lines + 3) * 8) / 2) - lerpLines / 2,
                  lerp320, lerpLines, 0);
 
-        drawRect(8 + lerping32, 128 + lerping32, lerpoSixtyFooooooouuuuuuur,
-                 lerpoSixtyFooooooouuuuuuur, 0);
-
-        drawRect(80 + lerping32, 128 + lerping32, lerpoSixtyFooooooouuuuuuur,
-                 lerpoSixtyFooooooouuuuuuur, 0);
-
-        drawRect(152 + lerping32, 128 + lerping32, lerpoSixtyFooooooouuuuuuur,
+        drawRect(8 + lerping32, (YRES_FRAMEBUFFER - 72) + lerping32, lerpoSixtyFooooooouuuuuuur,
                  lerpoSixtyFooooooouuuuuuur, 0);
 
         drawRect(XRES_FRAMEBUFFER - 16 - (len * 8) - 16 + (len * 8 / 2) - lerpLen / 2,
@@ -105,9 +96,7 @@ void CreditsScreen_repaintCallback(void) {
     }
 
     fill(0, (lines + 3) * 8, XRES_FRAMEBUFFER, 8, 0, TRUE);
-    fill(8 + 8, 128 + 8, 64, 64, 0, TRUE);
-    fill(80 + 8, 128 + 8, 64, 64, 0, TRUE);
-    fill(152 + 8, 128 + 8, 64, 64, 0, TRUE);
+    fill(8 + 8, (YRES_FRAMEBUFFER - 72) + 8, 64, 64, 0, TRUE);
 
     if (mainText != NULL) {
 
@@ -119,35 +108,14 @@ void CreditsScreen_repaintCallback(void) {
         drawTextAt(1, 3, mainText, 0);
     }
 
-    fill(8, 128, 64, 64, 255, FALSE);
-    drawBitmap(8, 128, monty, TRUE);
-    drawRect(8, 128, 64, 64, 0);
+    drawImageWindow(2,  (YRES_FRAMEBUFFER - 72) / 8, monty->width / 8, (monty->height / 8) + 1, "Monty", monty);
 
-    fill(8, 128, 64, 8, 0, FALSE);
-    drawTextAt(3, 17, "Monty", 255);
+    drawWindow(
+            (XRES_FRAMEBUFFER / 8) - (int) len - 3,
+            (YRES_FRAMEBUFFER / 8) - 3 - (optionsHeight / 8),
+            len + 2, (optionsHeight / 8) + 2,
+            "Options");
 
-    fill(80, 128, 64, 64, 255, FALSE);
-    drawRect(80, 128, 64, 64, 0);
-
-    fill(80, 128, 64, 8, 0, FALSE);
-
-    fill(152, 128, 64, 64, 255, FALSE);
-    drawRect(152, 128, 64, 64, 0);
-
-    fill(152, 128, 64, 8, 0, FALSE);
-
-    fill(XRES_FRAMEBUFFER - (len * 8) - 8 - 16, YRES_FRAMEBUFFER - optionsHeight - 8 - 16,
-         (len * 8) + 16, optionsHeight + 16, 0, TRUE);
-
-    fill(XRES_FRAMEBUFFER - (len * 8) - 16 - 16, YRES_FRAMEBUFFER - optionsHeight - 16 - 16,
-         (len * 8) + 16, optionsHeight + 16, 255, FALSE);
-
-    drawRect(XRES_FRAMEBUFFER - (len * 8) - 16 - 16, YRES_FRAMEBUFFER - optionsHeight - 16 - 16,
-             (len * 8) + 16, optionsHeight + 16, 0);
-
-    fill((40 - len - 2 - 2) * 8,
-         ((26 - CreditsScreen_optionsCount) - 2 - 1 - 2) * 8,
-         (len + 2) * 8, 8, 0, FALSE);
 
     for (c = 0; c < CreditsScreen_optionsCount; ++c) {
 
@@ -231,10 +199,6 @@ enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void CreditsScreen_unloadStateCallback() {
-    if (currentBackgroundBitmap != NULL) {
-        releaseBitmap(currentBackgroundBitmap);
-        currentBackgroundBitmap = NULL;
-        releaseBitmap(monty);
-        monty = NULL;
-    }
+    releaseBitmap(monty);
+    monty = NULL;
 }

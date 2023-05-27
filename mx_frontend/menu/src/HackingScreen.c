@@ -24,7 +24,7 @@
 #include "VisibilityStrategy.h"
 #include "UI.h"
 
-char* functionNames[6] = {
+const char* functionNames[6] = {
         "???",
         "writeB",
         "snprintf",
@@ -47,7 +47,6 @@ void HackingScreen_initStateCallback(int32_t tag) {
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
 
-    currentBackgroundBitmap = loadBitmap("pattern.img");
     memset(&pins[0][0], 0xFF, sizeof(pins));
     
     pins[0][0] = 5;
@@ -65,26 +64,37 @@ void HackingScreen_initStateCallback(int32_t tag) {
 }
 
 void HackingScreen_initialPaintCallback(void) {
-
-    if (currentBackgroundBitmap != NULL) {
-        drawRepeatBitmap(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, currentBackgroundBitmap);
-    }
 }
 
 void HackingScreen_repaintCallback(void) {
     uint8_t isSelected;
     int pin;
+    int pinPosition = 0;
+    drawWindow(1, 1, XRES_FRAMEBUFFER / 8, 15, "Disassembly: CONTROLLER.PRG (stack)");
 
-    drawWindow(1, 1, 40, 15, "Disassembly: CONTROLLER.PRG (stack)");
-    
+#ifndef AGS
     drawTextAt( 6 + (12 * 0), 11, "CPU0", cursorPosition == 0 ? 128 : 0);
     drawTextAt( 6 + (12 * 1), 11, "CPU1", cursorPosition == 1 ? 128 : 0);
     drawTextAt( 6 + (12 * 2), 11, "CPU2", cursorPosition == 2 ? 128 : 0);
-    
-    for ( pin = 0; pin < 3; ++pin ) {
+
+    for ( pin = 0; pin < 3; ++pin )
+#else
+    pin = cursorPosition;
+#endif
+    {
         int disk;
         int isCursorOnThisPin = cursorPosition == pin;
-        
+
+#ifndef AGS
+        pinPosition = pin;
+#else
+        pinPosition = 0;
+
+        char buffer[8];
+        sprintf(buffer, "CPU%d", cursorPosition);
+        drawTextAt( 6 + (12), 11, buffer, 128);
+#endif
+
         if (pins[pin][5] == 0 ) {
             accessGrantedToSafe = TRUE;
         }
@@ -92,9 +102,7 @@ void HackingScreen_repaintCallback(void) {
         for (disk = 0; disk < 6; ++disk) {
             
             int diskIndex = pins[pin][disk];
-            
-            
-            char *funcName = (disk >= pinTop[pin]) ? NULL : functionNames[diskIndex];
+            const char *funcName = (disk >= pinTop[pin]) ? NULL : functionNames[diskIndex];
                 
             if (isCursorOnThisPin) {
                 isSelected = 128;
@@ -108,13 +116,13 @@ void HackingScreen_repaintCallback(void) {
                 isSelected = getPaletteEntry(0xFF00AA00);
             }
                 
-            drawTextAt( 13 * (pin) + 1, 4 + (5 - disk), "|", isSelected);
+            drawTextAt( 13 * (pinPosition) + 1, 4 + (5 - disk), "|", isSelected);
                 
             if (funcName) {
-                drawTextAt( 13 * (pin) + 2, 4 + (5 - disk), funcName, isSelected);
+                drawTextAt( 13 * (pinPosition) + 2, 4 + (5 - disk), funcName, isSelected);
             }
             
-            drawTextAt( 13 * (pin) + 1, 10, "-------------", isSelected);
+            drawTextAt( 13 * (pinPosition) + 1, 10, "-------------", isSelected);
         }
     }
     
@@ -206,9 +214,5 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void HackingScreen_unloadStateCallback() {
-    if (currentBackgroundBitmap != NULL) {
-        releaseBitmap(currentBackgroundBitmap);
-        currentBackgroundBitmap = NULL;
-    }
     enableSmoothMovement = wasSmoothMovementPreviouslyEnabled;
 }
