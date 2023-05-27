@@ -13,6 +13,12 @@ Created by Daniel Monteiro on 2019-07-26.
 #define TOTAL_ROOMS 24
 #define TOTAL_ITEMS 39
 
+#ifndef NES
+#define BITFIELD(n) : n
+#else
+#define BITFIELD(n) /* : n */
+#endif
+
 struct Item;
 
 typedef void ( *ErrorHandlerCallback )(const char* error);
@@ -34,10 +40,10 @@ struct WorldPosition {
 
 struct Item {
   struct WorldPosition position;
-  uint8_t roomId : 6;
-  uint8_t index : 6;
-  uint8_t active : 1;
-  uint8_t pickable : 1;
+  uint8_t roomId BITFIELD(6);
+  uint8_t index BITFIELD(6);
+  uint8_t active BITFIELD(1);
+  uint8_t pickable BITFIELD(1);
   const char *name;
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
   const char *info;

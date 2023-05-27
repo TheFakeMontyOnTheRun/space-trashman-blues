@@ -42,11 +42,17 @@ enum GeometryType {
 	CORNER = 64
 };
 
+#ifndef NES
+#define BITFIELD(n) : n
+#else
+#define BITFIELD(n) /* : n */
+#endif
+
 struct Pattern {
-	uint8_t ceiling: 4;
-	uint8_t elementsMask: 4;
-	uint8_t geometryType : 7;
-	uint8_t blockMovement : 1;
+	uint8_t ceiling BITFIELD(4);
+	uint8_t elementsMask BITFIELD(4);
+	uint8_t geometryType BITFIELD(7);
+	uint8_t blockMovement BITFIELD(1);
 };
 
 void HUD_initialPaint(void);
