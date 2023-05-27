@@ -102,30 +102,42 @@ void handleSystemEvents() {
         if ((keys & KEY_UP)) {
             cooldown = COOLDOWN;
             mBufferedCommand = kCommandUp;
+            needsToRedrawVisibleMeshes = TRUE;
+            visibilityCached = FALSE;
         }
         if ((keys & KEY_DOWN)) {
             cooldown = COOLDOWN;
             mBufferedCommand = kCommandDown;
+            needsToRedrawVisibleMeshes = TRUE;
+            visibilityCached = FALSE;
         }
 
         if ((keys & KEY_LEFT)) {
             cooldown = COOLDOWN;
             mBufferedCommand = kCommandLeft;
+            needsToRedrawVisibleMeshes = TRUE;
+            visibilityCached = FALSE;
         }
         if ((keys & KEY_RIGHT)) {
             cooldown = COOLDOWN;
             mBufferedCommand = kCommandRight;
+            needsToRedrawVisibleMeshes = TRUE;
+            visibilityCached = FALSE;
         }
         if ((keys & KEY_A)) {
             cooldown = COOLDOWN;
             mBufferedCommand = kCommandFire1;
             needsToRedrawHUD = TRUE;
+            needsToRedrawVisibleMeshes = TRUE;
+            visibilityCached = FALSE;
         }
 
         if ((keys & KEY_B)) {
             cooldown = COOLDOWN;
             mBufferedCommand = kCommandFire2;
             needsToRedrawHUD = TRUE;
+            needsToRedrawVisibleMeshes = TRUE;
+            visibilityCached = FALSE;
         }
 
         if ((keys & KEY_SELECT)) {
@@ -143,11 +155,15 @@ void handleSystemEvents() {
         if ((keys & KEY_L)) {
             cooldown = COOLDOWN;
             mBufferedCommand = kCommandStrafeLeft;
+            needsToRedrawVisibleMeshes = TRUE;
+            visibilityCached = FALSE;
         }
 
         if ((keys & KEY_R)) {
             cooldown = COOLDOWN;
             mBufferedCommand = kCommandStrafeRight;
+            needsToRedrawVisibleMeshes = TRUE;
+            visibilityCached = FALSE;
         }
     }
 }

@@ -165,8 +165,10 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 }
 
 void updateCursorForRenderer(const int x, const int z) {
+#ifndef AGS
     needsToRedrawVisibleMeshes = TRUE;
     visibilityCached = FALSE;
+#endif
 }
 
 void drawMap(const struct CActor *current) {
