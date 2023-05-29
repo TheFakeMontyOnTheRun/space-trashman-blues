@@ -41,7 +41,6 @@ ALL : "$(OUTDIR)\Sub Mare Imperium Derelict.exe"
 
 
 CLEAN :
-	-@erase "$(INTDIR)\BattleScreen.obj"
 	-@erase "$(INTDIR)\CGDIRenderer.obj"
 	-@erase "$(INTDIR)\Common.obj"
 	-@erase "$(INTDIR)\Core.obj"
@@ -88,8 +87,8 @@ LINK32=link.exe
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib shell32.lib winmm.lib /nologo /subsystem:windows /pdb:none /machine:I386 /out:"$(OUTDIR)\Sub Mare Imperium Derelict.exe" 
 LINK32_OBJS= \
 	"$(INTDIR)\CGDIRenderer.obj" \
+	"$(INTDIR)\Common.obj" \
 	"$(INTDIR)\Core.obj" \
-	"$(INTDIR)\PackedFileReader.obj" \
 	"$(INTDIR)\Crawler.obj" \
 	"$(INTDIR)\CreditsScreen.obj" \
 	"$(INTDIR)\CRenderer.obj" \
@@ -110,13 +109,12 @@ LINK32_OBJS= \
 	"$(INTDIR)\Main.obj" \
 	"$(INTDIR)\MainMenu.obj" \
 	"$(INTDIR)\MapWithCharKey.obj" \
+	"$(INTDIR)\PackedFileReader.obj" \
 	"$(INTDIR)\Parser.obj" \
 	"$(INTDIR)\UI.obj" \
 	"$(INTDIR)\Vec.obj" \
 	"$(INTDIR)\VisibilityStrategy.obj" \
-	"$(INTDIR)\Sub Mare Imperium.res" \
-	"$(INTDIR)\Common.obj" \
-	"$(INTDIR)\BattleScreen.obj"
+	"$(INTDIR)\Sub Mare Imperium.res"
 
 "$(OUTDIR)\Sub Mare Imperium Derelict.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -135,7 +133,6 @@ ALL : "$(OUTDIR)\Sub Mare Imperium Derelict.exe"
 
 
 CLEAN :
-	-@erase "$(INTDIR)\BattleScreen.obj"
 	-@erase "$(INTDIR)\CGDIRenderer.obj"
 	-@erase "$(INTDIR)\Common.obj"
 	-@erase "$(INTDIR)\Core.obj"
@@ -183,8 +180,8 @@ LINK32=link.exe
 LINK32_FLAGS=winmm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /pdb:none /debug /machine:I386 /out:"$(OUTDIR)\Sub Mare Imperium Derelict.exe" 
 LINK32_OBJS= \
 	"$(INTDIR)\CGDIRenderer.obj" \
+	"$(INTDIR)\Common.obj" \
 	"$(INTDIR)\Core.obj" \
-	"$(INTDIR)\PackedFileReader.obj" \
 	"$(INTDIR)\Crawler.obj" \
 	"$(INTDIR)\CreditsScreen.obj" \
 	"$(INTDIR)\CRenderer.obj" \
@@ -205,13 +202,12 @@ LINK32_OBJS= \
 	"$(INTDIR)\Main.obj" \
 	"$(INTDIR)\MainMenu.obj" \
 	"$(INTDIR)\MapWithCharKey.obj" \
+	"$(INTDIR)\PackedFileReader.obj" \
 	"$(INTDIR)\Parser.obj" \
 	"$(INTDIR)\UI.obj" \
 	"$(INTDIR)\Vec.obj" \
 	"$(INTDIR)\VisibilityStrategy.obj" \
-	"$(INTDIR)\Sub Mare Imperium.res" \
-	"$(INTDIR)\Common.obj" \
-	"$(INTDIR)\BattleScreen.obj"
+	"$(INTDIR)\Sub Mare Imperium.res"
 
 "$(OUTDIR)\Sub Mare Imperium Derelict.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -261,12 +257,6 @@ LINK32_OBJS= \
 
 
 !IF "$(CFG)" == "Sub Mare Imperium Derelict - Win32 Release" || "$(CFG)" == "Sub Mare Imperium Derelict - Win32 Debug"
-SOURCE=..\..\menu\src\BattleScreen.c
-
-"$(INTDIR)\BattleScreen.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
-
-
 SOURCE=..\..\base3d\src\Win32Version\CGDIRenderer.c
 
 "$(INTDIR)\CGDIRenderer.obj" : $(SOURCE) "$(INTDIR)"
