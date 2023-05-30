@@ -58,7 +58,8 @@ extern prim_t prim;
 extern color_t color;
 
 
-
+extern float leanX;
+extern float leanY;
 int visibilityCached = FALSE;
 int needsToRedrawVisibleMeshes = TRUE;
 uint8_t texturesUsed = 0;
@@ -155,7 +156,7 @@ void endFrameGL() {
 
 void enter3D(void) {
     VECTOR camera_position = {0.00f, -0.25f, 2, 1.00f};
-    VECTOR camera_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+    VECTOR camera_rotation = {leanY, leanX, 0.00f, 1.00f};
 
     // Create the world_view matrix.
     create_world_view(world_view, camera_position, camera_rotation);

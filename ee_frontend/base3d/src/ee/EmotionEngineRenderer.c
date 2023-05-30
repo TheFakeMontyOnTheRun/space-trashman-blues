@@ -55,6 +55,8 @@ static char padBuf[256] __attribute__((aligned(64)));
 static char actAlign[6];
 static int actuators;
 
+float leanX = 0.0f;
+float leanY = 0.0f;
 
 framebuffer_t frame;
 zbuffer_t zBuffer;
@@ -206,20 +208,16 @@ void init_gs() {
 	frame.mask = 0;
 	frame.psm = GS_PSM_32;
 	frame.address = graph_vram_allocate(frame.width, frame.height, frame.psm, GRAPH_ALIGN_PAGE);
-	puts("Frame allocated");
+
 	// Enable the zbuffer.
 	zBuffer.enable = DRAW_DISABLE;
 	zBuffer.mask = 0;
 	zBuffer.method = ZTEST_METHOD_GREATER_EQUAL;
 	zBuffer.zsm = GS_ZBUF_32;
-	printf("graph_vram_allocate %d, %d, %d\n", frame.width, frame.height, zBuffer.zsm);
 	zBuffer.address = graph_vram_allocate(frame.width, frame.height, zBuffer.zsm, GRAPH_ALIGN_PAGE);
-	puts("Z-Buffer allocated");
+
 	// Initialize the screen and tie the first framebuffer to the read circuits.
-	printf("graph_initialize address: %p, width: %u, height: %u, psm: %u\n", frame.address, frame.width, frame.height,
-		   frame.psm);
 	graph_initialize(frame.address, frame.width, frame.height, frame.psm, 0, 0);
-	puts("Graph initialized");
 }
 
 
@@ -489,72 +487,94 @@ void handleSystemEvents() {
 
 	if (ret != 0) {
 
-		paddata = 0xffff ^ buttons.btns;
+        paddata = 0xffff ^ buttons.btns;
 
-		new_pad = paddata & ~old_pad;
-		old_pad = paddata;
+        new_pad = paddata & ~old_pad;
+        old_pad = paddata;
 
-		// Directions
-		if (new_pad & PAD_LEFT) {
-			printf("LEFT\n");
-			mBufferedCommand = kCommandLeft;
-		}
-		if (new_pad & PAD_DOWN) {
-			mBufferedCommand = kCommandDown;
-		}
-		if (new_pad & PAD_RIGHT) {
-			printf("RIGHT\n");
-			mBufferedCommand = kCommandRight;
-		}
-		if (new_pad & PAD_UP) {
-			mBufferedCommand = kCommandUp;
-		}
-		if (new_pad & PAD_START) {
-			printf("START\n");
-			mBufferedCommand = kCommandFire1;
-		}
-		if (new_pad & PAD_R3) {
-			printf("R3\n");
-		}
-		if (new_pad & PAD_L3) {
-			printf("L3\n");
-		}
-		if (new_pad & PAD_SELECT) {
-			printf("SELECT\n");
-			mBufferedCommand = kCommandBack;
-		}
-		if (new_pad & PAD_SQUARE) {
-			printf("SQUARE\n");
-			mBufferedCommand = kCommandFire3;
-		}
-		if (new_pad & PAD_CROSS) {
-			printf("CROSS - Enter press mode\n");
-			mBufferedCommand = kCommandFire4;
-		}
-		if (new_pad & PAD_CIRCLE) {
-			printf("CIRCLE - Exit press mode\n");
-			mBufferedCommand = kCommandFire1;
-		}
-		if (new_pad & PAD_TRIANGLE) {
-			// Check for the reason below..
-			printf("TRIANGLE (press mode disabled, see code)\n");
-			mBufferedCommand = kCommandFire2;
-		}
-		if (new_pad & PAD_R1) {
-			printf("R1 - Start little engine\n");
-			mBufferedCommand = kCommandStrafeRight;
-		}
-		if (new_pad & PAD_L1) {
-			printf("L1 - Stop little engine\n");
-			mBufferedCommand = kCommandStrafeLeft;
-		}
-		if (new_pad & PAD_R2) {
-			printf("R2\n");
-		}
-		if (new_pad & PAD_L2) {
-			printf("L2\n");
-		}
-	}
+        // Directions
+        if (new_pad & PAD_LEFT) {
+            printf("LEFT\n");
+            mBufferedCommand = kCommandLeft;
+        }
+        if (new_pad & PAD_DOWN) {
+            printf("DOWN\n");
+            mBufferedCommand = kCommandDown;
+        }
+        if (new_pad & PAD_RIGHT) {
+            printf("RIGHT\n");
+            mBufferedCommand = kCommandRight;
+        }
+        if (new_pad & PAD_UP) {
+            printf("UP\n");
+            mBufferedCommand = kCommandUp;
+        }
+        if (new_pad & PAD_START) {
+            printf("START\n");
+            mBufferedCommand = kCommandFire1;
+        }
+        if (new_pad & PAD_R3) {
+            printf("R3\n");
+        }
+        if (new_pad & PAD_L3) {
+            printf("L3\n");
+        }
+        if (new_pad & PAD_SELECT) {
+            printf("SELECT\n");
+            mBufferedCommand = kCommandBack;
+        }
+        if (new_pad & PAD_SQUARE) {
+            printf("SQUARE\n");
+            mBufferedCommand = kCommandFire3;
+        }
+        if (new_pad & PAD_CROSS) {
+            printf("CROSS - Enter press mode\n");
+            mBufferedCommand = kCommandFire4;
+        }
+        if (new_pad & PAD_CIRCLE) {
+            printf("CIRCLE - Exit press mode\n");
+            mBufferedCommand = kCommandFire1;
+        }
+        if (new_pad & PAD_TRIANGLE) {
+            // Check for the reason below..
+            printf("TRIANGLE (press mode disabled, see code)\n");
+            mBufferedCommand = kCommandFire2;
+        }
+        if (new_pad & PAD_R1) {
+            printf("R1 - Start little engine\n");
+            mBufferedCommand = kCommandStrafeRight;
+        }
+        if (new_pad & PAD_L1) {
+            printf("L1 - Stop little engine\n");
+            mBufferedCommand = kCommandStrafeLeft;
+        }
+        if (new_pad & PAD_R2) {
+            printf("R2\n");
+        }
+
+        if (new_pad & PAD_L2) {
+            printf("L2\n");
+        }
+
+        leanX = 0.0f;
+        leanY = 0.0f;
+
+        if( buttons.rjoy_h > 127) {
+            leanX = -0.25f * ((buttons.rjoy_h - 127) / 128.0f);
+        }
+
+        if( buttons.rjoy_h < 127) {
+            leanX = 0.25f * ((128 - buttons.rjoy_h) / 127.0f);
+        }
+
+        if( buttons.rjoy_v > 127) {
+            leanY = -0.25f * ((buttons.rjoy_v - 127) / 128.0f);
+        }
+
+        if( buttons.rjoy_v < 127) {
+            leanY = 0.25f * ((128 - buttons.rjoy_v) / 127.0f);
+        }
+    }
 }
 
 void graphicsShutdown() {
