@@ -94,10 +94,6 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\menu\src\BattleScreen.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\base3d\src\Win32Version\CGDIRenderer.c
 # End Source File
 # Begin Source File
