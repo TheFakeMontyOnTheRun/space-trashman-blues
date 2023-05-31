@@ -177,8 +177,8 @@ void enter3D(void) {
     glScalef(1, 1.25f, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-    glRotatef(((float)leanX) * 20.0f, 0.0f, 1.0f, 0.0f);
-    glRotatef(((float)leanY) * 20.0f, 1.0f, 0.0f, 0.0f);
+    glRotatef(((float)leanX), 0.0f, 1.0f, 0.0f);
+    glRotatef(((float)leanY), 1.0f, 0.0f, 0.0f);
 	glEnable(GL_FOG);
 
 #ifndef NDS
