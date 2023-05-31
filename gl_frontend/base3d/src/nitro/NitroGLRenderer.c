@@ -121,22 +121,8 @@ void handleSystemEvents() {
 
             touch = touchReadXY();
 
-            if (touch.px < 85) {
-                leanX = -1;
-            }
-
-            if (touch.px > 170) {
-                leanX = 1;
-            }
-
-            if (touch.py < 64) {
-                leanY = -1;
-            }
-
-            if (touch.py > 128) {
-                leanY = 1;
-            }
-
+            leanX = ((touch.px - 128) * 45 ) / 256;
+            leanY = ((touch.py - 96) * 45 ) / 192;
         }
 	}
 }

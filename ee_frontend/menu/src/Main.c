@@ -4,10 +4,6 @@
 #include <string.h>
 #include <stdint.h>
 
-#ifdef N64
-#include <libdragon.h>
-#endif
-
 const long UCLOCKS_PER_SEC = 1000;
 
 long timeEllapsed = 0;
@@ -32,18 +28,9 @@ long uclock() {
 #include "PackedFileReader.h"
 #include "Derelict.h"
 
-#ifdef __EMSCRIPTEN__
-#include <emscripten/html5.h>
-#include <emscripten/emscripten.h>
-#endif
 
 void initHW() {
-#ifndef N64
     initFileReader("base.pfs");
-#else
-	dfs_init(DFS_DEFAULT_LOCATION);
-    initFileReader("rom:/base.pfs");
-#endif
     graphicsInit();
 }
 
@@ -52,12 +39,6 @@ void shutdownHW() {
 }
 
 long start_clock, end_clock, prev;
-
-#ifdef __EMSCRIPTEN__
-void mainLoop();
-#endif
-
-#ifndef ANDROID
 
 
 int main(int argc, char **argv) {
@@ -72,9 +53,6 @@ int main(int argc, char **argv) {
     prev = 0;
     start_clock = uclock();
 
-#ifdef __EMSCRIPTEN__
-    emscripten_set_main_loop(mainLoop, 0, 1);
-#else
 	clearRenderer();
 
     while (isRunning) {
@@ -89,11 +67,7 @@ int main(int argc, char **argv) {
             delta_time = 50;
         }
 
-#ifndef N64
 		startFrameGL(640, 480);
-#else
-		startFrameGL(320, 240);
-#endif
 
         isRunning = isRunning && menuTick(10);
 
@@ -101,7 +75,6 @@ int main(int argc, char **argv) {
 		flipRenderer();
 
 	}
-#endif
 
     unloadStateCallback();
 
@@ -109,5 +82,3 @@ int main(int argc, char **argv) {
 
     return 0;
 }
-
-#endif

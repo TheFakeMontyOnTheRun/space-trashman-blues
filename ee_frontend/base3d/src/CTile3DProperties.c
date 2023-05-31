@@ -19,8 +19,8 @@
 void loadPropertyList(const char * propertyFile, struct MapWithCharKey * map) {
 
     struct StaticBuffer buffer = loadBinaryFileFromPath(propertyFile);
-    uint8_t *limit = buffer.data + buffer.size;
-    uint8_t *bufferHead = buffer.data;
+    const uint8_t *limit = buffer.data + buffer.size;
+    const uint8_t *bufferHead = buffer.data;
 
     clearMap(map);
 

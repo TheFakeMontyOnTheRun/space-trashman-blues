@@ -1,4 +1,4 @@
-EE_CFLAGS += -Os -fdata-sections -ffunction-sections -I$(PS2SDK)/ee/include -I$(PS2SDK)/common/include
+EE_CFLAGS += -pedantic -Wall -Wno-switch -Wno-unused-variable -Os -fdata-sections -ffunction-sections -I$(PS2SDK)/ee/include -I$(PS2SDK)/common/include
 EE_LDFLAGS += -s -Wl,--gc-sections -ldraw -ldma -lgraph -lpacket -lc  -ldraw -lgraph -lmath3d  -lpacket -ldma -lpad -lc
 
 EE_CFLAGS += -Ibase3d/include        \
