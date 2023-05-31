@@ -68,6 +68,7 @@ extern color_t color;
 #define BIAS (intToFix(8))
 #define REVERSE_BIAS (1.0f/8.0f)
 #define FOG_MAX_DISTANCE 32.0f
+#define Z_NEAR_PLANE_FRUSTUM 0
 
 void clearTextures(void) {
     int c;
@@ -121,7 +122,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 
 
 
-	if ((p0.mZ + zCameraOffset) > 0 && (p1.mZ + zCameraOffset) > 0  ) {
+	if ((p0.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM && (p1.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM  ) {
 
 		float centerY0, centerY1;
 		FixP_t acc;
@@ -314,7 +315,7 @@ void drawBillboardAt(const struct Vec3 center,
 					 struct Texture *bitmap,
 					 const FixP_t scale,
 					 const int size) {
-	if ((center.mZ + zCameraOffset) <= 0 ) {
+	if ((center.mZ + zCameraOffset) <= Z_NEAR_PLANE_FRUSTUM ) {
 		return;
 	}
 
@@ -415,7 +416,7 @@ void drawColumnAt(const struct Vec3 center,
 				  const uint8_t enableAlpha,
 				  const uint8_t repeatTexture) {
 
-	if ((center.mZ + zCameraOffset) <= 0 ) {
+	if ((center.mZ + zCameraOffset) <= Z_NEAR_PLANE_FRUSTUM ) {
 		return;
 	}
 
@@ -678,7 +679,7 @@ void drawColumnAt(const struct Vec3 center,
 void drawFloorAt(const struct Vec3 center,
 				 const struct Texture *texture, enum EDirection cameraDirection) {
 
-	if (center.mY <= 0 && (center.mZ + zCameraOffset) > 0  ) {
+	if (center.mY <= 0 && (center.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM  ) {
 
 		float centerY;
 		FixP_t acc;
@@ -823,7 +824,7 @@ void drawFloorAt(const struct Vec3 center,
 void drawCeilingAt(const struct Vec3 center,
 				   const struct Texture *texture, enum EDirection cameraDirection) {
 
-	if (center.mY >= 0 && center.mZ > 0 ) {
+	if (center.mY >= 0 && center.mZ > Z_NEAR_PLANE_FRUSTUM ) {
 
 		float centerY;
 		FixP_t acc;
@@ -972,7 +973,7 @@ void drawLeftNear(const struct Vec3 center,
 				  const uint8_t repeatTexture) {
 
 
-	if ((center.mZ + zCameraOffset) <= 0 ) {
+	if ((center.mZ + zCameraOffset) <= Z_NEAR_PLANE_FRUSTUM ) {
 		return;
 	}
 
@@ -1092,7 +1093,7 @@ void drawRightNear(const struct Vec3 center,
 				   const uint8_t mask,
 				   const uint8_t repeatTexture) {
 
-	if ((center.mZ + zCameraOffset) <= 0 ) {
+	if ((center.mZ + zCameraOffset) <= Z_NEAR_PLANE_FRUSTUM ) {
 		return;
 	}
 
