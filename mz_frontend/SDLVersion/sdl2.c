@@ -18,7 +18,7 @@ SDL_Renderer *renderer;
 
 uint8_t mBufferedCommand;
 uint32_t palette[16];
-uint8_t framebuffer[160 * 200];
+uint8_t framebuffer[256 * 160];
 
 void graphicsFlush();
 
@@ -53,7 +53,7 @@ void graphicsPut(int16_t x, int16_t y) {
 
 
 
-	framebuffer[(160 * y) + x] = 1;
+	framebuffer[(256 * y) + x] = 1;
 #ifdef PUTAFLIP
     graphicsFlush();
     SDL_Delay(100);
@@ -102,7 +102,7 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t shouldStipple) {
 		}
 
 		if (stipple) {
-			framebuffer[(160 * y) + x0] = colour;
+			framebuffer[(256 * y) + x0] = colour;
 		}
     }
 }
@@ -118,7 +118,7 @@ void showMessage(const char* mesg) {
 void drawWindow(int tx, int ty, int tw, int th, const char* title ) {}
 
 void clearGraphics() {
-    memset(framebuffer, 0, 160 * 200);
+    memset(framebuffer, 0, 256 * 160);
 }
 
 void writeStr(uint8_t nColumn, uint8_t nLine, char *str, uint8_t fg, uint8_t bg) {
@@ -263,10 +263,10 @@ void init() {
     mBufferedCommand = '.';
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
-    memset(framebuffer, 0, 160 * 200);
+    memset(framebuffer, 0, 256 * 160);
     window =
             SDL_CreateWindow("Derelict 8-bits SDL2 test", SDL_WINDOWPOS_CENTERED,
-                             SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
+                             SDL_WINDOWPOS_CENTERED, 512, 320, SDL_WINDOW_SHOWN);
 
     renderer = SDL_CreateRenderer(window, -1, 0);
 
@@ -319,8 +319,8 @@ void flipRenderer() {
 
     rect.x = 0;
     rect.y = 0;
-    rect.w = 259;
-    rect.h = 309;
+    rect.w = 512;
+    rect.h = 320;
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderFillRect(renderer, &rect);
@@ -328,11 +328,11 @@ void flipRenderer() {
     for (y = 0; y < 128; ++y) {
         for (x = 0; x < 128; ++x) {
 
-            rect.x = 1 + 2 * x;
-            rect.y = 1 + (24 * y) / 10;
+            rect.x = 2 * x;
+            rect.y = 2 * y;
             rect.w = 2;
-            rect.h = 3;
-            int index = framebuffer[(160 * y) + x];
+            rect.h = 2;
+            int index = framebuffer[(256 * y) + x];
 
             if (index < 0 || index >= 16) {
                 continue;
