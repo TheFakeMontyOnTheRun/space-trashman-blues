@@ -47,13 +47,40 @@ struct Vec3 cameraOffset;
 FixP_t walkingBias = 0;
 FixP_t playerHeight = 0;
 struct Texture *nativeTextures[TOTAL_TEXTURES];
-int usedTexture = 0;
 
 #define BIAS (intToFix(128))
 #define REVERSE_BIAS (1.0f/128.0f)
 
 void clearTextures() {
-	usedTexture = 0;
+    int c;
+    texturesUsed = 0;
+
+    for (c = 1; c < TOTAL_ITEMS; ++c) {
+        if (itemSprites[c]) {
+            releaseBitmap(itemSprites[c]->raw);
+            free(itemSprites[c]);
+            itemSprites[c] = NULL;
+        }
+    }
+
+    if (mapTopLevel[0]) {
+        for (c = 0; c < 8; ++c ) {
+            releaseBitmap(mapTopLevel[c]);
+            mapTopLevel[c] = NULL;
+        }
+    }
+
+    for (c = 0; c < TOTAL_TEXTURES; ++c) {
+        if (nativeTextures[c] != NULL) {
+            releaseBitmap(nativeTextures[c]->raw);
+#ifndef N64
+            free(nativeTextures[c]);
+#else
+            free_uncached(nativeTextures[c]);
+#endif
+            nativeTextures[c] = NULL;
+        }
+    }
 }
 
 

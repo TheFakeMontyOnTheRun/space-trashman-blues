@@ -916,8 +916,6 @@ void render(const long ms) {
                     addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
 
                     // lazy loading the item sprites
-                    // we can't preload it because...reasons on the NDS
-                    // perhaps some state machine issue? IDK. Placing this here works better for the NDS.
                     if (itemSprites[itemsSnapshotElement] == NULL) {
                         char buffer[64];
                         sprintf(&buffer[0], "%s.img", getItem(itemsSnapshotElement)->name);

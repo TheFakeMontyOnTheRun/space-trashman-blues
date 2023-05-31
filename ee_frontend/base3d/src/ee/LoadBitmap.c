@@ -96,7 +96,7 @@ struct Bitmap *loadBitmap(const char *filename) {
     size_t sizeInDisk  = src.size - 4; //total size minus the header
 
     uint16_t tmp;
-    uint8_t *ptr = src.data;
+    const uint8_t *ptr = src.data;
 
     tmp = *ptr++;
     toReturn->width = (tmp & 0xFF) << 8;

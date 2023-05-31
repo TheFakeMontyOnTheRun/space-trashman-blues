@@ -58,7 +58,8 @@ extern prim_t prim;
 extern color_t color;
 
 
-
+extern float leanX;
+extern float leanY;
 int visibilityCached = FALSE;
 int needsToRedrawVisibleMeshes = TRUE;
 uint8_t texturesUsed = 0;
@@ -155,7 +156,7 @@ void endFrameGL() {
 
 void enter3D(void) {
     VECTOR camera_position = {0.00f, -0.25f, 2, 1.00f};
-    VECTOR camera_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+    VECTOR camera_rotation = {leanY, leanX, 0.00f, 1.00f};
 
     // Create the world_view matrix.
     create_world_view(world_view, camera_position, camera_rotation);
@@ -216,12 +217,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 	nameStart = head;
 
 	clearTextures();
-
-    //item 0 is a dummy
-    for (int c = 1; c < itemsCount; ++c) {
-        sprintf(&buffer[0], "%s.img", getItem(c)->name);
-        itemSprites[c] = (makeTextureFrom(&buffer[0]));
-    }
 
     while (head != end && (texturesUsed < TOTAL_TEXTURES)) {
 		char val = *head;
@@ -368,7 +363,6 @@ void render(const long ms) {
 		uint8_t lastElement = 0xFF;
         uint8_t itemsSnapshotElement = 0xFF;
 		uint8_t element = 0;
-		int onTarget;
 		struct Vec3 position;
 		FixP_t tileHeight = 0;
 		int16_t x, y, z;
@@ -394,8 +388,8 @@ void render(const long ms) {
 
 		enter3D();
 
-        for (distance = (MAP_SIZE + MAP_SIZE - 1); distance >= 0; --distance) {
-            uint8_t bucketPos;
+		for (distance = 0; distance < (MAP_SIZE + MAP_SIZE); ++distance ) {
+			uint8_t bucketPos;
 
 			for (bucketPos = 0; bucketPos < MAP_SIZE; ++bucketPos) {
 
@@ -416,7 +410,6 @@ void render(const long ms) {
 					case kNorth:
 						x = visPos.x;
 						z = visPos.y;
-						onTarget = (cursorX == x && cursorZ == z);
 						element = map[z][x];
 
 						itemsSnapshotElement = mItems[z][x];
@@ -458,7 +451,6 @@ void render(const long ms) {
 						z = visPos.y;
 
 						element = map[z][x];
-						onTarget = (cursorX == x && cursorZ == z);
 						itemsSnapshotElement = mItems[z][x];
 
 						position.mX = mCamera.mX + intToFix(-2 * x);
@@ -491,7 +483,6 @@ void render(const long ms) {
 						z = visPos.x;
 
 						element = map[x][z];
-						onTarget = (cursorX == z && cursorZ == x);
 						itemsSnapshotElement = mItems[x][z];
 
 						position.mX = mCamera.mX + intToFix(-2 * x);
@@ -528,7 +519,6 @@ void render(const long ms) {
 						z = visPos.x;
 
                         element = map[x][z];
-						onTarget = (cursorX == z && cursorZ == x);
 						itemsSnapshotElement = mItems[x][z];
 
 						position.mX = mCamera.mX + intToFix(2 * x);
@@ -958,6 +948,13 @@ void render(const long ms) {
                     tmp.mZ = position.mZ;
 
                     addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
+
+                    // lazy loading the item sprites
+                    if (itemSprites[itemsSnapshotElement] == NULL) {
+                        char buffer[64];
+                        sprintf(&buffer[0], "%s.img", getItem(itemsSnapshotElement)->name);
+                        itemSprites[itemsSnapshotElement] = makeTextureFrom(&buffer[0]);
+                    }
 
                     drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
                 }

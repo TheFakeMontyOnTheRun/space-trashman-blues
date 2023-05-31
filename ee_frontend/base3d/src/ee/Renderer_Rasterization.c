@@ -330,7 +330,7 @@ void drawRepeatBitmap(
 		const int y,
 		const size_t dx,
 		const size_t dy,
-		const struct Bitmap *tile) {
+		struct Bitmap *tile) {
 
     size_t repeatX = (dx / tile->width) + 1;
     size_t repeatY = (dy / tile->height) + 1;
