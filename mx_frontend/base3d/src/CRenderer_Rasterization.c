@@ -124,6 +124,11 @@ void maskWall(
     ix = x;
 
     for (; ix < limit; ++ix) {
+
+        if (ix >= XRES) {
+            return;
+        }
+
         if (ix >= 0 && ix < XRES) {
 
             const FixP_t diffY = (y1 - y0);
@@ -144,6 +149,7 @@ void maskWall(
 
             if (iY1 >= YRES) {
                 iY1 = YRES;
+                continue;
             }
 
             destinationLine = bufferData + (XRES_FRAMEBUFFER * iY0) + ix;
@@ -264,6 +270,11 @@ void drawWall(FixP_t x0,
     ix = x;
 
     for (; ix < limit; ++ix) {
+
+        if (ix >= XRES ) {
+            return;
+        }
+
         if (ix >= 0 && ix < XRES) {
 
             const FixP_t diffY = (y1 - y0);
@@ -287,6 +298,11 @@ void drawWall(FixP_t x0,
             pixel = *(lineOffset);
 
             for (iy = iY0; iy < iY1; ++iy) {
+
+                if (iy >= YRES ) {
+                    iy = iY1;
+                    continue;
+                }
 
                 if (iy < YRES && iy >= 0) {
                     const int32_t iv = fixToInt(v);
@@ -433,6 +449,10 @@ void drawFrontWall(FixP_t x0,
 
     for (; iy < limit; ++iy) {
 
+        if (iy >= XRES) {
+            return;
+        }
+
         if (iy < YRES && iy >= 0) {
             FixP_t u = 0;
             const uint8_t iv = fixToInt(v) & (NATIVE_TEXTURE_SIZE - 1);
@@ -458,6 +478,11 @@ void drawFrontWall(FixP_t x0,
             pixel = *(sourceLineStart);
 
             for (ix = iX0; ix < iX1; ++ix) {
+
+                if (ix >= XRES) {
+                    ix = iX1;
+                    continue;
+                }
 
                 if (ix < XRES && ix >= 0) {
                     int stipple = ((ix + iy) & 1);
@@ -569,6 +594,11 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
     iy = y;
 
     for (; iy < limit; ++iy) {
+
+        if (iy >= YRES) {
+            return;
+        }
+
         if (iy < YRES && iy >= 0) {
 
             int32_t iX0;
@@ -699,6 +729,10 @@ void drawFloor(FixP_t y0,
 
     for (; iy < limit; ++iy) {
 
+        if (iy >= YRES) {
+            return;
+        }
+
         if (iy < YRES && iy >= 0) {
             int32_t iX0;
             int32_t iX1;
@@ -724,6 +758,12 @@ void drawFloor(FixP_t y0,
             stipple = ((iX0 + iy) & 1) == 0;
 
             for (ix = iX0; ix < iX1; ++ix) {
+
+                if (ix >= XRES) {
+                    ix = iX1;
+                    continue;
+                }
+
                 if (ix >= 0 && ix < XRES) {
                     const int32_t iu = fixToInt(u);
                     stipple = !stipple;
@@ -752,112 +792,6 @@ void drawFloor(FixP_t y0,
         x0 += leftDxDy;
         x1 += rightDxDy;
         v += dv;
-    }
-}
-
-
-/*
- *     x0y0 ____________ x1y0
- *         /            \
- *        /             \
- *  x0y1 /______________\ x1y1
- */
-void drawSlantedFloor(
-        FixP_t p0x,
-        FixP_t p0y,
-        FixP_t p1x,
-        FixP_t p1y,
-        FixP_t p2x,
-        FixP_t p2y,
-        FixP_t p3x,
-        FixP_t p3y,
-        int z,
-        const uint8_t *__restrict__ texture) {
-
-    const FixP_t one = intToFix(1);
-    uint8_t pixel = 0;
-    int farEnoughForStipple = (z >= distanceForPenumbra);
-    FixP_t X;
-    FixP_t Y;
-    FixP_t d01X = one;
-    FixP_t d02Y = one;
-    FixP_t d03XdY;
-    FixP_t currDy0 = 0;
-    FixP_t currX0;
-    FixP_t fragmentSizeFactor;
-    FixP_t currX1;
-    int cachedVi;
-
-    d03XdY = Div(p0x - p3x, p0y - p3y);
-    currX0 = p0x;
-    currX1 = p1x;
-
-    fragmentSizeFactor = Div(p2y - p1y, p3y - p0y);
-    
-    if (farEnoughForStipple) {
-        int stipple = FALSE;
-        for (Y = p0y; Y < p3y; Y += d02Y) {
-            FixP_t percentile = Div((Y - p0y), (p3y - p0y));
-            FixP_t targetY = Mul((p2y - p1y), percentile) + p1y;
-            FixP_t dydx = Div((targetY - Y), currX1 - currX0);
-            currX0 += d03XdY;
-            currX1 = Mul((p2x - p1x), percentile) + p1x;
-            currDy0 = 0;
-            
-            cachedVi = (fixToInt(Mul(percentile, FIXP_NATIVE_TEXTURE_SIZE)) * NATIVE_TEXTURE_SIZE);
-            
-            for (X = currX0; X <= currX1; X += d01X) {
-                
-                FixP_t percentileX = Div((X - currX0), (currX1 - currX0));
-                FixP_t sizeY = Mul(percentileX, fragmentSizeFactor);
-                
-                pixel = texture[cachedVi + (fixToInt(Mul(percentileX, FIXP_NATIVE_TEXTURE_SIZE)))];
-                
-                if (sizeY < one) {
-                    framebuffer[(XRES_FRAMEBUFFER * (fixToInt(Y + currDy0))) + fixToInt(X)] = pixel;
-                } else {
-                    int i = 0;
-                    FixP_t frag;
-                    for (frag = 0; frag <= (sizeY); frag += one) {
-                        framebuffer[(XRES_FRAMEBUFFER * (fixToInt(Y + currDy0) + i++)) + fixToInt(X)] = stipple ? pixel : 0;
-                        stipple = !stipple;
-                    }
-                }
-                
-                currDy0 += dydx;
-            }
-        }
-    } else {
-        for (Y = p0y; Y < p3y; Y += d02Y) {
-            FixP_t percentile = Div((Y - p0y), (p3y - p0y));
-            FixP_t targetY = Mul((p2y - p1y), percentile) + p1y;
-            FixP_t dydx = Div((targetY - Y), currX1 - currX0);
-            currX0 += d03XdY;
-            currX1 = Mul((p2x - p1x), percentile) + p1x;
-            currDy0 = 0;
-            
-            cachedVi = (fixToInt(Mul(percentile, FIXP_NATIVE_TEXTURE_SIZE)) * NATIVE_TEXTURE_SIZE);
-            
-            for (X = currX0; X <= currX1; X += d01X) {
-                
-                FixP_t percentileX = Div((X - currX0), (currX1 - currX0));
-                FixP_t sizeY = Mul(percentileX, fragmentSizeFactor);
-                
-                pixel = texture[cachedVi + (fixToInt(Mul(percentileX, FIXP_NATIVE_TEXTURE_SIZE)))];
-                
-                if (sizeY < one) {
-                    framebuffer[(XRES_FRAMEBUFFER * (fixToInt(Y + currDy0))) + fixToInt(X)] = pixel;
-                } else {
-                    int i = 0;
-                    FixP_t frag;
-                    for (frag = 0; frag <= (sizeY); frag += one) {
-                        framebuffer[(XRES_FRAMEBUFFER * (fixToInt(Y + currDy0) + i++)) + fixToInt(X)] = pixel;
-                    }
-                }
-                
-                currDy0 += dydx;
-            }
-        }
     }
 }
 
@@ -1115,6 +1049,10 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
         FixP_t texelLineDY;
         FixP_t oneOverLimit;
         int limit;
+
+        if (y >= YRES) {
+            return;
+        }
         
         fU1 += fDU1;
         fV1 += fDV1;
@@ -1253,6 +1191,10 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
         FixP_t texelLineDY;
         FixP_t oneOverLimit;
 		int limit;
+
+        if (y <= 0) {
+            return;
+        }
 		
         fU1 += fDU1;
         fV1 += fDV1;
@@ -1468,29 +1410,6 @@ void drawBitmap(const int dx,
     drawBitmapRaw(dx, dy, tile->width, tile->height, tile->data, transparent);
 }
 
-void drawRepeatBitmap(
-        const int x,
-        const int y,
-        const unsigned int dx,
-        const unsigned int dy,
-        const struct Bitmap *__restrict__ tile) {
-
-    int repeatX = (dx / tile->width) + 1;
-    int repeatY = (dy / tile->height) + 1;
-    int c, d;
-    for (c = 0; c < repeatY; ++c) {
-        for (d = 0; d < repeatX; ++d) {
-
-            int px = d * tile->width;
-            int py = c * tile->height;
-
-            if (px < XRES_FRAMEBUFFER && py < YRES_FRAMEBUFFER) {
-                drawBitmap(x + px, y + py, tile, FALSE);
-            }
-        }
-    }
-}
-
 void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour, char charToReplaceHifenWith) {
 
     size_t len = strlen(text);
@@ -1525,6 +1444,10 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
             dstX = (x - 1) * 8;
             dstY += 8;
             continue;
+        }
+
+        if (dstY >= YRES_FRAMEBUFFER) {
+            return;
         }
 
         if (currentChar == ' ') {

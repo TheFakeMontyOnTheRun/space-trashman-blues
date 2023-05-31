@@ -140,8 +140,6 @@ void redrawHUD(void) {
                 textBuffer[14] = 0;
 
                 // lazy loading the item sprites
-                // we can't preload it because...reasons on the NDS
-                // perhaps some state machine issue? IDK. Placing this here works better for the NDS.
                 if (itemSprites[itemIndex] == NULL) {
                     char buffer[64];
                     sprintf(&buffer[0], "%s.img", itemPtr->name);
