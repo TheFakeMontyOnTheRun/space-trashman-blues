@@ -177,8 +177,8 @@ void enter3D(void) {
     glScalef(1, 1.25f, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-    glRotatef(((float)leanX) * 20.0f, 0.0f, 1.0f, 0.0f);
-    glRotatef(((float)leanY) * 20.0f, 1.0f, 0.0f, 0.0f);
+    glRotatef(((float)leanX), 0.0f, 1.0f, 0.0f);
+    glRotatef(((float)leanY), 1.0f, 0.0f, 0.0f);
 	glEnable(GL_FOG);
 
 #ifndef NDS
@@ -252,7 +252,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 	char *head;
 	char *end;
 	char *nameStart;
-	int c;
+
 	sprintf(tilesFilename, "tiles%d.lst", levelNumber);
     data = loadBinaryFileFromPath(tilesFilename);
     char *buffer = (char*)malloc(data.size);
@@ -262,20 +262,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     disposeDiskBuffer(data);
 	nameStart = head;
 
-	texturesUsed = 0;
 	clearTextures();
-
-	for (c = 0; c < TOTAL_TEXTURES; ++c) {
-		if (nativeTextures[c] != NULL) {
-			releaseBitmap(nativeTextures[c]->raw);
-#ifndef N64
-			free(nativeTextures[c]);
-#else
-			free_uncached(nativeTextures[c]);
-#endif
-			nativeTextures[c] = NULL;
-		}
-	}
 
 	while (head != end && (texturesUsed < TOTAL_TEXTURES)) {
 		char val = *head;

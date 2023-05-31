@@ -105,7 +105,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 } else {
                     walkBy(2);
                     if (enableSmoothMovement) {
-                        zCameraOffset = -intToFix(2);
+                        zCameraOffset = -Div(intToFix(1), intToFix(2));
                     }
                 }
             }
