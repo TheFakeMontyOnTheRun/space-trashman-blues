@@ -56,6 +56,8 @@ void clearTextures(void) {
         releaseBitmap(mapTopLevel);
         mapTopLevel = NULL;
     }
+
+    /* The level textures don't need to be free'd */
 }
 
 struct Texture *makeTextureFrom(const char *__restrict__ filename) {
