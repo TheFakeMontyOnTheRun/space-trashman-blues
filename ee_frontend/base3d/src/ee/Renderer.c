@@ -218,12 +218,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 
 	clearTextures();
 
-    //item 0 is a dummy
-    for (int c = 1; c < itemsCount; ++c) {
-        sprintf(&buffer[0], "%s.img", getItem(c)->name);
-        itemSprites[c] = (makeTextureFrom(&buffer[0]));
-    }
-
     while (head != end && (texturesUsed < TOTAL_TEXTURES)) {
 		char val = *head;
 		if (val == '\n' || val == 0) {
@@ -954,6 +948,13 @@ void render(const long ms) {
                     tmp.mZ = position.mZ;
 
                     addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
+
+                    // lazy loading the item sprites
+                    if (itemSprites[itemsSnapshotElement] == NULL) {
+                        char buffer[64];
+                        sprintf(&buffer[0], "%s.img", getItem(itemsSnapshotElement)->name);
+                        itemSprites[itemsSnapshotElement] = makeTextureFrom(&buffer[0]);
+                    }
 
                     drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
                 }
