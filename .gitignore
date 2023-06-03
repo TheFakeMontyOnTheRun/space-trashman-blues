@@ -171,3 +171,5 @@ gl_frontend/gl_frontend.elf
 gl_frontend/gl_frontend.nds
 mx_frontend/mx_frontend.elf
 mx_frontend/mx_frontend.gba
+mx_frontend/gameaga
+mx_frontend/gamecd32
