@@ -1,15 +1,13 @@
 #include <stddef.h>
 
 #ifndef SMD
-
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-
 #else
 #include <genesis.h>
-#endifa
+#endif
 
 #include "Core.h"
 #include "Derelict.h"
@@ -20,8 +18,11 @@
 #include "HackingMinigame.h"
 #endif
 
-#ifndef EMBEDDED_DATA
+#ifdef MSDOS
 #include "Common.h"
+#endif
+
+#ifndef EMBEDDED_DATA
 #include "PackedFileReader.h"
 #endif
 

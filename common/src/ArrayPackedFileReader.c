@@ -3,9 +3,15 @@
 //
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdint.h>
+
+#ifndef SMD
 #include <assert.h>
+#else
+#define assert(x) x
+#define exit(x) /* x */
+#endif
+
 #include "Common.h"
 #include "basepfs.h"
 
@@ -53,7 +59,6 @@ struct StaticBuffer loadBinaryFileFromPath(const char * path) {
 found:
 
 	if (offset == 0) {
-		printf("failed to load %s\n", path);
 		exit(-1);
 	}
 
