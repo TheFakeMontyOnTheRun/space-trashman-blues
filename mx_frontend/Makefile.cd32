@@ -1,0 +1,54 @@
+CXX = m68k-amigaos-g++
+CC = m68k-amigaos-gcc
+STRIP=m68k-amigaos-strip
+CFLAGS = -Ibase3d/include -I../common/include -I../core/include -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -Imenu/include -ISoundSystem -c -m68020 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -O3 -DAGA8BPP -DCD32
+#CFLAGS = -DAMIGA -DCD32 -DFLAT_FLOOR_CEILING -I../common/include -ISoundSystem -Ibase3d/include -Imenu/include -c -m68020 -s -fno-keep-inline-functions -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -O3 -DAGA5BPP
+LDFLAGS =  -msmall-code -fexpensive-optimizations -O3 -s -fomit-frame-pointer -noixemul
+
+MENU_TARGET=gamecd32
+
+MENU_OBJ= menu/src/Main.o \
+	  ../common/src/FixP.o \
+	  ../common/src/Vec.o \
+	  ../common/src/Common.o \
+	  ../common/src/PackedFileReader.o \
+	  ../common/src/MapWithCharKey.o \
+	  base3d/src/CTile3DProperties.o \
+	  base3d/src/LoadBitmap.o \
+	  base3d/src/CRenderer.o \
+	  base3d/src/VisibilityStrategy.o \
+	  base3d/src/Globals.o \
+	  base3d/src/Events.o \
+	  base3d/src/CRenderer_Rasterization.o \
+	  base3d/src/CRenderer_Tesselation.o \
+	  base3d/src/EDirection_Utils.o \
+	  base3d/src/Dungeon.o \
+	  menu/src/GameMenu.o \
+	  menu/src/MainMenu.o \
+	  menu/src/Engine.o \
+	  menu/src/UI.o \
+	  menu/src/HackingScreen.o \
+	  menu/src/HelpScreen.o \
+	  menu/src/CreditsScreen.o \
+	  menu/src/Crawler.o \
+	  ../core/src/Derelict.o \
+	  ../core/src/Core.o \
+	  ../core/src/Parser.o \
+	  SoundSystem/MusicAGA.o \
+	  SoundSystem/PCMAudio.o \
+	  base3d/src/AmigaVersion/AmigaRenderer.o
+
+$(MENU_TARGET):	$(MENU_OBJ)
+	$(CC) -o$(MENU_TARGET) $(MENU_OBJ) $(LDFLAGS)
+	$(STRIP) $(MENU_TARGET)
+
+all:   $(MENU_TARGET)
+
+clean:
+	rm -f menu/src/*.o
+	rm -f base3d/src/*.o
+	rm -f base3d/src/AmigaVersion/*.o
+	rm -f common/src/*.o
+	rm -f SoundSystem/*.o
+	rm -f ../core/src/*.o
+	rm -f ../common/src/*.o
