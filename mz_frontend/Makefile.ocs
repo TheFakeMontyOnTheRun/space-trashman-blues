@@ -24,9 +24,9 @@ $(MENU_TARGET):	$(MENU_OBJ)
 all:   $(MENU_TARGET)
 
 adf: $(MENU_TARGET)
-	rm -f derelict3d.adf
-	xdftool derelict3d.adf format "Sub Mare Imperium - Derelict" + write gameocs gameocs + write base.pfs base.pfs
-	xdftool derelict3d.adf list
+	rm -f Derelict3D_ocs.adf
+	xdftool Derelict3D_ocs.adf format "Sub Mare Imperium - Derelict" + write gameocs gameocs + write base.pfs base.pfs
+	xdftool Derelict3D_ocs.adf list
 
 clean:
 	rm -f Engine3D/*.o

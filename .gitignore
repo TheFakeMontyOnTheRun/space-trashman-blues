@@ -173,3 +173,5 @@ mx_frontend/mx_frontend.elf
 mx_frontend/mx_frontend.gba
 mx_frontend/gameaga
 mx_frontend/gamecd32
+mx_frontend/Derelict3D_aga.adf
+mz_frontend/Derelict3D_ocs.adf
