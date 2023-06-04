@@ -21,10 +21,10 @@
 #endif
 
 enum DIRECTION {
-	DIRECTION_N,
-	DIRECTION_E,
-	DIRECTION_S,
-	DIRECTION_W
+    DIRECTION_N,
+    DIRECTION_E,
+    DIRECTION_S,
+    DIRECTION_W
 };
 
 #define IN_RANGE(V0, V1, V)  ((V0) <= (V) && (V) <= (V1))
@@ -58,1286 +58,1286 @@ uint8_t enteredFrom = 0xFF;
 extern int playerLocation;
 
 struct Projection {
-	uint8_t px;
-	uint8_t py;
-	int8_t dx;
+    uint8_t px;
+    uint8_t py;
+    int8_t dx;
 };
 
 const struct Projection projections[31] =
-		{
-				{0,  128, -128},    //	1
-				{0,  127, -64},    //	2
-				{20, 105, -42},    //	3
-				{31, 95,  -32},    //	4
-				{37, 88,  -25},    //	5
-				{41, 84,  -21},    //	6
-				{44, 81,  -18},    //	7
-				{47, 79,  -16},    //	8
-				{48, 77,  -14},    //	9
-				{50, 75,  -12},    //	10
-				{51, 74,  -11},    //	11
-				{52, 73,  -10},    //	12
-				{53, 72,  -9},    //	13
-				{53, 72,  -9},    //	14
-				{54, 71,  -8},    //	15
-				{55, 71,  -8},    //	16
-				{55, 70,  -7},    //	17
-				{55, 70,  -7},    //	18
-				{56, 69,  -6},    //	19
-				{56, 69,  -6},    //	20
-				{56, 69,  -6},    //	21
-				{57, 68,  -5},    //	22
-				{57, 68,  -5},    //	23
-				{57, 68,  -5},    //	24
-				{57, 68,  -5},    //	25
-				{58, 67,  -4},    //	26
-				{58, 67,  -4},    //	27
-				{58, 67,  -4},    //	28
-				{58, 67,  -4},    //	29
-				{58, 67,  -4},    //	30
-				{58, 67,  -4},    //	31
-		};
+        {
+                {0,  128, -128},    //	1
+                {0,  127, -64},    //	2
+                {20, 105, -42},    //	3
+                {31, 95,  -32},    //	4
+                {37, 88,  -25},    //	5
+                {41, 84,  -21},    //	6
+                {44, 81,  -18},    //	7
+                {47, 79,  -16},    //	8
+                {48, 77,  -14},    //	9
+                {50, 75,  -12},    //	10
+                {51, 74,  -11},    //	11
+                {52, 73,  -10},    //	12
+                {53, 72,  -9},    //	13
+                {53, 72,  -9},    //	14
+                {54, 71,  -8},    //	15
+                {55, 71,  -8},    //	16
+                {55, 70,  -7},    //	17
+                {55, 70,  -7},    //	18
+                {56, 69,  -6},    //	19
+                {56, 69,  -6},    //	20
+                {56, 69,  -6},    //	21
+                {57, 68,  -5},    //	22
+                {57, 68,  -5},    //	23
+                {57, 68,  -5},    //	24
+                {57, 68,  -5},    //	25
+                {58, 67,  -4},    //	26
+                {58, 67,  -4},    //	27
+                {58, 67,  -4},    //	28
+                {58, 67,  -4},    //	29
+                {58, 67,  -4},    //	30
+                {58, 67,  -4},    //	31
+        };
 
 #ifdef LEAN_BUILD
 int16_t max(int16_t x1, int16_t x2) {
-	return x1 > x2 ? x1 : x2;
+    return x1 > x2 ? x1 : x2;
 }
 
 int16_t min(int16_t x1, int16_t x2) {
-	return x1 < x2 ? x1 : x2;
+    return x1 < x2 ? x1 : x2;
 }
 #endif
 
 uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask, uint8_t type) {
 
-	int16_t z1;
+    int16_t z1;
 
-	int16_t z0px;
-	int16_t z1px;
-	int16_t z0py;
-	int16_t z1py;
-	int16_t z0dx;
-	int16_t z1dx;
+    int16_t z0px;
+    int16_t z1px;
+    int16_t z0py;
+    int16_t z1py;
+    int16_t z0dx;
+    int16_t z1dx;
 
-	int16_t px0z0;
-	int16_t py0z0;
-	int16_t py0z1;
-	int16_t py1z0;
-	int16_t py1z1;
-	int16_t px1z1;
+    int16_t px0z0;
+    int16_t py0z0;
+    int16_t py0z1;
+    int16_t py1z0;
+    int16_t py1z1;
+    int16_t px1z1;
 
-	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 5 : 1;
-	uint8_t stipple = 1;
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 5 : 1;
+    uint8_t stipple = 1;
 
-	if (z0 >= 32) {
-		return 0;
-	}
+    if (z0 >= 32) {
+        return 0;
+    }
 
-	z1 = z0 + dZ;
+    z1 = z0 + dZ;
 
-	if (z0 <= 2) {
-		return 0;
-	}
+    if (z0 <= 2) {
+        return 0;
+    }
 
-	if (z1 <= 2) {
-		return 0;
-	}
+    if (z1 <= 2) {
+        return 0;
+    }
 
-	if (z1 >= 32) {
-		return 0;
-	}
-
-
-	if (type == RIGHT_NEAR) {
-		z0px = (projections[z0].px);
-		z1px = (projections[z1].px);
-		z0dx = ((projections[z0].dx));
-		z1dx = ((projections[z1].dx));
-
-		px0z0 = z0px - (x0 * z0dx);
-		px1z1 = z1px - ((dX + x0) * z1dx);
-
-		z1py = (projections[z1].py);
-		z0py = (projections[z0].py);
-
-		py0z0 = z0py + ((y0) * z0dx);
-		py0z1 = z1py + ((y0) * z1dx);
-
-		py1z0 = z0py + ((y0 + dY) * z0dx);
-		py1z1 = z1py + ((y0 + dY) * z1dx);
-
-	} else {
-		z0px = (projections[z1].px);
-		z1px = (projections[z0].px);
-		z0dx = ((projections[z1].dx));
-		z1dx = ((projections[z0].dx));
-
-		px0z0 = z0px - ((x0) * z0dx);
-		px1z1 = z1px - ((x0 + dX) * z1dx); //extra operations to avoid overflow
-
-		z1py = (projections[z0].py);
-		z0py = (projections[z1].py);
-
-		py0z0 = z0py + ((y0) * z0dx);
-		py0z1 = z1py + ((y0) * z1dx);
-
-		py1z0 = z0py + ((y0 + dY) * z0dx);
-		py1z1 = z1py + ((y0 + dY) * z1dx);
-	}
-
-	{
-		int16_t x0, x1;
-
-		if (py1z0 < 0) {
-			py1z0 = 0;
-		}
-
-		if (py0z0 < 0) {
-			py0z0 = 0;
-		}
-
-		if (py1z0 >= YRES) {
-			py1z0 = YRESMINUSONE;
-		}
-
-		if (py0z0 >= YRES) {
-			py0z0 = YRESMINUSONE;
-		}
+    if (z1 >= 32) {
+        return 0;
+    }
 
 
-		if (py1z1 < 0) {
-			py1z1 = 0;
-		}
+    if (type == RIGHT_NEAR) {
+        z0px = (projections[z0].px);
+        z1px = (projections[z1].px);
+        z0dx = ((projections[z0].dx));
+        z1dx = ((projections[z1].dx));
 
-		if (py0z1 < 0) {
-			py0z1 = 0;
-		}
+        px0z0 = z0px - (x0 * z0dx);
+        px1z1 = z1px - ((dX + x0) * z1dx);
 
-		if (py1z1 >= YRES) {
-			py1z1 = YRESMINUSONE;
-		}
+        z1py = (projections[z1].py);
+        z0py = (projections[z0].py);
 
-		if (py0z1 >= YRES) {
-			py0z1 = YRESMINUSONE;
-		}
+        py0z0 = z0py + ((y0) * z0dx);
+        py0z1 = z1py + ((y0) * z1dx);
 
-		/* The upper segment */
-		x0 = px0z0;
-		x1 = px1z1;
+        py1z0 = z0py + ((y0 + dY) * z0dx);
+        py1z1 = z1py + ((y0 + dY) * z1dx);
 
-		if (x0 != x1) {
-			int16_t upperY0 = py1z0;
-			int16_t upperY1 = py1z1;
-			int16_t upperDx = abs(x1 - x0);
-			int16_t upperDy = -abs(upperY1 - upperY0);
-			int16_t upperSy = upperY0 < upperY1 ? 1 : -1;
-			int16_t upperErr = upperDx + upperDy;  /* error value e_xy */
-			int16_t upperErr2;
-			int16_t lowerY0 = py0z0;
-			int16_t lowerY1 = py0z1;
-			int16_t lowerDx = abs(x1 - x0);
-			int16_t lowerSx = x0 < x1 ? 1 : -1;
-			int16_t lowerDy = -abs(lowerY1 - lowerY0);
-			int16_t lowerSy = lowerY0 < lowerY1 ? 1 : -1;
-			int16_t lowerErr = lowerDx + lowerDy;  /* error value e_xy */
-			int16_t lowerErr2 = 0;
+    } else {
+        z0px = (projections[z1].px);
+        z1px = (projections[z0].px);
+        z0dx = ((projections[z1].dx));
+        z1dx = ((projections[z0].dx));
 
-			while (x0 != x1) {
-				if (IN_RANGE(0, XRESMINUSONE, x0)) {
-					vLine(x0, upperY0, lowerY0, shouldStipple);
-					graphicsPut(x0, upperY0);
-				}
+        px0z0 = z0px - ((x0) * z0dx);
+        px1z1 = z1px - ((x0 + dX) * z1dx); //extra operations to avoid overflow
 
-				/* loop */
-				upperErr2 = upperErr * 2;
+        z1py = (projections[z0].py);
+        z0py = (projections[z1].py);
 
-				if (upperErr2 >= upperDy || lowerErr2 >= lowerDy) {
-					upperErr += upperDy; /* e_xy+e_x > 0 */
-					lowerErr += lowerDy; /* e_xy+e_x > 0 */
-					x0 += lowerSx;
-				}
+        py0z0 = z0py + ((y0) * z0dx);
+        py0z1 = z1py + ((y0) * z1dx);
 
-				if (x0 >= XRES) {
-					return 0;
-				}
+        py1z0 = z0py + ((y0 + dY) * z0dx);
+        py1z1 = z1py + ((y0 + dY) * z1dx);
+    }
 
-				if (upperErr2 <= upperDx) {
-					/* e_xy+e_y < 0 */
-					upperErr += upperDx;
-					upperY0 += upperSy;
-				}
+    {
+        int16_t x0, x1;
 
-				/* loop */
-				lowerErr2 = lowerErr * 2;
+        if (py1z0 < 0) {
+            py1z0 = 0;
+        }
 
-				if (lowerErr2 <= lowerDx) {
-					/* e_xy+e_y < 0 */
-					lowerErr += lowerDx;
-					lowerY0 += lowerSy;
-				}
-			}
-		}
-	}
+        if (py0z0 < 0) {
+            py0z0 = 0;
+        }
+
+        if (py1z0 >= YRES) {
+            py1z0 = YRESMINUSONE;
+        }
+
+        if (py0z0 >= YRES) {
+            py0z0 = YRESMINUSONE;
+        }
 
 
-	if (elementMask & 2) {
-		if (IN_RANGE(0, XRESMINUSONE, px0z0)) {
-			vLine(px0z0, py0z0, py1z0, 0);
+        if (py1z1 < 0) {
+            py1z1 = 0;
+        }
 
-		}
-	}
+        if (py0z1 < 0) {
+            py0z1 = 0;
+        }
 
-	if (elementMask & 1) {
-		if (IN_RANGE(0, XRESMINUSONE, px1z1)) {
-			vLine(px1z1, py0z1, py1z1, 0);
-		}
-	}
+        if (py1z1 >= YRES) {
+            py1z1 = YRESMINUSONE;
+        }
+
+        if (py0z1 >= YRES) {
+            py0z1 = YRESMINUSONE;
+        }
+
+        /* The upper segment */
+        x0 = px0z0;
+        x1 = px1z1;
+
+        if (x0 != x1) {
+            int16_t upperY0 = py1z0;
+            int16_t upperY1 = py1z1;
+            int16_t upperDx = abs(x1 - x0);
+            int16_t upperDy = -abs(upperY1 - upperY0);
+            int16_t upperSy = upperY0 < upperY1 ? 1 : -1;
+            int16_t upperErr = upperDx + upperDy;  /* error value e_xy */
+            int16_t upperErr2;
+            int16_t lowerY0 = py0z0;
+            int16_t lowerY1 = py0z1;
+            int16_t lowerDx = abs(x1 - x0);
+            int16_t lowerSx = x0 < x1 ? 1 : -1;
+            int16_t lowerDy = -abs(lowerY1 - lowerY0);
+            int16_t lowerSy = lowerY0 < lowerY1 ? 1 : -1;
+            int16_t lowerErr = lowerDx + lowerDy;  /* error value e_xy */
+            int16_t lowerErr2 = 0;
+
+            while (x0 != x1) {
+                if (IN_RANGE(0, XRESMINUSONE, x0)) {
+                    vLine(x0, upperY0, lowerY0, shouldStipple);
+                    graphicsPut(x0, upperY0);
+                }
+
+                /* loop */
+                upperErr2 = upperErr * 2;
+
+                if (upperErr2 >= upperDy || lowerErr2 >= lowerDy) {
+                    upperErr += upperDy; /* e_xy+e_x > 0 */
+                    lowerErr += lowerDy; /* e_xy+e_x > 0 */
+                    x0 += lowerSx;
+                }
+
+                if (x0 >= XRES) {
+                    return 0;
+                }
+
+                if (upperErr2 <= upperDx) {
+                    /* e_xy+e_y < 0 */
+                    upperErr += upperDx;
+                    upperY0 += upperSy;
+                }
+
+                /* loop */
+                lowerErr2 = lowerErr * 2;
+
+                if (lowerErr2 <= lowerDx) {
+                    /* e_xy+e_y < 0 */
+                    lowerErr += lowerDx;
+                    lowerY0 += lowerSy;
+                }
+            }
+        }
+    }
 
 
-	return 1;
+    if (elementMask & 2) {
+        if (IN_RANGE(0, XRESMINUSONE, px0z0)) {
+            vLine(px0z0, py0z0, py1z0, 0);
+
+        }
+    }
+
+    if (elementMask & 1) {
+        if (IN_RANGE(0, XRESMINUSONE, px1z1)) {
+            vLine(px1z1, py0z1, py1z1, 0);
+        }
+    }
+
+
+    return 1;
 }
 
 uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_t elementMask) {
 
-	int16_t z0px;
-	int16_t z0py;
-	int16_t z0dx;
+    int16_t z0px;
+    int16_t z0py;
+    int16_t z0dx;
 
-	int16_t px0z0;
-	int16_t py0z0;
-	int16_t px1z0;
-	int16_t py1z0;
+    int16_t px0z0;
+    int16_t py0z0;
+    int16_t px1z0;
+    int16_t py1z0;
 
-	int16_t x;
+    int16_t x;
 
-	uint8_t drawContour;
+    uint8_t drawContour;
 
-	if (z0 >= 32) {
-		return 0;
-	}
+    if (z0 >= 32) {
+        return 0;
+    }
 
-	z0px = (projections[z0].px);
-	z0dx = ((projections[z0].dx));
+    z0px = (projections[z0].px);
+    z0dx = ((projections[z0].dx));
 
-	px0z0 = z0px - ((x0) * z0dx);
-	px1z0 = px0z0 - (dX * z0dx);
+    px0z0 = z0px - ((x0) * z0dx);
+    px1z0 = px0z0 - (dX * z0dx);
 
-	z0py = (projections[z0].py);
+    z0py = (projections[z0].py);
 
-	py0z0 = z0py + ((y0) * z0dx);
-	py1z0 = py0z0 + (dY * z0dx);
+    py0z0 = z0py + ((y0) * z0dx);
+    py1z0 = py0z0 + (dY * z0dx);
 
-	if (px1z0 < 0 || px0z0 > XRESMINUSONE) {
-		return 0;
-	}
+    if (px1z0 < 0 || px0z0 > XRESMINUSONE) {
+        return 0;
+    }
 
-	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 5 : 1;
-	uint8_t stipple = 1;
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 5 : 1;
+    uint8_t stipple = 1;
 
-	drawContour = (dY);
+    drawContour = (dY);
 
-	/* Draw the horizontal outlines of z0 and z1 */
-	/* Ceiling is lower than camera */
-	if (drawContour) {
-		for (x = px0z0; x <= px1z0; ++x) {
-			if (IN_RANGE(0, XRESMINUSONE, x)) {
-				vLine(x, py0z0, py1z0, shouldStipple);
-			}
-		}
+    /* Draw the horizontal outlines of z0 and z1 */
+    /* Ceiling is lower than camera */
+    if (drawContour) {
+        for (x = px0z0; x <= px1z0; ++x) {
+            if (IN_RANGE(0, XRESMINUSONE, x)) {
+                vLine(x, py0z0, py1z0, shouldStipple);
+            }
+        }
 
-		if (elementMask & 2) {
-			if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0)) {
-				vLine(px0z0, py0z0, py1z0, 0);
-			}
+        if (elementMask & 2) {
+            if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0)) {
+                vLine(px0z0, py0z0, py1z0, 0);
+            }
 
-			if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0)) {
-				vLine(px1z0, py0z0, py1z0, 0);
-			}
-		}
+            if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0)) {
+                vLine(px1z0, py0z0, py1z0, 0);
+            }
+        }
 
-	}
+    }
 
-	return 1;
+    return 1;
 }
 
 
 uint8_t drawObjectAt(int8_t x0, int8_t z0) {
 
-	int8_t z1;
-	uint8_t z0px;
-	uint8_t z0py;
-	uint8_t z1px;
-	uint8_t z1py;
-	int8_t z0dx;
-	int8_t z1dx;
+    int8_t z1;
+    uint8_t z0px;
+    uint8_t z0py;
+    uint8_t z1px;
+    uint8_t z1py;
+    int8_t z0dx;
+    int8_t z1dx;
 
-	int16_t px0z0;
-	int8_t py0z0;
-	int16_t px1z0;
-	int16_t px0z1;
-	int8_t py0z1;
-	int16_t px1z1;
-	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
-	uint8_t stipple = 1;
-
-
-	if (z0 >= 32 || z0 <= 4) {
-		return 0;
-	}
-
-	z1 = z0 + 1;
-
-	if (z1 >= 32) {
-		return 0;
-	}
+    int16_t px0z0;
+    int8_t py0z0;
+    int16_t px1z0;
+    int16_t px0z1;
+    int8_t py0z1;
+    int16_t px1z1;
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
+    uint8_t stipple = 1;
 
 
-	z0px = (projections[z0].px);
-	z1px = (projections[z1].px);
-	z0dx = ((projections[z0].dx));
-	z1dx = ((projections[z1].dx));
+    if (z0 >= 32 || z0 <= 4) {
+        return 0;
+    }
 
-	px0z0 = z0px - ((x0) * z0dx);
-	px0z1 = z1px - ((x0) * z1dx);
+    z1 = z0 + 1;
 
-	px1z0 = px0z0 - (1 * z0dx);
-	px1z1 = px0z1 - (1 * z1dx);
-
-	z1py = (projections[z1].py);
-	z0py = (projections[z0].py);
-
-	py0z0 = z0py + ((-CAMERA_HEIGHT) * z0dx);
-	py0z1 = z1py + ((-CAMERA_HEIGHT) * z1dx);
+    if (z1 >= 32) {
+        return 0;
+    }
 
 
-	{
-		int16_t x, x0, x1;
+    z0px = (projections[z0].px);
+    z1px = (projections[z1].px);
+    z0dx = ((projections[z0].dx));
+    z1dx = ((projections[z1].dx));
 
-		/* Draw the horizontal outlines of z0 and z1 */
-		for (x = px0z0; x <= px1z0; ++x) {
-			if (IN_RANGE(0, XRESMINUSONE, x)) {
+    px0z0 = z0px - ((x0) * z0dx);
+    px0z1 = z1px - ((x0) * z1dx);
 
-				if (shouldStipple) {
-					stipple = !stipple;
-				}
+    px1z0 = px0z0 - (1 * z0dx);
+    px1z1 = px0z1 - (1 * z1dx);
 
-				if (stipple) {
-					graphicsPut(x, py0z0);
-				}
-			}
-		}
+    z1py = (projections[z1].py);
+    z0py = (projections[z0].py);
 
-		for (x = px0z1; x <= px1z1; ++x) {
-			if (IN_RANGE(0, XRESMINUSONE, x)) {
+    py0z0 = z0py + ((-CAMERA_HEIGHT) * z0dx);
+    py0z1 = z1py + ((-CAMERA_HEIGHT) * z1dx);
 
-				if (shouldStipple) {
-					stipple = !stipple;
-				}
 
-				if (stipple) {
-					graphicsPut(x, py0z1);
-				}
-			}
-		}
+    {
+        int16_t x, x0, x1;
 
-		/* The left segment */
-		x0 = px0z0;
-		x1 = px0z1;
+        /* Draw the horizontal outlines of z0 and z1 */
+        for (x = px0z0; x <= px1z0; ++x) {
+            if (IN_RANGE(0, XRESMINUSONE, x)) {
 
-		if (x0 != x1) {
-			int16_t y0 = py0z0;
-			int16_t y1 = py0z1;
-			int16_t dx = abs(x1 - x0);
-			int16_t sx = x0 < x1 ? 1 : -1;
-			int16_t dy = -abs(y1 - y0);
-			int16_t sy = y0 < y1 ? 1 : -1;
-			int16_t err = dx + dy;  /* error value e_xy */
-			int16_t e2;
+                if (shouldStipple) {
+                    stipple = !stipple;
+                }
 
-			while ((x0 != x1 || y0 != y1)) {
+                if (stipple) {
+                    graphicsPut(x, py0z0);
+                }
+            }
+        }
 
-				if (IN_RANGE(0, XRESMINUSONE, x0)) {
+        for (x = px0z1; x <= px1z1; ++x) {
+            if (IN_RANGE(0, XRESMINUSONE, x)) {
 
-					if (shouldStipple) {
-						stipple = !stipple;
-					}
+                if (shouldStipple) {
+                    stipple = !stipple;
+                }
 
-					if (stipple) {
-						graphicsPut(x0, y0);
-					}
-				}
+                if (stipple) {
+                    graphicsPut(x, py0z1);
+                }
+            }
+        }
 
-				/* loop */
-				e2 = err << 2;
+        /* The left segment */
+        x0 = px0z0;
+        x1 = px0z1;
 
-				if (e2 >= dy) {
-					err += dy; /* e_xy+e_x > 0 */
-					x0 += sx;
-				}
+        if (x0 != x1) {
+            int16_t y0 = py0z0;
+            int16_t y1 = py0z1;
+            int16_t dx = abs(x1 - x0);
+            int16_t sx = x0 < x1 ? 1 : -1;
+            int16_t dy = -abs(y1 - y0);
+            int16_t sy = y0 < y1 ? 1 : -1;
+            int16_t err = dx + dy;  /* error value e_xy */
+            int16_t e2;
 
-				if (x0 >= XRES) {
-					goto right_stroke;
-				}
+            while ((x0 != x1 || y0 != y1)) {
 
-				if (e2 <= dx) {
-					/* e_xy+e_y < 0 */
-					err += dx;
-					y0 += sy;
-				}
-			}
-		}
+                if (IN_RANGE(0, XRESMINUSONE, x0)) {
 
-right_stroke:
+                    if (shouldStipple) {
+                        stipple = !stipple;
+                    }
 
-		x0 = px1z0;
-		x1 = px1z1;
+                    if (stipple) {
+                        graphicsPut(x0, y0);
+                    }
+                }
 
-		if (x0 != x1) {
-			int16_t y0 = py0z0;
-			int16_t y1 = py0z1;
-			int16_t dx = abs(x1 - x0);
-			int16_t sx = x0 < x1 ? 1 : -1;
-			int16_t dy = -abs(y1 - y0);
-			int16_t sy = y0 < y1 ? 1 : -1;
-			int16_t err = dx + dy;  /* error value e_xy */
-			int16_t e2;
+                /* loop */
+                e2 = err << 2;
 
-			while ((x0 != x1 || y0 != y1)) {
+                if (e2 >= dy) {
+                    err += dy; /* e_xy+e_x > 0 */
+                    x0 += sx;
+                }
 
-				if (shouldStipple) {
-					stipple = !stipple;
-				}
+                if (x0 >= XRES) {
+                    goto right_stroke;
+                }
 
-				if (stipple && IN_RANGE(0, XRESMINUSONE, x0)) {
-					graphicsPut(x0, y0);
-				}
+                if (e2 <= dx) {
+                    /* e_xy+e_y < 0 */
+                    err += dx;
+                    y0 += sy;
+                }
+            }
+        }
 
-				e2 = err << 2;
+        right_stroke:
 
-				if (e2 >= dy) {
-					err += dy; /* e_xy+e_x > 0 */
-					x0 += sx;
-				}
+        x0 = px1z0;
+        x1 = px1z1;
 
-				if (x0 >= XRES) {
-					return 1;
-				}
+        if (x0 != x1) {
+            int16_t y0 = py0z0;
+            int16_t y1 = py0z1;
+            int16_t dx = abs(x1 - x0);
+            int16_t sx = x0 < x1 ? 1 : -1;
+            int16_t dy = -abs(y1 - y0);
+            int16_t sy = y0 < y1 ? 1 : -1;
+            int16_t err = dx + dy;  /* error value e_xy */
+            int16_t e2;
 
-				if (e2 <= dx) {
-					/* e_xy+e_y < 0 */
-					err += dx;
-					y0 += sy;
-				}
-			}
-		}
-	}
+            while ((x0 != x1 || y0 != y1)) {
 
-	return 1;
+                if (shouldStipple) {
+                    stipple = !stipple;
+                }
+
+                if (stipple && IN_RANGE(0, XRESMINUSONE, x0)) {
+                    graphicsPut(x0, y0);
+                }
+
+                e2 = err << 2;
+
+                if (e2 >= dy) {
+                    err += dy; /* e_xy+e_x > 0 */
+                    x0 += sx;
+                }
+
+                if (x0 >= XRES) {
+                    return 1;
+                }
+
+                if (e2 <= dx) {
+                    /* e_xy+e_y < 0 */
+                    err += dx;
+                    y0 += sy;
+                }
+            }
+        }
+    }
+
+    return 1;
 }
 
 uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask) {
 
-	int8_t y1 = y0 + dY;
-	int8_t z1;
+    int8_t y1 = y0 + dY;
+    int8_t z1;
 
-	int16_t z0px;
-	int16_t z0py;
-	int16_t z1px;
-	int16_t z1py;
-	int16_t z0dx;
-	int16_t z1dx;
-	int16_t py1z0;
-	int16_t py1z1;
-	int16_t px0z0;
-	int16_t py0z0;
-	int16_t px1z0;
-	int16_t px0z1;
-	int16_t py0z1;
-	int16_t px1z1;
+    int16_t z0px;
+    int16_t z0py;
+    int16_t z1px;
+    int16_t z1py;
+    int16_t z0dx;
+    int16_t z1dx;
+    int16_t py1z0;
+    int16_t py1z1;
+    int16_t px0z0;
+    int16_t py0z0;
+    int16_t px1z0;
+    int16_t px0z1;
+    int16_t py0z1;
+    int16_t px1z1;
 
-	uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 6 : 2;
-	uint8_t stipple = 1;
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 6 : 2;
+    uint8_t stipple = 1;
 
-	uint8_t drawContour;
+    uint8_t drawContour;
 
-	if (z0 >= 32 || z0 <= 4) {
-		return 0;
-	}
+    if (z0 >= 32 || z0 <= 4) {
+        return 0;
+    }
 
-	z1 = z0 + dZ;
+    z1 = z0 + dZ;
 
-	if (z1 >= 32) {
-		return 0;
-	}
+    if (z1 >= 32) {
+        return 0;
+    }
 
-	z0px = (projections[z0].px);
-	z1px = (projections[z1].px);
-	z0dx = ((projections[z0].dx));
-	z1dx = ((projections[z1].dx));
+    z0px = (projections[z0].px);
+    z1px = (projections[z1].px);
+    z0dx = ((projections[z0].dx));
+    z1dx = ((projections[z1].dx));
 
-	z1py = (projections[z1].py);
-	z0py = (projections[z0].py);
+    z1py = (projections[z1].py);
+    z0py = (projections[z0].py);
 
-	px0z0 = z0px - ((x0) * z0dx);
-	px0z1 = z1px - ((x0) * z1dx);
-	px1z0 = px0z0 - (dX * z0dx);
-	px1z1 = px0z1 - (dX * z1dx);
-	py0z0 = z0py + ((y0) * z0dx);
-	py0z1 = z1py + ((y0) * z1dx);
-	py1z0 = z0py + ((y1) * z0dx);
-	py1z1 = z1py + ((y1) * z1dx);
+    px0z0 = z0px - ((x0) * z0dx);
+    px0z1 = z1px - ((x0) * z1dx);
+    px1z0 = px0z0 - (dX * z0dx);
+    px1z1 = px0z1 - (dX * z1dx);
+    py0z0 = z0py + ((y0) * z0dx);
+    py0z1 = z1py + ((y0) * z1dx);
+    py1z0 = z0py + ((y1) * z0dx);
+    py1z1 = z1py + ((y1) * z1dx);
 
-	drawContour = (dY);
+    drawContour = (dY);
 
-	{
-		int16_t x, x0, x1;
+    {
+        int16_t x, x0, x1;
 
-		shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 6;
+        shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 6;
 
-		x0 = px0z0;
-		x1 = px0z1;
+        x0 = px0z0;
+        x1 = px0z1;
 
-		if (x0 != x1) {
-			int16_t y0 = py0z0;
-			int16_t y1 = py0z1;
-			int16_t dx = abs(x1 - x0);
-			int16_t sx = x0 < x1 ? 1 : -1;
-			int16_t dy = -abs(y1 - y0);
-			int16_t sy = y0 < y1 ? 1 : -1;
-			int16_t err = dx + dy;
-			int16_t e2;
+        if (x0 != x1) {
+            int16_t y0 = py0z0;
+            int16_t y1 = py0z1;
+            int16_t dx = abs(x1 - x0);
+            int16_t sx = x0 < x1 ? 1 : -1;
+            int16_t dy = -abs(y1 - y0);
+            int16_t sy = y0 < y1 ? 1 : -1;
+            int16_t err = dx + dy;
+            int16_t e2;
 
-			while ((x0 != x1 || y0 != y1)) {
+            while ((x0 != x1 || y0 != y1)) {
 
-				if (drawContour) {
-					if (IN_RANGE(0, XRESMINUSONE, x0)) {
-						vLine(x0, y0, py1z0, 6);
-						graphicsPut(x0, y0);
-					}
-				}
+                if (drawContour) {
+                    if (IN_RANGE(0, XRESMINUSONE, x0)) {
+                        vLine(x0, y0, py1z0, 6);
+                        graphicsPut(x0, y0);
+                    }
+                }
 
-				e2 = err << 2;
+                e2 = err << 2;
 
-				if (e2 >= dy) {
-					err += dy;
-					x0 += sx;
-				}
+                if (e2 >= dy) {
+                    err += dy;
+                    x0 += sx;
+                }
 
-				if (x0 >= XRES) {
-					goto right_stroke;
-				}
+                if (x0 >= XRES) {
+                    goto right_stroke;
+                }
 
-				if (e2 <= dx) {
-					err += dx;
-					y0 += sy;
-				}
-			}
-		}
+                if (e2 <= dx) {
+                    err += dx;
+                    y0 += sy;
+                }
+            }
+        }
 
-		right_stroke:
+        right_stroke:
 
-		x0 = px1z0;
-		x1 = px1z1;
+        x0 = px1z0;
+        x1 = px1z1;
 
-		if (x0 != x1) {
-			int16_t y0 = py0z0;
-			int16_t y1 = py0z1;
-			int16_t dx = abs(x1 - x0);
-			int16_t sx = x0 < x1 ? 1 : -1;
-			int16_t dy = -abs(y1 - y0);
-			int16_t sy = y0 < y1 ? 1 : -1;
-			int16_t err = dx + dy;
-			int16_t e2;
+        if (x0 != x1) {
+            int16_t y0 = py0z0;
+            int16_t y1 = py0z1;
+            int16_t dx = abs(x1 - x0);
+            int16_t sx = x0 < x1 ? 1 : -1;
+            int16_t dy = -abs(y1 - y0);
+            int16_t sy = y0 < y1 ? 1 : -1;
+            int16_t err = dx + dy;
+            int16_t e2;
 
-			while ((x0 != x1 || y0 != y1)) {
+            while ((x0 != x1 || y0 != y1)) {
 
-				if (drawContour) {
-					if (IN_RANGE(0, XRESMINUSONE, x0)) {
-						vLine(x0, y0, py1z0, 6);
-						graphicsPut(x0, y0);
-					}
-				}
+                if (drawContour) {
+                    if (IN_RANGE(0, XRESMINUSONE, x0)) {
+                        vLine(x0, y0, py1z0, 6);
+                        graphicsPut(x0, y0);
+                    }
+                }
 
-				e2 = err << 2;
+                e2 = err << 2;
 
-				if (e2 >= dy) {
-					err += dy;
-					x0 += sx;
-				}
+                if (e2 >= dy) {
+                    err += dy;
+                    x0 += sx;
+                }
 
-				if (x0 >= XRES) {
-					goto final_stroke;
-				}
+                if (x0 >= XRES) {
+                    goto final_stroke;
+                }
 
-				if (e2 <= dx) {
+                if (e2 <= dx) {
 
-					err += dx;
-					y0 += sy;
-				}
-			}
-		}
+                    err += dx;
+                    y0 += sy;
+                }
+            }
+        }
 
-		final_stroke:
+        final_stroke:
 
-		if (py0z0 <= py0z0) {
-			if (drawContour) {
-				for (x = px0z0; x <= px1z0; ++x) {
-					if (IN_RANGE(0, XRESMINUSONE, x)) {
-						vLine(x, py0z0, py1z0, shouldStipple);
-						graphicsPut(x, py0z0);
-					}
-				}
-			}
-		}
+        if (py0z0 <= py0z0) {
+            if (drawContour) {
+                for (x = px0z0; x <= px1z0; ++x) {
+                    if (IN_RANGE(0, XRESMINUSONE, x)) {
+                        vLine(x, py0z0, py1z0, shouldStipple);
+                        graphicsPut(x, py0z0);
+                    }
+                }
+            }
+        }
 
-		if (IN_RANGE(0, XRESMINUSONE, px0z0)) {
-			vLine(px0z0, py0z0, py1z0, 0);
-		}
+        if (IN_RANGE(0, XRESMINUSONE, px0z0)) {
+            vLine(px0z0, py0z0, py1z0, 0);
+        }
 
-		if (IN_RANGE(0, XRESMINUSONE, px1z0)) {
-			vLine(px1z0, py0z0, py1z0, 0);
-		}
-	}
+        if (IN_RANGE(0, XRESMINUSONE, px1z0)) {
+            vLine(px1z0, py0z0, py1z0, 0);
+        }
+    }
 
-	return 1;
+    return 1;
 }
 
 
 uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
-	int8_t diff;
-	uint8_t pattern = (_pattern - 32) & 127;
-	uint8_t type;
+    int8_t diff;
+    uint8_t pattern = (_pattern - 32) & 127;
+    uint8_t type;
 
-	/* 127 = 01111111 - the first bit is used for indicating the presence of an object.
-	 * And since there are only 127 patterns anyway...
-	 * */
-	if (_pattern & 128) {
-		drawObjectAt(x0 - 1, y + 2);
-		return 1;
-	}
+    /* 127 = 01111111 - the first bit is used for indicating the presence of an object.
+     * And since there are only 127 patterns anyway...
+     * */
+    if (_pattern & 128) {
+        drawObjectAt(x0 - 1, y + 2);
+        return 1;
+    }
 
-	diff = patterns[0].ceiling - patterns[pattern].ceiling;
-	type = patterns[pattern].geometryType;
+    diff = patterns[0].ceiling - patterns[pattern].ceiling;
+    type = patterns[pattern].geometryType;
 
-	uint8_t mask = patterns[pattern].elementsMask;
+    uint8_t mask = patterns[pattern].elementsMask;
 
-	if (x0 == 2) {
-		mask = 255;
-	}
+    if (x0 == 2) {
+        mask = 255;
+    }
 
-	if (x1 == 2) {
-		mask = 127;
-	}
+    if (x1 == 2) {
+        mask = 127;
+    }
 
-	if (type == CUBE) {
-		return drawCubeAt(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2, x1 - x0,
-						  diff, 1, mask);
-	} else if (type == RIGHT_NEAR || type == LEFT_NEAR) {
+    if (type == CUBE) {
+        return drawCubeAt(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2, x1 - x0,
+                          diff, 1, mask);
+    } else if (type == RIGHT_NEAR || type == LEFT_NEAR) {
 
-		if (cameraRotation == 1 || cameraRotation == 3) {
+        if (cameraRotation == 1 || cameraRotation == 3) {
 
-			if (type == RIGHT_NEAR) {
-				type = LEFT_NEAR;
-			} else {
-				type = RIGHT_NEAR;
-			}
-		}
+            if (type == RIGHT_NEAR) {
+                type = LEFT_NEAR;
+            } else {
+                type = RIGHT_NEAR;
+            }
+        }
 
-		return drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2, x1 - x0,
-						 diff, 1, patterns[pattern].elementsMask, type);
+        return drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2, x1 - x0,
+                         diff, 1, patterns[pattern].elementsMask, type);
 
-	} else if (type == LEFT_WALL) {
+    } else if (type == LEFT_WALL) {
 
-		switch (cameraRotation) {
-			case 0:
-			case 2:
-				return drawWedge(x0 - (cameraRotation == 0 ? 1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-								 0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
-			case 1:
-			case 3:
-				return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT,
-								  y + (cameraRotation == 3 ? 1 : 0) + 2,
-								  x1 - x0, diff, mask);
-		}
-	} else if (type == BACK_WALL) {
-
-
-		switch (cameraRotation) {
-			case 0:
-			case 2:
-				return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT,
-								  y + (cameraRotation == 0 ? 1 : 0) + 2,
-								  x1 - x0, diff, mask);
-			case 1:
-			case 3:
-				return drawWedge(x0 - (cameraRotation == 1 ? 1 : 0),
-								 patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-								 0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
+        switch (cameraRotation) {
+            case 0:
+            case 2:
+                return drawWedge(x0 - (cameraRotation == 0 ? 1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                 0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
+            case 1:
+            case 3:
+                return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT,
+                                  y + (cameraRotation == 3 ? 1 : 0) + 2,
+                                  x1 - x0, diff, mask);
+        }
+    } else if (type == BACK_WALL) {
 
 
-		}
-	} else if (type == CORNER) {
-		int returnVal = 0;
+        switch (cameraRotation) {
+            case 0:
+            case 2:
+                return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT,
+                                  y + (cameraRotation == 0 ? 1 : 0) + 2,
+                                  x1 - x0, diff, mask);
+            case 1:
+            case 3:
+                return drawWedge(x0 - (cameraRotation == 1 ? 1 : 0),
+                                 patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                 0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
 
-		switch (cameraRotation) {
 
-			case 3:
-			case 0:
-				returnVal = drawWedge(x0 - (cameraRotation == 3 ? 0 : 1),
-									  patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-									  0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
+        }
+    } else if (type == CORNER) {
+        int returnVal = 0;
 
-				returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
-									   x1 - x0, diff, patterns[pattern].elementsMask) || returnVal;
-				break;
+        switch (cameraRotation) {
 
-			case 1:
-			case 2:
-				returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-									   x1 - x0, diff, patterns[pattern].elementsMask);
+            case 3:
+            case 0:
+                returnVal = drawWedge(x0 - (cameraRotation == 3 ? 0 : 1),
+                                      patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                      0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
 
-				returnVal =
-						drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-								  0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR) || returnVal;
+                returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
+                                       x1 - x0, diff, patterns[pattern].elementsMask) || returnVal;
+                break;
 
-				break;
-		}
+            case 1:
+            case 2:
+                returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                       x1 - x0, diff, patterns[pattern].elementsMask);
 
-		return returnVal;
-	}
+                returnVal =
+                        drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
+                                  0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR) || returnVal;
 
-	return 0;
+                break;
+        }
+
+        return returnVal;
+    }
+
+    return 0;
 }
 
 void repaintMapItems() {
-	struct ObjectNode *node;
+    struct ObjectNode *node;
 
-	/* ignore header node */
-	node = getRoom(playerLocation)->itemsPresent->next;
+    /* ignore header node */
+    node = getRoom(playerLocation)->itemsPresent->next;
 
-	//        drawObjectAt(x0 - 1, y + 2);
-	switch (cameraRotation) {
-		case 0:
-			//drawPattern(lastPattern, lastIndex - cameraX + 2, x - cameraX + 2, cameraZ - y);
-			while (node != NULL) {
-				struct Item *item = getItem(node->item);
-				drawObjectAt(item->position.x - cameraX + 2 - 1, cameraZ - item->position.y + 2);
-				node = node->next;
-			}
-			break;
+    //        drawObjectAt(x0 - 1, y + 2);
+    switch (cameraRotation) {
+        case 0:
+            //drawPattern(lastPattern, lastIndex - cameraX + 2, x - cameraX + 2, cameraZ - y);
+            while (node != NULL) {
+                struct Item *item = getItem(node->item);
+                drawObjectAt(item->position.x - cameraX + 2 - 1, cameraZ - item->position.y + 2);
+                node = node->next;
+            }
+            break;
 
-		case 1:
-			//drawPattern(lastPattern, (lastIndex - cameraZ) + 2 , (y - cameraZ) + 2, x - cameraX);
-			while (node != NULL) {
-				struct Item *item = getItem(node->item);
-				drawObjectAt((item->position.y - cameraZ) + 1, (item->position.x - cameraX) + 2);
-				node = node->next;
-			}
-			break;
+        case 1:
+            //drawPattern(lastPattern, (lastIndex - cameraZ) + 2 , (y - cameraZ) + 2, x - cameraX);
+            while (node != NULL) {
+                struct Item *item = getItem(node->item);
+                drawObjectAt((item->position.y - cameraZ) + 1, (item->position.x - cameraX) + 2);
+                node = node->next;
+            }
+            break;
 
-		case 2:
-			//drawPattern(lastPattern, -(x - cameraX) + 2, -(lastIndex - cameraX) + 2, y - cameraZ);
-			while (node != NULL) {
-				struct Item *item = getItem(node->item);
-				drawObjectAt(-(item->position.x - cameraX) + 1, (item->position.y - cameraZ) + 2);
-				node = node->next;
-			}
-			break;
+        case 2:
+            //drawPattern(lastPattern, -(x - cameraX) + 2, -(lastIndex - cameraX) + 2, y - cameraZ);
+            while (node != NULL) {
+                struct Item *item = getItem(node->item);
+                drawObjectAt(-(item->position.x - cameraX) + 1, (item->position.y - cameraZ) + 2);
+                node = node->next;
+            }
+            break;
 
-		case 3:
-			//        drawPattern(lastPattern, -(y - cameraZ) + 2, -(lastIndex - cameraZ)  + 2, cameraX - x);
-			while (node != NULL) {
-				struct Item *item = getItem(node->item);
-				drawObjectAt(-(item->position.y - cameraZ) + 1, (cameraX - item->position.x) + 2);
-				node = node->next;
-			}
-			break;
-	}
+        case 3:
+            //        drawPattern(lastPattern, -(y - cameraZ) + 2, -(lastIndex - cameraZ)  + 2, cameraX - x);
+            while (node != NULL) {
+                struct Item *item = getItem(node->item);
+                drawObjectAt(-(item->position.y - cameraZ) + 1, (cameraX - item->position.x) + 2);
+                node = node->next;
+            }
+            break;
+    }
 }
 
 /* all those refactors are due to a SDCC bug with very long functions */
 void renderScene() {
-	uint8_t x;
+    uint8_t x;
 
-	switch (cameraRotation) {
-		case DIRECTION_N:
-			renderCameraNorth();
-			break;
+    switch (cameraRotation) {
+        case DIRECTION_N:
+            renderCameraNorth();
+            break;
 
-		case DIRECTION_E:
-			renderCameraEast();
-			break;
+        case DIRECTION_E:
+            renderCameraEast();
+            break;
 
-		case DIRECTION_S:
-			renderCameraSouth();
-			break;
+        case DIRECTION_S:
+            renderCameraSouth();
+            break;
 
-		case DIRECTION_W:
-			renderCameraWest();
-			break;
-	}
+        case DIRECTION_W:
+            renderCameraWest();
+            break;
+    }
     return;
-	repaintMapItems();
+    repaintMapItems();
 }
 
 void renderCameraWest() {
-	int8_t x;
-	int8_t y;
+    int8_t x;
+    int8_t y;
 
-	for (x = 0; x < cameraX; ++x) {
-	  
-	  int8_t minZ = max(cameraZ - ((cameraX) - x), 0);
-	  int8_t maxZ = min(cameraZ + ((cameraX) - x), 31);	  
+    for (x = 0; x < cameraX; ++x) {
 
-	  for (y = minZ; y < cameraZ; ++y) {
-	    drawPattern(map[y][x], -(y - cameraZ) + 1, -(y - cameraZ) + 2, cameraX - x);
-	  }
+        int8_t minZ = max(cameraZ - ((cameraX) - x), 0);
+        int8_t maxZ = min(cameraZ + ((cameraX) - x), 31);
 
-	  for (y = maxZ; y >= cameraZ; --y) {
-	    drawPattern(map[y][x], -(y - cameraZ) + 1, -(y  - cameraZ) + 2, cameraX - x);
-	  }
-	}
+        for (y = minZ; y < cameraZ; ++y) {
+            drawPattern(map[y][x], -(y - cameraZ) + 1, -(y - cameraZ) + 2, cameraX - x);
+        }
+
+        for (y = maxZ; y >= cameraZ; --y) {
+            drawPattern(map[y][x], -(y - cameraZ) + 1, -(y - cameraZ) + 2, cameraX - x);
+        }
+    }
 }
 
 void
 renderCameraSouth() {
-	int8_t y;
-	int8_t x;
+    int8_t y;
+    int8_t x;
 
-	for (y = 31; y > cameraZ; --y) {
-	  
-	  int8_t maxX = min(cameraX + (y - cameraZ), 31);
-	  int8_t minX = max(cameraX - (y - cameraZ), 0);
-	  
-	  for (x = minX; x < cameraX - 1; ++x) {
-	    drawPattern(map[y][x], cameraX - x, cameraX - x + 1, y - cameraZ);
-	  }  
-	  
-	  
-	  for (x = maxX - 1; x >= cameraX - 1; --x) {
-	    drawPattern(map[y][x], cameraX - x, cameraX - x + 1, y - cameraZ);
-	  }
-	  
-	}
+    for (y = 31; y > cameraZ; --y) {
+
+        int8_t maxX = min(cameraX + (y - cameraZ), 31);
+        int8_t minX = max(cameraX - (y - cameraZ), 0);
+
+        for (x = minX; x < cameraX - 1; ++x) {
+            drawPattern(map[y][x], cameraX - x, cameraX - x + 1, y - cameraZ);
+        }
+
+
+        for (x = maxX - 1; x >= cameraX - 1; --x) {
+            drawPattern(map[y][x], cameraX - x, cameraX - x + 1, y - cameraZ);
+        }
+
+    }
 }
 
 void renderCameraEast() {
-	int8_t x;
+    int8_t x;
 
-	int8_t y;
+    int8_t y;
 
 
-	for (x = 31; x > cameraX; --x) {
+    for (x = 31; x > cameraX; --x) {
 
-	  int8_t maxZ = min(cameraZ + (x - cameraX), 31);
-	  int8_t minZ = max(cameraZ - (x - cameraX), 0);
-	  
-	  for (y = minZ; y < cameraZ; ++y) {
-	    drawPattern(map[y][x], (y - cameraZ) + 2, (y - cameraZ) + 3, x - cameraX);
-	  }
+        int8_t maxZ = min(cameraZ + (x - cameraX), 31);
+        int8_t minZ = max(cameraZ - (x - cameraX), 0);
 
-	  for (y = maxZ - 1; y >= cameraZ; --y) {
-	    drawPattern(map[y][x], (y - cameraZ) + 2, (y - cameraZ) + 3, x - cameraX);
-	  }
-	}
+        for (y = minZ; y < cameraZ; ++y) {
+            drawPattern(map[y][x], (y - cameraZ) + 2, (y - cameraZ) + 3, x - cameraX);
+        }
+
+        for (y = maxZ - 1; y >= cameraZ; --y) {
+            drawPattern(map[y][x], (y - cameraZ) + 2, (y - cameraZ) + 3, x - cameraX);
+        }
+    }
 }
 
 void renderCameraNorth() {
 
-	int8_t y;
-	int8_t x;
+    int8_t y;
+    int8_t x;
 
-	for (y = 0; y < cameraZ; ++y) {
-		int16_t maxX = min(cameraX + ((cameraZ) - y), 31);
-		int16_t minX = max(cameraX - ((cameraZ) - y), 0);
+    for (y = 0; y < cameraZ; ++y) {
+        int16_t maxX = min(cameraX + ((cameraZ) - y), 31);
+        int16_t minX = max(cameraX - ((cameraZ) - y), 0);
 
-		for (x = maxX; x > cameraX - 1; --x) {
-		  drawPattern(map[y][x], x - cameraX, x - cameraX + 1, cameraZ - y);
-		}
+        for (x = maxX; x > cameraX - 1; --x) {
+            drawPattern(map[y][x], x - cameraX, x - cameraX + 1, cameraZ - y);
+        }
 
-		for (x = minX; x <= cameraX + 1; ++x) {
-		  drawPattern(map[y][x], x - cameraX, x - cameraX + 1, cameraZ - y);
-		}
-	}
+        for (x = minX; x <= cameraX + 1; ++x) {
+            drawPattern(map[y][x], x - cameraX, x - cameraX + 1, cameraZ - y);
+        }
+    }
 }
 
 void pickItem() {
-	struct Room *room = getRoom(getPlayerRoom());
+    struct Room *room = getRoom(getPlayerRoom());
 
-	if (roomItem && roomItem->item) {
-		struct Item *itemToPick = getItem(roomItem->item);
-		if (itemToPick != NULL) {
+    if (roomItem && roomItem->item) {
+        struct Item *itemToPick = getItem(roomItem->item);
+        if (itemToPick != NULL) {
 
-			if (!strcmp(itemToPick->name, "digital-safe")) {
+            if (!strcmp(itemToPick->name, "digital-safe")) {
 
 #ifdef SUPPORTS_HACKING_MINIGAME
-				runHackingMinigame();
+                runHackingMinigame();
 #else
-				accessGrantedToSafe = TRUE;
+                accessGrantedToSafe = TRUE;
 #endif
-				return;
-			}
+                return;
+            }
 
-			if (itemToPick->pickable) {
+            if (itemToPick->pickable) {
 
-				uint8_t pattern = map[itemToPick->position.y][itemToPick->position.x];
-				map[itemToPick->position.y][itemToPick->position.x] = pattern;
+                uint8_t pattern = map[itemToPick->position.y][itemToPick->position.x];
+                map[itemToPick->position.y][itemToPick->position.x] = pattern;
 
-				pickObject(itemToPick);
-				focusedItem = roomItem;
-				roomItem = room->itemsPresent->next;
+                pickObject(itemToPick);
+                focusedItem = roomItem;
+                roomItem = room->itemsPresent->next;
 
-			} else {
-				useObjectNamed(itemToPick->name);
-			}
-		}
-	}
+            } else {
+                useObjectNamed(itemToPick->name);
+            }
+        }
+    }
 }
 
 void dropItem() {
 
-	struct Item *item = NULL;
+    struct Item *item = NULL;
 
-	if (focusedItem != NULL) {
-		item = getItem(focusedItem->item);
-	}
+    if (focusedItem != NULL) {
+        item = getItem(focusedItem->item);
+    }
 
-	if (item != NULL) {
-		uint8_t pattern;
-		struct WorldPosition *pos = getPlayerPosition();
+    if (item != NULL) {
+        uint8_t pattern;
+        struct WorldPosition *pos = getPlayerPosition();
 
-		dropObjectToRoom(getPlayerRoom(), item);
+        dropObjectToRoom(getPlayerRoom(), item);
 
-		focusedItem = getPlayerItems();
+        focusedItem = getPlayerItems();
 
-		roomItem = &objectNodes[item->index];
+        roomItem = &objectNodes[item->index];
 
-		switch (cameraRotation) {
-			case 0:
-				item->position.x = pos->x;
-				item->position.y = pos->y - 3;
-				break;
+        switch (cameraRotation) {
+            case 0:
+                item->position.x = pos->x;
+                item->position.y = pos->y - 3;
+                break;
 
-			case 1:
-				item->position.x = pos->x + 3;
-				item->position.y = pos->y;
-				break;
+            case 1:
+                item->position.x = pos->x + 3;
+                item->position.y = pos->y;
+                break;
 
-			case 2:
-				item->position.x = pos->x;
-				item->position.y = pos->y + 3;
-				break;
+            case 2:
+                item->position.x = pos->x;
+                item->position.y = pos->y + 3;
+                break;
 
-			case 3:
-				item->position.x = pos->x - 3;
-				item->position.y = pos->y;
-				break;
-		}
+            case 3:
+                item->position.x = pos->x - 3;
+                item->position.y = pos->y;
+                break;
+        }
 
 
-		pattern = map[item->position.y][item->position.x];
-		map[item->position.y][item->position.x] = pattern | 128;
-	}
+        pattern = map[item->position.y][item->position.x];
+        map[item->position.y][item->position.x] = pattern | 128;
+    }
 }
 
 void nextItemInRoom() {
-	struct Room *room = getRoom(getPlayerRoom());
+    struct Room *room = getRoom(getPlayerRoom());
 
-	if (roomItem == NULL) {
-		return;
-	}
+    if (roomItem == NULL) {
+        return;
+    }
 
-	roomItem = roomItem->next;
+    roomItem = roomItem->next;
 
-	if (!roomItem) {
-		roomItem = room->itemsPresent;
-	}
+    if (!roomItem) {
+        roomItem = room->itemsPresent;
+    }
 
-	if (roomItem->item == 0) {
-		roomItem = roomItem->next;
-	}
+    if (roomItem->item == 0) {
+        roomItem = roomItem->next;
+    }
 }
 
 void interactWithItemInRoom() {
-	struct Item *item = NULL;
-	struct Item *itemToPick = NULL;
+    struct Item *item = NULL;
+    struct Item *itemToPick = NULL;
 
-	if (roomItem != NULL) {
-		itemToPick = getItem(roomItem->item);
-		if (itemToPick != NULL) {
-			if (focusedItem != NULL) {
-				item = getItem(focusedItem->item);
-				if (item != NULL) {
-					item->useWithCallback(item, itemToPick);
-				}
-			}
-		}
-	}
+    if (roomItem != NULL) {
+        itemToPick = getItem(roomItem->item);
+        if (itemToPick != NULL) {
+            if (focusedItem != NULL) {
+                item = getItem(focusedItem->item);
+                if (item != NULL) {
+                    item->useWithCallback(item, itemToPick);
+                }
+            }
+        }
+    }
 }
 
 void useItemInHand() {
-	useObjectNamed(getItem(focusedItem->item)->name);
+    useObjectNamed(getItem(focusedItem->item)->name);
 }
 
 void nextItemInHand() {
-	focusedItem = focusedItem->next;
+    focusedItem = focusedItem->next;
 
-	if (!focusedItem) {
-		focusedItem = getPlayerItems();
-	}
+    if (!focusedItem) {
+        focusedItem = getPlayerItems();
+    }
 }
 
 void updateMapItems();
 
 void initMap() {
-	int x, y;
-	const uint8_t *head;
+    int x, y;
+    const uint8_t *head;
     char buffer[32];
-	uint8_t current;
+    uint8_t current;
 
-	/* first item in the list is always a dummy */
-	roomItem = getRoom(playerLocation)->itemsPresent->next;
+    /* first item in the list is always a dummy */
+    roomItem = getRoom(playerLocation)->itemsPresent->next;
 
     sprintf(&buffer[0], "%02d.txt", getPlayerRoom());
 
     struct StaticBuffer datafile = loadBinaryFileFromPath(&buffer[0]);
     head = datafile.data;
 
-	for (y = 0; y < 32; ++y) {
-		for (x = 0; x < 32; ++x) {
+    for (y = 0; y < 32; ++y) {
+        for (x = 0; x < 32; ++x) {
 
-			current = *head;
+            current = *head;
 
 
-			if ((current == 's' && enteredFrom == 0) ||
-				(current == 'w' && enteredFrom == 1) ||
-				(current == 'n' && enteredFrom == 2) ||
-				(current == 'e' && enteredFrom == 3)) {
+            if ((current == 's' && enteredFrom == 0) ||
+                (current == 'w' && enteredFrom == 1) ||
+                (current == 'n' && enteredFrom == 2) ||
+                (current == 'e' && enteredFrom == 3)) {
 
-				struct WorldPosition newPos;
-				cameraX = x;
-				cameraZ = y;
-				newPos.x = x;
-				newPos.y = y;
-				setPlayerPosition(&newPos);
-				enteredFrom = 0xFF;
-				current = '.';
-			}
+                struct WorldPosition newPos;
+                cameraX = x;
+                cameraZ = y;
+                newPos.x = x;
+                newPos.y = y;
+                setPlayerPosition(&newPos);
+                enteredFrom = 0xFF;
+                current = '.';
+            }
 
-			map[y][x] = current;
+            map[y][x] = current;
             printf("%c", current);
-			++head;
-		}
+            ++head;
+        }
         puts("");
-		++head; // line break
-	}
+        ++head; // line break
+    }
 
     disposeDiskBuffer(datafile);
-	//updateMapItems();
+    //updateMapItems();
     HUD_initialPaint();
 }
 
 void startRoomTransitionAnimation() {
 
-	for (uint8_t y = 32; y >= 2; --y) {
-		clearGraphics();
-		vLine(y, y, 95 + (32 - y), 1);
-		vLine(95 + (32 - y), y, 95 + (32 - y), 1);
+    for (uint8_t y = 32; y >= 2; --y) {
+        clearGraphics();
+        vLine(y, y, 95 + (32 - y), 1);
+        vLine(95 + (32 - y), y, 95 + (32 - y), 1);
 
-		for (uint8_t x = y; x < (95 + (32 - y)); ++x) {
-			graphicsPut(x, y);
-			graphicsPut(x, 95 + (32 - y));
+        for (uint8_t x = y; x < (95 + (32 - y)); ++x) {
+            graphicsPut(x, y);
+            graphicsPut(x, 95 + (32 - y));
 
-			//door opening
-			vLine(x, y, 95 - 3 * (32 - y), 7);
-		}
+            //door opening
+            vLine(x, y, 95 - 3 * (32 - y), 7);
+        }
 
 
-		graphicsFlush();
-		sleepForMS(20000);
-	}
+        graphicsFlush();
+        sleepForMS(20000);
+    }
 }
 
 void updateMapItems() {
-	struct ObjectNode *node;
+    struct ObjectNode *node;
 
-	/* ignore header node */
-	node = getRoom(playerLocation)->itemsPresent->next;
+    /* ignore header node */
+    node = getRoom(playerLocation)->itemsPresent->next;
 
-	while (node != NULL) {
-		struct Item *item = getItem(node->item);
-		uint8_t pattern = map[item->position.y][item->position.x];
-		map[item->position.y][item->position.x] = pattern;
-		node = node->next;
-	}
+    while (node != NULL) {
+        struct Item *item = getItem(node->item);
+        uint8_t pattern = map[item->position.y][item->position.x];
+        map[item->position.y][item->position.x] = pattern;
+        node = node->next;
+    }
 
 }
 
 void tickRenderer() {
-	uint8_t prevX;
-	uint8_t prevZ;
-	struct WorldPosition *pos;
-	int previousLocation = playerLocation;
-	uint8_t newCell = 0;
+    uint8_t prevX;
+    uint8_t prevZ;
+    struct WorldPosition *pos;
+    int previousLocation = playerLocation;
+    uint8_t newCell = 0;
 
-	clearGraphics();
-	renderScene();
+    clearGraphics();
+    renderScene();
 
-	graphicsFlush();
+    graphicsFlush();
 
-	prevX = cameraX;
-	prevZ = cameraZ;
+    prevX = cameraX;
+    prevZ = cameraZ;
 
-	waitkey:
-	switch (getKey()) {
+    waitkey:
+    switch (getKey()) {
 
-		case 'l':
-			shutdownGraphics();
-			exit(0);
-		case 'q':
-			turnLeft();
-			break;
+        case 'l':
+            shutdownGraphics();
+            exit(0);
+        case 'q':
+            turnLeft();
+            break;
 
-		case 'e':
-			turnRight();
-			break;
+        case 'e':
+            turnRight();
+            break;
 
-		case 'a':
-			walkBy(3);
-			break;
-		case 'd':
-			walkBy(1);
-			break;
-		case 's':
-			walkBy(2);
-			break;
-		case 'w':
-			walkBy(0);
-			break;
+        case 'a':
+            walkBy(3);
+            break;
+        case 'd':
+            walkBy(1);
+            break;
+        case 's':
+            walkBy(2);
+            break;
+        case 'w':
+            walkBy(0);
+            break;
 
-		case '7':
-			nextItemInHand();
-			HUD_refresh();
-			break;
+        case '7':
+            nextItemInHand();
+            HUD_refresh();
+            break;
 
-		case '4':
-			nextItemInRoom();
-			HUD_refresh();
-			break;
+        case '4':
+            nextItemInRoom();
+            HUD_refresh();
+            break;
 
-		case '8':
-			useItemInHand();
-			updateMapItems();
-			HUD_refresh();
-			break;
+        case '8':
+            useItemInHand();
+            updateMapItems();
+            HUD_refresh();
+            break;
 
-		case '5':
-			interactWithItemInRoom();
-			updateMapItems();
-			HUD_refresh();
-			break;
+        case '5':
+            interactWithItemInRoom();
+            updateMapItems();
+            HUD_refresh();
+            break;
 
-		case '9':
-			pickItem();
-			HUD_refresh();
-			break;
+        case '9':
+            pickItem();
+            HUD_refresh();
+            break;
 
-		case '6':
-			dropItem();
-			HUD_refresh();
-			break;
+        case '6':
+            dropItem();
+            HUD_refresh();
+            break;
 
 #if !defined(SDLSW)
-			case 'p':
-			default:
-				goto waitkey;
+            case 'p':
+            default:
+                goto waitkey;
 #endif
-	}
+    }
 
-	cameraRotation = getPlayerDirection();
-	pos = getPlayerPosition();
+    cameraRotation = getPlayerDirection();
+    pos = getPlayerPosition();
 
-	cameraX = pos->x;
-	cameraZ = pos->y;
+    cameraX = pos->x;
+    cameraZ = pos->y;
 
-	switch (cameraRotation) {
-		case 0:
-			newCell = map[cameraZ - 2][cameraX];
-			break;
-		case 1:
-			newCell = map[cameraZ][cameraX + 2];
-			break;
-		case 2:
-			newCell = map[cameraZ + 2][cameraX];
-			break;
-		case 3:
-			newCell = map[cameraZ][cameraX - 2];
-			break;
-	}
+    switch (cameraRotation) {
+        case 0:
+            newCell = map[cameraZ - 2][cameraX];
+            break;
+        case 1:
+            newCell = map[cameraZ][cameraX + 2];
+            break;
+        case 2:
+            newCell = map[cameraZ + 2][cameraX];
+            break;
+        case 3:
+            newCell = map[cameraZ][cameraX - 2];
+            break;
+    }
 
-	if (patterns[newCell - 32].blockMovement) {
-		pos->x = cameraX = prevX;
-		pos->y = cameraZ = prevZ;
-		setPlayerPosition(pos);
-	}
+    if (patterns[newCell - 32].blockMovement) {
+        pos->x = cameraX = prevX;
+        pos->y = cameraZ = prevZ;
+        setPlayerPosition(pos);
+    }
 
-	/* unlike MX, we are signaling from the origin into the new room. MX allows for the movement and then searches where
-	 * did the player came from - hence the "opposite direction" there */
+    /* unlike MX, we are signaling from the origin into the new room. MX allows for the movement and then searches where
+     * did the player came from - hence the "opposite direction" there */
 
-	if (newCell > ('0' - 1) && newCell < ('3' + 1)) {
-		enteredFrom = newCell - '0';
-		moveBy(enteredFrom);
-	}
+    if (newCell > ('0' - 1) && newCell < ('3' + 1)) {
+        enteredFrom = newCell - '0';
+        moveBy(enteredFrom);
+    }
 
-	if (playerLocation != previousLocation) {
-		initMap();
+    if (playerLocation != previousLocation) {
+        initMap();
 
-		if (newCell == '.') {
-			newCell = '0';
-		} else {
-			startRoomTransitionAnimation();
-		}
+        if (newCell == '.') {
+            newCell = '0';
+        } else {
+            startRoomTransitionAnimation();
+        }
 
-		setPlayerDirection(cameraRotation = (newCell - '0'));
-	} else {
-		enteredFrom = 0xFF;
-	}
+        setPlayerDirection(cameraRotation = (newCell - '0'));
+    } else {
+        enteredFrom = 0xFF;
+    }
 }
 
 
 void onError(const char *mesg) {
-	puts(mesg);
+    puts(mesg);
 }
 
 void logDelegate(const char *mesg) {
-	showMessage(mesg);
+    showMessage(mesg);
 }
 
 
 int main(int argc, char **argv) {
 
-	for (int c = 0; c < 32; ++c) {
-		map[c] = (uint8_t *) malloc(32);
-	}
+    for (int c = 0; c < 32; ++c) {
+        map[c] = (uint8_t *) malloc(32);
+    }
 
-	running = 1;
-	enteredFrom = 0;
-	cameraRotation = 0;
+    running = 1;
+    enteredFrom = 0;
+    cameraRotation = 0;
     initFileReader("base.pfs");
-	init();
-	initStation();
-	titleScreen();
+    init();
+    initStation();
+    titleScreen();
 
-	focusedItem = getPlayerItems();
-	setErrorHandlerCallback(onError);
-	setLoggerDelegate(logDelegate);
-	initMap();
+    focusedItem = getPlayerItems();
+    setErrorHandlerCallback(onError);
+    setLoggerDelegate(logDelegate);
+    initMap();
 
-	do {
-		tickRenderer();
-	} while (running);
+    do {
+        tickRenderer();
+    } while (running);
 
-	shutdownGraphics();
+    shutdownGraphics();
 
-	return 0;
+    return 0;
 }

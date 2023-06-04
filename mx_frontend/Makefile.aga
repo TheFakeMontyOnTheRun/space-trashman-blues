@@ -47,9 +47,9 @@ $(MENU_TARGET):	$(MENU_OBJ)
 all:   $(MENU_TARGET)
 
 adf: $(MENU_TARGET)
-	rm -f mistal.adf
-	xdftool mistral.adf format "The Mistral Report" + write game12k game12k + write base.pfs base.pfs
-	xdftool mistral.adf list
+	rm -f Derelict3D_aga.adf
+	xdftool Derelict3D_aga.adf format "Sub Mare Imperium - Derelict" + write gameaga gameaga + write base.pfs base.pfs
+	xdftool Derelict3D_aga.adf list
 
 clean:
 	rm -f menu/src/*.o
