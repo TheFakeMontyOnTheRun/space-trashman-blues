@@ -2,23 +2,28 @@
 #include "AmigaInt.h"
 #endif
 
+#include <stddef.h>
+
+#ifndef SMD
+#include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#else
+#include <genesis.h>
+#endif
 
 #include "Core.h"
 #include "Derelict.h"
 #include "Engine3D.h"
 #include "map.h"
-#include "Common.h"
-#include "PackedFileReader.h"
 
 #ifdef SUPPORTS_HACKING_MINIGAME
-
 #include "HackingMinigame.h"
-
 #endif
+
+#include "Common.h"
+#include "PackedFileReader.h"
 
 enum DIRECTION {
     DIRECTION_N,
@@ -1125,10 +1130,8 @@ void initMap() {
             }
 
             map[y][x] = current;
-            printf("%c", current);
             ++head;
         }
-        puts("");
         ++head; // line break
     }
 
@@ -1190,10 +1193,11 @@ void tickRenderer() {
 
     waitkey:
     switch (getKey()) {
-
+#ifndef SMD
         case 'l':
             shutdownGraphics();
             exit(0);
+#endif
         case 'q':
             turnLeft();
             break;

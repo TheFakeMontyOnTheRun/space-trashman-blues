@@ -16,6 +16,7 @@ data:	$(PACKAGER) $(CRUNCHER)
 	rm -f ./base.pfs
 	ls -r src/*.obj  | xargs java -jar wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
 	ls -r assets/*.*  | xargs ./packer
+	bin2c ../base.pfs ../Engine3D/basepfs.h basepfs
 	mv ./data.pfs ../base.pfs
 
 images:
