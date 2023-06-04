@@ -1,3 +1,6 @@
+#ifdef AMIGA
+#include "AmigaInt.h"
+#endif
 
 #include <stdint.h>
 #include <stdio.h>
@@ -95,6 +98,7 @@ const struct Projection projections[31] =
 				{58, 67,  -4},    //	31
 		};
 
+#ifdef LEAN_BUILD
 int16_t max(int16_t x1, int16_t x2) {
 	return x1 > x2 ? x1 : x2;
 }
@@ -102,6 +106,7 @@ int16_t max(int16_t x1, int16_t x2) {
 int16_t min(int16_t x1, int16_t x2) {
 	return x1 < x2 ? x1 : x2;
 }
+#endif
 
 uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask, uint8_t type) {
 
@@ -871,7 +876,7 @@ void renderScene() {
 			renderCameraWest();
 			break;
 	}
-
+    return;
 	repaintMapItems();
 }
 
@@ -976,7 +981,7 @@ void pickItem() {
 			if (itemToPick->pickable) {
 
 				uint8_t pattern = map[itemToPick->position.y][itemToPick->position.x];
-				map[itemToPick->position.y][itemToPick->position.x] = pattern & 127;
+				map[itemToPick->position.y][itemToPick->position.x] = pattern;
 
 				pickObject(itemToPick);
 				focusedItem = roomItem;
@@ -1087,14 +1092,16 @@ void updateMapItems();
 void initMap() {
 	int x, y;
 	const uint8_t *head;
+    char buffer[32];
 	uint8_t current;
 
 	/* first item in the list is always a dummy */
 	roomItem = getRoom(playerLocation)->itemsPresent->next;
 
+    sprintf(&buffer[0], "%02d.txt", getPlayerRoom());
 
-	struct StaticBuffer datafile = loadBinaryFileFromPath(playerLocation);
-	head = datafile.data;
+    struct StaticBuffer datafile = loadBinaryFileFromPath(&buffer[0]);
+    head = datafile.data;
 
 	for (y = 0; y < 32; ++y) {
 		for (x = 0; x < 32; ++x) {
@@ -1118,14 +1125,16 @@ void initMap() {
 			}
 
 			map[y][x] = current;
+            printf("%c", current);
 			++head;
 		}
+        puts("");
 		++head; // line break
 	}
 
     disposeDiskBuffer(datafile);
-	updateMapItems();
-	HUD_initialPaint();
+	//updateMapItems();
+    HUD_initialPaint();
 }
 
 void startRoomTransitionAnimation() {
@@ -1158,7 +1167,7 @@ void updateMapItems() {
 	while (node != NULL) {
 		struct Item *item = getItem(node->item);
 		uint8_t pattern = map[item->position.y][item->position.x];
-		map[item->position.y][item->position.x] = pattern | 128;
+		map[item->position.y][item->position.x] = pattern;
 		node = node->next;
 	}
 
@@ -1266,8 +1275,6 @@ void tickRenderer() {
 			break;
 	}
 
-	newCell = newCell & 127;
-
 	if (patterns[newCell - 32].blockMovement) {
 		pos->x = cameraX = prevX;
 		pos->y = cameraZ = prevZ;
@@ -1316,6 +1323,7 @@ int main(int argc, char **argv) {
 	running = 1;
 	enteredFrom = 0;
 	cameraRotation = 0;
+    initFileReader("base.pfs");
 	init();
 	initStation();
 	titleScreen();
