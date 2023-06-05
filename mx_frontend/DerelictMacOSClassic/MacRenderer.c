@@ -481,4 +481,5 @@ void graphicsInit()
 	SetWRefCon( mainWindowPtr, (long)offscreenBuffer);
 	SetPortWindowPort(mainWindowPtr);
 	SelectWindow(mainWindowPtr);
+    enableSmoothMovement = TRUE;
 }
