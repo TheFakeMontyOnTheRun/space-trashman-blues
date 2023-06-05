@@ -19,8 +19,6 @@ struct Vec2i {
 
 void initVec2i(struct Vec2i *  vec, int8_t x, int8_t y);
 
-void initVec3(struct Vec3 *  vec, FixP_t x, FixP_t y, FixP_t z);
-
 void addToVec3(struct Vec3 *  to, FixP_t x, FixP_t y, FixP_t z);
 
 #endif

@@ -193,7 +193,7 @@ void drawBillboardAt(const struct Vec3 center,
 
 	initVec3(&scaledCenter, center.mX, (center.mY), center.mZ);
 
-        scaled = Mul(scale, BIAS);
+    scaled = Mul(scale, BIAS);
 	textureScale = (fixToInt(scaled) * REVERSE_BIAS);
 	geometryScale = textureScale;
 
