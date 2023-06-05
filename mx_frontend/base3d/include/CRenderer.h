@@ -32,7 +32,6 @@ struct Projection {
 extern struct MapWithCharKey occluders;
 extern struct MapWithCharKey enemySightBlockers;
 extern struct MapWithCharKey colliders;
-extern int useDither;
 extern int visibilityCached;
 extern int needsToRedrawVisibleMeshes;
 extern struct Bitmap *defaultFont;
@@ -121,6 +120,8 @@ void initHW(void);
 void clear(void);
 
 void shutdownHW(void);
+
+void initZMap(void);
 
 void loadMesh(struct Mesh* mesh, char* filename );
 

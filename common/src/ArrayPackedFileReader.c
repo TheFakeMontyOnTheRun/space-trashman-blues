@@ -7,6 +7,7 @@
 
 #ifndef SMD
 #include <assert.h>
+#include <string.h>
 #else
 #define assert(x) x
 #define exit(x) /* x */

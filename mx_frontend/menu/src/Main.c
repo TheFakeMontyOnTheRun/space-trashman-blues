@@ -92,6 +92,7 @@ void initHW(void) {
 #else
     initFileReader("base.pfs");
 #endif
+    initZMap();
     graphicsInit();
 }
 

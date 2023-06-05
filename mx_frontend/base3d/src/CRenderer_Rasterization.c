@@ -51,7 +51,6 @@ void maskWall(
         FixP_t x1y0,
         FixP_t x1y1) {
 
-    const FixP_t zero = 0;
     int32_t x;
     int32_t limit;
     FixP_t upperY0;
@@ -129,7 +128,7 @@ void maskWall(
             return;
         }
 
-        if (ix >= 0 && ix < XRES) {
+        if (ix >= 0) {
 
             const FixP_t diffY = (y1 - y0);
             int32_t iY0;
@@ -137,7 +136,7 @@ void maskWall(
             uint8_t *destinationLine;
             int32_t iy;
 
-            if (diffY == zero) {
+            if (diffY == 0) {
                 continue;
             }
 
@@ -187,7 +186,6 @@ void drawWall(FixP_t x0,
               const uint8_t *__restrict__ texture,
               const FixP_t textureScaleY,
               const int z) {
-    const FixP_t zero = 0;
     int32_t x;
     int32_t limit;
     FixP_t upperY0;
@@ -275,7 +273,7 @@ void drawWall(FixP_t x0,
             return;
         }
 
-        if (ix >= 0 && ix < XRES) {
+        if (ix >= 0) {
 
             const FixP_t diffY = (y1 - y0);
             FixP_t v = 0;
@@ -288,7 +286,7 @@ void drawWall(FixP_t x0,
             FixP_t dv;
             int32_t iy;
 
-            if (diffY == zero) {
+            if (diffY == 0) {
                 continue;
             }
 
@@ -304,7 +302,7 @@ void drawWall(FixP_t x0,
                     continue;
                 }
 
-                if (iy < YRES && iy >= 0) {
+                if (iy >= 0) {
                     const int32_t iv = fixToInt(v);
                     int stipple = !((ix + iy) & 1);
 
@@ -449,11 +447,11 @@ void drawFrontWall(FixP_t x0,
 
     for (; iy < limit; ++iy) {
 
-        if (iy >= XRES) {
+        if (iy >= YRES) {
             return;
         }
 
-        if (iy < YRES && iy >= 0) {
+        if (iy >= 0) {
             FixP_t u = 0;
             const uint8_t iv = fixToInt(v) & (NATIVE_TEXTURE_SIZE - 1);
             const uint8_t *sourceLineStart = data + (iv * NATIVE_TEXTURE_SIZE);
@@ -484,7 +482,7 @@ void drawFrontWall(FixP_t x0,
                     continue;
                 }
 
-                if (ix < XRES && ix >= 0) {
+                if (ix >= 0) {
                     int stipple = ((ix + iy) & 1);
                     const uint8_t iu = fixToInt(u) & (NATIVE_TEXTURE_SIZE - 1);
                     /*
@@ -535,7 +533,6 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
     FixP_t dY;
     FixP_t leftDxDy;
     FixP_t rightDxDy;
-    const FixP_t zero = 0;
     FixP_t x0;
     FixP_t x1;
     uint8_t *bufferData = &framebuffer[0];
@@ -599,13 +596,13 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
             return;
         }
 
-        if (iy < YRES && iy >= 0) {
+        if (iy >= 0) {
 
             int32_t iX0;
             int32_t iX1;
             const FixP_t diffX = (x1 - x0);
 
-            if (diffX == zero) {
+            if (diffX == 0) {
                 continue;
             }
 
@@ -666,7 +663,6 @@ void drawFloor(FixP_t y0,
     FixP_t dY;
     FixP_t leftDxDy;
     FixP_t rightDxDy;
-    const FixP_t zero = 0;
     FixP_t x0;
     FixP_t x1;
     uint8_t pixel;
@@ -733,7 +729,7 @@ void drawFloor(FixP_t y0,
             return;
         }
 
-        if (iy < YRES && iy >= 0) {
+        if (iy >= 0) {
             int32_t iX0;
             int32_t iX1;
             int32_t ix;
@@ -744,7 +740,7 @@ void drawFloor(FixP_t y0,
             FixP_t u = 0;
             int stipple;
             
-            if (diffX == zero) {
+            if (diffX == 0) {
                 continue;
             }
 
@@ -764,7 +760,7 @@ void drawFloor(FixP_t y0,
                     continue;
                 }
 
-                if (ix >= 0 && ix < XRES) {
+                if (ix >= 0) {
                     const int32_t iu = fixToInt(u);
                     stipple = !stipple;
                     /*
@@ -978,7 +974,6 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
     FixP_t fDU2;
     FixP_t fDV1;
     FixP_t fDV2;
-    FixP_t one = intToFix(1);
 
     int yFinal = coords[5]; //not the lowest, neither the topmost
 
@@ -1028,11 +1023,11 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
     fDU2 = Div((u1 - u0), effectiveDelta);
     fDV2 = Div((v1 - v0), effectiveDelta);
 #else
-    effectiveDelta = Div(one, intToFix((coords[5]) - y));
+    effectiveDelta = Div(intToFix(1), intToFix((coords[5]) - y));
     fDU1 = Mul((u2 - u0), effectiveDelta);
     fDV1 = Mul((v2 - v0), effectiveDelta);
 
-    effectiveDelta = Div(one, intToFix((coords[3]) - y));
+    effectiveDelta = Div(intToFix(1), intToFix((coords[3]) - y));
     fDU2 = Mul((u1 - u0), effectiveDelta);
     fDV2 = Mul((v1 - v0), effectiveDelta);
 #endif
@@ -1073,7 +1068,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
 
         if (limit) {
 	        uint8_t *destination;
-            oneOverLimit = Div(one, intToFix(limit));
+            oneOverLimit = Div(intToFix(1), intToFix(limit));
 
             destination = &framebuffer[(XRES_FRAMEBUFFER * y) + iFX0];
 
@@ -1123,7 +1118,6 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     FixP_t fDV2;
 
     int yFinal = coords[3]; //not the upper, not the lowest
-    FixP_t one = intToFix(1);
     FixP_t x0 = intToFix(coords[0]);
     FixP_t y0 = intToFix(coords[1]);
     FixP_t x1 = intToFix(coords[2]);
@@ -1171,11 +1165,11 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     fDU2 = Div((u2 - u0), effectiveDelta);
     fDV2 = Div((v2 - v0), effectiveDelta);
 #else
-    effectiveDelta = Div(one, intToFix(y - (coords[3])));
+    effectiveDelta = Div(intToFix(1), intToFix(y - (coords[3])));
     fDU1 = Mul((u1 - u0), effectiveDelta);
     fDV1 = Mul((v1 - v0), effectiveDelta);
 
-    effectiveDelta = Div(one, intToFix(y - (coords[5])));
+    effectiveDelta = Div(intToFix(1), intToFix(y - (coords[5])));
     fDU2 = Mul((u2 - u0), effectiveDelta);
     fDV2 = Mul((v2 - v0), effectiveDelta);
 #endif
@@ -1215,7 +1209,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
 
         if (limit) {
 	        uint8_t *destination;
-            oneOverLimit = Div(one, intToFix(limit));
+            oneOverLimit = Div(intToFix(1), intToFix(limit));
 
             destination = &framebuffer[(XRES_FRAMEBUFFER * y) + iFX0];
 
