@@ -25,7 +25,7 @@
 
 #define PAGE_FLIP_INCREMENT 32
 #define FIXP_NATIVE_TEXTURE_SIZE  (intToFix(NATIVE_TEXTURE_SIZE))
-
+#define FIXP_YRES intToFix(YRES)
 char mTurnBuffer;
 
 uint16_t clippingY1 = YRES_FRAMEBUFFER;
@@ -122,42 +122,47 @@ void maskWall(
   */
     ix = x;
 
+    if (ix < 0 ) {
+        FixP_t diff = intToFix(-ix);
+        y0 += Mul(diff, upperDyDx);
+        y1 += Mul(diff, lowerDyDx);
+        ix = 0;
+    }
+
     for (; ix < limit; ++ix) {
+
+        const FixP_t diffY = (y1 - y0);
+        int32_t iY0;
+        int32_t iY1 = fixToInt(y1);
+        uint8_t *destinationLine;
+        int32_t iy;
 
         if (ix >= XRES) {
             return;
         }
 
-        if (ix >= 0) {
-
-            const FixP_t diffY = (y1 - y0);
-            int32_t iY0;
-            int32_t iY1 = fixToInt(y1);
-            uint8_t *destinationLine;
-            int32_t iy;
-
-            if (diffY == 0) {
-                continue;
-            }
-
-            if (y0 < 0) {
-                iY0 = 0;
-            } else {
-                iY0 = fixToInt(y0);
-            }
-
-            if (iY1 >= YRES) {
-                iY1 = YRES;
-                continue;
-            }
-
-            destinationLine = bufferData + (XRES_FRAMEBUFFER * iY0) + ix;
-
-            for (iy = iY0; iy < iY1; ++iy) {
-                *(destinationLine) = 0;
-                destinationLine += (XRES_FRAMEBUFFER);
-            }
+        if (diffY == 0) {
+            continue;
         }
+
+        if (y0 < 0) {
+            iY0 = 0;
+        } else {
+            iY0 = fixToInt(y0);
+        }
+
+        if (iY1 >= YRES) {
+            iY1 = YRES;
+            continue;
+        }
+
+        destinationLine = bufferData + (XRES_FRAMEBUFFER * iY0) + ix;
+
+        for (iy = iY0; iy < iY1; ++iy) {
+            *(destinationLine) = 0;
+            destinationLine += (XRES_FRAMEBUFFER);
+        }
+
         y0 += upperDyDx;
         y1 += lowerDyDx;
     }
@@ -267,60 +272,76 @@ void drawWall(FixP_t x0,
     du = Div(FIXP_NATIVE_TEXTURE_SIZE, dX);
     ix = x;
 
+    if (ix < 0 ) {
+        FixP_t diff = intToFix((-ix));
+        y0 += Mul( diff, upperDyDx);
+        y1 += Mul( diff, lowerDyDx);
+        u += Mul( diff, du);
+        ix = 0;
+    }
+
     for (; ix < limit; ++ix) {
+
+        const FixP_t diffY = (y1 - y0);
+        FixP_t v = 0;
+        int32_t iu = fixToInt(u);
+        int32_t iY0 = fixToInt(y0);
+        int32_t iY1 = fixToInt(y1);
+        const uint8_t *sourceLineStart = data + (iu * NATIVE_TEXTURE_SIZE);
+        const uint8_t *lineOffset = sourceLineStart;
+        uint8_t *destinationLine = bufferData + (XRES_FRAMEBUFFER * iY0) + ix;
+        FixP_t dv;
+        int32_t iy;
+        int stipple;
 
         if (ix >= XRES ) {
             return;
         }
 
-        if (ix >= 0) {
-
-            const FixP_t diffY = (y1 - y0);
-            FixP_t v = 0;
-            int32_t iu = fixToInt(u);
-            int32_t iY0 = fixToInt(y0);
-            int32_t iY1 = fixToInt(y1);
-            const uint8_t *sourceLineStart = data + (iu * NATIVE_TEXTURE_SIZE);
-            const uint8_t *lineOffset = sourceLineStart;
-            uint8_t *destinationLine = bufferData + (XRES_FRAMEBUFFER * iY0) + ix;
-            FixP_t dv;
-            int32_t iy;
-
-            if (diffY == 0) {
-                continue;
-            }
-
-            dv = Div(Mul(FIXP_NATIVE_TEXTURE_SIZE, textureScaleY), diffY);
-
-            lastV = 0;
-            pixel = *(lineOffset);
-
-            for (iy = iY0; iy < iY1; ++iy) {
-
-                if (iy >= YRES ) {
-                    iy = iY1;
-                    continue;
-                }
-
-                if (iy >= 0) {
-                    const int32_t iv = fixToInt(v);
-                    int stipple = !((ix + iy) & 1);
-
-                    if (iv != lastV && !(stipple && farForStipple)) {
-
-                        pixel = *(lineOffset);
-                        lineOffset = ((iv & (NATIVE_TEXTURE_SIZE - 1)) + sourceLineStart);
-                        lastV = iv;
-                    }
-
-                    if (pixel != TRANSPARENCY_COLOR) {
-                        *(destinationLine) = (farForStipple && stipple) ? 0 : pixel;
-                    }
-                }
-                destinationLine += (XRES_FRAMEBUFFER);
-                v += dv;
-            }
+        if (diffY == 0) {
+            continue;
         }
+
+        dv = Div(Mul(FIXP_NATIVE_TEXTURE_SIZE, textureScaleY), diffY);
+
+        lastV = 0;
+        pixel = *(lineOffset);
+        iy = iY0;
+
+        if (iY1 >= YRES) {
+            iY1 = YRES;
+        }
+
+        if (iy < 0 ) {
+            FixP_t diff = intToFix((-iy));
+            v += Mul( diff, dv);
+            destinationLine += -iy * (XRES_FRAMEBUFFER);
+            iy = 0;
+        }
+
+        stipple = !((ix + iy) & 1);
+
+        for (; iy < iY1; ++iy) {
+
+            const int32_t iv = fixToInt(v);
+
+            stipple = !stipple;
+
+            if (iv != lastV && !(stipple && farForStipple)) {
+
+                pixel = *(lineOffset);
+                lineOffset = ((iv & (NATIVE_TEXTURE_SIZE - 1)) + sourceLineStart);
+                lastV = iv;
+            }
+
+            if (pixel != TRANSPARENCY_COLOR) {
+                *(destinationLine) = (farForStipple && stipple) ? 0 : pixel;
+            }
+
+            destinationLine += (XRES_FRAMEBUFFER);
+            v += dv;
+        }
+
         y0 += upperDyDx;
         y1 += lowerDyDx;
         u += du;
@@ -445,67 +466,80 @@ void drawFrontWall(FixP_t x0,
 
     du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
 
+    if (iy < 0 ) {
+        FixP_t diff = intToFix(-iy);
+        v += Mul(diff, dv);
+        iy = 0;
+    }
+
     for (; iy < limit; ++iy) {
+
+        FixP_t u = 0;
+        const uint8_t iv = fixToInt(v) & (NATIVE_TEXTURE_SIZE - 1);
+        const uint8_t *sourceLineStart = data + (iv * NATIVE_TEXTURE_SIZE);
+        uint8_t *destinationLine = bufferData + (XRES_FRAMEBUFFER * iy) + iX0;
+        int ix;
+        int stipple;
+        lastU = 0;
 
         if (iy >= YRES) {
             return;
         }
 
-        if (iy >= 0) {
-            FixP_t u = 0;
-            const uint8_t iv = fixToInt(v) & (NATIVE_TEXTURE_SIZE - 1);
-            const uint8_t *sourceLineStart = data + (iv * NATIVE_TEXTURE_SIZE);
-            uint8_t *destinationLine = bufferData + (XRES_FRAMEBUFFER * iy) + iX0;
-            int ix;
-            lastU = 0;
+        if (!farEnoughForStipple
+            && ((!enableAlpha && iv == lastV)
+                && (iX1 < XRES && iX0 >= 0))) {
+            int start = (0 >= iX0) ? 0 : iX0;
+            int finish = ((XRES - 1) >= iX1) ? iX1 : (XRES - 1);
+            v += dv;
+            destinationLine = bufferData + (XRES_FRAMEBUFFER * iy);
+            sourceLineStart = destinationLine - XRES_FRAMEBUFFER;
+            memcpy (destinationLine + start, sourceLineStart + start,
+                    finish - start);
 
-            if (!farEnoughForStipple
-                && ((!enableAlpha && iv == lastV)
-                    && (iX1 < XRES && iX0 >= 0))) {
-                int start = (0 >= iX0) ? 0 : iX0;
-                int finish = ((XRES - 1) >= iX1) ? iX1 : (XRES - 1);
-                v += dv;
-                destinationLine = bufferData + (XRES_FRAMEBUFFER * iy);
-                sourceLineStart = destinationLine - XRES_FRAMEBUFFER;
-                memcpy (destinationLine + start, sourceLineStart + start,
-                        finish - start);
+            continue;
+        }
 
-                continue;
+        pixel = *(sourceLineStart);
+        ix = iX0;
+
+        if (ix < 0 ) {
+            FixP_t diff = intToFix(-ix);
+            destinationLine += -ix;
+            u += Mul(diff, du);
+            ix = 0;
+
+        }
+
+        if (iX1 >= XRES) {
+            iX1 = XRES;
+        }
+
+        stipple = ((ix + iy) & 1);
+        
+        for (; ix < iX1; ++ix) {
+            stipple = !stipple;
+
+            const uint8_t iu = fixToInt(u) & (NATIVE_TEXTURE_SIZE - 1);
+            /*
+                          only fetch the next texel if we really changed the
+                          u, v coordinates (otherwise, would fetch the same
+                          thing anyway)
+                           */
+            if (iu != lastU
+                && !(stipple && farEnoughForStipple)) {
+
+                pixel = *(sourceLineStart);
+                sourceLineStart += (iu - lastU);
+                lastU = iu;
+                lastV = iv;
             }
 
-            pixel = *(sourceLineStart);
-
-            for (ix = iX0; ix < iX1; ++ix) {
-
-                if (ix >= XRES) {
-                    ix = iX1;
-                    continue;
-                }
-
-                if (ix >= 0) {
-                    int stipple = ((ix + iy) & 1);
-                    const uint8_t iu = fixToInt(u) & (NATIVE_TEXTURE_SIZE - 1);
-                    /*
-                                  only fetch the next texel if we really changed the
-                                  u, v coordinates (otherwise, would fetch the same
-                                  thing anyway)
-                                   */
-                    if (iu != lastU
-                        && !(stipple && farEnoughForStipple)) {
-
-                        pixel = *(sourceLineStart);
-                        sourceLineStart += (iu - lastU);
-                        lastU = iu;
-                        lastV = iv;
-                    }
-
-                    if (pixel != TRANSPARENCY_COLOR) {
-                        *(destinationLine) = (farEnoughForStipple && stipple) ? 0 : pixel;
-                    }
-                }
-                ++destinationLine;
-                u += du;
+            if (pixel != TRANSPARENCY_COLOR) {
+                *(destinationLine) = (farEnoughForStipple && stipple) ? 0 : pixel;
             }
+            ++destinationLine;
+            u += du;
         }
         v += dv;
     }
@@ -637,8 +671,8 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
 /*
     *     x0y0 ____________ x1y0
     *         /            \
-    *        /             \
-    *  x0y1 /______________\ x1y1
+    *        /              \
+    *  x0y1 /________________\ x1y1
     */
 #ifdef AGS
 __attribute__((section(".iwram"), long_call))
@@ -668,12 +702,14 @@ void drawFloor(FixP_t y0,
     uint8_t pixel;
     FixP_t v = 0;
     int16_t iy;
-    uint8_t *bufferData = &framebuffer[0];
-    const uint8_t *data = texture;
-
+    uint8_t *bufferData;
     FixP_t dv;
     const uint8_t *sourceLineStart;
-    int farEnoughForStipple = (z >= distanceForPenumbra);
+    int farEnoughForStipple;
+
+    if (y0 == y1) {
+        return;
+    }
 
     /* if we have a trapezoid in which the base is smaller */
     if (y0 > y1) {
@@ -693,12 +729,15 @@ void drawFloor(FixP_t y0,
         x1y0 = x1y0 - x1y1;
     }
 
-    y = fixToInt(y0);
-    limit = fixToInt(y1);
-
-    if (y == limit || limit < 0 || y >= YRES) {
+    if (y1 < 0 || y0 >= FIXP_YRES) {
         return;
     }
+
+    bufferData = &framebuffer[0];
+    farEnoughForStipple = (z >= distanceForPenumbra);
+
+    y = fixToInt(y0);
+    limit = fixToInt(y1);
 
     upperX0 = x0y0;
     upperX1 = x1y0;
@@ -723,67 +762,81 @@ void drawFloor(FixP_t y0,
     iy = y;
     dv = Div(FIXP_NATIVE_TEXTURE_SIZE, dY);
 
+    /* Are we already withing the visible part of the screen? Why not jump straight to it?*/
+    if (iy < 0) {
+        FixP_t diff = intToFix((-iy));
+        x0 += Mul( diff, leftDxDy);
+        x1 += Mul( diff, rightDxDy);
+        v += Mul( diff, dv);
+        iy = 0;
+    }
+
     for (; iy < limit; ++iy) {
 
+        int32_t iX0;
+        int32_t iX1;
+        int32_t ix;
+        FixP_t du;
+        uint8_t *destinationLine;
+        const FixP_t diffX = (x1 - x0);
+        uint8_t lastU = 0;
+        FixP_t u = 0;
+        int stipple;
+
+        /* We might have reached the limit of the screen. There's no point in continuing */
         if (iy >= YRES) {
             return;
         }
 
-        if (iy >= 0) {
-            int32_t iX0;
-            int32_t iX1;
-            int32_t ix;
-            FixP_t du;
-            uint8_t *destinationLine;
-            const FixP_t diffX = (x1 - x0);
-            uint8_t lastU = 0;
-            FixP_t u = 0;
-            int stipple;
-            
-            if (diffX == 0) {
-                continue;
-            }
-
-            iX0 = fixToInt(x0);
-            iX1 = fixToInt(x1);
-            du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
-
-            destinationLine = bufferData + (XRES_FRAMEBUFFER * iy) + iX0;
-            sourceLineStart = data + (fixToInt(v) * NATIVE_TEXTURE_SIZE);
-            pixel = *(sourceLineStart);
-            stipple = ((iX0 + iy) & 1) == 0;
-
-            for (ix = iX0; ix < iX1; ++ix) {
-
-                if (ix >= XRES) {
-                    ix = iX1;
-                    continue;
-                }
-
-                if (ix >= 0) {
-                    const int32_t iu = fixToInt(u);
-                    stipple = !stipple;
-                    /*
-                    only fetch the next texel if we really changed the
-                    u, v coordinates (otherwise, would fetch the same
-                    thing anyway)
-                    */
-                    if (!(farEnoughForStipple && stipple) &&
-                        iu != lastU) {
-
-                        pixel = *(sourceLineStart);
-                        sourceLineStart += (iu - lastU);
-                        lastU = iu;
-                    }
-
-                    if (pixel != TRANSPARENCY_COLOR) {
-                        *(destinationLine) = (farEnoughForStipple && stipple) ? 0 : pixel;
-                    }
-                }
-                ++destinationLine;
-                u += du;
-            }
+        if (diffX == 0) {
+            continue;
         }
+
+        ix = iX0 = fixToInt(x0);
+        iX1 = fixToInt(x1);
+        du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
+
+        if (ix < 0 ) {
+            FixP_t diff = intToFix((-ix + 0));
+            u += Mul( diff, du);
+            ix = 0;
+        }
+
+        destinationLine = bufferData + (XRES_FRAMEBUFFER * iy) + ix;
+        sourceLineStart = texture + (fixToInt(v) * NATIVE_TEXTURE_SIZE);
+        pixel = *(sourceLineStart);
+        stipple = ((iX0 + iy) & 1) == 0;
+
+        if (iX1 >= XRES) {
+            iX1 = XRES;
+        }
+
+        for (; ix < iX1; ++ix) {
+
+            const int32_t iu = fixToInt(u);
+
+            stipple = !stipple;
+            /*
+            only fetch the next texel if we really changed the
+            u, v coordinates (otherwise, would fetch the same
+            thing anyway)
+            */
+            if (!(farEnoughForStipple && stipple) &&
+                iu != lastU) {
+
+                pixel = *(sourceLineStart);
+                sourceLineStart += (iu - lastU);
+                lastU = iu;
+            }
+
+            if (pixel != TRANSPARENCY_COLOR) {
+                *(destinationLine) = (farEnoughForStipple && stipple) ? 0 : pixel;
+            }
+
+            ++destinationLine;
+            u += du;
+        }
+
 
         x0 += leftDxDy;
         x1 += rightDxDy;
