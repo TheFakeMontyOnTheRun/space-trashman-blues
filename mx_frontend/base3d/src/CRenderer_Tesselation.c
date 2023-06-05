@@ -67,7 +67,8 @@ void projectAllVertices(const uint8_t count) {
 
 
 void initZMap(void) {
-    for (int z = 1; z < (4 * 128); ++z ) {
+	int z;
+    for (z = 1; z < (4 * 128); ++z ) {
         oneOverZMap[z] = Div(FIXP_HALF_YRES, Div(intToFix(z) , intToFix(4)));
     }
 }

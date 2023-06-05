@@ -221,8 +221,8 @@ int main(int argc, char **argv) {
         prev = now;
 
         /* protect against machines too fast for their own good. */
-        if (delta_time < 50) {
-            delta_time = 50;
+        if (delta_time < 20) {
+            delta_time = 20;
         }
 #endif
         isRunning = isRunning && menuTick(delta_time);
