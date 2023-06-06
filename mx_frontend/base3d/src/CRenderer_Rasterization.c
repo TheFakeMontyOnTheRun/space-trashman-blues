@@ -24,7 +24,9 @@
 #include "CRenderer.h"
 #include "VisibilityStrategy.h"
 
+
 #define PAGE_FLIP_INCREMENT 32
+
 #define FIXP_NATIVE_TEXTURE_SIZE  (intToFix(NATIVE_TEXTURE_SIZE))
 #define FIXP_YRES intToFix(YRES)
 char mTurnBuffer;
@@ -1535,7 +1537,6 @@ void drawTextAt(const int x, const int y, const char *__restrict__ text, const u
     drawTextAtWithMargin( x, y, (XRES_FRAMEBUFFER - 1), text, colour);
 }
 
-#ifndef AGS
 void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 					uint8_t *prevFrame, int turnState, int turnTarget, int scale200To240) {
 
@@ -1548,7 +1549,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 		turnStep =  turnTarget;
 	}
 
-	if (scale200To240) {
+#ifdef SCALE_200_TO_240
 		int dstY = 0;
 		int scaller = 0;
 		int heightY;
@@ -1571,7 +1572,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 
 					for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
 						index = *src;
-						*dst = palette[index];
+						*dst = index;
 						++src;
 						++dst;
 					}
@@ -1621,7 +1622,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 							index = currentFrame[(XRES_FRAMEBUFFER * y) + x];
 						}
 
-						*dst = palette[index];
+						*dst = index;
 						++dst;
 					}
 				}
@@ -1665,7 +1666,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 							index = currentFrame[(XRES_FRAMEBUFFER * y) + x];
 						}
 
-						*dst = palette[index];
+						*dst = index;
 						++dst;
 					}
 				}
@@ -1680,8 +1681,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 			}
 			turnStep -= PAGE_FLIP_INCREMENT;
 		}
-	} else {
-
+#else
 		if (turnTarget == turnStep || (mTurnBuffer != kCommandNone)) {
 
 			for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
@@ -1692,8 +1692,8 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 
 				for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
 					index = *src;
-					*dst = palette[index];
 					++src;
+					*dst = index;
 					++dst;
 				}
 			}
@@ -1722,7 +1722,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 					} else {
 						index = currentFrame[(XRES_FRAMEBUFFER * y) + x];
 					}
-					*dst = palette[index];
+					*dst = index;
 					++dst;
 				}
 			}
@@ -1746,12 +1746,11 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 						index = currentFrame[(XRES_FRAMEBUFFER * y) + x];
 					}
 
-					*dst = palette[index];
+					*dst = index;
 					++dst;
 				}
 			}
 			turnStep -= PAGE_FLIP_INCREMENT;
 		}
-	}
-}
 #endif
+}

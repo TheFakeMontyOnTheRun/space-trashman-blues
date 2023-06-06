@@ -176,7 +176,9 @@ void graphicsShutdown() {
 }
 
 void flipRenderer() {
-    memcpy(VRAM_PAGE_A, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
+
+    renderPageFlip(VRAM_PAGE_A, framebuffer,
+                   VRAM_PAGE_B, turnStep, turnTarget, 0);
     VBlankIntrWait();
 }
 

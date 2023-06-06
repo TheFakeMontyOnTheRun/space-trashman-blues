@@ -2,11 +2,13 @@
 #define RENDERER_H
 
 #ifdef AGS
+#define PAGE_FLIP_TARGET 128
 #define XRES 130
 #define YRES 160
 #define HALF_XRES 65
 #define HALF_YRES 80
 #else
+#define PAGE_FLIP_TARGET 200
 #define XRES 216
 #define YRES 200
 #define HALF_XRES 100
