@@ -7,6 +7,7 @@
 #include <unistd.h>
 #endif
 #include <assert.h>
+#include <stdio.h>
 
 #include "FixP.h"
 #include "Vec.h"
@@ -129,6 +130,10 @@ void maskWall(
         ix = 0;
     }
 
+    if (limit > XRES) {
+        limit = XRES;
+    }
+
     for (; ix < limit; ++ix) {
 
         const FixP_t diffY = (y1 - y0);
@@ -136,10 +141,6 @@ void maskWall(
         int32_t iY1 = fixToInt(y1);
         uint8_t *destinationLine;
         int32_t iy;
-
-        if (ix >= XRES) {
-            return;
-        }
 
         if (diffY == 0) {
             continue;
@@ -280,6 +281,10 @@ void drawWall(FixP_t x0,
         ix = 0;
     }
 
+    if (limit > XRES ) {
+        limit = XRES;
+    }
+
     for (; ix < limit; ++ix) {
 
         const FixP_t diffY = (y1 - y0);
@@ -293,10 +298,6 @@ void drawWall(FixP_t x0,
         FixP_t dv;
         int32_t iy;
         int stipple;
-
-        if (ix >= XRES ) {
-            return;
-        }
 
         if (diffY == 0) {
             continue;
@@ -472,6 +473,10 @@ void drawFrontWall(FixP_t x0,
         iy = 0;
     }
 
+    if (limit > YRES) {
+        limit = YRES;
+    }
+
     for (; iy < limit; ++iy) {
 
         FixP_t u = 0;
@@ -481,10 +486,6 @@ void drawFrontWall(FixP_t x0,
         int ix;
         int stipple;
         lastU = 0;
-
-        if (iy >= YRES) {
-            return;
-        }
 
         if (!farEnoughForStipple
             && ((!enableAlpha && iv == lastV)
@@ -518,9 +519,8 @@ void drawFrontWall(FixP_t x0,
         stipple = ((ix + iy) & 1);
         
         for (; ix < iX1; ++ix) {
-            stipple = !stipple;
-
             const uint8_t iu = fixToInt(u) & (NATIVE_TEXTURE_SIZE - 1);
+            stipple = !stipple;
             /*
                           only fetch the next texel if we really changed the
                           u, v coordinates (otherwise, would fetch the same
@@ -548,8 +548,8 @@ void drawFrontWall(FixP_t x0,
 /*
     *     x0y0 ____________ x1y0
     *         /            \
-    *        /             \
-    *  x0y1 /______________\ x1y1
+    *        /              \
+    *  x0y1 /________________\ x1y1
     */
 #ifdef AGS
 __attribute__((section(".iwram"), long_call))
@@ -624,44 +624,50 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
     x1 = upperX1;
     iy = y;
 
+    if (limit > YRES) {
+        limit = YRES;
+    }
+
+    if (iy < 0 ) {
+        FixP_t diff = intToFix(-iy);
+        x0 += Mul(diff, leftDxDy);
+        x1 += Mul(diff, rightDxDy);
+        iy = 0;
+    }
+
+
     for (; iy < limit; ++iy) {
+        int32_t iX0;
+        int32_t iX1;
 
-        if (iy >= YRES) {
-            return;
+        const FixP_t diffX = (x1 - x0);
+
+        if (diffX == 0) {
+            continue;
         }
 
-        if (iy >= 0) {
-
-            int32_t iX0;
-            int32_t iX1;
-            const FixP_t diffX = (x1 - x0);
-
-            if (diffX == 0) {
-                continue;
-            }
-
-            if (x0 < 0) {
-                iX0 = 0;
-            } else {
-                iX0 = fixToInt(x0);
-            }
-
-            if (x1 < 0) {
-                iX1 = 0;
-            } else {
-                iX1 = fixToInt(x1);
-            }
-
-            if (iX1 >= XRES) {
-                iX1 = XRES - 1;
-            }
-
-            if (iX0 >= XRES) {
-                iX0 = XRES - 1;
-            }
-
-            memset (bufferData + (XRES_FRAMEBUFFER * iy) + iX0, pixel, iX1 - iX0);
+        if (x0 < 0) {
+            iX0 = 0;
+        } else {
+            iX0 = fixToInt(x0);
         }
+
+        if (x1 < 0) {
+            iX1 = 0;
+        } else {
+            iX1 = fixToInt(x1);
+        }
+
+        if (iX1 >= XRES) {
+            iX1 = XRES - 1;
+        }
+
+        if (iX0 >= XRES) {
+            iX0 = XRES - 1;
+        }
+
+        memset (bufferData + (XRES_FRAMEBUFFER * iy) + iX0, pixel, iX1 - iX0);
+
 
         x0 += leftDxDy;
         x1 += rightDxDy;
@@ -771,6 +777,10 @@ void drawFloor(FixP_t y0,
         iy = 0;
     }
 
+    if (limit > YRES) {
+        limit = YRES;
+    }
+
     for (; iy < limit; ++iy) {
 
         int32_t iX0;
@@ -782,11 +792,6 @@ void drawFloor(FixP_t y0,
         uint8_t lastU = 0;
         FixP_t u = 0;
         int stipple;
-
-        /* We might have reached the limit of the screen. There's no point in continuing */
-        if (iy >= YRES) {
-            return;
-        }
 
         if (diffX == 0) {
             continue;
