@@ -21,7 +21,7 @@
 #define YRES_FRAMEBUFFER 160
 #endif
 
-#define TOTAL_TEXTURES 32
+#define TOTAL_TEXTURES 16
 #define TRANSPARENCY_COLOR 199
 
 struct Projection {
@@ -51,7 +51,11 @@ extern int turnTarget;
 extern int turnStep;
 extern int needToRedrawHUD;
 
+#ifndef AGS
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
+#else
+#define FIXP_DISTANCE_FOR_DARKNESS (intToFix(32))
+#endif
 
 #define MASK_LEFT 1
 #define MASK_FRONT 2
