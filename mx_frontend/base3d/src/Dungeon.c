@@ -66,11 +66,15 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             case kCommandRight:
                 playerCrawler.rotation = rightOf(playerCrawler.rotation);
                 turnRight();
+                turnStep = PAGE_FLIP_TARGET;
+                turnTarget = 0;
                 break;
 
             case kCommandLeft:
                 playerCrawler.rotation = leftOf(playerCrawler.rotation);
                 turnLeft();
+                turnStep = 0;
+                turnTarget = PAGE_FLIP_TARGET;
                 break;
             case kCommandUp: {
                 struct Vec2i offset = mapOffsetForDirection(

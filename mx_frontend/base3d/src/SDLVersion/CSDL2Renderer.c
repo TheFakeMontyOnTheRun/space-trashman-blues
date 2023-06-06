@@ -213,104 +213,31 @@ void flipRenderer() {
 	SDL_Rect rect;
 	int x, y;
 
-	if (!enableSmoothMovement || turnTarget == turnStep || (snapshotSignal != '.')) {
+    uint8_t newFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 
-		uint8_t *pixelPtr = &framebuffer[0];
+    renderPageFlip(newFrame, framebuffer,
+                   previousFrame, turnStep, turnTarget, 0);
 
-		for (y = dirtyLineY0; y < dirtyLineY1; ++y) {
-			for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
-				uint32_t pixel;
+    for (y = dirtyLineY0; y < dirtyLineY1; ++y) {
+        for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
+            uint32_t pixel;
 
-				rect.x = 2 * x;
-				rect.y = (24 * y) / 10;
-				rect.w = 2;
-				rect.h = 3;
+            rect.x = 2 * x;
+            rect.y = (24 * y) / 10;
+            rect.w = 2;
+            rect.h = 3;
 
-				pixel = palette[framebuffer[(XRES_FRAMEBUFFER * y) + x]];
+            pixel = palette[newFrame[(XRES_FRAMEBUFFER * y) + x]];
 
-				SDL_SetRenderDrawColor(renderer, (pixel & 0x000000FF) - 0x38,
-									   ((pixel & 0x0000FF00) >> 8) - 0x18,
-									   ((pixel & 0x00FF0000) >> 16) - 0x10, 255);
-				SDL_RenderFillRect(renderer, &rect);
+            SDL_SetRenderDrawColor(renderer, (pixel & 0x000000FF) - 0x38,
+                                   ((pixel & 0x0000FF00) >> 8) - 0x18,
+                                   ((pixel & 0x00FF0000) >> 16) - 0x10, 255);
+            SDL_RenderFillRect(renderer, &rect);
+        }
+    }
 
-				++pixelPtr;
-			}
-		}
-
-		mBufferedCommand = snapshotSignal;
-		snapshotSignal = '.';
-		memcpy(previousFrame, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
-	} else if (turnStep < turnTarget) {
-
-		for (y = dirtyLineY0; y < dirtyLineY1; ++y) {
-			for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
-				uint8_t index;
-				uint32_t pixel;
-				if (x < XRES) {
-
-					if (x >= turnStep) {
-						index = previousFrame[(XRES_FRAMEBUFFER * y) - turnStep + x];
-					} else {
-						index = framebuffer[(XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
-					}
-
-				} else {
-					index = framebuffer[(XRES_FRAMEBUFFER * y) + x];
-				}
-
-				pixel = palette[index];
-
-				rect.x = 2 * x;
-				rect.y = (24 * y) / 10;
-				rect.w = 2;
-				rect.h = 3;
-
-				SDL_SetRenderDrawColor(renderer, (pixel & 0x000000FF) - 0x38,
-									   ((pixel & 0x0000FF00) >> 8) - 0x18,
-									   ((pixel & 0x00FF0000) >> 16) - 0x10, 255);
-				SDL_RenderFillRect(renderer, &rect);
-			}
-		}
-
-		turnStep += 20;
-	} else {
-
-		uint8_t *pixelPtr = &framebuffer[0];
-
-		for (y = dirtyLineY0; y < dirtyLineY1; ++y) {
-			for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
-				uint8_t index;
-				uint32_t pixel;
-				if (x < XRES) {
-
-					if (x >= turnStep) {
-						index = framebuffer[(XRES_FRAMEBUFFER * y) - turnStep + x];
-					} else {
-						index = previousFrame[(XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
-					}
-
-				} else {
-					index = framebuffer[(XRES_FRAMEBUFFER * y) + x];
-				}
-
-				pixel = palette[index];
-
-				rect.x = 2 * x;
-				rect.y = (24 * y) / 10;
-				rect.w = 2;
-				rect.h = 3;
-
-				SDL_SetRenderDrawColor(renderer, (pixel & 0x000000FF) - 0x38,
-									   ((pixel & 0x0000FF00) >> 8) - 0x18,
-									   ((pixel & 0x00FF0000) >> 16) - 0x10, 255);
-				SDL_RenderFillRect(renderer, &rect);
-				++pixelPtr;
-			}
-		}
-
-		turnStep -= 20;
-	}
-
+    mBufferedCommand = snapshotSignal;
+    snapshotSignal = '.';
 
 	SDL_RenderPresent(renderer);
 }
