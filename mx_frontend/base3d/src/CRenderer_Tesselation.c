@@ -282,22 +282,6 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         llz1 = projectionVertices[2].second;
         lrz1 = projectionVertices[3].second;
 
-        if (flipTexture) {
-            uvCoords[0] = 0;
-            uvCoords[1] = NATIVE_TEXTURE_SIZE;
-            uvCoords[2] = 0;
-            uvCoords[3] = 0;
-            uvCoords[4] = NATIVE_TEXTURE_SIZE;
-            uvCoords[5] = NATIVE_TEXTURE_SIZE;
-        } else {
-            uvCoords[0] = NATIVE_TEXTURE_SIZE;
-            uvCoords[1] = 0;
-            uvCoords[2] = NATIVE_TEXTURE_SIZE;
-            uvCoords[3] = NATIVE_TEXTURE_SIZE;
-            uvCoords[4] = 0;
-            uvCoords[5] = 0;
-        }
-
         coords[0] = fixToInt(llz1.mX); // 2
         coords[1] = fixToInt(llz1.mY);
         coords[2] = fixToInt(lrz1.mX); // 3
@@ -305,23 +289,26 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         coords[4] = fixToInt(llz0.mX); // 0
         coords[5] = fixToInt(llz0.mY);
 
-        drawTexturedTriangle(&coords[0], &uvCoords[0], (struct Texture*)texture );
+        if (p0.mZ < FIXP_DISTANCE_FOR_DARKNESS) {
+            if (flipTexture) {
+                uvCoords[0] = 0;
+                uvCoords[1] = NATIVE_TEXTURE_SIZE;
+                uvCoords[2] = 0;
+                uvCoords[3] = 0;
+                uvCoords[4] = NATIVE_TEXTURE_SIZE;
+                uvCoords[5] = NATIVE_TEXTURE_SIZE;
+            } else {
+                uvCoords[0] = NATIVE_TEXTURE_SIZE;
+                uvCoords[1] = 0;
+                uvCoords[2] = NATIVE_TEXTURE_SIZE;
+                uvCoords[3] = NATIVE_TEXTURE_SIZE;
+                uvCoords[4] = 0;
+                uvCoords[5] = 0;
+            }
 
-
-        if (flipTexture) {
-            uvCoords[0] = NATIVE_TEXTURE_SIZE;
-            uvCoords[1] = NATIVE_TEXTURE_SIZE;
-            uvCoords[2] = 0;
-            uvCoords[3] = 0;
-            uvCoords[4] = NATIVE_TEXTURE_SIZE;
-            uvCoords[5] = 0;
+            drawTexturedTriangle(&coords[0], &uvCoords[0], (struct Texture*)texture, fixToInt(p0.mZ) );
         } else {
-            uvCoords[0] = 0;
-            uvCoords[1] = 0;
-            uvCoords[2] = NATIVE_TEXTURE_SIZE;
-            uvCoords[3] = NATIVE_TEXTURE_SIZE;
-            uvCoords[4] = 0;
-            uvCoords[5] = NATIVE_TEXTURE_SIZE;
+            fillTriangle(&coords[0], 0 );
         }
 
         coords[0] = fixToInt(llz0.mX); //0
@@ -331,7 +318,27 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         coords[4] = fixToInt(lrz0.mX); //1
         coords[5] = fixToInt(lrz0.mY);
 
-        drawTexturedTriangle( &coords[0], &uvCoords[0], (struct Texture*)texture );
+        if (p0.mZ < FIXP_DISTANCE_FOR_DARKNESS) {
+            if (flipTexture) {
+                uvCoords[0] = NATIVE_TEXTURE_SIZE;
+                uvCoords[1] = NATIVE_TEXTURE_SIZE;
+                uvCoords[2] = 0;
+                uvCoords[3] = 0;
+                uvCoords[4] = NATIVE_TEXTURE_SIZE;
+                uvCoords[5] = 0;
+            } else {
+                uvCoords[0] = 0;
+                uvCoords[1] = 0;
+                uvCoords[2] = NATIVE_TEXTURE_SIZE;
+                uvCoords[3] = NATIVE_TEXTURE_SIZE;
+                uvCoords[4] = 0;
+                uvCoords[5] = NATIVE_TEXTURE_SIZE;
+            }
+
+            drawTexturedTriangle( &coords[0], &uvCoords[0], (struct Texture*)texture, fixToInt(p0.mZ) );
+        } else {
+            fillTriangle(&coords[0], 0 );
+        }
 
         return;
     }
@@ -531,7 +538,7 @@ void drawMesh( const struct Mesh *mesh, const struct Vec3 center ) {
     FixP_t * vertexData = mesh->geometry;
     uint8_t colour = mesh->colour;
 
-    if (mesh->texture == NULL ) {
+    if (mesh->texture == NULL || center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
 	    int c;
         for (c = 0; c < count; ++c ) {
 
@@ -593,7 +600,9 @@ void drawMesh( const struct Mesh *mesh, const struct Vec3 center ) {
             coords[4] = fixToInt(projectionVertices[2].second.mX);
             coords[5] = fixToInt(projectionVertices[2].second.mY);
 
-            drawTexturedTriangle( &coords[0], uvData, mesh->texture);
+
+            drawTexturedTriangle( &coords[0], uvData, mesh->texture, fixToInt(ptr0->mZ));
+
             uvData += 6;
             vertexData += 9;
         }

@@ -1026,7 +1026,7 @@ void fillTriangle(int *coords, uint8_t colour) {
 }
 
 
-void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture) {
+void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z) {
     int y = coords[1];
     int u, v;
     FixP_t fU1, fU2, fV1, fV2;
@@ -1034,8 +1034,9 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
     FixP_t fDU2;
     FixP_t fDV1;
     FixP_t fDV2;
-
     int yFinal = coords[5]; //not the lowest, neither the topmost
+    int stipple;
+    int farEnoughForStipple = (z >= distanceForPenumbra);
 
     FixP_t x0 = intToFix(coords[0]);
     FixP_t y0 = intToFix(coords[1]);
@@ -1092,7 +1093,6 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
     fDV2 = Mul((v1 - v0), effectiveDelta);
 #endif
 
-
     for (; y < yFinal; ++y) {
 
         int iFX1;
@@ -1147,13 +1147,18 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
             if (y >= 0 && y <= YRES) {
 
                 int xPos = iFX0;
-
+                stipple = !((xPos + y) & 1);
                 while (limit--) {
+                    stipple = !stipple;
                     u = abs(fixToInt(texelLineX)) % NATIVE_TEXTURE_SIZE;
                     v = abs(fixToInt(texelLineY)) % NATIVE_TEXTURE_SIZE;
 
                     if (xPos >= 0 && xPos <= XRES) {
-                        *destination = *(&texture->rowMajor[0] + (NATIVE_TEXTURE_SIZE * v) + u);
+                        if (stipple && farEnoughForStipple) {
+                            *destination = 0;
+                        } else {
+                            *destination = *(&texture->rowMajor[0] + (NATIVE_TEXTURE_SIZE * v) + u);
+                        }
                     }
                     ++xPos;
                     ++destination;
@@ -1168,7 +1173,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
 }
 
 
-void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture) {
+void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z) {
     int y = coords[1];
     int u, v;
     FixP_t fU1, fU2, fV1, fV2;
@@ -1176,8 +1181,10 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     FixP_t fDV1;
     FixP_t fDU2;
     FixP_t fDV2;
-
+    int stipple;
     int yFinal = coords[3]; //not the upper, not the lowest
+    int farEnoughForStipple = (z >= distanceForPenumbra);
+
     FixP_t x0 = intToFix(coords[0]);
     FixP_t y0 = intToFix(coords[1]);
     FixP_t x1 = intToFix(coords[2]);
@@ -1289,14 +1296,20 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
 
                 int xPos = iFX0;
 
-
+                stipple = !((xPos + y) & 1);
                 while (limit--) {
+                    stipple = !stipple;
                     u = abs(fixToInt(texelLineX)) % NATIVE_TEXTURE_SIZE;
                     v = abs(fixToInt(texelLineY)) % NATIVE_TEXTURE_SIZE;
 
                     if (xPos >= 0 && xPos <= XRES) {
-                        *destination = *(&texture->rowMajor[0] + (NATIVE_TEXTURE_SIZE * v) + u);
+                        if (stipple && farEnoughForStipple) {
+                            *destination = 0;
+                        } else {
+                            *destination = *(&texture->rowMajor[0] + (NATIVE_TEXTURE_SIZE * v) + u);
+                        }
                     }
+
                     ++xPos;
                     ++destination;
                     texelLineX += texelLineDX;
@@ -1310,7 +1323,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     }
 }
 
-void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture) {
+void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z) {
     int newCoors[6];
     uint8_t newUV[6];
 	int c;
@@ -1357,7 +1370,7 @@ void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *textur
     newUV[5] = uvCoords[2 * other];
 
 
-    drawTexturedBottomFlatTriangle(&newCoors[0], &newUV[0], texture);
+    drawTexturedBottomFlatTriangle(&newCoors[0], &newUV[0], texture, z);
 
     newCoors[0] = coords[2 * lower];
     newCoors[1] = coords[(2 * lower) + 1];
@@ -1376,7 +1389,7 @@ void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *textur
     newUV[5] = uvCoords[2 * upper];
 
 
-    drawTexturedTopFlatTriangle(&newCoors[0], &newUV[0], texture);
+    drawTexturedTopFlatTriangle(&newCoors[0], &newUV[0], texture, z);
 }
 
 #ifdef AGS

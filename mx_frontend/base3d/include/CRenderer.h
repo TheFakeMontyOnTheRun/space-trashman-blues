@@ -211,7 +211,7 @@ void drawRect(const int x,
 
 void fillTriangle( int* coords, uint8_t colour );
 
-void drawTexturedTriangle( int* coords, uint8_t* uvCoords, struct Texture* texture);
+void drawTexturedTriangle( int* coords, uint8_t* uvCoords, struct Texture* texture, int z);
 
 void drawWall(FixP_t x0,
 			  FixP_t x1,
