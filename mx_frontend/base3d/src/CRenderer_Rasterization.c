@@ -26,7 +26,7 @@
 
 
 #define PAGE_FLIP_INCREMENT 32
-
+#define HUD_WIDTH (XRES_FRAMEBUFFER - XRES)
 #define FIXP_NATIVE_TEXTURE_SIZE  (intToFix(NATIVE_TEXTURE_SIZE))
 #define FIXP_YRES intToFix(YRES)
 char mTurnBuffer;
@@ -1696,73 +1696,31 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 		}
 #else
 		if (turnTarget == turnStep || (mTurnBuffer != kCommandNone)) {
-
-			for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
-
-				dst = stretchedBuffer;
-				src = &currentFrame[(XRES_FRAMEBUFFER * y)];
-				dst += (XRES_FRAMEBUFFER * y);
-
-				for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
-					index = *src;
-					++src;
-					*dst = index;
-					++dst;
-				}
-			}
-
 			if (mTurnBuffer != kCommandNone) {
 				mBufferedCommand = mTurnBuffer;
 			}
 
 			mTurnBuffer = kCommandNone;
 
+            memcpy(stretchedBuffer, currentFrame,XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
         	memcpy(prevFrame, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
 
 		} else if (turnState < turnTarget) {
-
-			for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
-				dst = stretchedBuffer;
-				dst += (XRES_FRAMEBUFFER * y);
-				for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
-					if (x < XRES && y >= 8) {
-						if (x >= turnStep) {
-							index = prevFrame[(XRES_FRAMEBUFFER * y) + x - turnStep];
-						} else {
-							index = currentFrame[(XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
-						}
-
-					} else {
-						index = currentFrame[(XRES_FRAMEBUFFER * y) + x];
-					}
-					*dst = index;
-					++dst;
-				}
-			}
+            for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
+                size_t lineOffset = (y * XRES_FRAMEBUFFER);
+                memcpy(stretchedBuffer + lineOffset, currentFrame + lineOffset  + ( XRES_FRAMEBUFFER - turnStep - HUD_WIDTH), turnStep);
+                memcpy(stretchedBuffer + lineOffset + turnStep, prevFrame + lineOffset, (XRES - turnStep));
+                memcpy(stretchedBuffer + lineOffset + XRES, currentFrame + lineOffset + XRES, (XRES_FRAMEBUFFER - XRES));
+            }
 
 			turnStep += PAGE_FLIP_INCREMENT;
 		} else {
-
-			for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
-				dst = stretchedBuffer;
-				dst += (XRES_FRAMEBUFFER * y);
-				for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
-					if (x < XRES && y >= 8) {
-
-						if (x >= turnStep) {
-							index = currentFrame[(XRES_FRAMEBUFFER * y) + x - turnStep];
-						} else {
-							index = prevFrame[(XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
-						}
-
-					} else {
-						index = currentFrame[(XRES_FRAMEBUFFER * y) + x];
-					}
-
-					*dst = index;
-					++dst;
-				}
-			}
+            for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
+                size_t lineOffset = (y * XRES_FRAMEBUFFER);
+                memcpy(stretchedBuffer + lineOffset, prevFrame + lineOffset  + ( XRES_FRAMEBUFFER - turnStep - HUD_WIDTH), turnStep);
+                memcpy(stretchedBuffer + lineOffset + turnStep, currentFrame + lineOffset, (XRES - turnStep));
+                memcpy(stretchedBuffer + lineOffset + XRES, currentFrame + lineOffset + XRES, (XRES_FRAMEBUFFER - XRES));
+            }
 			turnStep -= PAGE_FLIP_INCREMENT;
 		}
 #endif
