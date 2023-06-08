@@ -10,6 +10,7 @@ include_directories(
         ${OPENGL_INCLUDE_DIR}
 )
 
+include_directories(/usr/X11R7/include)
 include_directories(../core/include)
 include_directories(../common/include)
 include_directories(base3d/include)
