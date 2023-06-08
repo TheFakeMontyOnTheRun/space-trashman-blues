@@ -77,13 +77,15 @@ extern struct Vec2i *distances;
 extern uint8_t *collisionMap;
 extern struct Texture* textures;
 
+struct Texture internalTexturesMem[TOTAL_TEXTURES];
+
 void initHW(void) {
     textBuffer = (char*)calloc(40 * 25, 1);
     messageLogBuffer = (char*)calloc(256, 1);
     collisionMap = (uint8_t*)calloc(256, 1);
     visMap = (enum EVisibility*)calloc(MAP_SIZE * MAP_SIZE, sizeof(enum EVisibility));
     distances = (struct Vec2i*)calloc(2 * MAP_SIZE * MAP_SIZE, sizeof(struct Vec2i));
-    textures = (struct Texture*)calloc(TOTAL_TEXTURES, sizeof(struct Texture));
+    textures = &internalTexturesMem[0];
     itemsInMap = (uint8_t*)calloc(MAP_SIZE * MAP_SIZE, sizeof(uint8_t*));
     map = (uint8_t*)calloc(MAP_SIZE * MAP_SIZE, sizeof(uint8_t*));
 
@@ -104,7 +106,6 @@ void shutdownHW() {
     free(collisionMap);
     free(visMap);
     free(distances);
-    free(textures);
     free(itemsInMap);
     free(map);
 }
@@ -221,8 +222,8 @@ int main(int argc, char **argv) {
         prev = now;
 
         /* protect against machines too fast for their own good. */
-        if (delta_time < 20) {
-            delta_time = 20;
+        if (delta_time < 50) {
+            delta_time = 50;
         }
 #endif
         isRunning = isRunning && menuTick(delta_time);
