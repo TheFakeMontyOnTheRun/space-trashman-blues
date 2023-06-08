@@ -116,7 +116,7 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
             dstLine++;
         }
     }
-
+#ifndef AGS
     for (y = (NATIVE_TEXTURE_SIZE - 1); y >= 0; --y) {
         uint8_t *sourceLine = &buffer[(y * NATIVE_TEXTURE_SIZE) + (NATIVE_TEXTURE_SIZE - 1)];
         uint8_t *dstLine = &toReturn->rotations[1][y];
@@ -147,7 +147,7 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
             dstLine += NATIVE_TEXTURE_SIZE;
         }
     }
-
+#endif
     for (y = 0; y < NATIVE_TEXTURE_SIZE; ++y) {
         uint8_t *sourceLine = &buffer[y * NATIVE_TEXTURE_SIZE];
         uint8_t *dstLine = &toReturn->rowMajor[y];
