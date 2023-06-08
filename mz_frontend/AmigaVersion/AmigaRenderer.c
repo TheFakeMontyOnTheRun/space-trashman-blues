@@ -37,7 +37,7 @@ extern struct ExecBase *SysBase;
 struct Window *my_window;
 struct Screen *screen;
 
-uint8_t framebuffer[256 * 160];
+uint8_t *framebuffer;
 uint8_t bufferInput = '.';
 
 #ifdef CD32
@@ -171,6 +171,8 @@ void init() {
     int OpenA2024 = FALSE;
     int IsV36 = FALSE;
     int IsPAL;
+
+    framebuffer = (uint8_t*)calloc( 1, 128 * 128);
 
     drawTitleBox();
 
@@ -407,85 +409,10 @@ void clear() {}
 
 
 void graphicsPut(int16_t x, int16_t y) {
-    framebuffer[(256 * y) + x] = 2;
-}
-
-void fix_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint8_t pixel) {
-
-    //switching x0 with x1
-    if (x0 > x1) {
-        x0 = x0 + x1;
-        x1 = x0 - x1;
-        x0 = x0 - x1;
-
-        y0 = y0 + y1;
-        y1 = y0 - y1;
-        y0 = y0 - y1;
-    }
-
-    {
-        //https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
-
-        int dx = abs(x1 - x0);
-        int8_t sx = x0 < x1 ? 1 : -1;
-        int dy = -abs(y1 - y0);
-        int8_t sy = y0 < y1 ? 1 : -1;
-        int err = dx + dy;  /* error value e_xy */
-        uint8_t offset;
-        while (1) {
-
-            framebuffer[(256 * y0) + x0] = pixel;
-
-            /* loop */
-            if (x0 == x1 && y0 == y1) return;
-            int e2 = 2 * err;
-
-            if (e2 >= dy) {
-                err += dy; /* e_xy+e_x > 0 */
-                x0 += sx;
-            }
-
-            if (e2 <= dx) {
-                /* e_xy+e_y < 0 */
-                err += dx;
-                y0 += sy;
-            }
-        }
-    }
-}
-
-void graphicsHorizontalLine(int16_t x0, int16_t x1, int16_t y, uint8_t pixel) {
-    int offset;
-    uint8_t *ptr;
-    int16_t _x0 = x0;
-    int16_t _x1 = x1;
-
-
-    if (x0 > x1) {
-        _x0 = x1;
-        _x1 = x0;
-    }
-
-    if (_x0 >= 128 || _x1 < 0) {
-        return;
-    }
-
-    if (_x0 < 0) {
-        _x0 = 0;
-    }
-
-    if (_x1 >= 128) {
-        _x0 = 127;
-    }
-
-    offset = (256 * y) + _x0;
-    ptr = &framebuffer[offset];
-
-    memset(ptr, pixel, (_x1 - _x0));
+    framebuffer[(128 * y) + x] = 2;
 }
 
 void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t pixel) {
-    int offset;
     uint8_t *ptr;
     int16_t _y0 = y0;
     int16_t _y1 = y1;
@@ -511,11 +438,11 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t pixel) {
         _y1 = 127;
     }
 
-    ptr = &framebuffer[(256 * _y0) + (x0)];
+    ptr = &framebuffer[(128 * _y0) + (x0)];
 
     for (int16_t y = _y0; y <= _y1; ++y) {
         *ptr = pixel;
-        ptr += 256;
+        ptr += 128;
     }
 }
 
@@ -562,7 +489,7 @@ void realPut(int x, int y, uint8_t value) {
 }
 
 void clearGraphics() {
-    memset(framebuffer, 0, 256 * 160);
+    memset(framebuffer, 0, 128 * 128);
 }
 
 void clearScreen() {
@@ -580,18 +507,9 @@ void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 
 void graphicsFlush() {
 #ifdef CD32
-    WriteChunkyPixels(my_window->RPort, 0, 0, 256, 160, &framebuffer[0], 256);
+    WriteChunkyPixels(my_window->RPort, 0, 0, 128, 128, &framebuffer[0], 128);
 #else
-
-#ifdef AGA8BPP
-    OwnBlitter();
-    WaitBlit();
-    c2p1x1_8_c5_bm(320,200,0,0,&framebuffer[0], my_window->RPort->BitMap);
-    DisownBlitter();
-#else
-    c2p1x1_4_c5_bm(256,160,0,0,&framebuffer[0], my_window->RPort->BitMap);
-#endif
-
+    c2p1x1_4_c5_bm(128,128,0,0,&framebuffer[0], my_window->RPort->BitMap);
 #endif
 }
 
