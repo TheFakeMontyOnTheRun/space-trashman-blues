@@ -2,6 +2,16 @@
 #include "AmigaInt.h"
 #endif
 
+#ifdef ATARIST
+#include <inttypes.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <mint/osbind.h>
+#include <mint/sysbind.h>
+#endif
+
 #include <stddef.h>
 
 #ifndef SMD
@@ -1100,8 +1110,7 @@ void initMap() {
     char buffer[32];
     uint8_t current;
 
-    /* first item in the list is always a dummy */
-    roomItem = getRoom(playerLocation)->itemsPresent->next;
+    roomItem = getRoom(getPlayerRoom())->itemsPresent->next;
 
     sprintf(&buffer[0], "%02d.txt", getPlayerRoom());
 
@@ -1318,7 +1327,18 @@ void logDelegate(const char *mesg) {
 }
 
 
+#ifdef ATARIST
+int doMain(void);
+
 int main(int argc, char **argv) {
+    Supexec(&doMain);
+    return 0;
+}
+
+int doMain(void) {
+#else
+int main(int argc, char **argv) {
+#endif
 
     for (int c = 0; c < 32; ++c) {
         map[c] = (uint8_t *) malloc(32);
