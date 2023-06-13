@@ -28,6 +28,7 @@ uint16_t *logBase;
 uint8_t *framebuffer;
 uint8_t bufferInput = '.';
 
+#define NORMALIZE(x) (((x * 8) / 256))
 
 void putStr(int x, int y, const char *str, int fg, int bg) {}
 
@@ -51,22 +52,22 @@ void init() {
     querySoundDriver();
 
 
-    framebuffer_set_palette_entry(0, 0x00, 0x00, 0x00);
-    framebuffer_set_palette_entry(1, 0x00, 0x00, 0xAA);
-    framebuffer_set_palette_entry(2, 0x00, 0xAA, 0x00);
-    framebuffer_set_palette_entry(3, 0x00, 0xAA, 0xAA);
-    framebuffer_set_palette_entry(4, 0xAA, 0x00, 0x00);
-    framebuffer_set_palette_entry(5, 0xAA, 0x00, 0xAA);
-    framebuffer_set_palette_entry(6, 0xAA, 0x55, 0x00);
-    framebuffer_set_palette_entry(7, 0xAA, 0xAA, 0xAA);
-    framebuffer_set_palette_entry(8, 0x55, 0x55, 0x00);
-    framebuffer_set_palette_entry(9, 0x55, 0x55, 0xFF);
-    framebuffer_set_palette_entry(10, 0x55, 0xFF, 0x55);
-    framebuffer_set_palette_entry(11, 0x55, 0xFF, 0xFF);
-    framebuffer_set_palette_entry(12, 0xFF, 0x55, 0x55);
-    framebuffer_set_palette_entry(13, 0xFF, 0x55, 0xFF);
-    framebuffer_set_palette_entry(14, 0xFF, 0xFF, 0x55);
-    framebuffer_set_palette_entry(15, 0xFF, 0xFF, 0xFF);
+    framebuffer_set_palette_entry(0, NORMALIZE(0x00), NORMALIZE(0x00), NORMALIZE(0x00));
+    framebuffer_set_palette_entry(1, NORMALIZE(0x00), NORMALIZE(0x00), NORMALIZE(0xAA));
+    framebuffer_set_palette_entry(2, NORMALIZE(0x00), NORMALIZE(0xAA), NORMALIZE(0x00));
+    framebuffer_set_palette_entry(3, NORMALIZE(0x00), NORMALIZE(0xAA), NORMALIZE(0xAA));
+    framebuffer_set_palette_entry(4, NORMALIZE(0xAA), NORMALIZE(0x00), NORMALIZE(0x00));
+    framebuffer_set_palette_entry(5, NORMALIZE(0xAA), NORMALIZE(0x00), NORMALIZE(0xAA));
+    framebuffer_set_palette_entry(6, NORMALIZE(0xAA), NORMALIZE(0x55), NORMALIZE(0x00));
+    framebuffer_set_palette_entry(7, NORMALIZE(0xAA), NORMALIZE(0xAA), NORMALIZE(0xAA));
+    framebuffer_set_palette_entry(8, NORMALIZE(0x55), NORMALIZE(0x55), NORMALIZE(0x55));
+    framebuffer_set_palette_entry(9, NORMALIZE(0x55), NORMALIZE(0x55), NORMALIZE(0xFF));
+    framebuffer_set_palette_entry(10, NORMALIZE(0x55), NORMALIZE(0xFF), NORMALIZE(0x55));
+    framebuffer_set_palette_entry(11, NORMALIZE(0x55), NORMALIZE(0xFF), NORMALIZE(0xFF));
+    framebuffer_set_palette_entry(12, NORMALIZE(0xFF), NORMALIZE(0x55), NORMALIZE(0x55));
+    framebuffer_set_palette_entry(13, NORMALIZE(0xFF), NORMALIZE(0x55), NORMALIZE(0xFF));
+    framebuffer_set_palette_entry(14, NORMALIZE(0xFF), NORMALIZE(0xFF), NORMALIZE(0x55));
+    framebuffer_set_palette_entry(15, NORMALIZE(0xFF), NORMALIZE(0xFF), NORMALIZE(0xFF));
 }
 
 
