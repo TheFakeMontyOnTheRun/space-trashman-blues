@@ -20,6 +20,8 @@
 #define REG(xn, parm) parm __asm(#xn)
 #define REGARGS __regargs
 
+#define NORMALIZE(x) (((x * 16) / 256))
+
 #ifndef CD32
 extern void REGARGS c2p1x1_4_c5_bm(
 REG(d0, UWORD chunky_x),
@@ -196,22 +198,22 @@ void init() {
     SetRGB4 ( &screen->ViewPort, 30, 128, 192, 128 );
     SetRGB4 ( &screen->ViewPort, 31, 128, 192, 192 );
 #else
-    SetRGB4(&screen->ViewPort, 0, 0x00, 0x00, 0x00);
-    SetRGB4(&screen->ViewPort, 1, 0x00, 0x00, 0xAA);
-    SetRGB4(&screen->ViewPort, 2, 0x00, 0xAA, 0x00);
-    SetRGB4(&screen->ViewPort, 3, 0x00, 0xAA, 0xAA);
-    SetRGB4(&screen->ViewPort, 4, 0xAA, 0x00, 0x00);
-    SetRGB4(&screen->ViewPort, 5, 0xAA, 0x00, 0xAA);
-    SetRGB4(&screen->ViewPort, 6, 0xAA, 0x55, 0x00);
-    SetRGB4(&screen->ViewPort, 7, 0xAA, 0xAA, 0xAA);
-    SetRGB4(&screen->ViewPort, 8, 0x55, 0x55, 0x00);
-    SetRGB4(&screen->ViewPort, 9, 0x55, 0x55, 0xFF);
-    SetRGB4(&screen->ViewPort, 10, 0x55, 0xFF, 0x55);
-    SetRGB4(&screen->ViewPort, 11, 0x55, 0xFF, 0xFF);
-    SetRGB4(&screen->ViewPort, 12, 0xFF, 0x55, 0x55);
-    SetRGB4(&screen->ViewPort, 13, 0xFF, 0x55, 0xFF);
-    SetRGB4(&screen->ViewPort, 14, 0xFF, 0xFF, 0x55);
-    SetRGB4(&screen->ViewPort, 15, 0xFF, 0xFF, 0xFF);
+    SetRGB4(&screen->ViewPort, 0, NORMALIZE(0x00), NORMALIZE(0x00), NORMALIZE(0x00));
+    SetRGB4(&screen->ViewPort, 1, NORMALIZE(0x00), NORMALIZE(0x00), NORMALIZE(0xAA));
+    SetRGB4(&screen->ViewPort, 2, NORMALIZE(0x00), NORMALIZE(0xAA), NORMALIZE(0x00));
+    SetRGB4(&screen->ViewPort, 3, NORMALIZE(0x00), NORMALIZE(0xAA), NORMALIZE(0xAA));
+    SetRGB4(&screen->ViewPort, 4, NORMALIZE(0xAA), NORMALIZE(0x00), NORMALIZE(0x00));
+    SetRGB4(&screen->ViewPort, 5, NORMALIZE(0xAA), NORMALIZE(0x00), NORMALIZE(0xAA));
+    SetRGB4(&screen->ViewPort, 6, NORMALIZE(0xAA), NORMALIZE(0x55), NORMALIZE(0x00));
+    SetRGB4(&screen->ViewPort, 7, NORMALIZE(0xAA), NORMALIZE(0xAA), NORMALIZE(0xAA));
+    SetRGB4(&screen->ViewPort, 8, NORMALIZE(0x55), NORMALIZE(0x55), NORMALIZE(0x55));
+    SetRGB4(&screen->ViewPort, 9, NORMALIZE(0x55), NORMALIZE(0x55), NORMALIZE(0xFF));
+    SetRGB4(&screen->ViewPort, 10, NORMALIZE(0x55), NORMALIZE(0xFF), NORMALIZE(0x55));
+    SetRGB4(&screen->ViewPort, 11, NORMALIZE(0x55), NORMALIZE(0xFF), NORMALIZE(0xFF));
+    SetRGB4(&screen->ViewPort, 12, NORMALIZE(0xFF), NORMALIZE(0x55), NORMALIZE(0x55));
+    SetRGB4(&screen->ViewPort, 13, NORMALIZE(0xFF), NORMALIZE(0x55), NORMALIZE(0xFF));
+    SetRGB4(&screen->ViewPort, 14, NORMALIZE(0xFF), NORMALIZE(0xFF), NORMALIZE(0x55));
+    SetRGB4(&screen->ViewPort, 15, NORMALIZE(0xFF), NORMALIZE(0xFF), NORMALIZE(0xFF));
 #endif
 
     SetPointer(my_window, emptypointer, 1, 16, 0, 0);
