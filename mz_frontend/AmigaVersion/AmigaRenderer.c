@@ -114,41 +114,6 @@ struct RGB8 {
 };
 
 /*
-#ifdef CD32
-uint8_t getPaletteEntry ( uint32_t origin ) {
-  uint8_t shade;
-
-  if ( !( origin & 0xFF000000 ) ) {
-    return TRANSPARENCY_COLOR;
-  }
-
-  shade = 0;
-  shade += ( ( ( ( ( origin & 0x0000FF ) ) << 2 ) >> 8 ) ) << 4;
-  shade += ( ( ( ( ( origin & 0x00FF00 ) >> 8 ) << 2 ) >> 8 ) ) << 2;
-  shade += ( ( ( ( ( origin & 0xFF0000 ) >> 16 ) << 1 ) >> 8 ) ) << 0;
-
-  return shade;
-}
-#else
-uint8_t getPaletteEntry(uint32_t origin) {
-    uint8_t shade;
-
-    if (!(origin & 0xFF000000)) {
-        return TRANSPARENCY_COLOR;
-    }
-
-    shade = 0;
-    shade += (((((origin & 0x0000FF)) << 2) >> 8)) << 6;
-    shade += (((((origin & 0x00FF00) >> 8) << 3) >> 8)) << 3;
-    shade += (((((origin & 0xFF0000) >> 16) << 3) >> 8)) << 0;
-
-    return shade;
-}
-#endif
-*/
-
-
-/*
  * Code lifted (and heavily modified) from the Strife AGA port by Lantus
  * https://github.com/lantus/Strife/blob/master/i_video.c
  * */
@@ -196,7 +161,7 @@ void init() {
         CloseLibrary((struct Library *) IntuitionBase);
         exit(0);
     }
-/*
+
 #ifdef CD32
     SetRGB4 ( &screen->ViewPort, 0, 0, 0, 0 );
     SetRGB4 ( &screen->ViewPort, 1, 0, 0, 64 );
@@ -231,27 +196,25 @@ void init() {
     SetRGB4 ( &screen->ViewPort, 30, 128, 192, 128 );
     SetRGB4 ( &screen->ViewPort, 31, 128, 192, 192 );
 #else
-    for (r = 0; r < 256; r += 16) {
-        for (g = 0; g < 256; g += 8) {
-            for (b = 0; b < 256; b += 8) {
-                uint32_t pixel = 0xFF000000 + (r << 16) + (g << 8) + (b);
-                uint8_t paletteEntry = getPaletteEntry(pixel);
-                palete[paletteEntry].r = ((((16 * (b - 0x38)) / 256)));
-                palete[paletteEntry].g = ((((16 * (g - 0x18)) / 256)));
-                palete[paletteEntry].b = ((((16 * (r - 0x10)) / 256)));
-            }
-        }
-    }
-
-    for (c = 0; c < 256; ++c) {
-        SetRGB4(&screen->ViewPort, c, palete[c].r, palete[c].g,
-                palete[c].b);
-    }
-
-
+    SetRGB4(&screen->ViewPort, 0, 0,0,0);
+    SetRGB4(&screen->ViewPort, 1, 0x00,0x00,0xff);
+    SetRGB4(&screen->ViewPort, 2, 0x00,0xff,0x00);
+    SetRGB4(&screen->ViewPort, 3, 0x00,0xff,0xff);
+    SetRGB4(&screen->ViewPort, 4, 0xff,0x00,0x00);
+    SetRGB4(&screen->ViewPort, 5, 0xff,0x00,0xff);
+    SetRGB4(&screen->ViewPort, 6, 0xff,0xff,0x00);
+    SetRGB4(&screen->ViewPort, 7, 0xff,0xff,0xff);
+    SetRGB4(&screen->ViewPort, 8, 0x00,0x00,0x00);
+    SetRGB4(&screen->ViewPort, 9, 0x00,0x00,0x7f);
+    SetRGB4(&screen->ViewPort,10, 0x00,0x7f,0x00);
+    SetRGB4(&screen->ViewPort,11, 0x00,0x7f,0x7f);
+    SetRGB4(&screen->ViewPort,12, 0x7f,0x00,0x00);
+    SetRGB4(&screen->ViewPort,13, 0x7f,0x00,0x7f);
+    SetRGB4(&screen->ViewPort,14, 0x7f,0x7f,0x00);
+    SetRGB4(&screen->ViewPort,15, 0x7f,0x7f,0x7f);
 #endif
-*/
-   // SetPointer(my_window, emptypointer, 1, 16, 0, 0);
+
+    SetPointer(my_window, emptypointer, 1, 16, 0, 0);
 
     querySoundDriver();
 }
