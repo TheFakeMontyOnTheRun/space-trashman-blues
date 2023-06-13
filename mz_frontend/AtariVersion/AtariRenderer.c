@@ -146,11 +146,11 @@ void realPut(int x, int y, uint8_t value) {
 
     uint16_t *words = (uint16_t*)logBase;
 
-    uint16_t word = words[(y * 80) + posX + (posX * 4) ];
+    uint16_t word = words[(y * 80) + (posX * 4) ];
 
     word = word | (1 << (15 - ( x & 15)));
 
-    words[(y * 80) + posX + (posX * 4) ] = word;
+    words[(y * 80) + (posX * 4) ] = word;
 }
 
 void clearGraphics() {
