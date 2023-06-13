@@ -196,22 +196,22 @@ void init() {
     SetRGB4 ( &screen->ViewPort, 30, 128, 192, 128 );
     SetRGB4 ( &screen->ViewPort, 31, 128, 192, 192 );
 #else
-    SetRGB4(&screen->ViewPort, 0, 0,0,0);
-    SetRGB4(&screen->ViewPort, 1, 0x00,0x00,0xff);
-    SetRGB4(&screen->ViewPort, 2, 0x00,0xff,0x00);
-    SetRGB4(&screen->ViewPort, 3, 0x00,0xff,0xff);
-    SetRGB4(&screen->ViewPort, 4, 0xff,0x00,0x00);
-    SetRGB4(&screen->ViewPort, 5, 0xff,0x00,0xff);
-    SetRGB4(&screen->ViewPort, 6, 0xff,0xff,0x00);
-    SetRGB4(&screen->ViewPort, 7, 0xff,0xff,0xff);
-    SetRGB4(&screen->ViewPort, 8, 0x00,0x00,0x00);
-    SetRGB4(&screen->ViewPort, 9, 0x00,0x00,0x7f);
-    SetRGB4(&screen->ViewPort,10, 0x00,0x7f,0x00);
-    SetRGB4(&screen->ViewPort,11, 0x00,0x7f,0x7f);
-    SetRGB4(&screen->ViewPort,12, 0x7f,0x00,0x00);
-    SetRGB4(&screen->ViewPort,13, 0x7f,0x00,0x7f);
-    SetRGB4(&screen->ViewPort,14, 0x7f,0x7f,0x00);
-    SetRGB4(&screen->ViewPort,15, 0x7f,0x7f,0x7f);
+    SetRGB4(&screen->ViewPort, 0, 0x00, 0x00, 0x00);
+    SetRGB4(&screen->ViewPort, 1, 0x00, 0x00, 0xAA);
+    SetRGB4(&screen->ViewPort, 2, 0x00, 0xAA, 0x00);
+    SetRGB4(&screen->ViewPort, 3, 0x00, 0xAA, 0xAA);
+    SetRGB4(&screen->ViewPort, 4, 0xAA, 0x00, 0x00);
+    SetRGB4(&screen->ViewPort, 5, 0xAA, 0x00, 0xAA);
+    SetRGB4(&screen->ViewPort, 6, 0xAA, 0x55, 0x00);
+    SetRGB4(&screen->ViewPort, 7, 0xAA, 0xAA, 0xAA);
+    SetRGB4(&screen->ViewPort, 8, 0x55, 0x55, 0x00);
+    SetRGB4(&screen->ViewPort, 9, 0x55, 0x55, 0xFF);
+    SetRGB4(&screen->ViewPort, 10, 0x55, 0xFF, 0x55);
+    SetRGB4(&screen->ViewPort, 11, 0x55, 0xFF, 0xFF);
+    SetRGB4(&screen->ViewPort, 12, 0xFF, 0x55, 0x55);
+    SetRGB4(&screen->ViewPort, 13, 0xFF, 0x55, 0xFF);
+    SetRGB4(&screen->ViewPort, 14, 0xFF, 0xFF, 0x55);
+    SetRGB4(&screen->ViewPort, 15, 0xFF, 0xFF, 0xFF);
 #endif
 
     SetPointer(my_window, emptypointer, 1, 16, 0, 0);
