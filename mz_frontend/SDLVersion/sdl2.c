@@ -8,8 +8,8 @@
 #include "SDL.h"
 
 int cursorPosition = 0;
-extern struct ObjectNode* focusedItem;
-extern struct ObjectNode* roomItem;
+extern struct ObjectNode *focusedItem;
+extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
 SDL_Window *window;
 SDL_Renderer *renderer;
@@ -35,25 +35,24 @@ void pickOrDrop();
 void pickItem();
 
 void graphicsPut(int16_t x, int16_t y) {
-	if (x < 0 ) {
-		x = 0;
-	}
+    if (x < 0) {
+        x = 0;
+    }
 
-	if (x >= 128) {
-		x = 127;
-	}
+    if (x >= 128) {
+        x = 127;
+    }
 
-	if (y < 0 ) {
-		y = 0;
-	}
+    if (y < 0) {
+        y = 0;
+    }
 
-	if (y >= 128) {
-		y = 127;
-	}
+    if (y >= 128) {
+        y = 127;
+    }
 
 
-
-	framebuffer[(256 * y) + x] = 1;
+    framebuffer[(256 * y) + x] = 1;
 #ifdef PUTAFLIP
     graphicsFlush();
     SDL_Delay(100);
@@ -62,9 +61,9 @@ void graphicsPut(int16_t x, int16_t y) {
 
 void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t shouldStipple) {
 
-	if (x0 <0 ) {
-		return;
-	}
+    if (x0 < 0) {
+        return;
+    }
 
     int16_t y;
     int16_t _y0 = y0;
@@ -75,35 +74,35 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t shouldStipple) {
         _y1 = y0;
     }
 
-	if (_y0 < 0 ) {
-		_y0 = 0;
-	}
+    if (_y0 < 0) {
+        _y0 = 0;
+    }
 
-	if (_y1 >= 128) {
-		_y1 = 127;
-	}
+    if (_y1 >= 128) {
+        _y1 = 127;
+    }
 
-	uint8_t stipple;
-	uint8_t colour;
+    uint8_t stipple;
+    uint8_t colour;
 
-	if (shouldStipple <= 7) {
-		colour = shouldStipple;
-		shouldStipple = 0;
-		stipple = 1;
-	} else {
-		colour = shouldStipple - 8;
-		shouldStipple = 1;
-		stipple = (x0 & 1);
-	}
+    if (shouldStipple <= 7) {
+        colour = shouldStipple;
+        shouldStipple = 0;
+        stipple = 1;
+    } else {
+        colour = shouldStipple - 8;
+        shouldStipple = 1;
+        stipple = (x0 & 1);
+    }
 
-    for ( y = _y0; y <= _y1; ++y) {
-		if (shouldStipple) {
-			stipple = !stipple;
-		}
+    for (y = _y0; y <= _y1; ++y) {
+        if (shouldStipple) {
+            stipple = !stipple;
+        }
 
-		if (stipple) {
-			framebuffer[(256 * y) + x0] = colour;
-		}
+        if (stipple) {
+            framebuffer[(256 * y) + x0] = colour;
+        }
     }
 }
 
@@ -111,11 +110,11 @@ void shutdownGraphics() {
     SDL_Quit();
 }
 
-void showMessage(const char* mesg) {
+void showMessage(const char *mesg) {
     puts(mesg);
 }
 
-void drawWindow(int tx, int ty, int tw, int th, const char* title ) {}
+void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 
 void clearGraphics() {
     memset(framebuffer, 0, 256 * 160);
@@ -130,10 +129,10 @@ void printSituation() {
     puts("---------------");
     puts("\nPlayer items:");
 
-    while( playerObjects != NULL ) {
+    while (playerObjects != NULL) {
         struct Item *item = getItem(playerObjects->item);
 
-        printf("%c%c%s\n", (playerObjects == focusedItem) ? '>' : ' ', item->active ? '*' : '-', item->name );
+        printf("%c%c%s\n", (playerObjects == focusedItem) ? '>' : ' ', item->active ? '*' : '-', item->name);
 
         playerObjects = playerObjects->next;
     }
@@ -142,10 +141,10 @@ void printSituation() {
 
     struct ObjectNode *roomItems = getRoom(getPlayerRoom())->itemsPresent->next;
 
-    while( roomItems != NULL ) {
+    while (roomItems != NULL) {
         struct Item *item = getItem(roomItems->item);
 
-        printf("%c%c%s\n", (roomItems == roomItem) ? '>' : ' ',item->active ? '*' : '-', item->name );
+        printf("%c%c%s\n", (roomItems == roomItem) ? '>' : ' ', item->active ? '*' : '-', item->name);
 
         roomItems = roomItems->next;
     }
@@ -270,22 +269,22 @@ void init() {
 
     renderer = SDL_CreateRenderer(window, -1, 0);
 
-    palette[0] = 0xff000000;
-    palette[1] = 0xff0000ff;
-    palette[2] = 0xff00ff00;
-    palette[3] = 0xff00ffff;
-    palette[4] = 0xffff0000;
-    palette[5] = 0xffff00ff;
-    palette[6] = 0xffffff00;
-    palette[7] = 0xffffffff;
-    palette[8] = 0xff000000;
-    palette[9] = 0xff00007f;
-    palette[10] = 0xff007f00;
-    palette[11] = 0xff007f7f;
-    palette[12] = 0xff7f0000;
-    palette[13] = 0xff7f007f;
-    palette[14] = 0xff7f7f00;
-    palette[15] = 0xff7f7f7f;
+    palette[0] = 0x000000;
+    palette[1] = 0x0000AA;
+    palette[2] = 0x00AA00;
+    palette[3] = 0x00AAAA;
+    palette[4] = 0xAA0000;
+    palette[5] = 0xAA00AA;
+    palette[6] = 0xAA5500;
+    palette[7] = 0xAAAAAA;
+    palette[8] = 0x555555;
+    palette[9] = 0x5555FF;
+    palette[10] = 0x55FF55;
+    palette[11] = 0x55FFFF;
+    palette[12] = 0xFF5555;
+    palette[13] = 0xFF55FF;
+    palette[14] = 0xFFFF55;
+    palette[15] = 0xFFFFFF;
 
 #ifdef __EMSCRIPTEN__
     enterFullScreenMode ();

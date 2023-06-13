@@ -51,22 +51,22 @@ void init() {
     querySoundDriver();
 
 
-    framebuffer_set_palette_entry(0, 0, 0, 0);
-    framebuffer_set_palette_entry(1, 0x00, 0x00, 0xff);
-    framebuffer_set_palette_entry(2, 0x00, 0xff, 0x00);
-    framebuffer_set_palette_entry(3, 0x00, 0xff, 0xff);
-    framebuffer_set_palette_entry(4, 0xff, 0x00, 0x00);
-    framebuffer_set_palette_entry(5, 0xff, 0x00, 0xff);
-    framebuffer_set_palette_entry(6, 0xff, 0xff, 0x00);
-    framebuffer_set_palette_entry(7, 0xff, 0xff, 0xff);
-    framebuffer_set_palette_entry(8, 0x00, 0x00, 0x00);
-    framebuffer_set_palette_entry(9, 0x00, 0x00, 0x7f);
-    framebuffer_set_palette_entry(10, 0x00, 0x7f, 0x00);
-    framebuffer_set_palette_entry(11, 0x00, 0x7f, 0x7f);
-    framebuffer_set_palette_entry(12, 0x7f, 0x00, 0x00);
-    framebuffer_set_palette_entry(13, 0x7f, 0x00, 0x7f);
-    framebuffer_set_palette_entry(14, 0x7f, 0x7f, 0x00);
-    framebuffer_set_palette_entry(15, 0x7f, 0x7f, 0x7f);
+    framebuffer_set_palette_entry(0, 0x00, 0x00, 0x00);
+    framebuffer_set_palette_entry(1, 0x00, 0x00, 0xAA);
+    framebuffer_set_palette_entry(2, 0x00, 0xAA, 0x00);
+    framebuffer_set_palette_entry(3, 0x00, 0xAA, 0xAA);
+    framebuffer_set_palette_entry(4, 0xAA, 0x00, 0x00);
+    framebuffer_set_palette_entry(5, 0xAA, 0x00, 0xAA);
+    framebuffer_set_palette_entry(6, 0xAA, 0x55, 0x00);
+    framebuffer_set_palette_entry(7, 0xAA, 0xAA, 0xAA);
+    framebuffer_set_palette_entry(8, 0x55, 0x55, 0x00);
+    framebuffer_set_palette_entry(9, 0x55, 0x55, 0xFF);
+    framebuffer_set_palette_entry(10, 0x55, 0xFF, 0x55);
+    framebuffer_set_palette_entry(11, 0x55, 0xFF, 0xFF);
+    framebuffer_set_palette_entry(12, 0xFF, 0x55, 0x55);
+    framebuffer_set_palette_entry(13, 0xFF, 0x55, 0xFF);
+    framebuffer_set_palette_entry(14, 0xFF, 0xFF, 0x55);
+    framebuffer_set_palette_entry(15, 0xFF, 0xFF, 0xFF);
 }
 
 
