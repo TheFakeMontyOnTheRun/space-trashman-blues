@@ -159,41 +159,6 @@ void shutdownGraphics() {
 }
 
 void realPut(int x, int y, uint8_t value) {
-    int posX = x / 16;
-
-    uint16_t *words = (uint16_t *) logBase;
-
-    if (value & 1) {
-        uint16_t word = words[(y * 80) + (posX * 4)];
-
-        word = word | (1 << (15 - (x & 15)));
-
-        words[(y * 80) + (posX * 4)] = word;
-    }
-
-    if (value & 2) {
-        uint16_t word = words[(y * 80) + (posX * 4) + 1];
-
-        word = word | (1 << (15 - (x & 15)));
-
-        words[(y * 80) + (posX * 4) + 1] = word;
-    }
-
-    if (value & 4) {
-        uint16_t word = words[(y * 80) + (posX * 4) + 2];
-
-        word = word | (1 << (15 - (x & 15)));
-
-        words[(y * 80) + (posX * 4) + 2] = word;
-    }
-
-    if (value & 8) {
-        uint16_t word = words[(y * 80) + (posX * 4) + 3];
-
-        word = word | (1 << (15 - (x & 15)));
-
-        words[(y * 80) + (posX * 4) + 3] = word;
-    }
 
 }
 
@@ -216,10 +181,41 @@ void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 
 void graphicsFlush() {
     memset(logBase, 0, 32000);
+    uint8_t *fragment = &framebuffer[0];
+    unsigned lineOffset = 0;
     for (int y = 0; y < 128; ++y) {
         for (int x = 0; x < 128; ++x) {
-            realPut(x, y, framebuffer[128 * y + x]);
+
+            uint16_t *words = (uint16_t *) logBase;
+            unsigned value = *fragment;
+            unsigned offset = lineOffset + ((x >> 4) << 2);
+            unsigned bitPattern = (1 << (15 - (x & 15)));
+
+            if (value & 1) {
+                words[offset] |= bitPattern;
+            }
+
+            offset++;
+
+            if (value & 2) {
+                words[offset] |= bitPattern;
+            }
+
+            offset++;
+
+            if (value & 4) {
+                words[offset] |= bitPattern;
+            }
+
+            offset++;
+
+            if (value & 8) {
+                words[offset] |= bitPattern;
+            }
+
+            ++fragment;
         }
+        lineOffset += 80;
     }
 
     uint16_t *tmp;
