@@ -1,4 +1,4 @@
-CFLAGS = -fomit-frame-pointer -fno-exceptions -ffast-math -I../core/include -I../common/include -IEngine3D -DLEAN_BUILD -DMSDOS -DRES128X128 -DTRACE_OBJECTS_OVER_FLOOR -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DUSE_FILLED_POLYS -DSUPPORTS_ROOM_TRANSITION_ANIMATION
+CFLAGS = -fomit-frame-pointer -fno-exceptions -ffast-math -I../core/include -I../common/include -IEngine3D -DMSDOS -DRES128X128 -DTRACE_OBJECTS_OVER_FLOOR -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DUSE_FILLED_POLYS -DSUPPORTS_ROOM_TRANSITION_ANIMATION
 
 CC = i386-pc-msdosdjgpp-gcc
 
