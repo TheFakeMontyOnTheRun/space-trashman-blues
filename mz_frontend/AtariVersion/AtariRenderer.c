@@ -73,7 +73,7 @@ void init() {
 
 /*Same as above*/
 void handleSystemEvents() {
-    bufferInput = getchar();
+    bufferInput = Cnecin();
 }
 
 uint8_t getKey() {
