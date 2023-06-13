@@ -39,6 +39,8 @@
 #include "CRenderer.h"
 #include "Globals.h"
 
+#define NORMALIZE(x) (((x * 16) / 256))
+
 #define REG(xn, parm) parm __asm(#xn)
 #define REGARGS __regargs
 
@@ -232,38 +234,38 @@ void graphicsInit() {
     }
 
 #ifdef CD32
-    SetRGB4 ( &screen->ViewPort, 0, 0, 0, 0 );
-    SetRGB4 ( &screen->ViewPort, 1, 0, 0, 64 );
-    SetRGB4 ( &screen->ViewPort, 2, 0, 0, 128 );
-    SetRGB4 ( &screen->ViewPort, 3, 0, 0, 192 );
-    SetRGB4 ( &screen->ViewPort, 4, 0, 64, 0 );
-    SetRGB4 ( &screen->ViewPort, 5, 0, 64, 64 );
-    SetRGB4 ( &screen->ViewPort, 6, 0, 64, 128 );
-    SetRGB4 ( &screen->ViewPort, 7, 0, 64, 192 );
-    SetRGB4 ( &screen->ViewPort, 8, 0, 128, 0 );
-    SetRGB4 ( &screen->ViewPort, 9, 0, 128, 64 );
-    SetRGB4 ( &screen->ViewPort, 10, 0, 128, 128 );
-    SetRGB4 ( &screen->ViewPort, 11, 0, 128, 192 );
-    SetRGB4 ( &screen->ViewPort, 12, 0, 192, 0 );
-    SetRGB4 ( &screen->ViewPort, 13, 0, 192, 64 );
-    SetRGB4 ( &screen->ViewPort, 14, 0, 192, 128 );
-    SetRGB4 ( &screen->ViewPort, 15, 0, 192, 192 );
-    SetRGB4 ( &screen->ViewPort, 16, 128, 0, 0 );
-    SetRGB4 ( &screen->ViewPort, 17, 128, 0, 64 );
-    SetRGB4 ( &screen->ViewPort, 18, 128, 0, 128 );
-    SetRGB4 ( &screen->ViewPort, 19, 128, 0, 192 );
-    SetRGB4 ( &screen->ViewPort, 20, 128, 64, 0 );
-    SetRGB4 ( &screen->ViewPort, 21, 128, 64, 64 );
-    SetRGB4 ( &screen->ViewPort, 22, 128, 64, 128 );
-    SetRGB4 ( &screen->ViewPort, 23, 128, 64, 192 );
-    SetRGB4 ( &screen->ViewPort, 24, 128, 128, 0 );
-    SetRGB4 ( &screen->ViewPort, 25, 128, 128, 64 );
-    SetRGB4 ( &screen->ViewPort, 26, 128, 128, 128 );
-    SetRGB4 ( &screen->ViewPort, 27, 128, 128, 192 );
-    SetRGB4 ( &screen->ViewPort, 28, 128, 192, 0 );
-    SetRGB4 ( &screen->ViewPort, 29, 128, 192, 64 );
-    SetRGB4 ( &screen->ViewPort, 30, 128, 192, 128 );
-    SetRGB4 ( &screen->ViewPort, 31, 128, 192, 192 );
+    SetRGB4 ( &screen->ViewPort, 0, NORMALIZE(0), NORMALIZE(0), NORMALIZE(0 ));
+    SetRGB4 ( &screen->ViewPort, 1, NORMALIZE(0), NORMALIZE(0), NORMALIZE(64 ));
+    SetRGB4 ( &screen->ViewPort, 2, NORMALIZE(0), NORMALIZE(0), NORMALIZE(128 ));
+    SetRGB4 ( &screen->ViewPort, 3, NORMALIZE(0), NORMALIZE(0), NORMALIZE(192 ));
+    SetRGB4 ( &screen->ViewPort, 4, NORMALIZE(0), NORMALIZE(64), NORMALIZE(0 ));
+    SetRGB4 ( &screen->ViewPort, 5, NORMALIZE(0), NORMALIZE(64), NORMALIZE(64 ));
+    SetRGB4 ( &screen->ViewPort, 6, NORMALIZE(0), NORMALIZE(64), NORMALIZE(128 ));
+    SetRGB4 ( &screen->ViewPort, 7, NORMALIZE(0), NORMALIZE(64), NORMALIZE(192 ));
+    SetRGB4 ( &screen->ViewPort, 8, NORMALIZE(0), NORMALIZE(128), NORMALIZE(0 ));
+    SetRGB4 ( &screen->ViewPort, 9, NORMALIZE(0), NORMALIZE(128), NORMALIZE(64 ));
+    SetRGB4 ( &screen->ViewPort, 10, NORMALIZE(0), NORMALIZE(128), NORMALIZE(128 ));
+    SetRGB4 ( &screen->ViewPort, 11, NORMALIZE(0), NORMALIZE(128), NORMALIZE(192 ));
+    SetRGB4 ( &screen->ViewPort, 12, NORMALIZE(0), NORMALIZE(192), NORMALIZE(0 ));
+    SetRGB4 ( &screen->ViewPort, 13, NORMALIZE(0), NORMALIZE(192), NORMALIZE(64 ));
+    SetRGB4 ( &screen->ViewPort, 14, NORMALIZE(0), NORMALIZE(192), NORMALIZE(128 ));
+    SetRGB4 ( &screen->ViewPort, 15, NORMALIZE(0), NORMALIZE(192), NORMALIZE(192 ));
+    SetRGB4 ( &screen->ViewPort, 16, NORMALIZE(128), NORMALIZE(0), NORMALIZE(0 ));
+    SetRGB4 ( &screen->ViewPort, 17, NORMALIZE(128), NORMALIZE(0), NORMALIZE(64 ));
+    SetRGB4 ( &screen->ViewPort, 18, NORMALIZE(128), NORMALIZE(0), NORMALIZE(128 ));
+    SetRGB4 ( &screen->ViewPort, 19, NORMALIZE(128), NORMALIZE(0), NORMALIZE(192 ));
+    SetRGB4 ( &screen->ViewPort, 20, NORMALIZE(128), NORMALIZE(64), NORMALIZE(0 ));
+    SetRGB4 ( &screen->ViewPort, 21, NORMALIZE(128), NORMALIZE(64), NORMALIZE(64 ));
+    SetRGB4 ( &screen->ViewPort, 22, NORMALIZE(128), NORMALIZE(64), NORMALIZE(128) );
+    SetRGB4 ( &screen->ViewPort, 23, NORMALIZE(128), NORMALIZE(64), NORMALIZE(192) );
+    SetRGB4 ( &screen->ViewPort, 24, NORMALIZE(128), NORMALIZE(128), NORMALIZE(0 ));
+    SetRGB4 ( &screen->ViewPort, 25, NORMALIZE(128), NORMALIZE(128), NORMALIZE(64 ));
+    SetRGB4 ( &screen->ViewPort, 26,NORMALIZE( 128), NORMALIZE(128), NORMALIZE(128 ));
+    SetRGB4 ( &screen->ViewPort, 27,NORMALIZE( 128), NORMALIZE(128), NORMALIZE(192 ));
+    SetRGB4 ( &screen->ViewPort, 28, NORMALIZE(128), NORMALIZE(192), NORMALIZE(0 ));
+    SetRGB4 ( &screen->ViewPort, 29, NORMALIZE(128), NORMALIZE(192), NORMALIZE(64 ));
+    SetRGB4 ( &screen->ViewPort, 30, NORMALIZE(128), NORMALIZE(192), NORMALIZE(128 ));
+    SetRGB4 ( &screen->ViewPort, 31, NORMALIZE(128), NORMALIZE(192), NORMALIZE(192 ));
 #else
     for (r = 0; r < 256; r += 16) {
         for (g = 0; g < 256; g += 8) {
