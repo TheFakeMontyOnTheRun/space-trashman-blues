@@ -232,11 +232,9 @@ void handleSystemEvents() {
 				mBufferedCommand = kCommandFire4;
 				break;
 			case 'j':
-				useDither = FALSE;
 				visibilityCached = FALSE;
 				break;
 			case 'k':
-				useDither = TRUE;
 				visibilityCached = FALSE;
 				break;
 #ifdef SDLSW

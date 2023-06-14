@@ -2,7 +2,14 @@ CFLAGS = -fomit-frame-pointer -fno-exceptions -ffast-math -I../core/include -I..
 
 CC = i386-pc-msdosdjgpp-gcc
 
-OBJS = Engine3D/demo.o MSDOSVersion/msdos.o ../core/src/Core.o ../core/src/Derelict.o ../common/src/PackedFileReader.o ../common/src/Common.o
+OBJS = Engine3D/demo.o MSDOSVersion/msdos.o \
+    ../core/src/Core.o \
+    ../core/src/Derelict.o \
+    ../common/src/PackedFileReader.o \
+    ../common/src/CTile3DProperties.o \
+    ../common/src/MapWithCharKey.o \
+    ../common/src/FixP.o \
+    ../common/src/Common.o
 
 TARGET = derelict.exe
 

@@ -1,12 +1,19 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-
 #ifdef WIN32
 #include "Win32Int.h"
 #else
 #include <stdint.h>
+#endif
+
+#ifndef SMD
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#ifndef WIN32
 #include <unistd.h>
+#endif
+#else
+#include <genesis.h>
+typedef unsigned long size_t;
 #endif
 
 #include "Common.h"
@@ -16,19 +23,28 @@
 #include "PackedFileReader.h"
 #include "MapWithCharKey.h"
 
-void loadPropertyList(const char * propertyFile, struct MapWithCharKey * map) {
-
+void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map) {
+    int c;
     struct StaticBuffer buffer = loadBinaryFileFromPath(propertyFile);
     const uint8_t *limit = buffer.data + buffer.size;
     const uint8_t *bufferHead = buffer.data;
+
+    for (c = 0; c < 256; ++c) {
+        struct CTile3DProperties *prop = (struct CTile3DProperties *) getFromMap(map, c);
+        if (prop != NULL) {
+            free(prop);
+        }
+    }
 
     clearMap(map);
 
     while (bufferHead != limit) {
         FixP_t val = 0;
         uint8_t key = *(bufferHead++);
-        struct CTile3DProperties *prop = (struct CTile3DProperties *) calloc(
-                1, sizeof(struct CTile3DProperties));
+        struct CTile3DProperties *prop = (struct CTile3DProperties *) malloc(
+                 sizeof(struct CTile3DProperties));
+
+        memset(prop, 0, sizeof(struct CTile3DProperties));
 
         prop->mNeedsAlphaTest = *(bufferHead++);
         prop->mBlockVisibility = *(bufferHead++);

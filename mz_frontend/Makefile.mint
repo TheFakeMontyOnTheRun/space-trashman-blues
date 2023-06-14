@@ -11,6 +11,9 @@ MENU_OBJ= \
     AtariVersion/AtariRenderer.o \
     ../core/src/Core.o \
     ../core/src/Derelict.o \
+    ../common/src/FixP.o \
+    ../common/src/CTile3DProperties.o \
+    ../common/src/MapWithCharKey.o \
     ../common/src/PackedFileReader.o \
     ../common/src/Common.o
 

@@ -98,6 +98,7 @@ void Crawler_initStateCallback(int32_t tag) {
 	thisMissionNameLen = (int16_t) (strlen(thisMissionName));
 
 	if (tag == kPlayGame) {
+        clearMap(&tileProperties);
 		initRoom(getPlayerRoom());
 	}
 }
