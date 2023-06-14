@@ -725,7 +725,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
 uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
     int8_t diff;
-    uint8_t pattern = (_pattern - 32) & 127;
+    uint8_t pattern = (_pattern) & 127;
     uint8_t type;
 
     /* 127 = 01111111 - the first bit is used for indicating the presence of an object.
@@ -736,10 +736,19 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
         return 1;
     }
 
-    diff = patterns[0].ceiling - patterns[pattern].ceiling;
-    type = patterns[pattern].geometryType;
+    struct CTile3DProperties *prop =
+            (struct CTile3DProperties *) getFromMap(&tileProperties, pattern);
 
-    uint8_t mask = patterns[pattern].elementsMask;
+
+    diff = prop->mCeilingRepetitions;
+
+    if (diff == 0 && prop->mCeilingTextureIndex != 0xFF) {
+        diff = 1;
+    }
+
+    type = prop->mGeometryType;
+
+    uint8_t mask = 0xFF;
 
     if (x0 == 2) {
         mask = 255;
@@ -750,7 +759,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
     }
 
     if (type == kCube) {
-        return drawCubeAt(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2, x1 - x0,
+        return drawCubeAt(x0 - 1, fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, y + 2, x1 - x0,
                           diff, 1, mask);
     } else if (type == kRightNearWall || type == kLeftNearWall) {
 
@@ -763,19 +772,19 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
             }
         }
 
-        return drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2, x1 - x0,
-                         diff, 1, patterns[pattern].elementsMask, type);
+        return drawWedge(x0 - 1, fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, y + 2, x1 - x0,
+                         diff, 1, 0xFF, type);
 
     } else if (type == kWallWest) {
 
         switch (cameraRotation) {
             case 0:
             case 2:
-                return drawWedge(x0 - (cameraRotation == 0 ? 1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-                                 0, diff, 1, patterns[pattern].elementsMask, kLeftNearWall);
+                return drawWedge(x0 - (cameraRotation == 0 ? 1 : 0), fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, y + 2,
+                                 0, diff, 1, 0xFF, kLeftNearWall);
             case 1:
             case 3:
-                return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT,
+                return drawSquare(x0 - 1, fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT,
                                   y + (cameraRotation == 3 ? 1 : 0) + 2,
                                   x1 - x0, diff, mask);
         }
@@ -785,14 +794,14 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
         switch (cameraRotation) {
             case 0:
             case 2:
-                return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT,
+                return drawSquare(x0 - 1, fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT,
                                   y + (cameraRotation == 0 ? 1 : 0) + 2,
                                   x1 - x0, diff, mask);
             case 1:
             case 3:
                 return drawWedge(x0 - (cameraRotation == 1 ? 1 : 0),
-                                 patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-                                 0, diff, 1, patterns[pattern].elementsMask, kLeftNearWall);
+                                 fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, y + 2,
+                                 0, diff, 1, 0xFF, kLeftNearWall);
 
 
         }
@@ -804,21 +813,21 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
             case 3:
             case 0:
                 returnVal = drawWedge(x0 - (cameraRotation == 3 ? 0 : 1),
-                                      patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-                                      0, diff, 1, patterns[pattern].elementsMask, kLeftNearWall);
+                                      fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, y + 2,
+                                      0, diff, 1, 0xFF, kLeftNearWall);
 
-                returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
-                                       x1 - x0, diff, patterns[pattern].elementsMask) || returnVal;
+                returnVal = drawSquare(x0 - 1, fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, y + 1 + 2,
+                                       x1 - x0, diff, 0xFF) || returnVal;
                 break;
 
             case 1:
             case 2:
-                returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-                                       x1 - x0, diff, patterns[pattern].elementsMask);
+                returnVal = drawSquare(x0 - 1, fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, y + 2,
+                                       x1 - x0, diff, 0xFF);
 
                 returnVal =
-                        drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-                                  0, diff, 1, patterns[pattern].elementsMask, kLeftNearWall) || returnVal;
+                        drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, y + 2,
+                                  0, diff, 1, 0xFF, kLeftNearWall) || returnVal;
 
                 break;
         }
@@ -1117,7 +1126,7 @@ void initMap() {
 
     roomItem = getRoom(getPlayerRoom())->itemsPresent->next;
 
-    sprintf(&buffer[0], "%02d.txt", getPlayerRoom());
+    sprintf(&buffer[0], "map%d.txt", getPlayerRoom());
 
     struct StaticBuffer datafile = loadBinaryFileFromPath(&buffer[0]);
     head = datafile.data;
@@ -1151,8 +1160,8 @@ void initMap() {
 
     disposeDiskBuffer(datafile);
 
-//    sprintf(&buffer[0], "%02d.bin", getPlayerRoom());
-//    loadPropertyList(&buffer[0], &tileProperties);
+    sprintf(&buffer[0], "props%d.bin", getPlayerRoom());
+    loadPropertyList(&buffer[0], &tileProperties);
 
     //updateMapItems();
     HUD_initialPaint();
@@ -1297,7 +1306,11 @@ void tickRenderer() {
             break;
     }
 
-    if (patterns[newCell - 32].blockMovement) {
+    struct CTile3DProperties *prop =
+            (struct CTile3DProperties *) getFromMap(&tileProperties, newCell);
+
+
+    if (prop->mBlockMovement) {
         pos->x = cameraX = prevX;
         pos->y = cameraZ = prevZ;
         setPlayerPosition(pos);

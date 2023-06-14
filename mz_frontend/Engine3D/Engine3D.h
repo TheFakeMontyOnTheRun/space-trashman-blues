@@ -35,13 +35,6 @@
 #define CAMERA_HEIGHT 2
 #define VISIBILITY_LIMIT 32
 
-struct Pattern {
-	uint8_t ceiling: 4;
-	uint8_t elementsMask: 4;
-	uint8_t geometryType : 7;
-	uint8_t blockMovement : 1;
-};
-
 void HUD_initialPaint();
 
 void HUD_refresh();
