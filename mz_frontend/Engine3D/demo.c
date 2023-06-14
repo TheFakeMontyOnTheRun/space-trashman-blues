@@ -26,7 +26,6 @@
 #include "Core.h"
 #include "Derelict.h"
 #include "Engine3D.h"
-#include "map.h"
 
 #ifdef SUPPORTS_HACKING_MINIGAME
 #include "HackingMinigame.h"
@@ -34,6 +33,10 @@
 
 #include "Common.h"
 #include "PackedFileReader.h"
+#include "MapWithCharKey.h"
+#include "FixP.h"
+#include "CTile3DProperties.h"
+#include "map.h"
 
 enum DIRECTION {
     DIRECTION_N,
@@ -48,6 +51,8 @@ enum DIRECTION {
 
 struct ObjectNode *focusedItem = NULL;
 struct ObjectNode *roomItem = NULL;
+
+struct MapWithCharKey tileProperties;
 
 extern int accessGrantedToSafe;
 
@@ -163,7 +168,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
     }
 
 
-    if (type == RIGHT_NEAR) {
+    if (type == kRightNearWall) {
         z0px = (projections[z0].px);
         z1px = (projections[z1].px);
         z0dx = ((projections[z0].dx));
@@ -744,37 +749,37 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
         mask = 127;
     }
 
-    if (type == CUBE) {
+    if (type == kCube) {
         return drawCubeAt(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2, x1 - x0,
                           diff, 1, mask);
-    } else if (type == RIGHT_NEAR || type == LEFT_NEAR) {
+    } else if (type == kRightNearWall || type == kLeftNearWall) {
 
         if (cameraRotation == 1 || cameraRotation == 3) {
 
-            if (type == RIGHT_NEAR) {
-                type = LEFT_NEAR;
+            if (type == kRightNearWall) {
+                type = kLeftNearWall;
             } else {
-                type = RIGHT_NEAR;
+                type = kRightNearWall;
             }
         }
 
         return drawWedge(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2, x1 - x0,
                          diff, 1, patterns[pattern].elementsMask, type);
 
-    } else if (type == LEFT_WALL) {
+    } else if (type == kWallWest) {
 
         switch (cameraRotation) {
             case 0:
             case 2:
                 return drawWedge(x0 - (cameraRotation == 0 ? 1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-                                 0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
+                                 0, diff, 1, patterns[pattern].elementsMask, kLeftNearWall);
             case 1:
             case 3:
                 return drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT,
                                   y + (cameraRotation == 3 ? 1 : 0) + 2,
                                   x1 - x0, diff, mask);
         }
-    } else if (type == BACK_WALL) {
+    } else if (type == kWallNorth) {
 
 
         switch (cameraRotation) {
@@ -787,11 +792,11 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
             case 3:
                 return drawWedge(x0 - (cameraRotation == 1 ? 1 : 0),
                                  patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-                                 0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
+                                 0, diff, 1, patterns[pattern].elementsMask, kLeftNearWall);
 
 
         }
-    } else if (type == CORNER) {
+    } else if (type == kWallCorner) {
         int returnVal = 0;
 
         switch (cameraRotation) {
@@ -800,7 +805,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
             case 0:
                 returnVal = drawWedge(x0 - (cameraRotation == 3 ? 0 : 1),
                                       patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-                                      0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR);
+                                      0, diff, 1, patterns[pattern].elementsMask, kLeftNearWall);
 
                 returnVal = drawSquare(x0 - 1, patterns[pattern].ceiling - CAMERA_HEIGHT, y + 1 + 2,
                                        x1 - x0, diff, patterns[pattern].elementsMask) || returnVal;
@@ -813,7 +818,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 
                 returnVal =
                         drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), patterns[pattern].ceiling - CAMERA_HEIGHT, y + 2,
-                                  0, diff, 1, patterns[pattern].elementsMask, LEFT_NEAR) || returnVal;
+                                  0, diff, 1, patterns[pattern].elementsMask, kLeftNearWall) || returnVal;
 
                 break;
         }
@@ -1145,6 +1150,10 @@ void initMap() {
     }
 
     disposeDiskBuffer(datafile);
+
+//    sprintf(&buffer[0], "%02d.bin", getPlayerRoom());
+//    loadPropertyList(&buffer[0], &tileProperties);
+
     //updateMapItems();
     HUD_initialPaint();
 }

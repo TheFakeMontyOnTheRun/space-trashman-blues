@@ -35,15 +35,6 @@
 #define CAMERA_HEIGHT 2
 #define VISIBILITY_LIMIT 32
 
-enum GeometryType {
-	CUBE = 0,
-	RIGHT_NEAR = 4,
-	LEFT_NEAR = 8,
-	LEFT_WALL = 16,
-	BACK_WALL = 32,
-	CORNER = 64,
-};
-
 struct Pattern {
 	uint8_t ceiling: 4;
 	uint8_t elementsMask: 4;
