@@ -16,10 +16,13 @@ find_package(SDL2 REQUIRED)
 add_executable(derelict16
 		Engine3D/demo.c
 		Engine3D/HackingMinigame.c
-		../common/src/Common.c
 		SDLVersion/sdl2.c
 		../core/src/Derelict.c
 		../core/src/Core.c
+		../common/src/Common.c
+		../common/src/FixP.c
+		../common/src/MapWithCharKey.c
+		../common/src/CTile3DProperties.c
 		../common/src/PackedFileReader.c
 		)
 

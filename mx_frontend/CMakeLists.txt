@@ -30,10 +30,10 @@ add_executable(derelict32
 		menu/src/Engine.c
 		base3d/src/SDLVersion/CSDL2Renderer.c
 		base3d/src/Globals.c
-		base3d/src/CTile3DProperties.c
 		base3d/src/LoadBitmap.c
 		base3d/src/CRenderer.c
 		base3d/src/VisibilityStrategy.c
+		../common/src/CTile3DProperties.c
 		../common/src/Vec.c
 		../common/src/Common.c
 		../common/src/FixP.c

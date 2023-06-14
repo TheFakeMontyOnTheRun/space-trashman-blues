@@ -3,13 +3,12 @@
 <pre>
 <h1>Build Log</h1>
 <h3>
---------------------Configuration: Sub Mare Imperium Derelict - Win32 Release--------------------
+--------------------Configuration: Sub Mare Imperium Derelict - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating command line "rc.exe /l 0x816 /fo"Release/Sub Mare Imperium.res" /d "NDEBUG" "C:\space-trashman-blues\mx_frontend\vc6\Sub Mare Imperium Derelict\Sub Mare Imperium.rc"" 
-Creating temporary file "C:\WINDOWS\TEMP\RSP50E4.TMP" with contents
+Creating temporary file "C:\WINDOWS\TEMP\RSPE0C5.TMP" with contents
 [
-/nologo /ML /W3 /O2 /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /Fo"Release/" /Fd"Release/" /FD /c 
+/nologo /MLd /W3 /Gm /GX /ZI /Od /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
 "C:\space-trashman-blues\mx_frontend\base3d\src\Win32Version\CGDIRenderer.c"
 "C:\space-trashman-blues\common\src\Common.c"
 "C:\space-trashman-blues\core\src\Core.c"
@@ -18,7 +17,7 @@ Creating temporary file "C:\WINDOWS\TEMP\RSP50E4.TMP" with contents
 "C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c"
 "C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer_Rasterization.c"
 "C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer_Tesselation.c"
-"C:\space-trashman-blues\mx_frontend\base3d\src\CTile3DProperties.c"
+"C:\space-trashman-blues\common\src\CTile3DProperties.c"
 "C:\space-trashman-blues\core\src\Derelict.c"
 "C:\space-trashman-blues\mx_frontend\base3d\src\Dungeon.c"
 "C:\space-trashman-blues\mx_frontend\base3d\src\EDirection_Utils.c"
@@ -30,7 +29,6 @@ Creating temporary file "C:\WINDOWS\TEMP\RSP50E4.TMP" with contents
 "C:\space-trashman-blues\mx_frontend\menu\src\HackingScreen.c"
 "C:\space-trashman-blues\mx_frontend\menu\src\HelpScreen.c"
 "C:\space-trashman-blues\mx_frontend\base3d\src\LoadBitmap.c"
-"C:\space-trashman-blues\mx_frontend\menu\src\Main.c"
 "C:\space-trashman-blues\mx_frontend\menu\src\MainMenu.c"
 "C:\space-trashman-blues\common\src\MapWithCharKey.c"
 "C:\space-trashman-blues\common\src\PackedFileReader.c"
@@ -39,65 +37,75 @@ Creating temporary file "C:\WINDOWS\TEMP\RSP50E4.TMP" with contents
 "C:\space-trashman-blues\common\src\Vec.c"
 "C:\space-trashman-blues\mx_frontend\base3d\src\VisibilityStrategy.c"
 ]
-Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP50E4.TMP" 
-Creating temporary file "C:\WINDOWS\TEMP\RSP50E5.TMP" with contents
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSPE0C5.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSPE0C6.TMP" with contents
 [
-kernel32.lib user32.lib gdi32.lib shell32.lib winmm.lib /nologo /subsystem:windows /pdb:none /machine:I386 /out:"Release/Sub Mare Imperium Derelict.exe" 
-".\Release\CGDIRenderer.obj"
-".\Release\Common.obj"
-".\Release\Core.obj"
-".\Release\Crawler.obj"
-".\Release\CreditsScreen.obj"
-".\Release\CRenderer.obj"
-".\Release\CRenderer_Rasterization.obj"
-".\Release\CRenderer_Tesselation.obj"
-".\Release\CTile3DProperties.obj"
-".\Release\Derelict.obj"
-".\Release\Dungeon.obj"
-".\Release\EDirection_Utils.obj"
-".\Release\Engine.obj"
-".\Release\Events.obj"
-".\Release\FixP.obj"
-".\Release\GameMenu.obj"
-".\Release\Globals.obj"
-".\Release\HackingScreen.obj"
-".\Release\HelpScreen.obj"
-".\Release\LoadBitmap.obj"
-".\Release\Main.obj"
-".\Release\MainMenu.obj"
-".\Release\MapWithCharKey.obj"
-".\Release\PackedFileReader.obj"
-".\Release\Parser.obj"
-".\Release\UI.obj"
-".\Release\Vec.obj"
-".\Release\VisibilityStrategy.obj"
-".\Release\Sub Mare Imperium.res"
+/nologo /MLd /W3 /Gm /GX /ZI /Od /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"C:\space-trashman-blues\mx_frontend\menu\src\Main.c"
 ]
-Creating command line "link.exe @C:\WINDOWS\TEMP\RSP50E5.TMP"
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSPE0C6.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSPE0C7.TMP" with contents
+[
+winmm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /pdb:none /debug /machine:I386 /out:"Debug/Sub Mare Imperium Derelict.exe" 
+".\Debug\CGDIRenderer.obj"
+".\Debug\Common.obj"
+".\Debug\Core.obj"
+".\Debug\Crawler.obj"
+".\Debug\CreditsScreen.obj"
+".\Debug\CRenderer.obj"
+".\Debug\CRenderer_Rasterization.obj"
+".\Debug\CRenderer_Tesselation.obj"
+".\Debug\CTile3DProperties.obj"
+".\Debug\Derelict.obj"
+".\Debug\Dungeon.obj"
+".\Debug\EDirection_Utils.obj"
+".\Debug\Engine.obj"
+".\Debug\Events.obj"
+".\Debug\FixP.obj"
+".\Debug\GameMenu.obj"
+".\Debug\Globals.obj"
+".\Debug\HackingScreen.obj"
+".\Debug\HelpScreen.obj"
+".\Debug\LoadBitmap.obj"
+".\Debug\Main.obj"
+".\Debug\MainMenu.obj"
+".\Debug\MapWithCharKey.obj"
+".\Debug\PackedFileReader.obj"
+".\Debug\Parser.obj"
+".\Debug\UI.obj"
+".\Debug\Vec.obj"
+".\Debug\VisibilityStrategy.obj"
+".\Debug\Sub Mare Imperium.res"
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSPE0C7.TMP"
 <h3>Output Window</h3>
-Compiling resources...
 Compiling...
 CGDIRenderer.c
-C:\space-trashman-blues\mx_frontend\base3d\src\Win32Version\CGDIRenderer.c(91) : warning C4101: 'b' : unreferenced local variable
-C:\space-trashman-blues\mx_frontend\base3d\src\Win32Version\CGDIRenderer.c(91) : warning C4101: 'r' : unreferenced local variable
-C:\space-trashman-blues\mx_frontend\base3d\src\Win32Version\CGDIRenderer.c(91) : warning C4101: 'g' : unreferenced local variable
-C:\space-trashman-blues\mx_frontend\base3d\src\Win32Version\CGDIRenderer.c(91) : warning C4101: 'I' : unreferenced local variable
-C:\space-trashman-blues\mx_frontend\base3d\src\Win32Version\CGDIRenderer.c(92) : warning C4101: 'pixel' : unreferenced local variable
-C:\space-trashman-blues\mx_frontend\base3d\src\Win32Version\CGDIRenderer.c(428) : warning C4244: '=' : conversion from 'float ' to 'int ', possible loss of data
-C:\space-trashman-blues\mx_frontend\base3d\src\Win32Version\CGDIRenderer.c(429) : warning C4244: '=' : conversion from 'float ' to 'int ', possible loss of data
-C:\space-trashman-blues\mx_frontend\base3d\src\Win32Version\CGDIRenderer.c(224) : warning C4101: 'hDC' : unreferenced local variable
+c:\space-trashman-blues\mx_frontend\base3d\src\win32version\cgdirenderer.c(91) : warning C4101: 'b' : unreferenced local variable
+c:\space-trashman-blues\mx_frontend\base3d\src\win32version\cgdirenderer.c(91) : warning C4101: 'r' : unreferenced local variable
+c:\space-trashman-blues\mx_frontend\base3d\src\win32version\cgdirenderer.c(91) : warning C4101: 'g' : unreferenced local variable
+c:\space-trashman-blues\mx_frontend\base3d\src\win32version\cgdirenderer.c(91) : warning C4101: 'I' : unreferenced local variable
+c:\space-trashman-blues\mx_frontend\base3d\src\win32version\cgdirenderer.c(92) : warning C4101: 'pixel' : unreferenced local variable
+c:\space-trashman-blues\mx_frontend\base3d\src\win32version\cgdirenderer.c(428) : warning C4244: '=' : conversion from 'float ' to 'int ', possible loss of data
+c:\space-trashman-blues\mx_frontend\base3d\src\win32version\cgdirenderer.c(429) : warning C4244: '=' : conversion from 'float ' to 'int ', possible loss of data
+c:\space-trashman-blues\mx_frontend\base3d\src\win32version\cgdirenderer.c(224) : warning C4101: 'hDC' : unreferenced local variable
 Common.c
 Core.c
 Crawler.c
 CreditsScreen.c
 CRenderer.c
-C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c(112) : warning C4244: 'function' : conversion from 'short ' to 'const unsigned char ', possible loss of data
-C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c(117) : warning C4244: 'function' : conversion from 'short ' to 'const unsigned char ', possible loss of data
-C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c(120) : warning C4244: 'function' : conversion from 'short ' to 'const unsigned char ', possible loss of data
-C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c(123) : warning C4244: 'function' : conversion from 'short ' to 'const unsigned char ', possible loss of data
-C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c(124) : warning C4244: 'function' : conversion from 'short ' to 'const unsigned char ', possible loss of data
-C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c(274) : warning C4028: formal parameter 1 different from declaration
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer.c(115) : warning C4244: 'function' : conversion from 'short ' to 'const unsigned char ', possible loss of data
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer.c(120) : warning C4244: 'function' : conversion from 'short ' to 'const unsigned char ', possible loss of data
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer.c(123) : warning C4244: 'function' : conversion from 'short ' to 'const unsigned char ', possible loss of data
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer.c(126) : warning C4244: 'function' : conversion from 'short ' to 'const unsigned char ', possible loss of data
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer.c(127) : warning C4244: 'function' : conversion from 'short ' to 'const unsigned char ', possible loss of data
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer.c(277) : warning C4028: formal parameter 1 different from declaration
 CRenderer_Rasterization.c
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer_rasterization.c(1559) : warning C4101: 'x' : unreferenced local variable
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer_rasterization.c(1558) : warning C4101: 'dst' : unreferenced local variable
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer_rasterization.c(1557) : warning C4101: 'src' : unreferenced local variable
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer_rasterization.c(1556) : warning C4101: 'index' : unreferenced local variable
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer_rasterization.c(1559) : warning C4101: 'chunky' : unreferenced local variable
 CRenderer_Tesselation.c
 CTile3DProperties.c
 Derelict.c
@@ -105,10 +113,10 @@ Dungeon.c
 EDirection_Utils.c
 Engine.c
 Events.c
-C:\space-trashman-blues\mx_frontend\base3d\src\Events.c(66) : warning C4028: formal parameter 3 different from declaration
-C:\space-trashman-blues\mx_frontend\base3d\src\Events.c(162) : warning C4244: 'function' : conversion from 'short ' to 'const unsigned char ', possible loss of data
-C:\space-trashman-blues\mx_frontend\base3d\src\Events.c(165) : warning C4244: 'function' : conversion from 'short ' to 'const unsigned char ', possible loss of data
-C:\space-trashman-blues\mx_frontend\base3d\src\Events.c(168) : warning C4244: 'function' : conversion from 'short ' to 'const unsigned char ', possible loss of data
+c:\space-trashman-blues\mx_frontend\base3d\src\events.c(66) : warning C4028: formal parameter 3 different from declaration
+c:\space-trashman-blues\mx_frontend\base3d\src\events.c(162) : warning C4244: 'function' : conversion from 'short ' to 'const unsigned char ', possible loss of data
+c:\space-trashman-blues\mx_frontend\base3d\src\events.c(165) : warning C4244: 'function' : conversion from 'short ' to 'const unsigned char ', possible loss of data
+c:\space-trashman-blues\mx_frontend\base3d\src\events.c(168) : warning C4244: 'function' : conversion from 'short ' to 'const unsigned char ', possible loss of data
 FixP.c
 GameMenu.c
 Globals.c
@@ -116,66 +124,69 @@ HackingScreen.c
 HelpScreen.c
 LoadBitmap.c
 Generating Code...
-C:\space-trashman-blues\mx_frontend\menu\src\HelpScreen.c(117) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\menu\src\HackingScreen.c(76) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\menu\src\HackingScreen.c(77) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\menu\src\HackingScreen.c(78) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\menu\src\GameMenu.c(239) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\Events.c(46) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\Events.c(47) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\Events.c(81) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\Events.c(162) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\Events.c(166) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\Events.c(168) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\EDirection_Utils.c(69) : warning C4715: 'rightOf' : not all control paths return a value
-C:\space-trashman-blues\mx_frontend\base3d\src\EDirection_Utils.c(88) : warning C4715: 'oppositeOf' : not all control paths return a value
-C:\space-trashman-blues\mx_frontend\base3d\src\Dungeon.c(339) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\Dungeon.c(354) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\Dungeon.c(359) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\Dungeon.c(368) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\CTile3DProperties.c(26) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c(112) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c(117) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c(121) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c(123) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c(124) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c(640) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c(828) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c(848) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c(868) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\base3d\src\CRenderer.c(888) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\menu\src\CreditsScreen.c(135) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\menu\src\Crawler.c(148) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\core\src\Core.c(729) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\menu\src\helpscreen.c(117) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\menu\src\hackingscreen.c(76) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\menu\src\hackingscreen.c(77) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\menu\src\hackingscreen.c(78) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\menu\src\gamemenu.c(239) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\events.c(46) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\events.c(47) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\events.c(81) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\events.c(162) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\events.c(166) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\events.c(168) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\edirection_utils.c(69) : warning C4715: 'rightOf' : not all control paths return a value
+c:\space-trashman-blues\mx_frontend\base3d\src\edirection_utils.c(88) : warning C4715: 'oppositeOf' : not all control paths return a value
+c:\space-trashman-blues\mx_frontend\base3d\src\dungeon.c(343) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\dungeon.c(358) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\dungeon.c(363) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\dungeon.c(372) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\common\src\ctile3dproperties.c(33) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer.c(115) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer.c(120) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer.c(124) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer.c(126) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer.c(127) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer.c(639) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer.c(827) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer.c(847) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer.c(867) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\base3d\src\crenderer.c(887) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\menu\src\creditsscreen.c(135) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\menu\src\crawler.c(148) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\core\src\core.c(729) : warning C4761: integral size mismatch in argument; conversion supplied
 Compiling...
-Main.c
-C:\space-trashman-blues\mx_frontend\menu\src\Main.c(150) : warning C4047: 'function' : 'const char *' differs in levels of indirection from 'const int '
-C:\space-trashman-blues\mx_frontend\menu\src\Main.c(150) : warning C4024: 'LoadIconA' : different types for formal and actual parameter 2
-C:\space-trashman-blues\mx_frontend\menu\src\Main.c(151) : warning C4047: 'function' : 'const char *' differs in levels of indirection from 'const int '
-C:\space-trashman-blues\mx_frontend\menu\src\Main.c(151) : warning C4024: 'LoadIconA' : different types for formal and actual parameter 2
 MainMenu.c
 MapWithCharKey.c
-C:\space-trashman-blues\common\src\MapWithCharKey.c(23) : warning C4090: 'function' : different 'const' qualifiers
-C:\space-trashman-blues\common\src\MapWithCharKey.c(23) : warning C4022: 'memset' : pointer mismatch for actual parameter 1
+c:\space-trashman-blues\common\src\mapwithcharkey.c(28) : warning C4090: 'function' : different 'const' qualifiers
+c:\space-trashman-blues\common\src\mapwithcharkey.c(28) : warning C4022: 'memset' : pointer mismatch for actual parameter 1
 PackedFileReader.c
-C:\space-trashman-blues\common\src\PackedFileReader.c(294) : warning C4090: 'function' : different 'const' qualifiers
-C:\space-trashman-blues\common\src\PackedFileReader.c(294) : warning C4022: 'free' : pointer mismatch for actual parameter 1
+c:\space-trashman-blues\common\src\packedfilereader.c(186) : warning C4090: 'function' : different 'const' qualifiers
+c:\space-trashman-blues\common\src\packedfilereader.c(186) : warning C4022: 'fread' : pointer mismatch for actual parameter 1
+c:\space-trashman-blues\common\src\packedfilereader.c(294) : warning C4090: 'function' : different 'const' qualifiers
+c:\space-trashman-blues\common\src\packedfilereader.c(294) : warning C4022: 'free' : pointer mismatch for actual parameter 1
 Parser.c
 UI.c
 Vec.c
 VisibilityStrategy.c
 Generating Code...
-C:\space-trashman-blues\mx_frontend\menu\src\UI.c(110) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\menu\src\UI.c(110) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\menu\src\UI.c(154) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\core\src\Parser.c(25) : warning C4761: integral size mismatch in argument; conversion supplied
-C:\space-trashman-blues\mx_frontend\menu\src\MainMenu.c(131) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\menu\src\ui.c(110) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\menu\src\ui.c(110) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\menu\src\ui.c(152) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\core\src\parser.c(25) : warning C4761: integral size mismatch in argument; conversion supplied
+c:\space-trashman-blues\mx_frontend\menu\src\mainmenu.c(131) : warning C4761: integral size mismatch in argument; conversion supplied
+Compiling...
+Main.c
+c:\space-trashman-blues\mx_frontend\menu\src\main.c(152) : warning C4047: 'function' : 'const char *' differs in levels of indirection from 'const int '
+c:\space-trashman-blues\mx_frontend\menu\src\main.c(152) : warning C4024: 'LoadIconA' : different types for formal and actual parameter 2
+c:\space-trashman-blues\mx_frontend\menu\src\main.c(153) : warning C4047: 'function' : 'const char *' differs in levels of indirection from 'const int '
+c:\space-trashman-blues\mx_frontend\menu\src\main.c(153) : warning C4024: 'LoadIconA' : different types for formal and actual parameter 2
 Linking...
 
 
 
 <h3>Results</h3>
-Sub Mare Imperium Derelict.exe - 0 error(s), 62 warning(s)
+Sub Mare Imperium Derelict.exe - 0 error(s), 69 warning(s)
 </pre>
 </body>
 </html>

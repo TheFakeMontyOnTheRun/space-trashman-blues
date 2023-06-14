@@ -1,10 +1,15 @@
-#include <string.h>
-
 #ifdef WIN32
 #include "Win32Int.h"
 #else
 #include <stdint.h>
+#endif
+
+#ifndef SMD
+#include <string.h>
+#ifndef WIN32
 #include <unistd.h>
+#endif
+#else
 #endif
 
 #include "MapWithCharKey.h"
