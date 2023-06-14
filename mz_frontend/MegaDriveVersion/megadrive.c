@@ -22,7 +22,6 @@ void pickItem();
 
 void clearGraphics();
 
-extern const struct Pattern patterns[127];
 
 extern int8_t map[32][32];
 
