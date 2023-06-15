@@ -36,7 +36,6 @@
 		F1CA76D62610A93B00FD1E04 /* Parser.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D5B5D32531D2BF0094ED78 /* Parser.c */; };
 		F1CA76D82610A93C00FD1E04 /* UI.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A12236DE63E00478B2C /* UI.c */; };
 		F1CA76DA2610A94100FD1E04 /* Crawler.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A09236DE63E00478B2C /* Crawler.c */; };
-		F1CA76DC2610A98100FD1E04 /* CTile3DProperties.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E0236DE60800478B2C /* CTile3DProperties.c */; };
 		F1CA76DD2610A98800FD1E04 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D1107310486CEB800E47090 /* Info.plist */; };
 		F1CA76DE2610A98900FD1E04 /* enemyfire.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850E25581D370012292B /* enemyfire.wav */; };
 		F1CA76DF2610A98900FD1E04 /* gotclue.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850C25581D370012292B /* gotclue.wav */; };
@@ -59,6 +58,7 @@
 		F1CA76F02610A99300FD1E04 /* fire.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851725581D380012292B /* fire.wav */; };
 		F1CA76F22610A99900FD1E04 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		F1CA774E2610AFA000FD1E04 /* Derelict-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */; };
+		F1D1CE2A2A3B9E9E009F1F69 /* CTile3DProperties.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D1CE292A3B9E9E009F1F69 /* CTile3DProperties.c */; };
 		F1DE9C4B2951FD9100EC0235 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1DE9C4A2951FD9100EC0235 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
@@ -71,13 +71,11 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F12779DF236DE60800478B2C /* EDirection_Utils.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = EDirection_Utils.c; path = ../base3d/src/EDirection_Utils.c; sourceTree = SOURCE_ROOT; };
-		F12779E0236DE60800478B2C /* CTile3DProperties.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = CTile3DProperties.c; path = ../base3d/src/CTile3DProperties.c; sourceTree = SOURCE_ROOT; };
 		F12779E3236DE60800478B2C /* Dungeon.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Dungeon.c; path = ../base3d/src/Dungeon.c; sourceTree = SOURCE_ROOT; };
 		F12779E4236DE60800478B2C /* Globals.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Globals.c; path = ../base3d/src/Globals.c; sourceTree = SOURCE_ROOT; };
 		F12779E5236DE60800478B2C /* Events.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Events.c; path = ../base3d/src/Events.c; sourceTree = SOURCE_ROOT; };
 		F12779E9236DE60800478B2C /* VisibilityStrategy.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = VisibilityStrategy.c; path = ../base3d/src/VisibilityStrategy.c; sourceTree = SOURCE_ROOT; };
 		F12779F9236DE62100478B2C /* CActor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CActor.h; path = ../base3d/include/CActor.h; sourceTree = SOURCE_ROOT; };
-		F12779FD236DE62100478B2C /* CTile3DProperties.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CTile3DProperties.h; path = ../base3d/include/CTile3DProperties.h; sourceTree = SOURCE_ROOT; };
 		F12779FE236DE62100478B2C /* Dungeon.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Dungeon.h; path = ../base3d/include/Dungeon.h; sourceTree = SOURCE_ROOT; };
 		F12779FF236DE62100478B2C /* EDirection_Utils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = EDirection_Utils.h; path = ../base3d/include/EDirection_Utils.h; sourceTree = SOURCE_ROOT; };
 		F1277A00236DE62100478B2C /* Enums.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Enums.h; path = ../base3d/include/Enums.h; sourceTree = SOURCE_ROOT; };
@@ -140,6 +138,8 @@
 		F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Derelict-Info.plist"; sourceTree = "<group>"; };
 		F1CD088E2450E32D00D4794D /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Globals.h; path = ../base3d/include/Globals.h; sourceTree = SOURCE_ROOT; };
 		F1CD08C62450E41C00D4794D /* base.pfs */ = {isa = PBXFileReference; lastKnownFileType = file; name = base.pfs; path = ../base.pfs; sourceTree = SOURCE_ROOT; };
+		F1D1CE292A3B9E9E009F1F69 /* CTile3DProperties.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = CTile3DProperties.c; path = ../../common/src/CTile3DProperties.c; sourceTree = SOURCE_ROOT; };
+		F1D1CE2B2A3B9EAA009F1F69 /* CTile3DProperties.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CTile3DProperties.h; path = ../../common/include/CTile3DProperties.h; sourceTree = SOURCE_ROOT; };
 		F1D5B5D22531D2BF0094ED78 /* Derelict.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Derelict.c; path = ../../core/src/Derelict.c; sourceTree = "<group>"; };
 		F1D5B5D32531D2BF0094ED78 /* Parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Parser.c; path = ../../core/src/Parser.c; sourceTree = "<group>"; };
 		F1D5B5D62531D2C90094ED78 /* Parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Parser.h; path = ../../core/include/Parser.h; sourceTree = "<group>"; };
@@ -221,6 +221,8 @@
 				F136B293293CDB1A00131388 /* RendererGL1.h */,
 				F1B8CB2F27CFCFE700C06E6F /* Common.h */,
 				F1B8CB3027CFCFE700C06E6F /* FixP.h */,
+				F1D1CE2B2A3B9EAA009F1F69 /* CTile3DProperties.h */,
+				F1D1CE292A3B9E9E009F1F69 /* CTile3DProperties.c */,
 				F1B8CB3127CFCFE700C06E6F /* MapWithCharKey.h */,
 				F1B8CB3227CFCFE700C06E6F /* PackedFileReader.h */,
 				F1B8CB3327CFCFE700C06E6F /* Vec.h */,
@@ -234,8 +236,6 @@
 				F1B8CB1827CFCCBD00C06E6F /* MapWithCharKey.c */,
 				F1B8CB1927CFCCBD00C06E6F /* PackedFileReader.c */,
 				F1B8CB1A27CFCCBD00C06E6F /* Vec.c */,
-				F12779E0236DE60800478B2C /* CTile3DProperties.c */,
-				F12779FD236DE62100478B2C /* CTile3DProperties.h */,
 				F149B829263CB11700A3F597 /* Core.c */,
 				F1D5B5D22531D2BF0094ED78 /* Derelict.c */,
 				F1D5B5D72531D2CA0094ED78 /* Derelict.h */,
@@ -402,7 +402,6 @@
 				F1CA76D62610A93B00FD1E04 /* Parser.c in Sources */,
 				F1CA76D82610A93C00FD1E04 /* UI.c in Sources */,
 				F1CA76DA2610A94100FD1E04 /* Crawler.c in Sources */,
-				F1CA76DC2610A98100FD1E04 /* CTile3DProperties.c in Sources */,
 				F1C704D9294298C000E2F806 /* MyOpenGLView.m in Sources */,
 				F1B8CB1B27CFCCBD00C06E6F /* Common.c in Sources */,
 				F1B8CB1C27CFCCBD00C06E6F /* FixP.c in Sources */,
@@ -414,6 +413,7 @@
 				F136B295293CDB1A00131388 /* Renderer_RasterizationGL1.c in Sources */,
 				F136B296293CDB1A00131388 /* Renderer_TesselationGL1.c in Sources */,
 				F136B297293CDB1A00131388 /* RendererGL1.c in Sources */,
+				F1D1CE2A2A3B9E9E009F1F69 /* CTile3DProperties.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,10 +434,6 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					i386,
-					ppc,
-				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					CLI_BUILD,
 					INCLUDE_ITEM_DESCRIPTIONS,
@@ -449,10 +445,6 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					i386,
-					ppc,
-				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					CLI_BUILD,
 					INCLUDE_ITEM_DESCRIPTIONS,
@@ -464,13 +456,8 @@
 		F1CA76B72610A8C100FD1E04 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					i386,
-					ppc,
-				);
 				INFOPLIST_FILE = "Derelict-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				MACOSX_DEPLOYMENT_TARGET = "";
 				PRODUCT_NAME = Derelict;
 				WRAPPER_EXTENSION = app;
 			};
@@ -479,13 +466,8 @@
 		F1CA76B82610A8C100FD1E04 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					i386,
-					ppc,
-				);
 				INFOPLIST_FILE = "Derelict-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				MACOSX_DEPLOYMENT_TARGET = "";
 				PRODUCT_NAME = Derelict;
 				WRAPPER_EXTENSION = app;
 			};
