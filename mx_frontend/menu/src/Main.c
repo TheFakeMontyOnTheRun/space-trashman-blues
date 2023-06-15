@@ -80,14 +80,14 @@ extern struct Texture* textures;
 struct Texture internalTexturesMem[TOTAL_TEXTURES];
 
 void initHW(void) {
-    textBuffer = (char*)calloc(40 * 25, 1);
-    messageLogBuffer = (char*)calloc(256, 1);
-    collisionMap = (uint8_t*)calloc(256, 1);
-    visMap = (enum EVisibility*)calloc(MAP_SIZE * MAP_SIZE, sizeof(enum EVisibility));
-    distances = (struct Vec2i*)calloc(2 * MAP_SIZE * MAP_SIZE, sizeof(struct Vec2i));
+    textBuffer = (char*)allocMem(40 * 25, GENERAL_MEMORY, 1);
+    messageLogBuffer = (char*)allocMem(256, GENERAL_MEMORY, 1);
+    collisionMap = (uint8_t*)allocMem(256, GENERAL_MEMORY, 1);
+    visMap = (enum EVisibility*)allocMem(MAP_SIZE * MAP_SIZE * sizeof(enum EVisibility), GENERAL_MEMORY, 1);
+    distances = (struct Vec2i*)allocMem(2 * MAP_SIZE * MAP_SIZE * sizeof(struct Vec2i), GENERAL_MEMORY, 1);
     textures = &internalTexturesMem[0];
-    itemsInMap = (uint8_t*)calloc(MAP_SIZE * MAP_SIZE, sizeof(uint8_t*));
-    map = (uint8_t*)calloc(MAP_SIZE * MAP_SIZE, sizeof(uint8_t*));
+    itemsInMap = (uint8_t*)allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t*), GENERAL_MEMORY, 1);
+    map = (uint8_t*)allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t*), GENERAL_MEMORY, 1);
 
 #ifndef CD32
     initFileReader("base.pfs");
@@ -101,13 +101,13 @@ void initHW(void) {
 void shutdownHW() {
     graphicsShutdown();
 
-    free(textBuffer);
-    free(messageLogBuffer);
-    free(collisionMap);
-    free(visMap);
-    free(distances);
-    free(itemsInMap);
-    free(map);
+    disposeMem(textBuffer);
+    disposeMem(messageLogBuffer);
+    disposeMem(collisionMap);
+    disposeMem(visMap);
+    disposeMem(distances);
+    disposeMem(itemsInMap);
+    disposeMem(map);
 }
 
 long start_clock, end_clock, prev;

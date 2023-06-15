@@ -19,7 +19,7 @@ $(TARGET):	$(OBJS)
 all:	$(TARGET)
 
 clean:
-	rm -f $(OBJS) $(TARGET)
-	$(RM) -f *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.rom
-	$(RM) -f ../core/src/*.o src/*.o
-	rm *~
+	rm -f Engine3D/*.o
+	rm -f MSDOSVersion/*.o
+	rm -f ../core/src/*.o
+	rm -f ../common/src/*.o

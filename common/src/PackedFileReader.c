@@ -80,7 +80,7 @@ char mDataPath[kDataPath_MaxLength];
 
 void initFileReader(const char * dataFilePath) {
 	uint8_t len = strlen(dataFilePath);
-	memcpy(&mDataPath[0], dataFilePath, len);
+    memCopyToFrom(&mDataPath[0], (void*)dataFilePath, len);
 }
 
 #ifndef LEAN_BUILD
@@ -177,11 +177,7 @@ found:
 	assert (fread(&size, 4, 1, mDataPack));
 	size = toNativeEndianess(size);
 	toReturn.size = size;
-#ifndef N64
-	toReturn.data = (uint8_t *) malloc(size);
-#else
-	toReturn.data = (uint8_t *) malloc_uncached(size);
-#endif
+	toReturn.data = (uint8_t *) allocMem(size, GENERAL_MEMORY, 1);
 
 	assert (fread(toReturn.data, sizeof(uint8_t), size, mDataPack));
 	fclose(mDataPack);
@@ -275,11 +271,7 @@ found:
 	fread(&size, 4, 1, mDataPack);
 	size = toNativeEndianess(size);
 	toReturn.size = size;
-#ifndef N64
-	toReturn.data = (uint8_t *) malloc(size);
-#else
-	toReturn.data = (uint8_t *) malloc_uncached(size);
-#endif
+	toReturn.data = (uint8_t *) allocMem(size, GENERAL_MEMORY, 1);
 
 	fread(toReturn.data, sizeof(uint8_t), size, mDataPack);
 	fclose(mDataPack);
@@ -290,9 +282,5 @@ found:
 #endif
 
 void disposeDiskBuffer(struct StaticBuffer buffer) {
-#ifndef N64
-	free(buffer.data);
-#else
-	free_uncached(buffer.data);
-#endif
+	disposeMem(buffer.data);
 }

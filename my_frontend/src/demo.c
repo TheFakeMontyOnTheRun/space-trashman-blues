@@ -55,6 +55,9 @@ enum DIRECTION {
 // doesn't need to be used, but I'm leaving this here for posterity.
 #define BORDER_CELL '_'
 
+// Required since we have our own memory allocator abstraction
+uint16_t heap = 0;
+
 struct ObjectNode *focusedItem = NULL;
 struct ObjectNode *roomItem = NULL;
 

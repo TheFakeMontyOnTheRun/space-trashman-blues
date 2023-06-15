@@ -2,7 +2,8 @@
 Created by Daniel Monteiro on 2019-07-26.
 */
 
-#ifndef DONT_INCLUDE
+#include <stddef.h>
+
 #ifndef SMD
 #include <string.h>
 #ifdef WIN32
@@ -13,9 +14,10 @@ Created by Daniel Monteiro on 2019-07-26.
 #else
 #include <genesis.h>
 #endif
+
 #include "Core.h"
 #include "Derelict.h"
-#endif
+#include "Common.h"
 
 uint8_t accessGrantedToSafe = FALSE;
 
@@ -239,7 +241,7 @@ void initStation(void) {
 
 	/*Rooms*/
 	/* 1 */
-	memset(&connections[0], 0, 6 * sizeof(int8_t));
+	memFill(&connections[0], 0, 6 * sizeof(int8_t));
 	connections[0] = 2;
 	addRoom(
 			"lss-daedalus",
@@ -287,7 +289,7 @@ void initStation(void) {
 			32, 32, 0, connections);
 
 	/* 4 */
-	memset(&connections[0], 0, 6 * sizeof(int8_t));
+	memFill(&connections[0], 0, 6 * sizeof(int8_t));
 	connections[2] = 3;
 	connections[4] = 19;
 	connections[5] = 13;
@@ -301,7 +303,7 @@ void initStation(void) {
 			64, 64, 0, connections)->rankRequired = 1;
 
 	/* 5 */
-	memset(&connections[0], 0, 6 * sizeof(int8_t));
+	memFill(&connections[0], 0, 6 * sizeof(int8_t));
 	connections[3] = 3;
 	connections[1] = 9;
 	connections[0] = 7;
@@ -318,7 +320,7 @@ void initStation(void) {
 
 
 	/* 6 */
-	memset(&connections[0], 0, 6 * sizeof(int8_t));
+	memFill(&connections[0], 0, 6 * sizeof(int8_t));
 	connections[3] = 2;
 	addRoom("rls-bohr-2",
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
@@ -373,7 +375,7 @@ void initStation(void) {
 			32, 32, 0, connections);
 
 	/* 10 */
-	memset(&connections[0], 0, 6 * sizeof(int8_t));
+	memFill(&connections[0], 0, 6 * sizeof(int8_t));
 	connections[2] = 9;
 	addRoom("pod-3",
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
@@ -418,7 +420,7 @@ void initStation(void) {
 			32, 32, 0, connections)->rankRequired = 1;
 
 	/* 14 */
-	memset(&connections[0], 0, 6 * sizeof(int8_t));
+	memFill(&connections[0], 0, 6 * sizeof(int8_t));
 	connections[0] = 13;
 	connections[1] = 17;
 	connections[2] = 16;
@@ -434,7 +436,7 @@ void initStation(void) {
 			32, 32, 0, connections)->rankRequired = 1;
 
 	/* 15 */
-	memset(&connections[0], 0, 6 * sizeof(int8_t));
+	memFill(&connections[0], 0, 6 * sizeof(int8_t));
 	connections[1] = 14;
 	addRoom("bridge",
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
@@ -483,7 +485,7 @@ void initStation(void) {
 			32, 32, 0, connections)->rankRequired = 1;
 
 	/* 20 */
-	memset(&connections[0], 0, 6 * sizeof(int8_t));
+	memFill(&connections[0], 0, 6 * sizeof(int8_t));
 	connections[0] = 19;
 	connections[1] = 21;
 	connections[3] = 23;

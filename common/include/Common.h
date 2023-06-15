@@ -17,10 +17,27 @@
 #define FALSE 0
 #endif
 
+enum MemoryType {
+    GENERAL_MEMORY,
+    BITMAP_MEMORY,
+    DISKBUFFER_MEMORY,
+    SOUND_MEMORY,
+    TEXTURE_MEMORY,
+    FONT_MEMORY
+};
+
 struct StaticBuffer {
     const uint8_t *data;
     size_t size;
 };
+
+void *allocMem(size_t sizeInBytes, enum MemoryType type, int clearAfterAlloc);
+
+void disposeMem(void* ptr);
+
+void memCopyToFrom(void* dst, void* src, size_t sizeInBytes);
+
+void memFill(void* dst, uint8_t val, size_t sizeInBytes);
 
 int isBigEndian(void);
 

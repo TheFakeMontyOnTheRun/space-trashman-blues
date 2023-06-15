@@ -153,6 +153,14 @@ clean:
 	@rm -f common/src/*.o
 	@rm -f SoundSystem/*.o
 	@rm -f base3d/src/nitro/*.o
+	@rm -f menu/src/*.d
+	@rm -f ../core/src/*.d
+	@rm -f ../common/src/*.d
+	@rm -f base3d/src/*.d
+	@rm -f GL1Common/*.d
+	@rm -f common/src/*.d
+	@rm -f SoundSystem/*.d
+	@rm -f base3d/src/nitro/*.d
 
 
 #---------------------------------------------------------------------------------

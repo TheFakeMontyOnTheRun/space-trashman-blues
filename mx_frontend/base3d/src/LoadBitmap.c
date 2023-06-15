@@ -171,7 +171,7 @@ struct Bitmap *loadBitmap(const char *__restrict__ filename) {
     uint8_t repetitions;
 
     struct Bitmap *toReturn =
-            (struct Bitmap *) calloc(1, sizeof(struct Bitmap));
+            (struct Bitmap *) allocMem(sizeof(struct Bitmap), GENERAL_MEMORY, 1);
 
     struct StaticBuffer staticBuffer = loadBinaryFileFromPath(filename);
     const uint8_t *ptr = staticBuffer.data;
@@ -190,7 +190,7 @@ struct Bitmap *loadBitmap(const char *__restrict__ filename) {
 
     size = toReturn->width * toReturn->height;
 
-    toReturn->data = (uint8_t *) calloc(1, size);
+    toReturn->data = (uint8_t *) allocMem(size, BITMAP_MEMORY, 1);
 
 #ifndef CD32
     for (c = 0; c < sizeInDisk; c += 2) {
@@ -227,6 +227,6 @@ struct Bitmap *loadBitmap(const char *__restrict__ filename) {
 void releaseBitmap(struct Bitmap *__restrict__ ptr) {
     assert (ptr != NULL);
 
-    free(ptr->data);
-    free(ptr);
+    disposeMem(ptr->data);
+    disposeMem(ptr);
 }

@@ -78,7 +78,7 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 
 	packet_free(packet);
 
-	free(bitmap->data);
+    disposeMem(bitmap->data);
 	bitmap->data = NULL;
 	bitmap->uploadId = 1;
 
@@ -112,7 +112,7 @@ struct Bitmap *loadBitmap(const char *filename) {
 
     uint8_t *buffer = (uint8_t *) calloc(1, sizeInDisk);
 
-    memcpy( buffer, ptr, sizeInDisk);
+    memCopyToFrom( buffer, ptr, sizeInDisk);
 
     toReturn->data = (TexturePixelFormat *) calloc(1, size);
 
@@ -138,7 +138,7 @@ struct Bitmap *loadBitmap(const char *filename) {
         }
     }
 
-    free(buffer);
+    disposeMem(buffer);
     disposeDiskBuffer(src);
 
     toReturn->uploadId = -1;
@@ -149,9 +149,9 @@ struct Bitmap *loadBitmap(const char *filename) {
 void releaseBitmap(struct Bitmap *ptr) {
 	assert(ptr != NULL);
 	graph_vram_free(ptr->nativeBuffer->address);
-	free(ptr->nativeBuffer);
-	free(ptr->data);
-	free(ptr);
+    disposeMem(ptr->nativeBuffer);
+    disposeMem(ptr->data);
+    disposeMem(ptr);
 }
 
 FixP_t lerpFix(const FixP_t v0, const FixP_t v1, const FixP_t dt, const FixP_t total) {

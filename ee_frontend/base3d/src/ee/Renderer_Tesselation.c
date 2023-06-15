@@ -76,7 +76,7 @@ void clearTextures(void) {
     for (c = 1; c < TOTAL_ITEMS; ++c) {
         if (itemSprites[c]) {
             releaseBitmap(itemSprites[c]->raw);
-            free(itemSprites[c]);
+            disposeMem(itemSprites[c]);
             itemSprites[c] = NULL;
         }
     }
@@ -89,7 +89,7 @@ void clearTextures(void) {
 	for (c = 0; c < texturesUsed; ++c ) {
 		if (nativeTextures[c]) {
 			releaseBitmap(nativeTextures[c]->raw);
-			free(nativeTextures[c]);
+            disposeMem(nativeTextures[c]);
             nativeTextures[c] = NULL;
 		}
 	}

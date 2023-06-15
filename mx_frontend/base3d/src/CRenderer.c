@@ -142,9 +142,9 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     sprintf (tilesFilename, "tiles%d.lst", levelNumber);
 
     data = loadBinaryFileFromPath(tilesFilename);
-    buffer = (char*)malloc(data.size);
+    buffer = (char*)allocMem(data.size, GENERAL_MEMORY, 1);
     head = buffer;
-    memcpy(head, data.data, data.size);
+    memCopyToFrom(head, (void*)data.data, data.size);
     end = head + data.size;
     disposeDiskBuffer(data);
 
@@ -164,7 +164,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
         ++head;
     }
 
-    free(buffer);
+    disposeMem(buffer);
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -998,8 +998,8 @@ void loadMesh(struct Mesh *mesh, char *filename) {
     coordsCount = trigCount * 9;
 
     mesh->triangleCount = trigCount;
-    mesh->uvCoords = calloc(1, uvCoordsCount);
-    mesh->geometry = calloc(sizeof(FixP_t), coordsCount);
+    mesh->uvCoords = allocMem(uvCoordsCount, GENERAL_MEMORY, 1);
+    mesh->geometry = allocMem(sizeof(FixP_t) * coordsCount, GENERAL_MEMORY, 1);
 
 	uvCoord = mesh->uvCoords;
 	coord = mesh->geometry;
@@ -1023,10 +1023,10 @@ void loadMesh(struct Mesh *mesh, char *filename) {
         mesh->colour = *bufferHead;
         mesh->texture = NULL;
     } else {
-        textureName = calloc(1, read + 1);
-        memcpy(textureName, bufferHead, read);
+        textureName = allocMem(read + 1, GENERAL_MEMORY, 1);
+        memCopyToFrom(textureName, (void*)bufferHead, read);
         mesh->texture = makeTextureFrom(textureName);
-        free(textureName);
+        disposeMem(textureName);
     }
 
     disposeDiskBuffer(buffer);

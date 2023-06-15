@@ -82,14 +82,14 @@ void castVisibility(const enum EDirection from,
 	uint8_t bucketPositions[MAP_SIZE + MAP_SIZE];
 
 	if (cleanPrevious) {
-		memset (visMap, 0, sizeof(kInvisible) * MAP_SIZE * MAP_SIZE);
+        memFill (visMap, 0, sizeof(kInvisible) * MAP_SIZE * MAP_SIZE);
 	}
 
 	*stackHead = originalPos;
 	++stackHead;
 
-	memset (distances, -128, sizeof(struct Vec2i) * 2 * MAP_SIZE * MAP_SIZE);
-	memset (&bucketPositions, 0, sizeof(uint8_t) * (MAP_SIZE + MAP_SIZE));
+    memFill (distances, -128, sizeof(struct Vec2i) * 2 * MAP_SIZE * MAP_SIZE);
+    memFill (&bucketPositions, 0, sizeof(uint8_t) * (MAP_SIZE + MAP_SIZE));
 
 	while (stackHead != stackRoot) {
 		struct Vec2i transformed;

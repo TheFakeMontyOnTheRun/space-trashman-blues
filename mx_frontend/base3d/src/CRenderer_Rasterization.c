@@ -497,7 +497,7 @@ void drawFrontWall(FixP_t x0,
             v += dv;
             destinationLine = bufferData + (XRES_FRAMEBUFFER * iy);
             sourceLineStart = destinationLine - XRES_FRAMEBUFFER;
-            memcpy (destinationLine + start, sourceLineStart + start,
+            memCopyToFrom (destinationLine + start, (void*)(sourceLineStart + start),
                     finish - start);
 
             continue;
@@ -668,7 +668,7 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
             iX0 = XRES - 1;
         }
 
-        memset (bufferData + (XRES_FRAMEBUFFER * iy) + iX0, pixel, iX1 - iX0);
+        memFill(bufferData + (XRES_FRAMEBUFFER * iy) + iX0, pixel, iX1 - iX0);
 
 
         x0 += leftDxDy;
@@ -866,7 +866,7 @@ void drawRect(
         return;
     }
 
-    memset (destinationLineStart, pixel, dx);
+    memFill (destinationLineStart, pixel, dx);
 
     for (py = 0; py < (dy); ++py) {
         destinationLineStart = destination + (XRES_FRAMEBUFFER * (y + py)) + x;
@@ -874,7 +874,7 @@ void drawRect(
         destinationLineStart += dx;
         *destinationLineStart = pixel;
     }
-    memset (destination + (XRES_FRAMEBUFFER * (y + dy)) + x, pixel, dx);
+    memFill (destination + (XRES_FRAMEBUFFER * (y + dy)) + x, pixel, dx);
 }
 
 void fillBottomFlat(const int *coords, uint8_t colour) {
@@ -918,7 +918,7 @@ void fillBottomFlat(const int *coords, uint8_t colour) {
             int iFX1 = max(min((XRES - 1), fixToInt(fX1)), 0);
             int iFX0 = max(min((XRES - 1), fixToInt(fX0)), 0);
             uint8_t *destination = &framebuffer[(XRES_FRAMEBUFFER * y) + min(iFX0, iFX1)];
-            memset(destination, colour, abs(iFX1 - iFX0));
+            memFill(destination, colour, abs(iFX1 - iFX0));
         }
         fX0 -= dXDy2;
         fX1 += dXDy1;
@@ -966,7 +966,7 @@ void fillTopFlat(int *coords, uint8_t colour) {
             int iFX1 = max(min((XRES - 1), fixToInt(fX1)), 0);
             int iFX0 = max(min((XRES - 1), fixToInt(fX0)), 0);
             uint8_t *destination = &framebuffer[(XRES_FRAMEBUFFER * y) + min(iFX0, iFX1)];
-            memset(destination, colour, abs(iFX1 - iFX0));
+            memFill(destination, colour, abs(iFX1 - iFX0));
         }
 
         fX0 += dXDy1;
@@ -1415,7 +1415,7 @@ void fill(
 
     if (!stipple) {
         for (py = 0; py < dy; ++py) {
-            memset (destinationLineStart, pixel, dx);
+            memFill (destinationLineStart, pixel, dx);
             destinationLineStart += XRES_FRAMEBUFFER;
         }
     } else {
@@ -1606,7 +1606,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 
 			mTurnBuffer = kCommandNone;
 
-			memcpy(prevFrame, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
+			memCopyToFrom(prevFrame, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
 
 		} else if (turnState < turnTarget) {
 
@@ -1702,24 +1702,24 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 
 			mTurnBuffer = kCommandNone;
 
-            memcpy(stretchedBuffer, currentFrame,XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
-        	memcpy(prevFrame, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
+            memCopyToFrom(stretchedBuffer, currentFrame,XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
+        	memCopyToFrom(prevFrame, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
 
 		} else if (turnState < turnTarget) {
             for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
                 size_t lineOffset = (y * XRES_FRAMEBUFFER);
-                memcpy(stretchedBuffer + lineOffset, currentFrame + lineOffset  + ( XRES_FRAMEBUFFER - turnStep - HUD_WIDTH), turnStep);
-                memcpy(stretchedBuffer + lineOffset + turnStep, prevFrame + lineOffset, (XRES - turnStep));
-                memcpy(stretchedBuffer + lineOffset + XRES, currentFrame + lineOffset + XRES, (XRES_FRAMEBUFFER - XRES));
+                memCopyToFrom(stretchedBuffer + lineOffset, currentFrame + lineOffset  + ( XRES_FRAMEBUFFER - turnStep - HUD_WIDTH), turnStep);
+                memCopyToFrom(stretchedBuffer + lineOffset + turnStep, prevFrame + lineOffset, (XRES - turnStep));
+                memCopyToFrom(stretchedBuffer + lineOffset + XRES, currentFrame + lineOffset + XRES, (XRES_FRAMEBUFFER - XRES));
             }
 
 			turnStep += PAGE_FLIP_INCREMENT;
 		} else {
             for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
                 size_t lineOffset = (y * XRES_FRAMEBUFFER);
-                memcpy(stretchedBuffer + lineOffset, prevFrame + lineOffset  + ( XRES_FRAMEBUFFER - turnStep - HUD_WIDTH), turnStep);
-                memcpy(stretchedBuffer + lineOffset + turnStep, currentFrame + lineOffset, (XRES - turnStep));
-                memcpy(stretchedBuffer + lineOffset + XRES, currentFrame + lineOffset + XRES, (XRES_FRAMEBUFFER - XRES));
+                memCopyToFrom(stretchedBuffer + lineOffset, prevFrame + lineOffset  + ( XRES_FRAMEBUFFER - turnStep - HUD_WIDTH), turnStep);
+                memCopyToFrom(stretchedBuffer + lineOffset + turnStep, currentFrame + lineOffset, (XRES - turnStep));
+                memCopyToFrom(stretchedBuffer + lineOffset + XRES, currentFrame + lineOffset + XRES, (XRES_FRAMEBUFFER - XRES));
             }
 			turnStep -= PAGE_FLIP_INCREMENT;
 		}

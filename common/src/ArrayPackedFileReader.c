@@ -33,21 +33,21 @@ struct StaticBuffer loadBinaryFileFromPath(const char * path) {
 	int c;
 	uint32_t size = 0;
 
-	memcpy(&entries, mDataPack, 2);
+	memCopyToFrom(&entries, mDataPack, 2);
 	mDataPack+= 2;
 
 	for (c = 0; c < entries; ++c) {
 		uint8_t stringSize = 0;
 
-		memcpy(&offset, mDataPack, 4);
+		memCopyToFrom(&offset, mDataPack, 4);
 		mDataPack+= 4;
 
 		offset = toNativeEndianess(offset);
 
-		memcpy(&stringSize, mDataPack, 1);
+		memCopyToFrom(&stringSize, mDataPack, 1);
 		mDataPack+= 1;
 
-		memcpy(&buffer[0], mDataPack, stringSize + 1);
+		memCopyToFrom(&buffer[0], mDataPack, stringSize + 1);
 		mDataPack+= stringSize + 1;
 
 		if (!strcmp(buffer, path)) {
@@ -65,7 +65,7 @@ found:
 
 	mDataPack = &basepfs[offset];
 
-	memcpy(&size, mDataPack, 4);
+	memCopyToFrom(&size, mDataPack, 4);
 	mDataPack+= 4;
 
 	size = toNativeEndianess(size);
