@@ -1363,7 +1363,7 @@ int main(int argc, char **argv) {
 #endif
 
     for (int c = 0; c < 32; ++c) {
-        map[c] = (uint8_t *) malloc(32);
+        map[c] = (uint8_t *) allocMem(32, GENERAL_MEMORY, 1);
     }
 
     running = 1;

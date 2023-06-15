@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F11957942A3B0F00004A2B3B /* CTile3DProperties.c in Sources */ = {isa = PBXBuildFile; fileRef = F11957932A3B0EFF004A2B3B /* CTile3DProperties.c */; };
 		F149B82A263CB11700A3F597 /* Core.c in Sources */ = {isa = PBXBuildFile; fileRef = F149B829263CB11700A3F597 /* Core.c */; };
 		F194EAD62610B51400E292ED /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		F1B8CB1B27CFCCBD00C06E6F /* Common.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1627CFCCBD00C06E6F /* Common.c */; };
@@ -37,7 +38,6 @@
 		F1CA76D62610A93B00FD1E04 /* Parser.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D5B5D32531D2BF0094ED78 /* Parser.c */; };
 		F1CA76D82610A93C00FD1E04 /* UI.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A12236DE63E00478B2C /* UI.c */; };
 		F1CA76DA2610A94100FD1E04 /* Crawler.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A09236DE63E00478B2C /* Crawler.c */; };
-		F1CA76DC2610A98100FD1E04 /* CTile3DProperties.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E0236DE60800478B2C /* CTile3DProperties.c */; };
 		F1CA76DD2610A98800FD1E04 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D1107310486CEB800E47090 /* Info.plist */; };
 		F1CA76DE2610A98900FD1E04 /* enemyfire.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850E25581D370012292B /* enemyfire.wav */; };
 		F1CA76DF2610A98900FD1E04 /* gotclue.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850C25581D370012292B /* gotclue.wav */; };
@@ -71,9 +71,10 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F11957932A3B0EFF004A2B3B /* CTile3DProperties.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CTile3DProperties.c; path = ../../common/src/CTile3DProperties.c; sourceTree = "<group>"; };
+		F11957952A3B0F0A004A2B3B /* CTile3DProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CTile3DProperties.h; path = ../../common/include/CTile3DProperties.h; sourceTree = "<group>"; };
 		F12779DD236DE60800478B2C /* LoadBitmap.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = LoadBitmap.c; path = ../base3d/src/LoadBitmap.c; sourceTree = SOURCE_ROOT; };
 		F12779DF236DE60800478B2C /* EDirection_Utils.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = EDirection_Utils.c; path = ../base3d/src/EDirection_Utils.c; sourceTree = SOURCE_ROOT; };
-		F12779E0236DE60800478B2C /* CTile3DProperties.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = CTile3DProperties.c; path = ../base3d/src/CTile3DProperties.c; sourceTree = SOURCE_ROOT; };
 		F12779E2236DE60800478B2C /* CRenderer.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = CRenderer.c; path = ../base3d/src/CRenderer.c; sourceTree = SOURCE_ROOT; };
 		F12779E3236DE60800478B2C /* Dungeon.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Dungeon.c; path = ../base3d/src/Dungeon.c; sourceTree = SOURCE_ROOT; };
 		F12779E4236DE60800478B2C /* Globals.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Globals.c; path = ../base3d/src/Globals.c; sourceTree = SOURCE_ROOT; };
@@ -83,7 +84,6 @@
 		F12779E9236DE60800478B2C /* VisibilityStrategy.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = VisibilityStrategy.c; path = ../base3d/src/VisibilityStrategy.c; sourceTree = SOURCE_ROOT; };
 		F12779F9236DE62100478B2C /* CActor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CActor.h; path = ../base3d/include/CActor.h; sourceTree = SOURCE_ROOT; };
 		F12779FC236DE62100478B2C /* CRenderer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CRenderer.h; path = ../base3d/include/CRenderer.h; sourceTree = SOURCE_ROOT; };
-		F12779FD236DE62100478B2C /* CTile3DProperties.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CTile3DProperties.h; path = ../base3d/include/CTile3DProperties.h; sourceTree = SOURCE_ROOT; };
 		F12779FE236DE62100478B2C /* Dungeon.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Dungeon.h; path = ../base3d/include/Dungeon.h; sourceTree = SOURCE_ROOT; };
 		F12779FF236DE62100478B2C /* EDirection_Utils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = EDirection_Utils.h; path = ../base3d/include/EDirection_Utils.h; sourceTree = SOURCE_ROOT; };
 		F1277A00236DE62100478B2C /* Enums.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Enums.h; path = ../base3d/include/Enums.h; sourceTree = SOURCE_ROOT; };
@@ -218,12 +218,14 @@
 			isa = PBXGroup;
 			children = (
 				F1B8CB2F27CFCFE700C06E6F /* Common.h */,
+				F11957952A3B0F0A004A2B3B /* CTile3DProperties.h */,
 				F1B8CB3027CFCFE700C06E6F /* FixP.h */,
 				F1B8CB3127CFCFE700C06E6F /* MapWithCharKey.h */,
 				F1B8CB3227CFCFE700C06E6F /* PackedFileReader.h */,
 				F1B8CB3327CFCFE700C06E6F /* Vec.h */,
 				F12779F9236DE62100478B2C /* CActor.h */,
 				F1277A09236DE63E00478B2C /* Crawler.c */,
+				F11957932A3B0EFF004A2B3B /* CTile3DProperties.c */,
 				F149B82B263CB12B00A3F597 /* Core.h */,
 				F1277A0A236DE63E00478B2C /* CreditsScreen.c */,
 				F12779E6236DE60800478B2C /* CRenderer_Rasterization.c */,
@@ -235,8 +237,6 @@
 				F1B8CB1A27CFCCBD00C06E6F /* Vec.c */,
 				F12779E2236DE60800478B2C /* CRenderer.c */,
 				F12779FC236DE62100478B2C /* CRenderer.h */,
-				F12779E0236DE60800478B2C /* CTile3DProperties.c */,
-				F12779FD236DE62100478B2C /* CTile3DProperties.h */,
 				F149B829263CB11700A3F597 /* Core.c */,
 				F1D5B5D22531D2BF0094ED78 /* Derelict.c */,
 				F1D5B5D72531D2CA0094ED78 /* Derelict.h */,
@@ -405,12 +405,12 @@
 				F1CA76D12610A93600FD1E04 /* EDirection_Utils.c in Sources */,
 				F1CA76D22610A93700FD1E04 /* MainMenu.c in Sources */,
 				F1CA76D32610A93700FD1E04 /* Dungeon.c in Sources */,
+				F11957942A3B0F00004A2B3B /* CTile3DProperties.c in Sources */,
 				F1CA76D42610A93800FD1E04 /* CRenderer.c in Sources */,
 				F1CA76D52610A93900FD1E04 /* GameMenu.c in Sources */,
 				F1CA76D62610A93B00FD1E04 /* Parser.c in Sources */,
 				F1CA76D82610A93C00FD1E04 /* UI.c in Sources */,
 				F1CA76DA2610A94100FD1E04 /* Crawler.c in Sources */,
-				F1CA76DC2610A98100FD1E04 /* CTile3DProperties.c in Sources */,
 				F1B8CB1B27CFCCBD00C06E6F /* Common.c in Sources */,
 				F1B8CB1C27CFCCBD00C06E6F /* FixP.c in Sources */,
 				F1B8CB1D27CFCCBD00C06E6F /* MapWithCharKey.c in Sources */,
@@ -444,10 +444,6 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				DEAD_CODE_STRIPPING = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					CLI_BUILD,
@@ -461,10 +457,6 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				DEAD_CODE_STRIPPING = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					CLI_BUILD,
@@ -478,22 +470,14 @@
 		F1CA76B72610A8C100FD1E04 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "Derelict-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
 				PRODUCT_NAME = Derelict;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
@@ -511,12 +495,8 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "Derelict-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
 				PRODUCT_NAME = Derelict;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;

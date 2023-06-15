@@ -208,9 +208,9 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 	sprintf(tilesFilename, "tiles%d.lst", levelNumber);
 	data = loadBinaryFileFromPath(tilesFilename);
 
-    char *tmp = (char*)malloc(data.size);
+    char *tmp = (char*)allocMem(data.size, GENERAL_MEMORY, 1);
     head = tmp;
-    memcpy(head, data.data, data.size);
+    memCopyToFrom(head, data.data, data.size);
 	end = head + data.size;
     disposeDiskBuffer(data);
 
@@ -229,7 +229,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 		++head;
 	}
 
-    free(tmp);
+    disposeMem(tmp);
 }
 
 void updateCursorForRenderer(const int x, const int z) {

@@ -410,7 +410,7 @@ void dungeon_loadMap(const uint8_t * mapData,
     gameSnapshot.mapIndex = mapIndex;
     gameSnapshot.camera_rotation = 0;
 	playerCrawler.rotation = 0;
-    memcpy (&collisionMap, collisions, 256);
+    memCopyToFrom (&collisionMap, collisions, 256);
 
     for (y = 0; y < MAP_SIZE; ++y) {
         for (x = 0; x < MAP_SIZE; ++x) {

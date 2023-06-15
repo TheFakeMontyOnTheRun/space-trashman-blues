@@ -45,7 +45,7 @@ void HackingScreen_initStateCallback(int32_t tag) {
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
 
-    memset(&pins[0][0], 0xFF, sizeof(pins));
+    memFill(&pins[0][0], 0xFF, sizeof(pins));
     
     pins[0][0] = 5;
     pins[0][1] = 4;

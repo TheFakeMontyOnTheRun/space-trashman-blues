@@ -32,7 +32,7 @@ void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map) {
     for (c = 0; c < 256; ++c) {
         struct CTile3DProperties *prop = (struct CTile3DProperties *) getFromMap(map, c);
         if (prop != NULL) {
-            free(prop);
+            disposeMem(prop);
         }
     }
 
@@ -41,10 +41,8 @@ void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map) {
     while (bufferHead != limit) {
         FixP_t val = 0;
         uint8_t key = *(bufferHead++);
-        struct CTile3DProperties *prop = (struct CTile3DProperties *) malloc(
-                 sizeof(struct CTile3DProperties));
-
-        memset(prop, 0, sizeof(struct CTile3DProperties));
+        struct CTile3DProperties *prop = (struct CTile3DProperties *) allocMem(
+                 sizeof(struct CTile3DProperties), GENERAL_MEMORY, 1);
 
         prop->mNeedsAlphaTest = *(bufferHead++);
         prop->mBlockVisibility = *(bufferHead++);

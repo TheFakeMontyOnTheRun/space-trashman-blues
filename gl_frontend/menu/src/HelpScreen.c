@@ -42,12 +42,12 @@ void HelpScreen_initStateCallback(int32_t tag) {
 	cursorPosition = 0;
 	currentPresentationState = kAppearing;
 	timeUntilNextState = 500;
-	memset (&textBuffer[0], ' ', 40 * 25);
+    memFill (&textBuffer[0], ' ', 40 * 25);
 
 
 	mainText = &textBuffer[0];
-	memset (&textBuffer[0], 0, (40 * 25));
-	memcpy(&textBuffer[0], textFile.data, textFile.size);
+    memFill (&textBuffer[0], 0, (40 * 25));
+    memCopyToFrom(&textBuffer[0], textFile.data, textFile.size);
     disposeDiskBuffer(textFile);
 	HelpScreen_optionsCount = 1;
 }

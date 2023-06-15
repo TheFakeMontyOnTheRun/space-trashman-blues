@@ -132,7 +132,7 @@ void scaleBitmap(FixP_t x0,
 				v += dv;
 				destinationLine = bufferData + (TEXTURE_BUFFER_SIZE * iy);
 				sourceLineStart = destinationLine - TEXTURE_BUFFER_SIZE;
-				memcpy(destinationLine + start, sourceLineStart + start,
+                memCopyToFrom(destinationLine + start, sourceLineStart + start,
 					   finish - start);
 
 				continue;
@@ -189,11 +189,7 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 	glGenTextures(1, (uint32_t *) &newId);
 	glBindTexture(GL_TEXTURE_2D, newId);
 
-#ifndef N64
-	expanded = (uint16_t *) malloc(width * height * sizeof(uint16_t));
-#else
-	expanded = (uint16_t*)malloc_uncached(width * height * sizeof(uint16_t));
-#endif
+	expanded = (uint16_t *) allocMem(width * height * sizeof(uint16_t), TEXTURE_MEMORY, 1);
 
 	ptr = expanded;
 
@@ -226,7 +222,6 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 #ifndef NDS
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA2, width, height, 0, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1, expanded);
 #else
-
 	// at this point, we need to flush back the changed `expanded` array before submitting to the GPU, otherwise, it might
 	// get incomplete or corrupted texture data - our processed texels still live in the data cache
 	DC_FlushAll();
@@ -242,13 +237,13 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 		glTexImage2D(0, 0, GL_RGBA, TEXTURE_SIZE_32 , TEXTURE_SIZE_32, 0, TEXGEN_TEXCOORD | GL_TEXTURE_WRAP_S | GL_TEXTURE_WRAP_T, expanded);
 	}
 #endif
-	free(expanded);
-	free(bitmap->data);
 #else
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA2, width, height, 0,  GL_RGBA,   GL_UNSIGNED_SHORT_5_5_5_1_EXT, expanded);
-	free_uncached( expanded );
-	free_uncached(bitmap->data);
 #endif
+
+    disposeMem(expanded);
+    disposeMem(bitmap->data);
+
 	bitmap->data = NULL;
 
 #ifndef NDS
@@ -274,12 +269,7 @@ struct Bitmap *loadBitmap(const char *filename) {
 	struct StaticBuffer src = loadBinaryFileFromPath(filename);
 
 	struct Bitmap *toReturn =
-#ifndef N64
-			(struct Bitmap *) calloc(1, sizeof(struct Bitmap));
-#else
-	(struct Bitmap *) malloc_uncached(sizeof(struct Bitmap));
-	memset(toReturn, 0, sizeof(struct Bitmap));
-#endif
+			(struct Bitmap *) allocMem(sizeof(struct Bitmap), BITMAP_MEMORY, 1);
 
 	size_t sizeInDisk = src.size - 4; //total size minus the header
 
@@ -297,21 +287,9 @@ struct Bitmap *loadBitmap(const char *filename) {
 	toReturn->height += tmp & 0xFF;
 
 	size = toReturn->width * toReturn->height * sizeof(BitmapPixelFormat);
-#ifndef N64
-	buffer = (uint8_t *) calloc(1, sizeInDisk);
-#else
-	buffer = (uint8_t *) malloc_uncached(sizeInDisk);
-	memset(buffer, 0, sizeInDisk);
-#endif
-
-	memcpy(buffer, ptr, sizeInDisk);
-
-#ifndef N64
-	toReturn->data = (TexturePixelFormat *) calloc(1, size);
-#else
-	toReturn->data = (TexturePixelFormat *) malloc_uncached(size);
-	memset(toReturn->data, 0, size);
-#endif
+	buffer = (uint8_t *) allocMem(sizeInDisk, BITMAP_MEMORY, 1);
+    memCopyToFrom(buffer, ptr, sizeInDisk);
+	toReturn->data = (TexturePixelFormat *) allocMem(size, BITMAP_MEMORY, 1);
 
 	pixelIndex = 0;
 
@@ -344,12 +322,7 @@ struct Bitmap *loadBitmap(const char *filename) {
 	}
 #endif
 
-#ifndef N64
-	free(buffer);
-#else
-	free_uncached(buffer);
-#endif
-
+    disposeMem(buffer);
     disposeDiskBuffer(src);
 
 	toReturn->uploadId = -1;
@@ -364,12 +337,9 @@ void releaseBitmap(struct Bitmap *ptr) {
 	if (ptr->uploadId != -1) {
 		glDeleteTextures(1, (unsigned int *) &ptr->uploadId);
 	}
-	free(ptr->data);
-	free(ptr);
-#else
-	free_uncached(ptr->data);
-	free_uncached(ptr);
 #endif
+    disposeMem(ptr->data);
+    disposeMem(ptr);
 }
 
 FixP_t lerpFix(const FixP_t v0, const FixP_t v1, const FixP_t dt, const FixP_t total) {

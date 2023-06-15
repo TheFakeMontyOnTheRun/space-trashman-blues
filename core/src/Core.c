@@ -1,6 +1,8 @@
 /*
 Created by Daniel Monteiro on 2019-07-26.
 */
+#include <stddef.h>
+
 #ifdef __MWERKS__
 #define CLI_BUILD
 #endif
@@ -16,11 +18,11 @@ Created by Daniel Monteiro on 2019-07-26.
 #else
 #include <stdint.h>
 #endif
-
 #else
 #include <genesis.h>
 #endif
 
+#include "Common.h"
 #include "Core.h"
 
 #define WALK_STEP 1
@@ -104,7 +106,7 @@ struct Room *addRoom(
 
 	/* add list head to make manipulations easier */
 	toReturn->itemsPresent = &roomObjectHeads[roomCount++];
-	memset(toReturn->itemsPresent, 0, sizeof(struct ObjectNode));
+	memFill(toReturn->itemsPresent, 0, sizeof(struct ObjectNode));
 
 	return toReturn;
 }
@@ -189,7 +191,7 @@ void addObjectToList(struct Item *itemToAdd, struct ObjectNode *listHead) {
 	}
 
 	head->next = &objectNodes[itemToAdd->index];
-	memset(head->next, 0, sizeof(struct ObjectNode));
+	memFill(head->next, 0, sizeof(struct ObjectNode));
 	head->next->item = itemToAdd->index;
 }
 
@@ -752,11 +754,11 @@ void setGameStatus(enum EGameStates newStatus) {
 void initCore(void) {
         defaultLogger = writeToLog;
 	/* prepare for a single player in the game */
-	memset(&playerPosition, 0, sizeof(struct WorldPosition));
+	memFill(&playerPosition, 0, sizeof(struct WorldPosition));
 	setErrorHandlerCallback(NULL);
 
 	collectedObject = &collectedObjectHead;
-	memset(collectedObject, 0, sizeof(struct ObjectNode));
+	memFill(collectedObject, 0, sizeof(struct ObjectNode));
 	playerLocation = 1;
 	itemsCount = 0;
 	roomCount = 1; /* there's an implicit dummy first */
@@ -766,8 +768,8 @@ void initCore(void) {
 	playerPosition.x = 15;
 	playerPosition.y = 15;
 
-	memset(&rooms, 0, TOTAL_ROOMS * sizeof(struct Room));
-	memset(&item, 0, TOTAL_ITEMS * sizeof(struct Item));
+	memFill(&rooms, 0, TOTAL_ROOMS * sizeof(struct Room));
+	memFill(&item, 0, TOTAL_ITEMS * sizeof(struct Item));
 }
 
 
