@@ -711,11 +711,11 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
         }
 
         if (IN_RANGE(0, XRESMINUSONE, px0z0)) {
-            vLine(px0z0, py0z0, py1z0, 0);
+            vLine(px0z0, py0z0, py1z0, 1);
         }
 
         if (IN_RANGE(0, XRESMINUSONE, px1z0)) {
-            vLine(px1z0, py0z0, py1z0, 0);
+            vLine(px1z0, py0z0, py1z0, 1);
         }
     }
 
@@ -723,7 +723,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 }
 
 
-uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
+void drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t z) {
     int8_t diff;
     uint8_t pattern = (_pattern) & 127;
     uint8_t type;
@@ -732,19 +732,17 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
      * And since there are only 127 patterns anyway...
      * */
     if (_pattern & 128) {
-        drawObjectAt(x0 - 1, y + 2);
-        return 1;
+        drawObjectAt(x0 - 1, z + 2);
     }
 
     struct CTile3DProperties *prop =
             (struct CTile3DProperties *) getFromMap(&tileProperties, pattern);
+    
+    int ceilingHeight = fixToInt(prop->mCeilingHeight);
+    int floorHeight = fixToInt(prop->mFloorHeight);
 
 
-    diff = prop->mCeilingRepetitions;
-
-    if (diff == 0 && prop->mCeilingTextureIndex != 0xFF) {
-        diff = 1;
-    }
+    diff = ceilingHeight - floorHeight;
 
     type = prop->mGeometryType;
 
@@ -758,8 +756,31 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
         mask = 127;
     }
 
+    if (prop->mCeilingRepeatedTextureIndex != 0xFF && prop->mCeilingRepetitions > 0) {
+        drawCubeAt(x0 - 1, ( fixToInt(prop->mCeilingHeight)  ) - CAMERA_HEIGHT, z + 2, x1 - x0,
+                   prop->mCeilingRepetitions, 1, mask);
+    }
+
+
+    if (prop->mFloorRepeatedTextureIndex != 0xFF && prop->mFloorRepetitions > 0) {
+        drawCubeAt(x0 - 1, ( fixToInt(prop->mFloorHeight) ) - prop->mFloorRepetitions - CAMERA_HEIGHT, z + 2, x1 - x0,
+                   prop->mFloorRepetitions, 1, mask);
+    }
+
+
+    if (prop->mCeilingTextureIndex != 0xFF) {
+        drawCubeAt(x0 - 1, fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, z + 2, x1 - x0,
+                   0, 1, mask);
+    }
+
+    if (prop->mFloorTextureIndex != 0xFF) {
+        drawCubeAt(x0 - 1, fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 2, x1 - x0,
+                   0, 1, mask);
+    }
+
+
     if (type == kCube) {
-        return drawCubeAt(x0 - 1, fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, y + 2, x1 - x0,
+        drawCubeAt(x0 - 1, fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 2, x1 - x0,
                           diff, 1, mask);
     } else if (type == kRightNearWall || type == kLeftNearWall) {
 
@@ -772,7 +793,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
             }
         }
 
-        return drawWedge(x0 - 1, fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, y + 2, x1 - x0,
+        drawWedge(x0 - 1, fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 2, x1 - x0,
                          diff, 1, 0xFF, type);
 
     } else if (type == kWallWest) {
@@ -780,13 +801,13 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
         switch (cameraRotation) {
             case 0:
             case 2:
-                return drawWedge(x0 - (cameraRotation == 0 ? 1 : 0), fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, y + 2,
+                drawWedge(x0 - (cameraRotation == 0 ? 1 : 0), fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 2,
                                  0, diff, 1, 0xFF, kLeftNearWall);
             case 1:
             case 3:
-                return drawSquare(x0 - 1, fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT,
-                                  y + (cameraRotation == 3 ? 1 : 0) + 2,
-                                  x1 - x0, diff, mask);
+                drawSquare(x0 - 1, fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT,
+                                  z + (cameraRotation == 3 ? 1 : 0) + 2,
+                                  x1 - x0, diff, 0xFF);
         }
     } else if (type == kWallNorth) {
 
@@ -794,13 +815,13 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
         switch (cameraRotation) {
             case 0:
             case 2:
-                return drawSquare(x0 - 1, fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT,
-                                  y + (cameraRotation == 0 ? 1 : 0) + 2,
-                                  x1 - x0, diff, mask);
+                drawSquare(x0 - 1, fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT,
+                                  z + (cameraRotation == 0 ? 1 : 0) + 2,
+                                  x1 - x0, diff, 0xFF);
             case 1:
             case 3:
-                return drawWedge(x0 - (cameraRotation == 1 ? 1 : 0),
-                                 fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, y + 2,
+                drawWedge(x0 - (cameraRotation == 1 ? 1 : 0),
+                                 fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 2,
                                  0, diff, 1, 0xFF, kLeftNearWall);
 
 
@@ -813,29 +834,25 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
             case 3:
             case 0:
                 returnVal = drawWedge(x0 - (cameraRotation == 3 ? 0 : 1),
-                                      fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, y + 2,
+                                      fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 2,
                                       0, diff, 1, 0xFF, kLeftNearWall);
 
-                returnVal = drawSquare(x0 - 1, fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, y + 1 + 2,
+                returnVal = drawSquare(x0 - 1, fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 1 + 2,
                                        x1 - x0, diff, 0xFF) || returnVal;
                 break;
 
             case 1:
             case 2:
-                returnVal = drawSquare(x0 - 1, fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, y + 2,
+                returnVal = drawSquare(x0 - 1, fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 2,
                                        x1 - x0, diff, 0xFF);
 
                 returnVal =
-                        drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, y + 2,
+                        drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 2,
                                   0, diff, 1, 0xFF, kLeftNearWall) || returnVal;
 
                 break;
         }
-
-        return returnVal;
     }
-
-    return 0;
 }
 
 void repaintMapItems() {

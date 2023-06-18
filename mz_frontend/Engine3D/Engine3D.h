@@ -32,7 +32,7 @@
 #define YRESMINUSONE YRES - 1
 
 #define WALKSTEP 1
-#define CAMERA_HEIGHT 2
+#define CAMERA_HEIGHT 1
 #define VISIBILITY_LIMIT 32
 
 void HUD_initialPaint();
