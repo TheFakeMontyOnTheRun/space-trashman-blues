@@ -25,6 +25,6 @@ images:
 maps:
 	python3 ./compile_map.py
 
-full: images data
+full: images maps data
 
 default: full
