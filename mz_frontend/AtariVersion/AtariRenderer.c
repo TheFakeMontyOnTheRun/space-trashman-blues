@@ -86,8 +86,8 @@ uint8_t getKey() {
 void clear() {}
 
 
-void graphicsPut(int16_t x, int16_t y) {
-    framebuffer[(128 * y) + x] = 2;
+void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
+    framebuffer[(128 * y) + x] = colour;
 }
 
 void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t pixel) {
@@ -121,6 +121,33 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t pixel) {
     for (int16_t y = _y0; y <= _y1; ++y) {
         *ptr = pixel;
         ptr += 128;
+    }
+}
+
+
+void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
+    if (y < 0) {
+        return;
+    }
+
+    int16_t _x0 = x0;
+    int16_t _x1 = x1;
+
+    if (x0 > x1) {
+        _x0 = x1;
+        _x1 = x0;
+    }
+
+    if (_x0 < 0) {
+        _x0 = 0;
+    }
+
+    if (_x1 >= 128) {
+        _x1 = 127;
+    }
+
+    for (int x = _x0; x <= _x1; ++x) {
+        framebuffer[(128 * y) + x] = colour;
     }
 }
 
@@ -182,13 +209,24 @@ void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 
 void graphicsFlush() {
     memset(logBase, 0, 32000);
-    uint8_t *fragment = &framebuffer[0];
+    uint8_t *index = &framebuffer[0];
     unsigned lineOffset = 0;
+
     for (int y = 0; y < 128; ++y) {
         for (int x = 0; x < 128; ++x) {
 
+            unsigned value = *index;
+
+            ++index;
+            if (value > 16) {
+                if ((x + y) & 1) {
+                    value = 0;
+                } else {
+                    value = value - 16;
+                }
+            }
+
             uint16_t *words = (uint16_t *) logBase;
-            unsigned value = *fragment;
             unsigned offset = lineOffset + ((x >> 4) << 2);
             unsigned bitPattern = (1 << (15 - (x & 15)));
 
@@ -213,8 +251,6 @@ void graphicsFlush() {
             if (value & 8) {
                 words[offset] |= bitPattern;
             }
-
-            ++fragment;
         }
         lineOffset += 80;
     }

@@ -22,15 +22,15 @@
 
 #define NORMALIZE(x) (((x * 16) / 256))
 
-#ifndef CD32
-extern void REGARGS c2p1x1_4_c5_bm(
+extern void REGARGS
+c2p1x1_4_c5_bm(
 REG(d0, UWORD chunky_x),
 REG(d1, UWORD chunky_y),
 REG(d2, UWORD offset_x),
 REG(d3, UWORD offset_y),
-REG(a0, UBYTE *chunky_buffer),
-REG(a1, struct BitMap *bitmap));
-#endif
+REG(a0, UBYTE * chunky_buffer),
+REG(a1, struct BitMap *bitmap)
+);
 
 struct IntuitionBase *IntuitionBase;
 struct GfxBase *GfxBase;
@@ -42,39 +42,21 @@ struct Screen *screen;
 uint8_t *framebuffer;
 uint8_t bufferInput = '.';
 
-#ifdef CD32
 struct NewScreen xnewscreen = {
-    0,			  /* LeftEdge*/
-    0,			  /* TopEdge   */
-    320,		  /* Width     */
-    200,		  /* Height    */
-    5,			  /* Depth   */
-    0,			  /* DetailPen */
-    1,			  /* BlockPen */
-    0,			  /* ViewModes High-resolution, Interlaced */
-    CUSTOMSCREEN,	  /* Type customized screen. */
-    NULL,		  /* Font */
-    "The Mistral Report", /* Title */
-    NULL,		  /* Gadget */
-    NULL		  /* BitMap */
-};
-#else
-struct NewScreen xnewscreen = {
-        0,			  /* LeftEdge*/
-        0,			  /* TopEdge   */
-        320,		  /* Width     */
-        200,		  /* Height    */
-        5,			  /* Depth   */
-        0,			  /* DetailPen */
-        1,			  /* BlockPen */
-        0,			  /* ViewModes High-resolution, Interlaced */
-        CUSTOMSCREEN,	  /* Type customized screen. */
-        NULL,		  /* Font */
+        0,              /* LeftEdge*/
+        0,              /* TopEdge   */
+        320,          /* Width     */
+        200,          /* Height    */
+        5,              /* Depth   */
+        0,              /* DetailPen */
+        1,              /* BlockPen */
+        0,              /* ViewModes High-resolution, Interlaced */
+        CUSTOMSCREEN,      /* Type customized screen. */
+        NULL,          /* Font */
         "The Mistral Report", /* Title */
-        NULL,		  /* Gadget */
-        NULL		  /* BitMap */
+        NULL,          /* Gadget */
+        NULL          /* BitMap */
 };
-#endif
 
 struct NewWindow my_new_window = {
         0,                              /* LeftEdge*/
@@ -139,7 +121,7 @@ void init() {
     int IsV36 = FALSE;
     int IsPAL;
 
-    framebuffer = (uint8_t*)calloc( 1, 128 * 128);
+    framebuffer = (uint8_t *) calloc(1, 128 * 128);
 
     drawTitleBox();
 
@@ -164,40 +146,6 @@ void init() {
         exit(0);
     }
 
-#ifdef CD32
-    SetRGB4 ( &screen->ViewPort, 0, 0, 0, 0 );
-    SetRGB4 ( &screen->ViewPort, 1, 0, 0, 64 );
-    SetRGB4 ( &screen->ViewPort, 2, 0, 0, 128 );
-    SetRGB4 ( &screen->ViewPort, 3, 0, 0, 192 );
-    SetRGB4 ( &screen->ViewPort, 4, 0, 64, 0 );
-    SetRGB4 ( &screen->ViewPort, 5, 0, 64, 64 );
-    SetRGB4 ( &screen->ViewPort, 6, 0, 64, 128 );
-    SetRGB4 ( &screen->ViewPort, 7, 0, 64, 192 );
-    SetRGB4 ( &screen->ViewPort, 8, 0, 128, 0 );
-    SetRGB4 ( &screen->ViewPort, 9, 0, 128, 64 );
-    SetRGB4 ( &screen->ViewPort, 10, 0, 128, 128 );
-    SetRGB4 ( &screen->ViewPort, 11, 0, 128, 192 );
-    SetRGB4 ( &screen->ViewPort, 12, 0, 192, 0 );
-    SetRGB4 ( &screen->ViewPort, 13, 0, 192, 64 );
-    SetRGB4 ( &screen->ViewPort, 14, 0, 192, 128 );
-    SetRGB4 ( &screen->ViewPort, 15, 0, 192, 192 );
-    SetRGB4 ( &screen->ViewPort, 16, 128, 0, 0 );
-    SetRGB4 ( &screen->ViewPort, 17, 128, 0, 64 );
-    SetRGB4 ( &screen->ViewPort, 18, 128, 0, 128 );
-    SetRGB4 ( &screen->ViewPort, 19, 128, 0, 192 );
-    SetRGB4 ( &screen->ViewPort, 20, 128, 64, 0 );
-    SetRGB4 ( &screen->ViewPort, 21, 128, 64, 64 );
-    SetRGB4 ( &screen->ViewPort, 22, 128, 64, 128 );
-    SetRGB4 ( &screen->ViewPort, 23, 128, 64, 192 );
-    SetRGB4 ( &screen->ViewPort, 24, 128, 128, 0 );
-    SetRGB4 ( &screen->ViewPort, 25, 128, 128, 64 );
-    SetRGB4 ( &screen->ViewPort, 26, 128, 128, 128 );
-    SetRGB4 ( &screen->ViewPort, 27, 128, 128, 192 );
-    SetRGB4 ( &screen->ViewPort, 28, 128, 192, 0 );
-    SetRGB4 ( &screen->ViewPort, 29, 128, 192, 64 );
-    SetRGB4 ( &screen->ViewPort, 30, 128, 192, 128 );
-    SetRGB4 ( &screen->ViewPort, 31, 128, 192, 192 );
-#else
     SetRGB4(&screen->ViewPort, 0, NORMALIZE(0x00), NORMALIZE(0x00), NORMALIZE(0x00));
     SetRGB4(&screen->ViewPort, 1, NORMALIZE(0x00), NORMALIZE(0x00), NORMALIZE(0xAA));
     SetRGB4(&screen->ViewPort, 2, NORMALIZE(0x00), NORMALIZE(0xAA), NORMALIZE(0x00));
@@ -214,7 +162,6 @@ void init() {
     SetRGB4(&screen->ViewPort, 13, NORMALIZE(0xFF), NORMALIZE(0x55), NORMALIZE(0xFF));
     SetRGB4(&screen->ViewPort, 14, NORMALIZE(0xFF), NORMALIZE(0xFF), NORMALIZE(0x55));
     SetRGB4(&screen->ViewPort, 15, NORMALIZE(0xFF), NORMALIZE(0xFF), NORMALIZE(0xFF));
-#endif
 
     SetPointer(my_window, emptypointer, 1, 16, 0, 0);
 
@@ -373,11 +320,19 @@ uint8_t getKey() {
 void clear() {}
 
 
-void graphicsPut(int16_t x, int16_t y) {
-    framebuffer[(128 * y) + x] = 2;
+void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
+    if (colour >= 16) {
+        if ((x + y) & 1) {
+            framebuffer[(128 * y) + x] = 0;
+        } else {
+            framebuffer[(128 * y) + x] = colour - 16;
+        }
+    } else {
+        framebuffer[(128 * y) + x] = colour;
+    }
 }
 
-void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t pixel) {
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
     uint8_t *ptr;
     int16_t _y0 = y0;
     int16_t _y1 = y1;
@@ -405,9 +360,67 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t pixel) {
 
     ptr = &framebuffer[(128 * _y0) + (x0)];
 
-    for (int16_t y = _y0; y <= _y1; ++y) {
-        *ptr = pixel;
-        ptr += 128;
+    if (colour <= 16) {
+        for (int16_t y = _y0; y <= _y1; ++y) {
+            *ptr = colour;
+            ptr += 128;
+        }
+    } else {
+        colour = colour - 16;
+        uint8_t stipple = ((x0 + y0) & 1);
+
+        for (int16_t y = _y0; y <= _y1; ++y) {
+            stipple = !stipple;
+
+            if (stipple) {
+                *ptr = colour;
+            } else {
+                *ptr = 0;
+            }
+
+            ptr += 128;
+        }
+    }
+}
+
+void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
+    if (y < 0) {
+        return;
+    }
+
+    int16_t _x0 = x0;
+    int16_t _x1 = x1;
+
+    if (x0 > x1) {
+        _x0 = x1;
+        _x1 = x0;
+    }
+
+    if (_x0 < 0) {
+        _x0 = 0;
+    }
+
+    if (_x1 >= 128) {
+        _x1 = 127;
+    }
+
+    if (colour <= 16) {
+        for (int x = _x0; x <= _x1; ++x) {
+            framebuffer[(128 * y) + x] = colour;
+        }
+    } else {
+        colour = colour - 16;
+        uint8_t stipple = ((x0 + y) & 1);
+
+        for (int x = _x0; x <= _x1; ++x) {
+            stipple = !stipple;
+
+            if (stipple) {
+                framebuffer[(128 * y) + x] = colour;
+            } else {
+                framebuffer[(128 * y) + x] = 0;
+            }
+        }
     }
 }
 
@@ -449,6 +462,7 @@ void shutdownGraphics() {
     CloseScreen(screen);
     CloseLibrary((struct Library *) IntuitionBase);
 }
+
 void realPut(int x, int y, uint8_t value) {
 
 }
@@ -471,11 +485,7 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 
 void graphicsFlush() {
-#ifdef CD32
-    WriteChunkyPixels(my_window->RPort, 0, 0, 128, 128, &framebuffer[0], 128);
-#else
-    c2p1x1_4_c5_bm(128,128,0,0,&framebuffer[0], my_window->RPort->BitMap);
-#endif
+    c2p1x1_4_c5_bm(128, 128, 0, 0, &framebuffer[0], my_window->RPort->BitMap);
 }
 
 

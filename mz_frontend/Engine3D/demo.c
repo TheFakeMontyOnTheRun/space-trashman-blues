@@ -146,8 +146,8 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
     int16_t py1z1;
     int16_t px1z1;
 
-    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 5 : 1;
-    uint8_t stipple = 1;
+    uint8_t shouldStippleFill = (z0 >= STIPPLE_DISTANCE) ? 21 : 5;
+    uint8_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? 20 : 4;
 
     if (z0 >= 32) {
         return 0;
@@ -264,8 +264,8 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 
             while (x0 != x1) {
                 if (IN_RANGE(0, XRESMINUSONE, x0)) {
-                    vLine(x0, upperY0, lowerY0, shouldStipple);
-                    graphicsPut(x0, upperY0);
+                    vLine(x0, upperY0, lowerY0, shouldStippleFill);
+                    graphicsPut(x0, upperY0, shouldStippleBorder);
                 }
 
                 /* loop */
@@ -303,7 +303,6 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
     if (elementMask & 2) {
         if (IN_RANGE(0, XRESMINUSONE, px0z0)) {
             vLine(px0z0, py0z0, py1z0, 0);
-
         }
     }
 
@@ -351,8 +350,7 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
         return 0;
     }
 
-    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 5 : 1;
-    uint8_t stipple = 1;
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 21 : 5;
 
     drawContour = (dY);
 
@@ -397,9 +395,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
     int16_t px0z1;
     int8_t py0z1;
     int16_t px1z1;
-    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
-    uint8_t stipple = 1;
-
+    uint8_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? 17 : 1;
 
     if (z0 >= 32 || z0 <= 4) {
         return 0;
@@ -436,27 +432,13 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
         /* Draw the horizontal outlines of z0 and z1 */
         for (x = px0z0; x <= px1z0; ++x) {
             if (IN_RANGE(0, XRESMINUSONE, x)) {
-
-                if (shouldStipple) {
-                    stipple = !stipple;
-                }
-
-                if (stipple) {
-                    graphicsPut(x, py0z0);
-                }
+                graphicsPut(x, py0z0, shouldStippleBorder);
             }
         }
 
         for (x = px0z1; x <= px1z1; ++x) {
             if (IN_RANGE(0, XRESMINUSONE, x)) {
-
-                if (shouldStipple) {
-                    stipple = !stipple;
-                }
-
-                if (stipple) {
-                    graphicsPut(x, py0z1);
-                }
+                graphicsPut(x, py0z1, shouldStippleBorder);
             }
         }
 
@@ -477,14 +459,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
             while ((x0 != x1 || y0 != y1)) {
 
                 if (IN_RANGE(0, XRESMINUSONE, x0)) {
-
-                    if (shouldStipple) {
-                        stipple = !stipple;
-                    }
-
-                    if (stipple) {
-                        graphicsPut(x0, y0);
-                    }
+                    graphicsPut(x0, y0, shouldStippleBorder);
                 }
 
                 /* loop */
@@ -524,12 +499,8 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
 
             while ((x0 != x1 || y0 != y1)) {
 
-                if (shouldStipple) {
-                    stipple = !stipple;
-                }
-
-                if (stipple && IN_RANGE(0, XRESMINUSONE, x0)) {
-                    graphicsPut(x0, y0);
+                if (IN_RANGE(0, XRESMINUSONE, x0)) {
+                    graphicsPut(x0, y0, shouldStippleBorder);
                 }
 
                 e2 = err << 2;
@@ -575,8 +546,8 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     int16_t py0z1;
     int16_t px1z1;
 
-    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 6 : 2;
-    uint8_t stipple = 1;
+    uint8_t shouldStippleFill = (z0 >= STIPPLE_DISTANCE) ? 22 : 6;
+    uint8_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? 21 : 5;
 
     uint8_t drawContour;
 
@@ -612,8 +583,6 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     {
         int16_t x, x0, x1;
 
-        shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 6;
-
         x0 = px0z0;
         x1 = px0z1;
 
@@ -632,7 +601,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
                 if (drawContour) {
                     if (IN_RANGE(0, XRESMINUSONE, x0)) {
                         vLine(x0, y0, py1z0, 6);
-                        graphicsPut(x0, y0);
+                        graphicsPut(x0, y0, shouldStippleBorder);
                     }
                 }
 
@@ -674,7 +643,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
                 if (drawContour) {
                     if (IN_RANGE(0, XRESMINUSONE, x0)) {
                         vLine(x0, y0, py1z0, 6);
-                        graphicsPut(x0, y0);
+                        graphicsPut(x0, y0, shouldStippleBorder);
                     }
                 }
 
@@ -703,8 +672,8 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
             if (drawContour) {
                 for (x = px0z0; x <= px1z0; ++x) {
                     if (IN_RANGE(0, XRESMINUSONE, x)) {
-                        vLine(x, py0z0, py1z0, shouldStipple);
-                        graphicsPut(x, py0z0);
+                        vLine(x, py0z0, py1z0, shouldStippleFill);
+                        graphicsPut(x, py0z0, shouldStippleBorder);
                     }
                 }
             }
@@ -722,6 +691,104 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     return 1;
 }
 
+uint8_t drawFloorAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dZ, uint8_t elementMask) {
+
+    int8_t z1;
+
+    int16_t z0px;
+    int16_t z0py;
+    int16_t z1px;
+    int16_t z1py;
+    int16_t z0dx;
+    int16_t z1dx;
+    int16_t px0z0;
+    int16_t py0z0;
+    int16_t px1z0;
+    int16_t px0z1;
+    int16_t py0z1;
+    int16_t px1z1;
+
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 18 : 2;
+
+    if (z0 >= 32 || z0 < 1) {
+        return 0;
+    }
+
+    z1 = z0 + dZ;
+
+    if (z1 >= 32) {
+        return 0;
+    }
+
+    z0px = (projections[z0].px);
+    z1px = (projections[z1].px);
+    z0dx = ((projections[z0].dx));
+    z1dx = ((projections[z1].dx));
+
+    z1py = (projections[z1].py);
+    z0py = (projections[z0].py);
+
+    px0z0 = z0px - ((x0) * z0dx);
+    px0z1 = z1px - ((x0) * z1dx);
+    px1z0 = px0z0 - (dX * z0dx);
+    px1z1 = px0z1 - (dX * z1dx);
+    py0z0 = z0py + ((y0) * z0dx);
+    py0z1 = z1py + ((y0) * z1dx);
+
+
+    int16_t x, leftX0, leftX1, rightX0, rightX1;
+
+    leftX0 = px0z0;
+    leftX1 = px0z1;
+    rightX0 = px1z0;
+    rightX1 = px1z1;
+    int16_t dy = -abs(py0z1 - py0z0);
+    int16_t sy = py0z0 < py0z1 ? 1 : -1;
+
+    int16_t currentY0 = py0z0;
+    int16_t leftDx = abs(leftX1 - leftX0);
+    int16_t leftSx = leftX0 < leftX1 ? 1 : -1;
+    int16_t leftErr = leftDx + dy;
+    int16_t leftE2;
+
+    int16_t rightDx = abs(rightX1 - rightX0);
+    int16_t rightSx = rightX0 < rightX1 ? 1 : -1;
+    int16_t rightErr = rightDx + dy;
+    int16_t rightE2;
+
+    while (currentY0 != py0z1) {
+        if (leftX0 >= XRES) {
+            return 1;
+        }
+
+        if (IN_RANGE(0, XRESMINUSONE, leftX0) || IN_RANGE(0, XRESMINUSONE, rightX0)) {
+            hLine( leftX0, rightX0, currentY0, shouldStipple);
+        }
+
+        leftE2 = leftErr << 2;
+
+        if (leftE2 >= dy) {
+            leftErr += dy;
+            leftX0 += leftSx;
+        }
+
+        rightE2 = rightErr << 2;
+
+        if (rightE2 >= dy) {
+            rightErr += dy;
+            rightX0 += rightSx;
+        }
+
+        if (rightE2 <= rightDx || leftE2 <= leftDx) {
+            rightErr += rightDx;
+            leftErr += leftDx;
+            currentY0 += sy;
+        }
+    }
+
+
+    return 1;
+}
 
 void drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t z) {
     int8_t diff;
@@ -746,45 +813,34 @@ void drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t z) {
 
     type = prop->mGeometryType;
 
-    uint8_t mask = 0xFF;
-
-    if (x0 == 2) {
-        mask = 255;
-    }
-
-    if (x1 == 2) {
-        mask = 127;
-    }
-
     if (prop->mCeilingRepeatedTextureIndex != 0xFF && prop->mCeilingRepetitions > 0) {
-        drawCubeAt(x0 - 1, ( fixToInt(prop->mCeilingHeight)  ) - CAMERA_HEIGHT, z + 2, x1 - x0,
-                   prop->mCeilingRepetitions, 1, mask);
+        drawCubeAt(x0 - 1, ceilingHeight - CAMERA_HEIGHT, z + 2, x1 - x0,
+                   prop->mCeilingRepetitions, 1, 0xFF);
     }
-
 
     if (prop->mFloorRepeatedTextureIndex != 0xFF && prop->mFloorRepetitions > 0) {
-        drawCubeAt(x0 - 1, ( fixToInt(prop->mFloorHeight) ) - prop->mFloorRepetitions - CAMERA_HEIGHT, z + 2, x1 - x0,
-                   prop->mFloorRepetitions, 1, mask);
+        drawCubeAt(x0 - 1, floorHeight - prop->mFloorRepetitions - CAMERA_HEIGHT, z + 2, x1 - x0,
+                   prop->mFloorRepetitions, 1, 0xFF);
     }
 
 
     if (prop->mCeilingTextureIndex != 0xFF) {
-        drawCubeAt(x0 - 1, fixToInt(prop->mCeilingHeight) - CAMERA_HEIGHT, z + 2, x1 - x0,
-                   0, 1, mask);
+        drawFloorAt(x0 - 1, ceilingHeight - CAMERA_HEIGHT, z + 2, x1 - x0,
+                   1, 0xFF);
     }
 
     if (prop->mFloorTextureIndex != 0xFF) {
-        drawCubeAt(x0 - 1, fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 2, x1 - x0,
-                   0, 1, mask);
+        drawFloorAt(x0 - 1, floorHeight - CAMERA_HEIGHT, z + 2, x1 - x0,
+                   1, 0xFF);
     }
 
 
     if (type == kCube) {
-        drawCubeAt(x0 - 1, fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 2, x1 - x0,
-                          diff, 1, mask);
+        drawCubeAt(x0 - 1, floorHeight - CAMERA_HEIGHT, z + 2, x1 - x0,
+                          diff, 1, 0xFF);
     } else if (type == kRightNearWall || type == kLeftNearWall) {
 
-        if (cameraRotation == 1 || cameraRotation == 3) {
+        if (cameraRotation == 0 || cameraRotation == 2) {
 
             if (type == kRightNearWall) {
                 type = kLeftNearWall;
@@ -793,7 +849,7 @@ void drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t z) {
             }
         }
 
-        drawWedge(x0 - 1, fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 2, x1 - x0,
+        drawWedge(x0 - 1, floorHeight - CAMERA_HEIGHT, z + 2, x1 - x0,
                          diff, 1, 0xFF, type);
 
     } else if (type == kWallWest) {
@@ -801,11 +857,11 @@ void drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t z) {
         switch (cameraRotation) {
             case 0:
             case 2:
-                drawWedge(x0 - (cameraRotation == 0 ? 1 : 0), fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 2,
+                drawWedge(x0 - (cameraRotation == 0 ? 1 : 0), floorHeight - CAMERA_HEIGHT, z + 2,
                                  0, diff, 1, 0xFF, kLeftNearWall);
             case 1:
             case 3:
-                drawSquare(x0 - 1, fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT,
+                drawSquare(x0 - 1, floorHeight - CAMERA_HEIGHT,
                                   z + (cameraRotation == 3 ? 1 : 0) + 2,
                                   x1 - x0, diff, 0xFF);
         }
@@ -815,16 +871,16 @@ void drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t z) {
         switch (cameraRotation) {
             case 0:
             case 2:
-                drawSquare(x0 - 1, fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT,
+                drawSquare(x0 - 1, floorHeight - CAMERA_HEIGHT,
                                   z + (cameraRotation == 0 ? 1 : 0) + 2,
                                   x1 - x0, diff, 0xFF);
+                break;
             case 1:
             case 3:
                 drawWedge(x0 - (cameraRotation == 1 ? 1 : 0),
-                                 fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 2,
+                          floorHeight - CAMERA_HEIGHT, z + 2,
                                  0, diff, 1, 0xFF, kLeftNearWall);
-
-
+                break;
         }
     } else if (type == kWallCorner) {
         int returnVal = 0;
@@ -834,20 +890,20 @@ void drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t z) {
             case 3:
             case 0:
                 returnVal = drawWedge(x0 - (cameraRotation == 3 ? 0 : 1),
-                                      fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 2,
+                                      floorHeight - CAMERA_HEIGHT, z + 2,
                                       0, diff, 1, 0xFF, kLeftNearWall);
 
-                returnVal = drawSquare(x0 - 1, fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 1 + 2,
+                returnVal = drawSquare(x0 - 1, floorHeight - CAMERA_HEIGHT, z + 1 + 2,
                                        x1 - x0, diff, 0xFF) || returnVal;
                 break;
 
             case 1:
             case 2:
-                returnVal = drawSquare(x0 - 1, fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 2,
+                returnVal = drawSquare(x0 - 1, floorHeight - CAMERA_HEIGHT, z + 2,
                                        x1 - x0, diff, 0xFF);
 
                 returnVal =
-                        drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), fixToInt(prop->mFloorHeight) - CAMERA_HEIGHT, z + 2,
+                        drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), floorHeight - CAMERA_HEIGHT, z + 2,
                                   0, diff, 1, 0xFF, kLeftNearWall) || returnVal;
 
                 break;
@@ -932,8 +988,8 @@ void renderCameraWest() {
 
     for (x = 0; x < cameraX; ++x) {
 
-        int8_t minZ = max(cameraZ - ((cameraX) - x), 0);
-        int8_t maxZ = min(cameraZ + ((cameraX) - x), 31);
+        int8_t minZ = max(cameraZ - ((cameraX) - x) - 2, 0);
+        int8_t maxZ = min(cameraZ + ((cameraX) - x) + 1, 31);
 
         for (y = minZ; y < cameraZ; ++y) {
             drawPattern(map[y][x], -(y - cameraZ) + 1, -(y - cameraZ) + 2, cameraX - x);
@@ -952,8 +1008,8 @@ renderCameraSouth() {
 
     for (y = 31; y > cameraZ; --y) {
 
-        int8_t maxX = min(cameraX + (y - cameraZ), 31);
-        int8_t minX = max(cameraX - (y - cameraZ), 0);
+        int8_t maxX = min(cameraX + (y - cameraZ) + 1, 31);
+        int8_t minX = max(cameraX - (y - cameraZ) - 3, 0);
 
         for (x = minX; x < cameraX - 1; ++x) {
             drawPattern(map[y][x], cameraX - x, cameraX - x + 1, y - cameraZ);
@@ -975,8 +1031,8 @@ void renderCameraEast() {
 
     for (x = 31; x > cameraX; --x) {
 
-        int8_t maxZ = min(cameraZ + (x - cameraX), 31);
-        int8_t minZ = max(cameraZ - (x - cameraX), 0);
+        int8_t maxZ = min(cameraZ + (x - cameraX) + 2, 31);
+        int8_t minZ = max(cameraZ - (x - cameraX) - 2, 0);
 
         for (y = minZ; y < cameraZ; ++y) {
             drawPattern(map[y][x], (y - cameraZ) + 2, (y - cameraZ) + 3, x - cameraX);
@@ -994,7 +1050,7 @@ void renderCameraNorth() {
     int8_t x;
 
     for (y = 0; y < cameraZ; ++y) {
-        int16_t maxX = min(cameraX + ((cameraZ) - y), 31);
+        int16_t maxX = min(cameraX + ((cameraZ) - y + 3), 31);
         int16_t minX = max(cameraX - ((cameraZ) - y), 0);
 
         for (x = maxX; x > cameraX - 1; --x) {
@@ -1185,15 +1241,15 @@ void initMap() {
 }
 
 void startRoomTransitionAnimation() {
-
-    for (uint8_t y = 32; y >= 2; --y) {
+     for (uint8_t y = 32; y >= 2; --y) {
         clearGraphics();
+
         vLine(y, y, 95 + (32 - y), 1);
         vLine(95 + (32 - y), y, 95 + (32 - y), 1);
 
         for (uint8_t x = y; x < (95 + (32 - y)); ++x) {
-            graphicsPut(x, y);
-            graphicsPut(x, 95 + (32 - y));
+            graphicsPut(x, y, 7);
+            graphicsPut(x, 95 + (32 - y), 7);
 
             //door opening
             vLine(x, y, 95 - 3 * (32 - y), 7);

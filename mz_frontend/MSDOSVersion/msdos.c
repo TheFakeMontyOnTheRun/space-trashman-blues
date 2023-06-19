@@ -90,6 +90,52 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t shouldStipple) {
     }
 }
 
+
+void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t shouldStipple) {
+    if (y < 0) {
+        return;
+    }
+
+    int16_t _x0 = x0;
+    int16_t _x1 = x1;
+
+    if (x0 > x1) {
+        _x0 = x1;
+        _x1 = x0;
+    }
+
+    if (_x0 < 0) {
+        _x0 = 0;
+    }
+
+    if (_x1 >= 128) {
+        _x1 = 127;
+    }
+
+    uint8_t stipple;
+    uint8_t colour;
+
+    if (shouldStipple <= 7) {
+        colour = shouldStipple;
+        shouldStipple = 0;
+        stipple = 1;
+    } else {
+        colour = shouldStipple - 8;
+        shouldStipple = 1;
+        stipple = (x0 & 1);
+    }
+
+    for (int x = _x0; x <= _x1; ++x) {
+        if (shouldStipple) {
+            stipple = !stipple;
+        }
+
+        if (stipple) {
+            framebuffer[(256 * y) + x] = colour;
+        }
+    }
+}
+
 void graphicsPut(int16_t x, int16_t y) {
     if (x < 0) {
         x = 0;

@@ -57,9 +57,11 @@ void init();
 
 void graphicsFlush();
 
-void graphicsPut(int16_t x, int16_t y);
+void graphicsPut(int16_t x, int16_t y, uint8_t colour);
 
-void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t shouldStipple);
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour);
+
+void hLine(int16_t x0, int16_t x1, int16_t y0, uint8_t colour);
 
 void titleScreen();
 
