@@ -72,7 +72,7 @@ int8_t cameraX = 33;
 int8_t cameraZ = 22;
 int8_t cameraRotation = 0;
 uint8_t running = 1;
-
+int16_t cameraHeight = 1;
 uint8_t enteredFrom = 0xFF;
 
 extern int playerLocation;
@@ -422,8 +422,8 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
     z1py = (projections[z1].py);
     z0py = (projections[z0].py);
 
-    py0z0 = z0py + ((-CAMERA_HEIGHT) * z0dx);
-    py0z1 = z1py + ((-CAMERA_HEIGHT) * z1dx);
+    py0z0 = z0py + ((-cameraHeight) * z0dx);
+    py0z1 = z1py + ((-cameraHeight) * z1dx);
 
 
     {
@@ -814,30 +814,30 @@ void drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t z) {
     type = prop->mGeometryType;
 
     if (prop->mCeilingRepeatedTextureIndex != 0xFF && prop->mCeilingRepetitions > 0) {
-        drawCubeAt(x0 - 1, ceilingHeight - CAMERA_HEIGHT, z + 2, x1 - x0,
+        drawCubeAt(x0 - 1, ceilingHeight - cameraHeight, z + 2, x1 - x0,
                    prop->mCeilingRepetitions, 1, 0xFF);
     }
 
     if (prop->mFloorRepeatedTextureIndex != 0xFF && prop->mFloorRepetitions > 0) {
-        drawCubeAt(x0 - 1, floorHeight - prop->mFloorRepetitions - CAMERA_HEIGHT, z + 2, x1 - x0,
+        drawCubeAt(x0 - 1, floorHeight - prop->mFloorRepetitions - cameraHeight, z + 2, x1 - x0,
                    prop->mFloorRepetitions, 1, 0xFF);
     }
 
 
     if (prop->mCeilingTextureIndex != 0xFF) {
-        drawFloorAt(x0 - 1, ceilingHeight - CAMERA_HEIGHT, z + 2, x1 - x0,
-                   1, 0xFF);
+        drawFloorAt(x0 - 1, ceilingHeight - cameraHeight, z + 2, x1 - x0,
+                    1, 0xFF);
     }
 
     if (prop->mFloorTextureIndex != 0xFF) {
-        drawFloorAt(x0 - 1, floorHeight - CAMERA_HEIGHT, z + 2, x1 - x0,
-                   1, 0xFF);
+        drawFloorAt(x0 - 1, floorHeight - cameraHeight, z + 2, x1 - x0,
+                    1, 0xFF);
     }
 
 
     if (type == kCube) {
-        drawCubeAt(x0 - 1, floorHeight - CAMERA_HEIGHT, z + 2, x1 - x0,
-                          diff, 1, 0xFF);
+        drawCubeAt(x0 - 1, floorHeight - cameraHeight, z + 2, x1 - x0,
+                   diff, 1, 0xFF);
     } else if (type == kRightNearWall || type == kLeftNearWall) {
 
         if (cameraRotation == 0 || cameraRotation == 2) {
@@ -849,19 +849,19 @@ void drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t z) {
             }
         }
 
-        drawWedge(x0 - 1, floorHeight - CAMERA_HEIGHT, z + 2, x1 - x0,
-                         diff, 1, 0xFF, type);
+        drawWedge(x0 - 1, floorHeight - cameraHeight, z + 2, x1 - x0,
+                  diff, 1, 0xFF, type);
 
     } else if (type == kWallWest) {
 
         switch (cameraRotation) {
             case 0:
             case 2:
-                drawWedge(x0 - (cameraRotation == 0 ? 1 : 0), floorHeight - CAMERA_HEIGHT, z + 2,
-                                 0, diff, 1, 0xFF, kLeftNearWall);
+                drawWedge(x0 - (cameraRotation == 0 ? 1 : 0), floorHeight - cameraHeight, z + 2,
+                          0, diff, 1, 0xFF, kLeftNearWall);
             case 1:
             case 3:
-                drawSquare(x0 - 1, floorHeight - CAMERA_HEIGHT,
+                drawSquare(x0 - 1, floorHeight - cameraHeight,
                                   z + (cameraRotation == 3 ? 1 : 0) + 2,
                                   x1 - x0, diff, 0xFF);
         }
@@ -871,15 +871,15 @@ void drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t z) {
         switch (cameraRotation) {
             case 0:
             case 2:
-                drawSquare(x0 - 1, floorHeight - CAMERA_HEIGHT,
+                drawSquare(x0 - 1, floorHeight - cameraHeight,
                                   z + (cameraRotation == 0 ? 1 : 0) + 2,
                                   x1 - x0, diff, 0xFF);
                 break;
             case 1:
             case 3:
                 drawWedge(x0 - (cameraRotation == 1 ? 1 : 0),
-                          floorHeight - CAMERA_HEIGHT, z + 2,
-                                 0, diff, 1, 0xFF, kLeftNearWall);
+                          floorHeight - cameraHeight, z + 2,
+                          0, diff, 1, 0xFF, kLeftNearWall);
                 break;
         }
     } else if (type == kWallCorner) {
@@ -890,20 +890,20 @@ void drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t z) {
             case 3:
             case 0:
                 returnVal = drawWedge(x0 - (cameraRotation == 3 ? 0 : 1),
-                                      floorHeight - CAMERA_HEIGHT, z + 2,
+                                      floorHeight - cameraHeight, z + 2,
                                       0, diff, 1, 0xFF, kLeftNearWall);
 
-                returnVal = drawSquare(x0 - 1, floorHeight - CAMERA_HEIGHT, z + 1 + 2,
+                returnVal = drawSquare(x0 - 1, floorHeight - cameraHeight, z + 1 + 2,
                                        x1 - x0, diff, 0xFF) || returnVal;
                 break;
 
             case 1:
             case 2:
-                returnVal = drawSquare(x0 - 1, floorHeight - CAMERA_HEIGHT, z + 2,
+                returnVal = drawSquare(x0 - 1, floorHeight - cameraHeight, z + 2,
                                        x1 - x0, diff, 0xFF);
 
                 returnVal =
-                        drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), floorHeight - CAMERA_HEIGHT, z + 2,
+                        drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), floorHeight - cameraHeight, z + 2,
                                   0, diff, 1, 0xFF, kLeftNearWall) || returnVal;
 
                 break;
@@ -960,6 +960,15 @@ void repaintMapItems() {
 /* all those refactors are due to a SDCC bug with very long functions */
 void renderScene() {
     uint8_t x;
+
+
+    uint8_t pattern = map[cameraZ][cameraX];
+
+    struct CTile3DProperties *prop =
+            (struct CTile3DProperties *) getFromMap(&tileProperties, pattern);
+
+    cameraHeight = fixToInt(prop->mFloorHeight) + 1;
+
 
     switch (cameraRotation) {
         case DIRECTION_N:
