@@ -48,6 +48,7 @@ enum DIRECTION {
 #define IN_RANGE(V0, V1, V)  ((V0) <= (V) && (V) <= (V1))
 
 #define STIPPLE_DISTANCE 13
+#define STIPPLE_COLOUR_THRESHOLD 16
 
 struct ObjectNode *focusedItem = NULL;
 struct ObjectNode *roomItem = NULL;
@@ -146,8 +147,8 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
     int16_t py1z1;
     int16_t px1z1;
 
-    uint8_t shouldStippleFill = (z0 >= STIPPLE_DISTANCE) ? 21 : 5;
-    uint8_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? 20 : 4;
+    uint8_t shouldStippleFill = (z0 >= STIPPLE_DISTANCE) ? (11 + STIPPLE_COLOUR_THRESHOLD) : 11;
+    uint8_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? (3 + STIPPLE_COLOUR_THRESHOLD) : 3;
 
     if (z0 >= 32) {
         return 0;
@@ -350,7 +351,7 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
         return 0;
     }
 
-    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 21 : 5;
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? (4 + STIPPLE_COLOUR_THRESHOLD) : 4;
 
     drawContour = (dY);
 
@@ -395,7 +396,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
     int16_t px0z1;
     int8_t py0z1;
     int16_t px1z1;
-    uint8_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? 17 : 1;
+    uint8_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? (5 + STIPPLE_COLOUR_THRESHOLD) : 5;
 
     if (z0 >= 32 || z0 <= 4) {
         return 0;
@@ -546,8 +547,8 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     int16_t py0z1;
     int16_t px1z1;
 
-    uint8_t shouldStippleFill = (z0 >= STIPPLE_DISTANCE) ? 22 : 6;
-    uint8_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? 21 : 5;
+    uint8_t shouldStippleFill = (z0 >= STIPPLE_DISTANCE) ? (9 + STIPPLE_COLOUR_THRESHOLD) : 9;
+    uint8_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? (1 + STIPPLE_COLOUR_THRESHOLD) : 1;
 
     uint8_t drawContour;
 
@@ -708,7 +709,7 @@ uint8_t drawFloorAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dZ, uint8
     int16_t py0z1;
     int16_t px1z1;
 
-    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 18 : 2;
+    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? (2 + STIPPLE_COLOUR_THRESHOLD) : 2;
 
     if (z0 >= 32 || z0 < 1) {
         return 0;

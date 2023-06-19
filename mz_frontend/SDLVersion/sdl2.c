@@ -328,7 +328,7 @@ void flipRenderer() {
     rect.w = 512;
     rect.h = 320;
 
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 0x55, 0x55, 0x55, 255);
     SDL_RenderFillRect(renderer, &rect);
 
     for (y = 0; y < 128; ++y) {
