@@ -8,8 +8,8 @@
 #include "SDL.h"
 
 int cursorPosition = 0;
-extern struct ObjectNode* focusedItem;
-extern struct ObjectNode* roomItem;
+extern struct ObjectNode *focusedItem;
+extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
 SDL_Window *window;
 SDL_Renderer *renderer;
@@ -18,7 +18,7 @@ SDL_Renderer *renderer;
 
 uint8_t mBufferedCommand;
 uint32_t palette[16];
-uint8_t framebuffer[160 * 200];
+uint8_t framebuffer[256 * 160];
 
 void graphicsFlush();
 
@@ -34,22 +34,63 @@ void pickOrDrop();
 
 void pickItem();
 
-void graphicsPut(uint8_t x, uint8_t y) {
+void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
+    if (x < 0) {
+        x = 0;
+    }
 
-    assert(x >= 0);
-    assert(x < 128);
-    assert(y >= 0);
-    assert(y < 128);
+    if (x >= 128) {
+        x = 127;
+    }
+
+    if (y < 0) {
+        y = 0;
+    }
+
+    if (y >= 128) {
+        y = 127;
+    }
 
 
-    framebuffer[(160 * y) + x] = 1;
+    framebuffer[(256 * y) + x] = colour;
 #ifdef PUTAFLIP
     graphicsFlush();
     SDL_Delay(100);
 #endif
 }
 
-void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint shouldStipple) {
+void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
+    if (y < 0) {
+        return;
+    }
+
+    int16_t _x0 = x0;
+    int16_t _x1 = x1;
+
+    if (x0 > x1) {
+        _x0 = x1;
+        _x1 = x0;
+    }
+
+    if (_x0 < 0) {
+        _x0 = 0;
+    }
+
+    if (_x1 >= 128) {
+        _x1 = 127;
+    }
+
+    for (int x = _x0; x <= _x1; ++x) {
+        framebuffer[(256 * y) + x] = colour;
+    }
+}
+
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
+
+    if (x0 < 0) {
+        return;
+    }
+
     int16_t y;
     int16_t _y0 = y0;
     int16_t _y1 = y1;
@@ -59,27 +100,31 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint shouldStipple) {
         _y1 = y0;
     }
 
+    if (_y0 < 0) {
+        _y0 = 0;
+    }
 
-    for ( y = _y0; y <= _y1; ++y) {
-        if ( !shouldStipple || (y & 1) ) {
-            graphicsPut(x0, y);
-        }
+    if (_y1 >= 128) {
+        _y1 = 127;
+    }
+
+    for (y = _y0; y <= _y1; ++y) {
+        framebuffer[(256 * y) + x0] = colour;
     }
 }
-
 
 void shutdownGraphics() {
     SDL_Quit();
 }
 
-void showMessage(const char* mesg) {
+void showMessage(const char *mesg) {
     puts(mesg);
 }
 
-void drawWindow(int tx, int ty, int tw, int th, const char* title ) {}
+void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 
 void clearGraphics() {
-    memset(framebuffer, 0, 160 * 200);
+    memset(framebuffer, 0, 256 * 160);
 }
 
 void writeStr(uint8_t nColumn, uint8_t nLine, char *str, uint8_t fg, uint8_t bg) {
@@ -91,10 +136,10 @@ void printSituation() {
     puts("---------------");
     puts("\nPlayer items:");
 
-    while( playerObjects != NULL ) {
+    while (playerObjects != NULL) {
         struct Item *item = getItem(playerObjects->item);
 
-        printf("%c%c%s\n", (playerObjects == focusedItem) ? '>' : ' ', item->active ? '*' : '-', item->name );
+        printf("%c%c%s\n", (playerObjects == focusedItem) ? '>' : ' ', item->active ? '*' : '-', item->name);
 
         playerObjects = playerObjects->next;
     }
@@ -103,10 +148,10 @@ void printSituation() {
 
     struct ObjectNode *roomItems = getRoom(getPlayerRoom())->itemsPresent->next;
 
-    while( roomItems != NULL ) {
+    while (roomItems != NULL) {
         struct Item *item = getItem(roomItems->item);
 
-        printf("%c%c%s\n", (roomItems == roomItem) ? '>' : ' ',item->active ? '*' : '-', item->name );
+        printf("%c%c%s\n", (roomItems == roomItem) ? '>' : ' ', item->active ? '*' : '-', item->name);
 
         roomItems = roomItems->next;
     }
@@ -217,7 +262,6 @@ uint8_t getKey() {
 }
 
 void sleepForMS() {
-
 }
 
 void init() {
@@ -225,35 +269,33 @@ void init() {
     mBufferedCommand = '.';
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
-    memset(framebuffer, 5, 160 * 200);
+    memset(framebuffer, 0, 256 * 160);
     window =
-            SDL_CreateWindow("Derelict 8-bits SDL2 test", SDL_WINDOWPOS_CENTERED,
-                             SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
+            SDL_CreateWindow("Derelict 16-bits SDL2 test", SDL_WINDOWPOS_CENTERED,
+                             SDL_WINDOWPOS_CENTERED, 512, 320, SDL_WINDOW_SHOWN);
 
     renderer = SDL_CreateRenderer(window, -1, 0);
 
-    palette[0] = 0xFF000099;
-    palette[1] = 0xFFFFFFBF;
-    palette[2] = 0xFFE0FFFF;
-    palette[3] = 0xFFFF0000;
-    palette[4] = 0xFFFFFFFF;
-    palette[5] = 0xFF000000;
-    palette[6] = 0xFF0000FF;
-    palette[7] = 0xFFFF00FF;
-    palette[8] = 0xFF00b7eb;
-    palette[9] = 0xFFFFFF00;
-    palette[10] = 0xFFAFEEEE;
-    palette[11] = 0xFFffc0cb;
-    palette[12] = 0xFF00FF00;
-    palette[13] = 0xFFAAFFAA;
-    palette[14] = 0xFF0000FF;
-    palette[15] = 0xFFAAAAFF;
+    palette[0] = 0x000000;
+    palette[1] = 0x0000AA;
+    palette[2] = 0x00AA00;
+    palette[3] = 0x00AAAA;
+    palette[4] = 0xAA0000;
+    palette[5] = 0xAA00AA;
+    palette[6] = 0xAA5500;
+    palette[7] = 0xAAAAAA;
+    palette[8] = 0x555555;
+    palette[9] = 0x5555FF;
+    palette[10] = 0x55FF55;
+    palette[11] = 0x55FFFF;
+    palette[12] = 0xFF5555;
+    palette[13] = 0xFF55FF;
+    palette[14] = 0xFFFF55;
+    palette[15] = 0xFFFFFF;
 
 #ifdef __EMSCRIPTEN__
     enterFullScreenMode ();
 #endif
-
-
 }
 
 
@@ -283,22 +325,26 @@ void flipRenderer() {
 
     rect.x = 0;
     rect.y = 0;
-    rect.w = 259;
-    rect.h = 309;
+    rect.w = 512;
+    rect.h = 320;
 
-    SDL_SetRenderDrawColor(renderer, 0xFF,
-                           0xFF,
-                           0xFF, 255);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderFillRect(renderer, &rect);
 
     for (y = 0; y < 128; ++y) {
         for (x = 0; x < 128; ++x) {
-
-            rect.x = 1 + 2 * x;
-            rect.y = 1 + (24 * y) / 10;
+            rect.x = 2 * x;
+            rect.y = 2 * y;
             rect.w = 2;
-            rect.h = 3;
-            int index = framebuffer[(160 * y) + x];
+            rect.h = 2;
+            int index = framebuffer[(256 * y) + x];
+            if (index > 16) {
+                if ((x + y) & 1) {
+                    index = 0;
+                } else {
+                    index = index - 16;
+                }
+            }
 
             if (index < 0 || index >= 16) {
                 continue;
@@ -330,11 +376,9 @@ void graphicsFlush() {
 
 
 void HUD_initialPaint() {
-
 }
 
 void HUD_refresh() {
-
 }
 
 

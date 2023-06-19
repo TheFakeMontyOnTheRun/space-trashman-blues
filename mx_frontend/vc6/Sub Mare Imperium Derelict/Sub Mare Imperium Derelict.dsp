@@ -126,7 +126,7 @@ SOURCE=..\..\base3d\src\CRenderer_Tesselation.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\base3d\src\CTile3DProperties.c
+SOURCE=..\..\..\common\src\CTile3DProperties.c
 # End Source File
 # Begin Source File
 

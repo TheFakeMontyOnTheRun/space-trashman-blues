@@ -51,6 +51,7 @@ void initHW(void) {
 
     NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent: @"base.pfs"];
     initFileReader([path UTF8String]);
+    initZMap();
     graphicsInit();
     setupOPL2();
 }

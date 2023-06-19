@@ -69,8 +69,8 @@ void Crawler_initStateCallback(int32_t tag) {
 		timeUntilNextState = kDefaultPresentationStateInterval;
 		gameTicks = 0;
 		enteredThru = 0;
-		memset(&gameSnapshot, 0, sizeof(struct GameSnapshot));
-		memset(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
+        memFill(&gameSnapshot, 0, sizeof(struct GameSnapshot));
+        memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
 	} else {
 		currentPresentationState = kWaitingForInput;
 		timeUntilNextState = 0;
@@ -98,6 +98,7 @@ void Crawler_initStateCallback(int32_t tag) {
 	thisMissionNameLen = (int16_t) (strlen(thisMissionName));
 
 	if (tag == kPlayGame) {
+        clearMap(&tileProperties);
 		initRoom(getPlayerRoom());
 	}
 }
@@ -445,7 +446,7 @@ void Crawler_unloadStateCallback(int32_t newState) {
 		for (c = 0; c < TOTAL_TEXTURES; ++c) {
 			if (nativeTextures[c] != NULL) {
 				releaseBitmap(nativeTextures[c]->raw);
-				free(nativeTextures[c]);
+                disposeMem(nativeTextures[c]);
 				nativeTextures[c] = NULL;
 			}
 		}

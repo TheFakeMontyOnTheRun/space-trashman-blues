@@ -3,8 +3,10 @@
 //
 #include <stdint.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
+#ifndef SMD
+#include <string.h>
+#endif
 
 #include "Core.h"
 #include "Derelict.h"

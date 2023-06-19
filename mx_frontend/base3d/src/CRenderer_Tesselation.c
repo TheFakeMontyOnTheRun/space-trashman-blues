@@ -7,6 +7,8 @@
 #else
 #include <stdint.h>
 #include <unistd.h>
+#include <math.h>
+
 #endif
 #include "FixP.h"
 #include "Vec.h"
@@ -27,6 +29,8 @@
 #define FIXP_HALF_XRES  (intToFix(HALF_XRES))
 #define FIXP_HALF_YRES  (intToFix(HALF_YRES))
 #define FIXP_ONE (intToFix(1))
+
+FixP_t oneOverZMap[4 * 128];
 
 #ifdef AGS
 __attribute__((section(".iwram"), long_call))
@@ -53,13 +57,22 @@ void projectAllVertices(const uint8_t count) {
 				z = FIXP_ONE;
 			}
 
-			oneOver = Div(FIXP_HALF_YRES, z);
-		}
+            oneOver = oneOverZMap[ fixToInt( Mul( intToFix(4), z) ) ];
+        }
 
 		vertex->second.mX = (FIXP_HALF_XRES + Mul(vertex->first.mX + xCameraOffset, oneOver));
 		vertex->second.mY = (FIXP_HALF_YRES - Mul(vertex->first.mY + compoundYFactor, oneOver));
 	}
 }
+
+
+void initZMap(void) {
+	int z;
+    for (z = 1; z < (4 * 128); ++z ) {
+        oneOverZMap[z] = Div(FIXP_HALF_YRES, Div(intToFix(z) , intToFix(4)));
+    }
+}
+
 
 void drawBillboardAt(const struct Vec3 center,
                      const uint8_t *__restrict__ texture,
@@ -68,20 +81,27 @@ void drawBillboardAt(const struct Vec3 center,
 
     struct Vec2 ulz0;
     struct Vec2 lrz0;
+    struct Vec3 *ptr0;
+    struct Vec3 *ptr1;
 
     if (center.mZ <= kMinZCull) {
         return;
     }
 
-    initVec3(&projectionVertices[0].first, center.mX - FIXP_ONE, center.mY + scale, center.mZ);
-    initVec3(&projectionVertices[1].first, center.mX + FIXP_ONE, center.mY - scale, center.mZ);
+    ptr0 = &projectionVertices[0].first;
+    ptr1 = &projectionVertices[1].first;
+    ptr0->mX = center.mX - FIXP_ONE;
+    ptr1->mX = center.mX + FIXP_ONE;
+    ptr0->mY = center.mY + scale;
+    ptr1->mY = center.mY - scale;
+    ptr0->mZ = ptr1->mZ = center.mZ;
 
     projectAllVertices(2);
 
     ulz0 = projectionVertices[0].second;
     lrz0 = projectionVertices[1].second;
 
-    if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS && useDither) {
+    if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
         drawMask(ulz0.mX, ulz0.mY, lrz0.mX, lrz0.mY);
     } else {
         drawFrontWall(ulz0.mX, ulz0.mY, lrz0.mX, lrz0.mY, texture,
@@ -97,13 +117,17 @@ void drawColumnAt(const struct Vec3 center,
                   const int repeatTexture) {
 
     const FixP_t halfScale = scale;
-    const FixP_t textureScale = (repeatTexture ? halfScale : FIXP_ONE);
+    FixP_t textureScale;
+    int z;
     struct Vec2 p0;
     struct Vec2 p1;
     struct Vec2 p2;
     struct Vec2 p3;
-    int z = fixToInt(center.mZ);
-    int originalZ = z;
+    int originalZ;
+    struct Vec3 *ptr0;
+    struct Vec3 *ptr1;
+    struct Vec3 *ptr2;
+    struct Vec3 *ptr3;
 
     if (center.mZ <= kMinZCull) {
         return;
@@ -126,10 +150,23 @@ void drawColumnAt(const struct Vec3 center,
 
            front
   */
-    initVec3(&projectionVertices[0].first, center.mX - FIXP_ONE, center.mY + halfScale, center.mZ - FIXP_ONE);
-    initVec3(&projectionVertices[1].first, center.mX + FIXP_ONE, center.mY - halfScale, center.mZ - FIXP_ONE);
-    initVec3(&projectionVertices[2].first, center.mX - FIXP_ONE, center.mY + halfScale, center.mZ + FIXP_ONE);
-    initVec3(&projectionVertices[3].first, center.mX + FIXP_ONE, center.mY - halfScale, center.mZ + FIXP_ONE);
+    textureScale = (repeatTexture ? halfScale : FIXP_ONE);
+    z = fixToInt(center.mZ);
+    originalZ = z;
+
+    ptr0 = &projectionVertices[0].first;
+    ptr1 = &projectionVertices[1].first;
+    ptr2 = &projectionVertices[2].first;
+    ptr3 = &projectionVertices[3].first;
+
+    ptr0->mX = ptr2->mX = center.mX - FIXP_ONE;
+    ptr1->mX = ptr3->mX = center.mX + FIXP_ONE;
+
+    ptr0->mY = ptr2->mY = center.mY + halfScale;
+    ptr1->mY = ptr3->mY = center.mY - halfScale;
+
+    ptr0->mZ = ptr1->mZ = center.mZ - FIXP_ONE;
+    ptr2->mZ = ptr3->mZ = center.mZ + FIXP_ONE;
 
     projectAllVertices(4);
 
@@ -139,7 +176,7 @@ void drawColumnAt(const struct Vec3 center,
     p3 = projectionVertices[3].second;
 
     if ( (mask & MASK_BEHIND) || (enableAlpha && (mask & MASK_FRONT))) {
-        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS && useDither) {
+        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
             drawMask(p2.mX, p2.mY, p3.mX, p3.mY);
         } else {
             drawFrontWall(p2.mX, p2.mY, p3.mX, p3.mY, texture->rotations[0],
@@ -153,7 +190,7 @@ void drawColumnAt(const struct Vec3 center,
             z -= 2;
         }
 
-        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS && useDither) {
+        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
             maskWall(p2.mX, p0.mX, p2.mY, p3.mY, p0.mY, p1.mY);
         } else {
             drawWall(p2.mX, p0.mX, p2.mY, p3.mY, p0.mY, p1.mY, texture->rowMajor,
@@ -168,7 +205,7 @@ void drawColumnAt(const struct Vec3 center,
             z -= 2;
         }
 
-        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS && useDither) {
+        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
             maskWall(p1.mX, p3.mX, p0.mY, p1.mY, p2.mY, p3.mY);
         } else {
             drawWall(p1.mX, p3.mX, p0.mY, p1.mY, p2.mY, p3.mY, texture->rowMajor,
@@ -183,7 +220,7 @@ void drawColumnAt(const struct Vec3 center,
             z -= 2;
         }
 
-        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS && useDither) {
+        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
             drawMask(p0.mX, p0.mY, p1.mX, p1.mY);
         } else {
             drawFrontWall(p0.mX, p0.mY, p1.mX, p1.mY, texture->rotations[0],
@@ -245,22 +282,6 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         llz1 = projectionVertices[2].second;
         lrz1 = projectionVertices[3].second;
 
-        if (flipTexture) {
-            uvCoords[0] = 0;
-            uvCoords[1] = NATIVE_TEXTURE_SIZE;
-            uvCoords[2] = 0;
-            uvCoords[3] = 0;
-            uvCoords[4] = NATIVE_TEXTURE_SIZE;
-            uvCoords[5] = NATIVE_TEXTURE_SIZE;
-        } else {
-            uvCoords[0] = NATIVE_TEXTURE_SIZE;
-            uvCoords[1] = 0;
-            uvCoords[2] = NATIVE_TEXTURE_SIZE;
-            uvCoords[3] = NATIVE_TEXTURE_SIZE;
-            uvCoords[4] = 0;
-            uvCoords[5] = 0;
-        }
-
         coords[0] = fixToInt(llz1.mX); // 2
         coords[1] = fixToInt(llz1.mY);
         coords[2] = fixToInt(lrz1.mX); // 3
@@ -268,23 +289,26 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         coords[4] = fixToInt(llz0.mX); // 0
         coords[5] = fixToInt(llz0.mY);
 
-        drawTexturedTriangle(&coords[0], &uvCoords[0], (struct Texture*)texture );
+        if (p0.mZ < FIXP_DISTANCE_FOR_DARKNESS) {
+            if (flipTexture) {
+                uvCoords[0] = 0;
+                uvCoords[1] = NATIVE_TEXTURE_SIZE;
+                uvCoords[2] = 0;
+                uvCoords[3] = 0;
+                uvCoords[4] = NATIVE_TEXTURE_SIZE;
+                uvCoords[5] = NATIVE_TEXTURE_SIZE;
+            } else {
+                uvCoords[0] = NATIVE_TEXTURE_SIZE;
+                uvCoords[1] = 0;
+                uvCoords[2] = NATIVE_TEXTURE_SIZE;
+                uvCoords[3] = NATIVE_TEXTURE_SIZE;
+                uvCoords[4] = 0;
+                uvCoords[5] = 0;
+            }
 
-
-        if (flipTexture) {
-            uvCoords[0] = NATIVE_TEXTURE_SIZE;
-            uvCoords[1] = NATIVE_TEXTURE_SIZE;
-            uvCoords[2] = 0;
-            uvCoords[3] = 0;
-            uvCoords[4] = NATIVE_TEXTURE_SIZE;
-            uvCoords[5] = 0;
+            drawTexturedTriangle(&coords[0], &uvCoords[0], (struct Texture*)texture, fixToInt(p0.mZ) );
         } else {
-            uvCoords[0] = 0;
-            uvCoords[1] = 0;
-            uvCoords[2] = NATIVE_TEXTURE_SIZE;
-            uvCoords[3] = NATIVE_TEXTURE_SIZE;
-            uvCoords[4] = 0;
-            uvCoords[5] = NATIVE_TEXTURE_SIZE;
+            fillTriangle(&coords[0], 0 );
         }
 
         coords[0] = fixToInt(llz0.mX); //0
@@ -294,7 +318,27 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         coords[4] = fixToInt(lrz0.mX); //1
         coords[5] = fixToInt(lrz0.mY);
 
-        drawTexturedTriangle( &coords[0], &uvCoords[0], (struct Texture*)texture );
+        if (p0.mZ < FIXP_DISTANCE_FOR_DARKNESS) {
+            if (flipTexture) {
+                uvCoords[0] = NATIVE_TEXTURE_SIZE;
+                uvCoords[1] = NATIVE_TEXTURE_SIZE;
+                uvCoords[2] = 0;
+                uvCoords[3] = 0;
+                uvCoords[4] = NATIVE_TEXTURE_SIZE;
+                uvCoords[5] = 0;
+            } else {
+                uvCoords[0] = 0;
+                uvCoords[1] = 0;
+                uvCoords[2] = NATIVE_TEXTURE_SIZE;
+                uvCoords[3] = NATIVE_TEXTURE_SIZE;
+                uvCoords[4] = 0;
+                uvCoords[5] = NATIVE_TEXTURE_SIZE;
+            }
+
+            drawTexturedTriangle( &coords[0], &uvCoords[0], (struct Texture*)texture, fixToInt(p0.mZ) );
+        } else {
+            fillTriangle(&coords[0], 0 );
+        }
 
         return;
     }
@@ -311,10 +355,14 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
     llz1 = projectionVertices[2].second;
     lrz1 = projectionVertices[3].second;
 
-    if (p0.mZ >= FIXP_DISTANCE_FOR_DARKNESS && useDither) {
+    if (p0.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
         maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0 );
     } else {
+#ifndef AGS
         drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(p0.mZ), texture->rotations[cameraDirection] );
+#else
+        drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(p0.mZ), texture->rotations[0] );
+#endif
     }
 }
 
@@ -325,15 +373,27 @@ void drawFloorAt(const struct Vec3 center,
     struct Vec2 lrz0;
     struct Vec2 llz1;
     struct Vec2 lrz1;
+    struct Vec3 *ptr0;
+    struct Vec3 *ptr1;
+    struct Vec3 *ptr2;
+    struct Vec3 *ptr3;
 
     if (center.mZ <= kMinZCull) {
         return;
     }
 
-    initVec3(&projectionVertices[0].first, center.mX - FIXP_ONE, center.mY, center.mZ - FIXP_ONE);
-    initVec3(&projectionVertices[1].first, center.mX + FIXP_ONE, center.mY, center.mZ - FIXP_ONE);
-    initVec3(&projectionVertices[2].first, center.mX - FIXP_ONE, center.mY, center.mZ + FIXP_ONE);
-    initVec3(&projectionVertices[3].first, center.mX + FIXP_ONE, center.mY, center.mZ + FIXP_ONE);
+    ptr0 = &projectionVertices[0].first;
+    ptr1 = &projectionVertices[1].first;
+    ptr2 = &projectionVertices[2].first;
+    ptr3 = &projectionVertices[3].first;
+
+    ptr0->mX = ptr2->mX = center.mX - FIXP_ONE;
+    ptr1->mX = ptr3->mX = center.mX + FIXP_ONE;
+
+    ptr0->mY = ptr1->mY = ptr2->mY = ptr3->mY = center.mY;
+
+    ptr0->mZ = ptr1->mZ = center.mZ - FIXP_ONE;
+    ptr2->mZ = ptr3->mZ = center.mZ + FIXP_ONE;
 
     projectAllVertices(4);
 
@@ -343,11 +403,16 @@ void drawFloorAt(const struct Vec3 center,
     lrz1 = projectionVertices[3].second;
 
     if (center.mY <= 0) {
-        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS && useDither) {
+        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
             maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0);
         } else {
+#ifndef AGS
             drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
                       texture->rotations[cameraDirection]);
+#else
+            drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
+                      texture->rotations[0]);
+#endif
         }
     }
 }
@@ -358,15 +423,27 @@ void drawCeilingAt(const struct Vec3 center,
     struct Vec2 lrz0;
     struct Vec2 llz1;
     struct Vec2 lrz1;
+    struct Vec3 *ptr0;
+    struct Vec3 *ptr1;
+    struct Vec3 *ptr2;
+    struct Vec3 *ptr3;
 
     if (center.mZ <= kMinZCull) {
         return;
     }
 
-    initVec3(&projectionVertices[0].first, center.mX - FIXP_ONE, center.mY, center.mZ - FIXP_ONE);
-    initVec3(&projectionVertices[1].first, center.mX + FIXP_ONE, center.mY, center.mZ - FIXP_ONE);
-    initVec3(&projectionVertices[2].first, center.mX - FIXP_ONE, center.mY, center.mZ + FIXP_ONE);
-    initVec3(&projectionVertices[3].first, center.mX + FIXP_ONE, center.mY, center.mZ + FIXP_ONE);
+    ptr0 = &projectionVertices[0].first;
+    ptr1 = &projectionVertices[1].first;
+    ptr2 = &projectionVertices[2].first;
+    ptr3 = &projectionVertices[3].first;
+
+    ptr0->mX = ptr2->mX = center.mX - FIXP_ONE;
+    ptr1->mX = ptr3->mX = center.mX + FIXP_ONE;
+
+    ptr0->mY = ptr1->mY = ptr2->mY = ptr3->mY = center.mY;
+
+    ptr0->mZ = ptr1->mZ = center.mZ - FIXP_ONE;
+    ptr2->mZ = ptr3->mZ = center.mZ + FIXP_ONE;
 
     projectAllVertices(4);
 
@@ -377,11 +454,16 @@ void drawCeilingAt(const struct Vec3 center,
 
     if (center.mY >= 0) {
 
-        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS && useDither) {
+        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
             maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0);
         } else {
+#ifndef AGS
             drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
                       texture->rotations[cameraDirection]);
+#else
+            drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
+                      texture->rotations[0]);
+#endif
         }
     }
 }
@@ -399,6 +481,10 @@ void drawLeftNear(const struct Vec3 center,
     struct Vec2 urz0;
     struct Vec2 llz0;
     struct Vec2 lrz0;
+    struct Vec3 *ptr0;
+    struct Vec3 *ptr1;
+    struct Vec3 *ptr2;
+    struct Vec3 *ptr3;
 
     if (center.mZ <= kMinZCull) {
         return;
@@ -406,8 +492,17 @@ void drawLeftNear(const struct Vec3 center,
 
     if (mask & MASK_BEHIND) {
 
-        initVec3(&projectionVertices[0].first, center.mX - FIXP_ONE, center.mY - halfScale, center.mZ - FIXP_ONE);
-        initVec3(&projectionVertices[1].first, center.mX + FIXP_ONE, center.mY + halfScale, center.mZ - FIXP_ONE);
+        ptr0 = &projectionVertices[0].first;
+        ptr1 = &projectionVertices[1].first;
+
+        ptr0->mX = center.mX - FIXP_ONE;
+        ptr1->mX = center.mX + FIXP_ONE;
+
+        ptr0->mY = center.mY - halfScale;
+        ptr1->mY = center.mY + halfScale;
+
+        ptr0->mZ = center.mZ - FIXP_ONE;
+        ptr1->mZ = center.mZ - FIXP_ONE;
 
         projectAllVertices(2);
 
@@ -420,11 +515,19 @@ void drawLeftNear(const struct Vec3 center,
     if (cameraDirection == kWest || cameraDirection == kEast) {
         depth = - FIXP_ONE;
     }
+    ptr0 = &projectionVertices[0].first;
+    ptr1 = &projectionVertices[1].first;
+    ptr2 = &projectionVertices[2].first;
+    ptr3 = &projectionVertices[3].first;
 
-    initVec3(&projectionVertices[0].first, center.mX - FIXP_ONE, center.mY + halfScale, center.mZ - depth);
-    initVec3(&projectionVertices[1].first, center.mX + FIXP_ONE, center.mY + halfScale, center.mZ + depth);
-    initVec3(&projectionVertices[2].first, center.mX - FIXP_ONE, center.mY - halfScale, center.mZ - depth);
-    initVec3(&projectionVertices[3].first, center.mX + FIXP_ONE, center.mY - halfScale, center.mZ + depth);
+    ptr0->mX = ptr2->mX = center.mX - FIXP_ONE;
+    ptr1->mX = ptr3->mX = center.mX + FIXP_ONE;
+
+    ptr0->mY = ptr1->mY = center.mY + halfScale;
+    ptr2->mY = ptr3->mY = center.mY - halfScale;
+
+    ptr0->mZ = ptr2->mZ = center.mZ - depth;
+    ptr1->mZ = ptr3->mZ = center.mZ + depth;
 
     projectAllVertices(4);
 
@@ -433,7 +536,7 @@ void drawLeftNear(const struct Vec3 center,
     llz0 = projectionVertices[2].second;
     lrz0 = projectionVertices[3].second;
 
-    if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS && useDither) {
+    if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
         maskWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY);
     } else {
         drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture,
@@ -449,13 +552,25 @@ void drawMesh( const struct Mesh *mesh, const struct Vec3 center ) {
     FixP_t * vertexData = mesh->geometry;
     uint8_t colour = mesh->colour;
 
-    if (mesh->texture == NULL ) {
+    if (mesh->texture == NULL || center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
 	    int c;
         for (c = 0; c < count; ++c ) {
 
-            initVec3(&projectionVertices[0].first, center.mX + *(vertexData + 0), center.mY + *(vertexData + 1), center.mZ + *(vertexData + 2));
-            initVec3(&projectionVertices[1].first, center.mX + *(vertexData + 3), center.mY + *(vertexData + 4), center.mZ + *(vertexData + 5));
-            initVec3(&projectionVertices[2].first, center.mX + *(vertexData + 6), center.mY + *(vertexData + 7), center.mZ + *(vertexData + 8));
+            struct Vec3 *ptr0 = &projectionVertices[0].first;
+            struct Vec3 *ptr1 = &projectionVertices[1].first;
+            struct Vec3 *ptr2 = &projectionVertices[2].first;
+
+            ptr0->mX = center.mX + *(vertexData + 0);
+            ptr1->mX = center.mX + *(vertexData + 3);
+            ptr2->mX = center.mX + *(vertexData + 6);
+
+            ptr0->mY = center.mY + *(vertexData + 1);
+            ptr1->mY = center.mY + *(vertexData + 4);
+            ptr2->mY = center.mY + *(vertexData + 7);
+
+            ptr0->mZ = center.mZ + *(vertexData + 2);
+            ptr1->mZ = center.mZ + *(vertexData + 5);
+            ptr2->mZ = center.mZ + *(vertexData + 8);
 
             projectAllVertices(3);
 
@@ -474,9 +589,21 @@ void drawMesh( const struct Mesh *mesh, const struct Vec3 center ) {
         uint8_t* uvData = mesh->uvCoords;
         for (c = 0; c < count; ++c ) {
 
-            initVec3(&projectionVertices[0].first, center.mX + *(vertexData + 0), center.mY + *(vertexData + 1), center.mZ + *(vertexData + 2));
-            initVec3(&projectionVertices[1].first, center.mX + *(vertexData + 3), center.mY + *(vertexData + 4), center.mZ + *(vertexData + 5));
-            initVec3(&projectionVertices[2].first, center.mX + *(vertexData + 6), center.mY + *(vertexData + 7), center.mZ + *(vertexData + 8));
+            struct Vec3 *ptr0 = &projectionVertices[0].first;
+            struct Vec3 *ptr1 = &projectionVertices[1].first;
+            struct Vec3 *ptr2 = &projectionVertices[2].first;
+
+            ptr0->mX = center.mX + *(vertexData + 0);
+            ptr1->mX = center.mX + *(vertexData + 3);
+            ptr2->mX = center.mX + *(vertexData + 6);
+
+            ptr0->mY = center.mY + *(vertexData + 1);
+            ptr1->mY = center.mY + *(vertexData + 4);
+            ptr2->mY = center.mY + *(vertexData + 7);
+
+            ptr0->mZ = center.mZ + *(vertexData + 2);
+            ptr1->mZ = center.mZ + *(vertexData + 5);
+            ptr2->mZ = center.mZ + *(vertexData + 8);
 
             projectAllVertices(3);
 
@@ -487,7 +614,9 @@ void drawMesh( const struct Mesh *mesh, const struct Vec3 center ) {
             coords[4] = fixToInt(projectionVertices[2].second.mX);
             coords[5] = fixToInt(projectionVertices[2].second.mY);
 
-            drawTexturedTriangle( &coords[0], uvData, mesh->texture);
+
+            drawTexturedTriangle( &coords[0], uvData, mesh->texture, fixToInt(ptr0->mZ));
+
             uvData += 6;
             vertexData += 9;
         }
@@ -508,14 +637,28 @@ void drawRightNear(const struct Vec3 center,
     struct Vec2 urz0;
     struct Vec2 llz0;
     struct Vec2 lrz0;
+    struct Vec3 *ptr0;
+    struct Vec3 *ptr1;
+    struct Vec3 *ptr2;
+    struct Vec3 *ptr3;
 
     if (center.mZ <= kMinZCull) {
         return;
     }
 
     if (mask & MASK_BEHIND) {
-        initVec3(&projectionVertices[0].first, center.mX - FIXP_ONE, center.mY - halfScale, center.mZ - FIXP_ONE);
-        initVec3(&projectionVertices[1].first, center.mX + FIXP_ONE, center.mY + halfScale, center.mZ - FIXP_ONE);
+
+        ptr0 = &projectionVertices[0].first;
+        ptr1 = &projectionVertices[1].first;
+
+        ptr0->mX = center.mX - FIXP_ONE;
+        ptr1->mX = center.mX + FIXP_ONE;
+
+        ptr0->mY = center.mY - halfScale;
+        ptr1->mY = center.mY + halfScale;
+
+        ptr0->mZ = center.mZ - FIXP_ONE;
+        ptr1->mZ = center.mZ - FIXP_ONE;
 
         projectAllVertices(2);
 
@@ -529,11 +672,19 @@ void drawRightNear(const struct Vec3 center,
         depth = - FIXP_ONE;
     }
 
-    initVec3(&projectionVertices[0].first, center.mX - FIXP_ONE, center.mY + halfScale, center.mZ + depth);
-    initVec3(&projectionVertices[1].first, center.mX + FIXP_ONE, center.mY + halfScale, center.mZ - depth);
-    initVec3(&projectionVertices[2].first, center.mX - FIXP_ONE, center.mY - halfScale, center.mZ + depth);
-    initVec3(&projectionVertices[3].first, center.mX + FIXP_ONE, center.mY - halfScale, center.mZ - depth);
+    ptr0 = &projectionVertices[0].first;
+    ptr1 = &projectionVertices[1].first;
+    ptr2 = &projectionVertices[2].first;
+    ptr3 = &projectionVertices[3].first;
 
+    ptr0->mX = ptr2->mX = center.mX - FIXP_ONE;
+    ptr1->mX = ptr3->mX = center.mX + FIXP_ONE;
+
+    ptr0->mY = ptr1->mY = center.mY + halfScale;
+    ptr2->mY = ptr3->mY = center.mY - halfScale;
+
+    ptr0->mZ = ptr2->mZ = center.mZ + depth;
+    ptr1->mZ = ptr3->mZ = center.mZ - depth;
 
     projectAllVertices(4);
 
@@ -542,7 +693,7 @@ void drawRightNear(const struct Vec3 center,
     llz0 = projectionVertices[2].second;
     lrz0 = projectionVertices[3].second;
 
-    if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS && useDither) {
+    if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
         maskWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY);
     } else {
         drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture,

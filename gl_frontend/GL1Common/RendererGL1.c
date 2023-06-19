@@ -170,7 +170,12 @@ void setPerspective(float fovy,
 }
 
 void enter3D(void) {
-	glMatrixMode(GL_PROJECTION);
+#ifndef NDS
+    GLfloat fogColor[4] = {0.0, 0.0, 0.0, 1.0};
+#else
+    int i;
+#endif
+    glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
 	setPerspective(45, 240.0f / 200.0f, 1, 1024);
@@ -182,7 +187,6 @@ void enter3D(void) {
 	glEnable(GL_FOG);
 
 #ifndef NDS
-	GLfloat fogColor[4] = {0.0, 0.0, 0.0, 1.0};
 	glEnable(GL_DEPTH_TEST);
 	glFogi(GL_FOG_MODE, GL_LINEAR);
 	glFogfv(GL_FOG_COLOR, fogColor);
@@ -193,7 +197,7 @@ void enter3D(void) {
 	glFogShift(2);
 	glFogColor(0,0,0,0);
 
-	for(int i=0;i<32;i++) {
+	for(i=0;i<32;i++) {
 		glFogDensity(i,i*4);
 	}
 
@@ -226,7 +230,7 @@ void loadTileProperties(const uint8_t levelNumber) {
 	data = loadBinaryFileFromPath(buffer);
 
 	for (c = 0; c < 256; ++c) {
-		free((void *) getFromMap(&tileProperties, c));
+        disposeMem((void *) getFromMap(&tileProperties, c));
 	}
 
 	loadPropertyList(&buffer[0], &tileProperties);
@@ -255,9 +259,9 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 
 	sprintf(tilesFilename, "tiles%d.lst", levelNumber);
     data = loadBinaryFileFromPath(tilesFilename);
-    char *buffer = (char*)malloc(data.size);
+    char *buffer = (char*)allocMem(data.size, GENERAL_MEMORY, 1);
     head = buffer;
-    memcpy(head, data.data, data.size);
+    memCopyToFrom(head, data.data, data.size);
 	end = head + data.size;
     disposeDiskBuffer(data);
 	nameStart = head;
@@ -275,7 +279,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 		++head;
 	}
 
-    free(buffer);
+    disposeMem(buffer);
 }
 
 void updateCursorForRenderer(const int x, const int z) {

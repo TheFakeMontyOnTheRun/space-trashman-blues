@@ -18,7 +18,7 @@ EE_OBJS= menu/src/Main.o \
          	  ../common/src/Common.o \
          	  ../common/src/MapWithCharKey.o \
          	  ../common/src/ArrayPackedFileReader.o \
-         	  base3d/src/CTile3DProperties.o \
+         	  ../common/src/CTile3DProperties.o \
          	  base3d/src/VisibilityStrategy.o \
          	  base3d/src/Globals.o \
          	  base3d/src/Events.o \

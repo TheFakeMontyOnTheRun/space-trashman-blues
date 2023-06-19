@@ -24,13 +24,13 @@ MENU_OBJ=menu/src/MainMenu.o \
 	../common/src/Common.o \
 	../common/src/PackedFileReader.o \
 	../common/src/MapWithCharKey.o \
+	../common/src/CTile3DProperties.o \
 	menu/src/Crawler.o \
 	menu/src/Engine.o \
 	menu/src/UI.o \
 	menu/src/Main.o \
 	base3d/src/Globals.o \
 	base3d/src/SDLVersion/SDL1Renderer.o \
-	base3d/src/CTile3DProperties.o \
 	base3d/src/LoadBitmap.o \
 	base3d/src/CRenderer.o \
 	base3d/src/VisibilityStrategy.o \

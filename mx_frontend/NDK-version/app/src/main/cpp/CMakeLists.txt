@@ -38,7 +38,6 @@ add_library( # Sets the name of the library.
         ../../../../../menu/src/HelpScreen.c
         ../../../../../menu/src/CreditsScreen.c
         ../../../../../menu/src/HackingScreen.c
-        ../../../../../menu/src/BattleScreen.c
         ../../../../../menu/src/GameMenu.c
         ../../../../../menu/src/Main.c
         ../../../../../base3d/src/Globals.c
@@ -47,7 +46,7 @@ add_library( # Sets the name of the library.
         ../../../../../../common/src/PackedFileReader.c
         ../../../../../../common/src/MapWithCharKey.c
         ../../../../../../common/src/FixP.c
-        ../../../../../base3d/src/CTile3DProperties.c
+        ../../../../../../common/src/CTile3DProperties.c
         ../../../../../base3d/src/LoadBitmap.c
         ../../../../../base3d/src/CRenderer.c
         ../../../../../base3d/src/VisibilityStrategy.c

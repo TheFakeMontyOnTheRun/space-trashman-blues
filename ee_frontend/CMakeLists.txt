@@ -31,13 +31,13 @@ add_executable(derelict128
 		menu/src/Main.c
 		menu/src/Engine.c
 		base3d/src/Globals.c
-		base3d/src/CTile3DProperties.c
 		base3d/src/ee/EmotionEngineRenderer.c
 		base3d/src/ee/LoadBitmap.c
 		base3d/src/ee/Renderer.c
 		base3d/src/ee/Renderer_Rasterization.c
 		base3d/src/ee/Renderer_Tesselation.c
 		base3d/src/VisibilityStrategy.c
+		../common/src/CTile3DProperties.c
 		../common/src/ArrayPackedFileReader.c
 		../common/src/Vec.c
 		../common/src/Common.c

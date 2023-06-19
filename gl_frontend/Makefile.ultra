@@ -26,12 +26,12 @@ src = menu/src/MainMenu.c \
                   		menu/src/Engine.c \
                   		base3d/src/ultra/UltraGLRenderer.c \
                   		base3d/src/Globals.c \
-                  		base3d/src/CTile3DProperties.c \
                   		GL1Common/LoadBitmapGL1.c \
                   		GL1Common/RendererGL1.c \
                   		GL1Common/Renderer_RasterizationGL1.c \
                   		GL1Common/Renderer_TesselationGL1.c \
                   		base3d/src/VisibilityStrategy.c \
+                  		../common/src/CTile3DProperties.o \
                   		../common/src/Vec.c \
                   		../common/src/Common.c \
                   		../common/src/FixP.c \
@@ -67,6 +67,14 @@ derelict64.z64: $(BUILD_DIR)/derelict64.dfs
 
 clean:
 	rm -rf $(BUILD_DIR) derelict64.z64
+	rm -f menu/src/*.o
+	rm -f ../core/src/*.o
+	rm -f ../common/src/*.o
+	rm -f base3d/src/*.o
+	rm -f common/src/*.o
+	rm -f SoundSystem/*.o
+	rm -f base3d/src/SDLVersion/*.o
+	rm -f GL1Common/*.o
 
 -include $(wildcard $(BUILD_DIR)/*.d)
 

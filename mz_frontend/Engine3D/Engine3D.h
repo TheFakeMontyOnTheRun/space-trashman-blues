@@ -31,26 +31,8 @@
 #define XRESMINUSONE XRES - 1
 #define YRESMINUSONE YRES - 1
 
-
 #define WALKSTEP 1
-#define CAMERA_HEIGHT 2
 #define VISIBILITY_LIMIT 32
-
-enum GeometryType {
-	CUBE = 0,
-	RIGHT_NEAR = 4,
-	LEFT_NEAR = 8,
-	LEFT_WALL = 16,
-	BACK_WALL = 32,
-	CORNER = 64,
-};
-
-struct Pattern {
-	uint8_t ceiling: 4;
-	uint8_t elementsMask: 4;
-	uint8_t geometryType : 7;
-	uint8_t blockMovement : 1;
-};
 
 void HUD_initialPaint();
 
@@ -74,9 +56,11 @@ void init();
 
 void graphicsFlush();
 
-void graphicsPut(uint8_t x, uint8_t y);
+void graphicsPut(int16_t x, int16_t y, uint8_t colour);
 
-void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple);
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour);
+
+void hLine(int16_t x0, int16_t x1, int16_t y0, uint8_t colour);
 
 void titleScreen();
 

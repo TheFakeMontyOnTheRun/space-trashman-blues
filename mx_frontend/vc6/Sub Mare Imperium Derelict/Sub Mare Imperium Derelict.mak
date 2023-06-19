@@ -94,7 +94,6 @@ LINK32_OBJS= \
 	"$(INTDIR)\CRenderer.obj" \
 	"$(INTDIR)\CRenderer_Rasterization.obj" \
 	"$(INTDIR)\CRenderer_Tesselation.obj" \
-	"$(INTDIR)\CTile3DProperties.obj" \
 	"$(INTDIR)\Derelict.obj" \
 	"$(INTDIR)\Dungeon.obj" \
 	"$(INTDIR)\EDirection_Utils.obj" \
@@ -114,7 +113,8 @@ LINK32_OBJS= \
 	"$(INTDIR)\UI.obj" \
 	"$(INTDIR)\Vec.obj" \
 	"$(INTDIR)\VisibilityStrategy.obj" \
-	"$(INTDIR)\Sub Mare Imperium.res"
+	"$(INTDIR)\Sub Mare Imperium.res" \
+	"$(INTDIR)\CTile3DProperties.obj"
 
 "$(OUTDIR)\Sub Mare Imperium Derelict.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -187,7 +187,6 @@ LINK32_OBJS= \
 	"$(INTDIR)\CRenderer.obj" \
 	"$(INTDIR)\CRenderer_Rasterization.obj" \
 	"$(INTDIR)\CRenderer_Tesselation.obj" \
-	"$(INTDIR)\CTile3DProperties.obj" \
 	"$(INTDIR)\Derelict.obj" \
 	"$(INTDIR)\Dungeon.obj" \
 	"$(INTDIR)\EDirection_Utils.obj" \
@@ -207,7 +206,8 @@ LINK32_OBJS= \
 	"$(INTDIR)\UI.obj" \
 	"$(INTDIR)\Vec.obj" \
 	"$(INTDIR)\VisibilityStrategy.obj" \
-	"$(INTDIR)\Sub Mare Imperium.res"
+	"$(INTDIR)\Sub Mare Imperium.res" \
+	"$(INTDIR)\CTile3DProperties.obj"
 
 "$(OUTDIR)\Sub Mare Imperium Derelict.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -305,7 +305,7 @@ SOURCE=..\..\base3d\src\CRenderer_Tesselation.c
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\base3d\src\CTile3DProperties.c
+SOURCE=..\..\..\common\src\CTile3DProperties.c
 
 "$(INTDIR)\CTile3DProperties.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)

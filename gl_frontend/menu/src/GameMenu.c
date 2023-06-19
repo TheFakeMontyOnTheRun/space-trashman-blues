@@ -68,7 +68,7 @@ void GameMenu_initStateCallback(int32_t tag) {
 	biggestOption = 0;
 	currentPresentationState = kAppearing;
 	timeUntilNextState = 500;
-	memset (&textBuffer[0], ' ', 40 * 25);
+    memFill (&textBuffer[0], ' ', 40 * 25);
 	drawFilter = FALSE;
 
 	switch (tag) {
