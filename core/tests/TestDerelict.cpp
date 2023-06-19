@@ -11,45 +11,6 @@ extern "C" {
 #include "Derelict.h"
 #include "Parser.h"
 #include "Common.h"
-
-#ifndef USE_CUSTOM_MEMORY_HANDLER
-void *allocMem(size_t sizeInBytes, enum MemoryType type, int clearAfterAlloc) {
-    /*
-    For the general allocator, we're not worried about the type of memory. It all comes from the
-    same place.
-     */
-    void *ptr;
-
-#ifndef N64
-    ptr = malloc(sizeInBytes);
-#else
-    ptr = malloc_uncached(sizeInBytes);
-#endif
-
-    if (clearAfterAlloc) {
-        memset(ptr, 0, sizeInBytes);
-    }
-
-    return ptr;
-}
-
-void disposeMem(void *ptr) {
-#ifndef N64
-    free(ptr);
-#else
-    free_uncached(ptr);
-#endif
-
-}
-
-void memCopyToFrom(void *dst, void *src, size_t sizeInBytes) {
-    memcpy(dst, src, sizeInBytes);
-}
-
-void memFill(void *dst, uint8_t val, size_t sizeInBytes) {
-    memset(dst, val, sizeInBytes);
-}
-#endif
 }
 
 extern struct ObjectNode *collectedObject;
