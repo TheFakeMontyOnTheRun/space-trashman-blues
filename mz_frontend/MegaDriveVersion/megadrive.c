@@ -236,13 +236,20 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
     writeStrWithLimit(_x, y, text, 31);
 }
 
-void graphicsPut(int16_t x, int16_t y) {
-    BMP_setPixelFast(x, 16 + y, 0b11101110);
+void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
+    if (colour >= 16) {
+        if ((x + y) & 1) {
+            BMP_setPixelFast(x, 16 + y, 0);
+        } else {
+            BMP_setPixelFast(x, 16 + y, colour - 16);
+        }
+    } else {
+        BMP_setPixelFast(x, 16 + y, colour);
+    }
 }
 
-void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t shouldStipple) {
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
 
-    uint8_t stipple;
 
     if (y0 > y1) {
         uint8_t tmp = y0;
@@ -250,27 +257,71 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t shouldStipple) {
         y1 = tmp;
     }
 
-    uint8_t colour;
+    uint8_t stipple;
 
-    if (shouldStipple <= 7) {
-        colour = shouldStipple;
-        shouldStipple = 0;
-        stipple = 1;
+    if (colour < 16) {
+        colour += (colour << 4); //double the pixel
+        for (uint8_t y = y0; y < y1; ++y) {
+            BMP_setPixelFast(x0, 16 + y, colour);
+        }
     } else {
-        colour = shouldStipple - 8;
-        shouldStipple = 1;
         stipple = (x0 & 1);
+        colour -= 16;
+        colour += (colour << 4); //double the pixel
+
+        for (uint8_t y = y0; y < y1; ++y) {
+            stipple = !stipple;
+
+            if (stipple) {
+                BMP_setPixelFast(x0, 16 + y, colour);
+            } else {
+                BMP_setPixelFast(x0, 16 + y, 0);
+            }
+        }
+    }
+}
+
+
+void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
+    if (y < 0) {
+        return;
     }
 
-    colour += (colour << 4); //double the pixel
+    int16_t _x0 = x0;
+    int16_t _x1 = x1;
 
-    for (uint8_t y = y0; y < y1; ++y) {
-        if (shouldStipple) {
-            stipple = !stipple;
+    if (x0 > x1) {
+        _x0 = x1;
+        _x1 = x0;
+    }
+
+    if (_x0 < 0) {
+        _x0 = 0;
+    }
+
+    if (_x1 >= 128) {
+        _x1 = 127;
+    }
+
+    if (colour < 16) {
+        colour += (colour << 4); //double the pixel
+
+        for (int x = _x0; x <= _x1; ++x) {
+            BMP_setPixelFast(x, 16 + y, colour);
         }
+    } else {
+        colour -= 16;
+        colour += (colour << 4); //double the pixel
+        uint8_t stipple = ((x0 + y) & 1);
 
-        if (stipple) {
-            BMP_setPixelFast(x0, 16 + y, colour);
+        for (int x = _x0; x <= _x1; ++x) {
+            stipple = !stipple;
+
+            if (stipple) {
+                BMP_setPixelFast(x, 16 + y, colour);
+            } else {
+                BMP_setPixelFast(x, 16 + y, 0);
+            }
         }
     }
 }

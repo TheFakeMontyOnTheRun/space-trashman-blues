@@ -34,7 +34,7 @@ void pickOrDrop();
 
 void pickItem();
 
-void graphicsPut(int16_t x, int16_t y) {
+void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
     if (x < 0) {
         x = 0;
     }
@@ -52,14 +52,40 @@ void graphicsPut(int16_t x, int16_t y) {
     }
 
 
-    framebuffer[(256 * y) + x] = 1;
+    framebuffer[(256 * y) + x] = colour;
 #ifdef PUTAFLIP
     graphicsFlush();
     SDL_Delay(100);
 #endif
 }
 
-void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t shouldStipple) {
+void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
+    if (y < 0) {
+        return;
+    }
+
+    int16_t _x0 = x0;
+    int16_t _x1 = x1;
+
+    if (x0 > x1) {
+        _x0 = x1;
+        _x1 = x0;
+    }
+
+    if (_x0 < 0) {
+        _x0 = 0;
+    }
+
+    if (_x1 >= 128) {
+        _x1 = 127;
+    }
+
+    for (int x = _x0; x <= _x1; ++x) {
+        framebuffer[(256 * y) + x] = colour;
+    }
+}
+
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
 
     if (x0 < 0) {
         return;
@@ -82,27 +108,8 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t shouldStipple) {
         _y1 = 127;
     }
 
-    uint8_t stipple;
-    uint8_t colour;
-
-    if (shouldStipple <= 7) {
-        colour = shouldStipple;
-        shouldStipple = 0;
-        stipple = 1;
-    } else {
-        colour = shouldStipple - 8;
-        shouldStipple = 1;
-        stipple = (x0 & 1);
-    }
-
     for (y = _y0; y <= _y1; ++y) {
-        if (shouldStipple) {
-            stipple = !stipple;
-        }
-
-        if (stipple) {
-            framebuffer[(256 * y) + x0] = colour;
-        }
+        framebuffer[(256 * y) + x0] = colour;
     }
 }
 
@@ -264,7 +271,7 @@ void init() {
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     memset(framebuffer, 0, 256 * 160);
     window =
-            SDL_CreateWindow("Derelict 8-bits SDL2 test", SDL_WINDOWPOS_CENTERED,
+            SDL_CreateWindow("Derelict 16-bits SDL2 test", SDL_WINDOWPOS_CENTERED,
                              SDL_WINDOWPOS_CENTERED, 512, 320, SDL_WINDOW_SHOWN);
 
     renderer = SDL_CreateRenderer(window, -1, 0);
@@ -321,17 +328,23 @@ void flipRenderer() {
     rect.w = 512;
     rect.h = 320;
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderFillRect(renderer, &rect);
 
     for (y = 0; y < 128; ++y) {
         for (x = 0; x < 128; ++x) {
-
             rect.x = 2 * x;
             rect.y = 2 * y;
             rect.w = 2;
             rect.h = 2;
             int index = framebuffer[(256 * y) + x];
+            if (index > 16) {
+                if ((x + y) & 1) {
+                    index = 0;
+                } else {
+                    index = index - 16;
+                }
+            }
 
             if (index < 0 || index >= 16) {
                 continue;
