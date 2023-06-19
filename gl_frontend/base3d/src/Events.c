@@ -46,9 +46,9 @@ struct CActor actor;
 
 void clearMapCache(void) {
 	size_t sizeForSet = sizeof(uint8_t) * (MAP_SIZE * MAP_SIZE);
-	memset (&items[0], 0xFF, sizeForSet);
-	memset (&actorsInMap[0], 0xFF, sizeForSet);
-	memset (&effects[0], 0xFF, sizeForSet);
+    memFill (&items[0], 0xFF, sizeForSet);
+    memFill (&actorsInMap[0], 0xFF, sizeForSet);
+    memFill (&effects[0], 0xFF, sizeForSet);
 }
 
 void onLevelLoaded(int index) {
@@ -211,11 +211,7 @@ void initRoom(int room) {
 			itemSprites[c] != NULL) {
 
 			releaseBitmap(itemSprites[c]->raw);
-#ifndef N64
-			free(itemSprites[c]);
-#else
-			free_uncached(itemSprites[c]);
-#endif
+            disposeMem(itemSprites[c]);
 			itemSprites[c] = NULL;
 		}
 	}

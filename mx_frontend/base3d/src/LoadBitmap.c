@@ -6,8 +6,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include "Enums.h"
@@ -45,7 +47,7 @@ int lerpInt(const int v0, const int v1, const long t, const long total) {
 void clearTextures(void) {
     int c;
     usedTexture = 0;
-    for (c = 0; c < TOTAL_ITEMS; ++c ) {
+    for (c = 0; c < TOTAL_ITEMS; ++c) {
         if (itemSprites[c] != NULL) {
             releaseBitmap(itemSprites[c]);
             itemSprites[c] = NULL;
@@ -76,6 +78,7 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
     size_t sizeInDisk = staticBuffer.size - 4;
     src += 4;
 
+#ifndef CD32
     for (c = 0; c < sizeInDisk; c += 2) {
         pixel = src[c];
         repetitions = src[c + 1];
@@ -84,6 +87,23 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
             buffer[pixelIndex++] = pixel;
         }
     }
+#else
+    for ( c = 0; c < sizeInDisk; c += 2 ) {
+      pixel = src[c];
+      repetitions = src[c + 1];
+      uint8_t r	  = ( pixel & 192 ) >> 6;
+      uint8_t g	  = ( pixel & 56 ) >> 3;
+      uint8_t b	  = ( pixel & 7 );
+
+      for ( d = 0; d < repetitions; ++d ) {
+          if ( pixel == TRANSPARENCY_COLOR ) {
+            buffer[ pixelIndex++ ] = TRANSPARENCY_COLOR;
+        } else {
+            buffer[ pixelIndex++ ] = ( ( ( r >> 1 ) << 4 ) ) + ( ( g >> 1 ) << 2 ) + ( b >> 1 );
+        }
+      }
+    }
+#endif
 
     toReturn = &textures[usedTexture++];
 
@@ -96,7 +116,7 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
             dstLine++;
         }
     }
-
+#ifndef AGS
     for (y = (NATIVE_TEXTURE_SIZE - 1); y >= 0; --y) {
         uint8_t *sourceLine = &buffer[(y * NATIVE_TEXTURE_SIZE) + (NATIVE_TEXTURE_SIZE - 1)];
         uint8_t *dstLine = &toReturn->rotations[1][y];
@@ -127,7 +147,7 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
             dstLine += NATIVE_TEXTURE_SIZE;
         }
     }
-
+#endif
     for (y = 0; y < NATIVE_TEXTURE_SIZE; ++y) {
         uint8_t *sourceLine = &buffer[y * NATIVE_TEXTURE_SIZE];
         uint8_t *dstLine = &toReturn->rowMajor[y];
@@ -151,7 +171,7 @@ struct Bitmap *loadBitmap(const char *__restrict__ filename) {
     uint8_t repetitions;
 
     struct Bitmap *toReturn =
-            (struct Bitmap *) calloc(1, sizeof(struct Bitmap));
+            (struct Bitmap *) allocMem(sizeof(struct Bitmap), GENERAL_MEMORY, 1);
 
     struct StaticBuffer staticBuffer = loadBinaryFileFromPath(filename);
     const uint8_t *ptr = staticBuffer.data;
@@ -170,7 +190,9 @@ struct Bitmap *loadBitmap(const char *__restrict__ filename) {
 
     size = toReturn->width * toReturn->height;
 
-    toReturn->data = (uint8_t *) calloc(1, size);
+    toReturn->data = (uint8_t *) allocMem(size, BITMAP_MEMORY, 1);
+
+#ifndef CD32
     for (c = 0; c < sizeInDisk; c += 2) {
         pixel = *ptr++;
         repetitions = *ptr++;
@@ -179,6 +201,23 @@ struct Bitmap *loadBitmap(const char *__restrict__ filename) {
             toReturn->data[pixelIndex++] = pixel;
         }
     }
+#else
+    for ( c = 0; c < sizeInDisk; c += 2 ) {
+      pixel = *ptr++;
+      repetitions = *ptr++;
+      uint8_t r	  = ( pixel & 192 ) >> 6;
+      uint8_t g	  = ( pixel & 56 ) >> 3;
+      uint8_t b	  = ( pixel & 7 );
+
+      for ( d = 0; d < repetitions; ++d ) {
+          if ( pixel == TRANSPARENCY_COLOR ) {
+            toReturn->data[ pixelIndex++ ] = TRANSPARENCY_COLOR;
+        } else {
+            toReturn->data[ pixelIndex++ ] = ( ( ( r >> 1 ) << 4 ) ) + ( ( g >> 1 ) << 2 ) + ( b >> 1 );
+        }
+      }
+    }
+#endif
 
     disposeDiskBuffer(staticBuffer);
 
@@ -188,6 +227,6 @@ struct Bitmap *loadBitmap(const char *__restrict__ filename) {
 void releaseBitmap(struct Bitmap *__restrict__ ptr) {
     assert (ptr != NULL);
 
-    free(ptr->data);
-    free(ptr);
+    disposeMem(ptr->data);
+    disposeMem(ptr);
 }

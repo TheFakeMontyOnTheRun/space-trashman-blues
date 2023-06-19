@@ -89,12 +89,10 @@ void playMusic(int channel, const char *m) {
 		uint32_t frequency = 0;
 		int octave = 0;
 		melody_used = 0;
-		int position = 0;
 		size_t len = strlen(m);
 
 		for (int c = 0; c < len; ++c) {
 			char note = m[c];
-			++position;
 			switch (note) {
 				case '>':
 					octave++;
@@ -105,34 +103,34 @@ void playMusic(int channel, const char *m) {
 				case 'o':
 					octave = (m[c + 1]) - '0';
 					break;
-				case 'a':
-				case 'A':
-					frequency = 28;
-					break;
-				case 'B':
-				case 'b':
-					frequency = 30;
-					break;
-				case 'C':
-				case 'c':
-					frequency = 16;
-					break;
-				case 'D':
-				case 'd':
-					frequency = 18;
-					break;
-				case 'E':
-				case 'e':
-					frequency = 20;
-					break;
-				case 'F':
-				case 'f':
-					frequency = 22;
-					break;
-				case 'G':
-				case 'g':
-					frequency = 24;
-					break;
+                case 'a':
+                case 'A':
+                    frequency = 932;
+                    break;
+                case 'B':
+                case 'b':
+                    frequency = 988;
+                    break;
+                case 'C':
+                case 'c':
+                    frequency = 1109;
+                    break;
+                case 'D':
+                case 'd':
+                    frequency = 1175;
+                    break;
+                case 'E':
+                case 'e':
+                    frequency = 1318;
+                    break;
+                case 'F':
+                case 'f':
+                    frequency = 1397;
+                    break;
+                case 'G':
+                case 'g':
+                    frequency = 1568;
+                    break;
 				case ';':
 					melody_used = 0;
 				default:

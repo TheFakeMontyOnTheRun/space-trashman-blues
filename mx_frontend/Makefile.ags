@@ -28,7 +28,7 @@ INCLUDES	:= ../core/include ../common/include base3d/include common/include menu
 ARCH	:=	-mthumb -mthumb-interwork
 
 # Add --save-temps below to see the generated ASM
-CFLAGS	:=	-Wall -O3 \
+CFLAGS	:=	-Wall -Ofast \
 			-mcpu=arm7tdmi -mtune=arm7tdmi\
  			-fomit-frame-pointer\
 			-ffast-math -Wno-switch\
@@ -80,10 +80,10 @@ CFILES		:=			../menu/src/MainMenu.c \
                 		../menu/src/Engine.c \
                 		../base3d/src/AGSVersion/AGSRenderer.c \
                 		../base3d/src/Globals.c \
-                		../base3d/src/CTile3DProperties.c \
                 		../base3d/src/LoadBitmap.c \
                 		../base3d/src/CRenderer.c \
                 		../base3d/src/VisibilityStrategy.c \
+                		../../common/src/CTile3DProperties.c \
                 		../../common/src/ArrayPackedFileReader.c \
                 		../../common/src/Vec.c \
                 		../../common/src/Common.c \

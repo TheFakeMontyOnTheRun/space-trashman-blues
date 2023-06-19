@@ -24,7 +24,7 @@ MENU_OBJ= menu/src/Main.o \
           	  ../common/src/Common.o \
           	  ../common/src/PackedFileReader.o \
           	  ../common/src/MapWithCharKey.o \
-          	  base3d/src/CTile3DProperties.o \
+          	  ../common/src/CTile3DProperties.o \
           	  GL1Common/LoadBitmapGL1.o \
           	  GL1Common/RendererGL1.o \
           	  base3d/src/VisibilityStrategy.o \
@@ -69,3 +69,4 @@ clean:
 	rm -f common/src/*.o
 	rm -f SoundSystem/*.o
 	rm -f base3d/src/SDLVersion/*.o
+	rm -f GL1Common/*.o

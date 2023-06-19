@@ -2,11 +2,13 @@
 #define RENDERER_H
 
 #ifdef AGS
+#define PAGE_FLIP_TARGET 128
 #define XRES 130
 #define YRES 160
 #define HALF_XRES 65
 #define HALF_YRES 80
 #else
+#define PAGE_FLIP_TARGET 200
 #define XRES 216
 #define YRES 200
 #define HALF_XRES 100
@@ -21,7 +23,7 @@
 #define YRES_FRAMEBUFFER 160
 #endif
 
-#define TOTAL_TEXTURES 32
+#define TOTAL_TEXTURES 16
 #define TRANSPARENCY_COLOR 199
 
 struct Projection {
@@ -32,7 +34,6 @@ struct Projection {
 extern struct MapWithCharKey occluders;
 extern struct MapWithCharKey enemySightBlockers;
 extern struct MapWithCharKey colliders;
-extern int useDither;
 extern int visibilityCached;
 extern int needsToRedrawVisibleMeshes;
 extern struct Bitmap *defaultFont;
@@ -52,7 +53,11 @@ extern int turnTarget;
 extern int turnStep;
 extern int needToRedrawHUD;
 
+#ifndef AGS
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
+#else
+#define FIXP_DISTANCE_FOR_DARKNESS (intToFix(32))
+#endif
 
 #define MASK_LEFT 1
 #define MASK_FRONT 2
@@ -121,6 +126,8 @@ void initHW(void);
 void clear(void);
 
 void shutdownHW(void);
+
+void initZMap(void);
 
 void loadMesh(struct Mesh* mesh, char* filename );
 
@@ -204,7 +211,7 @@ void drawRect(const int x,
 
 void fillTriangle( int* coords, uint8_t colour );
 
-void drawTexturedTriangle( int* coords, uint8_t* uvCoords, struct Texture* texture);
+void drawTexturedTriangle( int* coords, uint8_t* uvCoords, struct Texture* texture, int z);
 
 void drawWall(FixP_t x0,
 			  FixP_t x1,

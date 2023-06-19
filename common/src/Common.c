@@ -1,74 +1,76 @@
-#include <assert.h>
+#ifdef AMIGA
+#include "AmigaInt.h"
+#endif
+
+#ifdef ATARIST
+#include <inttypes.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <mint/osbind.h>
+#include <mint/sysbind.h>
+#endif
+
+#ifdef N64
+#include <libdragon.h>
+#endif
+
+#include <stddef.h>
+
+#ifndef SMD
+#include <stdlib.h>
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
 #include <unistd.h>
-
+#include <string.h>
+#endif
+#else
+#include <genesis.h>
 #endif
 
 #include "Common.h"
 
-#ifndef LEAN_BUILD
 
-void clearVector(struct ItemVector *vector) {
-	size_t c;
-	vector->used = 0;
-	for (c = 0; c < vector->capacity; ++c) {
-		if (vector->items[c] != NULL) {
-			free(vector->items[c]);
-			vector->items[c] = NULL;
-		}
-	}
+#ifndef USE_CUSTOM_MEMORY_HANDLER
+void *allocMem(size_t sizeInBytes, enum MemoryType type, int clearAfterAlloc) {
+    /*
+    For the general allocator, we're not worried about the type of memory. It all comes from the
+    same place.
+     */
+    void *ptr;
+
+#ifndef N64
+    ptr = malloc(sizeInBytes);
+#else
+    ptr = malloc_uncached(sizeInBytes);
+#endif
+
+    if (clearAfterAlloc) {
+        memset(ptr, 0, sizeInBytes);
+    }
+
+    return ptr;
 }
 
-void initVector(struct ItemVector *vector, size_t capacity) {
-	vector->capacity = capacity;
-	vector->used = 0;
-	vector->items = (void **) (calloc(capacity, sizeof(void *)));
+void disposeMem(void* ptr) {
+#ifndef N64
+    free(ptr);
+#else
+    free_uncached(ptr);
+#endif
+
 }
 
-int removeFromVector(struct ItemVector *vector, void *item) {
-	size_t c, d;
-	for (c = 0; c < vector->capacity; ++c) {
-		if (vector->items[c] == item) {
-			void *replacement = NULL;
-
-			for (d = vector->used - 1; d >= c + 1; --d) {
-				replacement = vector->items[d];
-				if (replacement != NULL) {
-					vector->items[d] = NULL;
-					break;
-				}
-			}
-			vector->used--;
-			vector->items[c] = replacement;
-
-			return 1;
-		}
-	}
-
-	return 0;
+void memCopyToFrom(void* dst, void* src, size_t sizeInBytes) {
+    memcpy(dst, src, sizeInBytes);
 }
 
-int pushVector(struct ItemVector *vector, void *item) {
-	size_t c;
-	for (c = 0; c < vector->capacity; ++c) {
-		if (vector->items[c] == NULL) {
-			vector->used++;
-			vector->items[c] = item;
-			return 1;
-		}
-	}
-
-	return 0;
+void memFill(void* dst, uint8_t val, size_t sizeInBytes) {
+    memset(dst, val, sizeInBytes);
 }
-
 #endif
 
 int isBigEndian() {

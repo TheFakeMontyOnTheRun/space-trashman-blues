@@ -66,11 +66,15 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             case kCommandRight:
                 playerCrawler.rotation = rightOf(playerCrawler.rotation);
                 turnRight();
+                turnStep = PAGE_FLIP_TARGET;
+                turnTarget = 0;
                 break;
 
             case kCommandLeft:
                 playerCrawler.rotation = leftOf(playerCrawler.rotation);
                 turnLeft();
+                turnStep = 0;
+                turnTarget = PAGE_FLIP_TARGET;
                 break;
             case kCommandUp: {
                 struct Vec2i offset = mapOffsetForDirection(
@@ -406,7 +410,7 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     gameSnapshot.should_continue = kCrawlerGameInProgress;
     gameSnapshot.camera_rotation = 0;
 	playerCrawler.rotation = 0;
-    memcpy (collisionMap, collisions, 256);
+    memCopyToFrom (collisionMap, (void*)collisions, 256);
 
     for (y = 0; y < MAP_SIZE; ++y) {
         for (x = 0; x < MAP_SIZE; ++x) {

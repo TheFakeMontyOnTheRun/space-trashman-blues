@@ -42,12 +42,12 @@ void CreditsScreen_initStateCallback(int32_t tag) {
     cursorPosition = 0;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
-    memset (textBuffer, ' ', 40 * 25);
+    memFill (textBuffer, ' ', 40 * 25);
 
     mainText = textBuffer;
-    memset (textBuffer, 0, (40 * 25));
+    memFill (textBuffer, 0, (40 * 25));
 	textFile = loadBinaryFileFromPath("Credits.txt");
-    memcpy(textBuffer, textFile.data, textFile.size);
+    memCopyToFrom(textBuffer, (void*)textFile.data, textFile.size);
     disposeDiskBuffer(textFile);
 
 

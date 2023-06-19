@@ -1,13 +1,20 @@
-#include <string.h>
-
 #ifdef WIN32
 #include "Win32Int.h"
 #else
 #include <stdint.h>
+#endif
+
+#include <stddef.h>
+
+#ifndef SMD
+#include <string.h>
+#ifndef WIN32
 #include <unistd.h>
+#endif
 #endif
 
 #include "MapWithCharKey.h"
+#include "Common.h"
 
 const void *getFromMap(const struct MapWithCharKey * map, const uint8_t key) {
     return map->mMap[key];
@@ -20,6 +27,6 @@ void setInMap(struct MapWithCharKey * map,
 }
 
 void clearMap(struct MapWithCharKey * map) {
-    memset (map->mMap, 0, sizeof(const void *) * 256);
+    memFill(map->mMap, 0, sizeof(const void *) * 256);
 }
 

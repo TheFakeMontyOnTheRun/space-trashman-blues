@@ -58,7 +58,7 @@ void clearTextures() {
     for (c = 1; c < TOTAL_ITEMS; ++c) {
         if (itemSprites[c]) {
             releaseBitmap(itemSprites[c]->raw);
-            free(itemSprites[c]);
+            disposeMem(itemSprites[c]);
             itemSprites[c] = NULL;
         }
     }
@@ -73,11 +73,7 @@ void clearTextures() {
     for (c = 0; c < TOTAL_TEXTURES; ++c) {
         if (nativeTextures[c] != NULL) {
             releaseBitmap(nativeTextures[c]->raw);
-#ifndef N64
-            free(nativeTextures[c]);
-#else
-            free_uncached(nativeTextures[c]);
-#endif
+            disposeMem(nativeTextures[c]);
             nativeTextures[c] = NULL;
         }
     }
@@ -86,12 +82,9 @@ void clearTextures() {
 
 struct Texture *makeTextureFrom(const char *filename) {
 	struct Texture *toReturn =
-#ifndef N64
-			(struct Texture *) calloc(1, sizeof(struct Texture));
-#else
-	(struct Texture *) malloc_uncached(sizeof(struct Texture));
-	memset(toReturn, 0, sizeof(struct Texture));
-#endif
+	(struct Texture *) allocMem(sizeof(struct Texture), TEXTURE_MEMORY, 1);
+
+
 	toReturn->raw = loadBitmap(filename);
 	toReturn->raw->uploadId = submitBitmapToGPU(toReturn->raw);
 #ifndef NDS
@@ -193,7 +186,7 @@ void drawBillboardAt(const struct Vec3 center,
 
 	initVec3(&scaledCenter, center.mX, (center.mY), center.mZ);
 
-        scaled = Mul(scale, BIAS);
+    scaled = Mul(scale, BIAS);
 	textureScale = (fixToInt(scaled) * REVERSE_BIAS);
 	geometryScale = textureScale;
 

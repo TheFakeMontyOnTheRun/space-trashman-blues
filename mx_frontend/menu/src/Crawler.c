@@ -51,7 +51,7 @@ void Crawler_initStateCallback(int32_t tag) {
         timeUntilNextState = kDefaultPresentationStateInterval;
         gameTicks = 0;
         enteredThru = 0;
-        memset(&gameSnapshot, 0, sizeof(struct GameSnapshot));
+        memFill(&gameSnapshot, 0, sizeof(struct GameSnapshot));
     } else {
         currentPresentationState = kWaitingForInput;
         timeUntilNextState = 0;
