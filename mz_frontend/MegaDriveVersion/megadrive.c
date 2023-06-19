@@ -433,7 +433,7 @@ void init() {
 
     DMA_setBufferSize(2048);
 
-    BMP_init(FALSE, BG_B, PAL0, 0);
+    BMP_init(TRUE, BG_B, PAL0, 1);
 
     PAL_setColor(0, RGB24_TO_VDPCOLOR(0x000000));
     PAL_setColor(1, RGB24_TO_VDPCOLOR(0x0000AA));
