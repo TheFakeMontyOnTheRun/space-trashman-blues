@@ -43,7 +43,7 @@ unsigned char imageBuffer[128 * 128];
 void shutdownGraphics() {
 }
 
-void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t shouldStipple) {
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
 
     if (x0 < 0) {
         return;
@@ -66,32 +66,13 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t shouldStipple) {
         _y1 = 127;
     }
 
-    uint8_t stipple;
-    uint8_t colour;
-
-    if (shouldStipple <= 7) {
-        colour = shouldStipple;
-        shouldStipple = 0;
-        stipple = 1;
-    } else {
-        colour = shouldStipple - 8;
-        shouldStipple = 1;
-        stipple = (x0 & 1);
-    }
-
     for (y = _y0; y <= _y1; ++y) {
-        if (shouldStipple) {
-            stipple = !stipple;
-        }
-
-        if (stipple) {
-            imageBuffer[(128 * y) + x0] = colour;
-        }
+        imageBuffer[(128 * y) + x0] = colour;
     }
 }
 
 
-void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t shouldStipple) {
+void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
     if (y < 0) {
         return;
     }
@@ -112,31 +93,12 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t shouldStipple) {
         _x1 = 127;
     }
 
-    uint8_t stipple;
-    uint8_t colour;
-
-    if (shouldStipple <= 7) {
-        colour = shouldStipple;
-        shouldStipple = 0;
-        stipple = 1;
-    } else {
-        colour = shouldStipple - 8;
-        shouldStipple = 1;
-        stipple = (x0 & 1);
-    }
-
     for (int x = _x0; x <= _x1; ++x) {
-        if (shouldStipple) {
-            stipple = !stipple;
-        }
-
-        if (stipple) {
-            framebuffer[(256 * y) + x] = colour;
-        }
+        imageBuffer[(128 * y) + x] = colour;
     }
 }
 
-void graphicsPut(int16_t x, int16_t y) {
+void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
     if (x < 0) {
         x = 0;
     }
@@ -153,8 +115,7 @@ void graphicsPut(int16_t x, int16_t y) {
         y = 127;
     }
 
-
-    imageBuffer[(128 * y) + x] = 1;
+    imageBuffer[(128 * y) + x] = colour;
 }
 
 void realPut(int x, int y, uint8_t value) {
@@ -276,7 +237,16 @@ void graphicsFlush() {
 
 	for (int y = 0; y < 128; ++y) {
         for ( int x = 0; x < 128; ++x ) {
-            realPut(16 + x, 36 + y, *bufferPtr);
+            uint8_t index = *bufferPtr;
+            if (index > 16) {
+                if ((x + y) & 1) {
+                    index = 0;
+                } else {
+                    index = index - 16;
+                }
+            }
+
+            realPut(16 + x, 36 + y, index);
             bufferPtr++;
         }
 	}
