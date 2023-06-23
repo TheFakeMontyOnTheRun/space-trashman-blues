@@ -29,7 +29,7 @@ extern uint8_t playerLocation;
 #define BUFFER_RESX 128
 #define BUFFER_RESY 128
 #define COOLDOWN_MAX 0x2EF
-#define MARGIN_TEXT_SCREEN_LIMIT 35
+#define MARGIN_TEXT_SCREEN_LIMIT 40
 
 uint8_t font[] = {
 		// ASCII table starting on SPACE.
@@ -314,22 +314,29 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 }
 
 uint8_t * realPut( int x, int y, uint8_t colour, uint8_t *ptr) {
+
+    if (ptr == NULL) {
+        ptr = (unsigned char *)0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048) + (x >> 2);
+    }
+    *ptr |= (8 >> (x & 3));
+
     return ptr;
 }
+
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {
 
 	int x, y;
 	uint8_t *ptr;
 
 	for (x = 0; x < tw * 8; ++x ) {
-		if ((x & 7) == 0) {
+		if ((x & 3) == 0) {
 			ptr = NULL;
 		}
 		ptr = realPut( ((tx * 8) + x), (ty * 8), 1, ptr );
 	}
 
 	for (x = 0; x < tw * 8; ++x ) {
-		if ((x & 7) == 0) {
+		if ((x & 3) == 0) {
 			ptr = NULL;
 		}
 		ptr = realPut( ((tx * 8) + x), (ty + th) * 8, 1, ptr );
@@ -503,7 +510,7 @@ void graphicsFlush() {
 
 	for (int y = 0; y < BUFFER_SIZEY; ++y ) {
 		uint8_t *line = (unsigned char *)lineStart[y];
-		memcpy( line + 2, buffer + (y * BUFFER_SIZEX),  BUFFER_SIZEX);
+		memcpy( line + 1, buffer + (y * BUFFER_SIZEX),  BUFFER_SIZEX);
 	}
 
 	memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
@@ -553,48 +560,49 @@ void graphicsPut(uint8_t x, uint8_t y) {
 
 void HUD_initialPaint() {
 	for (uint8_t i = 0; i < 6; ++i) {
-		writeStr(26, 9 + i, menuItems[i], 2, 0);
+		writeStr(19, 11 + i, menuItems[i], 2, 0);
 	}
 
 	HUD_refresh();
 
-//	drawWindow(1, 0,  19, 24, "Map");
-//	drawWindow(1, 0,  20, 20, "3D View");
-	drawWindow(21, 0,  20, 20, "Controls and status");
-	drawWindow(1, 1,  10, 10, "3D View");
-	drawWindow(21, 1,  10, 10, "Controls and status");
+	drawWindow(0, 0,  17, 20, "3D View");
+	drawWindow(18, 0,  21, 20, "Controls and status");
 }
 
 void HUD_refresh() {
 
-	writeStrWithLimit(26, 6, "Object in hand", MARGIN_TEXT_SCREEN_LIMIT);
+	writeStrWithLimit(19, 7, "Object in hand", MARGIN_TEXT_SCREEN_LIMIT);
 
 	if (focusedItem != NULL) {
 		struct Item *item = getItem(focusedItem->item);
 
 
 		if (item->active) {
-			writeStr(26, 7, "*", 2, 0);
-		}
+			writeStr(19, 8, "*", 2, 0);
+		} else {
+            writeStr(19, 8, " ", 2, 0);
+        }
 
-		writeStrWithLimit(26, 7, item->name, MARGIN_TEXT_SCREEN_LIMIT);
+		writeStrWithLimit(20, 8, item->name, MARGIN_TEXT_SCREEN_LIMIT);
 	} else {
-		writeStrWithLimit(26, 7, "Nothing", MARGIN_TEXT_SCREEN_LIMIT);
+		writeStrWithLimit(20, 8, " Nothing", MARGIN_TEXT_SCREEN_LIMIT);
 	}
 
-	writeStrWithLimit(26, 2, "Object in room", MARGIN_TEXT_SCREEN_LIMIT);
+	writeStrWithLimit(19, 3, "Object in room", MARGIN_TEXT_SCREEN_LIMIT);
 
 	if (roomItem != NULL) {
 		struct Item *item = getItem(roomItem->item);
 
 
 		if (item->active) {
-			writeStrWithLimit(26, 3, "*", MARGIN_TEXT_SCREEN_LIMIT);
+            writeStr(19, 4, "*", 2, 0);
+        } else {
+            writeStr(19, 4, " ", 2, 0);
 		}
 
-		writeStrWithLimit(26, 3, item->name, MARGIN_TEXT_SCREEN_LIMIT);
+		writeStrWithLimit(20, 4, item->name, MARGIN_TEXT_SCREEN_LIMIT);
 	} else {
-		writeStrWithLimit(26, 3, "Nothing", MARGIN_TEXT_SCREEN_LIMIT);
+		writeStrWithLimit(19, 4, " Nothing", MARGIN_TEXT_SCREEN_LIMIT);
 	}
 }
 
