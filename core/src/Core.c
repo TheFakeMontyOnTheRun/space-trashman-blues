@@ -676,36 +676,20 @@ void walkBy(uint8_t direction) {
 
 #ifdef CLI_BUILD
 	if (playerPosition.x < 0) {
-		if (getRoom(playerLocation)->connections[3]) {
-			moveBy(3);
-		} else {
-			playerPosition.x = 0;
-		}
+    	playerPosition.x = 0;
 	}
 
 	if (playerPosition.y < 0) {
-		if (getRoom(playerLocation)->connections[0]) {
-			moveBy(0);
-		} else {
-			playerPosition.y = 0;
-		}
+		playerPosition.y = 0;
 	}
 
 
 	if (playerPosition.x >= rooms[playerLocation].sizeX) {
-		if (getRoom(playerLocation)->connections[1]) {
-			moveBy(1);
-		} else {
-			playerPosition.x = rooms[playerLocation].sizeX - 1;
-		}
+		playerPosition.x = rooms[playerLocation].sizeX - 1;
 	}
 
 	if (playerPosition.y >= rooms[playerLocation].sizeY) {
-		if (getRoom(playerLocation)->connections[2]) {
-			moveBy(2);
-		} else {
-			playerPosition.y = rooms[playerLocation].sizeY - 1;
-		}
+		playerPosition.y = rooms[playerLocation].sizeY - 1;
 	}
 #endif
 }
