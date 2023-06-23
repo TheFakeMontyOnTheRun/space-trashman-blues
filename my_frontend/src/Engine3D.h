@@ -109,4 +109,9 @@ void nextItemInRoom(void);
 uint8_t* graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr);
 #endif
 
+#ifdef CPC
+uint8_t* graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr);
+#endif
+
+
 #endif //DERELICT8_ENGINE3D_H

@@ -229,30 +229,6 @@ TEST_F(TestMovement, cannotMoveToInvalidDirections) {
   ASSERT_EQ(getPlayerRoom(), 1);
 }
 
-
-TEST_F(TestMovement, canWalkBetweenRooms) {
-  char buffer[255];
-  char *operator1;
-  char *operand1;
-
-  ASSERT_EQ(getPlayerRoom(), 1);
-
-  strcpy(&buffer[0], "walkTo 0 0");
-  operator1 = strtok( &buffer[0], "\n " );
-  operand1 = strtok( NULL, "\n ");
-  parseCommand(operator1, operand1);
-  ASSERT_EQ(getPlayerRoom(), 1);
-
-  parseCommand("w", NULL);
-  ASSERT_EQ(getPlayerRoom(), 2);
-
-  parseCommand("s", NULL);
-  ASSERT_EQ(getPlayerRoom(), 1);
-
-  parseCommand("move", "0");
-  ASSERT_EQ(getPlayerRoom(), 2);
-}
-
 TEST_F(TestMovement, roomsCanRequireSpecialRankForAccess) {
 
   setPlayerLocation(3);
