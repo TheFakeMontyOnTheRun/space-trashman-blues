@@ -223,6 +223,8 @@ void clearGraphics();
 
 void backToGraphics();
 
+uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr);
+
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 uint16_t cooldown;
 
@@ -248,15 +250,19 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 	uint8_t c = 0;
 	uint8_t x = _x;
 
+    uint8_t *lineBase = (unsigned char *)0xC000 + ((((y * 8) ) / 8) * 80) + ((((y * 8) ) & 7) * 2048);
+
     for (; c < len && y < 64; ++c) {
 
 		char cha = *ptr;
 
 		if (x == limitX) {
 			++y;
+            lineBase += 2048;
 			x = _x;
 		} else if (cha == '\n') {
 			++y;
+            lineBase += 2048;
 			x = _x;
 			++ptr;
 			continue;
@@ -272,13 +278,12 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 
 		uint8_t *fontTop = &font[((cha - 32) << 3)];
 
+        uint8_t *line = lineBase + 2 * x + 1;
+        
 		for ( int d = 0; d < 8; ++d ) {
             int e;
 			uint8_t chunk =*fontTop;
-			uint8_t *line = (unsigned char *)0xC000 + ((((y * 8) + d) / 8) * 80) + ((((y * 8) + d) & 7) * 2048);
-			uint8_t *pixel;
-
-            pixel = line + 2 * (x) + 1;
+			uint8_t *pixel = line;
 
             *pixel = 0;
 
@@ -289,7 +294,7 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
                 chunk = chunk >> 1;
             }
 
-            pixel = line + 2 * (x);
+            --pixel;
 
             *pixel = 0;
 
@@ -299,9 +304,9 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
                 }
                 chunk = chunk >> 1;
             }
-
 
             fontTop++;
+            line += 2048;
 		}
 
 		++x;
@@ -438,12 +443,14 @@ void exitTextMode() {
 }
 
 void drawMap() {
-/*
+
 	uint8_t *ptr;
 
 	if (playerLocation == 0 ) {
 		return;
 	}
+
+    memset(buffer, 0, BUFFER_SIZEX * BUFFER_SIZEY);
 
 	for (int y = 0; y < 32; ++y) {
 		for (int x = 0; x < 32; ++x) {
@@ -456,17 +463,19 @@ void drawMap() {
 			newCell = newCell & 127;
 			uint8_t block = patterns[newCell - 32].blockMovement;
 
-
 			for (int cy = 0; cy < 4; ++cy) {
+                ptr = NULL;
 				for (int cx = 0; cx < 4; ++cx) {
-					realPut(20 + (x * 4) + cx, 8 + (y * 4) + cy, block, ptr);
+                    if (block) {
+                        ptr = graphicsPutAddr((x * 4) + cx, (y * 4) + cy, ptr);
+                    }
 				}
 			}
-
-
 		}
 	}
- */
+
+    drawWindow(0, 0,  17, 20, "Map");
+    graphicsFlush();
 }
 
 uint8_t getKey() {
@@ -572,6 +581,14 @@ void HUD_initialPaint() {
 void HUD_refresh() {
 
 	writeStrWithLimit(19, 7, "Object in hand", MARGIN_TEXT_SCREEN_LIMIT);
+
+    for (uint8_t d = 0; d < 19; ++d) {
+        writeStr(20 + d, 4, " ", 2, 0);
+        writeStr(20 + d, 5, " ", 2, 0);
+        writeStr(20 + d, 8, " ", 2, 0);
+        writeStr(20 + d, 9, " ", 2, 0);
+    }
+
 
 	if (focusedItem != NULL) {
 		struct Item *item = getItem(focusedItem->item);
