@@ -1333,7 +1333,6 @@ void renderScene(void) {
     }
 
 #ifdef SMS
-
     stencilPtr = &stencilHigh[0];
 
     for (x = 0; x < XRESMINUSONE;) {
@@ -1351,6 +1350,38 @@ next_cluster:
         }
 
         for (c = 2; c < 8; ++c ) {
+            ++x;
+            ++stencilPtr;
+            prevY = y;
+            y = *stencilPtr;
+            if ( y != prevY ) {
+                goto next_cluster;
+            }
+            ptr = graphicsPutAddr(x, y, ptr );
+        }
+
+        ++x;
+        ++stencilPtr;
+    }
+#else
+#ifdef CPC
+    stencilPtr = &stencilHigh[0];
+
+    for (x = 0; x < XRESMINUSONE;) {
+      uint8_t y, prevY, c;
+        uint8_t *ptr;
+next_cluster:
+        //pixel 1
+        y = *stencilPtr;
+        ptr = graphicsPutAddr(x, y, NULL );
+
+        if (x & 3) {
+            ++x;
+            ++stencilPtr;
+            continue;
+        }
+
+        for (c = 2; c < 4; ++c ) {
             ++x;
             ++stencilPtr;
             prevY = y;
@@ -1390,6 +1421,7 @@ next_cluster:
 #endif
         ++stencilPtr;
     }
+#endif
 #endif
 
 #ifdef TRACE_OBJECTS_OVER_FLOOR
@@ -2023,6 +2055,7 @@ waitkey:
 
 
 void onError(const char *mesg) {
+#ifndef CPC
 #ifndef SMS
 #ifdef SMD
     writeStr(1,1, mesg, 1, 2);
@@ -2031,6 +2064,7 @@ void onError(const char *mesg) {
 #endif
 #else
     showMessage(mesg);
+#endif
 #endif
 }
 

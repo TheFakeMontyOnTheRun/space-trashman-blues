@@ -2,14 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdio.h>
 #include <time.h>
-
-#include <stdio.h>
-#include <conio.h>
-#include <graphics.h>
-#include <sys/ioctl.h>                // required for switching the screen mode
-#include <graphics.h>
 #include <games.h>
 #include <psg.h>
 #include <sound.h>
@@ -31,14 +24,12 @@ extern uint8_t accessGrantedToSafe;
 uint8_t cursorPosition = 0;
 extern uint8_t playerLocation;
 
-#define BUFFER_SIZEX 16
+#define BUFFER_SIZEX 32
 #define BUFFER_SIZEY 128
 #define BUFFER_RESX 128
 #define BUFFER_RESY 128
 #define COOLDOWN_MAX 0x2EF
-#define MARGIN_TEXT_SCREEN_LIMIT 35
-
-uint8_t framebuffer[16*128];
+#define MARGIN_TEXT_SCREEN_LIMIT 40
 
 uint8_t font[] = {
 		// ASCII table starting on SPACE.
@@ -79,9 +70,9 @@ uint8_t font[] = {
 		0x10, 0x00, 0x30, 0x08, 0x08, 0x0c, 0x08, 0x08, 0x30, 0x00, 0x28, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x10, 0x38, 0x6c, 0x44, 0x44, 0x7c, 0x00, 0x00
 };
+int getch();
 
-
-const uint16_t lineStart[200] = {
+const uint16_t lineStart[128] = {
 		49232l,
 		51280l,
 		53328l,
@@ -232,12 +223,13 @@ void clearGraphics();
 
 void backToGraphics();
 
+uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr);
+
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 uint16_t cooldown;
 
 void init() {
-	cooldown = COOLDOWN_MAX;
-	clg();
+    cooldown = COOLDOWN_MAX;
 }
 
 char *menuItems[] = {
@@ -258,15 +250,19 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 	uint8_t c = 0;
 	uint8_t x = _x;
 
-	for (; c < len && y < 64; ++c) {
+    uint8_t *lineBase = (unsigned char *)0xC000 + ((((y * 8) ) / 8) * 80) + ((((y * 8) ) & 7) * 2048);
+
+    for (; c < len && y < 64; ++c) {
 
 		char cha = *ptr;
 
 		if (x == limitX) {
 			++y;
+            lineBase += 2048;
 			x = _x;
 		} else if (cha == '\n') {
 			++y;
+            lineBase += 2048;
 			x = _x;
 			++ptr;
 			continue;
@@ -282,12 +278,35 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 
 		uint8_t *fontTop = &font[((cha - 32) << 3)];
 
+        uint8_t *line = lineBase + 2 * x + 1;
+        
 		for ( int d = 0; d < 8; ++d ) {
+            int e;
 			uint8_t chunk =*fontTop;
-			fontTop++;
-			uint8_t *line = (unsigned char *)0xC000 + ((((y * 8) + d) / 8) * 80) + ((((y * 8) + d) & 7) * 2048);
-			uint8_t *pixel = line + (x);
-			*pixel = chunk;
+			uint8_t *pixel = line;
+
+            *pixel = 0;
+
+            for (e = 0; e < 4; ++e ) {
+                if (chunk & 1 ) {
+                    *pixel |= (16 << e);
+                }
+                chunk = chunk >> 1;
+            }
+
+            --pixel;
+
+            *pixel = 0;
+
+            for (e = 0; e < 4; ++e ) {
+                if (chunk & 1 ) {
+                    *pixel |= (16 << e);
+                }
+                chunk = chunk >> 1;
+            }
+
+            fontTop++;
+            line += 2048;
 		}
 
 		++x;
@@ -299,69 +318,14 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 	writeStrWithLimit(_x, y, text, MARGIN_TEXT_SCREEN_LIMIT);
 }
 
-uint8_t* realPut(uint16_t x, uint16_t y, uint8_t colour, uint8_t* ptr) {
+uint8_t * realPut( int x, int y, uint8_t colour, uint8_t *ptr) {
 
-	if (ptr == NULL) {
-		ptr = (unsigned char *) 0xC000 + ((y / 8) * 80) + ((y & 7) * 2048) + (x / 8);
-	}
+    if (ptr == NULL) {
+        ptr = (unsigned char *)0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048) + (x >> 2);
+    }
+    *ptr |= (8 >> (x & 3));
 
-	if (colour) {
-		switch (x & 7) {
-			case 0:
-				*ptr |= 128;
-				break;
-			case 1:
-				*ptr |= 64;
-				break;
-			case 2:
-				*ptr |= 32;
-				break;
-			case 3:
-				*ptr |= 16;
-				break;
-			case 4:
-				*ptr |= 8;
-				break;
-			case 5:
-				*ptr |= 4;
-				break;
-			case 6:
-				*ptr |= 2;
-				break;
-			case 7:
-				*ptr |= 1;
-				break;
-		}
-	} else {
-		switch (x & 7) {
-			case 0:
-				*ptr &= ~128;
-				break;
-			case 1:
-				*ptr &= ~64;
-				break;
-			case 2:
-				*ptr &= ~32;
-				break;
-			case 3:
-				*ptr &= ~16;
-				break;
-			case 4:
-				*ptr &= ~8;
-				break;
-			case 5:
-				*ptr &= ~4;
-				break;
-			case 6:
-				*ptr &= ~2;
-				break;
-			case 7:
-				*ptr &= ~1;
-				break;
-		}
-	}
-
-	return ptr;
+    return ptr;
 }
 
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {
@@ -370,14 +334,14 @@ void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *titl
 	uint8_t *ptr;
 
 	for (x = 0; x < tw * 8; ++x ) {
-		if ((x & 7) == 0) {
+		if ((x & 3) == 0) {
 			ptr = NULL;
 		}
 		ptr = realPut( ((tx * 8) + x), (ty * 8), 1, ptr );
 	}
 
 	for (x = 0; x < tw * 8; ++x ) {
-		if ((x & 7) == 0) {
+		if ((x & 3) == 0) {
 			ptr = NULL;
 		}
 		ptr = realPut( ((tx * 8) + x), (ty + th) * 8, 1, ptr );
@@ -486,6 +450,8 @@ void drawMap() {
 		return;
 	}
 
+    memset(buffer, 0, BUFFER_SIZEX * BUFFER_SIZEY);
+
 	for (int y = 0; y < 32; ++y) {
 		for (int x = 0; x < 32; ++x) {
 
@@ -497,16 +463,19 @@ void drawMap() {
 			newCell = newCell & 127;
 			uint8_t block = patterns[newCell - 32].blockMovement;
 
-
 			for (int cy = 0; cy < 4; ++cy) {
+                ptr = NULL;
 				for (int cx = 0; cx < 4; ++cx) {
-					realPut(20 + (x * 4) + cx, 8 + (y * 4) + cy, block, ptr);
+                    if (block) {
+                        ptr = graphicsPutAddr((x * 4) + cx, (y * 4) + cy, ptr);
+                    }
 				}
 			}
-
-
 		}
 	}
+
+    drawWindow(0, 0,  17, 20, "Map");
+    graphicsFlush();
 }
 
 uint8_t getKey() {
@@ -539,7 +508,7 @@ void shutdownGraphics() {
 }
 
 void clearScreen() {
-	clg();
+    memset((unsigned char *)0xC000, 0, (320 / 4) * 200);
 }
 
 void clearGraphics() {
@@ -550,9 +519,11 @@ void graphicsFlush() {
 
 	for (int y = 0; y < BUFFER_SIZEY; ++y ) {
 		uint8_t *line = (unsigned char *)lineStart[y];
-		memcpy( line + 25, buffer + (y * BUFFER_SIZEX),  BUFFER_SIZEX);
+		memcpy( line + 1, buffer + (y * BUFFER_SIZEX),  BUFFER_SIZEX);
 	}
+
 	memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
+
 }
 
 void sleepForMS(uint32_t ms) {
@@ -569,11 +540,11 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 		_y1 = y0;
 	}
 
-	uint8_t *ptr = &buffer[(_y0 * (BUFFER_SIZEX)) + (x0 / 8)]; //skip to the line in pattern
+	uint8_t *ptr = &buffer[(_y0 * (BUFFER_SIZEX)) + (x0 / 4)]; //skip to the line in pattern
 	uint8_t y;
 	for (y = _y0; y <= _y1; ++y) {
 		if (!shouldStipple || (y & 1)) {
-			*ptr |= (128 >> (x0 & 7));
+			*ptr |= (8 >> (x0 & 3));
 		}
 		ptr += BUFFER_SIZEX;
 	}
@@ -584,60 +555,71 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr) {
 
 	if (ptr == NULL) {
-		ptr = &buffer[(y * (BUFFER_SIZEX)) + (x / 8)]; //skip to the line in pattern
+		ptr = &buffer[(y * (BUFFER_SIZEX)) + (x / 4)]; //skip to the line in pattern
 	}
 
-	*ptr |= (128 >> (x & 7));
+	*ptr |= (8 >> (x & 3));
 
 	return ptr;
 }
 
 void graphicsPut(uint8_t x, uint8_t y) {
-	buffer[(y * (BUFFER_SIZEX)) + (x / 8)] |= (128 >> (x & 7));
+	buffer[(y * (BUFFER_SIZEX)) + (x / 4)] |= (8 >> (x & 3));
 }
 
 void HUD_initialPaint() {
 	for (uint8_t i = 0; i < 6; ++i) {
-		writeStr(46, 9 + i, menuItems[i], 2, 0);
+		writeStr(19, 11 + i, menuItems[i], 2, 0);
 	}
 
 	HUD_refresh();
 
-	drawWindow(1, 0,  19, 24, "Map");
-	drawWindow(23, 0,  19, 24, "3D View");
-	drawWindow(45, 0,  34, 24, "Controls and status");
+	drawWindow(0, 0,  17, 20, "3D View");
+	drawWindow(18, 0,  21, 20, "Controls and status");
 }
 
 void HUD_refresh() {
 
-	writeStrWithLimit(46, 6, "Object in hand", MARGIN_TEXT_SCREEN_LIMIT);
+	writeStrWithLimit(19, 7, "Object in hand", MARGIN_TEXT_SCREEN_LIMIT);
+
+    for (uint8_t d = 0; d < 19; ++d) {
+        writeStr(20 + d, 4, " ", 2, 0);
+        writeStr(20 + d, 5, " ", 2, 0);
+        writeStr(20 + d, 8, " ", 2, 0);
+        writeStr(20 + d, 9, " ", 2, 0);
+    }
+
 
 	if (focusedItem != NULL) {
 		struct Item *item = getItem(focusedItem->item);
 
 
 		if (item->active) {
-			writeStr(46, 7, "*", 2, 0);
-		}
+			writeStr(19, 8, "*", 2, 0);
+		} else {
+            writeStr(19, 8, " ", 2, 0);
+        }
 
-		writeStrWithLimit(46, 7, item->name, MARGIN_TEXT_SCREEN_LIMIT);
+		writeStrWithLimit(20, 8, item->name, MARGIN_TEXT_SCREEN_LIMIT);
 	} else {
-		writeStrWithLimit(46, 7, "Nothing", MARGIN_TEXT_SCREEN_LIMIT);
+		writeStrWithLimit(20, 8, " Nothing", MARGIN_TEXT_SCREEN_LIMIT);
 	}
 
-	writeStrWithLimit(46, 2, "Object in room", MARGIN_TEXT_SCREEN_LIMIT);
+	writeStrWithLimit(19, 3, "Object in room", MARGIN_TEXT_SCREEN_LIMIT);
 
 	if (roomItem != NULL) {
 		struct Item *item = getItem(roomItem->item);
 
 
 		if (item->active) {
-			writeStrWithLimit(46, 3, "*", MARGIN_TEXT_SCREEN_LIMIT);
+            writeStr(19, 4, "*", 2, 0);
+        } else {
+            writeStr(19, 4, " ", 2, 0);
 		}
 
-		writeStrWithLimit(46, 3, item->name, MARGIN_TEXT_SCREEN_LIMIT);
+		writeStrWithLimit(20, 4, item->name, MARGIN_TEXT_SCREEN_LIMIT);
 	} else {
-		writeStrWithLimit(46, 3, "Nothing", MARGIN_TEXT_SCREEN_LIMIT);
+		writeStrWithLimit(19, 4, " Nothing", MARGIN_TEXT_SCREEN_LIMIT);
 	}
 }
 
