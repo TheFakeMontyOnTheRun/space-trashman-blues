@@ -1,11 +1,11 @@
 CC = zcc
 
-CFLAGS = +gb -O3 --opt-code-size -lndos -DGAMEPAD -vn -I../core/include -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DRLE_COMPRESSED_MAPS -DEMBEDDED_DATA
+CFLAGS = +gb -O2 --opt-code-size -DGAMEPAD -vn -I../core/include  -I../common/include -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DRLE_COMPRESSED_MAPS -DEMBEDDED_DATA -DLEAN_BUILD
 
 all: derelict.gb
 
-derelict.gb: src/demo.o src/gb.o ../core/src/Core.o ../core/src/Derelict.o
-	$(CC) $(CFLAGS)  -create-app   -oderelict.gb src/demo.o src/gb.o  ../core/src/Core.o ../core/src/Derelict.o $(LDFLAGS)
+derelict.gb: src/demo.o src/gb.o ../core/src/Core.o ../core/src/Derelict.o ../common/src/Common.o
+	$(CC) $(CFLAGS)  -create-app   -oderelict.gb src/demo.o src/gb.o  ../core/src/Core.o ../core/src/Derelict.o ../common/src/Common.o $(LDFLAGS)
 
 clean:
 	rm -f $(OBJS) $(TARGET)

@@ -73,6 +73,8 @@ void memFill(void* dst, uint8_t val, size_t sizeInBytes) {
 }
 #endif
 
+
+#ifndef LEAN_BUILD
 int isBigEndian() {
 	union {
 		uint32_t i;
@@ -98,3 +100,4 @@ uint32_t toNativeEndianess(const uint32_t val) {
 
 	return val2;
 }
+#endif

@@ -39,11 +39,12 @@ void memCopyToFrom(void* dst, void* src, size_t sizeInBytes);
 
 void memFill(void* dst, uint8_t val, size_t sizeInBytes);
 
+#ifndef LEAN_BUILD
 int isBigEndian(void);
 
-void initFileReader(const char *  dataFilePath);
-
 uint32_t toNativeEndianess(const uint32_t val);
+#endif
+
 
 #ifndef SMD
 #ifndef WIN32
