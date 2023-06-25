@@ -81,9 +81,7 @@ int8_t cameraX = 33;
 int8_t cameraZ = 22;
 int8_t cameraRotation = 0;
 uint8_t running = 1;
-
 uint8_t enteredFrom = 0xFF;
-
 extern uint8_t playerLocation;
 
 struct Projection {
@@ -95,177 +93,177 @@ struct Projection {
 const struct Projection projections[40] =
         {
 #ifdef RES128X64
-        {	0	,	64	,	-128	},	//	1
-        {	0	,	63	,	-64	},	//	2
-        {	20	,	52	,	-42	},	//	3
-        {	31	,	47	,	-32	},	//	4
-        {	37	,	43	,	-25	},	//	5
-        {	41	,	41	,	-21	},	//	6
-        {	44	,	40	,	-18	},	//	7
-        {	47	,	39	,	-16	},	//	8
-        {	48	,	38	,	-14	},	//	9
-        {	50	,	37	,	-12	},	//	10
-        {	51	,	36	,	-11	},	//	11
-        {	52	,	36	,	-10	},	//	12
-        {	53	,	35	,	-9	},	//	13
-        {	53	,	35	,	-9	},	//	14
-        {	54	,	35	,	-8	},	//	15
-        {	55	,	35	,	-8	},	//	16
-        {	55	,	34	,	-7	},	//	17
-        {	55	,	34	,	-7	},	//	18
-        {	56	,	34	,	-6	},	//	19
-        {	56	,	34	,	-6	},	//	20
-        {	56	,	34	,	-6	},	//	21
-        {	57	,	33	,	-5	},	//	22
-        {	57	,	33	,	-5	},	//	23
-        {	57	,	33	,	-5	},	//	24
-        {	57	,	33	,	-5	},	//	25
-        {	58	,	33	,	-4	},	//	26
-        {	58	,	33	,	-4	},	//	27
-        {	58	,	33	,	-4	},	//	28
-        {	58	,	33	,	-4	},	//	29
-        {	58	,	33	,	-4	},	//	30
-        {	58	,	33	,	-4	},	//	31
+                {	0	,	64	,	-128	},	//	1
+                {	0	,	63	,	-64	},	//	2
+                {	20	,	52	,	-42	},	//	3
+                {	31	,	47	,	-32	},	//	4
+                {	37	,	43	,	-25	},	//	5
+                {	41	,	41	,	-21	},	//	6
+                {	44	,	40	,	-18	},	//	7
+                {	47	,	39	,	-16	},	//	8
+                {	48	,	38	,	-14	},	//	9
+                {	50	,	37	,	-12	},	//	10
+                {	51	,	36	,	-11	},	//	11
+                {	52	,	36	,	-10	},	//	12
+                {	53	,	35	,	-9	},	//	13
+                {	53	,	35	,	-9	},	//	14
+                {	54	,	35	,	-8	},	//	15
+                {	55	,	35	,	-8	},	//	16
+                {	55	,	34	,	-7	},	//	17
+                {	55	,	34	,	-7	},	//	18
+                {	56	,	34	,	-6	},	//	19
+                {	56	,	34	,	-6	},	//	20
+                {	56	,	34	,	-6	},	//	21
+                {	57	,	33	,	-5	},	//	22
+                {	57	,	33	,	-5	},	//	23
+                {	57	,	33	,	-5	},	//	24
+                {	57	,	33	,	-5	},	//	25
+                {	58	,	33	,	-4	},	//	26
+                {	58	,	33	,	-4	},	//	27
+                {	58	,	33	,	-4	},	//	28
+                {	58	,	33	,	-4	},	//	29
+                {	58	,	33	,	-4	},	//	30
+                {	58	,	33	,	-4	},	//	31
 #else
 #ifdef RES96x64
-        {	0	,	64	,	-96	},	//	1
-        {	0	,	63	,	-48	},	//	2
-        {	15	,	52	,	-32	},	//	3
-        {	23	,	47	,	-24	},	//	4
-        {	27	,	43	,	-19	},	//	5
-        {	31	,	41	,	-16	},	//	6
-        {	33	,	40	,	-13	},	//	7
-        {	35	,	39	,	-12	},	//	8
-        {	36	,	38	,	-10	},	//	9
-        {	37	,	37	,	-9	},	//	10
-        {	38	,	36	,	-8	},	//	11
-        {	39	,	36	,	-8	},	//	12
-        {	39	,	35	,	-7	},	//	13
-        {	40	,	35	,	-6	},	//	14
-        {	40	,	35	,	-6	},	//	15
-        {	41	,	35	,	-6	},	//	16
-        {	41	,	34	,	-5	},	//	17
-        {	41	,	34	,	-5	},	//	18
-        {	41	,	34	,	-5	},	//	19
-        {	42	,	34	,	-4	},	//	20
-        {	42	,	34	,	-4	},	//	21
-        {	42	,	33	,	-4	},	//	22
-        {	42	,	33	,	-4	},	//	23
-        {	43	,	33	,	-4	},	//	24
-        {	43	,	33	,	-3	},	//	25
-        {	43	,	33	,	-3	},	//	26
-        {	43	,	33	,	-3	},	//	27
-        {	43	,	33	,	-3	},	//	28
-        {	43	,	33	,	-3	},	//	29
-        {	43	,	33	,	-3	},	//	30
-        {	43	,	33	,	-3	},	//	31
+                {	0	,	64	,	-96	},	//	1
+                {	0	,	63	,	-48	},	//	2
+                {	15	,	52	,	-32	},	//	3
+                {	23	,	47	,	-24	},	//	4
+                {	27	,	43	,	-19	},	//	5
+                {	31	,	41	,	-16	},	//	6
+                {	33	,	40	,	-13	},	//	7
+                {	35	,	39	,	-12	},	//	8
+                {	36	,	38	,	-10	},	//	9
+                {	37	,	37	,	-9	},	//	10
+                {	38	,	36	,	-8	},	//	11
+                {	39	,	36	,	-8	},	//	12
+                {	39	,	35	,	-7	},	//	13
+                {	40	,	35	,	-6	},	//	14
+                {	40	,	35	,	-6	},	//	15
+                {	41	,	35	,	-6	},	//	16
+                {	41	,	34	,	-5	},	//	17
+                {	41	,	34	,	-5	},	//	18
+                {	41	,	34	,	-5	},	//	19
+                {	42	,	34	,	-4	},	//	20
+                {	42	,	34	,	-4	},	//	21
+                {	42	,	33	,	-4	},	//	22
+                {	42	,	33	,	-4	},	//	23
+                {	43	,	33	,	-4	},	//	24
+                {	43	,	33	,	-3	},	//	25
+                {	43	,	33	,	-3	},	//	26
+                {	43	,	33	,	-3	},	//	27
+                {	43	,	33	,	-3	},	//	28
+                {	43	,	33	,	-3	},	//	29
+                {	43	,	33	,	-3	},	//	30
+                {	43	,	33	,	-3	},	//	31
 #else
 #ifdef RES64X128
-        {	0	,	128	,	-64	},	//	1
-        {	0	,	127	,	-32	},	//	2
-        {	9	,	105	,	-21	},	//	3
-        {	15	,	95	,	-16	},	//	4
-        {	18	,	88	,	-12	},	//	5
-        {	20	,	84	,	-10	},	//	6
-        {	21	,	81	,	-9	},	//	7
-        {	23	,	79	,	-8	},	//	8
-        {	23	,	77	,	-7	},	//	9
-        {	24	,	75	,	-6	},	//	10
-        {	25	,	74	,	-5	},	//	11
-        {	25	,	73	,	-5	},	//	12
-        {	26	,	72	,	-4	},	//	13
-        {	26	,	72	,	-4	},	//	14
-        {	26	,	71	,	-4	},	//	15
-        {	27	,	71	,	-4	},	//	16
-        {	27	,	70	,	-3	},	//	17
-        {	27	,	70	,	-3	},	//	18
-        {	27	,	69	,	-3	},	//	19
-        {	27	,	69	,	-3	},	//	20
-        {	27	,	69	,	-3	},	//	21
-        {	28	,	68	,	-2	},	//	22
-        {	28	,	68	,	-2	},	//	23
-        {	28	,	68	,	-2	},	//	24
-        {	28	,	68	,	-2	},	//	25
-        {	28	,	67	,	-2	},	//	26
-        {	28	,	67	,	-2	},	//	27
-        {	28	,	67	,	-2	},	//	28
-        {	28	,	67	,	-2	},	//	29
-        {	28	,	67	,	-2	},	//	30
-        {	28	,	67	,	-2	},	//	31
+                {	0	,	128	,	-64	},	//	1
+                {	0	,	127	,	-32	},	//	2
+                {	9	,	105	,	-21	},	//	3
+                {	15	,	95	,	-16	},	//	4
+                {	18	,	88	,	-12	},	//	5
+                {	20	,	84	,	-10	},	//	6
+                {	21	,	81	,	-9	},	//	7
+                {	23	,	79	,	-8	},	//	8
+                {	23	,	77	,	-7	},	//	9
+                {	24	,	75	,	-6	},	//	10
+                {	25	,	74	,	-5	},	//	11
+                {	25	,	73	,	-5	},	//	12
+                {	26	,	72	,	-4	},	//	13
+                {	26	,	72	,	-4	},	//	14
+                {	26	,	71	,	-4	},	//	15
+                {	27	,	71	,	-4	},	//	16
+                {	27	,	70	,	-3	},	//	17
+                {	27	,	70	,	-3	},	//	18
+                {	27	,	69	,	-3	},	//	19
+                {	27	,	69	,	-3	},	//	20
+                {	27	,	69	,	-3	},	//	21
+                {	28	,	68	,	-2	},	//	22
+                {	28	,	68	,	-2	},	//	23
+                {	28	,	68	,	-2	},	//	24
+                {	28	,	68	,	-2	},	//	25
+                {	28	,	67	,	-2	},	//	26
+                {	28	,	67	,	-2	},	//	27
+                {	28	,	67	,	-2	},	//	28
+                {	28	,	67	,	-2	},	//	29
+                {	28	,	67	,	-2	},	//	30
+                {	28	,	67	,	-2	},	//	31
 #else
 #ifdef RES128X128
-                {	0	,	127	,	-128	},	//	1
-                {	0	,	127	,	-64	},	//	2
-                {	21	,	106	,	-43	},	//	3
-                {	32	,	95	,	-32	},	//	4
-                {	38	,	89	,	-26	},	//	5
-                {	43	,	84	,	-21	},	//	6
-                {	46	,	81	,	-18	},	//	7
-                {	48	,	79	,	-16	},	//	8
-                {	50	,	77	,	-14	},	//	9
-                {	51	,	76	,	-13	},	//	10
-                {	52	,	75	,	-12	},	//	11
-                {	53	,	74	,	-11	},	//	12
-                {	54	,	73	,	-10	},	//	13
-                {	55	,	72	,	-9	},	//	14
-                {	55	,	72	,	-9	},	//	15
-                {	56	,	71	,	-8	},	//	16
-                {	56	,	71	,	-8	},	//	17
-                {	57	,	70	,	-7	},	//	18
-                {	57	,	70	,	-7	},	//	19
-                {	58	,	69	,	-6	},	//	20
-                {	58	,	69	,	-6	},	//	21
-                {	58	,	69	,	-6	},	//	22
-                {	58	,	69	,	-6	},	//	23
-                {	59	,	68	,	-5	},	//	24
-                {	59	,	68	,	-5	},	//	25
-                {	59	,	68	,	-5	},	//	26
-                {	59	,	68	,	-5	},	//	27
-                {	59	,	68	,	-5	},	//	28
-                {	60	,	67	,	-4	},	//	29
-                {	60	,	67	,	-4	},	//	30
-                {	60	,	67	,	-4	},	//	31
-                {	60	,	67	,	-4	},	//	32
-                {	60	,	67	,	-4	},	//	33
-                {	60	,	67	,	-4	},	//	34
-                {	60	,	67	,	-4	},	//	35
-                {	60	,	67	,	-4	},	//	36
-                {	61	,	66	,	-3	},	//	37
-                {	61	,	66	,	-3	},	//	38
-                {	61	,	66	,	-3	},	//	39
+                {0, 127, -128},    //	1
+                {0, 127, -64},    //	2
+                {21, 106, -43},    //	3
+                {32, 95, -32},    //	4
+                {38, 89, -26},    //	5
+                {43, 84, -21},    //	6
+                {46, 81, -18},    //	7
+                {48, 79, -16},    //	8
+                {50, 77, -14},    //	9
+                {51, 76, -13},    //	10
+                {52, 75, -12},    //	11
+                {53, 74, -11},    //	12
+                {54, 73, -10},    //	13
+                {55, 72, -9},    //	14
+                {55, 72, -9},    //	15
+                {56, 71, -8},    //	16
+                {56, 71, -8},    //	17
+                {57, 70, -7},    //	18
+                {57, 70, -7},    //	19
+                {58, 69, -6},    //	20
+                {58, 69, -6},    //	21
+                {58, 69, -6},    //	22
+                {58, 69, -6},    //	23
+                {59, 68, -5},    //	24
+                {59, 68, -5},    //	25
+                {59, 68, -5},    //	26
+                {59, 68, -5},    //	27
+                {59, 68, -5},    //	28
+                {60, 67, -4},    //	29
+                {60, 67, -4},    //	30
+                {60, 67, -4},    //	31
+                {60, 67, -4},    //	32
+                {60, 67, -4},    //	33
+                {60, 67, -4},    //	34
+                {60, 67, -4},    //	35
+                {60, 67, -4},    //	36
+                {61, 66, -3},    //	37
+                {61, 66, -3},    //	38
+                {61, 66, -3},    //	39
 #else
 
-        {	0	,	64	,	-64	},	//	1
-        {	0	,	63	,	-32	},	//	2
-        {	9	,	52	,	-21	},	//	3
-        {	15	,	47	,	-16	},	//	4
-        {	18	,	43	,	-12	},	//	5
-        {	20	,	41	,	-10	},	//	6
-        {	21	,	40	,	-9	},	//	7
-        {	23	,	39	,	-8	},	//	8
-        {	23	,	38	,	-7	},	//	9
-        {	24	,	37	,	-6	},	//	10
-        {	25	,	36	,	-5	},	//	11
-        {	25	,	36	,	-5	},	//	12
-        {	26	,	35	,	-4	},	//	13
-        {	26	,	35	,	-4	},	//	14
-        {	26	,	35	,	-4	},	//	15
-        {	27	,	35	,	-4	},	//	16
-        {	27	,	34	,	-3	},	//	17
-        {	27	,	34	,	-3	},	//	18
-        {	27	,	34	,	-3	},	//	19
-        {	27	,	34	,	-3	},	//	20
-        {	27	,	34	,	-3	},	//	21
-        {	28	,	33	,	-2	},	//	22
-        {	28	,	33	,	-2	},	//	23
-        {	28	,	33	,	-2	},	//	24
-        {	28	,	33	,	-2	},	//	25
-        {	28	,	33	,	-2	},	//	26
-        {	28	,	33	,	-2	},	//	27
-        {	28	,	33	,	-2	},	//	28
-        {	28	,	33	,	-2	},	//	29
-        {	28	,	33	,	-2	},	//	30
-        {	28	,	33	,	-2	},	//	31
+                {	0	,	64	,	-64	},	//	1
+                {	0	,	63	,	-32	},	//	2
+                {	9	,	52	,	-21	},	//	3
+                {	15	,	47	,	-16	},	//	4
+                {	18	,	43	,	-12	},	//	5
+                {	20	,	41	,	-10	},	//	6
+                {	21	,	40	,	-9	},	//	7
+                {	23	,	39	,	-8	},	//	8
+                {	23	,	38	,	-7	},	//	9
+                {	24	,	37	,	-6	},	//	10
+                {	25	,	36	,	-5	},	//	11
+                {	25	,	36	,	-5	},	//	12
+                {	26	,	35	,	-4	},	//	13
+                {	26	,	35	,	-4	},	//	14
+                {	26	,	35	,	-4	},	//	15
+                {	27	,	35	,	-4	},	//	16
+                {	27	,	34	,	-3	},	//	17
+                {	27	,	34	,	-3	},	//	18
+                {	27	,	34	,	-3	},	//	19
+                {	27	,	34	,	-3	},	//	20
+                {	27	,	34	,	-3	},	//	21
+                {	28	,	33	,	-2	},	//	22
+                {	28	,	33	,	-2	},	//	23
+                {	28	,	33	,	-2	},	//	24
+                {	28	,	33	,	-2	},	//	25
+                {	28	,	33	,	-2	},	//	26
+                {	28	,	33	,	-2	},	//	27
+                {	28	,	33	,	-2	},	//	28
+                {	28	,	33	,	-2	},	//	29
+                {	28	,	33	,	-2	},	//	30
+                {	28	,	33	,	-2	},	//	31
 #endif
 #endif
 #endif
@@ -274,7 +272,6 @@ const struct Projection projections[40] =
 
 
 #ifndef SMD
-
 int8_t max(int8_t x1, int8_t x2) {
     return x1 > x2 ? x1 : x2;
 }
@@ -282,26 +279,25 @@ int8_t max(int8_t x1, int8_t x2) {
 int8_t min(int8_t x1, int8_t x2) {
     return x1 < x2 ? x1 : x2;
 }
-
 #endif
 
 uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask, uint8_t type) {
 
-    int16_t z1;
-    int16_t z0px;
-    int16_t z1px;
-    int16_t z0py;
+    int8_t z1;
+    int8_t z0px;
+    int8_t z1px;
+    int8_t z0py;
 
-    int16_t z1py;
-    int16_t z0dx;
-    int16_t z1dx;
+    int8_t z1py;
+    int8_t z0dx;
+    int8_t z1dx;
 
     int16_t px0z0;
-    int16_t py0z0;
-    int16_t py0z1;
+    int8_t py0z0;
+    int8_t py0z1;
 
-    int16_t py1z0;
-    int16_t py1z1;
+    int8_t py1z0;
+    int8_t py1z1;
 
     int16_t px1z1;
 
@@ -340,7 +336,6 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
     if (z1 >= FAR_PLANE_Z) {
         return 0;
     }
-
 
     if (type == RIGHT_NEAR) {
         z0px = (projections[z0].px);
@@ -434,21 +429,22 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
         x1 = px1z1;
 
         if (x0 != x1) {
-            int16_t upperY0 = py1z0;
-            int16_t upperY1 = py1z1;
-            int16_t upperDx = abs(x1 - x0);
-            int16_t upperDy = -abs(upperY1 - upperY0);
-            int16_t upperSy = upperY0 < upperY1 ? 1 : -1;
-            int16_t upperErr = upperDx + upperDy;  /* error value e_xy */
-            int16_t upperErr2;
-            int16_t lowerY0 = py0z0;
-            int16_t lowerY1 = py0z1;
-            int16_t lowerDx = abs(x1 - x0);
-            int16_t lowerSx = x0 < x1 ? 1 : -1;
-            int16_t lowerDy = -abs(lowerY1 - lowerY0);
-            int16_t lowerSy = lowerY0 < lowerY1 ? 1 : -1;
-            int16_t lowerErr = lowerDx + lowerDy;  /* error value e_xy */
-            int16_t lowerErr2 = 0;
+            int8_t upperY0 = py1z0;
+            int8_t upperY1 = py1z1;
+            uint8_t upperDx = abs(x1 - x0);
+            int8_t upperDy = -abs(upperY1 - upperY0);
+            int8_t upperSy = upperY0 < upperY1 ? 1 : -1;
+            uint8_t upperErr = upperDx + upperDy;  /* error value e_xy */
+            int8_t upperErr2 = 0;
+
+            int8_t lowerY0 = py0z0;
+            int8_t lowerY1 = py0z1;
+            uint8_t lowerDx = abs(x1 - x0);
+            int8_t lowerSx = x0 < x1 ? 1 : -1;
+            int8_t lowerDy = -abs(lowerY1 - lowerY0);
+            int8_t lowerSy = lowerY0 < lowerY1 ? 1 : -1;
+            uint8_t lowerErr = lowerDx + lowerDy;  /* error value e_xy */
+            int8_t lowerErr2 = 0;
 
             while (x0 != x1) {
 
@@ -532,8 +528,8 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
     int8_t z0dx;
 
     int16_t px0z0;
-    int8_t py0z0;
     int16_t px1z0;
+    int8_t py0z0;
     int8_t py1z0;
     uint8_t shouldStipple;
     uint8_t drawContour;
@@ -654,11 +650,12 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
     int8_t z1dx;
 
     int16_t px0z0;
-    int8_t py0z0;
     int16_t px1z0;
     int16_t px0z1;
-    int8_t py0z1;
     int16_t px1z1;
+
+    int8_t py0z0;
+    int8_t py0z1;
     uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
     uint8_t stipple = 1;
 
@@ -731,14 +728,14 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
         x1 = px0z1;
 
         if (x0 != x1) {
-            int16_t y0 = py0z0;
-            int16_t y1 = py0z1;
-            int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
-            int16_t dy = -abs(y1 - y0);
-            int16_t sy = y0 < y1 ? 1 : -1;
-            int16_t err = dx + dy;  /* error value e_xy */
-            int16_t e2;
+            int8_t y0 = py0z0;
+            int8_t y1 = py0z1;
+            uint8_t dx = abs(x1 - x0);
+            int8_t sx = x0 < x1 ? 1 : -1;
+            int8_t dy = -abs(y1 - y0);
+            int8_t sy = y0 < y1 ? 1 : -1;
+            uint8_t err = dx + dy;  /* error value e_xy */
+            int8_t e2 = 0;
 
             while ((x0 != x1 || y0 != y1)) {
 
@@ -773,21 +770,21 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
             }
         }
 
-right_stroke:
+        right_stroke:
 
         /* The right segment */
         x0 = px1z0;
         x1 = px1z1;
 
         if (x0 != x1) {
-            int16_t y0 = py0z0;
-            int16_t y1 = py0z1;
-            int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
-            int16_t dy = -abs(y1 - y0);
-            int16_t sy = y0 < y1 ? 1 : -1;
-            int16_t err = dx + dy;  /* error value e_xy */
-            int16_t e2;
+            int8_t y0 = py0z0;
+            int8_t y1 = py0z1;
+            uint8_t dx = abs(x1 - x0);
+            int8_t sx = x0 < x1 ? 1 : -1;
+            int8_t dy = -abs(y1 - y0);
+            int8_t sy = y0 < y1 ? 1 : -1;
+            uint8_t err = dx + dy;  /* error value e_xy */
+            int8_t e2 = 0;
 
             while ((x0 != x1 || y0 != y1)) {
 
@@ -833,11 +830,11 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     int8_t z0dx;
     int8_t z1dx;
 
-    int16_t px0z0;
     int8_t py0z0;
+    int8_t py0z1;
+    int16_t px0z0;
     int16_t px1z0;
     int16_t px0z1;
-    int8_t py0z1;
     int16_t px1z1;
 
 #ifndef USE_FILLED_POLYS
@@ -967,14 +964,14 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
         x1 = px0z1;
 
         if (x0 != x1) {
-            int16_t y0 = py0z0;
-            int16_t y1 = py0z1;
-            int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
-            int16_t dy = -abs(y1 - y0);
-            int16_t sy = y0 < y1 ? 1 : -1;
-            int16_t err = dx + dy;  /* error value e_xy */
-            int16_t e2;
+            int8_t y0 = py0z0;
+            int8_t y1 = py0z1;
+            uint8_t dx = abs(x1 - x0);
+            int8_t sx = x0 < x1 ? 1 : -1;
+            int8_t dy = -abs(y1 - y0);
+            int8_t sy = y0 < y1 ? 1 : -1;
+            uint8_t err = dx + dy;  /* error value e_xy */
+            int8_t e2 = 0;
 
             while ((x0 != x1 || y0 != y1)) {
 
@@ -1027,20 +1024,20 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
             }
         }
 
-right_stroke:
+        right_stroke:
         /* The right segment */
         x0 = px1z0;
         x1 = px1z1;
 
         if (x0 != x1) {
-            int16_t y0 = py0z0;
-            int16_t y1 = py0z1;
-            int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
-            int16_t dy = -abs(y1 - y0);
-            int16_t sy = y0 < y1 ? 1 : -1;
-            int16_t err = dx + dy;  /* error value e_xy */
-            int16_t e2;
+            int8_t y0 = py0z0;
+            int8_t y1 = py0z1;
+            uint8_t dx = abs(x1 - x0);
+            int8_t sx = x0 < x1 ? 1 : -1;
+            int8_t dy = -abs(y1 - y0);
+            int8_t sy = y0 < y1 ? 1 : -1;
+            uint8_t err = dx + dy;  /* error value e_xy */
+            int8_t e2 = 0;
 
             while ((x0 != x1 || y0 != y1)) {
 
@@ -1092,7 +1089,7 @@ right_stroke:
             }
         }
 
-final_stroke:
+        final_stroke:
 #ifdef USE_FILLED_POLYS
         if (drawContour) {
             if (elementMask & 2) {
@@ -1185,7 +1182,8 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
     }
 
     if (type == CUBE) {
-        return drawCubeAt(RENDER_SCALE_X * (x0 - 1), patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + 2),
+        return drawCubeAt(RENDER_SCALE_X * (x0 - 1), patterns[pattern].ceiling - CAMERA_HEIGHT,
+                          RENDER_SCALE_Z * (y + 2),
                           RENDER_SCALE_X * (x1 - x0), diff, RENDER_SCALE_Z,
                           mask);
     } else if (type == RIGHT_NEAR || type == LEFT_NEAR) {
@@ -1208,19 +1206,21 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
         switch (cameraRotation) {
             case 0:
             case 2:
-                return drawWedge(RENDER_SCALE_X * (x0 - (cameraRotation == 0 ? 1 : 0)), patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + 2),
+                return drawWedge(RENDER_SCALE_X * (x0 - (cameraRotation == 0 ? 1 : 0)),
+                                 patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + 2),
                                  0, diff, RENDER_SCALE_Z,
                                  patterns[pattern].elementsMask, LEFT_WALL);
             case 1:
             case 3:
-                return drawSquare(RENDER_SCALE_X * (x0 - 1), patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + (cameraRotation == 3 ? 1 : 0) + 2),
+                return drawSquare(RENDER_SCALE_X * (x0 - 1), patterns[pattern].ceiling - CAMERA_HEIGHT,
+                                  RENDER_SCALE_Z * (y + (cameraRotation == 3 ? 1 : 0) + 2),
                                   RENDER_SCALE_X * (x1 - x0), diff, mask);
         }
     } else if (type == BACK_WALL) {
         switch (cameraRotation) {
             case 0:
             case 2:
-                return drawSquare(RENDER_SCALE_X  * (x0 - 1), patterns[pattern].ceiling - CAMERA_HEIGHT,
+                return drawSquare(RENDER_SCALE_X * (x0 - 1), patterns[pattern].ceiling - CAMERA_HEIGHT,
                                   RENDER_SCALE_Z * (y + (cameraRotation == 0 ? 1 : 0) + 2),
                                   RENDER_SCALE_X * (x1 - x0), diff, mask);
             case 1:
@@ -1240,16 +1240,19 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
                                       patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + 2),
                                       0, diff, RENDER_SCALE_Z, patterns[pattern].elementsMask, LEFT_WALL);
 
-                returnVal = drawSquare(RENDER_SCALE_X * (x0 - 1), patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + 1 + 2),
+                returnVal = drawSquare(RENDER_SCALE_X * (x0 - 1), patterns[pattern].ceiling - CAMERA_HEIGHT,
+                                       RENDER_SCALE_Z * (y + 1 + 2),
                                        RENDER_SCALE_X * (x1 - x0), diff, patterns[pattern].elementsMask) || returnVal;
                 break;
 
             case 1:
             case 2:
-                returnVal = drawSquare(RENDER_SCALE_X * (x0 - 1), patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + 2),
+                returnVal = drawSquare(RENDER_SCALE_X * (x0 - 1), patterns[pattern].ceiling - CAMERA_HEIGHT,
+                                       RENDER_SCALE_Z * (y + 2),
                                        RENDER_SCALE_X * (x1 - x0), diff, patterns[pattern].elementsMask);
                 returnVal =
-                        drawWedge(RENDER_SCALE_X * (x0 - (cameraRotation == 1 ? 1 : 0)), patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + 2),
+                        drawWedge(RENDER_SCALE_X * (x0 - (cameraRotation == 1 ? 1 : 0)),
+                                  patterns[pattern].ceiling - CAMERA_HEIGHT, RENDER_SCALE_Z * (y + 2),
                                   0, diff, RENDER_SCALE_Z, patterns[pattern].elementsMask, LEFT_WALL) || returnVal;
 
                 break;
@@ -1262,7 +1265,6 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 }
 
 #ifdef TRACE_OBJECTS_OVER_FLOOR
-
 void repaintMapItems(void) {
     struct ObjectNode *node;
 
@@ -1292,7 +1294,7 @@ void repaintMapItems(void) {
             //drawPattern(lastPattern, -(x - cameraX) + 2, -(lastIndex - cameraX) + 2, y - cameraZ);
             while (node != NULL) {
                 struct Item *item = getItem(node->item);
-                drawObjectAt(RENDER_SCALE_X * ( -(item->position.x - cameraX) + 1), (item->position.y - cameraZ) + 2);
+                drawObjectAt(RENDER_SCALE_X * (-(item->position.x - cameraX) + 1), (item->position.y - cameraZ) + 2);
                 node = node->next;
             }
             break;
@@ -1307,7 +1309,6 @@ void repaintMapItems(void) {
             break;
     }
 }
-
 #endif
 
 /* all those refactors are due to a SDCC bug with very long functions */
@@ -1793,7 +1794,7 @@ void initMap(void) {
     head = &data[offsetOnDataStrip];
 
     //the last location
-    if (dataPositions[playerLocation + 1] == 0 ) {
+    if (dataPositions[playerLocation + 1] == 0) {
         size_t extra = sizeof(data) - 1;
         headEnd = &data[0] + extra;
     } else {
@@ -1803,6 +1804,7 @@ void initMap(void) {
     struct StaticBuffer datafile = loadBinaryFileFromPath(playerLocation);
     head = datafile.data;
 #endif
+
     /* first item in the list is always a dummy */
     roomItem = getRoom(playerLocation)->itemsPresent->next;
 
@@ -1871,10 +1873,11 @@ void initMap(void) {
 }
 
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
-void startRoomTransitionAnimation(void) {
-  uint8_t x,y;
 
-  for (y = MAP_SIZE_Y; y >= 2; --y ) {
+void startRoomTransitionAnimation(void) {
+    uint8_t x, y;
+
+    for (y = MAP_SIZE_Y; y >= 2; --y) {
         vLine(y, y, 95 + (MAP_SIZE_Y - y), 1);
         vLine(95 + (MAP_SIZE_Y - y), y, 95 + (MAP_SIZE_Y - y), 1);
 
@@ -1903,8 +1906,9 @@ void startRoomTransitionAnimation(void) {
         graphicsFlush();
         sleepForMS(20000);
     }
-  HUD_initialPaint();
+    HUD_initialPaint();
 }
+
 #endif
 
 void updateMapItems(void) {
@@ -1934,7 +1938,7 @@ void tickRenderer(void) {
     prevX = cameraX;
     prevZ = cameraZ;
 
-waitkey:
+    waitkey:
     switch (getKey()) {
 
 #ifndef GAMEPAD
@@ -2043,8 +2047,8 @@ waitkey:
         if (newCell == NEUTRAL_CELL) {
             newCell = '0';
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
-            } else {
-                startRoomTransitionAnimation();
+        } else {
+            startRoomTransitionAnimation();
 #endif
         }
         setPlayerDirection(cameraRotation = (newCell - '0'));
