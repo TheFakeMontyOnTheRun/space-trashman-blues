@@ -1013,9 +1013,11 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
      * And since there are only 127 patterns anyway...
      * */
 
+#ifdef OPTIMIZATION_BLOCK_VISIBILITY_CELLS
     if (_pattern == BLOCK_CELL) {
         return 0;
     }
+#endif
 
     if (_pattern == NEUTRAL_CELL) {
         return 1;
