@@ -1,10 +1,12 @@
 #include <stddef.h>
 
 #ifndef SMD
+
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+
 #else
 #include <genesis.h>
 #endif
@@ -15,7 +17,9 @@
 #include "map.h"
 
 #ifdef SUPPORTS_HACKING_MINIGAME
+
 #include "HackingMinigame.h"
+
 #endif
 
 #ifdef MSDOS
@@ -90,188 +94,45 @@ struct Projection {
     int8_t dx;
 };
 
-const struct Projection projections[40] =
+const struct Projection projections[32] =
         {
-#ifdef RES128X64
-                {	0	,	64	,	-128	},	//	1
-                {	0	,	63	,	-64	},	//	2
-                {	20	,	52	,	-42	},	//	3
-                {	31	,	47	,	-32	},	//	4
-                {	37	,	43	,	-25	},	//	5
-                {	41	,	41	,	-21	},	//	6
-                {	44	,	40	,	-18	},	//	7
-                {	47	,	39	,	-16	},	//	8
-                {	48	,	38	,	-14	},	//	9
-                {	50	,	37	,	-12	},	//	10
-                {	51	,	36	,	-11	},	//	11
-                {	52	,	36	,	-10	},	//	12
-                {	53	,	35	,	-9	},	//	13
-                {	53	,	35	,	-9	},	//	14
-                {	54	,	35	,	-8	},	//	15
-                {	55	,	35	,	-8	},	//	16
-                {	55	,	34	,	-7	},	//	17
-                {	55	,	34	,	-7	},	//	18
-                {	56	,	34	,	-6	},	//	19
-                {	56	,	34	,	-6	},	//	20
-                {	56	,	34	,	-6	},	//	21
-                {	57	,	33	,	-5	},	//	22
-                {	57	,	33	,	-5	},	//	23
-                {	57	,	33	,	-5	},	//	24
-                {	57	,	33	,	-5	},	//	25
-                {	58	,	33	,	-4	},	//	26
-                {	58	,	33	,	-4	},	//	27
-                {	58	,	33	,	-4	},	//	28
-                {	58	,	33	,	-4	},	//	29
-                {	58	,	33	,	-4	},	//	30
-                {	58	,	33	,	-4	},	//	31
-#else
-#ifdef RES96x64
-                {	0	,	64	,	-96	},	//	1
-                {	0	,	63	,	-48	},	//	2
-                {	15	,	52	,	-32	},	//	3
-                {	23	,	47	,	-24	},	//	4
-                {	27	,	43	,	-19	},	//	5
-                {	31	,	41	,	-16	},	//	6
-                {	33	,	40	,	-13	},	//	7
-                {	35	,	39	,	-12	},	//	8
-                {	36	,	38	,	-10	},	//	9
-                {	37	,	37	,	-9	},	//	10
-                {	38	,	36	,	-8	},	//	11
-                {	39	,	36	,	-8	},	//	12
-                {	39	,	35	,	-7	},	//	13
-                {	40	,	35	,	-6	},	//	14
-                {	40	,	35	,	-6	},	//	15
-                {	41	,	35	,	-6	},	//	16
-                {	41	,	34	,	-5	},	//	17
-                {	41	,	34	,	-5	},	//	18
-                {	41	,	34	,	-5	},	//	19
-                {	42	,	34	,	-4	},	//	20
-                {	42	,	34	,	-4	},	//	21
-                {	42	,	33	,	-4	},	//	22
-                {	42	,	33	,	-4	},	//	23
-                {	43	,	33	,	-4	},	//	24
-                {	43	,	33	,	-3	},	//	25
-                {	43	,	33	,	-3	},	//	26
-                {	43	,	33	,	-3	},	//	27
-                {	43	,	33	,	-3	},	//	28
-                {	43	,	33	,	-3	},	//	29
-                {	43	,	33	,	-3	},	//	30
-                {	43	,	33	,	-3	},	//	31
-#else
-#ifdef RES64X128
-                {	0	,	128	,	-64	},	//	1
-                {	0	,	127	,	-32	},	//	2
-                {	9	,	105	,	-21	},	//	3
-                {	15	,	95	,	-16	},	//	4
-                {	18	,	88	,	-12	},	//	5
-                {	20	,	84	,	-10	},	//	6
-                {	21	,	81	,	-9	},	//	7
-                {	23	,	79	,	-8	},	//	8
-                {	23	,	77	,	-7	},	//	9
-                {	24	,	75	,	-6	},	//	10
-                {	25	,	74	,	-5	},	//	11
-                {	25	,	73	,	-5	},	//	12
-                {	26	,	72	,	-4	},	//	13
-                {	26	,	72	,	-4	},	//	14
-                {	26	,	71	,	-4	},	//	15
-                {	27	,	71	,	-4	},	//	16
-                {	27	,	70	,	-3	},	//	17
-                {	27	,	70	,	-3	},	//	18
-                {	27	,	69	,	-3	},	//	19
-                {	27	,	69	,	-3	},	//	20
-                {	27	,	69	,	-3	},	//	21
-                {	28	,	68	,	-2	},	//	22
-                {	28	,	68	,	-2	},	//	23
-                {	28	,	68	,	-2	},	//	24
-                {	28	,	68	,	-2	},	//	25
-                {	28	,	67	,	-2	},	//	26
-                {	28	,	67	,	-2	},	//	27
-                {	28	,	67	,	-2	},	//	28
-                {	28	,	67	,	-2	},	//	29
-                {	28	,	67	,	-2	},	//	30
-                {	28	,	67	,	-2	},	//	31
-#else
-#ifdef RES128X128
-                {0, 127, -128},    //	1
-                {0, 127, -64},    //	2
+                {0,  127, -128},    //	1
+                {0,  127, -64},    //	2
                 {21, 106, -43},    //	3
-                {32, 95, -32},    //	4
-                {38, 89, -26},    //	5
-                {43, 84, -21},    //	6
-                {46, 81, -18},    //	7
-                {48, 79, -16},    //	8
-                {50, 77, -14},    //	9
-                {51, 76, -13},    //	10
-                {52, 75, -12},    //	11
-                {53, 74, -11},    //	12
-                {54, 73, -10},    //	13
-                {55, 72, -9},    //	14
-                {55, 72, -9},    //	15
-                {56, 71, -8},    //	16
-                {56, 71, -8},    //	17
-                {57, 70, -7},    //	18
-                {57, 70, -7},    //	19
-                {58, 69, -6},    //	20
-                {58, 69, -6},    //	21
-                {58, 69, -6},    //	22
-                {58, 69, -6},    //	23
-                {59, 68, -5},    //	24
-                {59, 68, -5},    //	25
-                {59, 68, -5},    //	26
-                {59, 68, -5},    //	27
-                {59, 68, -5},    //	28
-                {60, 67, -4},    //	29
-                {60, 67, -4},    //	30
-                {60, 67, -4},    //	31
-                {60, 67, -4},    //	32
-                {60, 67, -4},    //	33
-                {60, 67, -4},    //	34
-                {60, 67, -4},    //	35
-                {60, 67, -4},    //	36
-                {61, 66, -3},    //	37
-                {61, 66, -3},    //	38
-                {61, 66, -3},    //	39
-#else
-
-                {	0	,	64	,	-64	},	//	1
-                {	0	,	63	,	-32	},	//	2
-                {	9	,	52	,	-21	},	//	3
-                {	15	,	47	,	-16	},	//	4
-                {	18	,	43	,	-12	},	//	5
-                {	20	,	41	,	-10	},	//	6
-                {	21	,	40	,	-9	},	//	7
-                {	23	,	39	,	-8	},	//	8
-                {	23	,	38	,	-7	},	//	9
-                {	24	,	37	,	-6	},	//	10
-                {	25	,	36	,	-5	},	//	11
-                {	25	,	36	,	-5	},	//	12
-                {	26	,	35	,	-4	},	//	13
-                {	26	,	35	,	-4	},	//	14
-                {	26	,	35	,	-4	},	//	15
-                {	27	,	35	,	-4	},	//	16
-                {	27	,	34	,	-3	},	//	17
-                {	27	,	34	,	-3	},	//	18
-                {	27	,	34	,	-3	},	//	19
-                {	27	,	34	,	-3	},	//	20
-                {	27	,	34	,	-3	},	//	21
-                {	28	,	33	,	-2	},	//	22
-                {	28	,	33	,	-2	},	//	23
-                {	28	,	33	,	-2	},	//	24
-                {	28	,	33	,	-2	},	//	25
-                {	28	,	33	,	-2	},	//	26
-                {	28	,	33	,	-2	},	//	27
-                {	28	,	33	,	-2	},	//	28
-                {	28	,	33	,	-2	},	//	29
-                {	28	,	33	,	-2	},	//	30
-                {	28	,	33	,	-2	},	//	31
-#endif
-#endif
-#endif
-#endif
+                {32, 95,  -32},    //	4
+                {38, 89,  -26},    //	5
+                {43, 84,  -21},    //	6
+                {46, 81,  -18},    //	7
+                {48, 79,  -16},    //	8
+                {50, 77,  -14},    //	9
+                {51, 76,  -13},    //	10
+                {52, 75,  -12},    //	11
+                {53, 74,  -11},    //	12
+                {54, 73,  -10},    //	13
+                {55, 72,  -9},    //	14
+                {55, 72,  -9},    //	15
+                {56, 71,  -8},    //	16
+                {56, 71,  -8},    //	17
+                {57, 70,  -7},    //	18
+                {57, 70,  -7},    //	19
+                {58, 69,  -6},    //	20
+                {58, 69,  -6},    //	21
+                {58, 69,  -6},    //	22
+                {58, 69,  -6},    //	23
+                {59, 68,  -5},    //	24
+                {59, 68,  -5},    //	25
+                {59, 68,  -5},    //	26
+                {59, 68,  -5},    //	27
+                {59, 68,  -5},    //	28
+                {60, 67,  -4},    //	29
+                {60, 67,  -4},    //	30
+                {60, 67,  -4},    //	31
+                {60, 67,  -4},    //	32
         };
 
 
 #ifndef SMD
+
 int8_t max(int8_t x1, int8_t x2) {
     return x1 > x2 ? x1 : x2;
 }
@@ -279,6 +140,7 @@ int8_t max(int8_t x1, int8_t x2) {
 int8_t min(int8_t x1, int8_t x2) {
     return x1 < x2 ? x1 : x2;
 }
+
 #endif
 
 uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask, uint8_t type) {
@@ -292,7 +154,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
     int8_t z0dx;
     int8_t z1dx;
 
-    int16_t px0z0;
+    uint8_t px0z0;
     int8_t py0z0;
     int8_t py0z1;
 
@@ -372,136 +234,133 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
         py1z1 = z1py + ((y0 + dY) * z1dx);
     }
 
-    {
-        int16_t x0, x1;
 
-        if (py1z0 < 0) {
-            py1z0 = 0;
-        }
+    int16_t linesX0, linesX1;
 
-        if (py0z0 < 0) {
-            py0z0 = 0;
-        }
+    if (py1z0 < 0) {
+        py1z0 = 0;
+    }
 
-        if (py1z0 >= YRES) {
-            py1z0 = YRESMINUSONE;
-        }
+    if (py0z0 < 0) {
+        py0z0 = 0;
+    }
 
-        if (py0z0 >= YRES) {
-            py0z0 = YRESMINUSONE;
-        }
+    if (py1z0 >= YRES) {
+        py1z0 = YRESMINUSONE;
+    }
+
+    if (py0z0 >= YRES) {
+        py0z0 = YRESMINUSONE;
+    }
 
 
-        if (py1z1 < 0) {
-            py1z1 = 0;
-        }
+    if (py1z1 < 0) {
+        py1z1 = 0;
+    }
 
-        if (py0z1 < 0) {
-            py0z1 = 0;
-        }
+    if (py0z1 < 0) {
+        py0z1 = 0;
+    }
 
-        if (py1z1 >= YRES) {
-            py1z1 = YRESMINUSONE;
-        }
+    if (py1z1 >= YRES) {
+        py1z1 = YRESMINUSONE;
+    }
 
-        if (py0z1 >= YRES) {
-            py0z1 = YRESMINUSONE;
-        }
+    if (py0z1 >= YRES) {
+        py0z1 = YRESMINUSONE;
+    }
 
 
 #ifndef USE_FILLED_POLYS
-        if (elementMask & 2) {
-            if (IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
-                vLine(px0z0, py0z0, max(py1z0, stencilHigh[px0z0]), shouldStipple);
-            }
+    if (elementMask & 2) {
+        if (IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
+            vLine(px0z0, py0z0, max(py1z0, stencilHigh[px0z0]), shouldStipple);
         }
+    }
 
-        if (elementMask & 1) {
-            if (IN_RANGE(0, XRESMINUSONE, px1z1) && py0z1 > stencilHigh[px1z1]) {
-                vLine(px1z1, py0z1, max(py1z1, stencilHigh[px1z1]), shouldStipple);
-            }
+    if (elementMask & 1) {
+        if (IN_RANGE(0, XRESMINUSONE, px1z1) && py0z1 > stencilHigh[px1z1]) {
+            vLine(px1z1, py0z1, max(py1z1, stencilHigh[px1z1]), shouldStipple);
         }
+    }
 
 #endif
 
-        /* The upper segment */
-        x0 = px0z0;
-        x1 = px1z1;
+    /* The upper segment */
+    linesX0 = px0z0;
+    linesX1 = px1z1;
 
-        if (x0 != x1) {
-            int8_t upperY0 = py1z0;
-            int8_t upperY1 = py1z1;
-            uint8_t upperDx = abs(x1 - x0);
-            int8_t upperDy = -abs(upperY1 - upperY0);
-            int8_t upperSy = upperY0 < upperY1 ? 1 : -1;
-            uint8_t upperErr = upperDx + upperDy;  /* error value e_xy */
-            int8_t upperErr2 = 0;
+    if (linesX0 != linesX1) {
+        int8_t upperY0 = py1z0;
+        int8_t upperY1 = py1z1;
+        uint8_t upperDx = abs(linesX1 - linesX0);
+        int8_t upperDy = -abs(upperY1 - upperY0);
+        int8_t upperSy = upperY0 < upperY1 ? 1 : -1;
+        uint8_t upperErr = upperDx + upperDy;  /* error value e_xy */
+        int8_t upperErr2 = 0;
 
-            int8_t lowerY0 = py0z0;
-            int8_t lowerY1 = py0z1;
-            uint8_t lowerDx = abs(x1 - x0);
-            int8_t lowerSx = x0 < x1 ? 1 : -1;
-            int8_t lowerDy = -abs(lowerY1 - lowerY0);
-            int8_t lowerSy = lowerY0 < lowerY1 ? 1 : -1;
-            uint8_t lowerErr = lowerDx + lowerDy;  /* error value e_xy */
-            int8_t lowerErr2 = 0;
+        int8_t lowerY0 = py0z0;
+        int8_t lowerY1 = py0z1;
+        uint8_t lowerDx = abs(linesX1 - linesX0);
+        int8_t lowerSx = linesX0 < linesX1 ? 1 : -1;
+        int8_t lowerDy = -abs(lowerY1 - lowerY0);
+        int8_t lowerSy = lowerY0 < lowerY1 ? 1 : -1;
+        uint8_t lowerErr = lowerDx + lowerDy;  /* error value e_xy */
+        int8_t lowerErr2 = 0;
 
-            while (x0 != x1) {
+        while (linesX0 != linesX1) {
 
+            if (IN_RANGE(0, XRESMINUSONE, linesX0)) {
 #ifndef USE_FILLED_POLYS
                 if (shouldStipple) {
                     stipple = !stipple;
                 }
+
+                if (stipple && stencilHigh[linesX0] < upperY0) {
+                    graphicsPut(linesX0, upperY0);
+                }
 #endif
 
-                if (IN_RANGE(0, XRESMINUSONE, x0)) {
-#ifndef USE_FILLED_POLYS
-                    if (stipple && stencilHigh[x0] <= upperY0) {
-                        graphicsPut(x0, upperY0);
-                    }
-
-#endif
-
-                    if (stencilHigh[x0] < lowerY0) {
+                if (stencilHigh[linesX0] < lowerY0) {
 #ifdef USE_FILLED_POLYS
-                        uint8_t top = max( upperY0, stencilHigh[x0]);
-                        vLine(x0, top, lowerY0, shouldStipple);
-                        graphicsPut(x0, top);
+                    uint8_t top = max( upperY0, stencilHigh[linesX0]);
+                    vLine(linesX0, top, lowerY0, shouldStipple);
+                    graphicsPut(linesX0, top);
 #endif
-                        stencilHigh[x0] = lowerY0;
-                    }
+                    stencilHigh[linesX0] = lowerY0;
                 }
+            }
 
-                /* loop */
-                upperErr2 = upperErr * 2;
+            /* loop */
+            upperErr2 = upperErr * 2;
 
-                if (upperErr2 >= upperDy || lowerErr2 >= lowerDy) {
-                    upperErr += upperDy; /* e_xy+e_x > 0 */
-                    lowerErr += lowerDy; /* e_xy+e_x > 0 */
-                    x0 += lowerSx;
-                }
+            if (upperErr2 >= upperDy || lowerErr2 >= lowerDy) {
+                upperErr += upperDy; /* e_xy+e_x > 0 */
+                lowerErr += lowerDy; /* e_xy+e_x > 0 */
+                linesX0 += lowerSx;
+            }
 
-                if (x0 >= XRES) {
-                    return 0;
-                }
+            if (linesX0 >= XRES) {
+                return 0;
+            }
 
-                if (upperErr2 <= upperDx) {
-                    /* e_xy+e_y < 0 */
-                    upperErr += upperDx;
-                    upperY0 += upperSy;
-                }
+            if (upperErr2 <= upperDx) {
+                /* e_xy+e_y < 0 */
+                upperErr += upperDx;
+                upperY0 += upperSy;
+            }
 
-                /* loop */
-                lowerErr2 = lowerErr * 2;
+            /* loop */
+            lowerErr2 = lowerErr * 2;
 
-                if (lowerErr2 <= lowerDx) {
-                    /* e_xy+e_y < 0 */
-                    lowerErr += lowerDx;
-                    lowerY0 += lowerSy;
-                }
+            if (lowerErr2 <= lowerDx) {
+                /* e_xy+e_y < 0 */
+                lowerErr += lowerDx;
+                lowerY0 += lowerSy;
             }
         }
     }
+
 
 #ifdef USE_FILLED_POLYS
     if (elementMask & 2) {
@@ -569,71 +428,71 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
     stipple = 1;
 
     drawContour = (dY);
-    {
-        int16_t x;
+
+    int16_t x;
 
 #ifndef USE_FILLED_POLYS
-        if (drawContour) {
-            if (elementMask & 2) {
-                if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
-                    vLine(px0z0, py0z0, stencilHigh[px0z0] < py1z0 ? py1z0 : stencilHigh[px0z0], shouldStipple);
-                }
+    if (drawContour) {
+        if (elementMask & 2) {
+            if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
+                vLine(px0z0, py0z0, stencilHigh[px0z0] < py1z0 ? py1z0 : stencilHigh[px0z0], shouldStipple);
+            }
 
-                if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
-                    vLine(px1z0, py0z0, stencilHigh[px1z0] < py1z0 ? py1z0 : stencilHigh[px1z0], shouldStipple);
-                }
+            if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
+                vLine(px1z0, py0z0, stencilHigh[px1z0] < py1z0 ? py1z0 : stencilHigh[px1z0], shouldStipple);
             }
         }
+    }
 #endif
 
-        /* Draw the horizontal outlines of z0 and z1 */
+    /* Draw the horizontal outlines of z0 and z1 */
 
-        /* Ceiling is lower than camera */
-        for (x = px0z0; x <= px1z0; ++x) {
-            if (IN_RANGE(0, XRESMINUSONE, x)) {
+    /* Ceiling is lower than camera */
+    for (x = px0z0; x <= px1z0; ++x) {
+        if (IN_RANGE(0, XRESMINUSONE, x)) {
 
 #ifndef USE_FILLED_POLYS
-                if (shouldStipple) {
-                    stipple = !stipple;
-                }
+            if (shouldStipple) {
+                stipple = !stipple;
+            }
 #endif
 
 #ifndef USE_FILLED_POLYS
-                if (stencilHigh[x] <= py1z0) {
-                    if (drawContour && stipple) {
-                        graphicsPut(x, py1z0);
-                    }
-                    stencilHigh[x] = py1z0;
+            if (stencilHigh[x] <= py1z0) {
+                if (drawContour && stipple) {
+                    graphicsPut(x, py1z0);
                 }
+                stencilHigh[x] = py1z0;
+            }
 
 
-                if (stencilHigh[x] <= py0z0) {
-                    stencilHigh[x] = py0z0;
-                }
+            if (stencilHigh[x] <= py0z0) {
+                stencilHigh[x] = py0z0;
+            }
 #else
-                if (drawContour && stencilHigh[x] <= py0z0) {
-                    vLine(x, max( py1z0, stencilHigh[x]), py0z0, shouldStipple);
-                    stencilHigh[x] = py0z0;
-                }
-#endif
+            if (drawContour && stencilHigh[x] <= py0z0) {
+                vLine(x, max( py1z0, stencilHigh[x]), py0z0, shouldStipple);
+                stencilHigh[x] = py0z0;
             }
+#endif
         }
+    }
 
 #ifdef USE_FILLED_POLYS
-        if (drawContour) {
-            if (elementMask & 2) {
-                if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
-                    vLine(px0z0, py0z0, stencilHigh[px0z0] < py1z0 ? py1z0 : stencilHigh[px0z0], 0 );
+    if (drawContour) {
+        if (elementMask & 2) {
+            if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
+                vLine(px0z0, py0z0, stencilHigh[px0z0] < py1z0 ? py1z0 : stencilHigh[px0z0], 0 );
 
-                }
+            }
 
-                if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
-                    vLine(px1z0, py0z0, stencilHigh[px1z0] < py1z0 ? py1z0 : stencilHigh[px1z0], 0 );
-                }
+            if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
+                vLine(px1z0, py0z0, stencilHigh[px1z0] < py1z0 ? py1z0 : stencilHigh[px1z0], 0 );
             }
         }
-#endif
     }
+#endif
+
 
     return 1;
 }
@@ -690,132 +549,131 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
     py0z1 = z1py + ((-CAMERA_HEIGHT) * z1dx);
 
 
-    {
-        int16_t x, x0, x1;
+    int16_t lineX0, lineX1;
 
-        /* Draw the horizontal outlines of z0 and z1 */
+    /* Draw the horizontal outlines of z0 and z1 */
 
-        for (x = px0z0; x <= px1z0; ++x) {
-            if (IN_RANGE(0, XRESMINUSONE, x)) {
+    for (lineX0 = px0z0; lineX0 <= px1z0; ++lineX0) {
+        if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
 
-                if (shouldStipple) {
-                    stipple = !stipple;
-                }
-
-                if (stipple && stencilHigh[x] < py0z0) {
-                    graphicsPut(x, py0z0);
-                }
+            if (shouldStipple) {
+                stipple = !stipple;
             }
-        }
 
-        for (x = px0z1; x <= px1z1; ++x) {
-            if (IN_RANGE(0, XRESMINUSONE, x)) {
-
-                if (shouldStipple) {
-                    stipple = !stipple;
-                }
-
-                if (stipple && stencilHigh[x] < py0z1) {
-                    graphicsPut(x, py0z1);
-                }
-            }
-        }
-
-
-
-        /* The left segment */
-        x0 = px0z0;
-        x1 = px0z1;
-
-        if (x0 != x1) {
-            int8_t y0 = py0z0;
-            int8_t y1 = py0z1;
-            uint8_t dx = abs(x1 - x0);
-            int8_t sx = x0 < x1 ? 1 : -1;
-            int8_t dy = -abs(y1 - y0);
-            int8_t sy = y0 < y1 ? 1 : -1;
-            uint8_t err = dx + dy;  /* error value e_xy */
-            int8_t e2 = 0;
-
-            while ((x0 != x1 || y0 != y1)) {
-
-                if (IN_RANGE(0, XRESMINUSONE, x0)) {
-
-                    if (shouldStipple) {
-                        stipple = !stipple;
-                    }
-
-                    if (stipple && stencilHigh[x0] < y0) {
-                        graphicsPut(x0, y0);
-                    }
-                }
-
-                /* loop */
-                e2 = err << 2;
-
-                if (e2 >= dy) {
-                    err += dy; /* e_xy+e_x > 0 */
-                    x0 += sx;
-                }
-
-                if (x0 >= XRES) {
-                    goto right_stroke;
-                }
-
-                if (e2 <= dx) {
-                    /* e_xy+e_y < 0 */
-                    err += dx;
-                    y0 += sy;
-                }
-            }
-        }
-
-        right_stroke:
-
-        /* The right segment */
-        x0 = px1z0;
-        x1 = px1z1;
-
-        if (x0 != x1) {
-            int8_t y0 = py0z0;
-            int8_t y1 = py0z1;
-            uint8_t dx = abs(x1 - x0);
-            int8_t sx = x0 < x1 ? 1 : -1;
-            int8_t dy = -abs(y1 - y0);
-            int8_t sy = y0 < y1 ? 1 : -1;
-            uint8_t err = dx + dy;  /* error value e_xy */
-            int8_t e2 = 0;
-
-            while ((x0 != x1 || y0 != y1)) {
-
-                if (shouldStipple) {
-                    stipple = !stipple;
-                }
-
-                if (stipple && IN_RANGE(0, XRESMINUSONE, x0) && stencilHigh[x0] < y0) {
-                    graphicsPut(x0, y0);
-                }
-
-                /* loop */
-                e2 = err << 2;
-
-                if (e2 >= dy) {
-                    err += dy; /* e_xy+e_x > 0 */
-                    x0 += sx;
-                }
-
-                if (x0 >= XRES) {
-                    return 1;
-                }
-
-                if (e2 <= dx) {
-                    /* e_xy+e_y < 0 */
-                    err += dx;
-                    y0 += sy;
-                }
+            if (stipple && stencilHigh[lineX0] < py0z0) {
+                graphicsPut(lineX0, py0z0);
             }
         }
     }
+
+    for (lineX0 = px0z1; lineX0 <= px1z1; ++lineX0) {
+        if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
+
+            if (shouldStipple) {
+                stipple = !stipple;
+            }
+
+            if (stipple && stencilHigh[lineX0] < py0z1) {
+                graphicsPut(lineX0, py0z1);
+            }
+        }
+    }
+
+
+
+    /* The left segment */
+    lineX0 = px0z0;
+    lineX1 = px0z1;
+
+    if (lineX0 != lineX1) {
+        int8_t y0 = py0z0;
+        int8_t y1 = py0z1;
+        uint8_t dx = abs(lineX1 - lineX0);
+        int8_t sx = lineX0 < lineX1 ? 1 : -1;
+        int8_t dy = -abs(y1 - y0);
+        int8_t sy = y0 < y1 ? 1 : -1;
+        uint8_t err = dx + dy;  /* error value e_xy */
+        int8_t e2 = 0;
+
+        while (lineX0 != lineX1) {
+
+            if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
+
+                if (shouldStipple) {
+                    stipple = !stipple;
+                }
+
+                if (stipple && stencilHigh[lineX0] < y0) {
+                    graphicsPut(lineX0, y0);
+                }
+            }
+
+            /* loop */
+            e2 = err << 2;
+
+            if (e2 >= dy) {
+                err += dy; /* e_xy+e_x > 0 */
+                lineX0 += sx;
+            }
+
+            if (lineX0 >= XRES) {
+                goto right_stroke;
+            }
+
+            if (e2 <= dx) {
+                /* e_xy+e_y < 0 */
+                err += dx;
+                y0 += sy;
+            }
+        }
+    }
+
+    right_stroke:
+
+    /* The right segment */
+    lineX0 = px1z0;
+    lineX1 = px1z1;
+
+    if (lineX0 != lineX1) {
+        int8_t y0 = py0z0;
+        int8_t y1 = py0z1;
+        uint8_t dx = abs(lineX1 - lineX0);
+        int8_t sx = lineX0 < lineX1 ? 1 : -1;
+        int8_t dy = -abs(y1 - y0);
+        int8_t sy = y0 < y1 ? 1 : -1;
+        uint8_t err = dx + dy;  /* error value e_xy */
+        int8_t e2 = 0;
+
+        while (lineX0 != lineX1) {
+
+            if (shouldStipple) {
+                stipple = !stipple;
+            }
+
+            if (stipple && IN_RANGE(0, XRESMINUSONE, lineX0) && stencilHigh[lineX0] < y0) {
+                graphicsPut(lineX0, y0);
+            }
+
+            /* loop */
+            e2 = err << 2;
+
+            if (e2 >= dy) {
+                err += dy; /* e_xy+e_x > 0 */
+                lineX0 += sx;
+            }
+
+            if (lineX0 >= XRES) {
+                return 1;
+            }
+
+            if (e2 <= dx) {
+                /* e_xy+e_y < 0 */
+                err += dx;
+                y0 += sy;
+            }
+        }
+    }
+
 
     return 1;
 }
@@ -880,266 +738,266 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
     drawContour = (dY);
 
-    {
-        int16_t x, x0, x1;
+
+    int16_t lineX0, lineX1;
 
 #ifndef USE_FILLED_POLYS
-        if (drawContour) {
-            if (elementMask & 2) {
-                if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
-                    vLine(px0z0, py0z0, stencilHigh[px0z0], shouldStipple);
-                }
-
-                if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
-                    vLine(px1z0, py0z0, stencilHigh[px1z0], shouldStipple);
-                }
+    if (drawContour) {
+        if (elementMask & 2) {
+            if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
+                vLine(px0z0, py0z0, stencilHigh[px0z0], shouldStipple);
             }
 
-            if (elementMask & 1) {
-                if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z1) && px0z1 < px0z0 &&
-                    py0z1 > stencilHigh[px0z1]) {
-                    vLine(px0z1, py0z1, stencilHigh[px0z1], shouldStipple);
-                }
-
-                if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z1) && px1z1 > px1z0 &&
-                    py0z1 > stencilHigh[px1z1]) {
-                    vLine(px1z1, py0z1, stencilHigh[px1z1], shouldStipple);
-                }
+            if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
+                vLine(px1z0, py0z0, stencilHigh[px1z0], shouldStipple);
             }
         }
 
-        /* Draw the horizontal outlines of z0 and z1 */
-
-        if (py0z0 > py0z1) {
-            /* Ceiling is lower than camera */
-            for (x = px0z0; x <= px1z0; ++x) {
-                if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
-
-                    if (shouldStipple) {
-                        stipple = !stipple;
-                    }
-
-                    if (drawContour && stipple) {
-                        graphicsPut(x, stencilHigh[x]);
-                    }
-                    stencilHigh[x] = py0z0;
-                }
+        if (elementMask & 1) {
+            if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z1) && px0z1 < px0z0 &&
+                py0z1 > stencilHigh[px0z1]) {
+                vLine(px0z1, py0z1, stencilHigh[px0z1], shouldStipple);
             }
-        } else if (drawContour) {
-            /* Ceiling is higher than the camera*/
-            /* Let's just draw the nearer segment */
-            for (x = px0z0; x <= px1z0; ++x) {
-                if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
 
-                    if (shouldStipple) {
-                        stipple = !stipple;
-                    }
+            if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z1) && px1z1 > px1z0 &&
+                py0z1 > stencilHigh[px1z1]) {
+                vLine(px1z1, py0z1, stencilHigh[px1z1], shouldStipple);
+            }
+        }
+    }
 
-                    if (stipple) {
-                        graphicsPut(x, stencilHigh[x]);
-                    }
+    /* Draw the horizontal outlines of z0 and z1 */
+
+    if (py0z0 > py0z1) {
+        /* Ceiling is lower than camera */
+        for (lineX0 = px0z0; lineX0 <= px1z0; ++lineX0) {
+            if (IN_RANGE(0, XRESMINUSONE, lineX0) && stencilHigh[lineX0] < py0z0) {
+
+                if (shouldStipple) {
+                    stipple = !stipple;
+                }
+
+                if (drawContour && stipple) {
+                    graphicsPut(lineX0, stencilHigh[lineX0]);
+                }
+                stencilHigh[lineX0] = py0z0;
+            }
+        }
+    } else if (drawContour) {
+        /* Ceiling is higher than the camera*/
+        /* Let's just draw the nearer segment */
+        for (lineX0 = px0z0; lineX0 <= px1z0; ++lineX0) {
+            if (IN_RANGE(0, XRESMINUSONE, lineX0) && stencilHigh[lineX0] < py0z0) {
+
+                if (shouldStipple) {
+                    stipple = !stipple;
+                }
+
+                if (stipple) {
+                    graphicsPut(lineX0, stencilHigh[lineX0]);
                 }
             }
         }
+    }
 
 #else
-        for (x = px0z0; x <= px1z0; ++x) {
-            if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
-                if (drawContour) {
-                    vLine(x, stencilHigh[x], py0z0, shouldStipple);
-                }
-                stencilHigh[x] = py0z0;
+    for (lineX0 = px0z0; lineX0 <= px1z0; ++lineX0) {
+        if (IN_RANGE(0, XRESMINUSONE, lineX0) && stencilHigh[lineX0] < py0z0) {
+            if (drawContour) {
+                vLine(lineX0, stencilHigh[lineX0], py0z0, shouldStipple);
             }
+            stencilHigh[lineX0] = py0z0;
         }
+    }
 
 #ifdef MSDOS
-        shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 6;
+    shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 6;
 #else
-        shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 9;
+    shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 0 : 9;
 #endif
 
 #endif
-        /* The left segment */
-        x0 = px0z0;
-        x1 = px0z1;
+    /* The left segment */
+    lineX0 = px0z0;
+    lineX1 = px0z1;
 
-        if (x0 != x1) {
-            int8_t y0 = py0z0;
-            int8_t y1 = py0z1;
-            uint8_t dx = abs(x1 - x0);
-            int8_t sx = x0 < x1 ? 1 : -1;
-            int8_t dy = -abs(y1 - y0);
-            int8_t sy = y0 < y1 ? 1 : -1;
-            uint8_t err = dx + dy;  /* error value e_xy */
-            int8_t e2 = 0;
+    if (lineX0 != lineX1) {
+        int8_t y0 = py0z0;
+        int8_t y1 = py0z1;
+        uint8_t dx = abs(lineX1 - lineX0);
+        int8_t sx = lineX0 < lineX1 ? 1 : -1;
+        int8_t dy = -abs(y1 - y0);
+        int8_t sy = y0 < y1 ? 1 : -1;
+        uint8_t err = dx + dy;  /* error value e_xy */
+        int8_t e2 = 0;
 
-            while ((x0 != x1 || y0 != y1)) {
+        while ((lineX0 != lineX1 || y0 != y1)) {
 
-                if (IN_RANGE(0, XRESMINUSONE, x0)) {
+            if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
 #ifndef USE_FILLED_POLYS
-                    if (shouldStipple) {
-                        stipple = !stipple;
-                    }
-#endif
-
-                    if (stencilHigh[x0] < y0) {
-#ifndef USE_FILLED_POLYS
-                        if (drawContour && stipple) {
-                            graphicsPut(x0, stencilHigh[x0]);
-                        }
-#endif
-
-#ifdef USE_FILLED_POLYS
-                        if (drawContour) {
-                            uint8_t top = stencilHigh[x0];
-#ifdef MSDOS
-                            vLine(x0, top, y0, 6);
-#else
-                            vLine(x0, top, y0, shouldStipple);
-#endif
-                            graphicsPut(x0, top);
-                        }
-#endif
-                        stencilHigh[x0] = y0;
-                    }
+                if (shouldStipple) {
+                    stipple = !stipple;
                 }
-
-                /* loop */
-                e2 = err << 2;
-
-                if (e2 >= dy) {
-                    err += dy; /* e_xy+e_x > 0 */
-                    x0 += sx;
-                }
-
-                if (x0 >= XRES) {
-                    goto right_stroke;
-                }
-
-                if (e2 <= dx) {
-                    /* e_xy+e_y < 0 */
-                    err += dx;
-                    y0 += sy;
-                }
-            }
-        }
-
-        right_stroke:
-        /* The right segment */
-        x0 = px1z0;
-        x1 = px1z1;
-
-        if (x0 != x1) {
-            int8_t y0 = py0z0;
-            int8_t y1 = py0z1;
-            uint8_t dx = abs(x1 - x0);
-            int8_t sx = x0 < x1 ? 1 : -1;
-            int8_t dy = -abs(y1 - y0);
-            int8_t sy = y0 < y1 ? 1 : -1;
-            uint8_t err = dx + dy;  /* error value e_xy */
-            int8_t e2 = 0;
-
-            while ((x0 != x1 || y0 != y1)) {
-
-                if (IN_RANGE(0, XRESMINUSONE, x0) && stencilHigh[x0] < y0) {
-
-#ifndef USE_FILLED_POLYS
-                    if (shouldStipple) {
-                        stipple = !stipple;
-                    }
 #endif
 
+                if (stencilHigh[lineX0] < y0) {
 #ifndef USE_FILLED_POLYS
                     if (drawContour && stipple) {
-                        graphicsPut(x0, stencilHigh[x0]);
+                        graphicsPut(lineX0, stencilHigh[lineX0]);
                     }
 #endif
 
 #ifdef USE_FILLED_POLYS
                     if (drawContour) {
-                        uint8_t top = stencilHigh[x0];
+                        uint8_t top = stencilHigh[lineX0];
 #ifdef MSDOS
-                        vLine(x0, top, y0, 6);
+                        vLine(lineX0, top, y0, 6);
 #else
-                        vLine(x0, top, y0, shouldStipple);
+                        vLine(lineX0, top, y0, shouldStipple);
 #endif
-                        graphicsPut(x0, top);
+                        graphicsPut(lineX0, top);
                     }
 #endif
-                    stencilHigh[x0] = y0;
-                }
-
-                /* loop */
-                e2 = err << 2;
-
-                if (e2 >= dy) {
-                    err += dy; /* e_xy+e_x > 0 */
-                    x0 += sx;
-                }
-
-                if (x0 >= XRES) {
-                    goto final_stroke;
-                }
-
-                if (e2 <= dx) {
-                    /* e_xy+e_y < 0 */
-                    err += dx;
-                    y0 += sy;
+                    stencilHigh[lineX0] = y0;
                 }
             }
-        }
 
-        final_stroke:
+            /* loop */
+            e2 = err << 2;
+
+            if (e2 >= dy) {
+                err += dy; /* e_xy+e_x > 0 */
+                lineX0 += sx;
+            }
+
+            if (lineX0 >= XRES) {
+                goto right_stroke;
+            }
+
+            if (e2 <= dx) {
+                /* e_xy+e_y < 0 */
+                err += dx;
+                y0 += sy;
+            }
+        }
+    }
+
+    right_stroke:
+    /* The right segment */
+    lineX0 = px1z0;
+    lineX1 = px1z1;
+
+    if (lineX0 != lineX1) {
+        int8_t y0 = py0z0;
+        int8_t y1 = py0z1;
+        uint8_t dx = abs(lineX1 - lineX0);
+        int8_t sx = lineX0 < lineX1 ? 1 : -1;
+        int8_t dy = -abs(y1 - y0);
+        int8_t sy = y0 < y1 ? 1 : -1;
+        uint8_t err = dx + dy;  /* error value e_xy */
+        int8_t e2 = 0;
+
+        while ((lineX0 != lineX1 || y0 != y1)) {
+
+            if (IN_RANGE(0, XRESMINUSONE, lineX0) && stencilHigh[lineX0] < y0) {
+
+#ifndef USE_FILLED_POLYS
+                if (shouldStipple) {
+                    stipple = !stipple;
+                }
+#endif
+
+#ifndef USE_FILLED_POLYS
+                if (drawContour && stipple) {
+                    graphicsPut(lineX0, stencilHigh[lineX0]);
+                }
+#endif
+
 #ifdef USE_FILLED_POLYS
-        if (drawContour) {
-            if (elementMask & 2) {
-                if ((elementMask != 255 ) &&IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
-                    vLine(px0z0, py0z0, stencilHigh[px0z0], 0);
+                if (drawContour) {
+                    uint8_t top = stencilHigh[lineX0];
+#ifdef MSDOS
+                    vLine(lineX0, top, y0, 6);
+#else
+                    vLine(lineX0, top, y0, shouldStipple);
+#endif
+                    graphicsPut(lineX0, top);
                 }
-
-                if ( (elementMask != 127 ) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
-                    vLine(px1z0, py0z0, stencilHigh[px1z0], 0);
-                }
+#endif
+                stencilHigh[lineX0] = y0;
             }
 
-            if (elementMask & 1) {
-                if ((elementMask != 255 ) &&IN_RANGE(0, XRESMINUSONE, px0z1) && px0z1 < px0z0 && py0z1 > stencilHigh[px0z1]) {
-                    vLine(px0z1, py0z1, stencilHigh[px0z1], 0);
-                }
+            /* loop */
+            e2 = err << 2;
 
-                if ((elementMask != 127 ) && IN_RANGE(0, XRESMINUSONE, px1z1) && px1z1 > px1z0 && py0z1 > stencilHigh[px1z1]) {
-                    vLine(px1z1, py0z1, stencilHigh[px1z1], 0);
-                }
+            if (e2 >= dy) {
+                err += dy; /* e_xy+e_x > 0 */
+                lineX0 += sx;
+            }
+
+            if (lineX0 >= XRES) {
+                goto final_stroke;
+            }
+
+            if (e2 <= dx) {
+                /* e_xy+e_y < 0 */
+                err += dx;
+                y0 += sy;
             }
         }
+    }
+
+    final_stroke:
+#ifdef USE_FILLED_POLYS
+    if (drawContour) {
+        if (elementMask & 2) {
+            if ((elementMask != 255 ) &&IN_RANGE(0, XRESMINUSONE, px0z0) && stencilHigh[px0z0] < py0z0) {
+                vLine(px0z0, py0z0, stencilHigh[px0z0], 0);
+            }
+
+            if ( (elementMask != 127 ) && IN_RANGE(0, XRESMINUSONE, px1z0) && stencilHigh[px1z0] < py0z0) {
+                vLine(px1z0, py0z0, stencilHigh[px1z0], 0);
+            }
+        }
+
+        if (elementMask & 1) {
+            if ((elementMask != 255 ) &&IN_RANGE(0, XRESMINUSONE, px0z1) && px0z1 < px0z0 && py0z1 > stencilHigh[px0z1]) {
+                vLine(px0z1, py0z1, stencilHigh[px0z1], 0);
+            }
+
+            if ((elementMask != 127 ) && IN_RANGE(0, XRESMINUSONE, px1z1) && px1z1 > px1z0 && py0z1 > stencilHigh[px1z1]) {
+                vLine(px1z1, py0z1, stencilHigh[px1z1], 0);
+            }
+        }
+    }
 #endif
-        if (py0z0 <= py0z1) {
-            /* Ceiling is higher than the camera*/
-            /* Draw the last segment */
-            if (drawContour) {
-                for (x = px0z1; x <= px1z1; ++x) {
-                    if (IN_RANGE(0, XRESMINUSONE, x)) {
+    if (py0z0 <= py0z1) {
+        /* Ceiling is higher than the camera*/
+        /* Draw the last segment */
+        if (drawContour) {
+            for (lineX0 = px0z1; lineX0 <= px1z1; ++lineX0) {
+                if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
 
-                        int8_t stencilY = stencilHigh[x];
+                    int8_t stencilY = stencilHigh[lineX0];
 
-                        if (stencilY < py0z0) {
-                            graphicsPut(x, py0z0);
-                        }
+                    if (stencilY < py0z0) {
+                        graphicsPut(lineX0, py0z0);
+                    }
 
-                        if (stencilY < py0z1) {
-                            stencilHigh[x] = py0z1;
-                        }
+                    if (stencilY < py0z1) {
+                        stencilHigh[lineX0] = py0z1;
                     }
                 }
-            } else {
-                for (x = px0z1; x <= px1z1; ++x) {
-                    if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z1) {
-                        stencilHigh[x] = py0z1;
-                    }
+            }
+        } else {
+            for (lineX0 = px0z1; lineX0 <= px1z1; ++lineX0) {
+                if (IN_RANGE(0, XRESMINUSONE, lineX0) && stencilHigh[lineX0] < py0z1) {
+                    stencilHigh[lineX0] = py0z1;
                 }
             }
         }
     }
+
 
     return 1;
 }
@@ -1265,6 +1123,7 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
 }
 
 #ifdef TRACE_OBJECTS_OVER_FLOOR
+
 void repaintMapItems(void) {
     struct ObjectNode *node;
 
@@ -1309,6 +1168,7 @@ void repaintMapItems(void) {
             break;
     }
 }
+
 #endif
 
 /* all those refactors are due to a SDCC bug with very long functions */
@@ -1808,7 +1668,7 @@ void initMap(void) {
     /* first item in the list is always a dummy */
     roomItem = getRoom(playerLocation)->itemsPresent->next;
 
-    memset(map, NEUTRAL_CELL, MAP_SIZE_X * MAP_SIZE_Y);
+    memset(map, BLOCK_CELL, MAP_SIZE_X * MAP_SIZE_Y);
 
     for (y = 0; y < MAP_SIZE_Y; ++y) {
         for (x = 0; x < MAP_SIZE_X; ++x) {
