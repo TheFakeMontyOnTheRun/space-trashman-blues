@@ -46,6 +46,7 @@ enum DIRECTION {
 #define VISIBILITY_LIMIT_X (MAP_SIZE_X - 1)
 #define VISIBILITY_LIMIT_Y (MAP_SIZE_Y - 1)
 #define FAR_PLANE_Z 32
+#define NEAR_PLANE_Z 2
 #define RENDER_SCALE_X 1
 #define RENDER_SCALE_Z 1
 
@@ -188,11 +189,11 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 
     z1 = z0 + dZ;
 
-    if (z0 <= 2) {
+    if (z0 <= NEAR_PLANE_Z) {
         return 0;
     }
 
-    if (z1 <= 2) {
+    if (z1 <= NEAR_PLANE_Z) {
         return 0;
     }
 
@@ -521,7 +522,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
 
     z0 = z0 * RENDER_SCALE_Z;
 
-    if (z0 >= FAR_PLANE_Z || z0 <= 4) {
+    if (z0 >= FAR_PLANE_Z || z0 <= NEAR_PLANE_Z) {
         return 0;
     }
 
@@ -709,7 +710,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
     uint8_t drawContour;
 
-    if (z0 >= FAR_PLANE_Z || z0 <= 4) {
+    if (z0 >= FAR_PLANE_Z || z0 <= NEAR_PLANE_Z) {
         return 0;
     }
 
