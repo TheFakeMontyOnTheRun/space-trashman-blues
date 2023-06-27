@@ -1,4 +1,4 @@
-CFLAGS = -fomit-frame-pointer -fno-exceptions -ffast-math -I../core/include -I../common/include -Isrc -DLEAN_BUILD -DMSDOS -DRES128X128 -DTRACE_OBJECTS_OVER_FLOOR -DCAN_PICK_OBJECT_AT_ANY_DISTANCE  -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DUSE_FILLED_POLYS
+CFLAGS = -Wall -pedantic -fomit-frame-pointer -fno-exceptions -ffast-math -I../core/include -I../common/include -Isrc -DLEAN_BUILD -DMSDOS -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_ROOM_TRANSITION_ANIMATION
 
 CC = ia16-elf-gcc
 STRIP = ia16-elf-strip

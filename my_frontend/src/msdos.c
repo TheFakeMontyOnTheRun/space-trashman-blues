@@ -314,7 +314,6 @@ void writeStrWithLimit(int _x, int y, const char *text, int limitX) {
     uint8_t len = strlen(text);
     const char *ptr = text;
     uint8_t c = 0;
-    uint8_t chary = 0;
     uint8_t x = _x;
 
     for (; c < len && y < 25; ++c) {
@@ -361,14 +360,10 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
 
 void graphicsFlush() {
-    uint8_t origin = 0;
-    uint16_t value;
     int diOffset;
-    uint8_t *bufferPtr = &imageBuffer[0];
     int index = 0;
     for (int y = 0; y < 128; ++y) {
         diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) >> 1) * 80) + 4;
-#ifndef __DJGPP__
         asm volatile(
             //save old values
                 "pushw %%si\n\t"
@@ -409,9 +404,6 @@ void graphicsFlush() {
                 : "r"( diOffset ), "r"(index)
                 : "ax", "cx", "es", "di"
                 );
-#else
-        dosmemput(bufferPtr + index, 32, (0xB800 * 16) + diOffset);
-#endif
         index += 32;
     }
 

@@ -1,6 +1,6 @@
-//
-// Created by Daniel Monteiro on 2021-10-22.
-//
+/*
+ Created by Daniel Monteiro on 2021-10-22.
+*/
 
 #ifndef DERELICT8_ENGINE3D_H
 #define DERELICT8_ENGINE3D_H
@@ -86,4 +86,4 @@ uint8_t* graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr);
 #endif
 
 
-#endif //DERELICT8_ENGINE3D_H
+#endif /* DERELICT8_ENGINE3D_H */

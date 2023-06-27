@@ -1,6 +1,6 @@
 CC = zcc
 
-CFLAGS = +msx -subtype=rom -compiler=sdcc -SO3 --max-allocs-per-node200000 -lndos --opt-code-speed -DTRACE_OBJECTS_OVER_FLOOR -pragma-define:CLIB_EXIT_STACK_SIZE=0 -pragma-define:CRT_MODEL=2 --opt-code-speed -vn -I../core/include -I../common/include -DSMS -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_HACKING_MINIGAME -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DRLE_COMPRESSED_MAPS -DEMBEDDED_DATA
+CFLAGS = +msx -subtype=rom -compiler=sdcc -SO3 --max-allocs-per-node200000 -lndos --opt-code-speed -pragma-define:CLIB_EXIT_STACK_SIZE=0 -pragma-define:CRT_MODEL=2 --opt-code-speed -vn -I../core/include -I../common/include -DSMS -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_HACKING_MINIGAME -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DRLE_COMPRESSED_MAPS -DEMBEDDED_DATA
 
 all: derelict.com
 
