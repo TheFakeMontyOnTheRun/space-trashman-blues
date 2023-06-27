@@ -318,7 +318,8 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
                     stipple = !stipple;
                 }
 
-                if (stipple && stencilHigh[linesX0] < upperY0) {
+                /* Somehow, not having the <= will cause the upper line not to be drawn */
+                if (stipple && stencilHigh[linesX0] <= upperY0) {
                     graphicsPut(linesX0, upperY0);
                 }
 #endif
@@ -1672,7 +1673,11 @@ void initMap(void) {
     /* first item in the list is always a dummy */
     roomItem = getRoom(playerLocation)->itemsPresent->next;
 
+#ifdef OPTIMIZATION_BLOCK_VISIBILITY_CELLS
     memset(map, BLOCK_CELL, MAP_SIZE_X * MAP_SIZE_Y);
+#else
+    memset(map, NEUTRAL_CELL, MAP_SIZE_X * MAP_SIZE_Y);
+#endif
 
     for (y = 0; y < MAP_SIZE_Y; ++y) {
         for (x = 0; x < MAP_SIZE_X; ++x) {
