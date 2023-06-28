@@ -31,7 +31,7 @@
 #define XRESMINUSONE XRES - 1
 #define YRESMINUSONE YRES - 1
 
-#define CAMERA_HEIGHT 2
+#define CAMERA_HEIGHT 4
 
 enum GeometryType {
 	CUBE = 0,
