@@ -1157,9 +1157,11 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
      * And since there are only 127 patterns anyway...
      * */
 
+#ifdef OPTIMIZATION_BLOCK_CELL
     if (_pattern == BLOCK_CELL) {
         return 0;
     }
+#endif
 
     if (_pattern == NEUTRAL_CELL) {
         return 1;
@@ -1806,8 +1808,11 @@ void initMap(void) {
     /* first item in the list is always a dummy */
     roomItem = getRoom(playerLocation)->itemsPresent->next;
 
+#ifdef OPTIMIZATION_BLOCK_CELL
+    memset(map, BLOCK_CELL, MAP_SIZE_X * MAP_SIZE_Y);
+#else
     memset(map, NEUTRAL_CELL, MAP_SIZE_X * MAP_SIZE_Y);
-
+#endif
     for (y = 0; y < MAP_SIZE_Y; ++y) {
         for (x = 0; x < MAP_SIZE_X; ++x) {
 
