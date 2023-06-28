@@ -5,13 +5,16 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 32
+    namespace 'pt.b13h.spacetrashmanblues'
+    compileSdkVersion 33
+
     defaultConfig {
         applicationId "pt.b13h.spacetrashmanblues"
-        minSdkVersion 17
-        targetSdkVersion 32
+        minSdk 21
+        targetSdk 33
         versionCode 11
         versionName "1.1"
+
         externalNativeBuild {
             cmake {
                 cppFlags ""
@@ -28,10 +31,9 @@ android {
     externalNativeBuild {
         cmake {
             path "src/main/cpp/CMakeLists.txt"
-            version "3.10.2"
+            version "3.22.1"
         }
     }
-    namespace 'pt.b13h.spacetrashmanblues'
 }
 
 task copyAssets(type: Copy) {
