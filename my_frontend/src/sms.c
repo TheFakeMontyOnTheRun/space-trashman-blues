@@ -20,6 +20,8 @@ extern struct ObjectNode *roomItem;
 
 extern uint8_t accessGrantedToSafe;
 
+void backToGraphics(void);
+
 void clearGraphics(void);
 
 #define BUFFER_SIZEX 16
