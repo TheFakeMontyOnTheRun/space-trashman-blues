@@ -53,21 +53,11 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 		y1 = tmp;
 	}
 
-	uint8_t colour;
+	stipple = ((x0 + y0 ) & 1);
 
-	if (shouldStipple <= 3) {
-		colour = shouldStipple;
-		shouldStipple = 0;
-		stipple = 1;
-	} else {
-		colour = shouldStipple - 4;
-		shouldStipple = 1;
-		stipple = (x0 & 1);
-	}
 
 	uint16_t offset = (32 * y0) + (x0 / 4);
 	uint8_t dy = (y1 - y0);
-
 
 	switch (x0 & 3) {
 		case 3:
@@ -80,7 +70,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
 				if (stipple) {
 					uint8_t byteInVRAM = imageBuffer[offset];
-					byteInVRAM = (byteInVRAM & 0b11111100) | colour;
+					byteInVRAM = (byteInVRAM & 0b11111100) | 1;
 					imageBuffer[offset] = byteInVRAM;
 				}
 
@@ -88,7 +78,6 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 			}
 			break;
 		case 2:
-			colour = colour << 2;
 			while (dy--) {
 
 				if (shouldStipple) {
@@ -97,7 +86,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
 				if (stipple) {
 					uint8_t byteInVRAM = imageBuffer[offset];
-					byteInVRAM = (byteInVRAM & 0b11110011) | colour;
+					byteInVRAM = (byteInVRAM & 0b11110011) | 4;
 					imageBuffer[offset] = byteInVRAM;
 				}
 
@@ -105,7 +94,6 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 			}
 			break;
 		case 1:
-			colour = colour << 4;
 			while (dy--) {
 				if (shouldStipple) {
 					stipple = !stipple;
@@ -113,7 +101,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
 				if (stipple) {
 					uint8_t byteInVRAM = imageBuffer[offset];
-					byteInVRAM = (byteInVRAM & 0b11001111) | colour;
+					byteInVRAM = (byteInVRAM & 0b11001111) | 16;
 					imageBuffer[offset] = byteInVRAM;
 				}
 
@@ -121,7 +109,6 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 			}
 			break;
 		case 0:
-			colour = colour << 6;
 			while (dy--) {
 
 				if (shouldStipple) {
@@ -130,7 +117,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
 				if (stipple) {
 					uint8_t byteInVRAM = imageBuffer[offset];
-					byteInVRAM = (byteInVRAM & 0b00111111) | colour;
+					byteInVRAM = (byteInVRAM & 0b00111111) | 64;
 					imageBuffer[offset] = byteInVRAM;
 				}
 
