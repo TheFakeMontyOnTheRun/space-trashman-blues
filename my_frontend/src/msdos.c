@@ -351,10 +351,11 @@ void graphicsFlush() {
 	uint8_t origin = 0;
 	uint16_t value;
 	int diOffset;
+    int baseOffset = (36 * 40) + 4;
 	uint8_t *bufferPtr = &imageBuffer[0];
 	int index = 0;
-	for (int y = 0; y < 128; ++y) {
-		diOffset = ((y & 1) ? 0x2000 : 0x0) + (((y + 36) >> 1) * 80) + 4;
+	for (int y = 0; y < 128; y += 2) {
+		diOffset = baseOffset;
 #ifndef __DJGPP__
 		asm volatile(
 		//save old values
@@ -399,6 +400,54 @@ void graphicsFlush() {
 #else
 		dosmemput(bufferPtr + index, 32, (0xB800 * 16) + diOffset);
 #endif
+        index += 32;
+        diOffset += 0x2000;
+#ifndef __DJGPP__
+        asm volatile(
+            //save old values
+                "pushw %%si\n\t"
+                "pushw %%ds\n\t"
+
+                //mimicking GCC move here.
+                //making DS the same as SS
+                "pushw %%ss\n\t"
+                "popw %%ds\n\t"
+
+                //set ES to point to VRAM
+                "movw $0xb800, %%ax\n\t"
+                "movw %%ax, %%es\n\t"
+
+                //point to the correct offset inside VRAM
+                "movw %0, %%di\n\t"
+
+                //we will copy 32-bytes
+                "movw $16, %%cx\n\t"
+
+                //point SI to imageBuffer
+                "movw %1, %%ax\n\t"
+                "addw $imageBuffer, %%ax\n\t"
+                "movw %%ax, %%si\n\t"
+
+                //clear direction flag
+                "cld\n\t"
+
+                //copy the damn thing
+                //DS:[SI] to ES:[DI], CX times
+                "rep movsw\n\t"
+
+                //restore previous values
+                "popw %%ds\n\t"
+                "popw %%si\n\t"
+
+                :
+                : "r"( diOffset ), "r"(index)
+                : "ax", "cx", "es", "di"
+                );
+#else
+        dosmemput(bufferPtr + index, 32, (0xB800 * 16) + diOffset);
+#endif
+
+        baseOffset += 80;
 		index += 32;
 	}
 
