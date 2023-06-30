@@ -47,6 +47,13 @@
 #include "Derelict.h"
 #include "Dungeon.h"
 
+#define ANGLE_TURN_THRESHOLD 40
+#define ANGLE_TURN_STEP 5
+
+extern int turning;
+extern int leanX;
+extern int leanY;
+
 FixP_t kCameraYDeltaPlayerDeath;
 FixP_t kCameraYSpeedPlayerDeath;
 const char *thisMissionName;
@@ -257,7 +264,46 @@ void Crawler_repaintCallback() {
 		}
 
 		if (currentPresentationState == kWaitingForInput) {
-			renderTick(30);
+
+            renderTick(30);
+
+            if (leanX > 0 && !turning) {
+                leanX -= ANGLE_TURN_STEP;
+            }
+
+            if (leanX < 0 && !turning) {
+                leanX += ANGLE_TURN_STEP;
+            }
+
+            if (leanY > 0) {
+                leanY -= ANGLE_TURN_STEP;
+            }
+
+            if (leanY < 0) {
+                leanY += ANGLE_TURN_STEP;
+            }
+
+            if (leanX > 0 && turning) {
+                if (leanX < ANGLE_TURN_THRESHOLD) {
+                    leanX += ANGLE_TURN_STEP;
+                } else if (leanX == ANGLE_TURN_THRESHOLD) {
+                    visibilityCached = FALSE;
+                    mBufferedCommand = kCommandRight;
+                    leanX = -ANGLE_TURN_THRESHOLD;
+                    turning = 0;
+                }
+            }
+
+            if (leanX < 0 && turning) {
+                if (leanX > -ANGLE_TURN_THRESHOLD) {
+                    leanX -= ANGLE_TURN_STEP;
+                } else if (leanX == -ANGLE_TURN_THRESHOLD) {
+                    visibilityCached = FALSE;
+                    mBufferedCommand = kCommandLeft;
+                    leanX = ANGLE_TURN_THRESHOLD;
+                    turning = 0;
+                }
+            }
 		}
 	}
 }
