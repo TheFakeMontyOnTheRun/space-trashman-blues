@@ -37,8 +37,10 @@ void enterFullScreenMode() {
 SDL_Window *window;
 SDL_GLContext glContext;
 int snapshotSignal = '.';
-int leanX;
-int leanY;
+
+int turning = 0;
+int leanX = 0;
+int leanY = 0;
 
 void graphicsInit() {
 	int r, g, b;
@@ -72,12 +74,12 @@ void handleSystemEvents() {
 		}
 
         if (event.type == SDL_KEYUP) {
-            leanY = leanX = 0;
             visibilityCached = FALSE;
             needsToRedrawVisibleMeshes = TRUE;
         }
 
         if (event.type == SDL_KEYDOWN) {
+	  leanY = leanX = 0;
             switch (event.key.keysym.sym) {
 				case SDLK_RETURN:
 				case SDLK_z:
@@ -158,26 +160,28 @@ void handleSystemEvents() {
 
 
 				case SDLK_LEFT:
-					mBufferedCommand = kCommandLeft;
-					visibilityCached = FALSE;
-					if ((currentGameMenuState == kPlayGame ||
-						 currentGameMenuState == kBackToGame) &&
-						currentPresentationState == kWaitingForInput
-							) {
-						turnStep = 0;
-						turnTarget = 200;
-					}
+				  turning = 1;
+				  leanX = -1;
+				  visibilityCached = FALSE;
+				  if ((currentGameMenuState == kPlayGame ||
+				       currentGameMenuState == kBackToGame) &&
+				      currentPresentationState == kWaitingForInput
+				      ) {
+				    turnStep = 0;
+				    turnTarget = 200;
+				  }
 					break;
 				case SDLK_RIGHT:
-					mBufferedCommand = kCommandRight;
-					visibilityCached = FALSE;
-					if ((currentGameMenuState == kPlayGame ||
-						 currentGameMenuState == kBackToGame) &&
-						currentPresentationState == kWaitingForInput
-							) {
-						turnStep = 200;
-						turnTarget = 0;
-					}
+				  leanX = 1;
+				  turning = 1;
+				  visibilityCached = FALSE;
+				  if ((currentGameMenuState == kPlayGame ||
+				       currentGameMenuState == kBackToGame) &&
+				      currentPresentationState == kWaitingForInput
+				      ) {
+				    turnStep = 200;
+				    turnTarget = 0;
+				  }
 					break;
 				case SDLK_UP:
 					mBufferedCommand = kCommandUp;
@@ -190,6 +194,15 @@ void handleSystemEvents() {
 				case SDLK_2:
 					enableSmoothMovement = FALSE;
 					break;
+
+				case SDLK_3:
+				  leanX = -33;
+					break;
+
+				case SDLK_4:
+				  leanX = 33;
+
+					break;					
 
 				case SDLK_DOWN:
 					mBufferedCommand = kCommandDown;
@@ -222,10 +235,41 @@ void graphicsShutdown() {
 }
 
 void flipRenderer() {
-
 	SDL_GL_SwapWindow(window);
 
 #ifndef __EMSCRIPTEN__
 	SDL_Delay(1000 / 60);
 #endif
+
+	if (leanX > 0 && !turning) {
+	  leanX--;
+	}
+
+	if (leanX < 0 && !turning) {
+	  leanX++;
+	}
+
+
+
+	if (leanX > 0 && turning) {
+	  if (leanX < 45) {
+	    	  leanX++;
+	  } else if (leanX == 45) {
+	    mBufferedCommand = kCommandRight;
+	    leanX = -45;
+	    turning = 0;
+	  }
+	}
+
+	if (leanX < 0 && turning) {
+	  if (leanX > -45) {
+	    	  leanX--;
+	  } else if (leanX == -45) {
+	    mBufferedCommand = kCommandLeft;	    
+	    leanX = 45;
+	    turning = 0;
+	  }	  
+	}	
+
+	
 }
