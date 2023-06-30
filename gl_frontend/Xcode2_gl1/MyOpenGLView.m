@@ -37,7 +37,12 @@
 
 void initStation(void);
 
-float leanX, leanY = 0.0f;
+#define ANGLE_TURN_THRESHOLD 40
+#define ANGLE_TURN_STEP 5
+
+int turning = 0;
+int leanX = 0;
+int leanY = 0;
 
 NSMutableSet *playingSounds;
 int nextAudioChannel = -1;
@@ -112,7 +117,7 @@ void graphicsInit() {
 }
 
 void handleSystemEvents() {
-	mBufferedCommand = kCommandNone;
+	
 
 	switch (bufferedInput) {
 		case 0: //a
@@ -148,11 +153,13 @@ void handleSystemEvents() {
 			break;
 
 		case 123:
-			mBufferedCommand = kCommandLeft;
+            turning = 1;
+            leanX = -ANGLE_TURN_STEP;
 			break;
 
 		case 124:
-			mBufferedCommand = kCommandRight;
+            turning = 1;
+            leanX = ANGLE_TURN_STEP;
 			break;
 	}
 	bufferedInput = -1;
@@ -165,6 +172,7 @@ void flipRenderer() {
 }
 
 - (void)keyDown:(NSEvent *)event {
+    leanY = leanX = 0;
 }
 
 - (void)keyUp:(NSEvent *)event {

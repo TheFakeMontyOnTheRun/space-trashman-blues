@@ -19,9 +19,6 @@
 
 #include "SDL.h"
 
-#define ANGLE_TURN_THRESHOLD 40
-#define ANGLE_TURN_STEP 5
-
 #ifdef __EMSCRIPTEN__
 #include <emscripten/html5.h>
 #endif
@@ -40,6 +37,9 @@ void enterFullScreenMode() {
 SDL_Window *window;
 SDL_GLContext glContext;
 int snapshotSignal = '.';
+
+#define ANGLE_TURN_THRESHOLD 40
+#define ANGLE_TURN_STEP 5
 
 int turning = 0;
 int leanX = 0;
@@ -165,26 +165,10 @@ void handleSystemEvents() {
                 case SDLK_LEFT:
                     turning = 1;
                     leanX = -ANGLE_TURN_STEP;
-
-                    if ((currentGameMenuState == kPlayGame ||
-                         currentGameMenuState == kBackToGame) &&
-                        currentPresentationState == kWaitingForInput
-                            ) {
-                        turnStep = 0;
-                        turnTarget = 200;
-                    }
                     break;
                 case SDLK_RIGHT:
                     leanX = ANGLE_TURN_STEP;
                     turning = 1;
-
-                    if ((currentGameMenuState == kPlayGame ||
-                         currentGameMenuState == kBackToGame) &&
-                        currentPresentationState == kWaitingForInput
-                            ) {
-                        turnStep = 200;
-                        turnTarget = 0;
-                    }
                     break;
                 case SDLK_UP:
                     mBufferedCommand = kCommandUp;
@@ -243,37 +227,4 @@ void flipRenderer() {
 #ifndef __EMSCRIPTEN__
     SDL_Delay(1000 / 60);
 #endif
-
-    if (leanX > 0 && !turning) {
-        leanX -= ANGLE_TURN_STEP;
-    }
-
-    if (leanX < 0 && !turning) {
-        leanX += ANGLE_TURN_STEP;
-    }
-
-
-    if (leanX > 0 && turning) {
-        if (leanX < ANGLE_TURN_THRESHOLD) {
-            leanX += ANGLE_TURN_STEP;
-        } else if (leanX == ANGLE_TURN_THRESHOLD) {
-            visibilityCached = FALSE;
-            mBufferedCommand = kCommandRight;
-            leanX = -ANGLE_TURN_THRESHOLD;
-            turning = 0;
-        }
-    }
-
-    if (leanX < 0 && turning) {
-        if (leanX > -ANGLE_TURN_THRESHOLD) {
-            leanX -= ANGLE_TURN_STEP;
-        } else if (leanX == -ANGLE_TURN_THRESHOLD) {
-            visibilityCached = FALSE;
-            mBufferedCommand = kCommandLeft;
-            leanX = ANGLE_TURN_THRESHOLD;
-            turning = 0;
-        }
-    }
-
-
 }

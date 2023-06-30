@@ -26,6 +26,11 @@
 
 #define COOLDOWN 0x10
 int snapshotSignal = '.';
+
+#define ANGLE_TURN_THRESHOLD 40
+#define ANGLE_TURN_STEP 5
+
+int turning = 0;
 int leanX = 0;
 int leanY = 0;
 
@@ -68,11 +73,15 @@ void handleSystemEvents() {
 
 		if ((keys & KEY_LEFT)) {
 			cooldown = COOLDOWN;
-			mBufferedCommand = kCommandLeft;
+            turning = 1;
+            leanX = -ANGLE_TURN_STEP;
+
 		}
 		if ((keys & KEY_RIGHT)) {
 			cooldown = COOLDOWN;
-			mBufferedCommand = kCommandRight;
+            turning = 1;
+            leanX = ANGLE_TURN_STEP;
+
 		}
 		if ((keys & KEY_A)) {
 			cooldown = COOLDOWN;
@@ -114,8 +123,6 @@ void handleSystemEvents() {
 			cooldown = COOLDOWN;
 			mBufferedCommand = kCommandBack;
 		}
-
-        leanX = leanY = 0;
 
         if(keys & KEY_TOUCH) {
 
