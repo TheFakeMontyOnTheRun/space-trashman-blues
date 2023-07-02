@@ -20,42 +20,42 @@ char *menuItems[] = {
         "4) Next in room",
 };
 
-void graphicsFlush();
+void graphicsFlush(void);
 
-void nextItemInHand();
+void nextItemInHand(void);
 
-void useItemInHand();
+void useItemInHand(void);
 
-void nextItemInRoom();
+void nextItemInRoom(void);
 
-void interactWithItemInRoom();
+void interactWithItemInRoom(void);
 
-void pickOrDrop();
+void pickOrDrop(void);
 
-void dropItem();
+void dropItem(void);
 
-void pickItem();
+void pickItem(void);
 
-void clearGraphics();
+void clearGraphics(void);
 
 unsigned char imageBuffer[128 * 32];
 
-void shutdownGraphics() {
+void shutdownGraphics(void) {
 }
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
-    uint8_t stipple;
+    uint16_t stipple;
 
     if (y0 > y1) {
-        int tmp = y0;
+        uint8_t tmp = y0;
         y0 = y1;
         y1 = tmp;
     }
 
     stipple = ((x0 + y0) & 1);
     uint16_t offset = (32 * y0) + (x0 / 4);
-    uint8_t dy = (y1 - y0);
+    uint16_t dy = (y1 - y0);
 
     switch (x0 & 3) {
         case 3:
@@ -159,7 +159,7 @@ void graphicsPut(uint8_t x, uint8_t y) {
     *ptrToByte = byteInVRAM;
 }
 
-void realPut(int x, int y, uint8_t value) {
+void realPut(uint16_t x, uint16_t y, uint8_t value) {
 
     int pixelRead = 0;
 #ifndef __DJGPP__
@@ -249,11 +249,11 @@ void realPut(int x, int y, uint8_t value) {
 #endif
 }
 
-void clearGraphics() {
+void clearGraphics(void) {
     memset(imageBuffer, 0, 128 * 32);
 }
 
-void init() {
+void init(void) {
 
     asm volatile("movb $0x0, %%ah\n\t"
                  "movb $0x4, %%al\n\t"
@@ -264,7 +264,7 @@ void init() {
             );
 }
 
-void clearScreen() {
+void clearScreen(void) {
 #ifndef __DJGPP__
     init();
 #else
@@ -275,7 +275,7 @@ void clearScreen() {
 #endif
 }
 
-uint8_t getKey() {
+uint8_t getKey(void) {
     unsigned char toReturn = 255;
 
 
@@ -350,13 +350,13 @@ void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
 
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
 
-void graphicsFlush() {
+void graphicsFlush(void) {
     uint8_t origin = 0;
     uint16_t value;
-    int diOffset;
-    int baseOffset = (36 * 40) + 4;
+    uint16_t diOffset;
+    uint16_t baseOffset = (36 * 40) + 4;
     uint8_t *bufferPtr = &imageBuffer[0];
-    int index = 0;
+    uint16_t index = 0;
 
     asm volatile(
         //save old values
@@ -434,8 +434,8 @@ void showMessage(const char *message) {
     writeStr(1, 1, message, 2, 0);
 }
 
-void titleScreen() {
-    int keepGoing = 1;
+void titleScreen(void) {
+    uint16_t keepGoing = 1;
     clearGraphics();
 
     writeStr(1, 1, "Sub Mare Imperium:", 2, 0);
@@ -453,14 +453,14 @@ void titleScreen() {
     clearScreen();
 }
 
-void HUD_initialPaint() {
-
-    for (int c = 15; c < (128 + 16 + 1); ++c) {
+void HUD_initialPaint(void) {
+    uint16_t c;
+    for (c = 15; c < (128 + 16 + 1); ++c) {
         realPut(c, 35, 3);
         realPut(c, 36 + 128, 3);
     }
 
-    for (int c = 35; c < (128 + 36 + 1); ++c) {
+    for (c = 35; c < (128 + 36 + 1); ++c) {
         realPut(15, c, 3);
         realPut(16 + 128, c, 3);
     }
@@ -478,7 +478,7 @@ void sleepForMS(uint32_t ms) {
 #endif
 }
 
-void HUD_refresh() {
+void HUD_refresh(void) {
     writeStr(21, 21, "                    ", 2, 0);
     writeStr(21, 22, "                    ", 2, 0);
     writeStr(1, 2, "                    ", 2, 0);
