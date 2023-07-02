@@ -20,24 +20,6 @@ char *menuItems[] = {
         "4) Next in room",
 };
 
-void graphicsFlush(void);
-
-void nextItemInHand(void);
-
-void useItemInHand(void);
-
-void nextItemInRoom(void);
-
-void interactWithItemInRoom(void);
-
-void pickOrDrop(void);
-
-void dropItem(void);
-
-void pickItem(void);
-
-void clearGraphics(void);
-
 unsigned char imageBuffer[128 * 32];
 
 void shutdownGraphics(void) {
@@ -344,7 +326,7 @@ void writeStrWithLimit(int _x, int y, const char *text, int limitX) {
     }
 }
 
-void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
+void writeStr(uint8_t _x, uint8_t y, const char *text) {
     writeStrWithLimit(_x, y, text, 40);
 }
 
@@ -359,20 +341,20 @@ void graphicsFlush(void) {
     uint16_t index = 0;
 
     asm volatile(
-        //save old values
+        /* save old values */
             "pushw %%si\n\t"
             "pushw %%ds\n\t"
 
-            //mimicking GCC move here.
-            //making DS the same as SS
+            /* mimicking GCC move here.
+               making DS the same as SS */
             "pushw %%ss\n\t"
             "popw %%ds\n\t"
 
-            //set ES to point to VRAM
+            /* set ES to point to VRAM */
             "movw $0xb800, %%ax\n\t"
             "movw %%ax, %%es\n\t"
 
-            //clear direction flag
+            /* clear direction flag */
             "cld\n\t"
             :
             :
@@ -382,35 +364,35 @@ void graphicsFlush(void) {
     /* 4096 = 128 * 32 */
     for (index = 0; index < 4096; index += 64, baseOffset += 80) {
         asm volatile(
-                //point to the correct offset inside VRAM
+            /* point to the correct offset inside VRAM */
                 "movw %0, %%di\n\t"
 
-                //point SI to imageBuffer
+                /* point SI to imageBuffer */
                 "movw %1, %%ax\n\t"
                 "addw $imageBuffer, %%ax\n\t"
                 "movw %%ax, %%si\n\t"
 
-                //we will copy 32-bytes
+                /* we will copy 32-bytes */
                 "movw $16, %%cx\n\t"
 
-                //copy the damn thing
-                //DS:[SI] to ES:[DI], CX times
+                /* copy the damn thing
+                   DS:[SI] to ES:[DI], CX times */
                 "rep movsw\n\t"
 
-                /* Second line */
-                //we will copy 32-bytes
+                /* Second line
+                   we will copy 32-bytes */
                 "movw $16, %%cx\n\t"
 
-                /* 0x2000 = 8192 */
-                /* 8192 - 32 = 8160 */
+                /* 0x2000 = 8192
+                   8192 - 32 = 8160 */
                 "addw $8160, %%di\n\t"
 
-                //point SI to imageBuffer
+                /* point SI to imageBuffer */
                 "addw $32, %%ax\n\t"
                 "movw %%ax, %%si\n\t"
 
-                //copy the damn thing
-                //DS:[SI] to ES:[DI], CX times
+                /* copy the damn thing
+                   DS:[SI] to ES:[DI], CX times */
                 "rep movsw\n\t"
                 :
                 : "r"( baseOffset ), "r"(index)
@@ -419,7 +401,7 @@ void graphicsFlush(void) {
     }
 
     asm volatile(
-        //restore previous values
+        /* restore previous values */
             "popw %%ds\n\t"
             "popw %%si\n\t"
             :
@@ -431,18 +413,18 @@ void graphicsFlush(void) {
 }
 
 void showMessage(const char *message) {
-    writeStr(1, 1, message, 2, 0);
+    writeStr(1, 1, message);
 }
 
 void titleScreen(void) {
     uint16_t keepGoing = 1;
     clearGraphics();
 
-    writeStr(1, 1, "Sub Mare Imperium:", 2, 0);
-    writeStr(1, 2, "     Derelict", 2, 0);
-    writeStr(1, 4, "by Daniel Monteiro", 2, 0);
-    writeStr(1, 6, "   Press any key", 2, 0);
-    writeStr(1, 7, "     to start", 2, 0);
+    writeStr(1, 1, "Sub Mare Imperium:");
+    writeStr(1, 2, "     Derelict");
+    writeStr(1, 4, "by Daniel Monteiro");
+    writeStr(1, 6, "   Press any key");
+    writeStr(1, 7, "     to start");
 
     while (keepGoing) {
         if (getKey() != '.') {
@@ -466,7 +448,7 @@ void HUD_initialPaint(void) {
     }
 
     for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(21, 14 + i, menuItems[i], 2, 0);
+        writeStr(21, 14 + i, menuItems[i]);
     }
 
     HUD_refresh();
@@ -479,19 +461,19 @@ void sleepForMS(uint32_t ms) {
 }
 
 void HUD_refresh(void) {
-    writeStr(21, 21, "                    ", 2, 0);
-    writeStr(21, 22, "                    ", 2, 0);
-    writeStr(1, 2, "                    ", 2, 0);
-    writeStr(1, 3, "                    ", 2, 0);
+    writeStr(21, 21, "                    ");
+    writeStr(21, 22, "                    ");
+    writeStr(1, 2, "                    ");
+    writeStr(1, 3, "                    ");
 
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
 
         if (item->active) {
-            writeStr(21, 21, "*", 2, 0);
-            writeStr(22, 21, item->name, 2, 0);
+            writeStr(21, 21, "*");
+            writeStr(22, 21, item->name);
         } else {
-            writeStr(21, 21, item->name, 2, 0);
+            writeStr(21, 21, item->name);
         }
     }
 
@@ -499,10 +481,10 @@ void HUD_refresh(void) {
         struct Item *item = getItem(roomItem->item);
 
         if (item->active) {
-            writeStr(1, 2, "*", 2, 0);
-            writeStr(2, 2, item->name, 2, 0);
+            writeStr(1, 2, "*");
+            writeStr(2, 2, item->name);
         } else {
-            writeStr(1, 2, item->name, 2, 0);
+            writeStr(1, 2, item->name);
         }
     }
 }

@@ -40,17 +40,17 @@ enum DIRECTION {
 #define RENDER_SCALE_X 1
 #define RENDER_SCALE_Z 1
 
-// Not rendered, but won't block visibility
+/*  Not rendered, but won't block visibility */
 #define NEUTRAL_CELL '.'
 
-// not rendered and blocks visibility
+/*  not rendered and blocks visibility */
 #define BLOCK_CELL '#'
 
-// used to mark the edge between the neutral cells and the walls.
-// doesn't need to be used, but I'm leaving this here for posterity.
+/*  used to mark the edge between the neutral cells and the walls.
+    doesn't need to be used, but I'm leaving this here for posterity. */
 #define BORDER_CELL '_'
 
-// Required since we have our own memory allocator abstraction
+/*  Required since we have our own memory allocator abstraction */
 uint16_t heap = 0;
 
 struct ObjectNode *focusedItem = NULL;
@@ -87,7 +87,7 @@ struct Projection {
 };
 
 const struct Projection projections[32] = {
-                {	0	,			-127	},	/*	1	*/
+                {	0	,			-127},	/*	1	*/
                 {	0	,			-64	},	/*	2	*/
                 {	21	,			-43	},	/*	3	*/
                 {	32	,			-32	},	/*	4	*/
@@ -195,7 +195,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
         z1dx = ((projections[z0].dx));
 
         px0z0 = z0px - ((x0) * z0dx);
-        px1z1 = z1px - ((x0 + dX) * z1dx); //extra operations to avoid overflow
+        px1z1 = z1px - ((x0 + dX) * z1dx); /* extra operations to avoid overflow */
 
         z1py = (projections[z0].px);
         z0py = (projections[z1].px);
@@ -265,7 +265,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
             int16_t upperDx = abs(x1 - x0);
             int16_t upperDy = -abs(upperY1 - upperY0);
             int16_t upperSy = upperY0 < upperY1 ? 1 : -1;
-            int16_t upperErr = upperDx + upperDy;  /* error value e_xy */
+            int16_t upperErr = upperDx + upperDy;
             int16_t upperErr2;
             int16_t lowerY0 = py0z0;
             int16_t lowerY1 = py0z1;
@@ -273,7 +273,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
             int16_t lowerSx = x0 < x1 ? 1 : -1;
             int16_t lowerDy = -abs(lowerY1 - lowerY0);
             int16_t lowerSy = lowerY0 < lowerY1 ? 1 : -1;
-            int16_t lowerErr = lowerDx + lowerDy;  /* error value e_xy */
+            int16_t lowerErr = lowerDx + lowerDy;
             int16_t lowerErr2 = 0;
 
             while (x0 != x1) {
@@ -292,12 +292,11 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
                     }
                 }
 
-                /* loop */
                 upperErr2 = upperErr * 2;
 
                 if (upperErr2 >= upperDy || lowerErr2 >= lowerDy) {
-                    upperErr += upperDy; /* e_xy+e_x > 0 */
-                    lowerErr += lowerDy; /* e_xy+e_x > 0 */
+                    upperErr += upperDy;
+                    lowerErr += lowerDy;
                     x0 += lowerSx;
                 }
 
@@ -306,16 +305,13 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
                 }
 
                 if (upperErr2 <= upperDx) {
-                    /* e_xy+e_y < 0 */
                     upperErr += upperDx;
                     upperY0 += upperSy;
                 }
 
-                /* loop */
                 lowerErr2 = lowerErr * 2;
 
                 if (lowerErr2 <= lowerDx) {
-                    /* e_xy+e_y < 0 */
                     lowerErr += lowerDx;
                     lowerY0 += lowerSy;
                 }
@@ -502,7 +498,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
             int16_t sx = x0 < x1 ? 1 : -1;
             int16_t dy = -abs(y1 - y0);
             int16_t sy = y0 < y1 ? 1 : -1;
-            int16_t err = dx + dy;  /* error value e_xy */
+            int16_t err = dx + dy;
             int16_t e2;
 
             while ((x0 != x1 || y0 != y1)) {
@@ -518,11 +514,10 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
                     }
                 }
 
-                /* loop */
                 e2 = err << 2;
 
                 if (e2 >= dy) {
-                    err += dy; /* e_xy+e_x > 0 */
+                    err += dy;
                     x0 += sx;
                 }
 
@@ -531,7 +526,6 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
                 }
 
                 if (e2 <= dx) {
-                    /* e_xy+e_y < 0 */
                     err += dx;
                     y0 += sy;
                 }
@@ -551,7 +545,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
             int16_t sx = x0 < x1 ? 1 : -1;
             int16_t dy = -abs(y1 - y0);
             int16_t sy = y0 < y1 ? 1 : -1;
-            int16_t err = dx + dy;  /* error value e_xy */
+            int16_t err = dx + dy;
             int16_t e2;
 
             while ((x0 != x1 || y0 != y1)) {
@@ -564,11 +558,10 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
                     graphicsPut(x0, y0);
                 }
 
-                /* loop */
                 e2 = err << 2;
 
                 if (e2 >= dy) {
-                    err += dy; /* e_xy+e_x > 0 */
+                    err += dy;
                     x0 += sx;
                 }
 
@@ -577,7 +570,6 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
                 }
 
                 if (e2 <= dx) {
-                    /* e_xy+e_y < 0 */
                     err += dx;
                     y0 += sy;
                 }
@@ -685,7 +677,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
                 }
             }
         } else if (drawContour) {
-            /* Ceiling is higher than the camera*/
+            /* Ceiling is higher than the camera */
             /* Let's just draw the nearer segment */
             for (x = px0z0; x <= px1z0; ++x) {
                 if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
@@ -712,7 +704,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
             int16_t sx = x0 < x1 ? 1 : -1;
             int16_t dy = -abs(y1 - y0);
             int16_t sy = y0 < y1 ? 1 : -1;
-            int16_t err = dx + dy;  /* error value e_xy */
+            int16_t err = dx + dy;
             int16_t e2;
 
             while ((x0 != x1 || y0 != y1)) {
@@ -730,11 +722,10 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
                     }
                 }
 
-                /* loop */
                 e2 = err << 2;
 
                 if (e2 >= dy) {
-                    err += dy; /* e_xy+e_x > 0 */
+                    err += dy;
                     x0 += sx;
                 }
 
@@ -743,7 +734,6 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
                 }
 
                 if (e2 <= dx) {
-                    /* e_xy+e_y < 0 */
                     err += dx;
                     y0 += sy;
                 }
@@ -762,7 +752,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
             int16_t sx = x0 < x1 ? 1 : -1;
             int16_t dy = -abs(y1 - y0);
             int16_t sy = y0 < y1 ? 1 : -1;
-            int16_t err = dx + dy;  /* error value e_xy */
+            int16_t err = dx + dy;
             int16_t e2;
 
             while ((x0 != x1 || y0 != y1)) {
@@ -779,11 +769,10 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
                     stencilHigh[x0] = y0;
                 }
 
-                /* loop */
                 e2 = err << 2;
 
                 if (e2 >= dy) {
-                    err += dy; /* e_xy+e_x > 0 */
+                    err += dy;
                     x0 += sx;
                 }
 
@@ -792,7 +781,6 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
                 }
 
                 if (e2 <= dx) {
-                    /* e_xy+e_y < 0 */
                     err += dx;
                     y0 += sy;
                 }
@@ -802,7 +790,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
         final_stroke:
 
         if (py0z0 <= py0z1) {
-            /* Ceiling is higher than the camera*/
+            /* Ceiling is higher than the camera */
             /* Draw the last segment */
             if (drawContour) {
                 for (x = px0z1; x <= px1z1; ++x) {
@@ -851,13 +839,6 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
     if (_pattern == NEUTRAL_CELL) {
         return 1;
     }
-
-#ifndef TRACE_OBJECTS_OVER_FLOOR
-    if (_pattern & 128) {
-        drawObjectAt( RENDER_SCALE_X * (x0 - 1), y + 2);
-        return 1;
-    }
-#endif
 
     diff = patterns[0].ceiling - patterns[pattern].ceiling;
     type = patterns[pattern].geometryType;
@@ -954,8 +935,6 @@ uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y) {
     return 0;
 }
 
-#ifdef TRACE_OBJECTS_OVER_FLOOR
-
 void repaintMapItems(void) {
     struct ObjectNode *node;
 
@@ -964,7 +943,6 @@ void repaintMapItems(void) {
 
     switch (cameraRotation) {
         case 0:
-            //drawPattern(lastPattern, lastIndex - cameraX + 2, x - cameraX + 2, cameraZ - y);
             while (node != NULL) {
                 struct Item *item = getItem(node->item);
                 drawObjectAt(RENDER_SCALE_X * (item->position.x - cameraX + 2 - 1), cameraZ - item->position.y + 2);
@@ -973,7 +951,6 @@ void repaintMapItems(void) {
             break;
 
         case 1:
-            //drawPattern(lastPattern, (lastIndex - cameraZ) + 2 , (y - cameraZ) + 2, x - cameraX);
             while (node != NULL) {
                 struct Item *item = getItem(node->item);
                 drawObjectAt(RENDER_SCALE_X * ((item->position.y - cameraZ) + 1), (item->position.x - cameraX) + 2);
@@ -982,7 +959,6 @@ void repaintMapItems(void) {
             break;
 
         case 2:
-            //drawPattern(lastPattern, -(x - cameraX) + 2, -(lastIndex - cameraX) + 2, y - cameraZ);
             while (node != NULL) {
                 struct Item *item = getItem(node->item);
                 drawObjectAt(RENDER_SCALE_X * (-(item->position.x - cameraX) + 1), (item->position.y - cameraZ) + 2);
@@ -991,7 +967,6 @@ void repaintMapItems(void) {
             break;
 
         case 3:
-            //        drawPattern(lastPattern, -(y - cameraZ) + 2, -(lastIndex - cameraZ)  + 2, cameraX - x);
             while (node != NULL) {
                 struct Item *item = getItem(node->item);
                 drawObjectAt(RENDER_SCALE_X * (-(item->position.y - cameraZ) + 1), (cameraX - item->position.x) + 2);
@@ -1000,8 +975,6 @@ void repaintMapItems(void) {
             break;
     }
 }
-
-#endif
 
 /* all those refactors are due to a SDCC bug with very long functions */
 void renderScene(void) {
@@ -1032,7 +1005,7 @@ void renderScene(void) {
       uint8_t y, prevY, c;
         uint8_t *ptr;
 next_cluster:
-        //pixel 1
+        /* pixel 1 */
         y = *stencilPtr;
         ptr = graphicsPutAddr(x, y, NULL );
 
@@ -1064,7 +1037,7 @@ next_cluster:
       uint8_t y, prevY, c;
         uint8_t *ptr;
 next_cluster:
-        //pixel 1
+        /* pixel 1 */
         y = *stencilPtr;
         ptr = graphicsPutAddr(x, y, NULL );
 
@@ -1099,9 +1072,8 @@ next_cluster:
 #endif
 #endif
 
-#ifdef TRACE_OBJECTS_OVER_FLOOR
     repaintMapItems();
-#endif
+
     memset(stencilHigh, 0, XRES);
 }
 
@@ -1467,7 +1439,7 @@ void initMap(void) {
 
     head = &data[offsetOnDataStrip];
 
-    //the last location
+    /* the last location */
     if (dataPositions[playerLocation + 1] == 0) {
         size_t extra = sizeof(data) - 1;
         headEnd = &data[0] + extra;
@@ -1535,7 +1507,7 @@ void initMap(void) {
 #endif
         }
 #ifndef EMBEDDED_DATA
-        ++head; // line break
+        ++head; /*  line break */
 #endif
     }
 
@@ -1560,7 +1532,7 @@ void startRoomTransitionAnimation(void) {
             graphicsPut(x, y);
             graphicsPut(x, 95 + (MAP_SIZE_Y - y));
 
-            //door opening
+            /* door opening */
             graphicsPut(x, 95 - 3 * (MAP_SIZE_Y - y));
         }
         graphicsFlush();
