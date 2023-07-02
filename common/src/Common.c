@@ -73,7 +73,7 @@ void memFill(void* dst, uint8_t val, size_t sizeInBytes) {
 }
 #endif
 
-int isBigEndian() {
+int isBigEndian(void) {
 	union {
 		uint32_t i;
 		char c[4];

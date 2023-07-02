@@ -32,7 +32,7 @@ uint8_t holdingDisk = 3;
 uint8_t pins[3][5];
 uint8_t pinTop[3];
 
-void HackingScreen_initStateCallback() {
+void HackingScreen_initStateCallback(void) {
 
 	cursorPosition = 1;
 	memset(&pins[0][0], 0xFF, sizeof(pins));
