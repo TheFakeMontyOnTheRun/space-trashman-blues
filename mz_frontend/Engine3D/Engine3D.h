@@ -5,68 +5,48 @@
 #ifndef DERELICT8_ENGINE3D_H
 #define DERELICT8_ENGINE3D_H
 
-#ifdef RES128X64
-#define XRES 128
-#define YRES 64
-#else
-#ifdef RES96x64
-#define XRES 96
-#define YRES 64
-#else
-#ifdef RES64X128
-#define XRES 64
-#define YRES 128
-#else
-#ifdef RES128X128
 #define XRES 128
 #define YRES 128
-#else
-#define XRES 64
-#define YRES 64
-#endif
-#endif
-#endif
-#endif
 
-#define XRESMINUSONE XRES - 1
-#define YRESMINUSONE YRES - 1
+#define XRESMINUSONE (XRES - 1)
+#define YRESMINUSONE (YRES - 1)
 
 #define WALKSTEP 1
 #define VISIBILITY_LIMIT 32
 
-void HUD_initialPaint();
+void HUD_initialPaint(void);
 
-void HUD_refresh();
+void HUD_refresh(void);
 
-void tickRenderer();
+void tickRenderer(void);
 
-void shutdownGraphics();
+void shutdownGraphics(void);
 
-void clearGraphics();
+void clearGraphics(void);
 
 void sleepForMS(uint32_t ms);
 
-void clearScreen();
+void clearScreen(void);
 
-void writeStr(uint8_t nColumn, uint8_t nLine, const char *str, uint8_t fg, uint8_t bg);
+void writeStr(int16_t nColumn, int16_t nLine, const char *str, uint16_t fg, uint16_t bg);
 
-uint8_t getKey();
+uint8_t getKey(void);
 
-void init();
+void init(void);
 
-void graphicsFlush();
+void graphicsFlush(void);
 
-void graphicsPut(int16_t x, int16_t y, uint8_t colour);
+void graphicsPut(int16_t x, int16_t y, uint16_t colour);
 
-void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour);
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour);
 
-void hLine(int16_t x0, int16_t x1, int16_t y0, uint8_t colour);
+void hLine(int16_t x0, int16_t x1, int16_t y0, uint16_t colour);
 
-void titleScreen();
+void titleScreen(void);
 
 void showMessage(const char *msg);
 
-void printSituation();
+void printSituation(void);
 
 void drawWindow(int tx, int ty, int tw, int th, const char *title);
 
