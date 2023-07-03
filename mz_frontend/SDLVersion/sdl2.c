@@ -379,6 +379,41 @@ void HUD_initialPaint() {
 }
 
 void HUD_refresh() {
+
+
+    for (uint8_t i = 0; i < 6; ++i) {
+        writeStr(16, 13 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
+    }
+
+
+    writeStr(16, 5, "Object in hand:", 2, 0);
+    if (focusedItem != NULL) {
+        struct Item *item = getItem(focusedItem->item);
+
+
+        if (item->active) {
+            writeStr(16, 6, "*", 2, 0);
+        }
+
+        writeStr(17, 6, item->name, 2, 0);
+    } else {
+        writeStr(16, 6, "Nothing", 2, 0);
+    }
+
+    writeStr(16, 8, "Object in room:", 2, 0);
+
+    if (roomItem != NULL) {
+        struct Item *item = getItem(roomItem->item);
+
+
+        if (item->active) {
+            writeStr(16, 9, "*", 2, 0);
+        }
+
+        writeStr(17, 9, item->name, 2, 0);
+    } else {
+        writeStr(16, 9, "Nothing", 2, 0);
+    }
 }
 
 
