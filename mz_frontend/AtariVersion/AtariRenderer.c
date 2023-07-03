@@ -7,9 +7,6 @@
 #include <math.h>
 #include <stdint.h>
 
-#include <osbind.h>
-#include <mint/sysbind.h>
-
 #include "AtariInt.h"
 #include "Core.h"
 #include "Derelict.h"
@@ -19,8 +16,10 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <mint/osbind.h>
+
+#include <osbind.h>
 #include <mint/sysbind.h>
+#include <mint/osbind.h>
 
 uint16_t *physBase;
 uint16_t *logBase;
@@ -30,18 +29,11 @@ uint8_t bufferInput = '.';
 
 #define NORMALIZE(x) (((x * 8) / 256))
 
-void putStr(int x, int y, const char *str, int fg, int bg) {}
-
-void drawTitleBox() {}
-
-void querySoundDriver() {
-}
-
 void framebuffer_set_palette_entry(int index, int red, int green, int blue) {
     *(uint16_t *) (0xffff8240 + (index * 2)) = blue | (green << 4) | (red << 8);
 }
 
-void init() {
+void init(void) {
     framebuffer = (uint8_t *) calloc(1, 128 * 128);
 
     physBase = Physbase();
@@ -49,8 +41,6 @@ void init() {
     memset(logBase, 0, 32000);
     memset(physBase, 0, 32000);
     Setscreen(-1, -1, 0);
-    querySoundDriver();
-
 
     framebuffer_set_palette_entry(0, NORMALIZE(0x00), NORMALIZE(0x00), NORMALIZE(0x00));
     framebuffer_set_palette_entry(1, NORMALIZE(0x00), NORMALIZE(0x00), NORMALIZE(0xAA));
@@ -72,25 +62,25 @@ void init() {
 
 
 /*Same as above*/
-void handleSystemEvents() {
+void handleSystemEvents(void) {
     bufferInput = Cnecin();
 }
 
-uint8_t getKey() {
+uint8_t getKey(void) {
     handleSystemEvents();
     uint8_t toReturn = bufferInput;
     bufferInput = '.';
     return toReturn;
 }
 
-void clear() {}
+void clear(void) {}
 
 
-void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
+void graphicsPut(int16_t x, int16_t y, uint16_t colour) {
     framebuffer[(128 * y) + x] = colour;
 }
 
-void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t pixel) {
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t pixel) {
     uint8_t *ptr;
     int16_t _y0 = y0;
     int16_t _y1 = y1;
@@ -125,7 +115,7 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t pixel) {
 }
 
 
-void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
+void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
     if (y < 0) {
         return;
     }
@@ -183,31 +173,31 @@ void pickItem();
 
 void clearGraphics();
 
-void shutdownGraphics() {
+void shutdownGraphics(void) {
 }
 
 void realPut(int x, int y, uint8_t value) {
 
 }
 
-void clearGraphics() {
+void clearGraphics(void) {
     memset(framebuffer, 0, 128 * 128);
 }
 
-void clearScreen() {
+void clearScreen(void) {
 }
 
 
 void writeStrWithLimit(int _x, int y, const char *text, int limitX) {
 }
 
-void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
+void writeStr(int16_t _x, int16_t y, const char *text, uint16_t fg, uint16_t bg) {
     writeStrWithLimit(_x, y, text, 40);
 }
 
 void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 
-void graphicsFlush() {
+void graphicsFlush(void) {
     memset(logBase, 0, 32000);
     uint8_t *index = &framebuffer[0];
     unsigned lineOffset = 0;
@@ -267,14 +257,14 @@ void showMessage(const char *message) {
 
 }
 
-void titleScreen() {
+void titleScreen(void) {
 }
 
-void HUD_initialPaint() {
+void HUD_initialPaint(void) {
 }
 
 void sleepForMS(uint32_t ms) {
 }
 
-void HUD_refresh() {
+void HUD_refresh(void) {
 }
