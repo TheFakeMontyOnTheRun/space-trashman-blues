@@ -454,7 +454,6 @@ void init() {
 }
 
 void graphicsFlush() {
-    HUD_initialPaint();
     BMP_flip(1);
     BMP_clear();
 }
