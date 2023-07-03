@@ -207,7 +207,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
     }
 
     {
-        int16_t x0, x1;
+        int16_t lineX0, lineX1;
 
         if (py1z0 < 0) {
             py1z0 = 0;
@@ -243,30 +243,30 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
         }
 
         /* The upper segment */
-        x0 = px0z0;
-        x1 = px1z1;
+        lineX0 = px0z0;
+        lineX1 = px1z1;
 
-        if (x0 != x1) {
+        if (lineX0 != lineX1) {
             int16_t upperY0 = py1z0;
             int16_t upperY1 = py1z1;
-            int16_t upperDx = abs(x1 - x0);
+            int16_t upperDx = abs(lineX1 - lineX0);
             int16_t upperDy = -abs(upperY1 - upperY0);
             int16_t upperSy = upperY0 < upperY1 ? 1 : -1;
             int16_t upperErr = upperDx + upperDy;  /* error value e_xy */
             int16_t upperErr2;
             int16_t lowerY0 = py0z0;
             int16_t lowerY1 = py0z1;
-            int16_t lowerDx = abs(x1 - x0);
-            int16_t lowerSx = x0 < x1 ? 1 : -1;
+            int16_t lowerDx = abs(lineX1 - lineX0);
+            int16_t lowerSx = lineX0 < lineX1 ? 1 : -1;
             int16_t lowerDy = -abs(lowerY1 - lowerY0);
             int16_t lowerSy = lowerY0 < lowerY1 ? 1 : -1;
             int16_t lowerErr = lowerDx + lowerDy;  /* error value e_xy */
             int16_t lowerErr2 = 0;
 
-            while (x0 != x1) {
-                if (IN_RANGE(0, XRESMINUSONE, x0)) {
-                    vLine(x0, upperY0, lowerY0, shouldStippleFill);
-                    graphicsPut(x0, upperY0, shouldStippleBorder);
+            while (lineX0 != lineX1) {
+                if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
+                    vLine(lineX0, upperY0, lowerY0, shouldStippleFill);
+                    graphicsPut(lineX0, upperY0, shouldStippleBorder);
                 }
 
                 /* loop */
@@ -275,10 +275,10 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
                 if (upperErr2 >= upperDy || lowerErr2 >= lowerDy) {
                     upperErr += upperDy; /* e_xy+e_x > 0 */
                     lowerErr += lowerDy; /* e_xy+e_x > 0 */
-                    x0 += lowerSx;
+                    lineX0 += lowerSx;
                 }
 
-                if (x0 >= XRES) {
+                if (lineX0 >= XRES) {
                     return 0;
                 }
 
@@ -428,39 +428,39 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
 
 
     {
-        int16_t x, x0, x1;
+        int16_t lineX0, lineX1;
 
         /* Draw the horizontal outlines of z0 and z1 */
-        for (x = px0z0; x <= px1z0; ++x) {
-            if (IN_RANGE(0, XRESMINUSONE, x)) {
-                graphicsPut(x, py0z0, shouldStippleBorder);
+        for (lineX0 = px0z0; lineX0 <= px1z0; ++lineX0) {
+            if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
+                graphicsPut(lineX0, py0z0, shouldStippleBorder);
             }
         }
 
-        for (x = px0z1; x <= px1z1; ++x) {
-            if (IN_RANGE(0, XRESMINUSONE, x)) {
-                graphicsPut(x, py0z1, shouldStippleBorder);
+        for (lineX0 = px0z1; lineX0 <= px1z1; ++lineX0) {
+            if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
+                graphicsPut(lineX0, py0z1, shouldStippleBorder);
             }
         }
 
         /* The left segment */
-        x0 = px0z0;
-        x1 = px0z1;
+        lineX0 = px0z0;
+        lineX1 = px0z1;
 
-        if (x0 != x1) {
+        if (lineX0 != lineX1) {
             int16_t y0 = py0z0;
             int16_t y1 = py0z1;
-            int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
+            int16_t dx = abs(lineX1 - lineX0);
+            int16_t sx = lineX0 < lineX1 ? 1 : -1;
             int16_t dy = -abs(y1 - y0);
             int16_t sy = y0 < y1 ? 1 : -1;
             int16_t err = dx + dy;  /* error value e_xy */
             int16_t e2;
 
-            while ((x0 != x1 || y0 != y1)) {
+            while ((lineX0 != lineX1 || y0 != y1)) {
 
-                if (IN_RANGE(0, XRESMINUSONE, x0)) {
-                    graphicsPut(x0, y0, shouldStippleBorder);
+                if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
+                    graphicsPut(lineX0, y0, shouldStippleBorder);
                 }
 
                 /* loop */
@@ -468,10 +468,10 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
 
                 if (e2 >= dy) {
                     err += dy; /* e_xy+e_x > 0 */
-                    x0 += sx;
+                    lineX0 += sx;
                 }
 
-                if (x0 >= XRES) {
+                if (lineX0 >= XRES) {
                     goto right_stroke;
                 }
 
@@ -485,33 +485,33 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
 
         right_stroke:
 
-        x0 = px1z0;
-        x1 = px1z1;
+        lineX0 = px1z0;
+        lineX1 = px1z1;
 
-        if (x0 != x1) {
+        if (lineX0 != lineX1) {
             int16_t y0 = py0z0;
             int16_t y1 = py0z1;
-            int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
+            int16_t dx = abs(lineX1 - lineX0);
+            int16_t sx = lineX0 < lineX1 ? 1 : -1;
             int16_t dy = -abs(y1 - y0);
             int16_t sy = y0 < y1 ? 1 : -1;
             int16_t err = dx + dy;  /* error value e_xy */
             int16_t e2;
 
-            while ((x0 != x1 || y0 != y1)) {
+            while ((lineX0 != lineX1 || y0 != y1)) {
 
-                if (IN_RANGE(0, XRESMINUSONE, x0)) {
-                    graphicsPut(x0, y0, shouldStippleBorder);
+                if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
+                    graphicsPut(lineX0, y0, shouldStippleBorder);
                 }
 
                 e2 = err << 2;
 
                 if (e2 >= dy) {
                     err += dy; /* e_xy+e_x > 0 */
-                    x0 += sx;
+                    lineX0 += sx;
                 }
 
-                if (x0 >= XRES) {
+                if (lineX0 >= XRES) {
                     return 1;
                 }
 
@@ -582,27 +582,27 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     drawContour = (dY);
 
     {
-        int16_t x, x0, x1;
+        int16_t x, lineX0, lineX1;
 
-        x0 = px0z0;
-        x1 = px0z1;
+        lineX0 = px0z0;
+        lineX1 = px0z1;
 
-        if (x0 != x1) {
+        if (lineX0 != lineX1) {
             int16_t y0 = py0z0;
             int16_t y1 = py0z1;
-            int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
+            int16_t dx = abs(lineX1 - lineX0);
+            int16_t sx = lineX0 < lineX1 ? 1 : -1;
             int16_t dy = -abs(y1 - y0);
             int16_t sy = y0 < y1 ? 1 : -1;
             int16_t err = dx + dy;
             int16_t e2;
 
-            while ((x0 != x1 || y0 != y1)) {
+            while ((lineX0 != lineX1 || y0 != y1)) {
 
                 if (drawContour) {
-                    if (IN_RANGE(0, XRESMINUSONE, x0)) {
-                        vLine(x0, y0, py1z0, 6);
-                        graphicsPut(x0, y0, shouldStippleBorder);
+                    if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
+                        vLine(lineX0, y0, py1z0, 6);
+                        graphicsPut(lineX0, y0, shouldStippleBorder);
                     }
                 }
 
@@ -610,10 +610,10 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
                 if (e2 >= dy) {
                     err += dy;
-                    x0 += sx;
+                    lineX0 += sx;
                 }
 
-                if (x0 >= XRES) {
+                if (lineX0 >= XRES) {
                     goto right_stroke;
                 }
 
@@ -626,25 +626,25 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
         right_stroke:
 
-        x0 = px1z0;
-        x1 = px1z1;
+        lineX0 = px1z0;
+        lineX1 = px1z1;
 
-        if (x0 != x1) {
+        if (lineX0 != lineX1) {
             int16_t y0 = py0z0;
             int16_t y1 = py0z1;
-            int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
+            int16_t dx = abs(lineX1 - lineX0);
+            int16_t sx = lineX0 < lineX1 ? 1 : -1;
             int16_t dy = -abs(y1 - y0);
             int16_t sy = y0 < y1 ? 1 : -1;
             int16_t err = dx + dy;
             int16_t e2;
 
-            while ((x0 != x1 || y0 != y1)) {
+            while ((lineX0 != lineX1 || y0 != y1)) {
 
                 if (drawContour) {
-                    if (IN_RANGE(0, XRESMINUSONE, x0)) {
-                        vLine(x0, y0, py1z0, 6);
-                        graphicsPut(x0, y0, shouldStippleBorder);
+                    if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
+                        vLine(lineX0, y0, py1z0, 6);
+                        graphicsPut(lineX0, y0, shouldStippleBorder);
                     }
                 }
 
@@ -652,10 +652,10 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
                 if (e2 >= dy) {
                     err += dy;
-                    x0 += sx;
+                    lineX0 += sx;
                 }
 
-                if (x0 >= XRES) {
+                if (lineX0 >= XRES) {
                     goto final_stroke;
                 }
 
