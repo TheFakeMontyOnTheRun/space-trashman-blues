@@ -11,6 +11,8 @@
 #include <proto/dos.h>
 #include <proto/exec.h>
 #include <proto/intuition.h>
+#include <clib/graphics_protos.h>
+#include <proto/keymap.h>
 
 #include "AmigaInt.h"
 #include "Core.h"
@@ -53,7 +55,7 @@ struct NewScreen xnewscreen = {
         0,              /* ViewModes High-resolution, Interlaced */
         CUSTOMSCREEN,      /* Type customized screen. */
         NULL,          /* Font */
-        "The Mistral Report", /* Title */
+        "Sub Mare Imperium: Derelict", /* Title */
         NULL,          /* Gadget */
         NULL          /* BitMap */
 };
@@ -72,7 +74,7 @@ struct NewWindow my_new_window = {
         ACTIVATE,                      /*            */
         NULL,                          /* FirstGadget */
         NULL,                          /* CheckMark   */
-        (UBYTE * ) "The Mistral Report",              /* Title       */
+        (UBYTE * ) "Sub Mare Imperium: Derelict",              /* Title       */
         NULL,                          /* Screen      */
         NULL,                          /* BitMap      */
         320,                          /* MinWidth    */
@@ -86,17 +88,6 @@ long frame = 0;
 
 void putStr(int x, int y, const char *str, int fg, int bg) {}
 
-void drawTitleBox() {}
-
-void querySoundDriver() {
-}
-
-struct RGB8 {
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
-};
-
 /*
  * Code lifted (and heavily modified) from the Strife AGA port by Lantus
  * https://github.com/lantus/Strife/blob/master/i_video.c
@@ -109,21 +100,8 @@ static UWORD emptypointer[] = {
 };
 
 void init() {
-    int r, g, b;
-    int c;
-    struct RGB8 palete[256];
-    struct ColorMap *cm;
-    struct Window *window;
-    struct IntuiMessage *msg;
-    struct DisplayInfo displayinfo;
-    struct TagItem taglist[3];
-    int OpenA2024 = FALSE;
-    int IsV36 = FALSE;
-    int IsPAL;
 
     framebuffer = (uint8_t *) calloc(1, 128 * 128);
-
-    drawTitleBox();
 
     IntuitionBase =
             (struct IntuitionBase *) OpenLibrary("intuition.library", 0);
@@ -163,9 +141,9 @@ void init() {
     SetRGB4(&screen->ViewPort, 14, NORMALIZE(0xFF), NORMALIZE(0xFF), NORMALIZE(0x55));
     SetRGB4(&screen->ViewPort, 15, NORMALIZE(0xFF), NORMALIZE(0xFF), NORMALIZE(0xFF));
 
-    SetPointer(my_window, emptypointer, 1, 16, 0, 0);
 
-    querySoundDriver();
+
+    SetPointer(my_window, emptypointer, 1, 16, 0, 0);
 }
 
 /*
@@ -487,7 +465,6 @@ void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 void graphicsFlush() {
     c2p1x1_4_c5_bm(128, 128, 0, 0, &framebuffer[0], my_window->RPort->BitMap);
 }
-
 
 void showMessage(const char *message) {
 
