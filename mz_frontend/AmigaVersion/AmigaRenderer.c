@@ -49,7 +49,7 @@ struct NewScreen xnewscreen = {
         0,              /* TopEdge   */
         320,          /* Width     */
         200,          /* Height    */
-        5,              /* Depth   */
+        4,              /* Depth   */
         0,              /* DetailPen */
         1,              /* BlockPen */
         0,              /* ViewModes High-resolution, Interlaced */
