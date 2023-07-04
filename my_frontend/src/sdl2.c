@@ -100,7 +100,7 @@ void clearGraphics() {
     memset(framebuffer, 0, 160 * 200);
 }
 
-void writeStr(uint8_t nColumn, uint8_t nLine, const char *str, uint8_t fg, uint8_t bg) {
+void writeStr(uint8_t column, uint8_t line, const char *str) {
     puts(str);
 }
 
@@ -274,11 +274,11 @@ void titleScreen() {
     int keepGoing = 1;
     clearGraphics();
 
-    writeStr(1, 1, "Sub Mare Imperium:", 2, 0);
-    writeStr(1, 2, "     Derelict", 2, 0);
-    writeStr(1, 4, "by Daniel Monteiro", 2, 0);
-    writeStr(1, 6, "  Press B button ", 2, 0);
-    writeStr(1, 7, "    to start", 2, 0);
+    writeStr(1, 1, "Sub Mare Imperium:");
+    writeStr(1, 2, "     Derelict");
+    writeStr(1, 4, "by Daniel Monteiro");
+    writeStr(1, 6, "  Press B button ");
+    writeStr(1, 7, "    to start");
 
     while (keepGoing) {
         if (getKey() != '.') {
