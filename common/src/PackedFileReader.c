@@ -246,7 +246,7 @@ struct StaticBuffer loadBinaryFileFromPath(const uint8_t slot) {
 	uint32_t offset = 0;
 	uint16_t entries = 0;
 	char buffer[85];
-	int c;
+	uint16_t c;
 	uint32_t size = 0;
 
 

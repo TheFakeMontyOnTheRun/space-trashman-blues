@@ -43,7 +43,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
         case 3:
             if (shouldStipple) {
                 while (dy--) {
-                    if (stipple = !stipple) {
+                    if ((stipple = !stipple)) {
                         uint8_t byteInVRAM = imageBuffer[offset];
                         byteInVRAM = (byteInVRAM & 0b11111100) | 1;
                         imageBuffer[offset] = byteInVRAM;
@@ -62,7 +62,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
         case 2:
             if (shouldStipple) {
                 while (dy--) {
-                    if (stipple = !stipple) {
+                    if ((stipple = !stipple)) {
                         uint8_t byteInVRAM = imageBuffer[offset];
                         byteInVRAM = (byteInVRAM & 0b11110011) | 4;
                         imageBuffer[offset] = byteInVRAM;
@@ -81,7 +81,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
         case 1:
             if (shouldStipple) {
                 while (dy--) {
-                    if (stipple = !stipple) {
+                    if ((stipple = !stipple)) {
                         uint8_t byteInVRAM = imageBuffer[offset];
                         byteInVRAM = (byteInVRAM & 0b11001111) | 16;
                         imageBuffer[offset] = byteInVRAM;
@@ -101,7 +101,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
         case 0:
             if (shouldStipple) {
                 while (dy--) {
-                    if (stipple = !stipple) {
+                    if ((stipple = !stipple)) {
                         uint8_t byteInVRAM = imageBuffer[offset];
                         byteInVRAM = (byteInVRAM & 0b00111111) | 64;
                         imageBuffer[offset] = byteInVRAM;
@@ -333,11 +333,7 @@ void writeStr(uint8_t _x, uint8_t y, const char *text) {
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
 
 void graphicsFlush(void) {
-    uint8_t origin = 0;
-    uint16_t value;
-    uint16_t diOffset;
     uint16_t baseOffset = (36 * 40) + 4;
-    uint8_t *bufferPtr = &imageBuffer[0];
     uint16_t index = 0;
 
     asm volatile(
@@ -415,6 +411,17 @@ void graphicsFlush(void) {
 void showMessage(const char *message) {
     writeStr(1, 1, message);
 }
+
+void clearTextScreen(void) {
+    clearScreen();
+}
+
+void enterTextMode(void) {}
+
+void exitTextMode(void) {
+    clearScreen();
+}
+
 
 void titleScreen(void) {
     uint16_t keepGoing = 1;
