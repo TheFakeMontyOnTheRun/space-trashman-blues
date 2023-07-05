@@ -23,19 +23,6 @@ uint8_t mBufferedCommand;
 uint32_t palette[16];
 uint8_t framebuffer[160 * 200];
 
-void graphicsFlush();
-
-void nextItemInHand();
-
-void useItemInHand();
-
-void nextItemInRoom();
-
-void interactWithItemInRoom();
-
-void pickOrDrop();
-
-void pickItem();
 
 void sleepForMS(uint32_t ms) {
 
@@ -105,6 +92,7 @@ void writeStr(uint8_t column, uint8_t line, const char *str) {
 }
 
 void printSituation() {
+    struct ObjectNode *roomItems;
     struct ObjectNode *playerObjects = getPlayerItems();
     puts("---------------");
     puts("\nPlayer items:");
@@ -119,7 +107,7 @@ void printSituation() {
 
     puts("\nItems in room:");
 
-    struct ObjectNode *roomItems = getRoom(getPlayerRoom())->itemsPresent->next;
+    roomItems = getRoom(getPlayerRoom())->itemsPresent->next;
 
     while (roomItems != NULL) {
         struct Item *item = getItem(roomItems->item);
@@ -130,9 +118,6 @@ void printSituation() {
     }
 }
 
-void dropItem();
-
-void pickItem();
 
 void clearScreen() {}
 
@@ -292,7 +277,7 @@ void titleScreen() {
 void flipRenderer() {
     SDL_Rect rect;
     uint32_t pixel;
-    int x, y;
+    int x, y, r, g, b;
 
     rect.x = 0;
     rect.y = 0;
@@ -306,12 +291,12 @@ void flipRenderer() {
 
     for (y = 0; y < 128; ++y) {
         for (x = 0; x < 128; ++x) {
-
+            int index = framebuffer[(160 * y) + x];
             rect.x = 1 + 2 * x;
             rect.y = 1 + (24 * y) / 10;
             rect.w = 2;
             rect.h = 3;
-            int index = framebuffer[(160 * y) + x];
+
 
             if (index < 0 || index >= 16) {
                 continue;
@@ -319,9 +304,9 @@ void flipRenderer() {
 
             pixel = palette[index];
 
-            int r = (pixel & 0x00FF0000) >> 16;
-            int g = ((pixel & 0x0000FF00) >> 8);
-            int b = ((pixel & 0x000000FF));
+            r = (pixel & 0x00FF0000) >> 16;
+            g = ((pixel & 0x0000FF00) >> 8);
+            b = ((pixel & 0x000000FF));
 
             SDL_SetRenderDrawColor(renderer, r,
                                    g,
