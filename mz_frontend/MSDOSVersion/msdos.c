@@ -43,7 +43,7 @@ unsigned char imageBuffer[128 * 128];
 void shutdownGraphics() {
 }
 
-void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour) {
 
     if (x0 < 0) {
         return;
@@ -72,7 +72,7 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
 }
 
 
-void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
+void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
     if (y < 0) {
         return;
     }
@@ -98,7 +98,7 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
     }
 }
 
-void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
+void graphicsPut(int16_t x, int16_t y, uint16_t colour) {
     if (x < 0) {
         x = 0;
     }
@@ -118,7 +118,7 @@ void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
     imageBuffer[(128 * y) + x] = colour;
 }
 
-void realPut(int x, int y, uint8_t value) {
+void realPut(int x, int y, uint16_t value) {
 
     int pixelRead = 0;
 
@@ -183,11 +183,11 @@ uint8_t getKey() {
 
 void writeStrWithLimit(int _x, int y, const char *text, int limitX) {
 
-    uint8_t len = strlen(text);
+    uint16_t len = strlen(text);
     const char *ptr = text;
-    uint8_t c = 0;
-    uint8_t chary = 0;
-    uint8_t x = _x;
+    uint16_t c = 0;
+    uint16_t chary = 0;
+    uint16_t x = _x;
 
     for (; c < len && y < 25; ++c) {
 
@@ -226,7 +226,7 @@ void writeStrWithLimit(int _x, int y, const char *text, int limitX) {
     }
 }
 
-void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
+void writeStr(int16_t _x, int16_t y, const char *text, uint16_t fg, uint16_t bg) {
     writeStrWithLimit(_x, y, text, 40);
 }
 
@@ -237,7 +237,7 @@ void graphicsFlush() {
 
     for (int y = 0; y < 128; ++y) {
         for (int x = 0; x < 128; ++x) {
-            uint8_t index = *bufferPtr;
+            uint16_t index = *bufferPtr;
             if (index > 16) {
                 if ((x + y) & 1) {
                     index = 0;
@@ -287,7 +287,7 @@ void HUD_initialPaint() {
         realPut(16 + 128, c, 3);
     }
 
-    for (uint8_t i = 0; i < 6; ++i) {
+    for (uint16_t i = 0; i < 6; ++i) {
         writeStr(21, 14 + i, menuItems[i], 2, 0);
     }
 
