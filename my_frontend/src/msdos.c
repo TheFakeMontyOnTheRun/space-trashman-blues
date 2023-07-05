@@ -281,13 +281,13 @@ uint8_t getKey(void) {
     return toReturn;
 }
 
-void writeStrWithLimit(int _x, int y, const char *text, int limitX) {
+void writeStrWithLimit(uint16_t _x, uint16_t y, const char *text, uint16_t limitX) {
 
-    uint8_t len = strlen(text);
+    uint16_t len = strlen(text);
     const char *ptr = text;
-    uint8_t c = 0;
-    uint8_t chary = 0;
-    uint8_t x = _x;
+    uint16_t c = 0;
+    uint16_t chary = 0;
+    uint16_t x = _x;
 
     for (; c < len && y < 25; ++c) {
 
@@ -454,7 +454,7 @@ void HUD_initialPaint(void) {
         realPut(16 + 128, c, 3);
     }
 
-    for (uint8_t i = 0; i < 6; ++i) {
+    for (uint16_t i = 0; i < 6; ++i) {
         writeStr(21, 14 + i, menuItems[i]);
     }
 

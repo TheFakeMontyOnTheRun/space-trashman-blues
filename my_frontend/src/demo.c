@@ -133,14 +133,14 @@ int8_t min(int8_t x1, int8_t x2) {
 
 uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask, uint8_t type) {
 
-    int16_t z1;
-    int16_t z0px;
-    int16_t z1px;
-    int16_t z0py;
+    int8_t z1;
+    uint8_t z0px;
+    uint8_t z1px;
+    uint8_t z0py;
 
-    int16_t z1py;
-    int16_t z0dx;
-    int16_t z1dx;
+    uint8_t z1py;
+    int8_t z0dx;
+    int8_t z1dx;
 
     int16_t px0z0;
     int16_t py0z0;
@@ -266,15 +266,15 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
             int16_t upperY1 = py1z1;
             int16_t upperDx = abs(x1 - x0);
             int16_t upperDy = -abs(upperY1 - upperY0);
-            int16_t upperSy = upperY0 < upperY1 ? 1 : -1;
+            int8_t upperSy = upperY0 < upperY1 ? 1 : -1;
             int16_t upperErr = upperDx + upperDy;
             int16_t upperErr2;
             int16_t lowerY0 = py0z0;
             int16_t lowerY1 = py0z1;
             int16_t lowerDx = abs(x1 - x0);
-            int16_t lowerSx = x0 < x1 ? 1 : -1;
+            int8_t lowerSx = x0 < x1 ? 1 : -1;
             int16_t lowerDy = -abs(lowerY1 - lowerY0);
-            int16_t lowerSy = lowerY0 < lowerY1 ? 1 : -1;
+            int8_t lowerSy = lowerY0 < lowerY1 ? 1 : -1;
             int16_t lowerErr = lowerDx + lowerDy;
             int16_t lowerErr2 = 0;
 
@@ -497,11 +497,11 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
             int16_t y0 = py0z0;
             int16_t y1 = py0z1;
             int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
+            int8_t sx = x0 < x1 ? 1 : -1;
             int16_t dy = -abs(y1 - y0);
-            int16_t sy = y0 < y1 ? 1 : -1;
+            int8_t sy = y0 < y1 ? 1 : -1;
             int16_t err = dx + dy;
-            int16_t e2;
+            int16_t e2 = 0;
 
             while ((x0 != x1 || y0 != y1)) {
 
@@ -544,11 +544,11 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
             int16_t y0 = py0z0;
             int16_t y1 = py0z1;
             int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
+            int8_t sx = x0 < x1 ? 1 : -1;
             int16_t dy = -abs(y1 - y0);
-            int16_t sy = y0 < y1 ? 1 : -1;
+            int8_t sy = y0 < y1 ? 1 : -1;
             int16_t err = dx + dy;
-            int16_t e2;
+            int16_t e2 = 0;
 
             while ((x0 != x1 || y0 != y1)) {
 
@@ -703,11 +703,11 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
             int16_t y0 = py0z0;
             int16_t y1 = py0z1;
             int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
+            int8_t sx = x0 < x1 ? 1 : -1;
             int16_t dy = -abs(y1 - y0);
-            int16_t sy = y0 < y1 ? 1 : -1;
+            int8_t sy = y0 < y1 ? 1 : -1;
             int16_t err = dx + dy;
-            int16_t e2;
+            int16_t e2 = 0;
 
             while ((x0 != x1 || y0 != y1)) {
 
@@ -751,11 +751,11 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
             int16_t y0 = py0z0;
             int16_t y1 = py0z1;
             int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
+            int8_t sx = x0 < x1 ? 1 : -1;
             int16_t dy = -abs(y1 - y0);
-            int16_t sy = y0 < y1 ? 1 : -1;
+            int8_t sy = y0 < y1 ? 1 : -1;
             int16_t err = dx + dy;
-            int16_t e2;
+            int16_t e2 = 0;
 
             while ((x0 != x1 || y0 != y1)) {
 

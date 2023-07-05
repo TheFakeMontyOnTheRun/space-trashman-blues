@@ -28,7 +28,7 @@ void clearGraphics(void);
 #define BUFFER_SIZEY 128
 #define BUFFER_RESX 128
 #define BUFFER_RESY 128
-#define COOLDOWN_MAX 0x2EF
+#define COOLDOWN_MAX 0xFF
 #define MARGIN_TEXT_SCREEN_LIMIT 30
 
 uint8_t font[] = {
@@ -74,7 +74,7 @@ uint8_t font[] = {
 uint8_t cursorPosition = 0;
 
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
-uint16_t cooldown;
+uint8_t cooldown;
 
 void init(void) {
     set_color(15, 1, 1);
