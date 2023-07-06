@@ -43,7 +43,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
         case 3:
             if (shouldStipple) {
                 while (dy--) {
-                    if (stipple = !stipple) {
+                    if ((stipple = !stipple)) {
                         uint8_t byteInVRAM = imageBuffer[offset];
                         byteInVRAM = (byteInVRAM & 0b11111100) | 1;
                         imageBuffer[offset] = byteInVRAM;
@@ -62,7 +62,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
         case 2:
             if (shouldStipple) {
                 while (dy--) {
-                    if (stipple = !stipple) {
+                    if ((stipple = !stipple)) {
                         uint8_t byteInVRAM = imageBuffer[offset];
                         byteInVRAM = (byteInVRAM & 0b11110011) | 4;
                         imageBuffer[offset] = byteInVRAM;
@@ -81,7 +81,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
         case 1:
             if (shouldStipple) {
                 while (dy--) {
-                    if (stipple = !stipple) {
+                    if ((stipple = !stipple)) {
                         uint8_t byteInVRAM = imageBuffer[offset];
                         byteInVRAM = (byteInVRAM & 0b11001111) | 16;
                         imageBuffer[offset] = byteInVRAM;
@@ -101,7 +101,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
         case 0:
             if (shouldStipple) {
                 while (dy--) {
-                    if (stipple = !stipple) {
+                    if ((stipple = !stipple)) {
                         uint8_t byteInVRAM = imageBuffer[offset];
                         byteInVRAM = (byteInVRAM & 0b00111111) | 64;
                         imageBuffer[offset] = byteInVRAM;
@@ -281,13 +281,13 @@ uint8_t getKey(void) {
     return toReturn;
 }
 
-void writeStrWithLimit(int _x, int y, const char *text, int limitX) {
+void writeStrWithLimit(uint16_t _x, uint16_t y, const char *text, uint16_t limitX) {
 
-    uint8_t len = strlen(text);
+    uint16_t len = strlen(text);
     const char *ptr = text;
-    uint8_t c = 0;
-    uint8_t chary = 0;
-    uint8_t x = _x;
+    uint16_t c = 0;
+    uint16_t chary = 0;
+    uint16_t x = _x;
 
     for (; c < len && y < 25; ++c) {
 
@@ -333,11 +333,7 @@ void writeStr(uint8_t _x, uint8_t y, const char *text) {
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
 
 void graphicsFlush(void) {
-    uint8_t origin = 0;
-    uint16_t value;
-    uint16_t diOffset;
     uint16_t baseOffset = (36 * 40) + 4;
-    uint8_t *bufferPtr = &imageBuffer[0];
     uint16_t index = 0;
 
     asm volatile(
@@ -416,6 +412,17 @@ void showMessage(const char *message) {
     writeStr(1, 1, message);
 }
 
+void clearTextScreen(void) {
+    clearScreen();
+}
+
+void enterTextMode(void) {}
+
+void exitTextMode(void) {
+    clearScreen();
+}
+
+
 void titleScreen(void) {
     uint16_t keepGoing = 1;
     clearGraphics();
@@ -447,7 +454,7 @@ void HUD_initialPaint(void) {
         realPut(16 + 128, c, 3);
     }
 
-    for (uint8_t i = 0; i < 6; ++i) {
+    for (uint16_t i = 0; i < 6; ++i) {
         writeStr(21, 14 + i, menuItems[i]);
     }
 

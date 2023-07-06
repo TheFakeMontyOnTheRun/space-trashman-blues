@@ -15,10 +15,12 @@
 #include <stddef.h>
 
 #ifndef SMD
+
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+
 #else
 #include <genesis.h>
 #endif
@@ -28,7 +30,9 @@
 #include "Engine3D.h"
 
 #ifdef SUPPORTS_HACKING_MINIGAME
+
 #include "HackingMinigame.h"
+
 #endif
 
 #include "Common.h"
@@ -69,12 +73,12 @@ void renderCameraSouth();
 
 void renderCameraWest();
 
-int8_t cameraX = 33;
-int8_t cameraZ = 22;
-int8_t cameraRotation = 0;
-uint8_t running = 1;
+int16_t cameraX = 33;
+int16_t cameraZ = 22;
+int16_t cameraRotation = 0;
+uint16_t running = 1;
 int16_t cameraHeight = 1;
-uint8_t enteredFrom = 0xFF;
+uint16_t enteredFrom = 0xFF;
 
 extern int playerLocation;
 
@@ -129,7 +133,8 @@ int16_t min(int16_t x1, int16_t x2) {
 }
 #endif
 
-uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask, uint8_t type) {
+uint16_t
+drawWedge(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ, uint16_t elementMask, uint16_t type) {
 
     int16_t z1;
 
@@ -147,8 +152,8 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
     int16_t py1z1;
     int16_t px1z1;
 
-    uint8_t shouldStippleFill = (z0 >= STIPPLE_DISTANCE) ? (11 + STIPPLE_COLOUR_THRESHOLD) : 11;
-    uint8_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? (3 + STIPPLE_COLOUR_THRESHOLD) : 3;
+    uint16_t shouldStippleFill = (z0 >= STIPPLE_DISTANCE) ? (11 + STIPPLE_COLOUR_THRESHOLD) : 11;
+    uint16_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? (3 + STIPPLE_COLOUR_THRESHOLD) : 3;
 
     if (z0 >= 32) {
         return 0;
@@ -206,96 +211,95 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
         py1z1 = z1py + ((y0 + dY) * z1dx);
     }
 
-    {
-        int16_t x0, x1;
 
-        if (py1z0 < 0) {
-            py1z0 = 0;
-        }
+    int16_t lineX0, lineX1;
 
-        if (py0z0 < 0) {
-            py0z0 = 0;
-        }
+    if (py1z0 < 0) {
+        py1z0 = 0;
+    }
 
-        if (py1z0 >= YRES) {
-            py1z0 = YRESMINUSONE;
-        }
+    if (py0z0 < 0) {
+        py0z0 = 0;
+    }
 
-        if (py0z0 >= YRES) {
-            py0z0 = YRESMINUSONE;
-        }
+    if (py1z0 >= YRES) {
+        py1z0 = YRESMINUSONE;
+    }
+
+    if (py0z0 >= YRES) {
+        py0z0 = YRESMINUSONE;
+    }
 
 
-        if (py1z1 < 0) {
-            py1z1 = 0;
-        }
+    if (py1z1 < 0) {
+        py1z1 = 0;
+    }
 
-        if (py0z1 < 0) {
-            py0z1 = 0;
-        }
+    if (py0z1 < 0) {
+        py0z1 = 0;
+    }
 
-        if (py1z1 >= YRES) {
-            py1z1 = YRESMINUSONE;
-        }
+    if (py1z1 >= YRES) {
+        py1z1 = YRESMINUSONE;
+    }
 
-        if (py0z1 >= YRES) {
-            py0z1 = YRESMINUSONE;
-        }
+    if (py0z1 >= YRES) {
+        py0z1 = YRESMINUSONE;
+    }
 
-        /* The upper segment */
-        x0 = px0z0;
-        x1 = px1z1;
+    /* The upper segment */
+    lineX0 = px0z0;
+    lineX1 = px1z1;
 
-        if (x0 != x1) {
-            int16_t upperY0 = py1z0;
-            int16_t upperY1 = py1z1;
-            int16_t upperDx = abs(x1 - x0);
-            int16_t upperDy = -abs(upperY1 - upperY0);
-            int16_t upperSy = upperY0 < upperY1 ? 1 : -1;
-            int16_t upperErr = upperDx + upperDy;  /* error value e_xy */
-            int16_t upperErr2;
-            int16_t lowerY0 = py0z0;
-            int16_t lowerY1 = py0z1;
-            int16_t lowerDx = abs(x1 - x0);
-            int16_t lowerSx = x0 < x1 ? 1 : -1;
-            int16_t lowerDy = -abs(lowerY1 - lowerY0);
-            int16_t lowerSy = lowerY0 < lowerY1 ? 1 : -1;
-            int16_t lowerErr = lowerDx + lowerDy;  /* error value e_xy */
-            int16_t lowerErr2 = 0;
+    if (lineX0 != lineX1) {
+        int16_t upperY0 = py1z0;
+        int16_t upperY1 = py1z1;
+        int16_t upperDx = abs(lineX1 - lineX0);
+        int16_t upperDy = -abs(upperY1 - upperY0);
+        int16_t upperSy = upperY0 < upperY1 ? 1 : -1;
+        int16_t upperErr = upperDx + upperDy;  /* error value e_xy */
+        int16_t upperErr2;
+        int16_t lowerY0 = py0z0;
+        int16_t lowerY1 = py0z1;
+        int16_t lowerDx = abs(lineX1 - lineX0);
+        int16_t lowerSx = lineX0 < lineX1 ? 1 : -1;
+        int16_t lowerDy = -abs(lowerY1 - lowerY0);
+        int16_t lowerSy = lowerY0 < lowerY1 ? 1 : -1;
+        int16_t lowerErr = lowerDx + lowerDy;  /* error value e_xy */
+        int16_t lowerErr2 = 0;
 
-            while (x0 != x1) {
-                if (IN_RANGE(0, XRESMINUSONE, x0)) {
-                    vLine(x0, upperY0, lowerY0, shouldStippleFill);
-                    graphicsPut(x0, upperY0, shouldStippleBorder);
-                }
+        while (lineX0 != lineX1) {
+            if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
+                vLine(lineX0, upperY0, lowerY0, shouldStippleFill);
+                graphicsPut(lineX0, upperY0, shouldStippleBorder);
+            }
 
-                /* loop */
-                upperErr2 = upperErr * 2;
+            /* loop */
+            upperErr2 = upperErr * 2;
 
-                if (upperErr2 >= upperDy || lowerErr2 >= lowerDy) {
-                    upperErr += upperDy; /* e_xy+e_x > 0 */
-                    lowerErr += lowerDy; /* e_xy+e_x > 0 */
-                    x0 += lowerSx;
-                }
+            if (upperErr2 >= upperDy || lowerErr2 >= lowerDy) {
+                upperErr += upperDy; /* e_xy+e_x > 0 */
+                lowerErr += lowerDy; /* e_xy+e_x > 0 */
+                lineX0 += lowerSx;
+            }
 
-                if (x0 >= XRES) {
-                    return 0;
-                }
+            if (lineX0 >= XRES) {
+                return 0;
+            }
 
-                if (upperErr2 <= upperDx) {
-                    /* e_xy+e_y < 0 */
-                    upperErr += upperDx;
-                    upperY0 += upperSy;
-                }
+            if (upperErr2 <= upperDx) {
+                /* e_xy+e_y < 0 */
+                upperErr += upperDx;
+                upperY0 += upperSy;
+            }
 
-                /* loop */
-                lowerErr2 = lowerErr * 2;
+            /* loop */
+            lowerErr2 = lowerErr * 2;
 
-                if (lowerErr2 <= lowerDx) {
-                    /* e_xy+e_y < 0 */
-                    lowerErr += lowerDx;
-                    lowerY0 += lowerSy;
-                }
+            if (lowerErr2 <= lowerDx) {
+                /* e_xy+e_y < 0 */
+                lowerErr += lowerDx;
+                lowerY0 += lowerSy;
             }
         }
     }
@@ -317,7 +321,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
     return 1;
 }
 
-uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_t elementMask) {
+uint16_t drawSquare(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, uint16_t elementMask) {
 
     int16_t z0px;
     int16_t z0py;
@@ -330,7 +334,7 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
 
     int16_t x;
 
-    uint8_t drawContour;
+    uint16_t drawContour;
 
     if (z0 >= 32) {
         return 0;
@@ -351,7 +355,7 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
         return 0;
     }
 
-    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? (4 + STIPPLE_COLOUR_THRESHOLD) : 4;
+    uint16_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? (4 + STIPPLE_COLOUR_THRESHOLD) : 4;
 
     drawContour = (dY);
 
@@ -380,23 +384,23 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
 }
 
 
-uint8_t drawObjectAt(int8_t x0, int8_t z0) {
+uint16_t drawObjectAt(int16_t x0, int16_t z0) {
 
-    int8_t z1;
-    uint8_t z0px;
-    uint8_t z0py;
-    uint8_t z1px;
-    uint8_t z1py;
-    int8_t z0dx;
-    int8_t z1dx;
+    int16_t z1;
+    uint16_t z0px;
+    uint16_t z0py;
+    uint16_t z1px;
+    uint16_t z1py;
+    int16_t z0dx;
+    int16_t z1dx;
 
     int16_t px0z0;
-    int8_t py0z0;
+    int16_t py0z0;
     int16_t px1z0;
     int16_t px0z1;
-    int8_t py0z1;
+    int16_t py0z1;
     int16_t px1z1;
-    uint8_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? (5 + STIPPLE_COLOUR_THRESHOLD) : 5;
+    uint16_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? (5 + STIPPLE_COLOUR_THRESHOLD) : 5;
 
     if (z0 >= 32 || z0 <= 4) {
         return 0;
@@ -427,110 +431,109 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
     py0z1 = z1py + ((-cameraHeight) * z1dx);
 
 
-    {
-        int16_t x, x0, x1;
+    int16_t lineX0, lineX1;
 
-        /* Draw the horizontal outlines of z0 and z1 */
-        for (x = px0z0; x <= px1z0; ++x) {
-            if (IN_RANGE(0, XRESMINUSONE, x)) {
-                graphicsPut(x, py0z0, shouldStippleBorder);
-            }
+    /* Draw the horizontal outlines of z0 and z1 */
+    for (lineX0 = px0z0; lineX0 <= px1z0; ++lineX0) {
+        if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
+            graphicsPut(lineX0, py0z0, shouldStippleBorder);
         }
+    }
 
-        for (x = px0z1; x <= px1z1; ++x) {
-            if (IN_RANGE(0, XRESMINUSONE, x)) {
-                graphicsPut(x, py0z1, shouldStippleBorder);
-            }
+    for (lineX0 = px0z1; lineX0 <= px1z1; ++lineX0) {
+        if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
+            graphicsPut(lineX0, py0z1, shouldStippleBorder);
         }
+    }
 
-        /* The left segment */
-        x0 = px0z0;
-        x1 = px0z1;
+    /* The left segment */
+    lineX0 = px0z0;
+    lineX1 = px0z1;
 
-        if (x0 != x1) {
-            int16_t y0 = py0z0;
-            int16_t y1 = py0z1;
-            int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
-            int16_t dy = -abs(y1 - y0);
-            int16_t sy = y0 < y1 ? 1 : -1;
-            int16_t err = dx + dy;  /* error value e_xy */
-            int16_t e2;
+    if (lineX0 != lineX1) {
+        int16_t y0 = py0z0;
+        int16_t y1 = py0z1;
+        int16_t dx = abs(lineX1 - lineX0);
+        int16_t sx = lineX0 < lineX1 ? 1 : -1;
+        int16_t dy = -abs(y1 - y0);
+        int16_t sy = y0 < y1 ? 1 : -1;
+        int16_t err = dx + dy;  /* error value e_xy */
+        int16_t e2;
 
-            while ((x0 != x1 || y0 != y1)) {
+        while ((lineX0 != lineX1 || y0 != y1)) {
 
-                if (IN_RANGE(0, XRESMINUSONE, x0)) {
-                    graphicsPut(x0, y0, shouldStippleBorder);
-                }
-
-                /* loop */
-                e2 = err << 2;
-
-                if (e2 >= dy) {
-                    err += dy; /* e_xy+e_x > 0 */
-                    x0 += sx;
-                }
-
-                if (x0 >= XRES) {
-                    goto right_stroke;
-                }
-
-                if (e2 <= dx) {
-                    /* e_xy+e_y < 0 */
-                    err += dx;
-                    y0 += sy;
-                }
+            if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
+                graphicsPut(lineX0, y0, shouldStippleBorder);
             }
-        }
 
-        right_stroke:
+            /* loop */
+            e2 = err << 2;
 
-        x0 = px1z0;
-        x1 = px1z1;
+            if (e2 >= dy) {
+                err += dy; /* e_xy+e_x > 0 */
+                lineX0 += sx;
+            }
 
-        if (x0 != x1) {
-            int16_t y0 = py0z0;
-            int16_t y1 = py0z1;
-            int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
-            int16_t dy = -abs(y1 - y0);
-            int16_t sy = y0 < y1 ? 1 : -1;
-            int16_t err = dx + dy;  /* error value e_xy */
-            int16_t e2;
+            if (lineX0 >= XRES) {
+                goto right_stroke;
+            }
 
-            while ((x0 != x1 || y0 != y1)) {
-
-                if (IN_RANGE(0, XRESMINUSONE, x0)) {
-                    graphicsPut(x0, y0, shouldStippleBorder);
-                }
-
-                e2 = err << 2;
-
-                if (e2 >= dy) {
-                    err += dy; /* e_xy+e_x > 0 */
-                    x0 += sx;
-                }
-
-                if (x0 >= XRES) {
-                    return 1;
-                }
-
-                if (e2 <= dx) {
-                    /* e_xy+e_y < 0 */
-                    err += dx;
-                    y0 += sy;
-                }
+            if (e2 <= dx) {
+                /* e_xy+e_y < 0 */
+                err += dx;
+                y0 += sy;
             }
         }
     }
 
+    right_stroke:
+
+    lineX0 = px1z0;
+    lineX1 = px1z1;
+
+    if (lineX0 != lineX1) {
+        int16_t y0 = py0z0;
+        int16_t y1 = py0z1;
+        int16_t dx = abs(lineX1 - lineX0);
+        int16_t sx = lineX0 < lineX1 ? 1 : -1;
+        int16_t dy = -abs(y1 - y0);
+        int16_t sy = y0 < y1 ? 1 : -1;
+        int16_t err = dx + dy;  /* error value e_xy */
+        int16_t e2;
+
+        while ((lineX0 != lineX1 || y0 != y1)) {
+
+            if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
+                graphicsPut(lineX0, y0, shouldStippleBorder);
+            }
+
+            e2 = err << 2;
+
+            if (e2 >= dy) {
+                err += dy; /* e_xy+e_x > 0 */
+                lineX0 += sx;
+            }
+
+            if (lineX0 >= XRES) {
+                return 1;
+            }
+
+            if (e2 <= dx) {
+                /* e_xy+e_y < 0 */
+                err += dx;
+                y0 += sy;
+            }
+        }
+    }
+
+
     return 1;
 }
 
-uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask) {
+uint16_t drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ, uint16_t elementMask) {
 
-    int8_t y1 = y0 + dY;
-    int8_t z1;
+    int16_t y1 = y0 + dY;
+    int16_t z1;
 
     int16_t z0px;
     int16_t z0py;
@@ -547,10 +550,10 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     int16_t py0z1;
     int16_t px1z1;
 
-    uint8_t shouldStippleFill = (z0 >= STIPPLE_DISTANCE) ? (9 + STIPPLE_COLOUR_THRESHOLD) : 9;
-    uint8_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? (1 + STIPPLE_COLOUR_THRESHOLD) : 1;
+    uint16_t shouldStippleFill = (z0 >= STIPPLE_DISTANCE) ? (9 + STIPPLE_COLOUR_THRESHOLD) : 9;
+    uint16_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? (1 + STIPPLE_COLOUR_THRESHOLD) : 1;
 
-    uint8_t drawContour;
+    uint16_t drawContour;
 
     if (z0 >= 32 || z0 <= 4) {
         return 0;
@@ -581,120 +584,118 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
     drawContour = (dY);
 
-    {
-        int16_t x, x0, x1;
 
-        x0 = px0z0;
-        x1 = px0z1;
+    int16_t x, lineX0, lineX1;
 
-        if (x0 != x1) {
-            int16_t y0 = py0z0;
-            int16_t y1 = py0z1;
-            int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
-            int16_t dy = -abs(y1 - y0);
-            int16_t sy = y0 < y1 ? 1 : -1;
-            int16_t err = dx + dy;
-            int16_t e2;
+    lineX0 = px0z0;
+    lineX1 = px0z1;
 
-            while ((x0 != x1 || y0 != y1)) {
+    if (lineX0 != lineX1) {
+        int16_t lineY0 = py0z0;
+        int16_t lineY1 = py0z1;
+        int16_t lineDx = abs(lineX1 - lineX0);
+        int16_t lineSx = lineX0 < lineX1 ? 1 : -1;
+        int16_t lineDy = -abs(lineY1 - lineY0);
+        int16_t lineSy = lineY0 < lineY1 ? 1 : -1;
+        int16_t lineErr = lineDx + lineDy;
+        int16_t lineE2;
 
-                if (drawContour) {
-                    if (IN_RANGE(0, XRESMINUSONE, x0)) {
-                        vLine(x0, y0, py1z0, 6);
-                        graphicsPut(x0, y0, shouldStippleBorder);
-                    }
-                }
+        while ((lineX0 != lineX1 || lineY0 != lineY1)) {
 
-                e2 = err << 2;
-
-                if (e2 >= dy) {
-                    err += dy;
-                    x0 += sx;
-                }
-
-                if (x0 >= XRES) {
-                    goto right_stroke;
-                }
-
-                if (e2 <= dx) {
-                    err += dx;
-                    y0 += sy;
-                }
-            }
-        }
-
-        right_stroke:
-
-        x0 = px1z0;
-        x1 = px1z1;
-
-        if (x0 != x1) {
-            int16_t y0 = py0z0;
-            int16_t y1 = py0z1;
-            int16_t dx = abs(x1 - x0);
-            int16_t sx = x0 < x1 ? 1 : -1;
-            int16_t dy = -abs(y1 - y0);
-            int16_t sy = y0 < y1 ? 1 : -1;
-            int16_t err = dx + dy;
-            int16_t e2;
-
-            while ((x0 != x1 || y0 != y1)) {
-
-                if (drawContour) {
-                    if (IN_RANGE(0, XRESMINUSONE, x0)) {
-                        vLine(x0, y0, py1z0, 6);
-                        graphicsPut(x0, y0, shouldStippleBorder);
-                    }
-                }
-
-                e2 = err << 2;
-
-                if (e2 >= dy) {
-                    err += dy;
-                    x0 += sx;
-                }
-
-                if (x0 >= XRES) {
-                    goto final_stroke;
-                }
-
-                if (e2 <= dx) {
-
-                    err += dx;
-                    y0 += sy;
-                }
-            }
-        }
-
-        final_stroke:
-
-        if (py0z0 <= py0z0) {
             if (drawContour) {
-                for (x = px0z0; x <= px1z0; ++x) {
-                    if (IN_RANGE(0, XRESMINUSONE, x)) {
-                        vLine(x, py0z0, py1z0, shouldStippleFill);
-                        graphicsPut(x, py0z0, shouldStippleBorder);
-                    }
+                if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
+                    vLine(lineX0, lineY0, py1z0, 6);
+                    graphicsPut(lineX0, lineY0, shouldStippleBorder);
                 }
             }
-        }
 
-        if (IN_RANGE(0, XRESMINUSONE, px0z0)) {
-            vLine(px0z0, py0z0, py1z0, 1);
-        }
+            lineE2 = lineErr << 2;
 
-        if (IN_RANGE(0, XRESMINUSONE, px1z0)) {
-            vLine(px1z0, py0z0, py1z0, 1);
+            if (lineE2 >= lineDy) {
+                lineErr += lineDy;
+                lineX0 += lineSx;
+            }
+
+            if (lineX0 >= XRES) {
+                goto right_stroke;
+            }
+
+            if (lineE2 <= lineDx) {
+                lineErr += lineDx;
+                lineY0 += lineSy;
+            }
         }
     }
+
+    right_stroke:
+
+    lineX0 = px1z0;
+    lineX1 = px1z1;
+
+    if (lineX0 != lineX1) {
+        int16_t lineY0 = py0z0;
+        int16_t lineY1 = py0z1;
+        int16_t lineDx = abs(lineX1 - lineX0);
+        int16_t lineSx = lineX0 < lineX1 ? 1 : -1;
+        int16_t lineDy = -abs(lineY1 - lineY0);
+        int16_t lineSy = lineY0 < lineY1 ? 1 : -1;
+        int16_t lineErr = lineDx + lineDy;
+        int16_t lineE2;
+
+        while ((lineX0 != lineX1 || lineY0 != lineY1)) {
+
+            if (drawContour) {
+                if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
+                    vLine(lineX0, lineY0, py1z0, 6);
+                    graphicsPut(lineX0, lineY0, shouldStippleBorder);
+                }
+            }
+
+            lineE2 = lineErr << 2;
+
+            if (lineE2 >= lineDy) {
+                lineErr += lineDy;
+                lineX0 += lineSx;
+            }
+
+            if (lineX0 >= XRES) {
+                goto final_stroke;
+            }
+
+            if (lineE2 <= lineDx) {
+
+                lineErr += lineDx;
+                lineY0 += lineSy;
+            }
+        }
+    }
+
+    final_stroke:
+
+    if (drawContour) {
+        for (x = px0z0; x <= px1z0; ++x) {
+            if (IN_RANGE(0, XRESMINUSONE, x)) {
+                vLine(x, py0z0, py1z0, shouldStippleFill);
+                graphicsPut(x, py0z0, shouldStippleBorder);
+            }
+        }
+    }
+
+    if (IN_RANGE(0, XRESMINUSONE, px0z0)) {
+        vLine(px0z0, py0z0, py1z0, 1);
+    }
+
+    if (IN_RANGE(0, XRESMINUSONE, px1z0)) {
+        vLine(px1z0, py0z0, py1z0, 1);
+    }
+
 
     return 1;
 }
 
-uint8_t drawFloorAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dZ, uint8_t elementMask) {
+uint16_t drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ, uint16_t elementMask) {
 
-    int8_t z1;
+    int16_t z1;
 
     int16_t z0px;
     int16_t z0py;
@@ -709,7 +710,7 @@ uint8_t drawFloorAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dZ, uint8
     int16_t py0z1;
     int16_t px1z1;
 
-    uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? (2 + STIPPLE_COLOUR_THRESHOLD) : 2;
+    uint16_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? (2 + STIPPLE_COLOUR_THRESHOLD) : 2;
 
     if (z0 >= 32 || z0 < 1) {
         return 0;
@@ -763,7 +764,7 @@ uint8_t drawFloorAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dZ, uint8
         }
 
         if (IN_RANGE(0, XRESMINUSONE, leftX0) || IN_RANGE(0, XRESMINUSONE, rightX0)) {
-            hLine( leftX0, rightX0, currentY0, shouldStipple);
+            hLine(leftX0, rightX0, currentY0, shouldStipple);
         }
 
         leftE2 = leftErr << 2;
@@ -791,10 +792,10 @@ uint8_t drawFloorAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dZ, uint8
     return 1;
 }
 
-void drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t z) {
-    int8_t diff;
-    uint8_t pattern = (_pattern) & 127;
-    uint8_t type;
+void drawPattern(uint16_t _pattern, int16_t x0, int16_t x1, int16_t z) {
+    int16_t diff;
+    uint16_t pattern = (_pattern) & 127;
+    uint16_t type;
 
     /* 127 = 01111111 - the first bit is used for indicating the presence of an object.
      * And since there are only 127 patterns anyway...
@@ -805,7 +806,7 @@ void drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t z) {
 
     struct CTile3DProperties *prop =
             (struct CTile3DProperties *) getFromMap(&tileProperties, pattern);
-    
+
     int ceilingHeight = fixToInt(prop->mCeilingHeight);
     int floorHeight = fixToInt(prop->mFloorHeight);
 
@@ -863,8 +864,8 @@ void drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t z) {
             case 1:
             case 3:
                 drawSquare(x0 - 1, floorHeight - cameraHeight,
-                                  z + (cameraRotation == 3 ? 1 : 0) + 2,
-                                  x1 - x0, diff, 0xFF);
+                           z + (cameraRotation == 3 ? 1 : 0) + 2,
+                           x1 - x0, diff, 0xFF);
         }
     } else if (type == kWallNorth) {
 
@@ -873,8 +874,8 @@ void drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t z) {
             case 0:
             case 2:
                 drawSquare(x0 - 1, floorHeight - cameraHeight,
-                                  z + (cameraRotation == 0 ? 1 : 0) + 2,
-                                  x1 - x0, diff, 0xFF);
+                           z + (cameraRotation == 0 ? 1 : 0) + 2,
+                           x1 - x0, diff, 0xFF);
                 break;
             case 1:
             case 3:
@@ -912,7 +913,7 @@ void drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t z) {
     }
 }
 
-void repaintMapItems() {
+void repaintMapItems(void) {
     struct ObjectNode *node;
 
     /* ignore header node */
@@ -959,11 +960,11 @@ void repaintMapItems() {
 }
 
 /* all those refactors are due to a SDCC bug with very long functions */
-void renderScene() {
-    uint8_t x;
+void renderScene(void) {
+    uint16_t x;
 
 
-    uint8_t pattern = map[cameraZ][cameraX];
+    uint16_t pattern = map[cameraZ][cameraX];
 
     struct CTile3DProperties *prop =
             (struct CTile3DProperties *) getFromMap(&tileProperties, pattern);
@@ -992,14 +993,14 @@ void renderScene() {
     repaintMapItems();
 }
 
-void renderCameraWest() {
-    int8_t x;
-    int8_t y;
+void renderCameraWest(void) {
+    int16_t x;
+    int16_t y;
 
     for (x = 0; x < cameraX; ++x) {
 
-        int8_t minZ = max(cameraZ - ((cameraX) - x) - 2, 0);
-        int8_t maxZ = min(cameraZ + ((cameraX) - x) + 1, 31);
+        int16_t minZ = max(cameraZ - ((cameraX) - x) - 2, 0);
+        int16_t maxZ = min(cameraZ + ((cameraX) - x) + 1, 31);
 
         for (y = minZ; y < cameraZ; ++y) {
             drawPattern(map[y][x], -(y - cameraZ) + 1, -(y - cameraZ) + 2, cameraX - x);
@@ -1012,14 +1013,14 @@ void renderCameraWest() {
 }
 
 void
-renderCameraSouth() {
-    int8_t y;
-    int8_t x;
+renderCameraSouth(void) {
+    int16_t y;
+    int16_t x;
 
     for (y = 31; y > cameraZ; --y) {
 
-        int8_t maxX = min(cameraX + (y - cameraZ) + 1, 31);
-        int8_t minX = max(cameraX - (y - cameraZ) - 3, 0);
+        int16_t maxX = min(cameraX + (y - cameraZ) + 1, 31);
+        int16_t minX = max(cameraX - (y - cameraZ) - 3, 0);
 
         for (x = minX; x < cameraX - 1; ++x) {
             drawPattern(map[y][x], cameraX - x, cameraX - x + 1, y - cameraZ);
@@ -1033,16 +1034,16 @@ renderCameraSouth() {
     }
 }
 
-void renderCameraEast() {
-    int8_t x;
+void renderCameraEast(void) {
+    int16_t x;
 
-    int8_t y;
+    int16_t y;
 
 
     for (x = 31; x > cameraX; --x) {
 
-        int8_t maxZ = min(cameraZ + (x - cameraX) + 2, 31);
-        int8_t minZ = max(cameraZ - (x - cameraX) - 2, 0);
+        int16_t maxZ = min(cameraZ + (x - cameraX) + 2, 31);
+        int16_t minZ = max(cameraZ - (x - cameraX) - 2, 0);
 
         for (y = minZ; y < cameraZ; ++y) {
             drawPattern(map[y][x], (y - cameraZ) + 2, (y - cameraZ) + 3, x - cameraX);
@@ -1054,10 +1055,10 @@ void renderCameraEast() {
     }
 }
 
-void renderCameraNorth() {
+void renderCameraNorth(void) {
 
-    int8_t y;
-    int8_t x;
+    int16_t y;
+    int16_t x;
 
     for (y = 0; y < cameraZ; ++y) {
         int16_t maxX = min(cameraX + ((cameraZ) - y + 3), 31);
@@ -1073,7 +1074,7 @@ void renderCameraNorth() {
     }
 }
 
-void pickItem() {
+void pickItem(void) {
     struct Room *room = getRoom(getPlayerRoom());
 
     if (roomItem && roomItem->item) {
@@ -1092,7 +1093,7 @@ void pickItem() {
 
             if (itemToPick->pickable) {
 
-                uint8_t pattern = map[itemToPick->position.y][itemToPick->position.x];
+                uint16_t pattern = map[itemToPick->position.y][itemToPick->position.x];
                 map[itemToPick->position.y][itemToPick->position.x] = pattern;
 
                 pickObject(itemToPick);
@@ -1106,7 +1107,7 @@ void pickItem() {
     }
 }
 
-void dropItem() {
+void dropItem(void) {
 
     struct Item *item = NULL;
 
@@ -1115,7 +1116,7 @@ void dropItem() {
     }
 
     if (item != NULL) {
-        uint8_t pattern;
+        uint16_t pattern;
         struct WorldPosition *pos = getPlayerPosition();
 
         dropObjectToRoom(getPlayerRoom(), item);
@@ -1152,7 +1153,7 @@ void dropItem() {
     }
 }
 
-void nextItemInRoom() {
+void nextItemInRoom(void) {
     struct Room *room = getRoom(getPlayerRoom());
 
     if (roomItem == NULL) {
@@ -1170,7 +1171,7 @@ void nextItemInRoom() {
     }
 }
 
-void interactWithItemInRoom() {
+void interactWithItemInRoom(void) {
     struct Item *item = NULL;
     struct Item *itemToPick = NULL;
 
@@ -1187,11 +1188,11 @@ void interactWithItemInRoom() {
     }
 }
 
-void useItemInHand() {
+void useItemInHand(void) {
     useObjectNamed(getItem(focusedItem->item)->name);
 }
 
-void nextItemInHand() {
+void nextItemInHand(void) {
     focusedItem = focusedItem->next;
 
     if (!focusedItem) {
@@ -1201,11 +1202,11 @@ void nextItemInHand() {
 
 void updateMapItems();
 
-void initMap() {
+void initMap(void) {
     int x, y;
     const uint8_t *head;
     char buffer[32];
-    uint8_t current;
+    uint16_t current;
 
     roomItem = getRoom(getPlayerRoom())->itemsPresent->next;
 
@@ -1250,14 +1251,14 @@ void initMap() {
     HUD_initialPaint();
 }
 
-void startRoomTransitionAnimation() {
-     for (uint8_t y = 32; y >= 2; --y) {
+void startRoomTransitionAnimation(void) {
+    for (uint16_t y = 32; y >= 2; --y) {
         clearGraphics();
 
         vLine(y, y, 95 + (32 - y), 1);
         vLine(95 + (32 - y), y, 95 + (32 - y), 1);
 
-        for (uint8_t x = y; x < (95 + (32 - y)); ++x) {
+        for (uint16_t x = y; x < (95 + (32 - y)); ++x) {
             graphicsPut(x, y, 7);
             graphicsPut(x, 95 + (32 - y), 7);
 
@@ -1271,7 +1272,7 @@ void startRoomTransitionAnimation() {
     }
 }
 
-void updateMapItems() {
+void updateMapItems(void) {
     struct ObjectNode *node;
 
     /* ignore header node */
@@ -1279,19 +1280,19 @@ void updateMapItems() {
 
     while (node != NULL) {
         struct Item *item = getItem(node->item);
-        uint8_t pattern = map[item->position.y][item->position.x];
+        uint16_t pattern = map[item->position.y][item->position.x];
         map[item->position.y][item->position.x] = pattern;
         node = node->next;
     }
 
 }
 
-void tickRenderer() {
-    uint8_t prevX;
-    uint8_t prevZ;
+void tickRenderer(void) {
+    uint16_t prevX;
+    uint16_t prevZ;
     struct WorldPosition *pos;
     int previousLocation = playerLocation;
-    uint8_t newCell = 0;
+    uint16_t newCell = 0;
 
     clearGraphics();
     renderScene();
@@ -1442,6 +1443,7 @@ int main(int argc, char **argv) {
 
 int doMain(void) {
 #else
+
 int main(int argc, char **argv) {
 #endif
 

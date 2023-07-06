@@ -12,12 +12,12 @@ extern int accessGrantedToSafe;
 int cursorPosition = 0;
 
 char *menuItems[] = {
-		"8) Use/Toggle",
-		"5) Use with...",
-		"9) Use/pick...",
-		"6) Drop",
-		"7) Next item",
-		"4) Next in room",
+        "8) Use/Toggle",
+        "5) Use with...",
+        "9) Use/pick...",
+        "6) Drop",
+        "7) Next item",
+        "4) Next in room",
 };
 
 void graphicsFlush();
@@ -43,7 +43,7 @@ unsigned char imageBuffer[128 * 128];
 void shutdownGraphics() {
 }
 
-void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour) {
 
     if (x0 < 0) {
         return;
@@ -72,7 +72,7 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
 }
 
 
-void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
+void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
     if (y < 0) {
         return;
     }
@@ -98,7 +98,7 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
     }
 }
 
-void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
+void graphicsPut(int16_t x, int16_t y, uint16_t colour) {
     if (x < 0) {
         x = 0;
     }
@@ -118,126 +118,126 @@ void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
     imageBuffer[(128 * y) + x] = colour;
 }
 
-void realPut(int x, int y, uint8_t value) {
+void realPut(int x, int y, uint16_t value) {
 
-	int pixelRead = 0;
+    int pixelRead = 0;
 
-	int pixel = value;
-	int px = x;
-	int py = y;
+    int pixel = value;
+    int px = x;
+    int py = y;
 
-	asm volatile ("movb $0x0C, %%ah\n\t"
-				  "movb %0,    %%al\n\t"
-				  "movb $0x0,  %%bh\n\t"
-				  "movw %1,    %%cx\n\t"
-				  "movw %2,    %%dx\n\t"
-				  "int $0x10\n\t"
-	:
-	:"rm" (pixel), "rm" (px), "rm" (py)
-	: "ax", "bx", "cx", "dx"
-	);
+    asm volatile ("movb $0x0C, %%ah\n\t"
+                  "movb %0,    %%al\n\t"
+                  "movb $0x0,  %%bh\n\t"
+                  "movw %1,    %%cx\n\t"
+                  "movw %2,    %%dx\n\t"
+                  "int $0x10\n\t"
+            :
+            :"rm" (pixel), "rm" (px), "rm" (py)
+            : "ax", "bx", "cx", "dx"
+            );
 }
 
 void clearGraphics() {
-	memset(imageBuffer, 0, 128 * 128);
+    memset(imageBuffer, 0, 128 * 128);
 }
 
 void init() {
 
-	asm volatile("movb $0x0, %%ah\n\t"
-				 "movb $0x0D, %%al\n\t"
-				 "int $0x10\n\t"
-	:
-	:
-	: "ax"
-	);
+    asm volatile("movb $0x0, %%ah\n\t"
+                 "movb $0x0D, %%al\n\t"
+                 "int $0x10\n\t"
+            :
+            :
+            : "ax"
+            );
 }
 
 void clearScreen() {
-	init();
+    init();
 }
 
 uint8_t getKey() {
-	unsigned char toReturn = 255;
+    unsigned char toReturn = 255;
 
 
-	asm volatile ("movb $0x00, %%ah\n\t"
-				  "movb $0x00, %%al\n\t"
-				  "int $0x16       \n\t"
-				  "movb %%al, %0\n\t"
-	: "=rm"(toReturn)
-	:
-	: "ax"
-	);
+    asm volatile ("movb $0x00, %%ah\n\t"
+                  "movb $0x00, %%al\n\t"
+                  "int $0x16       \n\t"
+                  "movb %%al, %0\n\t"
+            : "=rm"(toReturn)
+            :
+            : "ax"
+            );
 
-	asm volatile("movb $0x0C, %%ah\n\t"
-				 "movb $0x00, %%al\n\t"
-				 "int $0x21\n\t"
-	:
-	:
-	: "ax"
-	);
+    asm volatile("movb $0x0C, %%ah\n\t"
+                 "movb $0x00, %%al\n\t"
+                 "int $0x21\n\t"
+            :
+            :
+            : "ax"
+            );
 
-	return toReturn;
+    return toReturn;
 }
 
 void writeStrWithLimit(int _x, int y, const char *text, int limitX) {
 
-	uint8_t len = strlen(text);
-	const char *ptr = text;
-	uint8_t c = 0;
-	uint8_t chary = 0;
-	uint8_t x = _x;
+    uint16_t len = strlen(text);
+    const char *ptr = text;
+    uint16_t c = 0;
+    uint16_t chary = 0;
+    uint16_t x = _x;
 
-	for (; c < len && y < 25; ++c) {
+    for (; c < len && y < 25; ++c) {
 
-		char cha = *ptr;
+        char cha = *ptr;
 
-		if (x == limitX) {
-			++y;
-			x = _x;
-		} else if (cha == '\n') {
-			++y;
-			x = _x;
-			++ptr;
-			continue;
-		} else {
-			++x;
-		}
+        if (x == limitX) {
+            ++y;
+            x = _x;
+        } else if (cha == '\n') {
+            ++y;
+            x = _x;
+            ++ptr;
+            continue;
+        } else {
+            ++x;
+        }
 
-		asm volatile (
-		"movb $0x02, %%ah\n\t"
-		"movb    %0, %%dl\n\t"
-		"movb    %1, %%dh\n\t"
-		"movb  $0x0, %%bh\n\t"
-		"int  $0x10\n\t"
-		"movb $0x09, %%ah\n"
-		"movb %2,    %%al\n"
-		"movw $0x01, %%cx\n"
-		"movb $0x0,  %%bh\n"
-		"movb $0x03, %%bl\n"
-		"int  $0x10\n\t"
-		:
-		: "rm" (x), "rm" (y), "rm"(cha)
-		: "ax", "bx", "cx", "dx"
-		);
+        asm volatile (
+                "movb $0x02, %%ah\n\t"
+                "movb    %0, %%dl\n\t"
+                "movb    %1, %%dh\n\t"
+                "movb  $0x0, %%bh\n\t"
+                "int  $0x10\n\t"
+                "movb $0x09, %%ah\n"
+                "movb %2,    %%al\n"
+                "movw $0x01, %%cx\n"
+                "movb $0x0,  %%bh\n"
+                "movb $0x03, %%bl\n"
+                "int  $0x10\n\t"
+                :
+                : "rm" (x), "rm" (y), "rm"(cha)
+                : "ax", "bx", "cx", "dx"
+                );
 
-		++ptr;
-	}
+        ++ptr;
+    }
 }
 
-void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
-	writeStrWithLimit(_x, y, text, 40);
+void writeStr(int16_t _x, int16_t y, const char *text, uint16_t fg, uint16_t bg) {
+    writeStrWithLimit(_x, y, text, 40);
 }
 
 void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 
 void graphicsFlush() {
-	uint8_t *bufferPtr = &imageBuffer[0];
+    uint8_t *bufferPtr = &imageBuffer[0];
 
-	for (int y = 0; y < 128; ++y) {
-        for ( int x = 0; x < 128; ++x ) {
-            uint8_t index = *bufferPtr;
+    for (int y = 0; y < 128; ++y) {
+        for (int x = 0; x < 128; ++x) {
+            uint16_t index = *bufferPtr;
             if (index > 16) {
                 if ((x + y) & 1) {
                     index = 0;
@@ -249,80 +249,80 @@ void graphicsFlush() {
             realPut(16 + x, 36 + y, index);
             bufferPtr++;
         }
-	}
+    }
 }
 
 void showMessage(const char *message) {
-	writeStr(1, 1, message, 2, 0);
+    writeStr(1, 1, message, 2, 0);
 }
 
 void titleScreen() {
-	int keepGoing = 1;
-	clearGraphics();
+    int keepGoing = 1;
+    clearGraphics();
 
-	writeStr(1, 1, "Space Mare Imperium:", 2, 0);
-	writeStr(1, 2, "     Derelict", 2, 0);
-	writeStr(1, 4, "by Daniel Monteiro", 2, 0);
-	writeStr(1, 6, "   Press any key", 2, 0);
-	writeStr(1, 7, "     to start", 2, 0);
+    writeStr(1, 1, "Space Mare Imperium:", 2, 0);
+    writeStr(1, 2, "     Derelict", 2, 0);
+    writeStr(1, 4, "by Daniel Monteiro", 2, 0);
+    writeStr(1, 6, "   Press any key", 2, 0);
+    writeStr(1, 7, "     to start", 2, 0);
 
-	while (keepGoing) {
-		if (getKey() != '.') {
-			keepGoing = 0;
-		}
-	}
+    while (keepGoing) {
+        if (getKey() != '.') {
+            keepGoing = 0;
+        }
+    }
 
-	clearScreen();
+    clearScreen();
 }
 
 void HUD_initialPaint() {
-	int c;
-	for (c = 15; c < (128 + 16 + 1); ++c) {
-		realPut(c, 35, 3);
-		realPut(c, 36 + 128, 3);
-	}
+    int c;
+    for (c = 15; c < (128 + 16 + 1); ++c) {
+        realPut(c, 35, 3);
+        realPut(c, 36 + 128, 3);
+    }
 
-	for (c = 35; c < (128 + 36 + 1); ++c) {
-		realPut(15, c, 3);
-		realPut(16 + 128, c, 3);
-	}
+    for (c = 35; c < (128 + 36 + 1); ++c) {
+        realPut(15, c, 3);
+        realPut(16 + 128, c, 3);
+    }
 
-	for (uint8_t i = 0; i < 6; ++i) {
-		writeStr(21, 14 + i, menuItems[i], 2, 0);
-	}
+    for (uint16_t i = 0; i < 6; ++i) {
+        writeStr(21, 14 + i, menuItems[i], 2, 0);
+    }
 
-	HUD_refresh();
+    HUD_refresh();
 }
 
 void sleepForMS(uint32_t ms) {
-	usleep(ms);
+    usleep(ms);
 }
 
 void HUD_refresh() {
-	writeStr(21, 21, "                    ", 2, 0);
-	writeStr(21, 22, "                    ", 2, 0);
-	writeStr(1, 2, "                    ", 2, 0);
-	writeStr(1, 3, "                    ", 2, 0);
+    writeStr(21, 21, "                    ", 2, 0);
+    writeStr(21, 22, "                    ", 2, 0);
+    writeStr(1, 2, "                    ", 2, 0);
+    writeStr(1, 3, "                    ", 2, 0);
 
-	if (focusedItem != NULL) {
-		struct Item *item = getItem(focusedItem->item);
+    if (focusedItem != NULL) {
+        struct Item *item = getItem(focusedItem->item);
 
-		if (item->active) {
-			writeStr(21, 21, "*", 2, 0);
-			writeStr(22, 21, item->name, 2, 0);
-		} else {
-			writeStr(21, 21, item->name, 2, 0);
-		}
-	}
+        if (item->active) {
+            writeStr(21, 21, "*", 2, 0);
+            writeStr(22, 21, item->name, 2, 0);
+        } else {
+            writeStr(21, 21, item->name, 2, 0);
+        }
+    }
 
-	if (roomItem != NULL) {
-		struct Item *item = getItem(roomItem->item);
+    if (roomItem != NULL) {
+        struct Item *item = getItem(roomItem->item);
 
-		if (item->active) {
-			writeStr(1, 2, "*", 2, 0);
-			writeStr(2, 2, item->name, 2, 0);
-		} else {
-			writeStr(1, 2, item->name, 2, 0);
-		}
-	}
+        if (item->active) {
+            writeStr(1, 2, "*", 2, 0);
+            writeStr(2, 2, item->name, 2, 0);
+        } else {
+            writeStr(1, 2, item->name, 2, 0);
+        }
+    }
 }

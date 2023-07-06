@@ -33,8 +33,8 @@ extern uint8_t accessGrantedToSafe;
 
 #define COOLDOWN_MAX 0x2EF
 
-uint8_t buffered = '.';
-uint8_t cursorPosition = 0;
+int16_t buffered = '.';
+int16_t cursorPosition = 0;
 uint16_t cooldown;
 uint16_t movementCooldown = 0;
 
@@ -200,16 +200,16 @@ void shutdownGraphics() {
 }
 
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, char *str, uint8_t limitX) {
+void writeStrWithLimit(int16_t _x, int16_t y, char *str, int16_t limitX) {
 
     char textBuffer[2];
     char *charPtr = &textBuffer[0];
 
-    uint8_t len = strlen(str);
-    uint8_t x = _x;
+    int16_t len = strlen(str);
+    int16_t x = _x;
     textBuffer[1] = 0;
 
-    for (uint8_t c = 0; c < len && y < 19; ++c) {
+    for (int16_t c = 0; c < len && y < 19; ++c) {
 
         char cha = *str;
 
@@ -232,11 +232,11 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *str, uint8_t limitX) {
     }
 }
 
-void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
+void writeStr(int16_t _x, int16_t y, const char *text, int16_t fg, int16_t bg) {
     writeStrWithLimit(_x, y, text, 31);
 }
 
-void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
+void graphicsPut(int16_t x, int16_t y, int16_t colour) {
     if (colour >= 16) {
         if ((x + y) & 1) {
             BMP_setPixelFast(x, 16 + y, 0);
@@ -248,20 +248,20 @@ void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
     }
 }
 
-void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
+void vLine(int16_t x0, int16_t y0, int16_t y1, int16_t colour) {
 
 
     if (y0 > y1) {
-        uint8_t tmp = y0;
+        int16_t tmp = y0;
         y0 = y1;
         y1 = tmp;
     }
 
-    uint8_t stipple;
+    int16_t stipple;
 
     if (colour < 16) {
         colour += (colour << 4); //double the pixel
-        for (uint8_t y = y0; y < y1; ++y) {
+        for (int16_t y = y0; y < y1; ++y) {
             BMP_setPixelFast(x0, 16 + y, colour);
         }
     } else {
@@ -269,7 +269,7 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
         colour -= 16;
         colour += (colour << 4); //double the pixel
 
-        for (uint8_t y = y0; y < y1; ++y) {
+        for (int16_t y = y0; y < y1; ++y) {
             stipple = !stipple;
 
             if (stipple) {
@@ -282,7 +282,7 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
 }
 
 
-void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
+void hLine(int16_t x0, int16_t x1, int16_t y, int16_t colour) {
     if (y < 0) {
         return;
     }
@@ -312,7 +312,7 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
     } else {
         colour -= 16;
         colour += (colour << 4); //double the pixel
-        uint8_t stipple = ((x0 + y) & 1);
+        int16_t stipple = ((x0 + y) & 1);
 
         for (int x = _x0; x <= _x1; ++x) {
             stipple = !stipple;
@@ -332,9 +332,9 @@ static void joyEvent(u16 joy, u16 changed, u16 state) {
 
 void showMessage(const char *message) {
     enterTextMode();
-    uint8_t keepGoing = 1;
+    int16_t keepGoing = 1;
 
-    for (uint8_t i = 0; i < 19; ++i) {
+    for (int16_t i = 0; i < 19; ++i) {
         VDP_clearText(16, i, 16);
     }
 
@@ -349,7 +349,7 @@ void showMessage(const char *message) {
 
     clearScreen();
 
-    for (uint8_t i = 0; i < 19; ++i) {
+    for (int16_t i = 0; i < 19; ++i) {
         VDP_clearText(16, i, 16);
     }
 
@@ -365,7 +365,7 @@ void clearGraphics() {
 }
 
 void clearTextScreen() {
-    for (uint8_t c = 0; c < 23; ++c) {
+    for (int16_t c = 0; c < 23; ++c) {
         VDP_clearText(0, c, 256 / 8);
     }
     cooldown = COOLDOWN_MAX;
@@ -394,9 +394,8 @@ void sleepForMS(uint32_t ms) {
 }
 
 void titleScreen() {
-    uint8_t keepGoing = 1;
+    int16_t keepGoing = 1;
     clearGraphics();
-    //               |
     writeStr(1, 5, "   Sub Mare Imperium  ", 2, 0);
     writeStr(1, 6, "        Derelict        ", 2, 0);
     writeStr(1, 8, "   by Daniel Monteiro   ", 2, 0);
@@ -454,7 +453,6 @@ void init() {
 }
 
 void graphicsFlush() {
-    HUD_initialPaint();
     BMP_flip(1);
     BMP_clear();
 }
@@ -463,7 +461,7 @@ void HUD_initialPaint() {
     struct Room *room = getRoom(getPlayerRoom());
 
 
-    for (uint8_t i = 0; i < 6; ++i) {
+    for (int16_t i = 0; i < 6; ++i) {
         writeStr(16, 13 + i, i == cursorPosition ? ">" : " ", 2, 0);
         writeStr(17, 13 + i, menuItems[i], 2, 0);
     }
@@ -473,11 +471,11 @@ void HUD_initialPaint() {
 
 void HUD_refresh() {
 
-    for (uint8_t i = 0; i < 13; ++i) {
+    for (int16_t i = 0; i < 13; ++i) {
         VDP_clearText(16, i, 16);
     }
 
-    for (uint8_t i = 0; i < 6; ++i) {
+    for (int16_t i = 0; i < 6; ++i) {
         writeStr(16, 13 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
     }
 

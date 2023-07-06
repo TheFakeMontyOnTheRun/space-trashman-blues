@@ -29,94 +29,64 @@ struct Pattern {
     uint8_t blockMovement: 1;
 };
 
-void HUD_initialPaint(void);
+void backToGraphics(void);
 
-void HUD_refresh(void);
-
-void tickRenderer(void);
-
-void renderScene(void);
-
-void shutdownGraphics(void);
-
-void sleepForMS(uint32_t ms);
+void clearGraphics(void);
 
 void clearScreen(void);
 
 void clearTextScreen(void);
 
+void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title);
+
+void dropItem(void);
+
 void enterTextMode(void);
 
 void exitTextMode(void);
 
-void writeStr(uint8_t column, uint8_t line, const char *str);
-
 uint8_t getKey(void);
-
-void init(void);
 
 void graphicsFlush(void);
 
 void graphicsPut(uint8_t x, uint8_t y);
 
-void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple);
+uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr);
 
-void titleScreen(void);
+void HUD_initialPaint(void);
 
-void showMessage(const char *msg);
+void HUD_refresh(void);
+
+void init(void);
+
+void interactWithItemInRoom(void);
+
+void nextItemInHand(void);
+
+void nextItemInRoom(void);
+
+void pickItem(void);
+
+void pickOrDrop(void);
 
 void printSituation(void);
 
-void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title);
+void renderScene(void);
 
-void interactWithItemInRoom(void);
+void showMessage(const char *msg);
 
-void pickItem(void);
+void shutdownGraphics(void);
 
-void dropItem(void);
+void sleepForMS(uint32_t ms);
 
-void nextItemInHand(void);
+void tickRenderer(void);
 
-void nextItemInRoom(void);
-
-uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr);
-
-void graphicsFlush(void);
-
-void nextItemInHand(void);
+void titleScreen(void);
 
 void useItemInHand(void);
 
-void nextItemInRoom(void);
+void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple);
 
-void interactWithItemInRoom(void);
-
-void pickOrDrop(void);
-
-void dropItem(void);
-
-void pickItem(void);
-
-void clearGraphics(void);
-
-void graphicsFlush(void);
-
-void nextItemInHand(void);
-
-void useItemInHand(void);
-
-void nextItemInRoom(void);
-
-void interactWithItemInRoom(void);
-
-void pickOrDrop(void);
-
-void dropItem(void);
-
-void pickItem(void);
-
-void clearGraphics(void);
-
-void backToGraphics(void);
+void writeStr(uint8_t column, uint8_t line, const char *str);
 
 #endif /* DERELICT8_ENGINE3D_H */

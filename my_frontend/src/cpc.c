@@ -28,7 +28,7 @@ extern uint8_t playerLocation;
 #define BUFFER_SIZEY 128
 #define BUFFER_RESX 128
 #define BUFFER_RESY 128
-#define COOLDOWN_MAX 0x2EF
+#define COOLDOWN_MAX 0xFF
 #define MARGIN_TEXT_SCREEN_LIMIT 40
 
 uint8_t font[] = {
@@ -207,7 +207,7 @@ const uint16_t lineStart[128] = {
 uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr);
 
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
-uint16_t cooldown;
+uint8_t cooldown;
 
 void init(void) {
     cooldown = COOLDOWN_MAX;
@@ -312,7 +312,7 @@ uint8_t *realPut(int x, int y, uint8_t colour, uint8_t *ptr) {
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {
 
     int x, y;
-    uint8_t *ptr;
+    uint8_t *ptr = NULL;
 
     for (x = 0; x < tw * 8; ++x) {
         if ((x & 3) == 0) {

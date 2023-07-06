@@ -66,7 +66,7 @@ const struct Pattern patterns[96] = {
 		{0,                   3,  BACK_WALL,  0}, /*    89 */
 		{BASE_CEILING_HEIGHT, 3,  CUBE,       0}, /*    90 */
 		{0,                   3,  LEFT_NEAR,  0}, /*    91 [ */
-		{0,                   3,  LEFT_NEAR,  1}, /*    92 /*  \ */
+		{0,                   3,  LEFT_NEAR,  1}, /*    92 \ */
 		{0,                   3,  RIGHT_NEAR, 0}, /*    93 ] */
         {BASE_CEILING_HEIGHT, 3,  CUBE,       0}, /*    94 ^ */
 		{BASE_CEILING_HEIGHT, 3,  CUBE,       1}, /*    95 _ */

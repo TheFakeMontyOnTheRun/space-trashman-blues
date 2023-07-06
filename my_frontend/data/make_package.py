@@ -1,32 +1,31 @@
 #!/usr/bin/env python
 
 import glob
-from PIL import Image
-from math import floor
-import os.path
 import io
+import os.path
+from PIL import Image
 
-palette = [[0,0,0]];
+palette = [[0,0,0]]
 transparency = 0
 
 def transform( pixel ):
     
-    if ((pixel[3] < 255) ):
+    if pixel[3] < 255:
  #       print("skipping")
-        return transparency;
-       
-    shade = 0;  
-    shade += (((((pixel[0] & 255) ) << 2) >> 8)) << 6;
-    shade += (((((pixel[1] & 255) ) << 3) >> 8)) << 3;
-    shade += (((((pixel[2] & 255) ) << 3) >> 8)) << 0;
+        return transparency
+
+    shade = 0
+    shade += (((pixel[0] & 255) << 2) >> 8) << 6
+    shade += (((pixel[1] & 255) << 3) >> 8) << 3
+    shade += (((pixel[2] & 255) << 3) >> 8) << 0
     return shade
                     
-def palettize_file( filename ):
+def palettize_file(palette_filename):
 
-    output_filename = filename.replace( os.path.splitext(filename)[1], ".img").\
+    output_filename = palette_filename.replace(os.path.splitext(palette_filename)[1], ".img").\
         replace("src/", "assets/")
-    print( str(filename) + " became " + str(output_filename ))
-    img_src = Image.open( filename ).convert('RGBA')
+    print(str(palette_filename) + " became " + str(output_filename))
+    img_src = Image.open(palette_filename).convert('RGBA')
     img_data = img_src.load()
     img_dst = io.open( output_filename, "wb")
     img_dst.write(bytearray([(img_src.width & 0xFF00) >> 8, img_src.width &
@@ -40,7 +39,7 @@ def palettize_file( filename ):
         for x in range( 0, img_src.width ):
             pixel = img_data[ x, y ]
             adjusted = transform( pixel )
-            if ( adjusted != last or repetitions == 255 ):
+            if adjusted != last or repetitions == 255:
                 img_dst.write(bytearray([last]))
                 img_dst.write(bytearray([repetitions]))
 
