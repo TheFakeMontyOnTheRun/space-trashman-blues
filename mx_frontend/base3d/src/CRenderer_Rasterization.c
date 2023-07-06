@@ -582,7 +582,7 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
         x0y0 = x0y1;
         x0y1 = tmp;
 
-        tmp = x1y1;
+        tmp = x1y0;
         x1y0 = x1y1;
         x1y1 = tmp;
     }
@@ -719,7 +719,7 @@ void drawFloor(FixP_t y0,
         x0y0 = x0y1;
         x0y1 = tmp;
 
-        tmp = x1y1;
+        tmp = x1y0;
         x1y0 = x1y1;
         x1y1 = tmp;
     }
