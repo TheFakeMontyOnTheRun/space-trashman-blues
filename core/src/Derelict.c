@@ -207,7 +207,7 @@ void useCommWithRank(struct Item *item) {
 		defaultLogger("Insufficient rank to access");
 		return;
 	}
-	defaultLogger("Computer core rebooted");
+	defaultLogger("Computer node rebooted");
 	item->active = !item->active;
 }
 
@@ -217,6 +217,14 @@ void useCommWithRank(struct Item *item) {
  */
 void useComputerRack(struct Item *item) {
 
+	if (!getItemNamed("comm-terminal-1")->active ||
+	    !getItemNamed("comm-terminal-2")->active ||
+	    !getItemNamed("comm-terminal-3")->active) {
+	  defaultLogger("Central computer is offline");
+	  return;
+	}
+
+  
 	if (accessGrantedToSafe) {
 		defaultLogger("Safe unlocked");
 		addToRoom("situation-room", getItemNamed("root-keycard"));
