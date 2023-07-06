@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2023-07-05 22:31:01</td>
+            <td class="headerValue">2023-07-06 19:44:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">1</td>
@@ -76,20 +76,20 @@
 <a name="14"><span class="lineNum">      14 </span>            : #include &lt;string.h&gt;</a>
 <a name="15"><span class="lineNum">      15 </span>            : #endif</a>
 <a name="16"><span class="lineNum">      16 </span>            : </a>
-<a name="17"><span class="lineNum">      17 </span><span class="lineCov">        105 : int parseCommand(const char *cmd, const char *operand) {</span></a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineCov">        105 :     if (!strcmp(cmd, &quot;pick&quot;)) {</span></a>
+<a name="17"><span class="lineNum">      17 </span><span class="lineCov">        107 : int parseCommand(const char *cmd, const char *operand) {</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">        107 :     if (!strcmp(cmd, &quot;pick&quot;)) {</span></a>
 <a name="19"><span class="lineNum">      19 </span><span class="lineCov">         24 :         pickObjectByName(operand);</span></a>
-<a name="20"><span class="lineNum">      20 </span><span class="lineCov">         81 :     } else if (!strcmp(cmd, &quot;drop&quot;)) {</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">         83 :     } else if (!strcmp(cmd, &quot;drop&quot;)) {</span></a>
 <a name="21"><span class="lineNum">      21 </span><span class="lineCov">         11 :         dropObjectByName(operand);</span></a>
-<a name="22"><span class="lineNum">      22 </span><span class="lineCov">         70 :     } else if (!strcmp(cmd, &quot;move&quot;)) {</span></a>
+<a name="22"><span class="lineNum">      22 </span><span class="lineCov">         72 :     } else if (!strcmp(cmd, &quot;move&quot;)) {</span></a>
 <a name="23"><span class="lineNum">      23 </span>            : </a>
 <a name="24"><span class="lineNum">      24 </span><span class="lineCov">         14 :         if (operand != NULL &amp;&amp; operand[0] != '\0') {</span></a>
 <a name="25"><span class="lineNum">      25 </span><span class="lineCov">         12 :             moveBy(operand[0] - '0');</span></a>
 <a name="26"><span class="lineNum">      26 </span>            :         } else {</a>
 <a name="27"><span class="lineNum">      27 </span><span class="lineCov">          2 :                         errorHandlerCallback(&quot;Please specify a valid direction&quot;);</span></a>
 <a name="28"><span class="lineNum">      28 </span>            :         }</a>
-<a name="29"><span class="lineNum">      29 </span><span class="lineCov">         56 :     } else if (!strcmp(cmd, &quot;use&quot;)) {</span></a>
-<a name="30"><span class="lineNum">      30 </span><span class="lineCov">         22 :         useObjectNamed(operand);</span></a>
+<a name="29"><span class="lineNum">      29 </span><span class="lineCov">         58 :     } else if (!strcmp(cmd, &quot;use&quot;)) {</span></a>
+<a name="30"><span class="lineNum">      30 </span><span class="lineCov">         24 :         useObjectNamed(operand);</span></a>
 <a name="31"><span class="lineNum">      31 </span><span class="lineCov">         34 :     } else if (!strcmp(cmd, &quot;w&quot;)) {</span></a>
 <a name="32"><span class="lineNum">      32 </span><span class="lineCov">          4 :         walkBy(0);</span></a>
 <a name="33"><span class="lineNum">      33 </span><span class="lineCov">         30 :     } else if (!strcmp(cmd, &quot;s&quot;)) {</span></a>
@@ -115,7 +115,7 @@
 <a name="53"><span class="lineNum">      53 </span><span class="lineCov">          1 :         return FALSE;</span></a>
 <a name="54"><span class="lineNum">      54 </span>            :     }</a>
 <a name="55"><span class="lineNum">      55 </span>            : </a>
-<a name="56"><span class="lineNum">      56 </span><span class="lineCov">        104 :     return TRUE;</span></a>
+<a name="56"><span class="lineNum">      56 </span><span class="lineCov">        106 :     return TRUE;</span></a>
 <a name="57"><span class="lineNum">      57 </span>            : }</a>
 </pre>
       </td>
