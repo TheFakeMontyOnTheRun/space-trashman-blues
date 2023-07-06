@@ -270,7 +270,7 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, int16_t colour) {
         colour += (colour << 4); //double the pixel
 
         for (int16_t y = y0; y < y1; ++y) {
-            stipple = !stipple;
+            stipple = ~stipple;
 
             if (stipple) {
                 BMP_setPixelFast(x0, 16 + y, colour);
@@ -315,7 +315,7 @@ void hLine(int16_t x0, int16_t x1, int16_t y, int16_t colour) {
         int16_t stipple = ((x0 + y) & 1);
 
         for (int x = _x0; x <= _x1; ++x) {
-            stipple = !stipple;
+            stipple = ~stipple;
 
             if (stipple) {
                 BMP_setPixelFast(x, 16 + y, colour);
