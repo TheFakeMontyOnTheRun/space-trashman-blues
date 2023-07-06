@@ -71,20 +71,17 @@ void maskWall(
     uint8_t *bufferData = &framebuffer[0];
 
     if (x0 > x1) {
-        /* switch x0 with x1 */
-        x0 = x0 + x1;
-        x1 = x0 - x1;
-        x0 = x0 - x1;
+        FixP_t tmp = x0;
+        x0 = x1;
+        x1  = tmp;
 
-        /* switch x0y0 with x1y0 */
-        x0y0 = x0y0 + x1y0;
-        x1y0 = x0y0 - x1y0;
-        x0y0 = x0y0 - x1y0;
+        tmp = x0y0;
+        x0y0 = x1y0;
+        x1y0 = tmp;
 
-        /* switch x0y1 with x1y1 */
-        x0y1 = x0y1 + x1y1;
-        x1y1 = x0y1 - x1y1;
-        x0y1 = x0y1 - x1y1;
+        tmp = x0y1;
+        x0y1 = x1y1;
+        x1y1 = tmp;
     }
 
     x = fixToInt(x0);
@@ -218,20 +215,17 @@ void drawWall(FixP_t x0,
     int farForStipple = (z >= distanceForPenumbra);
 
     if (x0 > x1) {
-        /* switch x0 with x1 */
-        x0 = x0 + x1;
-        x1 = x0 - x1;
-        x0 = x0 - x1;
+        FixP_t tmp = x0;
+        x0 = x1;
+        x1 = tmp;
 
-        /* switch x0y0 with x1y0 */
-        x0y0 = x0y0 + x1y0;
-        x1y0 = x0y0 - x1y0;
-        x0y0 = x0y0 - x1y0;
+        tmp = x0y0;
+        x0y0 = x1y0;
+        x1y0 = tmp;
 
-        /* switch x0y1 with x1y1 */
-        x0y1 = x0y1 + x1y1;
-        x1y1 = x0y1 - x1y1;
-        x0y1 = x0y1 - x1y1;
+        tmp = x0y1;
+        x0y1 = x1y1;
+        x1y1 = tmp;
     }
 
     x = fixToInt(x0);
@@ -328,7 +322,7 @@ void drawWall(FixP_t x0,
 
             const int32_t iv = fixToInt(v);
 
-            stipple = !stipple;
+            stipple = ~stipple;
 
             if (iv != lastV && !(stipple && farForStipple)) {
 
@@ -428,10 +422,9 @@ void drawFrontWall(FixP_t x0,
 
     /* if we have a quad in which the base is smaller */
     if (y0 > y1) {
-        /* switch y0 with y1 */
-        y0 = y0 + y1;
-        y1 = y0 - y1;
-        y0 = y0 - y1;
+        FixP_t tmp = y0;
+        y0 = y1;
+        y1 = tmp;
     }
 
     y = fixToInt(y0);
@@ -522,7 +515,7 @@ void drawFrontWall(FixP_t x0,
         
         for (; ix < iX1; ++ix) {
             const uint8_t iu = fixToInt(u) & (NATIVE_TEXTURE_SIZE - 1);
-            stipple = !stipple;
+            stipple = ~stipple;
             /*
                           only fetch the next texel if we really changed the
                           u, v coordinates (otherwise, would fetch the same
@@ -581,20 +574,17 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
 
     /* if we have a trapezoid in which the base is smaller */
     if (y0 > y1) {
-        /* switch y0 with y1 */
-        y0 = y0 + y1;
-        y1 = y0 - y1;
-        y0 = y0 - y1;
+        FixP_t tmp = y0;
+        y0 = y1;
+        y1 = tmp;
 
-        /* switch x0y0 with x0y1 */
-        x0y0 = x0y0 + x0y1;
-        x0y1 = x0y0 - x0y1;
-        x0y0 = x0y0 - x0y1;
+        tmp = x0y0;
+        x0y0 = x0y1;
+        x0y1 = tmp;
 
-        /* switch x1y0 with x1y1 */
-        x1y0 = x1y0 + x1y1;
-        x1y1 = x1y0 - x1y1;
-        x1y0 = x1y0 - x1y1;
+        tmp = x1y1;
+        x1y0 = x1y1;
+        x1y1 = tmp;
     }
 
     y = fixToInt(y0);
@@ -721,20 +711,17 @@ void drawFloor(FixP_t y0,
 
     /* if we have a trapezoid in which the base is smaller */
     if (y0 > y1) {
-        /* switch y0 with y1 */
-        y0 = y0 + y1;
-        y1 = y0 - y1;
-        y0 = y0 - y1;
+        FixP_t tmp = y0;
+        y0 = y1;
+        y1 = tmp;
 
-        /* switch x0y0 with x0y1 */
-        x0y0 = x0y0 + x0y1;
-        x0y1 = x0y0 - x0y1;
-        x0y0 = x0y0 - x0y1;
+        tmp = x0y0;
+        x0y0 = x0y1;
+        x0y1 = tmp;
 
-        /* switch x1y0 with x1y1 */
-        x1y0 = x1y0 + x1y1;
-        x1y1 = x1y0 - x1y1;
-        x1y0 = x1y0 - x1y1;
+        tmp = x1y1;
+        x1y0 = x1y1;
+        x1y1 = tmp;
     }
 
     if (y1 < 0 || y0 >= FIXP_YRES) {
@@ -822,7 +809,7 @@ void drawFloor(FixP_t y0,
 
             const int32_t iu = fixToInt(u);
 
-            stipple = !stipple;
+            stipple = ~stipple;
             /*
             only fetch the next texel if we really changed the
             u, v coordinates (otherwise, would fetch the same
@@ -1149,7 +1136,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
                 int xPos = iFX0;
                 stipple = !((xPos + y) & 1);
                 while (limit--) {
-                    stipple = !stipple;
+                    stipple = ~stipple;
                     u = abs(fixToInt(texelLineX)) % NATIVE_TEXTURE_SIZE;
                     v = abs(fixToInt(texelLineY)) % NATIVE_TEXTURE_SIZE;
 
@@ -1298,7 +1285,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
 
                 stipple = !((xPos + y) & 1);
                 while (limit--) {
-                    stipple = !stipple;
+                    stipple = ~stipple;
                     u = abs(fixToInt(texelLineX)) % NATIVE_TEXTURE_SIZE;
                     v = abs(fixToInt(texelLineY)) % NATIVE_TEXTURE_SIZE;
 
