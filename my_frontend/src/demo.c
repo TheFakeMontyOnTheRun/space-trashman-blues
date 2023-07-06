@@ -279,7 +279,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
 
             if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
 
-                stipple = !stipple;
+                stipple = ~stipple;
 
                 if ((stipple || !shouldStipple) && stencilHigh[lineX0] <= upperY0) {
                     graphicsPut(lineX0, upperY0);
@@ -376,7 +376,7 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
     for (x = px0z0; x <= px1z0; ++x) {
         if (IN_RANGE(0, XRESMINUSONE, x)) {
 
-            stipple = !stipple;
+            stipple = ~stipple;
 
             if (stencilHigh[x] <= py1z0) {
                 if (drawContour && (stipple || !shouldStipple)) {
@@ -463,7 +463,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
     for (x = px0z1; x <= px1z1; ++x) {
         if (IN_RANGE(0, XRESMINUSONE, x)) {
 
-            stipple = !stipple;
+            stipple = ~stipple;
 
             if ((stipple || !shouldStipple) && stencilHigh[x] < py0z1) {
                 graphicsPut(x, py0z1);
@@ -489,7 +489,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
 
             if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
 
-                stipple = !stipple;
+                stipple = ~stipple;
 
                 if ((stipple || !shouldStipple) && stencilHigh[lineX0] < y0) {
                     graphicsPut(lineX0, y0);
@@ -533,7 +533,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
         while ((lineX0 != lineX1 || y0 != y1)) {
 
             if (IN_RANGE(0, XRESMINUSONE, lineX0) && stencilHigh[lineX0] < y0) {
-                stipple = !stipple;
+                stipple = ~stipple;
 
                 if ((stipple || !shouldStipple)) {
                     graphicsPut(lineX0, y0);
@@ -648,7 +648,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
         for (x = px0z0; x <= px1z0; ++x) {
             if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
 
-                stipple = !stipple;
+                stipple = ~stipple;
 
                 if (drawContour && (stipple || !shouldStipple)) {
                     graphicsPut(x, stencilHigh[x]);
@@ -662,7 +662,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
         for (x = px0z0; x <= px1z0; ++x) {
             if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
 
-                stipple = !stipple;
+                stipple = ~stipple;
 
                 if ((stipple || !shouldStipple)) {
                     graphicsPut(x, stencilHigh[x]);
@@ -689,7 +689,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
             if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
 
-                stipple = !stipple;
+                stipple = ~stipple;
 
                 if (stencilHigh[lineX0] < lineY0) {
                     if (drawContour && (stipple || !shouldStipple)) {
@@ -736,7 +736,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
             if (IN_RANGE(0, XRESMINUSONE, lineX0) && stencilHigh[lineX0] < lineY0) {
 
-                stipple = !stipple;
+                stipple = ~stipple;
 
                 if (drawContour && (stipple || !shouldStipple)) {
                     graphicsPut(lineX0, stencilHigh[lineX0]);
