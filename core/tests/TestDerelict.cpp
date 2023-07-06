@@ -266,8 +266,26 @@ TEST_F(TestDerelict, canOnlyUseCommWithHigherRanks) {
     ASSERT_TRUE(getItemNamed("comm-terminal-2")->active);
 }
 
+
+TEST_F(TestDerelict, cantUnlockSafeWithOfflineComputerNodes) {
+    setPlayerLocation(getRoomIdByName("situation-room"));
+
+    parseCommand("use", "digital-safe");
+    ASSERT_FALSE(hasItemInRoom("situation-room", "root-keycard"));
+
+    accessGrantedToSafe = TRUE;
+
+    parseCommand("use", "digital-safe");
+    ASSERT_FALSE(hasItemInRoom("situation-room", "root-keycard"));
+
+}
+
 TEST_F(TestDerelict, canUnlockSafeToCollectTheRootCard) {
     setPlayerLocation(getRoomIdByName("situation-room"));
+
+    getItemNamed("comm-terminal-1")->active = 1;
+    getItemNamed("comm-terminal-2")->active = 1;
+    getItemNamed("comm-terminal-3")->active = 1;
 
     parseCommand("use", "digital-safe");
     ASSERT_FALSE(hasItemInRoom("situation-room", "root-keycard"));
