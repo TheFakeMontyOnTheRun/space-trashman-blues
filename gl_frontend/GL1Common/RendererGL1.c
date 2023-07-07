@@ -614,7 +614,8 @@ void render(const long ms) {
 				heightDiff = tileProp->mCeilingHeight - tileProp->mFloorHeight;
 				lastElement = element;
 
-				glTranslatef(fixToInt(xCameraOffset + position.mX), 0, -fixToInt(zCameraOffset + position.mZ));
+				FixP_t zPos = zCameraOffset + position.mZ;
+				glTranslatef(fixToInt(xCameraOffset + position.mX), 0, -fixToFloat(zPos));
 
 				if (tileProp->mFloorRepeatedTextureIndex != 0xFF
 					&& tileProp->mFloorRepetitions > 0) {
@@ -1020,7 +1021,7 @@ void render(const long ms) {
 
 					drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
 				}
-				glTranslatef(-fixToInt(xCameraOffset + position.mX), 0, fixToInt(zCameraOffset + position.mZ));
+				glTranslatef(-fixToInt(xCameraOffset + position.mX), 0, fixToFloat(zPos));
 			}
 		}
 #ifdef NDS

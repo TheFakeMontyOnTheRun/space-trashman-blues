@@ -13,6 +13,6 @@ typedef int32_t FixP_t;
 
 #define Div(v1, v2)  ((FixP_t)((((int64_t) (v1)) * (1 << kIntegerPart)) / (v2)))
 
-#define fixToFloat(fp) (fixToInt(Mul((fp), intToFix(128))) / 128.0f)
+#define fixToFloat(fp) (fixToInt(Mul((fp), intToFix(16))) / 16.0f)
 
 #endif
