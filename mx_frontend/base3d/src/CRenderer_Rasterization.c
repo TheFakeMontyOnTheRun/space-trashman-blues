@@ -316,7 +316,7 @@ void drawWall(FixP_t x0,
             iy = 0;
         }
 
-        stipple = !((ix + iy) & 1);
+        stipple = (((ix + iy) & 1) ) ? 0xFFFFFFFF : 0;
 
         for (; iy < iY1; ++iy) {
 
@@ -511,7 +511,7 @@ void drawFrontWall(FixP_t x0,
             iX1 = XRES;
         }
 
-        stipple = ((ix + iy) & 1);
+        stipple = (((ix + iy) & 1)) ? 0xFFFFFFFF : 0;
         
         for (; ix < iX1; ++ix) {
             const uint8_t iu = fixToInt(u) & (NATIVE_TEXTURE_SIZE - 1);
@@ -799,7 +799,7 @@ void drawFloor(FixP_t y0,
         destinationLine = bufferData + (XRES_FRAMEBUFFER * iy) + ix;
         sourceLineStart = texture + (fixToInt(v) * NATIVE_TEXTURE_SIZE);
         pixel = *(sourceLineStart);
-        stipple = ((iX0 + iy) & 1) == 0;
+        stipple = ((iX0 + iy) & 1) ? 0xFFFFFFFF : 0;
 
         if (iX1 >= XRES) {
             iX1 = XRES;
@@ -1134,7 +1134,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
             if (y >= 0 && y <= YRES) {
 
                 int xPos = iFX0;
-                stipple = !((xPos + y) & 1);
+                stipple = ((xPos + y) & 1) ? 0xFFFFFFFF : 0;
                 while (limit--) {
                     stipple = ~stipple;
                     u = abs(fixToInt(texelLineX)) % NATIVE_TEXTURE_SIZE;
@@ -1283,7 +1283,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
 
                 int xPos = iFX0;
 
-                stipple = !((xPos + y) & 1);
+                stipple = ((xPos + y) & 1) ? 0xFFFFFFFF : 0;
                 while (limit--) {
                     stipple = ~stipple;
                     u = abs(fixToInt(texelLineX)) % NATIVE_TEXTURE_SIZE;
