@@ -1037,6 +1037,38 @@ next_cluster:
         ++stencilPtr;
     }
 #else
+#ifdef MSDOS
+    stencilPtr = &stencilHigh[0];
+
+    for (x = 0; x < XRESMINUSONE;) {
+      uint8_t y, prevY, c;
+        uint8_t *ptr;
+next_cluster:
+        /* pixel 1 */
+        y = *stencilPtr;
+        ptr = graphicsPutAddr(x, y, NULL );
+
+        if (x & 3) {
+            ++x;
+            ++stencilPtr;
+            continue;
+        }
+
+        for (c = 2; c < 4; ++c ) {
+            ++x;
+            ++stencilPtr;
+            prevY = y;
+            y = *stencilPtr;
+            if ( y != prevY ) {
+                goto next_cluster;
+            }
+            ptr = graphicsPutAddr(x, y, ptr );
+        }
+
+        ++x;
+        ++stencilPtr;
+    }
+#else
     stencilPtr = &stencilHigh[0];
 
     for (x = 0; x < XRES; ++x) {
@@ -1044,6 +1076,7 @@ next_cluster:
         graphicsPut(x, stencilY);
         ++stencilPtr;
     }
+#endif
 #endif
 #endif
 

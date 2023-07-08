@@ -27,124 +27,128 @@ void shutdownGraphics(void) {
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
-    uint16_t stipple;
-
     if (y0 > y1) {
         uint8_t tmp = y0;
         y0 = y1;
         y1 = tmp;
     }
 
-    stipple = ((x0 + y0) & 1);
-    uint16_t offset = (32 * y0) + (x0 / 4);
     uint16_t dy = (y1 - y0);
+    uint8_t *ptr = &imageBuffer[(32 * y0) + (x0 / 4)];
 
     switch (x0 & 3) {
-        case 3:
+        case 3: {
             if (shouldStipple) {
                 while (dy--) {
-                    if ((stipple = !stipple)) {
-                        uint8_t byteInVRAM = imageBuffer[offset];
-                        byteInVRAM = (byteInVRAM & 0b11111100) | 1;
-                        imageBuffer[offset] = byteInVRAM;
+                    if (dy & 1) {
+                        *ptr = (*ptr & 0b11111100) | 1;
                     }
-                    offset += 32;
+                    ptr += 32;
                 }
             } else {
                 while (dy--) {
-                    uint8_t byteInVRAM = imageBuffer[offset];
-                    byteInVRAM = (byteInVRAM & 0b11111100) | 1;
-                    imageBuffer[offset] = byteInVRAM;
-                    offset += 32;
+                    *ptr = (*ptr & 0b11111100) | 1;
+                    ptr += 32;
                 }
             }
+        }
             break;
         case 2:
             if (shouldStipple) {
                 while (dy--) {
-                    if ((stipple = !stipple)) {
-                        uint8_t byteInVRAM = imageBuffer[offset];
-                        byteInVRAM = (byteInVRAM & 0b11110011) | 4;
-                        imageBuffer[offset] = byteInVRAM;
+                    if (dy & 1) {
+                        *ptr = (*ptr & 0b11110011) | 4;
                     }
-                    offset += 32;
+                    ptr += 32;
                 }
             } else {
                 while (dy--) {
-                    uint8_t byteInVRAM = imageBuffer[offset];
-                    byteInVRAM = (byteInVRAM & 0b11110011) | 4;
-                    imageBuffer[offset] = byteInVRAM;
-                    offset += 32;
+                    *ptr = (*ptr & 0b11110011) | 4;
+                    ptr += 32;
                 }
             }
             break;
         case 1:
             if (shouldStipple) {
                 while (dy--) {
-                    if ((stipple = !stipple)) {
-                        uint8_t byteInVRAM = imageBuffer[offset];
-                        byteInVRAM = (byteInVRAM & 0b11001111) | 16;
-                        imageBuffer[offset] = byteInVRAM;
+                    if (dy & 1) {
+                        *ptr = (*ptr & 0b11001111) | 16;
                     }
 
-                    offset += 32;
+                    ptr += 32;
                 }
             } else {
                 while (dy--) {
-                    uint8_t byteInVRAM = imageBuffer[offset];
-                    byteInVRAM = (byteInVRAM & 0b11001111) | 16;
-                    imageBuffer[offset] = byteInVRAM;
-                    offset += 32;
+                    *ptr = (*ptr & 0b11001111) | 16;
+                    ptr += 32;
                 }
             }
             break;
         case 0:
             if (shouldStipple) {
                 while (dy--) {
-                    if ((stipple = !stipple)) {
-                        uint8_t byteInVRAM = imageBuffer[offset];
-                        byteInVRAM = (byteInVRAM & 0b00111111) | 64;
-                        imageBuffer[offset] = byteInVRAM;
+                    if (dy & 1) {
+                        *ptr = (*ptr & 0b00111111) | 64;
                     }
-                    offset += 32;
+                    ptr += 32;
                 }
             } else {
                 while (dy--) {
-                    uint8_t byteInVRAM = imageBuffer[offset];
-                    byteInVRAM = (byteInVRAM & 0b00111111) | 64;
-                    imageBuffer[offset] = byteInVRAM;
-                    offset += 32;
+                    *ptr = (*ptr & 0b00111111) | 64;
+                    ptr += 32;
                 }
             }
             break;
     }
 }
 
-void graphicsPut(uint8_t x, uint8_t y) {
-    uint8_t *ptrToByte = &imageBuffer[(32 * (y & 0b01111111)) + ((x & 0b01111111) / 4)];
-    uint8_t byteInVRAM = *ptrToByte;
+uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptrToByte) {
+
+    if (ptrToByte == NULL) {
+        ptrToByte = &imageBuffer[(32 * (y & 0b01111111)) + ((x & 0b01111111) / 4)];
+    }
 
     switch (x & 3) {
         case 3:
-            byteInVRAM = (byteInVRAM & 0b11111100) | 0b00000001;
+            *ptrToByte = (*ptrToByte & 0b11111100) | 0b00000001;
             break;
         case 2:
-            byteInVRAM = (byteInVRAM & 0b11110011) | 0b00000100;
+            *ptrToByte = (*ptrToByte & 0b11110011) | 0b00000100;
             break;
         case 1:
-            byteInVRAM = (byteInVRAM & 0b11001111) | 0b00010000;
+            *ptrToByte = (*ptrToByte & 0b11001111) | 0b00010000;
             break;
         case 0:
-            byteInVRAM = (byteInVRAM & 0b00111111) | 0b01000000;
+            *ptrToByte = (*ptrToByte & 0b00111111) | 0b01000000;
             break;
     }
-    *ptrToByte = byteInVRAM;
+
+    return ptrToByte;
+}
+
+
+void graphicsPut(uint8_t x, uint8_t y) {
+    uint8_t *ptrToByte = &imageBuffer[(32 * (y & 0b01111111)) + ((x & 0b01111111) / 4)];
+
+    switch (x & 3) {
+        case 3:
+            *ptrToByte = (*ptrToByte & 0b11111100) | 0b00000001;
+            break;
+        case 2:
+            *ptrToByte = (*ptrToByte & 0b11110011) | 0b00000100;
+            break;
+        case 1:
+            *ptrToByte = (*ptrToByte & 0b11001111) | 0b00010000;
+            break;
+        case 0:
+            *ptrToByte = (*ptrToByte & 0b00111111) | 0b01000000;
+            break;
+    }
 }
 
 void realPut(uint16_t x, uint16_t y, uint8_t value) {
 
     int pixelRead = 0;
-#ifndef __DJGPP__
 
     if (y & 1) {
         asm volatile("movw $0xb800, %%ax\n\t"
@@ -213,22 +217,6 @@ void realPut(uint16_t x, uint16_t y, uint8_t value) {
                 : "ax", "es", "di"
                 );
     }
-#else
-    int pixel = value;
-    int px = x;
-    int py = y;
-
-    asm volatile ("movb $0x0C, %%ah\n\t"
-                  "movb %0,    %%al\n\t"
-                  "movb $0x0,  %%bh\n\t"
-                  "movw %1,    %%cx\n\t"
-                  "movw %2,    %%dx\n\t"
-                  "int $0x10\n\t"
-    :
-    :"rm" (pixel), "rm" (px), "rm" (py)
-    : "ax", "bx", "cx", "dx"
-    );
-#endif
 }
 
 void clearGraphics(void) {
@@ -247,14 +235,7 @@ void init(void) {
 }
 
 void clearScreen(void) {
-#ifndef __DJGPP__
     init();
-#else
-    uint8_t *mirrorVRAM = (uint8_t*)alloca( 320 * 100);
-    memset(mirrorVRAM, 0, 320 * 100);
-    dosmemput(mirrorVRAM, 320 * 100, (0xB800 * 16));
-    dosmemput(mirrorVRAM, 320 * 100, (0xB800 * 16) + 0x2000);
-#endif
 }
 
 uint8_t getKey(void) {
@@ -283,15 +264,13 @@ uint8_t getKey(void) {
 
 void writeStrWithLimit(uint16_t _x, uint16_t y, const char *text, uint16_t limitX) {
 
-    uint16_t len = strlen(text);
     const char *ptr = text;
     uint16_t c = 0;
     uint16_t chary = 0;
     uint16_t x = _x;
+    char cha = *ptr;
 
-    for (; c < len && y < 25; ++c) {
-
-        char cha = *ptr;
+    for (; cha && y < 25; ++c) {
 
         if (x == limitX) {
             ++y;
@@ -300,6 +279,7 @@ void writeStrWithLimit(uint16_t _x, uint16_t y, const char *text, uint16_t limit
             ++y;
             x = _x;
             ++ptr;
+            cha = *ptr;
             continue;
         } else {
             ++x;
@@ -323,6 +303,7 @@ void writeStrWithLimit(uint16_t _x, uint16_t y, const char *text, uint16_t limit
                 );
 
         ++ptr;
+        cha = *ptr;
     }
 }
 
@@ -336,17 +317,12 @@ void graphicsFlush(void) {
     uint16_t baseOffset = (36 * 40) + 4;
     uint16_t index = 0;
 
+/*
+ * DS ES and SS already have the same value as CS
+ * */
+
     asm volatile(
-        /* save old values */
-            "pushw %%si\n\t"
-            "pushw %%ds\n\t"
-
-            /* mimicking GCC move here.
-               making DS the same as SS */
-            "pushw %%ss\n\t"
-            "popw %%ds\n\t"
-
-            /* set ES to point to VRAM */
+        /* set ES to point to VRAM */
             "movw $0xb800, %%ax\n\t"
             "movw %%ax, %%es\n\t"
 
@@ -354,7 +330,7 @@ void graphicsFlush(void) {
             "cld\n\t"
             :
             :
-            : "ax", "cx", "es", "di"
+            : "ax", "es"
             );
 
     /* 4096 = 128 * 32 */
@@ -392,18 +368,9 @@ void graphicsFlush(void) {
                 "rep movsw\n\t"
                 :
                 : "r"( baseOffset ), "r"(index)
-                : "ax", "cx", "es", "di"
+                : "ax", "cx", "es", "di", "si"
                 );
     }
-
-    asm volatile(
-        /* restore previous values */
-            "popw %%ds\n\t"
-            "popw %%si\n\t"
-            :
-            :
-            :
-            );
 
     memset(imageBuffer, 0, 128 * 32);
 }
@@ -462,9 +429,6 @@ void HUD_initialPaint(void) {
 }
 
 void sleepForMS(uint32_t ms) {
-#ifdef __DJGPP__
-    usleep(ms);
-#endif
 }
 
 void HUD_refresh(void) {
