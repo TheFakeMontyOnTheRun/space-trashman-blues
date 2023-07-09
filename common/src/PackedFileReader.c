@@ -71,7 +71,7 @@ FILE *android_fopen(const char* filename) {
 #ifndef LEAN_BUILD
 #define kDataPath_MaxLength 256
 #else
-//8.3 + \0 = 8 + 5 = 13
+/* 8.3 + \0 = 8 + 5 = 13 */
 #define kDataPath_MaxLength 13
 #endif
 
