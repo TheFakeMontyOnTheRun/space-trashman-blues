@@ -204,8 +204,6 @@ const uint16_t lineStart[128] = {
         64768l
 };
 
-uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr);
-
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 uint8_t cooldown;
 
@@ -221,8 +219,6 @@ char *menuItems[] = {
         "7) Next item",
         "4) Next in room",
 };
-
-void graphicsFlush(void);
 
 void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 
@@ -304,7 +300,13 @@ uint8_t *realPut(int x, int y, uint8_t colour, uint8_t *ptr) {
     if (ptr == NULL) {
         ptr = (unsigned char *) 0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048) + (x >> 2);
     }
-    *ptr |= (8 >> (x & 3));
+
+    if (colour) {
+        *ptr |= (8 >> (x & 3));
+    } else {
+        *ptr &= ~(8 >> (x & 3));
+    }
+
 
     return ptr;
 }
@@ -325,14 +327,11 @@ void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *titl
         if ((x & 3) == 0) {
             ptr = NULL;
         }
-        ptr = realPut(((tx * 8) + x), (ty + th) * 8, 1, ptr);
+        ptr = realPut(((tx * 8) + x), ((ty + th) * 8) - 1, 1, ptr);
     }
 
-    for (y = 0; y < th * 8; ++y) {
+    for (y = 0; y < (th * 8) - 1; ++y) {
         realPut((tx + tw) * 8, ((ty * 8) + y), 1, NULL);
-    }
-
-    for (y = 0; y < th * 8; ++y) {
         realPut((tx * 8), ((ty * 8) + y), 1, NULL);
     }
 
@@ -352,8 +351,6 @@ void showMessage(const char *message) {
             keepGoing = 0;
         }
     }
-
-    backToGraphics();
 }
 
 void titleScreen(void) {
@@ -426,37 +423,32 @@ void exitTextMode(void) {
 void drawMap(void) {
 
     uint8_t *ptr;
+    uint8_t x, y;
 
     if (playerLocation == 0) {
         return;
     }
 
-    memset(buffer, 0, BUFFER_SIZEX * BUFFER_SIZEY);
-
-    for (int y = 0; y < 32; ++y) {
-        for (int x = 0; x < 32; ++x) {
-
-            if ((x & 7) == 0) {
-                ptr = NULL;
-            }
-
-            uint8_t newCell = map[y][x];
-            newCell = newCell & 127;
-            uint8_t block = patterns[newCell - 32].blockMovement;
-
-            for (int cy = 0; cy < 4; ++cy) {
-                ptr = NULL;
-                for (int cx = 0; cx < 4; ++cx) {
-                    if (block) {
-                        ptr = graphicsPutAddr((x * 4) + cx, (y * 4) + cy, ptr);
+    for (y = 0; y < 32; ++y) {
+        for (x = 0; x < 32; ++x) {
+            if (patterns[(map[y][x] & 127) - 32].blockMovement) {
+                for (int cy = 0; cy < 2; ++cy) {
+                    ptr = NULL;
+                    for (int cx = 0; cx < 2; ++cx) {
+                        ptr = realPut((x * 2) + cx + 32, (y * 2) + cy + 136, 2, ptr);
+                    }
+                }
+            } else {
+                for (int cy = 0; cy < 2; ++cy) {
+                    ptr = NULL;
+                    for (int cx = 0; cx < 2; ++cx) {
+                        ptr = realPut((x * 2) + cx + 32, (y * 2) + cy + 136, 0, ptr);
                     }
                 }
             }
+
         }
     }
-
-    drawWindow(0, 0, 17, 20, "Map");
-    graphicsFlush();
 }
 
 uint8_t getKey() {
@@ -523,9 +515,10 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
     uint8_t *ptr = &buffer[(_y0 * (BUFFER_SIZEX)) + (x0 / 4)]; /* skip to the line in pattern */
     uint8_t y;
+    uint8_t pattern = (8 >> (x0 & 3));
     for (y = _y0; y <= _y1; ++y) {
         if (!shouldStipple || (y & 1)) {
-            *ptr |= (8 >> (x0 & 3));
+            *ptr |= pattern;
         }
         ptr += BUFFER_SIZEX;
     }
@@ -549,14 +542,17 @@ void graphicsPut(uint8_t x, uint8_t y) {
 }
 
 void HUD_initialPaint() {
-    for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(19, 11 + i, menuItems[i]);
+    uint8_t y;
+
+    for (y = 0; y < 6; ++y) {
+        writeStr(19, 11 + y, menuItems[y]);
+    }
+
+    for (y = 0; y < 200; ++y) {
+        realPut(144, y, 1, NULL);
     }
 
     HUD_refresh();
-
-    drawWindow(0, 0, 17, 20, "3D View");
-    drawWindow(18, 0, 21, 20, "Controls and status");
 }
 
 void HUD_refresh() {

@@ -1429,8 +1429,6 @@ void nextItemInHand(void) {
     }
 }
 
-void updateMapItems(void);
-
 void initMap(void) {
     uint8_t x, y, c;
     const uint8_t *head;
@@ -1715,15 +1713,14 @@ int main(int argc, char **argv) {
     cameraRotation = 0;
     init();
     initStation();
-
-    titleScreen();
-
     focusedItem = getPlayerItems();
     setErrorHandlerCallback(onError);
     setLoggerDelegate(logDelegate);
-    initMap();
 
     memset(stencilHigh, 0, XRES);
+    titleScreen();
+
+    initMap();
 
     do {
         tickRenderer();

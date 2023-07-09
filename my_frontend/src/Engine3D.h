@@ -83,6 +83,8 @@ void tickRenderer(void);
 
 void titleScreen(void);
 
+void updateMapItems(void);
+
 void useItemInHand(void);
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple);
