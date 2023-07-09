@@ -311,12 +311,6 @@ void sleepForMS(uint32_t ms) {
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
-#ifdef HALF_BUFFER
-    x0 = x0 >> 1;
-    y0 = y0 >> 1;
-    y1 = y1 >> 1;
-#endif
-
     uint8_t _y0 = y0;
     uint8_t _y1 = y1;
 
