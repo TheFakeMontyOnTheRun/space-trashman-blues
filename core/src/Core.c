@@ -676,7 +676,7 @@ void walkBy(uint8_t direction) {
 
 #ifdef CLI_BUILD
 	if (playerPosition.x < 0) {
-    	playerPosition.x = 0;
+	  playerPosition.x = 0;
 	}
 
 	if (playerPosition.y < 0) {
