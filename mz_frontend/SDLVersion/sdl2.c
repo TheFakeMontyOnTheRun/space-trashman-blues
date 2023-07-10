@@ -6,6 +6,7 @@
 
 
 #include "SDL.h"
+#include "Engine3D.h"
 
 int cursorPosition = 0;
 extern struct ObjectNode *focusedItem;
@@ -19,20 +20,6 @@ SDL_Renderer *renderer;
 uint8_t mBufferedCommand;
 uint32_t palette[16];
 uint8_t framebuffer[256 * 160];
-
-void graphicsFlush();
-
-void nextItemInHand();
-
-void useItemInHand();
-
-void nextItemInRoom();
-
-void interactWithItemInRoom();
-
-void pickOrDrop();
-
-void pickItem();
 
 void graphicsPut(int16_t x, int16_t y, uint16_t colour) {
     if (x < 0) {
@@ -87,7 +74,7 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
 
 void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour) {
 
-    if (x0 < 0) {
+    if (x0 < 0 || x0 > XRESMINUSONE) {
         return;
     }
 
@@ -127,7 +114,7 @@ void clearGraphics() {
     memset(framebuffer, 0, 256 * 160);
 }
 
-void writeStr(uint8_t nColumn, uint8_t nLine, char *str, uint16_t fg, uint16_t bg) {
+void writeStr(int16_t nColumn, int16_t nLine, const char *str, uint16_t fg, uint16_t bg) {
     puts(str);
 }
 
@@ -164,7 +151,7 @@ void pickItem();
 void clearScreen() {}
 
 
-uint16_t getKey() {
+uint8_t getKey() {
     SDL_Event event;
 
     mBufferedCommand = '.';
@@ -261,7 +248,7 @@ uint16_t getKey() {
     return mBufferedCommand;
 }
 
-void sleepForMS() {
+void sleepForMS(uint32_t unused) {
 }
 
 void init() {
