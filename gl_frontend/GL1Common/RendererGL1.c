@@ -615,7 +615,8 @@ void render(const long ms) {
 				lastElement = element;
 
 				FixP_t zPos = zCameraOffset + position.mZ;
-				glTranslatef(fixToInt(xCameraOffset + position.mX), 0, -fixToFloat(zPos));
+				FixP_t xPos = xCameraOffset + position.mX;
+				glTranslatef(fixToFloat(xPos), 0, -fixToFloat(zPos));
 
 				if (tileProp->mFloorRepeatedTextureIndex != 0xFF
 					&& tileProp->mFloorRepetitions > 0) {
@@ -1024,7 +1025,7 @@ void render(const long ms) {
 					glRotatef(((float)leanX), 0.0f, 1.0f, 0.0f);
 					
 				}
-				glTranslatef(-fixToInt(xCameraOffset + position.mX), 0, fixToFloat(zPos));
+				glTranslatef(-fixToFloat(xPos), 0, fixToFloat(zPos));
 			}
 		}
 #ifdef NDS
