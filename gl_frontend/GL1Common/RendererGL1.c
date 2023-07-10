@@ -1019,7 +1019,10 @@ void render(const long ms) {
 						itemSprites[itemsSnapshotElement] = makeTextureFrom(&buffer[0]);
 					}
 
+					glRotatef(((float)-leanX), 0.0f, 1.0f, 0.0f);
 					drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
+					glRotatef(((float)leanX), 0.0f, 1.0f, 0.0f);
+					
 				}
 				glTranslatef(-fixToInt(xCameraOffset + position.mX), 0, fixToFloat(zPos));
 			}
