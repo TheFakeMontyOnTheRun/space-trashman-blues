@@ -6,10 +6,24 @@
 #include "Derelict.h"
 #include "Engine3D.h"
 
+extern const struct Pattern patterns[127];
+
+extern int8_t map[32][32];
+
+extern struct ObjectNode *focusedItem;
+
+extern struct ObjectNode *roomItem;
+
+extern uint8_t accessGrantedToSafe;
+
+
 extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
-extern int accessGrantedToSafe;
+
+
 int cursorPosition = 0;
+uint8_t updateDirection;
+extern uint8_t playerLocation;
 
 char *menuItems[] = {
         "8) Use/Toggle",
@@ -259,6 +273,10 @@ uint8_t getKey(void) {
             : "ax"
             );
 
+    if (toReturn == 'q' || toReturn == 'e') {
+        updateDirection = 1;
+    }
+
     return toReturn;
 }
 
@@ -314,7 +332,7 @@ void writeStr(uint8_t _x, uint8_t y, const char *text) {
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
 
 void graphicsFlush(void) {
-    uint16_t baseOffset = (36 * 40) + 4;
+    uint16_t baseOffset = 0;//(36 * 40) + 4;
     uint16_t index = 0;
 
 /*
@@ -372,6 +390,25 @@ void graphicsFlush(void) {
                 );
     }
 
+
+    if (updateDirection) {
+        updateDirection = 0;
+        switch (getPlayerDirection()) {
+            case 0:
+                writeStrWithLimit(29, 14, "N", 31);
+                break;
+            case 1:
+                writeStrWithLimit(29, 14, "E", 31);
+                break;
+            case 2:
+                writeStrWithLimit(29, 14, "S", 31);
+                break;
+            case 3:
+                writeStrWithLimit(29, 14, "W", 31);
+                break;
+        }
+    }
+
     memset(imageBuffer, 0, 128 * 32);
 }
 
@@ -409,22 +446,52 @@ void titleScreen(void) {
     clearScreen();
 }
 
+void drawMap(void) {
+
+    uint8_t x, y;
+
+    if (playerLocation == 0) {
+        return;
+    }
+
+    for (y = 0; y < 32; ++y) {
+        for (x = 0; x < 32; ++x) {
+            if (patterns[(map[y][x] & 127) - 32].blockMovement) {
+                for (int cy = 0; cy < 2; ++cy) {
+                    for (int cx = 0; cx < 2; ++cx) {
+                        realPut((x * 2) + cx + 152, (y * 2) + cy + 8, 2);
+                    }
+                }
+            } else {
+                for (int cy = 0; cy < 2; ++cy) {
+                    for (int cx = 0; cx < 2; ++cx) {
+                        realPut((x * 2) + cx + 152, (y * 2) + cy + 8, 0);
+                    }
+                }
+            }
+
+        }
+    }
+}
+
 void HUD_initialPaint(void) {
-    uint16_t c;
-    for (c = 15; c < (128 + 16 + 1); ++c) {
-        realPut(c, 35, 3);
-        realPut(c, 36 + 128, 3);
+    updateDirection = 1;
+    for (uint8_t i = 0; i < 6; ++i) {
+        writeStr(19, 17 + i, menuItems[i]);
     }
 
-    for (c = 35; c < (128 + 36 + 1); ++c) {
-        realPut(15, c, 3);
-        realPut(16 + 128, c, 3);
+    for (uint8_t y = 0; y < 200; ++y) {
+        realPut(144, y, 1);
     }
 
-    for (uint16_t i = 0; i < 6; ++i) {
-        writeStr(21, 14 + i, menuItems[i]);
+    drawMap();
+
+    for (uint16_t x = 0; x < 320; ++x) {
+        realPut(x, 130, 1);
     }
 
+    writeStrWithLimit(19, 14, "Direction: ", 31);
+    updateDirection = 1;
     HUD_refresh();
 }
 
@@ -432,30 +499,42 @@ void sleepForMS(uint32_t ms) {
 }
 
 void HUD_refresh(void) {
-    writeStr(21, 21, "                    ");
-    writeStr(21, 22, "                    ");
-    writeStr(1, 2, "                    ");
-    writeStr(1, 3, "                    ");
 
-    if (focusedItem != NULL) {
-        struct Item *item = getItem(focusedItem->item);
-
-        if (item->active) {
-            writeStr(21, 21, "*");
-            writeStr(22, 21, item->name);
-        } else {
-            writeStr(21, 21, item->name);
-        }
+    for (uint8_t d = 0; d < 15; ++d) {
+        writeStr(1 + d, 19, " ");
+        writeStr(1 + d, 20, " ");
+        writeStr(1 + d, 23, " ");
+        writeStr(1 + d, 24, " ");
     }
+
+
+    writeStrWithLimit(1, 18, "Object in room", 16);
 
     if (roomItem != NULL) {
         struct Item *item = getItem(roomItem->item);
 
+
         if (item->active) {
-            writeStr(1, 2, "*");
-            writeStr(2, 2, item->name);
-        } else {
-            writeStr(1, 2, item->name);
+            writeStrWithLimit(1, 19, "*", 16);
         }
+
+        writeStrWithLimit(2, 19, item->name, 16);
+    } else {
+        writeStrWithLimit(2, 19, "Nothing", 16);
+    }
+
+    writeStrWithLimit(1, 21, "Object in hand", 16);
+
+    if (focusedItem != NULL) {
+        struct Item *item = getItem(focusedItem->item);
+
+
+        if (item->active) {
+            writeStr(1, 22, "*");
+        }
+
+        writeStrWithLimit(2, 22, item->name, 16);
+    } else {
+        writeStrWithLimit(2, 22, "Nothing", 16);
     }
 }

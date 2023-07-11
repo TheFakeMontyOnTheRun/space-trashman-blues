@@ -21,7 +21,7 @@ SDL_Renderer *renderer;
 
 uint8_t mBufferedCommand;
 uint32_t palette[16];
-uint8_t framebuffer[160 * 200];
+uint8_t framebuffer[128 * 128];
 
 
 void sleepForMS(uint32_t ms) {
@@ -36,7 +36,7 @@ void graphicsPut(uint8_t x, uint8_t y) {
     assert(y < 128);
 
 
-    framebuffer[(160 * y) + x] = 1;
+    framebuffer[(128 * y) + x] = 1;
 #ifdef PUTAFLIP
     graphicsFlush();
     SDL_Delay(100);
@@ -84,7 +84,7 @@ void showMessage(const char *mesg) {
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
 
 void clearGraphics() {
-    memset(framebuffer, 0, 160 * 200);
+    memset(framebuffer, 0, 128 * 128);
 }
 
 void writeStr(uint8_t column, uint8_t line, const char *str) {
@@ -225,10 +225,10 @@ void init() {
     mBufferedCommand = '.';
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
-    memset(framebuffer, 5, 160 * 200);
+    memset(framebuffer, 5, 128 * 128);
     window =
             SDL_CreateWindow("Derelict 8-bits SDL2 test", SDL_WINDOWPOS_CENTERED,
-                             SDL_WINDOWPOS_CENTERED, 259, 309, SDL_WINDOW_SHOWN);
+                             SDL_WINDOWPOS_CENTERED, 256, 256, SDL_WINDOW_SHOWN);
 
     renderer = SDL_CreateRenderer(window, -1, 0);
 
@@ -281,8 +281,8 @@ void flipRenderer() {
 
     rect.x = 0;
     rect.y = 0;
-    rect.w = 259;
-    rect.h = 309;
+    rect.w = 256;
+    rect.h = 256;
 
     SDL_SetRenderDrawColor(renderer, 0xFF,
                            0xFF,
@@ -291,11 +291,11 @@ void flipRenderer() {
 
     for (y = 0; y < 128; ++y) {
         for (x = 0; x < 128; ++x) {
-            int index = framebuffer[(160 * y) + x];
+            int index = framebuffer[(128 * y) + x];
             rect.x = 1 + 2 * x;
-            rect.y = 1 + (24 * y) / 10;
+            rect.y = 1 + 2 * y;
             rect.w = 2;
-            rect.h = 3;
+            rect.h = 2;
 
 
             if (index < 0 || index >= 16) {

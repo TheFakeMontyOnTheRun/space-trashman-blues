@@ -23,6 +23,8 @@ extern uint8_t accessGrantedToSafe;
 
 uint8_t cursorPosition = 0;
 extern uint8_t playerLocation;
+uint8_t updateDirection;
+
 
 #define BUFFER_SIZEX 32
 #define BUFFER_SIZEY 128
@@ -73,141 +75,16 @@ uint8_t font[] = {
 
 int getch(void);
 
-const uint16_t lineStart[128] = {
-        49232l,
-        51280l,
-        53328l,
-        55376l,
-        57424l,
-        59472l,
-        61520l,
-        63568l,
-        49312l,
-        51360l,
-        53408l,
-        55456l,
-        57504l,
-        59552l,
-        61600l,
-        63648l,
-        49392l,
-        51440l,
-        53488l,
-        55536l,
-        57584l,
-        59632l,
-        61680l,
-        63728l,
-        49472l,
-        51520l,
-        53568l,
-        55616l,
-        57664l,
-        59712l,
-        61760l,
-        63808l,
-        49552l,
-        51600l,
-        53648l,
-        55696l,
-        57744l,
-        59792l,
-        61840l,
-        63888l,
-        49632l,
-        51680l,
-        53728l,
-        55776l,
-        57824l,
-        59872l,
-        61920l,
-        63968l,
-        49712l,
-        51760l,
-        53808l,
-        55856l,
-        57904l,
-        59952l,
-        62000l,
-        64048l,
-        49792l,
-        51840l,
-        53888l,
-        55936l,
-        57984l,
-        60032l,
-        62080l,
-        64128l,
-        49872l,
-        51920l,
-        53968l,
-        56016l,
-        58064l,
-        60112l,
-        62160l,
-        64208l,
-        49952l,
-        52000l,
-        54048l,
-        56096l,
-        58144l,
-        60192l,
-        62240l,
-        64288l,
-        50032l,
-        52080l,
-        54128l,
-        56176l,
-        58224l,
-        60272l,
-        62320l,
-        64368l,
-        50112l,
-        52160l,
-        54208l,
-        56256l,
-        58304l,
-        60352l,
-        62400l,
-        64448l,
-        50192l,
-        52240l,
-        54288l,
-        56336l,
-        58384l,
-        60432l,
-        62480l,
-        64528l,
-        50272l,
-        52320l,
-        54368l,
-        56416l,
-        58464l,
-        60512l,
-        62560l,
-        64608l,
-        50352l,
-        52400l,
-        54448l,
-        56496l,
-        58544l,
-        60592l,
-        62640l,
-        64688l,
-        50432l,
-        52480l,
-        54528l,
-        56576l,
-        58624l,
-        60672l,
-        62720l,
-        64768l
-};
-
+uint16_t lineStart[128];
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 uint8_t cooldown;
 
 void init(void) {
+
+    for (int y = 0; y < 128; ++y) {
+        lineStart[y] = 0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048);
+    }
+
     cooldown = COOLDOWN_MAX;
 }
 
@@ -435,14 +312,14 @@ void drawMap(void) {
                 for (int cy = 0; cy < 2; ++cy) {
                     ptr = NULL;
                     for (int cx = 0; cx < 2; ++cx) {
-                        ptr = realPut((x * 2) + cx + 32, (y * 2) + cy + 136, 2, ptr);
+                        ptr = realPut((x * 2) + cx + 152, (y * 2) + cy + 8, 2, ptr);
                     }
                 }
             } else {
                 for (int cy = 0; cy < 2; ++cy) {
                     ptr = NULL;
                     for (int cx = 0; cx < 2; ++cx) {
-                        ptr = realPut((x * 2) + cx + 32, (y * 2) + cy + 136, 0, ptr);
+                        ptr = realPut((x * 2) + cx + 152, (y * 2) + cy + 8, 0, ptr);
                     }
                 }
             }
@@ -462,8 +339,10 @@ uint8_t getKey() {
         case 31:
             return 's';
         case 29:
+            updateDirection = 1;
             return 'q';
         case 28:
+            updateDirection = 1;
             return 'e';
         case 'z':
             return 'a';
@@ -492,11 +371,28 @@ void graphicsFlush() {
 
     for (int y = 0; y < BUFFER_SIZEY; ++y) {
         uint8_t *line = (unsigned char *) lineStart[y];
-        memcpy(line + 1, buffer + (y * BUFFER_SIZEX), BUFFER_SIZEX);
+        memcpy(line, buffer + (y * BUFFER_SIZEX), BUFFER_SIZEX);
+    }
+
+    if (updateDirection) {
+        updateDirection = 0;
+        switch (getPlayerDirection()) {
+            case 0:
+                writeStrWithLimit(29, 14, "N", 31);
+                break;
+            case 1:
+                writeStrWithLimit(29, 14, "E", 31);
+                break;
+            case 2:
+                writeStrWithLimit(29, 14, "S", 31);
+                break;
+            case 3:
+                writeStrWithLimit(29, 14, "W", 31);
+                break;
+        }
     }
 
     memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
-
 }
 
 void sleepForMS(uint32_t ms) {
@@ -542,61 +438,63 @@ void graphicsPut(uint8_t x, uint8_t y) {
 }
 
 void HUD_initialPaint() {
-    uint8_t y;
-
-    for (y = 0; y < 6; ++y) {
-        writeStr(19, 11 + y, menuItems[y]);
+    for (uint8_t i = 0; i < 6; ++i) {
+        writeStr(19, 17 + i, menuItems[i]);
     }
 
-    for (y = 0; y < 200; ++y) {
+    for (uint8_t y = 0; y < 200; ++y) {
         realPut(144, y, 1, NULL);
     }
 
+    drawMap();
+
+    for (uint16_t x = 0; x < 320; ++x) {
+        realPut(x, 130, 1, NULL);
+    }
+
+    writeStrWithLimit(19, 14, "Direction: ", 31);
+    updateDirection = 1;
     HUD_refresh();
 }
 
 void HUD_refresh() {
 
-    writeStrWithLimit(19, 7, "Object in hand", MARGIN_TEXT_SCREEN_LIMIT);
-
-    for (uint8_t d = 0; d < 19; ++d) {
-        writeStr(20 + d, 4, " ");
-        writeStr(20 + d, 5, " ");
-        writeStr(20 + d, 8, " ");
-        writeStr(20 + d, 9, " ");
+    for (uint8_t d = 0; d < 15; ++d) {
+        writeStr(1 + d, 19, " ");
+        writeStr(1 + d, 20, " ");
+        writeStr(1 + d, 23, " ");
+        writeStr(1 + d, 24, " ");
     }
 
 
-    if (focusedItem != NULL) {
-        struct Item *item = getItem(focusedItem->item);
-
-
-        if (item->active) {
-            writeStr(19, 8, "*");
-        } else {
-            writeStr(19, 8, " ");
-        }
-
-        writeStrWithLimit(20, 8, item->name, MARGIN_TEXT_SCREEN_LIMIT);
-    } else {
-        writeStrWithLimit(20, 8, " Nothing", MARGIN_TEXT_SCREEN_LIMIT);
-    }
-
-    writeStrWithLimit(19, 3, "Object in room", MARGIN_TEXT_SCREEN_LIMIT);
+    writeStrWithLimit(1, 18, "Object in room", 16);
 
     if (roomItem != NULL) {
         struct Item *item = getItem(roomItem->item);
 
 
         if (item->active) {
-            writeStr(19, 4, "*");
-        } else {
-            writeStr(19, 4, " ");
+            writeStrWithLimit(1, 19, "*", 16);
         }
 
-        writeStrWithLimit(20, 4, item->name, MARGIN_TEXT_SCREEN_LIMIT);
+        writeStrWithLimit(2, 19, item->name, 16);
     } else {
-        writeStrWithLimit(19, 4, " Nothing", MARGIN_TEXT_SCREEN_LIMIT);
+        writeStrWithLimit(2, 19, "Nothing", 16);
+    }
+
+    writeStrWithLimit(1, 21, "Object in hand", 16);
+
+    if (focusedItem != NULL) {
+        struct Item *item = getItem(focusedItem->item);
+
+
+        if (item->active) {
+            writeStr(1, 22, "*");
+        }
+
+        writeStrWithLimit(2, 22, item->name, 16);
+    } else {
+        writeStrWithLimit(2, 22, "Nothing", 16);
     }
 }
 
