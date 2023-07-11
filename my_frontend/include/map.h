@@ -106,6 +106,6 @@ const struct Pattern patterns[96] = {
 int8_t map[32][32];
 
 
-#include "maps.h"
+#include "map-data.h"
 
 #endif

@@ -1,9 +1,32 @@
-CFLAGS = -Wall -Wextra -Wno-unused-parameter -Wno-unused-variable -fomit-frame-pointer -fno-exceptions -ffast-math -I../core/include -I../common/include -Isrc -DLEAN_BUILD -DMSDOS -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE  -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DSUPPORTS_HACKING_MINIGAME
+CFLAGS = \
+    -Wall \
+    -Wextra \
+    -Wno-unused-parameter \
+    -Wno-unused-variable \
+    -fomit-frame-pointer \
+    -fno-exceptions \
+    -ffast-math \
+    -Iinclude \
+    -I../core/include \
+    -I../common/include \
+    -Isrc \
+    -DMSDOS \
+    -DLEAN_BUILD \
+    -DCAN_PICK_OBJECT_AT_ANY_DISTANCE  \
+    -DSUPPORTS_ROOM_TRANSITION_ANIMATION \
+    -DSUPPORTS_HACKING_MINIGAME
 
 CC = ia16-elf-gcc
 STRIP = ia16-elf-strip
 
-OBJS = src/demo.o src/HackingMinigame.o src/msdos.o ../core/src/Core.o ../core/src/Derelict.o ../common/src/PackedFileReader.o ../common/src/Common.o
+OBJS = \
+    src/Engine3D.o \
+    src/HackingMinigame.o \
+    src/msdos.o \
+    ../core/src/Core.o \
+    ../core/src/Derelict.o \
+    ../common/src/PackedFileReader.o \
+    ../common/src/Common.o
 
 TARGET = derelict.com
 
@@ -14,6 +37,4 @@ all:	$(TARGET)
 
 clean:
 	rm -f $(OBJS) $(TARGET)
-	$(RM) -f *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.rom
-	$(RM) -f ../core/src/*.o src/*.o
 	rm *~

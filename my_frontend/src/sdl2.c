@@ -23,18 +23,12 @@ uint8_t mBufferedCommand;
 uint32_t palette[16];
 uint8_t framebuffer[128 * 128];
 
-
-void sleepForMS(uint32_t ms) {
-
-}
-
 void graphicsPut(uint8_t x, uint8_t y) {
 
     assert(x >= 0);
     assert(x < 128);
     assert(y >= 0);
     assert(y < 128);
-
 
     framebuffer[(128 * y) + x] = 1;
 #ifdef PUTAFLIP
@@ -69,7 +63,6 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
         }
     }
 }
-
 
 void shutdownGraphics() {
     SDL_DestroyRenderer(renderer);
@@ -118,9 +111,7 @@ void printSituation() {
     }
 }
 
-
 void clearScreen() {}
-
 
 uint8_t getKey() {
     SDL_Event event;
@@ -219,7 +210,6 @@ uint8_t getKey() {
     return mBufferedCommand;
 }
 
-
 void init() {
     int r, g, b;
     mBufferedCommand = '.';
@@ -253,7 +243,6 @@ void init() {
     enterFullScreenMode ();
 #endif
 }
-
 
 void titleScreen() {
     int keepGoing = 1;
@@ -322,7 +311,6 @@ void graphicsFlush() {
     flipRenderer();
     clearGraphics();
 }
-
 
 void HUD_initialPaint() {
 
