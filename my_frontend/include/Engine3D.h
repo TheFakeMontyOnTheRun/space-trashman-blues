@@ -65,19 +65,29 @@ void nextItemInHand(void);
 
 void nextItemInRoom(void);
 
+void performAction(void);
+
 void pickItem(void);
 
 void pickOrDrop(void);
 
 void printSituation(void);
 
+void renderCameraNorth(void);
+
+void renderCameraEast(void);
+
+void renderCameraSouth(void);
+
+void renderCameraWest(void);
+
 void renderScene(void);
 
 void showMessage(const char *msg);
 
-void shutdownGraphics(void);
+void startMusic(void);
 
-void sleepForMS(uint32_t ms);
+void shutdownGraphics(void);
 
 void tickRenderer(void);
 

@@ -60,18 +60,6 @@ struct ObjectNode *roomItem = NULL;
 
 extern uint8_t accessGrantedToSafe;
 
-void performAction(void);
-
-void startMusic(void);
-
-void renderCameraNorth(void);
-
-void renderCameraEast(void);
-
-void renderCameraSouth(void);
-
-void renderCameraWest(void);
-
 int8_t stencilHigh[XRES];
 
 int8_t cameraX = 33;
@@ -973,7 +961,7 @@ void renderScene(void) {
             break;
     }
 
-#ifdef SMS
+#ifdef TMS9918
     stencilPtr = &stencilHigh[0];
 
     for (x = 0; x < XRESMINUSONE;) {
@@ -1543,7 +1531,6 @@ void startRoomTransitionAnimation(void) {
             graphicsPut(x, 95 - 3 * (MAP_SIZE_Y - y));
         }
         graphicsFlush();
-        sleepForMS(20000);
     }
     HUD_initialPaint();
 }

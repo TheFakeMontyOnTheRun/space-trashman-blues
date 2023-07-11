@@ -6,6 +6,8 @@
 #include "Derelict.h"
 #include "Engine3D.h"
 
+unsigned char imageBuffer[128 * 32];
+
 extern const struct Pattern patterns[127];
 
 extern int8_t map[32][32];
@@ -16,25 +18,9 @@ extern struct ObjectNode *roomItem;
 
 extern uint8_t accessGrantedToSafe;
 
-
-extern struct ObjectNode *focusedItem;
-extern struct ObjectNode *roomItem;
-
-
 int cursorPosition = 0;
 uint8_t updateDirection;
 extern uint8_t playerLocation;
-
-char *menuItems[] = {
-        "8) Use/Toggle",
-        "5) Use with...",
-        "9) Use/pick...",
-        "6) Drop",
-        "7) Next item",
-        "4) Next in room",
-};
-
-unsigned char imageBuffer[128 * 32];
 
 void shutdownGraphics(void) {
 }
@@ -140,7 +126,6 @@ uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptrToByte) {
     return ptrToByte;
 }
 
-
 void graphicsPut(uint8_t x, uint8_t y) {
     uint8_t *ptrToByte = &imageBuffer[(32 * (y & 0b01111111)) + ((x & 0b01111111) / 4)];
 
@@ -163,6 +148,7 @@ void graphicsPut(uint8_t x, uint8_t y) {
 void realPut(uint16_t x, uint16_t y, uint8_t value) {
 
     int pixelRead = 0;
+    uint16_t offset = ((x / 4) + ((y / 2) * 80));
 
     if (y & 1) {
         asm volatile("movw $0xb800, %%ax\n\t"
@@ -172,7 +158,7 @@ void realPut(uint16_t x, uint16_t y, uint8_t value) {
                      "movb %%es:(%%di), %%al\n\t"
                      "movw %%ax, %0\n\t"
                 : "=r"(pixelRead)
-                : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80)))
+                : "r"( 0x2000 + offset )
                 : "ax", "es", "di"
                 );
     } else {
@@ -183,7 +169,7 @@ void realPut(uint16_t x, uint16_t y, uint8_t value) {
                      "movb %%es:(%%di), %%al\n\t"
                      "movw %%ax, %0\n\t"
                 : "=r"(pixelRead)
-                : "r"((x / 4) + ((y / 2) * 80))
+                : "r"(offset)
                 : "ax", "es", "di"
                 );
     }
@@ -218,7 +204,7 @@ void realPut(uint16_t x, uint16_t y, uint8_t value) {
                      "movw %0, %%di  \n\t"
                      "movb %1, %%es:(%%di)\n\t"
                 :
-                : "r"( 0x2000 + ((x / 4) + ((y / 2) * 80))), "r" (value)
+                : "r"( 0x2000 + offset), "r" (value)
                 : "ax", "es", "di"
                 );
     } else {
@@ -227,7 +213,7 @@ void realPut(uint16_t x, uint16_t y, uint8_t value) {
                      "movw %0, %%di  \n\t"
                      "movb %1, %%es:(%%di)\n\t"
                 :
-                : "r"(((x / 4) + ((y / 2) * 80))), "r" (value)
+                : "r"(offset), "r" (value)
                 : "ax", "es", "di"
                 );
     }
@@ -325,14 +311,9 @@ void writeStrWithLimit(uint16_t _x, uint16_t y, const char *text, uint16_t limit
     }
 }
 
-void writeStr(uint8_t _x, uint8_t y, const char *text) {
-    writeStrWithLimit(_x, y, text, 40);
-}
-
-void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
 
 void graphicsFlush(void) {
-    uint16_t baseOffset = 0;//(36 * 40) + 4;
+    uint16_t baseOffset = 0;
     uint16_t index = 0;
 
 /*
@@ -390,7 +371,6 @@ void graphicsFlush(void) {
                 );
     }
 
-
     if (updateDirection) {
         updateDirection = 0;
         switch (getPlayerDirection()) {
@@ -412,6 +392,21 @@ void graphicsFlush(void) {
     memset(imageBuffer, 0, 128 * 32);
 }
 
+char *menuItems[] = {
+        "8) Use/Toggle",
+        "5) Use with...",
+        "9) Use/pick...",
+        "6) Drop",
+        "7) Next item",
+        "4) Next in room",
+};
+
+void writeStr(uint8_t _x, uint8_t y, const char *text) {
+    writeStrWithLimit(_x, y, text, 40);
+}
+
+void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
+
 void showMessage(const char *message) {
     writeStr(1, 1, message);
 }
@@ -425,7 +420,6 @@ void enterTextMode(void) {}
 void exitTextMode(void) {
     clearScreen();
 }
-
 
 void titleScreen(void) {
     uint16_t keepGoing = 1;
@@ -493,9 +487,6 @@ void HUD_initialPaint(void) {
     writeStrWithLimit(19, 14, "Direction: ", 31);
     updateDirection = 1;
     HUD_refresh();
-}
-
-void sleepForMS(uint32_t ms) {
 }
 
 void HUD_refresh(void) {

@@ -1,14 +1,44 @@
 CC = zcc
 
-CFLAGS = +msx -subtype=rom -compiler=sdcc -SO3 --max-allocs-per-node200000 -lndos --opt-code-speed -pragma-define:CLIB_EXIT_STACK_SIZE=0 -pragma-define:CRT_MODEL=2 --opt-code-speed -vn -I../core/include -I../common/include -DSMS -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_HACKING_MINIGAME -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DRLE_COMPRESSED_MAPS -DEMBEDDED_DATA
+CFLAGS = \
+        +msx \
+        -subtype=rom \
+        -compiler=sdcc \
+        -SO3 \
+        --max-allocs-per-node200000 \
+        -lndos \
+        --opt-code-speed \
+        -pragma-define:CLIB_EXIT_STACK_SIZE=0 \
+        -pragma-define:CRT_MODEL=2 \
+        --opt-code-speed \
+        -vn \
+        -Iinclude \
+        -I../core/include \
+        -I../common/include \
+        -DTMS9918 \
+        -DCAN_PICK_OBJECT_AT_ANY_DISTANCE \
+        -DSUPPORTS_HACKING_MINIGAME \
+        -DSUPPORTS_ROOM_TRANSITION_ANIMATION \
+        -DRLE_COMPRESSED_MAPS \
+        -DEMBEDDED_DATA
 
-all: derelict.com
+TARGET = derelict.rom
 
-derelict.com: src/demo.o src/msx.o src/HackingMinigame.o ../core/src/Core.o ../core/src/Derelict.o ../common/src/Common.o
-	$(CC) $(CFLAGS)  -create-app   -oderelict.com src/demo.o src/msx.o src/HackingMinigame.o ../common/src/Common.o ../core/src/Core.o ../core/src/Derelict.o $(LDFLAGS)
+OBJS = \
+    src/Engine3D.o \
+    src/TMS9918.o \
+    src/YM2413.o \
+    src/msx.o \
+    src/HackingMinigame.o \
+    ../core/src/Core.o \
+    ../core/src/Derelict.o \
+    ../common/src/Common.o
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -create-app -o $(TARGET) $(OBJS) $(LDFLAGS)
 
 clean:
 	rm -f $(OBJS) $(TARGET)
-	$(RM) -f *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.rom
-	$(RM) -f ../core/src/*.o src/*.o ../common/src/*.o
-	rm *~
+	rm -f *~

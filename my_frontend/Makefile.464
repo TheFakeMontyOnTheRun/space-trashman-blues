@@ -1,14 +1,39 @@
 CC = zcc
 
-CFLAGS = +cpc -lm -compiler=sdcc -SO3 --max-allocs-per-node200000 --opt-code-speed -pragma-define:CLIB_EXIT_STACK_SIZE=0 -pragma-define:CRT_MODEL=2 --opt-code-speed -I../core/include -I../common/include -DCPC -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_HACKING_MINIGAME -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DRLE_COMPRESSED_MAPS -DEMBEDDED_DATA
+CFLAGS = \
+        +cpc \
+        -compiler=sdcc \
+        -SO3 \
+        --max-allocs-per-node200000 \
+        --opt-code-speed \
+        -pragma-define:CLIB_EXIT_STACK_SIZE=0 \
+        -pragma-define:CRT_MODEL=2 \
+        -Iinclude \
+        -I../core/include \
+        -I../common/include \
+        -DCPC \
+        -DCAN_PICK_OBJECT_AT_ANY_DISTANCE \
+        -DSUPPORTS_HACKING_MINIGAME \
+        -DSUPPORTS_ROOM_TRANSITION_ANIMATION \
+        -DRLE_COMPRESSED_MAPS \
+        -DEMBEDDED_DATA
 
-all: derelict.dsk
+TARGET = derelict.dsk
 
-derelict.dsk: src/demo.o src/cpc.o src/HackingMinigame.o ../core/src/Core.o ../core/src/Derelict.o ../common/src/Common.o
-	$(CC) $(CFLAGS) -lcpcfs -subtype=dsk -create-app -oderelict.dsk src/demo.o src/cpc.o ../common/src/Common.o src/HackingMinigame.o ../core/src/Core.o ../core/src/Derelict.o $(LDFLAGS)
+OBJS = \
+    src/Engine3D.o \
+    src/cpc.o \
+    src/HackingMinigame.o \
+    ../common/src/Common.o \
+    ../core/src/Core.o \
+    ../core/src/Derelict.o
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -subtype=dsk -create-app -o $(TARGET) $(OBJS) $(LDFLAGS)
 
 clean:
 	rm -f $(OBJS) $(TARGET)
-	$(RM) -f *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.rom
-	$(RM) -f ../core/src/*.o src/*.o ../common/src/*.o
-	rm *~
+	rm -f *~
+

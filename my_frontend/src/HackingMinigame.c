@@ -1,16 +1,11 @@
 /*
    Created by Daniel Monteiro on 2021-11-01.
 */
-#ifndef SMD
 
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-
-#else
-#include <genesis.h>
-#endif
 
 #include "Core.h"
 #include "Derelict.h"
@@ -33,7 +28,6 @@ uint8_t pins[3][5];
 uint8_t pinTop[3];
 
 void HackingScreen_initStateCallback(void) {
-
     cursorPosition = 1;
     memset(&pins[0][0], 0xFF, sizeof(pins));
 
