@@ -366,16 +366,19 @@ void drawMap(void) {
         return;
     }
 
+    for (y = 0; y < 8; ++y) {
+        writeStr(17, 1 + y, "         ");
+    }
+
     for (y = 0; y < 32; ++y) {
         for (x = 0; x < 32; ++x) {
             if (patterns[(map[y][x] & 127) - 32].blockMovement) {
                 for (int cy = 0; cy < 2; ++cy) {
-                    draw((x * 2) + 136, (y * 2) + cy + 8, (x * 2) + 136 + 2, (y * 2) + cy + 8);
+                    for (int cx = 0; cx < 2; ++cx ) {
+                        pset((x * 2) + 136 + cx, (y * 2) + cy + 8);
+                    }
                 }
-            } else {
-
             }
-
         }
     }
 }
@@ -435,6 +438,7 @@ void HUD_initialPaint(void) {
 
     draw(BUFFER_RESX, 0, BUFFER_RESX, 191);
     draw(0, 128, 255, 128);
+    drawMap();
 
     for (uint8_t i = 0; i < 6; ++i) {
         writeStr(18, 17 + i, menuItems[i]);
@@ -460,22 +464,22 @@ void HUD_refresh(void) {
         writeStr(17, 17 + i, (i == cursorPosition) ? ">" : " ");
     }
 
-    writeStrWithLimit(1, 17, "Object in room", 31);
+    writeStrWithLimit(1, 17, "Object in room", 16);
 
     if (roomItem != NULL) {
         struct Item *item = getItem(roomItem->item);
 
 
         if (item->active) {
-            writeStrWithLimit(1, 18, "*", 31);
+            writeStrWithLimit(1, 18, "*", 16);
         }
 
-        writeStrWithLimit(2, 18, item->name, 31);
+        writeStrWithLimit(2, 18, item->name, 16);
     } else {
-        writeStrWithLimit(2, 18, "Nothing", 31);
+        writeStrWithLimit(2, 18, "Nothing", 16);
     }
 
-    writeStrWithLimit(1, 20, "Object in hand", 31);
+    writeStrWithLimit(1, 20, "Object in hand", 16);
 
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
@@ -485,9 +489,9 @@ void HUD_refresh(void) {
             writeStr(1, 21, "*");
         }
 
-        writeStrWithLimit(2, 21, item->name, 31);
+        writeStrWithLimit(2, 21, item->name, 16);
     } else {
-        writeStrWithLimit(2, 21, "Nothing", 31);
+        writeStrWithLimit(2, 21, "Nothing", 16);
     }
 }
 
