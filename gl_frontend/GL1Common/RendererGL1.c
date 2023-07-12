@@ -504,7 +504,7 @@ void render(const long ms) {
 
 						position.mX = mCamera.mX + intToFix(-2 * x);
 						position.mY = mCamera.mY;
-						position.mZ = mCamera.mZ + intToFix(2 + 2 * z);
+						position.mZ = mCamera.mZ + intToFix(2 * z);
 
 						/*						remember, bounds - 1!*/
 
@@ -534,9 +534,9 @@ void render(const long ms) {
 						element = map[x][z];
 						itemsSnapshotElement = mItems[x][z];
 
-						position.mX = mCamera.mX + intToFix(-2 * x);
+						position.mX = mCamera.mX + intToFix(-2 * x + 1);
 						position.mY = mCamera.mY;
-						position.mZ = mCamera.mZ + intToFix(2 - 2 * z);
+						position.mZ = mCamera.mZ + intToFix(1 - 2 * z);
 
 						/* remember, bounds - 1! */
 
@@ -570,9 +570,9 @@ void render(const long ms) {
 						element = map[x][z];
 						itemsSnapshotElement = mItems[x][z];
 
-						position.mX = mCamera.mX + intToFix(2 * x);
+						position.mX = mCamera.mX + intToFix(2 * x - 1);
 						position.mY = mCamera.mY;
-						position.mZ = mCamera.mZ + intToFix(2 * (z - MAP_SIZE + 1));
+						position.mZ = mCamera.mZ + intToFix(2 * (z - MAP_SIZE) + 1);
 
 
 						/* remember, bounds - 1! */
