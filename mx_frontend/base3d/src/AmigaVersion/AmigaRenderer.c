@@ -39,6 +39,8 @@
 #include "CRenderer.h"
 #include "Globals.h"
 
+uint8_t finalBuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+
 #define NORMALIZE(x) (((x * 16) / 256))
 
 #define REG(xn, parm) parm __asm(#xn)
@@ -449,19 +451,23 @@ void handleSystemEvents() {
 }
 
 void flipRenderer() {
+    renderPageFlip(&finalBuffer[0], framebuffer,
+                   previousFrame, turnStep, turnTarget, 0);
+
+
 #ifdef CD32
 
-    WriteChunkyPixels(my_window->RPort, 0, 0, 320, 200, &framebuffer[0], 320);
+    WriteChunkyPixels(my_window->RPort, 0, 0, 320, 200, &finalBuffer[0], 320);
 
 #else
 
 #ifdef AGA8BPP
     OwnBlitter();
     WaitBlit();
-    c2p1x1_8_c5_bm(320,200,0,0,&framebuffer[0], my_window->RPort->BitMap);
+    c2p1x1_8_c5_bm(320,200,0,0,&finalBuffer[0], my_window->RPort->BitMap);
     DisownBlitter();
 #else
-    WriteChunkyPixels(my_window->RPort, 0, 0, 319, 199, &framebuffer[0], 320);
+    WriteChunkyPixels(my_window->RPort, 0, 0, 319, 199, &finalBuffer[0], 320);
 #endif
 
 #endif

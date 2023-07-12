@@ -328,67 +328,9 @@ void waitVSync() {
 }
 
 void flipRenderer() {
-
-    int x, y;
-
-
-
-    if ( !enableSmoothMovement || turnTarget == turnStep ) {
-        dosmemput(&framebuffer[0], XRES_FRAMEBUFFER * YRES_FRAMEBUFFER, 0xa0000);
-        memcpy( previousFrame, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
-    } else if ( turnStep < turnTarget ) {
-
-        uint8_t *bufferPtr = &turnBuffer[0];
-        for ( y = 0; y < YRES_FRAMEBUFFER; ++y ) {
-            for ( x = 0; x < XRES_FRAMEBUFFER; ++x ) {
-                uint8_t index;
-
-                if (x < XRES ) {
-
-                    if ( x  >= turnStep ) {
-                        index = previousFrame[ (XRES_FRAMEBUFFER * y) - turnStep + x ];
-                    } else {
-                        index = framebuffer[ (XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
-                    }
-                } else {
-                    index = framebuffer[ (XRES_FRAMEBUFFER * y) + x];
-                }
-
-                *bufferPtr = index;
-                ++bufferPtr;
-            }
-        }
-
-        turnStep+= 20;
-        dosmemput(&turnBuffer[0], XRES_FRAMEBUFFER * YRES_FRAMEBUFFER, 0xa0000);
-    } else {
-
-        uint8_t *bufferPtr = &turnBuffer[0];
-        for ( y = 0; y < YRES_FRAMEBUFFER; ++y ) {
-            for ( x = 0; x < XRES_FRAMEBUFFER; ++x ) {
-                uint8_t index;
-
-                if (x < XRES  ) {
-
-                    if ( x  >= turnStep ) {
-                        index = framebuffer[ (XRES_FRAMEBUFFER * y) - turnStep + x ];
-                    } else {
-                        index = previousFrame[ (XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
-                    }
-
-                } else {
-                    index = framebuffer[ (XRES_FRAMEBUFFER * y) + x];
-                }
-
-                *bufferPtr = index;
-                ++bufferPtr;
-            }
-        }
-
-        turnStep-= 20;
-        dosmemput(&turnBuffer[0], XRES_FRAMEBUFFER * YRES_FRAMEBUFFER, 0xa0000);
-    }
-
+    renderPageFlip(&turnBuffer[0], framebuffer,
+                   previousFrame, turnStep, turnTarget, 0);
+    dosmemput(&turnBuffer[0], XRES_FRAMEBUFFER * YRES_FRAMEBUFFER, 0xa0000);
 }
 
 void clear() {}
