@@ -17,8 +17,6 @@ extern int accessGrantedToSafe;
 SDL_Window *window;
 SDL_Renderer *renderer;
 
-#define TRANSPARENCY_COLOR 17
-
 uint8_t mBufferedCommand;
 uint32_t palette[16];
 uint8_t framebuffer[128 * 128];
@@ -37,13 +35,13 @@ void graphicsPut(uint8_t x, uint8_t y) {
 #endif
 }
 
-void clearTextScreen() {
+void clearTextScreen(void) {
 }
 
-void enterTextMode() {
+void enterTextMode(void) {
 }
 
-void exitTextMode() {
+void exitTextMode(void) {
 }
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
@@ -64,7 +62,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
     }
 }
 
-void shutdownGraphics() {
+void shutdownGraphics(void) {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
@@ -76,7 +74,7 @@ void showMessage(const char *mesg) {
 
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
 
-void clearGraphics() {
+void clearGraphics(void) {
     memset(framebuffer, 0, 128 * 128);
 }
 
@@ -84,7 +82,7 @@ void writeStr(uint8_t column, uint8_t line, const char *str) {
     puts(str);
 }
 
-void printSituation() {
+void printSituation(void) {
     struct ObjectNode *roomItems;
     struct ObjectNode *playerObjects = getPlayerItems();
     puts("---------------");
@@ -111,9 +109,9 @@ void printSituation() {
     }
 }
 
-void clearScreen() {}
+void clearScreen(void) {}
 
-uint8_t getKey() {
+uint8_t getKey(void) {
     SDL_Event event;
 
     mBufferedCommand = '.';
@@ -210,8 +208,7 @@ uint8_t getKey() {
     return mBufferedCommand;
 }
 
-void init() {
-    int r, g, b;
+void init(void) {
     mBufferedCommand = '.';
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
@@ -244,7 +241,7 @@ void init() {
 #endif
 }
 
-void titleScreen() {
+void titleScreen(void) {
     int keepGoing = 1;
     clearGraphics();
 
@@ -263,7 +260,7 @@ void titleScreen() {
     clearScreen();
 }
 
-void flipRenderer() {
+void flipRenderer(void) {
     SDL_Rect rect;
     uint32_t pixel;
     int x, y, r, g, b;
@@ -307,16 +304,16 @@ void flipRenderer() {
     SDL_RenderPresent(renderer);
 }
 
-void graphicsFlush() {
+void graphicsFlush(void) {
     flipRenderer();
     clearGraphics();
 }
 
-void HUD_initialPaint() {
+void HUD_initialPaint(void) {
 
 }
 
-void HUD_refresh() {
+void HUD_refresh(void) {
 
 }
 

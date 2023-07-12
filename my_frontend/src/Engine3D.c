@@ -50,7 +50,6 @@ enum DIRECTION {
 
 /*  used to mark the edge between the neutral cells and the walls.
     doesn't need to be used, but I'm leaving this here for posterity. */
-#define BORDER_CELL '_'
 
 /*  Required since we have our own memory allocator abstraction */
 uint16_t heap = 0;
