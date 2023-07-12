@@ -208,8 +208,6 @@ void drawMap(void) {
 }
 
 void HUD_initialPaint(void) {
-    struct Room *room = getRoom(getPlayerRoom());
-
     drawLine(128, 0, 128, 191);
     drawLine(0, 128, 255, 128);
     drawMap();
@@ -251,7 +249,6 @@ void HUD_refresh(void) {
 
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
-
 
         if (item->active) {
             writeStr(1, 21, "*");

@@ -284,7 +284,7 @@ void drawMap(void) {
     }
 }
 
-uint8_t getKey() {
+uint8_t getKey(void) {
     uint8_t input = getch();
 
     performAction();
@@ -311,18 +311,18 @@ uint8_t getKey() {
     return input;
 }
 
-void shutdownGraphics() {
+void shutdownGraphics(void) {
 }
 
-void clearScreen() {
+void clearScreen(void) {
     memset((unsigned char *) 0xC000, 0, (320 / 4) * 200);
 }
 
-void clearGraphics() {
+void clearGraphics(void) {
     memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
-void graphicsFlush() {
+void graphicsFlush(void) {
 
     for (int y = 0; y < BUFFER_SIZEY; ++y) {
         uint8_t *line = (unsigned char *) lineStart[y];
@@ -387,7 +387,7 @@ void graphicsPut(uint8_t x, uint8_t y) {
     buffer[(y * (BUFFER_SIZEX)) + (x / 4)] |= (8 >> (x & 3));
 }
 
-void HUD_initialPaint() {
+void HUD_initialPaint(void) {
     for (uint8_t i = 0; i < 6; ++i) {
         writeStr(19, 17 + i, menuItems[i]);
     }
@@ -407,7 +407,7 @@ void HUD_initialPaint() {
     HUD_refresh();
 }
 
-void HUD_refresh() {
+void HUD_refresh(void) {
 
     for (uint8_t d = 0; d < 15; ++d) {
         writeStr(1 + d, 19, " ");

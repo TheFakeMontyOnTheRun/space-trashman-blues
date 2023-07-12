@@ -498,7 +498,6 @@ void HUD_refresh(void) {
         writeStr(1 + d, 24, " ");
     }
 
-
     writeStrWithLimit(1, 18, "Object in room", 16);
 
     if (roomItem != NULL) {
@@ -518,7 +517,6 @@ void HUD_refresh(void) {
 
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
-
 
         if (item->active) {
             writeStr(1, 22, "*");
