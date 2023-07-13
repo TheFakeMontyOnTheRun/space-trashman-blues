@@ -143,16 +143,16 @@ void graphicsFlush(void) {
         updateDirection = 0;
         switch (getPlayerDirection()) {
             case 0:
-                writeStrWithLimit(29, 14, "N", 31, 2, 0);
+                writeStrWithLimit(12, 17, "N", 31, 2, 0);
                 break;
             case 1:
-                writeStrWithLimit(29, 14, "E", 31, 2, 0);
+                writeStrWithLimit(12, 17, "E", 31,2 , 0);
                 break;
             case 2:
-                writeStrWithLimit(29, 14, "S", 31, 2, 0);
+                writeStrWithLimit(12, 17, "S", 31, 2, 0);
                 break;
             case 3:
-                writeStrWithLimit(29, 14, "W", 31, 2, 0);
+                writeStrWithLimit(12, 17, "W", 31, 2, 0);
                 break;
         }
     }
