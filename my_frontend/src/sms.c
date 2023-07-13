@@ -46,7 +46,7 @@ char *menuItems[] = {
 };
 
 void writeStr(uint8_t _x, uint8_t y, const char *text) {
-    writeStrWithLimit(_x, y, text, MARGIN_TEXT_SCREEN_LIMIT);
+    writeStrWithLimit(_x, y, text, MARGIN_TEXT_SCREEN_LIMIT, 2, 0);
 }
 
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
@@ -160,12 +160,6 @@ char *menuItems[] = {
     }
 }
 
-void enterTextMode(void) {
-}
-
-void exitTextMode(void) {
-}
-
 uint8_t getKey(void) {
     int key = read_joypad1();
 
@@ -227,16 +221,16 @@ void graphicsFlush(void) {
         updateDirection = 0;
         switch (getPlayerDirection()) {
             case 0:
-                writeStrWithLimit(29, 14, "N", 31);
+                writeStrWithLimit(29, 14, "N", 31, 2, 0);
                 break;
             case 1:
-                writeStrWithLimit(29, 14, "E", 31);
+                writeStrWithLimit(29, 14, "E", 31,2 , 0);
                 break;
             case 2:
-                writeStrWithLimit(29, 14, "S", 31);
+                writeStrWithLimit(29, 14, "S", 31, 2, 0);
                 break;
             case 3:
-                writeStrWithLimit(29, 14, "W", 31);
+                writeStrWithLimit(29, 14, "W", 31, 2, 0);
                 break;
         }
     }
@@ -259,7 +253,7 @@ void drawMap(void) {
             if (patterns[(map[y][x] & 127) - 32].blockMovement) {
                 for (int cy = 0; cy < 2; ++cy) {
                     for (int cx = 0; cx < 2; ++cx) {
-                        realPut((x * 2) + 136 + cx, (y * 2) + cy + 8);
+                        realPut((x * 2) + 136 + cx, (y * 2) + cy + 8, 1 , NULL);
                     }
                 }
             }
@@ -268,15 +262,15 @@ void drawMap(void) {
 }
 
 void HUD_initialPaint(void) {
-    drawLine(128, 0, 128, 191);
-    drawLine(0, 128, 255, 128);
+    drawLine(128, 0, 128, 191, 2);
+    drawLine(0, 128, 255, 128, 2);
     drawMap();
 
     for (uint8_t i = 0; i < 6; ++i) {
         writeStr(18, 17 + i, menuItems[i]);
     }
 
-    writeStrWithLimit(17, 14, "Direction: ", 31);
+    writeStrWithLimit(17, 14, "Direction: ", 31,2 , 0);
     updateDirection = 1;
     HUD_refresh();
 }
@@ -295,22 +289,22 @@ void HUD_refresh(void) {
         writeStr(17, 17 + i, (i == cursorPosition) ? ">" : " ");
     }
 
-    writeStrWithLimit(1, 17, "Object in room", 16);
+    writeStrWithLimit(1, 17, "Object in room", 16, 2 , 0);
 
     if (roomItem != NULL) {
         struct Item *item = getItem(roomItem->item);
 
 
         if (item->active) {
-            writeStrWithLimit(1, 18, "*", 16);
+            writeStrWithLimit(1, 18, "*", 16, 2 , 0);
         }
 
-        writeStrWithLimit(2, 18, item->name, 16);
+        writeStrWithLimit(2, 18, item->name, 16, 2 , 0);
     } else {
-        writeStrWithLimit(2, 18, "Nothing", 16);
+        writeStrWithLimit(2, 18, "Nothing", 16, 2 , 0);
     }
 
-    writeStrWithLimit(1, 20, "Object in hand", 16);
+    writeStrWithLimit(1, 20, "Object in hand", 16, 2 , 0);
 
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
@@ -320,8 +314,8 @@ void HUD_refresh(void) {
             writeStr(1, 21, "*");
         }
 
-        writeStrWithLimit(2, 21, item->name, 16);
+        writeStrWithLimit(2, 21, item->name, 16, 2 , 0);
     } else {
-        writeStrWithLimit(2, 21, "Nothing", 16);
+        writeStrWithLimit(2, 21, "Nothing", 16, 2 , 0);
     }
 }

@@ -11,6 +11,8 @@ CFLAGS = \
         -Iinclude \
         -I../core/include \
         -I../common/include \
+        -DXRES_FRAMEBUFFER=320 \
+        -DYRES_FRAMEBUFFER=200 \
         -DCPC \
         -DCAN_PICK_OBJECT_AT_ANY_DISTANCE \
         -DSUPPORTS_HACKING_MINIGAME \
@@ -23,6 +25,7 @@ TARGET = derelict.dsk
 OBJS = \
     src/Engine3D.o \
     src/cpc.o \
+    src/KeyboardUI.o \
     src/HackingMinigame.o \
     ../common/src/Common.o \
     ../core/src/Core.o \
@@ -35,5 +38,6 @@ $(TARGET): $(OBJS)
 
 clean:
 	rm -f $(OBJS) $(TARGET)
+	rm -f *.bin
 	rm -f *~
 

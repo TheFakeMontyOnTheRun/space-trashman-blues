@@ -51,7 +51,7 @@ void graphicsFlush(void);
 
 void graphicsPut(uint8_t x, uint8_t y);
 
-uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr);
+uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr);
 
 void HUD_initialPaint(void);
 
@@ -100,5 +100,12 @@ void useItemInHand(void);
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple);
 
 void writeStr(uint8_t column, uint8_t line, const char *str);
+
+
+void flush3DBuffer(void);
+void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg);
+uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t* ptr);
+void drawLine(uint16_t x0, uint8_t y0,uint16_t x1, uint8_t y1, uint8_t colour);
+void drawMap(void);
 
 #endif /* DERELICT8_ENGINE3D_H */
