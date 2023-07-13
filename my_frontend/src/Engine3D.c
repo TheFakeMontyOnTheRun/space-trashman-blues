@@ -969,7 +969,7 @@ void renderScene(void) {
 next_cluster:
         /* pixel 1 */
         y = *stencilPtr;
-        ptr = graphicsPutAddr(x, y, NULL );
+        ptr = graphicsPutAddr(x, y, 1, NULL );
 
         if (x & 7) {
             ++x;
@@ -985,7 +985,7 @@ next_cluster:
             if ( y != prevY ) {
                 goto next_cluster;
             }
-            ptr = graphicsPutAddr(x, y, ptr );
+            ptr = graphicsPutAddr(x, y, 1, ptr );
         }
 
         ++x;
@@ -1001,7 +1001,7 @@ next_cluster:
 next_cluster:
         /* pixel 1 */
         y = *stencilPtr;
-        ptr = graphicsPutAddr(x, y, NULL );
+        ptr = graphicsPutAddr(x, y, 1, NULL );
 
         if (x & 3) {
             ++x;
@@ -1017,7 +1017,7 @@ next_cluster:
             if ( y != prevY ) {
                 goto next_cluster;
             }
-            ptr = graphicsPutAddr(x, y, ptr );
+            ptr = graphicsPutAddr(x, y, 1, ptr );
         }
 
         ++x;
@@ -1033,7 +1033,7 @@ next_cluster:
 next_cluster:
         /* pixel 1 */
         y = *stencilPtr;
-        ptr = graphicsPutAddr(x, y, NULL );
+        ptr = graphicsPutAddr(x, y, 1, NULL );
 
         if (x & 3) {
             ++x;
@@ -1049,7 +1049,7 @@ next_cluster:
             if ( y != prevY ) {
                 goto next_cluster;
             }
-            ptr = graphicsPutAddr(x, y, ptr );
+            ptr = graphicsPutAddr(x, y, 1, ptr );
         }
 
         ++x;

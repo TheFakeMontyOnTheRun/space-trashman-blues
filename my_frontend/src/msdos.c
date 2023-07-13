@@ -6,6 +6,8 @@
 #include "Derelict.h"
 #include "Engine3D.h"
 
+#include "KeyboardUI.h"
+
 unsigned char imageBuffer[128 * 32];
 
 extern const struct Pattern patterns[127];
@@ -18,8 +20,8 @@ extern struct ObjectNode *roomItem;
 
 extern uint8_t accessGrantedToSafe;
 
-int cursorPosition = 0;
 uint8_t updateDirection;
+
 extern uint8_t playerLocation;
 
 void shutdownGraphics(void) {
@@ -102,7 +104,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
     }
 }
 
-uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptrToByte) {
+uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptrToByte) {
 
     if (ptrToByte == NULL) {
         ptrToByte = &imageBuffer[(32 * (y & 0b01111111)) + ((x & 0b01111111) / 4)];
@@ -145,7 +147,7 @@ void graphicsPut(uint8_t x, uint8_t y) {
     }
 }
 
-void realPut(uint16_t x, uint16_t y, uint8_t value) {
+uint8_t *realPut(uint16_t x, uint8_t y, uint8_t value, uint8_t* ptr) {
 
     int pixelRead = 0;
     uint16_t offset = ((x / 4) + ((y / 2) * 80));
@@ -217,6 +219,8 @@ void realPut(uint16_t x, uint16_t y, uint8_t value) {
                 : "ax", "es", "di"
                 );
     }
+
+    return NULL;
 }
 
 void clearGraphics(void) {
@@ -224,7 +228,8 @@ void clearGraphics(void) {
 }
 
 void init(void) {
-
+    initKeyboardUI();
+    updateDirection = 1;
     asm volatile("movb $0x0, %%ah\n\t"
                  "movb $0x4, %%al\n\t"
                  "int $0x10\n\t"
@@ -266,22 +271,22 @@ uint8_t getKey(void) {
     return toReturn;
 }
 
-void writeStrWithLimit(uint16_t _x, uint16_t y, const char *text, uint16_t limitX) {
+void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
 
     const char *ptr = text;
     uint16_t c = 0;
     uint16_t chary = 0;
-    uint16_t x = _x;
+    uint16_t x = _x - 1;
     char cha = *ptr;
 
     for (; cha && y < 25; ++c) {
 
         if (x == limitX) {
             ++y;
-            x = _x;
+            x = _x - 1;
         } else if (cha == '\n') {
             ++y;
-            x = _x;
+            x = _x - 1;
             ++ptr;
             cha = *ptr;
             continue;
@@ -375,16 +380,16 @@ void graphicsFlush(void) {
         updateDirection = 0;
         switch (getPlayerDirection()) {
             case 0:
-                writeStrWithLimit(29, 14, "N", 31);
+                writeStrWithLimit(29, 14, "N", 31, 2, 0);
                 break;
             case 1:
-                writeStrWithLimit(29, 14, "E", 31);
+                writeStrWithLimit(29, 14, "E", 31, 2, 0);
                 break;
             case 2:
-                writeStrWithLimit(29, 14, "S", 31);
+                writeStrWithLimit(29, 14, "S", 31, 2, 0);
                 break;
             case 3:
-                writeStrWithLimit(29, 14, "W", 31);
+                writeStrWithLimit(29, 14, "W", 31, 2, 0);
                 break;
         }
     }
@@ -392,17 +397,8 @@ void graphicsFlush(void) {
     memset(imageBuffer, 0, 128 * 32);
 }
 
-char *menuItems[] = {
-        "8) Use/Toggle",
-        "5) Use with...",
-        "9) Use/pick...",
-        "6) Drop",
-        "7) Next item",
-        "4) Next in room",
-};
-
 void writeStr(uint8_t _x, uint8_t y, const char *text) {
-    writeStrWithLimit(_x, y, text, 40);
+    writeStrWithLimit(_x, y, text, 40, 2, 0);
 }
 
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
@@ -440,6 +436,25 @@ void titleScreen(void) {
     clearScreen();
 }
 
+void drawLine(uint16_t x0, uint8_t y0,uint16_t x1, uint8_t y1, uint8_t colour) {
+    int dx = abs(x1-x0);
+    int sx = x0<x1 ? 1 : -1;
+    int dy = abs(y1-y0);
+    int sy = y0<y1 ? 1 : -1;
+    int err = (dx>dy ? dx : -dy)>>1;
+    int e2;
+    for(;;) {
+
+        if (x0==x1 && y0==y1) break;
+
+        realPut(x0, y0, colour, NULL);
+
+        e2 = err;
+        if (e2 > -dx) { err -= dy; x0 += sx; }
+        if (e2 < dy) { err += dx; y0 += sy; }
+    }
+}
+
 void drawMap(void) {
 
     uint8_t x, y;
@@ -453,77 +468,17 @@ void drawMap(void) {
             if (patterns[(map[y][x] & 127) - 32].blockMovement) {
                 for (int cy = 0; cy < 2; ++cy) {
                     for (int cx = 0; cx < 2; ++cx) {
-                        realPut((x * 2) + cx + 152, (y * 2) + cy + 8, 2);
+                        realPut((x * 2) + cx + 152, (y * 2) + cy + 8, 2, NULL);
                     }
                 }
             } else {
                 for (int cy = 0; cy < 2; ++cy) {
                     for (int cx = 0; cx < 2; ++cx) {
-                        realPut((x * 2) + cx + 152, (y * 2) + cy + 8, 0);
+                        realPut((x * 2) + cx + 152, (y * 2) + cy + 8, 0, NULL);
                     }
                 }
             }
 
         }
-    }
-}
-
-void HUD_initialPaint(void) {
-    updateDirection = 1;
-    for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(19, 17 + i, menuItems[i]);
-    }
-
-    for (uint8_t y = 0; y < 200; ++y) {
-        realPut(144, y, 1);
-    }
-
-    drawMap();
-
-    for (uint16_t x = 0; x < 320; ++x) {
-        realPut(x, 130, 1);
-    }
-
-    writeStrWithLimit(19, 14, "Direction: ", 31);
-    updateDirection = 1;
-    HUD_refresh();
-}
-
-void HUD_refresh(void) {
-
-    for (uint8_t d = 0; d < 15; ++d) {
-        writeStr(1 + d, 19, " ");
-        writeStr(1 + d, 20, " ");
-        writeStr(1 + d, 23, " ");
-        writeStr(1 + d, 24, " ");
-    }
-
-    writeStrWithLimit(1, 18, "Object in room", 16);
-
-    if (roomItem != NULL) {
-        struct Item *item = getItem(roomItem->item);
-
-
-        if (item->active) {
-            writeStrWithLimit(1, 19, "*", 16);
-        }
-
-        writeStrWithLimit(2, 19, item->name, 16);
-    } else {
-        writeStrWithLimit(2, 19, "Nothing", 16);
-    }
-
-    writeStrWithLimit(1, 21, "Object in hand", 16);
-
-    if (focusedItem != NULL) {
-        struct Item *item = getItem(focusedItem->item);
-
-        if (item->active) {
-            writeStr(1, 22, "*");
-        }
-
-        writeStrWithLimit(2, 22, item->name, 16);
-    } else {
-        writeStrWithLimit(2, 22, "Nothing", 16);
     }
 }

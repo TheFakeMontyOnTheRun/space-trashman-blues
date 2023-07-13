@@ -10,6 +10,8 @@ CFLAGS = \
     -I../core/include \
     -I../common/include \
     -Isrc \
+    -DXRES_FRAMEBUFFER=320 \
+    -DYRES_FRAMEBUFFER=200 \
     -DMSDOS \
     -DLEAN_BUILD \
     -DCAN_PICK_OBJECT_AT_ANY_DISTANCE  \
@@ -23,6 +25,7 @@ OBJS = \
     src/Engine3D.o \
     src/HackingMinigame.o \
     src/msdos.o \
+    src/KeyboardUI.o \
     ../core/src/Core.o \
     ../core/src/Derelict.o \
     ../common/src/PackedFileReader.o \

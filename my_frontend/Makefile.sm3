@@ -13,6 +13,8 @@ CFLAGS = \
         -Iinclude \
         -I../core/include \
         -I../common/include \
+        -DXRES_FRAMEBUFFER=256 \
+        -DYRES_FRAMEBUFFER=192 \
         -DGAMEPAD \
         -DTMS9918 \
         -DCAN_PICK_OBJECT_AT_ANY_DISTANCE \

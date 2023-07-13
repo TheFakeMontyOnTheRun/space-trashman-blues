@@ -10,47 +10,29 @@
 
 #include "TMS9918.h"
 #include "YM2413.h"
+#include "KeyboardUI.h"
 
 char getch(void);
 
 extern const struct Pattern patterns[127];
 
-extern uint8_t playerLocation;
-
 extern int8_t map[32][32];
 
-extern struct ObjectNode *focusedItem;
-
-extern struct ObjectNode *roomItem;
-
-extern uint8_t accessGrantedToSafe;
-
-uint8_t cursorPosition = 0;
+extern uint8_t playerLocation;
 
 uint8_t updateDirection;
-
-char *menuItems[] = {
-        "8) Use/Toggle",
-        "5) Use with...",
-        "9) Use/pick...",
-        "6) Drop",
-        "7) Next item",
-        "4) Next in room",
-};
-
-#define COOLDOWN_MAX 0x2EF
-uint16_t cooldown;
 
 #define MARGIN_TEXT_SCREEN_LIMIT 35
 
 void init(void) {
     initTMS9918();
     initYM2413();
-    cooldown = COOLDOWN_MAX;
+    initKeyboardUI();
+    updateDirection = 1;
 }
 
 void writeStr(uint8_t _x, uint8_t y, const char *text) {
-    writeStrWithLimit(_x, y, text, MARGIN_TEXT_SCREEN_LIMIT);
+    writeStrWithLimit(_x, y, text, MARGIN_TEXT_SCREEN_LIMIT, 2, 0);
 }
 
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
@@ -128,12 +110,6 @@ void performAction(void) {
     }
 }
 
-void enterTextMode(void) {
-}
-
-void exitTextMode(void) {
-}
-
 uint8_t getKey(void) {
     uint8_t input = getch();
 
@@ -167,16 +143,16 @@ void graphicsFlush(void) {
         updateDirection = 0;
         switch (getPlayerDirection()) {
             case 0:
-                writeStrWithLimit(29, 14, "N", 31);
+                writeStrWithLimit(29, 14, "N", 31, 2, 0);
                 break;
             case 1:
-                writeStrWithLimit(29, 14, "E", 31);
+                writeStrWithLimit(29, 14, "E", 31, 2, 0);
                 break;
             case 2:
-                writeStrWithLimit(29, 14, "S", 31);
+                writeStrWithLimit(29, 14, "S", 31, 2, 0);
                 break;
             case 3:
-                writeStrWithLimit(29, 14, "W", 31);
+                writeStrWithLimit(29, 14, "W", 31, 2, 0);
                 break;
         }
     }
@@ -199,63 +175,10 @@ void drawMap(void) {
             if (patterns[(map[y][x] & 127) - 32].blockMovement) {
                 for (int cy = 0; cy < 2; ++cy) {
                     for (int cx = 0; cx < 2; ++cx) {
-                        realPut((x * 2) + 136 + cx, (y * 2) + cy + 8);
+                        realPut((x * 2) + 136 + cx, (y * 2) + cy + 8, 2, NULL);
                     }
                 }
             }
         }
-    }
-}
-
-void HUD_initialPaint(void) {
-    drawLine(128, 0, 128, 191);
-    drawLine(0, 128, 255, 128);
-    drawMap();
-
-    for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(17, 17 + i, menuItems[i]);
-    }
-
-    writeStrWithLimit(17, 14, "Direction: ", 31);
-    updateDirection = 1;
-    HUD_refresh();
-}
-
-void HUD_refresh(void) {
-
-    for (uint8_t d = 0; d < 15; ++d) {
-        writeStr(1 + d, 18, " ");
-        writeStr(1 + d, 19, " ");
-        writeStr(1 + d, 22, " ");
-        writeStr(1 + d, 23, " ");
-    }
-
-    writeStrWithLimit(1, 17, "Object in room", 16);
-
-    if (roomItem != NULL) {
-        struct Item *item = getItem(roomItem->item);
-
-
-        if (item->active) {
-            writeStrWithLimit(1, 18, "*", 16);
-        }
-
-        writeStrWithLimit(2, 18, item->name, 16);
-    } else {
-        writeStrWithLimit(2, 18, "Nothing", 16);
-    }
-
-    writeStrWithLimit(1, 20, "Object in hand", 16);
-
-    if (focusedItem != NULL) {
-        struct Item *item = getItem(focusedItem->item);
-
-        if (item->active) {
-            writeStr(1, 21, "*");
-        }
-
-        writeStrWithLimit(2, 21, item->name, 16);
-    } else {
-        writeStrWithLimit(2, 21, "Nothing", 16);
     }
 }

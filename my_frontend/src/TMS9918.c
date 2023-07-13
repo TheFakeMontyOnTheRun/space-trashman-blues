@@ -56,7 +56,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
     }
 }
 
-uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr) {
+uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
     if (ptr == NULL) {
         ptr = &buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)];
     }
@@ -92,8 +92,16 @@ void clearTextScreen(void) {
     clearScreen();
 }
 
-void realPut(uint8_t x, uint8_t y) {
+uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t* ptr) {
     pset(x, y);
+
+    return NULL;
+}
+
+void enterTextMode(void) {
+}
+
+void exitTextMode(void) {
 }
 
 void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
@@ -138,6 +146,6 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
     }
 }
 
-void drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
+void drawLine(uint16_t x0, uint8_t y0,uint16_t x1, uint8_t y1, uint8_t colour) {
     draw(x0, y0, x1, y1);
 }

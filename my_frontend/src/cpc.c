@@ -11,6 +11,8 @@
 #include "Derelict.h"
 #include "Engine3D.h"
 
+#include "KeyboardUI.h"
+
 #include "font.h"
 
 extern const struct Pattern patterns[127];
@@ -21,7 +23,6 @@ extern struct ObjectNode *focusedItem;
 
 extern struct ObjectNode *roomItem;
 
-uint8_t cursorPosition = 0;
 extern uint8_t playerLocation;
 uint8_t updateDirection;
 
@@ -29,34 +30,24 @@ uint8_t updateDirection;
 #define BUFFER_SIZEY 128
 #define BUFFER_RESX 128
 #define BUFFER_RESY 128
-#define COOLDOWN_MAX 0xFF
+
 #define MARGIN_TEXT_SCREEN_LIMIT 40
 
 int getch(void);
 
 uint16_t lineStart[128];
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
-uint8_t cooldown;
 
 void init(void) {
+
+    initKeyboardUI();
 
     for (int y = 0; y < 128; ++y) {
         lineStart[y] = 0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048);
     }
-
-    cooldown = COOLDOWN_MAX;
 }
 
-char *menuItems[] = {
-        "8) Use/Toggle",
-        "5) Use with...",
-        "9) Use/pick...",
-        "6) Drop",
-        "7) Next item",
-        "4) Next in room",
-};
-
-void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
+void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
 
     uint8_t len = strlen(text);
     char *ptr = text;
@@ -128,10 +119,10 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 }
 
 void writeStr(uint8_t _x, uint8_t y, const char *text) {
-    writeStrWithLimit(_x, y, text, MARGIN_TEXT_SCREEN_LIMIT);
+    writeStrWithLimit(_x, y, text, MARGIN_TEXT_SCREEN_LIMIT, 2, 0);
 }
 
-uint8_t *realPut(int x, int y, uint8_t colour, uint8_t *ptr) {
+uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
 
     if (ptr == NULL) {
         ptr = (unsigned char *) 0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048) + (x >> 2);
@@ -333,16 +324,16 @@ void graphicsFlush(void) {
         updateDirection = 0;
         switch (getPlayerDirection()) {
             case 0:
-                writeStrWithLimit(29, 14, "N", 31);
+                writeStrWithLimit(29, 14, "N", 31, 2, 0);
                 break;
             case 1:
-                writeStrWithLimit(29, 14, "E", 31);
+                writeStrWithLimit(29, 14, "E", 31, 2, 0);
                 break;
             case 2:
-                writeStrWithLimit(29, 14, "S", 31);
+                writeStrWithLimit(29, 14, "S", 31, 2, 0);
                 break;
             case 3:
-                writeStrWithLimit(29, 14, "W", 31);
+                writeStrWithLimit(29, 14, "W", 31, 2, 0);
                 break;
         }
     }
@@ -372,7 +363,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
 }
 
-uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr) {
+uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
 
     if (ptr == NULL) {
         ptr = &buffer[(y * (BUFFER_SIZEX)) + (x / 4)]; /* skip to the line in pattern */
@@ -387,61 +378,21 @@ void graphicsPut(uint8_t x, uint8_t y) {
     buffer[(y * (BUFFER_SIZEX)) + (x / 4)] |= (8 >> (x & 3));
 }
 
-void HUD_initialPaint(void) {
-    for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(19, 17 + i, menuItems[i]);
-    }
+void drawLine(uint16_t x0, uint8_t y0,uint16_t x1, uint8_t y1, uint8_t colour) {
+    int dx = abs(x1-x0);
+    int sx = x0<x1 ? 1 : -1;
+    int dy = abs(y1-y0);
+    int sy = y0<y1 ? 1 : -1;
+    int err = (dx>dy ? dx : -dy)>>1;
+    int e2;
+    for(;;) {
 
-    for (uint8_t y = 0; y < 200; ++y) {
-        realPut(144, y, 1, NULL);
-    }
+        if (x0==x1 && y0==y1) break;
 
-    drawMap();
+        realPut(x0, y0, colour, NULL);
 
-    for (uint16_t x = 0; x < 320; ++x) {
-        realPut(x, 130, 1, NULL);
-    }
-
-    writeStrWithLimit(19, 14, "Direction: ", 31);
-    updateDirection = 1;
-    HUD_refresh();
-}
-
-void HUD_refresh(void) {
-
-    for (uint8_t d = 0; d < 15; ++d) {
-        writeStr(1 + d, 19, " ");
-        writeStr(1 + d, 20, " ");
-        writeStr(1 + d, 23, " ");
-        writeStr(1 + d, 24, " ");
-    }
-
-    writeStrWithLimit(1, 18, "Object in room", 16);
-
-    if (roomItem != NULL) {
-        struct Item *item = getItem(roomItem->item);
-
-
-        if (item->active) {
-            writeStrWithLimit(1, 19, "*", 16);
-        }
-
-        writeStrWithLimit(2, 19, item->name, 16);
-    } else {
-        writeStrWithLimit(2, 19, "Nothing", 16);
-    }
-
-    writeStrWithLimit(1, 21, "Object in hand", 16);
-
-    if (focusedItem != NULL) {
-        struct Item *item = getItem(focusedItem->item);
-
-        if (item->active) {
-            writeStr(1, 22, "*");
-        }
-
-        writeStrWithLimit(2, 22, item->name, 16);
-    } else {
-        writeStrWithLimit(2, 22, "Nothing", 16);
+        e2 = err;
+        if (e2 > -dx) { err -= dy; x0 += sx; }
+        if (e2 < dy) { err += dx; y0 += sy; }
     }
 }
