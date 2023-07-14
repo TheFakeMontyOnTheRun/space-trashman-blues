@@ -46,7 +46,7 @@ void HUD_initialPaint(void) {
         writeStr(17, (YRES_TEXT - 6) + i, menuItems[i]);
     }
 
-    writeStrWithLimit(1, YRES_TEXT - 7, "Direction: ", 31,2 , 0);
+    writeStrWithLimit(1, YRES_TEXT - 7, "Direction: ", 31, 2, 0);
     HUD_refresh();
 }
 

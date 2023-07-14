@@ -26,6 +26,8 @@ OBJS = \
     src/Engine3D.o \
     src/cpc.o \
     src/KeyboardUI.o \
+    src/Menu.o \
+    src/YM2413.o \
     src/HackingMinigame.o \
     ../common/src/Common.o \
     ../core/src/Core.o \

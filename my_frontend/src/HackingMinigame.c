@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "Menu.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Engine3D.h"
@@ -45,7 +46,7 @@ void HackingScreen_initStateCallback(void) {
 void HackingScreen_repaintCallback(void) {
     uint8_t pin;
 
-    drawWindow(1, 1, 40, 15, "Disassembly: CONTROLLER.PRG (stack)");
+    drawWindow(1, 1, 40, 15, "Disassembly: CONTROLLER.PRG (stack)", 2);
 
     writeStr((12 * 0), 11, cursorPosition == 0 ? "[CPU0]" : " CPU0 ");
     writeStr((12 * 1), 11, cursorPosition == 1 ? "[CPU1]" : " CPU1 ");
