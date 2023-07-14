@@ -11,19 +11,15 @@
 #include "Derelict.h"
 #include "Engine3D.h"
 
+#include "YM2413.h"
 #include "KeyboardUI.h"
-
+#include "Menu.h"
 #include "font.h"
-
-extern const struct Pattern patterns[127];
-
-extern int8_t map[32][32];
 
 extern struct ObjectNode *focusedItem;
 
 extern struct ObjectNode *roomItem;
 
-extern uint8_t playerLocation;
 uint8_t updateDirection;
 
 #define BUFFER_SIZEX 32
@@ -39,7 +35,7 @@ uint16_t lineStart[128];
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 
 void init(void) {
-
+    initYM2413();
     initKeyboardUI();
     updateDirection = 1;
     for (int y = 0; y < 128; ++y) {
@@ -118,10 +114,6 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_
     }
 }
 
-void writeStr(uint8_t _x, uint8_t y, const char *text) {
-    writeStrWithLimit(_x, y, text, MARGIN_TEXT_SCREEN_LIMIT, 2, 0);
-}
-
 uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
 
     if (ptr == NULL) {
@@ -137,63 +129,6 @@ uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
     return ptr;
 }
 
-void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {
-
-    int x, y;
-    uint8_t *ptr = NULL;
-
-    for (x = 0; x < tw * 8; ++x) {
-        if ((x & 3) == 0) {
-            ptr = NULL;
-        }
-        ptr = realPut(((tx * 8) + x), (ty * 8), 1, ptr);
-    }
-
-    for (x = 0; x < tw * 8; ++x) {
-        if ((x & 3) == 0) {
-            ptr = NULL;
-        }
-        ptr = realPut(((tx * 8) + x), ((ty + th) * 8) - 1, 1, ptr);
-    }
-
-    for (y = 0; y < (th * 8) - 1; ++y) {
-        realPut((tx + tw) * 8, ((ty * 8) + y), 1, NULL);
-        realPut((tx * 8), ((ty * 8) + y), 1, NULL);
-    }
-
-    writeStr(tx + 1, ty, title);
-}
-
-void showMessage(const char *message) {
-    uint8_t keepGoing = 1;
-    clearScreen();
-
-    writeStr(1, 1, message);
-    writeStr(2, 22, "Press SPACE button to continue");
-
-    while (keepGoing) {
-        if (getKey() == ' ') {
-            keepGoing = 0;
-        }
-    }
-}
-
-void titleScreen(void) {
-    uint8_t keepGoing = 1;
-    clearScreen();
-
-    writeStr(1, 1, "Sub Mare Imperium: Derelict");
-    writeStr(1, 4, "by Daniel Monteiro");
-    writeStr(1, 6, " Press SPACE to start ");
-
-    while (keepGoing) {
-        if (getKey() == ' ') {
-            keepGoing = 0;
-        }
-    }
-    backToGraphics();
-}
-
 void refreshJustGraphics(void) {
     clearGraphics();
     renderScene();
@@ -206,34 +141,7 @@ void backToGraphics(void) {
     refreshJustGraphics();
 }
 
-void performAction(void) {
-    switch (getGameStatus()) {
-        case kBadVictory:
-            showMessage("Victory! Too bad you didn't survive");
-            while (1);
 
-        case kBadGameOver:
-            showMessage("You're dead! And so are the\n"
-                        "other people on the path of\n"
-                        "destruction faulty reactor");
-            while (1);
-
-        case kGoodVictory:
-            showMessage("Victory! You managed to destroy the\nship and get out alive");
-            while (1);
-
-        case kGoodGameOver:
-            showMessage("You failed! While you're alive\n"
-                        "you failed to prevent the worst\n"
-                        "scenario and now EVERYBODY is\n"
-                        "dead!)");
-            while (1);
-
-        default:
-        case kNormalGameplay:
-            break;
-    }
-}
 
 void clearTextScreen(void) {
     clearScreen();
@@ -245,35 +153,7 @@ void enterTextMode(void) {
 void exitTextMode(void) {
 }
 
-void drawMap(void) {
 
-    uint8_t *ptr;
-    uint8_t x, y;
-
-    if (playerLocation == 0) {
-        return;
-    }
-
-    for (y = 0; y < 32; ++y) {
-        for (x = 0; x < 32; ++x) {
-            if (patterns[(map[y][x] & 127) - 32].blockMovement) {
-                for (int cy = 0; cy < 2; ++cy) {
-                    ptr = NULL;
-                    for (int cx = 0; cx < 2; ++cx) {
-                        ptr = realPut((x * 2) + cx + 152, (y * 2) + cy + 8, 2, ptr);
-                    }
-                }
-            } else {
-                for (int cy = 0; cy < 2; ++cy) {
-                    ptr = NULL;
-                    for (int cx = 0; cx < 2; ++cx) {
-                        ptr = realPut((x * 2) + cx + 152, (y * 2) + cy + 8, 0, ptr);
-                    }
-                }
-            }
-        }
-    }
-}
 
 uint8_t getKey(void) {
     uint8_t input = getch();

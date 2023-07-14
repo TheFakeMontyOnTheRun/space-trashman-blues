@@ -10,19 +10,7 @@
 
 unsigned char imageBuffer[128 * 32];
 
-extern const struct Pattern patterns[127];
-
-extern int8_t map[32][32];
-
-extern struct ObjectNode *focusedItem;
-
-extern struct ObjectNode *roomItem;
-
-extern uint8_t accessGrantedToSafe;
-
 uint8_t updateDirection;
-
-extern uint8_t playerLocation;
 
 void shutdownGraphics(void) {
 }
@@ -147,7 +135,7 @@ void graphicsPut(uint8_t x, uint8_t y) {
     }
 }
 
-uint8_t *realPut(uint16_t x, uint8_t y, uint8_t value, uint8_t* ptr) {
+uint8_t *realPut(uint16_t x, uint8_t y, uint8_t value, uint8_t *ptr) {
 
     int pixelRead = 0;
     uint16_t offset = ((x / 4) + ((y / 2) * 80));
@@ -383,7 +371,7 @@ void graphicsFlush(void) {
                 writeStrWithLimit(12, 18, "N", 31, 2, 0);
                 break;
             case 1:
-                writeStrWithLimit(12, 18, "E", 31,2 , 0);
+                writeStrWithLimit(12, 18, "E", 31, 2, 0);
                 break;
             case 2:
                 writeStrWithLimit(12, 18, "S", 31, 2, 0);
@@ -397,15 +385,6 @@ void graphicsFlush(void) {
     memset(imageBuffer, 0, 128 * 32);
 }
 
-void writeStr(uint8_t _x, uint8_t y, const char *text) {
-    writeStrWithLimit(_x, y, text, 40, 2, 0);
-}
-
-void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
-
-void showMessage(const char *message) {
-    writeStr(1, 1, message);
-}
 
 void clearTextScreen(void) {
     clearScreen();
@@ -417,68 +396,27 @@ void exitTextMode(void) {
     clearScreen();
 }
 
-void titleScreen(void) {
-    uint16_t keepGoing = 1;
-    clearGraphics();
-
-    writeStr(1, 1, "Sub Mare Imperium:");
-    writeStr(1, 2, "     Derelict");
-    writeStr(1, 4, "by Daniel Monteiro");
-    writeStr(1, 6, "   Press any key");
-    writeStr(1, 7, "     to start");
-
-    while (keepGoing) {
-        if (getKey() != '.') {
-            keepGoing = 0;
-        }
-    }
-
-    clearScreen();
-}
-
-void drawLine(uint16_t x0, uint8_t y0,uint16_t x1, uint8_t y1, uint8_t colour) {
-    int dx = abs(x1-x0);
-    int sx = x0<x1 ? 1 : -1;
-    int dy = abs(y1-y0);
-    int sy = y0<y1 ? 1 : -1;
-    int err = (dx>dy ? dx : -dy)>>1;
+void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
+    int dx = abs(x1 - x0);
+    int sx = x0 < x1 ? 1 : -1;
+    int dy = abs(y1 - y0);
+    int sy = y0 < y1 ? 1 : -1;
+    int err = (dx > dy ? dx : -dy) >> 1;
     int e2;
-    for(;;) {
+    for (;;) {
 
-        if (x0==x1 && y0==y1) break;
+        if (x0 == x1 && y0 == y1) break;
 
         realPut(x0, y0, colour, NULL);
 
         e2 = err;
-        if (e2 > -dx) { err -= dy; x0 += sx; }
-        if (e2 < dy) { err += dx; y0 += sy; }
-    }
-}
-
-void drawMap(void) {
-
-    uint8_t x, y;
-
-    if (playerLocation == 0) {
-        return;
-    }
-
-    for (y = 0; y < 32; ++y) {
-        for (x = 0; x < 32; ++x) {
-            if (patterns[(map[y][x] & 127) - 32].blockMovement) {
-                for (int cy = 0; cy < 2; ++cy) {
-                    for (int cx = 0; cx < 2; ++cx) {
-                        realPut((x * 2) + cx + 152, (y * 2) + cy + 8, 2, NULL);
-                    }
-                }
-            } else {
-                for (int cy = 0; cy < 2; ++cy) {
-                    for (int cx = 0; cx < 2; ++cx) {
-                        realPut((x * 2) + cx + 152, (y * 2) + cy + 8, 0, NULL);
-                    }
-                }
-            }
-
+        if (e2 > -dx) {
+            err -= dy;
+            x0 += sx;
+        }
+        if (e2 < dy) {
+            err += dx;
+            y0 += sy;
         }
     }
 }

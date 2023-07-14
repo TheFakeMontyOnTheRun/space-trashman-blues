@@ -32,6 +32,7 @@ OBJS = \
     src/YM2413.o \
     src/KeyboardUI.o \
     src/msx.o \
+    src/Menu.o \
     src/HackingMinigame.o \
     ../core/src/Core.o \
     ../core/src/Derelict.o \

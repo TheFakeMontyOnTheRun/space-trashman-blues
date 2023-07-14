@@ -28,6 +28,7 @@ TARGET = derelict.sms
 OBJS = \
     src/Engine3D.o \
     src/sms.o \
+    src/Menu.o \
     src/TMS9918.o \
     src/HackingMinigame.o \
     ../core/src/Core.o \

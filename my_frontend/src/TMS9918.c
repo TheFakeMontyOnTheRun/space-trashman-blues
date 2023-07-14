@@ -92,7 +92,7 @@ void clearTextScreen(void) {
     clearScreen();
 }
 
-uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t* ptr) {
+uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
     pset(x, y);
 
     return NULL;
@@ -146,6 +146,6 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
     }
 }
 
-void drawLine(uint16_t x0, uint8_t y0,uint16_t x1, uint8_t y1, uint8_t colour) {
+void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
     draw(x0, y0, x1, y1);
 }

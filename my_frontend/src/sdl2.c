@@ -7,10 +7,10 @@
 #include "Core.h"
 #include "Derelict.h"
 #include "Engine3D.h"
-
+#include "KeyboardUI.h"
+#include "Menu.h"
 #include "SDL.h"
 
-int cursorPosition = 0;
 extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
@@ -68,19 +68,15 @@ void shutdownGraphics(void) {
     SDL_Quit();
 }
 
-void showMessage(const char *mesg) {
-    puts(mesg);
-}
-
-void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
-
 void clearGraphics(void) {
     memset(framebuffer, 0, 128 * 128);
 }
 
-void writeStr(uint8_t column, uint8_t line, const char *str) {
-    puts(str);
+void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
+
 }
+
+uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {}
 
 void printSituation(void) {
     struct ObjectNode *roomItems;
@@ -138,6 +134,7 @@ uint8_t getKey(void) {
 
                 case SDLK_SPACE:
                     printSituation();
+                    mBufferedCommand = ' ';
                     break;
 
                 case SDLK_KP_7:
@@ -208,7 +205,13 @@ uint8_t getKey(void) {
     return mBufferedCommand;
 }
 
+void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
+    puts(text);
+}
+
 void init(void) {
+    initKeyboardUI();
+
     mBufferedCommand = '.';
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
@@ -241,24 +244,6 @@ void init(void) {
 #endif
 }
 
-void titleScreen(void) {
-    int keepGoing = 1;
-    clearGraphics();
-
-    writeStr(1, 1, "Sub Mare Imperium:");
-    writeStr(1, 2, "     Derelict");
-    writeStr(1, 4, "by Daniel Monteiro");
-    writeStr(1, 6, "  Press B button ");
-    writeStr(1, 7, "    to start");
-
-    while (keepGoing) {
-        if (getKey() != '.') {
-            keepGoing = 0;
-        }
-    }
-
-    clearScreen();
-}
 
 void flipRenderer(void) {
     SDL_Rect rect;
@@ -308,12 +293,3 @@ void graphicsFlush(void) {
     flipRenderer();
     clearGraphics();
 }
-
-void HUD_initialPaint(void) {
-
-}
-
-void HUD_refresh(void) {
-
-}
-
