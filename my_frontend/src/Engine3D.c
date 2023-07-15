@@ -128,17 +128,16 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
     uint8_t z1py;
     int8_t z0dx;
     int8_t z1dx;
+
     int16_t lineX0;
     int16_t lineX1;
-
     int16_t px0z0;
-    int16_t py0z0;
-    int16_t py0z1;
-
-    int16_t py1z0;
-    int16_t py1z1;
-
     int16_t px1z1;
+    
+    int8_t py0z0;
+    int8_t py0z1;
+    int8_t py1z0;
+    int8_t py1z1;
 
     uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
     uint8_t stipple = 1;
@@ -246,18 +245,18 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
     lineX1 = px1z1;
 
     if (lineX0 != lineX1) {
-        int16_t upperY0 = py1z0;
-        int16_t upperY1 = py1z1;
-        int16_t upperDx = abs(lineX1 - lineX0);
-        int16_t upperDy = -abs(upperY1 - upperY0);
+        int8_t upperY0 = py1z0;
+        int8_t upperY1 = py1z1;
+        int8_t upperDx = abs(lineX1 - lineX0);
+        int8_t upperDy = -abs(upperY1 - upperY0);
         int8_t upperSy = upperY0 < upperY1 ? 1 : -1;
         int16_t upperErr = upperDx + upperDy;
-        int16_t upperErr2;
-        int16_t lowerY0 = py0z0;
-        int16_t lowerY1 = py0z1;
+        int16_t upperErr2 = 0;
+        int8_t lowerY0 = py0z0;
+        int8_t lowerY1 = py0z1;
         int16_t lowerDx = abs(lineX1 - lineX0);
         int8_t lowerSx = lineX0 < lineX1 ? 1 : -1;
-        int16_t lowerDy = -abs(lowerY1 - lowerY0);
+        int8_t lowerDy = -abs(lowerY1 - lowerY0);
         int8_t lowerSy = lowerY0 < lowerY1 ? 1 : -1;
         int16_t lowerErr = lowerDx + lowerDy;
         int16_t lowerErr2 = 0;
@@ -311,10 +310,12 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
     uint8_t z0px;
     uint8_t z0py;
     int8_t z0dx;
+
     int16_t x;
     int16_t px0z0;
-    int8_t py0z0;
     int16_t px1z0;
+    
+    int8_t py0z0;
     int8_t py1z0;
     uint8_t shouldStipple;
     uint8_t drawContour;
@@ -393,15 +394,18 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
     uint8_t z1py;
     int8_t z0dx;
     int8_t z1dx;
+    
     int16_t x;
     int16_t lineX0;
     int16_t lineX1;
     int16_t px0z0;
-    int8_t py0z0;
     int16_t px1z0;
     int16_t px0z1;
-    int8_t py0z1;
     int16_t px1z1;
+    
+    int8_t py0z0;
+    int8_t py0z1;
+
     uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
     uint8_t stipple = 1;
 
@@ -463,11 +467,11 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
     lineX1 = px0z1;
 
     if (lineX0 != lineX1) {
-        int16_t y0 = py0z0;
-        int16_t y1 = py0z1;
+        int8_t y0 = py0z0;
+        int8_t y1 = py0z1;
         int16_t dx = abs(lineX1 - lineX0);
         int8_t sx = lineX0 < lineX1 ? 1 : -1;
-        int16_t dy = -abs(y1 - y0);
+        int8_t dy = -abs(y1 - y0);
         int8_t sy = y0 < y1 ? 1 : -1;
         int16_t err = dx + dy;
         int16_t e2 = 0;
@@ -508,11 +512,11 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
     lineX1 = px1z1;
 
     if (lineX0 != lineX1) {
-        int16_t y0 = py0z0;
-        int16_t y1 = py0z1;
+        int8_t y0 = py0z0;
+        int8_t y1 = py0z1;
         int16_t dx = abs(lineX1 - lineX0);
         int8_t sx = lineX0 < lineX1 ? 1 : -1;
-        int16_t dy = -abs(y1 - y0);
+        int8_t dy = -abs(y1 - y0);
         int8_t sy = y0 < y1 ? 1 : -1;
         int16_t err = dx + dy;
         int16_t e2 = 0;
@@ -558,16 +562,17 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     uint8_t z1py;
     int8_t z0dx;
     int8_t z1dx;
+    
     int16_t x;
     int16_t lineX0;
     int16_t lineX1;
-
     int16_t px0z0;
-    int8_t py0z0;
     int16_t px1z0;
     int16_t px0z1;
-    int8_t py0z1;
     int16_t px1z1;
+    
+    int8_t py0z0;
+    int8_t py0z1;
 
     uint8_t shouldStipple = (z0 >= STIPPLE_DISTANCE);
     uint8_t stipple = 1;
@@ -663,11 +668,11 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     lineX1 = px0z1;
 
     if (lineX0 != lineX1) {
-        int16_t lineY0 = py0z0;
-        int16_t lineY1 = py0z1;
+        int8_t lineY0 = py0z0;
+        int8_t lineY1 = py0z1;
         int16_t lineDx = abs(lineX1 - lineX0);
         int8_t lineSx = lineX0 < lineX1 ? 1 : -1;
-        int16_t lineDy = -abs(lineY1 - lineY0);
+        int8_t lineDy = -abs(lineY1 - lineY0);
         int8_t lineSy = lineY0 < lineY1 ? 1 : -1;
         int16_t lineErr = lineDx + lineDy;
         int16_t lineE2 = 0;
@@ -710,11 +715,11 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     lineX1 = px1z1;
 
     if (lineX0 != lineX1) {
-        int16_t lineY0 = py0z0;
-        int16_t lineY1 = py0z1;
+        int8_t lineY0 = py0z0;
+        int8_t lineY1 = py0z1;
         int16_t lineDx = abs(lineX1 - lineX0);
         int8_t lineSx = lineX0 < lineX1 ? 1 : -1;
-        int16_t lineDy = -abs(lineY1 - lineY0);
+        int8_t lineDy = -abs(lineY1 - lineY0);
         int8_t lineSy = lineY0 < lineY1 ? 1 : -1;
         int16_t lineErr = lineDx + lineDy;
         int16_t lineE2 = 0;
