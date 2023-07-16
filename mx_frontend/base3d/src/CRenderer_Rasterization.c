@@ -565,7 +565,7 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
     FixP_t x0;
     FixP_t x1;
     uint8_t *bufferData = &framebuffer[0];
-    int16_t iy;
+    int32_t iy;
     /*
       0xFF here acts as a dirty value, indicating there is no last value.
       But even if we had textures this big, it would be only at the end of
@@ -699,7 +699,7 @@ void drawFloor(FixP_t y0,
     FixP_t x1;
     uint8_t pixel;
     FixP_t v = 0;
-    int16_t iy;
+    int32_t iy;
     uint8_t *bufferData;
     FixP_t dv;
     const uint8_t *sourceLineStart;

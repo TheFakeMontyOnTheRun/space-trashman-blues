@@ -38,24 +38,23 @@ struct Vec2i transform(const enum EDirection from, const struct Vec2i currentPos
 
     switch (from) {
         case kNorth:
-            toReturn = currentPos;
+             return currentPos;
             break;
         case kSouth:
-            initVec2i(&toReturn, (int8_t) (MAP_SIZE - currentPos.x - 1),
-                      (int8_t) (MAP_SIZE - currentPos.y - 1));
+            toReturn.x = (MAP_SIZE - currentPos.x - 1);
+            toReturn.y = (MAP_SIZE - currentPos.y - 1);
             break;
 
         case kEast:
-            initVec2i(&toReturn, (int8_t) (MAP_SIZE - currentPos.y - 1),
-                      (int8_t) (MAP_SIZE - currentPos.x - 1));
+            toReturn.x = (MAP_SIZE - currentPos.y - 1);
+            toReturn.y = (MAP_SIZE - currentPos.x - 1);
             break;
         case kWest:
-            initVec2i(&toReturn, (int8_t) (currentPos.y),
-                      (int8_t) (currentPos.x));
+            toReturn.x = (currentPos.y);
+            toReturn.y = (currentPos.x);
             break;
         default:
             assert (FALSE);
-            break;
     }
 
     return toReturn;

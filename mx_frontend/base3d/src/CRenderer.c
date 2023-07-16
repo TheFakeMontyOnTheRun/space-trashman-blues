@@ -31,13 +31,11 @@
 /*	Div(intToFix(1), intToFix(16));*/
 #define WALKING_BIAS 4096
 
-extern int needToRedrawHUD;
 int hasSnapshot = FALSE;
 FixP_t playerHeight = 0;
 FixP_t walkingBias = 0;
 FixP_t playerHeightChangeRate = 0;
 FixP_t playerHeightTarget = 0;
-extern int currentSelectedItem;
 int visibilityCached = FALSE;
 int needsToRedrawVisibleMeshes = TRUE;
 struct MapWithCharKey occluders;
@@ -268,7 +266,7 @@ void drawMap(const struct CActor *current) {
     ++gameTicks;
 }
 
-enum ECommand getInput() {
+enum ECommand getInput(void) {
     const enum ECommand toReturn = mBufferedCommand;
     mBufferedCommand = kCommandNone;
     return toReturn;
@@ -304,7 +302,7 @@ void render(const long ms) {
         uint8_t element = 0;
         struct Vec3 position;
         FixP_t tileHeight = 0;
-        int16_t x, z;
+        int32_t x, z;
         int distance;
         FixP_t cameraHeight;
         uint8_t facesMask;
@@ -313,7 +311,6 @@ void render(const long ms) {
 #ifdef SDLSW
         clearRenderer();
 #endif
-
         element = LEVEL_MAP(cameraPosition.x, cameraPosition.y);
 
         tileProp = ((struct CTile3DProperties *) getFromMap(&tileProperties,
