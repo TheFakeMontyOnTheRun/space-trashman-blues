@@ -467,7 +467,7 @@ void render(const long ms) {
 								mCamera.mX + intToFix(-2 * ((MAP_SIZE - 1) - x));
 						position.mY = mCamera.mY;
 						position.mZ =
-								mCamera.mZ + intToFix(2 * (MAP_SIZE) - (2 * z));
+								mCamera.mZ + intToFix(2 * (MAP_SIZE -  z) - 1);
 
 						if (x > 0) {
 							facesMask |= (map[z][(x - 1)] != element) ?
@@ -504,7 +504,7 @@ void render(const long ms) {
 
 						position.mX = mCamera.mX + intToFix(-2 * x);
 						position.mY = mCamera.mY;
-						position.mZ = mCamera.mZ + intToFix(2 * z);
+						position.mZ = mCamera.mZ + intToFix(2 * z) + intToFix(1);
 
 						/*						remember, bounds - 1!*/
 
@@ -534,7 +534,7 @@ void render(const long ms) {
 						element = map[x][z];
 						itemsSnapshotElement = mItems[x][z];
 
-						position.mX = mCamera.mX + intToFix(-2 * x + 1);
+						position.mX = mCamera.mX + intToFix(-2 * x + 1) - intToFix(1);
 						position.mY = mCamera.mY;
 						position.mZ = mCamera.mZ + intToFix(1 - 2 * z);
 
@@ -570,7 +570,7 @@ void render(const long ms) {
 						element = map[x][z];
 						itemsSnapshotElement = mItems[x][z];
 
-						position.mX = mCamera.mX + intToFix(2 * x - 1);
+						position.mX = mCamera.mX + intToFix(2 * x - 1) + intToFix(1);
 						position.mY = mCamera.mY;
 						position.mZ = mCamera.mZ + intToFix(2 * (z - MAP_SIZE) + 1);
 
