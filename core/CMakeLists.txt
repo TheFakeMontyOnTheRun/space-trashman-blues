@@ -22,6 +22,7 @@ enable_testing()
 
 include_directories(include)
 
+include_directories(../common/include)
 include_directories(gtest)
 include_directories(gtest/include)
 
@@ -46,6 +47,7 @@ set(SOURCE_FILES
 		src/Derelict.c
 		src/Core.c
 		src/Parser.c
+		../common/src/Common.c
 		)
 
 add_executable(derelict-core src/main.c ${SOURCE_FILES} )
