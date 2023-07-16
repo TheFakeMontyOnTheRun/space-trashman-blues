@@ -109,6 +109,8 @@ void clearRenderer(void);
 
 void flipRenderer(void);
 
+enum ECommand getInput(void);
+
 void render(long ms);
 
 void loadTexturesForLevel(const uint8_t levelNumber);
