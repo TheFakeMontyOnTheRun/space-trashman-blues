@@ -691,9 +691,9 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
 			200,
 #endif
-					  FALSE, 6, 2);
-	newItem->useCallback = useObjectToggleCallback;
-	newItem->useWithCallback = cantBeUsedWithOthersCallback;
+					  FALSE, 7, 2);
+	newItem->useCallback = useCommWithRank;
+	newItem->useWithCallback = cantBeUsedWithOthersCallback;	
 	addToRoom("hall-1", newItem);
 
 
@@ -717,8 +717,8 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
 			200,
 #endif
-					  FALSE, 6, 2);
-	newItem->useCallback = useObjectToggleCallback;
+					  FALSE, 7, 2);
+	newItem->useCallback = useCommWithRank;
 	newItem->useWithCallback = cantBeUsedWithOthersCallback;
 	addToRoom("hall-3", newItem);
 
