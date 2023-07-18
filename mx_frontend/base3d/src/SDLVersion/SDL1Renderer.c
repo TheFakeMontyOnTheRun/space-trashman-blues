@@ -309,6 +309,7 @@ void flipRenderer() {
     }
 
     SDL_UnlockSurface(stretchedBuffer);
+    SDL_FillRect(video, NULL, SDL_MapRGB(video->format, 0, 0, 0) );
     SDL_BlitSurface( stretchedBuffer, NULL, video, NULL);
 
     SDL_Flip(video);
