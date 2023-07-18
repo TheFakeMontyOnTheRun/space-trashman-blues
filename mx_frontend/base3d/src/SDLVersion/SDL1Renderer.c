@@ -16,48 +16,15 @@
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
 
-#ifdef __APPLE__
-
 #include <SDL.h>
-
-#else
-
-#include <SDL/SDL.h>
-#include <SDL/SDL_mixer.h>
+#include <SDL_mixer.h>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten/html5.h>
 #endif
-#endif
 
 SDL_Surface *video;
 SDL_Surface *stretchedBuffer;
-//SDL_AudioDeviceID deviceId;
-//
-//char* audioFiles[] = {"./data/wav/menu_move.wav", "./data/wav/menu_select.wav", "./data/wav/gotclue.wav", "./data/wav/detected2.wav", "./data/wav/bong.wav", "./data/wav/fire.wav", "./data/wav/enemyfire.wav", "./data/wav/detected2.wav" };
-//Mix_Chunk *audioBuffers[8];
-//int audioEnabled = 0;
-//
-//void setupOPL2(int port) {
-//
-//}
-//
-//void stopSounds() {
-//    audioEnabled = 0;
-//}
-//
-//
-//void playSound( const int action ){
-//    if (audioEnabled ) {
-//        Mix_PlayChannel( -1, audioBuffers[action], 0 );
-//    }
-//}
-//
-//void soundTick() {}
-//
-//void muteSound() {}
-
-
 
 #ifdef __EMSCRIPTEN__
 void enterFullScreenMode() {
@@ -72,195 +39,183 @@ void enterFullScreenMode() {
 
 
 uint8_t getPaletteEntry(uint32_t origin) {
-  uint8_t shade;
+    uint8_t shade;
 
-  if (!(origin & 0xFF000000)) {
-    return TRANSPARENCY_COLOR;
-  }
+    if (!(origin & 0xFF000000)) {
+        return TRANSPARENCY_COLOR;
+    }
 
-  shade = 0;
-  shade += (((((origin & 0x0000FF)) << 2) >> 8)) << 6;
-  shade += (((((origin & 0x00FF00) >> 8) << 3) >> 8)) << 3;
-  shade += (((((origin & 0xFF0000) >> 16) << 3) >> 8)) << 0;
+    shade = 0;
+    shade += (((((origin & 0x0000FF)) << 2) >> 8)) << 6;
+    shade += (((((origin & 0x00FF00) >> 8) << 3) >> 8)) << 3;
+    shade += (((((origin & 0xFF0000) >> 16) << 3) >> 8)) << 0;
 
-  return shade;
+    return shade;
 }
 
 void graphicsInit() {
-  int r, g, b, c;
+    int r, g, b, c;
 
-  SDL_Init(SDL_INIT_EVERYTHING);
-  video = SDL_SetVideoMode(320, 240, 32, 0);
-  for (r = 0; r < 256; r += 16) {
-    for (g = 0; g < 256; g += 8) {
-      for (b = 0; b < 256; b += 8) {
-	uint32_t pixel = 0xFF000000 + (r << 16) + (g << 8) + (b);
-	uint8_t paletteEntry = getPaletteEntry(pixel);
-	palette[paletteEntry] = SDL_MapRGB(video->format, (((pixel & 0x000000FF))) - 0x38,
-                                       (((pixel & 0x0000FF00) >> 8)) - 0x18,
-                                       (((pixel & 0x00FF0000) >> 16)) - 0x10);
-      }
+    SDL_Init(SDL_INIT_EVERYTHING);
+    video = SDL_SetVideoMode(320, 240, 32, 0);
+    for (r = 0; r < 256; r += 16) {
+        for (g = 0; g < 256; g += 8) {
+            for (b = 0; b < 256; b += 8) {
+                uint32_t pixel = 0xFF000000 + (r << 16) + (g << 8) + (b);
+                uint8_t paletteEntry = getPaletteEntry(pixel);
+                palette[paletteEntry] = SDL_MapRGB(video->format, (((pixel & 0x000000FF))) - 0x38,
+                                                   (((pixel & 0x0000FF00) >> 8)) - 0x18,
+                                                   (((pixel & 0x00FF0000) >> 16)) - 0x10);
+            }
+        }
     }
-  }
 
 #ifdef __EMSCRIPTEN__
-  enterFullScreenMode ();
+    enterFullScreenMode ();
 #endif
-  defaultFont = loadBitmap("font.img");
-	enableSmoothMovement = TRUE;
+    defaultFont = loadBitmap("font.img");
+    enableSmoothMovement = TRUE;
 
-//    if ( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 ) {
-//        audioEnabled = 0;
-//    } else {
-//
-//        for (c = 0; c < 8; ++c) {
-//            audioBuffers[c] = Mix_LoadWAV( audioFiles[c] );
-//        }
-//
-//        audioEnabled = 1;
-//    }
-
-    stretchedBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 32, video->format->Rmask, video->format->Gmask, video->format->Bmask, video->format->Rmask);
+    stretchedBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 32, video->format->Rmask, video->format->Gmask,
+                                           video->format->Bmask, video->format->Rmask);
 }
 
 void handleSystemEvents() {
-  SDL_Event event;
+    SDL_Event event;
 
-  while (SDL_PollEvent(&event)) {
+    while (SDL_PollEvent(&event)) {
 
-    if (event.type == SDL_QUIT) {
-      mBufferedCommand = kCommandQuit;
-      return;
+        if (event.type == SDL_QUIT) {
+            mBufferedCommand = kCommandQuit;
+            return;
+        }
+
+        if (event.type == SDL_KEYDOWN) {
+
+            SDLKey key = event.key.keysym.sym;
+
+
+            switch (event.key.keysym.scancode) {
+                case 461:
+                    mBufferedCommand = kCommandBack;
+                    visibilityCached = FALSE;
+                    break;
+
+                case 403:
+                    mBufferedCommand = kCommandFire1;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+                case 404:
+                    mBufferedCommand = kCommandFire2;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+                case 405:
+                    mBufferedCommand = kCommandFire3;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+                case 406:
+                    mBufferedCommand = kCommandBack;
+                    visibilityCached = FALSE;
+                    break;
+
+                case 412:
+                    mBufferedCommand = kCommandStrafeLeft;
+                    visibilityCached = FALSE;
+                    break;
+                case 417:
+                    mBufferedCommand = kCommandStrafeRight;
+                    visibilityCached = FALSE;
+                    break;
+            }
+
+            switch (key) {
+                case SDLK_RETURN:
+                case SDLK_z:
+                    mBufferedCommand = kCommandFire1;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+
+                case SDLK_ESCAPE:
+                case SDLK_q:
+                    mBufferedCommand = kCommandBack;
+                    visibilityCached = FALSE;
+                    break;
+
+                case SDLK_SPACE:
+
+                case SDLK_s:
+                    mBufferedCommand = kCommandStrafeLeft;
+                    visibilityCached = FALSE;
+                    break;
+                case SDLK_d:
+                    mBufferedCommand = kCommandStrafeRight;
+                    visibilityCached = FALSE;
+                    break;
+
+                case SDLK_v:
+                    visibilityCached = FALSE;
+                    break;
+                case SDLK_b:
+                    visibilityCached = FALSE;
+                    break;
+
+                case SDLK_j:
+                    visibilityCached = FALSE;
+                    break;
+                case SDLK_k:
+                    visibilityCached = FALSE;
+                    break;
+
+                case SDLK_x:
+                    mBufferedCommand = kCommandFire2;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+                case SDLK_c:
+                    mBufferedCommand = kCommandFire3;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+                case SDLK_e:
+                    mBufferedCommand = kCommandFire4;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+
+                case SDLK_LEFT:
+                    mBufferedCommand = kCommandLeft;
+                    visibilityCached = FALSE;
+                    break;
+                case SDLK_RIGHT:
+                    mBufferedCommand = kCommandRight;
+                    visibilityCached = FALSE;
+                    break;
+                case SDLK_UP:
+                    mBufferedCommand = kCommandUp;
+                    visibilityCached = FALSE;
+                    break;
+                case SDLK_DOWN:
+                    mBufferedCommand = kCommandDown;
+                    visibilityCached = FALSE;
+                    break;
+
+                default:
+                    return;
+            }
+        }
     }
-
-    if (event.type == SDL_KEYDOWN) {
-
-      SDLKey key = event.key.keysym.sym;
-
-
-
-
-      switch(event.key.keysym.scancode){
-      case 461:
-	mBufferedCommand = kCommandBack;
-	visibilityCached = FALSE;
-	break;
-
-      case 403:
-	mBufferedCommand = kCommandFire1;
-	visibilityCached = FALSE;
-	needsToRedrawVisibleMeshes = TRUE;
-	break;
-      case 404:
-	mBufferedCommand = kCommandFire2;
-	visibilityCached = FALSE;
-	needsToRedrawVisibleMeshes = TRUE;
-	break;
-      case 405:
-	mBufferedCommand = kCommandFire3;
-	visibilityCached = FALSE;
-	needsToRedrawVisibleMeshes = TRUE;
-	break;
-      case 406:
-	mBufferedCommand = kCommandBack;
-	visibilityCached = FALSE;
-	break;
-
-      case 412:
-	mBufferedCommand = kCommandStrafeLeft;
-	visibilityCached = FALSE;
-	break;
-      case 417:
-	mBufferedCommand = kCommandStrafeRight;
-	visibilityCached = FALSE;
-	break;
-      }
-
-      switch (key) {
-      case SDLK_RETURN:
-      case SDLK_z:
-	mBufferedCommand = kCommandFire1;
-	visibilityCached = FALSE;
-	needsToRedrawVisibleMeshes = TRUE;
-	break;
-
-      case SDLK_ESCAPE:
-      case SDLK_q:
-	mBufferedCommand = kCommandBack;
-	visibilityCached = FALSE;
-	break;
-
-      case SDLK_SPACE:
-
-      case SDLK_s:
-	mBufferedCommand = kCommandStrafeLeft;
-	visibilityCached = FALSE;
-	break;
-      case SDLK_d:
-	mBufferedCommand = kCommandStrafeRight;
-	visibilityCached = FALSE;
-	break;
-
-      case SDLK_v:
-	visibilityCached = FALSE;
-	break;
-      case SDLK_b:
-	visibilityCached = FALSE;
-	break;
-
-      case SDLK_j:
-	visibilityCached = FALSE;
-	break;
-      case SDLK_k:
-	visibilityCached = FALSE;
-	break;
-
-      case SDLK_x:
-	mBufferedCommand = kCommandFire2;
-	visibilityCached = FALSE;
-	needsToRedrawVisibleMeshes = TRUE;
-	break;
-      case SDLK_c:
-	mBufferedCommand = kCommandFire3;
-	visibilityCached = FALSE;
-	needsToRedrawVisibleMeshes = TRUE;
-	break;
-      case SDLK_e:
-	mBufferedCommand = kCommandFire4;
-	visibilityCached = FALSE;
-	needsToRedrawVisibleMeshes = TRUE;
-	break;
-
-      case SDLK_LEFT:
-	mBufferedCommand = kCommandLeft;
-	visibilityCached = FALSE;
-	break;
-      case SDLK_RIGHT:
-	mBufferedCommand = kCommandRight;
-	visibilityCached = FALSE;
-	break;
-      case SDLK_UP:
-	mBufferedCommand = kCommandUp;
-	visibilityCached = FALSE;
-	break;
-      case SDLK_DOWN:
-	mBufferedCommand = kCommandDown;
-	visibilityCached = FALSE;
-	break;
-
-      default:
-	return;
-      }
-    }
-  }
 }
 
 void graphicsShutdown() {
-  SDL_Quit();
+    SDL_Quit();
 
-  releaseBitmap(defaultFont);
+    releaseBitmap(defaultFont);
 
-  texturesUsed = 0;
+    texturesUsed = 0;
 }
 
 void flipRenderer() {
@@ -278,18 +233,18 @@ void flipRenderer() {
     SDL_LockSurface(stretchedBuffer);
 
 
-
-
     for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
-        if (scaller == 4 ) {
+        int chunky;
+
+        if (scaller == 4) {
             heightY = 2;
         } else {
             heightY = 1;
         }
 
 
-        for (int chunky = 0; chunky < heightY; ++chunky ) {
-            dst = (uint32_t*)stretchedBuffer->pixels;
+        for (chunky = 0; chunky < heightY; ++chunky) {
+            dst = (uint32_t *) stretchedBuffer->pixels;
             src = &framebuffer[(XRES_FRAMEBUFFER * y)];
             dst += (XRES_FRAMEBUFFER * (dstY + chunky));
 
@@ -302,15 +257,15 @@ void flipRenderer() {
         scaller++;
 
 
-        if (scaller == 5 ) {
+        if (scaller == 5) {
             scaller = 0;
             dstY++;
         }
     }
 
     SDL_UnlockSurface(stretchedBuffer);
-    SDL_FillRect(video, NULL, SDL_MapRGB(video->format, 0, 0, 0) );
-    SDL_BlitSurface( stretchedBuffer, NULL, video, NULL);
+    SDL_FillRect(video, NULL, SDL_MapRGB(video->format, 0, 0, 0));
+    SDL_BlitSurface(stretchedBuffer, NULL, video, NULL);
 
     SDL_Flip(video);
 #ifndef __EMSCRIPTEN__
@@ -321,5 +276,5 @@ void flipRenderer() {
 }
 
 void clearRenderer() {
-  SDL_FillRect(video, NULL, 0);
+    SDL_FillRect(video, NULL, 0);
 }
