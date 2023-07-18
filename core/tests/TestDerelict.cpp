@@ -306,7 +306,7 @@ TEST_F(TestDerelict, usingTheReactorCoreWillCauseMeltdown) {
 
 TEST_F(TestDerelict, canToggleCommTerminal1) {
     setPlayerLocation(getRoomIdByName("hall-1"));
-
+    setPlayerRank(5);
     ASSERT_FALSE(getItemNamed("comm-terminal-1")->active);
     parseCommand("use", "comm-terminal-1");
     ASSERT_TRUE(getItemNamed("comm-terminal-1")->active);
