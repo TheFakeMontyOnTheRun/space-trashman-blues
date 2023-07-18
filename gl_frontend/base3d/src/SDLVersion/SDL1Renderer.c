@@ -22,13 +22,20 @@
 
 #else
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_mixer.h>
+#include <SDL.h>
+#include <SDL_mixer.h>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten/html5.h>
 #endif
 #endif
+
+#define ANGLE_TURN_THRESHOLD 40
+#define ANGLE_TURN_STEP 5
+
+int turning = 0;
+int leanX = 0;
+int leanY = 0;
 
 SDL_Surface *video;
 
@@ -94,6 +101,7 @@ void graphicsInit() {
 //
 //        audioEnabled = 1;
 //    }
+	initGL();
 }
 
 void handleSystemEvents() {
@@ -201,15 +209,14 @@ void handleSystemEvents() {
 					visibilityCached = FALSE;
 					needsToRedrawVisibleMeshes = TRUE;
 					break;
-
-				case SDLK_LEFT:
-					mBufferedCommand = kCommandLeft;
-					visibilityCached = FALSE;
-					break;
-				case SDLK_RIGHT:
-					mBufferedCommand = kCommandRight;
-					visibilityCached = FALSE;
-					break;
+			        case SDLK_LEFT:
+				  turning = 1;
+				  leanX = -ANGLE_TURN_STEP;
+				  break;
+   			        case SDLK_RIGHT:
+				  leanX = ANGLE_TURN_STEP;
+				  turning = 1;
+				  break;
 				case SDLK_UP:
 					mBufferedCommand = kCommandUp;
 					visibilityCached = FALSE;
