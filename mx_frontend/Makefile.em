@@ -1,7 +1,7 @@
 CC = emcc
 CXX = em++
 
-LDFLAGS =  -O3 -s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_SDL=1 -s --preload-file ./base.pfs --use-preload-plugins -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0 --shell-file ./minimal.html
+LDFLAGS =  -O3 -s USE_ZLIB=1 -s USE_LIBPNG=1 -sUSE_SDL -s --preload-file ./base.pfs --use-preload-plugins -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0 --shell-file ./minimal.html
 
 CFLAGS=-g -c -O3     \
 	-Ibase3d/include                                     \
@@ -14,7 +14,7 @@ CFLAGS=-g -c -O3     \
 	-fomit-frame-pointer                                 \
 	-fno-exceptions                                      \
 	-ffast-math \
-	-I../core/include -DINCLUDE_ITEM_DESCRIPTIONS -DCLI_BUILD
+	-I../core/include -DINCLUDE_ITEM_DESCRIPTIONS -DCLI_BUILD -sUSE_SDL
 
 MENU_TARGET=game.html
 
