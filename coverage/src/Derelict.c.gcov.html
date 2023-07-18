@@ -31,18 +31,18 @@
             <td class="headerValue">lcov-output.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">370</td>
             <td class="headerCovTableEntry">373</td>
-            <td class="headerCovTableEntry">373</td>
-            <td class="headerCovTableEntryHi">100.0 %</td>
+            <td class="headerCovTableEntryHi">99.2 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2023-07-16 22:17:16</td>
+            <td class="headerValue">2023-07-18 16:25:36</td>
             <td></td>
             <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">18</td>
             <td class="headerCovTableEntry">19</td>
-            <td class="headerCovTableEntry">19</td>
-            <td class="headerCovTableEntryHi">100.0 %</td>
+            <td class="headerCovTableEntryHi">94.7 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -259,18 +259,18 @@
 <a name="197"><span class="lineNum">     197 </span><span class="lineCov">          1 :         defaultLogger(&quot;Can't disable this.&quot;);</span></a>
 <a name="198"><span class="lineNum">     198 </span><span class="lineCov">          1 : }</span></a>
 <a name="199"><span class="lineNum">     199 </span>            : </a>
-<a name="200"><span class="lineNum">     200 </span><span class="lineCov">          1 : void useObjectToggleCallback(struct Item *item) {</span></a>
-<a name="201"><span class="lineNum">     201 </span><span class="lineCov">          1 :         item-&gt;active = !item-&gt;active;</span></a>
-<a name="202"><span class="lineNum">     202 </span><span class="lineCov">          1 : }</span></a>
+<a name="200"><span class="lineNum">     200 </span><span class="lineNoCov">          0 : void useObjectToggleCallback(struct Item *item) {</span></a>
+<a name="201"><span class="lineNum">     201 </span><span class="lineNoCov">          0 :         item-&gt;active = !item-&gt;active;</span></a>
+<a name="202"><span class="lineNum">     202 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="203"><span class="lineNum">     203 </span>            : </a>
-<a name="204"><span class="lineNum">     204 </span><span class="lineCov">          3 : void useCommWithRank(struct Item *item) {</span></a>
+<a name="204"><span class="lineNum">     204 </span><span class="lineCov">          4 : void useCommWithRank(struct Item *item) {</span></a>
 <a name="205"><span class="lineNum">     205 </span>            : </a>
-<a name="206"><span class="lineNum">     206 </span><span class="lineCov">          3 :         if (getPlayerRank() &lt;= 1) {</span></a>
+<a name="206"><span class="lineNum">     206 </span><span class="lineCov">          4 :         if (getPlayerRank() &lt;= 1) {</span></a>
 <a name="207"><span class="lineNum">     207 </span><span class="lineCov">          2 :                 defaultLogger(&quot;Insufficient rank to access&quot;);</span></a>
 <a name="208"><span class="lineNum">     208 </span><span class="lineCov">          2 :                 return;</span></a>
 <a name="209"><span class="lineNum">     209 </span>            :         }</a>
-<a name="210"><span class="lineNum">     210 </span><span class="lineCov">          1 :         defaultLogger(&quot;Computer node rebooted&quot;);</span></a>
-<a name="211"><span class="lineNum">     211 </span><span class="lineCov">          1 :         item-&gt;active = !item-&gt;active;</span></a>
+<a name="210"><span class="lineNum">     210 </span><span class="lineCov">          2 :         defaultLogger(&quot;Computer node rebooted&quot;);</span></a>
+<a name="211"><span class="lineNum">     211 </span><span class="lineCov">          2 :         item-&gt;active = !item-&gt;active;</span></a>
 <a name="212"><span class="lineNum">     212 </span>            : }</a>
 <a name="213"><span class="lineNum">     213 </span>            : </a>
 <a name="214"><span class="lineNum">     214 </span>            : /**</a>
@@ -753,9 +753,9 @@
 <a name="691"><span class="lineNum">     691 </span>            : #ifdef ITEMS_HAVE_WEIGHT</a>
 <a name="692"><span class="lineNum">     692 </span>            :                         200,</a>
 <a name="693"><span class="lineNum">     693 </span>            : #endif</a>
-<a name="694"><span class="lineNum">     694 </span>            :                                           FALSE, 6, 2);</a>
-<a name="695"><span class="lineNum">     695 </span><span class="lineCov">         52 :         newItem-&gt;useCallback = useObjectToggleCallback;</span></a>
-<a name="696"><span class="lineNum">     696 </span><span class="lineCov">         52 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
+<a name="694"><span class="lineNum">     694 </span>            :                                           FALSE, 7, 2);</a>
+<a name="695"><span class="lineNum">     695 </span><span class="lineCov">         52 :         newItem-&gt;useCallback = useCommWithRank;</span></a>
+<a name="696"><span class="lineNum">     696 </span><span class="lineCov">         52 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;     </span></a>
 <a name="697"><span class="lineNum">     697 </span><span class="lineCov">         52 :         addToRoom(&quot;hall-1&quot;, newItem);</span></a>
 <a name="698"><span class="lineNum">     698 </span>            : </a>
 <a name="699"><span class="lineNum">     699 </span>            : </a>
@@ -779,8 +779,8 @@
 <a name="717"><span class="lineNum">     717 </span>            : #ifdef ITEMS_HAVE_WEIGHT</a>
 <a name="718"><span class="lineNum">     718 </span>            :                         200,</a>
 <a name="719"><span class="lineNum">     719 </span>            : #endif</a>
-<a name="720"><span class="lineNum">     720 </span>            :                                           FALSE, 6, 2);</a>
-<a name="721"><span class="lineNum">     721 </span><span class="lineCov">         52 :         newItem-&gt;useCallback = useObjectToggleCallback;</span></a>
+<a name="720"><span class="lineNum">     720 </span>            :                                           FALSE, 7, 2);</a>
+<a name="721"><span class="lineNum">     721 </span><span class="lineCov">         52 :         newItem-&gt;useCallback = useCommWithRank;</span></a>
 <a name="722"><span class="lineNum">     722 </span><span class="lineCov">         52 :         newItem-&gt;useWithCallback = cantBeUsedWithOthersCallback;</span></a>
 <a name="723"><span class="lineNum">     723 </span><span class="lineCov">         52 :         addToRoom(&quot;hall-3&quot;, newItem);</span></a>
 <a name="724"><span class="lineNum">     724 </span>            : </a>
