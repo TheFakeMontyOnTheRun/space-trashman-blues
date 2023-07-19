@@ -36,7 +36,7 @@ const char* functionNames[6] = {
 uint8_t holdingDisk = 3;
 uint8_t pins[3][10];
 uint8_t pinTop[3];
-extern int accessGrantedToSafe;
+extern uint8_t accessGrantedToSafe;
 int wasSmoothMovementPreviouslyEnabled;
 
 void HackingScreen_initStateCallback(int32_t tag) {

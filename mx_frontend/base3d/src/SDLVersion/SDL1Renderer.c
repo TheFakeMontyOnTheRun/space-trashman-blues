@@ -17,7 +17,6 @@
 #include "CRenderer.h"
 
 #include <SDL.h>
-#include <SDL_mixer.h>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten/html5.h>
@@ -77,7 +76,7 @@ void graphicsInit() {
     enableSmoothMovement = TRUE;
 
     stretchedBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 32, video->format->Rmask, video->format->Gmask,
-                                           video->format->Bmask, video->format->Rmask);
+                                           video->format->Bmask, video->format->Amask);
 }
 
 void handleSystemEvents() {
@@ -229,6 +228,10 @@ void flipRenderer() {
     uint8_t *src;
     uint32_t *dst;
 
+    uint8_t newFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+
+    renderPageFlip(newFrame, framebuffer,
+                   previousFrame, turnStep, turnTarget, 0);
 
     SDL_LockSurface(stretchedBuffer);
 
@@ -245,7 +248,7 @@ void flipRenderer() {
 
         for (chunky = 0; chunky < heightY; ++chunky) {
             dst = (uint32_t *) stretchedBuffer->pixels;
-            src = &framebuffer[(XRES_FRAMEBUFFER * y)];
+            src = &newFrame[(XRES_FRAMEBUFFER * y)];
             dst += (XRES_FRAMEBUFFER * (dstY + chunky));
 
             for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
