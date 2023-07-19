@@ -258,6 +258,16 @@ void graphicsPut(uint8_t x, uint8_t y) {
     buffer[(y * (BUFFER_SIZEX)) + (x / 4)] |= (8 >> (x & 3));
 }
 
+void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
+    int x, y;
+    for(y = y0; y < y1; ++y ) {
+        for (x = x0; x < x1; ++x ) {
+            realPut(x, y, colour, NULL);
+        }
+    }
+}
+
+
 void drawLine(uint16_t x0, uint8_t y0,uint16_t x1, uint8_t y1, uint8_t colour) {
     int dx = abs(x1-x0);
     int sx = x0<x1 ? 1 : -1;

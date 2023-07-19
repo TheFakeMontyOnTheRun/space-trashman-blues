@@ -109,6 +109,8 @@ void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour);
 
 void drawMap(void);
 
+void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour);
+
 void refreshJustGraphics(void);
 
 #endif /* DERELICT8_ENGINE3D_H */
