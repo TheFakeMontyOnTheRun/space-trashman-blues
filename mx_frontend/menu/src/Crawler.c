@@ -222,7 +222,7 @@ void Crawler_repaintCallback() {
 
             drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, 255);
 
-            zCameraOffset -= Div(intToFix(1), intToFix(16));
+            zCameraOffset -= Div(intToFix(1), intToFix(4));
             if (zCameraOffset == 0 ) {
                 int chanceForRandomBattle = getRoom(getPlayerRoom())->chanceOfRandomBattle;
                 int diceRoll;
