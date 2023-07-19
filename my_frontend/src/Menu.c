@@ -67,11 +67,7 @@ void drawMap(void) {
     for (y = 0; y < 32; ++y) {
         for (x = 0; x < 32; ++x) {
             if (patterns[(map[y][x] & 127) - 32].blockMovement) {
-                for (int cy = 0; cy < 2; ++cy) {
-                    for (int cx = 0; cx < 2; ++cx) {
-                        realPut((x * 2) + 136 + cx, (y * 2) + cy + 8, 2, NULL);
-                    }
-                }
+                fillRect(136 + (x * 2), (y * 2) + 8, 136 + (x * 2) + 2, (y * 2) + 8 + 2, 15);
             }
         }
     }
