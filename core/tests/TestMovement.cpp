@@ -117,7 +117,9 @@ TEST_F(TestMovement, canWalkInsideRooms) {
 
 
   parseCommand("e", NULL);
+  ASSERT_EQ(getPlayerDirection(), 1);
 
+  setPlayerDirection(1);
   ASSERT_EQ(getPlayerDirection(), 1);
 
   parseCommand("w", NULL);
