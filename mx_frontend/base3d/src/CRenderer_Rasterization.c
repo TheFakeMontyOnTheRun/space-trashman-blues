@@ -1,11 +1,15 @@
 #include <stdlib.h>
 #include <string.h>
+
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
+
 #include <assert.h>
 #include <stdio.h>
 
@@ -46,6 +50,7 @@ uint16_t clippingY1 = YRES_FRAMEBUFFER;
 #ifdef AGS
 __attribute__((target("arm"), section(".iwram"), noinline))
 #endif
+
 void maskWall(
         FixP_t x0,
         FixP_t x1,
@@ -73,7 +78,7 @@ void maskWall(
     if (x0 > x1) {
         FixP_t tmp = x0;
         x0 = x1;
-        x1  = tmp;
+        x1 = tmp;
 
         tmp = x0y0;
         x0y0 = x1y0;
@@ -110,8 +115,14 @@ void maskWall(
     y1 = lowerY0;
 
     dX = intToFix(limit - x);
-    upperDyDx = Div(upperDy, dX);
-    lowerDyDx = Div(lowerDy, dX);
+
+    if (dX == 0) {
+        return;
+    } else {
+        FixP_t oneOverDx = Div(intToFix(1), dX);
+        upperDyDx = Mul(upperDy, oneOverDx);
+        lowerDyDx = Mul(lowerDy, oneOverDx);
+    }
 
     /*
       0xFF here acts as a dirty value, indicating there is no last value.
@@ -122,7 +133,7 @@ void maskWall(
   */
     ix = x;
 
-    if (ix < 0 ) {
+    if (ix < 0) {
         FixP_t diff = intToFix(-ix);
         y0 += Mul(diff, upperDyDx);
         y1 += Mul(diff, lowerDyDx);
@@ -182,6 +193,7 @@ void maskWall(
 #ifdef AGS
 __attribute__((target("arm"), section(".iwram"), noinline))
 #endif
+
 void drawWall(FixP_t x0,
               FixP_t x1,
               FixP_t x0y0,
@@ -207,6 +219,7 @@ void drawWall(FixP_t x0,
     uint8_t pixel = 0;
     FixP_t u = 0;
     uint8_t lastV;
+    FixP_t lastDiffY = 0xFFFFFFFF;
     const uint8_t *data = texture;
 
     FixP_t du;
@@ -254,30 +267,28 @@ void drawWall(FixP_t x0,
     y1 = lowerY0;
 
     dX = intToFix(limit - x);
-    upperDyDx = Div(upperDy, dX);
-    lowerDyDx = Div(lowerDy, dX);
+    if (dX == 0) {
+        return;
+    } else {
+        FixP_t oneOverDx = Div(intToFix(1), dX);
+        upperDyDx = Mul(upperDy, oneOverDx);
+        lowerDyDx = Mul(lowerDy, oneOverDx);
+        du = Mul(FIXP_NATIVE_TEXTURE_SIZE, oneOverDx);
+    }
 
     u = 0;
-    /*
-       0xFF here acts as a dirty value, indicating there is no last value.
-       But even if we had textures this big, it would be only at the end of
-       the run.
-      we can use this statically, since the textures are already loaded.
-      we don't need to fetch that data on every run.
-   */
 
-    du = Div(FIXP_NATIVE_TEXTURE_SIZE, dX);
     ix = x;
 
-    if (ix < 0 ) {
+    if (ix < 0) {
         FixP_t diff = intToFix((-ix));
-        y0 += Mul( diff, upperDyDx);
-        y1 += Mul( diff, lowerDyDx);
-        u += Mul( diff, du);
+        y0 += Mul(diff, upperDyDx);
+        y1 += Mul(diff, lowerDyDx);
+        u += Mul(diff, du);
         ix = 0;
     }
 
-    if (limit > XRES ) {
+    if (limit > XRES) {
         limit = XRES;
     }
 
@@ -299,7 +310,10 @@ void drawWall(FixP_t x0,
             continue;
         }
 
-        dv = Div(Mul(FIXP_NATIVE_TEXTURE_SIZE, textureScaleY), diffY);
+        if (diffY != lastDiffY) {
+            dv = Div(Mul(FIXP_NATIVE_TEXTURE_SIZE, textureScaleY), diffY);
+            lastDiffY = diffY;
+        }
 
         lastV = 0;
         pixel = *(lineOffset);
@@ -309,14 +323,14 @@ void drawWall(FixP_t x0,
             iY1 = YRES;
         }
 
-        if (iy < 0 ) {
+        if (iy < 0) {
             FixP_t diff = intToFix((-iy));
-            v += Mul( diff, dv);
+            v += Mul(diff, dv);
             destinationLine += -iy * (XRES_FRAMEBUFFER);
             iy = 0;
         }
 
-        stipple = (((ix + iy) & 1) ) ? 0xFFFFFFFF : 0;
+        stipple = (((ix + iy) & 1)) ? 0xFFFFFFFF : 0;
 
         for (; iy < iY1; ++iy) {
 
@@ -394,6 +408,7 @@ void drawMask(
 #ifdef AGS
 __attribute__((target("arm"), section(".iwram"), noinline))
 #endif
+
 void drawFrontWall(FixP_t x0,
                    FixP_t y0,
                    FixP_t x1,
@@ -444,11 +459,6 @@ void drawFrontWall(FixP_t x0,
 
     dY = (y1 - y0);
 
-    /*
-      0xFF here acts as a dirty value, indicating there is no last value.
-      But even if we had textures this big, it would be only at the end of
-      the run.
-   */
     iy = (int32_t) (y);
     dv = Div(Mul(FIXP_NATIVE_TEXTURE_SIZE, textureScaleY) - intToFix(1), dY);
     diffX = (x1 - x0);
@@ -462,7 +472,7 @@ void drawFrontWall(FixP_t x0,
 
     du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
 
-    if (iy < 0 ) {
+    if (iy < 0) {
         FixP_t diff = intToFix(-iy);
         v += Mul(diff, dv);
         iy = 0;
@@ -490,8 +500,8 @@ void drawFrontWall(FixP_t x0,
             v += dv;
             destinationLine = bufferData + (XRES_FRAMEBUFFER * iy);
             sourceLineStart = destinationLine - XRES_FRAMEBUFFER;
-            memCopyToFrom (destinationLine + start, (void*)(sourceLineStart + start),
-                    finish - start);
+            memCopyToFrom(destinationLine + start, (void *) (sourceLineStart + start),
+                          finish - start);
 
             continue;
         }
@@ -499,7 +509,7 @@ void drawFrontWall(FixP_t x0,
         pixel = *(sourceLineStart);
         ix = iX0;
 
-        if (ix < 0 ) {
+        if (ix < 0) {
             FixP_t diff = intToFix(-ix);
             destinationLine += -ix;
             u += Mul(diff, du);
@@ -512,7 +522,7 @@ void drawFrontWall(FixP_t x0,
         }
 
         stipple = (((ix + iy) & 1)) ? 0xFFFFFFFF : 0;
-        
+
         for (; ix < iX1; ++ix) {
             const uint8_t iu = fixToInt(u) & (NATIVE_TEXTURE_SIZE - 1);
             stipple = ~stipple;
@@ -549,6 +559,7 @@ void drawFrontWall(FixP_t x0,
 #ifdef AGS
 __attribute__((target("arm"), section(".iwram"), noinline))
 #endif
+
 void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP_t x1y1, uint8_t pixel) {
 
     int32_t y;
@@ -566,11 +577,6 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
     FixP_t x1;
     uint8_t *bufferData = &framebuffer[0];
     int32_t iy;
-    /*
-      0xFF here acts as a dirty value, indicating there is no last value.
-      But even if we had textures this big, it would be only at the end of
-      the run.
-   */
 
     /* if we have a trapezoid in which the base is smaller */
     if (y0 > y1) {
@@ -609,9 +615,17 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
 
     leftDX = (lowerX0 - upperX0);
     rightDX = (lowerX1 - upperX1);
+
     dY = (y1 - y0);
-    leftDxDy = Div(leftDX, dY);
-    rightDxDy = Div(rightDX, dY);
+
+    if (dY == 0) {
+        return;
+    } else {
+        FixP_t oneOverDy = Div(intToFix(1), dY);
+        leftDxDy = Mul(leftDX, oneOverDy);
+        rightDxDy = Mul(rightDX, oneOverDy);
+    }
+
     x0 = upperX0;
     x1 = upperX1;
     iy = y;
@@ -620,7 +634,7 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
         limit = YRES;
     }
 
-    if (iy < 0 ) {
+    if (iy < 0) {
         FixP_t diff = intToFix(-iy);
         x0 += Mul(diff, leftDxDy);
         x1 += Mul(diff, rightDxDy);
@@ -675,6 +689,7 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
 #ifdef AGS
 __attribute__((target("arm"), section(".iwram"), noinline))
 #endif
+
 void drawFloor(FixP_t y0,
                FixP_t y1,
                FixP_t x0y0,
@@ -702,6 +717,7 @@ void drawFloor(FixP_t y0,
     int32_t iy;
     uint8_t *bufferData;
     FixP_t dv;
+    FixP_t lastDiffX = 0xFFFFFFFF;
     const uint8_t *sourceLineStart;
     int farEnoughForStipple;
 
@@ -750,19 +766,26 @@ void drawFloor(FixP_t y0,
     leftDX = (lowerX0 - upperX0);
     rightDX = (lowerX1 - upperX1);
     dY = (y1 - y0);
-    leftDxDy = Div(leftDX, dY);
-    rightDxDy = Div(rightDX, dY);
+
+    if (dY == 0) {
+        return;
+    } else {
+        FixP_t oneOverDy = Div(intToFix(1), dY);
+        leftDxDy = Mul(leftDX, oneOverDy);
+        rightDxDy = Mul(rightDX, oneOverDy);
+        dv = Mul(FIXP_NATIVE_TEXTURE_SIZE, oneOverDy);
+    }
+
     x0 = upperX0;
     x1 = upperX1;
     iy = y;
-    dv = Div(FIXP_NATIVE_TEXTURE_SIZE, dY);
 
     /* Are we already withing the visible part of the screen? Why not jump straight to it?*/
     if (iy < 0) {
         FixP_t diff = intToFix((-iy));
-        x0 += Mul( diff, leftDxDy);
-        x1 += Mul( diff, rightDxDy);
-        v += Mul( diff, dv);
+        x0 += Mul(diff, leftDxDy);
+        x1 += Mul(diff, rightDxDy);
+        v += Mul(diff, dv);
         iy = 0;
     }
 
@@ -788,11 +811,15 @@ void drawFloor(FixP_t y0,
 
         ix = iX0 = fixToInt(x0);
         iX1 = fixToInt(x1);
-        du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
 
-        if (ix < 0 ) {
+        if (diffX != lastDiffX) {
+            du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
+            lastDiffX = diffX;
+        }
+
+        if (ix < 0) {
             FixP_t diff = intToFix((-ix + 0));
-            u += Mul( diff, du);
+            u += Mul(diff, du);
             ix = 0;
         }
 
@@ -853,7 +880,7 @@ void drawRect(
         return;
     }
 
-    memFill (destinationLineStart, pixel, dx);
+    memFill(destinationLineStart, pixel, dx);
 
     for (py = 0; py < (dy); ++py) {
         destinationLineStart = destination + (XRES_FRAMEBUFFER * (y + py)) + x;
@@ -861,7 +888,7 @@ void drawRect(
         destinationLineStart += dx;
         *destinationLineStart = pixel;
     }
-    memFill (destination + (XRES_FRAMEBUFFER * (y + dy)) + x, pixel, dx);
+    memFill(destination + (XRES_FRAMEBUFFER * (y + dy)) + x, pixel, dx);
 }
 
 void fillBottomFlat(const int *coords, uint8_t colour) {
@@ -925,7 +952,7 @@ void fillTopFlat(int *coords, uint8_t colour) {
     FixP_t y1 = intToFix(coords[3]);
     FixP_t x2 = intToFix(coords[4]);
     FixP_t y2 = intToFix(coords[5]);
-    
+
     FixP_t dXDy1;
     FixP_t dXDy2;
     FixP_t fX0;
@@ -969,8 +996,8 @@ void fillTriangle(int *coords, uint8_t colour) {
     int upper = -1;
     int lower = -1;
     int other = 0;
-	int c;
-	
+    int c;
+
     for (c = 0; c < 3; ++c) {
         if (upper == -1 || coords[(2 * c) + 1] < coords[(2 * upper) + 1]) {
             upper = c;
@@ -1044,7 +1071,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
     FixP_t dX0X2 = (x0 - x2);
     FixP_t dY1Y0 = (y1 - y0);
     FixP_t dY2Y0 = (y2 - y0);
-    
+
     FixP_t dXDy2;
     FixP_t dXDy1;
     FixP_t fX0;
@@ -1095,7 +1122,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
         if (y >= YRES) {
             return;
         }
-        
+
         fU1 += fDU1;
         fV1 += fDV1;
         fU2 += fDU2;
@@ -1111,10 +1138,10 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
             iFX0 = fixToInt(fX0);
         }
 
-		limit = iFX1 - iFX0;
+        limit = iFX1 - iFX0;
 
         if (limit) {
-	        uint8_t *destination;
+            uint8_t *destination;
             oneOverLimit = Div(intToFix(1), intToFix(limit));
 
             destination = &framebuffer[(XRES_FRAMEBUFFER * y) + iFX0];
@@ -1191,13 +1218,13 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     FixP_t dX2X0 = (x2 - x0);
     FixP_t dY0Y1 = (y0 - y1);
     FixP_t dY0Y2 = (y0 - y2);
-    
+
     FixP_t dXDy1;
     FixP_t dXDy2;
     FixP_t fX0;
     FixP_t fX1;
     FixP_t effectiveDelta;
-    
+
     if (dY0Y1 == 0 || dY0Y2 == 0) {
         return;
     }
@@ -1232,18 +1259,18 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     for (; y >= yFinal; --y) {
         int iFX1;
         int iFX0;
-		int flipped;
+        int flipped;
         FixP_t texelLineX;
         FixP_t texelLineY;
         FixP_t texelLineDX;
         FixP_t texelLineDY;
         FixP_t oneOverLimit;
-		int limit;
+        int limit;
 
         if (y <= 0) {
             return;
         }
-		
+
         fU1 += fDU1;
         fV1 += fDV1;
         fU2 += fDU2;
@@ -1262,7 +1289,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
         limit = iFX1 - iFX0;
 
         if (limit) {
-	        uint8_t *destination;
+            uint8_t *destination;
             oneOverLimit = Div(intToFix(1), intToFix(limit));
 
             destination = &framebuffer[(XRES_FRAMEBUFFER * y) + iFX0];
@@ -1313,7 +1340,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
 void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z) {
     int newCoors[6];
     uint8_t newUV[6];
-	int c;
+    int c;
     int upper = -1;
     int lower = -1;
     int other = 0;
@@ -1392,17 +1419,17 @@ void fill(
 
     uint8_t *destination = &framebuffer[0];
     unsigned int py;
-	uint8_t *destinationLineStart;
+    uint8_t *destinationLineStart;
 
     if (pixel == TRANSPARENCY_COLOR) {
         return;
     }
 
-	destinationLineStart = destination + (XRES_FRAMEBUFFER * y) + x;
+    destinationLineStart = destination + (XRES_FRAMEBUFFER * y) + x;
 
     if (!stipple) {
         for (py = 0; py < dy; ++py) {
-            memFill (destinationLineStart, pixel, dx);
+            memFill(destinationLineStart, pixel, dx);
             destinationLineStart += XRES_FRAMEBUFFER;
         }
     } else {
@@ -1420,11 +1447,11 @@ void fill(
 }
 
 void drawBitmapRaw(const int dx,
-                const int dy,
-                int width,
-                int height,
-                uint8_t *bitmapData,
-                const int transparent) {
+                   const int dy,
+                   int width,
+                   int height,
+                   uint8_t *bitmapData,
+                   const int transparent) {
 
     uint8_t *destination = &framebuffer[0];
     uint8_t *sourceLine = bitmapData;
@@ -1464,7 +1491,8 @@ void drawBitmap(const int dx,
     drawBitmapRaw(dx, dy, tile->width, tile->height, tile->data, transparent);
 }
 
-void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour, char charToReplaceHifenWith) {
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text,
+                                       const uint8_t colour, char charToReplaceHifenWith) {
 
     size_t len = strlen(text);
     int32_t dstX = (x - 1) * 8;
@@ -1481,19 +1509,19 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
         uint8_t col;
         uint8_t *letter;
 
-        char currentChar  = text[c];
-        
+        char currentChar = text[c];
+
         if (currentChar == '-') {
             currentChar = charToReplaceHifenWith;
         }
-        
-        
+
+
         ascii = text[c] - ' ';
         line = ascii >> 5;
         col = ascii & 31;
         letter = fontPixelData + (col * 8) + (fontWidth * (line * 8));
-        
-    
+
+
         if (currentChar == '\n' || dstX >= margin) {
             dstX = (x - 1) * 8;
             dstY += 8;
@@ -1529,186 +1557,190 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
 }
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour) {
-    drawTextAtWithMarginWithFiltering( x, y, margin, text, colour, '-');
+    drawTextAtWithMarginWithFiltering(x, y, margin, text, colour, '-');
 }
 
 void drawTextAt(const int x, const int y, const char *__restrict__ text, const uint8_t colour) {
 
-    drawTextAtWithMargin( x, y, (XRES_FRAMEBUFFER - 1), text, colour);
+    drawTextAtWithMargin(x, y, (XRES_FRAMEBUFFER - 1), text, colour);
 }
 
 void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
-					uint8_t *prevFrame, int turnState, int turnTarget, int scale200To240) {
+                    uint8_t *prevFrame, int turnState, int turnTarget, int scale200To240) {
 
-	uint8_t index;
-	uint8_t *src;
-	uint8_t *dst;
-	int x, y, chunky;
-	
-	if (abs(turnTarget - turnStep) < PAGE_FLIP_INCREMENT) {
-		turnStep =  turnTarget;
-	}
+    uint8_t index;
+    uint8_t *src;
+    uint8_t *dst;
+    int x, y, chunky;
+
+    if (abs(turnTarget - turnStep) < PAGE_FLIP_INCREMENT) {
+        turnStep = turnTarget;
+    }
 
 #ifdef SCALE_200_TO_240
-		int dstY = 0;
-		int scaller = 0;
-		int heightY;
+    int dstY = 0;
+    int scaller = 0;
+    int heightY;
 
-		if (turnTarget == turnState || (mTurnBuffer != kCommandNone) ) {
+    if (turnTarget == turnState || (mTurnBuffer != kCommandNone) ) {
 
-			for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
+        for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
 
-				if (scaller == 4) {
-					heightY = 2;
-				} else {
-					heightY = 1;
-				}
+            if (scaller == 4) {
+                heightY = 2;
+            } else {
+                heightY = 1;
+            }
 
-				for (chunky = 0; chunky < heightY; ++chunky) {
+            for (chunky = 0; chunky < heightY; ++chunky) {
 
-					dst = stretchedBuffer;
-					src = &currentFrame[(XRES_FRAMEBUFFER * y)];
-					dst += (XRES_FRAMEBUFFER * (dstY + chunky));
+                dst = stretchedBuffer;
+                src = &currentFrame[(XRES_FRAMEBUFFER * y)];
+                dst += (XRES_FRAMEBUFFER * (dstY + chunky));
 
-					for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
-						index = *src;
-						*dst = index;
-						++src;
-						++dst;
-					}
-				}
+                for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
+                    index = *src;
+                    *dst = index;
+                    ++src;
+                    ++dst;
+                }
+            }
 
-				dstY++;
-				scaller++;
+            dstY++;
+            scaller++;
 
-				if (scaller == 5) {
-					scaller = 0;
-					dstY++;
-				}
-			}
+            if (scaller == 5) {
+                scaller = 0;
+                dstY++;
+            }
+        }
 
-			if (mTurnBuffer != kCommandNone) {
-				mBufferedCommand = mTurnBuffer;
-			}
+        if (mTurnBuffer != kCommandNone) {
+            mBufferedCommand = mTurnBuffer;
+        }
 
-			mTurnBuffer = kCommandNone;
+        mTurnBuffer = kCommandNone;
 
-			memCopyToFrom(prevFrame, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
+        memCopyToFrom(prevFrame, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
 
-		} else if (turnState < turnTarget) {
+    } else if (turnState < turnTarget) {
 
-			for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
+        for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
 
-				if (scaller == 4) {
-					heightY = 2;
-				} else {
-					heightY = 1;
-				}
+            if (scaller == 4) {
+                heightY = 2;
+            } else {
+                heightY = 1;
+            }
 
-				for (chunky = 0; chunky < heightY; ++chunky) {
+            for (chunky = 0; chunky < heightY; ++chunky) {
 
-					dst = stretchedBuffer;
-					dst += (XRES_FRAMEBUFFER * (dstY + chunky));
+                dst = stretchedBuffer;
+                dst += (XRES_FRAMEBUFFER * (dstY + chunky));
 
-					for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
-						if (x < XRES && y >= 8) {
-							if (x >= turnStep ) {
-								index = prevFrame[(XRES_FRAMEBUFFER * y) + x - turnStep];
-							} else {
-								index = currentFrame[(XRES_FRAMEBUFFER * y) + x - ( XRES_FRAMEBUFFER - XRES)- turnStep];
-							}
+                for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
+                    if (x < XRES && y >= 8) {
+                        if (x >= turnStep ) {
+                            index = prevFrame[(XRES_FRAMEBUFFER * y) + x - turnStep];
+                        } else {
+                            index = currentFrame[(XRES_FRAMEBUFFER * y) + x - ( XRES_FRAMEBUFFER - XRES)- turnStep];
+                        }
 
-						} else {
-							index = currentFrame[(XRES_FRAMEBUFFER * y) + x];
-						}
+                    } else {
+                        index = currentFrame[(XRES_FRAMEBUFFER * y) + x];
+                    }
 
-						*dst = index;
-						++dst;
-					}
-				}
+                    *dst = index;
+                    ++dst;
+                }
+            }
 
-				dstY++;
-				scaller++;
+            dstY++;
+            scaller++;
 
-				if (scaller == 5) {
-					scaller = 0;
-					dstY++;
-				}
-			}
+            if (scaller == 5) {
+                scaller = 0;
+                dstY++;
+            }
+        }
 
-			turnStep += PAGE_FLIP_INCREMENT;
-		} else {
+        turnStep += PAGE_FLIP_INCREMENT;
+    } else {
 
-			for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
+        for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
 
-				if (scaller == 4) {
-					heightY = 2;
-				} else {
-					heightY = 1;
-				}
+            if (scaller == 4) {
+                heightY = 2;
+            } else {
+                heightY = 1;
+            }
 
-				for (chunky = 0; chunky < heightY; ++chunky) {
+            for (chunky = 0; chunky < heightY; ++chunky) {
 
-					dst = stretchedBuffer;
-					dst += (XRES_FRAMEBUFFER * (dstY + chunky));
+                dst = stretchedBuffer;
+                dst += (XRES_FRAMEBUFFER * (dstY + chunky));
 
-					for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
+                for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
 
-						if (x < XRES && y >= 8) {
+                    if (x < XRES && y >= 8) {
 
-							if (x >= turnStep) {
-								index = currentFrame[(XRES_FRAMEBUFFER * y) + x - turnStep];
-							} else {
-								index = prevFrame[(XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
-							}
+                        if (x >= turnStep) {
+                            index = currentFrame[(XRES_FRAMEBUFFER * y) + x - turnStep];
+                        } else {
+                            index = prevFrame[(XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
+                        }
 
-						} else {
-							index = currentFrame[(XRES_FRAMEBUFFER * y) + x];
-						}
+                    } else {
+                        index = currentFrame[(XRES_FRAMEBUFFER * y) + x];
+                    }
 
-						*dst = index;
-						++dst;
-					}
-				}
+                    *dst = index;
+                    ++dst;
+                }
+            }
 
-				dstY++;
-				scaller++;
+            dstY++;
+            scaller++;
 
-				if (scaller == 5) {
-					scaller = 0;
-					dstY++;
-				}
-			}
-			turnStep -= PAGE_FLIP_INCREMENT;
-		}
+            if (scaller == 5) {
+                scaller = 0;
+                dstY++;
+            }
+        }
+        turnStep -= PAGE_FLIP_INCREMENT;
+    }
 #else
-		if (turnTarget == turnStep || (mTurnBuffer != kCommandNone)) {
-			if (mTurnBuffer != kCommandNone) {
-				mBufferedCommand = mTurnBuffer;
-			}
+    if (turnTarget == turnStep || (mTurnBuffer != kCommandNone)) {
+        if (mTurnBuffer != kCommandNone) {
+            mBufferedCommand = mTurnBuffer;
+        }
 
-			mTurnBuffer = kCommandNone;
+        mTurnBuffer = kCommandNone;
 
-            memCopyToFrom(stretchedBuffer, currentFrame,XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
-        	memCopyToFrom(prevFrame, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
+        memCopyToFrom(stretchedBuffer, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
+        memCopyToFrom(prevFrame, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
 
-		} else if (turnState < turnTarget) {
-            for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
-                size_t lineOffset = (y * XRES_FRAMEBUFFER);
-                memCopyToFrom(stretchedBuffer + lineOffset, currentFrame + lineOffset  + ( XRES_FRAMEBUFFER - turnStep - HUD_WIDTH), turnStep);
-                memCopyToFrom(stretchedBuffer + lineOffset + turnStep, prevFrame + lineOffset, (XRES - turnStep));
-                memCopyToFrom(stretchedBuffer + lineOffset + XRES, currentFrame + lineOffset + XRES, (XRES_FRAMEBUFFER - XRES));
-            }
+    } else if (turnState < turnTarget) {
+        for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
+            size_t lineOffset = (y * XRES_FRAMEBUFFER);
+            memCopyToFrom(stretchedBuffer + lineOffset,
+                          currentFrame + lineOffset + (XRES_FRAMEBUFFER - turnStep - HUD_WIDTH), turnStep);
+            memCopyToFrom(stretchedBuffer + lineOffset + turnStep, prevFrame + lineOffset, (XRES - turnStep));
+            memCopyToFrom(stretchedBuffer + lineOffset + XRES, currentFrame + lineOffset + XRES,
+                          (XRES_FRAMEBUFFER - XRES));
+        }
 
-			turnStep += PAGE_FLIP_INCREMENT;
-		} else {
-            for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
-                size_t lineOffset = (y * XRES_FRAMEBUFFER);
-                memCopyToFrom(stretchedBuffer + lineOffset, prevFrame + lineOffset  + ( XRES_FRAMEBUFFER - turnStep - HUD_WIDTH), turnStep);
-                memCopyToFrom(stretchedBuffer + lineOffset + turnStep, currentFrame + lineOffset, (XRES - turnStep));
-                memCopyToFrom(stretchedBuffer + lineOffset + XRES, currentFrame + lineOffset + XRES, (XRES_FRAMEBUFFER - XRES));
-            }
-			turnStep -= PAGE_FLIP_INCREMENT;
-		}
+        turnStep += PAGE_FLIP_INCREMENT;
+    } else {
+        for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
+            size_t lineOffset = (y * XRES_FRAMEBUFFER);
+            memCopyToFrom(stretchedBuffer + lineOffset,
+                          prevFrame + lineOffset + (XRES_FRAMEBUFFER - turnStep - HUD_WIDTH), turnStep);
+            memCopyToFrom(stretchedBuffer + lineOffset + turnStep, currentFrame + lineOffset, (XRES - turnStep));
+            memCopyToFrom(stretchedBuffer + lineOffset + XRES, currentFrame + lineOffset + XRES,
+                          (XRES_FRAMEBUFFER - XRES));
+        }
+        turnStep -= PAGE_FLIP_INCREMENT;
+    }
 #endif
 }
