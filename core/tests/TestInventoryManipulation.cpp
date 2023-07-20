@@ -139,6 +139,27 @@ TEST_F(TestInventoryManipulation, canPickObjects) {
 	ASSERT_TRUE(hasItemInRoom("lss-daedalus", "low-rank-keycard"));
 }
 
+TEST_F(TestInventoryManipulation, cantAddInvalidObjectToRoom) {
+  setErrorHandlerCallback(myErrorHandler);
+  addToRoom("lss-daedalus", NULL);
+}
+
+
+TEST_F(TestInventoryManipulation, cantAddObjectsToInvalidRoom) {
+  struct Item* emp = getItemNamed("emp-controller");
+
+  setErrorHandlerCallback(myErrorHandler);
+  
+  addToRoom("", emp);
+  ASSERT_TRUE(hasItemInRoom("lss-daedalus", "emp-controller"));
+
+  addToRoom("farofinha", emp);
+  ASSERT_TRUE(hasItemInRoom("lss-daedalus", "emp-controller"));
+
+  addToRoom(NULL, emp);
+  ASSERT_TRUE(hasItemInRoom("lss-daedalus", "emp-controller"));
+}
+
 TEST_F(TestInventoryManipulation, objectsCanOnlyExistInOneRoom) {
         struct Item *item;
 

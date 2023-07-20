@@ -197,10 +197,6 @@ void cantToggleCallback(struct Item *item) {
 	defaultLogger("Can't disable this.");
 }
 
-void useObjectToggleCallback(struct Item *item) {
-	item->active = !item->active;
-}
-
 void useCommWithRank(struct Item *item) {
 
 	if (getPlayerRank() <= 1) {
