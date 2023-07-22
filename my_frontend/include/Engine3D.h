@@ -5,8 +5,8 @@
 #ifndef DERELICT8_ENGINE3D_H
 #define DERELICT8_ENGINE3D_H
 
-#define XRES 128
-#define YRES 128
+#define XRES 127
+#define YRES 127
 
 #define XRESMINUSONE (XRES - 1)
 #define YRESMINUSONE (YRES - 1)
