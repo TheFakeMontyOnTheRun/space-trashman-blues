@@ -25,12 +25,6 @@ uint8_t framebuffer[128 * 128];
 uint8_t vfb[256 * 192];
 
 void graphicsPut(uint8_t x, uint8_t y) {
-
-    assert(x >= 0);
-    assert(x < 128);
-    assert(y >= 0);
-    assert(y < 128);
-
     framebuffer[(128 * y) + x] = 1;
 #ifdef PUTAFLIP
     graphicsFlush();
