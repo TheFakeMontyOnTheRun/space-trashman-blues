@@ -37,21 +37,35 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
         _y1 = y0;
     }
 
+    if (shouldStipple && (( _y0 & 1 ) == 0)) {
+        ++_y0;
+    }
+
     uint8_t patternLine = (_y0 & 7); /* which line inside the pattern; */
     uint8_t *ptr = &buffer[((_y0 & ~7) << 4) + (x0 & ~7) + patternLine];
     uint8_t shiftXAnd7 = 128 >> (x0 & 7);
 
-    for (uint8_t y = _y0; y <= _y1; ++y) {
-        if (!shouldStipple || (y & 1)) {
+    if (shouldStipple) {
+        for (uint8_t y = _y0; y <= _y1; y += 2) {
             *ptr |= shiftXAnd7;
+            patternLine += 2;
+            ptr += 2;
+
+            if (patternLine >= 8) {
+                patternLine = 0;
+                ptr += (16 * 8) - 8;
+            }
         }
+    } else {
+        for (uint8_t y = _y0; y <= _y1; ++y) {
+            *ptr |= shiftXAnd7;
+            ++patternLine;
+            ++ptr;
 
-        ++patternLine;
-        ++ptr;
-
-        if (patternLine >= 8) {
-            patternLine = 0;
-            ptr += (16 * 8) - 8;
+            if (patternLine >= 8) {
+                patternLine = 0;
+                ptr += (16 * 8) - 8;
+            }
         }
     }
 }
