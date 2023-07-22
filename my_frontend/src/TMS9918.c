@@ -38,7 +38,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
     }
 
     uint8_t patternLine = (_y0 & 7); /* which line inside the pattern; */
-    uint8_t *ptr = &buffer[((_y0 & ~7) << 4) + (x0 & ~7) + (_y0 & 7)];
+    uint8_t *ptr = &buffer[((_y0 & ~7) << 4) + (x0 & ~7) + patternLine];
     uint8_t shiftXAnd7 = 128 >> (x0 & 7);
 
     for (uint8_t y = _y0; y <= _y1; ++y) {
