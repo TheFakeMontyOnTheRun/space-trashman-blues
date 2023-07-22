@@ -46,10 +46,10 @@ void clearTextScreen(void) {
     rect.h = 384 - 256;
 
     SDL_SetRenderDrawColor(renderer,
-			   0,
+                           0,
                            0,
                            0x99,
-			   0xFF);
+                           0xFF);
     SDL_RenderFillRect(renderer, &rect);
     SDL_RenderPresent(renderer);
 }
@@ -89,44 +89,50 @@ void clearGraphics(void) {
 }
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
-    int dx = abs(x1-x0);
-    int sx = x0<x1 ? 1 : -1;
-    int dy = abs(y1-y0);
-    int sy = y0<y1 ? 1 : -1;
-    int err = (dx>dy ? dx : -dy)>>1;
+    int dx = abs(x1 - x0);
+    int sx = x0 < x1 ? 1 : -1;
+    int dy = abs(y1 - y0);
+    int sy = y0 < y1 ? 1 : -1;
+    int err = (dx > dy ? dx : -dy) >> 1;
     int e2;
-    for(;;) {
+    for (;;) {
 
-        if (x0==x1 && y0==y1) break;
+        if (x0 == x1 && y0 == y1) break;
 
         realPut(x0, y0, colour, NULL);
 
         e2 = err;
-        if (e2 > -dx) { err -= dy; x0 += sx; }
-        if (e2 < dy) { err += dx; y0 += sy; }
+        if (e2 > -dx) {
+            err -= dy;
+            x0 += sx;
+        }
+        if (e2 < dy) {
+            err += dx;
+            y0 += sy;
+        }
     }
 }
 
 uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
-  SDL_Rect rect;
-  uint32_t pixel = palette[colour];
-  uint8_t r, g, b;
+    SDL_Rect rect;
+    uint32_t pixel = palette[colour];
+    uint8_t r, g, b;
 
-  rect.x = x * 2;
-  rect.y = y * 2;
-  rect.w = 2;
-  rect.h = 2;
-  
-  r = (pixel & 0x00FF0000) >> 16;
-  g = ((pixel & 0x0000FF00) >> 8);
-  b = ((pixel & 0x000000FF));
-  
-  SDL_SetRenderDrawColor(renderer, r,
-			 g,
-			 b, 255);
-  SDL_RenderFillRect(renderer, &rect);
+    rect.x = x * 2;
+    rect.y = y * 2;
+    rect.w = 2;
+    rect.h = 2;
 
-  return NULL;
+    r = (pixel & 0x00FF0000) >> 16;
+    g = ((pixel & 0x0000FF00) >> 8);
+    b = ((pixel & 0x000000FF));
+
+    SDL_SetRenderDrawColor(renderer, r,
+                           g,
+                           b, 255);
+    SDL_RenderFillRect(renderer, &rect);
+
+    return NULL;
 }
 
 void clearScreen(void) {
@@ -138,10 +144,10 @@ void clearScreen(void) {
     rect.h = 384;
 
     SDL_SetRenderDrawColor(renderer,
-			   0,
+                           0,
                            0,
                            0x99,
-			   0xFF);
+                           0xFF);
     SDL_RenderFillRect(renderer, &rect);
 }
 
@@ -201,7 +207,7 @@ uint8_t getKey(void) {
 
 
                 case SDLK_s:
-		  		  clearTextScreen();
+                    clearTextScreen();
                     break;
                 case SDLK_d:
                     break;
@@ -222,11 +228,11 @@ uint8_t getKey(void) {
                     break;
 
                 case SDLK_LEFT:
-		  		  updateDirection = 1;
+                    updateDirection = 1;
                     mBufferedCommand = 'q';
                     break;
                 case SDLK_RIGHT:
-		  		  updateDirection = 1;
+                    updateDirection = 1;
                     mBufferedCommand = 'e';
                     break;
                 case SDLK_UP:
@@ -284,10 +290,10 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_
 
             for (e = 0; e < 8; ++e) {
                 if (chunk & 1) {
-		  realPut(8 * x + (7 - e), 8 * y + ( d), 1, NULL);
+                    realPut(8 * x + (7 - e), 8 * y + (d), 1, NULL);
                 } else {
-		  realPut(8 * x + (7 - e), 8 * y + ( d), 0, NULL);
-		}
+                    realPut(8 * x + (7 - e), 8 * y + (d), 0, NULL);
+                }
                 chunk = chunk >> 1;
             }
 
@@ -310,7 +316,7 @@ void init(void) {
     memset(framebuffer, 0, 128 * 128);
     window =
             SDL_CreateWindow("Derelict 8-bits SDL2 test", SDL_WINDOWPOS_CENTERED,
-                             SDL_WINDOWPOS_CENTERED, 512, 384, 0 );
+                             SDL_WINDOWPOS_CENTERED, 512, 384, 0);
 
     renderer = SDL_CreateRenderer(window, -1, 0);
 
@@ -363,10 +369,10 @@ void flipRenderer(void) {
             b = ((pixel & 0x000000FF));
 
             SDL_SetRenderDrawColor(renderer,
-				   r,
+                                   r,
                                    g,
                                    b,
-				   255);
+                                   255);
             SDL_RenderFillRect(renderer, &rect);
         }
     }
@@ -398,23 +404,23 @@ void graphicsFlush(void) {
 }
 
 void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
-  SDL_Rect rect;
-  uint32_t pixel = palette[colour];
-  uint8_t r, g, b;
-  
-  rect.x = x0 * 2;
-  rect.y = y0 * 2;
-  rect.w = (x1 - x0) * 2;
-  rect.h = (y1 - y0) * 2;
-  
-  r = (pixel & 0x00FF0000) >> 16;
-  g = ((pixel & 0x0000FF00) >> 8);
-  b = ((pixel & 0x000000FF));
-  
-  SDL_SetRenderDrawColor(renderer,
-			 r,
-			 g,
-			 b,
-			 255);
-  SDL_RenderFillRect(renderer, &rect);
+    SDL_Rect rect;
+    uint32_t pixel = palette[colour];
+    uint8_t r, g, b;
+
+    rect.x = x0 * 2;
+    rect.y = y0 * 2;
+    rect.w = (x1 - x0) * 2;
+    rect.h = (y1 - y0) * 2;
+
+    r = (pixel & 0x00FF0000) >> 16;
+    g = ((pixel & 0x0000FF00) >> 8);
+    b = ((pixel & 0x000000FF));
+
+    SDL_SetRenderDrawColor(renderer,
+                           r,
+                           g,
+                           b,
+                           255);
+    SDL_RenderFillRect(renderer, &rect);
 }
