@@ -17,6 +17,7 @@ extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
 SDL_Window *window;
 SDL_Renderer *renderer;
+uint8_t updateDirection;
 
 uint8_t mBufferedCommand;
 uint32_t palette[16];
@@ -200,8 +201,7 @@ uint8_t getKey(void) {
 
 
                 case SDLK_s:
-		  puts("clear!");
-		  clearTextScreen();
+		  		  clearTextScreen();
                     break;
                 case SDLK_d:
                     break;
@@ -222,11 +222,11 @@ uint8_t getKey(void) {
                     break;
 
                 case SDLK_LEFT:
-		  //		  updateDirection = 1;
+		  		  updateDirection = 1;
                     mBufferedCommand = 'q';
                     break;
                 case SDLK_RIGHT:
-		  //		  updateDirection = 1;
+		  		  updateDirection = 1;
                     mBufferedCommand = 'e';
                     break;
                 case SDLK_UP:
@@ -302,6 +302,7 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_
 
 void init(void) {
     initKeyboardUI();
+    updateDirection = 1;
 
     mBufferedCommand = '.';
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -309,7 +310,7 @@ void init(void) {
     memset(framebuffer, 0, 128 * 128);
     window =
             SDL_CreateWindow("Derelict 8-bits SDL2 test", SDL_WINDOWPOS_CENTERED,
-                             SDL_WINDOWPOS_CENTERED, 512, 384, SDL_WINDOW_SHOWN);
+                             SDL_WINDOWPOS_CENTERED, 512, 384, 0 );
 
     renderer = SDL_CreateRenderer(window, -1, 0);
 
@@ -374,8 +375,26 @@ void flipRenderer(void) {
 }
 
 void graphicsFlush(void) {
+    if (updateDirection) {
+        updateDirection = 0;
+        switch (getPlayerDirection()) {
+            case 0:
+                writeStrWithLimit(12, 17, "N", 31, 2, 0);
+                break;
+            case 1:
+                writeStrWithLimit(12, 17, "E", 31, 2, 0);
+                break;
+            case 2:
+                writeStrWithLimit(12, 17, "S", 31, 2, 0);
+                break;
+            case 3:
+                writeStrWithLimit(12, 17, "W", 31, 2, 0);
+                break;
+        }
+    }
     flipRenderer();
     clearGraphics();
+    SDL_UpdateWindowSurface(window);
 }
 
 void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
