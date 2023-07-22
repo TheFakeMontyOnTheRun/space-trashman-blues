@@ -10,6 +10,7 @@
 #include "KeyboardUI.h"
 #include "Menu.h"
 #include "SDL.h"
+#include "font.h"
 
 extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
@@ -36,6 +37,20 @@ void graphicsPut(uint8_t x, uint8_t y) {
 }
 
 void clearTextScreen(void) {
+    SDL_Rect rect;
+
+    rect.x = 0;
+    rect.y = 256;
+    rect.w = 512;
+    rect.h = 384 - 256;
+
+    SDL_SetRenderDrawColor(renderer,
+			   0,
+                           0,
+                           0x99,
+			   0xFF);
+    SDL_RenderFillRect(renderer, &rect);
+    SDL_RenderPresent(renderer);
 }
 
 void enterTextMode(void) {
@@ -73,45 +88,67 @@ void clearGraphics(void) {
 }
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
+    int dx = abs(x1-x0);
+    int sx = x0<x1 ? 1 : -1;
+    int dy = abs(y1-y0);
+    int sy = y0<y1 ? 1 : -1;
+    int err = (dx>dy ? dx : -dy)>>1;
+    int e2;
+    for(;;) {
 
-}
+        if (x0==x1 && y0==y1) break;
 
-uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {}
+        realPut(x0, y0, colour, NULL);
 
-void printSituation(void) {
-    struct ObjectNode *roomItems;
-    struct ObjectNode *playerObjects = getPlayerItems();
-    puts("---------------");
-    puts("\nPlayer items:");
-
-    while (playerObjects != NULL) {
-        struct Item *item = getItem(playerObjects->item);
-
-        printf("%c%c%s\n", (playerObjects == focusedItem) ? '>' : ' ', item->active ? '*' : '-', item->name);
-
-        playerObjects = playerObjects->next;
-    }
-
-    puts("\nItems in room:");
-
-    roomItems = getRoom(getPlayerRoom())->itemsPresent->next;
-
-    while (roomItems != NULL) {
-        struct Item *item = getItem(roomItems->item);
-
-        printf("%c%c%s\n", (roomItems == roomItem) ? '>' : ' ', item->active ? '*' : '-', item->name);
-
-        roomItems = roomItems->next;
+        e2 = err;
+        if (e2 > -dx) { err -= dy; x0 += sx; }
+        if (e2 < dy) { err += dx; y0 += sy; }
     }
 }
 
-void clearScreen(void) {}
+uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
+  SDL_Rect rect;
+  uint32_t pixel = palette[colour];
+  uint8_t r, g, b;
+
+  rect.x = x * 2;
+  rect.y = y * 2;
+  rect.w = 2;
+  rect.h = 2;
+  
+  r = (pixel & 0x00FF0000) >> 16;
+  g = ((pixel & 0x0000FF00) >> 8);
+  b = ((pixel & 0x000000FF));
+  
+  SDL_SetRenderDrawColor(renderer, r,
+			 g,
+			 b, 255);
+  SDL_RenderFillRect(renderer, &rect);
+
+  return NULL;
+}
+
+void clearScreen(void) {
+    SDL_Rect rect;
+
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = 512;
+    rect.h = 384;
+
+    SDL_SetRenderDrawColor(renderer,
+			   0,
+                           0,
+                           0x99,
+			   0xFF);
+    SDL_RenderFillRect(renderer, &rect);
+}
 
 uint8_t getKey(void) {
     SDL_Event event;
 
     mBufferedCommand = '.';
-
+    SDL_RenderPresent(renderer);
     while (SDL_PollEvent(&event)) {
 
         if (event.type == SDL_QUIT) {
@@ -133,7 +170,6 @@ uint8_t getKey(void) {
                     break;
 
                 case SDLK_SPACE:
-                    printSituation();
                     mBufferedCommand = ' ';
                     break;
 
@@ -164,6 +200,8 @@ uint8_t getKey(void) {
 
 
                 case SDLK_s:
+		  puts("clear!");
+		  clearTextScreen();
                     break;
                 case SDLK_d:
                     break;
@@ -184,9 +222,11 @@ uint8_t getKey(void) {
                     break;
 
                 case SDLK_LEFT:
+		  //		  updateDirection = 1;
                     mBufferedCommand = 'q';
                     break;
                 case SDLK_RIGHT:
+		  //		  updateDirection = 1;
                     mBufferedCommand = 'e';
                     break;
                 case SDLK_UP:
@@ -202,11 +242,62 @@ uint8_t getKey(void) {
         }
     }
 
+    performAction();
+
     return mBufferedCommand;
 }
 
 void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
-    puts(text);
+    uint8_t len = strlen(text);
+    char *ptr = text;
+    uint8_t c = 0;
+    uint8_t x = _x;
+
+    for (; c < len && y < 64; ++c) {
+
+        char cha = *ptr;
+
+        if (x == limitX) {
+            ++y;
+            x = _x;
+        } else if (cha == '\n') {
+            ++y;
+            x = _x;
+            ++ptr;
+            continue;
+        }
+
+        if (cha >= 'a') {
+            if (cha <= 'z') {
+                cha = (cha - 'a') + 'A';
+            } else {
+                cha -= ('z' - 'a');
+            }
+        }
+
+        uint8_t *fontTop = &font[((cha - 32) << 3)];
+
+
+        for (int d = 0; d < 8; ++d) {
+            int e;
+            uint8_t chunk = *fontTop;
+
+            for (e = 0; e < 8; ++e) {
+                if (chunk & 1) {
+		  realPut(8 * x + (7 - e), 8 * y + ( d), 1, NULL);
+                } else {
+		  realPut(8 * x + (7 - e), 8 * y + ( d), 0, NULL);
+		}
+                chunk = chunk >> 1;
+            }
+
+
+            fontTop++;
+        }
+
+        ++x;
+        ++ptr;
+    }
 }
 
 void init(void) {
@@ -215,10 +306,10 @@ void init(void) {
     mBufferedCommand = '.';
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
-    memset(framebuffer, 5, 128 * 128);
+    memset(framebuffer, 0, 128 * 128);
     window =
             SDL_CreateWindow("Derelict 8-bits SDL2 test", SDL_WINDOWPOS_CENTERED,
-                             SDL_WINDOWPOS_CENTERED, 256, 256, SDL_WINDOW_SHOWN);
+                             SDL_WINDOWPOS_CENTERED, 512, 384, SDL_WINDOW_SHOWN);
 
     renderer = SDL_CreateRenderer(window, -1, 0);
 
@@ -250,21 +341,12 @@ void flipRenderer(void) {
     uint32_t pixel;
     int x, y, r, g, b;
 
-    rect.x = 0;
-    rect.y = 0;
-    rect.w = 256;
-    rect.h = 256;
-
-    SDL_SetRenderDrawColor(renderer, 0xFF,
-                           0xFF,
-                           0xFF, 255);
-    SDL_RenderFillRect(renderer, &rect);
 
     for (y = 0; y < 128; ++y) {
         for (x = 0; x < 128; ++x) {
             int index = framebuffer[(128 * y) + x];
-            rect.x = 1 + 2 * x;
-            rect.y = 1 + 2 * y;
+            rect.x = 2 * x;
+            rect.y = 2 * y;
             rect.w = 2;
             rect.h = 2;
 
@@ -279,9 +361,11 @@ void flipRenderer(void) {
             g = ((pixel & 0x0000FF00) >> 8);
             b = ((pixel & 0x000000FF));
 
-            SDL_SetRenderDrawColor(renderer, r,
+            SDL_SetRenderDrawColor(renderer,
+				   r,
                                    g,
-                                   b, 255);
+                                   b,
+				   255);
             SDL_RenderFillRect(renderer, &rect);
         }
     }
@@ -295,10 +379,23 @@ void graphicsFlush(void) {
 }
 
 void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
-    int x, y;
-    for(y = y0; y < y1; ++y ) {
-        for (x = x0; x < x1; ++x ) {
-            realPut(x, y, colour, NULL);
-        }
-    }
+  SDL_Rect rect;
+  uint32_t pixel = palette[colour];
+  uint8_t r, g, b;
+  
+  rect.x = x0 * 2;
+  rect.y = y0 * 2;
+  rect.w = (x1 - x0) * 2;
+  rect.h = (y1 - y0) * 2;
+  
+  r = (pixel & 0x00FF0000) >> 16;
+  g = ((pixel & 0x0000FF00) >> 8);
+  b = ((pixel & 0x000000FF));
+  
+  SDL_SetRenderDrawColor(renderer,
+			 r,
+			 g,
+			 b,
+			 255);
+  SDL_RenderFillRect(renderer, &rect);
 }
