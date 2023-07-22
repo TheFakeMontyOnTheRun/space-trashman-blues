@@ -22,6 +22,7 @@ uint8_t updateDirection;
 uint8_t mBufferedCommand;
 uint32_t palette[16];
 uint8_t framebuffer[128 * 128];
+uint8_t vfb[256 * 192];
 
 void graphicsPut(uint8_t x, uint8_t y) {
 
@@ -38,20 +39,7 @@ void graphicsPut(uint8_t x, uint8_t y) {
 }
 
 void clearTextScreen(void) {
-    SDL_Rect rect;
-
-    rect.x = 0;
-    rect.y = 256;
-    rect.w = 512;
-    rect.h = 384 - 256;
-
-    SDL_SetRenderDrawColor(renderer,
-                           0,
-                           0,
-                           0x99,
-                           0xFF);
-    SDL_RenderFillRect(renderer, &rect);
-    SDL_RenderPresent(renderer);
+    fillRect(0, 128, 256, 192, 0);
 }
 
 void enterTextMode(void) {
@@ -114,48 +102,19 @@ void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) 
 }
 
 uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
-    SDL_Rect rect;
-    uint32_t pixel = palette[colour];
-    uint8_t r, g, b;
-
-    rect.x = x * 2;
-    rect.y = y * 2;
-    rect.w = 2;
-    rect.h = 2;
-
-    r = (pixel & 0x00FF0000) >> 16;
-    g = ((pixel & 0x0000FF00) >> 8);
-    b = ((pixel & 0x000000FF));
-
-    SDL_SetRenderDrawColor(renderer, r,
-                           g,
-                           b, 255);
-    SDL_RenderFillRect(renderer, &rect);
+    vfb[(256 * y) + x ] = colour;
 
     return NULL;
 }
 
 void clearScreen(void) {
-    SDL_Rect rect;
-
-    rect.x = 0;
-    rect.y = 0;
-    rect.w = 512;
-    rect.h = 384;
-
-    SDL_SetRenderDrawColor(renderer,
-                           0,
-                           0,
-                           0x99,
-                           0xFF);
-    SDL_RenderFillRect(renderer, &rect);
+    fillRect(0, 0, 256, 192, 0);
 }
 
 uint8_t getKey(void) {
     SDL_Event event;
 
     mBufferedCommand = '.';
-    SDL_RenderPresent(renderer);
     while (SDL_PollEvent(&event)) {
 
         if (event.type == SDL_QUIT) {
@@ -181,30 +140,35 @@ uint8_t getKey(void) {
                     break;
 
                 case SDLK_KP_7:
+                case SDLK_7:
                     mBufferedCommand = '7';
                     break;
 
                 case SDLK_KP_8:
+                case SDLK_8:
                     mBufferedCommand = '8';
                     break;
 
 
                 case SDLK_KP_4:
+                case SDLK_4:
                     mBufferedCommand = '4';
                     break;
 
                 case SDLK_KP_5:
+                case SDLK_5:
                     mBufferedCommand = '5';
                     break;
 
                 case SDLK_KP_9:
+                case SDLK_9:
                     mBufferedCommand = '9';
                     break;
 
                 case SDLK_KP_6:
+                case SDLK_6:
                     mBufferedCommand = '6';
                     break;
-
 
                 case SDLK_s:
                     clearTextScreen();
@@ -344,14 +308,52 @@ void init(void) {
 
 
 void flipRenderer(void) {
-    SDL_Rect rect;
-    uint32_t pixel;
-    int x, y, r, g, b;
-
-
+    int x, y;
     for (y = 0; y < 128; ++y) {
         for (x = 0; x < 128; ++x) {
             int index = framebuffer[(128 * y) + x];
+
+            if (index < 0 || index >= 16) {
+                continue;
+            }
+
+            realPut(x, y, index, NULL);
+        }
+    }
+}
+
+void graphicsFlush(void) {
+    if (updateDirection) {
+        updateDirection = 0;
+        switch (getPlayerDirection()) {
+            case 0:
+                writeStrWithLimit(12, 17, "N", 31, 2, 0);
+                break;
+            case 1:
+                writeStrWithLimit(12, 17, "E", 31, 2, 0);
+                break;
+            case 2:
+                writeStrWithLimit(12, 17, "S", 31, 2, 0);
+                break;
+            case 3:
+                writeStrWithLimit(12, 17, "W", 31, 2, 0);
+                break;
+        }
+    }
+
+    flipRenderer();
+    clearGraphics();
+    flushVirtualFramebuffer();
+}
+
+void flushVirtualFramebuffer(void) {
+    int x, y, r, g, b;
+    uint32_t pixel;
+    SDL_Rect rect;
+
+    for (y = 0; y < 192; ++y) {
+        for (x = 0; x < 256; ++x) {
+            int index = vfb[(256 * y) + x];
             rect.x = 2 * x;
             rect.y = 2 * y;
             rect.w = 2;
@@ -376,51 +378,16 @@ void flipRenderer(void) {
             SDL_RenderFillRect(renderer, &rect);
         }
     }
-
     SDL_RenderPresent(renderer);
-}
-
-void graphicsFlush(void) {
-    if (updateDirection) {
-        updateDirection = 0;
-        switch (getPlayerDirection()) {
-            case 0:
-                writeStrWithLimit(12, 17, "N", 31, 2, 0);
-                break;
-            case 1:
-                writeStrWithLimit(12, 17, "E", 31, 2, 0);
-                break;
-            case 2:
-                writeStrWithLimit(12, 17, "S", 31, 2, 0);
-                break;
-            case 3:
-                writeStrWithLimit(12, 17, "W", 31, 2, 0);
-                break;
-        }
-    }
-    flipRenderer();
-    clearGraphics();
     SDL_UpdateWindowSurface(window);
+    SDL_RenderClear(renderer);
 }
 
 void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
-    SDL_Rect rect;
-    uint32_t pixel = palette[colour];
-    uint8_t r, g, b;
-
-    rect.x = x0 * 2;
-    rect.y = y0 * 2;
-    rect.w = (x1 - x0) * 2;
-    rect.h = (y1 - y0) * 2;
-
-    r = (pixel & 0x00FF0000) >> 16;
-    g = ((pixel & 0x0000FF00) >> 8);
-    b = ((pixel & 0x000000FF));
-
-    SDL_SetRenderDrawColor(renderer,
-                           r,
-                           g,
-                           b,
-                           255);
-    SDL_RenderFillRect(renderer, &rect);
+    int x, y;
+    for (y = y0; y < y1; ++y) {
+        for (x = x0; x < x1; ++x) {
+            realPut(x, y, colour, NULL);
+        }
+    }
 }

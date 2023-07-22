@@ -43,7 +43,7 @@ void HUD_initialPaint(void) {
     drawMap();
 
     for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(17, (YRES_TEXT - 6) + i, menuItems[i]);
+        writeStr(17, (YRES_TEXT - 7) + i, menuItems[i]);
     }
 
     writeStrWithLimit(1, YRES_TEXT - 7, "Direction: ", 31, 2, 0);

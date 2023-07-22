@@ -1534,6 +1534,10 @@ void startRoomTransitionAnimation(void) {
             /* door opening */
             graphicsPut(x, 95 - 3 * (MAP_SIZE_Y - y));
         }
+#ifdef SDLW
+        /* Just to keep the OS happy */
+        getKey();
+#endif
         graphicsFlush();
     }
     HUD_initialPaint();
@@ -1628,11 +1632,9 @@ void tickRenderer(void) {
             walkBy(0);
             break;
 
-#if !defined(SDLSW)
         case 'p':
         default:
             goto waitkey;
-#endif
     }
     cameraRotation = getPlayerDirection();
     pos = getPlayerPosition();
