@@ -17,4 +17,9 @@ void performAction(void);
 
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title, uint8_t colour);
 
+
+#ifdef SDLW
+void flushVirtualFramebuffer(void);
+#endif
+
 #endif //DERELICT8_MENU_H

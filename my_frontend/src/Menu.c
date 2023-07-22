@@ -22,6 +22,11 @@ void titleScreen(void) {
     writeStr(1, 1, "Sub Mare Imperium: Derelict");
     writeStr(1, 4, "by Daniel Monteiro");
     writeStr(1, 6, " Press SPACE to start ");
+#ifdef SDLW
+        /* Just to keep the OS happy */
+    flushVirtualFramebuffer();
+#endif
+
 
     while (keepGoing) {
         uint8_t key = getKey();
@@ -41,7 +46,12 @@ void showMessage(const char *message) {
     clearScreen();
 
     writeStr(1, 1, message);
-    writeStr(2, 22, "Press SPACE button to continue");
+    writeStr(1, 22, "Press SPACE button to continue");
+
+#ifdef SDLW
+        /* Just to keep the OS happy */
+    flushVirtualFramebuffer();
+#endif
 
     while (keepGoing) {
         uint8_t key = getKey();
