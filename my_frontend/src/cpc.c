@@ -142,7 +142,6 @@ void backToGraphics(void) {
 }
 
 
-
 void clearTextScreen(void) {
     clearScreen();
 }
@@ -152,7 +151,6 @@ void enterTextMode(void) {
 
 void exitTextMode(void) {
 }
-
 
 
 uint8_t getKey(void) {
@@ -207,7 +205,7 @@ void graphicsFlush(void) {
                 writeStrWithLimit(12, 18, "N", 31, 2, 0);
                 break;
             case 1:
-                writeStrWithLimit(12, 18, "E", 31,2 , 0);
+                writeStrWithLimit(12, 18, "E", 31, 2, 0);
                 break;
             case 2:
                 writeStrWithLimit(12, 18, "S", 31, 2, 0);
@@ -262,15 +260,15 @@ uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
     return ptr;
 }
 
-void graphicsPutPointArray(uint8_t* y128Values) {
+void graphicsPutPointArray(uint8_t *y128Values) {
     uint8_t *stencilPtr = y128Values;
     int x;
 
     for (x = 0; x < XRESMINUSONE;) {
-      uint8_t y, prevY, c;
-      uint8_t currByte;
+        uint8_t y, prevY, c;
+        uint8_t currByte;
         uint8_t *ptr;
-next_cluster:
+        next_cluster:
         /* pixel 1 */
         y = *stencilPtr;
         prevY = y;
@@ -285,11 +283,11 @@ next_cluster:
             continue;
         }
 
-        for (c = 2; c < 4; ++c ) {
+        for (c = 2; c < 4; ++c) {
             ++x;
             ++stencilPtr;
             y = *stencilPtr;
-            if ( y != prevY ) {
+            if (y != prevY) {
                 *ptr = currByte;
                 goto next_cluster;
             }
@@ -308,29 +306,35 @@ void graphicsPut(uint8_t x, uint8_t y) {
 
 void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
     int x, y;
-    for(y = y0; y < y1; ++y ) {
-        for (x = x0; x < x1; ++x ) {
+    for (y = y0; y < y1; ++y) {
+        for (x = x0; x < x1; ++x) {
             realPut(x, y, colour, NULL);
         }
     }
 }
 
 
-void drawLine(uint16_t x0, uint8_t y0,uint16_t x1, uint8_t y1, uint8_t colour) {
-    int dx = abs(x1-x0);
-    int sx = x0<x1 ? 1 : -1;
-    int dy = abs(y1-y0);
-    int sy = y0<y1 ? 1 : -1;
-    int err = (dx>dy ? dx : -dy)>>1;
+void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
+    int dx = abs(x1 - x0);
+    int sx = x0 < x1 ? 1 : -1;
+    int dy = abs(y1 - y0);
+    int sy = y0 < y1 ? 1 : -1;
+    int err = (dx > dy ? dx : -dy) >> 1;
     int e2;
-    for(;;) {
+    for (;;) {
 
-        if (x0==x1 && y0==y1) break;
+        if (x0 == x1 && y0 == y1) break;
 
         realPut(x0, y0, colour, NULL);
 
         e2 = err;
-        if (e2 > -dx) { err -= dy; x0 += sx; }
-        if (e2 < dy) { err += dx; y0 += sy; }
+        if (e2 > -dx) {
+            err -= dy;
+            x0 += sx;
+        }
+        if (e2 < dy) {
+            err += dx;
+            y0 += sy;
+        }
     }
 }

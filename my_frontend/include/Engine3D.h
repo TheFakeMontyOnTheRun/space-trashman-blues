@@ -51,7 +51,7 @@ void graphicsPut(uint8_t x, uint8_t y);
 
 uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr);
 
-void graphicsPutPointArray(uint8_t* y128Values);
+void graphicsPutPointArray(uint8_t *y128Values);
 
 void HUD_initialPaint(void);
 

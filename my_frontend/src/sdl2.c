@@ -32,7 +32,7 @@ void graphicsPut(uint8_t x, uint8_t y) {
 #endif
 }
 
-void graphicsPutPointArray(uint8_t* y128Values) {
+void graphicsPutPointArray(uint8_t *y128Values) {
     uint8_t *stencilPtr = y128Values;
     int x;
 
@@ -106,7 +106,7 @@ void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) 
 }
 
 uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
-    vfb[(256 * y) + x ] = colour;
+    vfb[(256 * y) + x] = colour;
 
     return NULL;
 }

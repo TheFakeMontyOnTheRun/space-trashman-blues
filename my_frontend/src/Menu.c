@@ -23,7 +23,7 @@ void titleScreen(void) {
     writeStr(1, 4, "by Daniel Monteiro");
     writeStr(1, 6, " Press SPACE to start ");
 #ifdef SDLW
-        /* Just to keep the OS happy */
+    /* Just to keep the OS happy */
     flushVirtualFramebuffer();
 #endif
 
@@ -49,7 +49,7 @@ void showMessage(const char *message) {
     writeStr(1, 22, "Press SPACE button to continue");
 
 #ifdef SDLW
-        /* Just to keep the OS happy */
+    /* Just to keep the OS happy */
     flushVirtualFramebuffer();
 #endif
 
