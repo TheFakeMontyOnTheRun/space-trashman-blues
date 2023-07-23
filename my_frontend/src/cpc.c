@@ -231,16 +231,24 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
         _y1 = y0;
     }
 
+    if (shouldStipple && ((_y0 & 1) == 0)) {
+        _y0++;
+    }
+
     uint8_t *ptr = &buffer[(_y0 * (BUFFER_SIZEX)) + (x0 / 4)]; /* skip to the line in pattern */
     uint8_t y;
     uint8_t pattern = (8 >> (x0 & 3));
-    for (y = _y0; y <= _y1; ++y) {
-        if (!shouldStipple || (y & 1)) {
+    if (shouldStipple) {
+        for (y = _y0; y <= _y1; y += 2) {
             *ptr |= pattern;
+            ptr += BUFFER_SIZEX + BUFFER_SIZEX;
         }
-        ptr += BUFFER_SIZEX;
+    } else {
+        for (y = _y0; y <= _y1; ++y) {
+            *ptr |= pattern;
+            ptr += BUFFER_SIZEX;
+        }
     }
-
 }
 
 uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
