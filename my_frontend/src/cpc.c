@@ -262,6 +262,42 @@ uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
     return ptr;
 }
 
+void graphicsPutPointArray(uint8_t* y128Values) {
+    uint8_t *stencilPtr = y128Values;
+    int x;
+
+    for (x = 0; x < XRESMINUSONE;) {
+      uint8_t y, prevY, c;
+        uint8_t *ptr;
+next_cluster:
+        /* pixel 1 */
+        y = *stencilPtr;
+        ptr = &buffer[(y * (BUFFER_SIZEX)) + (x / 4)]; /* skip to the line in pattern */
+        *ptr |= (8 >> (x & 3));
+
+        if (x & 3) {
+            ++x;
+            ++stencilPtr;
+            continue;
+        }
+
+        for (c = 2; c < 4; ++c ) {
+            ++x;
+            ++stencilPtr;
+            prevY = y;
+            y = *stencilPtr;
+            if ( y != prevY ) {
+                goto next_cluster;
+            }
+
+            *ptr |= (8 >> (x & 3));
+        }
+
+        ++x;
+        ++stencilPtr;
+    }
+}
+
 void graphicsPut(uint8_t x, uint8_t y) {
     buffer[(y * (BUFFER_SIZEX)) + (x / 4)] |= (8 >> (x & 3));
 }

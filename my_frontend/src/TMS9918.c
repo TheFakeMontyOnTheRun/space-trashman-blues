@@ -80,6 +80,41 @@ uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
     return ptr;
 }
 
+void graphicsPutPointArray(uint8_t* y128Values) {
+    uint8_t *stencilPtr = y128Values;
+    int x;
+
+    for (x = 0; x < (BUFFER_RESX - 1);) {
+        uint8_t y, prevY, c;
+        uint8_t *ptr;
+        next_cluster:
+        /* pixel 1 */
+        y = *stencilPtr;
+        ptr = &buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)];
+        *ptr |= (128 >> (x & 7));
+
+        if (x & 7) {
+            ++x;
+            ++stencilPtr;
+            continue;
+        }
+
+        for (c = 2; c < 8; ++c ) {
+            ++x;
+            ++stencilPtr;
+            prevY = y;
+            y = *stencilPtr;
+            if ( y != prevY ) {
+                goto next_cluster;
+            }
+            *ptr |= (128 >> (x & 7));
+        }
+
+        ++x;
+        ++stencilPtr;
+    }
+}
+
 void graphicsPut(uint8_t x, uint8_t y) {
     buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)] |= (128 >> (x & 7));
 }
