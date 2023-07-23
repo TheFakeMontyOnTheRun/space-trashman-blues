@@ -116,7 +116,7 @@ uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptrToByt
     return ptrToByte;
 }
 
-void graphicsPutPointArray(uint8_t* y128Values) {
+void graphicsPutPointArray(uint8_t *y128Values) {
     uint8_t *stencilPtr = y128Values;
     int x;
 
@@ -152,11 +152,11 @@ void graphicsPutPointArray(uint8_t* y128Values) {
             continue;
         }
 
-        for (c = 2; c < 4; ++c ) {
+        for (c = 2; c < 4; ++c) {
             ++x;
             ++stencilPtr;
             y = *stencilPtr;
-            if ( y != prevY ) {
+            if (y != prevY) {
                 *ptr = currByte;
                 goto next_cluster;
             }
@@ -466,8 +466,8 @@ void exitTextMode(void) {
 
 void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
     int x, y;
-    for(y = y0; y < y1; ++y ) {
-        for (x = x0; x < x1; ++x ) {
+    for (y = y0; y < y1; ++y) {
+        for (x = x0; x < x1; ++x) {
             realPut(x, y, colour, NULL);
         }
     }
