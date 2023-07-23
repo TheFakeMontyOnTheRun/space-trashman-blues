@@ -133,7 +133,7 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
     int16_t lineX1;
     int16_t px0z0;
     int16_t px1z1;
-    
+
     int8_t py0z0;
     int8_t py0z1;
     int8_t py1z0;
@@ -314,12 +314,11 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
     int16_t x;
     int16_t px0z0;
     int16_t px1z0;
-    
+
     int8_t py0z0;
     int8_t py1z0;
     uint8_t shouldStipple;
     uint8_t drawContour;
-    uint8_t stipple;
 
     if (z0 >= FAR_PLANE_Z) {
         return 0;
@@ -342,8 +341,6 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
     }
 
     shouldStipple = (z0 >= STIPPLE_DISTANCE);
-    stipple = 1;
-
     drawContour = (dY);
 
     if (drawContour) {
@@ -358,28 +355,26 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
         }
     }
 
-    /* Draw the horizontal outlines of z0 and z1 */
-
-    /* Ceiling is lower than camera */
-    for (x = px0z0; x <= px1z0; ++x) {
-        if (IN_RANGE(0, XRESMINUSONE, x)) {
-
-            stipple = ~stipple;
-
-            if (stencilHigh[x] <= py1z0) {
-                if (drawContour && (stipple || !shouldStipple)) {
-                    graphicsPut(x, py1z0);
-                }
-                stencilHigh[x] = py1z0;
-            }
-
-
-            if (stencilHigh[x] <= py0z0) {
-                stencilHigh[x] = py0z0;
-            }
-        }
+    if (px0z0 < 0) {
+        px0z0 = 0;
     }
 
+    if (px1z0 >= XRES) {
+        px1z0 = XRESMINUSONE;
+    }
+
+    for (x = px0z0; x <= px1z0; ++x) {
+        if (stencilHigh[x] <= py1z0) {
+            if (drawContour && ((x & 1) || !shouldStipple)) {
+                graphicsPut(x, py1z0);
+            }
+            stencilHigh[x] = py1z0;
+        }
+
+        if (stencilHigh[x] <= py0z0) {
+            stencilHigh[x] = py0z0;
+        }
+    }
 
     return 1;
 }
@@ -394,7 +389,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
     uint8_t z1py;
     int8_t z0dx;
     int8_t z1dx;
-    
+
     int16_t x;
     int16_t lineX0;
     int16_t lineX1;
@@ -402,7 +397,7 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
     int16_t px1z0;
     int16_t px0z1;
     int16_t px1z1;
-    
+
     int8_t py0z0;
     int8_t py0z1;
 
@@ -439,24 +434,25 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
     py0z1 = z1py + ((-CAMERA_HEIGHT) * z1dx);
 
     /* Draw the horizontal outlines of z0 and z1 */
-
-    for (x = px0z0; x <= px1z0; ++x) {
-        if (IN_RANGE(0, XRESMINUSONE, x)) {
-
-            stipple = !stipple;
-
-            if ((stipple || !shouldStipple) && stencilHigh[x] < py0z0) {
+    if (shouldStipple) {
+        for (x = px0z0; x <= px1z0; x += 2) {
+            if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
                 graphicsPut(x, py0z0);
             }
         }
-    }
-
-    for (x = px0z1; x <= px1z1; ++x) {
-        if (IN_RANGE(0, XRESMINUSONE, x)) {
-
-            stipple = ~stipple;
-
-            if ((stipple || !shouldStipple) && stencilHigh[x] < py0z1) {
+        for (x = px0z1; x <= px1z1; x += 2) {
+            if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z1) {
+                graphicsPut(x, py0z1);
+            }
+        }
+    } else {
+        for (x = px0z0; x <= px1z0; ++x) {
+            if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
+                graphicsPut(x, py0z0);
+            }
+        }
+        for (x = px0z1; x <= px1z1; ++x) {
+            if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z1) {
                 graphicsPut(x, py0z1);
             }
         }
@@ -562,7 +558,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     uint8_t z1py;
     int8_t z0dx;
     int8_t z1dx;
-    
+
     int16_t x;
     int16_t lineX0;
     int16_t lineX1;
@@ -570,7 +566,7 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     int16_t px1z0;
     int16_t px0z1;
     int16_t px1z1;
-    
+
     int8_t py0z0;
     int8_t py0z1;
 
@@ -637,26 +633,37 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
 
     if (py0z0 > py0z1) {
         /* Ceiling is lower than camera */
-        for (x = px0z0; x <= px1z0; ++x) {
-            if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
-
-                stipple = ~stipple;
-
-                if (drawContour && (stipple || !shouldStipple)) {
-                    graphicsPut(x, stencilHigh[x]);
+        if (shouldStipple) {
+            for (x = px0z0; x <= px1z0; x += 2) {
+                if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
+                    if (drawContour) {
+                        graphicsPut(x, stencilHigh[x]);
+                    }
+                    stencilHigh[x] = py0z0;
                 }
-                stencilHigh[x] = py0z0;
+            }
+        } else {
+            for (x = px0z0; x <= px1z0; ++x) {
+                if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
+                    if (drawContour) {
+                        graphicsPut(x, stencilHigh[x]);
+                    }
+                    stencilHigh[x] = py0z0;
+                }
             }
         }
     } else if (drawContour) {
         /* Ceiling is higher than the camera */
         /* Let's just draw the nearer segment */
-        for (x = px0z0; x <= px1z0; ++x) {
-            if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
-
-                stipple = ~stipple;
-
-                if ((stipple || !shouldStipple)) {
+        if (shouldStipple) {
+            for (x = px0z0; x <= px1z0; x += 2) {
+                if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
+                    graphicsPut(x, stencilHigh[x]);
+                }
+            }
+        } else {
+            for (x = px0z0; x <= px1z0; ++x) {
+                if (IN_RANGE(0, XRESMINUSONE, x) && stencilHigh[x] < py0z0) {
                     graphicsPut(x, stencilHigh[x]);
                 }
             }
