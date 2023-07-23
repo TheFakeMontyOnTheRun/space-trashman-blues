@@ -87,13 +87,17 @@ void graphicsPutPointArray(uint8_t* y128Values) {
     for (x = 0; x < (BUFFER_RESX - 1);) {
         uint8_t y, prevY, c;
         uint8_t *ptr;
+        uint8_t currByte;
         next_cluster:
-        /* pixel 1 */
+
         y = *stencilPtr;
+        prevY = y;
         ptr = &buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)];
-        *ptr |= (128 >> (x & 7));
+        currByte = *ptr;
+        currByte |= (128 >> (x & 7));
 
         if (x & 7) {
+            *ptr = currByte;
             ++x;
             ++stencilPtr;
             continue;
@@ -102,13 +106,14 @@ void graphicsPutPointArray(uint8_t* y128Values) {
         for (c = 2; c < 8; ++c ) {
             ++x;
             ++stencilPtr;
-            prevY = y;
             y = *stencilPtr;
             if ( y != prevY ) {
+                *ptr = currByte;
                 goto next_cluster;
             }
-            *ptr |= (128 >> (x & 7));
+            currByte |= (128 >> (x & 7));
         }
+        *ptr = currByte;
 
         ++x;
         ++stencilPtr;

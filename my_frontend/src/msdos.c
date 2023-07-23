@@ -126,53 +126,57 @@ void graphicsPutPointArray(uint8_t* y128Values) {
         next_cluster:
         /* pixel 1 */
         y = *stencilPtr;
+        prevY = y;
         ptr = &imageBuffer[(32 * (y & 0b01111111)) + ((x & 0b01111111) / 4)];
+        uint8_t currByte = *ptr;
 
         switch (x & 3) {
             case 3:
-                *ptr = (*ptr & 0b11111100) | 0b00000001;
+                currByte = (currByte & 0b11111100) | 0b00000001;
                 break;
             case 2:
-                *ptr = (*ptr & 0b11110011) | 0b00000100;
+                currByte = (currByte & 0b11110011) | 0b00000100;
                 break;
             case 1:
-                *ptr = (*ptr & 0b11001111) | 0b00010000;
+                currByte = (currByte & 0b11001111) | 0b00010000;
                 break;
             case 0:
-                *ptr = (*ptr & 0b00111111) | 0b01000000; /* <---- */
+                currByte = (currByte & 0b00111111) | 0b01000000;
                 break;
         }
 
         if (x & 3) {
             ++x;
             ++stencilPtr;
+            *ptr = currByte;
             continue;
         }
 
         for (c = 2; c < 4; ++c ) {
             ++x;
             ++stencilPtr;
-            prevY = y;
             y = *stencilPtr;
             if ( y != prevY ) {
+                *ptr = currByte;
                 goto next_cluster;
             }
 
             switch (x & 3) {
                 case 3:
-                    *ptr = (*ptr & 0b11111100) | 0b00000001;
+                    currByte = (currByte & 0b11111100) | 0b00000001;
                     break;
                 case 2:
-                    *ptr = (*ptr & 0b11110011) | 0b00000100;
+                    currByte = (currByte & 0b11110011) | 0b00000100;
                     break;
                 case 1:
-                    *ptr = (*ptr & 0b11001111) | 0b00010000;
+                    currByte = (currByte & 0b11001111) | 0b00010000;
                     break;
                 case 0:
-                    *ptr = (*ptr & 0b00111111) | 0b01000000; /* X */
+                    currByte = (currByte & 0b00111111) | 0b01000000;
                     break;
             }
         }
+        *ptr = currByte;
 
         ++x;
         ++stencilPtr;
