@@ -116,6 +116,69 @@ uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptrToByt
     return ptrToByte;
 }
 
+void graphicsPutPointArray(uint8_t* y128Values) {
+    uint8_t *stencilPtr = y128Values;
+    int x;
+
+    for (x = 0; x < XRESMINUSONE;) {
+        uint8_t y, prevY, c;
+        uint8_t *ptr;
+        next_cluster:
+        /* pixel 1 */
+        y = *stencilPtr;
+        ptr = &imageBuffer[(32 * (y & 0b01111111)) + ((x & 0b01111111) / 4)];
+
+        switch (x & 3) {
+            case 3:
+                *ptr = (*ptr & 0b11111100) | 0b00000001;
+                break;
+            case 2:
+                *ptr = (*ptr & 0b11110011) | 0b00000100;
+                break;
+            case 1:
+                *ptr = (*ptr & 0b11001111) | 0b00010000;
+                break;
+            case 0:
+                *ptr = (*ptr & 0b00111111) | 0b01000000; /* <---- */
+                break;
+        }
+
+        if (x & 3) {
+            ++x;
+            ++stencilPtr;
+            continue;
+        }
+
+        for (c = 2; c < 4; ++c ) {
+            ++x;
+            ++stencilPtr;
+            prevY = y;
+            y = *stencilPtr;
+            if ( y != prevY ) {
+                goto next_cluster;
+            }
+
+            switch (x & 3) {
+                case 3:
+                    *ptr = (*ptr & 0b11111100) | 0b00000001;
+                    break;
+                case 2:
+                    *ptr = (*ptr & 0b11110011) | 0b00000100;
+                    break;
+                case 1:
+                    *ptr = (*ptr & 0b11001111) | 0b00010000;
+                    break;
+                case 0:
+                    *ptr = (*ptr & 0b00111111) | 0b01000000; /* X */
+                    break;
+            }
+        }
+
+        ++x;
+        ++stencilPtr;
+    }
+}
+
 void graphicsPut(uint8_t x, uint8_t y) {
     uint8_t *ptrToByte = &imageBuffer[(32 * (y & 0b01111111)) + ((x & 0b01111111) / 4)];
 

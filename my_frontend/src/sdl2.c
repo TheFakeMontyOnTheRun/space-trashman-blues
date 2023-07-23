@@ -32,6 +32,16 @@ void graphicsPut(uint8_t x, uint8_t y) {
 #endif
 }
 
+void graphicsPutPointArray(uint8_t* y128Values) {
+    uint8_t *stencilPtr = y128Values;
+    int x;
+
+    for (x = 0; x < XRES; ++x) {
+        graphicsPut(x, *stencilPtr);
+        ++stencilPtr;
+    }
+}
+
 void clearTextScreen(void) {
     fillRect(0, 128, 256, 192, 0);
 }
