@@ -43,9 +43,8 @@ void writeStr(uint8_t _x, uint8_t y, const char *text) {
 
 void showMessage(const char *message) {
     uint8_t keepGoing = 1;
-    clearScreen();
-
-    writeStr(1, 1, message);
+    clearTextScreen();
+    writeStr(1, 17, message);
     writeStr(1, 22, "Press SPACE button to continue");
 
 #ifdef SDLW
@@ -59,7 +58,8 @@ void showMessage(const char *message) {
             keepGoing = 0;
         }
     }
-    clearScreen();
+    clearTextScreen();
+    HUD_initialPaint();
 }
 
 void drawMap(void) {
