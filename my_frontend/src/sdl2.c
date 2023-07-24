@@ -383,8 +383,6 @@ void flushVirtualFramebuffer(void) {
         }
     }
     SDL_RenderPresent(renderer);
-    SDL_UpdateWindowSurface(window);
-    SDL_RenderClear(renderer);
 }
 
 void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
