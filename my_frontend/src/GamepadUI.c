@@ -70,7 +70,6 @@ char *menuItems[] = {
 
 void HUD_initialPaint(void) {
     drawLine(128, 0, 128, 128, 2);
-    drawLine(0, 128, 255, 128, 2);
     drawMap();
 
     for (uint8_t i = 0; i < 6; ++i) {
