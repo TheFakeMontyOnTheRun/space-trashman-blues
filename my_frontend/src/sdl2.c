@@ -43,7 +43,7 @@ void graphicsPutPointArray(uint8_t *y128Values) {
 }
 
 void clearTextScreen(void) {
-    fillRect(0, 128, 256, 192, 0);
+    fillRect(0, 129, 256, 192, 0);
 }
 
 void enterTextMode(void) {
