@@ -144,7 +144,7 @@ void shutdownGraphics(void) {
 
 uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
     set_color(colour, 1, 1);
-    pset(x, y);
+    plot(x, y);
     set_color(15, 1, 1);
     return NULL;
 }
@@ -212,7 +212,7 @@ void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) 
     set_color(colour, 1, 1);
     for (y = y0; y < y1; ++y) {
         for (x = x0; x < x1; ++x) {
-            pset(x, y);
+            plot(x, y);
         }
     }
     set_color(15, 1, 1);

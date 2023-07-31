@@ -6,6 +6,7 @@
 
 #ifdef N64
 #include <libdragon.h>
+#include <GL/gl_integration.h>
 #endif
 
 #ifndef NDS
@@ -77,6 +78,10 @@ int messageLogBufferCoolDown = 0;
 
 void printMessageTo3DView(const char *message);
 
+#ifdef N64
+static surface_t zbuffer;
+#endif
+
 
 enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
 struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
@@ -100,6 +105,10 @@ void enter2D(void) {
 
 void initGL(void) {
 
+#ifdef N64
+    zbuffer = surface_alloc(FMT_RGBA16, display_get_width(), display_get_height());
+#endif
+
 	glEnable(GL_TEXTURE_2D);                        // Enable Texture Mapping ( NEW )
 	glClearColor(0, 0, 0, 1);                   // Black Background
 	glDisable(GL_FOG);
@@ -115,16 +124,16 @@ void initGL(void) {
 #endif
 }
 
-void clearRenderer(void) {
-#ifndef NDS
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-#else
-	glClearDepth(GL_MAX_DEPTH);
-#endif
-}
-
-
 void startFrameGL(int width, int height) {
+#ifdef N64
+    surface_t *disp = display_get();
+
+    rdpq_attach(disp, &zbuffer);
+
+    gl_context_begin();
+#endif
+
+
 	glViewport(0, 0, width, height);
 	glClearColor(0, 0, 0, 1);                   // Black Background
 
@@ -153,6 +162,12 @@ void endFrameGL(void) {
 	}
 #else
 	glFlush(0);
+#endif
+
+#ifdef N64
+    gl_context_end();
+
+    rdpq_detach_show();
 #endif
 }
 

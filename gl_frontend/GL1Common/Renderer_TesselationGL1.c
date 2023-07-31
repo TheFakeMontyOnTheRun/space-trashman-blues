@@ -200,7 +200,10 @@ void drawBillboardAt(const struct Vec3 center,
 	glTranslatef(0.0f, centerY, 0.0f);
 	glScalef(1.0f, geometryScale, 1.0f);
 
-	glEnable(GL_ALPHA_TEST);
+#ifndef NDS
+    glAlphaFunc(GL_GREATER, 0.5f);
+#endif
+    glEnable(GL_ALPHA_TEST);
 
 	glBegin(GL_QUADS);
 
@@ -244,7 +247,10 @@ void drawColumnAt(const struct Vec3 center,
 	glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
 
 	if (enableAlpha) {
-		glEnable(GL_ALPHA_TEST);
+#ifndef NDS
+        glAlphaFunc(GL_GREATER, 0.5f);
+#endif
+        glEnable(GL_ALPHA_TEST);
 	}
 	glTranslatef(0.0f, centerY, 0.0f);
 	glScalef(1.0f, geometryScale, 1.0f);
