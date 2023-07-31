@@ -232,11 +232,11 @@ void writeStrWithLimit(int16_t _x, int16_t y, char *str, int16_t limitX) {
     }
 }
 
-void writeStr(int16_t _x, int16_t y, const char *text, int16_t fg, int16_t bg) {
+void writeStr(int16_t _x, int16_t y, const char *text, uint16_t fg, uint16_t bg) {
     writeStrWithLimit(_x, y, text, 31);
 }
 
-void graphicsPut(int16_t x, int16_t y, int16_t colour) {
+void graphicsPut(int16_t x, int16_t y, uint16_t colour) {
     if (colour >= 16) {
         if ((x + y) & 1) {
             BMP_setPixelFast(x, 16 + y, 0);
@@ -248,7 +248,7 @@ void graphicsPut(int16_t x, int16_t y, int16_t colour) {
     }
 }
 
-void vLine(int16_t x0, int16_t y0, int16_t y1, int16_t colour) {
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour) {
 
 
     if (y0 > y1) {
@@ -282,7 +282,7 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, int16_t colour) {
 }
 
 
-void hLine(int16_t x0, int16_t x1, int16_t y, int16_t colour) {
+void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
     if (y < 0) {
         return;
     }

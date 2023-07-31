@@ -47,6 +47,7 @@ void graphicsInit() {
 	initGL();
 	controller_init();
 	fnt1 = rdpq_font_load("rom:/font.font64");
+    rdpq_text_register_font(1, fnt1);
 }
 
 void handleSystemEvents() {
@@ -134,5 +135,4 @@ void graphicsShutdown() {
 }
 
 void flipRenderer() {
-	gl_swap_buffers();
 }

@@ -2,23 +2,12 @@
 #define RENDERER_H
 
 
-#ifdef AMIGA
-#define XRES 200
-#define YRES 128
-#define HALF_XRES 100
-#define HALF_YRES 64
-#else
 #define XRES 216
 #define YRES 200
-#define HALF_XRES 100
-#define HALF_YRES 100
-#endif
-
 #define XRES_FRAMEBUFFER 320
 #define YRES_FRAMEBUFFER 200
-
 #define TOTAL_TEXTURES 64
-#define TRANSPARENCY_COLOR 199
+#define TRANSPARENCY_COLOR 0
 
 typedef uint32_t OutputPixelFormat;
 typedef uint32_t FramebufferPixelFormat;

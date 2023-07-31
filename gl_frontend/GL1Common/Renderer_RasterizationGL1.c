@@ -20,6 +20,7 @@
 
 #ifdef N64
 #include <libdragon.h>
+#include <rdpq_text.h>
 #endif
 
 #include "Core.h"
@@ -167,6 +168,9 @@ void fill(
 				defaultFont->uploadId = submitBitmapToGPU(defaultFont);
 			}
 
+#ifndef NDS
+            glAlphaFunc(GL_GREATER, 0.5f);
+#endif
 			glEnable(GL_ALPHA_TEST);
 
 			repeatX = (dx / 4);
@@ -253,6 +257,9 @@ void drawBitmap(const int _dx,
 	if (bitmap->uploadId != -1) {
 
 		if (transparent) {
+#ifndef NDS
+            glAlphaFunc(GL_GREATER, 0.5f);
+#endif
 			glEnable(GL_ALPHA_TEST);
 		}
 
@@ -323,6 +330,9 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 
 	glBindTexture(GL_TEXTURE_2D, defaultFont->uploadId);
 
+#ifndef NDS
+    glAlphaFunc(GL_GREATER, 0.5f);
+#endif
 	glEnable(GL_ALPHA_TEST);
 	glBegin(GL_QUADS);
 
@@ -342,14 +352,13 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 	dstX = (x - 1) * 8;
 	dstY = (y + 1) * 9;
 
-
-
     r = (colour & 0xFF);
     g = ((colour & 0x00FF00) >> 8);
     b = ((colour & 0xFF0000) >> 16);
 
-	rdpq_mode_end();
-	rdpq_font_begin(RGBA32(r, g, b, 0xFF));
+	rdpq_font_style(fnt1, 0, &(rdpq_fontstyle_t){
+      .color = RGBA32(r, g, b, 0xFF),
+    });
 #endif
 	for (c = 0; c < len; ++c) {
 		if (text[c] == '\n' || dstX >= XRES_FRAMEBUFFER) {
@@ -378,8 +387,7 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 		glVertex3f(dstX * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -0.1);
 #else
 		shortStr[0] = text[c];
-		rdpq_font_position(dstX, dstY);
-		rdpq_font_print(fnt1, &shortStr[0]);
+        rdpq_text_print(NULL, 1, dstX, dstY, &shortStr[0]);
 #endif
 
 
@@ -388,8 +396,6 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 #ifndef N64
 	glEnd();
 #else
-	rdpq_font_end();
-	rdpq_mode_begin();
 #endif
 
 	glColor3f(1, 1, 1);
