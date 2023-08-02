@@ -1,3 +1,5 @@
+# built with revision 4409fe77e208aaef77800b684602d4ea5a74da0b of unstable branch of libdraon
+
 BUILD_DIR=build
 include $(N64_INST)/include/n64.mk
 
