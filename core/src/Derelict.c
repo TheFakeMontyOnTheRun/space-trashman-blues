@@ -162,7 +162,7 @@ void elevatorGoUpCallback(struct Item *item) {
 
 		if (getItem(currentItem->item)->pickable) {
 			item = getItem(currentItem->item);
-			/*This will alreadu remove it from the room*/
+			/* This will already remove it from the room */
 			addObjectToRoom(newRoom, item);
 		}
 

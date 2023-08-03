@@ -15,63 +15,63 @@ Created by Daniel Monteiro on 2019-07-26.
 
 struct Item;
 
-typedef void ( *ErrorHandlerCallback )(const char* error);
+typedef void ( *ErrorHandlerCallback )(const char *error);
 
-typedef void ( *PickObjectCallback )(struct Item* item);
+typedef void ( *PickObjectCallback )(struct Item *item);
 
-typedef void ( *DropObjectCallback )(struct Item* item);
+typedef void ( *DropObjectCallback )(struct Item *item);
 
-typedef void ( *UseObjectCallback )(struct Item* item);
+typedef void ( *UseObjectCallback )(struct Item *item);
 
-typedef void ( *UseWithObjectCallback )(struct Item* item, struct Item* otherItem);
+typedef void ( *UseWithObjectCallback )(struct Item *item, struct Item *otherItem);
 
-typedef void ( *LogDelegate )(const char* item);
+typedef void ( *LogDelegate )(const char *item);
 
 struct WorldPosition {
-  int8_t x;
-  int8_t y;
+    int8_t x;
+    int8_t y;
 };
 
 struct Item {
-  struct WorldPosition position;
-  uint8_t roomId : 6;
-  uint8_t index : 6;
-  uint8_t active : 1;
-  uint8_t pickable : 1;
-  const char *name;
+    struct WorldPosition position;
+    uint8_t roomId: 6;
+    uint8_t index: 6;
+    uint8_t active: 1;
+    uint8_t pickable: 1;
+    const char *name;
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-  const char *info;
+    const char *info;
 #endif
-  UseWithObjectCallback useWithCallback;
-  UseObjectCallback useCallback;
-  DropObjectCallback dropCallback;
-  PickObjectCallback pickCallback;
+    UseWithObjectCallback useWithCallback;
+    UseObjectCallback useCallback;
+    DropObjectCallback dropCallback;
+    PickObjectCallback pickCallback;
 };
 
 struct ObjectNode {
-  uint8_t item;
-  struct ObjectNode *next;
+    uint8_t item;
+    struct ObjectNode *next;
 };
 
 struct Room {
-  const char *name;
+    const char *name;
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
     const char *info;
 #endif
-  uint8_t connections[6];
-  struct ObjectNode *itemsPresent;
-  uint8_t chanceOfRandomBattle;
-  uint8_t sizeX;
-  uint8_t sizeY;
-  uint8_t rankRequired;
+    uint8_t connections[6];
+    struct ObjectNode *itemsPresent;
+    uint8_t chanceOfRandomBattle;
+    uint8_t sizeX;
+    uint8_t sizeY;
+    uint8_t rankRequired;
 };
 
 enum EGameStates {
-	kNormalGameplay,
-	kGoodVictory,
-	kBadVictory,
-	kGoodGameOver,
-	kBadGameOver
+    kNormalGameplay,
+    kGoodVictory,
+    kBadVictory,
+    kGoodGameOver,
+    kBadGameOver
 };
 
 extern ErrorHandlerCallback errorHandlerCallback;
@@ -80,7 +80,7 @@ void initCore(void);
 
 void setGameStatus(enum EGameStates newStatus);
 
-enum EGameStates  getGameStatus(void);
+enum EGameStates getGameStatus(void);
 
 uint8_t getPlayerDirection(void);
 
@@ -88,13 +88,13 @@ void setPlayerDirection(uint8_t direction);
 
 void moveBy(uint8_t direction);
 
-struct WorldPosition* getPlayerPosition(void);
+struct WorldPosition *getPlayerPosition(void);
 
-void setPlayerPosition(struct WorldPosition* pos);
+void setPlayerPosition(struct WorldPosition *pos);
 
 uint8_t isPositionAllowed(int8_t x, int8_t y);
 
-void walkTo(const char* operands);
+void walkTo(const char *operands);
 
 void turnLeft(void);
 
@@ -108,7 +108,7 @@ void setPlayerRank(uint8_t newRank);
 
 void showInventory(void);
 
-uint8_t playerHasObject( const char* itemName);
+uint8_t playerHasObject(const char *itemName);
 
 void setPlayerLocation(uint8_t location);
 
@@ -116,22 +116,22 @@ uint8_t getPlayerRoom(void);
 
 uint8_t isPlayerAtRoom(const char *roomName);
 
-struct Item* addItem(const char *description,
+struct Item *addItem(const char *description,
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
                      const char *info,
 #endif
 #ifdef ITEMS_HAVE_WEIGHT
-		uint8_t weight,
+                     uint8_t weight,
 #endif
-					 uint8_t pickable,
-					 int8_t positionX,
-					 int8_t positionY);
+                     uint8_t pickable,
+                     int8_t positionX,
+                     int8_t positionY);
 
-struct ObjectNode* getPlayerItems(void);
+struct ObjectNode *getPlayerItems(void);
 
-struct Item* getItem(uint8_t index);
+struct Item *getItem(uint8_t index);
 
-uint8_t isCloseToObject( struct WorldPosition* pos, struct Item* _item );
+uint8_t isCloseToObject(struct WorldPosition *pos, struct Item *_item);
 
 void pickObject(struct Item *itemToPick);
 
@@ -141,21 +141,21 @@ void dropObjectByName(const char *objName);
 
 uint8_t hasItemInRoom(const char *roomName, const char *itemName);
 
-void addToRoom( const char* roomName, struct Item *itemName );
+void addToRoom(const char *roomName, struct Item *itemName);
 
 struct Room *addRoom(
-		const char *description,
+        const char *description,
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
-		const char *info,
+        const char *info,
 #endif
-		uint8_t sizeX, uint8_t sizeY, uint8_t chanceOfRandomBattle, const int8_t connections[6]);
+        uint8_t sizeX, uint8_t sizeY, uint8_t chanceOfRandomBattle, const int8_t connections[6]);
 
 void addObjectToRoom(uint8_t roomId, struct Item *itemToAdd);
 
 void dropObjectToRoom(uint8_t roomId, struct Item *itemToDrop);
 
 
-struct Item *getItemNamed(const char* name);
+struct Item *getItemNamed(const char *name);
 
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
 void infoAboutItemNamed(const char* itemName);
@@ -171,9 +171,9 @@ struct Room *getRoomByName(const char *name);
 
 void removeObjectFromRoom(struct Item *itemToRemove);
 
-void useObjectNamed(const char* operand);
+void useObjectNamed(const char *operand);
 
-void useObjectsTogether(const char* operands);
+void useObjectsTogether(const char *operands);
 
 void setLoggerDelegate(LogDelegate newDelegate);
 
