@@ -666,7 +666,7 @@ void render(const long ms) {
                     FixP_t adjust = 0;
 
                     if (((heightDiff * 2) - intToFix(integerPart)) >= halfOne) {
-                        adjust = Div(halfOne, intToFix(4));
+                        adjust = Div(halfOne, intToFix(8));
                     }
 
                     switch (tileProp->mGeometryType) {
@@ -698,7 +698,7 @@ void render(const long ms) {
                                     break;
                             }
 
-                            drawColumnAt(tmp, (heightDiff + Div(adjust, intToFix(2))),
+                            drawColumnAt(tmp, (heightDiff + adjust),
                                          nativeTextures[tileProp->mMainWallTextureIndex],
                                          facesMask, tileProp->mNeedsAlphaTest,
                                          tileProp->mRepeatMainTexture);
@@ -732,7 +732,7 @@ void render(const long ms) {
                                     break;
                             }
 
-                            drawColumnAt(tmp, (heightDiff + Div(adjust, intToFix(2))),
+                            drawColumnAt(tmp, (heightDiff + adjust ),
                                          nativeTextures[tileProp->mMainWallTextureIndex],
                                          facesMask, tileProp->mNeedsAlphaTest,
                                          tileProp->mRepeatMainTexture);
@@ -767,7 +767,7 @@ void render(const long ms) {
                                     break;
                             }
 
-                            drawColumnAt(tmp, (heightDiff + Div(adjust, intToFix(2))),
+                            drawColumnAt(tmp, (heightDiff + adjust),
                                          nativeTextures[tileProp->mMainWallTextureIndex],
                                          facesMask, tileProp->mNeedsAlphaTest,
                                          tileProp->mRepeatMainTexture);
@@ -784,7 +784,7 @@ void render(const long ms) {
                                       0);
 
                             drawRightNear(
-                                    tmp, (heightDiff + Div(adjust, intToFix(2))),
+                                    tmp, (heightDiff + adjust),
                                     nativeTextures[tileProp->mMainWallTextureIndex]->rowMajor,
                                     facesMask, tileProp->mRepeatMainTexture);
                             break;
@@ -800,7 +800,7 @@ void render(const long ms) {
                                       0);
 
                             drawLeftNear(
-                                    tmp, (heightDiff + Div(adjust, intToFix(2))),
+                                    tmp, (heightDiff + adjust),
                                     nativeTextures[tileProp->mMainWallTextureIndex]->rowMajor,
                                     facesMask, tileProp->mRepeatMainTexture);
                             break;
@@ -894,7 +894,7 @@ void render(const long ms) {
                                       ((tileProp->mFloorHeight * 2) + heightDiff),
                                       0);
 
-                            drawColumnAt(tmp, (heightDiff + Div(adjust, intToFix(2))),
+                            drawColumnAt(tmp, (heightDiff + adjust),
                                          nativeTextures[tileProp->mMainWallTextureIndex],
                                          facesMask, tileProp->mNeedsAlphaTest,
                                          tileProp->mRepeatMainTexture);
