@@ -31,6 +31,7 @@
 #define FIXP_ONE (intToFix(1))
 
 FixP_t oneOverZMap[4 * 128];
+FixP_t divLut[320];
 
 #ifdef AGS
 __attribute__((section(".iwram"), long_call))
@@ -70,6 +71,10 @@ void initZMap(void) {
 	int z;
     for (z = 1; z < (4 * 128); ++z ) {
         oneOverZMap[z] = Div(FIXP_HALF_YRES, Div(intToFix(z) , intToFix(4)));
+    }
+
+    for (z = 1; z < (320); ++z ) {
+        divLut[z] = Div(intToFix(1) , intToFix(z));
     }
 }
 

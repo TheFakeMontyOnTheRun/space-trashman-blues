@@ -770,7 +770,7 @@ void drawFloor(FixP_t y0,
     if (dY == 0) {
         return;
     } else {
-        FixP_t oneOverDy = Div(intToFix(1), dY);
+        FixP_t oneOverDy = divLut[limit - y];
         leftDxDy = Mul(leftDX, oneOverDy);
         rightDxDy = Mul(rightDX, oneOverDy);
         dv = Mul(FIXP_NATIVE_TEXTURE_SIZE, oneOverDy);
@@ -813,7 +813,11 @@ void drawFloor(FixP_t y0,
         iX1 = fixToInt(x1);
 
         if (diffX != lastDiffX) {
-            du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
+            if (diffX > 0 ) {
+                du = Mul(FIXP_NATIVE_TEXTURE_SIZE, divLut[iX1 - iX0]);
+            } else {
+                du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
+            }
             lastDiffX = diffX;
         }
 
