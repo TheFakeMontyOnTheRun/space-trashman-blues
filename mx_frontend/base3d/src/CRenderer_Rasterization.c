@@ -119,7 +119,7 @@ void maskWall(
     if (dX == 0) {
         return;
     } else {
-        FixP_t oneOverDx = Div(intToFix(1), dX);
+        FixP_t oneOverDx = divLut[limit - x];
         upperDyDx = Mul(upperDy, oneOverDx);
         lowerDyDx = Mul(lowerDy, oneOverDx);
     }
@@ -270,7 +270,7 @@ void drawWall(FixP_t x0,
     if (dX == 0) {
         return;
     } else {
-        FixP_t oneOverDx = Div(intToFix(1), dX);
+      FixP_t oneOverDx = divLut[limit - x];
         upperDyDx = Mul(upperDy, oneOverDx);
         lowerDyDx = Mul(lowerDy, oneOverDx);
         du = Mul(FIXP_NATIVE_TEXTURE_SIZE, oneOverDx);
@@ -470,7 +470,7 @@ void drawFrontWall(FixP_t x0,
         return;
     }
 
-    du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
+    du = Mul(FIXP_NATIVE_TEXTURE_SIZE, divLut[iX1 - iX0]);
 
     if (iy < 0) {
         FixP_t diff = intToFix(-iy);
@@ -621,7 +621,7 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
     if (dY == 0) {
         return;
     } else {
-        FixP_t oneOverDy = Div(intToFix(1), dY);
+      FixP_t oneOverDy = divLut[limit - y];
         leftDxDy = Mul(leftDX, oneOverDy);
         rightDxDy = Mul(rightDX, oneOverDy);
     }
@@ -1146,7 +1146,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
 
         if (limit) {
             uint8_t *destination;
-            oneOverLimit = Div(intToFix(1), intToFix(limit));
+            oneOverLimit = divLut[limit];
 
             destination = &framebuffer[(XRES_FRAMEBUFFER * y) + iFX0];
 
@@ -1294,7 +1294,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
 
         if (limit) {
             uint8_t *destination;
-            oneOverLimit = Div(intToFix(1), intToFix(limit));
+            oneOverLimit = divLut[limit];
 
             destination = &framebuffer[(XRES_FRAMEBUFFER * y) + iFX0];
 
