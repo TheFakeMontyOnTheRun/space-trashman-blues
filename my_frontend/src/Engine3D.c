@@ -31,7 +31,7 @@ enum DIRECTION {
 
 #define IN_RANGE(V0, V1, V)  ((V0) <= (V) && (V) <= (V1))
 
-#define STIPPLE_DISTANCE 13
+#define STIPPLE_DISTANCE 12
 #define RLE_THRESHOLD 32
 #define MAP_SIZE_X 32
 #define MAP_SIZE_Y 32
