@@ -70,14 +70,16 @@ void drawMap(void) {
         return;
     }
 
-    for (y = 0; y < 8; ++y) {
-        writeStr(17, 1 + y, "         ");
+    for (y = 0; y < 13; ++y) {
+        for( x = 0; x < 13; ++x ) {
+            writeStr(17 + x, 1 + y, " ");
+        }
     }
 
     for (y = 0; y < 32; ++y) {
         for (x = 0; x < 32; ++x) {
             if (patterns[(map[y][x] & 127) - 32].blockMovement) {
-                fillRect(136 + (x * 2), (y * 2) + 8, 136 + (x * 2) + 2, (y * 2) + 8 + 2, 15);
+                fillRect(128 + (x * 3) + 16, (y * 3) + 16, 128 + (x * 3) + 3 + 16, (y * 3) + 3 + 16, 15);
             }
         }
     }
