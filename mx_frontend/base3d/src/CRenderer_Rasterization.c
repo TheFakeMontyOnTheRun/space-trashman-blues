@@ -119,14 +119,14 @@ void maskWall(
     if (dX == 0) {
         return;
     } else {
-      FixP_t oneOverDx;
+        FixP_t oneOverDx;
 
-      if (dX > 0 && dX < intToFix(320) ) {
-	oneOverDx = divLut[limit - x];
-      } else {
-	oneOverDx = Div(intToFix(1), dX);
-      }
-      
+        if (dX > 0 && dX < intToFix(320)) {
+            oneOverDx = divLut[limit - x];
+        } else {
+            oneOverDx = Div(intToFix(1), dX);
+        }
+
         upperDyDx = Mul(upperDy, oneOverDx);
         lowerDyDx = Mul(lowerDy, oneOverDx);
     }
@@ -277,13 +277,13 @@ void drawWall(FixP_t x0,
     if (dX == 0) {
         return;
     } else {
-      FixP_t oneOverDx;
+        FixP_t oneOverDx;
 
-      if (dX > 0 && dX < intToFix(320)) {
-	oneOverDx = divLut[limit - x];
-      } else {
-	oneOverDx = Div(intToFix(1), dX);
-      }
+        if (dX > 0 && dX < intToFix(320)) {
+            oneOverDx = divLut[limit - x];
+        } else {
+            oneOverDx = Div(intToFix(1), dX);
+        }
 
         upperDyDx = Mul(upperDy, oneOverDx);
         lowerDyDx = Mul(lowerDy, oneOverDx);
@@ -484,10 +484,10 @@ void drawFrontWall(FixP_t x0,
         return;
     }
 
-    if (diffX > 0 && diffX < intToFix(320) ) {
-      du = Mul(FIXP_NATIVE_TEXTURE_SIZE, divLut[iX1 - iX0]);
+    if (diffX > 0 && diffX < intToFix(320)) {
+        du = Mul(FIXP_NATIVE_TEXTURE_SIZE, divLut[iX1 - iX0]);
     } else {
-      du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
+        du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
     }
 
 
@@ -640,13 +640,13 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
     if (dY == 0) {
         return;
     } else {
-      FixP_t oneOverDy;
-      if (dY > 0 && dY < intToFix(320) ) {
-	oneOverDy = divLut[limit - y];
-      } else {
-	oneOverDy = Div(intToFix(1), dY);
-      }
-      
+        FixP_t oneOverDy;
+        if (dY > 0 && dY < intToFix(320)) {
+            oneOverDy = divLut[limit - y];
+        } else {
+            oneOverDy = Div(intToFix(1), dY);
+        }
+
         leftDxDy = Mul(leftDX, oneOverDy);
         rightDxDy = Mul(rightDX, oneOverDy);
     }
@@ -795,13 +795,13 @@ void drawFloor(FixP_t y0,
     if (dY == 0) {
         return;
     } else {
-      FixP_t oneOverDy;
-      if (dY > 0 && dY < intToFix(320) ) {
-	oneOverDy = divLut[limit - y];
-      } else {
-	oneOverDy = Div(intToFix(1), dY);
-      }
-      
+        FixP_t oneOverDy;
+        if (dY > 0 && dY < intToFix(320)) {
+            oneOverDy = divLut[limit - y];
+        } else {
+            oneOverDy = Div(intToFix(1), dY);
+        }
+
         leftDxDy = Mul(leftDX, oneOverDy);
         rightDxDy = Mul(rightDX, oneOverDy);
         dv = Mul(FIXP_NATIVE_TEXTURE_SIZE, oneOverDy);
@@ -844,7 +844,7 @@ void drawFloor(FixP_t y0,
         iX1 = fixToInt(x1);
 
         if (diffX != lastDiffX) {
-	  if (diffX > 0 && diffX < intToFix(320) ) {
+            if (diffX > 0 && diffX < intToFix(320)) {
                 du = Mul(FIXP_NATIVE_TEXTURE_SIZE, divLut[iX1 - iX0]);
             } else {
                 du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
@@ -1177,12 +1177,12 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
 
         if (limit) {
             uint8_t *destination;
-	    if (limit > 0 && limit < 320 ) {
-	      oneOverLimit = divLut[limit];
-	    } else {
-	      oneOverLimit = Div(intToFix(1), (fX1 - fX0));
-	    }
-            
+            if (limit > 0 && limit < 320) {
+                oneOverLimit = divLut[limit];
+            } else {
+                oneOverLimit = Div(intToFix(1), (fX1 - fX0));
+            }
+
 
             destination = &framebuffer[(XRES_FRAMEBUFFER * y) + iFX0];
 
@@ -1330,11 +1330,11 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
 
         if (limit) {
             uint8_t *destination;
-	    if (limit > 0 && limit < 320 ) {
-	      oneOverLimit = divLut[limit];
-	    } else {
-	      oneOverLimit = Div(intToFix(1), (fX1 - fX0));
-	    }
+            if (limit > 0 && limit < 320) {
+                oneOverLimit = divLut[limit];
+            } else {
+                oneOverLimit = Div(intToFix(1), (fX1 - fX0));
+            }
 
 
             destination = &framebuffer[(XRES_FRAMEBUFFER * y) + iFX0];
@@ -1454,6 +1454,7 @@ void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *textur
 #ifdef AGS
 __attribute__((target("arm"), section(".iwram"), noinline))
 #endif
+
 void fill(
         const int x,
         const int y,
