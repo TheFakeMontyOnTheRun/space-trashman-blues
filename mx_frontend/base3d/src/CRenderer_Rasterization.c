@@ -338,15 +338,10 @@ void drawWall(FixP_t x0,
         }
 
         if (iy < 0) {
-	  FixP_t diff = -y0;
-	  int32_t iv = fixToInt(v);
-	  lastV = iv;
-	  v += Mul(diff, dv);
-	  iv = fixToInt(v);
-	  destinationLine += -iy * (XRES_FRAMEBUFFER);
-	  iy = 0;
-	  pixel = *(lineOffset);
-	  lineOffset = ((iv & (NATIVE_TEXTURE_SIZE - 1)) + sourceLineStart);
+            FixP_t diff = intToFix((-iy));
+            v += Mul(diff, dv);
+            destinationLine += -iy * (XRES_FRAMEBUFFER);
+            iy = 0;
         }
 
         stipple = (((ix + iy) & 1)) ? 0xFFFFFFFF : 0;
@@ -358,6 +353,7 @@ void drawWall(FixP_t x0,
             stipple = ~stipple;
 
             if (iv != lastV && !(stipple && farForStipple)) {
+
                 pixel = *(lineOffset);
                 lineOffset = ((iv & (NATIVE_TEXTURE_SIZE - 1)) + sourceLineStart);
                 lastV = iv;
@@ -856,20 +852,14 @@ void drawFloor(FixP_t y0,
             lastDiffX = diffX;
         }
 
-	sourceLineStart = texture + (fixToInt(v) * NATIVE_TEXTURE_SIZE);
-	
         if (ix < 0) {
-	  FixP_t diff = -iX0;
-	    lastU = fixToInt(u);
+            FixP_t diff = intToFix((-ix + 0));
             u += Mul(diff, du);
             ix = 0;
-	    const int32_t iu = fixToInt(u);
-	    sourceLineStart += (iu - lastU);
-	    pixel = *(sourceLineStart);
         }
 
         destinationLine = bufferData + (XRES_FRAMEBUFFER * iy) + ix;
-
+        sourceLineStart = texture + (fixToInt(v) * NATIVE_TEXTURE_SIZE);
         pixel = *(sourceLineStart);
         stipple = ((iX0 + iy) & 1) ? 0xFFFFFFFF : 0;
 
