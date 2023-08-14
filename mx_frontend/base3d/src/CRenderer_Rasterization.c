@@ -1017,8 +1017,8 @@ void fillTopFlat(int *coords, uint8_t colour) {
 
     dXDy1 = Div(dX1X0, dY0Y1);
     dXDy2 = Div(dX2X0, dY0Y2);
-    fX0 = x0; //p1
-    fX1 = x0; //p2
+    fX0 = x0; /* p1 */
+    fX1 = x0; /* p2 */
 
     for (; y >= yFinal; --y) {
         if (y < 0) {
@@ -1095,7 +1095,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
     FixP_t fDU2;
     FixP_t fDV1;
     FixP_t fDV2;
-    int yFinal = coords[5]; //not the lowest, neither the topmost
+    int yFinal = coords[5]; /* not the lowest, neither the topmost */
     int stipple;
     int farEnoughForStipple = (z >= distanceForPenumbra);
 
@@ -1250,7 +1250,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     FixP_t fDU2;
     FixP_t fDV2;
     int stipple;
-    int yFinal = coords[3]; //not the upper, not the lowest
+    int yFinal = coords[3]; /* not the upper, not the lowest */
     int farEnoughForStipple = (z >= distanceForPenumbra);
 
     FixP_t x0 = intToFix(coords[0]);
@@ -1285,8 +1285,8 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
 
     dXDy1 = Div(dX1X0, dY0Y1);
     dXDy2 = Div(dX2X0, dY0Y2);
-    fX0 = x0; //p1
-    fX1 = x0; //p2
+    fX0 = x0; /* p1 */
+    fX1 = x0; /* p2 */
 
     fV1 = fV2 = v0;
     fU1 = fU2 = u0;

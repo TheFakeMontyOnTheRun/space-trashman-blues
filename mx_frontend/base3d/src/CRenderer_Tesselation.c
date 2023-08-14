@@ -287,11 +287,11 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         llz1 = projectionVertices[2].second;
         lrz1 = projectionVertices[3].second;
 
-        coords[0] = fixToInt(llz1.mX); // 2
+        coords[0] = fixToInt(llz1.mX); /* 2 */
         coords[1] = fixToInt(llz1.mY);
-        coords[2] = fixToInt(lrz1.mX); // 3
+        coords[2] = fixToInt(lrz1.mX); /* 3 */
         coords[3] = fixToInt(lrz1.mY);
-        coords[4] = fixToInt(llz0.mX); // 0
+        coords[4] = fixToInt(llz0.mX); /* 0 */
         coords[5] = fixToInt(llz0.mY);
 
         if (p0.mZ < FIXP_DISTANCE_FOR_DARKNESS) {
@@ -316,11 +316,11 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
             fillTriangle(&coords[0], 0 );
         }
 
-        coords[0] = fixToInt(llz0.mX); //0
+        coords[0] = fixToInt(llz0.mX); /* 0 */
         coords[1] = fixToInt(llz0.mY);
-        coords[2] = fixToInt(lrz1.mX); //3
+        coords[2] = fixToInt(lrz1.mX); /* 3 */
         coords[3] = fixToInt(lrz1.mY);
-        coords[4] = fixToInt(lrz0.mX); //1
+        coords[4] = fixToInt(lrz0.mX); /* 1 */
         coords[5] = fixToInt(lrz0.mY);
 
         if (p0.mZ < FIXP_DISTANCE_FOR_DARKNESS) {
