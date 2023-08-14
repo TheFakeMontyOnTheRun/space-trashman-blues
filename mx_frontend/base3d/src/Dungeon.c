@@ -336,7 +336,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             }
         }
 
-        //for the elevators
+        /* for the elevators */
         if (currentPlayerRoom != getPlayerRoom()) {
             enable3DRendering = FALSE;
             enteredThru = 0 ;

@@ -909,7 +909,7 @@ void render(const long ms) {
 
                     addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + intToFix(1), 0);
 
-                    // lazy loading the item sprites
+                    /* lazy loading the item sprites */
                     if (itemSprites[itemsSnapshotElement] == NULL) {
                         char buffer[64];
                         sprintf(&buffer[0], "%s.img", getItem(itemsSnapshotElement)->name);
