@@ -30,7 +30,7 @@
 
 /*	Div(intToFix(1), intToFix(16));*/
 #define WALKING_BIAS 4096
-
+#define STANDARD_HEIGHT (Div(intToFix(230), intToFix(100)))
 int hasSnapshot = FALSE;
 FixP_t playerHeight = 0;
 FixP_t walkingBias = 0;
@@ -292,8 +292,6 @@ void render(const long ms) {
     }
 
     if (needsToRedrawVisibleMeshes) {
-        const FixP_t halfOne = Div(intToFix(1), intToFix(2));
-        FixP_t standardHeight = Div(intToFix(230), intToFix(100));
         uint8_t itemsSnapshotElement = 0xFF;
         struct Vec3 tmp, tmp2;
         struct CTile3DProperties *tileProp;
@@ -322,7 +320,7 @@ void render(const long ms) {
 
         cameraHeight = -2 * tileHeight;
 
-        mCamera.mY = cameraHeight - standardHeight;
+        mCamera.mY = cameraHeight - STANDARD_HEIGHT;
 
         for (distance = (MAP_SIZE + MAP_SIZE - 1); distance >= 0; --distance) {
             uint8_t bucketPos;
@@ -665,8 +663,8 @@ void render(const long ms) {
 
                     FixP_t adjust = 0;
 
-                    if (((heightDiff * 2) - intToFix(integerPart)) >= halfOne) {
-                        adjust = Div(halfOne, intToFix(8));
+                    if (((heightDiff * 2) - intToFix(integerPart)) >= Div(intToFix(1), intToFix(2))) {
+                        adjust = Div(Div(intToFix(1), intToFix(2)), intToFix(8));
                     }
 
                     switch (tileProp->mGeometryType) {
