@@ -122,9 +122,11 @@ void maskWall(
         FixP_t oneOverDx;
 
         if (dX > 0 && dX < intToFix(320)) {
-            oneOverDx = divLut[limit - x];
+	  oneOverDx = divLut[limit - x];
+	} else if (dX < 0 && dX > -intToFix(320)) {
+	  oneOverDx = -divLut[-limit + x];
         } else {
-            oneOverDx = Div(intToFix(1), dX);
+	  oneOverDx = Div(intToFix(1), dX);
         }
 
         upperDyDx = Mul(upperDy, oneOverDx);
@@ -280,9 +282,11 @@ void drawWall(FixP_t x0,
         FixP_t oneOverDx;
 
         if (dX > 0 && dX < intToFix(320)) {
-            oneOverDx = divLut[limit - x];
+	  oneOverDx = divLut[limit - x];
+	} else if (dX < 0 && dX > -intToFix(320)) {
+	  oneOverDx = -divLut[-limit + x];
         } else {
-            oneOverDx = Div(intToFix(1), dX);
+	  oneOverDx = Div(intToFix(1), dX);
         }
 
         upperDyDx = Mul(upperDy, oneOverDx);
@@ -486,6 +490,8 @@ void drawFrontWall(FixP_t x0,
 
     if (diffX > 0 && diffX < intToFix(320)) {
         du = Mul(FIXP_NATIVE_TEXTURE_SIZE, divLut[iX1 - iX0]);
+    } else if (diffX < 0 && diffX > -intToFix(320)) {
+        du = -Mul(FIXP_NATIVE_TEXTURE_SIZE, divLut[iX0 - iX1]);      
     } else {
         du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
     }
@@ -642,9 +648,11 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
     } else {
         FixP_t oneOverDy;
         if (dY > 0 && dY < intToFix(320)) {
-            oneOverDy = divLut[limit - y];
+	  oneOverDy = divLut[limit - y];
+	} else if (dY < 0 && dY > -intToFix(320)) {
+	  oneOverDy = -divLut[-limit + y];
         } else {
-            oneOverDy = Div(intToFix(1), dY);
+	  oneOverDy = Div(intToFix(1), dY);
         }
 
         leftDxDy = Mul(leftDX, oneOverDy);
@@ -797,9 +805,11 @@ void drawFloor(FixP_t y0,
     } else {
         FixP_t oneOverDy;
         if (dY > 0 && dY < intToFix(320)) {
-            oneOverDy = divLut[limit - y];
+	  oneOverDy = divLut[limit - y];
+	} else if (dY < 0 && dY > -intToFix(320)) {
+	  oneOverDy = -divLut[-limit + y];
         } else {
-            oneOverDy = Div(intToFix(1), dY);
+	  oneOverDy = Div(intToFix(1), dY);
         }
 
         leftDxDy = Mul(leftDX, oneOverDy);
@@ -846,6 +856,8 @@ void drawFloor(FixP_t y0,
         if (diffX != lastDiffX) {
             if (diffX > 0 && diffX < intToFix(320)) {
                 du = Mul(FIXP_NATIVE_TEXTURE_SIZE, divLut[iX1 - iX0]);
+	    } else if (diffX < 0 && diffX > -intToFix(320)) {
+                du = -Mul(FIXP_NATIVE_TEXTURE_SIZE, divLut[iX0 - iX1]);
             } else {
                 du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
             }
@@ -1179,6 +1191,8 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
             uint8_t *destination;
             if (limit > 0 && limit < 320) {
                 oneOverLimit = divLut[limit];
+	    } else if (limit < 0 && limit > -320) {
+                oneOverLimit = -divLut[-limit];
             } else {
                 oneOverLimit = Div(intToFix(1), (fX1 - fX0));
             }
@@ -1332,6 +1346,8 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
             uint8_t *destination;
             if (limit > 0 && limit < 320) {
                 oneOverLimit = divLut[limit];
+	    } else if (limit < 0 && limit > -320) {
+                oneOverLimit = -divLut[-limit];
             } else {
                 oneOverLimit = Div(intToFix(1), (fX1 - fX0));
             }
