@@ -1,4 +1,4 @@
-LDFLAGS= -L/usr/pkg/lib -L/usr/X11R7/lib -R/usr/X11R7/lib -lX11 -lXext -lXrandr -lXrender
+LDFLAGS= -L/usr/pkg/lib -L/usr/X11R7/lib -R/usr/X11R7/lib -lX11 -lXext -lXrender
 
 
 CFLAGS= -I/usr/X11R7/include \
