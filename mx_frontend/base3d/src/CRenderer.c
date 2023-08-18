@@ -28,8 +28,7 @@
 #include "Globals.h"
 #include "UI.h"
 
-/*	Div(intToFix(1), intToFix(16));*/
-#define WALKING_BIAS 4096
+#define WALKING_BIAS (Div(intToFix(1), intToFix(16)))
 #define STANDARD_HEIGHT (Div(intToFix(230), intToFix(100)))
 int hasSnapshot = FALSE;
 FixP_t playerHeight = 0;
@@ -498,64 +497,40 @@ void render(const long ms) {
                 heightDiff = tileProp->mCeilingHeight - tileProp->mFloorHeight;
                 lastElement = element;
 
+		tmp.mX = tmp2.mX = position.mX;
+		tmp.mZ = tmp2.mZ = position.mZ;
+
                 if (tileProp->mFloorRepeatedTextureIndex != 0xFF
                     && tileProp->mFloorRepetitions > 0) {
 
                     switch (tileProp->mGeometryType) {
                         case kRightNearWall:
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0,
-                                      ((tileProp->mFloorHeight * 2)
-                                       - intToFix(tileProp->mFloorRepetitions)),
-                                      0);
-
-                            drawRightNear(
-                                    tmp, intToFix(tileProp->mFloorRepetitions),
-                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex]
-                                            ->rowMajor,
-                                    facesMask, TRUE);
+			  tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) - intToFix(tileProp->mFloorRepetitions));
+			  drawRightNear(
+					tmp, intToFix(tileProp->mFloorRepetitions),
+					nativeTextures[tileProp->mFloorRepeatedTextureIndex]
+					->rowMajor,
+					facesMask, TRUE);
 
                             break;
 
                         case kLeftNearWall:
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0,
-                                      ((tileProp->mFloorHeight * 2)
-                                       - intToFix(tileProp->mFloorRepetitions)),
-                                      0);
-
+                            tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) - intToFix(tileProp->mFloorRepetitions));
                             drawLeftNear(
-                                    tmp, intToFix(tileProp->mFloorRepetitions),
-                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex]
-                                            ->rowMajor, facesMask, TRUE);
+					 tmp, intToFix(tileProp->mFloorRepetitions),
+					 nativeTextures[tileProp->mFloorRepeatedTextureIndex]
+					 ->rowMajor, facesMask, TRUE);
                             break;
 
                         case kCube:
                         case kRampNorth:
                         case kRampEast:
                         default:
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0,
-                                      ((tileProp->mFloorHeight * 2)
-                                       - intToFix(tileProp->mFloorRepetitions)),
-                                      0);
-
-                            drawColumnAt(
-                                    tmp, intToFix(tileProp->mFloorRepetitions),
-                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex],
-                                    facesMask, FALSE, TRUE);
+			  tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) - intToFix(tileProp->mFloorRepetitions));
+			  drawColumnAt(
+				       tmp, intToFix(tileProp->mFloorRepetitions),
+				       nativeTextures[tileProp->mFloorRepeatedTextureIndex],
+				       facesMask, FALSE, TRUE);
                             break;
                     }
                 }
@@ -565,16 +540,7 @@ void render(const long ms) {
 
                     switch (tileProp->mGeometryType) {
                         case kRightNearWall:
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0,
-                                      ((tileProp->mCeilingHeight * 2)
-                                       + intToFix(tileProp->mCeilingRepetitions)),
-                                      0);
-
+			  tmp.mY = position.mY + ((tileProp->mCeilingHeight * 2) + intToFix(tileProp->mCeilingRepetitions));
                             drawRightNear(
                                     tmp, intToFix(tileProp->mCeilingRepetitions),
                                     nativeTextures[tileProp->mCeilingRepeatedTextureIndex]
@@ -583,67 +549,37 @@ void render(const long ms) {
                             break;
 
                         case kLeftNearWall:
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0,
-                                      ((tileProp->mCeilingHeight * 2)
-                                       + intToFix(tileProp->mCeilingRepetitions)),
-                                      0);
-
-                            drawLeftNear(
-                                    tmp, intToFix(tileProp->mCeilingRepetitions),
-                                    nativeTextures[tileProp->mCeilingRepeatedTextureIndex]
-                                            ->rowMajor,
-                                    facesMask, TRUE);
+			  tmp.mY = position.mY + ((tileProp->mCeilingHeight * 2) + intToFix(tileProp->mCeilingRepetitions));
+			  drawLeftNear(
+				       tmp, intToFix(tileProp->mCeilingRepetitions),
+				       nativeTextures[tileProp->mCeilingRepeatedTextureIndex]
+				       ->rowMajor,
+				       facesMask, TRUE);
                             break;
 
                         case kCube:
                         case kRampNorth:
                         case kRampEast:
                         default:
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0,
-                                      ((tileProp->mCeilingHeight * 2)
-                                       + intToFix(tileProp->mCeilingRepetitions)),
-                                      0);
-
-                            drawColumnAt(
-                                    tmp, intToFix(tileProp->mCeilingRepetitions),
-                                    nativeTextures[tileProp->mCeilingRepeatedTextureIndex],
-                                    facesMask, FALSE, TRUE);
+			  tmp.mY = position.mY + ((tileProp->mCeilingHeight * 2) + intToFix(tileProp->mCeilingRepetitions));
+			  drawColumnAt(
+				       tmp, intToFix(tileProp->mCeilingRepetitions),
+				       nativeTextures[tileProp->mCeilingRepeatedTextureIndex],
+				       facesMask, FALSE, TRUE);
                             break;
                     }
                 }
 
                 if (tileProp->mFloorTextureIndex != 0xFF) {
-
-                    tmp.mX = position.mX;
-                    tmp.mY = position.mY;
-                    tmp.mZ = position.mZ;
-
-                    addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2), 0);
-
-
-                    drawFloorAt(tmp, nativeTextures[tileProp->mFloorTextureIndex], cameraDirection);
+		  tmp.mY = position.mY + (tileProp->mFloorHeight * 2);
+		  drawFloorAt(tmp, nativeTextures[tileProp->mFloorTextureIndex], cameraDirection);
                 }
 
                 if (tileProp->mCeilingTextureIndex != 0xFF) {
-
                     uint8_t newDirection = cameraDirection;
 
-                    tmp.mX = position.mX;
-                    tmp.mY = position.mY;
-                    tmp.mZ = position.mZ;
-
-                    addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
-
+		    tmp.mY = position.mY + (tileProp->mCeilingHeight * 2);
+		    
                     if (cameraDirection == kNorth) {
                         newDirection = kSouth;
                     }
@@ -669,15 +605,8 @@ void render(const long ms) {
 
                     switch (tileProp->mGeometryType) {
                         case kWallNorth:
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0,
-                                      ((tileProp->mFloorHeight * 2) + heightDiff),
-                                      0);
-
+			  tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) + heightDiff);
+			  
                             switch (cameraDirection) {
                                 case kNorth:
                                     facesMask = MASK_BEHIND;
@@ -702,15 +631,7 @@ void render(const long ms) {
                                          tileProp->mRepeatMainTexture);
                             break;
                         case kWallWest:
-
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0,
-                                      ((tileProp->mFloorHeight * 2) + heightDiff),
-                                      0);
+                            tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) + heightDiff);
 
                             switch (cameraDirection) {
                                 case kNorth:
@@ -737,15 +658,7 @@ void render(const long ms) {
                             break;
 
                         case kWallCorner:
-
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0,
-                                      ((tileProp->mFloorHeight * 2) + heightDiff),
-                                      0);
+                            tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) + heightDiff);
 
                             switch (cameraDirection) {
                                 case kNorth:
@@ -772,14 +685,7 @@ void render(const long ms) {
                             break;
 
                         case kRightNearWall:
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0,
-                                      ((tileProp->mFloorHeight * 2) + heightDiff),
-                                      0);
+			  tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) + heightDiff);
 
                             drawRightNear(
                                     tmp, (heightDiff + adjust),
@@ -788,14 +694,7 @@ void render(const long ms) {
                             break;
 
                         case kLeftNearWall:
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0,
-                                      ((tileProp->mFloorHeight * 2) + heightDiff),
-                                      0);
+			  tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) + heightDiff);
 
                             drawLeftNear(
                                     tmp, (heightDiff + adjust),
@@ -805,19 +704,10 @@ void render(const long ms) {
 
                         case kRampNorth: {
                             uint8_t flipTextureVertical = 0;
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            tmp2.mX = position.mX;
-                            tmp2.mY = position.mY;
-                            tmp2.mZ = position.mZ;
-
+                            tmp.mY = position.mY + (tileProp->mFloorHeight * 2);
+                            tmp2.mY = position.mY + (tileProp->mCeilingHeight * 2);
 
                             flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kEast);
-
-                            addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2), 0);
-                            addToVec3(&tmp2, 0, (tileProp->mCeilingHeight * 2), 0);
 
                             drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection, flipTextureVertical);
                         }
@@ -825,17 +715,8 @@ void render(const long ms) {
 
                         case kRampSouth: {
                             uint8_t flipTextureVertical = 0;
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            tmp2.mX = position.mX;
-                            tmp2.mY = position.mY;
-                            tmp2.mZ = position.mZ;
-
-
-                            addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
-                            addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
+                            tmp.mY = position.mY + (tileProp->mCeilingHeight * 2);
+                            tmp2.mY = position.mY + (tileProp->mFloorHeight * 2);
 
                             flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kWest);
 
@@ -845,18 +726,10 @@ void render(const long ms) {
 
                         case kRampEast: {
                             uint8_t flipTextureVertical = 0;
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            tmp2.mX = position.mX;
-                            tmp2.mY = position.mY;
-                            tmp2.mZ = position.mZ;
+                            tmp.mY = position.mY + (tileProp->mCeilingHeight * 2);
+                            tmp2.mY = position.mY + (tileProp->mFloorHeight * 2);
 
                             flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kEast);
-
-                            addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
-                            addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
 
                             drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex],
                                        (cameraDirection + 1) & 3, flipTextureVertical);
@@ -864,17 +737,8 @@ void render(const long ms) {
                             break;
                         case kRampWest: {
                             uint8_t flipTextureVertical = 0;
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            tmp2.mX = position.mX;
-                            tmp2.mY = position.mY;
-                            tmp2.mZ = position.mZ;
-
-
-                            addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
-                            addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
+                            tmp.mY = position.mY + (tileProp->mCeilingHeight * 2);
+                            tmp2.mY = position.mY + (tileProp->mFloorHeight * 2);
 
                             flipTextureVertical = (cameraDirection == kNorth || cameraDirection == kWest );
 
@@ -883,15 +747,7 @@ void render(const long ms) {
                         }
                             break;
                         case kCube:
-
-                            tmp.mX = position.mX;
-                            tmp.mY = position.mY;
-                            tmp.mZ = position.mZ;
-
-                            addToVec3(&tmp, 0,
-                                      ((tileProp->mFloorHeight * 2) + heightDiff),
-                                      0);
-
+                            tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) + heightDiff);
                             drawColumnAt(tmp, (heightDiff + adjust),
                                          nativeTextures[tileProp->mMainWallTextureIndex],
                                          facesMask, tileProp->mNeedsAlphaTest,
@@ -903,11 +759,7 @@ void render(const long ms) {
 
 
                 if (itemsSnapshotElement != 0xFF) {
-                    tmp.mX = position.mX;
-                    tmp.mY = position.mY;
-                    tmp.mZ = position.mZ;
-
-                    addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + intToFix(1), 0);
+                    tmp.mY = position.mY + (tileProp->mFloorHeight * 2) + intToFix(1);
 
                     /* lazy loading the item sprites */
                     if (itemSprites[itemsSnapshotElement] == NULL) {
