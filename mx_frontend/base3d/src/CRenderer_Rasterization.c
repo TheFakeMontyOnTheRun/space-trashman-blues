@@ -865,7 +865,7 @@ void drawFloor(FixP_t y0,
         }
 
         if (ix < 0) {
-            FixP_t diff = intToFix((-ix + 0));
+            FixP_t diff = intToFix((-ix));
             u += Mul(diff, du);
             ix = 0;
         }
