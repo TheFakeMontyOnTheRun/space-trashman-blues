@@ -58,7 +58,7 @@ void projectAllVertices(const uint8_t count) {
 				z = FIXP_ONE;
 			}
 
-            oneOver = oneOverZMap[ fixToInt( Mul( intToFix(4), z) ) ];
+            oneOver = oneOverZMap[ fixToInt(z * 4) ];
         }
 
 		vertex->second.mX = (FIXP_HALF_XRES + Mul(vertex->first.mX + xCameraOffset, oneOver));
