@@ -188,9 +188,12 @@ void titleScreen(void) {
 
   drawGraphic(shapes);
 
-  writeStr(16, 1, "Sub Mare Imperium: Derelict");
-  writeStr(16, 4, "by Daniel Monteiro");
-  writeStr(16, 6, " Press SPACE to start ");
+#ifndef GAMEPAD
+  writeStr(16, 1, "Sub Mare\nImperium:\nDerelict\nby\nDaniel Monteiro\nPress SPACE to\nstart ");
+#else
+  writeStr(16, 1, "Sub Mare\nImperium:\nDerelict\nby\nDaniel Monteiro\nPress Start!");
+#endif
+
 #ifdef SDLW
     /* Just to keep the OS happy */
     flushVirtualFramebuffer();
