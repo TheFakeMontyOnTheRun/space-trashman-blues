@@ -1302,7 +1302,7 @@ void interactWithItemInRoom(void) {
         if (itemToPick != NULL) {
             if (focusedItem != NULL) {
                 item = getItem(focusedItem->item);
-                if (item != NULL) {
+                if (item != NULL && item->useWithCallback) {
                     item->useWithCallback(item, itemToPick);
                 }
             }
