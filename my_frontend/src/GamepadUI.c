@@ -61,9 +61,11 @@ char *menuItems[] = {
             break;
         case 4:
             nextItemInHand();
+            HUD_refresh();
             break;
         case 5:
             nextItemInRoom();
+            HUD_refresh();
             break;
     }
 }
