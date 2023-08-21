@@ -4,8 +4,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include "FixP.h"
@@ -90,9 +92,9 @@ void Crawler_initialPaintCallback() {
     fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, 0, FALSE);
 
     fill((XRES_FRAMEBUFFER / 2) - (9 * 8) - 1, textPosY * 8, 18 * 8 + 3, 8, 255, FALSE);
-    drawRect((XRES_FRAMEBUFFER / 2) - (9 * 8) - 1, (textPosY  * 8 ) - 8 - 1, 18 * 8 + 2, 8 + 2, 255);
+    drawRect((XRES_FRAMEBUFFER / 2) - (9 * 8) - 1, (textPosY * 8) - 8 - 1, 18 * 8 + 2, 8 + 2, 255);
 
-    drawTextAt(((XRES_FRAMEBUFFER / 8) / 2)- 7, textPosY + 1, "Loading", 0);
+    drawTextAt(((XRES_FRAMEBUFFER / 8) / 2) - 7, textPosY + 1, "Loading", 0);
     drawTextAt(((XRES_FRAMEBUFFER / 8) / 2) - 7, textPosY, "Please wait...", 255);
 
     needToRedrawHUD = TRUE;
@@ -149,11 +151,11 @@ void Crawler_repaintCallback() {
         }
     } else {
 
-        if  (currentPresentationState == kRoomTransitioning ) {
+        if (currentPresentationState == kRoomTransitioning) {
 
             struct Vec3 center;
 
-            if ( !enableSmoothMovement ) {
+            if (!enableSmoothMovement) {
                 currentPresentationState = kWaitingForInput;
                 zCameraOffset = xCameraOffset = yCameraOffset = 0;
                 needToRedrawHUD = TRUE;
@@ -165,52 +167,49 @@ void Crawler_repaintCallback() {
             fill(0, 0, XRES + 1, YRES, 0, 0);
 
 
-
             center.mY = 0;
             center.mZ = intToFix(3);
             center.mX = -intToFix(3);
-            drawColumnAt( center, intToFix(3), nativeTextures[1], MASK_LEFT, 0, 1);
-
+            drawColumnAt(center, intToFix(3), nativeTextures[1], MASK_LEFT, 0, 1);
 
 
             center.mY = 0;
             center.mX = intToFix(3);
-            drawColumnAt( center, intToFix(3), nativeTextures[1], MASK_RIGHT, 0, 1);
+            drawColumnAt(center, intToFix(3), nativeTextures[1], MASK_RIGHT, 0, 1);
 
 
             center.mZ = intToFix(2);
             center.mX = -intToFix(1);
 
             center.mY = intToFix(4) - zCameraOffset;
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
 
             center.mX = intToFix(1);
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
 
             center.mY = intToFix(2) - zCameraOffset;
 
             center.mZ = intToFix(3);
-            drawCeilingAt( center, nativeTextures[0], 0);
+            drawCeilingAt(center, nativeTextures[0], 0);
 
             center.mZ = intToFix(2);
 
             center.mY = intToFix(3) - zCameraOffset;
 
             center.mX = -intToFix(1);
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
 
             center.mX = intToFix(1);
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
 
 
             center.mY = intToFix(6) - zCameraOffset;
 
             center.mX = -intToFix(1);
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+            drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
 
             center.mX = intToFix(1);
-            drawBillboardAt( center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
-
+            drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
 
 
             center.mX = -intToFix(1);
@@ -218,19 +217,19 @@ void Crawler_repaintCallback() {
             center.mY = intToFix(2) - zCameraOffset;
 
             center.mZ = intToFix(3);
-            drawCeilingAt( center, nativeTextures[0], 0);
+            drawCeilingAt(center, nativeTextures[0], 0);
 
             drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, 255);
 
             zCameraOffset -= Div(intToFix(1), intToFix(4));
-            if (zCameraOffset == 0 ) {
+            if (zCameraOffset == 0) {
                 int chanceForRandomBattle = getRoom(getPlayerRoom())->chanceOfRandomBattle;
                 int diceRoll;
 
                 //tmp
                 diceRoll = 0xFF;
 
-                if (diceRoll <= chanceForRandomBattle ) {
+                if (diceRoll <= chanceForRandomBattle) {
                     currentPresentationState = kEnteringRandomBattle;
                 } else {
                     currentPresentationState = kWaitingForInput;
@@ -240,7 +239,7 @@ void Crawler_repaintCallback() {
             return;
         }
 
-        if (currentPresentationState == kWaitingForInput ) {
+        if (currentPresentationState == kWaitingForInput) {
             renderTick(30);
         }
     }
@@ -292,7 +291,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
                         cursorPosition = AbandonMission_count - 1;
                     }
 
-                    if (cursorPosition < 0 ) {
+                    if (cursorPosition < 0) {
                         cursorPosition = 0;
                     }
 
@@ -323,7 +322,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
         }
 
 
-        switch(cmd) {
+        switch (cmd) {
             case kCommandUp:
                 playSound(MENU_SELECTION_CHANGE_SOUND);
                 cursorPosition = (cursorPosition - 1);

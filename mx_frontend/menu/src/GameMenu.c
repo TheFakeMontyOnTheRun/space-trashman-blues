@@ -1,8 +1,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include <stdio.h>
@@ -67,7 +69,7 @@ void GameMenu_initStateCallback(int32_t tag) {
     cursorPosition = 0;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
-    memFill (textBuffer, ' ', 40 * 25);
+    memFill(textBuffer, ' ', 40 * 25);
     drawFilter = FALSE;
 
     switch (tag) {
@@ -144,16 +146,16 @@ void GameMenu_initStateCallback(int32_t tag) {
             GameMenu_StateTitle = "CyDeck";
 
             head = getPlayerItems();
-            
+
             while (head != NULL && index < currentSelectedItem) {
                 ++index;
                 head = head->next;
             }
-            
-            if (head != NULL && getItem(head->item) != NULL ) {
+
+            if (head != NULL && getItem(head->item) != NULL) {
                 struct Item *item = getItem(head->item);
                 mainText = item->name;
-#ifdef INCLUDE_ITEM_DESCRIPTIONS                
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                 strcpy(textBuffer, item->info);
 #endif
                 GameMenu_optionsCount = 1;
@@ -178,7 +180,7 @@ void GameMenu_initStateCallback(int32_t tag) {
 }
 
 void GameMenu_initialPaintCallback(void) {
-    fill(0, 0, (XRES_FRAMEBUFFER-1), (YRES_FRAMEBUFFER-1), getPaletteEntry(0xFF6cb1a3), 0);
+    fill(0, 0, (XRES_FRAMEBUFFER - 1), (YRES_FRAMEBUFFER - 1), getPaletteEntry(0xFF6cb1a3), 0);
 }
 
 void GameMenu_repaintCallback(void) {
@@ -214,7 +216,8 @@ void GameMenu_repaintCallback(void) {
         drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, (YRES_FRAMEBUFFER / 8) - 5, GameMenu_StateTitle, textBuffer);
     }
 
-    drawWindow((XRES_FRAMEBUFFER / 8) - biggestOption - 3, (YRES_FRAMEBUFFER / 8) - (optionsHeight / 8) - 3, biggestOption + 2, (optionsHeight / 8) + 2,
+    drawWindow((XRES_FRAMEBUFFER / 8) - biggestOption - 3, (YRES_FRAMEBUFFER / 8) - (optionsHeight / 8) - 3,
+               biggestOption + 2, (optionsHeight / 8) + 2,
                GameMenu_StateTitle);
 
     for (c = 0; c < GameMenu_optionsCount; ++c) {
@@ -234,7 +237,8 @@ void GameMenu_repaintCallback(void) {
         }
 
         drawTextAt(
-                (XRES_FRAMEBUFFER / 8) - biggestOption - 2, (((YRES_FRAMEBUFFER / 8) + 1) - GameMenu_optionsCount) + c - 2,
+                (XRES_FRAMEBUFFER / 8) - biggestOption - 2,
+                (((YRES_FRAMEBUFFER / 8) + 1) - GameMenu_optionsCount) + c - 2,
                 &GameMenu_options[c][0],
                 isCursor ? (shouldGreyOut ? 128 : 200) : (shouldGreyOut ? 64 : 0));
     }
@@ -281,7 +285,7 @@ enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long delta) {
                     cursorPosition = GameMenu_optionsCount - 1;
                 }
 
-                if (cursorPosition < 0 ) {
+                if (cursorPosition < 0) {
                     cursorPosition = 0;
                 }
 

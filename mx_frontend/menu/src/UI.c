@@ -46,22 +46,23 @@ drawWindow(const int x, const int y, const unsigned int dx, const unsigned int d
 }
 
 int
-drawAppearingWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char * title, long remainingTime) {
+drawAppearingWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title,
+                    long remainingTime) {
 
     if (remainingTime > 256) {
         return 0;
     }
 
-   if (remainingTime > 0) {
+    if (remainingTime > 0) {
 
         int middleX = x + (dx / 2);
         int middleY = y + (dy / 2);
 
         int invertedProgression = ((256 - (remainingTime)) / 32) * 32;
-        int lerpPositionX = lerpInt( middleX, x, invertedProgression, 256);
-        int lerpPositionWidth = lerpInt( 0, dx, invertedProgression, 256);
+        int lerpPositionX = lerpInt(middleX, x, invertedProgression, 256);
+        int lerpPositionWidth = lerpInt(0, dx, invertedProgression, 256);
         int lerpPositionY = lerpInt(middleY, y, invertedProgression, 256);
-        int lerpPositionHeight = lerpInt( 0, dy, invertedProgression, 256);
+        int lerpPositionHeight = lerpInt(0, dy, invertedProgression, 256);
 
         drawRect(lerpPositionX * 8,
                  lerpPositionY * 8,
@@ -108,18 +109,18 @@ void updateMap(void) {
     for (z = -8; z < 8; ++z) {
         for (x = -10; x < 10; ++x) {
             if (isPositionAllowed(visPos.x + x, visPos.y + z)) {
-                fill(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4,192, FALSE);
+                fill(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4, 192, FALSE);
             }
         }
     }
 
-    fill(XRES + 8 + (10 * 4), 2 + 8 + (8 * 4), 4, 4,32, FALSE);
+    fill(XRES + 8 + (10 * 4), 2 + 8 + (8 * 4), 4, 4, 32, FALSE);
 }
 
 void redrawHUD(void) {
     int line = 0;
     struct ObjectNode *head;
-    struct Item* itemPtr;
+    struct Item *itemPtr;
     fill(XRES, 0, XRES_FRAMEBUFFER - XRES, YRES, 0, FALSE);
     drawTextAt(1 + (XRES / 8), 1, " Map:", 255);
 
@@ -146,10 +147,11 @@ void redrawHUD(void) {
                     itemSprites[itemIndex] = loadBitmap(&buffer[0]);
                 }
 
-                drawBitmapRaw(XRES + 8, YRES- 16 - 16, 16, 16, itemSprites[itemIndex]->data, 1);
+                drawBitmapRaw(XRES + 8, YRES - 16 - 16, 16, 16, itemSprites[itemIndex]->data, 1);
 
-                drawTextAtWithMarginWithFiltering(2 + ((XRES) / 8), ((YRES_FRAMEBUFFER / 8) + 1) - 2, 311, itemPtr->name,
-                                     itemPtr->active ? 192 : 255, '\n');
+                drawTextAtWithMarginWithFiltering(2 + ((XRES) / 8), ((YRES_FRAMEBUFFER / 8) + 1) - 2, 311,
+                                                  itemPtr->name,
+                                                  itemPtr->active ? 192 : 255, '\n');
             }
             ++line;
         }
