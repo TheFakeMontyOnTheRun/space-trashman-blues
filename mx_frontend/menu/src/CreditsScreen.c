@@ -1,8 +1,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include <stdio.h>
@@ -42,12 +44,12 @@ void CreditsScreen_initStateCallback(int32_t tag) {
     cursorPosition = 0;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
-    memFill (textBuffer, ' ', 40 * 25);
+    memFill(textBuffer, ' ', 40 * 25);
 
     mainText = textBuffer;
-    memFill (textBuffer, 0, (40 * 25));
-	textFile = loadBinaryFileFromPath("Credits.txt");
-    memCopyToFrom(textBuffer, (void*)textFile.data, textFile.size);
+    memFill(textBuffer, 0, (40 * 25));
+    textFile = loadBinaryFileFromPath("Credits.txt");
+    memCopyToFrom(textBuffer, (void *) textFile.data, textFile.size);
     disposeDiskBuffer(textFile);
 
 
@@ -57,14 +59,14 @@ void CreditsScreen_initStateCallback(int32_t tag) {
 void CreditsScreen_initialPaintCallback(void) {
     dirtyLineY0 = 0;
     dirtyLineY1 = YRES_FRAMEBUFFER;
-    fill(0, 0, (XRES_FRAMEBUFFER-1), (YRES_FRAMEBUFFER-1), getPaletteEntry(0xFF6cb1a3), 0);
+    fill(0, 0, (XRES_FRAMEBUFFER - 1), (YRES_FRAMEBUFFER - 1), getPaletteEntry(0xFF6cb1a3), 0);
 }
 
 void CreditsScreen_repaintCallback(void) {
     int lines = countLines();
     int c;
     int optionsHeight = 8 * (CreditsScreen_optionsCount);
-    size_t len = max( strlen("Options"), strlen(CreditsScreen_options[0]));
+    size_t len = max(strlen("Options"), strlen(CreditsScreen_options[0]));
 
     if (currentPresentationState == kAppearing) {
 
@@ -88,7 +90,7 @@ void CreditsScreen_repaintCallback(void) {
                  lerpoSixtyFooooooouuuuuuur, 0);
 
         drawRect(XRES_FRAMEBUFFER - 16 - (len * 8) - 16 + (len * 8 / 2) - lerpLen / 2,
-				 YRES_FRAMEBUFFER - optionsHeight - 16 - 16 + optionsHeight / 2
+                 YRES_FRAMEBUFFER - optionsHeight - 16 - 16 + optionsHeight / 2
                  - lerpOptionsHeight / 2,
                  lerpLen + 16, lerpOptionsHeight + 16, 0);
 
@@ -108,7 +110,7 @@ void CreditsScreen_repaintCallback(void) {
         drawTextAt(1, 3, mainText, 0);
     }
 
-    drawImageWindow(2,  (YRES_FRAMEBUFFER - 72) / 8, monty->width / 8, (monty->height / 8) + 1, "Monty", monty);
+    drawImageWindow(2, (YRES_FRAMEBUFFER - 72) / 8, monty->width / 8, (monty->height / 8) + 1, "Monty", monty);
 
     drawWindow(
             (XRES_FRAMEBUFFER / 8) - (int) len - 3,
@@ -176,7 +178,7 @@ enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
                     cursorPosition = CreditsScreen_optionsCount - 1;
                 }
 
-                if (cursorPosition < 0 ) {
+                if (cursorPosition < 0) {
                     cursorPosition = 0;
                 }
                 break;

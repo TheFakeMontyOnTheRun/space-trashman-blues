@@ -5,6 +5,7 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
 
@@ -43,7 +44,7 @@ int AbandonMission_count = 2;
 extern struct GameSnapshot gameSnapshot;
 
 void Crawler_initStateCallback(int32_t tag) {
-	int c;
+    int c;
 
     if (tag == kPlayGame) {
         initStation();
@@ -87,7 +88,7 @@ void Crawler_initialPaintCallback() {
 }
 
 void Crawler_repaintCallback() {
-    
+
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = TRUE;
 
@@ -105,7 +106,7 @@ void Crawler_repaintCallback() {
              (biggestOption * 8) + 16, optionsHeight + 16, getPaletteEntry(0xFFFFFFFF), FALSE);
 
         drawRect(XRES_FRAMEBUFFER - (biggestOption * 8) - 16 - 16,
-				 YRES_FRAMEBUFFER - optionsHeight - 16 - 16, (biggestOption * 8) + 16,
+                 YRES_FRAMEBUFFER - optionsHeight - 16 - 16, (biggestOption * 8) + 16,
                  optionsHeight + 16, getPaletteEntry(0xFF000000));
 
         if (AbandonMission_Title != NULL) {
@@ -139,11 +140,11 @@ void Crawler_repaintCallback() {
         }
     } else {
 
-        if  (currentPresentationState == kRoomTransitioning ) {
+        if (currentPresentationState == kRoomTransitioning) {
 
             struct Vec3 center;
 
-            if ( !enableSmoothMovement ) {
+            if (!enableSmoothMovement) {
                 currentPresentationState = kWaitingForInput;
                 zCameraOffset = xCameraOffset = yCameraOffset = 0;
                 needToRedrawHUD = TRUE;
@@ -152,70 +153,71 @@ void Crawler_repaintCallback() {
 
             xCameraOffset = yCameraOffset = 0;
 
-			enter3D();
+            enter3D();
 
             center.mY = 0;
             center.mZ = intToFix(3);
             center.mX = -intToFix(3);
-            drawColumnAt( center, intToFix(2), nativeTextures[1], MASK_LEFT, 0, 1);
+            drawColumnAt(center, intToFix(2), nativeTextures[1], MASK_LEFT, 0, 1);
 
             center.mY = 0;
             center.mX = intToFix(3);
-            drawColumnAt( center, intToFix(2), nativeTextures[1], MASK_RIGHT, 0, 1);
+            drawColumnAt(center, intToFix(2), nativeTextures[1], MASK_RIGHT, 0, 1);
 
             center.mZ = intToFix(2);
             center.mX = -intToFix(1);
             center.mY = intToFix(4) - zCameraOffset;
-            drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
+            drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
 
             center.mX = intToFix(1);
-            drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
+            drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
 
             center.mZ = intToFix(2);
             center.mY = intToFix(3) - zCameraOffset;
 
             center.mX = -intToFix(1);
-            drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
+            drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
 
             center.mX = intToFix(1);
-            drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
+            drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
 
 
             center.mY = intToFix(5) - zCameraOffset;
 
             center.mX = -intToFix(1);
-            drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
+            drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
 
             center.mX = intToFix(1);
-            drawBillboardAt( center, nativeTextures[0], intToFix(1), 32);
+            drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
 
-			enter2D();
+            enter2D();
 
-            drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, getPaletteEntry(0xFFFFFFFF));
+            drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName,
+                                 getPaletteEntry(0xFFFFFFFF));
 
             zCameraOffset -= Div(intToFix(1), intToFix(32));
 
-            if (zCameraOffset == 0 ) {
+            if (zCameraOffset == 0) {
                 int chanceForRandomBattle = getRoom(getPlayerRoom())->chanceOfRandomBattle;
                 int diceRoll;
 
                 //tmp
                 diceRoll = 0xFF;
 
-                if (diceRoll <= chanceForRandomBattle ) {
+                if (diceRoll <= chanceForRandomBattle) {
                     currentPresentationState = kEnteringRandomBattle;
                 } else {
                     currentPresentationState = kWaitingForInput;
-					needsToRedrawVisibleMeshes = TRUE;
-					gameTicks = 0;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    gameTicks = 0;
                     needToRedrawHUD = TRUE;
                 }
             }
             return;
         }
 
-        if (currentPresentationState == kWaitingForInput ) {
-			drawTextAtWithMargin(1, 1, XRES, thisMissionName, getPaletteEntry(0xFFFFFFFF));
+        if (currentPresentationState == kWaitingForInput) {
+            drawTextAtWithMargin(1, 1, XRES, thisMissionName, getPaletteEntry(0xFFFFFFFF));
             renderTick(30);
         }
     }
@@ -224,7 +226,7 @@ void Crawler_repaintCallback() {
 enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     int returnCode;
 
-    if (kEnteringRandomBattle == currentPresentationState ) {
+    if (kEnteringRandomBattle == currentPresentationState) {
         return kRandomBattle;
     }
 
@@ -269,7 +271,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
                         cursorPosition = AbandonMission_count - 1;
                     }
 
-                    if (cursorPosition < 0 ) {
+                    if (cursorPosition < 0) {
                         cursorPosition = 0;
                     }
 
@@ -283,7 +285,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
                 case kCommandFire1:
                 case kCommandFire2:
                 case kCommandFire3:
-				case kCommandBack:
+                case kCommandBack:
                     if (cursorPosition == 0) {
                         showPromptToAbandonMission = FALSE;
                         needsToRedrawVisibleMeshes = TRUE;
@@ -300,7 +302,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
         }
 
 
-        switch(cmd) {
+        switch (cmd) {
             case kCommandUp:
                 playSound(MENU_SELECTION_CHANGE_SOUND);
                 cursorPosition = (cursorPosition - 1);

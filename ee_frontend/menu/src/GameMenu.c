@@ -1,8 +1,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include <stdio.h>
@@ -65,7 +67,7 @@ void GameMenu_initStateCallback(int32_t tag) {
     cursorPosition = 0;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
-    memFill (&textBuffer[0], ' ', 40 * 25);
+    memFill(&textBuffer[0], ' ', 40 * 25);
     drawFilter = FALSE;
 
     switch (tag) {
@@ -82,7 +84,7 @@ void GameMenu_initStateCallback(int32_t tag) {
 
 
         case kGoodVictoryEpilogue:
-            sprintf (textBuffer, "Victory! You managed to destroy the\nship and get out alive\n\n\n\n\n\n");
+            sprintf(textBuffer, "Victory! You managed to destroy the\nship and get out alive\n\n\n\n\n\n");
             mainText = &textBuffer[0];
 
             GameMenu_StateTitle = "Victory";
@@ -93,7 +95,7 @@ void GameMenu_initStateCallback(int32_t tag) {
             break;
 
         case kBadVictoryEpilogue:
-            sprintf (textBuffer, "Victory! Too bad you didn't survive\nto tell the story\n\n\n\n\n\n");
+            sprintf(textBuffer, "Victory! Too bad you didn't survive\nto tell the story\n\n\n\n\n\n");
             mainText = &textBuffer[0];
 
             GameMenu_StateTitle = "Victory";
@@ -105,11 +107,11 @@ void GameMenu_initStateCallback(int32_t tag) {
             break;
 
         case kGoodGameOverEpilogue:
-            sprintf (textBuffer,
-                     "You failed! While you fled the ship\n"
-                     "alive, you failed to prevent the \n"
-                     "worstscenario and now EVERYBODY is\n"
-                     "dead (and that includes you!)\n\n\n\n\n");
+            sprintf(textBuffer,
+                    "You failed! While you fled the ship\n"
+                    "alive, you failed to prevent the \n"
+                    "worstscenario and now EVERYBODY is\n"
+                    "dead (and that includes you!)\n\n\n\n\n");
             mainText = &textBuffer[0];
 
             GameMenu_StateTitle = "Game Over";
@@ -120,10 +122,10 @@ void GameMenu_initStateCallback(int32_t tag) {
             break;
 
         case kBadGameOverEpilogue:
-            sprintf (textBuffer,
-                     "You're dead! And so are millions of\n"
-                     "other people on the path of\n"
-                     "destruction faulty reactor\n\n\n\n\n\n");
+            sprintf(textBuffer,
+                    "You're dead! And so are millions of\n"
+                    "other people on the path of\n"
+                    "destruction faulty reactor\n\n\n\n\n\n");
             mainText = &textBuffer[0];
 
             GameMenu_StateTitle = "Game Over";
@@ -134,7 +136,7 @@ void GameMenu_initStateCallback(int32_t tag) {
             break;
 
         case kPrologue:
-            sprintf (textBuffer, "Out of prison");
+            sprintf(textBuffer, "Out of prison");
             mainText = &textBuffer[0];
 
             GameMenu_StateTitle = "Everything's changed...but still feels the same.";
@@ -151,16 +153,16 @@ void GameMenu_initStateCallback(int32_t tag) {
             GameMenu_StateTitle = "CyDeck";
 
             head = getPlayerItems();
-            
+
             while (head != NULL && index < currentSelectedItem) {
                 ++index;
                 head = head->next;
             }
-            
-            if (head != NULL && getItem(head->item) != NULL ) {
+
+            if (head != NULL && getItem(head->item) != NULL) {
                 struct Item *item = getItem(head->item);
                 mainText = item->name;
-#ifdef INCLUDE_ITEM_DESCRIPTIONS                
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
                 strcpy(&textBuffer[0], item->info);
 #endif
                 GameMenu_optionsCount = 1;
@@ -190,7 +192,7 @@ void GameMenu_repaintCallback(void) {
     int c;
     int16_t optionsHeight = 8 * (GameMenu_optionsCount);
 
-	fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), 0);
+    fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), 0);
 
     if (currentPresentationState == kAppearing) {
         int invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;
@@ -286,7 +288,7 @@ enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long delta) {
                     cursorPosition = GameMenu_optionsCount - 1;
                 }
 
-                if (cursorPosition < 0 ) {
+                if (cursorPosition < 0) {
                     cursorPosition = 0;
                 }
 
@@ -315,8 +317,8 @@ enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void GameMenu_unloadStateCallback(int32_t newState) {
-        if (featuredBitmap) {
-            releaseBitmap(featuredBitmap);
-            featuredBitmap = NULL;
-        }
+    if (featuredBitmap) {
+        releaseBitmap(featuredBitmap);
+        featuredBitmap = NULL;
+    }
 }

@@ -6,8 +6,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include "Enums.h"
@@ -38,7 +40,7 @@ struct Vec2i transform(const enum EDirection from, const struct Vec2i currentPos
 
     switch (from) {
         case kNorth:
-             return currentPos;
+            return currentPos;
             break;
         case kSouth:
             toReturn.x = (MAP_SIZE - currentPos.x - 1);
@@ -80,19 +82,19 @@ void castVisibility(const enum EDirection from,
     uint8_t bucketPositions[MAP_SIZE + MAP_SIZE];
 
     if (cleanPrevious) {
-        memFill (visMap, 0, sizeof(kInvisible) * MAP_SIZE * MAP_SIZE);
+        memFill(visMap, 0, sizeof(kInvisible) * MAP_SIZE * MAP_SIZE);
     }
 
     *stackHead = originalPos;
     ++stackHead;
 
-    memFill (distances, -128, sizeof(struct Vec2i) * 2 * MAP_SIZE * MAP_SIZE);
-    memFill (&bucketPositions, 0, sizeof(uint8_t) * (MAP_SIZE + MAP_SIZE));
+    memFill(distances, -128, sizeof(struct Vec2i) * 2 * MAP_SIZE * MAP_SIZE);
+    memFill(&bucketPositions, 0, sizeof(uint8_t) * (MAP_SIZE + MAP_SIZE));
 
     while (stackHead != stackRoot) {
         struct Vec2i transformed;
         int verticalDistance;
-	int horizontalDistance;
+        int horizontalDistance;
         int manhattanDistance;
         int narrowing;
 
@@ -100,15 +102,15 @@ void castVisibility(const enum EDirection from,
 
         currentPos = *stackHead;
 
-	if (from != kNorth) {
-	  transformed = transform(from, currentPos);
-	} else {
-	  transformed = currentPos;
-	}
-	
-	if (!(0 <= transformed.x && transformed.x < MAP_SIZE && 0 <= transformed.y && transformed.y < MAP_SIZE) ) {
-	  continue;
-	}
+        if (from != kNorth) {
+            transformed = transform(from, currentPos);
+        } else {
+            transformed = currentPos;
+        }
+
+        if (!(0 <= transformed.x && transformed.x < MAP_SIZE && 0 <= transformed.y && transformed.y < MAP_SIZE)) {
+            continue;
+        }
 
         if (visMap[(transformed.y * MAP_SIZE) + transformed.x] == kVisible) {
             continue;
@@ -117,7 +119,7 @@ void castVisibility(const enum EDirection from,
         visMap[(transformed.y * MAP_SIZE) + transformed.x] = kVisible;
 
         verticalDistance = (currentPos.y - originalPos.y);
-	horizontalDistance = (currentPos.x - originalPos.x);
+        horizontalDistance = (currentPos.x - originalPos.x);
         manhattanDistance = abs(verticalDistance) + abs(horizontalDistance);
 
         if (manhattanDistance < (2 * MAP_SIZE)) {
@@ -133,18 +135,18 @@ void castVisibility(const enum EDirection from,
 
         narrowing = abs(verticalDistance) + 3;
 
-	if (stackHead != stackEnd) {
-	  if ((horizontalDistance >= -narrowing) && (horizontalDistance <= 0)) {
-            initVec2i(stackHead++, (currentPos.x + leftOffset.x), (currentPos.y + leftOffset.y));
-	  }
-	  
-	  if ((horizontalDistance <= narrowing) && (horizontalDistance >= 0)) {
-            initVec2i(stackHead++, (currentPos.x + rightOffset.x), (currentPos.y + rightOffset.y));
-	  }
-	  
-	  if (verticalDistance <= 0) {
-            initVec2i(stackHead++, (currentPos.x + northOffset.x), (currentPos.y + northOffset.y));
-	  }
-	}
+        if (stackHead != stackEnd) {
+            if ((horizontalDistance >= -narrowing) && (horizontalDistance <= 0)) {
+                initVec2i(stackHead++, (currentPos.x + leftOffset.x), (currentPos.y + leftOffset.y));
+            }
+
+            if ((horizontalDistance <= narrowing) && (horizontalDistance >= 0)) {
+                initVec2i(stackHead++, (currentPos.x + rightOffset.x), (currentPos.y + rightOffset.y));
+            }
+
+            if (verticalDistance <= 0) {
+                initVec2i(stackHead++, (currentPos.x + northOffset.x), (currentPos.y + northOffset.y));
+            }
+        }
     }
 }

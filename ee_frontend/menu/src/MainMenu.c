@@ -4,8 +4,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include "FixP.h"
@@ -75,12 +77,12 @@ void MainMenu_initialPaintCallback() {}
 
 void MainMenu_repaintCallback(void) {
 
-	struct Vec3 center;
+    struct Vec3 center;
 
     int16_t c;
 
     uint8_t optionsHeight = 8 * kMainMenuOptionsCount;
-    
+
     fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), 0);
 
     if (currentPresentationState == kAppearing) {
@@ -105,11 +107,12 @@ void MainMenu_repaintCallback(void) {
     }
 
     // Terrible hack due to weird Playstation 2 weirdness
-    drawBitmapRegion(0, 0, 112, YRES_FRAMEBUFFER, getPaletteEntry(0xFFFFFFFF), logoBitmap, 1, 0.0f, 0.875f, 0.0f, 0.89f);
+    drawBitmapRegion(0, 0, 112, YRES_FRAMEBUFFER, getPaletteEntry(0xFFFFFFFF), logoBitmap, 1, 0.0f, 0.875f, 0.0f,
+                     0.89f);
 
     drawBitmap(118, 45, logo2Bitmap, 1);
 
-	drawWindow(40 - biggestOption - 3, 25 - 4 - (optionsHeight / 8), biggestOption + 2, (optionsHeight / 8) + 2,
+    drawWindow(40 - biggestOption - 3, 25 - 4 - (optionsHeight / 8), biggestOption + 2, (optionsHeight / 8) + 2,
                "Episode 0");
 
     for (c = 0; c < kMainMenuOptionsCount; ++c) {
@@ -171,7 +174,7 @@ enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
                     cursorPosition = (kMainMenuOptionsCount - 1);
                 }
 
-                if (cursorPosition < 0 ) {
+                if (cursorPosition < 0) {
                     cursorPosition = 0;
                 }
                 break;
@@ -183,7 +186,7 @@ enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
             case kCommandFire1:
             case kCommandFire2:
             case kCommandFire3:
-			case kCommandBack:
+            case kCommandBack:
                 nextNavigationSelection =
                         MainMenu_nextStateNavigation[cursorPosition];
                 currentPresentationState = kConfirmInputBlink1;
@@ -195,8 +198,8 @@ enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void MainMenu_unloadStateCallback(int32_t newState) {
-	/*
+    /*
     releaseBitmap(logoBitmap);
-	releaseBitmap(logo2Bitmap);
-	 */
+    releaseBitmap(logo2Bitmap);
+     */
 }
