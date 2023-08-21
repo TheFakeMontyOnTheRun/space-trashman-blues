@@ -64,7 +64,7 @@ void enterState(enum EGameMenuState newState) {
     stopSounds();
     
     if (unloadStateCallback != NULL) {
-        unloadStateCallback();
+        unloadStateCallback(newState);
     }
 
     timeUntilNextState = MENU_ITEM_TIME_TO_BECOME_ACTIVE_MS;
