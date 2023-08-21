@@ -104,7 +104,7 @@ void HackingScreen_unloadStateCallback(int32_t newState);
 
 int countLines(void);
 
-void enterState( enum EGameMenuState State );
+void enterState(enum EGameMenuState State);
 
 int loopTick(enum ECommand cmd);
 

@@ -3,8 +3,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include "FixP.h"
@@ -73,7 +75,7 @@ void MainMenu_initStateCallback(int32_t tag) {
 }
 
 void MainMenu_initialPaintCallback() {
-    fill(0, 0, (XRES_FRAMEBUFFER-1), (YRES_FRAMEBUFFER-1), getPaletteEntry(0xFF6cb1a3), 0);
+    fill(0, 0, (XRES_FRAMEBUFFER - 1), (YRES_FRAMEBUFFER - 1), getPaletteEntry(0xFF6cb1a3), 0);
 }
 
 void MainMenu_repaintCallback(void) {
@@ -96,7 +98,7 @@ void MainMenu_repaintCallback(void) {
 
         drawRect(XRES_FRAMEBUFFER - movementX - 8 - 24 - ((biggestOption * 8) / 2)
                  + (sizeX / 2),
-				 YRES_FRAMEBUFFER - movementY - 8 - 16 - 8 - ((optionsHeight + 8) / 2)
+                 YRES_FRAMEBUFFER - movementY - 8 - 16 - 8 - ((optionsHeight + 8) / 2)
                  + (sizeY / 2),
                  sizeX, sizeY, 0);
         return;
@@ -110,7 +112,7 @@ void MainMenu_repaintCallback(void) {
             (XRES_FRAMEBUFFER / 8) - (int) biggestOption - 3,
             (YRES_FRAMEBUFFER / 8) - 3 - (optionsHeight / 8),
             biggestOption + 2, (optionsHeight / 8) + 2,
-               "Episode 0");
+            "Episode 0");
 
     for (c = 0; c < kMainMenuOptionsCount; ++c) {
 
@@ -172,7 +174,7 @@ enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
                     cursorPosition = (kMainMenuOptionsCount - 1);
                 }
 
-                if (cursorPosition < 0 ) {
+                if (cursorPosition < 0) {
                     cursorPosition = 0;
                 }
                 break;

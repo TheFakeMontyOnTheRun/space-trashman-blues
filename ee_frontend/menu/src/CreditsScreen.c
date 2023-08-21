@@ -1,8 +1,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include <stdio.h>
@@ -40,10 +42,10 @@ void CreditsScreen_initStateCallback(int32_t tag) {
     cursorPosition = 0;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
-    memFill (&textBuffer[0], ' ', 40 * 25);
+    memFill(&textBuffer[0], ' ', 40 * 25);
     mainText = &textBuffer[0];
-    memFill (&textBuffer[0], 0, (40 * 25));
-	textFile = loadBinaryFileFromPath("Help.txt");
+    memFill(&textBuffer[0], 0, (40 * 25));
+    textFile = loadBinaryFileFromPath("Help.txt");
     memCopyToFrom(&textBuffer[0], textFile.data, textFile.size);
 
     CreditsScreen_optionsCount = 1;
@@ -61,7 +63,7 @@ void CreditsScreen_repaintCallback(void) {
     int optionsHeight = 8 * (CreditsScreen_optionsCount);
     size_t len = strlen(CreditsScreen_options[0]);
 
-	fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), 0);
+    fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), 0);
 
     if (currentPresentationState == kAppearing) {
 
@@ -115,7 +117,7 @@ void CreditsScreen_repaintCallback(void) {
 
     fill(8, 128, 64, 64, getPaletteEntry(0xFFFFFFFF), FALSE);
 
-	drawBitmap(8, 128, monty, TRUE);
+    drawBitmap(8, 128, monty, TRUE);
 
     drawRect(8, 128, 64, 64, getPaletteEntry(0xFF000000));
 
@@ -202,7 +204,7 @@ enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
                     cursorPosition = CreditsScreen_optionsCount - 1;
                 }
 
-                if (cursorPosition < 0 ) {
+                if (cursorPosition < 0) {
                     cursorPosition = 0;
                 }
                 break;
@@ -213,7 +215,7 @@ enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
             case kCommandFire1:
             case kCommandFire2:
             case kCommandFire3:
-			case kCommandBack:
+            case kCommandBack:
                 nextNavigationSelection =
                         CreditsScreen_nextStateNavigation[cursorPosition];
                 currentPresentationState = kConfirmInputBlink1;

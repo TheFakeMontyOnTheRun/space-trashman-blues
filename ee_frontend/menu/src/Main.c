@@ -43,7 +43,7 @@ long start_clock, end_clock, prev;
 
 int main(int argc, char **argv) {
 
-	initStation();
+    initStation();
 
     initHW();
 
@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
     prev = 0;
     start_clock = uclock();
 
-	clearRenderer();
+    clearRenderer();
 
     while (isRunning) {
 
@@ -67,14 +67,14 @@ int main(int argc, char **argv) {
             delta_time = 50;
         }
 
-		startFrameGL(640, 480);
+        startFrameGL(640, 480);
 
         isRunning = isRunning && menuTick(10);
 
-		endFrameGL();
-		flipRenderer();
+        endFrameGL();
+        flipRenderer();
 
-	}
+    }
 
     unloadStateCallback(-1);
 

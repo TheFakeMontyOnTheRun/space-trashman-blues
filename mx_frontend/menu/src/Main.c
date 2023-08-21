@@ -75,19 +75,19 @@ extern char *messageLogBuffer;
 extern enum EVisibility *visMap;
 extern struct Vec2i *distances;
 extern uint8_t *collisionMap;
-extern struct Texture* textures;
+extern struct Texture *textures;
 
 struct Texture internalTexturesMem[TOTAL_TEXTURES];
 
 void initHW(void) {
-    textBuffer = (char*)allocMem(40 * 25, GENERAL_MEMORY, 1);
-    messageLogBuffer = (char*)allocMem(256, GENERAL_MEMORY, 1);
-    collisionMap = (uint8_t*)allocMem(256, GENERAL_MEMORY, 1);
-    visMap = (enum EVisibility*)allocMem(MAP_SIZE * MAP_SIZE * sizeof(enum EVisibility), GENERAL_MEMORY, 1);
-    distances = (struct Vec2i*)allocMem(2 * MAP_SIZE * MAP_SIZE * sizeof(struct Vec2i), GENERAL_MEMORY, 1);
+    textBuffer = (char *) allocMem(40 * 25, GENERAL_MEMORY, 1);
+    messageLogBuffer = (char *) allocMem(256, GENERAL_MEMORY, 1);
+    collisionMap = (uint8_t *) allocMem(256, GENERAL_MEMORY, 1);
+    visMap = (enum EVisibility *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(enum EVisibility), GENERAL_MEMORY, 1);
+    distances = (struct Vec2i *) allocMem(2 * MAP_SIZE * MAP_SIZE * sizeof(struct Vec2i), GENERAL_MEMORY, 1);
     textures = &internalTexturesMem[0];
-    itemsInMap = (uint8_t*)allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t*), GENERAL_MEMORY, 1);
-    map = (uint8_t*)allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t*), GENERAL_MEMORY, 1);
+    itemsInMap = (uint8_t *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t *), GENERAL_MEMORY, 1);
+    map = (uint8_t *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t *), GENERAL_MEMORY, 1);
 
 #ifndef CD32
     initFileReader("base.pfs");
@@ -134,7 +134,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         
 
         WNDCLASSEX WndCls;
-		RECT window_rect = {0, 0, 640, 480};
+        RECT window_rect = {0, 0, 640, 480};
         static char szAppName[] = "Sub Mare Imperium Derelict 95";
 
         hInst = hInstance;
@@ -169,19 +169,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                        NULL);
 
 
-		AdjustWindowRectEx(&window_rect, 
-							WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-							FALSE,
-							WS_EX_OVERLAPPEDWINDOW
-							);
+        AdjustWindowRectEx(&window_rect,
+                            WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+                            FALSE,
+                            WS_EX_OVERLAPPEDWINDOW
+                            );
 
-		MoveWindow(HWnd, 
-					CW_USEDEFAULT, 
-					CW_USEDEFAULT, 
-					window_rect.right - window_rect.left,
-					window_rect.bottom - window_rect.top,
-					TRUE
-					);
+        MoveWindow(HWnd,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    window_rect.right - window_rect.left,
+                    window_rect.bottom - window_rect.top,
+                    TRUE
+                    );
 
 
 #else

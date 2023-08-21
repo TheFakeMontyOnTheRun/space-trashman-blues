@@ -1,9 +1,12 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
+
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
@@ -43,7 +46,7 @@ void BattleScreen_initStateCallback(int32_t tag) {
 }
 
 void BattleScreen_initialPaintCallback(void) {
-    fill(0, 0, XRES, YRES, 128, FALSE );
+    fill(0, 0, XRES, YRES, 128, FALSE);
 }
 
 void BattleScreen_repaintCallback(void) {
@@ -52,10 +55,10 @@ void BattleScreen_repaintCallback(void) {
     size_t len = 7;
     int optionsHeight = 8 * (Battlecreen_optionsCount);
 
-    drawTextAt( 15, 13, "Mutant crab", 128);
+    drawTextAt(15, 13, "Mutant crab", 128);
     redrawHUD();
 
-    drawBitmap( 32, 32, enemySprite, TRUE);
+    drawBitmap(32, 32, enemySprite, TRUE);
 
     if (drawAppearingWindow(1, 15, 22, 10, "Actions", timeUntilNextState)) {
 
@@ -73,8 +76,8 @@ void BattleScreen_repaintCallback(void) {
                      0, FALSE);
             }
 
-            drawTextAt( 2, (26 - Battlecreen_optionsCount) + c - 2,
-                        &BattleScreen_options[c][0], isCursor ? 255 : 0);
+            drawTextAt(2, (26 - Battlecreen_optionsCount) + c - 2,
+                       &BattleScreen_options[c][0], isCursor ? 255 : 0);
         }
     }
 }
@@ -113,14 +116,14 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, long delta) {
         switch (cmd) {
             case kCommandLeft:
             case kCommandUp:
-                if (cursorPosition > 0 ) {
+                if (cursorPosition > 0) {
                     cursorPosition--;
                 }
                 turnTarget = turnStep;
                 break;
             case kCommandRight:
             case kCommandDown:
-                if (cursorPosition < (Battlecreen_optionsCount - 1) ) {
+                if (cursorPosition < (Battlecreen_optionsCount - 1)) {
                     cursorPosition++;
                 }
                 turnTarget = turnStep;
