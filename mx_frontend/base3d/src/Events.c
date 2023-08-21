@@ -6,8 +6,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include "Enums.h"
@@ -36,7 +38,7 @@ enum CrawlerState shouldContinue = kCrawlerGameInProgress;
 struct CActor actor;
 
 void clearMapCache() {
-    memFill (&(ITEMS_IN_MAP(0, 0)), 0xFF, MAP_SIZE * MAP_SIZE);
+    memFill(&(ITEMS_IN_MAP(0, 0)), 0xFF, MAP_SIZE * MAP_SIZE);
 }
 
 void onLevelLoaded(int index) {
@@ -116,9 +118,10 @@ int loopTick(enum ECommand command) {
 
         if (gameTicks != 0) {
             yCameraOffset = ((struct CTile3DProperties *) getFromMap(&tileProperties,
-                                                                     LEVEL_MAP(x, z) ))->mFloorHeight -
+                                                                     LEVEL_MAP(x, z)))->mFloorHeight -
                             ((struct CTile3DProperties *) getFromMap(&tileProperties,
-                                                                     LEVEL_MAP(actor.position.x, actor.position.y)))->mFloorHeight;
+                                                                     LEVEL_MAP(actor.position.x,
+                                                                               actor.position.y)))->mFloorHeight;
         } else {
             yCameraOffset = 0;
         }

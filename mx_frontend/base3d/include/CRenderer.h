@@ -27,8 +27,8 @@
 #define TRANSPARENCY_COLOR 199
 
 struct Projection {
-	struct Vec3 first;
-	struct Vec2 second;
+    struct Vec3 first;
+    struct Vec2 second;
 };
 
 extern struct MapWithCharKey occluders;
@@ -91,7 +91,7 @@ struct Mesh {
     uint16_t triangleCount;
     uint8_t *uvCoords;
     FixP_t *geometry;
-    struct Texture* texture;
+    struct Texture *texture;
     uint8_t colour;
 };
 
@@ -133,65 +133,67 @@ void shutdownHW(void);
 
 void initZMap(void);
 
-void loadMesh(struct Mesh* mesh, char* filename );
+void loadMesh(struct Mesh *mesh, char *filename);
 
 void projectAllVertices(const uint8_t count);
 
 uint8_t getPaletteEntry(const uint32_t origin);
 
-void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame, uint8_t *prevFrame, int turnState, int turnTarget, int scale200To240);
+void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame, uint8_t *prevFrame, int turnState, int turnTarget,
+                    int scale200To240);
 
 void fill(
-		const int x, const int y,
-		const unsigned int dx, const unsigned int dy,
-		const uint8_t pixel, const int stipple);
+        const int x, const int y,
+        const unsigned int dx, const unsigned int dy,
+        const uint8_t pixel, const int stipple);
 
 
-void drawMesh(const struct Mesh* mesh, const struct Vec3 at );
+void drawMesh(const struct Mesh *mesh, const struct Vec3 at);
 
-void drawMap(const struct CActor * __restrict__ current);
+void drawMap(const struct CActor *__restrict__ current);
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour);
 
-void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour, char charToReplaceHifenWith);
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text,
+                                       const uint8_t colour, char charToReplaceHifenWith);
 
 void drawTextAt(const int x,
-				const int y,
-				const char * __restrict__ text,
-				const uint8_t colour);
+                const int y,
+                const char *__restrict__ text,
+                const uint8_t colour);
 
 void drawFloorAt(const struct Vec3 center,
-				 const struct Texture * __restrict__ texture, uint8_t rotation);
+                 const struct Texture *__restrict__ texture, uint8_t rotation);
 
 void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
-                 const struct Texture * __restrict__ texture, uint8_t rotation, uint8_t flipTexture);
+                const struct Texture *__restrict__ texture, uint8_t rotation, uint8_t flipTexture);
 
 void drawCeilingAt(const struct Vec3 center,
-				   const struct Texture * __restrict__ texture, uint8_t rotation);
+                   const struct Texture *__restrict__ texture, uint8_t rotation);
 
 void drawLeftNear(const struct Vec3 center,
-				  const FixP_t scale,
-				  const uint8_t * __restrict__ texture,
-				  const uint8_t mask,
-				  const int repeatedTexture);
+                  const FixP_t scale,
+                  const uint8_t *__restrict__ texture,
+                  const uint8_t mask,
+                  const int repeatedTexture);
 
 void drawRightNear(const struct Vec3 center,
-				   const FixP_t scale,
-				   const uint8_t * __restrict__ texture,
-				   const uint8_t mask,
-				   const int repeatedTexture);
+                   const FixP_t scale,
+                   const uint8_t *__restrict__ texture,
+                   const uint8_t mask,
+                   const int repeatedTexture);
 
 void drawColumnAt(const struct Vec3 center,
-				  const FixP_t scale,
-				  const struct Texture * __restrict__ texture,
-				  const uint8_t mask,
-				  const int enableAlpha,
-				  const int repeatedTexture);
+                  const FixP_t scale,
+                  const struct Texture *__restrict__ texture,
+                  const uint8_t mask,
+                  const int enableAlpha,
+                  const int repeatedTexture);
 
 void drawBillboardAt(const struct Vec3 center,
-					 const uint8_t * __restrict__ texture,
-					 const FixP_t scale,
-					 const int size);
+                     const uint8_t *__restrict__ texture,
+                     const FixP_t scale,
+                     const int size);
 
 void drawBitmapRaw(const int dx,
                    const int dy,
@@ -202,71 +204,71 @@ void drawBitmapRaw(const int dx,
 
 
 void drawBitmap(const int x,
-				const int y,
-				const struct Bitmap * __restrict__ tile,
-						const int transparent);
+                const int y,
+                const struct Bitmap *__restrict__ tile,
+                const int transparent);
 
 void drawRect(const int x,
-			const int y,
-			const unsigned int dx,
-			const unsigned int dy,
-			const uint8_t pixel);
+              const int y,
+              const unsigned int dx,
+              const unsigned int dy,
+              const uint8_t pixel);
 
 
-void fillTriangle( int* coords, uint8_t colour );
+void fillTriangle(int *coords, uint8_t colour);
 
-void drawTexturedTriangle( int* coords, uint8_t* uvCoords, struct Texture* texture, int z);
+void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z);
 
 void drawWall(FixP_t x0,
-			  FixP_t x1,
-			  FixP_t x0y0,
-			  FixP_t x0y1,
-			  FixP_t x1y0,
-			  FixP_t x1y1,
-			  const uint8_t * __restrict__ texture,
-			  const FixP_t textureScaleY,
-			  const int z);
+              FixP_t x1,
+              FixP_t x0y0,
+              FixP_t x0y1,
+              FixP_t x1y0,
+              FixP_t x1y1,
+              const uint8_t *__restrict__ texture,
+              const FixP_t textureScaleY,
+              const int z);
 
 void drawFloor(FixP_t y0,
-			   FixP_t y1,
-			   FixP_t x0y0,
-			   FixP_t x1y0,
-			   FixP_t x0y1,
-			   FixP_t x1y1,
-			   int z,
-			   const uint8_t * __restrict__ texture);
+               FixP_t y1,
+               FixP_t x0y0,
+               FixP_t x1y0,
+               FixP_t x0y1,
+               FixP_t x1y1,
+               int z,
+               const uint8_t *__restrict__ texture);
 
 void drawFrontWall(FixP_t x0,
-				   FixP_t y0,
-				   FixP_t x1,
-				   FixP_t y1,
-				   const uint8_t * __restrict__ texture,
-				   const FixP_t textureScaleY,
-				   const int z,
-				   const int enableAlpha,
-				   const int size);
+                   FixP_t y0,
+                   FixP_t x1,
+                   FixP_t y1,
+                   const uint8_t *__restrict__ texture,
+                   const FixP_t textureScaleY,
+                   const int z,
+                   const int enableAlpha,
+                   const int size);
 
 void drawMask(const FixP_t x0,
-			const FixP_t y0,
-			const FixP_t x1,
-			const FixP_t y1);
+              const FixP_t y0,
+              const FixP_t x1,
+              const FixP_t y1);
 
 void maskWall(
-		FixP_t x0,
-		FixP_t x1,
-		FixP_t x0y0,
-		FixP_t x0y1,
-		FixP_t x1y0,
-		FixP_t x1y1);
+        FixP_t x0,
+        FixP_t x1,
+        FixP_t x0y0,
+        FixP_t x0y1,
+        FixP_t x1y0,
+        FixP_t x1y1);
 
 void maskFloor(
-		FixP_t y0,
-		FixP_t y1,
-		FixP_t x0y0,
-		FixP_t x1y0,
-		FixP_t x0y1,
-		FixP_t x1y1,
+        FixP_t y0,
+        FixP_t y1,
+        FixP_t x0y0,
+        FixP_t x1y0,
+        FixP_t x0y1,
+        FixP_t x1y1,
         uint8_t pixel
-		);
+);
 
 #endif
