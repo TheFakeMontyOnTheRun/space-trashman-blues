@@ -193,6 +193,12 @@ void cantBeUsedWithOthersCallback(struct Item *item1, struct Item *item2) {
 	defaultLogger("Nothing happens.");
 }
 
+void inspectItemWithHelmetCallback(struct Item *helmet, struct Item *item) {
+#ifdef INCLUDE_ITEM_DESCRIPTIONS
+    defaultLogger(item->info);
+#endif
+}
+
 void cantToggleCallback(struct Item *item) {
 	defaultLogger("Can't disable this.");
 }
@@ -616,6 +622,7 @@ void initStation(void) {
 	pickObject(newItem);
 	newItem->pickable = FALSE;
 	newItem->useCallback = cantToggleCallback;
+    newItem->useWithCallback = inspectItemWithHelmetCallback;
 
 
 	newItem = addItem("low-rank-keycard",
