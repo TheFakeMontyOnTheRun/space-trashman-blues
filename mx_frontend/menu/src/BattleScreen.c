@@ -140,7 +140,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, long delta) {
     return kResumeCurrentState;
 }
 
-void BattleScreen_unloadStateCallback() {
+void BattleScreen_unloadStateCallback(int32_t newState) {
     if (currentBackgroundBitmap != NULL) {
         releaseBitmap(currentBackgroundBitmap);
         currentBackgroundBitmap = NULL;
