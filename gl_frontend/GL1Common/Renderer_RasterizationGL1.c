@@ -56,66 +56,66 @@ extern rdpq_font_t *fnt1;
 int submitBitmapToGPU(struct Bitmap *bitmap);
 
 void drawRect(
-		const int _x,
-		const int _y,
-		const size_t _dx,
-		const size_t _dy,
-		const FramebufferPixelFormat pixel) {
+        const int _x,
+        const int _y,
+        const size_t _dx,
+        const size_t _dy,
+        const FramebufferPixelFormat pixel) {
 
-	float x = _x * NORMALIZE_ORTHO;
-	float y = _y * NORMALIZE_ORTHO;
-	float dx = _dx * NORMALIZE_ORTHO;
-	float dy = _dy * NORMALIZE_ORTHO;
+    float x = _x * NORMALIZE_ORTHO;
+    float y = _y * NORMALIZE_ORTHO;
+    float dx = _dx * NORMALIZE_ORTHO;
+    float dy = _dy * NORMALIZE_ORTHO;
 
-	uint32_t fragment = pixel;//palette[pixel];
+    uint32_t fragment = pixel;//palette[pixel];
 
-	if (fragment != TRANSPARENCY_COLOR) {
-		float r, g, b;
+    if (fragment != TRANSPARENCY_COLOR) {
+        float r, g, b;
 
-		r = (fragment & 0xFF) * NORMALIZE_COLOUR;
-		g = ((fragment & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
-		b = ((fragment & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
+        r = (fragment & 0xFF) * NORMALIZE_COLOUR;
+        g = ((fragment & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+        b = ((fragment & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
 
-		glColor3f(r,
-				  g,
-				  b);
+        glColor3f(r,
+                  g,
+                  b);
 
 #ifndef NDS
-		glBegin(GL_LINE_LOOP);
-		glVertex3f(x, y, -0.13);
-		glVertex3f(x + dx, y, -0.13);
-		glVertex3f(x + dx, y + dy, -0.13);
-		glVertex3f(x, y + dy, -0.13);
-		glEnd();
+        glBegin(GL_LINE_LOOP);
+        glVertex3f(x, y, -0.13);
+        glVertex3f(x + dx, y, -0.13);
+        glVertex3f(x + dx, y + dy, -0.13);
+        glVertex3f(x, y + dy, -0.13);
+        glEnd();
 #else
-		glBegin(GL_QUADS);
+        glBegin(GL_QUADS);
 
-		glVertex3f(x, y, -0.13);
-		glVertex3f(x + dx, y, -0.13);
-		glVertex3f(x + dx, y, -0.13);
-		glVertex3f(x, y, -0.13);
+        glVertex3f(x, y, -0.13);
+        glVertex3f(x + dx, y, -0.13);
+        glVertex3f(x + dx, y, -0.13);
+        glVertex3f(x, y, -0.13);
 
-		glVertex3f(x + dx, y, -0.13);
-		glVertex3f(x + dx, y + dy, -0.13);
-		glVertex3f(x + dx, y + dy, -0.13);
-		glVertex3f(x + dx, y, -0.13);
+        glVertex3f(x + dx, y, -0.13);
+        glVertex3f(x + dx, y + dy, -0.13);
+        glVertex3f(x + dx, y + dy, -0.13);
+        glVertex3f(x + dx, y, -0.13);
 
-		glVertex3f(x, y + dy, -0.13);
-		glVertex3f(x + dx, y + dy, -0.13);
-		glVertex3f(x + dx, y + dy, -0.13);
-		glVertex3f(x, y + dy, -0.13);
+        glVertex3f(x, y + dy, -0.13);
+        glVertex3f(x + dx, y + dy, -0.13);
+        glVertex3f(x + dx, y + dy, -0.13);
+        glVertex3f(x, y + dy, -0.13);
 
-		glVertex3f(x, y, -0.13);
-		glVertex3f(x, y + dy, -0.13);
-		glVertex3f(x, y + dy, -0.13);
-		glVertex3f(x, y, -0.13);
+        glVertex3f(x, y, -0.13);
+        glVertex3f(x, y + dy, -0.13);
+        glVertex3f(x, y + dy, -0.13);
+        glVertex3f(x, y, -0.13);
 
-		glEnd();
+        glEnd();
 
 #endif
 
-		glColor3f(1, 1, 1);
-	}
+        glColor3f(1, 1, 1);
+    }
 }
 
 void fillTriangle(int *coords, FramebufferPixelFormat colour) {
@@ -125,292 +125,292 @@ void drawTexturedTriangle(int *coords, UVCoord *uvCoords, struct Texture *textur
 }
 
 void fill(
-		const int _x,
-		const int _y,
-		const size_t _dx,
-		const size_t _dy,
-		const FramebufferPixelFormat pixel,
-		const uint8_t stipple) {
+        const int _x,
+        const int _y,
+        const size_t _dx,
+        const size_t _dy,
+        const FramebufferPixelFormat pixel,
+        const uint8_t stipple) {
 
-	uint32_t fragment = pixel;//palette[pixel];
+    uint32_t fragment = pixel;//palette[pixel];
 
-	float x = _x * NORMALIZE_ORTHO;
-	float y = _y * NORMALIZE_ORTHO;
-	float dx = _dx * NORMALIZE_ORTHO;
-	float dy = _dy * NORMALIZE_ORTHO;
+    float x = _x * NORMALIZE_ORTHO;
+    float y = _y * NORMALIZE_ORTHO;
+    float dx = _dx * NORMALIZE_ORTHO;
+    float dy = _dy * NORMALIZE_ORTHO;
 
-	if (fragment != TRANSPARENCY_COLOR) {
+    if (fragment != TRANSPARENCY_COLOR) {
 
-		float r, g, b;
+        float r, g, b;
 
-		r = (fragment & 0xFF) * NORMALIZE_COLOUR;
-		g = ((fragment & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
-		b = ((fragment & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
+        r = (fragment & 0xFF) * NORMALIZE_COLOUR;
+        g = ((fragment & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+        b = ((fragment & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
 
-		glColor3f(r,
-				  g,
-				  b);
+        glColor3f(r,
+                  g,
+                  b);
 
-		if (stipple) {
+        if (stipple) {
 #ifndef N64
-			float fontWidth = defaultFont->width;
-			float fontHeight = defaultFont->height;
-			float blockWidth = 8.0f / fontWidth;
-			float blockHeight = 8.0f / fontHeight;
-			size_t repeatX;
-			size_t repeatY;
-			size_t c, d;
-			uint32_t ascii;
-			float line;
-			float col;
+            float fontWidth = defaultFont->width;
+            float fontHeight = defaultFont->height;
+            float blockWidth = 8.0f / fontWidth;
+            float blockHeight = 8.0f / fontHeight;
+            size_t repeatX;
+            size_t repeatY;
+            size_t c, d;
+            uint32_t ascii;
+            float line;
+            float col;
 
-			if (defaultFont->uploadId == -1) {
-				defaultFont->uploadId = submitBitmapToGPU(defaultFont);
-			}
+            if (defaultFont->uploadId == -1) {
+                defaultFont->uploadId = submitBitmapToGPU(defaultFont);
+            }
 
 #ifndef NDS
             glAlphaFunc(GL_GREATER, 0.5f);
 #endif
-			glEnable(GL_ALPHA_TEST);
+            glEnable(GL_ALPHA_TEST);
 
-			repeatX = (dx / 4);
-			repeatY = (dy / 4);
+            repeatX = (dx / 4);
+            repeatY = (dy / 4);
 
-			glBindTexture(GL_TEXTURE_2D, defaultFont->uploadId);
-			glBegin(GL_QUADS);
+            glBindTexture(GL_TEXTURE_2D, defaultFont->uploadId);
+            glBegin(GL_QUADS);
 
-			ascii = 0;
-			line = (((ascii >> 5) + 1) * blockHeight);
-			col = (((ascii & 31)) * blockWidth);
+            ascii = 0;
+            line = (((ascii >> 5) + 1) * blockHeight);
+            col = (((ascii & 31)) * blockWidth);
 
-			for (c = 0; c < repeatY; ++c) {
-				for (d = 0; d < repeatX; ++d) {
+            for (c = 0; c < repeatY; ++c) {
+                for (d = 0; d < repeatX; ++d) {
 
-					size_t dstX = x + d * 4;
-					size_t dstY = y + c * 4;
+                    size_t dstX = x + d * 4;
+                    size_t dstY = y + c * 4;
 
-					glTexCoord2f(col, line - blockHeight);
-					glVertex3f(dstX, dstY, -0.15);
-					glTexCoord2f(col + blockWidth, line - blockHeight);
-					glVertex3f(dstX + 4, dstY, -0.15);
-					glTexCoord2f(col + blockWidth, line);
-					glVertex3f(dstX + 4, dstY + 4, -0.15);
-					glTexCoord2f(col, line);
-					glVertex3f(dstX, dstY + 4, -0.15);
-				}
-			}
+                    glTexCoord2f(col, line - blockHeight);
+                    glVertex3f(dstX, dstY, -0.15);
+                    glTexCoord2f(col + blockWidth, line - blockHeight);
+                    glVertex3f(dstX + 4, dstY, -0.15);
+                    glTexCoord2f(col + blockWidth, line);
+                    glVertex3f(dstX + 4, dstY + 4, -0.15);
+                    glTexCoord2f(col, line);
+                    glVertex3f(dstX, dstY + 4, -0.15);
+                }
+            }
 
-			glEnd();
-			glDisable(GL_ALPHA_TEST);
+            glEnd();
+            glDisable(GL_ALPHA_TEST);
 #else
-			glDisable(GL_TEXTURE_2D);
-			glColor3f(0,
-					  0,
-					  0);
+            glDisable(GL_TEXTURE_2D);
+            glColor3f(0,
+                      0,
+                      0);
 
-			glBegin(GL_QUADS);
-			glVertex3f(x, y, -0.15);
-			glVertex3f(x + dx, y, -0.15);
-			glVertex3f(x + dx, y + dy, -0.15);
-			glVertex3f(x, y + dy, -0.15);
-			glEnd();
-			glEnable(GL_TEXTURE_2D);
+            glBegin(GL_QUADS);
+            glVertex3f(x, y, -0.15);
+            glVertex3f(x + dx, y, -0.15);
+            glVertex3f(x + dx, y + dy, -0.15);
+            glVertex3f(x, y + dy, -0.15);
+            glEnd();
+            glEnable(GL_TEXTURE_2D);
 #endif
-		} else {
-			glDisable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, 0);
-			glColor3f(r,
-					  g,
-					  b);
+        } else {
+            glDisable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glColor3f(r,
+                      g,
+                      b);
 
-			glBegin(GL_QUADS);
-			glVertex3f(x, y, -0.15);
-			glVertex3f(x + dx, y, -0.15);
-			glVertex3f(x + dx, y + dy, -0.15);
-			glVertex3f(x, y + dy, -0.15);
-			glEnd();
-			glEnable(GL_TEXTURE_2D);
-		}
-	}
-	glColor3f(1, 1, 1);
+            glBegin(GL_QUADS);
+            glVertex3f(x, y, -0.15);
+            glVertex3f(x + dx, y, -0.15);
+            glVertex3f(x + dx, y + dy, -0.15);
+            glVertex3f(x, y + dy, -0.15);
+            glEnd();
+            glEnable(GL_TEXTURE_2D);
+        }
+    }
+    glColor3f(1, 1, 1);
 }
 
 void drawBitmap(const int _dx,
-				const int _dy,
-				struct Bitmap *bitmap,
-				const uint8_t transparent) {
-    
-	float x;
-	float y;
-	float dx;
-	float dy;
-    
-	if (bitmap->uploadId == -1) {
-		bitmap->uploadId = submitBitmapToGPU(bitmap);
-	}
+                const int _dy,
+                struct Bitmap *bitmap,
+                const uint8_t transparent) {
 
-	x = _dx * NORMALIZE_ORTHO;
-	y = _dy * NORMALIZE_ORTHO;
-	dx = bitmap->width * NORMALIZE_ORTHO;
-	dy = bitmap->height * NORMALIZE_ORTHO;
+    float x;
+    float y;
+    float dx;
+    float dy;
 
-	if (bitmap->uploadId != -1) {
+    if (bitmap->uploadId == -1) {
+        bitmap->uploadId = submitBitmapToGPU(bitmap);
+    }
 
-		if (transparent) {
+    x = _dx * NORMALIZE_ORTHO;
+    y = _dy * NORMALIZE_ORTHO;
+    dx = bitmap->width * NORMALIZE_ORTHO;
+    dy = bitmap->height * NORMALIZE_ORTHO;
+
+    if (bitmap->uploadId != -1) {
+
+        if (transparent) {
 #ifndef NDS
             glAlphaFunc(GL_GREATER, 0.5f);
 #endif
-			glEnable(GL_ALPHA_TEST);
-		}
+            glEnable(GL_ALPHA_TEST);
+        }
 
-		glBindTexture(GL_TEXTURE_2D, bitmap->uploadId);
+        glBindTexture(GL_TEXTURE_2D, bitmap->uploadId);
 
-		glBegin(GL_QUADS);
-		glTexCoord2f(0, 0);
-		glVertex3f(x, y, -0.125);
-		glTexCoord2f(1, 0);
-		glVertex3f(x + dx, y, -0.125);
-		glTexCoord2f(1, 1);
-		glVertex3f(x + dx, y + dy, -0.125);
-		glTexCoord2f(0, 1);
-		glVertex3f(x, y + dy, -0.125);
-		glEnd();
+        glBegin(GL_QUADS);
+        glTexCoord2f(0, 0);
+        glVertex3f(x, y, -0.125);
+        glTexCoord2f(1, 0);
+        glVertex3f(x + dx, y, -0.125);
+        glTexCoord2f(1, 1);
+        glVertex3f(x + dx, y + dy, -0.125);
+        glTexCoord2f(0, 1);
+        glVertex3f(x, y + dy, -0.125);
+        glEnd();
 
-		if (transparent) {
-			glDisable(GL_ALPHA_TEST);
-		}
-	}
+        if (transparent) {
+            glDisable(GL_ALPHA_TEST);
+        }
+    }
 }
 
 void drawRepeatBitmap(
-		const int x,
-		const int y,
-		const size_t dx,
-		const size_t dy,
-		struct Bitmap *tile) {
+        const int x,
+        const int y,
+        const size_t dx,
+        const size_t dy,
+        struct Bitmap *tile) {
 
-	size_t repeatX = (dx / tile->width) + 1;
-	size_t repeatY = (dy / tile->height) + 1;
-	size_t c, d;
-	for (c = 0; c < repeatY; ++c) {
-		for (d = 0; d < repeatX; ++d) {
+    size_t repeatX = (dx / tile->width) + 1;
+    size_t repeatY = (dy / tile->height) + 1;
+    size_t c, d;
+    for (c = 0; c < repeatY; ++c) {
+        for (d = 0; d < repeatX; ++d) {
 
-			size_t px = x + d * tile->width;
-			size_t py = y + c * tile->height;
+            size_t px = x + d * tile->width;
+            size_t py = y + c * tile->height;
 
-			if (px < XRES_FRAMEBUFFER && py < YRES_FRAMEBUFFER) {
-				drawBitmap(px, py, tile, FALSE);
-			}
-		}
-	}
+            if (px < XRES_FRAMEBUFFER && py < YRES_FRAMEBUFFER) {
+                drawBitmap(px, py, tile, FALSE);
+            }
+        }
+    }
 }
 
 void drawTextAt(const int x, const int y, const char *text, const FramebufferPixelFormat colour) {
 
-	size_t len = strlen(text);
-	int32_t dstX = (x - 1) * 8;
-	int32_t dstY = (y - 1) * 8;
-	size_t c;
+    size_t len = strlen(text);
+    int32_t dstX = (x - 1) * 8;
+    int32_t dstY = (y - 1) * 8;
+    size_t c;
     uint32_t ascii;
     float line;
     float col;
     char shortStr[2];
-    
+
 #ifndef N64
     float r, g, b;
-    
-	float fontWidth = defaultFont->width;
-	float fontHeight = 32.0f;//defaultFont->height;
-	float blockWidth = 8.0f / fontWidth;
-	float blockHeight = 8.0f / fontHeight;
 
-	if (defaultFont->uploadId == -1) {
-		defaultFont->uploadId = submitBitmapToGPU(defaultFont);
-	}
+    float fontWidth = defaultFont->width;
+    float fontHeight = 32.0f;//defaultFont->height;
+    float blockWidth = 8.0f / fontWidth;
+    float blockHeight = 8.0f / fontHeight;
 
-	glBindTexture(GL_TEXTURE_2D, defaultFont->uploadId);
+    if (defaultFont->uploadId == -1) {
+        defaultFont->uploadId = submitBitmapToGPU(defaultFont);
+    }
+
+    glBindTexture(GL_TEXTURE_2D, defaultFont->uploadId);
 
 #ifndef NDS
     glAlphaFunc(GL_GREATER, 0.5f);
 #endif
-	glEnable(GL_ALPHA_TEST);
-	glBegin(GL_QUADS);
+    glEnable(GL_ALPHA_TEST);
+    glBegin(GL_QUADS);
 
-	r = (colour & 0xFF) * NORMALIZE_COLOUR;
-	g = ((colour & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
-	b = ((colour & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
+    r = (colour & 0xFF) * NORMALIZE_COLOUR;
+    g = ((colour & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+    b = ((colour & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
 
-	glColor3f(r,
-			  g,
-			  b);
+    glColor3f(r,
+              g,
+              b);
 
 #else
-	uint8_t r, g, b;
+    uint8_t r, g, b;
     
-	shortStr[1] = 0;
+    shortStr[1] = 0;
 
-	dstX = (x - 1) * 8;
-	dstY = (y + 1) * 9;
+    dstX = (x - 1) * 8;
+    dstY = (y + 1) * 9;
 
     r = (colour & 0xFF);
     g = ((colour & 0x00FF00) >> 8);
     b = ((colour & 0xFF0000) >> 16);
 
-	rdpq_font_style(fnt1, 0, &(rdpq_fontstyle_t){
+    rdpq_font_style(fnt1, 0, &(rdpq_fontstyle_t){
       .color = RGBA32(r, g, b, 0xFF),
     });
 #endif
-	for (c = 0; c < len; ++c) {
-		if (text[c] == '\n' || dstX >= XRES_FRAMEBUFFER) {
-			dstX = (x - 1) * 8;
-			dstY += 8;
-			continue;
-		}
+    for (c = 0; c < len; ++c) {
+        if (text[c] == '\n' || dstX >= XRES_FRAMEBUFFER) {
+            dstX = (x - 1) * 8;
+            dstY += 8;
+            continue;
+        }
 
-		if (text[c] == ' ' || text[c] == '\r') {
-			dstX += 8;
-			continue;
-		}
+        if (text[c] == ' ' || text[c] == '\r') {
+            dstX += 8;
+            continue;
+        }
 
 #ifndef N64
-		ascii = text[c] - ' ';
-		line = (((ascii >> 5) + 1) * blockHeight);
-		col = (((ascii & 31)) * blockWidth);
+        ascii = text[c] - ' ';
+        line = (((ascii >> 5) + 1) * blockHeight);
+        col = (((ascii & 31)) * blockWidth);
 
-		glTexCoord2f(col, line - blockHeight);
-		glVertex3f(dstX * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -0.1);
-		glTexCoord2f(col + blockWidth, line - blockHeight);
-		glVertex3f((dstX + 8) * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -0.1);
-		glTexCoord2f(col + blockWidth, line);
-		glVertex3f((dstX + 8) * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -0.1);
-		glTexCoord2f(col, line);
-		glVertex3f(dstX * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -0.1);
+        glTexCoord2f(col, line - blockHeight);
+        glVertex3f(dstX * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -0.1);
+        glTexCoord2f(col + blockWidth, line - blockHeight);
+        glVertex3f((dstX + 8) * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -0.1);
+        glTexCoord2f(col + blockWidth, line);
+        glVertex3f((dstX + 8) * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -0.1);
+        glTexCoord2f(col, line);
+        glVertex3f(dstX * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -0.1);
 #else
-		shortStr[0] = text[c];
+        shortStr[0] = text[c];
         rdpq_text_print(NULL, 1, dstX, dstY, &shortStr[0]);
 #endif
 
 
-		dstX += 8;
-	}
+        dstX += 8;
+    }
 #ifndef N64
-	glEnd();
+    glEnd();
 #else
 #endif
 
-	glColor3f(1, 1, 1);
-	glDisable(GL_ALPHA_TEST);
+    glColor3f(1, 1, 1);
+    glDisable(GL_ALPHA_TEST);
 }
 
 void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text,
-									   const uint8_t colour, char charToReplaceHifenWith) {
-	drawTextAt(x, y, text, colour);
+                                       const uint8_t colour, char charToReplaceHifenWith) {
+    drawTextAt(x, y, text, colour);
 }
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour) {
-	drawTextAt(x, y, text, colour);
+    drawTextAt(x, y, text, colour);
 }
 
 void renderPageFlip(OutputPixelFormat *stretchedBuffer, FramebufferPixelFormat *currentFrame,
-					FramebufferPixelFormat *prevFrame, int turnState, int turnTarget, uint8_t scale200To240) {
+                    FramebufferPixelFormat *prevFrame, int turnState, int turnTarget, uint8_t scale200To240) {
 }

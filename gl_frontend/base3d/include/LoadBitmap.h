@@ -6,14 +6,14 @@ typedef uint32_t TexturePixelFormat;
 typedef uint32_t BitmapPixelFormat;
 
 struct Bitmap {
-	BitmapPixelFormat *data;
-	uint16_t width;
-	uint16_t height;
-	int uploadId;
+    BitmapPixelFormat *data;
+    uint16_t width;
+    uint16_t height;
+    int uploadId;
 };
 
 struct Texture {
-	struct Bitmap *raw;
+    struct Bitmap *raw;
 };
 
 void clearTextures(void);

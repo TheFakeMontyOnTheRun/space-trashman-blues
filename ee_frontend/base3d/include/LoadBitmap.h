@@ -23,22 +23,22 @@ typedef uint32_t TexturePixelFormat;
 typedef uint32_t BitmapPixelFormat;
 
 struct Bitmap {
-	BitmapPixelFormat *data;
-	uint16_t width;
-	uint16_t height;
+    BitmapPixelFormat *data;
+    uint16_t width;
+    uint16_t height;
     int uploadId;
-	texbuffer_t *nativeBuffer;
+    texbuffer_t *nativeBuffer;
 };
 
 struct Texture {
-	struct Bitmap *raw;
+    struct Bitmap *raw;
 };
 
 void clearTextures(void);
 
-struct Texture *makeTextureFrom(const char *  filename);
+struct Texture *makeTextureFrom(const char *filename);
 
-struct Bitmap *loadBitmap(const char *  filename);
+struct Bitmap *loadBitmap(const char *filename);
 
 
 void bindTexture(struct Bitmap *ptr);

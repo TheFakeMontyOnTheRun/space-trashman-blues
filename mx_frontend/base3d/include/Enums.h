@@ -3,66 +3,66 @@
 
 
 enum EDirection {
-	kNorth, kEast, kSouth, kWest
+    kNorth, kEast, kSouth, kWest
 };
 
 enum CrawlerState {
-	kCrawlerGameOver = -1,
-	kCrawlerQuit = 0,
-	kCrawlerGameInProgress = 1
+    kCrawlerGameOver = -1,
+    kCrawlerQuit = 0,
+    kCrawlerGameInProgress = 1
 };
 
 enum ECommand {
-	kCommandNone,
-	kCommandUp,
-	kCommandRight,
-	kCommandDown,
-	kCommandLeft,
-	kCommandFire1,
-	kCommandFire2,
-	kCommandBack,
-	kCommandQuit,
-	kCommandStrafeLeft,
-	kCommandStrafeRight,
-	kCommandFire3,
-	kCommandFire4
+    kCommandNone,
+    kCommandUp,
+    kCommandRight,
+    kCommandDown,
+    kCommandLeft,
+    kCommandFire1,
+    kCommandFire2,
+    kCommandBack,
+    kCommandQuit,
+    kCommandStrafeLeft,
+    kCommandStrafeRight,
+    kCommandFire3,
+    kCommandFire4
 };
 
 enum EGameMenuState {
-	kResumeCurrentState = -1,
-	kMainMenu,
-	kPlayGame,
-	kHelp,
-	kCredits,
-	kQuit,
-	kBackToGame,
-	kEndGame,
-	kInspectItem,
-	kHackingGame,
-	kGoodVictoryEpilogue,
-	kBadVictoryEpilogue,
-	kGoodGameOverEpilogue,
-	kBadGameOverEpilogue,
-	kPrologue,
-	kEpilogue
+    kResumeCurrentState = -1,
+    kMainMenu,
+    kPlayGame,
+    kHelp,
+    kCredits,
+    kQuit,
+    kBackToGame,
+    kEndGame,
+    kInspectItem,
+    kHackingGame,
+    kGoodVictoryEpilogue,
+    kBadVictoryEpilogue,
+    kGoodGameOverEpilogue,
+    kBadGameOverEpilogue,
+    kPrologue,
+    kEpilogue
 };
 
 enum EPresentationState {
-	kAppearing,
-	kWaitingForInput,
-	kConfirmInputBlink1,
-	kConfirmInputBlink2,
-	kConfirmInputBlink3,
-	kConfirmInputBlink4,
-	kConfirmInputBlink5,
-	kConfirmInputBlink6,
-	kFade,
-	kRoomTransitioning,
-	kEnteringRandomBattle
+    kAppearing,
+    kWaitingForInput,
+    kConfirmInputBlink1,
+    kConfirmInputBlink2,
+    kConfirmInputBlink3,
+    kConfirmInputBlink4,
+    kConfirmInputBlink5,
+    kConfirmInputBlink6,
+    kFade,
+    kRoomTransitioning,
+    kEnteringRandomBattle
 };
 
 enum ESoundDriver {
-	kNoSound, kPcSpeaker, kOpl2Lpt, kAdlib
+    kNoSound, kPcSpeaker, kOpl2Lpt, kAdlib
 };
 
 #define MENU_SELECTION_CHANGE_SOUND 0

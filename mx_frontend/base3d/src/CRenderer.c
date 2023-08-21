@@ -6,8 +6,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include "FixP.h"
@@ -135,13 +137,13 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     char *end;
     char *nameStart;
     char *buffer;
-    
+
     sprintf (tilesFilename, "tiles%d.lst", levelNumber);
 
     data = loadBinaryFileFromPath(tilesFilename);
-    buffer = (char*)allocMem(data.size, GENERAL_MEMORY, 1);
+    buffer = (char *) allocMem(data.size, GENERAL_MEMORY, 1);
     head = buffer;
-    memCopyToFrom(head, (void*)data.data, data.size);
+    memCopyToFrom(head, (void *) data.data, data.size);
     end = head + data.size;
     disposeDiskBuffer(data);
 
@@ -260,7 +262,7 @@ void drawMap(const struct CActor *current) {
 #endif
 
     castVisibility(cameraDirection, cameraPosition,
-                    TRUE, &occluders);
+                   TRUE, &occluders);
 
     ++gameTicks;
 }
@@ -352,7 +354,7 @@ void render(const long ms) {
                                 mCamera.mZ + intToFix(2 * (MAP_SIZE) - (2 * z));
 
                         if (x > 0) {
-                            facesMask |= (LEVEL_MAP( x - 1, z ) != element) ?
+                            facesMask |= (LEVEL_MAP(x - 1, z) != element) ?
                                          MASK_RIGHT :
                                          0;
                         }
@@ -390,7 +392,7 @@ void render(const long ms) {
 
                         /*						remember, bounds - 1!*/
 
-                        if ((x > 0) && (LEVEL_MAP( x - 1, z ) == element)) {
+                        if ((x > 0) && (LEVEL_MAP(x - 1, z) == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
@@ -467,7 +469,7 @@ void render(const long ms) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((z < (MAP_SIZE - 1)) && (LEVEL_MAP( z - 1, x ) == element)) {
+                        if ((z < (MAP_SIZE - 1)) && (LEVEL_MAP(z - 1, x) == element)) {
                             facesMask &= ~MASK_FRONT;
                         }
 
@@ -497,40 +499,43 @@ void render(const long ms) {
                 heightDiff = tileProp->mCeilingHeight - tileProp->mFloorHeight;
                 lastElement = element;
 
-		tmp.mX = tmp2.mX = position.mX;
-		tmp.mZ = tmp2.mZ = position.mZ;
+                tmp.mX = tmp2.mX = position.mX;
+                tmp.mZ = tmp2.mZ = position.mZ;
 
                 if (tileProp->mFloorRepeatedTextureIndex != 0xFF
                     && tileProp->mFloorRepetitions > 0) {
 
                     switch (tileProp->mGeometryType) {
                         case kRightNearWall:
-			  tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) - intToFix(tileProp->mFloorRepetitions));
-			  drawRightNear(
-					tmp, intToFix(tileProp->mFloorRepetitions),
-					nativeTextures[tileProp->mFloorRepeatedTextureIndex]
-					->rowMajor,
-					facesMask, TRUE);
+                            tmp.mY = position.mY +
+                                     ((tileProp->mFloorHeight * 2) - intToFix(tileProp->mFloorRepetitions));
+                            drawRightNear(
+                                    tmp, intToFix(tileProp->mFloorRepetitions),
+                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex]
+                                            ->rowMajor,
+                                    facesMask, TRUE);
 
                             break;
 
                         case kLeftNearWall:
-                            tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) - intToFix(tileProp->mFloorRepetitions));
+                            tmp.mY = position.mY +
+                                     ((tileProp->mFloorHeight * 2) - intToFix(tileProp->mFloorRepetitions));
                             drawLeftNear(
-					 tmp, intToFix(tileProp->mFloorRepetitions),
-					 nativeTextures[tileProp->mFloorRepeatedTextureIndex]
-					 ->rowMajor, facesMask, TRUE);
+                                    tmp, intToFix(tileProp->mFloorRepetitions),
+                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex]
+                                            ->rowMajor, facesMask, TRUE);
                             break;
 
                         case kCube:
                         case kRampNorth:
                         case kRampEast:
                         default:
-			  tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) - intToFix(tileProp->mFloorRepetitions));
-			  drawColumnAt(
-				       tmp, intToFix(tileProp->mFloorRepetitions),
-				       nativeTextures[tileProp->mFloorRepeatedTextureIndex],
-				       facesMask, FALSE, TRUE);
+                            tmp.mY = position.mY +
+                                     ((tileProp->mFloorHeight * 2) - intToFix(tileProp->mFloorRepetitions));
+                            drawColumnAt(
+                                    tmp, intToFix(tileProp->mFloorRepetitions),
+                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex],
+                                    facesMask, FALSE, TRUE);
                             break;
                     }
                 }
@@ -540,7 +545,8 @@ void render(const long ms) {
 
                     switch (tileProp->mGeometryType) {
                         case kRightNearWall:
-			  tmp.mY = position.mY + ((tileProp->mCeilingHeight * 2) + intToFix(tileProp->mCeilingRepetitions));
+                            tmp.mY = position.mY +
+                                     ((tileProp->mCeilingHeight * 2) + intToFix(tileProp->mCeilingRepetitions));
                             drawRightNear(
                                     tmp, intToFix(tileProp->mCeilingRepetitions),
                                     nativeTextures[tileProp->mCeilingRepeatedTextureIndex]
@@ -549,37 +555,39 @@ void render(const long ms) {
                             break;
 
                         case kLeftNearWall:
-			  tmp.mY = position.mY + ((tileProp->mCeilingHeight * 2) + intToFix(tileProp->mCeilingRepetitions));
-			  drawLeftNear(
-				       tmp, intToFix(tileProp->mCeilingRepetitions),
-				       nativeTextures[tileProp->mCeilingRepeatedTextureIndex]
-				       ->rowMajor,
-				       facesMask, TRUE);
+                            tmp.mY = position.mY +
+                                     ((tileProp->mCeilingHeight * 2) + intToFix(tileProp->mCeilingRepetitions));
+                            drawLeftNear(
+                                    tmp, intToFix(tileProp->mCeilingRepetitions),
+                                    nativeTextures[tileProp->mCeilingRepeatedTextureIndex]
+                                            ->rowMajor,
+                                    facesMask, TRUE);
                             break;
 
                         case kCube:
                         case kRampNorth:
                         case kRampEast:
                         default:
-			  tmp.mY = position.mY + ((tileProp->mCeilingHeight * 2) + intToFix(tileProp->mCeilingRepetitions));
-			  drawColumnAt(
-				       tmp, intToFix(tileProp->mCeilingRepetitions),
-				       nativeTextures[tileProp->mCeilingRepeatedTextureIndex],
-				       facesMask, FALSE, TRUE);
+                            tmp.mY = position.mY +
+                                     ((tileProp->mCeilingHeight * 2) + intToFix(tileProp->mCeilingRepetitions));
+                            drawColumnAt(
+                                    tmp, intToFix(tileProp->mCeilingRepetitions),
+                                    nativeTextures[tileProp->mCeilingRepeatedTextureIndex],
+                                    facesMask, FALSE, TRUE);
                             break;
                     }
                 }
 
                 if (tileProp->mFloorTextureIndex != 0xFF) {
-		  tmp.mY = position.mY + (tileProp->mFloorHeight * 2);
-		  drawFloorAt(tmp, nativeTextures[tileProp->mFloorTextureIndex], cameraDirection);
+                    tmp.mY = position.mY + (tileProp->mFloorHeight * 2);
+                    drawFloorAt(tmp, nativeTextures[tileProp->mFloorTextureIndex], cameraDirection);
                 }
 
                 if (tileProp->mCeilingTextureIndex != 0xFF) {
                     uint8_t newDirection = cameraDirection;
 
-		    tmp.mY = position.mY + (tileProp->mCeilingHeight * 2);
-		    
+                    tmp.mY = position.mY + (tileProp->mCeilingHeight * 2);
+
                     if (cameraDirection == kNorth) {
                         newDirection = kSouth;
                     }
@@ -605,8 +613,8 @@ void render(const long ms) {
 
                     switch (tileProp->mGeometryType) {
                         case kWallNorth:
-			  tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) + heightDiff);
-			  
+                            tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) + heightDiff);
+
                             switch (cameraDirection) {
                                 case kNorth:
                                     facesMask = MASK_BEHIND;
@@ -651,7 +659,7 @@ void render(const long ms) {
                                     break;
                             }
 
-                            drawColumnAt(tmp, (heightDiff + adjust ),
+                            drawColumnAt(tmp, (heightDiff + adjust),
                                          nativeTextures[tileProp->mMainWallTextureIndex],
                                          facesMask, tileProp->mNeedsAlphaTest,
                                          tileProp->mRepeatMainTexture);
@@ -685,7 +693,7 @@ void render(const long ms) {
                             break;
 
                         case kRightNearWall:
-			  tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) + heightDiff);
+                            tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) + heightDiff);
 
                             drawRightNear(
                                     tmp, (heightDiff + adjust),
@@ -694,7 +702,7 @@ void render(const long ms) {
                             break;
 
                         case kLeftNearWall:
-			  tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) + heightDiff);
+                            tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) + heightDiff);
 
                             drawLeftNear(
                                     tmp, (heightDiff + adjust),
@@ -709,7 +717,8 @@ void render(const long ms) {
 
                             flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kEast);
 
-                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection, flipTextureVertical);
+                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection,
+                                       flipTextureVertical);
                         }
                             break;
 
@@ -720,7 +729,8 @@ void render(const long ms) {
 
                             flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kWest);
 
-                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection, flipTextureVertical);
+                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection,
+                                       flipTextureVertical);
                         }
                             break;
 
@@ -740,7 +750,7 @@ void render(const long ms) {
                             tmp.mY = position.mY + (tileProp->mCeilingHeight * 2);
                             tmp2.mY = position.mY + (tileProp->mFloorHeight * 2);
 
-                            flipTextureVertical = (cameraDirection == kNorth || cameraDirection == kWest );
+                            flipTextureVertical = (cameraDirection == kNorth || cameraDirection == kWest);
 
                             drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex],
                                        (cameraDirection + 3) & 3, flipTextureVertical);
@@ -774,40 +784,40 @@ void render(const long ms) {
         }
 
 
-		if (turnTarget == turnStep) {
-			if (focusItemName != NULL) {
-				size_t len = strlen(focusItemName);
-				int lines = 1 + (len / 27);
-				fill( 0, YRES - (8 * lines), XRES, lines * 8, 0, 1 );
-				drawTextAtWithMarginWithFiltering(1, 26 - lines, XRES, focusItemName, 255, ' ');
-			}
+        if (turnTarget == turnStep) {
+            if (focusItemName != NULL) {
+                size_t len = strlen(focusItemName);
+                int lines = 1 + (len / 27);
+                fill(0, YRES - (8 * lines), XRES, lines * 8, 0, 1);
+                drawTextAtWithMarginWithFiltering(1, 26 - lines, XRES, focusItemName, 255, ' ');
+            }
 
 
-			if (currentPresentationState == kRoomTransitioning) {
-				messageLogBufferCoolDown = 0;
-			}
+            if (currentPresentationState == kRoomTransitioning) {
+                messageLogBufferCoolDown = 0;
+            }
 
-			if (messageLogBufferCoolDown > 0) {
-				int len = strlen(messageLogBuffer);
-				int lines = 1;
-				int chars = 0;
+            if (messageLogBufferCoolDown > 0) {
+                int len = strlen(messageLogBuffer);
+                int lines = 1;
+                int chars = 0;
                 int c;
-                
-				for (c = 0; c < len; ++c) {
 
-					++chars;
+                for (c = 0; c < len; ++c) {
 
-					if (chars == 27 || messageLogBuffer[c] == '\n') {
-						chars = 0;
-						++lines;
-					}
-				}
+                    ++chars;
 
-				fill(0, 0, 216, lines * 8, 0, 1);
+                    if (chars == 27 || messageLogBuffer[c] == '\n') {
+                        chars = 0;
+                        ++lines;
+                    }
+                }
 
-				drawTextAt(1, 1, messageLogBuffer, 255);
-			}
-		}
+                fill(0, 0, 216, lines * 8, 0, 1);
+
+                drawTextAt(1, 1, messageLogBuffer, 255);
+            }
+        }
 
         clippingY1 = YRES_FRAMEBUFFER;
 
@@ -848,8 +858,8 @@ void loadMesh(struct Mesh *mesh, char *filename) {
     mesh->uvCoords = allocMem(uvCoordsCount, GENERAL_MEMORY, 1);
     mesh->geometry = allocMem(sizeof(FixP_t) * coordsCount, GENERAL_MEMORY, 1);
 
-	uvCoord = mesh->uvCoords;
-	coord = mesh->geometry;
+    uvCoord = mesh->uvCoords;
+    coord = mesh->geometry;
 
     for (c = 0; c < uvCoordsCount; ++c) {
         *(uvCoord++) = (*(bufferHead++));
@@ -871,7 +881,7 @@ void loadMesh(struct Mesh *mesh, char *filename) {
         mesh->texture = NULL;
     } else {
         textureName = allocMem(read + 1, GENERAL_MEMORY, 1);
-        memCopyToFrom(textureName, (void*)bufferHead, read);
+        memCopyToFrom(textureName, (void *) bufferHead, read);
         mesh->texture = makeTextureFrom(textureName);
         disposeMem(textureName);
     }
