@@ -2,14 +2,17 @@
 #include <stdlib.h>
 
 #include <assert.h>
+
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
 #include <math.h>
 
 #endif
+
 #include "FixP.h"
 #include "Vec.h"
 #include "Enums.h"
@@ -36,46 +39,47 @@ FixP_t divLut[320];
 #ifdef AGS
 __attribute__((section(".iwram"), long_call))
 #endif
+
 void projectAllVertices(const uint8_t count) {
-  
-  FixP_t oneOver = FIXP_ONE;
-  int c;
-  
-  struct Projection *vertex = &projectionVertices[0];
-  FixP_t lastZ = 0xCAFEBABE;
-  FixP_t compoundYFactor = playerHeight + walkingBias + yCameraOffset;
-  
-  for (c = 0; c < count; ++c, ++vertex) {
-    
-    FixP_t z = (vertex->first.mZ);
-    
-    if (z != lastZ) {
-      lastZ = z;
-      
-      z += zCameraOffset;
-      
-      if (z < FIXP_ONE) {
-	z = FIXP_ONE;
-      }
-      
-      oneOver = oneOverZMap[ fixToInt(z * 4) ];
+
+    FixP_t oneOver = FIXP_ONE;
+    int c;
+
+    struct Projection *vertex = &projectionVertices[0];
+    FixP_t lastZ = 0xCAFEBABE;
+    FixP_t compoundYFactor = playerHeight + walkingBias + yCameraOffset;
+
+    for (c = 0; c < count; ++c, ++vertex) {
+
+        FixP_t z = (vertex->first.mZ);
+
+        if (z != lastZ) {
+            lastZ = z;
+
+            z += zCameraOffset;
+
+            if (z < FIXP_ONE) {
+                z = FIXP_ONE;
+            }
+
+            oneOver = oneOverZMap[fixToInt(z * 4)];
+        }
+
+        vertex->second.mX = (FIXP_HALF_XRES + Mul(vertex->first.mX + xCameraOffset, oneOver));
+        vertex->second.mY = (FIXP_HALF_YRES - Mul(vertex->first.mY + compoundYFactor, oneOver));
     }
-    
-    vertex->second.mX = (FIXP_HALF_XRES + Mul(vertex->first.mX + xCameraOffset, oneOver));
-    vertex->second.mY = (FIXP_HALF_YRES - Mul(vertex->first.mY + compoundYFactor, oneOver));
-  }
 }
 
 
 void initZMap(void) {
-  int z;
-  for (z = 1; z < (4 * 128); ++z ) {
-    oneOverZMap[z] = Div(FIXP_HALF_YRES, Div(intToFix(z) , intToFix(4)));
-  }
-  
-  for (z = 1; z < (320); ++z ) {
-    divLut[z] = Div(intToFix(1) , intToFix(z));
-  }
+    int z;
+    for (z = 1; z < (4 * 128); ++z) {
+        oneOverZMap[z] = Div(FIXP_HALF_YRES, Div(intToFix(z), intToFix(4)));
+    }
+
+    for (z = 1; z < (320); ++z) {
+        divLut[z] = Div(intToFix(1), intToFix(z));
+    }
 }
 
 
@@ -180,7 +184,7 @@ void drawColumnAt(const struct Vec3 center,
     p2 = projectionVertices[2].second;
     p3 = projectionVertices[3].second;
 
-    if ( (mask & MASK_BEHIND) || (enableAlpha && (mask & MASK_FRONT))) {
+    if ((mask & MASK_BEHIND) || (enableAlpha && (mask & MASK_FRONT))) {
         if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
             drawMask(p2.mX, p2.mY, p3.mX, p3.mY);
         } else {
@@ -220,7 +224,7 @@ void drawColumnAt(const struct Vec3 center,
         z = originalZ;
     }
 
-    if ( (mask & MASK_FRONT)) {
+    if ((mask & MASK_FRONT)) {
         if (mask & ~MASK_BEHIND) {
             z -= 2;
         }
@@ -250,107 +254,107 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 
     if (cameraDirection == kNorth) {
 
-      projectionVertices[0].first = projectionVertices[1].first = p0;
-      projectionVertices[2].first = projectionVertices[3].first = p1;
+        projectionVertices[0].first = projectionVertices[1].first = p0;
+        projectionVertices[2].first = projectionVertices[3].first = p1;
 
-      if (flipTexture) {
-	cameraDirection = kSouth;
-      }
+        if (flipTexture) {
+            cameraDirection = kSouth;
+        }
 
     } else if (cameraDirection == kSouth) {
 
-      projectionVertices[0].first = projectionVertices[1].first = p1;
-      projectionVertices[2].first = projectionVertices[3].first = p0;
+        projectionVertices[0].first = projectionVertices[1].first = p1;
+        projectionVertices[2].first = projectionVertices[3].first = p0;
 
-      if (flipTexture) {
-	cameraDirection = kNorth;
-      }
+        if (flipTexture) {
+            cameraDirection = kNorth;
+        }
 
     } else {
-      if (cameraDirection == kEast) {
-	projectionVertices[0].first = projectionVertices[2].first = p1;
-	projectionVertices[1].first = projectionVertices[3].first = p0;
-      } else {
-	projectionVertices[0].first = projectionVertices[2].first = p0;
-	projectionVertices[1].first = projectionVertices[3].first = p1;
-      }
-      
-      addToVec3(&projectionVertices[0].first, - FIXP_ONE, 0, - FIXP_ONE);
-      addToVec3(&projectionVertices[1].first,      FIXP_ONE, 0, - FIXP_ONE);
-      addToVec3(&projectionVertices[2].first, - FIXP_ONE, 0,      FIXP_ONE);
-      addToVec3(&projectionVertices[3].first,      FIXP_ONE, 0,      FIXP_ONE);
+        if (cameraDirection == kEast) {
+            projectionVertices[0].first = projectionVertices[2].first = p1;
+            projectionVertices[1].first = projectionVertices[3].first = p0;
+        } else {
+            projectionVertices[0].first = projectionVertices[2].first = p0;
+            projectionVertices[1].first = projectionVertices[3].first = p1;
+        }
 
-      projectAllVertices(4);
+        addToVec3(&projectionVertices[0].first, -FIXP_ONE, 0, -FIXP_ONE);
+        addToVec3(&projectionVertices[1].first, FIXP_ONE, 0, -FIXP_ONE);
+        addToVec3(&projectionVertices[2].first, -FIXP_ONE, 0, FIXP_ONE);
+        addToVec3(&projectionVertices[3].first, FIXP_ONE, 0, FIXP_ONE);
 
-      llz0 = projectionVertices[0].second;
-      lrz0 = projectionVertices[1].second;
-      llz1 = projectionVertices[2].second;
-      lrz1 = projectionVertices[3].second;
+        projectAllVertices(4);
 
-      coords[0] = fixToInt(llz1.mX); /* 2 */
-      coords[1] = fixToInt(llz1.mY);
-      coords[2] = fixToInt(lrz1.mX); /* 3 */
-      coords[3] = fixToInt(lrz1.mY);
-      coords[4] = fixToInt(llz0.mX); /* 0 */
-      coords[5] = fixToInt(llz0.mY);
-      
-      if (p0.mZ < FIXP_DISTANCE_FOR_DARKNESS) {
-	if (flipTexture) {
-	  uvCoords[0] = 0;
-	  uvCoords[1] = NATIVE_TEXTURE_SIZE;
-	  uvCoords[2] = 0;
-	  uvCoords[3] = 0;
-	  uvCoords[4] = NATIVE_TEXTURE_SIZE;
-	  uvCoords[5] = NATIVE_TEXTURE_SIZE;
-	} else {
-	  uvCoords[0] = NATIVE_TEXTURE_SIZE;
-	  uvCoords[1] = 0;
-	  uvCoords[2] = NATIVE_TEXTURE_SIZE;
-	  uvCoords[3] = NATIVE_TEXTURE_SIZE;
-	  uvCoords[4] = 0;
-	  uvCoords[5] = 0;
-	}
-	
-	drawTexturedTriangle(&coords[0], &uvCoords[0], (struct Texture*)texture, fixToInt(p0.mZ) );
-      } else {
-	fillTriangle(&coords[0], 0 );
-      }
-      
-      coords[0] = fixToInt(llz0.mX); /* 0 */
-      coords[1] = fixToInt(llz0.mY);
-      coords[2] = fixToInt(lrz1.mX); /* 3 */
-      coords[3] = fixToInt(lrz1.mY);
-      coords[4] = fixToInt(lrz0.mX); /* 1 */
-      coords[5] = fixToInt(lrz0.mY);
-      
-      if (p0.mZ < FIXP_DISTANCE_FOR_DARKNESS) {
-	if (flipTexture) {
-	  uvCoords[0] = NATIVE_TEXTURE_SIZE;
-	  uvCoords[1] = NATIVE_TEXTURE_SIZE;
-	  uvCoords[2] = 0;
-	  uvCoords[3] = 0;
-	  uvCoords[4] = NATIVE_TEXTURE_SIZE;
-	  uvCoords[5] = 0;
-	} else {
-	  uvCoords[0] = 0;
-	  uvCoords[1] = 0;
-	  uvCoords[2] = NATIVE_TEXTURE_SIZE;
-	  uvCoords[3] = NATIVE_TEXTURE_SIZE;
-	  uvCoords[4] = 0;
-	  uvCoords[5] = NATIVE_TEXTURE_SIZE;
-	}
-	
-	drawTexturedTriangle( &coords[0], &uvCoords[0], (struct Texture*)texture, fixToInt(p0.mZ) );
-      } else {
-	fillTriangle(&coords[0], 0 );
-      }
-      
-      return;
+        llz0 = projectionVertices[0].second;
+        lrz0 = projectionVertices[1].second;
+        llz1 = projectionVertices[2].second;
+        lrz1 = projectionVertices[3].second;
+
+        coords[0] = fixToInt(llz1.mX); /* 2 */
+        coords[1] = fixToInt(llz1.mY);
+        coords[2] = fixToInt(lrz1.mX); /* 3 */
+        coords[3] = fixToInt(lrz1.mY);
+        coords[4] = fixToInt(llz0.mX); /* 0 */
+        coords[5] = fixToInt(llz0.mY);
+
+        if (p0.mZ < FIXP_DISTANCE_FOR_DARKNESS) {
+            if (flipTexture) {
+                uvCoords[0] = 0;
+                uvCoords[1] = NATIVE_TEXTURE_SIZE;
+                uvCoords[2] = 0;
+                uvCoords[3] = 0;
+                uvCoords[4] = NATIVE_TEXTURE_SIZE;
+                uvCoords[5] = NATIVE_TEXTURE_SIZE;
+            } else {
+                uvCoords[0] = NATIVE_TEXTURE_SIZE;
+                uvCoords[1] = 0;
+                uvCoords[2] = NATIVE_TEXTURE_SIZE;
+                uvCoords[3] = NATIVE_TEXTURE_SIZE;
+                uvCoords[4] = 0;
+                uvCoords[5] = 0;
+            }
+
+            drawTexturedTriangle(&coords[0], &uvCoords[0], (struct Texture *) texture, fixToInt(p0.mZ));
+        } else {
+            fillTriangle(&coords[0], 0);
+        }
+
+        coords[0] = fixToInt(llz0.mX); /* 0 */
+        coords[1] = fixToInt(llz0.mY);
+        coords[2] = fixToInt(lrz1.mX); /* 3 */
+        coords[3] = fixToInt(lrz1.mY);
+        coords[4] = fixToInt(lrz0.mX); /* 1 */
+        coords[5] = fixToInt(lrz0.mY);
+
+        if (p0.mZ < FIXP_DISTANCE_FOR_DARKNESS) {
+            if (flipTexture) {
+                uvCoords[0] = NATIVE_TEXTURE_SIZE;
+                uvCoords[1] = NATIVE_TEXTURE_SIZE;
+                uvCoords[2] = 0;
+                uvCoords[3] = 0;
+                uvCoords[4] = NATIVE_TEXTURE_SIZE;
+                uvCoords[5] = 0;
+            } else {
+                uvCoords[0] = 0;
+                uvCoords[1] = 0;
+                uvCoords[2] = NATIVE_TEXTURE_SIZE;
+                uvCoords[3] = NATIVE_TEXTURE_SIZE;
+                uvCoords[4] = 0;
+                uvCoords[5] = NATIVE_TEXTURE_SIZE;
+            }
+
+            drawTexturedTriangle(&coords[0], &uvCoords[0], (struct Texture *) texture, fixToInt(p0.mZ));
+        } else {
+            fillTriangle(&coords[0], 0);
+        }
+
+        return;
     }
 
-    addToVec3(&projectionVertices[0].first, - FIXP_ONE, 0, - FIXP_ONE);
-    addToVec3(&projectionVertices[1].first, FIXP_ONE, 0, - FIXP_ONE);
-    addToVec3(&projectionVertices[2].first, - FIXP_ONE, 0, FIXP_ONE);
+    addToVec3(&projectionVertices[0].first, -FIXP_ONE, 0, -FIXP_ONE);
+    addToVec3(&projectionVertices[1].first, FIXP_ONE, 0, -FIXP_ONE);
+    addToVec3(&projectionVertices[2].first, -FIXP_ONE, 0, FIXP_ONE);
     addToVec3(&projectionVertices[3].first, FIXP_ONE, 0, FIXP_ONE);
 
     projectAllVertices(4);
@@ -361,10 +365,11 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
     lrz1 = projectionVertices[3].second;
 
     if (p0.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-        maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0 );
+        maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0);
     } else {
 #ifndef AGS
-        drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(p0.mZ), texture->rotations[cameraDirection] );
+        drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(p0.mZ),
+                  texture->rotations[cameraDirection]);
 #else
         drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(p0.mZ), texture->rotations[0] );
 #endif
@@ -412,11 +417,11 @@ void drawFloorAt(const struct Vec3 center,
             maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0);
         } else {
 #ifndef AGS
-	  drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
-		    texture->rotations[cameraDirection]);
+            drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
+                      texture->rotations[cameraDirection]);
 #else
-	  drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
-		    texture->rotations[0]);
+            drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
+                  texture->rotations[0]);
 #endif
         }
     }
@@ -518,7 +523,7 @@ void drawLeftNear(const struct Vec3 center,
     }
 
     if (cameraDirection == kWest || cameraDirection == kEast) {
-        depth = - FIXP_ONE;
+        depth = -FIXP_ONE;
     }
     ptr0 = &projectionVertices[0].first;
     ptr1 = &projectionVertices[1].first;
@@ -549,17 +554,17 @@ void drawLeftNear(const struct Vec3 center,
     }
 }
 
-void drawMesh( const struct Mesh *mesh, const struct Vec3 center ) {
+void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
 
     int coords[6];
     int count = mesh->triangleCount;
 
-    FixP_t * vertexData = mesh->geometry;
+    FixP_t *vertexData = mesh->geometry;
     uint8_t colour = mesh->colour;
 
     if (mesh->texture == NULL || center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-	    int c;
-        for (c = 0; c < count; ++c ) {
+        int c;
+        for (c = 0; c < count; ++c) {
 
             struct Vec3 *ptr0 = &projectionVertices[0].first;
             struct Vec3 *ptr1 = &projectionVertices[1].first;
@@ -586,13 +591,13 @@ void drawMesh( const struct Mesh *mesh, const struct Vec3 center ) {
             coords[4] = fixToInt(projectionVertices[2].second.mX);
             coords[5] = fixToInt(projectionVertices[2].second.mY);
 
-            fillTriangle( &coords[0], colour);
+            fillTriangle(&coords[0], colour);
             vertexData += 9;
         }
     } else {
-	    int c;
-        uint8_t* uvData = mesh->uvCoords;
-        for (c = 0; c < count; ++c ) {
+        int c;
+        uint8_t *uvData = mesh->uvCoords;
+        for (c = 0; c < count; ++c) {
 
             struct Vec3 *ptr0 = &projectionVertices[0].first;
             struct Vec3 *ptr1 = &projectionVertices[1].first;
@@ -620,7 +625,7 @@ void drawMesh( const struct Mesh *mesh, const struct Vec3 center ) {
             coords[5] = fixToInt(projectionVertices[2].second.mY);
 
 
-            drawTexturedTriangle( &coords[0], uvData, mesh->texture, fixToInt(ptr0->mZ));
+            drawTexturedTriangle(&coords[0], uvData, mesh->texture, fixToInt(ptr0->mZ));
 
             uvData += 6;
             vertexData += 9;
@@ -674,7 +679,7 @@ void drawRightNear(const struct Vec3 center,
     }
 
     if (cameraDirection == kWest || cameraDirection == kEast) {
-        depth = - FIXP_ONE;
+        depth = -FIXP_ONE;
     }
 
     ptr0 = &projectionVertices[0].first;

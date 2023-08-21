@@ -6,8 +6,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include "Enums.h"
@@ -40,9 +42,9 @@ struct CActor actor;
 
 void clearMapCache() {
     size_t sizeForSet = sizeof(uint8_t) * (MAP_SIZE * MAP_SIZE);
-    memFill (&items[0], 0xFF, sizeForSet);
-    memFill (&actorsInMap[0], 0xFF, sizeForSet);
-    memFill (&effects[0], 0xFF, sizeForSet);
+    memFill(&items[0], 0xFF, sizeForSet);
+    memFill(&actorsInMap[0], 0xFF, sizeForSet);
+    memFill(&effects[0], 0xFF, sizeForSet);
 }
 
 void onLevelLoaded(int index) {
@@ -96,11 +98,11 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
 
     /* 16 bytes should be enough here... */
 
-    sprintf (nameBuffer, "map%d.txt", map);
+    sprintf(nameBuffer, "map%d.txt", map);
     buffer = loadBinaryFileFromPath(nameBuffer);
     dungeon_loadMap(buffer.data, collisions, map);
 
-    sprintf (nameBuffer, "map%d.img", map);
+    sprintf(nameBuffer, "map%d.img", map);
 
     if (mapTopLevel) {
         releaseBitmap(mapTopLevel);

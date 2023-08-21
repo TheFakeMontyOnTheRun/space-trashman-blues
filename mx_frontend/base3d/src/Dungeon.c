@@ -2,12 +2,16 @@
 #include <string.h>
 
 #include <stddef.h>
+
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -48,17 +52,17 @@ struct CActor playerCrawler;
 uint8_t isPositionAllowed(int8_t x, int8_t y) {
 
     return (0 <= x) && (x < MAP_SIZE) && (0 <= y) && (y < MAP_SIZE)
-           && collisionMap[LEVEL_MAP(x,y)] != '1';
+           && collisionMap[LEVEL_MAP(x, y)] != '1';
 }
 
 struct GameSnapshot dungeon_tick(const enum ECommand command) {
-  int currentPlayerRoom;
-  int cell;
-  struct WorldPosition worldPos;
-  struct ObjectNode *head;
-  
-  int oldTurn = gameSnapshot.turn;
-  struct WorldPosition oldPosition = *getPlayerPosition();
+    int currentPlayerRoom;
+    int cell;
+    struct WorldPosition worldPos;
+    struct ObjectNode *head;
+
+    int oldTurn = gameSnapshot.turn;
+    struct WorldPosition oldPosition = *getPlayerPosition();
     currentPlayerRoom = getPlayerRoom();
 
     {
@@ -137,14 +141,15 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 }
 
                 while (head1 != NULL && item1 == NULL) {
-                    if (offseted.x == (getItem(head1->item)->position.x) && offseted.y == (getItem(head1->item)->position.y)) {
+                    if (offseted.x == (getItem(head1->item)->position.x) &&
+                        offseted.y == (getItem(head1->item)->position.y)) {
                         item1 = getItem(head1->item);
                     }
                     head1 = head1->next;
                 }
 
                 if (item2 != NULL) {
-                    if (item1 != NULL ) {
+                    if (item1 != NULL) {
                         char buffer[255];
                         char *operator1;
                         char *operand1;
@@ -161,16 +166,17 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             }
                 break;
             case kCommandFire2: {
-            	struct Item *item = NULL;
+                struct Item *item = NULL;
                 struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
-				head= getRoom(getPlayerRoom())->itemsPresent->next;
+                head = getRoom(getPlayerRoom())->itemsPresent->next;
                 offseted.x += playerCrawler.position.x;
                 offseted.y += playerCrawler.position.y;
 
                 needToRedrawHUD = TRUE;
 
                 while (head != NULL && item == NULL) {
-                    if (offseted.x == (getItem(head->item)->position.x) && offseted.y == (getItem(head->item)->position.y)) {
+                    if (offseted.x == (getItem(head->item)->position.x) &&
+                        offseted.y == (getItem(head->item)->position.y)) {
                         item = getItem(head->item);
                     }
                     head = head->next;
@@ -324,7 +330,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             offseted.y += playerCrawler.position.y;
 
             while (roomItems != NULL && item == NULL) {
-                struct Item* itemCandidate = getItem(roomItems->item);
+                struct Item *itemCandidate = getItem(roomItems->item);
                 if (offseted.x == (itemCandidate->position.x) && offseted.y == (itemCandidate->position.y)) {
                     item = itemCandidate;
                 }
@@ -339,7 +345,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         /* for the elevators */
         if (currentPlayerRoom != getPlayerRoom()) {
             enable3DRendering = FALSE;
-            enteredThru = 0 ;
+            enteredThru = 0;
             setPlayerDirection(enteredThru);
             initRoom(getPlayerRoom());
 
@@ -360,9 +366,9 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             if (currentPlayerRoom != getPlayerRoom()) {
                 int c = 0;
                 int room = getPlayerRoom();
-                struct Room* roomPtr = getRoom(room);
+                struct Room *roomPtr = getRoom(room);
 
-                for (c = 0; c < 6; ++c ) {
+                for (c = 0; c < 6; ++c) {
                     if (roomPtr->connections[c] == currentPlayerRoom) {
                         enteredThru = oppositeOf(c);
                     }
@@ -390,7 +396,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         head = getRoom(getPlayerRoom())->itemsPresent->next;
 
         while (head != NULL) {
-            struct Item* itemPtr = getItem(head->item);
+            struct Item *itemPtr = getItem(head->item);
             setItem(itemPtr->position.x, itemPtr->position.y, itemPtr->index);
             head = head->next;
         }
@@ -409,13 +415,13 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
 
     gameSnapshot.should_continue = kCrawlerGameInProgress;
     gameSnapshot.camera_rotation = 0;
-	playerCrawler.rotation = 0;
-    memCopyToFrom (collisionMap, (void*)collisions, 256);
+    playerCrawler.rotation = 0;
+    memCopyToFrom(collisionMap, (void *) collisions, 256);
 
     for (y = 0; y < MAP_SIZE; ++y) {
         for (x = 0; x < MAP_SIZE; ++x) {
             char current = *ptr;
-            LEVEL_MAP(x, y ) = current;
+            LEVEL_MAP(x, y) = current;
             setItem(x, y, 0xFF);
 
             if ((current == 's' && enteredThru == 0) ||
@@ -439,12 +445,12 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     playerCrawler.position.x = x;
     playerCrawler.position.y = y;
 
-	head = getRoom(getPlayerRoom())->itemsPresent->next;
+    head = getRoom(getPlayerRoom())->itemsPresent->next;
 
     while (head != NULL) {
-      struct Item *item = getItem(head->item);
-      setItem(item->position.x, item->position.y, item->index);
-      head = head->next;
+        struct Item *item = getItem(head->item);
+        setItem(item->position.x, item->position.y, item->index);
+        head = head->next;
     }
 
     visibilityCached = FALSE;
