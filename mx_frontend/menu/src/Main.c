@@ -229,7 +229,7 @@ int main(int argc, char **argv) {
         isRunning = isRunning && menuTick(delta_time);
     }
 #endif
-    unloadStateCallback();
+    unloadStateCallback(-1);
     shutdownHW();
 
     return 0;
