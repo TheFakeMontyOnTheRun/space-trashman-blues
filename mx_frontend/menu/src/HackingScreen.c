@@ -213,6 +213,6 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
     return kResumeCurrentState;
 }
 
-void HackingScreen_unloadStateCallback() {
+void HackingScreen_unloadStateCallback(int32_t newState) {
     enableSmoothMovement = wasSmoothMovementPreviouslyEnabled;
 }

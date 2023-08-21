@@ -92,6 +92,7 @@ void castVisibility(const enum EDirection from,
     while (stackHead != stackRoot) {
         struct Vec2i transformed;
         int verticalDistance;
+	int horizontalDistance;
         int manhattanDistance;
         int narrowing;
 
@@ -100,10 +101,10 @@ void castVisibility(const enum EDirection from,
         currentPos = *stackHead;
 
         transformed = transform(from, currentPos);
-
-		if (!(0 <= transformed.x && transformed.x < MAP_SIZE && 0 <= transformed.y && transformed.y < MAP_SIZE) ) {
-			continue;
-		}
+	
+	if (!(0 <= transformed.x && transformed.x < MAP_SIZE && 0 <= transformed.y && transformed.y < MAP_SIZE) ) {
+	  continue;
+	}
 
         if (visMap[(transformed.y * MAP_SIZE) + transformed.x] == kVisible) {
             continue;
@@ -112,9 +113,8 @@ void castVisibility(const enum EDirection from,
         visMap[(transformed.y * MAP_SIZE) + transformed.x] = kVisible;
 
         verticalDistance = (currentPos.y - originalPos.y);
-
-        manhattanDistance =
-                abs(verticalDistance) + abs(currentPos.x - originalPos.x);
+	horizontalDistance = (currentPos.x - originalPos.x);
+        manhattanDistance = abs(verticalDistance) + abs(horizontalDistance);
 
         if (manhattanDistance < (2 * MAP_SIZE)) {
             distances[(manhattanDistance * (MAP_SIZE))
@@ -129,23 +129,18 @@ void castVisibility(const enum EDirection from,
 
         narrowing = abs(verticalDistance) + 3;
 
-        if (((currentPos.x - originalPos.x) >= -narrowing)
-            && (currentPos.x - originalPos.x) <= 0
-            && (stackHead != stackEnd)) {
-            initVec2i(stackHead++, (int8_t) (currentPos.x + leftOffset.x),
-                      (int8_t) (currentPos.y + leftOffset.y));
-        }
-
-        if (((currentPos.x - originalPos.x) <= narrowing)
-            && (currentPos.x - originalPos.x) >= 0
-            && (stackHead != stackEnd)) {
-            initVec2i(stackHead++, (int8_t) (currentPos.x + rightOffset.x),
-                      (int8_t) (currentPos.y + rightOffset.y));
-        }
-
-        if (verticalDistance <= 0 && (stackHead != stackEnd)) {
-            initVec2i(stackHead++, (int8_t) (currentPos.x + northOffset.x),
-                      (int8_t) (currentPos.y + northOffset.y));
-        }
+	if (stackHead != stackEnd) {
+	  if ((horizontalDistance >= -narrowing) && (horizontalDistance <= 0)) {
+            initVec2i(stackHead++, (currentPos.x + leftOffset.x), (currentPos.y + leftOffset.y));
+	  }
+	  
+	  if ((horizontalDistance <= narrowing) && (horizontalDistance >= 0)) {
+            initVec2i(stackHead++, (currentPos.x + rightOffset.x), (currentPos.y + rightOffset.y));
+	  }
+	  
+	  if (verticalDistance <= 0) {
+            initVec2i(stackHead++, (currentPos.x + northOffset.x), (currentPos.y + northOffset.y));
+	  }
+	}
     }
 }
