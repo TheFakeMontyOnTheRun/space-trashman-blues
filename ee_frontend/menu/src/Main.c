@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
 
 	}
 
-    unloadStateCallback();
+    unloadStateCallback(-1);
 
     shutdownHW();
 

@@ -173,5 +173,5 @@ enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, long delta) {
     return kResumeCurrentState;
 }
 
-void HelpScreen_unloadStateCallback() {
+void HelpScreen_unloadStateCallback(int32_t newState) {
 }
