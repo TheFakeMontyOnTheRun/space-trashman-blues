@@ -879,31 +879,42 @@ void drawFloor(FixP_t y0,
             iX1 = XRES;
         }
 
-        for (; ix < iX1; ++ix) {
-
+	if (!farEnoughForStipple) {
+	  for (; ix < iX1; ++ix) {	 
             const int32_t iu = fixToInt(u);
-
-            stipple = ~stipple;
-            /*
-            only fetch the next texel if we really changed the
-            u, v coordinates (otherwise, would fetch the same
-            thing anyway)
-            */
-            if (!(farEnoughForStipple && stipple) &&
-                iu != lastU) {
-
-                pixel = *(sourceLineStart);
-                sourceLineStart += (iu - lastU);
-                lastU = iu;
-            }
-
-            if (pixel != TRANSPARENCY_COLOR) {
-                *(destinationLine) = (farEnoughForStipple && stipple) ? 0 : pixel;
-            }
-
-            ++destinationLine;
+	    /*
+	      only fetch the next texel if we really changed the
+	      u, v coordinates (otherwise, would fetch the same
+	      thing anyway)
+	    */
+	    if (iu != lastU) {		
+	      pixel = *(sourceLineStart);
+	      sourceLineStart += (iu - lastU);
+	      lastU = iu;
+	    }
+	    
+	    *(destinationLine++) = pixel;
             u += du;
-        }
+	  }
+	} else {
+	  for (; ix < iX1; ++ix) {	   
+            const int32_t iu = fixToInt(u);	   
+	    stipple = ~stipple;
+	    /*ditto, but only if the stippling is not active for this fragment*/
+	    if (!stipple &&
+		iu != lastU) {
+	      
+	      pixel = *(sourceLineStart);
+	      sourceLineStart += (iu - lastU);
+	      lastU = iu;
+	    }
+	    
+	    *(destinationLine++) = (stipple) ? 0 : pixel;
+            u += du;
+	  }
+	}
+	
+
 
 
         x0 += leftDxDy;

@@ -100,7 +100,11 @@ void castVisibility(const enum EDirection from,
 
         currentPos = *stackHead;
 
-        transformed = transform(from, currentPos);
+	if (from != kNorth) {
+	  transformed = transform(from, currentPos);
+	} else {
+	  transformed = currentPos;
+	}
 	
 	if (!(0 <= transformed.x && transformed.x < MAP_SIZE && 0 <= transformed.y && transformed.y < MAP_SIZE) ) {
 	  continue;
