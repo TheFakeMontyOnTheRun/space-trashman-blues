@@ -13,35 +13,35 @@ EE_CFLAGS += -Ibase3d/include        \
 EE_BIN = derelict128.elf
 
 EE_OBJS= menu/src/Main.o \
-         	  ../common/src/FixP.o \
-         	  ../common/src/Vec.o \
-         	  ../common/src/Common.o \
-         	  ../common/src/MapWithCharKey.o \
-         	  ../common/src/ArrayPackedFileReader.o \
-         	  ../common/src/CTile3DProperties.o \
-         	  base3d/src/VisibilityStrategy.o \
-         	  base3d/src/Globals.o \
-         	  base3d/src/Events.o \
-         	  base3d/src/EDirection_Utils.o \
-         	  base3d/src/Dungeon.o \
-         	  menu/src/GameMenu.o \
-         	  menu/src/MainMenu.o \
-         	  menu/src/Engine.o \
-         	  menu/src/UI.o \
-         	  menu/src/HackingScreen.o \
-         	  menu/src/BattleScreen.o \
-         	  menu/src/HelpScreen.o \
-         	  menu/src/CreditsScreen.o \
-         	  menu/src/Crawler.o \
-         	  ../core/src/Derelict.o \
-         	  ../core/src/Core.o \
-         	  ../core/src/Parser.o \
-         	  SoundSystem/NullMusic.o \
-         	  base3d/src/ee/LoadBitmap.o \
-         	  base3d/src/ee/Renderer_Rasterization.o \
-         	  base3d/src/ee/Renderer_Tesselation.o \
-         	  base3d/src/ee/Renderer.o \
-         	  base3d/src/ee/EmotionEngineRenderer.o
+	../common/src/FixP.o \
+	../common/src/Vec.o \
+	../common/src/Common.o \
+	../common/src/MapWithCharKey.o \
+	../common/src/ArrayPackedFileReader.o \
+	../common/src/CTile3DProperties.o \
+	../common/src/EDirection_Utils.o \
+	base3d/src/VisibilityStrategy.o \
+	base3d/src/Globals.o \
+	base3d/src/Events.o \
+	base3d/src/Dungeon.o \
+	menu/src/GameMenu.o \
+	menu/src/MainMenu.o \
+	menu/src/Engine.o \
+	menu/src/UI.o \
+	menu/src/HackingScreen.o \
+	menu/src/BattleScreen.o \
+	menu/src/HelpScreen.o \
+	menu/src/CreditsScreen.o \
+	menu/src/Crawler.o \
+	../core/src/Derelict.o \
+	../core/src/Core.o \
+        ../core/src/Parser.o \
+        SoundSystem/NullMusic.o \
+        base3d/src/ee/LoadBitmap.o \
+        base3d/src/ee/Renderer_Rasterization.o \
+        base3d/src/ee/Renderer_Tesselation.o \
+        base3d/src/ee/Renderer.o \
+        base3d/src/ee/EmotionEngineRenderer.o
 
 all: $(EE_BIN)
 

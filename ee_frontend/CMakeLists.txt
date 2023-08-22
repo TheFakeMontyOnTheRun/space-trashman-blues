@@ -43,8 +43,8 @@ add_executable(derelict128
 		../common/src/Common.c
 		../common/src/FixP.c
 		../common/src/MapWithCharKey.c
+		../common/src/EDirection_Utils.c
 		base3d/src/Events.c
-		base3d/src/EDirection_Utils.c
 		SoundSystem/NullMusic.c
 		base3d/src/Dungeon.c
 		menu/src/UI.c
