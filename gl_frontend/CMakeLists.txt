@@ -33,19 +33,19 @@ add_executable(derelict64
         menu/src/Main.c
         menu/src/Engine.c
         base3d/src/SDLVersion/CSDL2Renderer.c
-        base3d/src/Globals.c
         GL1Common/LoadBitmapGL1.c
         GL1Common/RendererGL1.c
         GL1Common/Renderer_RasterizationGL1.c
         GL1Common/Renderer_TesselationGL1.c
         base3d/src/VisibilityStrategy.c
+        ../common/src/Globals.c
         ../common/src/CTile3DProperties.c
         ../common/src/Vec.c
         ../common/src/Common.c
         ../common/src/FixP.c
         ../common/src/MapWithCharKey.c
         ../common/src/PackedFileReader.c
-	../common/src/EDirection_Utils.c
+	    ../common/src/EDirection_Utils.c
         base3d/src/Events.c
         SoundSystem/NullMusic.c
         base3d/src/Dungeon.c
