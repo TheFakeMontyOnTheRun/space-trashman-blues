@@ -25,6 +25,7 @@ MENU_OBJ=menu/src/MainMenu.o \
 	../common/src/PackedFileReader.o \
 	../common/src/MapWithCharKey.o \
 	../common/src/CTile3DProperties.o \
+	../common/src/EDirection_Utils.o \
 	menu/src/Crawler.o \
 	menu/src/Engine.o \
 	menu/src/UI.o \
@@ -36,7 +37,6 @@ MENU_OBJ=menu/src/MainMenu.o \
 	base3d/src/VisibilityStrategy.o \
 	base3d/src/Events.o \
 	base3d/src/CRenderer_Rasterization.o \
-	base3d/src/EDirection_Utils.o \
 	base3d/src/CRenderer_Tesselation.o \
 	SoundSystem/NullMusic.o \
 	menu/src/HelpScreen.o \

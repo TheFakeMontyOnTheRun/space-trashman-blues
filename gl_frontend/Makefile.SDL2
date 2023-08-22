@@ -25,6 +25,7 @@ MENU_OBJ= menu/src/Main.o \
           	  ../common/src/PackedFileReader.o \
           	  ../common/src/MapWithCharKey.o \
           	  ../common/src/CTile3DProperties.o \
+		  ../common/src/EDirection_Utils.o \
           	  GL1Common/LoadBitmapGL1.o \
           	  GL1Common/RendererGL1.o \
           	  base3d/src/VisibilityStrategy.o \
@@ -32,7 +33,6 @@ MENU_OBJ= menu/src/Main.o \
           	  base3d/src/Events.o \
           	  GL1Common/Renderer_RasterizationGL1.o \
           	  GL1Common/Renderer_TesselationGL1.o \
-          	  base3d/src/EDirection_Utils.o \
           	  base3d/src/Dungeon.o \
           	  menu/src/GameMenu.o \
           	  menu/src/MainMenu.o \
