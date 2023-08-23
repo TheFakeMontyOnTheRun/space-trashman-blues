@@ -395,7 +395,7 @@ void drawMap(const uint8_t *elements,
         walkingBias = 0;
     }
 
-    castVisibility(cameraDirection, visMap, &elements[0], cameraPosition,
+    castVisibility(cameraDirection, visMap, cameraPosition,
                    distances, TRUE, &occluders);
 
     ++gameTicks;
@@ -434,7 +434,7 @@ void render(const long ms) {
 
         needsToRedrawVisibleMeshes = FALSE;
 
-        element = map[cameraPosition.y][cameraPosition.x];
+        element = LEVEL_MAP(cameraPosition.x, cameraPosition.y);
 
         tileProp = ((struct CTile3DProperties *) getFromMap(&tileProperties,
                                                             element));
@@ -471,7 +471,7 @@ void render(const long ms) {
                     case kNorth:
                         x = visPos.x;
                         z = visPos.y;
-                        element = map[z][x];
+                        element = LEVEL_MAP(x, z);
 
                         itemsSnapshotElement = mItems[z][x];
 
@@ -482,17 +482,17 @@ void render(const long ms) {
                                 mCamera.mZ + intToFix(2 * (MAP_SIZE - z) - 1);
 
                         if (x > 0) {
-                            facesMask |= (map[z][(x - 1)] != element) ?
+                            facesMask |= (LEVEL_MAP(x - 1, z) != element) ?
                                          MASK_RIGHT :
                                          0;
                         }
 
                         /* remember, bounds - 1! */
-                        if ((x < (MAP_SIZE - 1)) && (map[z][(x + 1)] == element)) {
+                        if ((x < (MAP_SIZE - 1)) && (LEVEL_MAP(x + 1, z) == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((z < (MAP_SIZE - 1)) && (map[(z + 1)][x] == element)) {
+                        if ((z < (MAP_SIZE - 1)) && (LEVEL_MAP(x, z + 1) == element)) {
                             facesMask &= ~MASK_FRONT;
                         }
 
@@ -511,7 +511,7 @@ void render(const long ms) {
                         x = visPos.x;
                         z = visPos.y;
 
-                        element = map[z][x];
+                        element = LEVEL_MAP(x, z);
                         itemsSnapshotElement = mItems[z][x];
 
                         position.mX = mCamera.mX + intToFix(-2 * x);
@@ -520,11 +520,11 @@ void render(const long ms) {
 
                         /*						remember, bounds - 1!*/
 
-                        if ((x > 0) && (map[z][(x - 1)] == element)) {
+                        if ((x > 0) && (LEVEL_MAP(x - 1, z) == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((x < (MAP_SIZE - 1)) && (map[z][(x + 1)] == element)) {
+                        if ((x < (MAP_SIZE - 1)) && (LEVEL_MAP(x + 1, z) == element)) {
                             facesMask &= ~MASK_RIGHT;
                         }
 
@@ -543,7 +543,7 @@ void render(const long ms) {
                         x = visPos.y;
                         z = visPos.x;
 
-                        element = map[x][z];
+                        element = LEVEL_MAP(z, x );
                         itemsSnapshotElement = mItems[x][z];
 
                         position.mX = mCamera.mX + intToFix(-2 * x + 1) - intToFix(1);
@@ -552,15 +552,15 @@ void render(const long ms) {
 
                         /* remember, bounds - 1! */
 
-                        if ((x > 0) && (map[(x - 1)][z] == element)) {
+                        if ((x > 0) && (LEVEL_MAP(z , x - 1) == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((x < (MAP_SIZE - 1)) && (map[(x + 1)][z] == element)) {
+                        if ((x < (MAP_SIZE - 1)) && (LEVEL_MAP(z, x + 1) == element)) {
                             facesMask &= ~MASK_RIGHT;
                         }
 
-                        if ((z < (MAP_SIZE - 1)) && (map[x][(z + 1)] == element)) {
+                        if ((z < (MAP_SIZE - 1)) && (LEVEL_MAP(z + 1, x) == element)) {
                             facesMask &= ~MASK_FRONT;
                         }
 
@@ -579,7 +579,7 @@ void render(const long ms) {
                         x = visPos.y;
                         z = visPos.x;
 
-                        element = map[x][z];
+                        element = LEVEL_MAP(z, x);
                         itemsSnapshotElement = mItems[x][z];
 
                         position.mX = mCamera.mX + intToFix(2 * x - 1) + intToFix(1);
@@ -588,15 +588,15 @@ void render(const long ms) {
 
 
                         /* remember, bounds - 1! */
-                        if ((x > 0) && (map[(x - 1)][z] == element)) {
+                        if ((x > 0) && (LEVEL_MAP(z, x - 1) == element)) {
                             facesMask &= ~MASK_RIGHT;
                         }
 
-                        if ((x < (MAP_SIZE - 1)) && (map[(x + 1)][z] == element)) {
+                        if ((x < (MAP_SIZE - 1)) && (LEVEL_MAP(z, x + 1) == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((z < (MAP_SIZE - 1)) && (map[x][(z - 1)] == element)) {
+                        if ((z < (MAP_SIZE - 1)) && (LEVEL_MAP(z - 1, x ) == element)) {
                             facesMask &= ~MASK_FRONT;
                         }
 

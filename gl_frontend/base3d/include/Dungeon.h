@@ -39,7 +39,5 @@ extern int enteredThru;
 
 extern int cursorPosition;
 
-extern uint8_t map[MAP_SIZE][MAP_SIZE];
-
 extern const char *focusItemName;
 #endif
