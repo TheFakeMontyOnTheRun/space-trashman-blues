@@ -37,7 +37,7 @@ add_executable(derelict64
         GL1Common/RendererGL1.c
         GL1Common/Renderer_RasterizationGL1.c
         GL1Common/Renderer_TesselationGL1.c
-        base3d/src/VisibilityStrategy.c
+        ../common/src/VisibilityStrategy.c
         ../common/src/Globals.c
         ../common/src/CTile3DProperties.c
         ../common/src/Vec.c

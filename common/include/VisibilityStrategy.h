@@ -8,8 +8,10 @@ enum EVisibility {
 struct Vec2i transform(const enum EDirection from, const struct Vec2i currentPos);
 
 void castVisibility(const enum EDirection from,
+                    enum EVisibility *visMap,
                     const struct Vec2i pos,
+                    struct Vec2i *distances,
                     const int cleanPrevious,
-                    const struct MapWithCharKey *__restrict__ occluderTiles);
+                    const struct MapWithCharKey *occluderTiles);
 
 #endif

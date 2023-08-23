@@ -35,7 +35,7 @@ add_executable(derelict128
 		base3d/src/ee/Renderer.c
 		base3d/src/ee/Renderer_Rasterization.c
 		base3d/src/ee/Renderer_Tesselation.c
-		base3d/src/VisibilityStrategy.c
+		../common/src/VisibilityStrategy.c
 		../common/src/Globals.c
 		../common/src/CTile3DProperties.c
 		../common/src/ArrayPackedFileReader.c

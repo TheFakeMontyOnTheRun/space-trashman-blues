@@ -81,7 +81,7 @@ CFILES		:=			../menu/src/MainMenu.c \
                 		../base3d/src/AGSVersion/AGSRenderer.c \
                 		../base3d/src/LoadBitmap.c \
                 		../base3d/src/CRenderer.c \
-                		../base3d/src/VisibilityStrategy.c \
+                		../../common/src/VisibilityStrategy.c \
                 		../../common/src/Globals.c \
                 		../../common/src/CTile3DProperties.c \
                 		../../common/src/ArrayPackedFileReader.c \
@@ -89,7 +89,7 @@ CFILES		:=			../menu/src/MainMenu.c \
                 		../../common/src/Common.c \
                 		../../common/src/FixP.c \
                 		../../common/src/MapWithCharKey.c \
-				../../common/src/EDirection_Utils.o \
+				        ../../common/src/EDirection_Utils.o \
                 		../base3d/src/Events.c \
                 		../base3d/src/CRenderer_Rasterization.c \
                 		../base3d/src/CRenderer_Tesselation.c \

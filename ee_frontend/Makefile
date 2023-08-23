@@ -21,7 +21,7 @@ EE_OBJS= menu/src/Main.o \
 	../common/src/CTile3DProperties.o \
 	../common/src/EDirection_Utils.o \
 	../common/src/Globals.o \
-	base3d/src/VisibilityStrategy.o \
+	../common/src/VisibilityStrategy.o \
 	base3d/src/Events.o \
 	base3d/src/Dungeon.o \
 	menu/src/GameMenu.o \

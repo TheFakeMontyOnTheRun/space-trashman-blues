@@ -261,8 +261,8 @@ void drawMap(const struct CActor *current) {
     walkingBias = 0;
 #endif
 
-    castVisibility(cameraDirection, cameraPosition,
-                   TRUE, &occluders);
+    castVisibility(cameraDirection, visMap, cameraPosition,
+                   distances, TRUE, &occluders);
 
     ++gameTicks;
 }

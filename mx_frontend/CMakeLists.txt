@@ -31,7 +31,7 @@ add_executable(derelict32
 		base3d/src/SDLVersion/CSDL2Renderer.c
 		base3d/src/LoadBitmap.c
 		base3d/src/CRenderer.c
-		base3d/src/VisibilityStrategy.c
+		../common/src/VisibilityStrategy.c
 		../common/src/Globals.c
 		../common/src/CTile3DProperties.c
 		../common/src/Vec.c
