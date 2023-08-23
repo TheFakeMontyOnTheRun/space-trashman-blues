@@ -25,6 +25,7 @@
 
 #define TOTAL_TEXTURES 16
 #define TRANSPARENCY_COLOR 199
+#define VISIBILITY_CONE_NARROWING 3
 
 struct Projection {
     struct Vec3 first;

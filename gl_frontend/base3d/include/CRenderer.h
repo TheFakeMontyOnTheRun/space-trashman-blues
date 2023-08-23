@@ -8,7 +8,7 @@
 #define YRES_FRAMEBUFFER 200
 #define TOTAL_TEXTURES 64
 #define TRANSPARENCY_COLOR 0
-
+#define VISIBILITY_CONE_NARROWING 6
 typedef uint32_t OutputPixelFormat;
 typedef uint32_t FramebufferPixelFormat;
 typedef uint8_t UVCoord;
