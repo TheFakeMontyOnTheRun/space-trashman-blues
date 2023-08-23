@@ -131,7 +131,7 @@ void castVisibility(const enum EDirection from,
             continue;
         }
 
-        narrowing = abs(verticalDistance) + 3;
+        narrowing = abs(verticalDistance) + VISIBILITY_CONE_NARROWING;
 
         if (stackHead != stackEnd) {
             if ((horizontalDistance >= -narrowing) && (horizontalDistance <= 0)) {
