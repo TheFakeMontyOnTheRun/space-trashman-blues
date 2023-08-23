@@ -14,17 +14,14 @@ extern const struct Pattern patterns[127];
 
 extern int8_t map[32][32];
 
-const uint8_t shapeIndex[] = {14};
-const uint8_t shape0[] = {
+const uint8_t shape[] = {
         6, 2,
         40, 63,
         42, 40,
         54, 39,
         54, 65,
         42, 66,
-        40, 63
-};
-const uint8_t shape1[] = {
+        40, 63,
         7, 2,
         32, 102,
         24, 112,
@@ -32,9 +29,7 @@ const uint8_t shape1[] = {
         59, 139,
         59, 97,
         41, 94,
-        24, 92
-};
-const uint8_t shape2[] = {
+        24, 92,
         8, 2,
         35, 115,
         42, 116,
@@ -43,9 +38,7 @@ const uint8_t shape2[] = {
         32, 139,
         35, 132,
         35, 115,
-        37, 90
-};
-const uint8_t shape3[] = {
+        37, 90,
         10, 2,
         36, 64,
         35, 91,
@@ -56,9 +49,7 @@ const uint8_t shape3[] = {
         42, 110,
         35, 96,
         35, 91,
-        36, 64
-};
-const uint8_t shape4[] = {
+        36, 64,
         7, 2,
         35, 91,
         38, 74,
@@ -66,9 +57,7 @@ const uint8_t shape4[] = {
         59, 96,
         57, 99,
         42, 105,
-        35, 91
-};
-const uint8_t shape5[] = {
+        35, 91,
         8, 2,
         59, 38,
         51, 34,
@@ -77,9 +66,7 @@ const uint8_t shape5[] = {
         39, 78,
         50, 81,
         59, 74,
-        59, 38
-};
-const uint8_t shape6[] = {
+        59, 38,
         9, 2,
         36, 71,
         35, 91,
@@ -89,9 +76,7 @@ const uint8_t shape6[] = {
         58, 74,
         50, 80,
         39, 77,
-        36, 67
-};
-const uint8_t shape7[] = {
+        36, 67,
         8, 2,
         54, 88,
         55, 92,
@@ -100,9 +85,7 @@ const uint8_t shape7[] = {
         46, 99,
         45, 97,
         50, 91,
-        55, 85
-};
-const uint8_t shape8[] = {
+        55, 85,
         8, 2,
         41, 78,
         41, 85,
@@ -111,36 +94,28 @@ const uint8_t shape8[] = {
         54, 92,
         57, 75,
         50, 81,
-        41, 78
-};
-const uint8_t shape9[] = {
+        41, 78,
         6, 2,
         39, 43,
         45, 40,
         58, 45,
         58, 39,
         49, 35,
-        39, 43
-};
-const uint8_t shape10[] = {
+        39, 43,
         6, 2,
         36, 64,
         39, 75,
         40, 51,
         39, 49,
         38, 43,
-        36, 64
-};
-const uint8_t shape11[] = {
+        36, 64,
         6, 2,
         50, 78,
         53, 53,
         56, 52,
         59, 47,
         59, 72,
-        50, 78
-};
-const uint8_t shape12[] = {
+        50, 78,
         7, 2,
         39, 104,
         37, 100,
@@ -148,37 +123,26 @@ const uint8_t shape12[] = {
         26, 115,
         29, 109,
         39, 104,
-        52, 93
-};
-const uint8_t* shapes[] = {
-        &shapeIndex[0],
-        &shape0[0],
-        &shape1[0],
-        &shape2[0],
-        &shape3[0],
-        &shape4[0],
-        &shape5[0],
-        &shape6[0],
-        &shape7[0],
-        &shape8[0],
-        &shape9[0],
-        &shape10[0],
-        &shape11[0],
-        &shape12[0]
+        52, 93,
+	0
 };
 
+void drawGraphic(const uint8_t *graphic) {
 
-void drawGraphic(const uint8_t **graphic) {
-  uint8_t nshapes = graphic[0][0];
-  for (int s = 1; s < nshapes; ++s) {
-    const uint8_t *shape = &graphic[s][0] + 2;
-    uint8_t npoints = shapes[s][0];
-    uint8_t colour = shapes[s][1];
+  const uint8_t* ptr = graphic;
 
+  while (*ptr) {
+    const uint8_t npoints = *ptr; 
+    const uint8_t colour = *(ptr + 1);
+    ptr += 2;
+    const uint8_t *shape = ptr;
+    
     for (int c = 0; c < npoints - 1; ++c) {
-      drawLine(shape[2 * c], shape[(2 * c) + 1], shape[(2 * c) + 2], shape[(2 * c) + 3], 2);
+      drawLine(shape[2 * c], shape[(2 * c) + 1], shape[(2 * c) + 2], shape[(2 * c) + 3], colour);
+      ptr += 2;
     }
-    drawLine(shape[ 2 * npoints - 2], shape[ 2 * npoints - 1], shape[0], shape[1], 2);
+    drawLine(shape[ 2 * npoints - 2], shape[ 2 * npoints - 1], shape[0], shape[1], colour);
+    ptr += 2;
   }
 }
 
@@ -186,7 +150,7 @@ void titleScreen(void) {
   uint8_t keepGoing = 1;
   clearScreen();
 
-  drawGraphic(shapes);
+  drawGraphic(shape);
 
 #ifndef GAMEPAD
   writeStr(16, 1, "Sub Mare\nImperium:\nDerelict\nby\nDaniel Monteiro\nPress SPACE to\nstart ");
