@@ -32,6 +32,8 @@ add_executable(derelict64
         menu/src/GameMenu.c
         menu/src/Main.c
         menu/src/Engine.c
+        menu/src/UI.c
+        menu/src/HackingScreen.c
         base3d/src/SDLVersion/CSDL2Renderer.c
         GL1Common/LoadBitmapGL1.c
         GL1Common/RendererGL1.c
@@ -45,12 +47,10 @@ add_executable(derelict64
         ../common/src/FixP.c
         ../common/src/MapWithCharKey.c
         ../common/src/PackedFileReader.c
-	../common/src/EDirection_Utils.c
-        ../common/src/Dungeon.c	
+	    ../common/src/EDirection_Utils.c
         ../common/src/Events.c
+        ../common/src/Dungeon.c
         SoundSystem/NullMusic.c
-        menu/src/UI.c
-        menu/src/HackingScreen.c
         SoundSystem/PCMAudio.c
         ../core/src/Derelict.c
         ../core/src/Core.c

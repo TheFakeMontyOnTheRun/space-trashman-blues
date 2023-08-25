@@ -18,12 +18,12 @@ MENU_OBJ= menu/src/Main.o \
 	  ../common/src/EDirection_Utils.o \
 	  ../common/src/Globals.o \
 	  ../common/src/VisibilityStrategy.o \
+	  ../common/src/Events.o \
+	  ../common/src/Dungeon.o \
 	  base3d/src/LoadBitmap.o \
 	  base3d/src/CRenderer.o \
-	  base3d/src/Events.o \
 	  base3d/src/CRenderer_Rasterization.o \
 	  base3d/src/CRenderer_Tesselation.o \
-	  base3d/src/Dungeon.o \
 	  menu/src/GameMenu.o \
 	  menu/src/MainMenu.o \
 	  menu/src/Engine.o \

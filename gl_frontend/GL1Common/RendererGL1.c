@@ -336,7 +336,6 @@ void drawMap(const struct CActor *current) {
         needsToRedrawVisibleMeshes = TRUE;
     }
 
-
     if (visibilityCached) {
         return;
     }
