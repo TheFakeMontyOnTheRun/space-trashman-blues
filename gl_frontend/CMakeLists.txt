@@ -47,7 +47,7 @@ add_executable(derelict64
         ../common/src/PackedFileReader.c
 	../common/src/EDirection_Utils.c
         ../common/src/Dungeon.c	
-        base3d/src/Events.c
+        ../common/src/Events.c
         SoundSystem/NullMusic.c
         menu/src/UI.c
         menu/src/HackingScreen.c
