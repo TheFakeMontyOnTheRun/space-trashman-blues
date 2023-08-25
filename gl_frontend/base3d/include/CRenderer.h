@@ -1,7 +1,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-
+#define TILED_BITMAPS
 #define XRES 216
 #define YRES 200
 #define XRES_FRAMEBUFFER 320

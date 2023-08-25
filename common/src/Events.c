@@ -3,10 +3,6 @@
 #include <string.h>
 #include <assert.h>
 
-#ifdef N64
-#include <libdragon.h>
-#endif
-
 #ifdef WIN32
 #include "Win32Int.h"
 #else
@@ -33,6 +29,7 @@
 #include "PackedFileReader.h"
 #include "Dungeon.h"
 #include "SoundSystem.h"
+#include "Globals.h"
 
 int x = 0;
 int z = 0;
@@ -40,8 +37,8 @@ int rotation = 0;
 enum CrawlerState shouldContinue = kCrawlerGameInProgress;
 struct CActor actor;
 
-void clearMapCache(void) {
-  memFill(&(ITEMS_IN_MAP(0, 0)), 0xFF, MAP_SIZE * MAP_SIZE);
+void clearMapCache() {
+    memFill(&(ITEMS_IN_MAP(0, 0)), 0xFF, MAP_SIZE * MAP_SIZE);
 }
 
 void onLevelLoaded(int index) {
@@ -68,6 +65,10 @@ void tickMission(enum ECommand cmd) {
     }
 }
 
+void setItem(const int x, const int y, uint8_t item) {
+    ITEMS_IN_MAP(x, y) = item;
+}
+
 void loadMap(int map, struct MapWithCharKey *collisionMap) {
 
     /* all the char keys plus null terminator */
@@ -89,6 +90,12 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
 
     sprintf (nameBuffer, "map%d.img", map);
 
+#ifndef TILED_BITMAPS
+    if (mapTopLevel) {
+      releaseBitmap(mapTopLevel);
+    }
+    mapTopLevel = loadBitmap(nameBuffer);
+#else
     if (mapTopLevel[0]) {
         for (c = 0; c < 8; ++c) {
             releaseBitmap(mapTopLevel[c]);
@@ -99,8 +106,9 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
         char buffer[32];
         sprintf(buffer, "map%d_tile%04d.img", map, c);
         mapTopLevel[c] = loadBitmap(buffer);
-    }
-
+    }    
+#endif
+    
     disposeDiskBuffer(buffer);
 }
 
@@ -128,8 +136,8 @@ int loopTick(enum ECommand command) {
             yCameraOffset = ((struct CTile3DProperties *) getFromMap(&tileProperties,
                                                                      LEVEL_MAP(x, z)))->mFloorHeight -
                             ((struct CTile3DProperties *) getFromMap(&tileProperties,
-								     LEVEL_MAP(actor.position.x, actor.position.y)
-								     ))->mFloorHeight;
+                                                                     LEVEL_MAP(actor.position.x,
+                                                                               actor.position.y)))->mFloorHeight;
         } else {
             yCameraOffset = 0;
         }
@@ -156,18 +164,15 @@ int loopTick(enum ECommand command) {
     return shouldContinue;
 }
 
-void setItem(const int x, const int y, uint8_t item) {
-  ITEMS_IN_MAP(x, y) = item;
-}
-
 void initRoom(int room) {
     int16_t c;
-    char buffer[256];
+
     shouldContinue = kCrawlerGameInProgress;
     mBufferedCommand = kCommandNone;
     gameTicks = 0;
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = TRUE;
+    needsToRedrawHUD = TRUE;
     onLevelLoaded(room);
 
     for (c = 0; c < 256; ++c) {
@@ -184,19 +189,4 @@ void initRoom(int room) {
     }
 
     loadMap(room, &colliders);
-
-    for (c = 1; c < itemsCount; ++c) {
-
-        int itemRoom = getItem(c)->roomId;
-
-        // if we have the texture, but don't need it, unload it
-        if (!(itemRoom == room ||
-              itemRoom == 0) && // player has Item
-            itemSprites[c] != NULL) {
-
-            releaseBitmap(itemSprites[c]->raw);
-            disposeMem(itemSprites[c]);
-            itemSprites[c] = NULL;
-        }
-    }
 }

@@ -41,7 +41,7 @@ add_executable(derelict32
 		../common/src/PackedFileReader.c
 		../common/src/EDirection_Utils.c
 		../common/src/Dungeon.c
-		base3d/src/Events.c
+		../common/src/Events.c
 		base3d/src/CRenderer_Rasterization.c
 		base3d/src/CRenderer_Tesselation.c
 		SoundSystem/NullMusic.c
