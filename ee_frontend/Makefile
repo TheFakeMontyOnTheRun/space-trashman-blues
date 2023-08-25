@@ -22,8 +22,8 @@ EE_OBJS= menu/src/Main.o \
 	../common/src/EDirection_Utils.o \
 	../common/src/Globals.o \
 	../common/src/VisibilityStrategy.o \
-	base3d/src/Events.o \
-	base3d/src/Dungeon.o \
+	../common/src/Events.o \
+	../common/src/Dungeon.o \
 	menu/src/GameMenu.o \
 	menu/src/MainMenu.o \
 	menu/src/Engine.o \

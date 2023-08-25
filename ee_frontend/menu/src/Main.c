@@ -28,7 +28,6 @@ long uclock() {
 #include "PackedFileReader.h"
 #include "Derelict.h"
 
-uint8_t *map;
 extern char *textBuffer;
 extern char *messageLogBuffer;
 extern enum EVisibility *visMap;

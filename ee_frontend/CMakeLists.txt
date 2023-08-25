@@ -44,9 +44,7 @@ add_executable(derelict128
 		../common/src/FixP.c
 		../common/src/MapWithCharKey.c
 		../common/src/EDirection_Utils.c
-		base3d/src/Events.c
 		SoundSystem/NullMusic.c
-		base3d/src/Dungeon.c
 		menu/src/UI.c
 		menu/src/HackingScreen.c
 		SoundSystem/PCMAudio.c

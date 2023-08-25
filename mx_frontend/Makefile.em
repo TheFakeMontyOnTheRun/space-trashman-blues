@@ -28,6 +28,8 @@ MENU_OBJ=menu/src/MainMenu.o \
 	../common/src/EDirection_Utils.o \
 	../common/src/Globals.o \
 	../common/src/VisibilityStrategy.o \
+	../common/src/Events.o \
+	../common/src/Dungeon.o \
 	menu/src/Crawler.o \
 	menu/src/Engine.o \
 	menu/src/UI.o \
@@ -35,7 +37,6 @@ MENU_OBJ=menu/src/MainMenu.o \
 	base3d/src/SDLVersion/SDL1Renderer.o \
 	base3d/src/LoadBitmap.o \
 	base3d/src/CRenderer.o \
-	base3d/src/Events.o \
 	base3d/src/CRenderer_Rasterization.o \
 	base3d/src/CRenderer_Tesselation.o \
 	SoundSystem/NullMusic.o \
@@ -43,7 +44,6 @@ MENU_OBJ=menu/src/MainMenu.o \
 	menu/src/HackingScreen.o \
 	menu/src/GameMenu.o \
 	menu/src/CreditsScreen.o \
-	base3d/src/Dungeon.o \
 	../core/src/Derelict.o \
 	../core/src/Core.o \
 	../core/src/Parser.o

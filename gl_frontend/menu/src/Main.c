@@ -37,8 +37,6 @@ long uclock() {
 #include <emscripten/emscripten.h>
 #endif
 
-
-uint8_t *map;
 extern char *textBuffer;
 extern char *messageLogBuffer;
 extern enum EVisibility *visMap;

@@ -28,12 +28,12 @@ MENU_OBJ= menu/src/Main.o \
           	  ../common/src/EDirection_Utils.o \
           	  ../common/src/Globals.o \
           	  ../common/src/VisibilityStrategy.o \
+          	  ../common/src/Events.o \
+          	  ../common/src/Dungeon.o \
           	  GL1Common/LoadBitmapGL1.o \
           	  GL1Common/RendererGL1.o \
-          	  base3d/src/Events.o \
           	  GL1Common/Renderer_RasterizationGL1.o \
           	  GL1Common/Renderer_TesselationGL1.o \
-          	  base3d/src/Dungeon.o \
           	  menu/src/GameMenu.o \
           	  menu/src/MainMenu.o \
           	  menu/src/Engine.o \
