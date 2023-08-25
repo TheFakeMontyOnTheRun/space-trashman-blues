@@ -32,6 +32,8 @@
 
 #define WALKING_BIAS (Div(intToFix(1), intToFix(16)))
 #define STANDARD_HEIGHT (Div(intToFix(230), intToFix(100)))
+
+extern const char *focusItemName;
 int hasSnapshot = FALSE;
 FixP_t playerHeight = 0;
 FixP_t walkingBias = 0;
@@ -75,7 +77,6 @@ FixP_t xCameraOffset;
 FixP_t yCameraOffset;
 FixP_t zCameraOffset;
 uint8_t enableSmoothMovement = FALSE;
-char *focusItemName = NULL;
 
 struct Projection projectionVertices[8];
 
@@ -217,17 +218,6 @@ void drawMap(const struct CActor *current) {
     needsToRedrawVisibleMeshes = TRUE;
 
     cameraPosition = mapCamera;
-
-    for (z = 0; z < MAP_SIZE; ++z) {
-        for (x = 0; x < MAP_SIZE; ++x) {
-            const uint8_t item = ITEMS_IN_MAP(x, z);
-            ITEMS_IN_MAP(x, z) = 0xFF;
-
-            if (item != 0xFF) {
-                ITEMS_IN_MAP(x, z) = item;
-            }
-        }
-    }
 
     switch (cameraDirection) {
         case kNorth:

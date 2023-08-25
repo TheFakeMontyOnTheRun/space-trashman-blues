@@ -40,11 +40,11 @@ add_executable(derelict32
 		../common/src/MapWithCharKey.c
 		../common/src/PackedFileReader.c
 		../common/src/EDirection_Utils.c
+		../common/src/Dungeon.c
 		base3d/src/Events.c
 		base3d/src/CRenderer_Rasterization.c
 		base3d/src/CRenderer_Tesselation.c
 		SoundSystem/NullMusic.c
-		base3d/src/Dungeon.c
 		menu/src/UI.c
 		menu/src/HackingScreen.c
 		SoundSystem/PCMAudio.c

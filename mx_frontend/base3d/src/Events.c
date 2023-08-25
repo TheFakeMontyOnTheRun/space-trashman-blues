@@ -66,7 +66,6 @@ void tickMission(enum ECommand cmd) {
 }
 
 void setItem(const int x, const int y, uint8_t item) {
-
     ITEMS_IN_MAP(x, y) = item;
 }
 

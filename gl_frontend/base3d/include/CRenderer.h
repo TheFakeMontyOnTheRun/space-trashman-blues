@@ -103,11 +103,7 @@ void fill(
 
 void drawMesh(const struct Mesh *mesh, const struct Vec3 at);
 
-void drawMap(const uint8_t *elements,
-             const uint8_t *items,
-             const uint8_t *actors,
-             uint8_t *effects,
-             const struct CActor *current);
+void drawMap(const struct CActor *current);
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour);
 
