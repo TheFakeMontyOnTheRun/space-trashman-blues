@@ -31,9 +31,10 @@
 
 /* This include must be here just to satisfy the .h - your IDE might trick you into thinking this is not needed. And it's not, but ISO requires. */
 #include "CActor.h"
-
+#include "LoadBitmap.h"
 #include "CRenderer.h"
 
+const char *focusItemName = NULL;
 struct GameSnapshot gameSnapshot;
 uint8_t *map;
 uint8_t *itemsInMap;
@@ -70,15 +71,19 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             case kCommandRight:
                 playerCrawler.rotation = rightOf(playerCrawler.rotation);
                 turnRight();
+#ifdef PAGE_FLIP_ANIMATION		
                 turnStep = PAGE_FLIP_TARGET;
                 turnTarget = 0;
+#endif		
                 break;
 
             case kCommandLeft:
                 playerCrawler.rotation = leftOf(playerCrawler.rotation);
                 turnLeft();
+#ifdef PAGE_FLIP_ANIMATION				
                 turnStep = 0;
                 turnTarget = PAGE_FLIP_TARGET;
+#endif		
                 break;
             case kCommandUp: {
                 struct Vec2i offset = mapOffsetForDirection(

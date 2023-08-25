@@ -18,7 +18,7 @@ include_directories(common/include)
 include_directories(menu/include)
 include_directories(SoundSystem)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic -g")
 
 find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -45,10 +45,10 @@ add_executable(derelict64
         ../common/src/FixP.c
         ../common/src/MapWithCharKey.c
         ../common/src/PackedFileReader.c
-	    ../common/src/EDirection_Utils.c
+	../common/src/EDirection_Utils.c
+        ../common/src/Dungeon.c	
         base3d/src/Events.c
         SoundSystem/NullMusic.c
-        base3d/src/Dungeon.c
         menu/src/UI.c
         menu/src/HackingScreen.c
         SoundSystem/PCMAudio.c

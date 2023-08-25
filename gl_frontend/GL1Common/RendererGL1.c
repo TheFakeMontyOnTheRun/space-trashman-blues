@@ -65,7 +65,6 @@ uint8_t linesOfSight[MAP_SIZE][MAP_SIZE];
 uint8_t revealed[MAP_SIZE][MAP_SIZE];
 struct MapWithCharKey tileProperties;
 struct Vec2i cameraPosition;
-uint8_t mItems[MAP_SIZE][MAP_SIZE];
 enum ECommand mBufferedCommand = kCommandNone;
 struct Texture *itemSprites[TOTAL_ITEMS];
 int turnTarget = 0;
@@ -306,11 +305,7 @@ void updateCursorForRenderer(const int x, const int z) {
     cursorZ = z;
 }
 
-void drawMap(const uint8_t *elements,
-             const uint8_t *items,
-             const uint8_t *actors,
-             uint8_t *effects,
-             const struct CActor *current) {
+void drawMap(const struct CActor *current) {
 
     int8_t z, x;
     const struct Vec2i mapCamera = current->position;
@@ -350,22 +345,6 @@ void drawMap(const uint8_t *elements,
     needsToRedrawVisibleMeshes = TRUE;
 
     cameraPosition = mapCamera;
-
-
-    for (z = 0; z < MAP_SIZE; ++z) {
-        for (x = 0; x < MAP_SIZE; ++x) {
-            const uint16_t offset = (MAP_SIZE * z) + x;
-            const uint8_t actor = actors[offset];
-            const uint8_t item = items[offset];
-            const uint8_t effect = effects[offset];
-
-            mItems[z][x] = 0xFF;
-
-            if (item != 0xFF) {
-                mItems[z][x] = item;
-            }
-        }
-    }
 
     switch (cameraDirection) {
         case kNorth:
@@ -473,7 +452,7 @@ void render(const long ms) {
                         z = visPos.y;
                         element = LEVEL_MAP(x, z);
 
-                        itemsSnapshotElement = mItems[z][x];
+                        itemsSnapshotElement = ITEMS_IN_MAP(x, z);
 
                         position.mX =
                                 mCamera.mX + intToFix(-2 * ((MAP_SIZE - 1) - x));
@@ -512,7 +491,7 @@ void render(const long ms) {
                         z = visPos.y;
 
                         element = LEVEL_MAP(x, z);
-                        itemsSnapshotElement = mItems[z][x];
+                        itemsSnapshotElement = ITEMS_IN_MAP(x, z);
 
                         position.mX = mCamera.mX + intToFix(-2 * x);
                         position.mY = mCamera.mY;
@@ -544,7 +523,7 @@ void render(const long ms) {
                         z = visPos.x;
 
                         element = LEVEL_MAP(z, x );
-                        itemsSnapshotElement = mItems[x][z];
+                        itemsSnapshotElement = ITEMS_IN_MAP(z, x);
 
                         position.mX = mCamera.mX + intToFix(-2 * x + 1) - intToFix(1);
                         position.mY = mCamera.mY;
@@ -580,7 +559,7 @@ void render(const long ms) {
                         z = visPos.x;
 
                         element = LEVEL_MAP(z, x);
-                        itemsSnapshotElement = mItems[x][z];
+                        itemsSnapshotElement = ITEMS_IN_MAP(z, x);
 
                         position.mX = mCamera.mX + intToFix(2 * x - 1) + intToFix(1);
                         position.mY = mCamera.mY;
