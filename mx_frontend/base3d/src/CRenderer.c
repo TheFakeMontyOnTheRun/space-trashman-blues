@@ -209,7 +209,6 @@ void drawMap(const struct CActor *current) {
         needsToRedrawVisibleMeshes = TRUE;
     }
 
-
     if (visibilityCached) {
         return;
     }
@@ -268,7 +267,6 @@ void render(const long ms) {
     if (messageLogBufferCoolDown > 0) {
         messageLogBufferCoolDown -= ms;
     }
-
 
     if (!enable3DRendering) {
         return;

@@ -16,4 +16,6 @@ void drawImageWindow(const int x, const int y, const unsigned int dx, const unsi
 int drawAppearingWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title,
                         long remainingTime);
 
+void updateMap(void);
+
 #endif /*THE_MISTRAL_REPORT_UI_H*/
