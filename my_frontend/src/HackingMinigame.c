@@ -46,14 +46,15 @@ void HackingScreen_initStateCallback(void) {
 void HackingScreen_repaintCallback(void) {
     uint8_t pin;
 
-    drawWindow(1, 1, 40, 15, "Disassembly: CONTROLLER.PRG (stack)", 2);
+    drawWindow(1, 1, 40, 15, "Stack trace:", 2);
 
     writeStr((12 * 0), 11, cursorPosition == 0 ? "[CPU0]" : " CPU0 ");
     writeStr((12 * 1), 11, cursorPosition == 1 ? "[CPU1]" : " CPU1 ");
     writeStr((12 * 2), 11, cursorPosition == 2 ? "[CPU2]" : " CPU2 ");
 
-    writeStr(0, 10, "-------------------------------");
-
+    for (int c = 0; c < 31; ++c ) {
+        writeStr(c, 10, "-");
+    }
 
     for (pin = 0; pin < 3; ++pin) {
         uint8_t disk;
@@ -78,7 +79,7 @@ void HackingScreen_repaintCallback(void) {
         }
     }
 
-    writeStr(1, 2, "register pointer:");
+    writeStr(1, 2, "Pointer:");
 
     if (holdingDisk != 0xFF) {
         writeStr(19, 2, functionNames[holdingDisk]);
