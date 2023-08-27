@@ -15,8 +15,8 @@ extern struct ObjectNode *roomItem;
 
 char *menuItems[] = {
         "Use/Toggle",
-        "Use with...",
-        "Use/pick...",
+        "Use with",
+        "Use/pick",
         "Drop",
         "Next item",
         "Next in room",

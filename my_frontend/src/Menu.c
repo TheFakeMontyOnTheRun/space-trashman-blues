@@ -151,7 +151,11 @@ void showMessage(const char *message) {
     uint8_t keepGoing = 1;
     clearTextScreen();
     writeStr(1, 17, message);
+#ifndef GAMEPAD
     writeStr(1, 22, "Press SPACE button to continue");
+#else
+    writeStr(1, 22, "Press start to continue");
+#endif
 
 #ifdef SDLW
     /* Just to keep the OS happy */
