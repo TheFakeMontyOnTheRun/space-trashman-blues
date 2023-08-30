@@ -27,7 +27,7 @@ add_executable(derelict32
 		menu/src/CreditsScreen.c
 		menu/src/GameMenu.c
 		menu/src/Main.c
-		menu/src/Engine.c
+		../common/src/Engine.c
 		base3d/src/SDLVersion/CSDL2Renderer.c
 		base3d/src/LoadBitmap.c
 		base3d/src/CRenderer.c
@@ -45,7 +45,7 @@ add_executable(derelict32
 		base3d/src/CRenderer_Rasterization.c
 		base3d/src/CRenderer_Tesselation.c
 		SoundSystem/NullMusic.c
-		menu/src/UI.c
+		../common/src/UI.c
 		menu/src/HackingScreen.c
 		SoundSystem/PCMAudio.c
 		../core/src/Derelict.c

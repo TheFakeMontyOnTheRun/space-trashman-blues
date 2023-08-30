@@ -29,7 +29,7 @@ add_executable(derelict128
 		menu/src/CreditsScreen.c
 		menu/src/GameMenu.c
 		menu/src/Main.c
-		menu/src/Engine.c
+		../common/src/Engine.c
 		base3d/src/ee/EmotionEngineRenderer.c
 		base3d/src/ee/LoadBitmap.c
 		base3d/src/ee/Renderer.c
@@ -45,7 +45,7 @@ add_executable(derelict128
 		../common/src/MapWithCharKey.c
 		../common/src/EDirection_Utils.c
 		SoundSystem/NullMusic.c
-		menu/src/UI.c
+		../common/src/UI.c
 		menu/src/HackingScreen.c
 		SoundSystem/PCMAudio.c
 		../core/src/Derelict.c

@@ -26,8 +26,8 @@ EE_OBJS= menu/src/Main.o \
 	../common/src/Dungeon.o \
 	menu/src/GameMenu.o \
 	menu/src/MainMenu.o \
-	menu/src/Engine.o \
-	menu/src/UI.o \
+	../common/src/Engine.o \
+	../common/src/UI.o \
 	menu/src/HackingScreen.o \
 	menu/src/BattleScreen.o \
 	menu/src/HelpScreen.o \
