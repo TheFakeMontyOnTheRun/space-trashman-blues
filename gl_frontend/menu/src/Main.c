@@ -8,15 +8,6 @@
 #include <libdragon.h>
 #endif
 
-const long UCLOCKS_PER_SEC = 1000;
-
-long timeEllapsed = 0;
-
-long uclock() {
-    timeEllapsed += (1000 / 60);
-    return timeEllapsed;
-}
-
 #include "FixP.h"
 #include "Vec.h"
 #include "Enums.h"
@@ -72,42 +63,31 @@ void shutdownHW(void) {
 
 long start_clock, end_clock, prev;
 
-#ifdef __EMSCRIPTEN__
-void mainLoop();
-#endif
-
-#ifndef ANDROID
-
-
 int main(int argc, char **argv) {
 
     initHW(argc, argv);
 
     enterState(kMainMenu);
 
-    end_clock = uclock();
+    end_clock = 0;
     prev = 0;
-    start_clock = uclock();
-
-#ifdef __EMSCRIPTEN__
-    emscripten_set_main_loop(mainLoop, 0, 1);
-#else
+    start_clock = 0;
 
     while (isRunning) {
 
         long now, delta_time;
 
-        now = (end_clock - start_clock) / (UCLOCKS_PER_SEC / 1000);
+        now = (end_clock - start_clock);
         delta_time = now - prev;
         prev = now;
 
-        if (delta_time < 50) {
-            delta_time = 50;
+        if (delta_time < 20) {
+            delta_time = 20;
         }
 
 #ifndef N64
 #ifndef NDS
-        startFrameGL(640, 480);
+        startFrameGL(320, 240);
 #else
         startFrameGL(255, 191);
 #endif
@@ -115,18 +95,15 @@ int main(int argc, char **argv) {
         startFrameGL(320, 240);
 #endif
 
-        isRunning = isRunning && menuTick(20);
+        isRunning = isRunning && menuTick(delta_time);
 
         endFrameGL();
         flipRenderer();
 
     }
-#endif
 
 
     shutdownHW();
 
     return 0;
 }
-
-#endif
