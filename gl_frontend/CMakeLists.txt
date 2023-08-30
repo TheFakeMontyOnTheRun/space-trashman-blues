@@ -24,16 +24,15 @@ find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
 
 add_executable(derelict64
-        menu/src/MainMenu.c
-        menu/src/Crawler.c
-        menu/src/HelpScreen.c
-        menu/src/BattleScreen.c
-        menu/src/CreditsScreen.c
-        menu/src/GameMenu.c
+        ../common/src/MainMenu.c
+        ../common/src/Crawler.c
+        ../common/src/HelpScreen.c
+        ../common/src/CreditsScreen.c
+        ../common/src/GameMenu.c
         menu/src/Main.c
         ../common/src/Engine.c
         ../common/src/UI.c
-        menu/src/HackingScreen.c
+        ../common/src/HackingScreen.c
         base3d/src/SDLVersion/CSDL2Renderer.c
         GL1Common/LoadBitmapGL1.c
         GL1Common/RendererGL1.c
