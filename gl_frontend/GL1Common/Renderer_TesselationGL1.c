@@ -47,6 +47,7 @@ struct Vec3 cameraOffset;
 FixP_t walkingBias = 0;
 FixP_t playerHeight = 0;
 struct Texture *nativeTextures[TOTAL_TEXTURES];
+extern struct Texture *itemSprites[TOTAL_ITEMS];
 
 #define BIAS (intToFix(128))
 #define REVERSE_BIAS (1.0f/128.0f)

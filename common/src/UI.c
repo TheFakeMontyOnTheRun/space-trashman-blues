@@ -17,7 +17,6 @@
 
 #include "Enums.h"
 #include "FixP.h"
-#include "LoadBitmap.h"
 #include "Engine.h"
 #include "FixP.h"
 #include "Vec.h"
@@ -30,19 +29,24 @@
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
+#include "LoadBitmap.h"
 #include "VisibilityStrategy.h"
 
 
 #include "UI.h"
 
-void
-drawWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *__restrict__ title) {
+extern const char *thisMissionName;
 
-    fill((x) * 8, (y) * 8, dx * 8, dy * 8, 0, TRUE);
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, 255, FALSE);
-    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, 0);
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, 0, FALSE);
-    drawTextAt(x + 1, y, title, 255);
+extern int currentSelectedItem;
+
+void
+drawWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title) {
+
+    fill((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
+    fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
+    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
+    fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
+    drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
 }
 
 int
@@ -67,36 +71,36 @@ drawAppearingWindow(const int x, const int y, const unsigned int dx, const unsig
         drawRect(lerpPositionX * 8,
                  lerpPositionY * 8,
                  lerpPositionWidth * 8,
-                 lerpPositionHeight * 8, 0);
+                 lerpPositionHeight * 8, getPaletteEntry(0xFF000000));
 
         return 0;
     }
 
-    fill((x) * 8, (y) * 8, dx * 8, dy * 8, 0, TRUE);
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, 255, FALSE);
-    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, 0);
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, 0, FALSE);
-    drawTextAt(x + 1, y, title, 255);
+    fill((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
+    fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
+    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
+    fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
+    drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
 
     return 1;
 }
 
 void
-drawTextWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *__restrict__ title,
-               const char *__restrict__ content) {
+drawTextWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title,
+               const char *content) {
     drawWindow(x, y, dx, dy, title);
-    drawTextAtWithMargin(x + 1, y + 2, (x + dx - 2) * 8, content, 0);
+    drawTextAt(x + 1, y + 2, content, 0);
 }
 
 void
-drawImageWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *__restrict__ title,
-                const struct Bitmap *__restrict__ content) {
-    fill((x) * 8, (y) * 8, dx * 8, dy * 8, 0, TRUE);
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, 255, FALSE);
+drawImageWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title,
+                struct Bitmap *content) {
+    fill((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
+    fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
     drawBitmap((x - 1) * 8, (y) * 8, content, TRUE);
-    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, 0);
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, 0, FALSE);
-    drawTextAt(x + 1, y, title, 255);
+    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
+    fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
+    drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
 }
 
 void updateMap(void) {
@@ -120,13 +124,24 @@ void updateMap(void) {
 void redrawHUD(void) {
     int line = 0;
     struct ObjectNode *head;
+    struct WorldPosition visPos = *getPlayerPosition();
+    int x, z, c;
     struct Item *itemPtr;
-    fill(XRES, 0, XRES_FRAMEBUFFER - XRES, YRES, 0, FALSE);
-    drawTextAt(1 + (XRES / 8), 1, " Map:", 255);
+    drawTextAtWithMargin(1, 1, XRES, thisMissionName, getPaletteEntry(0xFFFFFFFF));
 
+    drawTextAt(1 + (XRES / 8), 1, " Map:", getPaletteEntry(0xFFFFFFFF));
+
+#ifndef TILED_BITMAPS
     if (mapTopLevel != NULL) {
         drawBitmap(XRES, 72, mapTopLevel, 0);
     }
+#else
+    if (mapTopLevel[0] != NULL) {
+        for (c = 0; c < 8; ++c) {
+            drawBitmap(((c & 3) * 32), 8 + (c >> 2) * 32, mapTopLevel[c], 1);
+        }
+    }
+#endif
 
     //draw current item on the corner of the screen
     head = getPlayerItems();
@@ -136,22 +151,14 @@ void redrawHUD(void) {
         if (itemPtr != NULL) {
             if (line == currentSelectedItem) {
                 char textBuffer[255];
-                int itemIndex = itemPtr->index;
                 sprintf(&textBuffer[0], "%s", itemPtr->name);
                 textBuffer[14] = 0;
 
-                // lazy loading the item sprites
-                if (itemSprites[itemIndex] == NULL) {
-                    char buffer[64];
-                    sprintf(&buffer[0], "%s.img", itemPtr->name);
-                    itemSprites[itemIndex] = loadBitmap(&buffer[0]);
-                }
+//                drawBitmapRaw(XRES + 8, 199 - 32 - 16 - 16, 32, 32, itemSprites[itemPtr->index]->rotations[0], 1);
 
-                drawBitmapRaw(XRES + 8, YRES - 16 - 16, 16, 16, itemSprites[itemIndex]->data, 1);
-
-                drawTextAtWithMarginWithFiltering(2 + ((XRES) / 8), ((YRES_FRAMEBUFFER / 8) + 1) - 2, 311,
-                                                  itemPtr->name,
-                                                  itemPtr->active ? 192 : 255, '\n');
+                drawTextAtWithMarginWithFiltering(2 + ((XRES) / 8), 23, 311, itemPtr->name,
+                                                  itemPtr->active ? getPaletteEntry(0xFFAAAAAA) : getPaletteEntry(
+                                                          0xFFFFFFFF), '\n');
             }
             ++line;
         }
