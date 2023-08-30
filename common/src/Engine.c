@@ -71,7 +71,6 @@ void enterState(enum EGameMenuState newState) {
     currentPresentationState = kAppearing;
     cursorPosition = 0;
     nextNavigationSelection = -1;
-
     switch (newState) {
         default:
         case kMainMenu:
@@ -128,14 +127,6 @@ void enterState(enum EGameMenuState newState) {
             repaintCallback = HackingScreen_repaintCallback;
             tickCallback = HackingScreen_tickCallback;
             unloadStateCallback = HackingScreen_unloadStateCallback;
-        }
-            break;
-        case kRandomBattle: {
-            initStateCallback = BattleScreen_initStateCallback;
-            initialPaintCallback = BattleScreen_initialPaintCallback;
-            repaintCallback = BattleScreen_repaintCallback;
-            tickCallback = BattleScreen_tickCallback;
-            unloadStateCallback = BattleScreen_unloadStateCallback;
         }
             break;
         case kQuit:

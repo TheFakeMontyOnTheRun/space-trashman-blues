@@ -31,8 +31,8 @@ add_executable(derelict64
         menu/src/CreditsScreen.c
         menu/src/GameMenu.c
         menu/src/Main.c
-        menu/src/Engine.c
-        menu/src/UI.c
+        ../common/src/Engine.c
+        ../common/src/UI.c
         menu/src/HackingScreen.c
         base3d/src/SDLVersion/CSDL2Renderer.c
         GL1Common/LoadBitmapGL1.c

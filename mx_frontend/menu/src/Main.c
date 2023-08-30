@@ -227,6 +227,7 @@ int main(int argc, char **argv) {
         }
 #endif
         isRunning = isRunning && menuTick(delta_time);
+        flipRenderer();
     }
 #endif
     unloadStateCallback(-1);

@@ -311,10 +311,6 @@ void Crawler_repaintCallback() {
 enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     int returnCode;
 
-    if (kEnteringRandomBattle == currentPresentationState) {
-        return kRandomBattle;
-    }
-
     if (showPromptToAbandonMission) {
 
         timeUntilNextState -= delta;
@@ -485,7 +481,6 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
 void Crawler_unloadStateCallback(int32_t newState) {
 
     if (newState != kBackToGame &&
-        newState != kRandomBattle &&
         newState != kInspectItem &&
         newState != kHackingGame) {
         int c;
