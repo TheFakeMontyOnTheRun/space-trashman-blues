@@ -90,8 +90,8 @@ struct Texture *makeTextureFrom(const char *filename) {
     toReturn->raw->uploadId = submitBitmapToGPU(toReturn->raw);
 #ifndef NDS
     glBindTexture(GL_TEXTURE_2D, toReturn->raw->uploadId);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 #endif
     return toReturn;
 }
@@ -368,14 +368,14 @@ void drawFloorAt(const struct Vec3 center,
         glBindTexture(GL_TEXTURE_2D, texture->raw->uploadId);
         glBegin(GL_QUADS);
 
-        glTexCoord2f(x[0], y[0]);
-        glVertex3f(-1, 0, -1);
-        glTexCoord2f(x[1], y[1]);
-        glVertex3f(1, 0, -1);
-        glTexCoord2f(x[2], y[2]);
-        glVertex3f(1, 0, 1);
-        glTexCoord2f(x[3], y[3]);
-        glVertex3f(-1, 0, 1);
+        glTexCoord2i(x[0], y[0]);
+        glVertex3i(-1, 0, -1);
+        glTexCoord2i(x[1], y[1]);
+        glVertex3i(1, 0, -1);
+        glTexCoord2i(x[2], y[2]);
+        glVertex3i(1, 0, 1);
+        glTexCoord2i(x[3], y[3]);
+        glVertex3i(-1, 0, 1);
 
         glEnd();
         glTranslatef(0, -centerY, 0);
@@ -444,13 +444,13 @@ void drawCeilingAt(const struct Vec3 center,
         glBegin(GL_QUADS);
 
         glTexCoord2f(x[0], y[0]);
-        glVertex3f(-1, 0, -1);
+        glVertex3i(-1, 0, -1);
         glTexCoord2f(x[1], y[1]);
-        glVertex3f(1, 0, -1);
+        glVertex3i(1, 0, -1);
         glTexCoord2f(x[2], y[2]);
-        glVertex3f(1, 0, 1);
+        glVertex3i(1, 0, 1);
         glTexCoord2f(x[3], y[3]);
-        glVertex3f(-1, 0, 1);
+        glVertex3i(-1, 0, 1);
         glEnd();
         glTranslatef(0, -centerY, 0);
     }
@@ -484,22 +484,22 @@ void drawLeftNear(const struct Vec3 center,
 
     if (cameraDirection == kWest || cameraDirection == kEast) {
         glTexCoord2f(0, textureScale);
-        glVertex3f(-1, -1, -1);
+        glVertex3i(-1, -1, -1);
         glTexCoord2f(1, textureScale);
-        glVertex3f(1, -1, 1);
+        glVertex3i(1, -1, 1);
         glTexCoord2f(1, 0);
-        glVertex3f(1, 1, 1);
+        glVertex3i(1, 1, 1);
         glTexCoord2f(0, 0);
-        glVertex3f(-1, 1, -1);
+        glVertex3i(-1, 1, -1);
     } else {
         glTexCoord2f(0, textureScale);
-        glVertex3f(-1, -1, 1);
+        glVertex3i(-1, -1, 1);
         glTexCoord2f(1, textureScale);
-        glVertex3f(1, -1, -1);
+        glVertex3i(1, -1, -1);
         glTexCoord2f(1, 0);
-        glVertex3f(1, 1, -1);
+        glVertex3i(1, 1, -1);
         glTexCoord2f(0, 0);
-        glVertex3f(-1, 1, 1);
+        glVertex3i(-1, 1, 1);
     }
     glEnd();
 
@@ -536,22 +536,22 @@ void drawRightNear(const struct Vec3 center,
 
     if (cameraDirection == kWest || cameraDirection == kEast) {
         glTexCoord2f(0, textureScale);
-        glVertex3f(-1, -1, 1);
+        glVertex3i(-1, -1, 1);
         glTexCoord2f(1, textureScale);
-        glVertex3f(1, -1, -1);
+        glVertex3i(1, -1, -1);
         glTexCoord2f(1, 0);
-        glVertex3f(1, 1, -1);
+        glVertex3i(1, 1, -1);
         glTexCoord2f(0, 0);
-        glVertex3f(-1, 1, 1);
+        glVertex3i(-1, 1, 1);
     } else {
         glTexCoord2f(0, textureScale);
-        glVertex3f(-1, -1, -1);
+        glVertex3i(-1, -1, -1);
         glTexCoord2f(1, textureScale);
-        glVertex3f(1, -1, 1);
-        glTexCoord2f(1, 0);
-        glVertex3f(1, 1, 1);
-        glTexCoord2f(0, 0);
-        glVertex3f(-1, 1, -1);
+        glVertex3i(1, -1, 1);
+        glTexCoord2i(1, 0);
+        glVertex3i(1, 1, 1);
+        glTexCoord2i(0, 0);
+        glVertex3i(-1, 1, -1);
     }
     glEnd();
 
