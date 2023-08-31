@@ -154,7 +154,7 @@ void fill(
         if (stipple) {
 #ifndef N64
             float fontWidth = defaultFont->width;
-            float fontHeight = defaultFont->height;
+            float fontHeight = 32.0f;//defaultFont->height;
             float blockWidth = 8.0f / fontWidth;
             float blockHeight = 8.0f / fontHeight;
             size_t repeatX;
@@ -168,16 +168,16 @@ void fill(
                 defaultFont->uploadId = submitBitmapToGPU(defaultFont);
             }
 
+            glBindTexture(GL_TEXTURE_2D, defaultFont->uploadId);
+
 #ifndef NDS
             glAlphaFunc(GL_GREATER, 0.5f);
 #endif
             glEnable(GL_ALPHA_TEST);
-
-            repeatX = (dx / 4);
-            repeatY = (dy / 4);
-
-            glBindTexture(GL_TEXTURE_2D, defaultFont->uploadId);
             glBegin(GL_QUADS);
+
+            repeatX = (_dx / 8 );
+            repeatY = (_dy / 8 );
 
             ascii = 0;
             line = (((ascii >> 5) + 1) * blockHeight);
@@ -186,17 +186,17 @@ void fill(
             for (c = 0; c < repeatY; ++c) {
                 for (d = 0; d < repeatX; ++d) {
 
-                    size_t dstX = x + d * 4;
-                    size_t dstY = y + c * 4;
+                    size_t dstX = _x + ((d * 8));
+                    size_t dstY = _y + ((c * 8));
 
                     glTexCoord2f(col, line - blockHeight);
-                    glVertex3f(dstX, dstY, -0.15);
+                    glVertex3f(dstX * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -0.1);
                     glTexCoord2f(col + blockWidth, line - blockHeight);
-                    glVertex3f(dstX + 4, dstY, -0.15);
+                    glVertex3f((dstX + 8) * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -0.1);
                     glTexCoord2f(col + blockWidth, line);
-                    glVertex3f(dstX + 4, dstY + 4, -0.15);
+                    glVertex3f((dstX + 8) * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -0.1);
                     glTexCoord2f(col, line);
-                    glVertex3f(dstX, dstY + 4, -0.15);
+                    glVertex3f(dstX * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -0.1);
                 }
             }
 
