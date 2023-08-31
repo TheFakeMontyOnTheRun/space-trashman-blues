@@ -152,6 +152,11 @@ void fill(
                   b);
 
         if (stipple) {
+#ifdef NDS
+            /* Temporarily disable the shadows on NDS, since the Z-ordering is wrong in it */
+    return;
+#endif
+
 #ifndef N64
             float fontWidth = defaultFont->width;
             float fontHeight = 32.0f;//defaultFont->height;
