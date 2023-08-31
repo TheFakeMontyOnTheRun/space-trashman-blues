@@ -26,11 +26,11 @@
 #include "UI.h"
 #include "SoundSystem.h"
 
-#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && !defined(N64) && !defined(NDS)
+#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && !defined(AGS) && !defined(N64) && !defined(NDS)
 const char *MainMenu_options[4] = {
         "Play game", "Credits", "Help", "Quit"};
 
-enum EGameMenuState MainMenu_nextStateNavigation[4] = {
+const enum EGameMenuState MainMenu_nextStateNavigation[4] = {
         kPlayGame, kCredits, kHelp,
         kQuit};
 
@@ -39,20 +39,30 @@ const int kMainMenuOptionsCount = 4;
 const char *MainMenu_options[3] = {
         "Play game", "Credits", "Help"};
 
-int32_t MainMenu_nextStateNavigation[3] = {
+const int32_t MainMenu_nextStateNavigation[3] = {
         kPlayGame, kCredits, kHelp};
 
 const int kMainMenuOptionsCount = 3;
 #endif
 
 extern size_t biggestOption;
+
+#ifndef TILED_BITMAPS
+struct Bitmap *logoBitmap;
+struct Bitmap *logo2Bitmap;
+#else
 struct Bitmap *logoBitmap[28];
 struct Bitmap *logo2Bitmap[15];
+#endif
 
 void MainMenu_initStateCallback(int32_t tag) {
     int c;
     cursorPosition = 0;
 
+#ifndef TILED_BITMAPS
+    logoBitmap = loadBitmap("title.img");
+    logo2Bitmap = loadBitmap("logo.img");
+#else
     for (c = 0; c < 28; ++c) {
         char buffer[32];
         sprintf(buffer, "title_tile%04d.img", c);
@@ -64,6 +74,7 @@ void MainMenu_initStateCallback(int32_t tag) {
         sprintf(buffer, "logo_tile%04d.img", c);
         logo2Bitmap[c] = loadBitmap(buffer);
     }
+#endif
 
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
@@ -82,17 +93,18 @@ void MainMenu_initStateCallback(int32_t tag) {
     playSound(MAIN_MENU_THEME);
 }
 
-void MainMenu_initialPaintCallback() {}
+void MainMenu_initialPaintCallback() {
+}
 
 void MainMenu_repaintCallback(void) {
     int16_t c;
 
     uint8_t optionsHeight = 8 * kMainMenuOptionsCount;
 
-    fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), 0);
+    fill(0, 0, (XRES_FRAMEBUFFER), (YRES_FRAMEBUFFER), getPaletteEntry(0xFF6cb1a3), FALSE);
 
     if (currentPresentationState == kAppearing) {
-        long invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;
+        int invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;
         int movementX =
                 lerpInt(0, (biggestOption * 8), invertedProgression, 256);
         int movementY = lerpInt(0, optionsHeight, invertedProgression, 256);
@@ -104,14 +116,20 @@ void MainMenu_repaintCallback(void) {
         }
 
 
-        drawRect(320 - movementX - 8 - 24 - ((biggestOption * 8) / 2)
+        drawRect(XRES_FRAMEBUFFER - movementX - 8 - 24 - ((biggestOption * 8) / 2)
                  + (sizeX / 2),
-                 200 - movementY - 8 - 16 - 8 - ((optionsHeight + 8) / 2)
+                 YRES_FRAMEBUFFER - movementY - 8 - 16 - 8 - ((optionsHeight + 8) / 2)
                  + (sizeY / 2),
-                 sizeX, sizeY, 0);
+                 sizeX, sizeY, getPaletteEntry(0xFF000000));
         return;
     }
 
+#ifndef TILED_BITMAPS
+#ifndef AGS
+    drawBitmap(0, 0, logoBitmap, 0);
+#endif
+    drawBitmap(XRES_FRAMEBUFFER - logo2Bitmap->width, logo2Bitmap->height / 2, logo2Bitmap, 1);
+#else
     for (c = 0; c < 28; ++c) {
         drawBitmap((c & 3) * 32, (c >> 2) * 32, logoBitmap[c], 1);
     }
@@ -119,9 +137,13 @@ void MainMenu_repaintCallback(void) {
     for (c = 0; c < 15; ++c) {
         drawBitmap(118 + (c & 7) * 32, 45 + (c >> 3) * 32, logo2Bitmap[c], 1);
     }
+#endif
 
-    drawWindow(40 - biggestOption - 3, 25 - 4 - (optionsHeight / 8), biggestOption + 2, (optionsHeight / 8) + 2,
-               "Episode 0");
+    drawWindow(
+            (XRES_FRAMEBUFFER / 8) - (int) biggestOption - 3,
+            (YRES_FRAMEBUFFER / 8) - 3 - (optionsHeight / 8),
+            biggestOption + 2, (optionsHeight / 8) + 2,
+            "Episode 0");
 
     for (c = 0; c < kMainMenuOptionsCount; ++c) {
 
@@ -132,14 +154,14 @@ void MainMenu_repaintCallback(void) {
                            || (currentPresentationState == kWaitingForInput));
 
         if (isCursor) {
-            fill((uint16_t) (320 - (biggestOption * 8)) - 8 - 24,
-                 (200 - optionsHeight) + (c * 8) - 24,
+            fill((uint16_t) (XRES_FRAMEBUFFER - (biggestOption * 8)) - 8 - 24,
+                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - (8 * 2),
                  (biggestOption * 8) + 16, 8, getPaletteEntry(0xFF000000), FALSE);
         }
 
-        drawTextAt(40 - biggestOption + 1 - 3,
-                   (26 - kMainMenuOptionsCount) + c - 3,
-                   &MainMenu_options[c][0], isCursor ? getPaletteEntry(0xFFFFFFFF) : getPaletteEntry(0xFF000000));
+        drawTextAt((XRES_FRAMEBUFFER / 8) - biggestOption + 1 - 3,
+                   (((YRES_FRAMEBUFFER / 8) + 1) - kMainMenuOptionsCount) + c - 2,
+                   &MainMenu_options[c][0], isCursor ? getPaletteEntry(0xFF00000FF) : getPaletteEntry(0xFF000000));
     }
 }
 
@@ -194,7 +216,7 @@ enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
             case kCommandFire1:
             case kCommandFire2:
             case kCommandFire3:
-            case kCommandBack:
+
                 nextNavigationSelection =
                         MainMenu_nextStateNavigation[cursorPosition];
                 currentPresentationState = kConfirmInputBlink1;
@@ -206,6 +228,10 @@ enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void MainMenu_unloadStateCallback(int32_t newState) {
+#ifndef TILED_BITMAPS
+    releaseBitmap(logoBitmap);
+    releaseBitmap(logo2Bitmap);
+#else
     int c;
     for (c = 0; c < 28; ++c) {
         releaseBitmap(logoBitmap[c]);
@@ -214,4 +240,5 @@ void MainMenu_unloadStateCallback(int32_t newState) {
     for (c = 0; c < 15; ++c) {
         releaseBitmap(logo2Bitmap[c]);
     }
+#endif
 }
