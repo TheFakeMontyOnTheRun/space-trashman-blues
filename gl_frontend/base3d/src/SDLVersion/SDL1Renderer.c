@@ -39,68 +39,15 @@ int leanY = 0;
 
 SDL_Surface *video;
 
-
-//SDL_AudioDeviceID deviceId;
-//
-//char* audioFiles[] = {"./data/wav/menu_move.wav", "./data/wav/menu_select.wav", "./data/wav/gotclue.wav", "./data/wav/detected2.wav", "./data/wav/bong.wav", "./data/wav/fire.wav", "./data/wav/enemyfire.wav", "./data/wav/detected2.wav" };
-//Mix_Chunk *audioBuffers[8];
-//int audioEnabled = 0;
-//
-//void setupOPL2(int port) {
-//
-//}
-//
-//void stopSounds() {
-//    audioEnabled = 0;
-//}
-//
-//
-//void playSound( const int action ){
-//    if (audioEnabled ) {
-//        Mix_PlayChannel( -1, audioBuffers[action], 0 );
-//    }
-//}
-//
-//void soundTick() {}
-//
-//void muteSound() {}
-
-
-
-#ifdef __EMSCRIPTEN__
-void enterFullScreenMode() {
-	EmscriptenFullscreenStrategy s;
-	memset(&s, 0, sizeof(s));
-	s.scaleMode = EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
-	s.canvasResolutionScaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_NONE;
-	s.filteringMode = EMSCRIPTEN_FULLSCREEN_FILTERING_DEFAULT;
-	emscripten_enter_soft_fullscreen(0, &s);
-}
-#endif
-
-
 void graphicsInit() {
-
-
 	SDL_Init(SDL_INIT_EVERYTHING);
-	video = SDL_SetVideoMode(640, 480, 32, SDL_OPENGL);
+	video = SDL_SetVideoMode(320, 240, 32, SDL_OPENGL);
 
 #ifdef __EMSCRIPTEN__
 	enterFullScreenMode ();
 #endif
 	defaultFont = loadBitmap("font.img");
 	enableSmoothMovement = TRUE;
-
-//    if ( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 ) {
-//        audioEnabled = 0;
-//    } else {
-//
-//        for (c = 0; c < 8; ++c) {
-//            audioBuffers[c] = Mix_LoadWAV( audioFiles[c] );
-//        }
-//
-//        audioEnabled = 1;
-//    }
 	initGL();
 }
 
@@ -242,12 +189,9 @@ void graphicsShutdown() {
 }
 
 void flipRenderer() {
-
 	SDL_GL_SwapBuffers();
 
 #ifndef __EMSCRIPTEN__
 	SDL_Delay(1000 / 60);
 #endif
-
-
 }

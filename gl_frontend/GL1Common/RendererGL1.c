@@ -120,9 +120,20 @@ void initGL(void) {
     glAlphaFunc(GL_GREATER, 0);
     glDisable(GL_LINE_SMOOTH);
     glDisable(GL_CULL_FACE);
+
+#ifndef N64
+    /* not sure if this is OK for NDS or N64 - cant verify now*/
+    glHint(GL_LINE_SMOOTH_HINT, GL_FASTEST);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+    glHint(GL_POINT_SMOOTH_HINT, GL_FASTEST);
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_FASTEST);
+		
+#endif
 #else
     glClearDepth(GL_MAX_DEPTH);
 #endif
+
+    
 }
 
 void startFrameGL(int width, int height) {
