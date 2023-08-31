@@ -35,6 +35,7 @@
 
 extern const char *focusItemName;
 int hasSnapshot = FALSE;
+int leanX, leanY, turning;
 FixP_t playerHeight = 0;
 FixP_t walkingBias = 0;
 FixP_t playerHeightChangeRate = 0;
@@ -88,6 +89,14 @@ char *messageLogBuffer;
 int messageLogBufferCoolDown = 0;
 
 void printMessageTo3DView(const char *message);
+
+void enter2D() {
+
+}
+
+void enter3D() {
+
+}
 
 void printMessageTo3DView(const char *message) {
     strcpy(messageLogBuffer, message);

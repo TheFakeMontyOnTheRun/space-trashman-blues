@@ -36,7 +36,7 @@
 #define TEXT_BUFFER_SIZE (40 * 25)
 
 const char **GameMenu_options;
-enum EGameMenuState *GameMenu_nextStateNavigation;
+const enum EGameMenuState *GameMenu_nextStateNavigation;
 const char *GameMenu_StateTitle;
 struct Bitmap *featuredBitmap = NULL;
 
@@ -44,20 +44,20 @@ extern int playerLocation;
 
 const char *inspectItem_options[1] = {"Back"};
 
-enum EGameMenuState InspectItem_nextStateNavigation[1] = {
+const enum EGameMenuState InspectItem_nextStateNavigation[1] = {
         kBackToGame};
 
-enum EGameMenuState GameMenu_EndGame_nextStateNavigation[2] = {kInspectItem, kMainMenu};
+const enum EGameMenuState GameMenu_EndGame_nextStateNavigation[2] = {kInspectItem, kMainMenu};
 
 const char *GameMenu_EndGame_options[2] = {"No", "Yes"};
 
 const char *GameMenu_Story_options[1] = {"Continue"};
 
-enum EGameMenuState GameMenu_Story_nextStateNavigation[1] = {kMainMenu};
+const enum EGameMenuState GameMenu_Story_nextStateNavigation[1] = {kMainMenu};
 
 int16_t GameMenu_optionsCount = 2;
 extern size_t biggestOption;
-extern char textBuffer[TEXT_BUFFER_SIZE];
+extern char *textBuffer;
 int drawFilter = FALSE;
 
 void GameMenu_initStateCallback(int32_t tag) {
@@ -65,10 +65,9 @@ void GameMenu_initStateCallback(int32_t tag) {
 
     GameMenu_StateTitle = NULL;
     cursorPosition = 0;
-    biggestOption = 0;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
-    memFill(&textBuffer[0], ' ', 40 * 25);
+    memFill(textBuffer, ' ', 40 * 25);
     drawFilter = FALSE;
 
     switch (tag) {
@@ -77,7 +76,7 @@ void GameMenu_initStateCallback(int32_t tag) {
             timeUntilNextState = 0;
             drawFilter = TRUE;
             GameMenu_StateTitle = "End session?";
-            mainText = &textBuffer[0];
+            mainText = textBuffer;
             GameMenu_optionsCount = 2;
             GameMenu_options = &GameMenu_EndGame_options[0];
             GameMenu_nextStateNavigation = &GameMenu_EndGame_nextStateNavigation[0];
@@ -86,7 +85,7 @@ void GameMenu_initStateCallback(int32_t tag) {
 
         case kGoodVictoryEpilogue:
             sprintf (textBuffer, "Victory! You managed to destroy the\nship and get out alive\n\n\n\n\n\n");
-            mainText = &textBuffer[0];
+            mainText = textBuffer;
 
             GameMenu_StateTitle = "Victory";
 
@@ -97,11 +96,8 @@ void GameMenu_initStateCallback(int32_t tag) {
 
         case kBadVictoryEpilogue:
             sprintf (textBuffer, "Victory! Too bad you didn't survive\nto tell the story\n\n\n\n\n\n");
-            mainText = &textBuffer[0];
-
+            mainText = textBuffer;
             GameMenu_StateTitle = "Victory";
-
-
             GameMenu_optionsCount = 1;
             GameMenu_options = &GameMenu_Story_options[0];
             GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
@@ -111,12 +107,10 @@ void GameMenu_initStateCallback(int32_t tag) {
             sprintf (textBuffer,
                      "You failed! While you fled the ship\n"
                      "alive, you failed to prevent the \n"
-                     "worstscenario and now EVERYBODY is\n"
+                     "worst scenario and now EVERYBODY is\n"
                      "dead (and that includes you!)\n\n\n\n\n");
-            mainText = &textBuffer[0];
-
+            mainText = textBuffer;
             GameMenu_StateTitle = "Game Over";
-
             GameMenu_optionsCount = 1;
             GameMenu_options = &GameMenu_Story_options[0];
             GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
@@ -127,10 +121,8 @@ void GameMenu_initStateCallback(int32_t tag) {
                      "You're dead! And so are millions of\n"
                      "other people on the path of\n"
                      "destruction faulty reactor\n\n\n\n\n\n");
-            mainText = &textBuffer[0];
-
+            mainText = textBuffer;
             GameMenu_StateTitle = "Game Over";
-
             GameMenu_optionsCount = 1;
             GameMenu_options = &GameMenu_Story_options[0];
             GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
@@ -138,10 +130,8 @@ void GameMenu_initStateCallback(int32_t tag) {
 
         case kPrologue:
             sprintf (textBuffer, "Out of prison");
-            mainText = &textBuffer[0];
-
+            mainText = textBuffer;
             GameMenu_StateTitle = "Everything's changed...but still feels the same.";
-
             GameMenu_optionsCount = 1;
             GameMenu_options = &GameMenu_Story_options[0];
             GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
@@ -164,7 +154,7 @@ void GameMenu_initStateCallback(int32_t tag) {
                 struct Item *item = getItem(head->item);
                 mainText = item->name;
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-                strcpy(&textBuffer[0], item->info);
+                strcpy(textBuffer, item->info);
 #endif
                 GameMenu_optionsCount = 1;
                 GameMenu_options = &inspectItem_options[0];
@@ -174,9 +164,7 @@ void GameMenu_initStateCallback(int32_t tag) {
         }
     }
 
-    if (GameMenu_StateTitle != NULL) {
-        biggestOption = strlen(GameMenu_StateTitle);
-    }
+    biggestOption = strlen(GameMenu_StateTitle);
 
     for (c = 0; c < GameMenu_optionsCount; ++c) {
         size_t len = strlen(GameMenu_options[c]);
@@ -185,22 +173,20 @@ void GameMenu_initStateCallback(int32_t tag) {
             biggestOption = len;
         }
     }
+
+    featuredBitmap = NULL;
 }
 
 void GameMenu_initialPaintCallback(void) {
-
 }
 
 void GameMenu_repaintCallback(void) {
-
     int c;
     int16_t optionsHeight = 8 * (GameMenu_optionsCount);
-    enter2D();
 
-    fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), 0);
+    fill(0, 0, (XRES_FRAMEBUFFER), (YRES_FRAMEBUFFER), getPaletteEntry(0xFF6cb1a3), FALSE);
 
     if (currentPresentationState == kAppearing) {
-
         int invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;
         int movementX =
                 lerpInt(0, (biggestOption * 8), invertedProgression, 256);
@@ -212,24 +198,25 @@ void GameMenu_repaintCallback(void) {
             return;
         }
 
-        drawRect(320 - movementX - 8 - 24 - ((biggestOption * 8) / 2)
+        drawRect(XRES_FRAMEBUFFER - movementX - 8 - 24 - ((biggestOption * 8) / 2)
                  + (sizeX / 2),
-                 200 - movementY - 8 - 16 - 8 - ((optionsHeight + 8) / 2)
+                 YRES_FRAMEBUFFER - movementY - 8 - 16 - 8 - ((optionsHeight + 8) / 2)
                  + (sizeY / 2),
-                 sizeX, sizeY, 0);
+                 sizeX, sizeY, getPaletteEntry(0xFF000000));
 
         return;
     }
 
     if (drawFilter) {
-        fill(0, 0, 320, 200, 0, TRUE);
+        fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), TRUE);
     }
 
     if (mainText != NULL) {
-        drawTextWindow(1, 1, 38, 20, mainText, textBuffer);
+        drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, (YRES_FRAMEBUFFER / 8) - 5, GameMenu_StateTitle, textBuffer);
     }
 
-    drawWindow(40 - biggestOption - 3, 25 - (optionsHeight / 8) - 3, biggestOption + 2, (optionsHeight / 8) + 2,
+    drawWindow((XRES_FRAMEBUFFER / 8) - biggestOption - 3, (YRES_FRAMEBUFFER / 8) - (optionsHeight / 8) - 3,
+               biggestOption + 2, (optionsHeight / 8) + 2,
                GameMenu_StateTitle);
 
     for (c = 0; c < GameMenu_optionsCount; ++c) {
@@ -243,15 +230,16 @@ void GameMenu_repaintCallback(void) {
         int shouldGreyOut = FALSE;
 
         if (isCursor) {
-            fill(320 - (biggestOption * 8) - 16 - 8 - 8,
-                 (200 - optionsHeight) + (c * 8) - 8 - 8,
-                 (biggestOption * 8) + 16, 8, 0, FALSE);
+            fill(XRES_FRAMEBUFFER - (biggestOption * 8) - 16 - 8 - 8,
+                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - 8 - 8,
+                 (biggestOption * 8) + 16, 8, getPaletteEntry(0xFF000000), FALSE);
         }
 
         drawTextAt(
-                40 - biggestOption - 2, (26 - GameMenu_optionsCount) + c - 2,
+                (XRES_FRAMEBUFFER / 8) - biggestOption - 2,
+                (((YRES_FRAMEBUFFER / 8) + 1) - GameMenu_optionsCount) + c - 2,
                 &GameMenu_options[c][0],
-                isCursor ? (shouldGreyOut ? 128 : 200) : (shouldGreyOut ? 64 : 0));
+                isCursor ? (shouldGreyOut ? getPaletteEntry(0xFF000099) : getPaletteEntry(0xFF0000FF)) : (shouldGreyOut ? getPaletteEntry(0xFF555555) : getPaletteEntry(0xFF000000)));
     }
 }
 
@@ -286,6 +274,8 @@ enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long delta) {
     if (currentPresentationState == kWaitingForInput) {
 
         switch (cmd) {
+            case kCommandBack:
+                return kMainMenu;
             case kCommandUp:
                 playSound(MENU_SELECTION_CHANGE_SOUND);
                 cursorPosition = (cursorPosition - 1);
@@ -311,7 +301,7 @@ enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long delta) {
             case kCommandFire1:
             case kCommandFire2:
             case kCommandFire3:
-            case kCommandBack:
+
                 featuredBitmap = NULL;
                 nextNavigationSelection = GameMenu_nextStateNavigation[cursorPosition];
                 currentPresentationState = kConfirmInputBlink1;

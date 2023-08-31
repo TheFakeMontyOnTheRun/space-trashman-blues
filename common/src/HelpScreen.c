@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdlib.h>
 
 #include "Enums.h"
 #include "FixP.h"
@@ -19,37 +20,39 @@
 #include "CActor.h"
 #include "Common.h"
 #include "PackedFileReader.h"
-#include "LoadBitmap.h"
 #include "CRenderer.h"
 #include "CTile3DProperties.h"
 #include "FixP.h"
+#include "LoadBitmap.h"
 #include "MapWithCharKey.h"
 #include "VisibilityStrategy.h"
 #include "UI.h"
 
 const char *HelpScreen_options[1] = {"Back"};
 
-enum EGameMenuState HelpScreen_nextStateNavigation[1] = {
+const enum EGameMenuState HelpScreen_nextStateNavigation[1] = {
         kMainMenu,
 };
 
-int16_t HelpScreen_optionsCount = 1;
-extern char textBuffer[40 * 25];
+const int16_t HelpScreen_optionsCount = 1;
+extern char *textBuffer;
 
 void HelpScreen_initStateCallback(int32_t tag) {
+#ifndef AGS
     struct StaticBuffer textFile = loadBinaryFileFromPath("Help.txt");
-
+#else
+    struct StaticBuffer textFile = loadBinaryFileFromPath("HelpAGS.txt");
+#endif
+    
     cursorPosition = 0;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
-    memFill(&textBuffer[0], ' ', 40 * 25);
+    memFill(textBuffer, ' ', 40 * 25);
 
-
-    mainText = &textBuffer[0];
-    memFill(&textBuffer[0], 0, (40 * 25));
-    memCopyToFrom(&textBuffer[0], textFile.data, textFile.size);
+    mainText = textBuffer;
+    memFill(textBuffer, 0, (40 * 25));
+    memCopyToFrom(textBuffer, (void *) textFile.data, textFile.size);
     disposeDiskBuffer(textFile);
-    HelpScreen_optionsCount = 1;
 }
 
 void HelpScreen_initialPaintCallback(void) {
@@ -63,12 +66,12 @@ void HelpScreen_repaintCallback(void) {
 
     lines = countLines();
 
-    fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), 0);
+    fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), FALSE);
 
     if (currentPresentationState == kAppearing) {
 
         int invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;
-        int lerp320 = lerpInt(0, 319, invertedProgression, 256);
+        int lerp320 = lerpInt(0, (XRES_FRAMEBUFFER - 1), invertedProgression, 256);
         int lerpLines = lerpInt(0, (lines + 3) * 8, invertedProgression, 256);
         int lerpLen8 = lerpInt(0, (len * 8), invertedProgression, 256);
         int lerpOptionsHeight =
@@ -78,22 +81,23 @@ void HelpScreen_repaintCallback(void) {
             return;
         }
 
-        drawRect(160 - lerp320 / 2, ((lines + 3) * 8) / 2 - lerpLines / 2,
-                 lerp320, lerpLines, 0);
+        drawRect((XRES_FRAMEBUFFER / 2) - lerp320 / 2, ((lines + 3) * 8) / 2 - lerpLines / 2,
+                 lerp320, lerpLines, getPaletteEntry(0xFF000000));
 
-        drawRect(320 - (len * 8) - 16 - 16 + (len * 8) / 2 - lerpLen8 / 2,
-                 200 - optionsHeight - 16 - 16 + optionsHeight / 2
+        drawRect(XRES_FRAMEBUFFER - (len * 8) - 16 - 16 + (len * 8) / 2 - lerpLen8 / 2,
+                 YRES_FRAMEBUFFER - optionsHeight - 16 - 16 + optionsHeight / 2
                  - lerpOptionsHeight / 2,
-                 lerpLen8 + 16, lerpOptionsHeight + 16, 0);
+                 lerpLen8 + 16, lerpOptionsHeight + 16, getPaletteEntry(0xFF000000));
 
         return;
     }
 
     if (mainText != NULL) {
-        drawTextWindow(1, 1, 40, lines + 3, "Help", mainText);
+        drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, lines + 3, "Help", mainText);
     }
 
-    drawWindow(40 - len - 3, 25 - (optionsHeight / 8) - 3, len + 2, (optionsHeight / 8) + 2, "");
+    drawWindow((XRES_FRAMEBUFFER / 8) - len - 3, ((YRES_FRAMEBUFFER / 8) + 1) - (optionsHeight / 8) - 3, len + 2,
+               (optionsHeight / 8) + 2, "");
 
     for (c = 0; c < HelpScreen_optionsCount; ++c) {
 
@@ -104,12 +108,14 @@ void HelpScreen_repaintCallback(void) {
                            || (currentPresentationState == kWaitingForInput));
 
         if (isCursor) {
-            fill(320 - (len * 8) - 16 - 8 - 8,
-                 (200 - optionsHeight) + (c * 8) - 8 - 8, (len * 8) + 16, 8,
+            fill(XRES_FRAMEBUFFER - (len * 8) - 16 - 8 - 8,
+                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - (8 * 1),
+                 (len * 8) + 16,
+                 8,
                  getPaletteEntry(0xFF000000), FALSE);
         }
 
-        drawTextAt(40 - len - 2, (26 - HelpScreen_optionsCount) + c - 2,
+        drawTextAt((XRES_FRAMEBUFFER / 8) - len - 2, (((YRES_FRAMEBUFFER / 8) + 1) - HelpScreen_optionsCount) + c - 1,
                    &HelpScreen_options[c][0], isCursor ? getPaletteEntry(0xFFFFFFFF) : getPaletteEntry(0xFF000000));
     }
 }
@@ -145,6 +151,8 @@ enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, long delta) {
     if (currentPresentationState == kWaitingForInput) {
 
         switch (cmd) {
+            case kCommandBack:
+                return kMainMenu;
             case kCommandUp:
                 cursorPosition = (cursorPosition - 1);
 
@@ -164,7 +172,7 @@ enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, long delta) {
             case kCommandFire1:
             case kCommandFire2:
             case kCommandFire3:
-            case kCommandBack:
+
                 nextNavigationSelection =
                         HelpScreen_nextStateNavigation[cursorPosition];
                 currentPresentationState = kConfirmInputBlink1;

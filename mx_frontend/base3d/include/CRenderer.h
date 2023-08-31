@@ -142,6 +142,10 @@ void projectAllVertices(const uint8_t count);
 
 uint8_t getPaletteEntry(const uint32_t origin);
 
+void enter2D(void);
+
+void enter3D(void);
+
 void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame, uint8_t *prevFrame, int turnState, int turnTarget,
                     int scale200To240);
 

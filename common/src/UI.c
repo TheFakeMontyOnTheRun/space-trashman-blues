@@ -89,7 +89,7 @@ void
 drawTextWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title,
                const char *content) {
     drawWindow(x, y, dx, dy, title);
-    drawTextAt(x + 1, y + 2, content, 0);
+    drawTextAt(x + 1, y + 2, content, getPaletteEntry(0xFF000000));
 }
 
 void
@@ -108,24 +108,23 @@ void updateMap(void) {
     struct WorldPosition visPos = *getPlayerPosition();
 
     fill(XRES + 8 + (10 * 4) + (4 * -10), 2 + 8 + (8 * 4) + (4 * -8), 4 * 20, 4 * 16,
-         64, FALSE);
+         getPaletteEntry(0xFF000066), FALSE);
 
     for (z = -8; z < 8; ++z) {
         for (x = -10; x < 10; ++x) {
             if (isPositionAllowed(visPos.x + x, visPos.y + z)) {
-                fill(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4, 192, FALSE);
+                fill(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4, getPaletteEntry(0xFF000099), FALSE);
             }
         }
     }
 
-    fill(XRES + 8 + (10 * 4), 2 + 8 + (8 * 4), 4, 4, 32, FALSE);
+    fill(XRES + 8 + (10 * 4), 2 + 8 + (8 * 4), 4, 4, getPaletteEntry(0xFF0000FF), FALSE);
 }
 
 void redrawHUD(void) {
     int line = 0;
     struct ObjectNode *head;
-    struct WorldPosition visPos = *getPlayerPosition();
-    int x, z, c;
+    int c;
     struct Item *itemPtr;
     drawTextAtWithMargin(1, 1, XRES, thisMissionName, getPaletteEntry(0xFFFFFFFF));
 
@@ -143,7 +142,7 @@ void redrawHUD(void) {
     }
 #endif
 
-    //draw current item on the corner of the screen
+    /* draw current item on the corner of the screen */
     head = getPlayerItems();
 
     while (head != NULL) {

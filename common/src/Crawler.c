@@ -63,8 +63,8 @@ extern size_t biggestOption;
 int needToRedrawHUD = FALSE;
 const char *AbandonMission_Title = "Abandon game?";
 const char *AbandonMission_options[6] = {"Continue", "End game"};
-int AbandonMission_navigation[2] = {-1, kMainMenu};
-int AbandonMission_count = 2;
+const int AbandonMission_navigation[2] = {-1, kMainMenu};
+const int AbandonMission_count = 2;
 extern struct GameSnapshot gameSnapshot;
 
 void Crawler_initStateCallback(int32_t tag) {
@@ -111,6 +111,20 @@ void Crawler_initStateCallback(int32_t tag) {
 }
 
 void Crawler_initialPaintCallback() {
+    /*
+    int textPosY = ((YRES_FRAMEBUFFER / 8) / 2) - 1;
+
+    fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
+
+    fill((XRES_FRAMEBUFFER / 2) - (9 * 8) - 1, textPosY * 8, 18 * 8 + 3, 8, getPaletteEntry(0xFFFFFFFF), FALSE);
+    drawRect((XRES_FRAMEBUFFER / 2) - (9 * 8) - 1, (textPosY * 8) - 8 - 1, 18 * 8 + 2, 8 + 2, getPaletteEntry(0xFFFFFFFF));
+
+    drawTextAt(((XRES_FRAMEBUFFER / 8) / 2) - 7, textPosY + 1, "Loading", getPaletteEntry(0xFF000000));
+    drawTextAt(((XRES_FRAMEBUFFER / 8) / 2) - 7, textPosY, "Please wait...", getPaletteEntry(0xFFFFFFFF));
+
+    needToRedrawHUD = TRUE;
+    needsToRedrawVisibleMeshes = TRUE;
+     */
 }
 
 void Crawler_repaintCallback() {
@@ -344,6 +358,8 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
         if (currentPresentationState == kWaitingForInput) {
 
             switch (cmd) {
+                case kCommandBack:
+                    return kMainMenu;
                 case kCommandUp:
                     playSound(MENU_SELECTION_CHANGE_SOUND);
                     cursorPosition = (cursorPosition - 1);
@@ -366,7 +382,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
                 case kCommandFire1:
                 case kCommandFire2:
                 case kCommandFire3:
-                case kCommandBack:
+
                     if (cursorPosition == 0) {
                         showPromptToAbandonMission = FALSE;
                         needsToRedrawVisibleMeshes = TRUE;
@@ -434,10 +450,6 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     if (currentPresentationState == kWaitingForInput) {
         if (cmd == kCommandFire4) {
             needToRedrawHUD = TRUE;
-        }
-
-        if (cmd == kCommandFire3) {
-            return kInspectItem;
         }
 
         returnCode = loopTick(cmd);
