@@ -71,16 +71,15 @@ export OUTPUT	:=	$(CURDIR)/$(TARGET)
 export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir))
 export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 
-CFILES   := ../menu/src/MainMenu.c \
-                              		../menu/src/Crawler.c \
-                              		../menu/src/HelpScreen.c \
-                              		../menu/src/BattleScreen.c \
-                              		../menu/src/CreditsScreen.c \
-                              		../menu/src/GameMenu.c \
+CFILES   := ../../common/src/MainMenu.c \
+                              		../../common/src/Crawler.c \
+                              		../../common/src/HelpScreen.c \
+                              		../../common/src/CreditsScreen.c \
+                              		../../common/src/GameMenu.c \
                               		../menu/src/Main.c \
-                              		../menu/src/Engine.c \
-                              		../menu/src/UI.c \
-                              		../menu/src/HackingScreen.c \
+                              		../../common/src/Engine.c \
+                              		../../common/src/UI.c \
+                              		../../common/src/HackingScreen.c \
                               		../base3d/src/nitro/NitroGLRenderer.c \
                               		../GL1Common/LoadBitmapGL1.c \
                               		../GL1Common/RendererGL1.c \

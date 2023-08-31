@@ -10,8 +10,6 @@
 #define TRANSPARENCY_COLOR 0
 #define VISIBILITY_CONE_NARROWING MAP_SIZE
 typedef uint32_t OutputPixelFormat;
-typedef uint32_t TexturePixelFormat;
-typedef uint32_t BitmapPixelFormat;
 typedef uint32_t FramebufferPixelFormat;
 typedef uint8_t UVCoord;
 
