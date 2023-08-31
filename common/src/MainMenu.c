@@ -161,7 +161,7 @@ void MainMenu_repaintCallback(void) {
 
         drawTextAt((XRES_FRAMEBUFFER / 8) - biggestOption + 1 - 3,
                    (((YRES_FRAMEBUFFER / 8) + 1) - kMainMenuOptionsCount) + c - 2,
-                   &MainMenu_options[c][0], isCursor ? getPaletteEntry(0xFF00000FF) : getPaletteEntry(0xFF000000));
+                   &MainMenu_options[c][0], isCursor ? getPaletteEntry(0xFF0000FF) : getPaletteEntry(0xFF000000));
     }
 }
 
