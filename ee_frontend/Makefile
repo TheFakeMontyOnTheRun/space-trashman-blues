@@ -24,14 +24,13 @@ EE_OBJS= menu/src/Main.o \
 	../common/src/VisibilityStrategy.o \
 	../common/src/Events.o \
 	../common/src/Dungeon.o \
-	menu/src/GameMenu.o \
-	menu/src/MainMenu.o \
+	../common/src/GameMenu.o \
+	../common/src/MainMenu.o \
 	../common/src/Engine.o \
 	../common/src/UI.o \
-	menu/src/HackingScreen.o \
-	menu/src/BattleScreen.o \
-	menu/src/HelpScreen.o \
-	menu/src/CreditsScreen.o \
+	../common/src/HackingScreen.o \
+	../common/src/HelpScreen.o \
+	../common/src/CreditsScreen.o \
 	menu/src/Crawler.o \
 	../core/src/Derelict.o \
 	../core/src/Core.o \

@@ -198,20 +198,10 @@ void Crawler_repaintCallback() {
             zCameraOffset -= Div(intToFix(1), intToFix(32));
 
             if (zCameraOffset == 0) {
-                int chanceForRandomBattle = getRoom(getPlayerRoom())->chanceOfRandomBattle;
-                int diceRoll;
-
-                //tmp
-                diceRoll = 0xFF;
-
-                if (diceRoll <= chanceForRandomBattle) {
-                    currentPresentationState = kEnteringRandomBattle;
-                } else {
-                    currentPresentationState = kWaitingForInput;
-                    needsToRedrawVisibleMeshes = TRUE;
-                    gameTicks = 0;
-                    needToRedrawHUD = TRUE;
-                }
+                currentPresentationState = kWaitingForInput;
+                needsToRedrawVisibleMeshes = TRUE;
+                gameTicks = 0;
+                needToRedrawHUD = TRUE;
             }
             return;
         }
@@ -225,10 +215,6 @@ void Crawler_repaintCallback() {
 
 enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     int returnCode;
-
-    if (kEnteringRandomBattle == currentPresentationState) {
-        return kRandomBattle;
-    }
 
     if (showPromptToAbandonMission) {
 

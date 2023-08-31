@@ -43,6 +43,7 @@ FixP_t walkingBias = 0;
 FixP_t playerHeight = 0;
 
 struct Texture *nativeTextures[TOTAL_TEXTURES];
+extern struct Texture *itemSprites[TOTAL_ITEMS];
 
 extern MATRIX local_world;
 extern MATRIX world_view;
