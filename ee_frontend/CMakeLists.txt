@@ -22,12 +22,11 @@ find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
 
 add_executable(derelict128
-		menu/src/MainMenu.c
+		../common/src/MainMenu.c
 		menu/src/Crawler.c
-		menu/src/HelpScreen.c
-		menu/src/BattleScreen.c
-		menu/src/CreditsScreen.c
-		menu/src/GameMenu.c
+		../common/src/HelpScreen.c
+		../common/src/CreditsScreen.c
+		../common/src/GameMenu.c
 		menu/src/Main.c
 		../common/src/Engine.c
 		base3d/src/ee/EmotionEngineRenderer.c
@@ -46,7 +45,7 @@ add_executable(derelict128
 		../common/src/EDirection_Utils.c
 		SoundSystem/NullMusic.c
 		../common/src/UI.c
-		menu/src/HackingScreen.c
+		../common/src/HackingScreen.c
 		SoundSystem/PCMAudio.c
 		../core/src/Derelict.c
 		../core/src/Core.c
