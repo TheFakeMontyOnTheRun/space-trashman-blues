@@ -31,7 +31,7 @@ EE_OBJS= menu/src/Main.o \
 	../common/src/HackingScreen.o \
 	../common/src/HelpScreen.o \
 	../common/src/CreditsScreen.o \
-	menu/src/Crawler.o \
+	../common/src/Crawler.o \
 	../core/src/Derelict.o \
 	../core/src/Core.o \
         ../core/src/Parser.o \

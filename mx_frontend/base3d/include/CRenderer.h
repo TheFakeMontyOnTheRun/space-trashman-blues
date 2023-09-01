@@ -157,6 +157,8 @@ void fill(
 
 void drawMesh(const struct Mesh *mesh, const struct Vec3 at);
 
+void renderRoomTransition(void);
+
 void drawMap(const struct CActor *__restrict__ current);
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour);

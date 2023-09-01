@@ -21,7 +21,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTI
 find_package(SDL2 REQUIRED)
 
 add_executable(derelict32
-		menu/src/Crawler.c
+		../common/src/Crawler.c
 		../common/src/MainMenu.c
 		../common/src/HelpScreen.c
 		../common/src/CreditsScreen.c

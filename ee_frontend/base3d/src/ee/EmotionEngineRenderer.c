@@ -56,8 +56,8 @@ static char padBuf[256] __attribute__((aligned(64)));
 static char actAlign[6];
 static int actuators;
 
-float leanX = 0.0f;
-float leanY = 0.0f;
+extern int leanX;
+extern int leanY;
 
 framebuffer_t frame;
 zbuffer_t zBuffer;
@@ -547,25 +547,8 @@ void handleSystemEvents() {
         if (new_pad & PAD_L2) {
             printf("L2\n");
         }
-
-        leanX = 0.0f;
-        leanY = 0.0f;
-
-        if (buttons.rjoy_h > 127) {
-            leanX = -0.25f * ((buttons.rjoy_h - 127) / 128.0f);
-        }
-
-        if (buttons.rjoy_h < 127) {
-            leanX = 0.25f * ((128 - buttons.rjoy_h) / 127.0f);
-        }
-
-        if (buttons.rjoy_v > 127) {
-            leanY = -0.25f * ((buttons.rjoy_v - 127) / 128.0f);
-        }
-
-        if (buttons.rjoy_v < 127) {
-            leanY = 0.25f * ((128 - buttons.rjoy_v) / 127.0f);
-        }
+        leanX = buttons.rjoy_h;
+        leanY = buttons.rjoy_v;
     }
 }
 

@@ -36,6 +36,8 @@ int z = 0;
 int rotation = 0;
 enum CrawlerState shouldContinue = kCrawlerGameInProgress;
 struct CActor actor;
+const char *thisMissionName;
+int16_t thisMissionNameLen;
 
 void clearMapCache() {
     memFill(&(ITEMS_IN_MAP(0, 0)), 0xFF, MAP_SIZE * MAP_SIZE);
@@ -44,6 +46,10 @@ void clearMapCache() {
 void onLevelLoaded(int index) {
     clearMapCache();
     shouldContinue = kCrawlerGameInProgress;
+
+    thisMissionName = getRoomDescription();
+    thisMissionNameLen = (int16_t) (strlen(thisMissionName));
+
     clearMap(&tileProperties);
     loadTexturesForLevel(index);
     loadTileProperties(index);
@@ -166,7 +172,6 @@ int loopTick(enum ECommand command) {
 
 void initRoom(int room) {
     int16_t c;
-
     shouldContinue = kCrawlerGameInProgress;
     mBufferedCommand = kCommandNone;
     gameTicks = 0;

@@ -73,6 +73,8 @@ void graphicsShutdown(void);
 
 void clearRenderer(void);
 
+void renderRoomTransition(void);
+
 void flipRenderer(void);
 
 void render(long ms);
