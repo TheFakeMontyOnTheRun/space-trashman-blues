@@ -58,8 +58,11 @@ extern prim_t prim;
 extern color_t color;
 
 
-extern float leanX;
-extern float leanY;
+extern const char *thisMissionName;
+extern int16_t thisMissionNameLen;
+
+extern int leanX;
+extern int leanY;
 int visibilityCached = FALSE;
 int needsToRedrawVisibleMeshes = TRUE;
 uint8_t texturesUsed = 0;
@@ -109,6 +112,8 @@ void enter2D(void) {
 }
 
 void initGL() {
+    /* tmp */
+    memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
 }
 
 void clearRenderer() {
@@ -152,8 +157,27 @@ void endFrameGL() {
 }
 
 void enter3D(void) {
+    float _leanX = 0.0f;
+    float _leanY = 0.0f;
+
+    if (leanX > 127) {
+        _leanX = -0.25f * ((leanX - 127) / 128.0f);
+    }
+
+    if (leanX < 127) {
+        _leanX = 0.25f * ((128 - leanX) / 127.0f);
+    }
+
+    if (leanY > 127) {
+        _leanY = -0.25f * ((leanY - 127) / 128.0f);
+    }
+
+    if (leanY < 127) {
+        _leanY = 0.25f * ((128 - leanY) / 127.0f);
+    }
+
     VECTOR camera_position = {0.00f, -0.25f, 2, 1.00f};
-    VECTOR camera_rotation = {leanY, leanX, 0.00f, 1.00f};
+    VECTOR camera_rotation = {_leanY, _leanX, 0.00f, 1.00f};
 
     // Create the world_view matrix.
     create_world_view(world_view, camera_position, camera_rotation);
@@ -227,6 +251,9 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     }
 
     disposeMem(tmp);
+
+    /* tmp */
+    playerHeight = -intToFix(1);
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -234,6 +261,70 @@ void updateCursorForRenderer(const int x, const int z) {
     visibilityCached = FALSE;
     cursorX = x;
     cursorZ = z;
+}
+
+void renderRoomTransition() {
+    struct Vec3 center;
+
+    if (!enableSmoothMovement) {
+        currentPresentationState = kWaitingForInput;
+        zCameraOffset = xCameraOffset = yCameraOffset = 0;
+        needToRedrawHUD = TRUE;
+        return;
+    }
+
+    xCameraOffset = yCameraOffset = 0;
+
+    enter3D();
+
+    center.mY = 0;
+    center.mZ = intToFix(3);
+    center.mX = -intToFix(3);
+    drawColumnAt(center, intToFix(2), nativeTextures[1], MASK_LEFT, 0, 1);
+
+    center.mY = 0;
+    center.mX = intToFix(3);
+    drawColumnAt(center, intToFix(2), nativeTextures[1], MASK_RIGHT, 0, 1);
+
+    center.mZ = intToFix(2);
+    center.mX = -intToFix(1);
+    center.mY = intToFix(4) - zCameraOffset;
+    drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
+
+    center.mX = intToFix(1);
+    drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
+
+    center.mZ = intToFix(2);
+    center.mY = intToFix(3) - zCameraOffset;
+
+    center.mX = -intToFix(1);
+    drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
+
+    center.mX = intToFix(1);
+    drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
+
+
+    center.mY = intToFix(5) - zCameraOffset;
+
+    center.mX = -intToFix(1);
+    drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
+
+    center.mX = intToFix(1);
+    drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
+
+    enter2D();
+
+    drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName,
+                         getPaletteEntry(0xFFFFFFFF));
+
+    zCameraOffset -= Div(intToFix(1), intToFix(32));
+
+    if (zCameraOffset == 0) {
+        currentPresentationState = kWaitingForInput;
+        needsToRedrawVisibleMeshes = TRUE;
+        gameTicks = 0;
+        needToRedrawHUD = TRUE;
+    }
 }
 
 void drawMap(const struct CActor *current) {

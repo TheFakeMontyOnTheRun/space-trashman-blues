@@ -114,6 +114,8 @@ void fill(
 
 void drawMesh(const struct Mesh *mesh, const struct Vec3 at);
 
+void renderRoomTransition(void);
+
 void drawMap(const struct CActor *current);
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour);

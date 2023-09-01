@@ -33,9 +33,11 @@
 #define WALKING_BIAS (Div(intToFix(1), intToFix(16)))
 #define STANDARD_HEIGHT (Div(intToFix(230), intToFix(100)))
 
+extern const char *thisMissionName;
+extern int16_t thisMissionNameLen;
 extern const char *focusItemName;
 int hasSnapshot = FALSE;
-int leanX, leanY, turning;
+extern int leanX, leanY, turning;
 FixP_t playerHeight = 0;
 FixP_t walkingBias = 0;
 FixP_t playerHeightChangeRate = 0;
@@ -174,6 +176,10 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     }
 
     disposeMem(buffer);
+
+    /* tmp */
+    playerHeight = 0;
+    playerHeightChangeRate = 0;
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -181,6 +187,83 @@ void updateCursorForRenderer(const int x, const int z) {
     needsToRedrawVisibleMeshes = TRUE;
     visibilityCached = FALSE;
 #endif
+}
+
+void renderRoomTransition() {
+    struct Vec3 center;
+
+    dirtyLineY0 = 0;
+    dirtyLineY1 = YRES_FRAMEBUFFER;
+
+    if (!enableSmoothMovement) {
+        currentPresentationState = kWaitingForInput;
+        zCameraOffset = xCameraOffset = yCameraOffset = 0;
+        needToRedrawHUD = TRUE;
+
+    } else {
+        xCameraOffset = yCameraOffset = 0;
+
+        fill(0, 0, XRES + 1, YRES, 0, 0);
+
+        center.mY = 0;
+        center.mZ = intToFix(3);
+        center.mX = -intToFix(3);
+        drawColumnAt(center, intToFix(3), nativeTextures[1], MASK_LEFT, 0, 1);
+
+        center.mX = intToFix(3);
+        drawColumnAt(center, intToFix(3), nativeTextures[1], MASK_RIGHT, 0, 1);
+
+        center.mZ = intToFix(2);
+        center.mX = -intToFix(1);
+        center.mY = intToFix(4) - zCameraOffset;
+        drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+
+        center.mX = intToFix(1);
+        drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+
+        center.mY = intToFix(2) - zCameraOffset;
+        center.mZ = intToFix(3);
+        drawCeilingAt(center, nativeTextures[0], 0);
+
+        center.mZ = intToFix(2);
+        center.mY = intToFix(3) - zCameraOffset;
+        center.mX = -intToFix(1);
+        drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+
+        center.mX = intToFix(1);
+        drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+
+        center.mY = intToFix(6) - zCameraOffset;
+        center.mX = -intToFix(1);
+        drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+
+        center.mX = intToFix(1);
+        drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+
+        center.mX = -intToFix(1);
+        center.mY = intToFix(2) - zCameraOffset;
+        center.mZ = intToFix(3);
+        drawCeilingAt(center, nativeTextures[0], 0);
+
+        drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, 255);
+
+        zCameraOffset -= Div(intToFix(1), intToFix(4));
+
+        if (zCameraOffset == 0) {
+            int chanceForRandomBattle = getRoom(getPlayerRoom())->chanceOfRandomBattle;
+            int diceRoll;
+
+            /* tmp */
+            diceRoll = 0xFF;
+
+            if (diceRoll <= chanceForRandomBattle) {
+                currentPresentationState = kEnteringRandomBattle;
+            } else {
+                currentPresentationState = kWaitingForInput;
+                needToRedrawHUD = TRUE;
+            }
+        }
+    }
 }
 
 void drawMap(const struct CActor *current) {
@@ -272,6 +355,8 @@ enum ECommand getInput(void) {
 }
 
 void render(const long ms) {
+    dirtyLineY0 = 0;
+    dirtyLineY1 = YRES_FRAMEBUFFER;
 
     if (messageLogBufferCoolDown > 0) {
         messageLogBufferCoolDown -= ms;
@@ -823,6 +908,7 @@ void render(const long ms) {
 
         if (needsToRedrawHUD) {
             needsToRedrawHUD = FALSE;
+            fill(XRES, 0, XRES_FRAMEBUFFER - XRES, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
             redrawHUD();
         }
 

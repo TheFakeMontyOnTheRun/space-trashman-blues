@@ -45,6 +45,10 @@
 
 #define STANDARD_HEIGHT (Div(intToFix(180), intToFix(100)))
 
+
+extern const char *thisMissionName;
+extern int16_t thisMissionNameLen;
+
 extern int leanX;
 extern int leanY;
 int visibilityCached = FALSE;
@@ -133,7 +137,8 @@ void initGL(void) {
     glClearDepth(GL_MAX_DEPTH);
 #endif
 
-    
+    /* tmp */
+    memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
 }
 
 void startFrameGL(int width, int height) {
@@ -307,6 +312,9 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     }
 
     disposeMem(buffer);
+
+    /* tmp */
+    playerHeight = -intToFix(1);
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -314,6 +322,102 @@ void updateCursorForRenderer(const int x, const int z) {
     visibilityCached = FALSE;
     cursorX = x;
     cursorZ = z;
+}
+
+void renderRoomTransition() {
+    struct Vec3 center;
+    FixP_t acc;
+    FixP_t bias;
+    FixP_t scaled;
+    float zOffset;
+
+    if (!enableSmoothMovement) {
+        currentPresentationState = kWaitingForInput;
+        zCameraOffset = xCameraOffset = yCameraOffset = 0;
+        needToRedrawHUD = TRUE;
+        return;
+    }
+
+    xCameraOffset = yCameraOffset = 0;
+
+#ifndef NDS
+    enter2D();
+    fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
+#endif
+
+    enter3D();
+    center.mX = center.mY = 0;
+    center.mZ = 1;
+
+    bias = intToFix(128);
+
+    acc = (zCameraOffset);
+    scaled = Mul(acc, bias);
+
+    zOffset = (fixToInt(scaled) / 128.0f);
+    glTranslatef(0, 0.0f, -zOffset);
+
+    glTranslatef(-3, 0.0f, -3);
+    drawColumnAt(center, intToFix(3), nativeTextures[1], MASK_FORCE_LEFT, 0, 1);
+    glTranslatef(3, 0.0f, 3);
+
+    glTranslatef(3, 0.0f, -3);
+    drawColumnAt(center, intToFix(3), nativeTextures[1], MASK_FORCE_RIGHT, 0, 1);
+    glTranslatef(-3, 0.0f, 3);
+
+    center.mY = intToFix(4) - zCameraOffset;
+    glTranslatef(-1, 0.0f, -3);
+    drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
+    glTranslatef(1, 0.0f, 3);
+
+    glTranslatef(1, 0.0f, -3);
+    drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
+    glTranslatef(-1, 0.0f, 3);
+
+    center.mY = intToFix(3) - zCameraOffset;
+    glTranslatef(-1, 0.0f, -3);
+    drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
+    glTranslatef(1, 0.0f, 3);
+
+    glTranslatef(1, 0.0f, -3);
+    drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
+    glTranslatef(-1, 0.0f, 3);
+
+    center.mY = intToFix(6) - zCameraOffset;
+    glTranslatef(-1, 0.0f, -3);
+    drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
+    glTranslatef(1, 0.0f, 3);
+
+    glTranslatef(1, 0.0f, -3);
+    drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
+
+#ifdef NDS
+    swiWaitForVBlank();
+#endif
+    enter2D();
+
+    drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName,
+                         getPaletteEntry(0xFFFFFFFF));
+
+    zCameraOffset -= Div(intToFix(1), intToFix(32));
+
+    if (zCameraOffset == 0) {
+        int chanceForRandomBattle = getRoom(getPlayerRoom())->chanceOfRandomBattle;
+        int diceRoll;
+
+        //tmp
+        diceRoll = 0xFF;
+
+        if (diceRoll <= chanceForRandomBattle) {
+            currentPresentationState = kEnteringRandomBattle;
+        } else {
+            currentPresentationState = kWaitingForInput;
+            needsToRedrawVisibleMeshes = TRUE;
+            gameTicks = 0;
+            needToRedrawHUD = TRUE;
+        }
+    }
+    return;
 }
 
 void drawMap(const struct CActor *current) {

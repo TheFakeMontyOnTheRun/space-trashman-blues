@@ -30,9 +30,9 @@ int snapshotSignal = '.';
 #define ANGLE_TURN_THRESHOLD 40
 #define ANGLE_TURN_STEP 5
 
-int turning = 0;
-int leanX = 0;
-int leanY = 0;
+extern int turning;
+extern int leanX;
+extern int leanY;
 
 
 void graphicsInit() {

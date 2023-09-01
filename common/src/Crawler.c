@@ -8,24 +8,6 @@
 
 #include <stdint.h>
 #include <unistd.h>
-
-#endif
-
-#ifndef NDS
-#ifdef __APPLE__
-#define GL_SILENCE_DEPRECATION
-
-#include <OpenGL/gl.h>
-
-#else
-#include <GL/gl.h>
-#endif
-#else
-#include <nds.h>
-#include <malloc.h>
-#include <stdio.h>
-#include <nds/arm9/image.h>
-#include <nds/arm9/trig_lut.h>
 #endif
 
 #include "FixP.h"
@@ -50,14 +32,12 @@
 #define ANGLE_TURN_THRESHOLD 40
 #define ANGLE_TURN_STEP 5
 
-extern int turning;
-extern int leanX;
-extern int leanY;
+int turning = 0;
+int leanX = 0;
+int leanY = 0;
 
 FixP_t kCameraYDeltaPlayerDeath;
 FixP_t kCameraYSpeedPlayerDeath;
-const char *thisMissionName;
-int16_t thisMissionNameLen;
 int showPromptToAbandonMission = FALSE;
 extern size_t biggestOption;
 int needToRedrawHUD = FALSE;
@@ -77,7 +57,6 @@ void Crawler_initStateCallback(int32_t tag) {
         gameTicks = 0;
         enteredThru = 0;
         memFill(&gameSnapshot, 0, sizeof(struct GameSnapshot));
-        memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
     } else {
         currentPresentationState = kWaitingForInput;
         timeUntilNextState = 0;
@@ -101,9 +80,6 @@ void Crawler_initStateCallback(int32_t tag) {
     playerHeight = -intToFix(1);
     playerHeightChangeRate = 0;
 
-    thisMissionName = getRoomDescription();
-    thisMissionNameLen = (int16_t) (strlen(thisMissionName));
-
     if (tag == kPlayGame) {
         clearMap(&tileProperties);
         initRoom(getPlayerRoom());
@@ -111,20 +87,6 @@ void Crawler_initStateCallback(int32_t tag) {
 }
 
 void Crawler_initialPaintCallback() {
-    /*
-    int textPosY = ((YRES_FRAMEBUFFER / 8) / 2) - 1;
-
-    fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
-
-    fill((XRES_FRAMEBUFFER / 2) - (9 * 8) - 1, textPosY * 8, 18 * 8 + 3, 8, getPaletteEntry(0xFFFFFFFF), FALSE);
-    drawRect((XRES_FRAMEBUFFER / 2) - (9 * 8) - 1, (textPosY * 8) - 8 - 1, 18 * 8 + 2, 8 + 2, getPaletteEntry(0xFFFFFFFF));
-
-    drawTextAt(((XRES_FRAMEBUFFER / 8) / 2) - 7, textPosY + 1, "Loading", getPaletteEntry(0xFF000000));
-    drawTextAt(((XRES_FRAMEBUFFER / 8) / 2) - 7, textPosY, "Please wait...", getPaletteEntry(0xFFFFFFFF));
-
-    needToRedrawHUD = TRUE;
-    needsToRedrawVisibleMeshes = TRUE;
-     */
 }
 
 void Crawler_repaintCallback() {
@@ -181,106 +143,12 @@ void Crawler_repaintCallback() {
     } else {
 
         if (currentPresentationState == kRoomTransitioning) {
-
-            struct Vec3 center;
-            FixP_t acc;
-            FixP_t bias;
-            FixP_t scaled;
-            float zOffset;
-
-            if (!enableSmoothMovement) {
-                currentPresentationState = kWaitingForInput;
-                zCameraOffset = xCameraOffset = yCameraOffset = 0;
-                needToRedrawHUD = TRUE;
-                return;
-            }
-
-            xCameraOffset = yCameraOffset = 0;
-
-#ifndef NDS
-            enter2D();
-            fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
-#endif
-
-            enter3D();
-            center.mX = center.mY = 0;
-            center.mZ = 1;
-
-            bias = intToFix(128);
-
-            acc = (zCameraOffset);
-            scaled = Mul(acc, bias);
-
-            zOffset = (fixToInt(scaled) / 128.0f);
-            glTranslatef(0, 0.0f, -zOffset);
-
-            glTranslatef(-3, 0.0f, -3);
-            drawColumnAt(center, intToFix(3), nativeTextures[1], MASK_FORCE_LEFT, 0, 1);
-            glTranslatef(3, 0.0f, 3);
-
-            glTranslatef(3, 0.0f, -3);
-            drawColumnAt(center, intToFix(3), nativeTextures[1], MASK_FORCE_RIGHT, 0, 1);
-            glTranslatef(-3, 0.0f, 3);
-
-            center.mY = intToFix(4) - zCameraOffset;
-            glTranslatef(-1, 0.0f, -3);
-            drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
-            glTranslatef(1, 0.0f, 3);
-
-            glTranslatef(1, 0.0f, -3);
-            drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
-            glTranslatef(-1, 0.0f, 3);
-
-            center.mY = intToFix(3) - zCameraOffset;
-            glTranslatef(-1, 0.0f, -3);
-            drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
-            glTranslatef(1, 0.0f, 3);
-
-            glTranslatef(1, 0.0f, -3);
-            drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
-            glTranslatef(-1, 0.0f, 3);
-
-            center.mY = intToFix(6) - zCameraOffset;
-            glTranslatef(-1, 0.0f, -3);
-            drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
-            glTranslatef(1, 0.0f, 3);
-
-            glTranslatef(1, 0.0f, -3);
-            drawBillboardAt(center, nativeTextures[0], intToFix(1), 32);
-
-#ifdef NDS
-            swiWaitForVBlank();
-#endif
-            enter2D();
-
-            drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName,
-                                 getPaletteEntry(0xFFFFFFFF));
-
-            zCameraOffset -= Div(intToFix(1), intToFix(32));
-
-            if (zCameraOffset == 0) {
-                int chanceForRandomBattle = getRoom(getPlayerRoom())->chanceOfRandomBattle;
-                int diceRoll;
-
-                //tmp
-                diceRoll = 0xFF;
-
-                if (diceRoll <= chanceForRandomBattle) {
-                    currentPresentationState = kEnteringRandomBattle;
-                } else {
-                    currentPresentationState = kWaitingForInput;
-                    needsToRedrawVisibleMeshes = TRUE;
-                    gameTicks = 0;
-                    needToRedrawHUD = TRUE;
-                }
-            }
-            return;
-        }
-
-        if (currentPresentationState == kWaitingForInput) {
+            renderRoomTransition();
+        } else if (currentPresentationState == kWaitingForInput) {
 
             renderTick(30);
 
+#ifndef PLAYSTATION2
             if (leanX > 0 && !turning) {
                 leanX -= ANGLE_TURN_STEP;
             }
@@ -318,6 +186,7 @@ void Crawler_repaintCallback() {
                     turning = 0;
                 }
             }
+#endif
         }
     }
 }
@@ -495,13 +364,6 @@ void Crawler_unloadStateCallback(int32_t newState) {
     if (newState != kBackToGame &&
         newState != kInspectItem &&
         newState != kHackingGame) {
-        int c;
-        for (c = 0; c < TOTAL_TEXTURES; ++c) {
-            if (nativeTextures[c] != NULL) {
-                releaseBitmap(nativeTextures[c]->raw);
-                disposeMem(nativeTextures[c]);
-                nativeTextures[c] = NULL;
-            }
-        }
+        clearTextures();
     }
 }

@@ -71,13 +71,13 @@ export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 #---------------------------------------------------------------------------------
 # automatically build a list of object files for our project
 #---------------------------------------------------------------------------------
-CFILES		:=			../menu/src/MainMenu.c \
-                		../menu/src/Crawler.c \
-                		../menu/src/HelpScreen.c \
-                		../menu/src/CreditsScreen.c \
-                		../menu/src/GameMenu.c \
+CFILES		:=			../../common/src/MainMenu.c \
+                		../../common/src/Crawler.c \
+                		../../common/src/HelpScreen.c \
+                		../../common/src/CreditsScreen.c \
+                		../../common/src/GameMenu.c \
                 		../menu/src/Main.c \
-                		../menu/src/Engine.c \
+                		../../common/src/Engine.c \
                 		../base3d/src/AGSVersion/AGSRenderer.c \
                 		../base3d/src/LoadBitmap.c \
                 		../base3d/src/CRenderer.c \
@@ -95,8 +95,8 @@ CFILES		:=			../menu/src/MainMenu.c \
                 		../base3d/src/CRenderer_Rasterization.c \
                 		../base3d/src/CRenderer_Tesselation.c \
                 		../SoundSystem/NullMusic.c \
-                		../menu/src/UI.c \
-                		../menu/src/HackingScreen.c \
+                		../../common/src/UI.c \
+                		../../common/src/HackingScreen.c \
                 		../SoundSystem/PCMAudio.c \
                 		../../core/src/Derelict.c \
                 		../../core/src/Core.c \
