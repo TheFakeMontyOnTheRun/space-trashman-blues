@@ -174,5 +174,6 @@ int menuTick(long delta_time) {
 #ifdef __EMSCRIPTEN__
 void mainLoop () {
   menuTick ( 50 );
+  flipRenderer();
 }
 #endif

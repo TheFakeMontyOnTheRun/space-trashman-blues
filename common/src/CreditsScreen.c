@@ -75,8 +75,9 @@ void CreditsScreen_repaintCallback(void) {
     int lines = countLines();
     int c;
     int optionsHeight = 8 * (CreditsScreen_optionsCount);
-    fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), FALSE);
     size_t len = max(strlen("Options"), strlen(CreditsScreen_options[0]));
+    
+    fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), FALSE);
 
     if (currentPresentationState == kAppearing) {
 
