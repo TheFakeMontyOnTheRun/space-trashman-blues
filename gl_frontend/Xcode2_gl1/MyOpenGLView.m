@@ -28,7 +28,7 @@
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
 #include "Engine.h"
-
+#include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 
 #import "MyOpenGLView.h"
@@ -40,9 +40,9 @@ void initStation(void);
 #define ANGLE_TURN_THRESHOLD 40
 #define ANGLE_TURN_STEP 5
 
-int turning = 0;
-int leanX = 0;
-int leanY = 0;
+extern int turning;
+extern int leanX;
+extern int leanY;
 
 NSMutableSet *playingSounds;
 int nextAudioChannel = -1;
@@ -99,8 +99,20 @@ void soundTick(void) {}
 
 void muteSound(void) {}
 
+extern char *textBuffer;
+extern char *messageLogBuffer;
+extern enum EVisibility *visMap;
+extern struct Vec2i *distances;
+extern uint8_t *collisionMap;
 
-void initHW(int argc, char** argv) {
+void initHW(int argc, char **argv) {
+    textBuffer = (char *) allocMem(40 * 25, GENERAL_MEMORY, 1);
+    messageLogBuffer = (char *) allocMem(256, GENERAL_MEMORY, 1);
+    collisionMap = (uint8_t *) allocMem(256, GENERAL_MEMORY, 1);
+    visMap = (enum EVisibility *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(enum EVisibility), GENERAL_MEMORY, 1);
+    distances = (struct Vec2i *) allocMem(2 * MAP_SIZE * MAP_SIZE * sizeof(struct Vec2i), GENERAL_MEMORY, 1);
+    itemsInMap = (uint8_t *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t *), GENERAL_MEMORY, 1);
+    map = (uint8_t *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t *), GENERAL_MEMORY, 1);
 
 	NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"base.pfs"];
 	initFileReader([path UTF8String]);

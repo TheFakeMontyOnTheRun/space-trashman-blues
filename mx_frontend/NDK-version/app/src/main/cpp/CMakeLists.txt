@@ -33,30 +33,30 @@ add_library( # Sets the name of the library.
         ../../../../../../core/src/Derelict.c
         ../../../../../../core/src/Core.c
         ../../../../../../core/src/Parser.c
-        ../../../../../menu/src/MainMenu.c
-        ../../../../../menu/src/Crawler.c
-        ../../../../../menu/src/HelpScreen.c
-        ../../../../../menu/src/CreditsScreen.c
-        ../../../../../menu/src/HackingScreen.c
-        ../../../../../menu/src/GameMenu.c
+        ../../../../../../common/src/MainMenu.c
+        ../../../../../../common/src/Crawler.c
+        ../../../../../../common/src/HelpScreen.c
+        ../../../../../../common/src/CreditsScreen.c
+        ../../../../../../common/src/HackingScreen.c
+        ../../../../../../common/src/GameMenu.c
         ../../../../../menu/src/Main.c
-        ../../../../../base3d/src/Globals.c
+        ../../../../../../common/src/Globals.c
         ../../../../../../common/src/Vec.c
         ../../../../../../common/src/Common.c
         ../../../../../../common/src/PackedFileReader.c
         ../../../../../../common/src/MapWithCharKey.c
         ../../../../../../common/src/FixP.c
         ../../../../../../common/src/CTile3DProperties.c
+        ../../../../../../common/src/VisibilityStrategy.c
+        ../../../../../../common/src/Events.c
+        ../../../../../../common/src/EDirection_Utils.c
+        ../../../../../../common/src/Dungeon.c
         ../../../../../base3d/src/LoadBitmap.c
         ../../../../../base3d/src/CRenderer.c
-        ../../../../../base3d/src/VisibilityStrategy.c
-        ../../../../../menu/src/Engine.c
-        ../../../../../base3d/src/Events.c
+        ../../../../../../common/src/Engine.c
         ../../../../../base3d/src/CRenderer_Rasterization.c
-        ../../../../../base3d/src/EDirection_Utils.c
         ../../../../../base3d/src/CRenderer_Tesselation.c
-        ../../../../../base3d/src/Dungeon.c
-        ../../../../../menu/src/UI.c
+        ../../../../../../common/src/UI.c
         ../../../../../SoundSystem/PCMAudio.c
         native-lib.c)
 

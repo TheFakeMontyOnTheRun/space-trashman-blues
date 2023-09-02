@@ -31,7 +31,7 @@ struct Texture *textures;
 uint8_t usedTexture = 0;
 extern struct Bitmap *mapTopLevel;
 
-extern struct Texture *itemSprites[TOTAL_ITEMS];
+extern struct Bitmap *itemSprites[TOTAL_ITEMS];
 
 extern int currentSelectedItem;
 
@@ -229,7 +229,7 @@ struct Bitmap *loadBitmap(const char *__restrict__ filename) {
     return toReturn;
 }
 
-void releaseBitmap(struct Bitmap *__restrict__ ptr) {
+void releaseBitmap(struct Bitmap * ptr) {
     assert (ptr != NULL);
 
     disposeMem(ptr->data);

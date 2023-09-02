@@ -131,7 +131,7 @@ found:
 	toReturn.size = size;
 	toReturn.data = (uint8_t *) allocMem(size, GENERAL_MEMORY, 1);
 
-	assert (fread(toReturn.data, sizeof(uint8_t), size, mDataPack));
+	assert (fread((void*)toReturn.data, sizeof(uint8_t), size, mDataPack));
 	fclose(mDataPack);
 
 	return toReturn;
@@ -234,5 +234,5 @@ found:
 #endif
 
 void disposeDiskBuffer(struct StaticBuffer buffer) {
-	disposeMem(buffer.data);
+	disposeMem((void*)buffer.data);
 }

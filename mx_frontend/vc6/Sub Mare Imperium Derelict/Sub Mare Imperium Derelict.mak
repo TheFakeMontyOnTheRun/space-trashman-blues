@@ -87,14 +87,19 @@ LINK32=link.exe
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib shell32.lib winmm.lib /nologo /subsystem:windows /pdb:none /machine:I386 /out:"$(OUTDIR)\Sub Mare Imperium Derelict.exe" 
 LINK32_OBJS= \
 	"$(INTDIR)\CGDIRenderer.obj" \
-	"$(INTDIR)\Common.obj" \
 	"$(INTDIR)\Core.obj" \
-	"$(INTDIR)\Crawler.obj" \
-	"$(INTDIR)\CreditsScreen.obj" \
 	"$(INTDIR)\CRenderer.obj" \
 	"$(INTDIR)\CRenderer_Rasterization.obj" \
 	"$(INTDIR)\CRenderer_Tesselation.obj" \
 	"$(INTDIR)\Derelict.obj" \
+	"$(INTDIR)\LoadBitmap.obj" \
+	"$(INTDIR)\Main.obj" \
+	"$(INTDIR)\Sub Mare Imperium.res" \
+	"$(INTDIR)\Parser.obj" \
+	"$(INTDIR)\Common.obj" \
+	"$(INTDIR)\Crawler.obj" \
+	"$(INTDIR)\CreditsScreen.obj" \
+	"$(INTDIR)\CTile3DProperties.obj" \
 	"$(INTDIR)\Dungeon.obj" \
 	"$(INTDIR)\EDirection_Utils.obj" \
 	"$(INTDIR)\Engine.obj" \
@@ -104,17 +109,12 @@ LINK32_OBJS= \
 	"$(INTDIR)\Globals.obj" \
 	"$(INTDIR)\HackingScreen.obj" \
 	"$(INTDIR)\HelpScreen.obj" \
-	"$(INTDIR)\LoadBitmap.obj" \
-	"$(INTDIR)\Main.obj" \
 	"$(INTDIR)\MainMenu.obj" \
 	"$(INTDIR)\MapWithCharKey.obj" \
 	"$(INTDIR)\PackedFileReader.obj" \
-	"$(INTDIR)\Parser.obj" \
 	"$(INTDIR)\UI.obj" \
 	"$(INTDIR)\Vec.obj" \
-	"$(INTDIR)\VisibilityStrategy.obj" \
-	"$(INTDIR)\Sub Mare Imperium.res" \
-	"$(INTDIR)\CTile3DProperties.obj"
+	"$(INTDIR)\VisibilityStrategy.obj"
 
 "$(OUTDIR)\Sub Mare Imperium Derelict.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -180,14 +180,19 @@ LINK32=link.exe
 LINK32_FLAGS=winmm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /pdb:none /debug /machine:I386 /out:"$(OUTDIR)\Sub Mare Imperium Derelict.exe" 
 LINK32_OBJS= \
 	"$(INTDIR)\CGDIRenderer.obj" \
-	"$(INTDIR)\Common.obj" \
 	"$(INTDIR)\Core.obj" \
-	"$(INTDIR)\Crawler.obj" \
-	"$(INTDIR)\CreditsScreen.obj" \
 	"$(INTDIR)\CRenderer.obj" \
 	"$(INTDIR)\CRenderer_Rasterization.obj" \
 	"$(INTDIR)\CRenderer_Tesselation.obj" \
 	"$(INTDIR)\Derelict.obj" \
+	"$(INTDIR)\LoadBitmap.obj" \
+	"$(INTDIR)\Main.obj" \
+	"$(INTDIR)\Sub Mare Imperium.res" \
+	"$(INTDIR)\Parser.obj" \
+	"$(INTDIR)\Common.obj" \
+	"$(INTDIR)\Crawler.obj" \
+	"$(INTDIR)\CreditsScreen.obj" \
+	"$(INTDIR)\CTile3DProperties.obj" \
 	"$(INTDIR)\Dungeon.obj" \
 	"$(INTDIR)\EDirection_Utils.obj" \
 	"$(INTDIR)\Engine.obj" \
@@ -197,17 +202,12 @@ LINK32_OBJS= \
 	"$(INTDIR)\Globals.obj" \
 	"$(INTDIR)\HackingScreen.obj" \
 	"$(INTDIR)\HelpScreen.obj" \
-	"$(INTDIR)\LoadBitmap.obj" \
-	"$(INTDIR)\Main.obj" \
 	"$(INTDIR)\MainMenu.obj" \
 	"$(INTDIR)\MapWithCharKey.obj" \
 	"$(INTDIR)\PackedFileReader.obj" \
-	"$(INTDIR)\Parser.obj" \
 	"$(INTDIR)\UI.obj" \
 	"$(INTDIR)\Vec.obj" \
-	"$(INTDIR)\VisibilityStrategy.obj" \
-	"$(INTDIR)\Sub Mare Imperium.res" \
-	"$(INTDIR)\CTile3DProperties.obj"
+	"$(INTDIR)\VisibilityStrategy.obj"
 
 "$(OUTDIR)\Sub Mare Imperium Derelict.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -275,13 +275,13 @@ SOURCE=..\..\..\core\src\Core.c
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\menu\src\Crawler.c
+SOURCE=..\..\..\common\src\Crawler.c
 
 "$(INTDIR)\Crawler.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\menu\src\CreditsScreen.c
+SOURCE=..\..\..\common\src\CreditsScreen.c
 
 "$(INTDIR)\CreditsScreen.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
@@ -317,25 +317,25 @@ SOURCE=..\..\..\core\src\Derelict.c
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\base3d\src\Dungeon.c
+SOURCE=..\..\..\common\src\Dungeon.c
 
 "$(INTDIR)\Dungeon.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\base3d\src\EDirection_Utils.c
+SOURCE=..\..\..\common\src\EDirection_Utils.c
 
 "$(INTDIR)\EDirection_Utils.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\menu\src\Engine.c
+SOURCE=..\..\..\common\src\Engine.c
 
 "$(INTDIR)\Engine.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\base3d\src\Events.c
+SOURCE=..\..\..\common\src\Events.c
 
 "$(INTDIR)\Events.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
@@ -347,25 +347,25 @@ SOURCE=..\..\..\common\src\FixP.c
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\menu\src\GameMenu.c
+SOURCE=..\..\..\common\src\GameMenu.c
 
 "$(INTDIR)\GameMenu.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\base3d\src\Globals.c
+SOURCE=..\..\..\common\src\Globals.c
 
 "$(INTDIR)\Globals.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\menu\src\HackingScreen.c
+SOURCE=..\..\..\common\src\HackingScreen.c
 
 "$(INTDIR)\HackingScreen.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\menu\src\HelpScreen.c
+SOURCE=..\..\..\common\src\HelpScreen.c
 
 "$(INTDIR)\HelpScreen.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
@@ -401,7 +401,7 @@ CPP_SWITCHES=/nologo /MLd /W3 /Gm /GX /ZI /Od /I "c:\space-trashman-blues\common
 
 !ENDIF 
 
-SOURCE=..\..\menu\src\MainMenu.c
+SOURCE=..\..\..\common\src\MainMenu.c
 
 "$(INTDIR)\MainMenu.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
@@ -425,7 +425,7 @@ SOURCE=..\..\..\core\src\Parser.c
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\menu\src\UI.c
+SOURCE=..\..\..\common\src\UI.c
 
 "$(INTDIR)\UI.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
@@ -437,7 +437,7 @@ SOURCE=..\..\..\common\src\Vec.c
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-SOURCE=..\..\base3d\src\VisibilityStrategy.c
+SOURCE=..\..\..\common\src\VisibilityStrategy.c
 
 "$(INTDIR)\VisibilityStrategy.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)

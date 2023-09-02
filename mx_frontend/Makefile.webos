@@ -18,7 +18,7 @@ CFLAGS=-g -c -O3     \
 
 MENU_TARGET=game.html
 
-MENU_OBJ=menu/src/MainMenu.o \
+MENU_OBJ=../common/src/MainMenu.o \
 	../common/src/FixP.o \
 	../common/src/Vec.o \
 	../common/src/Common.o \
@@ -30,9 +30,9 @@ MENU_OBJ=menu/src/MainMenu.o \
 	../common/src/VisibilityStrategy.o \
 	../common/src/Events.o \
 	../common/src/Dungeon.o \
-	menu/src/Crawler.o \
-	menu/src/Engine.o \
-	menu/src/UI.o \
+	../common/src/Crawler.o \
+	../common/src/Engine.o \
+	../common/src/UI.o \
 	menu/src/Main.o \
 	base3d/src/SDLVersion/SDL1Renderer.o \
 	base3d/src/LoadBitmap.o \
@@ -40,10 +40,10 @@ MENU_OBJ=menu/src/MainMenu.o \
 	base3d/src/CRenderer_Rasterization.o \
 	base3d/src/CRenderer_Tesselation.o \
 	SoundSystem/NullMusic.o \
-	menu/src/HelpScreen.o \
-	menu/src/HackingScreen.o \
-	menu/src/GameMenu.o \
-	menu/src/CreditsScreen.o \
+	../common/src/HelpScreen.o \
+	../common/src/HackingScreen.o \
+	../common/src/GameMenu.o \
+	../common/src/CreditsScreen.o \
 	../core/src/Derelict.o \
 	../core/src/Core.o \
 	../core/src/Parser.o
