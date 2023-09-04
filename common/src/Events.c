@@ -43,6 +43,19 @@ void clearMapCache() {
     memFill(&(ITEMS_IN_MAP(0, 0)), 0xFF, MAP_SIZE * MAP_SIZE);
 }
 
+
+void clearTileProperties() {
+    int c;
+    for (c = 0; c < 256; ++c) {
+        void *content = getFromMap(&tileProperties, c);
+        if (content) {
+            disposeMem(content);
+        }
+    }
+
+    clearMap(&tileProperties);
+}
+
 void onLevelLoaded(int index) {
     clearMapCache();
     shouldContinue = kCrawlerGameInProgress;
@@ -50,7 +63,7 @@ void onLevelLoaded(int index) {
     thisMissionName = getRoomDescription();
     thisMissionNameLen = (int16_t) (strlen(thisMissionName));
 
-    clearMap(&tileProperties);
+    clearTileProperties();
     loadTexturesForLevel(index);
     loadTileProperties(index);
 }
@@ -90,15 +103,15 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
 
     /* 16 bytes should be enough here... */
 
-    sprintf (nameBuffer, "map%d.txt", map);
+    sprintf(nameBuffer, "map%d.txt", map);
     buffer = loadBinaryFileFromPath(nameBuffer);
     dungeon_loadMap(buffer.data, collisions, map);
 
-    sprintf (nameBuffer, "map%d.img", map);
+    sprintf(nameBuffer, "map%d.img", map);
 
 #ifndef TILED_BITMAPS
     if (mapTopLevel) {
-      releaseBitmap(mapTopLevel);
+        releaseBitmap(mapTopLevel);
     }
     mapTopLevel = loadBitmap(nameBuffer);
 #else
@@ -112,9 +125,9 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
         char buffer[32];
         sprintf(buffer, "map%d_tile%04d.img", map, c);
         mapTopLevel[c] = loadBitmap(buffer);
-    }    
+    }
 #endif
-    
+
     disposeDiskBuffer(buffer);
 }
 

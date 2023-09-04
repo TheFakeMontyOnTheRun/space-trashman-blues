@@ -1,16 +1,12 @@
 LDFLAGS=`sdl-config --libs` -lm
 
 
-CFLAGS= `sdl-config --cflags `  \
-    -O6 -Ofast      \
+CFLAGS= `sdl-config --cflags `  -g \
     -Ibase3d/include        \
     -ISoundSystem           \
     -Imenu/include          \
-    -funroll-loops          \
-    -fomit-frame-pointer    \
     -fno-exceptions         \
     -ffast-math             \
-    -flto		    \
     --pedantic		    \
     -DCLI_BUILD \
     -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS

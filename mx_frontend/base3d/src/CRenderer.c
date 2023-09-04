@@ -115,7 +115,6 @@ void loadTileProperties(const uint8_t levelNumber) {
     clearMap(&occluders);
     clearMap(&colliders);
     clearMap(&enemySightBlockers);
-
     sprintf (buffer, "props%d.bin", levelNumber);
 
     data = loadBinaryFileFromPath(buffer);
