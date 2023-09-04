@@ -1,10 +1,23 @@
 //
 // Created by Daniel Monteiro on 2019-07-26.
 //
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
+
+#ifdef __APPLE__
+#if __clang_major__ > 4
 
 #include <memory>
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
+
+using std::shared_ptr;
+#else
+#include <tr1/memory>
+using std::tr1::shared_ptr;
+#endif
+#else
+#include <tr1/memory>
+using std::tr1::shared_ptr;
+#endif
 
 extern "C" {
 #include "Core.h"
