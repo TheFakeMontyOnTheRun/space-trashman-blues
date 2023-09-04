@@ -7,7 +7,7 @@
 //
 
 #import "GameWindow.h"
-#import "GameView.h"
+#import "MyOpenGLView.h"
 
 @implementation GameWindow
 
@@ -29,9 +29,13 @@
 
 	NSView *view = [[[self contentView] subviews] objectAtIndex:0];
 
-	if ([view isKindOfClass:[GameView class]]) {
-		GameView *gv = (GameView *) view;
-		[gv viewDidEndLiveResize];
+	if ([view isKindOfClass:[MyOpenGLView class]]) {
+		MyOpenGLView *gv = (MyOpenGLView *) view;
+        
+        /* if we happen to run in OSX 10.0?! */
+        if ([gv respondsToSelector: @selector(viewDidEndLiveResize)]) {
+            [gv viewDidEndLiveResize];
+        }
 	}
 }
 

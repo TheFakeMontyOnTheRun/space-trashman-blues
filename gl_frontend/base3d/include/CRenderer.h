@@ -249,7 +249,7 @@ int submitBitmapToGPU(struct Bitmap *bitmap);
 
 void initGL(void);
 
-void startFrameGL(int width, int height);
+void startFrameGL(int x, int y, int width, int height);
 
 void endFrameGL(void);
 

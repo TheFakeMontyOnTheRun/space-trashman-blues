@@ -141,7 +141,7 @@ void initGL(void) {
     memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
 }
 
-void startFrameGL(int width, int height) {
+void startFrameGL(int x, int y, int width, int height) {
 #ifdef N64
     surface_t *disp = display_get();
 
@@ -151,7 +151,7 @@ void startFrameGL(int width, int height) {
 #endif
 
 
-    glViewport(0, 0, width, height);
+    glViewport(x, y, width, height);
     glClearColor(0, 0, 0, 1);                   // Black Background
 
 #ifndef NDS
