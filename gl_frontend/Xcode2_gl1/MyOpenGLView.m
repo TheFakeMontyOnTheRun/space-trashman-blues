@@ -239,7 +239,31 @@ void flipRenderer() {
 }
 
 - (void)drawRect:(NSRect)rect {
-	startFrameGL((GLsizei) rect.size.width, (GLsizei) rect.size.height);
+    int width = rect.size.width;
+    int height = rect.size.height;
+    
+    if (width > height ) {
+        float heightBase = height / 240.0f;
+        width = 320 * heightBase;
+        height = 240 * heightBase;
+        /* height is the base, since width is too big and we must add borders*/
+    } else {
+        /* width is the base, since height is too big and we must add borders*/
+        float widthBase = width / 320.0f;
+        width = 320 * widthBase;
+        height = 240 * widthBase;
+    }
+    
+    
+    /* Ugly hack to prevent garbage from appearing on the borders */
+	startFrameGL( 0, 0, rect.size.width, rect.size.height);
+    fill(0, 0, 320, 200, getPaletteEntry(0xFF000000), FALSE);
+    
+    
+	startFrameGL( (rect.size.width - width) / 2,
+                 (rect.size.height - height) / 2,
+                 width,
+                 height);
 
     isRunning = isRunning && menuTick(20);
 
