@@ -47,7 +47,7 @@ void clearMapCache() {
 void clearTileProperties() {
     int c;
     for (c = 0; c < 256; ++c) {
-        void *content = getFromMap(&tileProperties, c);
+        void *content = (void*)getFromMap(&tileProperties, c);
         if (content) {
             disposeMem(content);
         }
