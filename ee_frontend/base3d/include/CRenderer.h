@@ -104,6 +104,8 @@ void shutdownHW(void);
 
 void loadMesh(struct Mesh *mesh, char *filename);
 
+void clearTileProperties(void);
+
 uint32_t getPaletteEntry(const uint32_t origin);
 
 void fill(
