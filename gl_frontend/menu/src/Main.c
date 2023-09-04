@@ -87,12 +87,12 @@ int main(int argc, char **argv) {
 
 #ifndef N64
 #ifndef NDS
-        startFrameGL(320, 240);
+        startFrameGL(0, 0, 320, 240);
 #else
-        startFrameGL(255, 191);
+        startFrameGL(0, 0, 255, 191);
 #endif
 #else
-        startFrameGL(320, 240);
+        startFrameGL(0, 0, 320, 240);
 #endif
 
         isRunning = isRunning && menuTick(delta_time);

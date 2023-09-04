@@ -91,6 +91,8 @@ void handleSystemEvents(void);
 
 void initHW(int argc, char **argv);
 
+void clearTileProperties(void);
+
 void shutdownHW(void);
 
 void loadMesh(struct Mesh *mesh, char *filename);
