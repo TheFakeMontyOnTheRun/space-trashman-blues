@@ -27,8 +27,8 @@ OBJS = \
     src/cpc.o \
     src/KeyboardUI.o \
     src/Menu.o \
-    src/YM2413.o \
     src/HackingMinigame.o \
+    ../common/src/AY-3-8910.o \
     ../common/src/Common.o \
     ../core/src/Core.o \
     ../core/src/Derelict.o
