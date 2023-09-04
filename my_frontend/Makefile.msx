@@ -30,7 +30,7 @@ OBJS = \
     src/Engine3D.o \
     src/Main.o \
     src/TMS9918.o \
-    src/YM2413.o \
+    ../common/src/AY-3-8910.o \
     src/KeyboardUI.o \
     src/msx.o \
     src/Menu.o \

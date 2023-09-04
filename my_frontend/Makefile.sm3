@@ -31,6 +31,7 @@ OBJS = \
     src/sms.o \
     src/Menu.o \
     src/TMS9918.o \
+    ../common/src/SN76489.o \
     src/HackingMinigame.o \
     src/GamepadUI.o \
     ../core/src/Core.o \
