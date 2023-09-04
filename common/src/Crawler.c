@@ -365,5 +365,6 @@ void Crawler_unloadStateCallback(int32_t newState) {
         newState != kInspectItem &&
         newState != kHackingGame) {
         clearTextures();
+        clearTileProperties();
     }
 }

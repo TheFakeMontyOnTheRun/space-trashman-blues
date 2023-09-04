@@ -132,6 +132,8 @@ void initHW(void);
 
 void clear(void);
 
+void clearTileProperties(void);
+
 void shutdownHW(void);
 
 void initZMap(void);
