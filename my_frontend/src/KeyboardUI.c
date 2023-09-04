@@ -38,10 +38,11 @@ void initKeyboardUI(void) {
 
 
 void HUD_initialPaint(void) {
+	uint8_t i;
     drawLine(128, 0, 128, 128, 2);
     drawMap();
 
-    for (uint8_t i = 0; i < 6; ++i) {
+    for (i = 0; i < 6; ++i) {
         writeStr(17, (YRES_TEXT - 7) + i, menuItems[i]);
     }
 
@@ -50,8 +51,8 @@ void HUD_initialPaint(void) {
 }
 
 void HUD_refresh(void) {
-
-    for (uint8_t d = 0; d < 15; ++d) {
+	uint8_t d;
+    for (d = 0; d < 15; ++d) {
         writeStr(1 + d, YRES_TEXT - 2, " ");
         writeStr(1 + d, YRES_TEXT - 3, " ");
         writeStr(1 + d, YRES_TEXT - 5, " ");

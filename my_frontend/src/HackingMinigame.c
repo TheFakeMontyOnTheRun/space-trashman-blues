@@ -45,6 +45,7 @@ void HackingScreen_initStateCallback(void) {
 
 void HackingScreen_repaintCallback(void) {
     uint8_t pin;
+	int c;
 
     drawWindow(1, 1, 40, 15, "Stack trace:", 2);
 
@@ -52,7 +53,7 @@ void HackingScreen_repaintCallback(void) {
     writeStr((12 * 1), 11, cursorPosition == 1 ? "[CPU1]" : " CPU1 ");
     writeStr((12 * 2), 11, cursorPosition == 2 ? "[CPU2]" : " CPU2 ");
 
-    for (int c = 0; c < 31; ++c ) {
+    for (c = 0; c < 31; ++c ) {
         writeStr(c, 10, "-");
     }
 

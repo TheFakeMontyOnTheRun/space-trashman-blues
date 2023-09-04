@@ -102,12 +102,13 @@ void drawGraphic(const uint8_t *graphic) {
   const uint8_t* ptr = graphic;
 
   while (*ptr) {
+	int c;
     const uint8_t npoints = *ptr; 
     const uint8_t colour = *(ptr + 1);
     ptr += 2;
     const uint8_t *shape = ptr;
     
-    for (int c = 0; c < npoints - 1; ++c) {
+    for (c = 0; c < npoints - 1; ++c) {
       drawLine(shape[2 * c], shape[(2 * c) + 1], shape[(2 * c) + 2], shape[(2 * c) + 3], colour);
       ptr += 2;
     }
