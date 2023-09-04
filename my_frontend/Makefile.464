@@ -25,6 +25,7 @@ TARGET = derelict.dsk
 OBJS = \
     src/Engine3D.o \
     src/cpc.o \
+    src/Main.o \
     src/KeyboardUI.o \
     src/Menu.o \
     src/YM2413.o \

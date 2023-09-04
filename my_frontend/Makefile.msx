@@ -28,6 +28,7 @@ TARGET = derelict.rom
 
 OBJS = \
     src/Engine3D.o \
+    src/Main.o \
     src/TMS9918.o \
     src/YM2413.o \
     src/KeyboardUI.o \

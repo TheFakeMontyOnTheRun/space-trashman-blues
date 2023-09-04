@@ -22,7 +22,7 @@ enum GeometryType {
     CORNER = 64
 };
 
-struct Pattern {
+struct CellPattern {
     uint8_t ceiling: 4;
     uint8_t elementsMask: 4;
     uint8_t geometryType: 7;
@@ -42,6 +42,10 @@ void dropItem(void);
 void enterTextMode(void);
 
 void exitTextMode(void);
+
+void initState(void);
+
+void tickRenderer(void);
 
 uint8_t getKey(void);
 

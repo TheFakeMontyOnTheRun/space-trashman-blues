@@ -27,6 +27,7 @@ TARGET = derelict.sms
 
 OBJS = \
     src/Engine3D.o \
+    src/Main.o \
     src/sms.o \
     src/Menu.o \
     src/TMS9918.o \

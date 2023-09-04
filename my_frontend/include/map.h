@@ -5,7 +5,7 @@
 
 /* ceiling is at height 12, floor at height 0. Camera is at height 2 */
 
-const struct Pattern patterns[96] = {
+const struct CellPattern patterns[96] = {
         {BASE_CEILING_HEIGHT, 3,  CUBE,       0}, /*    32 */
         {0,                   3,  CUBE,       0}, /*    33 */
         {0,                   3,  RIGHT_NEAR, 0}, /*    34 */

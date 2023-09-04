@@ -16,6 +16,7 @@ find_package(SDL2 REQUIRED)
 add_executable(derelict8
         src/Engine3D.c
         src/sdl2.c
+        src/Main.c
         ../core/src/Derelict.c
         ../core/src/Core.c
         include/Engine3D.h

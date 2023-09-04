@@ -25,6 +25,7 @@ OBJS = \
     src/Engine3D.o \
     src/HackingMinigame.o \
     src/msdos.o \
+    src/Main.o \
     src/Menu.o \
     src/KeyboardUI.o \
     ../core/src/Core.o \
