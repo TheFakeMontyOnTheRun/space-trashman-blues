@@ -9,7 +9,7 @@
 #include "Engine3D.h"
 
 #include "TMS9918.h"
-#include "YM2413.h"
+#include "AY-3-8910.h"
 #include "KeyboardUI.h"
 
 char getch(void);
@@ -18,7 +18,7 @@ uint8_t updateDirection;
 
 void init(void) {
     initTMS9918();
-    initYM2413();
+    initAY38910();
     initKeyboardUI();
     updateDirection = 1;
 }
