@@ -1473,7 +1473,6 @@ void tickRenderer(void) {
     prevX = cameraX;
     prevZ = cameraZ;
 
-    waitkey:
     switch (getKey()) {
 
 #ifndef GAMEPAD
@@ -1532,10 +1531,6 @@ void tickRenderer(void) {
         case 'w':
             walkBy(0);
             break;
-
-        case 'p':
-        default:
-            goto waitkey;
     }
     cameraRotation = getPlayerDirection();
     pos = getPlayerPosition();
@@ -1599,9 +1594,7 @@ void logDelegate(const char *mesg) {
     showMessage(mesg);
 }
 
-
-int main(int argc, char **argv) {
-
+void initState() {
     running = 1;
     enteredFrom = 0;
     cameraRotation = 0;
@@ -1610,17 +1603,10 @@ int main(int argc, char **argv) {
     focusedItem = getPlayerItems();
     setErrorHandlerCallback(onError);
     setLoggerDelegate(logDelegate);
-
+    
     memset(stencilHigh, 0, XRES);
-    titleScreen();
-
+//    titleScreen();
+    
     initMap();
-
-    do {
-        tickRenderer();
-    } while (running);
-
-    shutdownGraphics();
-
-    return 0;
 }
+

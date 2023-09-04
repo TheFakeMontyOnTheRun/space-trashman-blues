@@ -10,7 +10,7 @@
 
 extern uint8_t playerLocation;
 
-extern const struct Pattern patterns[127];
+extern const struct CellPattern patterns[127];
 
 extern int8_t map[32][32];
 

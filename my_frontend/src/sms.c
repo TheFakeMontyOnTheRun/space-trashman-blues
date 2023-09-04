@@ -10,6 +10,7 @@
 #include "Engine3D.h"
 #include "GamepadUI.h"
 #include "TMS9918.h"
+#include "SN76489.h"
 
 #define COOLDOWN_MAX 0xFF
 
@@ -22,6 +23,7 @@ extern uint8_t cursorPosition;
 void init(void) {
     initGamepadUI();
     initTMS9918();
+    initSN76489();
     cooldown = COOLDOWN_MAX;
     updateDirection = 1;
 }

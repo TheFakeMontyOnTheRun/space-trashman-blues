@@ -11,7 +11,7 @@
 #include "Derelict.h"
 #include "Engine3D.h"
 
-#include "YM2413.h"
+#include "AY-3-8910.h"
 #include "KeyboardUI.h"
 #include "Menu.h"
 #include "font.h"
@@ -35,7 +35,7 @@ uint16_t lineStart[128];
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 
 void init(void) {
-    initYM2413();
+    initAY38910();
     initKeyboardUI();
     updateDirection = 1;
     for (int y = 0; y < 128; ++y) {

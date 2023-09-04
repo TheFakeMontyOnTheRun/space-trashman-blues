@@ -9,8 +9,9 @@
 #include "Engine3D.h"
 #include "KeyboardUI.h"
 #include "Menu.h"
-#include "SDL.h"
 #include "font.h"
+
+#include "SDL.h"
 
 extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
