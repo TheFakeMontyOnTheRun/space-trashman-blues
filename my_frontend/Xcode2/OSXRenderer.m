@@ -208,6 +208,7 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_
     char *ptr = text;
     uint8_t c = 0;
     uint8_t x = _x;
+	int d;
     
     for (; c < len && y < 64; ++c) {
         
@@ -234,7 +235,7 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_
         uint8_t *fontTop = &font[((cha - 32) << 3)];
         
         
-        for (int d = 0; d < 8; ++d) {
+        for (d = 0; d < 8; ++d) {
             int e;
             uint8_t chunk = *fontTop;
             
