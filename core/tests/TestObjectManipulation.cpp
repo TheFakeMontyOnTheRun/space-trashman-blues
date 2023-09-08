@@ -26,7 +26,6 @@ extern "C" {
 }
 
 extern struct ObjectNode *collectedObject;
-using namespace std;
 using testing::Eq;
 
 static void myDummyOutputHandler(const char *msg) {}
