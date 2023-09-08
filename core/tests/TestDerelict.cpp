@@ -28,7 +28,6 @@ extern "C" {
 
 extern struct ObjectNode *collectedObject;
 extern uint8_t accessGrantedToSafe;
-using namespace std;
 using testing::Eq;
 
 static void myDummyOutputHandler(const char *msg) {}
