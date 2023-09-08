@@ -1,4 +1,4 @@
-LDFLAGS=`sdl2-config --libs` -lm -framework OpenGL
+LDFLAGS=`sdl2-config --libs` -R/usr/pkg/lib -R/usr/X11R7/lib  -L/usr/pkg/lib -L/usr/X11R7/lib  -lm -lGL
 
 CFLAGS= `sdl2-config --cflags `  \
     -O6 -Ofast      \
