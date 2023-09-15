@@ -382,7 +382,7 @@ void initStation(void) {
 	"well. These parts of the quarters \n"
 	"were probably the more prestigious ones.",
 #endif
-			32, 32, 0, connections);
+		32, 32, 0, connections)->rankRequired = 1;
 
 	/* 10 */
 	memFill(&connections[0], 0, 6 * sizeof(int8_t));
