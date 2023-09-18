@@ -1,3 +1,5 @@
+#include <stddef.h>
+
 #ifdef AMIGA
 #include "AmigaInt.h"
 #endif
@@ -7,20 +9,15 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <mint/osbind.h>
 #include <mint/sysbind.h>
 #endif
 
-#include <stddef.h>
-
 #ifndef SMD
-
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-
 #else
 #include <genesis.h>
 #endif
@@ -30,9 +27,7 @@
 #include "Engine3D.h"
 
 #ifdef SUPPORTS_HACKING_MINIGAME
-
 #include "HackingMinigame.h"
-
 #endif
 
 #include "Common.h"
@@ -56,9 +51,7 @@ enum DIRECTION {
 
 struct ObjectNode *focusedItem = NULL;
 struct ObjectNode *roomItem = NULL;
-
 struct MapWithCharKey tileProperties;
-
 extern int accessGrantedToSafe;
 
 void performAction();

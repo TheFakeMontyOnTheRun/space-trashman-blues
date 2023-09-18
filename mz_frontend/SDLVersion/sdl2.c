@@ -181,30 +181,34 @@ uint8_t getKey() {
                     break;
 
                 case SDLK_KP_7:
+                case SDLK_7:		  
                     mBufferedCommand = '7';
                     break;
 
                 case SDLK_KP_8:
+                case SDLK_8:		  
                     mBufferedCommand = '8';
                     break;
 
-
                 case SDLK_KP_4:
+                case SDLK_4:		  
                     mBufferedCommand = '4';
                     break;
 
                 case SDLK_KP_5:
+                case SDLK_5:		  
                     mBufferedCommand = '5';
                     break;
 
                 case SDLK_KP_9:
+                case SDLK_9:		  
                     mBufferedCommand = '9';
                     break;
 
                 case SDLK_KP_6:
+                case SDLK_6:		  
                     mBufferedCommand = '6';
                     break;
-
 
                 case SDLK_s:
                     break;
