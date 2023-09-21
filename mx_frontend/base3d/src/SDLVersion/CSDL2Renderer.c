@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
-
+#include <stdio.h>
 #include "Common.h"
 #include "Enums.h"
 #include "FixP.h"
@@ -34,9 +34,14 @@ void enterFullScreenMode() {
 }
 #endif
 
+FILE* demoFile;
 SDL_Window *window;
 SDL_Renderer *renderer;
 int snapshotSignal = '.';
+int recordingCommand = 0;
+int playingDemo = 0;
+int commandRepetitions = 0;
+uint8_t lastCommand = 255;
 
 uint8_t getPaletteEntry(const uint32_t origin) {
 	uint8_t shade;
@@ -85,8 +90,22 @@ void graphicsInit() {
 void handleSystemEvents() {
 	SDL_Event event;
 
+	if (playingDemo) {
+	  printf("%d, %d\n", commandRepetitions, mBufferedCommand);
+	  if (!(commandRepetitions--)) {
+	    fscanf(demoFile, "%d, %d\n", &commandRepetitions, &mBufferedCommand);
+	    printf("read %d, %d\n", commandRepetitions, mBufferedCommand);	    
+	  }
+	  if (feof(demoFile)) {
+	    playingDemo = 0;
+	  }
+	}
+	
 	while (SDL_PollEvent(&event)) {
 
+
+	
+	  
 		if (event.type == SDL_QUIT) {
 			mBufferedCommand = kCommandQuit;
 			return;
@@ -108,7 +127,16 @@ void handleSystemEvents() {
 					needsToRedrawVisibleMeshes = TRUE;
                     needsToRedrawHUD = TRUE;
 					break;
-				case SDLK_c:
+			case SDLK_p:
+			  commandRepetitions = 0;
+			  mBufferedCommand = '.';
+			  playingDemo = 1;
+			  demoFile = fopen("demo.txt", "r");			  
+			  break;
+			case SDLK_r:
+			  recordingCommand = 1; 
+			  break;
+			case SDLK_c:
 					mBufferedCommand = kCommandFire3;
 					visibilityCached = FALSE;
 					needsToRedrawVisibleMeshes = TRUE;
@@ -199,6 +227,16 @@ void handleSystemEvents() {
 			}
 		}
 	}
+
+	if (recordingCommand) {
+	  if (mBufferedCommand != lastCommand ) {
+	    printf("%d, %d\n", commandRepetitions, mBufferedCommand);
+	    lastCommand = mBufferedCommand;
+	    commandRepetitions = 1;
+	  } else {
+	    commandRepetitions++;
+	  }
+	}	  
 }
 
 void graphicsShutdown() {
@@ -207,6 +245,10 @@ void graphicsShutdown() {
 	releaseBitmap(defaultFont);
 
 	texturesUsed = 0;
+	
+	if (recordingCommand) {
+	  printf("%d, %d\n", commandRepetitions, mBufferedCommand);
+	}
 }
 
 void flipRenderer() {
