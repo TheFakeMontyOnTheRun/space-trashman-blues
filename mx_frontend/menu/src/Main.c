@@ -188,12 +188,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 int main(int argc, char **argv) {
 #endif
-
-    puts(
-            "Sub Mare Imperium - Derelict, 2021 - by the Brotherhood "
-            "of 13h");
-
-
     initHW();
     initStation();
     enterState(kMainMenu);
