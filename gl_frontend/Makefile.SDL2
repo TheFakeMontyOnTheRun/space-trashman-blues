@@ -3,7 +3,6 @@ LDFLAGS=`sdl2-config --libs` -R/usr/pkg/lib -R/usr/X11R7/lib  -L/usr/pkg/lib -L/
 CFLAGS= `sdl2-config --cflags `  \
     -O6 -Ofast      \
     -Ibase3d/include        \
-    -ISoundSystem           \
     -Imenu/include          \
     -funroll-loops          \
     -fomit-frame-pointer    \
@@ -45,7 +44,7 @@ MENU_OBJ= menu/src/Main.o \
           	  ../core/src/Derelict.o \
           	  ../core/src/Core.o \
           	  ../core/src/Parser.o \
-          	  SoundSystem/NullMusic.o \
+          	  ../common/src/NullMusic.o \
          	  base3d/src/SDLVersion/CSDL2Renderer.o
 
 

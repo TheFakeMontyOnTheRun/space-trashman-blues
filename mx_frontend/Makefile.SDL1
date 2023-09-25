@@ -3,7 +3,6 @@ LDFLAGS=`sdl-config --libs` -lm
 
 CFLAGS= `sdl-config --cflags `  -g \
     -Ibase3d/include        \
-    -ISoundSystem           \
     -Imenu/include          \
     -fno-exceptions         \
     -ffast-math             \
@@ -40,7 +39,7 @@ MENU_OBJ= menu/src/Main.o \
          	  ../core/src/Derelict.o \
          	  ../core/src/Core.o \
          	  ../core/src/Parser.o \
-         	  SoundSystem/NullMusic.o \
+         	  ../common/src/NullMusic.o \
          	  base3d/src/SDLVersion/SDL1Renderer.o
 
 
