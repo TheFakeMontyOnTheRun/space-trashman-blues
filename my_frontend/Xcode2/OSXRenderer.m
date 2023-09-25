@@ -29,6 +29,8 @@ uint8_t mPalette[256];
 struct Bitmap *mFont;
 uint8_t mBufferedCommand = '.';
 
+void flushVirtualFramebuffer(void);
+
 uint8_t getPaletteEntry(const uint32_t origin) {
     uint8_t shade;
     /*

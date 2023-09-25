@@ -119,4 +119,6 @@ void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour);
 
 void refreshJustGraphics(void);
 
+void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title, uint8_t colour);
+
 #endif /* DERELICT8_ENGINE3D_H */
