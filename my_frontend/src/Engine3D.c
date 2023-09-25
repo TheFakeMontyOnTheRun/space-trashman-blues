@@ -1605,7 +1605,7 @@ void initState() {
     setLoggerDelegate(logDelegate);
     
     memset(stencilHigh, 0, XRES);
-//    titleScreen();
+    titleScreen();
     
     initMap();
 }
