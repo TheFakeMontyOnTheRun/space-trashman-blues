@@ -6,8 +6,7 @@ LDFLAGS =  -O3 -s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_SDL=1 -s --preload-file ./ba
 CFLAGS=-g -c -O3     \
 	-Ibase3d/include                                     \
 	-Imenu/include                                       \
-	-ISoundSystem                                       \
-	-I../common/include									\
+	-I../common/include				     \
 	$(SDL_INCLUDE)                                       \
 	-DSDLSW                                              \
 	-DVGA                                                \
@@ -39,7 +38,7 @@ MENU_OBJ=../common/src/MainMenu.o \
 	base3d/src/CRenderer.o \
 	base3d/src/CRenderer_Rasterization.o \
 	base3d/src/CRenderer_Tesselation.o \
-	SoundSystem/NullMusic.o \
+	../common/src/NullMusic.o \
 	../common/src/HelpScreen.o \
 	../common/src/HackingScreen.o \
 	../common/src/GameMenu.o \

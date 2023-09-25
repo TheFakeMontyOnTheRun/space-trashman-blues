@@ -7,7 +7,6 @@ LDFLAGS = -lemu -flto
 
 CFLAGS= -O6 -Ofast      \
     -Ibase3d/include        \
-    -ISoundSystem           \
     -Imenu/include          \
     -funroll-loops          \
     -funroll-all-loops      \
@@ -53,10 +52,10 @@ MENU_OBJ= menu/src/Main.o \
 	  ../common/src/VisibilityStrategy.o \
 	  ../common/src/Events.o \
 	  ../common/src/Dungeon.o \
-	  SoundSystem/MusicDOS.o \
-	  SoundSystem/timer.o \
-	  SoundSystem/OPL2.o \
-	  SoundSystem/controller.o \
+	  ../common/src/MusicDOS.o \
+	  ../common/src/timer.o \
+	  ../common/src/OPL2.o \
+	  ../common/src/controller.o \
 	  base3d/src/DOSVersion/DOSRenderer.o \
 	  base3d/src/LoadBitmap.o \
 	  base3d/src/CRenderer.o \
@@ -86,5 +85,4 @@ clean:
 	rm -f ../common/src/*.o
 	rm -f base3d/src/*.o
 	rm -f common/src/*.o
-	rm -f SoundSystem/*.o
 	rm -f base3d/src/DOSVersion/*.o

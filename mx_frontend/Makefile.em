@@ -39,7 +39,7 @@ MENU_OBJ=../common/src/MainMenu.o \
 	base3d/src/CRenderer.o \
 	base3d/src/CRenderer_Rasterization.o \
 	base3d/src/CRenderer_Tesselation.o \
-	SoundSystem/NullMusic.o \
+	../common/src/NullMusic.o \
 	../common/src/HelpScreen.o \
 	../common/src/HackingScreen.o \
 	../common/src/GameMenu.o \

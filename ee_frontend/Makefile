@@ -2,7 +2,6 @@ EE_CFLAGS += -pedantic -Wall -Wno-switch -Wno-unused-variable -Os -fdata-section
 EE_LDFLAGS += -s -Wl,--gc-sections -ldraw -ldma -lgraph -lpacket -lc  -ldraw -lgraph -lmath3d  -lpacket -ldma -lpad -lc
 
 EE_CFLAGS += -Ibase3d/include        \
-    -ISoundSystem           \
     -Imenu/include          \
     -DCLI_BUILD \
     -I../core/include \
@@ -35,7 +34,7 @@ EE_OBJS= menu/src/Main.o \
 	../core/src/Derelict.o \
 	../core/src/Core.o \
         ../core/src/Parser.o \
-        SoundSystem/NullMusic.o \
+        ../common/src/NullMusic.o \
         base3d/src/ee/LoadBitmap.o \
         base3d/src/ee/Renderer_Rasterization.o \
         base3d/src/ee/Renderer_Tesselation.o \
