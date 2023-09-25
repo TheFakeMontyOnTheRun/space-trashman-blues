@@ -20,7 +20,7 @@ TARGET		:=	$(shell basename $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	menu/src base3d/src base3d/src/ags SoundSystem
 DATA		:=
-INCLUDES	:= ../core/include ../common/include base3d/include common/include menu/include SoundSystem
+INCLUDES	:= ../core/include ../common/include base3d/include common/include menu/include
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -89,15 +89,15 @@ CFILES		:=			../../common/src/MainMenu.c \
                 		../../common/src/Common.c \
                 		../../common/src/FixP.c \
                 		../../common/src/MapWithCharKey.c \
-				        ../../common/src/EDirection_Utils.o \
+			        ../../common/src/EDirection_Utils.o \
                 		../../common/src/Events.c \
                 		../../common/src/Dungeon.c \
                 		../base3d/src/CRenderer_Rasterization.c \
                 		../base3d/src/CRenderer_Tesselation.c \
-                		../SoundSystem/NullMusic.c \
+                		../../common/src/NullMusic.c \
                 		../../common/src/UI.c \
                 		../../common/src/HackingScreen.c \
-                		../SoundSystem/PCMAudio.c \
+                		../../common/src/PCMAudio.c \
                 		../../core/src/Derelict.c \
                 		../../core/src/Core.c \
                 		../../core/src/Parser.c

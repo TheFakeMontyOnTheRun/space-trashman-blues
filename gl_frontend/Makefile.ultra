@@ -5,7 +5,6 @@ include $(N64_INST)/include/n64.mk
 
 CFLAGS += -Ofast      \
     -Ibase3d/include        \
-    -ISoundSystem           \
     -Imenu/include          \
     -funroll-loops          \
     -fomit-frame-pointer    \
@@ -41,10 +40,10 @@ src = ../common/src/MainMenu.c \
                   		../common/src/EDirection_Utils.c \
                   		../common/src/Events.c \
                   		../common/src/Dungeon.c \
-                  		SoundSystem/NullMusic.c \
+                  		../common/src/NullMusic.c \
                   		../common/src/UI.c \
                   		../common/src/HackingScreen.c \
-                  		SoundSystem/PCMAudio.c \
+                  		../common/src/PCMAudio.c \
                   		../core/src/Derelict.c \
                   		../core/src/Core.c \
                   		../core/src/Parser.c

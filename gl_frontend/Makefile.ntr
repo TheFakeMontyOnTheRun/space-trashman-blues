@@ -39,10 +39,9 @@ ARCH := -marm -mthumb-interwork -march=armv5te -mtune=arm946e-s
 
 CFLAGS   := -g -Wall -O3\
             $(ARCH) $(INCLUDE) -DARM9 -DNDS -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -I../base3d/include        \
-                                                                                                     -I../SoundSystem           \
-                                                                                                     -I../menu/include          \
-                                                                                                     -I../../core/include \
-                                                                                                     -I../../common/include \
+            -I../menu/include          \
+            -I../../core/include \
+            -I../../common/include \
             -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic
 
 ASFLAGS  := -g $(ARCH)
@@ -96,8 +95,8 @@ CFILES   := ../../common/src/MainMenu.c \
                               		../../common/src/EDirection_Utils.c \
                               		../../common/src/Events.c \
                               		../../common/src/Dungeon.c \
-                              		../SoundSystem/NullMusic.c \
-                              		../SoundSystem/PCMAudio.c \
+                              		../../common/src/NullMusic.c \
+                              		../../common/src/PCMAudio.c \
                               		../../core/src/Derelict.c \
                               		../../core/src/Core.c \
                               		../../core/src/Parser.c
