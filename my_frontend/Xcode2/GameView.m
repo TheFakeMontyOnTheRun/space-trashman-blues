@@ -95,6 +95,8 @@ void setMultiplier(CGSize size) {
 
         initState();
         
+        initMap();
+        
         [self initTimer];
     }
     
