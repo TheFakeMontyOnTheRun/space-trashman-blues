@@ -43,6 +43,8 @@ void enterTextMode(void);
 
 void exitTextMode(void);
 
+void initMap(void);
+
 void initState(void);
 
 void tickRenderer(void);

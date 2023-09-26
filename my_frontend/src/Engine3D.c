@@ -1331,6 +1331,8 @@ void initMap(void) {
     uint16_t offsetOnDataStrip = 0;
     int16_t repetitions = -1;
 
+    memset(stencilHigh, 0, XRES);
+
 #ifdef EMBEDDED_DATA
     for (c = 0; c < playerLocation; ++c) {
         offsetOnDataStrip += dataPositions[c];
@@ -1603,10 +1605,5 @@ void initState() {
     focusedItem = getPlayerItems();
     setErrorHandlerCallback(onError);
     setLoggerDelegate(logDelegate);
-    
-    memset(stencilHigh, 0, XRES);
-    titleScreen();
-    
-    initMap();
 }
 

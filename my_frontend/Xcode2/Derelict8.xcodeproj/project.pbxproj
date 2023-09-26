@@ -59,6 +59,7 @@
 		F1CA76B32610A8BF00FD1E04 /* Derelict.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Derelict.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Derelict-Info.plist"; sourceTree = "<group>"; };
 		F1CD08C62450E41C00D4794D /* base.pfs */ = {isa = PBXFileReference; lastKnownFileType = file; name = base.pfs; path = ../base.pfs; sourceTree = SOURCE_ROOT; };
+		F1CF4A822AC2BB100095BEF5 /* Menu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Menu.h; path = ../include/Menu.h; sourceTree = "<group>"; };
 		F1D5B5D22531D2BF0094ED78 /* Derelict.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Derelict.c; path = ../../core/src/Derelict.c; sourceTree = "<group>"; };
 		F1D5B5D32531D2BF0094ED78 /* Parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Parser.c; path = ../../core/src/Parser.c; sourceTree = "<group>"; };
 		F1D5B5D62531D2C90094ED78 /* Parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Parser.h; path = ../../core/include/Parser.h; sourceTree = "<group>"; };
@@ -141,6 +142,7 @@
 				F13B51A52AA5F255006BE693 /* Engine3D.h */,
 				F13B51A62AA5F255006BE693 /* font.h */,
 				F13B51A72AA5F255006BE693 /* HackingMinigame.h */,
+				F1CF4A822AC2BB100095BEF5 /* Menu.h */,
 				F13B51A82AA5F255006BE693 /* KeyboardUI.h */,
 				F13B51A92AA5F255006BE693 /* map-data.h */,
 				F13B51AA2AA5F255006BE693 /* map.h */,
