@@ -70,7 +70,7 @@ long uclock() {
 #include <emscripten/emscripten.h>
 #endif
 
-extern char *textBuffer;
+char *textBuffer;
 extern char *messageLogBuffer;
 extern enum EVisibility *visMap;
 extern struct Vec2i *distances;
@@ -80,7 +80,7 @@ extern struct Texture *textures;
 struct Texture internalTexturesMem[TOTAL_TEXTURES];
 
 void initHW(void) {
-    textBuffer = (char *) allocMem(40 * 25, GENERAL_MEMORY, 1);
+    textBuffer = (char *) allocMem(TEXT_BUFFER_SIZE, GENERAL_MEMORY, 1);
     messageLogBuffer = (char *) allocMem(256, GENERAL_MEMORY, 1);
     collisionMap = (uint8_t *) allocMem(256, GENERAL_MEMORY, 1);
     visMap = (enum EVisibility *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(enum EVisibility), GENERAL_MEMORY, 1);

@@ -77,7 +77,7 @@ FixP_t xCameraOffset;
 FixP_t yCameraOffset;
 FixP_t zCameraOffset;
 struct Bitmap *mapTopLevel[8];
-char messageLogBuffer[256];
+char *messageLogBuffer;
 
 int messageLogBufferCoolDown = 0;
 
@@ -88,8 +88,8 @@ static surface_t zbuffer;
 #endif
 
 
-enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
-struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
+enum EVisibility *visMap;
+struct Vec2i *distances;
 
 uint32_t getPaletteEntry(const uint32_t origin) {
     return origin;

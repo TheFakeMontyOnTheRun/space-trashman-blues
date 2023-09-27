@@ -34,8 +34,6 @@
 
 #include "SoundSystem.h"
 
-char textBuffer[40 * 25];
-
 InitStateCallback initStateCallback = NULL;
 InitialPaintCallback initialPaintCallback = NULL;
 RepaintCallback repaintCallback = NULL;

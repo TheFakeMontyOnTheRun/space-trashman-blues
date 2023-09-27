@@ -1,10 +1,8 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
 #include <unistd.h>
-
 #endif
 
 #include <stdio.h>
@@ -32,8 +30,6 @@
 #include "SoundSystem.h"
 #include "Core.h"
 #include "Derelict.h"
-
-#define TEXT_BUFFER_SIZE (40 * 25)
 
 const char **GameMenu_options;
 const enum EGameMenuState *GameMenu_nextStateNavigation;
@@ -67,7 +63,7 @@ void GameMenu_initStateCallback(int32_t tag) {
     cursorPosition = 0;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
-    memFill(textBuffer, ' ', 40 * 25);
+    memFill(textBuffer, ' ', TEXT_BUFFER_SIZE);
     drawFilter = FALSE;
 
     switch (tag) {
@@ -123,15 +119,6 @@ void GameMenu_initStateCallback(int32_t tag) {
                      "destruction faulty reactor\n\n\n\n\n\n");
             mainText = textBuffer;
             GameMenu_StateTitle = "Game Over";
-            GameMenu_optionsCount = 1;
-            GameMenu_options = &GameMenu_Story_options[0];
-            GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
-            break;
-
-        case kPrologue:
-            sprintf (textBuffer, "Out of prison");
-            mainText = textBuffer;
-            GameMenu_StateTitle = "Everything's changed...but still feels the same.";
             GameMenu_optionsCount = 1;
             GameMenu_options = &GameMenu_Story_options[0];
             GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];

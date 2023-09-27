@@ -22,11 +22,10 @@
 
 extern         GameView* osxview;
 
-extern char *textBuffer;
 extern char *messageLogBuffer;
 
 
-extern char *textBuffer;
+char *textBuffer;
 extern char *messageLogBuffer;
 extern enum EVisibility *visMap;
 extern struct Vec2i *distances;
