@@ -320,7 +320,11 @@ void drawWall(FixP_t x0,
         const uint8_t *sourceLineStart = data + (iu * NATIVE_TEXTURE_SIZE);
         const uint8_t *lineOffset = sourceLineStart;
         uint8_t *destinationLine = bufferData + (XRES_FRAMEBUFFER * iY0) + ix;
-        FixP_t dv;
+        /*
+            Yes, this would cause a div by zero...but the lastDiffY is set to be different from diffY, causing it be
+            initialized with the Div between the texture size and the diffY
+        */
+        FixP_t dv = 0;
         int32_t iy;
         int stipple;
 

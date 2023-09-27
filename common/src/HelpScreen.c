@@ -35,7 +35,6 @@ const enum EGameMenuState HelpScreen_nextStateNavigation[1] = {
 };
 
 const int16_t HelpScreen_optionsCount = 1;
-extern char *textBuffer;
 
 void HelpScreen_initStateCallback(int32_t tag) {
 #ifndef AGS
@@ -47,10 +46,10 @@ void HelpScreen_initStateCallback(int32_t tag) {
     cursorPosition = 0;
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
-    memFill(textBuffer, ' ', 40 * 25);
+    memFill(textBuffer, ' ', TEXT_BUFFER_SIZE);
 
     mainText = textBuffer;
-    memFill(textBuffer, 0, (40 * 25));
+    memFill(textBuffer, 0, TEXT_BUFFER_SIZE);
     memCopyToFrom(textBuffer, (void *) textFile.data, textFile.size);
     disposeDiskBuffer(textFile);
 }

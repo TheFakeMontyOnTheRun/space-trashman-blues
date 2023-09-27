@@ -32,7 +32,6 @@
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 
-extern char *textBuffer;
 extern char *messageLogBuffer;
 extern enum EVisibility *visMap;
 extern struct Vec2i *distances;
@@ -40,7 +39,7 @@ extern uint8_t *collisionMap;
 extern struct Texture* textures;
 
 void initHW(void) {
-    textBuffer = (char*)calloc(40 * 25, 1);
+    textBuffer = (char*)calloc(TEXT_BUFFER_SIZE, 1);
     messageLogBuffer = (char*)calloc(256, 1);
     collisionMap = (uint8_t*)calloc(256, 1);
     visMap = (enum EVisibility*)calloc(MAP_SIZE * MAP_SIZE, sizeof(enum EVisibility));
