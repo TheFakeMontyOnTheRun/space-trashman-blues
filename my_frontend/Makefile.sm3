@@ -26,10 +26,13 @@ CFLAGS = \
 TARGET = derelict.sms
 
 OBJS = \
-    src/Engine3D.o \
+    src/Events.o \
+    src/RendererRasterizer.o \
+    src/RendererScene.o \
+    src/RendererTesselation.o \
     src/Main.o \
     src/sms.o \
-    src/Menu.o \
+    src/UI.o \
     src/TMS9918.o \
     ../common/src/SN76489.o \
     src/HackingMinigame.o \

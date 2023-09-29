@@ -7,10 +7,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "Menu.h"
+#include "UI.h"
 #include "Core.h"
 #include "Derelict.h"
-#include "Engine3D.h"
+#include "Renderer.h"
 #include "HackingMinigame.h"
 
 extern int accessGrantedToSafe;

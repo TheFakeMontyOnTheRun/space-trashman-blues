@@ -2,8 +2,8 @@
    Created by Daniel Monteiro on 2021-10-22.
 */
 
-#ifndef DERELICT8_ENGINE3D_H
-#define DERELICT8_ENGINE3D_H
+#ifndef DERELICT8_RENDERER_H
+#define DERELICT8_RENDERER_H
 
 #define XRES 127
 #define YRES 127
@@ -12,6 +12,32 @@
 #define YRESMINUSONE (YRES - 1)
 
 #define CAMERA_HEIGHT 4
+
+enum DIRECTION {
+    DIRECTION_N,
+    DIRECTION_E,
+    DIRECTION_S,
+    DIRECTION_W
+};
+
+#define IN_RANGE(V0, V1, V)  ((V0) <= (V) && (V) <= (V1))
+
+#define STIPPLE_DISTANCE 12
+#define RLE_THRESHOLD 32
+#define MAP_SIZE_X 32
+#define MAP_SIZE_Y 32
+#define VISIBILITY_LIMIT_X (MAP_SIZE_X - 1)
+#define VISIBILITY_LIMIT_Y (MAP_SIZE_Y - 1)
+#define FAR_PLANE_Z 32
+#define NEAR_PLANE_Z 6
+#define RENDER_SCALE_X 1
+#define RENDER_SCALE_Z 1
+
+/*  Not rendered, but won't block visibility */
+#define NEUTRAL_CELL '.'
+
+/*  not rendered and blocks visibility */
+#define BLOCK_CELL '#'
 
 enum GeometryType {
     CUBE = 0,
@@ -123,4 +149,18 @@ void refreshJustGraphics(void);
 
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title, uint8_t colour);
 
-#endif /* DERELICT8_ENGINE3D_H */
+uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask);
+
+uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask, uint8_t type);
+
+uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_t elementMask);
+
+uint8_t drawObjectAt(int8_t x0, int8_t z0);
+
+void startRoomTransitionAnimation(void);
+
+void repaintMapItems(void);
+
+uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y);
+
+#endif /* DERELICT8_RENDERER_H */

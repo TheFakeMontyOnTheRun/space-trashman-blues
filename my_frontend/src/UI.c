@@ -3,10 +3,10 @@
 */
 #include <stdlib.h>
 #include <stdint.h>
-#include "Menu.h"
+#include "UI.h"
 #include "Core.h"
 #include "Derelict.h"
-#include "Engine3D.h"
+#include "Renderer.h"
 
 extern uint8_t playerLocation;
 

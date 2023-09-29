@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 99)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../cmake-sdl2")
 
-include_directories(src ../core/src ../core/include ../common/include include
+include_directories(src ../core/src ../core/include include ../common/include
         ${SDL2_INCLUDE_DIR}
         )
 
@@ -14,17 +14,21 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLW -DEMBEDDED_DATA -DRLE_COMPRESSED_MAPS
 find_package(SDL2 REQUIRED)
 
 add_executable(derelict8
-        src/Engine3D.c
+        src/RendererTesselation.c
         src/sdl2.c
         src/Main.c
         ../core/src/Derelict.c
         ../core/src/Core.c
-        include/Engine3D.h
+        include/Renderer.h
         ../common/src/PackedFileReader.c
         ../common/src/Common.c
         src/HackingMinigame.c
         include/HackingMinigame.h
-        src/Menu.c
+        src/UI.c
+        src/Events.c
+        src/RendererRasterizer.c
+        src/RendererTesselation.c
+        src/RendererScene.c
         src/KeyboardUI.c)
 
 include(FindPkgConfig)

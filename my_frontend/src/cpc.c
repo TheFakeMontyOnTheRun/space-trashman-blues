@@ -9,11 +9,11 @@
 
 #include "Core.h"
 #include "Derelict.h"
-#include "Engine3D.h"
+#include "Renderer.h"
 
 #include "AY-3-8910.h"
 #include "KeyboardUI.h"
-#include "Menu.h"
+#include "UI.h"
 #include "font.h"
 
 extern struct ObjectNode *focusedItem;
