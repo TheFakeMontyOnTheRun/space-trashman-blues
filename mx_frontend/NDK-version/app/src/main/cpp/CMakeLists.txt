@@ -13,7 +13,6 @@ include_directories(../../../../../../common/include)
 include_directories(../../../../../base3d/include)
 include_directories(../../../../../common/include)
 include_directories(../../../../../menu/include)
-include_directories(../../../../../SoundSystem)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DANDROID  -D_BSD_SOURCE")
 
@@ -39,7 +38,6 @@ add_library( # Sets the name of the library.
         ../../../../../../common/src/CreditsScreen.c
         ../../../../../../common/src/HackingScreen.c
         ../../../../../../common/src/GameMenu.c
-        ../../../../../menu/src/Main.c
         ../../../../../../common/src/Globals.c
         ../../../../../../common/src/Vec.c
         ../../../../../../common/src/Common.c
@@ -51,13 +49,14 @@ add_library( # Sets the name of the library.
         ../../../../../../common/src/Events.c
         ../../../../../../common/src/EDirection_Utils.c
         ../../../../../../common/src/Dungeon.c
+        ../../../../../../common/src/Engine.c
+        ../../../../../../common/src/UI.c
+        ../../../../../../common/src/PCMAudio.c
         ../../../../../base3d/src/LoadBitmap.c
         ../../../../../base3d/src/CRenderer.c
-        ../../../../../../common/src/Engine.c
         ../../../../../base3d/src/CRenderer_Rasterization.c
         ../../../../../base3d/src/CRenderer_Tesselation.c
-        ../../../../../../common/src/UI.c
-        ../../../../../SoundSystem/PCMAudio.c
+        ../../../../../menu/src/Main.c
         native-lib.c)
 
 # Searches for a specified prebuilt library and stores the path as a
