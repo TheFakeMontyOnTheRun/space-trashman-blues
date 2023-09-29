@@ -6,9 +6,9 @@
 
 #include "Core.h"
 #include "Derelict.h"
-#include "Engine3D.h"
+#include "Renderer.h"
 #include "KeyboardUI.h"
-#include "Menu.h"
+#include "UI.h"
 #include "font.h"
 
 #include "SDL.h"

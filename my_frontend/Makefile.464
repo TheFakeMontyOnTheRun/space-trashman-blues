@@ -23,11 +23,14 @@ CFLAGS = \
 TARGET = derelict.dsk
 
 OBJS = \
-    src/Engine3D.o \
+    src/Events.o \
+    src/RendererRasterizer.o \
+    src/RendererScene.o \
+    src/RendererTesselation.o \
     src/cpc.o \
     src/Main.o \
     src/KeyboardUI.o \
-    src/Menu.o \
+    src/UI.o \
     src/HackingMinigame.o \
     ../common/src/AY-3-8910.o \
     ../common/src/Common.o \

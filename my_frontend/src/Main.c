@@ -1,6 +1,6 @@
 #include <stdint.h>
-#include "Menu.h"
-#include "Engine3D.h"
+#include "UI.h"
+#include "Renderer.h"
 
 void initState(void);
 void tickRenderer(void);

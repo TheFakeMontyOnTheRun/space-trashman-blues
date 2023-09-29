@@ -6,7 +6,7 @@
 
 #include "Core.h"
 #include "Derelict.h"
-#include "Engine3D.h"
+#include "Renderer.h"
 
 #include "TMS9918.h"
 #include "AY-3-8910.h"
