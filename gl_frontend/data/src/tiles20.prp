@@ -15,5 +15,5 @@ n 0 0 0 0 1 ceiling asphalt null null null null 0 0 5 0
 . 0 0 0 0 1 ceiling asphalt null null null null 0 0 5 0
 , 0 1 1 1 0 null null null null null null 0 0 0 0
 4 0 0 0 0 1 ceiling asphalt null null null null 0 0 5 0
-L 0 0 0 0 1 ceiling asphalt electric cube bricks2 bricks2 3 1 2 1
+L 0 0 1 0 1 ceiling asphalt electric cube bricks2 bricks2 3 1 2 1
 X 0 0 1 1 1 null null null null bricks grating 0 2 2 2
