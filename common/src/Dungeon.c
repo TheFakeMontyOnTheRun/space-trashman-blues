@@ -134,7 +134,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 offseted.x += playerCrawler.position.x;
                 offseted.y += playerCrawler.position.y;
 
-                needToRedrawHUD = TRUE;
+                needsToRedrawHUD = TRUE;
 
                 while (head2 != NULL && (index < currentSelectedItem)) {
                     ++index;
@@ -177,7 +177,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 offseted.x += playerCrawler.position.x;
                 offseted.y += playerCrawler.position.y;
 
-                needToRedrawHUD = TRUE;
+                needsToRedrawHUD = TRUE;
 
                 while (head != NULL && item == NULL) {
                     if (offseted.x == (getItem(head->item)->position.x) &&
@@ -224,7 +224,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 break;
             case kCommandFire3: {
                 enterState(kInspectItem);
-                needToRedrawHUD = TRUE;
+                needsToRedrawHUD = TRUE;
             }
                 break;
 
@@ -232,7 +232,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 struct ObjectNode *playerItems = getPlayerItems();
                 int index = 0;
 
-                needToRedrawHUD = TRUE;
+                needsToRedrawHUD = TRUE;
 
                 ++currentSelectedItem;
 

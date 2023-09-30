@@ -23,12 +23,12 @@ find_package(OpenGL REQUIRED)
 
 add_executable(derelict128
 		../common/src/MainMenu.c
-		menu/src/Crawler.c
+		../common/src/Crawler.c
 		../common/src/HelpScreen.c
 		../common/src/CreditsScreen.c
 		../common/src/GameMenu.c
-		menu/src/Main.c
 		../common/src/Engine.c
+		menu/src/Main.c
 		base3d/src/ee/EmotionEngineRenderer.c
 		base3d/src/ee/LoadBitmap.c
 		base3d/src/ee/Renderer.c
@@ -43,10 +43,10 @@ add_executable(derelict128
 		../common/src/FixP.c
 		../common/src/MapWithCharKey.c
 		../common/src/EDirection_Utils.c
-		SoundSystem/NullMusic.c
+		../common/src/NullMusic.c
 		../common/src/UI.c
 		../common/src/HackingScreen.c
-		SoundSystem/PCMAudio.c
+		../common/src/PCMAudio.c
 		../core/src/Derelict.c
 		../core/src/Core.c
 		../core/src/Parser.c)

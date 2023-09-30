@@ -54,7 +54,7 @@ extern int hasSnapshot;
 extern const int distanceForPenumbra;
 extern int turnTarget;
 extern int turnStep;
-extern int needToRedrawHUD;
+extern int needsToRedrawHUD;
 
 #ifndef AGS
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))

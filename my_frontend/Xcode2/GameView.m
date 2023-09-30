@@ -16,6 +16,7 @@
 #include "Core.h"
 #include "Derelict.h"
 #include "KeyboardUI.h"
+#include "Renderer.h"
 #include "Menu.h"
 
 extern GameView* osxview;
