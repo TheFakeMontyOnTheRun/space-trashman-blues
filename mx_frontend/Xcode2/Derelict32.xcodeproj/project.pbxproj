@@ -73,6 +73,7 @@
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F11957932A3B0EFF004A2B3B /* CTile3DProperties.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CTile3DProperties.c; path = ../../common/src/CTile3DProperties.c; sourceTree = "<group>"; };
 		F11957952A3B0F0A004A2B3B /* CTile3DProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CTile3DProperties.h; path = ../../common/include/CTile3DProperties.h; sourceTree = "<group>"; };
+		F11F43C72AC82F5D009636BC /* SoundSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundSystem.h; path = ../../common/include/SoundSystem.h; sourceTree = SOURCE_ROOT; };
 		F12779DD236DE60800478B2C /* LoadBitmap.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = LoadBitmap.c; path = ../base3d/src/LoadBitmap.c; sourceTree = SOURCE_ROOT; };
 		F12779E2236DE60800478B2C /* CRenderer.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = CRenderer.c; path = ../base3d/src/CRenderer.c; sourceTree = SOURCE_ROOT; };
 		F12779E6236DE60800478B2C /* CRenderer_Rasterization.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = CRenderer_Rasterization.c; path = ../base3d/src/CRenderer_Rasterization.c; sourceTree = SOURCE_ROOT; };
@@ -117,7 +118,6 @@
 		F1B8CB3327CFCFE700C06E6F /* Vec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Vec.h; path = ../../common/include/Vec.h; sourceTree = SOURCE_ROOT; };
 		F1BD0D30236EF697002329C6 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		F1BD0D31236EF697002329C6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
-		F1BF22812450F4AF0088A1C4 /* SoundSystem.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SoundSystem.h; path = ../SoundSystem/SoundSystem.h; sourceTree = SOURCE_ROOT; };
 		F1C623052AA3A7F40026195F /* Crawler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Crawler.c; path = ../../common/src/Crawler.c; sourceTree = SOURCE_ROOT; };
 		F1C623062AA3A7F40026195F /* CreditsScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CreditsScreen.c; path = ../../common/src/CreditsScreen.c; sourceTree = SOURCE_ROOT; };
 		F1C623072AA3A7F40026195F /* Dungeon.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Dungeon.c; path = ../../common/src/Dungeon.c; sourceTree = SOURCE_ROOT; };
@@ -261,9 +261,9 @@
 				F12779DD236DE60800478B2C /* LoadBitmap.c */,
 				F1277A02236DE62100478B2C /* LoadBitmap.h */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
+				F11F43C72AC82F5D009636BC /* SoundSystem.h */,
 				F1D5B5D32531D2BF0094ED78 /* Parser.c */,
 				F1D5B5D62531D2C90094ED78 /* Parser.h */,
-				F1BF22812450F4AF0088A1C4 /* SoundSystem.h */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";

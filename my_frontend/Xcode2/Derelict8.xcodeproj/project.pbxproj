@@ -7,11 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F13B51A12AA5F241006BE693 /* Engine3D.c in Sources */ = {isa = PBXBuildFile; fileRef = F13B519D2AA5F241006BE693 /* Engine3D.c */; };
 		F13B51A22AA5F241006BE693 /* HackingMinigame.c in Sources */ = {isa = PBXBuildFile; fileRef = F13B519E2AA5F241006BE693 /* HackingMinigame.c */; };
 		F13B51A32AA5F241006BE693 /* KeyboardUI.c in Sources */ = {isa = PBXBuildFile; fileRef = F13B519F2AA5F241006BE693 /* KeyboardUI.c */; };
-		F13B51A42AA5F241006BE693 /* Menu.c in Sources */ = {isa = PBXBuildFile; fileRef = F13B51A02AA5F241006BE693 /* Menu.c */; };
 		F13B51AD2AA613D4006BE693 /* Common.c in Sources */ = {isa = PBXBuildFile; fileRef = F13B51AC2AA613D4006BE693 /* Common.c */; };
+		F14601D92AC82536007A09B5 /* UI.c in Sources */ = {isa = PBXBuildFile; fileRef = F14601D42AC82536007A09B5 /* UI.c */; };
+		F14601DA2AC82536007A09B5 /* RendererRasterizer.c in Sources */ = {isa = PBXBuildFile; fileRef = F14601D52AC82536007A09B5 /* RendererRasterizer.c */; };
+		F14601DB2AC82536007A09B5 /* RendererScene.c in Sources */ = {isa = PBXBuildFile; fileRef = F14601D62AC82536007A09B5 /* RendererScene.c */; };
+		F14601DC2AC82536007A09B5 /* RendererTesselation.c in Sources */ = {isa = PBXBuildFile; fileRef = F14601D72AC82536007A09B5 /* RendererTesselation.c */; };
+		F14601DD2AC82536007A09B5 /* Events.c in Sources */ = {isa = PBXBuildFile; fileRef = F14601D82AC82536007A09B5 /* Events.c */; };
 		F149B82A263CB11700A3F597 /* Core.c in Sources */ = {isa = PBXBuildFile; fileRef = F149B829263CB11700A3F597 /* Core.c */; };
 		F194EAD62610B51400E292ED /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		F1CA76BB2610A8E200FD1E04 /* GameView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1277A26236DE6DD00478B2C /* GameView.m */; };
@@ -38,17 +41,21 @@
 		F1277A26236DE6DD00478B2C /* GameView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = GameView.m; sourceTree = "<group>"; };
 		F1277A27236DE6DD00478B2C /* OSXRenderer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OSXRenderer.h; sourceTree = "<group>"; };
 		F1277A28236DE6DD00478B2C /* OSXRenderer.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OSXRenderer.m; sourceTree = "<group>"; };
-		F13B519D2AA5F241006BE693 /* Engine3D.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Engine3D.c; path = ../src/Engine3D.c; sourceTree = "<group>"; };
 		F13B519E2AA5F241006BE693 /* HackingMinigame.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = HackingMinigame.c; path = ../src/HackingMinigame.c; sourceTree = "<group>"; };
 		F13B519F2AA5F241006BE693 /* KeyboardUI.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = KeyboardUI.c; path = ../src/KeyboardUI.c; sourceTree = "<group>"; };
-		F13B51A02AA5F241006BE693 /* Menu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Menu.c; path = ../src/Menu.c; sourceTree = "<group>"; };
-		F13B51A52AA5F255006BE693 /* Engine3D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Engine3D.h; path = ../include/Engine3D.h; sourceTree = "<group>"; };
 		F13B51A62AA5F255006BE693 /* font.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = font.h; path = ../include/font.h; sourceTree = "<group>"; };
 		F13B51A72AA5F255006BE693 /* HackingMinigame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HackingMinigame.h; path = ../include/HackingMinigame.h; sourceTree = "<group>"; };
 		F13B51A82AA5F255006BE693 /* KeyboardUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = KeyboardUI.h; path = ../include/KeyboardUI.h; sourceTree = "<group>"; };
 		F13B51A92AA5F255006BE693 /* map-data.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "map-data.h"; path = "../include/map-data.h"; sourceTree = "<group>"; };
 		F13B51AA2AA5F255006BE693 /* map.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = map.h; path = ../include/map.h; sourceTree = "<group>"; };
 		F13B51AC2AA613D4006BE693 /* Common.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Common.c; path = ../../common/src/Common.c; sourceTree = "<group>"; };
+		F14601D42AC82536007A09B5 /* UI.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = UI.c; path = ../src/UI.c; sourceTree = SOURCE_ROOT; };
+		F14601D52AC82536007A09B5 /* RendererRasterizer.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = RendererRasterizer.c; path = ../src/RendererRasterizer.c; sourceTree = SOURCE_ROOT; };
+		F14601D62AC82536007A09B5 /* RendererScene.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = RendererScene.c; path = ../src/RendererScene.c; sourceTree = SOURCE_ROOT; };
+		F14601D72AC82536007A09B5 /* RendererTesselation.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = RendererTesselation.c; path = ../src/RendererTesselation.c; sourceTree = SOURCE_ROOT; };
+		F14601D82AC82536007A09B5 /* Events.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Events.c; path = ../src/Events.c; sourceTree = SOURCE_ROOT; };
+		F14601E72AC82B5E007A09B5 /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Renderer.h; path = ../include/Renderer.h; sourceTree = SOURCE_ROOT; };
+		F14601E82AC82B69007A09B5 /* UI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UI.h; path = ../include/UI.h; sourceTree = SOURCE_ROOT; };
 		F149B829263CB11700A3F597 /* Core.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Core.c; path = ../../core/src/Core.c; sourceTree = "<group>"; };
 		F149B82B263CB12B00A3F597 /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Core.h; path = ../../core/include/Core.h; sourceTree = "<group>"; };
 		F1B679BC24E4AAE400FCEF8E /* GameWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameWindow.h; sourceTree = "<group>"; };
@@ -59,7 +66,6 @@
 		F1CA76B32610A8BF00FD1E04 /* Derelict.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Derelict.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Derelict-Info.plist"; sourceTree = "<group>"; };
 		F1CD08C62450E41C00D4794D /* base.pfs */ = {isa = PBXFileReference; lastKnownFileType = file; name = base.pfs; path = ../base.pfs; sourceTree = SOURCE_ROOT; };
-		F1CF4A822AC2BB100095BEF5 /* Menu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Menu.h; path = ../include/Menu.h; sourceTree = "<group>"; };
 		F1D5B5D22531D2BF0094ED78 /* Derelict.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Derelict.c; path = ../../core/src/Derelict.c; sourceTree = "<group>"; };
 		F1D5B5D32531D2BF0094ED78 /* Parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Parser.c; path = ../../core/src/Parser.c; sourceTree = "<group>"; };
 		F1D5B5D62531D2C90094ED78 /* Parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Parser.h; path = ../../core/include/Parser.h; sourceTree = "<group>"; };
@@ -135,17 +141,20 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				F13B519D2AA5F241006BE693 /* Engine3D.c */,
+				F14601D42AC82536007A09B5 /* UI.c */,
+				F14601D52AC82536007A09B5 /* RendererRasterizer.c */,
+				F14601D62AC82536007A09B5 /* RendererScene.c */,
+				F14601D72AC82536007A09B5 /* RendererTesselation.c */,
+				F14601D82AC82536007A09B5 /* Events.c */,
 				F13B519E2AA5F241006BE693 /* HackingMinigame.c */,
+				F14601E72AC82B5E007A09B5 /* Renderer.h */,
 				F13B519F2AA5F241006BE693 /* KeyboardUI.c */,
-				F13B51A02AA5F241006BE693 /* Menu.c */,
-				F13B51A52AA5F255006BE693 /* Engine3D.h */,
 				F13B51A62AA5F255006BE693 /* font.h */,
 				F13B51A72AA5F255006BE693 /* HackingMinigame.h */,
-				F1CF4A822AC2BB100095BEF5 /* Menu.h */,
 				F13B51A82AA5F255006BE693 /* KeyboardUI.h */,
 				F13B51A92AA5F255006BE693 /* map-data.h */,
 				F13B51AA2AA5F255006BE693 /* map.h */,
+				F14601E82AC82B69007A09B5 /* UI.h */,
 				F1B8CB2F27CFCFE700C06E6F /* Common.h */,
 				F13B51AC2AA613D4006BE693 /* Common.c */,
 				F149B82B263CB12B00A3F597 /* Core.h */,
@@ -247,11 +256,14 @@
 				F1CA76C22610A91800FD1E04 /* main.m in Sources */,
 				F1CA76D02610A93600FD1E04 /* Derelict.c in Sources */,
 				F1CA76D62610A93B00FD1E04 /* Parser.c in Sources */,
-				F13B51A12AA5F241006BE693 /* Engine3D.c in Sources */,
 				F13B51A22AA5F241006BE693 /* HackingMinigame.c in Sources */,
 				F13B51A32AA5F241006BE693 /* KeyboardUI.c in Sources */,
-				F13B51A42AA5F241006BE693 /* Menu.c in Sources */,
 				F13B51AD2AA613D4006BE693 /* Common.c in Sources */,
+				F14601D92AC82536007A09B5 /* UI.c in Sources */,
+				F14601DA2AC82536007A09B5 /* RendererRasterizer.c in Sources */,
+				F14601DB2AC82536007A09B5 /* RendererScene.c in Sources */,
+				F14601DC2AC82536007A09B5 /* RendererTesselation.c in Sources */,
+				F14601DD2AC82536007A09B5 /* Events.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
