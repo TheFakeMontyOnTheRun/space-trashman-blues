@@ -79,6 +79,7 @@
 		F136B29C293CDC2300131388 /* CRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CRenderer.h; path = ../base3d/include/CRenderer.h; sourceTree = "<group>"; };
 		F149B829263CB11700A3F597 /* Core.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Core.c; path = ../../core/src/Core.c; sourceTree = "<group>"; };
 		F149B82B263CB12B00A3F597 /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Core.h; path = ../../core/include/Core.h; sourceTree = "<group>"; };
+		F15E9FEA2AC833B2003E6C7F /* SoundSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundSystem.h; path = ../../common/include/SoundSystem.h; sourceTree = SOURCE_ROOT; };
 		F18B850725581D370012292B /* magbootson.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = magbootson.wav; path = ../data/wavogg/magbootson.wav; sourceTree = "<group>"; };
 		F18B850825581D370012292B /* menu_select.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = menu_select.wav; path = ../data/wavogg/menu_select.wav; sourceTree = "<group>"; };
 		F18B850925581D370012292B /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = click.wav; path = ../data/wavogg/click.wav; sourceTree = "<group>"; };
@@ -111,7 +112,6 @@
 		F1B8CB3327CFCFE700C06E6F /* Vec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Vec.h; path = ../../common/include/Vec.h; sourceTree = SOURCE_ROOT; };
 		F1BD0D30236EF697002329C6 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		F1BD0D31236EF697002329C6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
-		F1BF22812450F4AF0088A1C4 /* SoundSystem.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SoundSystem.h; path = ../SoundSystem/SoundSystem.h; sourceTree = SOURCE_ROOT; };
 		F1C623592AA3A9840026195F /* CActor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CActor.h; path = ../../common/include/CActor.h; sourceTree = SOURCE_ROOT; };
 		F1C6235A2AA3A9840026195F /* Dungeon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Dungeon.h; path = ../../common/include/Dungeon.h; sourceTree = SOURCE_ROOT; };
 		F1C6235B2AA3A9840026195F /* EDirection_Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EDirection_Utils.h; path = ../../common/include/EDirection_Utils.h; sourceTree = SOURCE_ROOT; };
@@ -216,6 +216,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				F15E9FEA2AC833B2003E6C7F /* SoundSystem.h */,
 				F1C623612AA3A9B00026195F /* Crawler.c */,
 				F1C623622AA3A9B00026195F /* CreditsScreen.c */,
 				F1C623632AA3A9B00026195F /* Dungeon.c */,
@@ -262,7 +263,6 @@
 				29B97316FDCFA39411CA2CEA /* main.m */,
 				F1D5B5D32531D2BF0094ED78 /* Parser.c */,
 				F1D5B5D62531D2C90094ED78 /* Parser.h */,
-				F1BF22812450F4AF0088A1C4 /* SoundSystem.h */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";

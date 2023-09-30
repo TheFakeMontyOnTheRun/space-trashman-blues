@@ -15,7 +15,6 @@
 
 #include "Core.h"
 #include "Derelict.h"
-#include "Engine3D.h"
 #include "KeyboardUI.h"
 #include "Menu.h"
 
