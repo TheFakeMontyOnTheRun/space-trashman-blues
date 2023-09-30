@@ -121,8 +121,6 @@ void startMusic(void);
 
 void shutdownGraphics(void);
 
-void tickRenderer(void);
-
 void titleScreen(void);
 
 void updateMapItems(void);

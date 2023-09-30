@@ -5,7 +5,6 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
 #include <unistd.h>
 #endif
@@ -318,7 +317,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
 
     if (currentPresentationState == kWaitingForInput) {
         if (cmd == kCommandFire4) {
-            needToRedrawHUD = TRUE;
+            needsToRedrawHUD = TRUE;
         }
 
         returnCode = loopTick(cmd);

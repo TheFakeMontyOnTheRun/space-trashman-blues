@@ -269,7 +269,7 @@ void renderRoomTransition() {
     if (!enableSmoothMovement) {
         currentPresentationState = kWaitingForInput;
         zCameraOffset = xCameraOffset = yCameraOffset = 0;
-        needToRedrawHUD = TRUE;
+        needsToRedrawHUD = TRUE;
         return;
     }
 
@@ -323,7 +323,7 @@ void renderRoomTransition() {
         currentPresentationState = kWaitingForInput;
         needsToRedrawVisibleMeshes = TRUE;
         gameTicks = 0;
-        needToRedrawHUD = TRUE;
+        needsToRedrawHUD = TRUE;
     }
 }
 

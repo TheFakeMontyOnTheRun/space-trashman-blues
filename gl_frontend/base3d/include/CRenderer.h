@@ -26,7 +26,7 @@ extern long gameTicks;
 extern int hasSnapshot;
 extern int turnTarget;
 extern int turnStep;
-extern int needToRedrawHUD;
+extern int needsToRedrawHUD;
 
 #define MASK_LEFT 1
 #define MASK_FRONT 2
