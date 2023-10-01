@@ -22,7 +22,7 @@ char *menuItems[] = {
         "Next in room",
 };
 
-uint8_t cursorPosition = 0;
+extern int cursorPosition;
 
 void initGamepadUI(void) {
     cursorPosition = 0;

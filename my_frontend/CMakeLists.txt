@@ -22,6 +22,7 @@ add_executable(derelict8
         include/Renderer.h
         ../common/src/PackedFileReader.c
         ../common/src/Common.c
+        ../common/src/Engine.c
         src/HackingMinigame.c
         include/HackingMinigame.h
         src/UI.c
@@ -29,7 +30,12 @@ add_executable(derelict8
         src/RendererRasterizer.c
         src/RendererTesselation.c
         src/RendererScene.c
-        src/KeyboardUI.c)
+        src/KeyboardUI.c
+        src/Crawler.c
+        src/Help.c
+        src/MainMenu.c
+        src/Credits.c
+        src/GameMenu.c)
 
 include(FindPkgConfig)
 

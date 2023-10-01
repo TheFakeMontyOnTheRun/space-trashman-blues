@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
@@ -11,8 +12,6 @@
 
 #define XRES_TEXT (XRES_FRAMEBUFFER / 8)
 #define YRES_TEXT (YRES_FRAMEBUFFER / 8)
-
-uint8_t cursorPosition = 0;
 
 extern struct ObjectNode *focusedItem;
 

@@ -5,6 +5,7 @@
 
 #include "Core.h"
 #include "Derelict.h"
+#include "Enums.h"
 #include "Renderer.h"
 #include "map.h"
 #include "map-data.h"
@@ -28,6 +29,7 @@ int8_t map[32][32];
 /*  Required since we have our own memory allocator abstraction */
 uint16_t heap = 0;
 
+extern int isRunning;
 extern int8_t stencilHigh[XRES];
 
 struct ObjectNode *focusedItem = NULL;
@@ -37,8 +39,8 @@ extern uint8_t accessGrantedToSafe;
 
 int8_t cameraX = 33;
 int8_t cameraZ = 22;
-int8_t cameraRotation = 0;
-uint8_t running = 1;
+extern int cameraRotation;
+extern int running;
 
 uint8_t enteredFrom = 0xFF;
 
@@ -267,6 +269,14 @@ void initMap(void) {
     HUD_initialPaint();
 }
 
+void tickGame(enum ECommand cmd, long data) {
+
+}
+
+void shutdownGame( int32_t tag_unused) {
+
+}
+
 void tickRenderer(void) {
     uint8_t prevX;
     uint8_t prevZ;
@@ -400,8 +410,8 @@ void logDelegate(const char *mesg) {
     showMessage(mesg);
 }
 
-void initState() {
-    running = 1;
+void initState(int32_t tag_unused) {
+    isRunning = 1;
     enteredFrom = 0;
     cameraRotation = 0;
     init();
