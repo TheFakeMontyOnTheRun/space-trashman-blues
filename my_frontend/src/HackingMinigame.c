@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "Enums.h"
 #include "UI.h"
 #include "Core.h"
 #include "Derelict.h"
@@ -89,8 +90,11 @@ void HackingScreen_repaintCallback(void) {
     }
 }
 
-int8_t HackingScreen_tickCallback(char cmd) {
+void HackingScreen_initialPaintCallback(void) {}
 
+void HackingScreen_unloadStateCallback(int32_t newState) {}
+
+enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long data) {
     uint8_t pin;
 
     for (pin = 0; pin < 3; ++pin) {
@@ -153,7 +157,7 @@ void runHackingMinigame(void) {
             cmd = getKey();
         }
 
-        state = HackingScreen_tickCallback(cmd);
+        state = HackingScreen_tickCallback(cmd, 0);
         clearTextScreen();
         HackingScreen_repaintCallback();
     }

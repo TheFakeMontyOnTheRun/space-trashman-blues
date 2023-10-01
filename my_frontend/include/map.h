@@ -5,7 +5,7 @@
 
 /* ceiling is at height 12, floor at height 0. Camera is at height 2 */
 
-const extern struct CellPattern patterns[96];
+extern const struct CellPattern patterns[96];
 
 extern int8_t map[32][32];
 
