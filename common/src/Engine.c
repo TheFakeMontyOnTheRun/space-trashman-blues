@@ -17,21 +17,9 @@
 #endif
 #endif
 
-#include "FixP.h"
-#include "Vec.h"
 #include "Enums.h"
-#include "CActor.h"
-#include "MapWithCharKey.h"
 #include "Common.h"
-#include "LoadBitmap.h"
-#include "Core.h"
 #include "Engine.h"
-#include "CTile3DProperties.h"
-#include "CRenderer.h"
-#include "VisibilityStrategy.h"
-#include "PackedFileReader.h"
-
-
 #include "SoundSystem.h"
 
 InitStateCallback initStateCallback = NULL;
@@ -39,6 +27,9 @@ InitialPaintCallback initialPaintCallback = NULL;
 RepaintCallback repaintCallback = NULL;
 TickCallback tickCallback = NULL;
 UnloadStateCallback unloadStateCallback = NULL;
+
+enum ECommand getInput(void);
+void handleSystemEvents(void);
 
 int countLines() {
     size_t len = strlen(mainText);
