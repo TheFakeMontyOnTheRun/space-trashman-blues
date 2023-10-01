@@ -28,3 +28,9 @@ void initSN76489(void) {
 
     psg_envelope(envUH, psgT(10), chanAll); // set a raising volume envelope on all channels
 }
+
+void stopSounds(void) {}
+
+void soundTick(void) {}
+
+void playSound( int ununused ) {}

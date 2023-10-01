@@ -21,6 +21,7 @@ add_executable(derelict8
         ../core/src/Core.c
         include/Renderer.h
         ../common/src/PackedFileReader.c
+        ../common/src/NullMusic.c
         ../common/src/Common.c
         ../common/src/Engine.c
         src/HackingMinigame.c

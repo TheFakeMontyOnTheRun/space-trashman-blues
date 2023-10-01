@@ -5,6 +5,7 @@
 #include <sms.h>
 #include <stdio.h>
 
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
@@ -13,6 +14,9 @@
 #include "SN76489.h"
 
 #define COOLDOWN_MAX 0xFF
+
+/*  Required since we have our own memory allocator abstraction */
+uint16_t heap = 0;
 
 uint8_t cooldown;
 
@@ -40,7 +44,9 @@ void backToGraphics(void) {
     refreshJustGraphics();
 }
 
-uint8_t getKey(void) {
+void handleSystemEvents(void) {}
+
+enum ECommand getInput(void) {
     int key = read_joypad1();
 
     if (cooldown) {

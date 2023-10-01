@@ -3,6 +3,8 @@
 */
 #include <stdlib.h>
 #include <stdint.h>
+
+#include "Enums.h"
 #include "UI.h"
 #include "Core.h"
 #include "Derelict.h"
@@ -136,8 +138,8 @@ void titleScreen(void) {
 
 
     while (keepGoing) {
-        uint8_t key = getKey();
-        if (key == ' ' || key == 'p') {
+        enum ECommand key = getInput();
+        if (key != kCommandFire1) {
             keepGoing = 0;
         }
     }
@@ -164,7 +166,7 @@ void showMessage(const char *message) {
 #endif
 
     while (keepGoing) {
-        uint8_t key = getKey();
+        uint8_t key = getInput();
         if (key == ' ' || key == 'p') {
             keepGoing = 0;
         }

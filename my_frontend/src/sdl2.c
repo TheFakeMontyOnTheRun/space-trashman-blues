@@ -4,6 +4,7 @@
 #include <Core.h>
 #include <assert.h>
 
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
@@ -116,7 +117,9 @@ void clearScreen(void) {
     fillRect(0, 0, 256, 192, 0);
 }
 
-uint8_t getKey(void) {
+void handleSystemEvents(void) {}
+
+enum ECommand getInput(void) {
     SDL_Event event;
 
     mBufferedCommand = '.';

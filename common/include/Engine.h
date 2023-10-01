@@ -116,4 +116,5 @@ int menuTick(long delta_time);
 
 #define MENU_ITEM_TIME_TO_BECOME_ACTIVE_MS 200
 #define TEXT_BUFFER_SIZE (40 * 25)
-#endif
+
+#endif /* ENGINE_H */

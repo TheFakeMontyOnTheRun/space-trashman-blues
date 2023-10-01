@@ -4,6 +4,7 @@
 #include <string.h>
 #include <time.h>
 
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
@@ -15,6 +16,10 @@
 char getch(void);
 
 uint8_t updateDirection;
+
+/*  Required since we have our own memory allocator abstraction */
+uint16_t heap = 0;
+
 
 void init(void) {
     initTMS9918();
@@ -35,7 +40,9 @@ void backToGraphics(void) {
     refreshJustGraphics();
 }
 
-uint8_t getKey(void) {
+void handleSystemEvents(void) {}
+
+enum ECommand getInput(void) {
     uint8_t input = getch();
 
     performAction();
