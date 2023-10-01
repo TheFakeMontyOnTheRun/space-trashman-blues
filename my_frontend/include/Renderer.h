@@ -71,17 +71,9 @@ void exitTextMode(void);
 
 void initMap(void);
 
-void initState(int32_t tag);
-
-void tickRenderer(void);
-
-void tickGame(enum ECommand, long data);
-
-void shutdownGame(int32_t unused);
-
 void shutdownGraphics(void);
 
-uint8_t getKey(void);
+enum ECommand getInput(void);
 
 void graphicsFlush(void);
 

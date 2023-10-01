@@ -22,18 +22,25 @@ CC = ia16-elf-gcc
 STRIP = ia16-elf-strip
 
 OBJS = \
+    src/msdos.o \
     src/Events.o \
     src/RendererRasterizer.o \
     src/RendererScene.o \
     src/RendererTesselation.o \
-    src/HackingMinigame.o \
-    src/msdos.o \
     src/Main.o \
     src/UI.o \
+    src/Crawler.o \
+    src/Credits.o \
+    src/GameMenu.o \
+    src/MainMenu.o \
+    src/Help.o \
+    ../common/src/Engine.o \
+    src/HackingMinigame.o \
     src/KeyboardUI.o \
     ../core/src/Core.o \
     ../core/src/Derelict.o \
     ../common/src/PackedFileReader.o \
+    ../common/src/MonotoneSpeaker.o \
     ../common/src/Common.o
 
 TARGET = derelict.com

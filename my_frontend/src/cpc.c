@@ -7,6 +7,7 @@
 #include <psg.h>
 #include <sound.h>
 
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
@@ -157,8 +158,10 @@ void enterTextMode(void) {
 void exitTextMode(void) {
 }
 
+void handleSystemEvents(void) {}
 
-uint8_t getKey(void) {
+
+enum ECommand getInput(void) {
     uint8_t input = getch();
 
     performAction();

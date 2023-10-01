@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <unistd.h>
 
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
@@ -298,7 +299,9 @@ void clearScreen(void) {
     init();
 }
 
-uint8_t getKey(void) {
+void handleSystemEvents(void) {}
+
+enum ECommand getInput(void) {
     unsigned char toReturn = 255;
 
 

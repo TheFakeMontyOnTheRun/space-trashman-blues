@@ -154,7 +154,7 @@ void runHackingMinigame(void) {
         cmd = '.';
 
         while (cmd == '.') {
-            cmd = getKey();
+            cmd = getInput();
         }
 
         state = HackingScreen_tickCallback(cmd, 0);

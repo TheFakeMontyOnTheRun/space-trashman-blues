@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
@@ -288,7 +289,7 @@ void startRoomTransitionAnimation(void) {
         }
 #ifdef SDLW
         /* Just to keep the OS happy */
-        getKey();
+        getInput();
 #endif
         graphicsFlush();
     }
