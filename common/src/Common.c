@@ -98,3 +98,21 @@ uint32_t toNativeEndianess(const uint32_t val) {
 
 	return val2;
 }
+
+int countLines() {
+    size_t len = strlen(mainText);
+    int lines = 2;    /* initial line + final line must be accounted for */
+    int charsInLine = 0;
+    size_t c;
+    for (c = 0; c < len; ++c) {
+        if (mainText[c] == '\n') {
+            lines++;
+            charsInLine = 0;
+        } else {
+            charsInLine++;
+        }
+    }
+
+    return lines - 1;
+}
+

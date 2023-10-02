@@ -12,21 +12,11 @@
 #include "FixP.h"
 #include "Enums.h"
 #include "Vec.h"
-#include "CActor.h"
-#include "MapWithCharKey.h"
-#include "Common.h"
-#include "Vec.h"
 #include "LoadBitmap.h"
-#include "Core.h"
 #include "Engine.h"
-#include "MapWithCharKey.h"
-#include "CTile3DProperties.h"
 #include "CRenderer.h"
-#include "VisibilityStrategy.h"
-#include "SoundSystem.h"
-#include "Core.h"
-#include "Derelict.h"
 #include "Dungeon.h"
+#include "Common.h"
 
 #define ANGLE_TURN_THRESHOLD 40
 #define ANGLE_TURN_STEP 5
@@ -38,13 +28,12 @@ int leanY = 0;
 FixP_t kCameraYDeltaPlayerDeath;
 FixP_t kCameraYSpeedPlayerDeath;
 int showPromptToAbandonMission = FALSE;
-extern size_t biggestOption;
 int needToRedrawHUD = FALSE;
+
 const char *AbandonMission_Title = "Abandon game?";
 const char *AbandonMission_options[6] = {"Continue", "End game"};
 const int AbandonMission_navigation[2] = {-1, kMainMenu};
 const int AbandonMission_count = 2;
-extern struct GameSnapshot gameSnapshot;
 
 void Crawler_initStateCallback(int32_t tag) {
     int c;

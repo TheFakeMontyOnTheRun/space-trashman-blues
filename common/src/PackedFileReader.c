@@ -1,32 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 #ifdef N64
 #include <libdragon.h>
 #endif
 
 #ifndef LEAN_BUILD
-
 #include <assert.h>
-
 #else
 #define assert(x) (x)
 #endif
 
-#include <errno.h>
 
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
 #include <unistd.h>
-
 #endif
 
 #include "Common.h"
-
 
 #ifdef ANDROID
 #include <jni.h>
@@ -54,7 +49,6 @@ int android_close(void *cookie) {
 	AAsset_close((AAsset *) cookie);
 	return 0;
 }
-
 
 FILE *android_fopen(const char* filename) {
 

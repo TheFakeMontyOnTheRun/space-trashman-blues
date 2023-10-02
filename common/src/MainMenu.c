@@ -11,18 +11,13 @@
 #endif
 
 #include "FixP.h"
-#include "Vec.h"
 #include "Enums.h"
-#include "CActor.h"
-#include "MapWithCharKey.h"
 #include "Common.h"
 #include "Vec.h"
 #include "LoadBitmap.h"
-#include "Core.h"
 #include "Engine.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
-#include "VisibilityStrategy.h"
 #include "UI.h"
 #include "SoundSystem.h"
 

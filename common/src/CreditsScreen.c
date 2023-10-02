@@ -1,10 +1,8 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
 #include <unistd.h>
-
 #endif
 
 #include <stdio.h>
@@ -15,17 +13,11 @@
 #include "Enums.h"
 #include "FixP.h"
 #include "Vec.h"
-#include "Core.h"
 #include "Engine.h"
-#include "CActor.h"
 #include "Common.h"
 #include "PackedFileReader.h"
 #include "LoadBitmap.h"
 #include "CRenderer.h"
-#include "CTile3DProperties.h"
-#include "FixP.h"
-#include "MapWithCharKey.h"
-#include "VisibilityStrategy.h"
 #include "UI.h"
 
 const char *CreditsScreen_options[1] = {"Back"};
@@ -35,7 +27,6 @@ int32_t CreditsScreen_nextStateNavigation[1] = {
 };
 
 const int16_t CreditsScreen_optionsCount = 1;
-extern char *textBuffer;
 
 #ifndef TILED_BITMAPS
 struct Bitmap *monty;

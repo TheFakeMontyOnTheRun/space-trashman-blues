@@ -1,10 +1,8 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
 #include <unistd.h>
-
 #endif
 
 #include <stdio.h>
@@ -14,18 +12,14 @@
 #include "Enums.h"
 #include "FixP.h"
 #include "Vec.h"
-#include "Core.h"
 #include "Engine.h"
-#include "CActor.h"
 #include "Common.h"
 #include "PackedFileReader.h"
 #include "LoadBitmap.h"
 #include "CRenderer.h"
-#include "CTile3DProperties.h"
-#include "FixP.h"
-#include "MapWithCharKey.h"
-#include "VisibilityStrategy.h"
 #include "UI.h"
+
+extern uint8_t accessGrantedToSafe;
 
 const char *functionNames[6] = {
         "???",
@@ -39,7 +33,6 @@ const char *functionNames[6] = {
 uint8_t holdingDisk = 3;
 uint8_t pins[3][10];
 uint8_t pinTop[3];
-extern uint8_t accessGrantedToSafe;
 int wasSmoothMovementPreviouslyEnabled;
 
 void HackingScreen_initStateCallback(int32_t tag) {

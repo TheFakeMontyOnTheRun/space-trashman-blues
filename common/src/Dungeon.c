@@ -1,19 +1,14 @@
 #include <stdio.h>
 #include <string.h>
-
+#include <stdlib.h>
 #include <stddef.h>
 
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
 #include <unistd.h>
-
 #endif
-
-#include <string.h>
-#include <stdlib.h>
 
 #include "FixP.h"
 #include "Vec.h"
@@ -24,15 +19,22 @@
 #include "Core.h"
 #include "Engine.h"
 #include "SoundSystem.h"
-#include "Core.h"
-#include "Derelict.h"
 #include "Parser.h"
-#include "EDirection_Utils.h"
-
-/* This include must be here just to satisfy the .h - your IDE might trick you into thinking this is not needed. And it's not, but ISO requires. */
 #include "CActor.h"
-#include "LoadBitmap.h"
+/* 
+   This include must be here just to satisfy the .h - your IDE might trick you into thinking this is not needed. 
+   And it's not, but ISO requires. 
+*/
 #include "CRenderer.h"
+
+
+extern const char *focusItemName;
+extern int currentSelectedItem;
+extern int shouldContinue;
+extern const char *thisMissionName;
+extern int16_t thisMissionNameLen;
+
+
 
 const char *focusItemName = NULL;
 struct GameSnapshot gameSnapshot;
@@ -40,14 +42,6 @@ uint8_t *map;
 uint8_t *itemsInMap;
 uint8_t *collisionMap;
 int enteredThru = 0;
-extern const char *focusItemName;
-
-extern int currentSelectedItem;
-
-extern int shouldContinue;
-extern const char *thisMissionName;
-extern int16_t thisMissionNameLen;
-
 struct CActor playerCrawler;
 
 uint8_t isPositionAllowed(int8_t x, int8_t y) {
