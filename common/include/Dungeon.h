@@ -28,4 +28,6 @@ extern int cursorPosition;
 
 extern const char *focusItemName;
 
+extern struct GameSnapshot gameSnapshot;
+
 #endif

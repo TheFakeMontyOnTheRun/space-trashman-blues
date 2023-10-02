@@ -1,42 +1,27 @@
 /*
 * Created by Daniel Monteiro on 2019-08-02.
 */
-#ifdef WIN32
-#include "Win32Int.h"
-#else
-
-#include <stdint.h>
-#include <unistd.h>
-
-#endif
-
 #include <stdio.h>
 #include <string.h>
 
-#include "Core.h"
+#ifdef WIN32
+#include "Win32Int.h"
+#else
+#include <stdint.h>
+#include <unistd.h>
+#endif
 
+
+#include "Core.h"
 #include "Enums.h"
 #include "FixP.h"
-#include "Engine.h"
-#include "FixP.h"
 #include "Vec.h"
-#include "CActor.h"
-#include "MapWithCharKey.h"
 #include "Common.h"
-#include "Vec.h"
 #include "LoadBitmap.h"
-#include "Engine.h"
-#include "MapWithCharKey.h"
-#include "CTile3DProperties.h"
 #include "CRenderer.h"
-#include "LoadBitmap.h"
-#include "VisibilityStrategy.h"
-
-
 #include "UI.h"
 
 extern const char *thisMissionName;
-
 extern int currentSelectedItem;
 
 void

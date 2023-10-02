@@ -104,17 +104,20 @@ void redrawHUD(void);
 
 void shutdownHW(void);
 
+enum ECommand getInput(void);
+
+void handleSystemEvents(void);
+
 extern int isRunning;
 extern long timeUntilNextState;
 extern enum EPresentationState currentPresentationState;
 extern enum EGameMenuState nextNavigationSelection;
 extern enum EGameMenuState currentGameMenuState;
-extern const char *mainText;
-extern char *textBuffer;
 
 int menuTick(long delta_time);
 
 #define MENU_ITEM_TIME_TO_BECOME_ACTIVE_MS 200
-#define TEXT_BUFFER_SIZE (40 * 25)
+
+
 
 #endif /* ENGINE_H */

@@ -113,7 +113,10 @@ void shutdownHW() {
 long start_clock, end_clock, prev;
 
 #ifdef __EMSCRIPTEN__
-void mainLoop();
+void mainLoop () {
+  menuTick ( 50 );
+  flipRenderer();
+}
 #endif
 
 #ifndef ANDROID

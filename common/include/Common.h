@@ -45,6 +45,13 @@ void initFileReader(const char *  dataFilePath);
 
 uint32_t toNativeEndianess(const uint32_t val);
 
+
+extern const char *mainText;
+extern char *textBuffer;
+extern size_t biggestOption;
+
+#define TEXT_BUFFER_SIZE (40 * 25)
+
 #ifndef SMD
 #ifndef WIN32
 #ifndef LEAN_BUILD

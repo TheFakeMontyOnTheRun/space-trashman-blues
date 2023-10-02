@@ -6,30 +6,21 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
 #include <unistd.h>
-
 #endif
 
 #include "Enums.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "CActor.h"
-#include "MapWithCharKey.h"
 #include "Common.h"
-#include "Vec.h"
-#include "LoadBitmap.h"
-#include "Core.h"
-#include "Engine.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
-#include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "Dungeon.h"
-#include "SoundSystem.h"
-#include "Globals.h"
+
 
 int x = 0;
 int z = 0;

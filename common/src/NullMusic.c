@@ -1,3 +1,8 @@
+#include "Enums.h"
+#include "SoundSystem.h"
+
+enum ESoundDriver soundDriver = kNoSound;
+
 void setupOPL2(int port) {}
 
 void stopSounds(void) {}

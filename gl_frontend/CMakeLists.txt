@@ -14,7 +14,6 @@ include_directories(/usr/X11R7/include)
 include_directories(../core/include)
 include_directories(../common/include)
 include_directories(base3d/include)
-include_directories(common/include)
 include_directories(menu/include)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic -g")

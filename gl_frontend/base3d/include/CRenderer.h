@@ -1,6 +1,8 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+#include "LoadBitmap.h"
+
 #define TILED_BITMAPS
 #define XRES 216
 #define YRES 200

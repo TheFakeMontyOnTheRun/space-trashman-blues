@@ -6,14 +6,11 @@
 #ifdef AMIGA
 #include "AmigaInt.h"
 #else
-
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
 #include <unistd.h>
-
 #endif
 #endif
 
@@ -28,26 +25,6 @@ RepaintCallback repaintCallback = NULL;
 TickCallback tickCallback = NULL;
 UnloadStateCallback unloadStateCallback = NULL;
 
-enum ECommand getInput(void);
-void handleSystemEvents(void);
-
-int countLines() {
-    size_t len = strlen(mainText);
-    int lines = 2;    /* initial line + final line must be accounted for */
-    int charsInLine = 0;
-    size_t c;
-    for (c = 0; c < len; ++c) {
-        if (mainText[c] == '\n') {
-            lines++;
-            charsInLine = 0;
-        } else {
-            charsInLine++;
-        }
-    }
-
-    return lines - 1;
-}
-
 void enterState(enum EGameMenuState newState) {
 
     stopSounds();
@@ -60,6 +37,7 @@ void enterState(enum EGameMenuState newState) {
     currentPresentationState = kAppearing;
     cursorPosition = 0;
     nextNavigationSelection = -1;
+    
     switch (newState) {
         default:
         case kMainMenu:
@@ -128,8 +106,6 @@ void enterState(enum EGameMenuState newState) {
     initialPaintCallback();
 }
 
-enum ESoundDriver soundDriver = kNoSound;
-
 int menuTick(long delta_time) {
 
     enum ECommand input;
@@ -159,10 +135,3 @@ int menuTick(long delta_time) {
 
     return isRunning;
 }
-
-#ifdef __EMSCRIPTEN__
-void mainLoop () {
-  menuTick ( 50 );
-  flipRenderer();
-}
-#endif
