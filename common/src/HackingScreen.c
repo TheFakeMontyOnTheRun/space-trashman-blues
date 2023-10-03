@@ -18,8 +18,8 @@
 #include "LoadBitmap.h"
 #include "CRenderer.h"
 #include "UI.h"
-
-extern uint8_t accessGrantedToSafe;
+#include "Core.h"
+#include "Derelict.h"
 
 const char *functionNames[6] = {
         "???",
@@ -90,7 +90,7 @@ void HackingScreen_repaintCallback(void) {
 #endif
 
         if (pins[pin][5] == 0) {
-            accessGrantedToSafe = TRUE;
+	  grantAccessToSafe();
         }
 
         for (disk = 0; disk < 6; ++disk) {
@@ -106,7 +106,7 @@ void HackingScreen_repaintCallback(void) {
                 isSelected = 0;
             }
 
-            if (accessGrantedToSafe) {
+            if (isAccessToSafeGranted()) {
                 isSelected = getPaletteEntry(0xFF00AA00);
             }
 
@@ -163,7 +163,7 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
 
         for (pin = 0; pin < 3; ++pin) {
             if (pins[pin][5] == 0) {
-                accessGrantedToSafe = TRUE;
+		grantAccessToSafe();
             }
         }
 

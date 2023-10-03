@@ -23,4 +23,8 @@ void elevatorGoDownCallback(struct Item *item);
 
 void elevatorGoUpCallback(struct Item *item);
 
+void grantAccessToSafe();
+
+uint8_t isAccessToSafeGranted();
+
 #endif

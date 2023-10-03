@@ -1,5 +1,5 @@
-#ifndef TIMER_H_
-#define TIMER_H_
+#ifndef TIMER_H
+#define TIMER_H
 
 void timer_setup(unsigned short frequency);
 

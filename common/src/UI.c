@@ -21,9 +21,6 @@
 #include "CRenderer.h"
 #include "UI.h"
 
-extern const char *thisMissionName;
-extern int currentSelectedItem;
-
 void
 drawWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title) {
 

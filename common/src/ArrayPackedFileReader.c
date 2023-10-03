@@ -1,6 +1,6 @@
-//
-// Created by Daniel Monteiro on 10/02/2023.
-//
+/*
+   Created by Daniel Monteiro on 10/02/2023.
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -19,7 +19,8 @@
 void initFileReader(const char * dataFilePath) {
 }
 
-void disposeDiskBuffer(struct StaticBuffer buffer) {}
+void disposeDiskBuffer(struct StaticBuffer buffer) {
+}
 
 struct StaticBuffer loadBinaryFileFromPath(const char * path) {
 

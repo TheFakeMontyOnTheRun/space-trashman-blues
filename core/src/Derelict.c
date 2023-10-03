@@ -21,6 +21,14 @@ Created by Daniel Monteiro on 2019-07-26.
 
 uint8_t accessGrantedToSafe = FALSE;
 
+void grantAccessToSafe() {
+  accessGrantedToSafe = TRUE;
+}
+
+uint8_t isAccessToSafeGranted() {
+  return accessGrantedToSafe;
+}
+
 void updateRankFromKeycards(void) {
 	uint8_t rank = 0;
 
@@ -239,7 +247,6 @@ void useComputerRack(struct Item *item) {
 void reactorValveCallback(struct Item *item) {
 	setGameStatus(kBadVictory);
 }
-
 
 void initStation(void) {
 

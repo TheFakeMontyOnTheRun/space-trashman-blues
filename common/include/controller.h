@@ -1,5 +1,5 @@
-#ifndef DEMOTUNE_H_
-#define DEMOTUNE_H_
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
 
 extern void
 music_set(int channel, const char *melody, int block);

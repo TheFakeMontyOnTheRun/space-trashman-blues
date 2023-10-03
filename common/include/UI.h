@@ -2,8 +2,8 @@
 * Created by Daniel Monteiro on 2019-08-02.
 */
 
-#ifndef THE_MISTRAL_REPORT_UI_H
-#define THE_MISTRAL_REPORT_UI_H
+#ifndef UI_H
+#define UI_H
 
 void drawWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title);
 
@@ -18,4 +18,4 @@ int drawAppearingWindow(const int x, const int y, const unsigned int dx, const u
 
 void updateMap(void);
 
-#endif /*THE_MISTRAL_REPORT_UI_H*/
+#endif /*UI_H*/
