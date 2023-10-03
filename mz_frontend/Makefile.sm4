@@ -57,7 +57,7 @@ RESS  = $(wildcard res/*.res)
 SS    = $(wildcard src/*.s)
 
 OBJS  = $(RESS:.res=.o)
-OBJS += Engine3D/demo.o  ../common/src/FixP.o ../common/src/CTile3DProperties.o ../common/src/MapWithCharKey.o MegaDriveVersion/megadrive.o Engine3D/HackingMinigame.o ../core/src/Core.o ../core/src/Derelict.o ../common/src/Common.o ../common/src/ArrayPackedFileReader.o
+OBJS += Engine3D/demo.o  ../common/src/FixP.o ../common/src/Globals.o ../common/src/CTile3DProperties.o ../common/src/MapWithCharKey.o MegaDriveVersion/megadrive.o Engine3D/HackingMinigame.o ../core/src/Core.o ../core/src/Derelict.o ../common/src/Common.o ../common/src/ArrayPackedFileReader.o
 
 OBJS += $(SS:.s=.o)
 

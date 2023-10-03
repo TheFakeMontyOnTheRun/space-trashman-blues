@@ -9,7 +9,6 @@
 extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
-int cursorPosition = 0;
 
 char *menuItems[] = {
         "8) Use/Toggle",

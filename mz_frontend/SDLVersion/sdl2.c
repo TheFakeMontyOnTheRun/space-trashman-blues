@@ -7,8 +7,9 @@
 
 #include "SDL.h"
 #include "Engine3D.h"
+#include "Common.h"
+#include "Engine.h"
 
-int cursorPosition = 0;
 extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;

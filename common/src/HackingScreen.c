@@ -16,6 +16,7 @@
 #include "Common.h"
 #include "PackedFileReader.h"
 #include "LoadBitmap.h"
+#include "CActor.h"
 #include "CRenderer.h"
 #include "UI.h"
 #include "Core.h"

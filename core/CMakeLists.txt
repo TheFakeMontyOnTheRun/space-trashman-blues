@@ -47,6 +47,7 @@ set(SOURCE_FILES
 		src/Derelict.c
 		src/Core.c
 		src/Parser.c
+		../common/src/Globals.c
 		../common/src/Common.c
 		)
 

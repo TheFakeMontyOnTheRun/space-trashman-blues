@@ -17,6 +17,8 @@ char getch(void);
 
 uint8_t updateDirection;
 
+enum ESoundDriver soundDriver = kNoSound;
+
 /*  Required since we have our own memory allocator abstraction */
 uint16_t heap = 0;
 

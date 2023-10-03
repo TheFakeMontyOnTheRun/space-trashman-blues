@@ -21,6 +21,7 @@ add_executable(derelict16
 		../core/src/Core.c
 		../common/src/Common.c
 		../common/src/FixP.c
+		../common/src/Globals.c
 		../common/src/MapWithCharKey.c
 		../common/src/CTile3DProperties.c
 		../common/src/PackedFileReader.c

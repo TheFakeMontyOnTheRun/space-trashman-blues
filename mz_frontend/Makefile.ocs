@@ -17,6 +17,7 @@ MENU_OBJ= \
     ../common/src/PackedFileReader.o \
     ../common/src/CTile3DProperties.o \
     ../common/src/Common.o \
+    ../common/src/Globals.o \
     ../common/src/c2p1x1_4_c5_bm.o
 
 $(MENU_TARGET):	$(MENU_OBJ)

@@ -14,9 +14,14 @@
 #include "Vec.h"
 #include "LoadBitmap.h"
 #include "Engine.h"
+#include "CActor.h"
 #include "CRenderer.h"
 #include "Dungeon.h"
 #include "Common.h"
+#include "Core.h"
+#include "Derelict.h"
+#include "MapWithCharKey.h"
+#include "SoundSystem.h"
 
 #define ANGLE_TURN_THRESHOLD 40
 #define ANGLE_TURN_STEP 5

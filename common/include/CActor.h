@@ -5,4 +5,5 @@ struct CActor {
     enum EDirection rotation;
     struct Vec2i position;
 };
+
 #endif

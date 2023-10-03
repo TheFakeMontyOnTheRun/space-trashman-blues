@@ -3,7 +3,7 @@ CFLAGS = -Iinclude -I../common/include -O3 -g -c -march=i486 -DCLI_BUILD -DHAS_S
 CC = i386-pc-msdosdjgpp-gcc
 CXX = i386-pc-msdosdjgpp-g++
 
-OBJS = src/Derelict.o src/Parser.o src/Core.o ../common/src/Common.o
+OBJS = src/Derelict.o src/Parser.o src/Core.o ../common/src/Common.o ../common/src/Globals.o
 
 MAIN_GAME_OBJ = src/main.o
 
@@ -17,6 +17,6 @@ all:	$(TARGET)
 
 clean:
 	rm -f $(OBJS) $(TESTTARGET) $(MAIN_GAME_OBJ) $(TESTOBJS) $(TARGET)
-	find . | grep ~ | xargs rm
-	find . | grep gcno | xargs rm
-	find . | grep gcda | xargs rm
+	rm -rf coverage
+	find . | grep gcno | xargs rm -f
+	find . | grep gcda | xargs rm -f

@@ -39,6 +39,8 @@
 #include "PackedFileReader.h"
 #include "SoundSystem.h"
 
+enum ESoundDriver soundDriver = kNoSound;
+
 int isInstantApp = FALSE;
 
 void initHW(void);

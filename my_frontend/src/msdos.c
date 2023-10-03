@@ -13,6 +13,8 @@ unsigned char imageBuffer[128 * 32];
 
 uint8_t updateDirection;
 
+enum ESoundDriver soundDriver = kNoSound;
+
 void shutdownGraphics(void) {
 }
 

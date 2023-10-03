@@ -33,7 +33,7 @@
 
 typedef int ESoundDriver;
 
-extern ESoundDriver soundDriver;
+enum ESoundDriver soundDriver = kNoSound;
 
 uint8_t turnBuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 

@@ -17,6 +17,11 @@
 #include "UI.h"
 #include "font.h"
 
+/*  Required since we have our own memory allocator abstraction */
+uint16_t heap = 0;
+
+enum ESoundDriver soundDriver = kNoSound;
+
 extern struct ObjectNode *focusedItem;
 
 extern struct ObjectNode *roomItem;

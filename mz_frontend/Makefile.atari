@@ -11,6 +11,7 @@ MENU_OBJ= \
     ../core/src/Core.o \
     ../core/src/Derelict.o \
     ../common/src/FixP.o \
+    ../common/src/Globals.o \
     ../common/src/CTile3DProperties.o \
     ../common/src/MapWithCharKey.o \
     ../common/src/PackedFileReader.o \
