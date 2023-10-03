@@ -1,5 +1,5 @@
-#ifndef HASHASHIN_DUNGEON_H
-#define HASHASHIN_DUNGEON_H
+#ifndef DUNGEON_H
+#define DUNGEON_H
 
 struct GameSnapshot {
     int8_t camera_x;

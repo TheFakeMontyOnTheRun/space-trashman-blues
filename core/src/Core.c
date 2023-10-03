@@ -277,6 +277,7 @@ void setPlayerRank(uint8_t newRank) {
 void moveBy(uint8_t direction) {
 	int c;
 	int previousLocation = playerLocation;
+
 	struct Room *room = &rooms[playerLocation];
 	if (direction <= 5 && room->connections[direction] != 0) {
 		struct Item *coupling = getItemNamed("magnetic-coupling");

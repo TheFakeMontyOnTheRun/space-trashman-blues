@@ -40,8 +40,6 @@ const int32_t MainMenu_nextStateNavigation[3] = {
 const int kMainMenuOptionsCount = 3;
 #endif
 
-extern size_t biggestOption;
-
 #ifndef TILED_BITMAPS
 struct Bitmap *logoBitmap;
 struct Bitmap *logo2Bitmap;

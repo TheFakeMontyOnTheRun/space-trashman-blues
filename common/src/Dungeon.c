@@ -28,14 +28,6 @@
 #include "CRenderer.h"
 
 
-extern const char *focusItemName;
-extern int currentSelectedItem;
-extern int shouldContinue;
-extern const char *thisMissionName;
-extern int16_t thisMissionNameLen;
-
-
-
 const char *focusItemName = NULL;
 struct GameSnapshot gameSnapshot;
 uint8_t *map;

@@ -26,8 +26,6 @@ const enum EGameMenuState *GameMenu_nextStateNavigation;
 const char *GameMenu_StateTitle;
 struct Bitmap *featuredBitmap = NULL;
 
-extern int playerLocation;
-
 const char *inspectItem_options[1] = {"Back"};
 
 const enum EGameMenuState InspectItem_nextStateNavigation[1] = {
@@ -42,8 +40,6 @@ const char *GameMenu_Story_options[1] = {"Continue"};
 const enum EGameMenuState GameMenu_Story_nextStateNavigation[1] = {kMainMenu};
 
 int16_t GameMenu_optionsCount = 2;
-extern size_t biggestOption;
-extern char *textBuffer;
 int drawFilter = FALSE;
 
 void GameMenu_initStateCallback(int32_t tag) {
