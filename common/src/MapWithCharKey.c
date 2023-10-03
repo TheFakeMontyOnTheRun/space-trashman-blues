@@ -14,6 +14,7 @@
 #endif
 
 #include "MapWithCharKey.h"
+#include "Common.h"
 
 const void *getFromMap(const struct MapWithCharKey * map, const uint8_t key) {
     return map->mMap[key];

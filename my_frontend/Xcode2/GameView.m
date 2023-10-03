@@ -9,15 +9,32 @@
 #import "GameView.h"
 
 #include <stddef.h>
+#include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <string.h>
 
+#include "Enums.h"
+#include "UI.h"
+#include "Engine.h"
+#include "SoundSystem.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "KeyboardUI.h"
 #include "Renderer.h"
 #include "Menu.h"
+
+
+const char *mainText;
+int isRunning = 1;
+
+long timeUntilNextState;
+enum EPresentationState currentPresentationState;
+enum EGameMenuState currentGameMenuState;
+int8_t cameraRotation = 0;
+int cursorPosition;
+enum EGameMenuState nextNavigationSelection;
+enum EGameMenuState menuStateToReturn;
+enum ESoundDriver soundDriver = kNoSound;
 
 extern GameView* osxview;
 
@@ -36,6 +53,22 @@ float multiplier = 1.0f;
 int updateDirection = 0;
 id delegate;
 
+void stopSounds(void) {
+    
+}
+
+void soundTick(void) {
+    
+}
+
+void playSound(int unused) {
+    
+}
+
+void handleSystemEvents(void) {
+    
+}
+
 void init(void) {
     initKeyboardUI();
     updateDirection = 1;
@@ -50,7 +83,7 @@ void shutdownGraphics(void) {
 
 - (void) repaintGame:(NSTimer *)timer
 {
-    tickRenderer();
+    repaintCallback();
     [self setNeedsDisplay: YES ];
 }
 
@@ -93,7 +126,7 @@ void setMultiplier(CGSize size) {
         palette[14] = 0xFF0000FF;
         palette[15] = 0xFFAAAAFF;
 
-        initState();
+        enterState(kPlayGame);
         
         initMap();
         

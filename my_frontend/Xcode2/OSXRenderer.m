@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "Enums.h"
 #include "OSXRenderer.h"
 #include "GameView.h"
 
@@ -52,7 +53,7 @@ void graphicsInit() {
 void graphicsShutdown() {
 }
 
-uint8_t getKey(void) {
+enum ECommand getInput(void) {
     int code = [ osxview getInput ];
     
     mBufferedCommand = '.';

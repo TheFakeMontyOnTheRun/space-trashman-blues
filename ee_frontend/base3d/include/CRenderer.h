@@ -1,6 +1,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+#include "LoadBitmap.h"
 
 #ifdef AMIGA
 #define XRES 200

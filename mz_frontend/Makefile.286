@@ -9,6 +9,7 @@ OBJS = Engine3D/demo.o MSDOSVersion/msdos.o \
     ../common/src/CTile3DProperties.o \
     ../common/src/MapWithCharKey.o \
     ../common/src/FixP.o \
+    ../common/src/Globals.o \
     ../common/src/Common.o
 
 TARGET = derelict.exe

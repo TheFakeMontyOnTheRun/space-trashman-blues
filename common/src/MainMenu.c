@@ -4,10 +4,8 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
 #include <unistd.h>
-
 #endif
 
 #include "FixP.h"
@@ -16,7 +14,9 @@
 #include "Vec.h"
 #include "LoadBitmap.h"
 #include "Engine.h"
+#include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
+#include "CActor.h"
 #include "CRenderer.h"
 #include "UI.h"
 #include "SoundSystem.h"

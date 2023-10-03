@@ -3,6 +3,7 @@
 #include "Core.h"
 #include "Derelict.h"
 #include "Engine3D.h"
+#include "Engine.h"
 
 void graphicsFlush();
 
@@ -34,7 +35,6 @@ extern uint8_t accessGrantedToSafe;
 #define COOLDOWN_MAX 0x2EF
 
 int16_t buffered = '.';
-int16_t cursorPosition = 0;
 uint16_t cooldown;
 uint16_t movementCooldown = 0;
 

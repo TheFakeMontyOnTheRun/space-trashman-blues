@@ -39,6 +39,7 @@
 #include "CRenderer.h"
 #include "Globals.h"
 
+enum ESoundDriver soundDriver = kNoSound;
 uint8_t finalBuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 
 #define NORMALIZE(x) (((x * 16) / 256))
@@ -145,7 +146,7 @@ void putStr(int x, int y, const char *str, int fg, int bg) {}
 void drawTitleBox() {}
 
 void querySoundDriver() {
-    setupOPL2();
+    setupOPL2(1);
 }
 
 struct RGB8 {

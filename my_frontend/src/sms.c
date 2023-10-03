@@ -24,6 +24,8 @@ uint8_t updateDirection;
 
 extern uint8_t cursorPosition;
 
+enum ESoundDriver soundDriver = kNoSound;
+
 void init(void) {
     initGamepadUI();
     initTMS9918();

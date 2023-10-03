@@ -20,12 +20,14 @@
 #include "CRenderer.h"
 #include "PackedFileReader.h"
 #include "Dungeon.h"
+#include "Core.h"
+#include "LoadBitmap.h"
 
 
 int x = 0;
 int z = 0;
 int rotation = 0;
-enum CrawlerState shouldContinue = kCrawlerGameInProgress;
+enum CrawlerState crawlerGameState = kCrawlerGameInProgress;
 struct CActor actor;
 const char *thisMissionName;
 int16_t thisMissionNameLen;
@@ -49,7 +51,7 @@ void clearTileProperties() {
 
 void onLevelLoaded(int index) {
     clearMapCache();
-    shouldContinue = kCrawlerGameInProgress;
+    crawlerGameState = kCrawlerGameInProgress;
 
     thisMissionName = getRoomDescription();
     thisMissionNameLen = (int16_t) (strlen(thisMissionName));
@@ -66,11 +68,11 @@ void tickMission(enum ECommand cmd) {
     x = snapshot.camera_x;
     z = snapshot.camera_z;
     rotation = snapshot.camera_rotation;
-    shouldContinue = snapshot.should_continue;
+    crawlerGameState = snapshot.should_continue;
 
     updateCursorForRenderer(snapshot.playerTarget.x, snapshot.playerTarget.y);
 
-    if (shouldContinue != kCrawlerGameInProgress) {
+    if (crawlerGameState != kCrawlerGameInProgress) {
         gameTicks = 0;
     }
 }
@@ -131,7 +133,7 @@ int loopTick(enum ECommand command) {
     int needRedraw = 0;
 
     if (command == kCommandBack) {
-        shouldContinue = kCrawlerQuit;
+        crawlerGameState = kCrawlerQuit;
     } else if (command != kCommandNone || gameTicks == 0) {
 
         if (command == kCommandFire1 || command == kCommandFire2
@@ -171,12 +173,12 @@ int loopTick(enum ECommand command) {
             visibilityCached = FALSE;
         }
     }
-    return shouldContinue;
+    return crawlerGameState;
 }
 
 void initRoom(int room) {
     int16_t c;
-    shouldContinue = kCrawlerGameInProgress;
+    crawlerGameState = kCrawlerGameInProgress;
     mBufferedCommand = kCommandNone;
     gameTicks = 0;
     visibilityCached = FALSE;

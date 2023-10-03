@@ -15,6 +15,7 @@
 #include "Vec.h"
 #include "Common.h"
 #include "LoadBitmap.h"
+#include "CActor.h"
 #include "CRenderer.h"
 #include "UI.h"
 #include "Globals.h"
