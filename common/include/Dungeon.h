@@ -24,8 +24,6 @@ void initRoom(int room);
 
 extern int enteredThru;
 
-extern int cursorPosition;
-
 extern const char *focusItemName;
 
 extern struct GameSnapshot gameSnapshot;

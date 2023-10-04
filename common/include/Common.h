@@ -49,13 +49,11 @@ uint32_t toNativeEndianess(const uint32_t val);
 extern const char *mainText;
 extern char *textBuffer;
 extern size_t biggestOption;
-
 extern const char *focusItemName;
 extern int currentSelectedItem;
 extern int shouldContinue;
 extern const char *thisMissionName;
 extern int16_t thisMissionNameLen;
-
 extern size_t biggestOption;
 
 #define TEXT_BUFFER_SIZE (40 * 25)

@@ -35,6 +35,7 @@ uint8_t *itemsInMap;
 uint8_t *collisionMap;
 int enteredThru = 0;
 struct CActor playerCrawler;
+int currentSelectedItem = 0;
 
 uint8_t isPositionAllowed(int8_t x, int8_t y) {
 
