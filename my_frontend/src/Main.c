@@ -7,8 +7,6 @@
 #include "SoundSystem.h"
 
 const char *mainText;
-int isRunning = 1;
-
 long timeUntilNextState;
 enum EPresentationState currentPresentationState;
 enum EGameMenuState currentGameMenuState;
