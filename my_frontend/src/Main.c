@@ -6,14 +6,7 @@
 #include "Engine.h"
 #include "SoundSystem.h"
 
-const char *mainText;
-long timeUntilNextState;
-enum EPresentationState currentPresentationState;
-enum EGameMenuState currentGameMenuState;
 int8_t cameraRotation = 0;
-int cursorPosition;
-enum EGameMenuState nextNavigationSelection;
-enum EGameMenuState menuStateToReturn;
 
 int main(int argc, char **argv) {
 
