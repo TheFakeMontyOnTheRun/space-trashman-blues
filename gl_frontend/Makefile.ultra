@@ -14,7 +14,7 @@ CFLAGS += -Ofast      \
     -I../core/include \
     -I../common/include \
     -DN64 \
-    -DINCLUDE_ITEM_DESCRIPTIONS \
+    -DINCLUDE_ITEM_DESCRIPTIONS -DTILED_BITMAPS \
     -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic -Wno-discarded-qualifiers
 
 src = ../common/src/MainMenu.c \

@@ -38,7 +38,7 @@ NITRO    := filesystem
 ARCH := -marm -mthumb-interwork -march=armv5te -mtune=arm946e-s
 
 CFLAGS   := -g -Wall -O3\
-            $(ARCH) $(INCLUDE) -DARM9 -DNDS -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -I../base3d/include        \
+            $(ARCH) $(INCLUDE) -DARM9 -DTILED_BITMAPS -DNDS -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -I../base3d/include        \
             -I../menu/include          \
             -I../../core/include \
             -I../../common/include \

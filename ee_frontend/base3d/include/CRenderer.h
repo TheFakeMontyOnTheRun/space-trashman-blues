@@ -3,66 +3,31 @@
 
 #include "LoadBitmap.h"
 
-#ifdef AMIGA
-#define XRES 200
-#define YRES 128
-#define HALF_XRES 100
-#define HALF_YRES 64
-#else
 #define XRES 216
 #define YRES 200
-#define HALF_XRES 100
-#define HALF_YRES 100
-#endif
-
 #define XRES_FRAMEBUFFER 320
 #define YRES_FRAMEBUFFER 200
-
 #define TOTAL_TEXTURES 64
 #define TRANSPARENCY_COLOR (0x00FF0000)
 #define VISIBILITY_CONE_NARROWING 6
-typedef uint32_t OutputPixelFormat;
-typedef uint32_t FramebufferPixelFormat;
-typedef uint8_t UVCoord;
-
-extern struct MapWithCharKey occluders;
-extern struct MapWithCharKey colliders;
-extern int visibilityCached;
-extern int needsToRedrawVisibleMeshes;
-extern uint8_t *visibleElementsMap;
-#ifndef N64
-extern struct Bitmap *defaultFont;
-#endif
-extern enum EDirection cameraDirection;
-extern long gameTicks;
-extern int hasSnapshot;
-extern int turnTarget;
-extern int turnStep;
-extern int needsToRedrawHUD;
-
 #define MASK_LEFT 1
 #define MASK_FRONT 2
 #define MASK_RIGHT 4
 #define MASK_BEHIND 8
 #define MASK_FORCE_LEFT 16
 #define MASK_FORCE_RIGHT 32
-
 #define WALKING_BIAS 4096
+#define LEVEL_MAP(x, y) (map[ ( (MAP_SIZE) * (y) ) + (x) ])
+#define ITEMS_IN_MAP(x, y) (itemsInMap[ ( (MAP_SIZE) * (y) ) + (x) ])
 
-extern struct MapWithCharKey tileProperties;
-extern struct Vec2i cameraPosition;
-extern uint8_t texturesUsed;
-extern enum ECommand mBufferedCommand;
-extern struct Texture *nativeTextures[TOTAL_TEXTURES];
-extern FixP_t playerHeight;
-extern FixP_t walkingBias;
-extern FixP_t playerHeightChangeRate;
-extern FixP_t xCameraOffset;
-extern FixP_t yCameraOffset;
-extern FixP_t zCameraOffset;
-extern int enable3DRendering;
-extern uint8_t enableSmoothMovement;
-extern struct Bitmap *mapTopLevel;
+typedef uint32_t OutputPixelFormat;
+typedef uint32_t FramebufferPixelFormat;
+typedef uint8_t UVCoord;
+
+struct Projection {
+    struct Vec3 first;
+    struct Vec2 second;
+};
 
 struct Mesh {
     uint16_t triangleCount;
@@ -71,13 +36,6 @@ struct Mesh {
     struct Texture *texture;
     uint8_t colour;
 };
-
-extern uint8_t *map;
-extern uint8_t *itemsInMap;
-extern FixP_t divLut[320];
-
-#define LEVEL_MAP(x, y) (map[ ( (MAP_SIZE) * (y) ) + (x) ])
-#define ITEMS_IN_MAP(x, y) (itemsInMap[ ( (MAP_SIZE) * (y) ) + (x) ])
 
 void graphicsInit(void);
 
@@ -99,15 +57,21 @@ enum ECommand getInput(void);
 
 void handleSystemEvents(void);
 
-void initHW(void);
+void initHW(int argc, char **argv);
+
+void clear(void);
+
+void clearTileProperties(void);
 
 void shutdownHW(void);
 
 void loadMesh(struct Mesh *mesh, char *filename);
 
-void clearTileProperties(void);
+void initZMap(void);
 
-uint32_t getPaletteEntry(const uint32_t origin);
+void projectAllVertices(const uint8_t count);
+
+FramebufferPixelFormat getPaletteEntry(const uint32_t origin);
 
 void fill(
         const int x, const int y,
@@ -270,14 +234,52 @@ void maskFloor(
 
 int submitBitmapToGPU(struct Bitmap *bitmap);
 
-void initGL();
+void initGL(void);
 
-void startFrameGL(int width, int height);
+void startFrameGL(int x, int y, int width, int height);
 
-void endFrameGL();
+void endFrameGL(void);
 
-void enter3D();
+void enter3D(void);
 
-void enter2D();
+void enter2D(void);
 
+extern struct MapWithCharKey occluders;
+extern struct MapWithCharKey colliders;
+extern int visibilityCached;
+extern int needsToRedrawVisibleMeshes;
+extern uint8_t *visibleElementsMap;
+#ifndef N64
+extern struct Bitmap *defaultFont;
+#endif
+extern enum EDirection cameraDirection;
+extern long gameTicks;
+extern int hasSnapshot;
+extern int turnTarget;
+extern int turnStep;
+extern int needsToRedrawHUD;
+extern struct MapWithCharKey tileProperties;
+extern struct Vec2i cameraPosition;
+extern uint8_t texturesUsed;
+extern enum ECommand mBufferedCommand;
+extern struct Texture *nativeTextures[TOTAL_TEXTURES];
+extern FixP_t playerHeight;
+extern FixP_t walkingBias;
+extern FixP_t playerHeightChangeRate;
+extern FixP_t xCameraOffset;
+extern FixP_t yCameraOffset;
+extern FixP_t zCameraOffset;
+extern int enable3DRendering;
+extern uint8_t enableSmoothMovement;
+#ifdef TILED_BITMAPS
+extern struct Bitmap *mapTopLevel[8];
+#else
+extern struct Bitmap *mapTopLevel;
+#endif
+extern int dirtyLineY0;
+extern int dirtyLineY1;
+extern char mTurnBuffer;
+extern uint8_t *map;
+extern uint8_t *itemsInMap;
+extern FixP_t divLut[320];
 #endif

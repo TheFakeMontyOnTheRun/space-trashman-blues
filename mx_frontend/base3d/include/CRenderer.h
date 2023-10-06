@@ -1,6 +1,8 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+#include "LoadBitmap.h"
+
 #ifdef AGS
 #define PAGE_FLIP_TARGET 128
 #define XRES 130
@@ -23,72 +25,34 @@
 #define YRES_FRAMEBUFFER 160
 #endif
 
-#define PAGE_FLIP_ANIMATION
-
-#define TOTAL_TEXTURES 16
-#define TRANSPARENCY_COLOR 199
-#define VISIBILITY_CONE_NARROWING 3
-
-struct Projection {
-    struct Vec3 first;
-    struct Vec2 second;
-};
-
-extern struct MapWithCharKey occluders;
-extern struct MapWithCharKey enemySightBlockers;
-extern struct MapWithCharKey colliders;
-extern int visibilityCached;
-extern int needsToRedrawVisibleMeshes;
-extern struct Bitmap *defaultFont;
-
-#ifndef AGS
-extern uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
-extern uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
-extern uint32_t palette[256];
-#else
-extern uint8_t *framebuffer;
-#endif
-extern enum EDirection cameraDirection;
-extern long gameTicks;
-extern int hasSnapshot;
-extern const int distanceForPenumbra;
-extern int turnTarget;
-extern int turnStep;
-extern int needsToRedrawHUD;
-
 #ifndef AGS
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
 #else
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(32))
 #endif
 
+#define PAGE_FLIP_ANIMATION
+#define TOTAL_TEXTURES 16
+#define TRANSPARENCY_COLOR 199
+#define VISIBILITY_CONE_NARROWING 3
 #define MASK_LEFT 1
 #define MASK_FRONT 2
 #define MASK_RIGHT 4
 #define MASK_BEHIND 8
 #define MASK_FORCE_LEFT 16
 #define MASK_FORCE_RIGHT 32
+#define WALKING_BIAS 4096
+#define LEVEL_MAP(x, y) (map[ ( (MAP_SIZE) * (y) ) + (x) ])
+#define ITEMS_IN_MAP(x, y) (itemsInMap[ ( (MAP_SIZE) * (y) ) + (x) ])
 
-extern struct MapWithCharKey tileProperties;
-extern struct Vec2i cameraPosition;
-extern uint8_t texturesUsed;
-extern enum ECommand mBufferedCommand;
-extern struct Texture *nativeTextures[TOTAL_TEXTURES];
-extern uint16_t clippingY1;
-extern struct Projection projectionVertices[8];
-extern FixP_t playerHeight;
-extern FixP_t walkingBias;
-extern FixP_t playerHeightChangeRate;
-extern FixP_t playerHeightTarget;
-extern FixP_t xCameraOffset;
-extern FixP_t yCameraOffset;
-extern FixP_t zCameraOffset;
-extern int enable3DRendering;
-extern uint8_t enableSmoothMovement;
-extern struct Bitmap *mapTopLevel;
-extern int dirtyLineY0;
-extern int dirtyLineY1;
-extern char mTurnBuffer;
+struct Projection {
+    struct Vec3 first;
+    struct Vec2 second;
+};
+
+typedef uint32_t OutputPixelFormat;
+typedef uint32_t FramebufferPixelFormat;
+typedef uint8_t UVCoord;
 
 struct Mesh {
     uint16_t triangleCount;
@@ -98,14 +62,6 @@ struct Mesh {
     uint8_t colour;
 };
 
-extern uint8_t *map;
-extern uint8_t *itemsInMap;
-extern FixP_t divLut[320];
-
-#define LEVEL_MAP(x, y) (map[ ( (MAP_SIZE) * (y) ) + (x) ])
-#define ITEMS_IN_MAP(x, y) (itemsInMap[ ( (MAP_SIZE) * (y) ) + (x) ])
-
-
 void graphicsInit(void);
 
 void graphicsShutdown(void);
@@ -113,8 +69,6 @@ void graphicsShutdown(void);
 void clearRenderer(void);
 
 void flipRenderer(void);
-
-enum ECommand getInput(void);
 
 void render(long ms);
 
@@ -128,7 +82,7 @@ enum ECommand getInput(void);
 
 void handleSystemEvents(void);
 
-void initHW(void);
+void initHW(int argc, char **argv);
 
 void clear(void);
 
@@ -136,9 +90,9 @@ void clearTileProperties(void);
 
 void shutdownHW(void);
 
-void initZMap(void);
-
 void loadMesh(struct Mesh *mesh, char *filename);
+
+void initZMap(void);
 
 void projectAllVertices(const uint8_t count);
 
@@ -282,4 +236,63 @@ void maskFloor(
         uint8_t pixel
 );
 
+int submitBitmapToGPU(struct Bitmap *bitmap);
+
+void initGL(void);
+
+void startFrameGL(int x, int y, int width, int height);
+
+void endFrameGL(void);
+
+void enter3D(void);
+
+void enter2D(void);
+
+extern struct MapWithCharKey occluders;
+extern struct MapWithCharKey enemySightBlockers;
+extern struct MapWithCharKey colliders;
+extern int visibilityCached;
+extern int needsToRedrawVisibleMeshes;
+extern struct Bitmap *defaultFont;
+#ifndef AGS
+extern uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+extern uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+extern uint32_t palette[256];
+#else
+extern uint8_t *framebuffer;
+#endif
+extern enum EDirection cameraDirection;
+extern long gameTicks;
+extern int hasSnapshot;
+extern const int distanceForPenumbra;
+extern int turnTarget;
+extern int turnStep;
+extern int needsToRedrawHUD;
+extern struct MapWithCharKey tileProperties;
+extern struct Vec2i cameraPosition;
+extern uint8_t texturesUsed;
+extern enum ECommand mBufferedCommand;
+extern struct Texture *nativeTextures[TOTAL_TEXTURES];
+extern uint16_t clippingY1;
+extern struct Projection projectionVertices[8];
+extern FixP_t playerHeight;
+extern FixP_t walkingBias;
+extern FixP_t playerHeightChangeRate;
+extern FixP_t playerHeightTarget;
+extern FixP_t xCameraOffset;
+extern FixP_t yCameraOffset;
+extern FixP_t zCameraOffset;
+extern int enable3DRendering;
+extern uint8_t enableSmoothMovement;
+#ifdef TILED_BITMAPS
+extern struct Bitmap *mapTopLevel[8];
+#else
+extern struct Bitmap *mapTopLevel;
+#endif
+extern int dirtyLineY0;
+extern int dirtyLineY1;
+extern char mTurnBuffer;
+extern uint8_t *map;
+extern uint8_t *itemsInMap;
+extern FixP_t divLut[320];
 #endif
