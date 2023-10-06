@@ -64,7 +64,7 @@ void CreditsScreen_initialPaintCallback(void) {
 }
 
 void CreditsScreen_repaintCallback(void) {
-    int lines = countLines();
+    int lines = 1;
     int c;
     int optionsHeight = 8 * (CreditsScreen_optionsCount);
     size_t len = max(strlen("Options"), strlen(CreditsScreen_options[0]));

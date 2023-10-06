@@ -56,7 +56,7 @@ void HelpScreen_repaintCallback(void) {
     size_t len = strlen(HelpScreen_options[0]);
     int optionsHeight = 8 * (HelpScreen_optionsCount);
 
-    lines = countLines();
+    lines = 18;
 
     fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), FALSE);
 
