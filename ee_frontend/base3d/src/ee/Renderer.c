@@ -119,7 +119,7 @@ void initGL() {
 void clearRenderer() {
 }
 
-void startFrameGL(int width, int height) {
+void startFrameGL(int x, int y, int width, int height) {
 
     current = packets[context];
 

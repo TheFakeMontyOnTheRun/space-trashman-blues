@@ -34,7 +34,7 @@ extern enum EVisibility *visMap;
 extern struct Vec2i *distances;
 extern uint8_t *collisionMap;
 
-void initHW(void) {
+void initHW(int argc, char** argv) {
     textBuffer = (char *) allocMem(TEXT_BUFFER_SIZE, GENERAL_MEMORY, 1);
     messageLogBuffer = (char *) allocMem(256, GENERAL_MEMORY, 1);
     collisionMap = (uint8_t *) allocMem(256, GENERAL_MEMORY, 1);
@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
 
     initStation();
 
-    initHW();
+    initHW(0, NULL);
 
     enterState(kMainMenu);
 
@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
             delta_time = 50;
         }
 
-        startFrameGL(640, 480);
+        startFrameGL(0, 0, 640, 480);
 
         isRunning = isRunning && menuTick(10);
 

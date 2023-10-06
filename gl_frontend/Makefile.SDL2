@@ -13,7 +13,7 @@ CFLAGS= `sdl2-config --cflags `  \
     -DCLI_BUILD \
     -I../core/include \
     -I../common/include \
-    -DINCLUDE_ITEM_DESCRIPTIONS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic
+    -DINCLUDE_ITEM_DESCRIPTIONS -DTILED_BITMAPS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic
 
 MENU_TARGET=game
 
