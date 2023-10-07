@@ -174,6 +174,7 @@ void drawBillboardAt(const struct Vec3 center,
                      struct Texture *bitmap,
                      const FixP_t scale,
                      const int size) {
+
     struct Vec3 scaledCenter;
     float centerY;
     FixP_t acc;

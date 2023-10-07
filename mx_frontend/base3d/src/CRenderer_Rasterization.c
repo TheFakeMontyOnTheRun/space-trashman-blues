@@ -209,7 +209,7 @@ void drawWall(FixP_t x0,
               FixP_t x0y1,
               FixP_t x1y0,
               FixP_t x1y1,
-              const uint8_t *__restrict__ texture,
+              const TexturePixelFormat *texture,
               const FixP_t textureScaleY,
               const int z) {
     int32_t x;
@@ -435,7 +435,7 @@ void drawFrontWall(FixP_t x0,
                    FixP_t y0,
                    FixP_t x1,
                    FixP_t y1,
-                   const uint8_t *__restrict__ texture,
+                   const TexturePixelFormat *texture,
                    const FixP_t textureScaleY,
                    const int z,
                    const int enableAlpha,
@@ -734,7 +734,7 @@ void drawFloor(FixP_t y0,
                FixP_t x0y1,
                FixP_t x1y1,
                int z,
-               const uint8_t *__restrict__ texture) {
+               const uint8_t * texture) {
 
     int32_t y;
     int32_t limit;
@@ -925,12 +925,11 @@ void drawFloor(FixP_t y0,
     }
 }
 
-void drawRect(
-        const int x,
-        const int y,
-        const unsigned int dx,
-        const unsigned int dy,
-        const uint8_t pixel) {
+void drawRect(const int x,
+              const int y,
+              const size_t dx,
+              const size_t dy,
+              const FramebufferPixelFormat pixel) {
 
     uint8_t *destination = &framebuffer[0];
     uint8_t *destinationLineStart = destination + (XRES_FRAMEBUFFER * (y)) + x;
@@ -1485,12 +1484,9 @@ __attribute__((target("arm"), section(".iwram"), noinline))
 #endif
 
 void fill(
-        const int x,
-        const int y,
-        const unsigned int dx,
-        const unsigned int dy,
-        const uint8_t pixel,
-        const int stipple) {
+        const int x, const int y,
+        const size_t dx, const size_t dy,
+        const FramebufferPixelFormat pixel, const uint8_t stipple) {
 
     uint8_t *destination = &framebuffer[0];
     unsigned int py;
@@ -1558,15 +1554,15 @@ void drawBitmapRaw(const int dx,
     }
 }
 
-void drawBitmap(const int dx,
-                const int dy,
-                const struct Bitmap *__restrict__ tile,
-                const int transparent) {
+void drawBitmap(const int x,
+                const int y,
+                struct Bitmap *tile,
+                const uint8_t transparent) {
 
-    drawBitmapRaw(dx, dy, tile->width, tile->height, tile->data, transparent);
+    drawBitmapRaw(x, y, tile->width, tile->height, tile->data, transparent);
 }
 
-void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text,
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char * text,
                                        const uint8_t colour, char charToReplaceHifenWith) {
 
     size_t len = strlen(text);
@@ -1631,11 +1627,11 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
     }
 }
 
-void drawTextAtWithMargin(const int x, const int y, int margin, const char *__restrict__ text, const uint8_t colour) {
+void drawTextAtWithMargin(const int x, const int y, int margin, const char * text, const uint8_t colour) {
     drawTextAtWithMarginWithFiltering(x, y, margin, text, colour, '-');
 }
 
-void drawTextAt(const int x, const int y, const char *__restrict__ text, const uint8_t colour) {
+void drawTextAt(const int x, const int y, const char * text, const uint8_t colour) {
 
     drawTextAtWithMargin(x, y, (XRES_FRAMEBUFFER - 1), text, colour);
 }

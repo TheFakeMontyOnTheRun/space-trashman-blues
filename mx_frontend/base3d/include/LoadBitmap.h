@@ -3,6 +3,10 @@
 
 #define NATIVE_TEXTURE_SIZE 16
 
+typedef uint8_t TexturePixelFormat;
+
+typedef uint8_t BitmapPixelFormat;
+
 struct Bitmap {
     uint8_t *data;
     uint16_t width;
@@ -12,11 +16,11 @@ struct Bitmap {
 
 struct Texture {
 #ifndef AGS
-    uint8_t rotations[4][NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
+    TexturePixelFormat rotations[4][NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
 #else
     uint8_t rotations[1][NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
 #endif
-    uint8_t rowMajor[NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
+    TexturePixelFormat rowMajor[NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
 };
 
 void clearTextures(void);

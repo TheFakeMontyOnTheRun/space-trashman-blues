@@ -3,10 +3,34 @@
 
 #include "LoadBitmap.h"
 
+#ifdef AGS
+#define PAGE_FLIP_TARGET 128
+#define XRES 130
+#define YRES 160
+#define HALF_XRES 65
+#define HALF_YRES 80
+#else
+#define PAGE_FLIP_TARGET 200
 #define XRES 216
 #define YRES 200
+#define HALF_XRES 100
+#define HALF_YRES 100
+#endif
+
+#ifndef AGS
 #define XRES_FRAMEBUFFER 320
 #define YRES_FRAMEBUFFER 200
+#else
+#define XRES_FRAMEBUFFER 240
+#define YRES_FRAMEBUFFER 160
+#endif
+
+#ifndef AGS
+#define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
+#else
+#define FIXP_DISTANCE_FOR_DARKNESS (intToFix(32))
+#endif
+
 #define TOTAL_TEXTURES 64
 #define TRANSPARENCY_COLOR 0
 #define VISIBILITY_CONE_NARROWING MAP_SIZE
@@ -72,6 +96,15 @@ void initZMap(void);
 void projectAllVertices(const uint8_t count);
 
 FramebufferPixelFormat getPaletteEntry(const uint32_t origin);
+
+void enter2D(void);
+
+void enter3D(void);
+
+#ifdef PAGE_FLIP_ANIMATION
+void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame, uint8_t *prevFrame, int turnState, int turnTarget,
+                    int scale200To240);
+#endif
 
 void fill(
         const int x, const int y,
@@ -150,25 +183,6 @@ void drawBitmapRegion(const int _x,
                       const uint8_t transparent,
                       float u0, float u1, float v0, float v1);
 
-void drawSlantedFloor(
-        FixP_t p0x,
-        FixP_t p0y,
-        FixP_t p1x,
-        FixP_t p1y,
-        FixP_t p2x,
-        FixP_t p2y,
-        FixP_t p3x,
-        FixP_t p3y,
-        int z,
-        const TexturePixelFormat *texture);
-
-void drawRepeatBitmap(
-        const int x,
-        const int y,
-        const size_t dx,
-        const size_t dy,
-        struct Bitmap *tile);
-
 void drawRect(const int x,
               const int y,
               const size_t dx,
@@ -178,7 +192,7 @@ void drawRect(const int x,
 
 void fillTriangle(int *coords, FramebufferPixelFormat colour);
 
-void drawTexturedTriangle(int *coords, UVCoord *uvCoords, struct Texture *texture);
+void drawTexturedTriangle(int *coords, UVCoord *uvCoords, struct Texture *texture, int z);
 
 void drawWall(FixP_t x0,
               FixP_t x1,
@@ -239,10 +253,6 @@ void initGL(void);
 void startFrameGL(int x, int y, int width, int height);
 
 void endFrameGL(void);
-
-void enter3D(void);
-
-void enter2D(void);
 
 extern struct MapWithCharKey occluders;
 extern struct MapWithCharKey colliders;
