@@ -14,7 +14,7 @@ CFLAGS=-g -c -O3     \
 	-fomit-frame-pointer                                 \
 	-fno-exceptions                                      \
 	-ffast-math \
-	-I../core/include -DINCLUDE_ITEM_DESCRIPTIONS -DCLI_BUILD -sUSE_SDL
+	-I../core/include -DINCLUDE_ITEM_DESCRIPTIONS -DCLI_BUILD -sUSE_SDL -DPAGE_FLIP_ANIMATION
 
 MENU_TARGET=game.html
 

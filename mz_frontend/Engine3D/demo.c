@@ -53,6 +53,7 @@ struct ObjectNode *focusedItem = NULL;
 struct ObjectNode *roomItem = NULL;
 struct MapWithCharKey tileProperties;
 extern int accessGrantedToSafe;
+int cursorPosition = 0;
 
 void performAction();
 

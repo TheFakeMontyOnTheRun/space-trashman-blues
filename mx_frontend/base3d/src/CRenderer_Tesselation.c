@@ -84,7 +84,7 @@ void initZMap(void) {
 
 
 void drawBillboardAt(const struct Vec3 center,
-                     const uint8_t *__restrict__ texture,
+                     struct Texture *texture,
                      const FixP_t scale,
                      const int size) {
 
@@ -113,17 +113,17 @@ void drawBillboardAt(const struct Vec3 center,
     if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
         drawMask(ulz0.mX, ulz0.mY, lrz0.mX, lrz0.mY);
     } else {
-        drawFrontWall(ulz0.mX, ulz0.mY, lrz0.mX, lrz0.mY, texture,
+        drawFrontWall(ulz0.mX, ulz0.mY, lrz0.mX, lrz0.mY, texture->rotations[0],
                       scale, fixToInt(center.mZ), TRUE, size);
     }
 }
 
 void drawColumnAt(const struct Vec3 center,
                   const FixP_t scale,
-                  const struct Texture *__restrict__ texture,
+                  const struct Texture *texture,
                   const uint8_t mask,
-                  const int enableAlpha,
-                  const int repeatTexture) {
+                  const uint8_t enableAlpha,
+                  const uint8_t repeatedTexture) {
 
     const FixP_t halfScale = scale;
     FixP_t textureScale;
@@ -159,7 +159,7 @@ void drawColumnAt(const struct Vec3 center,
 
            front
   */
-    textureScale = (repeatTexture ? halfScale : FIXP_ONE);
+    textureScale = (repeatedTexture ? halfScale : FIXP_ONE);
     z = fixToInt(center.mZ);
     originalZ = z;
 
@@ -239,7 +239,7 @@ void drawColumnAt(const struct Vec3 center,
 }
 
 void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
-                const struct Texture *__restrict__ texture, uint8_t cameraDirection, uint8_t flipTexture) {
+                const struct Texture *texture, uint8_t cameraDirection, uint8_t flipTexture) {
 
     struct Vec2 llz0;
     struct Vec2 lrz0;
@@ -377,7 +377,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 }
 
 void drawFloorAt(const struct Vec3 center,
-                 const struct Texture *__restrict__ texture, uint8_t cameraDirection) {
+                 const struct Texture *texture, enum EDirection rotation) {
 
     struct Vec2 llz0;
     struct Vec2 lrz0;
@@ -428,7 +428,7 @@ void drawFloorAt(const struct Vec3 center,
 }
 
 void drawCeilingAt(const struct Vec3 center,
-                   const struct Texture *__restrict__ texture, uint8_t cameraDirection) {
+                   const struct Texture *texture, enum EDirection rotation){
     struct Vec2 llz0;
     struct Vec2 lrz0;
     struct Vec2 llz1;
@@ -480,12 +480,12 @@ void drawCeilingAt(const struct Vec3 center,
 
 void drawLeftNear(const struct Vec3 center,
                   const FixP_t scale,
-                  const uint8_t *__restrict__ texture,
+                  const struct Texture *texture,
                   const uint8_t mask,
-                  const int repeatTexture) {
+                  const uint8_t repeatedTexture) {
 
     FixP_t halfScale = scale;
-    const FixP_t textureScale = (repeatTexture ? halfScale : FIXP_ONE);
+    const FixP_t textureScale = (repeatedTexture ? halfScale : FIXP_ONE);
     FixP_t depth = FIXP_ONE;
     struct Vec2 ulz0;
     struct Vec2 urz0;
@@ -549,7 +549,7 @@ void drawLeftNear(const struct Vec3 center,
     if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
         maskWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY);
     } else {
-        drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture,
+        drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture->rotations[0],
                  textureScale, fixToInt(center.mZ));
     }
 }
@@ -636,12 +636,12 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
 
 void drawRightNear(const struct Vec3 center,
                    const FixP_t scale,
-                   const uint8_t *__restrict__ texture,
+                   const struct Texture *texture,
                    const uint8_t mask,
-                   const int repeatTexture) {
+                   const uint8_t repeatedTexture) {
 
     FixP_t halfScale = scale;
-    const FixP_t textureScale = (repeatTexture ? halfScale : FIXP_ONE);
+    const FixP_t textureScale = (repeatedTexture ? halfScale : FIXP_ONE);
     FixP_t depth = FIXP_ONE;
     struct Vec2 ulz0;
     struct Vec2 urz0;
@@ -706,7 +706,7 @@ void drawRightNear(const struct Vec3 center,
     if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
         maskWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY);
     } else {
-        drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture,
+        drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture->rotations[0],
                  textureScale, fixToInt(center.mZ));
     }
 }

@@ -17,7 +17,7 @@ CFLAGS= -O6 -Ofast      \
     -flto		    \
     -march=i486             \
     --pedantic		    \
-    -DCLI_BUILD \
+    -DCLI_BUILD -DPAGE_FLIP_ANIMATION \
     -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS
 
 CXXFLAGS= -O6 -Ofast      \
@@ -34,7 +34,7 @@ CXXFLAGS= -O6 -Ofast      \
     -march=i486             \
     -fpermissive \
     -Wno-narrowing \
-    -DCLI_BUILD \
+    -DCLI_BUILD -DPAGE_FLIP_ANIMATION \
     --pedantic		\
     -I../core/include -I../common/include
 

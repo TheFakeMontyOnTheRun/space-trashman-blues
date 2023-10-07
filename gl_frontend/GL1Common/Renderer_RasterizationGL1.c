@@ -121,7 +121,7 @@ void drawRect(
 void fillTriangle(int *coords, FramebufferPixelFormat colour) {
 }
 
-void drawTexturedTriangle(int *coords, UVCoord *uvCoords, struct Texture *texture) {
+void drawTexturedTriangle(int *coords, UVCoord *uvCoords, struct Texture *texture, int z) {
 }
 
 void fill(
@@ -407,7 +407,7 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
     glDisable(GL_ALPHA_TEST);
 }
 
-void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text,
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text,
                                        const uint8_t colour, char charToReplaceHifenWith) {
     drawTextAt(x, y, text, colour);
 }

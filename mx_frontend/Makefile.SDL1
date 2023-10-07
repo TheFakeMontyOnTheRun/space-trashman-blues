@@ -8,7 +8,7 @@ CFLAGS= `sdl-config --cflags `  -g \
     -ffast-math             \
     --pedantic		    \
     -DCLI_BUILD \
-    -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS
+    -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS -DPAGE_FLIP_ANIMATION
 
 MENU_TARGET=game
 
