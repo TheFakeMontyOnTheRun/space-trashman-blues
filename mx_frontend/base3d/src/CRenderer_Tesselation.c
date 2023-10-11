@@ -25,6 +25,7 @@
 #include "Core.h"
 #include "Engine.h"
 #include "MapWithCharKey.h"
+#include "Mesh.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
 
@@ -428,7 +429,7 @@ void drawFloorAt(const struct Vec3 center,
 }
 
 void drawCeilingAt(const struct Vec3 center,
-                   const struct Texture *texture, enum EDirection rotation){
+                   const struct Texture *texture, enum EDirection rotation) {
     struct Vec2 llz0;
     struct Vec2 lrz0;
     struct Vec2 llz1;
@@ -558,13 +559,17 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
 
     int coords[6];
     int count = mesh->triangleCount;
-
     FixP_t *vertexData = mesh->geometry;
     uint8_t colour = mesh->colour;
 
     if (mesh->texture == NULL || center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
         int c;
         for (c = 0; c < count; ++c) {
+            float vx, vy, vz;
+
+            vx = fixToFloat(*(vertexData + 0));
+            vy = fixToFloat(*(vertexData + 3));
+            vz = fixToFloat(*(vertexData + 6));
 
             struct Vec3 *ptr0 = &projectionVertices[0].first;
             struct Vec3 *ptr1 = &projectionVertices[1].first;
@@ -623,7 +628,6 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
             coords[3] = fixToInt(projectionVertices[1].second.mY);
             coords[4] = fixToInt(projectionVertices[2].second.mX);
             coords[5] = fixToInt(projectionVertices[2].second.mY);
-
 
             drawTexturedTriangle(&coords[0], uvData, mesh->texture, fixToInt(ptr0->mZ));
 

@@ -459,12 +459,12 @@ void graphicsFlush(void) {
 
 
 void clearTextScreen(void) {
-  int c, d;
-  for (c = 16; c < 24; ++c ) {
-    for (d = 1; d < 32; ++d ){
-      writeStrWithLimit(d, c, " ", 256 / 8, 2, 0);
+    int c, d;
+    for (c = 16; c < 24; ++c) {
+        for (d = 1; d < 32; ++d) {
+            writeStrWithLimit(d, c, " ", 256 / 8, 2, 0);
+        }
     }
-  }
 }
 
 void enterTextMode(void) {}

@@ -53,14 +53,6 @@ struct Projection {
     struct Vec2 second;
 };
 
-struct Mesh {
-    uint16_t triangleCount;
-    uint8_t *uvCoords;
-    FixP_t *geometry;
-    struct Texture *texture;
-    uint8_t colour;
-};
-
 void graphicsInit(void);
 
 void graphicsShutdown(void);

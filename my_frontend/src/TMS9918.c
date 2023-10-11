@@ -199,12 +199,12 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 
 
 void clearTextScreen(void) {
-  int c, d;
-  for (c = 16; c < 24; ++c ) {
-    for (d = 1; d < 32; ++d ){
-      writeStrWithLimit(d, c, " ", 256 / 8);
+    int c, d;
+    for (c = 16; c < 24; ++c) {
+        for (d = 1; d < 32; ++d) {
+            writeStrWithLimit(d, c, " ", 256 / 8);
+        }
     }
-  }
 }
 
 void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {

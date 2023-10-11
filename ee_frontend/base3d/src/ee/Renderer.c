@@ -29,6 +29,7 @@
 #include "MapWithCharKey.h"
 #include "Globals.h"
 #include "LoadBitmap.h"
+#include "Mesh.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
 #include "VisibilityStrategy.h"
@@ -60,7 +61,7 @@ extern color_t color;
 
 extern const char *thisMissionName;
 extern int16_t thisMissionNameLen;
-
+struct Mesh mesh;
 extern int leanX;
 extern int leanY;
 int visibilityCached = FALSE;
@@ -95,6 +96,15 @@ void printMessageTo3DView(const char *message);
 
 enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
 struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
+
+
+void drawTriangle(const struct Vec3 pos1,
+                  const struct Vec2i uv1,
+                  const struct Vec3 pos2,
+                  const struct Vec2i uv2,
+                  const struct Vec3 pos3,
+                  const struct Vec2i uv3,
+                  const struct Texture *texture);
 
 uint32_t getPaletteEntry(const uint32_t origin) {
     return (0x80 << 24) + (origin & 0x00FFFFFF);
@@ -254,6 +264,8 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 
     /* tmp */
     playerHeight = -intToFix(1);
+
+    loadMesh(&mesh, "fighter.mdl");
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -549,7 +561,7 @@ void render(const long ms) {
                         x = visPos.y;
                         z = visPos.x;
 
-                        element = LEVEL_MAP(z, x );
+                        element = LEVEL_MAP(z, x);
                         itemsSnapshotElement = ITEMS_IN_MAP(z, x);
 
                         position.mX = mCamera.mX + intToFix(-2 * x + 1) - intToFix(1);
@@ -558,7 +570,7 @@ void render(const long ms) {
 
                         /* remember, bounds - 1! */
 
-                        if ((x > 0) && (LEVEL_MAP(z , x - 1) == element)) {
+                        if ((x > 0) && (LEVEL_MAP(z, x - 1) == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
@@ -602,7 +614,7 @@ void render(const long ms) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((z < (MAP_SIZE - 1)) && (LEVEL_MAP(z - 1, x ) == element)) {
+                        if ((z < (MAP_SIZE - 1)) && (LEVEL_MAP(z - 1, x) == element)) {
                             facesMask &= ~MASK_FRONT;
                         }
 

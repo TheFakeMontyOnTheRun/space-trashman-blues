@@ -36,6 +36,7 @@
 #include "MapWithCharKey.h"
 #include "Globals.h"
 #include "LoadBitmap.h"
+#include "Mesh.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
 #include "VisibilityStrategy.h"
@@ -78,7 +79,7 @@ FixP_t yCameraOffset;
 FixP_t zCameraOffset;
 struct Bitmap *mapTopLevel[8];
 char *messageLogBuffer;
-
+struct Mesh mesh;
 int messageLogBufferCoolDown = 0;
 
 void printMessageTo3DView(const char *message);
@@ -131,7 +132,7 @@ void initGL(void) {
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
     glHint(GL_POINT_SMOOTH_HINT, GL_FASTEST);
     glHint(GL_POLYGON_SMOOTH_HINT, GL_FASTEST);
-		
+
 #endif
 #else
     glClearDepth(GL_MAX_DEPTH);
@@ -315,6 +316,8 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 
     /* tmp */
     playerHeight = -intToFix(1);
+
+    loadMesh(&mesh, "fighter.mdl");
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -636,7 +639,7 @@ void render(const long ms) {
                         x = visPos.y;
                         z = visPos.x;
 
-                        element = LEVEL_MAP(z, x );
+                        element = LEVEL_MAP(z, x);
                         itemsSnapshotElement = ITEMS_IN_MAP(z, x);
 
                         position.mX = mCamera.mX + intToFix(-2 * x + 1) - intToFix(1);
@@ -645,7 +648,7 @@ void render(const long ms) {
 
                         /* remember, bounds - 1! */
 
-                        if ((x > 0) && (LEVEL_MAP(z , x - 1) == element)) {
+                        if ((x > 0) && (LEVEL_MAP(z, x - 1) == element)) {
                             facesMask &= ~MASK_LEFT;
                         }
 
@@ -689,7 +692,7 @@ void render(const long ms) {
                             facesMask &= ~MASK_LEFT;
                         }
 
-                        if ((z < (MAP_SIZE - 1)) && (LEVEL_MAP(z - 1, x ) == element)) {
+                        if ((z < (MAP_SIZE - 1)) && (LEVEL_MAP(z - 1, x) == element)) {
                             facesMask &= ~MASK_FRONT;
                         }
 

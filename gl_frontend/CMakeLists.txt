@@ -40,6 +40,7 @@ add_executable(derelict64
         ../common/src/Globals.c
         ../common/src/CTile3DProperties.c
         ../common/src/Vec.c
+        ../common/src/Mesh.c
         ../common/src/Common.c
         ../common/src/FixP.c
         ../common/src/MapWithCharKey.c

@@ -9,7 +9,9 @@
 #include "map.h"
 
 #ifdef SUPPORTS_HACKING_MINIGAME
+
 #include "HackingMinigame.h"
+
 #endif
 
 #ifdef MSDOS

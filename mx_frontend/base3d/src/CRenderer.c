@@ -29,6 +29,7 @@
 #include "Derelict.h"
 #include "Globals.h"
 #include "UI.h"
+#include "Mesh.h"
 
 #define WALKING_BIAS (Div(intToFix(1), intToFix(16)))
 #define STANDARD_HEIGHT (Div(intToFix(230), intToFix(100)))
@@ -48,6 +49,7 @@ struct MapWithCharKey occluders;
 struct MapWithCharKey colliders;
 struct MapWithCharKey enemySightBlockers;
 struct Bitmap *defaultFont;
+struct Mesh mesh;
 
 #ifndef AGS
 uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
@@ -179,6 +181,8 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     /* tmp */
     playerHeight = 0;
     playerHeightChangeRate = 0;
+
+    loadMesh(&mesh, "fighter.mdl");
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -913,60 +917,4 @@ void render(const long ms) {
 
         updateMap();
     }
-}
-
-void loadMesh(struct Mesh *mesh, char *filename) {
-    struct StaticBuffer buffer = loadBinaryFileFromPath(filename);
-    FixP_t val = 0;
-    const uint8_t *bufferHead = buffer.data;
-    int16_t trigCount = 0;
-    int uvCoordsCount;
-    int coordsCount;
-    char *textureName;
-    uint8_t *uvCoord;
-    FixP_t *coord;
-    uint8_t read;
-    int c;
-
-    read = (*(bufferHead++));
-    trigCount += read;
-    read = (*(bufferHead++)) << 8;
-    trigCount += read;
-
-    uvCoordsCount = trigCount * 6;
-    coordsCount = trigCount * 9;
-
-    mesh->triangleCount = trigCount;
-    mesh->uvCoords = allocMem(uvCoordsCount, GENERAL_MEMORY, 1);
-    mesh->geometry = allocMem(sizeof(FixP_t) * coordsCount, GENERAL_MEMORY, 1);
-
-    uvCoord = mesh->uvCoords;
-    coord = mesh->geometry;
-
-    for (c = 0; c < uvCoordsCount; ++c) {
-        *(uvCoord++) = (*(bufferHead++));
-    }
-
-    for (c = 0; c < coordsCount; ++c) {
-        val = 0;
-        val += (*(bufferHead++) << 0);
-        val += (*(bufferHead++) << 8);
-        val += (*(bufferHead++) << 16);
-        val += (*(bufferHead++) << 24);
-        *(coord++) = val;
-    }
-
-    read = (*(bufferHead++));
-
-    if (read == 0) {
-        mesh->colour = *bufferHead;
-        mesh->texture = NULL;
-    } else {
-        textureName = allocMem(read + 1, GENERAL_MEMORY, 1);
-        memCopyToFrom(textureName, (void *) bufferHead, read);
-        mesh->texture = makeTextureFrom(textureName);
-        disposeMem(textureName);
-    }
-
-    disposeDiskBuffer(buffer);
 }

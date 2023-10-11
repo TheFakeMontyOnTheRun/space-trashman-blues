@@ -20,6 +20,7 @@
 #include "Engine.h"
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
+#include "Mesh.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
 
@@ -34,84 +35,84 @@ extern int leanY;
 
 void graphicsInit() {
 
-	debug_init_isviewer();
-	debug_init_usblog();
+    debug_init_isviewer();
+    debug_init_usblog();
 
-	display_init(RESOLUTION_320x240, DEPTH_16_BPP, 3, GAMMA_NONE, ANTIALIAS_RESAMPLE_FETCH_ALWAYS);
+    display_init(RESOLUTION_320x240, DEPTH_16_BPP, 3, GAMMA_NONE, ANTIALIAS_RESAMPLE_FETCH_ALWAYS);
 
-	enableSmoothMovement = TRUE;
+    enableSmoothMovement = TRUE;
 
-	// that is from the N64 SDK...not our own initGL
-	gl_init();
-	rdpq_init();
-	initGL();
-	controller_init();
-	fnt1 = rdpq_font_load("rom:/font.font64");
+    // that is from the N64 SDK...not our own initGL
+    gl_init();
+    rdpq_init();
+    initGL();
+    controller_init();
+    fnt1 = rdpq_font_load("rom:/font.font64");
     rdpq_text_register_font(1, fnt1);
 }
 
 void handleSystemEvents() {
 
-	controller_scan();
-	struct controller_data pressed = get_keys_pressed();
+    controller_scan();
+    struct controller_data pressed = get_keys_pressed();
 //	struct controller_data down = get_keys_down();
 
-	switch (get_dpad_direction(0)) {
-		case 2:
-			mBufferedCommand = kCommandUp;
-			break;
-		case 0:
+    switch (get_dpad_direction(0)) {
+        case 2:
+            mBufferedCommand = kCommandUp;
+            break;
+        case 0:
             turning = 1;
             leanX = ANGLE_TURN_STEP;
-			break;
-		case 6:
-			mBufferedCommand = kCommandDown;
-			break;
-		case 4:
+            break;
+        case 6:
+            mBufferedCommand = kCommandDown;
+            break;
+        case 4:
             turning = 1;
             leanX = -ANGLE_TURN_STEP;
-			break;
-	}
+            break;
+    }
 
-	if (pressed.c[0].C_up) {
-		mBufferedCommand = kCommandFire1;
-	}
+    if (pressed.c[0].C_up) {
+        mBufferedCommand = kCommandFire1;
+    }
 
-	if (pressed.c[0].C_down) {
-		mBufferedCommand = kCommandFire2;
-	}
+    if (pressed.c[0].C_down) {
+        mBufferedCommand = kCommandFire2;
+    }
 
-	if (pressed.c[0].C_left) {
-		mBufferedCommand = kCommandFire3;
-	}
+    if (pressed.c[0].C_left) {
+        mBufferedCommand = kCommandFire3;
+    }
 
-	if (pressed.c[0].C_right) {
-		mBufferedCommand = kCommandFire4;
-	}
+    if (pressed.c[0].C_right) {
+        mBufferedCommand = kCommandFire4;
+    }
 
-	if (pressed.c[0].start) {
-		mBufferedCommand = kCommandBack;
-	}
+    if (pressed.c[0].start) {
+        mBufferedCommand = kCommandBack;
+    }
 
-	if (pressed.c[0].A) {
-		mBufferedCommand = kCommandFire1;
-	}
+    if (pressed.c[0].A) {
+        mBufferedCommand = kCommandFire1;
+    }
 
-	if (pressed.c[0].B) {
-		mBufferedCommand = kCommandFire2;
-	}
+    if (pressed.c[0].B) {
+        mBufferedCommand = kCommandFire2;
+    }
 
-	if (pressed.c[0].Z) {
-		mBufferedCommand = kCommandFire3;
-	}
+    if (pressed.c[0].Z) {
+        mBufferedCommand = kCommandFire3;
+    }
 
-	if (pressed.c[0].L) {
-		mBufferedCommand = kCommandStrafeLeft;
-	}
+    if (pressed.c[0].L) {
+        mBufferedCommand = kCommandStrafeLeft;
+    }
 
-	if (pressed.c[0].R) {
-		mBufferedCommand = kCommandStrafeRight;
-	}
+    if (pressed.c[0].R) {
+        mBufferedCommand = kCommandStrafeRight;
+    }
 
     if (pressed.c[0].x < 0) {
         leanX = -ANGLE_TURN_THRESHOLD;
@@ -131,7 +132,7 @@ void handleSystemEvents() {
 }
 
 void graphicsShutdown() {
-	texturesUsed = 0;
+    texturesUsed = 0;
 }
 
 void flipRenderer() {

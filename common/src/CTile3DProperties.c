@@ -1,15 +1,21 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
+
 #endif
 
 #ifndef SMD
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
 #ifndef WIN32
+
 #include <unistd.h>
+
 #endif
 #else
 #include <genesis.h>
@@ -42,7 +48,7 @@ void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map) {
         FixP_t val = 0;
         uint8_t key = *(bufferHead++);
         struct CTile3DProperties *prop = (struct CTile3DProperties *) allocMem(
-                 sizeof(struct CTile3DProperties), GENERAL_MEMORY, 1);
+                sizeof(struct CTile3DProperties), GENERAL_MEMORY, 1);
 
         prop->mNeedsAlphaTest = *(bufferHead++);
         prop->mBlockVisibility = *(bufferHead++);

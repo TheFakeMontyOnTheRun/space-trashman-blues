@@ -1,8 +1,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include <stdio.h>
@@ -16,6 +18,7 @@
 #include "Common.h"
 #include "LoadBitmap.h"
 #include "CActor.h"
+#include "Mesh.h"
 #include "CRenderer.h"
 #include "UI.h"
 #include "Globals.h"
@@ -213,7 +216,9 @@ void GameMenu_repaintCallback(void) {
                 (XRES_FRAMEBUFFER / 8) - biggestOption - 2,
                 (((YRES_FRAMEBUFFER / 8) + 1) - GameMenu_optionsCount) + c - 2,
                 &GameMenu_options[c][0],
-                isCursor ? (shouldGreyOut ? getPaletteEntry(0xFF000099) : getPaletteEntry(0xFF0000FF)) : (shouldGreyOut ? getPaletteEntry(0xFF555555) : getPaletteEntry(0xFF000000)));
+                isCursor ? (shouldGreyOut ? getPaletteEntry(0xFF000099) : getPaletteEntry(0xFF0000FF)) : (shouldGreyOut
+                                                                                                          ? getPaletteEntry(
+                                0xFF555555) : getPaletteEntry(0xFF000000)));
     }
 }
 

@@ -6,8 +6,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include "FixP.h"
@@ -25,6 +27,7 @@
    This include must be here just to satisfy the .h - your IDE might trick you into thinking this is not needed. 
    And it's not, but ISO requires. 
 */
+#include "Mesh.h"
 #include "CRenderer.h"
 
 
@@ -58,19 +61,19 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             case kCommandRight:
                 playerCrawler.rotation = rightOf(playerCrawler.rotation);
                 turnRight();
-#ifdef PAGE_FLIP_ANIMATION		
+#ifdef PAGE_FLIP_ANIMATION
                 turnStep = PAGE_FLIP_TARGET;
                 turnTarget = 0;
-#endif		
+#endif
                 break;
 
             case kCommandLeft:
                 playerCrawler.rotation = leftOf(playerCrawler.rotation);
                 turnLeft();
-#ifdef PAGE_FLIP_ANIMATION				
+#ifdef PAGE_FLIP_ANIMATION
                 turnStep = 0;
                 turnTarget = PAGE_FLIP_TARGET;
-#endif		
+#endif
                 break;
             case kCommandUp: {
                 struct Vec2i offset = mapOffsetForDirection(

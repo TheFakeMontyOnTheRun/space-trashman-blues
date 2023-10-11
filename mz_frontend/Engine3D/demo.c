@@ -14,10 +14,12 @@
 #endif
 
 #ifndef SMD
+
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+
 #else
 #include <genesis.h>
 #endif
@@ -27,7 +29,9 @@
 #include "Engine3D.h"
 
 #ifdef SUPPORTS_HACKING_MINIGAME
+
 #include "HackingMinigame.h"
+
 #endif
 
 #include "Common.h"

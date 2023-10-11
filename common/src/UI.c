@@ -7,8 +7,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 
@@ -19,6 +21,7 @@
 #include "Common.h"
 #include "LoadBitmap.h"
 #include "CActor.h"
+#include "Mesh.h"
 #include "CRenderer.h"
 #include "UI.h"
 
@@ -96,7 +99,8 @@ void updateMap(void) {
     for (z = -8; z < 8; ++z) {
         for (x = -10; x < 10; ++x) {
             if (isPositionAllowed(visPos.x + x, visPos.y + z)) {
-                fill(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4, getPaletteEntry(0xFF000099), FALSE);
+                fill(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4, getPaletteEntry(0xFF000099),
+                     FALSE);
             }
         }
     }

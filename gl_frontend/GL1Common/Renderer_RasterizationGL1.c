@@ -33,7 +33,7 @@
 #include "Vec.h"
 #include "MapWithCharKey.h"
 #include "Dungeon.h"
-
+#include "Mesh.h"
 #include "CTile3DProperties.h"
 #include "LoadBitmap.h"
 #include "CRenderer.h"
@@ -181,8 +181,8 @@ void fill(
             glEnable(GL_ALPHA_TEST);
             glBegin(GL_QUADS);
 
-            repeatX = (_dx / 8 );
-            repeatY = (_dy / 8 );
+            repeatX = (_dx / 8);
+            repeatY = (_dy / 8);
 
             ascii = 0;
             line = (((ascii >> 5) + 1) * blockHeight);

@@ -6,8 +6,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include "Enums.h"
@@ -16,6 +18,7 @@
 #include "CActor.h"
 #include "Common.h"
 #include "MapWithCharKey.h"
+#include "Mesh.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
 #include "PackedFileReader.h"
@@ -40,7 +43,7 @@ void clearMapCache() {
 void clearTileProperties() {
     int c;
     for (c = 0; c < 256; ++c) {
-        void *content = (void*)getFromMap(&tileProperties, c);
+        void *content = (void *) getFromMap(&tileProperties, c);
         if (content) {
             disposeMem(content);
         }

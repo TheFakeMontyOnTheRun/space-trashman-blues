@@ -97,38 +97,38 @@ const uint8_t shapes[] = {
         46, 81,
         55, 107,
         55, 107,
-        0 };
+        0};
 
 void drawGraphic(const uint8_t *graphic) {
 
-  const uint8_t* ptr = graphic;
+    const uint8_t *ptr = graphic;
 
-  while (*ptr) {
-	int c;
-    const uint8_t npoints = *ptr; 
-    const uint8_t colour = *(ptr + 1);
-    ptr += 2;
-    const uint8_t *shape = ptr;
-    
-    for (c = 0; c < npoints - 1; ++c) {
-      drawLine(shape[2 * c], shape[(2 * c) + 1], shape[(2 * c) + 2], shape[(2 * c) + 3], colour);
-      ptr += 2;
+    while (*ptr) {
+        int c;
+        const uint8_t npoints = *ptr;
+        const uint8_t colour = *(ptr + 1);
+        ptr += 2;
+        const uint8_t *shape = ptr;
+
+        for (c = 0; c < npoints - 1; ++c) {
+            drawLine(shape[2 * c], shape[(2 * c) + 1], shape[(2 * c) + 2], shape[(2 * c) + 3], colour);
+            ptr += 2;
+        }
+        drawLine(shape[2 * npoints - 2], shape[2 * npoints - 1], shape[0], shape[1], colour);
+        ptr += 2;
     }
-    drawLine(shape[ 2 * npoints - 2], shape[ 2 * npoints - 1], shape[0], shape[1], colour);
-    ptr += 2;
-  }
 }
 
 void titleScreen(void) {
-  uint8_t keepGoing = 1;
-  clearScreen();
+    uint8_t keepGoing = 1;
+    clearScreen();
 
-  drawGraphic(shapes);
+    drawGraphic(shapes);
 
 #ifndef GAMEPAD
-  writeStr(16, 1, "Sub Mare\nImperium:\nDerelict\nby\nDaniel Monteiro\nPress SPACE to\nstart ");
+    writeStr(16, 1, "Sub Mare\nImperium:\nDerelict\nby\nDaniel Monteiro\nPress SPACE to\nstart ");
 #else
-  writeStr(16, 1, "Sub Mare\nImperium:\nDerelict\nby\nDaniel Monteiro\nPress Start!");
+    writeStr(16, 1, "Sub Mare\nImperium:\nDerelict\nby\nDaniel Monteiro\nPress Start!");
 #endif
 
 #ifdef SDLW
