@@ -734,7 +734,7 @@ void drawFloor(FixP_t y0,
                FixP_t x0y1,
                FixP_t x1y1,
                int z,
-               const uint8_t * texture) {
+               const uint8_t *texture) {
 
     int32_t y;
     int32_t limit;
@@ -1562,7 +1562,7 @@ void drawBitmap(const int x,
     drawBitmapRaw(x, y, tile->width, tile->height, tile->data, transparent);
 }
 
-void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char * text,
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text,
                                        const uint8_t colour, char charToReplaceHifenWith) {
 
     size_t len = strlen(text);
@@ -1627,11 +1627,11 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
     }
 }
 
-void drawTextAtWithMargin(const int x, const int y, int margin, const char * text, const uint8_t colour) {
+void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const uint8_t colour) {
     drawTextAtWithMarginWithFiltering(x, y, margin, text, colour, '-');
 }
 
-void drawTextAt(const int x, const int y, const char * text, const uint8_t colour) {
+void drawTextAt(const int x, const int y, const char *text, const uint8_t colour) {
 
     drawTextAtWithMargin(x, y, (XRES_FRAMEBUFFER - 1), text, colour);
 }

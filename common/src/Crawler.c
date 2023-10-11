@@ -5,8 +5,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include "FixP.h"
@@ -15,6 +17,7 @@
 #include "LoadBitmap.h"
 #include "Engine.h"
 #include "CActor.h"
+#include "Mesh.h"
 #include "CRenderer.h"
 #include "Dungeon.h"
 #include "Common.h"

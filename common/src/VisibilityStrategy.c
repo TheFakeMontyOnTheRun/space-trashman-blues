@@ -21,6 +21,7 @@
 #include "CActor.h"
 #include "Common.h"
 #include "LoadBitmap.h"
+#include "Mesh.h"
 #include "CTile3DProperties.h"
 #include "EDirection_Utils.h"
 #include "CRenderer.h"

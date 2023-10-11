@@ -30,6 +30,7 @@
 #include "Vec.h"
 #include "LoadBitmap.h"
 #include "MapWithCharKey.h"
+#include "Mesh.h"
 #include "CTile3DProperties.h"
 #include "LoadBitmap.h"
 #include "CRenderer.h"
@@ -1201,4 +1202,144 @@ void drawRightNear(const struct Vec3 center,
     ++q;
 
     _q = q;
+}
+
+void drawTriangle(const struct Vec3 pos1,
+                  const struct Vec2i uv1,
+                  const struct Vec3 pos2,
+                  const struct Vec2i uv2,
+                  const struct Vec3 pos3,
+                  const struct Vec2i uv3,
+                  const struct Texture *texture) {
+
+    float vx1, vy1, vz1, u1, v1;
+    float vx2, vy2, vz2, u2, v2;
+    float vx3, vy3, vz3, u3, v3;
+
+    int points_count = 3;
+
+    int points[3] = {
+            0, 1, 2
+    };
+
+    VECTOR object_position = {0, 0, 0, 1.00f};
+    VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+
+    u1 = (uv1.x) / 16.0f;
+    v1 = 1.0f - ((uv1.y) / 16.0f);
+    vx1 = GEOMETRY_SCALE_X * 0.1f * fixToFloat(pos1.mX);
+    vy1 = GEOMETRY_SCALE_Y * 0.1f * fixToFloat(pos1.mY);
+    vz1 = GEOMETRY_SCALE_Z * 0.1f * fixToFloat(pos1.mZ);
+
+    u2 = (uv2.x) / 16.0f;
+    v2 = 1.0f - ((uv2.y) / 16.0f);
+    vx2 = GEOMETRY_SCALE_X * 0.1f * fixToFloat(pos2.mX);
+    vy2 = GEOMETRY_SCALE_Y * 0.1f * fixToFloat(pos2.mY);
+    vz2 = GEOMETRY_SCALE_Z * 0.1f * fixToFloat(pos2.mZ);
+
+    u3 = (uv3.y) / 16.0f;
+    v3 = 1.0f - ((uv3.y) / 16.0f);
+    vx3 = GEOMETRY_SCALE_X * 0.1f * fixToFloat(pos3.mX);
+    vy3 = GEOMETRY_SCALE_Y * 0.1f * fixToFloat(pos3.mY);
+    vz3 = GEOMETRY_SCALE_Z * 0.1f * fixToFloat(pos3.mZ);
+
+    float centerZ = (vz1 + vz2 + vz3 ) / 3.0f;
+    float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
+
+    VECTOR colours[3] = {
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+    };
+
+    VECTOR vertices[3] = {
+            {vx1, vy1, vz1, 1.00f},
+            {vx2, vy2, vz2, 1.00f},
+            {vx3, vy3, vz3, 1.00f},
+    };
+
+    VECTOR coordinates[3] = {
+            {u1, v1, 0, 0},
+            {u2, v2, 0, 0},
+            {u3, v3, 0, 0},
+    };
+
+    bindTexture(texture->raw);
+
+    create_local_world(local_world, object_position, object_rotation);
+
+    create_local_screen(local_screen, local_world, world_view, view_screen);
+
+    // Calculate the vertex values.
+    calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
+
+    draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
+
+    // Convert floating point vertices to fixed point and translate to center of screen.
+    draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
+
+    // Convert floating point colours to fixed point.
+    draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
+
+    qword_t *q = _q;
+    u64 *dw;
+
+    // Draw the triangles using triangle primitive type.
+    dw = (u64 *) draw_prim_start(q, 0, &prim, &color);
+
+    for (int i = 0; i < points_count; i++) {
+        *dw++ = colors[points[i]].rgbaq;
+        *dw++ = st[points[i]].uv;
+        *dw++ = verts[points[i]].xyz;
+    }
+
+    // Check if we're in middle of a qword or not.
+    if ((u32) dw % 16) {
+        *dw++ = 0;
+    }
+
+    q = draw_prim_end((qword_t *) dw, 3, DRAW_STQ_REGLIST);
+
+    _q = q;
+
+}
+
+void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
+    int c;
+    int count = mesh->triangleCount;
+    FixP_t *vertexData = mesh->geometry;
+    uint8_t *uvData = mesh->uvCoords;
+
+    if (mesh->texture != NULL && (center.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM) {
+        for (c = 0; c < count; ++c) {
+            struct Vec3 p1;
+            struct Vec3 p2;
+            struct Vec3 p3;
+            struct Vec2i uv1;
+            struct Vec2i uv2;
+            struct Vec2i uv3;
+
+            uv1.x = (*uvData++);
+            uv1.y = (*uvData++);
+            p1.mX = center.mX + *(vertexData + 0);
+            p1.mY = center.mY + *(vertexData + 1);
+            p1.mZ = center.mZ + *(vertexData + 2);
+
+            uv2.x = (*uvData++);
+            uv2.y = (*uvData++);
+            p2.mX = center.mX + *(vertexData + 3);
+            p2.mY = center.mY + *(vertexData + 4);
+            p2.mZ = center.mZ + *(vertexData + 5);
+
+            uv3.x = (*uvData++);
+            uv3.y = (*uvData++);
+            p3.mX = center.mX + *(vertexData + 6);
+            p3.mY = center.mY + *(vertexData + 7);
+            p3.mZ = center.mZ + *(vertexData + 8);
+
+            drawTriangle(p1, uv1, p2, uv2, p3, uv3, mesh->texture);
+
+            vertexData += 9;
+        }
+    }
 }

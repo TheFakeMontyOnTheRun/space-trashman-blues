@@ -32,6 +32,7 @@ MENU_OBJ=../common/src/MainMenu.o \
 	../common/src/Crawler.o \
 	../common/src/Engine.o \
 	../common/src/UI.o \
+	../common/src/Mesh.o \
 	menu/src/Main.o \
 	base3d/src/SDLVersion/SDL1Renderer.o \
 	base3d/src/LoadBitmap.o \

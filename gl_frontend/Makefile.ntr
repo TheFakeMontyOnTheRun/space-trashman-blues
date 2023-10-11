@@ -78,6 +78,7 @@ CFILES   := ../../common/src/MainMenu.c \
                               		../menu/src/Main.c \
                               		../../common/src/Engine.c \
                               		../../common/src/UI.c \
+					../../common/src/Mesh.c \
                               		../../common/src/HackingScreen.c \
                               		../base3d/src/nitro/NitroGLRenderer.c \
                               		../GL1Common/LoadBitmapGL1.c \

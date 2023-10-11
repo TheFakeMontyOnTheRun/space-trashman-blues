@@ -53,14 +53,6 @@ struct Projection {
     struct Vec2 second;
 };
 
-struct Mesh {
-    uint16_t triangleCount;
-    uint8_t *uvCoords;
-    FixP_t *geometry;
-    struct Texture *texture;
-    uint8_t colour;
-};
-
 void graphicsInit(void);
 
 void graphicsShutdown(void);
@@ -89,8 +81,6 @@ void clearTileProperties(void);
 
 void shutdownHW(void);
 
-void loadMesh(struct Mesh *mesh, char *filename);
-
 void initZMap(void);
 
 void projectAllVertices(const uint8_t count);
@@ -102,8 +92,10 @@ void enter2D(void);
 void enter3D(void);
 
 #ifdef PAGE_FLIP_ANIMATION
+
 void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame, uint8_t *prevFrame, int turnState, int turnTarget,
                     int scale200To240);
+
 #endif
 
 void fill(

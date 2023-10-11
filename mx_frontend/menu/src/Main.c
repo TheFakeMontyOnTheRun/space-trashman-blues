@@ -7,7 +7,7 @@
 #ifdef AMIGA
 #include "AmigaInt.h"
 
-#define VERSTAG "\0$VER: The Mistral Report 1.0 (05.07.2020)"
+#define VERSTAG "\0$VER: Sub Mare Imperium - Derelict 1.0 (10.10.2023)"
 #else
 
 #ifdef WIN32
@@ -59,6 +59,7 @@ long uclock() {
 #include "LoadBitmap.h"
 #include "Core.h"
 #include "Engine.h"
+#include "Mesh.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
 #include "VisibilityStrategy.h"

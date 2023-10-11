@@ -150,7 +150,7 @@ struct Bitmap *loadBitmap(const char *filename) {
 void releaseBitmap(struct Bitmap *ptr) {
     assert(ptr != NULL);
 
-    if (ptr->nativeBuffer != NULL ) {
+    if (ptr->nativeBuffer != NULL) {
         graph_vram_free(ptr->nativeBuffer->address);
         disposeMem(ptr->nativeBuffer);
     }

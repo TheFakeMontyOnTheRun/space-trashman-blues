@@ -35,6 +35,7 @@
 #include "Vec.h"
 #include "LoadBitmap.h"
 #include "MapWithCharKey.h"
+#include "Mesh.h"
 #include "CTile3DProperties.h"
 #include "LoadBitmap.h"
 #include "CRenderer.h"
@@ -558,4 +559,60 @@ void drawRightNear(const struct Vec3 center,
 
     glScalef(1.0f, 1.0f / geometryScale, 1.0f);
     glTranslatef(0.0f, -centerY, 0.0f);
+}
+
+void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
+    int c;
+    int count = mesh->triangleCount;
+    FixP_t *vertexData = mesh->geometry;
+    uint8_t *uvData = mesh->uvCoords;
+    float x, y, z;
+
+    x = fixToFloat(center.mX);
+    y = fixToFloat(center.mX);
+    z = -fixToFloat(center.mZ);
+
+    glTranslatef(x, y, z);
+
+#ifndef NDS
+    glAlphaFunc(GL_GREATER, 0.5f);
+#endif
+    glBindTexture(GL_TEXTURE_2D, mesh->texture->raw->uploadId);
+
+    if (mesh->texture != NULL) {
+        for (c = 0; c < count; ++c) {
+            float vx, vy, vz, u, v;
+
+            glBegin(GL_TRIANGLES);
+
+            u = (*uvData++) / 16.0f;
+            v = 1.0f - ((*uvData++) / 16.0f);
+            glTexCoord2f(u, v);
+            vx = fixToFloat(*(vertexData + 0));
+            vy = fixToFloat(*(vertexData + 1));
+            vz = fixToFloat(*(vertexData + 2));
+            glVertex3f(vx, vy, vz);
+
+            u = (*uvData++) / 16.0f;
+            v = 1.0f - ((*uvData++) / 16.0f);
+            glTexCoord2f(u, v);
+            vx = fixToFloat(*(vertexData + 3));
+            vy = fixToFloat(*(vertexData + 4));
+            vz = fixToFloat(*(vertexData + 5));
+            glVertex3f(vx, vy, vz);
+
+            u = (*uvData++) / 16.0f;
+            v = 1.0f - ((*uvData++) / 16.0f);
+            glTexCoord2f(u, v);
+            vx = fixToFloat(*(vertexData + 6));
+            vy = fixToFloat(*(vertexData + 7));
+            vz = fixToFloat(*(vertexData + 8));
+            glVertex3f(vx, vy, vz);
+            glEnd();
+
+            vertexData += 9;
+        }
+    }
+
+    glTranslatef(-x, -y, -z);
 }

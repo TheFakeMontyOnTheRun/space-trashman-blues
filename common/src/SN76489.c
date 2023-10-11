@@ -11,10 +11,13 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "Enums.h"
+#include "SoundSystem.h"
+
 void initSN76489(void) {
 #ifdef PSG
     psg_init();
-	psg_channels(chanAll, chanNone); // set all channels to tone generation
+    psg_channels(chanAll, chanNone); // set all channels to tone generation
 #endif
 
     psg_volume(0, 10);
@@ -33,4 +36,4 @@ void stopSounds(void) {}
 
 void soundTick(void) {}
 
-void playSound( int ununused ) {}
+void playSound(int ununused) {}

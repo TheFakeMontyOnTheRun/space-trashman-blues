@@ -1,8 +1,10 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
 #include <unistd.h>
+
 #endif
 
 #include <stdio.h>
@@ -17,6 +19,7 @@
 #include "PackedFileReader.h"
 #include "LoadBitmap.h"
 #include "CActor.h"
+#include "Mesh.h"
 #include "CRenderer.h"
 #include "UI.h"
 #include "Core.h"
@@ -68,9 +71,12 @@ void HackingScreen_repaintCallback(void) {
     drawWindow(1, 1, XRES_FRAMEBUFFER / 8, 15, "Disassembly: CONTROLLER.PRG (stack)");
 
 #ifndef AGS
-    drawTextAt(6 + (12 * 0), 11, "CPU0", cursorPosition == 0 ? getPaletteEntry(0xFF999999) : getPaletteEntry(0xFF000000));
-    drawTextAt(6 + (12 * 1), 11, "CPU1", cursorPosition == 1 ? getPaletteEntry(0xFF999999) : getPaletteEntry(0xFF000000));
-    drawTextAt(6 + (12 * 2), 11, "CPU2", cursorPosition == 2 ? getPaletteEntry(0xFF999999) : getPaletteEntry(0xFF000000));
+    drawTextAt(6 + (12 * 0), 11, "CPU0",
+               cursorPosition == 0 ? getPaletteEntry(0xFF999999) : getPaletteEntry(0xFF000000));
+    drawTextAt(6 + (12 * 1), 11, "CPU1",
+               cursorPosition == 1 ? getPaletteEntry(0xFF999999) : getPaletteEntry(0xFF000000));
+    drawTextAt(6 + (12 * 2), 11, "CPU2",
+               cursorPosition == 2 ? getPaletteEntry(0xFF999999) : getPaletteEntry(0xFF000000));
 
     for (pin = 0; pin < 3; ++pin)
 #else
@@ -91,7 +97,7 @@ void HackingScreen_repaintCallback(void) {
 #endif
 
         if (pins[pin][5] == 0) {
-	  grantAccessToSafe();
+            grantAccessToSafe();
         }
 
         for (disk = 0; disk < 6; ++disk) {
@@ -164,7 +170,7 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
 
         for (pin = 0; pin < 3; ++pin) {
             if (pins[pin][5] == 0) {
-		grantAccessToSafe();
+                grantAccessToSafe();
             }
         }
 

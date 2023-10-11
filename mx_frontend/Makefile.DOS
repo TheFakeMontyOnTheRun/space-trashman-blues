@@ -55,6 +55,7 @@ MENU_OBJ= menu/src/Main.o \
 	  ../common/src/MusicDOS.o \
 	  ../common/src/timer.o \
 	  ../common/src/OPL2.o \
+	  ../common/src/Mesh.o \
 	  ../common/src/controller.o \
 	  base3d/src/DOSVersion/DOSRenderer.o \
 	  base3d/src/LoadBitmap.o \

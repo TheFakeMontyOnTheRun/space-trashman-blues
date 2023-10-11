@@ -6,3 +6,5 @@
 /***
  * TODO: unify the interfaces
  */
+#include "Enums.h"
+#include "SoundSystem.h"

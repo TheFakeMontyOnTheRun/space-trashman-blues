@@ -17,6 +17,7 @@
 #include "LoadBitmap.h"
 #include "Core.h"
 #include "Engine.h"
+#include "Mesh.h"
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
 #include "VisibilityStrategy.h"
