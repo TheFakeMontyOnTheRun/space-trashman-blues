@@ -1212,6 +1212,8 @@ void drawTriangle(const struct Vec3 pos1,
                   const struct Vec2i uv3,
                   const struct Texture *texture) {
 
+    bindTexture(texture->raw);
+
     float vx1, vy1, vz1, u1, v1;
     float vx2, vy2, vz2, u2, v2;
     float vx3, vy3, vz3, u3, v3;
@@ -1225,26 +1227,27 @@ void drawTriangle(const struct Vec3 pos1,
     VECTOR object_position = {0, 0, 0, 1.00f};
     VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
 
+    /* GS UVs go from 0..2 */
     u1 = (uv1.x) / 16.0f;
-    v1 = 1.0f - ((uv1.y) / 16.0f);
-    vx1 = GEOMETRY_SCALE_X * 0.1f * fixToFloat(pos1.mX);
-    vy1 = GEOMETRY_SCALE_Y * 0.1f * fixToFloat(pos1.mY);
-    vz1 = GEOMETRY_SCALE_Z * 0.1f * fixToFloat(pos1.mZ);
+    v1 = 2.0f - ((uv1.y) / 16.0f);
+    vx1 = GEOMETRY_SCALE_X * 0.05f * fixToFloat(pos1.mX);
+    vy1 = -GEOMETRY_SCALE_Y * 0.05f * fixToFloat(pos1.mY);
+    vz1 = GEOMETRY_SCALE_Z * 0.05f * fixToFloat(pos1.mZ);
 
     u2 = (uv2.x) / 16.0f;
-    v2 = 1.0f - ((uv2.y) / 16.0f);
-    vx2 = GEOMETRY_SCALE_X * 0.1f * fixToFloat(pos2.mX);
-    vy2 = GEOMETRY_SCALE_Y * 0.1f * fixToFloat(pos2.mY);
-    vz2 = GEOMETRY_SCALE_Z * 0.1f * fixToFloat(pos2.mZ);
+    v2 = 2.0f - ((uv2.y) / 16.0f);
+    vx2 = GEOMETRY_SCALE_X * 0.05f * fixToFloat(pos2.mX);
+    vy2 = -GEOMETRY_SCALE_Y * 0.05f * fixToFloat(pos2.mY);
+    vz2 = GEOMETRY_SCALE_Z * 0.05f * fixToFloat(pos2.mZ);
 
     u3 = (uv3.y) / 16.0f;
-    v3 = 1.0f - ((uv3.y) / 16.0f);
-    vx3 = GEOMETRY_SCALE_X * 0.1f * fixToFloat(pos3.mX);
-    vy3 = GEOMETRY_SCALE_Y * 0.1f * fixToFloat(pos3.mY);
-    vz3 = GEOMETRY_SCALE_Z * 0.1f * fixToFloat(pos3.mZ);
+    v3 = 2.0f - ((uv3.y) / 16.0f);
+    vx3 = GEOMETRY_SCALE_X * 0.05f * fixToFloat(pos3.mX);
+    vy3 = -GEOMETRY_SCALE_Y * 0.05f * fixToFloat(pos3.mY);
+    vz3 = GEOMETRY_SCALE_Z * 0.05f * fixToFloat(pos3.mZ);
 
     float centerZ = (vz1 + vz2 + vz3 ) / 3.0f;
-    float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
+    float fogAttenuation =  1.0f; // centerZ / ((FOG_MAX_DISTANCE - fixToFloat(zCameraOffset)) * GEOMETRY_SCALE_Z * 0.05f );
 
     VECTOR colours[3] = {
             {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
@@ -1263,8 +1266,6 @@ void drawTriangle(const struct Vec3 pos1,
             {u2, v2, 0, 0},
             {u3, v3, 0, 0},
     };
-
-    bindTexture(texture->raw);
 
     create_local_world(local_world, object_position, object_rotation);
 
