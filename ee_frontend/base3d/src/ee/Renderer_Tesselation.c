@@ -1220,27 +1220,23 @@ void drawTriangle(const struct Vec3 pos1,
 
     int points_count = 3;
 
-    int points[3] = {
-            0, 1, 2
-    };
-
     VECTOR object_position = {0, 0, 0, 1.00f};
     VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
 
-    /* GS UVs go from 0..2 */
-    u1 = (uv1.x) / 16.0f;
+    /* GS UVs go from 0..2, or so it seems */
+    u1 = 2.0f - (uv1.x) / 16.0f;
     v1 = 2.0f - ((uv1.y) / 16.0f);
     vx1 = GEOMETRY_SCALE_X * 0.05f * fixToFloat(pos1.mX);
     vy1 = -GEOMETRY_SCALE_Y * 0.05f * fixToFloat(pos1.mY);
     vz1 = GEOMETRY_SCALE_Z * 0.05f * fixToFloat(pos1.mZ);
 
-    u2 = (uv2.x) / 16.0f;
+    u2 = 2.0f - (uv2.x) / 16.0f;
     v2 = 2.0f - ((uv2.y) / 16.0f);
     vx2 = GEOMETRY_SCALE_X * 0.05f * fixToFloat(pos2.mX);
     vy2 = -GEOMETRY_SCALE_Y * 0.05f * fixToFloat(pos2.mY);
     vz2 = GEOMETRY_SCALE_Z * 0.05f * fixToFloat(pos2.mZ);
 
-    u3 = (uv3.y) / 16.0f;
+    u3 = 2.0f - (uv3.y) / 16.0f;
     v3 = 2.0f - ((uv3.y) / 16.0f);
     vx3 = GEOMETRY_SCALE_X * 0.05f * fixToFloat(pos3.mX);
     vy3 = -GEOMETRY_SCALE_Y * 0.05f * fixToFloat(pos3.mY);
@@ -1289,9 +1285,9 @@ void drawTriangle(const struct Vec3 pos1,
     dw = (u64 *) draw_prim_start(q, 0, &prim, &color);
 
     for (int i = 0; i < points_count; i++) {
-        *dw++ = colors[points[i]].rgbaq;
-        *dw++ = st[points[i]].uv;
-        *dw++ = verts[points[i]].xyz;
+        *dw++ = colors[i].rgbaq;
+        *dw++ = st[i].uv;
+        *dw++ = verts[i].xyz;
     }
 
     // Check if we're in middle of a qword or not.
