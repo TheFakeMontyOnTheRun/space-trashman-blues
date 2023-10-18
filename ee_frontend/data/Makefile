@@ -4,10 +4,12 @@ packager:
 	rm -f base3d/packer
 	$(CXX) -std=c++14 -opacker packer.cpp
 
+models:
+	ls src/*.obj  | xargs java -jar wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
+
 data:	packager
 	python3 ./check_textures.py
 	rm -f ./base.pfs
-	ls src/*.obj  | xargs java -jar wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
 	ls assets/*.*  | xargs ./packer
 	mv ./data.pfs ../base.pfs
 	cp ../base.pfs ../filesystem
@@ -19,6 +21,6 @@ images:
 maps:
 	python3 ./compile_map.py
 
-full: images maps data
+full: images maps models data
 
 default: full

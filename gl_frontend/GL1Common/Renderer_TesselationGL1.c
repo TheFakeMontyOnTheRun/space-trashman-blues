@@ -585,7 +585,7 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
 
             glBegin(GL_TRIANGLES);
 
-            u = (*uvData++) / 16.0f;
+            u = 1.0f - (*uvData++) / 16.0f;
             v = 1.0f - ((*uvData++) / 16.0f);
             glTexCoord2f(u, v);
             vx = fixToFloat(*(vertexData + 0));
@@ -593,7 +593,7 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
             vz = fixToFloat(*(vertexData + 2));
             glVertex3f(vx, vy, vz);
 
-            u = (*uvData++) / 16.0f;
+            u = 1.0f - (*uvData++) / 16.0f;
             v = 1.0f - ((*uvData++) / 16.0f);
             glTexCoord2f(u, v);
             vx = fixToFloat(*(vertexData + 3));
@@ -601,7 +601,7 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
             vz = fixToFloat(*(vertexData + 5));
             glVertex3f(vx, vy, vz);
 
-            u = (*uvData++) / 16.0f;
+            u = 1.0f - (*uvData++) / 16.0f;
             v = 1.0f - ((*uvData++) / 16.0f);
             glTexCoord2f(u, v);
             vx = fixToFloat(*(vertexData + 6));
