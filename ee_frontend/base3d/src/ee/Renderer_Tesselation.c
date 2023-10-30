@@ -1224,21 +1224,23 @@ void drawTriangle(const struct Vec3 pos1,
     VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
 
     /* GS UVs go from 0..2, or so it seems */
-    u1 = 2.0f - (uv1.x) / 16.0f;
-    v1 = 2.0f - ((uv1.y) / 16.0f);
-    vx1 = GEOMETRY_SCALE_X * 0.05f * fixToFloat(pos1.mX);
+    u1 = 1.0f - (uv1.x) / 16.0f;
+    v1 = 1.0f - ((uv1.y) / 16.0f);
+
+    /* having the X coordinates being half the others is intentional */
+    vx1 = GEOMETRY_SCALE_X * 0.025f * fixToFloat(pos1.mX);
     vy1 = -GEOMETRY_SCALE_Y * 0.05f * fixToFloat(pos1.mY);
     vz1 = GEOMETRY_SCALE_Z * 0.05f * fixToFloat(pos1.mZ);
 
-    u2 = 2.0f - (uv2.x) / 16.0f;
-    v2 = 2.0f - ((uv2.y) / 16.0f);
-    vx2 = GEOMETRY_SCALE_X * 0.05f * fixToFloat(pos2.mX);
+    u2 = 1.0f - (uv2.x) / 16.0f;
+    v2 = 1.0f - ((uv2.y) / 16.0f);
+    vx2 = GEOMETRY_SCALE_X * 0.025f * fixToFloat(pos2.mX);
     vy2 = -GEOMETRY_SCALE_Y * 0.05f * fixToFloat(pos2.mY);
     vz2 = GEOMETRY_SCALE_Z * 0.05f * fixToFloat(pos2.mZ);
 
-    u3 = 2.0f - (uv3.y) / 16.0f;
-    v3 = 2.0f - ((uv3.y) / 16.0f);
-    vx3 = GEOMETRY_SCALE_X * 0.05f * fixToFloat(pos3.mX);
+    u3 = 1.0f - (uv3.x) / 16.0f;
+    v3 = 1.0f - ((uv3.y) / 16.0f);
+    vx3 = GEOMETRY_SCALE_X * 0.025f * fixToFloat(pos3.mX);
     vy3 = -GEOMETRY_SCALE_Y * 0.05f * fixToFloat(pos3.mY);
     vz3 = GEOMETRY_SCALE_Z * 0.05f * fixToFloat(pos3.mZ);
 
