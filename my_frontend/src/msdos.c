@@ -288,6 +288,10 @@ void clearGraphics(void) {
 void initHW(void) {
     initKeyboardUI();
     updateDirection = 1;
+    clearGraphics();
+}
+
+void clearScreen(void) {
     asm volatile("movb $0x0, %%ah\n\t"
                  "movb $0x4, %%al\n\t"
                  "int $0x10\n\t"
@@ -295,10 +299,6 @@ void initHW(void) {
             :
             : "ax"
             );
-}
-
-void clearScreen(void) {
-    initHW();
 }
 
 void handleSystemEvents(void) {}
@@ -380,6 +380,10 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_
 void graphicsFlush(void) {
     uint16_t baseOffset = 0;
     uint16_t index = 0;
+
+    if (!needs3dRefresh) {
+        return;
+    }
 
 /*
  * DS ES and SS already have the same value as CS

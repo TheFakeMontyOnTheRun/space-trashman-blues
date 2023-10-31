@@ -17,6 +17,7 @@ void performAction(void);
 
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title, uint8_t colour);
 
+void drawGraphic(const uint8_t *graphic);
 
 #ifdef SDLW
 void flushVirtualFramebuffer(void);

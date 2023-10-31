@@ -287,13 +287,7 @@ void startRoomTransitionAnimation(void) {
             /* door opening */
             graphicsPut(x, 95 - 3 * (MAP_SIZE_Y - y));
         }
-#ifdef SDLW
-        /* Just to keep the OS happy */
-        getInput();
-#endif
-        graphicsFlush();
     }
-    HUD_initialPaint();
 }
 
 #endif

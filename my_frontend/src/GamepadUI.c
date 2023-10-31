@@ -51,12 +51,10 @@ char *menuItems[] = {
             break;
         case 2:
             pickItem();
-            refreshJustGraphics();
             HUD_refresh();
             break;
         case 3:
             dropItem();
-            refreshJustGraphics();
             HUD_refresh();
             break;
         case 4:

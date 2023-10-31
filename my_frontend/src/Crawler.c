@@ -45,21 +45,20 @@ extern int cameraRotation;
 extern uint8_t enteredFrom;
 extern uint8_t playerLocation;
 
-enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {}
+uint8_t needs3dRefresh;
 
-void Crawler_repaintCallback(void) {
+enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
     uint8_t prevX;
     uint8_t prevZ;
     struct WorldPosition *pos;
     uint8_t previousLocation = playerLocation;
     uint8_t newCell = 0;
     renderScene();
-    graphicsFlush();
 
     prevX = cameraX;
     prevZ = cameraZ;
 
-    switch (getInput()) {
+    switch (cmd) {
 
 #ifndef GAMEPAD
         case 'l':
@@ -169,6 +168,11 @@ void Crawler_repaintCallback(void) {
     } else {
         enteredFrom = 0xFF;
     }
+    return kResumeCurrentState;
+}
+
+void Crawler_repaintCallback(void) {
+
 }
 
 void onError(const char *mesg) {
@@ -180,6 +184,7 @@ void logDelegate(const char *mesg) {
 }
 
 void Crawler_initStateCallback(int32_t tag_unused) {
+    needs3dRefresh = 1;
     enteredFrom = 0;
     cameraRotation = 0;
     initStation();
@@ -187,10 +192,14 @@ void Crawler_initStateCallback(int32_t tag_unused) {
     setErrorHandlerCallback(onError);
     setLoggerDelegate(logDelegate);
     initMap();
-
 }
 
-void Crawler_initialPaintCallback(void) {}
+void Crawler_initialPaintCallback(void) {
+    clearScreen();
+    HUD_initialPaint();
+}
 
-void Crawler_unloadStateCallback(int32_t newState) {}
+void Crawler_unloadStateCallback(int32_t newState) {
+    needs3dRefresh = 0;
+}
 

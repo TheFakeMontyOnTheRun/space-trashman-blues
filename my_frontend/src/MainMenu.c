@@ -7,20 +7,122 @@
 #include "UI.h"
 #include "Renderer.h"
 
-void MainMenu_initStateCallback(int32_t tag) {
+const uint8_t shapes[] = {
+        7, 2,
+        28, 103,
+        16, 140,
+        54, 140,
+        55, 107,
+        38, 111,
+        32, 100,
+        32, 100,
+        7, 2,
+        30, 116,
+        32, 109,
+        40, 117,
+        54, 117,
+        54, 140,
+        28, 140,
+        28, 140,
+        10, 2,
+        32, 64,
+        31, 92,
+        38, 106,
+        53, 99,
+        54, 96,
+        54, 107,
+        38, 111,
+        31, 97,
+        31, 92,
+        31, 92,
+        8, 2,
+        54, 39,
+        44, 38,
+        34, 43,
+        31, 66,
+        35, 79,
+        46, 82,
+        54, 74,
+        54, 74,
+        9, 2,
+        31, 72,
+        31, 92,
+        38, 106,
+        53, 99,
+        54, 96,
+        54, 75,
+        45, 81,
+        35, 78,
+        31, 68,
+        6, 2,
+        37, 79,
+        39, 98,
+        43, 99,
+        53, 76,
+        46, 81,
+        46, 81,
+        5, 2,
+        31, 65,
+        35, 76,
+        36, 52,
+        34, 44,
+        34, 44,
+        5, 2,
+        46, 79,
+        49, 54,
+        54, 48,
+        54, 73,
+        54, 73,
+        4, 2,
+        38, 111,
+        35, 78,
+        31, 97,
+        31, 97,
+        4, 2,
+        31, 97,
+        35, 78,
+        32, 68,
+        32, 68,
+        4, 2,
+        38, 111,
+        46, 81,
+        55, 107,
+        55, 107,
+        0};
 
+int drawn = 0;
+
+void MainMenu_initStateCallback(int32_t tag) {
+    needs3dRefresh = 0;
 }
 
 void MainMenu_initialPaintCallback(void) {
-
+    clearScreen();
 }
 
 void MainMenu_repaintCallback(void) {
+    if(!drawn) {
+        drawn = 1;
 
+        clearScreen();
+
+        drawGraphic(shapes);
+
+#ifndef GAMEPAD
+        writeStr(16, 1, "Sub Mare\nImperium:\nDerelict\nby\nDaniel Monteiro\nPress SPACE to\nstart ");
+#else
+        writeStr(16, 1, "Sub Mare\nImperium:\nDerelict\nby\nDaniel Monteiro\nPress Start!");
+#endif
+    }
 }
 
 enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long data) {
 
+    if (cmd != '.') {
+        return kPlayGame;
+    }
+
+    return kResumeCurrentState;
 }
 
 void MainMenu_unloadStateCallback(int32_t newState) {

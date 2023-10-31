@@ -26,26 +26,13 @@ extern uint8_t cursorPosition;
 
 enum ESoundDriver soundDriver = kNoSound;
 
-uint8_t needs3dRefresh;
-
 void initHW(void) {
     initGamepadUI();
     initTMS9918();
     initSN76489();
     cooldown = COOLDOWN_MAX;
     updateDirection = 1;
-}
-
-void refreshJustGraphics(void) {
-    clearGraphics();
-    renderScene();
-    graphicsFlush();
-}
-
-void backToGraphics(void) {
-    clearScreen();
-    HUD_initialPaint();
-    refreshJustGraphics();
+    needs3dRefresh = 1;
 }
 
 void handleSystemEvents(void) {}
@@ -105,23 +92,24 @@ enum ECommand getInput(void) {
 }
 
 void graphicsFlush(void) {
-    flush3DBuffer();
-
-    if (updateDirection) {
-        updateDirection = 0;
-        switch (getPlayerDirection()) {
-            case 0:
-                writeStrWithLimit(12, 17, "N", 31, 2, 0);
-                break;
-            case 1:
-                writeStrWithLimit(12, 17, "E", 31, 2, 0);
-                break;
-            case 2:
-                writeStrWithLimit(12, 17, "S", 31, 2, 0);
-                break;
-            case 3:
-                writeStrWithLimit(12, 17, "W", 31, 2, 0);
-                break;
+    if (needs3dRefresh) {
+        flush3DBuffer();
+        if (updateDirection) {
+            updateDirection = 0;
+            switch (getPlayerDirection()) {
+                case 0:
+                    writeStrWithLimit(12, 17, "N", 31, 2, 0);
+                    break;
+                case 1:
+                    writeStrWithLimit(12, 17, "E", 31, 2, 0);
+                    break;
+                case 2:
+                    writeStrWithLimit(12, 17, "S", 31, 2, 0);
+                    break;
+                case 3:
+                    writeStrWithLimit(12, 17, "W", 31, 2, 0);
+                    break;
+            }
         }
     }
 }
