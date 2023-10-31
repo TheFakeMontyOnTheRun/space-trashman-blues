@@ -163,5 +163,4 @@ void runHackingMinigame(void) {
     }
     exitTextMode();
     clearScreen();
-    HUD_initialPaint();
 }

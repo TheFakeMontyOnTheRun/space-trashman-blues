@@ -117,7 +117,9 @@ void clearScreen(void) {
     fillRect(0, 0, 256, 192, 0);
 }
 
-void handleSystemEvents(void) {}
+void handleSystemEvents(void) {
+    clearGraphics();
+}
 
 enum ECommand getInput(void) {
     SDL_Event event;
@@ -285,7 +287,7 @@ void initHW(void) {
     mBufferedCommand = '.';
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
-    memset(framebuffer, 0, 128 * 128);
+    clearGraphics();
     window =
             SDL_CreateWindow("Derelict 8-bits SDL2 test", SDL_WINDOWPOS_CENTERED,
                              SDL_WINDOWPOS_CENTERED, 512, 384, 0);
@@ -331,26 +333,27 @@ void flipRenderer(void) {
 }
 
 void graphicsFlush(void) {
-    if (updateDirection) {
-        updateDirection = 0;
-        switch (getPlayerDirection()) {
-            case 0:
-                writeStrWithLimit(12, 17, "N", 31, 2, 0);
-                break;
-            case 1:
-                writeStrWithLimit(12, 17, "E", 31, 2, 0);
-                break;
-            case 2:
-                writeStrWithLimit(12, 17, "S", 31, 2, 0);
-                break;
-            case 3:
-                writeStrWithLimit(12, 17, "W", 31, 2, 0);
-                break;
+    if (needs3dRefresh) {
+        if (updateDirection) {
+            updateDirection = 0;
+            switch (getPlayerDirection()) {
+                case 0:
+                    writeStrWithLimit(12, 17, "N", 31, 2, 0);
+                    break;
+                case 1:
+                    writeStrWithLimit(12, 17, "E", 31, 2, 0);
+                    break;
+                case 2:
+                    writeStrWithLimit(12, 17, "S", 31, 2, 0);
+                    break;
+                case 3:
+                    writeStrWithLimit(12, 17, "W", 31, 2, 0);
+                    break;
+            }
         }
-    }
 
-    flipRenderer();
-    clearGraphics();
+        flipRenderer();
+    }
     flushVirtualFramebuffer();
 }
 

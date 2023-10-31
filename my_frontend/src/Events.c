@@ -261,5 +261,4 @@ void initMap(void) {
 #endif
 
     updateMapItems();
-    HUD_initialPaint();
 }

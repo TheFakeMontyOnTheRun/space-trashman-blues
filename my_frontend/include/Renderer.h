@@ -55,8 +55,6 @@ struct CellPattern {
     uint8_t blockMovement: 1;
 };
 
-void backToGraphics(void);
-
 void clearGraphics(void);
 
 void clearScreen(void);
@@ -141,8 +139,6 @@ void drawMap(void);
 
 void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour);
 
-void refreshJustGraphics(void);
-
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title, uint8_t colour);
 
 uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask);
@@ -158,5 +154,7 @@ void startRoomTransitionAnimation(void);
 void repaintMapItems(void);
 
 uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y);
+
+extern uint8_t needs3dRefresh;
 
 #endif /* DERELICT8_RENDERER_H */

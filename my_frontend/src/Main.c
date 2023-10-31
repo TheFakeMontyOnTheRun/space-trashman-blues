@@ -10,12 +10,11 @@ int8_t cameraRotation = 0;
 
 int main(int argc, char **argv) {
     initHW();
-    enterState(kPlayGame);
-   // titleScreen();
+    enterState(kMainMenu);
 
   do {
-      repaintCallback();
-      tickCallback(kCommandNone, 1);
+      menuTick(10);
+      graphicsFlush();
   } while (isRunning);
 
     unloadStateCallback(1);
