@@ -182,7 +182,6 @@ void logDelegate(const char *mesg) {
 void Crawler_initStateCallback(int32_t tag_unused) {
     enteredFrom = 0;
     cameraRotation = 0;
-    init();
     initStation();
     focusedItem = getPlayerItems();
     setErrorHandlerCallback(onError);

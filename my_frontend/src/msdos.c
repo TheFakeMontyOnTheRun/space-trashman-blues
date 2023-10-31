@@ -285,7 +285,7 @@ void clearGraphics(void) {
     memset(imageBuffer, 0, 128 * 32);
 }
 
-void init(void) {
+void initHW(void) {
     initKeyboardUI();
     updateDirection = 1;
     asm volatile("movb $0x0, %%ah\n\t"

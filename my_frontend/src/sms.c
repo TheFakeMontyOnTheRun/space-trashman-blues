@@ -26,7 +26,9 @@ extern uint8_t cursorPosition;
 
 enum ESoundDriver soundDriver = kNoSound;
 
-void init(void) {
+uint8_t needs3dRefresh;
+
+void initHW(void) {
     initGamepadUI();
     initTMS9918();
     initSN76489();

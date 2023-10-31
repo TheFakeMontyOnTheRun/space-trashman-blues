@@ -23,7 +23,7 @@ enum ESoundDriver soundDriver = kNoSound;
 uint16_t heap = 0;
 
 
-void init(void) {
+void initHW(void) {
     initTMS9918();
     initAY38910();
     initKeyboardUI();

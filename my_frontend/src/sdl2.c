@@ -278,7 +278,7 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_
     }
 }
 
-void init(void) {
+void initHW(void) {
     initKeyboardUI();
     updateDirection = 1;
 

@@ -40,8 +40,7 @@ int8_t min(int8_t x1, int8_t x2) {
 
 /* all those refactors are due to a SDCC bug with very long functions */
 void renderScene(void) {
-    uint8_t x;
-    int8_t *stencilPtr;
+
     switch (cameraRotation) {
         case DIRECTION_N:
             renderCameraNorth();
