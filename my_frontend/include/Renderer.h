@@ -87,7 +87,7 @@ void HUD_initialPaint(void);
 
 void HUD_refresh(void);
 
-void init(void);
+void initHW(void);
 
 void interactWithItemInRoom(void);
 

@@ -40,7 +40,7 @@ int getch(void);
 uint16_t lineStart[128];
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 
-void init(void) {
+void initHW(void) {
     initAY38910();
     initKeyboardUI();
     updateDirection = 1;
