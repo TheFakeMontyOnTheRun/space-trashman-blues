@@ -44,8 +44,7 @@ void loadMesh(struct Mesh *mesh, char *filename) {
 
     for (c = 0; c < uvCoordsCount; ++c) {
         uint8_t val = (*(bufferHead++));
-        val = (val * 32) / 256;
-        *(uvCoord++) = val;
+        *(uvCoord++) = val / 2;
     }
 
     for (c = 0; c < coordsCount; ++c) {
