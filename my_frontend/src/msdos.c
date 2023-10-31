@@ -298,7 +298,7 @@ void initHW(void) {
 }
 
 void clearScreen(void) {
-    init();
+    initHW();
 }
 
 void handleSystemEvents(void) {}
