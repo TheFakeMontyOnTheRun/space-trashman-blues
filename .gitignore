@@ -183,3 +183,13 @@ core/doxysite
 monty.mode1
 monty.pbxuser
 my_frontend/Xcode2/build
+tools/wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
+tools/wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT.jar
+tools/wobj-compiler/target/classes/pt/b13h/wavefrontcompiler/CompilerApp$1.class
+tools/wobj-compiler/target/classes/pt/b13h/wavefrontcompiler/CompilerApp.class
+tools/wobj-compiler/target/libs/gameutils-1.0-SNAPSHOT.jar
+tools/wobj-compiler/target/libs/liboldfart-1.0-SNAPSHOT.jar
+tools/wobj-compiler/target/libs/libstrip-1.0-SNAPSHOT.jar
+tools/wobj-compiler/target/maven-archiver/pom.properties
+tools/wobj-compiler/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+tools/wobj-compiler/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst

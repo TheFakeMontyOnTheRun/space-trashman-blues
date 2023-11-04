@@ -1,21 +1,20 @@
 .DEFAULT_GOAL := default
 
-CRUNCHER=wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
 PACKAGER=packer
 
-$(CRUNCHER): 
-	mvn -q -f wobj-compiler/pom.xml clean compile package install
-	mkdir -p wobj-compiler/dist
-	cp wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar wobj-compiler/dist 
+CRUNCHER=../../tools/wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
+
+$(CRUNCHER):
+	mvn -q -f ../../tools/wobj-compiler/pom.xml clean compile package install
 
 $(PACKAGER):
 	rm -f $(PACKAGER)
 	$(CXX) -std=c++14 -o$(PACKAGER) packer.cpp
 
-models:
-	ls src/*.obj  | xargs java -jar wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
+models: $(CRUNCHER)
+	ls src/*.obj  | xargs java -jar ../../tools/wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
 
-data:	$(PACKAGER) $(CRUNCHER)
+data:	$(PACKAGER)
 	#python3 ./check_textures.py
 	rm -f ./base.pfs
 	ls assets/*.*  | xargs ./packer
