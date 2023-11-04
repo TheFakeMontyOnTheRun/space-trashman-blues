@@ -47,6 +47,7 @@ src = ../common/src/MainMenu.c \
                   		../common/src/PCMAudio.c \
                   		../core/src/Derelict.c \
                   		../core/src/Core.c \
+                  		../common/src/HackingMinigameRules.o \
                   		../core/src/Parser.c
 
 all: derelict64.z64

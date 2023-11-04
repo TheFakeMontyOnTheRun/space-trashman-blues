@@ -100,6 +100,7 @@ CFILES   := ../../common/src/MainMenu.c \
                               		../../common/src/PCMAudio.c \
                               		../../core/src/Derelict.c \
                               		../../core/src/Core.c \
+                              		../common/src/HackingMinigameRules.o \
                               		../../core/src/Parser.c
 CPPFILES	:=
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))

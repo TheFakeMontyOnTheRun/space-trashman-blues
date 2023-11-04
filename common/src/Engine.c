@@ -29,15 +29,15 @@ UnloadStateCallback unloadStateCallback = NULL;
 
 enum EGameMenuState currentGameMenuState = kResumeCurrentState;
 enum EGameMenuState menuStateToReturn = kResumeCurrentState;
-int cursorPosition = 0;
+int8_t cursorPosition = 0;
 enum EGameMenuState nextNavigationSelection = kResumeCurrentState;
 long timeUntilNextState = MENU_ITEM_TIME_TO_BECOME_ACTIVE_MS;
 enum EPresentationState currentPresentationState;
 size_t biggestOption;
-int isRunning = TRUE;
+uint8_t isRunning = TRUE;
 const char *mainText = NULL;
-int enable3DRendering = TRUE;
-int needsToRedrawHUD = 1;
+uint8_t enable3DRendering = TRUE;
+uint8_t needsToRedrawHUD = 1;
 
 void enterState(enum EGameMenuState newState) {
 

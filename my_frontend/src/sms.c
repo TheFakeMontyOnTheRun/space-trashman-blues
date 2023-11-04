@@ -29,7 +29,7 @@ enum ESoundDriver soundDriver = kNoSound;
 void initHW(void) {
     initGamepadUI();
     initTMS9918();
-    initSN76489();
+//    initSN76489();
     cooldown = COOLDOWN_MAX;
     updateDirection = 1;
     needs3dRefresh = 1;

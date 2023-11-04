@@ -40,6 +40,7 @@ EE_OBJS= menu/src/Main.o \
         base3d/src/ee/Renderer_Rasterization.o \
         base3d/src/ee/Renderer_Tesselation.o \
         base3d/src/ee/Renderer.o \
+        ../common/src/HackingMinigameRules.o \
         base3d/src/ee/EmotionEngineRenderer.o
 
 all: $(EE_BIN)

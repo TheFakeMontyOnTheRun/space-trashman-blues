@@ -47,6 +47,7 @@ MENU_OBJ=../common/src/MainMenu.o \
 	../common/src/CreditsScreen.o \
 	../core/src/Derelict.o \
 	../core/src/Core.o \
+	../common/src/HackingMinigameRules.o \
 	../core/src/Parser.o
 
 

@@ -39,6 +39,7 @@ MENU_OBJ= menu/src/Main.o \
 	  ../common/src/c2p1x1_8_c5_bm.o \
 	  ../common/src/MusicAGA.o \
 	  ../common/src/PCMAudio.o \
+	  ../common/src/HackingMinigameRules.o \
 	  base3d/src/AmigaVersion/AmigaRenderer.o
 
 $(MENU_TARGET):	$(MENU_OBJ)

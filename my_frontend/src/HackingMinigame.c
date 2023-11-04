@@ -13,8 +13,8 @@
 #include "Derelict.h"
 #include "Renderer.h"
 #include "HackingMinigame.h"
+#include "HackingMinigameRules.h"
 
-extern int accessGrantedToSafe;
 extern int cursorPosition;
 
 char *functionNames[5] = {
@@ -25,30 +25,19 @@ char *functionNames[5] = {
         "LoadDBReg"
 };
 
-uint8_t holdingDisk = 3;
-uint8_t pins[3][5];
-uint8_t pinTop[3];
-
 void HackingScreen_initStateCallback(void) {
     cursorPosition = 1;
-    memset(&pins[0][0], 0xFF, sizeof(pins));
+    needs3dRefresh = 0;
 
-    pins[0][0] = 4;
-    pins[0][1] = 2;
-    pins[0][2] = 1;
-    pins[0][3] = 0;
-
-    pinTop[0] = 4;
-    pinTop[1] = 0;
-    pinTop[2] = 0;
-    holdingDisk = 3;
+    initHackingMinigame();
 }
 
 void HackingScreen_repaintCallback(void) {
     uint8_t pin;
-	int c;
+	uint8_t c;
+    uint8_t holdingDisk;
 
-    drawWindow(1, 1, 40, 15, "Stack trace:", 2);
+    writeStr(1, 1, "Stack trace:");
 
     writeStr((12 * 0), 11, cursorPosition == 0 ? "[CPU0]" : " CPU0 ");
     writeStr((12 * 1), 11, cursorPosition == 1 ? "[CPU1]" : " CPU1 ");
@@ -61,15 +50,11 @@ void HackingScreen_repaintCallback(void) {
     for (pin = 0; pin < 3; ++pin) {
         uint8_t disk;
 
-        if (pins[pin][4] == 0) {
-            accessGrantedToSafe = TRUE;
-        }
-
         for (disk = 0; disk < 5; ++disk) {
 
-            uint8_t diskIndex = pins[pin][disk];
+            uint8_t diskIndex = getPositionForPin(pin, disk);
 
-            char *funcName = (disk >= pinTop[pin]) ? NULL : functionNames[diskIndex];
+            char *funcName = (disk >= getDisksForPin(pin)) ? NULL : functionNames[diskIndex];
 
             if (pin != 0) {
                 writeStr(10 * (pin), 4 + (4 - disk), "I");
@@ -83,6 +68,8 @@ void HackingScreen_repaintCallback(void) {
 
     writeStr(1, 2, "Pointer:");
 
+    holdingDisk = getHoldingDisk();
+
     if (holdingDisk != 0xFF) {
         writeStr(19, 2, functionNames[holdingDisk]);
     } else {
@@ -90,17 +77,19 @@ void HackingScreen_repaintCallback(void) {
     }
 }
 
-void HackingScreen_initialPaintCallback(void) {}
+void HackingScreen_initialPaintCallback(void) {
 
-void HackingScreen_unloadStateCallback(int32_t newState) {}
+}
+
+void HackingScreen_unloadStateCallback(int32_t newState) {
+
+}
 
 enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long data) {
-    uint8_t pin;
+    uint8_t holdingDisk = getHoldingDisk();
 
-    for (pin = 0; pin < 3; ++pin) {
-        if (pins[pin][4] == 0) {
-            accessGrantedToSafe = TRUE;
-        }
+    if (isHackingMinigameCompleted()) {
+        grantAccessToSafe();
     }
 
     switch (cmd) {
@@ -119,18 +108,11 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long data) {
         case 's':
             return -1;
         case 'w':
+            clearScreen();
             if (holdingDisk == 0xFF) {
-                if (pinTop[cursorPosition] > 0) {
-                    pinTop[cursorPosition]--;
-                    holdingDisk = pins[cursorPosition][pinTop[cursorPosition]];
-                }
+                pickDisk(cursorPosition);
             } else {
-
-                if (pinTop[cursorPosition] == 0 || holdingDisk < pins[cursorPosition][pinTop[cursorPosition] - 1]) {
-                    pins[cursorPosition][pinTop[cursorPosition]] = holdingDisk;
-                    pinTop[cursorPosition]++;
-                    holdingDisk = 0xFF;
-                }
+                dropDisk(cursorPosition);
             }
             break;
 
@@ -138,29 +120,5 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long data) {
             break;
     }
 
-    return 0;
-}
-
-void runHackingMinigame(void) {
-    uint8_t cmd;
-    uint8_t state = 0;
-    clearScreen();
-    enterTextMode();
-    HackingScreen_initStateCallback();
-    HackingScreen_repaintCallback();
-
-
-    while (state == 0) {
-        cmd = '.';
-
-        while (cmd == '.') {
-            cmd = getInput();
-        }
-
-        state = HackingScreen_tickCallback(cmd, 0);
-        clearTextScreen();
-        HackingScreen_repaintCallback();
-    }
-    exitTextMode();
-    clearScreen();
+    return kResumeCurrentState;
 }
