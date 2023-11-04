@@ -38,7 +38,8 @@ add_executable(derelict8
         src/Credits.c
         src/GameMenu.c
         ../common/src/HackingMinigameRules.c
-        ../common/src/HackingMinigameRules.h)
+        ../common/include/HackingMinigameRules.h
+        )
 
 include(FindPkgConfig)
 
