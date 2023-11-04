@@ -45,6 +45,7 @@ MENU_OBJ= menu/src/Main.o \
           	  ../core/src/Core.o \
           	  ../core/src/Parser.o \
           	  ../common/src/NullMusic.o \
+          	  ../common/src/HackingMinigameRules.o \
          	  base3d/src/SDLVersion/CSDL2Renderer.o
 
 

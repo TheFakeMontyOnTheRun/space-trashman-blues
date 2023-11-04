@@ -24,6 +24,7 @@
 #include "UI.h"
 #include "Core.h"
 #include "Derelict.h"
+#include "HackingMinigameRules.h"
 
 const char *functionNames[6] = {
         "???",
@@ -34,9 +35,6 @@ const char *functionNames[6] = {
         "MainRunLoop"
 };
 
-uint8_t holdingDisk = 3;
-uint8_t pins[3][10];
-uint8_t pinTop[3];
 int wasSmoothMovementPreviouslyEnabled;
 
 void HackingScreen_initStateCallback(int32_t tag) {
@@ -45,18 +43,8 @@ void HackingScreen_initStateCallback(int32_t tag) {
     currentPresentationState = kAppearing;
     timeUntilNextState = 500;
 
-    memFill(&pins[0][0], 0xFF, sizeof(pins));
+    initHackingMinigame();
 
-    pins[0][0] = 5;
-    pins[0][1] = 4;
-    pins[0][2] = 2;
-    pins[0][3] = 1;
-    pins[0][4] = 0;
-
-    pinTop[0] = 5;
-    pinTop[1] = 0;
-    pinTop[2] = 0;
-    holdingDisk = 3;
     wasSmoothMovementPreviouslyEnabled = enableSmoothMovement;
     enableSmoothMovement = FALSE;
 }
@@ -68,6 +56,7 @@ void HackingScreen_repaintCallback(void) {
     uint8_t isSelected;
     int pin;
     int pinPosition = 0;
+    uint8_t holdingDisk;
     drawWindow(1, 1, XRES_FRAMEBUFFER / 8, 15, "Disassembly: CONTROLLER.PRG (stack)");
 
 #ifndef AGS
@@ -96,14 +85,10 @@ void HackingScreen_repaintCallback(void) {
         drawTextAt( 6 + (12), 11, buffer, 128);
 #endif
 
-        if (pins[pin][5] == 0) {
-            grantAccessToSafe();
-        }
-
         for (disk = 0; disk < 6; ++disk) {
 
-            int diskIndex = pins[pin][disk];
-            const char *funcName = (disk >= pinTop[pin]) ? NULL : functionNames[diskIndex];
+            int diskIndex = getPositionForPin(pin, disk);
+            const char *funcName = (disk >= getDisksForPin(pin)) ? NULL : functionNames[diskIndex];
 
             if (isCursorOnThisPin) {
                 isSelected = getPaletteEntry(0xFF999999);
@@ -128,6 +113,8 @@ void HackingScreen_repaintCallback(void) {
     }
 
     drawTextAt(1, 2, "register pointer:", getPaletteEntry(0xFF000000));
+
+    holdingDisk = getHoldingDisk();
 
     if (holdingDisk != 0xFF) {
         drawTextAt(19, 2, functionNames[holdingDisk], getPaletteEntry(0xFF999999));
@@ -167,11 +154,10 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
     if (currentPresentationState == kWaitingForInput) {
 
         int pin;
+        uint8_t holdingDisk = getHoldingDisk();
 
-        for (pin = 0; pin < 3; ++pin) {
-            if (pins[pin][5] == 0) {
-                grantAccessToSafe();
-            }
+        if (isHackingMinigameCompleted()) {
+            grantAccessToSafe();
         }
 
         switch (cmd) {
@@ -192,17 +178,9 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
                 return kBackToGame;
             case kCommandFire1:
                 if (holdingDisk == 0xFF) {
-                    if (pinTop[cursorPosition] > 0) {
-                        pinTop[cursorPosition]--;
-                        holdingDisk = pins[cursorPosition][pinTop[cursorPosition]];
-                    }
+                    pickDisk(cursorPosition);
                 } else {
-
-                    if (pinTop[cursorPosition] == 0 || holdingDisk < pins[cursorPosition][pinTop[cursorPosition] - 1]) {
-                        pins[cursorPosition][pinTop[cursorPosition]] = holdingDisk;
-                        pinTop[cursorPosition]++;
-                        holdingDisk = 0xFF;
-                    }
+                    dropDisk(cursorPosition);
                 }
                 break;
 

@@ -15,6 +15,7 @@ extern int8_t map[32][32];
 #ifdef SUPPORTS_HACKING_MINIGAME
 
 #include "HackingMinigame.h"
+#include "Engine.h"
 
 #endif
 
@@ -51,7 +52,7 @@ void pickItem(void) {
             if (!strcmp(itemToPick->name, "digital-safe")) {
 
 #ifdef SUPPORTS_HACKING_MINIGAME
-                runHackingMinigame();
+                enterState(kHackingGame);
 #else
                 accessGrantedToSafe = TRUE;
 #endif

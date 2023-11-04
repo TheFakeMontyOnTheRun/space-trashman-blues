@@ -40,6 +40,7 @@ OBJS = \
     ../common/src/Engine.o \
     ../common/src/AY-3-8910.o \
     ../common/src/Common.o \
+    ../common/src/HackingMinigameRules.o \
     ../core/src/Core.o \
     ../core/src/Derelict.o
 

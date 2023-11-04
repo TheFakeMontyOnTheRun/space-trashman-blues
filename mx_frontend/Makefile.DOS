@@ -72,6 +72,7 @@ MENU_OBJ= menu/src/Main.o \
 	  ../common/src/Crawler.o \
 	  ../core/src/Derelict.o \
 	  ../core/src/Core.o \
+	  ../common/src/HackingMinigameRules.o \
 	  ../core/src/Parser.o
 
 $(MENU_TARGET):	$(MENU_OBJ)

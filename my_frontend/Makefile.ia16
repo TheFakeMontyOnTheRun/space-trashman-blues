@@ -41,6 +41,7 @@ OBJS = \
     ../core/src/Derelict.o \
     ../common/src/PackedFileReader.o \
     ../common/src/MonotoneSpeaker.o \
+    ../common/src/HackingMinigameRules.o \
     ../common/src/Common.o
 
 TARGET = derelict.com

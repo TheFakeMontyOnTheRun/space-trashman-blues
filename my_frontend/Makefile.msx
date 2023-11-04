@@ -46,6 +46,7 @@ OBJS = \
     ../common/src/Engine.o \
     ../core/src/Core.o \
     ../core/src/Derelict.o \
+    ../common/src/HackingMinigameRules.o \
     ../common/src/Common.o
 
 all: $(TARGET)

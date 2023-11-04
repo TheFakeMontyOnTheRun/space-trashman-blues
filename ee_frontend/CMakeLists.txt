@@ -50,6 +50,7 @@ add_executable(derelict128
 		../common/src/PCMAudio.c
 		../core/src/Derelict.c
 		../core/src/Core.c
+		../common/src/HackingMinigameRules.c
 		../core/src/Parser.c)
 
 

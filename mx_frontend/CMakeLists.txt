@@ -48,6 +48,7 @@ add_executable(derelict32
         ../common/src/UI.c
         ../common/src/HackingScreen.c
         ../common/src/PCMAudio.c
+        ../common/src/HackingMinigameRules.c
         ../core/src/Derelict.c
         ../core/src/Core.c
         ../core/src/Parser.c
