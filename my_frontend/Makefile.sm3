@@ -8,7 +8,13 @@ CFLAGS = \
         --opt-code-speed \
         -lndos \
         -pragma-define:CLIB_EXIT_STACK_SIZE=0 \
-        -pragma-define:CRT_MODEL=2 \
+        -pragma-define:CRT_MODEL=3 \
+        -pragma-define:CRT_ENABLE_CLOSE=0 \
+        -pragma-define:CLIB_STDIO_HEAP_SIZE=0 \
+        -pragma-define:CLIB_DISABLE_MODE0=1 \
+        -pragma-define:CLIB_DISABLE_MODE1=1 \
+        -pragma-define:CLIB_DISABLE_MODE3=1 \
+        -pragma-define:CRT_FONT=0 \
         -vn \
         -Iinclude \
         -I../core/include \
