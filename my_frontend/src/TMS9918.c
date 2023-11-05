@@ -149,12 +149,6 @@ uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
     return NULL;
 }
 
-void enterTextMode(void) {
-}
-
-void exitTextMode(void) {
-}
-
 void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 
     uint8_t len = strlen(text);
@@ -196,7 +190,6 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
         ++ptr;
     }
 }
-
 
 void clearTextScreen(void) {
     int c, d;

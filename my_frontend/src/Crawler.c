@@ -117,6 +117,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
             walkBy(0);
             break;
     }
+
     cameraRotation = getPlayerDirection();
     pos = getPlayerPosition();
 

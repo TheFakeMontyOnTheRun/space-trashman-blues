@@ -8,10 +8,8 @@
 #include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
+#include "UI.h"
 #include "KeyboardUI.h"
-
-#define XRES_TEXT (XRES_FRAMEBUFFER / 8)
-#define YRES_TEXT (YRES_FRAMEBUFFER / 8)
 
 extern struct ObjectNode *focusedItem;
 

@@ -102,7 +102,7 @@ extern InitialPaintCallback initialPaintCallback;
 extern RepaintCallback repaintCallback;
 extern TickCallback tickCallback;
 extern UnloadStateCallback unloadStateCallback;
-extern int isRunning;
+extern uint8_t isRunning;
 extern int cursorPosition;
 extern long timeUntilNextState;
 extern enum EPresentationState currentPresentationState;

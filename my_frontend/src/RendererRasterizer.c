@@ -99,7 +99,6 @@ uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t 
         return 0;
     }
 
-
     if (type == RIGHT_NEAR) {
         z0px = (projections[z0].px);
         z1px = (projections[z1].px);
@@ -318,7 +317,6 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
     return 1;
 }
 
-
 uint8_t drawObjectAt(int8_t x0, int8_t z0) {
 
     int8_t z1;
@@ -484,7 +482,6 @@ uint8_t drawObjectAt(int8_t x0, int8_t z0) {
         }
     }
 
-
     return 1;
 }
 
@@ -523,7 +520,6 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
     if (z1 >= FAR_PLANE_Z) {
         return 0;
     }
-
 
     z0px = (projections[z0].px);
     z1px = (projections[z1].px);
@@ -728,7 +724,6 @@ uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t
             }
         }
     }
-
-
+    
     return 1;
 }

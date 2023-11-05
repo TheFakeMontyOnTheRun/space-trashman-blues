@@ -13,7 +13,9 @@ void GameMenu_initialPaintCallback(void) {}
 
 void GameMenu_repaintCallback(void) {}
 
-enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long data) {}
+enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long data) {
+    return kMainMenu;
+}
 
 void GameMenu_unloadStateCallback(int32_t newState) {}
 

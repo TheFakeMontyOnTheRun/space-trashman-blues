@@ -7,6 +7,7 @@
 #include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
+#include "UI.h"
 #include "GamepadUI.h"
 
 extern struct ObjectNode *focusedItem;

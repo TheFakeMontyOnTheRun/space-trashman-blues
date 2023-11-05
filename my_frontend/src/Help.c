@@ -13,7 +13,9 @@ void HelpScreen_initialPaintCallback(void) {}
 
 void HelpScreen_repaintCallback(void) {}
 
-enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, long data) {}
+enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, long data) {
+    return kMainMenu;
+}
 
 void HelpScreen_unloadStateCallback(int32_t newState) {}
 

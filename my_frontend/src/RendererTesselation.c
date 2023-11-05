@@ -304,5 +304,4 @@ void updateMapItems(void) {
         map[item->position.y][item->position.x] = pattern | 128;
         node = node->next;
     }
-
 }

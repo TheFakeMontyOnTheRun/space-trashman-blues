@@ -63,10 +63,6 @@ void clearTextScreen(void);
 
 void dropItem(void);
 
-void enterTextMode(void);
-
-void exitTextMode(void);
-
 void initMap(void);
 
 void shutdownGraphics(void);
