@@ -13,7 +13,9 @@ void CreditsScreen_initialPaintCallback(void) {}
 
 void CreditsScreen_repaintCallback(void) {}
 
-enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long data) {}
+enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long data) {
+    return kMainMenu;
+}
 
 void CreditsScreen_unloadStateCallback(int32_t newState) {}
 

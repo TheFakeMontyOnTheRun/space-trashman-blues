@@ -19,8 +19,7 @@ void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *titl
 
 void drawGraphic(const uint8_t *graphic);
 
-#ifdef SDLW
-void flushVirtualFramebuffer(void);
-#endif
+#define XRES_TEXT (XRES_FRAMEBUFFER / 8)
+#define YRES_TEXT (YRES_FRAMEBUFFER / 8)
 
 #endif //DERELICT8_MENU_H

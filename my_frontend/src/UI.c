@@ -22,9 +22,8 @@ void drawGraphic(const uint8_t *graphic) {
 
     while (*ptr) {
         int c;
-        const uint8_t npoints = *ptr;
-        const uint8_t colour = *(ptr + 1);
-        ptr += 2;
+        const uint8_t npoints = *ptr++;
+        const uint8_t colour = *ptr++;
         const uint8_t *shape = ptr;
 
         for (c = 0; c < npoints - 1; ++c) {
@@ -44,15 +43,11 @@ void showMessage(const char *message) {
     uint8_t keepGoing = 1;
     clearTextScreen();
     writeStr(1, 17, message);
+
 #ifndef GAMEPAD
     writeStr(1, 22, "Press SPACE button to continue");
 #else
     writeStr(1, 22, "Press start to continue");
-#endif
-
-#ifdef SDLW
-    /* Just to keep the OS happy */
-    flushVirtualFramebuffer();
 #endif
 
     while (keepGoing) {

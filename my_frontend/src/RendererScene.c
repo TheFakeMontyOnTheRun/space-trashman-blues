@@ -93,7 +93,6 @@ void renderCameraWest(void) {
         }
         drawPattern(lastPattern, -(y - cameraZ) + 2, -(lastIndex - cameraZ) + 2, cameraX - x);
 
-
         lastIndex = cameraZ - 1;
         lastPattern = map[lastIndex][x];
 

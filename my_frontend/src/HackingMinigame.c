@@ -25,7 +25,7 @@ char *functionNames[5] = {
         "LoadDBReg"
 };
 
-void HackingScreen_initStateCallback(void) {
+void HackingScreen_initStateCallback(int32_t tag) {
     cursorPosition = 1;
     needs3dRefresh = 0;
 
