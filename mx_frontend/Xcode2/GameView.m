@@ -35,6 +35,8 @@ extern struct Texture* textures;
 @implementation GameView
 
 uint32_t stretchedBuffer[ XRES_FRAMEBUFFER * YRES_FRAMEBUFFER ];
+uint8_t flippedBuffer[XRES_FRAMEBUFFER*YRES_FRAMEBUFFER];
+
 CGColorSpaceRef rgb;
 CGDataProviderRef provider;
 CGImageRef ref;
@@ -147,7 +149,7 @@ void setMultiplier(CGSize size) {
         
         osxview = self;
         
-        initHW();
+        initHW(0, NULL);
         enterState(kMainMenu);
         
         menuTick(50);
@@ -223,80 +225,23 @@ void shutdownHW(void) {
     }
     
     setMultiplier(bounds.size);
-    
-    if ( turnTarget == turnStep ) {
-        uint8_t *pixelPtr = &buffer[0];
-        uint32_t *bufferPtr = &stretchedBuffer[0];
-        for ( y = 0; y < YRES_FRAMEBUFFER; ++y ) {
-            for ( x = 0; x < XRES_FRAMEBUFFER; ++x ) {
-                uint8_t index = *pixelPtr;
-                uint32_t pixel = palette[ index ];
-                *bufferPtr = pixel;
-                ++pixelPtr;
-                ++bufferPtr;
-            }
+	
+	
+	renderPageFlip(&flippedBuffer[0], &framebuffer[0], &previousFrame[0], turnStep, turnTarget, 0);
+    uint8_t *pixelPtr = &flippedBuffer[0];
+    uint32_t *bufferPtr = &stretchedBuffer[0];
+    for ( y = 0; y < YRES_FRAMEBUFFER; ++y ) {
+		for ( x = 0; x < XRES_FRAMEBUFFER; ++x ) {
+			uint8_t index = *pixelPtr;
+            uint32_t pixel = palette[ index ];
+            *bufferPtr = pixel;
+            ++pixelPtr;
+            ++bufferPtr;
         }
-        
-        memcpy( previousFrame, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
-    } else if ( turnStep < turnTarget ) {
-        
-        uint32_t *bufferPtr = &stretchedBuffer[0];
-        for ( y = 0; y < YRES_FRAMEBUFFER; ++y ) {
-            for ( x = 0; x < XRES_FRAMEBUFFER; ++x ) {
-                uint8_t index;
-                
-                if (x < XRES ) {
-                    
-                    if ( x  >= turnStep ) {
-                        index = previousFrame[ (XRES_FRAMEBUFFER * y) - turnStep + x ];
-                    } else {
-                        index = buffer[ (XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
-                    }
-                    
-                } else {
-                    index = buffer[ (XRES_FRAMEBUFFER * y) + x];
-                }
-                
-                uint32_t pixel = palette[ index ];
-                *bufferPtr = pixel;
-                ++bufferPtr;
-            }
-        }
-        
-        turnStep+= 20;
-    } else {
-        
-        uint8_t *pixelPtr = &buffer[0];
-        uint32_t *bufferPtr = &stretchedBuffer[0];
-        for ( y = 0; y < YRES_FRAMEBUFFER; ++y ) {
-            for ( x = 0; x < XRES_FRAMEBUFFER; ++x ) {
-                uint8_t index;
-
-                if (x < XRES ) {
-                    
-                    if ( x  >= turnStep ) {
-                        index = buffer[ (XRES_FRAMEBUFFER * y) - turnStep + x ];
-                    } else {
-                        index = previousFrame[ (XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
-                    }
-                    
-                } else {
-                    index = buffer[ (XRES_FRAMEBUFFER * y) + x];
-                }
-
-
-                uint32_t pixel = palette[ index ];
-                *bufferPtr = pixel;
-                ++pixelPtr;
-                ++bufferPtr;
-            }
-        }
-        
-        turnStep-= 20;
     }
         
-        
-        
+    memcpy( previousFrame, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
+
     /*  MAC_OS_X_VERSION_10_10*/
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= 101000
     CGContextRef context = (CGContextRef)[[NSGraphicsContext currentContext] CGContext];

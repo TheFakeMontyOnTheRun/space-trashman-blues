@@ -85,7 +85,7 @@ void initZMap(void) {
 
 
 void drawBillboardAt(const struct Vec3 center,
-                     struct Texture *texture,
+                     struct Bitmap *bitmap,
                      const FixP_t scale,
                      const int size) {
 
@@ -114,7 +114,7 @@ void drawBillboardAt(const struct Vec3 center,
     if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
         drawMask(ulz0.mX, ulz0.mY, lrz0.mX, lrz0.mY);
     } else {
-        drawFrontWall(ulz0.mX, ulz0.mY, lrz0.mX, lrz0.mY, texture->rotations[0],
+        drawFrontWall(ulz0.mX, ulz0.mY, lrz0.mX, lrz0.mY, bitmap->data,
                       scale, fixToInt(center.mZ), TRUE, size);
     }
 }
@@ -550,7 +550,7 @@ void drawLeftNear(const struct Vec3 center,
     if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
         maskWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY);
     } else {
-        drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture->rotations[0],
+        drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture->rowMajor,
                  textureScale, fixToInt(center.mZ));
     }
 }
@@ -561,9 +561,12 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
     int count = mesh->triangleCount;
     FixP_t *vertexData = mesh->geometry;
     uint8_t colour = mesh->colour;
-
+	struct Vec3 *ptr0;
+    struct Vec3 *ptr1;
+	struct Vec3 *ptr2;
+    int c;	
+    
     if (mesh->texture == NULL || center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-        int c;
         for (c = 0; c < count; ++c) {
             float vx, vy, vz;
 
@@ -571,9 +574,9 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
             vy = fixToFloat(*(vertexData + 3));
             vz = fixToFloat(*(vertexData + 6));
 
-            struct Vec3 *ptr0 = &projectionVertices[0].first;
-            struct Vec3 *ptr1 = &projectionVertices[1].first;
-            struct Vec3 *ptr2 = &projectionVertices[2].first;
+            ptr0 = &projectionVertices[0].first;
+            ptr1 = &projectionVertices[1].first;
+            ptr2 = &projectionVertices[2].first;
 
             ptr0->mX = center.mX + *(vertexData + 0);
             ptr1->mX = center.mX + *(vertexData + 3);
@@ -600,13 +603,12 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
             vertexData += 9;
         }
     } else {
-        int c;
         uint8_t *uvData = mesh->uvCoords;
         for (c = 0; c < count; ++c) {
 
-            struct Vec3 *ptr0 = &projectionVertices[0].first;
-            struct Vec3 *ptr1 = &projectionVertices[1].first;
-            struct Vec3 *ptr2 = &projectionVertices[2].first;
+            ptr0 = &projectionVertices[0].first;
+            ptr1 = &projectionVertices[1].first;
+            ptr2 = &projectionVertices[2].first;
 
             ptr0->mX = center.mX + *(vertexData + 0);
             ptr1->mX = center.mX + *(vertexData + 3);
@@ -710,7 +712,7 @@ void drawRightNear(const struct Vec3 center,
     if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
         maskWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY);
     } else {
-        drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture->rotations[0],
+        drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture->rowMajor,
                  textureScale, fixToInt(center.mZ));
     }
 }

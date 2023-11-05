@@ -31,7 +31,6 @@
 #include "UI.h"
 #include "Mesh.h"
 
-#define WALKING_BIAS (Div(intToFix(1), intToFix(16)))
 #define STANDARD_HEIGHT (Div(intToFix(230), intToFix(100)))
 
 extern const char *thisMissionName;
@@ -216,32 +215,18 @@ void renderRoomTransition() {
         center.mX = intToFix(3);
         drawColumnAt(center, intToFix(3), nativeTextures[1], MASK_RIGHT, 0, 1);
 
-        center.mZ = intToFix(2);
-        center.mX = -intToFix(1);
-        center.mY = intToFix(4) - zCameraOffset;
-        drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
+        center.mY = intToFix(5) - zCameraOffset;
+        center.mX = intToFix(-1);
+        drawColumnAt(center, intToFix(3), nativeTextures[0], MASK_FRONT, 0, 1);
+        center.mX = intToFix(1);
+        drawColumnAt(center, intToFix(3), nativeTextures[0], MASK_FRONT, 0, 1);
+
+
 
         center.mX = intToFix(1);
-        drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
-
         center.mY = intToFix(2) - zCameraOffset;
         center.mZ = intToFix(3);
         drawCeilingAt(center, nativeTextures[0], 0);
-
-        center.mZ = intToFix(2);
-        center.mY = intToFix(3) - zCameraOffset;
-        center.mX = -intToFix(1);
-        drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
-
-        center.mX = intToFix(1);
-        drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
-
-        center.mY = intToFix(6) - zCameraOffset;
-        center.mX = -intToFix(1);
-        drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
-
-        center.mX = intToFix(1);
-        drawBillboardAt(center, &nativeTextures[0]->rotations[0][0], intToFix(1), 32);
 
         center.mX = -intToFix(1);
         center.mY = intToFix(2) - zCameraOffset;
@@ -596,8 +581,7 @@ void render(const long ms) {
                                      ((tileProp->mFloorHeight * 2) - intToFix(tileProp->mFloorRepetitions));
                             drawRightNear(
                                     tmp, intToFix(tileProp->mFloorRepetitions),
-                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex]
-                                            ->rowMajor,
+                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex],
                                     facesMask, TRUE);
 
                             break;
@@ -607,8 +591,7 @@ void render(const long ms) {
                                      ((tileProp->mFloorHeight * 2) - intToFix(tileProp->mFloorRepetitions));
                             drawLeftNear(
                                     tmp, intToFix(tileProp->mFloorRepetitions),
-                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex]
-                                            ->rowMajor, facesMask, TRUE);
+                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex], facesMask, TRUE);
                             break;
 
                         case kCube:
@@ -634,8 +617,7 @@ void render(const long ms) {
                                      ((tileProp->mCeilingHeight * 2) + intToFix(tileProp->mCeilingRepetitions));
                             drawRightNear(
                                     tmp, intToFix(tileProp->mCeilingRepetitions),
-                                    nativeTextures[tileProp->mCeilingRepeatedTextureIndex]
-                                            ->rowMajor,
+                                    nativeTextures[tileProp->mCeilingRepeatedTextureIndex],
                                     facesMask, TRUE);
                             break;
 
@@ -644,8 +626,7 @@ void render(const long ms) {
                                      ((tileProp->mCeilingHeight * 2) + intToFix(tileProp->mCeilingRepetitions));
                             drawLeftNear(
                                     tmp, intToFix(tileProp->mCeilingRepetitions),
-                                    nativeTextures[tileProp->mCeilingRepeatedTextureIndex]
-                                            ->rowMajor,
+                                    nativeTextures[tileProp->mCeilingRepeatedTextureIndex],
                                     facesMask, TRUE);
                             break;
 
@@ -782,7 +763,7 @@ void render(const long ms) {
 
                             drawRightNear(
                                     tmp, (heightDiff + adjust),
-                                    nativeTextures[tileProp->mMainWallTextureIndex]->rowMajor,
+                                    nativeTextures[tileProp->mMainWallTextureIndex],
                                     facesMask, tileProp->mRepeatMainTexture);
                             break;
 
@@ -791,7 +772,7 @@ void render(const long ms) {
 
                             drawLeftNear(
                                     tmp, (heightDiff + adjust),
-                                    nativeTextures[tileProp->mMainWallTextureIndex]->rowMajor,
+                                    nativeTextures[tileProp->mMainWallTextureIndex],
                                     facesMask, tileProp->mRepeatMainTexture);
                             break;
 
@@ -863,7 +844,7 @@ void render(const long ms) {
                         itemSprites[itemsSnapshotElement] = loadBitmap(&buffer[0]);
                     }
 
-                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement]->data, intToFix(1), 32);
+                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], intToFix(1), 32);
                 }
             }
         }

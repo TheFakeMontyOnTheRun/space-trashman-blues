@@ -91,12 +91,8 @@ void enter2D(void);
 
 void enter3D(void);
 
-#ifdef PAGE_FLIP_ANIMATION
-
 void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame, uint8_t *prevFrame, int turnState, int turnTarget,
                     int scale200To240);
-
-#endif
 
 void fill(
         const int x, const int y,
@@ -149,7 +145,7 @@ void drawColumnAt(const struct Vec3 center,
                   const uint8_t repeatedTexture);
 
 void drawBillboardAt(const struct Vec3 center,
-                     struct Texture *texture,
+                     struct Bitmap *bitmap,
                      const FixP_t scale,
                      const int size);
 
