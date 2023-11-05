@@ -7,7 +7,12 @@ CFLAGS = \
         --max-allocs-per-node200000 \
         --opt-code-speed \
         -pragma-define:CLIB_EXIT_STACK_SIZE=0 \
-        -pragma-define:CRT_MODEL=2 \
+        -pragma-define:CRT_MODEL=3 \
+        -pragma-define:CRT_ENABLE_CLOSE=0 \
+        -pragma-define:CLIB_STDIO_HEAP_SIZE=0 \
+        -pragma-define:CRT_FONT=0 \
+        -pragma-define:CLIB_EXIT_STACK_SIZE=0 \
+        -pragma-define:CRT_DISABLELOADER=1 \
         -Iinclude \
         -I../core/include \
         -I../common/include \

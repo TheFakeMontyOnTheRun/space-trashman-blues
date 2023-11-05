@@ -135,19 +135,6 @@ uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
     return ptr;
 }
 
-void refreshJustGraphics(void) {
-    clearGraphics();
-    renderScene();
-    graphicsFlush();
-}
-
-void backToGraphics(void) {
-    clearScreen();
-    HUD_initialPaint();
-    refreshJustGraphics();
-}
-
-
 void clearTextScreen(void) {
   int c, d;
   for (c = 16; c < 24; ++c ) {
@@ -157,14 +144,7 @@ void clearTextScreen(void) {
   }
 }
 
-void enterTextMode(void) {
-}
-
-void exitTextMode(void) {
-}
-
 void handleSystemEvents(void) {}
-
 
 enum ECommand getInput(void) {
     uint8_t input = getch();
@@ -212,21 +192,9 @@ void graphicsFlush(void) {
     }
 
     if (updateDirection) {
+        char direction[8] = {'N', 0, 'E', 0, 'S', 0, 'W', 0};
         updateDirection = 0;
-        switch (getPlayerDirection()) {
-            case 0:
-                writeStrWithLimit(12, 18, "N", 31, 2, 0);
-                break;
-            case 1:
-                writeStrWithLimit(12, 18, "E", 31, 2, 0);
-                break;
-            case 2:
-                writeStrWithLimit(12, 18, "S", 31, 2, 0);
-                break;
-            case 3:
-                writeStrWithLimit(12, 18, "W", 31, 2, 0);
-                break;
-        }
+        writeStrWithLimit(12, 18, &direction[getPlayerDirection() * 2], 31, 2, 0);
     }
 
     memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
@@ -325,7 +293,6 @@ void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) 
         }
     }
 }
-
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
     int dx = abs(x1 - x0);
