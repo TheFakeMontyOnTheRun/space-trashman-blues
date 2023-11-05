@@ -36,31 +36,6 @@ void drawGraphic(const uint8_t *graphic) {
     }
 }
 
-void titleScreen(void) {
-    uint8_t keepGoing = 1;
-    clearScreen();
-
-#ifndef GAMEPAD
-    writeStr(16, 1, "Sub Mare\nImperium:\nDerelict\nby\nDaniel Monteiro\nPress SPACE to\nstart ");
-#else
-    writeStr(16, 1, "Sub Mare\nImperium:\nDerelict\nby\nDaniel Monteiro\nPress Start!");
-#endif
-
-#ifdef SDLW
-    /* Just to keep the OS happy */
-    flushVirtualFramebuffer();
-#endif
-
-
-    while (keepGoing) {
-        enum ECommand key = getInput();
-        if (key != kCommandFire1) {
-            keepGoing = 0;
-        }
-    }
-    clearScreen();
-}
-
 void writeStr(uint8_t _x, uint8_t y, const char *text) {
     writeStrWithLimit(_x, y, text, (XRES_FRAMEBUFFER / 8), 2, 0);
 }
