@@ -60,6 +60,8 @@
 		F1CA76F02610A99300FD1E04 /* fire.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B851725581D380012292B /* fire.wav */; };
 		F1CA76F22610A99900FD1E04 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		F1CA774E2610AFA000FD1E04 /* Derelict-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */; };
+		F1E3500C2AF7B835003A6154 /* HackingMinigameRules.c in Sources */ = {isa = PBXBuildFile; fileRef = F1E3500B2AF7B835003A6154 /* HackingMinigameRules.c */; };
+		F1E350232AF7BA13003A6154 /* Mesh.c in Sources */ = {isa = PBXBuildFile; fileRef = F1E350222AF7BA13003A6154 /* Mesh.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -146,6 +148,10 @@
 		F1D5B5D32531D2BF0094ED78 /* Parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Parser.c; path = ../../core/src/Parser.c; sourceTree = "<group>"; };
 		F1D5B5D62531D2C90094ED78 /* Parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Parser.h; path = ../../core/include/Parser.h; sourceTree = "<group>"; };
 		F1D5B5D72531D2CA0094ED78 /* Derelict.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Derelict.h; path = ../../core/include/Derelict.h; sourceTree = "<group>"; };
+		F1E3500B2AF7B835003A6154 /* HackingMinigameRules.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = HackingMinigameRules.c; path = ../../common/src/HackingMinigameRules.c; sourceTree = SOURCE_ROOT; };
+		F1E350222AF7BA13003A6154 /* Mesh.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Mesh.c; path = ../../common/src/Mesh.c; sourceTree = SOURCE_ROOT; };
+		F1E350242AF7BA27003A6154 /* Mesh.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Mesh.h; path = ../../common/include/Mesh.h; sourceTree = SOURCE_ROOT; };
+		F1E350252AF7BA27003A6154 /* HackingMinigameRules.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = HackingMinigameRules.h; path = ../../common/include/HackingMinigameRules.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -222,9 +228,12 @@
 				F1C623372AA3A90C0026195F /* UI.h */,
 				F1C6232E2AA3A8CD0026195F /* Globals.h */,
 				F1C6232F2AA3A8CD0026195F /* VisibilityStrategy.h */,
+				F1E3500B2AF7B835003A6154 /* HackingMinigameRules.c */,
 				F1C623232AA3A88A0026195F /* Engine.h */,
 				F1C623212AA3A8790026195F /* CActor.h */,
 				F1C623222AA3A8790026195F /* Enums.h */,
+				F1E350242AF7BA27003A6154 /* Mesh.h */,
+				F1E350252AF7BA27003A6154 /* HackingMinigameRules.h */,
 				F1C623052AA3A7F40026195F /* Crawler.c */,
 				F1C623062AA3A7F40026195F /* CreditsScreen.c */,
 				F1C623072AA3A7F40026195F /* Dungeon.c */,
@@ -232,6 +241,7 @@
 				F1C623092AA3A7F40026195F /* Engine.c */,
 				F1C6230A2AA3A7F40026195F /* Events.c */,
 				F1C6230B2AA3A7F40026195F /* GameMenu.c */,
+				F1E350222AF7BA13003A6154 /* Mesh.c */,
 				F1C6230C2AA3A7F40026195F /* Globals.c */,
 				F1C6230D2AA3A7F40026195F /* HackingScreen.c */,
 				F1C6230E2AA3A7F40026195F /* HelpScreen.c */,
@@ -416,6 +426,8 @@
 				F1C6231C2AA3A7F40026195F /* MainMenu.c in Sources */,
 				F1C6231D2AA3A7F40026195F /* UI.c in Sources */,
 				F1C6231E2AA3A7F40026195F /* VisibilityStrategy.c in Sources */,
+				F1E3500C2AF7B835003A6154 /* HackingMinigameRules.c in Sources */,
+				F1E350232AF7BA13003A6154 /* Mesh.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,6 +459,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					CLI_BUILD,
 					INCLUDE_ITEM_DESCRIPTIONS,
+					PAGE_FLIP_ANIMATION,
 				);
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
@@ -458,6 +471,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					CLI_BUILD,
 					INCLUDE_ITEM_DESCRIPTIONS,
+					PAGE_FLIP_ANIMATION,
 				);
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};

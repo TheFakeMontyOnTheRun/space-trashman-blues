@@ -60,6 +60,8 @@
 		F1CA774E2610AFA000FD1E04 /* Derelict-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */; };
 		F1D1CE2A2A3B9E9E009F1F69 /* CTile3DProperties.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D1CE292A3B9E9E009F1F69 /* CTile3DProperties.c */; };
 		F1DE9C4B2951FD9100EC0235 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1DE9C4A2951FD9100EC0235 /* OpenGL.framework */; };
+		F1E350512AF7BB01003A6154 /* HackingMinigameRules.c in Sources */ = {isa = PBXBuildFile; fileRef = F1E3504F2AF7BB01003A6154 /* HackingMinigameRules.c */; };
+		F1E350522AF7BB01003A6154 /* Mesh.c in Sources */ = {isa = PBXBuildFile; fileRef = F1E350502AF7BB01003A6154 /* Mesh.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -145,6 +147,10 @@
 		F1D5B5D62531D2C90094ED78 /* Parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Parser.h; path = ../../core/include/Parser.h; sourceTree = "<group>"; };
 		F1D5B5D72531D2CA0094ED78 /* Derelict.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Derelict.h; path = ../../core/include/Derelict.h; sourceTree = "<group>"; };
 		F1DE9C4A2951FD9100EC0235 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		F1E3504D2AF7BAF1003A6154 /* Mesh.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Mesh.h; path = ../../common/include/Mesh.h; sourceTree = SOURCE_ROOT; };
+		F1E3504E2AF7BAF1003A6154 /* HackingMinigameRules.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = HackingMinigameRules.h; path = ../../common/include/HackingMinigameRules.h; sourceTree = SOURCE_ROOT; };
+		F1E3504F2AF7BB01003A6154 /* HackingMinigameRules.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = HackingMinigameRules.c; path = ../../common/src/HackingMinigameRules.c; sourceTree = SOURCE_ROOT; };
+		F1E350502AF7BB01003A6154 /* Mesh.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Mesh.c; path = ../../common/src/Mesh.c; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,7 +229,11 @@
 				F1C623642AA3A9B00026195F /* EDirection_Utils.c */,
 				F1C623652AA3A9B00026195F /* Engine.c */,
 				F1C623662AA3A9B00026195F /* Events.c */,
+				F1E3504D2AF7BAF1003A6154 /* Mesh.h */,
+				F1E3504E2AF7BAF1003A6154 /* HackingMinigameRules.h */,
 				F1C623672AA3A9B00026195F /* GameMenu.c */,
+				F1E3504F2AF7BB01003A6154 /* HackingMinigameRules.c */,
+				F1E350502AF7BB01003A6154 /* Mesh.c */,
 				F1C623682AA3A9B00026195F /* Globals.c */,
 				F1C623692AA3A9B00026195F /* HackingScreen.c */,
 				F1C6236A2AA3A9B00026195F /* HelpScreen.c */,
@@ -414,6 +424,8 @@
 				F1C623792AA3A9B00026195F /* UI.c in Sources */,
 				F1C6237A2AA3A9B00026195F /* VisibilityStrategy.c in Sources */,
 				F1A132302AA6276B00D2EEFC /* GameWindow.m in Sources */,
+				F1E350512AF7BB01003A6154 /* HackingMinigameRules.c in Sources */,
+				F1E350522AF7BB01003A6154 /* Mesh.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,6 +449,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					CLI_BUILD,
 					INCLUDE_ITEM_DESCRIPTIONS,
+					TILED_BITMAPS,
 				);
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
@@ -448,6 +461,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					CLI_BUILD,
 					INCLUDE_ITEM_DESCRIPTIONS,
+					TILED_BITMAPS,
 				);
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};

@@ -38,7 +38,7 @@ extern struct Vec2i *distances;
 extern uint8_t *collisionMap;
 extern struct Texture* textures;
 
-void initHW(void) {
+void initHW(int argc, char** argv) {
     textBuffer = (char*)calloc(TEXT_BUFFER_SIZE, 1);
     messageLogBuffer = (char*)calloc(256, 1);
     collisionMap = (uint8_t*)calloc(256, 1);
@@ -52,7 +52,7 @@ void initHW(void) {
     initFileReader([path UTF8String]);
     initZMap();
     graphicsInit();
-    setupOPL2();
+    setupOPL2(1);
 }
 
 void shutdownHW(void);
