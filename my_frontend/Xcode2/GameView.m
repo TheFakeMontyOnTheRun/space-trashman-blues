@@ -1,6 +1,6 @@
 //
 //  GameView.m
-//  The Mistral Report
+//  Sub Mare Imperium: Derelict
 //
 //  Created by Daniel Monteiro on 2023-09-04.
 //  Copyright (c) 2018 Daniel Monteiro. All rights reserved.
@@ -25,7 +25,6 @@
 
 
 const char *mainText;
-int isRunning = 1;
 
 long timeUntilNextState;
 enum EPresentationState currentPresentationState;
@@ -69,7 +68,7 @@ void handleSystemEvents(void) {
     
 }
 
-void init(void) {
+void initHW(void) {
     initKeyboardUI();
     updateDirection = 1;
     
@@ -83,7 +82,11 @@ void shutdownGraphics(void) {
 
 - (void) repaintGame:(NSTimer *)timer
 {
-    repaintCallback();
+    
+    menuTick(10);
+    graphicsFlush();
+
+    
     [self setNeedsDisplay: YES ];
 }
 
@@ -125,10 +128,11 @@ void setMultiplier(CGSize size) {
         palette[13] = 0xFFAAFFAA;
         palette[14] = 0xFF0000FF;
         palette[15] = 0xFFAAAAFF;
-
-        enterState(kPlayGame);
         
-        initMap();
+        
+        initHW();
+        enterState(kMainMenu);
+
         
         [self initTimer];
     }

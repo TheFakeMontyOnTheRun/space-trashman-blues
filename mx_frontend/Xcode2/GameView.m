@@ -31,6 +31,7 @@ extern enum EVisibility *visMap;
 extern struct Vec2i *distances;
 extern uint8_t *collisionMap;
 extern struct Texture* textures;
+enum ESoundDriver soundDriver;
 
 @implementation GameView
 
