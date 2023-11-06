@@ -271,27 +271,6 @@ void repaintMapItems(void) {
     }
 }
 
-#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
-
-void startRoomTransitionAnimation(void) {
-    uint8_t x, y;
-
-    for (y = MAP_SIZE_Y; y >= 2; --y) {
-        vLine(y, y, 95 + (MAP_SIZE_Y - y), 1);
-        vLine(95 + (MAP_SIZE_Y - y), y, 95 + (MAP_SIZE_Y - y), 1);
-
-        for (x = y; x < (95 + (MAP_SIZE_Y - y)); ++x) {
-            graphicsPut(x, y);
-            graphicsPut(x, 95 + (MAP_SIZE_Y - y));
-
-            /* door opening */
-            graphicsPut(x, 95 - 3 * (MAP_SIZE_Y - y));
-        }
-    }
-}
-
-#endif
-
 void updateMapItems(void) {
     struct ObjectNode *node;
 

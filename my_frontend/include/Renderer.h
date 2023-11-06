@@ -145,8 +145,6 @@ uint8_t drawSquare(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, uint8_
 
 uint8_t drawObjectAt(int8_t x0, int8_t z0);
 
-void startRoomTransitionAnimation(void);
-
 void repaintMapItems(void);
 
 uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y);

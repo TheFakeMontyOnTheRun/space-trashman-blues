@@ -47,13 +47,39 @@ extern uint8_t playerLocation;
 
 uint8_t needs3dRefresh;
 
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
+uint8_t roomTransitionAnimationStep = 0;
+#endif
+
+
 enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
     uint8_t prevX;
     uint8_t prevZ;
     struct WorldPosition *pos;
     uint8_t previousLocation = playerLocation;
     uint8_t newCell = 0;
-    renderScene();
+
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
+    if (roomTransitionAnimationStep >= 2) {
+        uint8_t y = roomTransitionAnimationStep--;
+        uint8_t x;
+        vLine(y, y, 95 + (MAP_SIZE_Y - y), 1);
+        vLine(95 + (MAP_SIZE_Y - y), y, 95 + (MAP_SIZE_Y - y), 1);
+
+        for (x = y; x < (95 + (MAP_SIZE_Y - y)); ++x) {
+            graphicsPut(x, y);
+            graphicsPut(x, 95 + (MAP_SIZE_Y - y));
+
+            /* door opening */
+            graphicsPut(x, 95 - 3 * (MAP_SIZE_Y - y));
+        }
+
+        return kResumeCurrentState;
+    } else
+#endif
+    {
+        renderScene();
+    }
 
     prevX = cameraX;
     prevZ = cameraZ;
@@ -162,7 +188,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
             newCell = '0';
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
         } else {
-            startRoomTransitionAnimation();
+            roomTransitionAnimationStep = 32;
 #endif
         }
         setPlayerDirection(cameraRotation = (newCell - '0'));

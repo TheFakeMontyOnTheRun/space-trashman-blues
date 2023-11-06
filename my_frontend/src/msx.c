@@ -15,6 +15,10 @@
 
 char getch(void);
 
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
+extern uint8_t roomTransitionAnimationStep;
+#endif
+
 uint8_t updateDirection;
 
 enum ESoundDriver soundDriver = kNoSound;
@@ -32,6 +36,12 @@ void initHW(void) {
 void handleSystemEvents(void) {}
 
 enum ECommand getInput(void) {
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
+    if (roomTransitionAnimationStep >= 1) {
+        return 'p';
+    }
+#endif
+
     uint8_t input = getch();
 
     performAction();
