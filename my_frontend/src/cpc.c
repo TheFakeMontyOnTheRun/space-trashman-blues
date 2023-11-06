@@ -37,16 +37,12 @@ uint8_t updateDirection;
 
 int getch(void);
 
-uint16_t lineStart[128];
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 
 void initHW(void) {
     initAY38910();
     initKeyboardUI();
     updateDirection = 1;
-    for (int y = 0; y < 128; ++y) {
-        lineStart[y] = 0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048);
-    }
 }
 
 void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
@@ -187,7 +183,7 @@ void clearGraphics(void) {
 void graphicsFlush(void) {
 
     for (int y = 0; y < BUFFER_SIZEY; ++y) {
-        uint8_t *line = (unsigned char *) lineStart[y];
+        uint8_t *line = (unsigned char *) 0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048);
         memcpy(line, buffer + (y * BUFFER_SIZEX), BUFFER_SIZEX);
     }
 
