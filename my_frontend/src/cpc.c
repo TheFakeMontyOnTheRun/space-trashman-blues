@@ -6,7 +6,6 @@
 #include <games.h>
 #include <psg.h>
 #include <sound.h>
-#include <conio.h>
 
 #include "Enums.h"
 #include "Core.h"
@@ -17,6 +16,11 @@
 #include "KeyboardUI.h"
 #include "UI.h"
 #include "font.h"
+
+/* Sadly, I can't include conio.h - otherwise, I would get errors when building on OSX */
+int kbhit(void);
+int getch(void);
+
 
 /*  Required since we have our own memory allocator abstraction */
 uint16_t heap = 0;

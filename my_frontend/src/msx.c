@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include <conio.h>
 
 #include "Enums.h"
 #include "Core.h"
@@ -15,6 +14,10 @@
 #include "KeyboardUI.h"
 
 uint8_t updateDirection;
+
+/* Sadly, I can't include conio.h - otherwise, I would get errors when building on OSX */
+int kbhit(void);
+int getch(void);
 
 enum ESoundDriver soundDriver = kNoSound;
 
