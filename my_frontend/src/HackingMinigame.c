@@ -17,7 +17,7 @@
 
 extern int cursorPosition;
 
-char *functionNames[5] = {
+const char *functionNames[5] = {
         "???",
         "writeB",
         "snprintf",
