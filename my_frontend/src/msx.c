@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <conio.h>
 
 #include "Enums.h"
 #include "Core.h"
@@ -12,12 +13,6 @@
 #include "TMS9918.h"
 #include "AY-3-8910.h"
 #include "KeyboardUI.h"
-
-char getch(void);
-
-#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
-extern uint8_t roomTransitionAnimationStep;
-#endif
 
 uint8_t updateDirection;
 
@@ -31,16 +26,16 @@ void initHW(void) {
     initAY38910();
     initKeyboardUI();
     updateDirection = 1;
+    needs3dRefresh = 0;
 }
 
 void handleSystemEvents(void) {}
 
 enum ECommand getInput(void) {
-#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
-    if (roomTransitionAnimationStep >= 1) {
+
+    if (!kbhit()) {
         return 'p';
     }
-#endif
 
     uint8_t input = getch();
 
@@ -66,11 +61,13 @@ enum ECommand getInput(void) {
 }
 
 void graphicsFlush(void) {
-    flush3DBuffer();
+    if (needs3dRefresh) {
+        flush3DBuffer();
 
-    if (updateDirection) {
-        char direction[8] = {'N', 0, 'E', 0, 'S', 0, 'W', 0};
-        updateDirection = 0;
-        writeStrWithLimit(12, 17, &direction[getPlayerDirection() * 2], 31, 2, 0);
+        if (updateDirection) {
+            char direction[8] = {'N', 0, 'E', 0, 'S', 0, 'W', 0};
+            updateDirection = 0;
+            writeStrWithLimit(12, 17, &direction[getPlayerDirection() * 2], 31, 2, 0);
+        }
     }
 }

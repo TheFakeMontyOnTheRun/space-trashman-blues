@@ -6,6 +6,7 @@
 #include <games.h>
 #include <psg.h>
 #include <sound.h>
+#include <conio.h>
 
 #include "Enums.h"
 #include "Core.h"
@@ -26,10 +27,6 @@ extern struct ObjectNode *focusedItem;
 
 extern struct ObjectNode *roomItem;
 
-#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
-extern uint8_t roomTransitionAnimationStep;
-#endif
-
 uint8_t updateDirection;
 
 #define BUFFER_SIZEX 32
@@ -47,6 +44,7 @@ void initHW(void) {
     initAY38910();
     initKeyboardUI();
     updateDirection = 1;
+    needs3dRefresh = 0;
 }
 
 void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
@@ -64,11 +62,11 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_
 
         if (x == limitX) {
             ++y;
-            lineBase += 2048;
+            lineBase = (unsigned char *) 0xC000 + ((((y * 8)) / 8) * 80) + ((((y * 8)) & 7) * 2048);
             x = _x;
         } else if (cha == '\n') {
             ++y;
-            lineBase += 2048;
+            lineBase = (unsigned char *) 0xC000 + ((((y * 8)) / 8) * 80) + ((((y * 8)) & 7) * 2048);
             x = _x;
             ++ptr;
             continue;
@@ -147,12 +145,10 @@ void clearTextScreen(void) {
 void handleSystemEvents(void) {}
 
 enum ECommand getInput(void) {
-#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
-    if (roomTransitionAnimationStep >= 1) {
+
+    if (!kbhit()) {
         return 'p';
     }
-#endif
-
 
     uint8_t input = getch();
 
@@ -192,19 +188,20 @@ void clearGraphics(void) {
 }
 
 void graphicsFlush(void) {
+    if (needs3dRefresh) {
+        for (int y = 0; y < BUFFER_SIZEY; ++y) {
+            uint8_t *line = (unsigned char *) 0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048);
+            memcpy(line, buffer + (y * BUFFER_SIZEX), BUFFER_SIZEX);
+        }
 
-    for (int y = 0; y < BUFFER_SIZEY; ++y) {
-        uint8_t *line = (unsigned char *) 0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048);
-        memcpy(line, buffer + (y * BUFFER_SIZEX), BUFFER_SIZEX);
+        if (updateDirection) {
+            char direction[8] = {'N', 0, 'E', 0, 'S', 0, 'W', 0};
+            updateDirection = 0;
+            writeStrWithLimit(12, 18, &direction[getPlayerDirection() * 2], 31, 2, 0);
+        }
+
+        memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
     }
-
-    if (updateDirection) {
-        char direction[8] = {'N', 0, 'E', 0, 'S', 0, 'W', 0};
-        updateDirection = 0;
-        writeStrWithLimit(12, 18, &direction[getPlayerDirection() * 2], 31, 2, 0);
-    }
-
-    memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {

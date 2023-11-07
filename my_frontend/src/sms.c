@@ -32,7 +32,7 @@ void initHW(void) {
     initSN76489();
     cooldown = COOLDOWN_MAX;
     updateDirection = 1;
-    needs3dRefresh = 1;
+    needs3dRefresh = 0;
 }
 
 void handleSystemEvents(void) {}
