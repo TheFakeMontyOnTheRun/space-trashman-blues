@@ -297,7 +297,9 @@ void graphicsFlush(void) {
     
     flipRenderer();
     clearGraphics();
-    flushVirtualFramebuffer();
+	if (needs3dRefresh) {
+		flushVirtualFramebuffer();
+	}
 }
 
 void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
