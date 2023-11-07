@@ -124,7 +124,7 @@ void handleSystemEvents(void) {
 enum ECommand getInput(void) {
     SDL_Event event;
 
-    mBufferedCommand = '.';
+    mBufferedCommand = 'p';
     while (SDL_PollEvent(&event)) {
 
         if (event.type == SDL_QUIT) {
@@ -217,7 +217,7 @@ enum ECommand getInput(void) {
                     break;
 
                 default:
-                    return '.';
+                    return 'p';
             }
         }
     }
