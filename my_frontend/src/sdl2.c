@@ -332,30 +332,6 @@ void flipRenderer(void) {
     }
 }
 
-void graphicsFlush(void) {
-    if (needs3dRefresh) {
-        if (updateDirection) {
-            updateDirection = 0;
-            switch (getPlayerDirection()) {
-                case 0:
-                    writeStrWithLimit(12, 17, "N", 31, 2, 0);
-                    break;
-                case 1:
-                    writeStrWithLimit(12, 17, "E", 31, 2, 0);
-                    break;
-                case 2:
-                    writeStrWithLimit(12, 17, "S", 31, 2, 0);
-                    break;
-                case 3:
-                    writeStrWithLimit(12, 17, "W", 31, 2, 0);
-                    break;
-            }
-        }
-
-        flipRenderer();
-    }
-    flushVirtualFramebuffer();
-}
 
 void flushVirtualFramebuffer(void) {
     int x, y, r, g, b;
@@ -391,6 +367,32 @@ void flushVirtualFramebuffer(void) {
     }
     SDL_RenderPresent(renderer);
 }
+
+void graphicsFlush(void) {
+    if (needs3dRefresh) {
+        if (updateDirection) {
+            updateDirection = 0;
+            switch (getPlayerDirection()) {
+                case 0:
+                    writeStrWithLimit(12, 17, "N", 31, 2, 0);
+                    break;
+                case 1:
+                    writeStrWithLimit(12, 17, "E", 31, 2, 0);
+                    break;
+                case 2:
+                    writeStrWithLimit(12, 17, "S", 31, 2, 0);
+                    break;
+                case 3:
+                    writeStrWithLimit(12, 17, "W", 31, 2, 0);
+                    break;
+            }
+        }
+
+        flipRenderer();
+    }
+    flushVirtualFramebuffer();
+}
+
 
 void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
     int x, y;
