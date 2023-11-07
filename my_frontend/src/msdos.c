@@ -306,8 +306,7 @@ void handleSystemEvents(void) {}
 enum ECommand getInput(void) {
     unsigned char toReturn = 255;
 
-
-    asm volatile ("movb $0x00, %%ah\n\t"
+    asm volatile ("movb $0x01, %%ah\n\t"
                   "movb $0x00, %%al\n\t"
                   "int $0x16       \n\t"
                   "movb %%al, %0\n\t"
@@ -323,6 +322,10 @@ enum ECommand getInput(void) {
             :
             : "ax"
             );
+
+    if (toReturn == 0) {
+        return 'p';
+    }
 
     if (toReturn == 'q' || toReturn == 'e') {
         updateDirection = 1;

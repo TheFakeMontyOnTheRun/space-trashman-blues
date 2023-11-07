@@ -53,10 +53,11 @@ const uint8_t shapes[] = {
         46, 81,
         0 };
 
-int drawn = 0;
+int drawn;
 
 void MainMenu_initStateCallback(int32_t tag) {
     needs3dRefresh = 0;
+    drawn = 0;
 }
 
 void MainMenu_initialPaintCallback(void) {
@@ -81,7 +82,7 @@ void MainMenu_repaintCallback(void) {
 
 enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long data) {
 
-    if (cmd != '.') {
+    if (cmd != 'p') {
         return kPlayGame;
     }
 
