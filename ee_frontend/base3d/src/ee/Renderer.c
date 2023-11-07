@@ -59,11 +59,7 @@ extern prim_t prim;
 extern color_t color;
 
 
-extern const char *thisMissionName;
-extern int16_t thisMissionNameLen;
 struct Mesh mesh;
-extern int leanX;
-extern int leanY;
 int visibilityCached = FALSE;
 int needsToRedrawVisibleMeshes = TRUE;
 uint8_t texturesUsed = 0;

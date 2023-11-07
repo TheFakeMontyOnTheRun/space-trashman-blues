@@ -56,9 +56,6 @@ static char padBuf[256] __attribute__((aligned(64)));
 static char actAlign[6];
 static int actuators;
 
-extern int leanX;
-extern int leanY;
-
 framebuffer_t frame;
 zbuffer_t zBuffer;
 int context = 0;
