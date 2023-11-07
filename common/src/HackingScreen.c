@@ -26,13 +26,12 @@
 #include "Derelict.h"
 #include "HackingMinigameRules.h"
 
-const char *functionNames[6] = {
+const char *functionNames[5] = {
         "???",
         "writeB",
         "snprintf",
         "hackLogin",
-        "LoadDBFile",
-        "MainRunLoop"
+        "LoadDBReg"
 };
 
 int wasSmoothMovementPreviouslyEnabled;
@@ -85,7 +84,7 @@ void HackingScreen_repaintCallback(void) {
         drawTextAt( 6 + (12), 11, buffer, 128);
 #endif
 
-        for (disk = 0; disk < 6; ++disk) {
+        for (disk = 0; disk < 5; ++disk) {
 
             int diskIndex = getPositionForPin(pin, disk);
             const char *funcName = (disk >= getDisksForPin(pin)) ? NULL : functionNames[diskIndex];
