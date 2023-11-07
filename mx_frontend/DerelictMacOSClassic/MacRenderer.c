@@ -44,6 +44,9 @@ GWorldPtr offscreenBuffer;
 extern enum ECommand mBufferedCommand;
 extern char* filePrefix;
 extern int visibilityCached;
+
+enum ESoundDriver soundDriver;
+
 void soundTick(){}
 
 void playSound(const int) {}
