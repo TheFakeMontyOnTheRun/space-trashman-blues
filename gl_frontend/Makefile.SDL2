@@ -19,6 +19,7 @@ MENU_TARGET=game
 
 MENU_OBJ= menu/src/Main.o \
           	  ../common/src/FixP.o \
+          	  ../common/src/Mesh.o \
           	  ../common/src/Vec.o \
           	  ../common/src/Common.o \
           	  ../common/src/PackedFileReader.o \
