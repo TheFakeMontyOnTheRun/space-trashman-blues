@@ -261,7 +261,7 @@ extern int hasSnapshot;
 extern const int distanceForPenumbra;
 extern int turnTarget;
 extern int turnStep;
-extern uint8_t needsToRedrawHUD;
+extern int needsToRedrawHUD;
 extern struct MapWithCharKey tileProperties;
 extern struct Vec2i cameraPosition;
 extern uint8_t texturesUsed;
@@ -276,7 +276,7 @@ extern FixP_t playerHeightTarget;
 extern FixP_t xCameraOffset;
 extern FixP_t yCameraOffset;
 extern FixP_t zCameraOffset;
-extern uint8_t enable3DRendering;
+extern int enable3DRendering;
 extern uint8_t enableSmoothMovement;
 #ifdef TILED_BITMAPS
 extern struct Bitmap *mapTopLevel[8];

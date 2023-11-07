@@ -47,7 +47,7 @@ extern int leanY;
 NSMutableSet *playingSounds;
 int nextAudioChannel = -1;
 float multiplier = 1.0f;
-extern uint8_t isRunning;
+extern int isRunning;
 NSSound *playerSounds[8];
 enum ESoundDriver soundDriver = kNoSound;
 
