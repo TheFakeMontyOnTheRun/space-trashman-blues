@@ -88,7 +88,7 @@ enum ECommand getInput(void) {
         return 'p';
     }
 
-    return '.';
+    return 'p';
 }
 
 void graphicsFlush(void) {
