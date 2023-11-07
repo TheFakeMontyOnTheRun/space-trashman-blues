@@ -78,7 +78,7 @@ CFILES   := ../../common/src/MainMenu.c \
                               		../menu/src/Main.c \
                               		../../common/src/Engine.c \
                               		../../common/src/UI.c \
-					../../common/src/Mesh.c \
+					                ../../common/src/Mesh.c \
                               		../../common/src/HackingScreen.c \
                               		../base3d/src/nitro/NitroGLRenderer.c \
                               		../GL1Common/LoadBitmapGL1.c \
@@ -100,7 +100,7 @@ CFILES   := ../../common/src/MainMenu.c \
                               		../../common/src/PCMAudio.c \
                               		../../core/src/Derelict.c \
                               		../../core/src/Core.c \
-                              		../common/src/HackingMinigameRules.o \
+                              		../../common/src/HackingMinigameRules.o \
                               		../../core/src/Parser.c
 CPPFILES	:=
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
