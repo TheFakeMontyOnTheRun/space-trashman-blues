@@ -71,7 +71,7 @@
 		F1BD0D30236EF697002329C6 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		F1BD0D31236EF697002329C6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		F1CA76B32610A8BF00FD1E04 /* Derelict.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Derelict.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Derelict-Info.plist"; sourceTree = "<group>"; };
+		F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Derelict-Info.plist"; sourceTree = "<group>"; };
 		F1CD08C62450E41C00D4794D /* base.pfs */ = {isa = PBXFileReference; lastKnownFileType = file; name = base.pfs; path = ../base.pfs; sourceTree = SOURCE_ROOT; };
 		F1D4FFCA2AF8D82800F8A437 /* Engine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Engine.h; path = ../../common/include/Engine.h; sourceTree = "<group>"; };
 		F1D4FFCB2AF8D83600F8A437 /* HackingMinigameRules.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HackingMinigameRules.h; path = ../../common/include/HackingMinigameRules.h; sourceTree = "<group>"; };
@@ -340,7 +340,7 @@
 					DEMBEDDED_DATA,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				SDKROOT = "";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Debug;
 		};
@@ -359,7 +359,7 @@
 					DEMBEDDED_DATA,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				SDKROOT = "";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Release;
 		};
