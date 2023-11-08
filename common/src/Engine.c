@@ -48,7 +48,7 @@ void enterState(enum EGameMenuState newState) {
     }
 
     timeUntilNextState = MENU_ITEM_TIME_TO_BECOME_ACTIVE_MS;
-    currentPresentationState = kAppearing;
+    currentPresentationState = kWaitingForInput;
     cursorPosition = 0;
     nextNavigationSelection = -1;
     

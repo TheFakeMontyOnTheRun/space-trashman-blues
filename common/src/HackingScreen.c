@@ -38,9 +38,8 @@ int wasSmoothMovementPreviouslyEnabled;
 
 void HackingScreen_initStateCallback(int32_t tag) {
 
+    /* The middle pin */
     cursorPosition = 1;
-    currentPresentationState = kAppearing;
-    timeUntilNextState = 500;
 
     initHackingMinigame();
 
@@ -124,68 +123,38 @@ void HackingScreen_repaintCallback(void) {
 
 enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
 
-    timeUntilNextState -= delta;
+    uint8_t holdingDisk = getHoldingDisk();
 
-    if (timeUntilNextState <= 0) {
-
-        switch (currentPresentationState) {
-            case kAppearing:
-                timeUntilNextState = 500;
-                currentPresentationState = kWaitingForInput;
-                break;
-            case kWaitingForInput:
-                break;
-            case kConfirmInputBlink1:
-            case kConfirmInputBlink2:
-            case kConfirmInputBlink3:
-            case kConfirmInputBlink4:
-            case kConfirmInputBlink5:
-            case kConfirmInputBlink6:
-                timeUntilNextState = 250;
-                currentPresentationState =
-                        (enum EPresentationState) ((int) currentPresentationState + 1);
-                break;
-            case kFade:
-                return nextNavigationSelection;
-        }
+    if (isHackingMinigameCompleted()) {
+        grantAccessToSafe();
     }
 
-    if (currentPresentationState == kWaitingForInput) {
+    switch (cmd) {
+        case kCommandLeft:
+            if (cursorPosition > 0) {
+                cursorPosition--;
+            }
+            turnTarget = turnStep;
+            break;
+        case kCommandRight:
+            if (cursorPosition < 2) {
+                cursorPosition++;
+            }
+            turnTarget = turnStep;
+            break;
+        case kCommandBack:
+        case kCommandDown:
+            return kBackToGame;
+        case kCommandFire1:
+            if (holdingDisk == 0xFF) {
+                pickDisk(cursorPosition);
+            } else {
+                dropDisk(cursorPosition);
+            }
+            break;
 
-        int pin;
-        uint8_t holdingDisk = getHoldingDisk();
-
-        if (isHackingMinigameCompleted()) {
-            grantAccessToSafe();
-        }
-
-        switch (cmd) {
-            case kCommandLeft:
-                if (cursorPosition > 0) {
-                    cursorPosition--;
-                }
-                turnTarget = turnStep;
-                break;
-            case kCommandRight:
-                if (cursorPosition < 2) {
-                    cursorPosition++;
-                }
-                turnTarget = turnStep;
-                break;
-            case kCommandBack:
-            case kCommandDown:
-                return kBackToGame;
-            case kCommandFire1:
-                if (holdingDisk == 0xFF) {
-                    pickDisk(cursorPosition);
-                } else {
-                    dropDisk(cursorPosition);
-                }
-                break;
-
-            default:
-                break;
-        }
+        default:
+            break;
     }
 
     return kResumeCurrentState;

@@ -53,7 +53,6 @@ struct Bitmap *logo2Bitmap[15];
 
 void MainMenu_initStateCallback(int32_t tag) {
     int c;
-    cursorPosition = 0;
 
 #ifndef TILED_BITMAPS
     logoBitmap = loadBitmap("title.img");
@@ -71,9 +70,6 @@ void MainMenu_initStateCallback(int32_t tag) {
         logo2Bitmap[c] = loadBitmap(buffer);
     }
 #endif
-
-    currentPresentationState = kAppearing;
-    timeUntilNextState = 500;
 
     biggestOption = 0;
 
@@ -99,27 +95,6 @@ void MainMenu_repaintCallback(void) {
 
     fill(0, 0, (XRES_FRAMEBUFFER), (YRES_FRAMEBUFFER), getPaletteEntry(0xFF6cb1a3), FALSE);
 
-    if (currentPresentationState == kAppearing) {
-        int invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;
-        int movementX =
-                lerpInt(0, (biggestOption * 8), invertedProgression, 256);
-        int movementY = lerpInt(0, optionsHeight, invertedProgression, 256);
-        int sizeX = lerpInt(0, (biggestOption * 8), invertedProgression, 256);
-        int sizeY = lerpInt(0, optionsHeight + 8, invertedProgression, 256);
-
-        if (timeUntilNextState > 256) {
-            return;
-        }
-
-
-        drawRect(XRES_FRAMEBUFFER - movementX - 8 - 24 - ((biggestOption * 8) / 2)
-                 + (sizeX / 2),
-                 YRES_FRAMEBUFFER - movementY - 8 - 16 - 8 - ((optionsHeight + 8) / 2)
-                 + (sizeY / 2),
-                 sizeX, sizeY, getPaletteEntry(0xFF000000));
-        return;
-    }
-
 #ifndef TILED_BITMAPS
 #ifndef AGS
     drawBitmap(0, 0, logoBitmap, 0);
@@ -144,10 +119,7 @@ void MainMenu_repaintCallback(void) {
     for (c = 0; c < kMainMenuOptionsCount; ++c) {
 
         int isCursor = (cursorPosition == c)
-                       && ((currentPresentationState == kConfirmInputBlink1)
-                           || (currentPresentationState == kConfirmInputBlink3)
-                           || (currentPresentationState == kConfirmInputBlink5)
-                           || (currentPresentationState == kWaitingForInput));
+                       && (currentPresentationState == kWaitingForInput);
 
         if (isCursor) {
             fill((uint16_t) (XRES_FRAMEBUFFER - (biggestOption * 8)) - 8 - 24,
@@ -163,61 +135,27 @@ void MainMenu_repaintCallback(void) {
 
 enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
 
-    timeUntilNextState -= delta;
-
-    if (timeUntilNextState <= 0) {
-
-        switch (currentPresentationState) {
-            case kAppearing:
-                timeUntilNextState = 250;
-                currentPresentationState = kWaitingForInput;
-                break;
-            case kWaitingForInput:
-                break;
-            case kConfirmInputBlink1:
-            case kConfirmInputBlink2:
-            case kConfirmInputBlink3:
-            case kConfirmInputBlink4:
-            case kConfirmInputBlink5:
-            case kConfirmInputBlink6:
-                timeUntilNextState = 250;
-                currentPresentationState =
-                        (enum EPresentationState) ((int) currentPresentationState + 1);
-                break;
-            case kFade:
-                return nextNavigationSelection;
-        }
+    switch (cmd) {
+        case kCommandUp:
+            playSound(MENU_SELECTION_CHANGE_SOUND);
+            --cursorPosition;
+            break;
+        case kCommandDown:
+            playSound(MENU_SELECTION_CHANGE_SOUND);
+            ++cursorPosition;
+            break;
+        case kCommandFire1:
+        case kCommandFire2:
+        case kCommandFire3:
+            return MainMenu_nextStateNavigation[cursorPosition];
     }
 
-    if (currentPresentationState == kWaitingForInput) {
+    if (cursorPosition > (kMainMenuOptionsCount - 1)) {
+        cursorPosition = (kMainMenuOptionsCount - 1);
+    }
 
-        switch (cmd) {
-            case kCommandUp:
-                playSound(MENU_SELECTION_CHANGE_SOUND);
-                cursorPosition = cursorPosition - 1;
-
-                if (cursorPosition > (kMainMenuOptionsCount - 1)) {
-                    cursorPosition = (kMainMenuOptionsCount - 1);
-                }
-
-                if (cursorPosition < 0) {
-                    cursorPosition = 0;
-                }
-                break;
-            case kCommandDown:
-                playSound(MENU_SELECTION_CHANGE_SOUND);
-                cursorPosition =
-                        (uint8_t) ((cursorPosition + 1) % kMainMenuOptionsCount);
-                break;
-            case kCommandFire1:
-            case kCommandFire2:
-            case kCommandFire3:
-
-                nextNavigationSelection =
-                        MainMenu_nextStateNavigation[cursorPosition];
-                currentPresentationState = kConfirmInputBlink1;
-                break;
-        }
+    if (cursorPosition < 0) {
+        cursorPosition = 0;
     }
 
     return kResumeCurrentState;

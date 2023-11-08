@@ -48,13 +48,11 @@ void Crawler_initStateCallback(int32_t tag) {
 
     if (tag == kPlayGame) {
         initStation();
-        currentPresentationState = kAppearing;
         timeUntilNextState = kDefaultPresentationStateInterval;
         gameTicks = 0;
         enteredThru = 0;
         memFill(&gameSnapshot, 0, sizeof(struct GameSnapshot));
     } else {
-        currentPresentationState = kWaitingForInput;
         timeUntilNextState = 0;
     }
 
@@ -120,10 +118,7 @@ void Crawler_repaintCallback() {
         for (c = 0; c < AbandonMission_count; ++c) {
 
             int isCursor = (cursorPosition == c)
-                           && ((currentPresentationState == kConfirmInputBlink1)
-                               || (currentPresentationState == kConfirmInputBlink3)
-                               || (currentPresentationState == kConfirmInputBlink5)
-                               || (currentPresentationState == kWaitingForInput));
+                           && ((currentPresentationState == kWaitingForInput));
 
             if (isCursor) {
                 fill(XRES_FRAMEBUFFER - (biggestOption * 8) - 16 - 8 - 8,
@@ -192,97 +187,17 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
 
     if (showPromptToAbandonMission) {
 
-        timeUntilNextState -= delta;
-
-        if (timeUntilNextState <= 0) {
-
-            switch (currentPresentationState) {
-                case kAppearing:
-                    timeUntilNextState = 500;
-                    currentPresentationState = kWaitingForInput;
-                    break;
-                case kWaitingForInput:
-                    break;
-                case kRoomTransitioning:
-                    break;
-                case kConfirmInputBlink1:
-                case kConfirmInputBlink2:
-                case kConfirmInputBlink3:
-                case kConfirmInputBlink4:
-                case kConfirmInputBlink5:
-                case kConfirmInputBlink6:
-                    timeUntilNextState = 250;
-                    currentPresentationState =
-                            (enum EPresentationState) (((int) currentPresentationState) + 1);
-                    break;
-                case kFade:
-                    return nextNavigationSelection;
-            }
-        }
-
-        if (currentPresentationState == kWaitingForInput) {
-
-            switch (cmd) {
-                case kCommandBack:
-                    return kMainMenu;
-                case kCommandUp:
-                    playSound(MENU_SELECTION_CHANGE_SOUND);
-                    cursorPosition = (cursorPosition - 1);
-
-                    if (cursorPosition >= AbandonMission_count) {
-                        cursorPosition = AbandonMission_count - 1;
-                    }
-
-                    if (cursorPosition < 0) {
-                        cursorPosition = 0;
-                    }
-
-                    break;
-                case kCommandDown:
-                    playSound(MENU_SELECTION_CHANGE_SOUND);
-                    cursorPosition =
-                            (uint8_t) ((cursorPosition + 1) % AbandonMission_count);
-
-                    break;
-                case kCommandFire1:
-                case kCommandFire2:
-                case kCommandFire3:
-
-                    if (cursorPosition == 0) {
-                        showPromptToAbandonMission = FALSE;
-                        needsToRedrawVisibleMeshes = TRUE;
-                        currentPresentationState = kAppearing;
-                        return kResumeCurrentState;
-                    }
-                    timeUntilNextState = 0;
-                    nextNavigationSelection = AbandonMission_navigation[cursorPosition];
-                    currentPresentationState = kConfirmInputBlink1;
-                    break;
-            }
-
-            return kResumeCurrentState;
-        }
-
-
         switch (cmd) {
+            case kCommandBack:
+                return kMainMenu;
             case kCommandUp:
                 playSound(MENU_SELECTION_CHANGE_SOUND);
-                cursorPosition = (cursorPosition - 1);
-
-                if (cursorPosition >= AbandonMission_count) {
-                    cursorPosition = AbandonMission_count - 1;
-                }
+                --cursorPosition;
                 break;
             case kCommandDown:
                 playSound(MENU_SELECTION_CHANGE_SOUND);
-                cursorPosition =
-                        (uint8_t) ((cursorPosition + 1) % AbandonMission_count);
-
+                ++cursorPosition;
                 break;
-            case kCommandBack:
-                showPromptToAbandonMission = TRUE;
-                break;
-
             case kCommandFire1:
             case kCommandFire2:
             case kCommandFire3:
@@ -290,13 +205,18 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
                 if (cursorPosition == 0) {
                     showPromptToAbandonMission = FALSE;
                     needsToRedrawVisibleMeshes = TRUE;
-                    currentPresentationState = kAppearing;
                     return kResumeCurrentState;
                 }
                 timeUntilNextState = 0;
-                nextNavigationSelection = AbandonMission_navigation[cursorPosition];
-                currentPresentationState = kConfirmInputBlink1;
-                break;
+                return AbandonMission_navigation[cursorPosition];
+        }
+
+        if (cursorPosition >= AbandonMission_count) {
+            cursorPosition = AbandonMission_count - 1;
+        }
+
+        if (cursorPosition < 0) {
+            cursorPosition = 0;
         }
 
         return kResumeCurrentState;
@@ -319,10 +239,8 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
 
         returnCode = loopTick(cmd);
 
-
         if (returnCode == kCrawlerGameOver) {
             playerHeightChangeRate = kCameraYSpeedPlayerDeath;
-            currentPresentationState = kFade;
             timeUntilNextState = kDefaultPresentationStateInterval;
         }
 
@@ -332,21 +250,8 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     if (timeUntilNextState <= 0) {
 
         switch (currentPresentationState) {
-            case kAppearing:
-                currentPresentationState = kWaitingForInput;
-                timeUntilNextState = kNonExpiringPresentationState;
-                break;
-            case kFade:
-                return kResumeCurrentState;
             case kWaitingForInput:
                 return kMenuStateUnchanged;
-            case kConfirmInputBlink1:
-            case kConfirmInputBlink2:
-            case kConfirmInputBlink3:
-            case kConfirmInputBlink4:
-            case kConfirmInputBlink5:
-            case kConfirmInputBlink6:
-                break;
         }
 
         needsToRedrawVisibleMeshes = TRUE;

@@ -39,11 +39,6 @@ void HelpScreen_initStateCallback(int32_t tag) {
     struct StaticBuffer textFile = loadBinaryFileFromPath("HelpAGS.txt");
 #endif
     
-    cursorPosition = 0;
-    currentPresentationState = kAppearing;
-    timeUntilNextState = 500;
-    memFill(textBuffer, ' ', TEXT_BUFFER_SIZE);
-
     mainText = textBuffer;
     memFill(textBuffer, 0, TEXT_BUFFER_SIZE);
     memCopyToFrom(textBuffer, (void *) textFile.data, textFile.size);
@@ -63,30 +58,6 @@ void HelpScreen_repaintCallback(void) {
 
     fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), FALSE);
 
-    if (currentPresentationState == kAppearing) {
-
-        int invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;
-        int lerp320 = lerpInt(0, (XRES_FRAMEBUFFER - 1), invertedProgression, 256);
-        int lerpLines = lerpInt(0, (lines + 3) * 8, invertedProgression, 256);
-        int lerpLen8 = lerpInt(0, (len * 8), invertedProgression, 256);
-        int lerpOptionsHeight =
-                lerpInt(0, optionsHeight, invertedProgression, 256);
-
-        if (timeUntilNextState > 256) {
-            return;
-        }
-
-        drawRect((XRES_FRAMEBUFFER / 2) - lerp320 / 2, ((lines + 3) * 8) / 2 - lerpLines / 2,
-                 lerp320, lerpLines, getPaletteEntry(0xFF000000));
-
-        drawRect(XRES_FRAMEBUFFER - (len * 8) - 16 - 16 + (len * 8) / 2 - lerpLen8 / 2,
-                 YRES_FRAMEBUFFER - optionsHeight - 16 - 16 + optionsHeight / 2
-                 - lerpOptionsHeight / 2,
-                 lerpLen8 + 16, lerpOptionsHeight + 16, getPaletteEntry(0xFF000000));
-
-        return;
-    }
-
     if (mainText != NULL) {
         drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, lines + 3, "Help", mainText);
     }
@@ -97,10 +68,7 @@ void HelpScreen_repaintCallback(void) {
     for (c = 0; c < HelpScreen_optionsCount; ++c) {
 
         int isCursor = (cursorPosition == c)
-                       && ((currentPresentationState == kConfirmInputBlink1)
-                           || (currentPresentationState == kConfirmInputBlink3)
-                           || (currentPresentationState == kConfirmInputBlink5)
-                           || (currentPresentationState == kWaitingForInput));
+                       && ((currentPresentationState == kWaitingForInput));
 
         if (isCursor) {
             fill(XRES_FRAMEBUFFER - (len * 8) - 16 - 8 - 8,
@@ -116,63 +84,27 @@ void HelpScreen_repaintCallback(void) {
 }
 
 enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, long delta) {
-
-    timeUntilNextState -= delta;
-
-    if (timeUntilNextState <= 0) {
-
-        switch (currentPresentationState) {
-            case kAppearing:
-                timeUntilNextState = 500;
-                currentPresentationState = kWaitingForInput;
-                break;
-            case kWaitingForInput:
-                break;
-            case kConfirmInputBlink1:
-            case kConfirmInputBlink2:
-            case kConfirmInputBlink3:
-            case kConfirmInputBlink4:
-            case kConfirmInputBlink5:
-            case kConfirmInputBlink6:
-                timeUntilNextState = 250;
-                currentPresentationState =
-                        (enum EPresentationState) ((int) currentPresentationState + 1);
-                break;
-            case kFade:
-                return nextNavigationSelection;
-        }
+    switch (cmd) {
+        case kCommandBack:
+            return kMainMenu;
+        case kCommandUp:
+            --cursorPosition;
+            break;
+        case kCommandDown:
+            ++cursorPosition;
+            break;
+        case kCommandFire1:
+        case kCommandFire2:
+        case kCommandFire3:
+            return HelpScreen_nextStateNavigation[cursorPosition];
     }
 
-    if (currentPresentationState == kWaitingForInput) {
+    if (cursorPosition >= HelpScreen_optionsCount) {
+        cursorPosition = HelpScreen_optionsCount - 1;
+    }
 
-        switch (cmd) {
-            case kCommandBack:
-                return kMainMenu;
-            case kCommandUp:
-                cursorPosition = (cursorPosition - 1);
-
-                if (cursorPosition >= HelpScreen_optionsCount) {
-                    cursorPosition = HelpScreen_optionsCount - 1;
-                }
-
-                if (cursorPosition < 0) {
-                    cursorPosition = 0;
-                }
-
-                break;
-            case kCommandDown:
-                cursorPosition =
-                        (uint8_t) ((cursorPosition + 1) % HelpScreen_optionsCount);
-                break;
-            case kCommandFire1:
-            case kCommandFire2:
-            case kCommandFire3:
-
-                nextNavigationSelection =
-                        HelpScreen_nextStateNavigation[cursorPosition];
-                currentPresentationState = kConfirmInputBlink1;
-                break;
-        }
+    if (cursorPosition < 0) {
+        cursorPosition = 0;
     }
 
     return kResumeCurrentState;

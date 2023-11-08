@@ -238,18 +238,8 @@ void renderRoomTransition() {
         zCameraOffset -= Div(intToFix(1), intToFix(4));
 
         if (zCameraOffset == 0) {
-            int chanceForRandomBattle = getRoom(getPlayerRoom())->chanceOfRandomBattle;
-            int diceRoll;
-
-            /* tmp */
-            diceRoll = 0xFF;
-
-            if (diceRoll <= chanceForRandomBattle) {
-                currentPresentationState = kEnteringRandomBattle;
-            } else {
-                currentPresentationState = kWaitingForInput;
-                needsToRedrawHUD = TRUE;
-            }
+            currentPresentationState = kWaitingForInput;
+            needsToRedrawHUD = TRUE;
         }
     }
 }
