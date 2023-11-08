@@ -40,17 +40,12 @@ struct Bitmap *monty[4];
 
 void CreditsScreen_initStateCallback(int32_t tag) {
 
-    struct StaticBuffer textFile;
-    cursorPosition = 0;
-    currentPresentationState = kAppearing;
-    timeUntilNextState = 500;
-    memFill(textBuffer, ' ', TEXT_BUFFER_SIZE);
-
+    struct StaticBuffer textFile = loadBinaryFileFromPath("Credits.txt");
     mainText = textBuffer;
     memFill(textBuffer, 0, TEXT_BUFFER_SIZE);
-    textFile = loadBinaryFileFromPath("Credits.txt");
     memCopyToFrom(textBuffer, (void *) textFile.data, textFile.size);
     disposeDiskBuffer(textFile);
+
 #ifndef TILED_BITMAPS
     monty = loadBitmap("monty.img");
 #else
@@ -73,35 +68,6 @@ void CreditsScreen_repaintCallback(void) {
     size_t len = max(strlen("Options"), strlen(CreditsScreen_options[0]));
     
     fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), FALSE);
-
-    if (currentPresentationState == kAppearing) {
-
-        int invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;
-        int lerpoSixtyFooooooouuuuuuur =
-                lerpInt(0, 64, invertedProgression, 256);
-        int lerping32 = 32 - (lerpoSixtyFooooooouuuuuuur / 2);
-        int lerp320 = lerpInt(0, XRES_FRAMEBUFFER, invertedProgression, 256);
-        int lerpLines = lerpInt(0, (lines + 3) * 8, invertedProgression, 256);
-        int lerpLen = lerpInt(0, len * 8, invertedProgression, 256);
-        int lerpOptionsHeight =
-                lerpInt(0, optionsHeight, invertedProgression, 256);
-        if (timeUntilNextState > 256) {
-            return;
-        }
-
-        drawRect(160 - lerp320 / 2, (((lines + 3) * 8) / 2) - lerpLines / 2,
-                 lerp320, lerpLines, getPaletteEntry(0xFF000000));
-
-        drawRect(8 + lerping32, (YRES_FRAMEBUFFER - 72) + lerping32, lerpoSixtyFooooooouuuuuuur,
-                 lerpoSixtyFooooooouuuuuuur, getPaletteEntry(0xFF000000));
-
-        drawRect(XRES_FRAMEBUFFER - 16 - (len * 8) - 16 + (len * 8 / 2) - lerpLen / 2,
-                 YRES_FRAMEBUFFER - optionsHeight - 16 - 16 + optionsHeight / 2
-                 - lerpOptionsHeight / 2,
-                 lerpLen + 16, lerpOptionsHeight + 16, getPaletteEntry(0xFF000000));
-
-        return;
-    }
 
     fill(0, (lines + 3) * 8, 320, 8, getPaletteEntry(0xFF000000), TRUE);
     fill(8 + 8, 128 + 8, 64, 64, getPaletteEntry(0xFF000000), TRUE);
@@ -140,10 +106,7 @@ void CreditsScreen_repaintCallback(void) {
     for (c = 0; c < CreditsScreen_optionsCount; ++c) {
 
         int isCursor = (cursorPosition == c)
-                       && ((currentPresentationState == kConfirmInputBlink1)
-                           || (currentPresentationState == kConfirmInputBlink3)
-                           || (currentPresentationState == kConfirmInputBlink5)
-                           || (currentPresentationState == kWaitingForInput));
+                       && ((currentPresentationState == kWaitingForInput));
 
         if (isCursor) {
             fill(XRES_FRAMEBUFFER - (len * 8) - 16 - 8 - 8,
@@ -157,62 +120,27 @@ void CreditsScreen_repaintCallback(void) {
 }
 
 enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
-
-    timeUntilNextState -= delta;
-
-    if (timeUntilNextState <= 0) {
-
-        switch (currentPresentationState) {
-            case kAppearing:
-                timeUntilNextState = 500;
-                currentPresentationState = kWaitingForInput;
-                break;
-            case kWaitingForInput:
-                break;
-            case kConfirmInputBlink1:
-            case kConfirmInputBlink2:
-            case kConfirmInputBlink3:
-            case kConfirmInputBlink4:
-            case kConfirmInputBlink5:
-            case kConfirmInputBlink6:
-                timeUntilNextState = 250;
-                currentPresentationState =
-                        (enum EPresentationState) (((int) currentPresentationState) + 1);
-                break;
-            case kFade:
-                return nextNavigationSelection;
-        }
+    switch (cmd) {
+        case kCommandBack:
+            return kMainMenu;
+        case kCommandUp:
+            --cursorPosition;
+            break;
+        case kCommandDown:
+            ++cursorPosition;
+            break;
+        case kCommandFire1:
+        case kCommandFire2:
+        case kCommandFire3:
+            return CreditsScreen_nextStateNavigation[cursorPosition];
     }
 
-    if (currentPresentationState == kWaitingForInput) {
+    if (cursorPosition >= CreditsScreen_optionsCount) {
+        cursorPosition = CreditsScreen_optionsCount - 1;
+    }
 
-        switch (cmd) {
-            case kCommandBack:
-                return kMainMenu;
-            case kCommandUp:
-                cursorPosition = (cursorPosition - 1);
-
-                if (cursorPosition >= CreditsScreen_optionsCount) {
-                    cursorPosition = CreditsScreen_optionsCount - 1;
-                }
-
-                if (cursorPosition < 0) {
-                    cursorPosition = 0;
-                }
-                break;
-            case kCommandDown:
-                cursorPosition =
-                        (uint8_t) ((cursorPosition + 1) % CreditsScreen_optionsCount);
-                break;
-            case kCommandFire1:
-            case kCommandFire2:
-            case kCommandFire3:
-
-                nextNavigationSelection =
-                        CreditsScreen_nextStateNavigation[cursorPosition];
-                currentPresentationState = kConfirmInputBlink1;
-                break;
-        }
+    if (cursorPosition < 0) {
+        cursorPosition = 0;
     }
 
     return kResumeCurrentState;

@@ -49,17 +49,8 @@ enum EGameMenuState {
 };
 
 enum EPresentationState {
-    kAppearing,
     kWaitingForInput,
-    kConfirmInputBlink1,
-    kConfirmInputBlink2,
-    kConfirmInputBlink3,
-    kConfirmInputBlink4,
-    kConfirmInputBlink5,
-    kConfirmInputBlink6,
-    kFade,
     kRoomTransitioning,
-    kEnteringRandomBattle
 };
 
 enum ESoundDriver {

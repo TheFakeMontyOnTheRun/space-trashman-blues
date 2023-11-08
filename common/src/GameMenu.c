@@ -26,8 +26,11 @@
 #include "Core.h"
 
 const char **GameMenu_options;
+
 const enum EGameMenuState *GameMenu_nextStateNavigation;
+
 const char *GameMenu_StateTitle;
+
 struct Bitmap *featuredBitmap = NULL;
 
 const char *inspectItem_options[1] = {"Back"};
@@ -50,10 +53,7 @@ void GameMenu_initStateCallback(int32_t tag) {
     int c;
 
     GameMenu_StateTitle = NULL;
-    cursorPosition = 0;
-    currentPresentationState = kAppearing;
-    timeUntilNextState = 500;
-    memFill(textBuffer, ' ', TEXT_BUFFER_SIZE);
+    memFill(textBuffer, 0, TEXT_BUFFER_SIZE);
     drawFilter = FALSE;
 
     switch (tag) {
@@ -163,27 +163,6 @@ void GameMenu_repaintCallback(void) {
 
     fill(0, 0, (XRES_FRAMEBUFFER), (YRES_FRAMEBUFFER), getPaletteEntry(0xFF6cb1a3), FALSE);
 
-    if (currentPresentationState == kAppearing) {
-        int invertedProgression = ((256 - (timeUntilNextState)) / 32) * 32;
-        int movementX =
-                lerpInt(0, (biggestOption * 8), invertedProgression, 256);
-        int movementY = lerpInt(0, optionsHeight, invertedProgression, 256);
-        int sizeX = lerpInt(0, (biggestOption * 8), invertedProgression, 256);
-        int sizeY = lerpInt(0, optionsHeight + 8, invertedProgression, 256);
-
-        if (timeUntilNextState > 256) {
-            return;
-        }
-
-        drawRect(XRES_FRAMEBUFFER - movementX - 8 - 24 - ((biggestOption * 8) / 2)
-                 + (sizeX / 2),
-                 YRES_FRAMEBUFFER - movementY - 8 - 16 - 8 - ((optionsHeight + 8) / 2)
-                 + (sizeY / 2),
-                 sizeX, sizeY, getPaletteEntry(0xFF000000));
-
-        return;
-    }
-
     if (drawFilter) {
         fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), TRUE);
     }
@@ -199,10 +178,7 @@ void GameMenu_repaintCallback(void) {
     for (c = 0; c < GameMenu_optionsCount; ++c) {
 
         int isCursor = (cursorPosition == c)
-                       && ((currentPresentationState == kConfirmInputBlink1)
-                           || (currentPresentationState == kConfirmInputBlink3)
-                           || (currentPresentationState == kConfirmInputBlink5)
-                           || (currentPresentationState == kWaitingForInput));
+                       && ((currentPresentationState == kWaitingForInput));
 
         int shouldGreyOut = FALSE;
 
@@ -224,68 +200,31 @@ void GameMenu_repaintCallback(void) {
 
 enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long delta) {
 
-    timeUntilNextState -= delta;
-
-    if (timeUntilNextState <= 0) {
-
-        switch (currentPresentationState) {
-            case kAppearing:
-                timeUntilNextState = 500;
-                currentPresentationState = kWaitingForInput;
-                break;
-            case kWaitingForInput:
-                break;
-            case kConfirmInputBlink1:
-            case kConfirmInputBlink2:
-            case kConfirmInputBlink3:
-            case kConfirmInputBlink4:
-            case kConfirmInputBlink5:
-            case kConfirmInputBlink6:
-                timeUntilNextState = 250;
-                currentPresentationState =
-                        (enum EPresentationState) ((int) currentPresentationState + 1);
-                break;
-            case kFade:
-                return nextNavigationSelection;
-        }
+    switch (cmd) {
+        case kCommandBack:
+            return kMainMenu;
+        case kCommandUp:
+            playSound(MENU_SELECTION_CHANGE_SOUND);
+            --cursorPosition;
+            featuredBitmap = NULL;
+            break;
+        case kCommandDown:
+            playSound(MENU_SELECTION_CHANGE_SOUND);
+            ++cursorPosition;
+            featuredBitmap = NULL;
+            break;
+        case kCommandFire1:
+        case kCommandFire2:
+        case kCommandFire3:
+            return GameMenu_nextStateNavigation[cursorPosition];
     }
 
-    if (currentPresentationState == kWaitingForInput) {
+    if (cursorPosition >= GameMenu_optionsCount) {
+        cursorPosition = GameMenu_optionsCount - 1;
+    }
 
-        switch (cmd) {
-            case kCommandBack:
-                return kMainMenu;
-            case kCommandUp:
-                playSound(MENU_SELECTION_CHANGE_SOUND);
-                cursorPosition = (cursorPosition - 1);
-
-                if (cursorPosition >= GameMenu_optionsCount) {
-                    cursorPosition = GameMenu_optionsCount - 1;
-                }
-
-                if (cursorPosition < 0) {
-                    cursorPosition = 0;
-                }
-
-                featuredBitmap = NULL;
-                break;
-            case kCommandDown:
-                playSound(MENU_SELECTION_CHANGE_SOUND);
-                cursorPosition =
-                        (uint8_t) ((cursorPosition + 1) % GameMenu_optionsCount);
-
-                featuredBitmap = NULL;
-
-                break;
-            case kCommandFire1:
-            case kCommandFire2:
-            case kCommandFire3:
-
-                featuredBitmap = NULL;
-                nextNavigationSelection = GameMenu_nextStateNavigation[cursorPosition];
-                currentPresentationState = kConfirmInputBlink1;
-                break;
-        }
+    if (cursorPosition < 0) {
+        cursorPosition = 0;
     }
 
     return kResumeCurrentState;
