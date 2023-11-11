@@ -33,8 +33,6 @@ int turning = 0;
 int leanX = 0;
 int leanY = 0;
 
-FixP_t kCameraYDeltaPlayerDeath;
-FixP_t kCameraYSpeedPlayerDeath;
 int showPromptToAbandonMission = FALSE;
 int needToRedrawHUD = FALSE;
 
@@ -56,9 +54,6 @@ void Crawler_initStateCallback(int32_t tag) {
         timeUntilNextState = 0;
     }
 
-    kCameraYDeltaPlayerDeath = Div(intToFix(9), intToFix(10));
-
-    kCameraYSpeedPlayerDeath = Div(intToFix(1), intToFix(10));
     showPromptToAbandonMission = FALSE;
 
     biggestOption = strlen(AbandonMission_Title);
@@ -71,7 +66,7 @@ void Crawler_initStateCallback(int32_t tag) {
         }
     }
 
-    playerHeight = -intToFix(1);
+    playerHeight = 0;
     playerHeightChangeRate = 0;
 
     if (tag == kPlayGame) {
