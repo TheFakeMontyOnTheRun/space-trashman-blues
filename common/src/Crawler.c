@@ -83,6 +83,46 @@ void Crawler_initStateCallback(int32_t tag) {
 void Crawler_initialPaintCallback() {
 }
 
+void recenterView() {
+    if (leanX > 0 && !turning) {
+        leanX -= ANGLE_TURN_STEP;
+    }
+
+    if (leanX < 0 && !turning) {
+        leanX += ANGLE_TURN_STEP;
+    }
+
+    if (leanY > 0) {
+        leanY -= ANGLE_TURN_STEP;
+    }
+
+    if (leanY < 0) {
+        leanY += ANGLE_TURN_STEP;
+    }
+
+    if (leanX > 0 && turning) {
+        if (leanX < ANGLE_TURN_THRESHOLD) {
+            leanX += ANGLE_TURN_STEP;
+        } else if (leanX == ANGLE_TURN_THRESHOLD) {
+            visibilityCached = FALSE;
+            mBufferedCommand = kCommandRight;
+            leanX = -ANGLE_TURN_THRESHOLD;
+            turning = 0;
+        }
+    }
+
+    if (leanX < 0 && turning) {
+        if (leanX > -ANGLE_TURN_THRESHOLD) {
+            leanX -= ANGLE_TURN_STEP;
+        } else if (leanX == -ANGLE_TURN_THRESHOLD) {
+            visibilityCached = FALSE;
+            mBufferedCommand = kCommandLeft;
+            leanX = ANGLE_TURN_THRESHOLD;
+            turning = 0;
+        }
+    }
+}
+
 void Crawler_repaintCallback() {
 
     visibilityCached = FALSE;
@@ -140,43 +180,7 @@ void Crawler_repaintCallback() {
             renderTick(30);
 
 #ifndef PLAYSTATION2
-            if (leanX > 0 && !turning) {
-                leanX -= ANGLE_TURN_STEP;
-            }
-
-            if (leanX < 0 && !turning) {
-                leanX += ANGLE_TURN_STEP;
-            }
-
-            if (leanY > 0) {
-                leanY -= ANGLE_TURN_STEP;
-            }
-
-            if (leanY < 0) {
-                leanY += ANGLE_TURN_STEP;
-            }
-
-            if (leanX > 0 && turning) {
-                if (leanX < ANGLE_TURN_THRESHOLD) {
-                    leanX += ANGLE_TURN_STEP;
-                } else if (leanX == ANGLE_TURN_THRESHOLD) {
-                    visibilityCached = FALSE;
-                    mBufferedCommand = kCommandRight;
-                    leanX = -ANGLE_TURN_THRESHOLD;
-                    turning = 0;
-                }
-            }
-
-            if (leanX < 0 && turning) {
-                if (leanX > -ANGLE_TURN_THRESHOLD) {
-                    leanX -= ANGLE_TURN_STEP;
-                } else if (leanX == -ANGLE_TURN_THRESHOLD) {
-                    visibilityCached = FALSE;
-                    mBufferedCommand = kCommandLeft;
-                    leanX = ANGLE_TURN_THRESHOLD;
-                    turning = 0;
-                }
-            }
+            recenterView();
 #endif
         }
     }
