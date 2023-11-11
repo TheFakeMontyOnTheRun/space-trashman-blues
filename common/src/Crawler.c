@@ -25,6 +25,7 @@
 #include "Derelict.h"
 #include "MapWithCharKey.h"
 #include "SoundSystem.h"
+#include "UI.h"
 
 #define ANGLE_TURN_THRESHOLD 40
 #define ANGLE_TURN_STEP 5
@@ -128,27 +129,14 @@ void Crawler_repaintCallback() {
         int optionsHeight = 8 * (AbandonMission_count);
         turnStep = turnTarget;
 
+        /* The dithered filter on top of the 3D rendering*/
         fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), TRUE);
 
-        fill(XRES_FRAMEBUFFER - (biggestOption * 8) - 8 - 16, YRES_FRAMEBUFFER - optionsHeight - 8 - 16,
-             (biggestOption * 8) + 16, optionsHeight + 16, getPaletteEntry(0xFF000000), TRUE);
-
-        fill(XRES_FRAMEBUFFER - (biggestOption * 8) - 16 - 16, YRES_FRAMEBUFFER - optionsHeight - 16 - 16,
-             (biggestOption * 8) + 16, optionsHeight + 16, getPaletteEntry(0xFFFFFFFF), FALSE);
-
-        drawRect(XRES_FRAMEBUFFER - (biggestOption * 8) - 16 - 16,
-                 YRES_FRAMEBUFFER - optionsHeight - 16 - 16, (biggestOption * 8) + 16,
-                 optionsHeight + 16, getPaletteEntry(0xFF000000));
-
-        if (AbandonMission_Title != NULL) {
-
-            fill((40 - biggestOption - 2 - 2) * 8,
-                 ((26 - AbandonMission_count) - 2 - 1 - 2) * 8,
-                 (biggestOption + 2) * 8, 8, getPaletteEntry(0xFF000000), FALSE);
-
-            drawTextAt(40 - biggestOption - 2, (26 - AbandonMission_count) - 4,
-                       AbandonMission_Title, getPaletteEntry(0xFFFFFFFF));
-        }
+        drawWindow((XRES_FRAMEBUFFER / 8) - biggestOption - 3,
+                   (YRES_FRAMEBUFFER / 8) - AbandonMission_count - 3,
+                   (biggestOption) + 2,
+                   AbandonMission_count + 2,
+                   AbandonMission_Title);
 
         for (c = 0; c < AbandonMission_count; ++c) {
 
@@ -232,28 +220,14 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     }
 
     if (currentPresentationState == kWaitingForInput) {
+        /* Not sure why this is here? */
         if (cmd == kCommandFire4) {
             needsToRedrawHUD = TRUE;
         }
 
         returnCode = loopTick(cmd);
 
-        if (returnCode == kCrawlerGameOver) {
-            playerHeightChangeRate = kCameraYSpeedPlayerDeath;
-            timeUntilNextState = kDefaultPresentationStateInterval;
-        }
-
         return kResumeCurrentState;
-    }
-
-    if (timeUntilNextState <= 0) {
-
-        switch (currentPresentationState) {
-            case kWaitingForInput:
-                return kMenuStateUnchanged;
-        }
-
-        needsToRedrawVisibleMeshes = TRUE;
     }
 
     return kMenuStateUnchanged;

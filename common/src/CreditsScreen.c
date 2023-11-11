@@ -58,7 +58,6 @@ void CreditsScreen_initStateCallback(int32_t tag) {
 }
 
 void CreditsScreen_initialPaintCallback(void) {
-    fill(0, 0, (XRES_FRAMEBUFFER - 1), (YRES_FRAMEBUFFER - 1), getPaletteEntry(0xFF6cb1a3), FALSE);
 }
 
 void CreditsScreen_repaintCallback(void) {
@@ -66,25 +65,14 @@ void CreditsScreen_repaintCallback(void) {
     int c;
     int optionsHeight = 8 * (CreditsScreen_optionsCount);
     size_t len = max(strlen("Options"), strlen(CreditsScreen_options[0]));
-    
-    fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), FALSE);
 
-    fill(0, (lines + 3) * 8, 320, 8, getPaletteEntry(0xFF000000), TRUE);
-    fill(8 + 8, 128 + 8, 64, 64, getPaletteEntry(0xFF000000), TRUE);
-    fill(80 + 8, 128 + 8, 64, 64, getPaletteEntry(0xFF000000), TRUE);
-    fill(152 + 8, 128 + 8, 64, 64, getPaletteEntry(0xFF000000), TRUE);
+    /* The background */
+    fill(0, 0, (XRES_FRAMEBUFFER - 1), (YRES_FRAMEBUFFER - 1), getPaletteEntry(0xFF6cb1a3), FALSE);
 
     if (mainText != NULL) {
-
-        fill(0, 0, XRES_FRAMEBUFFER, (lines + 3) * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
-
-        drawRect(0, 0, XRES_FRAMEBUFFER, (lines + 3) * 8, getPaletteEntry(0xFF000000));
-        fill(0, 0, XRES_FRAMEBUFFER, 8, getPaletteEntry(0xFF000000), FALSE);
-        drawTextAt(2, 1, "Credits", getPaletteEntry(0xFFFFFFFF));
-        drawTextAt(1, 3, mainText, getPaletteEntry(0xFF000000));
+        drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 1, lines + 3, "Credits", mainText);
     }
 
-    fill(8, 128, 64, 64, getPaletteEntry(0xFFFFFFFF), FALSE);
 #ifndef TILED_BITMAPS
     drawImageWindow(2, (YRES_FRAMEBUFFER - 72) / 8, monty->width / 8, (monty->height / 8) + 1, "Monty", monty);
 #else
