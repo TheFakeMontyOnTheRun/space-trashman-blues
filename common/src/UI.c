@@ -32,7 +32,10 @@ drawWindow(const int x, const int y, const unsigned int dx, const unsigned int d
     fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
     drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
     fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
-    drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
+
+    if (title != NULL) {
+        drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
+    }
 }
 
 int
