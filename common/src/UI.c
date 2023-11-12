@@ -25,6 +25,47 @@
 #include "CRenderer.h"
 #include "UI.h"
 
+void drawMenuBackground(void) {
+    fill(0, 0, (XRES_FRAMEBUFFER), (YRES_FRAMEBUFFER), getPaletteEntry(0xFF6cb1a3), FALSE);
+}
+
+void
+drawWindowWithOptions(const int x,
+                      const int y,
+                      const unsigned int dx,
+                      const unsigned int dy,
+                      const char *title,
+                      const char **options,
+                      uint8_t optionsCount,
+                      uint8_t selectedOption) {
+    int c;
+
+    drawWindow(x,
+               y,
+               dx,
+               dy,
+               title);
+
+    for (c = 0; c < optionsCount; ++c) {
+
+        int isCursor = (selectedOption == c);
+
+        if (isCursor) {
+            fill(x * 8 - 8,
+                 (y + 2 + c) * 8 - 8,
+                 dx * 8,
+                 8,
+                 getPaletteEntry(0xFF000000),
+                 FALSE);
+        }
+
+        drawTextAt(x + 1,
+                   y + 2 + c,
+                   &options[c][0],
+                   isCursor ? getPaletteEntry(0xFFFFFFFF) : getPaletteEntry(0xFF000000));
+    }
+}
+
 void
 drawWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title) {
 
