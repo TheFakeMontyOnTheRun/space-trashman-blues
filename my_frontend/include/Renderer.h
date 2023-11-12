@@ -93,10 +93,6 @@ void performAction(void);
 
 void pickItem(void);
 
-void pickOrDrop(void);
-
-void printSituation(void);
-
 void renderCameraNorth(void);
 
 void renderCameraEast(void);
@@ -109,11 +105,7 @@ void renderScene(void);
 
 void showMessage(const char *msg);
 
-void startMusic(void);
-
 void shutdownGraphics(void);
-
-void titleScreen(void);
 
 void updateMapItems(void);
 
@@ -134,8 +126,6 @@ void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour);
 void drawMap(void);
 
 void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour);
-
-void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title, uint8_t colour);
 
 uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask);
 

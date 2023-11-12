@@ -5,8 +5,6 @@
 #ifndef DERELICT8_MENU_H
 #define DERELICT8_MENU_H
 
-void titleScreen(void);
-
 void writeStr(uint8_t _x, uint8_t y, const char *text);
 
 void showMessage(const char *message);
