@@ -62,7 +62,6 @@ void CreditsScreen_initialPaintCallback(void) {
 
 void CreditsScreen_repaintCallback(void) {
     int lines = 1;
-    int c;
     int optionsHeight = 8 * (CreditsScreen_optionsCount);
     size_t len = max(strlen("Options"), strlen(CreditsScreen_options[0]));
 
@@ -83,28 +82,10 @@ void CreditsScreen_repaintCallback(void) {
     drawBitmap(40, 160, monty[3], TRUE);
 #endif
 
-
-    drawWindow(
-            (XRES_FRAMEBUFFER / 8) - (int) len - 3,
-            (YRES_FRAMEBUFFER / 8) - 3 - (optionsHeight / 8),
-            len + 2, (optionsHeight / 8) + 2,
-            "Options");
-
-
-    for (c = 0; c < CreditsScreen_optionsCount; ++c) {
-
-        int isCursor = (cursorPosition == c)
-                       && ((currentPresentationState == kWaitingForInput));
-
-        if (isCursor) {
-            fill(XRES_FRAMEBUFFER - (len * 8) - 16 - 8 - 8,
-                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - 8 - 8, (len * 8) + 16, 8,
-                 getPaletteEntry(0xFF000000), FALSE);
-        }
-
-        drawTextAt(40 - len - 2, (26 - CreditsScreen_optionsCount) + c - 2,
-                   &CreditsScreen_options[c][0], isCursor ? getPaletteEntry(0xFFFFFFFF) : getPaletteEntry(0xFF000000));
-    }
+    drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - len - 3,
+                          ((YRES_FRAMEBUFFER / 8) + 1) - (optionsHeight / 8) - 3,
+                          len + 2,
+                          (optionsHeight / 8) + 2, "", &CreditsScreen_options, CreditsScreen_optionsCount, cursorPosition);
 }
 
 enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {

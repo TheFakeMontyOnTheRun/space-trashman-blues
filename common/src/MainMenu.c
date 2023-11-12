@@ -110,27 +110,15 @@ void MainMenu_repaintCallback(void) {
     }
 #endif
 
-    drawWindow(
+    drawWindowWithOptions(
             (XRES_FRAMEBUFFER / 8) - (int) biggestOption - 3,
             (YRES_FRAMEBUFFER / 8) - 3 - (optionsHeight / 8),
-            biggestOption + 2, (optionsHeight / 8) + 2,
-            "Episode 0");
-
-    for (c = 0; c < kMainMenuOptionsCount; ++c) {
-
-        int isCursor = (cursorPosition == c)
-                       && (currentPresentationState == kWaitingForInput);
-
-        if (isCursor) {
-            fill((uint16_t) (XRES_FRAMEBUFFER - (biggestOption * 8)) - 8 - 24,
-                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - (8 * 2),
-                 (biggestOption * 8) + 16, 8, getPaletteEntry(0xFF000000), FALSE);
-        }
-
-        drawTextAt((XRES_FRAMEBUFFER / 8) - biggestOption + 1 - 3,
-                   (((YRES_FRAMEBUFFER / 8) + 1) - kMainMenuOptionsCount) + c - 2,
-                   &MainMenu_options[c][0], isCursor ? getPaletteEntry(0xFF0000FF) : getPaletteEntry(0xFF000000));
-    }
+            biggestOption + 2,
+            (optionsHeight / 8) + 2,
+            "Episode 0",
+            MainMenu_options,
+            kMainMenuOptionsCount,
+            cursorPosition);
 }
 
 enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {

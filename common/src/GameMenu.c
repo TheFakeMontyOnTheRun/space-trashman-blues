@@ -64,7 +64,7 @@ void GameMenu_initStateCallback(int32_t tag) {
             GameMenu_StateTitle = "End session?";
             mainText = textBuffer;
             GameMenu_optionsCount = 2;
-            GameMenu_options = &GameMenu_EndGame_options[0];
+            GameMenu_options = GameMenu_EndGame_options;
             GameMenu_nextStateNavigation = &GameMenu_EndGame_nextStateNavigation[0];
             break;
 
@@ -76,7 +76,7 @@ void GameMenu_initStateCallback(int32_t tag) {
             GameMenu_StateTitle = "Victory";
 
             GameMenu_optionsCount = 1;
-            GameMenu_options = &GameMenu_Story_options[0];
+            GameMenu_options = GameMenu_Story_options;
             GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
             break;
 
@@ -85,7 +85,7 @@ void GameMenu_initStateCallback(int32_t tag) {
             mainText = textBuffer;
             GameMenu_StateTitle = "Victory";
             GameMenu_optionsCount = 1;
-            GameMenu_options = &GameMenu_Story_options[0];
+            GameMenu_options = GameMenu_Story_options;
             GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
             break;
 
@@ -98,7 +98,7 @@ void GameMenu_initStateCallback(int32_t tag) {
             mainText = textBuffer;
             GameMenu_StateTitle = "Game Over";
             GameMenu_optionsCount = 1;
-            GameMenu_options = &GameMenu_Story_options[0];
+            GameMenu_options = GameMenu_Story_options;
             GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
             break;
 
@@ -110,7 +110,7 @@ void GameMenu_initStateCallback(int32_t tag) {
             mainText = textBuffer;
             GameMenu_StateTitle = "Game Over";
             GameMenu_optionsCount = 1;
-            GameMenu_options = &GameMenu_Story_options[0];
+            GameMenu_options = GameMenu_Story_options;
             GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
             break;
 
@@ -119,6 +119,9 @@ void GameMenu_initStateCallback(int32_t tag) {
             int index = 0;
 
             GameMenu_StateTitle = "CyDeck";
+
+            GameMenu_optionsCount = 1;
+            GameMenu_options = inspectItem_options;
 
             head = getPlayerItems();
 
@@ -171,31 +174,14 @@ void GameMenu_repaintCallback(void) {
         drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, (YRES_FRAMEBUFFER / 8) - 5, GameMenu_StateTitle, textBuffer);
     }
 
-    drawWindow((XRES_FRAMEBUFFER / 8) - biggestOption - 3, (YRES_FRAMEBUFFER / 8) - (optionsHeight / 8) - 3,
-               biggestOption + 2, (optionsHeight / 8) + 2,
-               GameMenu_StateTitle);
-
-    for (c = 0; c < GameMenu_optionsCount; ++c) {
-
-        int isCursor = (cursorPosition == c)
-                       && ((currentPresentationState == kWaitingForInput));
-
-        int shouldGreyOut = FALSE;
-
-        if (isCursor) {
-            fill(XRES_FRAMEBUFFER - (biggestOption * 8) - 16 - 8 - 8,
-                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - 8 - 8,
-                 (biggestOption * 8) + 16, 8, getPaletteEntry(0xFF000000), FALSE);
-        }
-
-        drawTextAt(
-                (XRES_FRAMEBUFFER / 8) - biggestOption - 2,
-                (((YRES_FRAMEBUFFER / 8) + 1) - GameMenu_optionsCount) + c - 2,
-                &GameMenu_options[c][0],
-                isCursor ? (shouldGreyOut ? getPaletteEntry(0xFF000099) : getPaletteEntry(0xFF0000FF)) : (shouldGreyOut
-                                                                                                          ? getPaletteEntry(
-                                0xFF555555) : getPaletteEntry(0xFF000000)));
-    }
+    drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - biggestOption - 3,
+                          ((YRES_FRAMEBUFFER / 8) + 1) - (optionsHeight / 8) - 3,
+                          biggestOption + 2,
+                          (optionsHeight / 8) + 2,
+                          GameMenu_StateTitle,
+                          GameMenu_options,
+                          GameMenu_optionsCount,
+                          cursorPosition);
 }
 
 enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long delta) {

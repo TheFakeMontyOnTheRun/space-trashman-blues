@@ -5,6 +5,18 @@
 #ifndef UI_H
 #define UI_H
 
+void drawMenuBackground(void);
+
+void
+drawWindowWithOptions(const int x,
+                      const int y,
+                      const unsigned int dx,
+                      const unsigned int dy,
+                      const char *title,
+                      const char **options,
+                      uint8_t optionsCount,
+                      uint8_t selectedOption);
+
 void drawWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title);
 
 void drawTextWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title,

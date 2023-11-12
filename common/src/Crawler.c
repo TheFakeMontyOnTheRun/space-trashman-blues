@@ -125,35 +125,20 @@ void Crawler_repaintCallback() {
     needsToRedrawVisibleMeshes = TRUE;
 
     if (showPromptToAbandonMission) {
-        int c;
         int optionsHeight = 8 * (AbandonMission_count);
         turnStep = turnTarget;
 
         /* The dithered filter on top of the 3D rendering*/
         fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), TRUE);
 
-        drawWindow((XRES_FRAMEBUFFER / 8) - biggestOption - 3,
-                   (YRES_FRAMEBUFFER / 8) - AbandonMission_count - 3,
-                   (biggestOption) + 2,
-                   AbandonMission_count + 2,
-                   AbandonMission_Title);
-
-        for (c = 0; c < AbandonMission_count; ++c) {
-
-            int isCursor = (cursorPosition == c)
-                           && ((currentPresentationState == kWaitingForInput));
-
-            if (isCursor) {
-                fill(XRES_FRAMEBUFFER - (biggestOption * 8) - 16 - 8 - 8,
-                     (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - 8 - 8,
-                     (biggestOption * 8) + 16, 8, getPaletteEntry(0xFF000000), FALSE);
-            }
-
-            drawTextAt(
-                    40 - biggestOption - 2, (26 - AbandonMission_count) + c - 2,
-                    &AbandonMission_options[c][0],
-                    isCursor ? getPaletteEntry(0xFFAAAAAA) : getPaletteEntry(0xFF000000));
-        }
+        drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - biggestOption - 3,
+                              ((YRES_FRAMEBUFFER / 8) + 1) - (optionsHeight / 8) - 3,
+                              biggestOption + 2,
+                              (optionsHeight / 8) + 2,
+                              AbandonMission_Title,
+                              &AbandonMission_options,
+                              AbandonMission_count,
+                              cursorPosition);
     } else {
 
         if (currentPresentationState == kRoomTransitioning) {

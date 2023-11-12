@@ -33,14 +33,15 @@ const enum EGameMenuState HelpScreen_nextStateNavigation[1] = {
 const int16_t HelpScreen_optionsCount = 1;
 
 void HelpScreen_initStateCallback(int32_t tag) {
+    mainText = textBuffer;
+    memFill(textBuffer, 0, TEXT_BUFFER_SIZE);
+
 #ifndef AGS
     struct StaticBuffer textFile = loadBinaryFileFromPath("Help.txt");
 #else
     struct StaticBuffer textFile = loadBinaryFileFromPath("HelpAGS.txt");
 #endif
-    
-    mainText = textBuffer;
-    memFill(textBuffer, 0, TEXT_BUFFER_SIZE);
+
     memCopyToFrom(textBuffer, (void *) textFile.data, textFile.size);
     disposeDiskBuffer(textFile);
 }
@@ -49,38 +50,26 @@ void HelpScreen_initialPaintCallback(void) {
 }
 
 void HelpScreen_repaintCallback(void) {
-    int c;
     int lines;
-    size_t len = strlen(HelpScreen_options[0]);
     int optionsHeight = 8 * (HelpScreen_optionsCount);
+    size_t len = max(strlen(&HelpScreen_options[0][0]), strlen("Help"));
+    fill(0, 0, XRES_FRAMEBUFFER - 1, YRES_FRAMEBUFFER - 1, getPaletteEntry(0xFF6cb1a3), FALSE);
 
+#ifndef AGS
     lines = 18;
-
-    fill(0, 0, 319, 199, getPaletteEntry(0xFF6cb1a3), FALSE);
+#else
+    lines = 2;
+#endif
 
     if (mainText != NULL) {
         drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, lines + 3, "Help", mainText);
     }
 
-    drawWindow((XRES_FRAMEBUFFER / 8) - len - 3, ((YRES_FRAMEBUFFER / 8) + 1) - (optionsHeight / 8) - 3, len + 2,
-               (optionsHeight / 8) + 2, "");
+    drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - len - 3,
+               ((YRES_FRAMEBUFFER / 8) + 1) - (optionsHeight / 8) - 3,
+               len + 2,
+               (optionsHeight / 8) + 2, "", HelpScreen_options, HelpScreen_optionsCount, cursorPosition);
 
-    for (c = 0; c < HelpScreen_optionsCount; ++c) {
-
-        int isCursor = (cursorPosition == c)
-                       && ((currentPresentationState == kWaitingForInput));
-
-        if (isCursor) {
-            fill(XRES_FRAMEBUFFER - (len * 8) - 16 - 8 - 8,
-                 (YRES_FRAMEBUFFER - optionsHeight) + (c * 8) - (8 * 1),
-                 (len * 8) + 16,
-                 8,
-                 getPaletteEntry(0xFF000000), FALSE);
-        }
-
-        drawTextAt((XRES_FRAMEBUFFER / 8) - len - 2, (((YRES_FRAMEBUFFER / 8) + 1) - HelpScreen_optionsCount) + c - 1,
-                   &HelpScreen_options[c][0], isCursor ? getPaletteEntry(0xFFFFFFFF) : getPaletteEntry(0xFF000000));
-    }
 }
 
 enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, long delta) {
