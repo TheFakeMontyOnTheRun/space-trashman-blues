@@ -205,7 +205,7 @@ void renderRoomTransition() {
     } else {
         xCameraOffset = yCameraOffset = 0;
 
-        fill(0, 0, XRES + 1, YRES, 0, 0);
+        fillRect(0, 0, XRES + 1, YRES, 0, 0);
 
         center.mY = 0;
         center.mZ = intToFix(3);
@@ -844,7 +844,7 @@ void render(const long ms) {
             if (focusItemName != NULL) {
                 size_t len = strlen(focusItemName);
                 int lines = 1 + (len / 27);
-                fill(0, YRES - (8 * lines), XRES, lines * 8, 0, 1);
+                fillRect(0, YRES - (8 * lines), XRES, lines * 8, 0, 1);
                 drawTextAtWithMarginWithFiltering(1, 26 - lines, XRES, focusItemName, 255, ' ');
             }
 
@@ -869,7 +869,7 @@ void render(const long ms) {
                     }
                 }
 
-                fill(0, 0, 216, lines * 8, 0, 1);
+                fillRect(0, 0, 216, lines * 8, 0, 1);
 
                 drawTextAt(1, 1, messageLogBuffer, 255);
             }
@@ -882,7 +882,7 @@ void render(const long ms) {
 
         if (needsToRedrawHUD) {
             needsToRedrawHUD = FALSE;
-            fill(XRES, 0, XRES_FRAMEBUFFER - XRES, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
+            fillRect(XRES, 0, XRES_FRAMEBUFFER - XRES, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
             redrawHUD();
         }
 

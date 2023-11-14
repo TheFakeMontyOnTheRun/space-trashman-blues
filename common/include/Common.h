@@ -31,7 +31,7 @@ struct StaticBuffer {
     size_t size;
 };
 
-void *allocMem(size_t sizeInBytes, enum MemoryType type, int clearAfterAlloc);
+void *allocMem(size_t sizeInBytes, enum MemoryType type, uint8_t clearAfterAlloc);
 
 void disposeMem(void* ptr);
 
@@ -39,7 +39,7 @@ void memCopyToFrom(void* dst, void* src, size_t sizeInBytes);
 
 void memFill(void* dst, uint8_t val, size_t sizeInBytes);
 
-int isBigEndian(void);
+uint8_t isBigEndian(void);
 
 void initFileReader(const char *  dataFilePath);
 

@@ -5,7 +5,7 @@
 #ifndef DERELICT8_MENU_H
 #define DERELICT8_MENU_H
 
-void writeStr(uint8_t _x, uint8_t y, const char *text);
+void drawTextAt(uint8_t _x, uint8_t y, const char *text, uint8_t colour);
 
 void showMessage(const char *message);
 
@@ -15,7 +15,19 @@ void performAction(void);
 
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title, uint8_t colour);
 
-void drawGraphic(const uint8_t *graphic);
+uint8_t getPaletteEntry(uint32_t colour);
+
+void
+drawWindowWithOptions(const uint8_t x,
+                      const uint8_t y,
+                      const uint8_t dx,
+                      const uint8_t dy,
+                      const char *title,
+                      const char **options,
+                      const uint8_t optionsCount,
+                      const uint8_t selectedOption);
+
+        void drawGraphic(const uint8_t *graphic);
 
 #define XRES_TEXT (XRES_FRAMEBUFFER / 8)
 #define YRES_TEXT (YRES_FRAMEBUFFER / 8)

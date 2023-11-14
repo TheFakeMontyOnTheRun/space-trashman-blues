@@ -88,8 +88,8 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_
 
         uint8_t *line = lineBase + 2 * x + 1;
 
-        for (int d = 0; d < 8; ++d) {
-            int e;
+        for (uint8_t d = 0; d < 8; ++d) {
+            uint8_t e;
             uint8_t chunk = *fontTop;
             uint8_t *pixel = line;
 
@@ -138,12 +138,12 @@ uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
 }
 
 void clearTextScreen(void) {
-  int c, d;
-  for (c = 16; c < 24; ++c ) {
-    for (d = 1; d < 32; ++d ){
-      writeStrWithLimit(d, c, " ", 256 / 8, 2, 0);
+    uint8_t c, d;
+    for (c = 16; c < 24; ++c) {
+        for (d = 1; d < 32; ++d) {
+            writeStrWithLimit(d, c, " ", 256 / 8, 2, 0);
+        }
     }
-  }
 }
 
 void handleSystemEvents(void) {}
@@ -193,7 +193,7 @@ void clearGraphics(void) {
 
 void graphicsFlush(void) {
     if (needs3dRefresh) {
-        for (int y = 0; y < BUFFER_SIZEY; ++y) {
+        for (uint8_t y = 0; y < BUFFER_SIZEY; ++y) {
             uint8_t *line = (unsigned char *) 0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048);
             memcpy(line, buffer + (y * BUFFER_SIZEX), BUFFER_SIZEX);
         }
@@ -251,7 +251,7 @@ uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
 
 void graphicsPutPointArray(uint8_t *y128Values) {
     uint8_t *stencilPtr = y128Values;
-    int x;
+    uint16_t x;
 
     for (x = 0; x < XRESMINUSONE;) {
         uint8_t y, prevY, c;
@@ -293,14 +293,17 @@ void graphicsPut(uint8_t x, uint8_t y) {
     buffer[(y * (BUFFER_SIZEX)) + (x / 4)] |= (8 >> (x & 3));
 }
 
-void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
-    int x, y;
+void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, uint8_t stipple) {
+    uint8_t x, y;
     for (y = y0; y < y1; ++y) {
         for (x = x0; x < x1; ++x) {
-            realPut(x, y, colour, NULL);
+            if (!stipple || ((x + y) & 1 )) {
+                realPut(x, y, colour, NULL);
+            }
         }
     }
 }
+
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
     int dx = abs(x1 - x0);

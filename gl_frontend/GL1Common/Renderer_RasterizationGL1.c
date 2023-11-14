@@ -124,7 +124,7 @@ void fillTriangle(int *coords, FramebufferPixelFormat colour) {
 void drawTexturedTriangle(int *coords, UVCoord *uvCoords, struct Texture *texture, int z) {
 }
 
-void fill(
+void fillRect(
         const int _x,
         const int _y,
         const size_t _dx,

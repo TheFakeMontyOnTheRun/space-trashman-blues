@@ -92,34 +92,28 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
             exit(0);
         case '7':
             nextItemInHand();
-            HUD_refresh();
             break;
 
         case '4':
             nextItemInRoom();
-            HUD_refresh();
             break;
 
         case '8':
             useItemInHand();
             updateMapItems();
-            HUD_refresh();
             break;
 
         case '5':
             interactWithItemInRoom();
             updateMapItems();
-            HUD_refresh();
             break;
 
         case '9':
             pickItem();
-            HUD_refresh();
             break;
 
         case '6':
             dropItem();
-            HUD_refresh();
             break;
 #endif
         case 'q':
@@ -143,6 +137,8 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
             walkBy(0);
             break;
     }
+
+    HUD_refresh();
 
     cameraRotation = getPlayerDirection();
     pos = getPlayerPosition();

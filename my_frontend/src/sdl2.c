@@ -45,7 +45,7 @@ void graphicsPutPointArray(uint8_t *y128Values) {
 }
 
 void clearTextScreen(void) {
-    fillRect(0, 129, 256, 192, 0);
+    fillRect(0, 129, 256, 192, 0, 0);
 }
 
 void enterTextMode(void) {
@@ -114,7 +114,7 @@ uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
 }
 
 void clearScreen(void) {
-    fillRect(0, 0, 256, 192, 0);
+    fillRect(0, 0, 256, 192, 0, 0);
 }
 
 void handleSystemEvents(void) {
@@ -137,16 +137,15 @@ enum ECommand getInput(void) {
             switch (event.key.keysym.sym) {
                 case SDLK_RETURN:
                 case SDLK_z:
-                    mBufferedCommand = 'a';
+                    mBufferedCommand = kCommandFire1;
                     break;
 
                 case SDLK_ESCAPE:
-                case SDLK_q:
-                    mBufferedCommand = 'l';
+                    mBufferedCommand = kCommandBack;
                     break;
 
-                case SDLK_SPACE:
-                    mBufferedCommand = ' ';
+                case SDLK_q:
+                    mBufferedCommand = kCommandQuit;
                     break;
 
                 case SDLK_KP_7:
@@ -183,9 +182,11 @@ enum ECommand getInput(void) {
                 case SDLK_s:
                     clearTextScreen();
                     break;
-                case SDLK_d:
+                case SDLK_x:
+                    mBufferedCommand = kCommandFire2;
                     break;
                 case SDLK_v:
+                    mBufferedCommand = kCommandFire4;
                     break;
                 case SDLK_b:
                     break;
@@ -193,31 +194,29 @@ enum ECommand getInput(void) {
                     break;
                 case SDLK_k:
                     break;
-                case SDLK_x:
-                    mBufferedCommand = 'd';
-                    break;
                 case SDLK_c:
+                    mBufferedCommand = kCommandFire3;
                     break;
                 case SDLK_e:
                     break;
 
                 case SDLK_LEFT:
                     updateDirection = 1;
-                    mBufferedCommand = 'q';
+                    mBufferedCommand = kCommandLeft;
                     break;
                 case SDLK_RIGHT:
                     updateDirection = 1;
-                    mBufferedCommand = 'e';
+                    mBufferedCommand = kCommandRight;
                     break;
                 case SDLK_UP:
-                    mBufferedCommand = 'w';
+                    mBufferedCommand = kCommandUp;
                     break;
                 case SDLK_DOWN:
-                    mBufferedCommand = 's';
+                    mBufferedCommand = kCommandDown;
                     break;
 
                 default:
-                    return 'p';
+                    return kCommandNone;
             }
         }
     }
@@ -394,11 +393,13 @@ void graphicsFlush(void) {
 }
 
 
-void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
+void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, uint8_t stipple) {
     int x, y;
     for (y = y0; y < y1; ++y) {
         for (x = x0; x < x1; ++x) {
-            realPut(x, y, colour, NULL);
+            if (!stipple || ((x + y) & 1 )) {
+                realPut(x, y, colour, NULL);
+            }
         }
     }
 }

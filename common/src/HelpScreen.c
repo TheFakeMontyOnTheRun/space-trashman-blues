@@ -53,7 +53,7 @@ void HelpScreen_repaintCallback(void) {
     int lines;
     int optionsHeight = 8 * (HelpScreen_optionsCount);
     size_t len = max(strlen(&HelpScreen_options[0][0]), strlen("Help"));
-    fill(0, 0, XRES_FRAMEBUFFER - 1, YRES_FRAMEBUFFER - 1, getPaletteEntry(0xFF6cb1a3), FALSE);
+    fillRect(0, 0, XRES_FRAMEBUFFER - 1, YRES_FRAMEBUFFER - 1, getPaletteEntry(0xFF6cb1a3), FALSE);
 
 #ifndef AGS
     lines = 18;

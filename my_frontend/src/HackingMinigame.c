@@ -37,14 +37,14 @@ void HackingScreen_repaintCallback(void) {
 	uint8_t c;
     uint8_t holdingDisk;
 
-    writeStr(1, 1, "Stack trace:");
+    drawTextAt(1, 1, "Stack trace:", 1);
 
-    writeStr((12 * 0), 11, cursorPosition == 0 ? "[CPU0]" : " CPU0 ");
-    writeStr((12 * 1), 11, cursorPosition == 1 ? "[CPU1]" : " CPU1 ");
-    writeStr((12 * 2), 11, cursorPosition == 2 ? "[CPU2]" : " CPU2 ");
+    drawTextAt((12 * 0), 11, cursorPosition == 0 ? "[CPU0]" : " CPU0 ", 1);
+    drawTextAt((12 * 1), 11, cursorPosition == 1 ? "[CPU1]" : " CPU1 ", 1);
+    drawTextAt((12 * 2), 11, cursorPosition == 2 ? "[CPU2]" : " CPU2 ", 1);
 
     for (c = 0; c < 31; ++c ) {
-        writeStr(c, 10, "-");
+        drawTextAt(c, 10, "-", 1);
     }
 
     for (pin = 0; pin < 3; ++pin) {
@@ -57,23 +57,23 @@ void HackingScreen_repaintCallback(void) {
             char *funcName = (disk >= getDisksForPin(pin)) ? NULL : functionNames[diskIndex];
 
             if (pin != 0) {
-                writeStr(10 * (pin), 4 + (4 - disk), "I");
+                drawTextAt(10 * (pin), 4 + (4 - disk), "I", 1);
             }
 
             if (funcName) {
-                writeStr(10 * (pin) + (pin == 0 ? 0 : 1), 4 + (4 - disk), funcName);
+                drawTextAt(10 * (pin) + (pin == 0 ? 0 : 1), 4 + (4 - disk), funcName, 1);
             }
         }
     }
 
-    writeStr(1, 2, "Pointer:");
+    drawTextAt(1, 2, "Pointer:", 1);
 
     holdingDisk = getHoldingDisk();
 
     if (holdingDisk != 0xFF) {
-        writeStr(19, 2, functionNames[holdingDisk]);
+        drawTextAt(19, 2, functionNames[holdingDisk], 1);
     } else {
-        writeStr(19, 2, "NULL");
+        drawTextAt(19, 2, "NULL", 1);
     }
 }
 

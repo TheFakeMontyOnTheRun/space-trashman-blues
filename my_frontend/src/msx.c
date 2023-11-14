@@ -37,7 +37,7 @@ void handleSystemEvents(void) {}
 enum ECommand getInput(void) {
 
     if (!kbhit()) {
-        return 'p';
+        return kCommandNone;
     }
 
     uint8_t input = getch();
@@ -46,19 +46,22 @@ enum ECommand getInput(void) {
 
     switch (input) {
         case 30:
-            return 'w';
+            return kCommandUp;
         case 31:
-            return 's';
+            return kCommandDown;
         case 29:
             updateDirection = 1;
-            return 'q';
+            return kCommandLeft;
         case 28:
             updateDirection = 1;
-            return 'e';
+            return kCommandRight;
+        case 'c':
+            return kCommandStrafeLeft;
+        case 'v':
+            return kCommandStrafeRight;
         case 'z':
-            return 'a';
-        case 'x':
-            return 'd';
+            return kCommandFire1;
+
     }
     return input;
 }
