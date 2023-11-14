@@ -169,7 +169,3 @@ drawWindowWithOptions(const uint8_t x,
                    isCursor ? getPaletteEntry(0xFFFFFFFF) : getPaletteEntry(0xFF000000));
     }
 }
-
-uint8_t getPaletteEntry(uint32_t colour) {
-    return colour & 3;
-}

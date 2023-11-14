@@ -211,3 +211,7 @@ void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) 
     set_color(colour, 1, 1);
     draw(x0, y0, x1, y1);
 }
+
+uint8_t getPaletteEntry(uint32_t colour) {
+    return colour & 3;
+}

@@ -56,53 +56,53 @@ void graphicsShutdown() {
 enum ECommand getInput(void) {
     int code = [ osxview getInput ];
     
-    mBufferedCommand = '.';
+    mBufferedCommand = kCommandNone;
     
     switch (code) {
         case 0: //a
         case 6: //z
         case 36: //enter
-            mBufferedCommand = 'z';
+            mBufferedCommand = kCommandFire1;
             break;
             
         case 7: //x
-            mBufferedCommand = 'x';
+            mBufferedCommand = kCommandFire2;
             break;
             
         case 8: //c
-            mBufferedCommand = 'c';
+            mBufferedCommand = kCommandFire3;
             break;
             
         case 9: //v
-            mBufferedCommand = 'v';
+            mBufferedCommand = kCommandFire4;
             break;
             
         case 1: //s
-            mBufferedCommand = 's';
+            mBufferedCommand = kCommandStrafeLeft;
             break;
         case 2: //d
-            mBufferedCommand = 'd';
+            mBufferedCommand = kCommandStrafeRight;
             break;
             
             
         case 53: //esc
-            mBufferedCommand = 'l';
+            mBufferedCommand = kCommandQuit;
             break;
             
             
         case 126:
-            mBufferedCommand = 'w';
+            mBufferedCommand = kCommandUp;
             break;
         case 125:
-            mBufferedCommand = 's';
+            mBufferedCommand = kCommandDown;
             break;
             
         case 123:
-            mBufferedCommand = 'q';
+            mBufferedCommand = kCommandLeft;
             break;
             
         case 124:
-            mBufferedCommand = 'e';
+            mBufferedCommand = kCommandRight;
             break;
         case -1:
             break;
@@ -140,7 +140,7 @@ void graphicsPutPointArray(uint8_t *y128Values) {
 }
 
 void clearTextScreen(void) {
-    fillRect(0, 129, 256, 192, 0);
+    fillRect(0, 129, 256, 192, 0, 0);
 }
 
 void enterTextMode(void) {
@@ -197,13 +197,18 @@ void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) 
 }
 
 uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
+    assert(y >= 0);
+    assert(x >= 0);
+    assert(x < 256);
+    assert(y < 192);
+    
     vfb[(256 * y) + x] = colour;
     
     return NULL;
 }
 
 void clearScreen(void) {
-    fillRect(0, 0, 256, 192, 0);
+    fillRect(0, 0, 255, 192, 0, 0);
 }
 
 void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
@@ -295,18 +300,20 @@ void graphicsFlush(void) {
         }
     }
     
-    flipRenderer();
-    clearGraphics();
 	if (needs3dRefresh) {
-		flushVirtualFramebuffer();
+        flipRenderer();
+        clearGraphics();
 	}
+    flushVirtualFramebuffer();
 }
 
-void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
-    int x, y;
+void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, uint8_t stipple) {
+    uint8_t x, y;
     for (y = y0; y < y1; ++y) {
         for (x = x0; x < x1; ++x) {
-            realPut(x, y, colour, NULL);
+            if (!stipple || ((x + y) & 1 )) {
+                realPut(x, y, colour, NULL);
+            }
         }
     }
 }

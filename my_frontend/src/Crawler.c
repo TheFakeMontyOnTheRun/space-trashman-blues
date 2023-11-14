@@ -116,24 +116,24 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
             dropItem();
             break;
 #endif
-        case 'q':
+        case kCommandLeft:
             turnLeft();
             break;
 
-        case 'e':
+        case kCommandRight:
             turnRight();
             break;
 
-        case 'a':
+        case kCommandStrafeLeft:
             walkBy(3);
             break;
-        case 'd':
+        case kCommandStrafeRight:
             walkBy(1);
             break;
-        case 's':
+        case kCommandDown:
             walkBy(2);
             break;
-        case 'w':
+        case kCommandUp:
             walkBy(0);
             break;
     }
