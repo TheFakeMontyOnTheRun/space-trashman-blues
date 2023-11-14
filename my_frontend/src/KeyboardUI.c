@@ -41,11 +41,13 @@ void HUD_initialPaint(void) {
 
 void HUD_refresh(void) {
 	uint8_t d, e;
+    /*
     for (d = 0; d < 15; ++d) {
         for (e = 2; e < 6; ++e) {
             drawTextAt(1 + d, YRES_TEXT - d, " ", 1);
         }
     }
+     */
 
     writeStrWithLimit(1, YRES_TEXT - 6, "In room", 16, 2, 0);
 
