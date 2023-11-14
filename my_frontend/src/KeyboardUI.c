@@ -17,13 +17,13 @@ extern struct ObjectNode *roomItem;
 
 char getch(void);
 
-char *menuItems[] = {
-        "8) Use/Toggle",
-        "5) Use with...",
-        "9) Use/pick...",
+const char *menuItems[] = {
+        "8) Use",
+        "5) Use with",
+        "9) Pick",
         "6) Drop",
-        "7) Next item",
-        "4) Next in room",
+        "7) Next(hand)",
+        "4) Next(room)",
 };
 
 #define COOLDOWN_MAX 0x2EF
@@ -35,32 +35,22 @@ void initKeyboardUI(void) {
 
 
 void HUD_initialPaint(void) {
-	uint8_t i;
-    drawLine(128, 0, 128, 128, 2);
     drawMap();
-
-    for (i = 0; i < 6; ++i) {
-        writeStr(17, (YRES_TEXT - 7) + i, menuItems[i]);
-    }
-
-    writeStrWithLimit(1, YRES_TEXT - 7, "Direction: ", 31, 2, 0);
     HUD_refresh();
 }
 
 void HUD_refresh(void) {
-	uint8_t d;
+	uint8_t d, e;
     for (d = 0; d < 15; ++d) {
-        writeStr(1 + d, YRES_TEXT - 2, " ");
-        writeStr(1 + d, YRES_TEXT - 3, " ");
-        writeStr(1 + d, YRES_TEXT - 5, " ");
-        writeStr(1 + d, YRES_TEXT - 6, " ");
+        for (e = 2; e < 6; ++e) {
+            drawTextAt(1 + d, YRES_TEXT - d, " ", 1);
+        }
     }
 
-    writeStrWithLimit(1, YRES_TEXT - 6, "Object in room", 16, 2, 0);
+    writeStrWithLimit(1, YRES_TEXT - 6, "In room", 16, 2, 0);
 
     if (roomItem != NULL) {
         struct Item *item = getItem(roomItem->item);
-
 
         if (item->active) {
             writeStrWithLimit(1, YRES_TEXT - 5, "*", 16, 2, 0);
@@ -68,20 +58,20 @@ void HUD_refresh(void) {
 
         writeStrWithLimit(2, YRES_TEXT - 5, item->name, 16, 2, 0);
     } else {
-        writeStrWithLimit(2, YRES_TEXT - 5, "Nothing", 16, 2, 0);
+        writeStrWithLimit(2, YRES_TEXT - 5, "-", 16, 2, 0);
     }
 
-    writeStrWithLimit(1, YRES_TEXT - 3, "Object in hand", 16, 2, 0);
+    writeStrWithLimit(1, YRES_TEXT - 3, "In hand", 16, 2, 0);
 
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
 
         if (item->active) {
-            writeStr(1, YRES_TEXT - 2, "*");
+            drawTextAt(1, YRES_TEXT - 2, "*", 1);
         }
 
         writeStrWithLimit(2, YRES_TEXT - 2, item->name, 16, 2, 0);
     } else {
-        writeStrWithLimit(2, YRES_TEXT - 2, "Nothing", 16, 2, 0);
+        writeStrWithLimit(2, YRES_TEXT - 2, "-", 16, 2, 0);
     }
 }

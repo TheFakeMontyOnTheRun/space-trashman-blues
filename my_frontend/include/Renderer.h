@@ -113,7 +113,7 @@ void useItemInHand(void);
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple);
 
-void writeStr(uint8_t column, uint8_t line, const char *str);
+void drawTextAt(uint8_t column, uint8_t line, const char *str, uint8_t colour);
 
 void flush3DBuffer(void);
 
@@ -123,9 +123,7 @@ uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr);
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour);
 
-void drawMap(void);
-
-void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour);
+void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, uint8_t stipple);
 
 uint8_t drawCubeAt(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask);
 

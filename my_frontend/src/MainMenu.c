@@ -53,42 +53,79 @@ const uint8_t shapes[] = {
         46, 81,
         0 };
 
-int drawn;
+#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && !defined(AGS) && !defined(N64) && !defined(NDS)
+const char *MainMenu_options[4] = {
+        "Play game",
+        "Credits",
+        "Help",
+        "Quit"};
+
+const enum EGameMenuState MainMenu_nextStateNavigation[4] = {
+        kPlayGame, kCredits, kHelp,
+        kQuit};
+
+const uint8_t kMainMenuOptionsCount = 4;
+#else
+const char *MainMenu_options[3] = {
+        "Play game", "Credits", "Help"};
+
+const int32_t MainMenu_nextStateNavigation[3] = {
+        kPlayGame, kCredits, kHelp};
+
+const uint8_t kMainMenuOptionsCount = 3;
+#endif
+
+
+extern size_t biggestOption;
+extern int cursorPosition;
 
 void MainMenu_initStateCallback(int32_t tag) {
-    needs3dRefresh = 0;
-    drawn = 0;
+    cursorPosition = 0;
+    biggestOption = 9;
 }
 
-void MainMenu_initialPaintCallback(void) {
-    clearScreen();
+void MainMenu_initialPaintCallback() {
 }
 
 void MainMenu_repaintCallback(void) {
-    if(!drawn) {
-        drawn = 1;
+    drawGraphic(shapes);
 
-        clearScreen();
-
-        drawGraphic(shapes);
-
-#ifndef GAMEPAD
-        writeStr(16, 1, "Sub Mare\nImperium:\nDerelict\nby\nDaniel Monteiro\nPress SPACE to\nstart ");
-#else
-        writeStr(16, 1, "Sub Mare\nImperium:\nDerelict\nby\nDaniel Monteiro\nPress Start!");
-#endif
-    }
+    drawWindowWithOptions(
+            (XRES_FRAMEBUFFER / 8) - (int) biggestOption - 3,
+            (YRES_FRAMEBUFFER / 8) - 3 - kMainMenuOptionsCount,
+            biggestOption + 2,
+            kMainMenuOptionsCount + 2,
+            "Episode 0",
+            MainMenu_options,
+            kMainMenuOptionsCount,
+            cursorPosition);
 }
 
-enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long data) {
+enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
 
-    if (cmd != 'p') {
-        return kPlayGame;
+    switch (cmd) {
+        case kCommandUp:
+            --cursorPosition;
+            break;
+        case kCommandDown:
+            ++cursorPosition;
+            break;
+        case kCommandFire1:
+        case kCommandFire2:
+        case kCommandFire3:
+            return MainMenu_nextStateNavigation[cursorPosition];
+    }
+
+    if (cursorPosition > (kMainMenuOptionsCount - 1)) {
+        cursorPosition = (kMainMenuOptionsCount - 1);
+    }
+
+    if (cursorPosition < 0) {
+        cursorPosition = 0;
     }
 
     return kResumeCurrentState;
 }
 
 void MainMenu_unloadStateCallback(int32_t newState) {
-
 }

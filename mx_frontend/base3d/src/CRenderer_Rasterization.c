@@ -424,7 +424,7 @@ void drawMask(
         _y1 = YRES - 1;
     }
 
-    fill(_x0, _y0, _x1 - _x0, _y1 - _y0, 0, FALSE);
+    fillRect(_x0, _y0, _x1 - _x0, _y1 - _y0, 0, FALSE);
 }
 
 #ifdef AGS
@@ -1483,7 +1483,7 @@ void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *textur
 __attribute__((target("arm"), section(".iwram"), noinline))
 #endif
 
-void fill(
+void fillRect(
         const int x, const int y,
         const size_t dx, const size_t dy,
         const FramebufferPixelFormat pixel, const uint8_t stipple) {

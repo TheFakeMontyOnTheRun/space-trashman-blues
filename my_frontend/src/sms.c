@@ -45,38 +45,39 @@ enum ECommand getInput(void) {
     }
 
     if (key & JOY_UP) {
-        return 'w';
+        return kCommandUp;
     }
 
     if (key & JOY_LEFT) {
         if (key & JOY_FIREB) {
-            return 'a';
+            return kCommandStrafeLeft;
         } else {
             updateDirection = 1;
-            return 'q';
+            return kCommandLeft;
         }
     }
 
     if (key & JOY_RIGHT) {
         if (key & JOY_FIREB) {
-            return 'd';
+            return kCommandStrafeRight;
         } else {
             updateDirection = 1;
-            return 'e';
+            return kCommandRight;
         }
     }
 
     if (key & JOY_DOWN) {
-        return 's';
+        return kCommandDown;
     }
 
-    if ((key & JOY_FIREA) && !cooldown) {
-        performActionJoypad();
+    if ((key & JOY_FIREA) /* && !cooldown */) {
+//        performActionJoypad();
         cooldown = COOLDOWN_MAX;
-        return 'p';
+        return kCommandFire1;
     }
 
-    if ((key & JOY_FIREB) && !cooldown) {
+    if ((key & JOY_FIREB) /* && !cooldown */ ) {
+        /*
         cursorPosition = (cursorPosition + 1);
 
         if (cursorPosition >= 6) {
@@ -85,10 +86,12 @@ enum ECommand getInput(void) {
 
         HUD_refresh();
         cooldown = COOLDOWN_MAX;
-        return 'p';
+        return kCommandNone;
+         */
+        return kCommandFire2;
     }
 
-    return 'p';
+    return kCommandNone;
 }
 
 void graphicsFlush(void) {

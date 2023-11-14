@@ -66,7 +66,7 @@ void CreditsScreen_repaintCallback(void) {
     size_t len = max(strlen("Options"), strlen(CreditsScreen_options[0]));
 
     /* The background */
-    fill(0, 0, (XRES_FRAMEBUFFER - 1), (YRES_FRAMEBUFFER - 1), getPaletteEntry(0xFF6cb1a3), FALSE);
+    fillRect(0, 0, (XRES_FRAMEBUFFER - 1), (YRES_FRAMEBUFFER - 1), getPaletteEntry(0xFF6cb1a3), FALSE);
 
     if (mainText != NULL) {
         drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 1, lines + 3, "Credits", mainText);

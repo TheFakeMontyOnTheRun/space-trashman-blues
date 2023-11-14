@@ -40,7 +40,7 @@
 
 #ifndef USE_CUSTOM_MEMORY_HANDLER
 
-void *allocMem(size_t sizeInBytes, enum MemoryType type, int clearAfterAlloc) {
+void *allocMem(size_t sizeInBytes, enum MemoryType type, uint8_t clearAfterAlloc) {
     /*
     For the general allocator, we're not worried about the type of memory. It all comes from the
     same place.
@@ -79,7 +79,7 @@ void memFill(void *dst, uint8_t val, size_t sizeInBytes) {
 
 #endif
 
-int isBigEndian(void) {
+uint8_t isBigEndian(void) {
     union {
         uint32_t i;
         char c[4];

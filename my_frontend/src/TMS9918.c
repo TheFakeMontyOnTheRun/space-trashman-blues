@@ -82,7 +82,7 @@ uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
 
 void graphicsPutPointArray(uint8_t *y128Values) {
     uint8_t *stencilPtr = y128Values;
-    int x;
+    uint16_t x;
 
     for (x = 0; x < (BUFFER_RESX - 1);) {
         uint8_t y, prevY, c;
@@ -124,15 +124,13 @@ void graphicsPut(uint8_t x, uint8_t y) {
     buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)] |= (128 >> (x & 7));
 }
 
-void initTMS9918(void) {
-    set_color(15, 1, 1);
+void clearScreen(void) {
     set_mode(mode_2);
     fill(MODE2_ATTR, 0xF1, MODE2_MAX);
 }
 
-void clearScreen(void) {
-    set_mode(mode_2);
-    fill(MODE2_ATTR, 0xF1, MODE2_MAX);
+void initTMS9918(void) {
+    clearScreen();
 }
 
 void clearGraphics(void) {
@@ -145,7 +143,6 @@ void shutdownGraphics(void) {
 uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
     set_color(colour, 1, 1);
     plot(x, y);
-    set_color(15, 1, 1);
     return NULL;
 }
 
@@ -192,7 +189,7 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 }
 
 void clearTextScreen(void) {
-    int c, d;
+    uint8_t c, d;
     for (c = 16; c < 24; ++c) {
         for (d = 1; d < 32; ++d) {
             writeStrWithLimit(d, c, " ", 256 / 8);
@@ -201,18 +198,16 @@ void clearTextScreen(void) {
 }
 
 void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
-    int x, y;
+    uint8_t x, y;
     set_color(colour, 1, 1);
     for (y = y0; y < y1; ++y) {
         for (x = x0; x < x1; ++x) {
             plot(x, y);
         }
     }
-    set_color(15, 1, 1);
 }
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
     set_color(colour, 1, 1);
     draw(x0, y0, x1, y1);
-    set_color(15, 1, 1);
 }

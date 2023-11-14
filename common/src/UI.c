@@ -26,7 +26,7 @@
 #include "UI.h"
 
 void drawMenuBackground(void) {
-    fill(0, 0, (XRES_FRAMEBUFFER), (YRES_FRAMEBUFFER), getPaletteEntry(0xFF6cb1a3), FALSE);
+    fillRect(0, 0, (XRES_FRAMEBUFFER), (YRES_FRAMEBUFFER), getPaletteEntry(0xFF6cb1a3), FALSE);
 }
 
 void
@@ -51,12 +51,12 @@ drawWindowWithOptions(const int x,
         int isCursor = (selectedOption == c);
 
         if (isCursor) {
-            fill(x * 8 - 8,
-                 (y + 2 + c) * 8 - 8,
-                 dx * 8,
-                 8,
-                 getPaletteEntry(0xFF000000),
-                 FALSE);
+            fillRect(x * 8 - 8,
+                     (y + 2 + c) * 8 - 8,
+                     dx * 8,
+                     8,
+                     getPaletteEntry(0xFF000000),
+                     FALSE);
         }
 
         drawTextAt(x + 1,
@@ -69,10 +69,10 @@ drawWindowWithOptions(const int x,
 void
 drawWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title) {
 
-    fill((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
+    fillRect((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
+    fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
     drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
+    fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
 
     if (title != NULL) {
         drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
@@ -106,10 +106,10 @@ drawAppearingWindow(const int x, const int y, const unsigned int dx, const unsig
         return 0;
     }
 
-    fill((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
+    fillRect((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
+    fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
     drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
+    fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
     drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
 
     return 1;
@@ -125,11 +125,11 @@ drawTextWindow(const int x, const int y, const unsigned int dx, const unsigned i
 void
 drawImageWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title,
                 struct Bitmap *content) {
-    fill((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
+    fillRect((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
+    fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
     drawBitmap((x - 1) * 8, (y) * 8, content, TRUE);
     drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
-    fill((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
+    fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
     drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
 }
 
@@ -137,19 +137,19 @@ void updateMap(void) {
     int x, z;
     struct WorldPosition visPos = *getPlayerPosition();
 
-    fill(XRES + 8 + (10 * 4) + (4 * -10), 2 + 8 + (8 * 4) + (4 * -8), 4 * 20, 4 * 16,
-         getPaletteEntry(0xFF000066), FALSE);
+    fillRect(XRES + 8 + (10 * 4) + (4 * -10), 2 + 8 + (8 * 4) + (4 * -8), 4 * 20, 4 * 16,
+             getPaletteEntry(0xFF000066), FALSE);
 
     for (z = -8; z < 8; ++z) {
         for (x = -10; x < 10; ++x) {
             if (isPositionAllowed(visPos.x + x, visPos.y + z)) {
-                fill(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4, getPaletteEntry(0xFF000099),
-                     FALSE);
+                fillRect(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4, getPaletteEntry(0xFF000099),
+                         FALSE);
             }
         }
     }
 
-    fill(XRES + 8 + (10 * 4), 2 + 8 + (8 * 4), 4, 4, getPaletteEntry(0xFF0000FF), FALSE);
+    fillRect(XRES + 8 + (10 * 4), 2 + 8 + (8 * 4), 4, 4, getPaletteEntry(0xFF0000FF), FALSE);
 }
 
 void redrawHUD(void) {

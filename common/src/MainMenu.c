@@ -93,7 +93,7 @@ void MainMenu_repaintCallback(void) {
 
     uint8_t optionsHeight = 8 * kMainMenuOptionsCount;
 
-    fill(0, 0, (XRES_FRAMEBUFFER), (YRES_FRAMEBUFFER), getPaletteEntry(0xFF6cb1a3), FALSE);
+    fillRect(0, 0, (XRES_FRAMEBUFFER), (YRES_FRAMEBUFFER), getPaletteEntry(0xFF6cb1a3), FALSE);
 
 #ifndef TILED_BITMAPS
 #ifndef AGS

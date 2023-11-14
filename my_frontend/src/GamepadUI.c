@@ -74,7 +74,7 @@ void HUD_initialPaint(void) {
     drawMap();
 
     for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(18, 17 + i, menuItems[i]);
+        drawTextAt(18, 17 + i, menuItems[i], 1);
     }
 
     writeStrWithLimit(1, 17, "Direction: ", 31, 2, 0);
@@ -84,15 +84,15 @@ void HUD_initialPaint(void) {
 void HUD_refresh(void) {
 
     for (uint8_t d = 0; d < 15; ++d) {
-        writeStr(1 + d, 18, " ");
-        writeStr(1 + d, 19, " ");
-        writeStr(1 + d, 22, " ");
-        writeStr(1 + d, 23, " ");
+        drawTextAt(1 + d, 18, " ", 1);
+        drawTextAt(1 + d, 19, " ", 1);
+        drawTextAt(1 + d, 22, " ", 1);
+        drawTextAt(1 + d, 23, " ", 1);
     }
 
 
     for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(17, 17 + i, (i == cursorPosition) ? ">" : " ");
+        drawTextAt(17, 17 + i, (i == cursorPosition) ? ">" : " ", 1);
     }
 
     writeStrWithLimit(1, 18, "Object in room", 16, 2, 0);
@@ -117,7 +117,7 @@ void HUD_refresh(void) {
 
 
         if (item->active) {
-            writeStr(1, 22, "*");
+            drawTextAt(1, 22, "*", 1);
         }
 
         writeStrWithLimit(2, 22, item->name, 16, 2, 0);

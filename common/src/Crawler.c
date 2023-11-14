@@ -129,7 +129,7 @@ void Crawler_repaintCallback() {
         turnStep = turnTarget;
 
         /* The dithered filter on top of the 3D rendering*/
-        fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), TRUE);
+        fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), TRUE);
 
         drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - biggestOption - 3,
                               ((YRES_FRAMEBUFFER / 8) + 1) - (optionsHeight / 8) - 3,

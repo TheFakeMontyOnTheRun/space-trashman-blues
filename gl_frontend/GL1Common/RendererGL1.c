@@ -345,7 +345,7 @@ void renderRoomTransition() {
 
 #ifndef NDS
     enter2D();
-    fill(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
+    fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
 #endif
 
     enter3D();
@@ -992,7 +992,7 @@ void render(const long ms) {
         if (focusItemName != NULL) {
             size_t len = strlen(focusItemName);
             int lines = 1 + (len / 27);
-            fill(0, YRES - (8 * lines), XRES, lines * 8, getPaletteEntry(0xFF000000), TRUE);
+            fillRect(0, YRES - (8 * lines), XRES, lines * 8, getPaletteEntry(0xFF000000), TRUE);
             drawTextAtWithMarginWithFiltering(1, 26 - lines, XRES, focusItemName, getPaletteEntry(0xFFFFFFFF), ' ');
         }
 
@@ -1017,7 +1017,7 @@ void render(const long ms) {
                 }
             }
 
-            fill(0, 0, 216, lines * 8, getPaletteEntry(0xFF000000), TRUE);
+            fillRect(0, 0, 216, lines * 8, getPaletteEntry(0xFF000000), TRUE);
 
             drawTextAt(1, 1, &messageLogBuffer[0], getPaletteEntry(0xFFFFFFFF));
         }
