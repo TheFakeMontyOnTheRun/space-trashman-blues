@@ -1044,7 +1044,7 @@ void render(const long ms) {
         if (focusItemName != NULL) {
             size_t len = strlen(focusItemName);
             int lines = 1 + (len / 27);
-            fill(0, YRES - (8 * lines), XRES, lines * 8, 0, 1);
+            fillRect(0, YRES - (8 * lines), XRES, lines * 8, 0, 1);
             drawTextAtWithMarginWithFiltering(1, 26 - lines, XRES, focusItemName, 255, ' ');
         }
 
@@ -1069,7 +1069,7 @@ void render(const long ms) {
                 }
             }
 
-            fill(0, 0, 216, lines * 8, 0, 1);
+            fillRect(0, 0, 216, lines * 8, 0, 1);
 
             drawTextAt(1, 1, &messageLogBuffer[0], 255);
         }
