@@ -96,16 +96,16 @@ void drawRect(
         const size_t dy,
         const FramebufferPixelFormat pixel) {
 
-    fill(x, y, 1, dy - 1, pixel, 0);
+    fillRect(x, y, 1, dy - 1, pixel, 0);
 
-    fill(x, y, dx - 1, 1, pixel, 0);
+    fillRect(x, y, dx - 1, 1, pixel, 0);
 
-    fill(x + dx - 1, y, 1, dy - 1, pixel, 0);
+    fillRect(x + dx - 1, y, 1, dy - 1, pixel, 0);
 
-    fill(x, y + dy - 1, dx, 1, pixel, 0);
+    fillRect(x, y + dy - 1, dx, 1, pixel, 0);
 }
 
-void fill(
+void fillRect(
         const int _x,
         const int _y,
         const size_t _dx,
