@@ -286,6 +286,15 @@ void clearGraphics(void) {
 }
 
 void initHW(void) {
+    asm volatile(
+            "movb $0x0, %%ah\n\t"
+            "movb $0x4, %%al\n\t"
+            "int $0x10\n\t"
+            :
+            :
+            : "ax"
+            );
+
     initKeyboardUI();
     updateDirection = 1;
     clearGraphics();
@@ -323,15 +332,35 @@ enum ECommand getInput(void) {
             : "ax"
             );
 
-    if (toReturn == 0) {
-        return 'p';
+    switch(toReturn) {
+        case 'q':
+            updateDirection = 1;
+            return kCommandLeft;
+        case 'w':
+            return kCommandUp;
+        case 's':
+            return kCommandDown;
+        case 'e':
+            updateDirection = 1;
+            return kCommandRight;
+        case 'a':
+            return kCommandStrafeLeft;
+        case 'd':
+            return kCommandStrafeRight;
+        case 'l':
+            return kCommandBack;
+
+        case 'z':
+            return kCommandFire1;
+        case 'x':
+            return kCommandFire2;
+        case 'c':
+            return kCommandFire3;
+        case 'v':
+            return kCommandFire4;
     }
 
-    if (toReturn == 'q' || toReturn == 'e') {
-        updateDirection = 1;
-    }
-
-    return toReturn;
+    return kCommandNone;
 }
 
 void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
@@ -481,7 +510,7 @@ void exitTextMode(void) {
 }
 
 
-void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
+void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, uint8_t stipple) {
     int x, y;
     for (y = y0; y < y1; ++y) {
         for (x = x0; x < x1; ++x) {
