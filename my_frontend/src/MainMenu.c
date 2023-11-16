@@ -75,7 +75,6 @@ const int32_t MainMenu_nextStateNavigation[3] = {
 const uint8_t kMainMenuOptionsCount = 3;
 #endif
 
-
 extern size_t biggestOption;
 extern int cursorPosition;
 
@@ -85,6 +84,7 @@ void MainMenu_initStateCallback(int32_t tag) {
 }
 
 void MainMenu_initialPaintCallback() {
+    clearScreen();
 }
 
 void MainMenu_repaintCallback(void) {
@@ -102,29 +102,7 @@ void MainMenu_repaintCallback(void) {
 }
 
 enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
-
-    switch (cmd) {
-        case kCommandUp:
-            --cursorPosition;
-            break;
-        case kCommandDown:
-            ++cursorPosition;
-            break;
-        case kCommandFire1:
-        case kCommandFire2:
-        case kCommandFire3:
-            return MainMenu_nextStateNavigation[cursorPosition];
-    }
-
-    if (cursorPosition > (kMainMenuOptionsCount - 1)) {
-        cursorPosition = (kMainMenuOptionsCount - 1);
-    }
-
-    if (cursorPosition < 0) {
-        cursorPosition = 0;
-    }
-
-    return kResumeCurrentState;
+    return handleCursor(MainMenu_nextStateNavigation, kMainMenuOptionsCount, cmd, kResumeCurrentState);
 }
 
 void MainMenu_unloadStateCallback(int32_t newState) {
