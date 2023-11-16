@@ -35,6 +35,7 @@ void initKeyboardUI(void) {
 
 
 void HUD_initialPaint(void) {
+    drawLine(128, 0, 128, 128, 2);
     drawMap();
     HUD_refresh();
 }

@@ -9,8 +9,11 @@
 #include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
+#include "Engine.h"
 
 extern uint8_t playerLocation;
+
+extern int cursorPosition;
 
 extern const struct CellPattern patterns[127];
 
@@ -50,7 +53,7 @@ void showMessage(const char *message) {
 
     while (keepGoing) {
         uint8_t key = getInput();
-        if (key == ' ' || key == 'p') {
+        if (key == kCommandFire1) {
             keepGoing = 0;
         }
     }
@@ -96,10 +99,6 @@ void performAction(void) {
                         "scenario and now EVERYBODY is\n"
                         "dead!)");
             while (1);
-
-        default:
-        case kNormalGameplay:
-            break;
     }
 }
 
@@ -141,30 +140,49 @@ drawWindowWithOptions(const uint8_t x,
 
     for (c = 0; c < optionsCount; ++c) {
 
-        uint8_t isCursor = (selectedOption == c);
-
-        if (isCursor) {
-            fillRect(x * 8 - 8,
-                 (y + 2 + c) * 8 - 8,
-                 dx * 8,
-                 8,
-                 getPaletteEntry(0xFF000000),
-                 FALSE);
-
-            drawTextAt(x,
-                       y + 2 + c,
-                       "*",
-                       1);
-        } else {
-            drawTextAt(x,
-                       y + 2 + c,
-                       " ",
-                       1);
-        }
+        drawTextAt(x,
+                   y + 2 + c,
+                   (selectedOption == c) ? ">" : " ",
+                   1);
 
         drawTextAt(x + 1,
                    y + 2 + c,
                    &options[c][0],
-                   isCursor ? getPaletteEntry(0xFFFFFFFF) : getPaletteEntry(0xFF000000));
+                   1);
     }
+}
+
+void
+drawTextWindow(const uint8_t x, const uint8_t y, const uint8_t dx, const uint8_t dy, const char *title,
+               const char *content) {
+    drawWindow(x, y, dx, dy, title, 2);
+    drawTextAt(x + 1, y + 2, content, 2);
+}
+
+enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t optionsCount, const enum ECommand cmd, enum EGameMenuState backState) {
+
+    switch (cmd) {
+        case kCommandBack:
+            return backState;
+        case kCommandUp:
+            --cursorPosition;
+            break;
+        case kCommandDown:
+            ++cursorPosition;
+            break;
+        case kCommandFire1:
+        case kCommandFire2:
+        case kCommandFire3:
+            return options[cursorPosition];
+    }
+
+    if (cursorPosition >= optionsCount) {
+        cursorPosition = optionsCount - 1;
+    }
+
+    if (cursorPosition < 0) {
+        cursorPosition = 0;
+    }
+
+    return kResumeCurrentState;
 }
