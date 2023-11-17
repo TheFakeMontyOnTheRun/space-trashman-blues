@@ -25,13 +25,13 @@ void CreditsScreen_initialPaintCallback(void) {
 
 void CreditsScreen_repaintCallback(void) {
     if (mainText != NULL) {
-        drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 1, 1 + 3, "Credits", mainText);
+        drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, 1 + 3, "Credits", mainText);
     }
 
     drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - 7 - 3,
                           ((YRES_FRAMEBUFFER / 8) + 1) - (1) - 3,
                           7 + 2,
-                          (1) + 2, "", CreditsScreen_options, 1, cursorPosition);
+                          2, "", CreditsScreen_options, 1, cursorPosition);
 }
 
 enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
