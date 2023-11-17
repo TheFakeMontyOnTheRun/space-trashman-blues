@@ -7,15 +7,38 @@
 #include "UI.h"
 #include "Renderer.h"
 
-void HelpScreen_initStateCallback(int32_t tag) {}
+extern const char *mainText;
+extern int8_t cursorPosition;
 
-void HelpScreen_initialPaintCallback(void) {}
+const char *HelpScreen_options[1] = {"Back"};
 
-void HelpScreen_repaintCallback(void) {}
+const enum EGameMenuState HelpScreen_nextStateNavigation[1] = {
+        kMainMenu,
+};
 
-enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, long data) {
-    return kMainMenu;
+void HelpScreen_initStateCallback(int32_t tag) {
+    mainText = "This is the help";
 }
 
-void HelpScreen_unloadStateCallback(int32_t newState) {}
+void HelpScreen_initialPaintCallback(void) {
+    clearScreen();
+}
 
+void HelpScreen_repaintCallback(void) {
+
+    if (mainText != NULL) {
+        drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, 1 + 3, "Help", mainText);
+    }
+
+    drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - 4 - 3,
+                          ((YRES_FRAMEBUFFER / 8) + 1) - 1 - 3,
+                          4 + 2,
+                          1 + 2, "", HelpScreen_options, 1, cursorPosition);
+}
+
+enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, long delta) {
+    return handleCursor(HelpScreen_nextStateNavigation, 1, cmd, kMainMenu);
+}
+
+void HelpScreen_unloadStateCallback(int32_t newState) {
+}
