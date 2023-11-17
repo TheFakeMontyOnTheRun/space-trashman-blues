@@ -15,8 +15,6 @@ void performAction(void);
 
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title, uint8_t colour);
 
-uint8_t getPaletteEntry(uint32_t colour);
-
 void
 drawWindowWithOptions(const uint8_t x,
                       const uint8_t y,

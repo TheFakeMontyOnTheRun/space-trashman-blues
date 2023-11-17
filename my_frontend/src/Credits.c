@@ -16,7 +16,7 @@ int32_t CreditsScreen_nextStateNavigation[1] = {
 };
 
 void CreditsScreen_initStateCallback(int32_t tag) {
-    mainText = "Made by Daniel Monteiro";
+    mainText = "Made by MontyOnTheRun";
 }
 
 void CreditsScreen_initialPaintCallback(void) {
@@ -24,10 +24,6 @@ void CreditsScreen_initialPaintCallback(void) {
 }
 
 void CreditsScreen_repaintCallback(void) {
-
-    /* The background */
-   // fillRect(0, 0, (XRES_FRAMEBUFFER - 1), (YRES_FRAMEBUFFER - 1), 3, 0);
-
     if (mainText != NULL) {
         drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 1, 1 + 3, "Credits", mainText);
     }
