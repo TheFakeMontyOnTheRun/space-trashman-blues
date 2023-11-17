@@ -68,7 +68,7 @@ void renderScene(void) {
 void renderCameraWest(void) {
     int8_t x;
     uint8_t lastPattern, lastIndex;
-    int8_t maxX = 0;
+    int8_t maxX;
     int8_t y;
     uint8_t pattern;
 
@@ -119,7 +119,7 @@ void renderCameraSouth(void) {
     int8_t y;
     uint8_t lastPattern, lastIndex;
     int8_t const *mapXY;
-    int8_t maxX = 0;
+    int8_t maxX;
     int8_t x;
     uint8_t pattern;
 
@@ -176,7 +176,7 @@ void renderCameraSouth(void) {
 void renderCameraEast(void) {
     int8_t x;
     uint8_t lastPattern, lastIndex;
-    int8_t maxX = 0;
+    int8_t maxX;
     int8_t y;
     uint8_t pattern;
 
@@ -230,7 +230,7 @@ void renderCameraNorth(void) {
 
     uint8_t lastPattern, lastIndex;
     int8_t const *mapXY;
-    int8_t maxX = 0;
+    int8_t maxX;
     int8_t y;
     int8_t x;
     uint8_t pattern;

@@ -36,7 +36,7 @@ extern uint8_t accessGrantedToSafe;
 
 int8_t cameraX = 33;
 int8_t cameraZ = 22;
-extern int cameraRotation;
+extern int8_t cameraRotation;
 
 uint8_t enteredFrom = 0xFF;
 

@@ -41,7 +41,7 @@ extern struct ObjectNode *roomItem;
 extern uint8_t accessGrantedToSafe;
 extern int8_t cameraX;
 extern int8_t cameraZ;
-extern int cameraRotation;
+extern int8_t cameraRotation;
 extern uint8_t enteredFrom;
 extern uint8_t playerLocation;
 

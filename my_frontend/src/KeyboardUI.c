@@ -15,7 +15,6 @@ extern struct ObjectNode *focusedItem;
 
 extern struct ObjectNode *roomItem;
 
-char getch(void);
 
 const char *menuItems[] = {
         "8) Use",
@@ -26,11 +25,7 @@ const char *menuItems[] = {
         "4) Next(room)",
 };
 
-#define COOLDOWN_MAX 0x2EF
-uint16_t cooldown;
-
 void initKeyboardUI(void) {
-    cooldown = COOLDOWN_MAX;
 }
 
 
