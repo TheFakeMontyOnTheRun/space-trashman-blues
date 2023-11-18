@@ -17,7 +17,7 @@ Created by Daniel Monteiro on 08/10/2019.
 
 #endif
 
-int parseCommand(const char *cmd, const char *operand) {
+uint8_t parseCommand(const char *cmd, const char *operand) {
     if (!strcmp(cmd, "pick")) {
         pickObjectByName(operand);
     } else if (!strcmp(cmd, "drop")) {
