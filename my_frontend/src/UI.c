@@ -87,8 +87,8 @@ void performAction(void) {
 }
 
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title, uint8_t colour) {
-    uint8_t x0 = tx * 8;
-    uint8_t x1 = (tx + tw) * 8;
+    uint16_t x0 = tx * 8;
+    uint16_t x1 = (tx + tw) * 8;
     uint8_t y0 = ty * 8;
     uint8_t y1 = (ty + th) * 8;
 
