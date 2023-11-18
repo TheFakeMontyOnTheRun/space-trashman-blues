@@ -42,13 +42,12 @@ void HUD_initialPaint(void) {
 
 void HUD_refresh(void) {
 	uint8_t d, e;
-    /*
+
     for (d = 0; d < 15; ++d) {
         for (e = 2; e < 6; ++e) {
-            drawTextAt(1 + d, YRES_TEXT - d, " ", 1);
+            drawTextAt(1 + d, YRES_TEXT - e, " ", 1);
         }
     }
-     */
 
     writeStrWithLimit(1, YRES_TEXT - 6, "In room", 16, 2, 0);
 
@@ -60,8 +59,6 @@ void HUD_refresh(void) {
         }
 
         writeStrWithLimit(2, YRES_TEXT - 5, item->name, 16, 2, 0);
-    } else {
-        writeStrWithLimit(2, YRES_TEXT - 5, "-", 16, 2, 0);
     }
 
     writeStrWithLimit(1, YRES_TEXT - 3, "In hand", 16, 2, 0);
@@ -74,7 +71,5 @@ void HUD_refresh(void) {
         }
 
         writeStrWithLimit(2, YRES_TEXT - 2, item->name, 16, 2, 0);
-    } else {
-        writeStrWithLimit(2, YRES_TEXT - 2, "-", 16, 2, 0);
     }
 }
