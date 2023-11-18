@@ -32,6 +32,11 @@ void initKeyboardUI(void) {
 void HUD_initialPaint(void) {
     drawLine(128, 0, 128, 128, 2);
     drawMap();
+
+    for (uint8_t i = 0; i < 6; ++i) {
+        drawTextAt(18, 17 + i, menuItems[i], 1);
+    }
+
     HUD_refresh();
 }
 
