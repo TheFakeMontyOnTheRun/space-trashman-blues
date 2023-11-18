@@ -39,10 +39,10 @@ int needToRedrawHUD = FALSE;
 
 const char *AbandonMission_Title = "Abandon game?";
 const char *AbandonMission_options[6] = {"Continue", "End game"};
-const int AbandonMission_navigation[2] = {-1, kMainMenu};
+const enum EGameMenuState AbandonMission_navigation[2] = {kResumeCurrentState, kMainMenu};
 const int AbandonMission_count = 2;
 
-void Crawler_initStateCallback(int32_t tag) {
+void Crawler_initStateCallback(enum EGameMenuState tag) {
     int c;
 
     if (tag == kPlayGame) {
@@ -119,7 +119,7 @@ void recenterView() {
     }
 }
 
-void Crawler_repaintCallback() {
+void Crawler_repaintCallback(void) {
 
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = TRUE;
@@ -218,7 +218,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     return kMenuStateUnchanged;
 }
 
-void Crawler_unloadStateCallback(int32_t newState) {
+void Crawler_unloadStateCallback(enum EGameMenuState newState) {
 
     if (newState != kBackToGame &&
         newState != kInspectItem &&

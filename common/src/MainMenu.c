@@ -51,7 +51,7 @@ struct Bitmap *logoBitmap[28];
 struct Bitmap *logo2Bitmap[15];
 #endif
 
-void MainMenu_initStateCallback(int32_t tag) {
+void MainMenu_initStateCallback(enum EGameMenuState tag) {
     int c;
 
 #ifndef TILED_BITMAPS
@@ -149,7 +149,7 @@ enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
     return kResumeCurrentState;
 }
 
-void MainMenu_unloadStateCallback(int32_t newState) {
+void MainMenu_unloadStateCallback(enum EGameMenuState newState) {
 #ifndef TILED_BITMAPS
     releaseBitmap(logoBitmap);
     releaseBitmap(logo2Bitmap);

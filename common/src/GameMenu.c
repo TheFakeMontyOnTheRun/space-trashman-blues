@@ -49,7 +49,7 @@ const enum EGameMenuState GameMenu_Story_nextStateNavigation[1] = {kMainMenu};
 int16_t GameMenu_optionsCount = 2;
 int drawFilter = FALSE;
 
-void GameMenu_initStateCallback(int32_t tag) {
+void GameMenu_initStateCallback(enum EGameMenuState tag) {
     int c;
 
     GameMenu_StateTitle = NULL;
@@ -216,7 +216,7 @@ enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long delta) {
     return kResumeCurrentState;
 }
 
-void GameMenu_unloadStateCallback(int32_t newState) {
+void GameMenu_unloadStateCallback(enum EGameMenuState newState) {
     if (featuredBitmap) {
         releaseBitmap(featuredBitmap);
         featuredBitmap = NULL;

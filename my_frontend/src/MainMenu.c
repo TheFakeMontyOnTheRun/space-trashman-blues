@@ -78,7 +78,7 @@ const uint8_t kMainMenuOptionsCount = 3;
 extern size_t biggestOption;
 extern int8_t cursorPosition;
 
-void MainMenu_initStateCallback(int32_t tag) {
+void MainMenu_initStateCallback(enum EGameMenuState tag) {
     cursorPosition = 0;
     biggestOption = 9;
 }
@@ -105,5 +105,5 @@ enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
     return handleCursor(MainMenu_nextStateNavigation, kMainMenuOptionsCount, cmd, kResumeCurrentState);
 }
 
-void MainMenu_unloadStateCallback(int32_t newState) {
+void MainMenu_unloadStateCallback(enum EGameMenuState newState) {
 }

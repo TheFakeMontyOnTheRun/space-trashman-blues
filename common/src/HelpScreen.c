@@ -32,7 +32,7 @@ const enum EGameMenuState HelpScreen_nextStateNavigation[1] = {
 
 const int16_t HelpScreen_optionsCount = 1;
 
-void HelpScreen_initStateCallback(int32_t tag) {
+void HelpScreen_initStateCallback(enum EGameMenuState tag) {
     mainText = textBuffer;
     memFill(textBuffer, 0, TEXT_BUFFER_SIZE);
 
@@ -99,5 +99,5 @@ enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, long delta) {
     return kResumeCurrentState;
 }
 
-void HelpScreen_unloadStateCallback(int32_t newState) {
+void HelpScreen_unloadStateCallback(enum EGameMenuState newState) {
 }

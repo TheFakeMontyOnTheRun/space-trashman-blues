@@ -26,7 +26,7 @@
 
 const char *CreditsScreen_options[1] = {"Back"};
 
-int32_t CreditsScreen_nextStateNavigation[1] = {
+enum EGameMenuState CreditsScreen_nextStateNavigation[1] = {
         kMainMenu,
 };
 
@@ -38,7 +38,7 @@ struct Bitmap *monty;
 struct Bitmap *monty[4];
 #endif
 
-void CreditsScreen_initStateCallback(int32_t tag) {
+void CreditsScreen_initStateCallback(enum EGameMenuState tag) {
 
     struct StaticBuffer textFile = loadBinaryFileFromPath("Credits.txt");
     mainText = textBuffer;
@@ -115,7 +115,7 @@ enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
     return kResumeCurrentState;
 }
 
-void CreditsScreen_unloadStateCallback(int32_t newState) {
+void CreditsScreen_unloadStateCallback(enum EGameMenuState newState) {
 #ifndef TILED_BITMAPS
     releaseBitmap(monty);
     monty = NULL;
