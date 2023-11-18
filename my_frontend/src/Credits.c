@@ -29,9 +29,9 @@ void CreditsScreen_repaintCallback(void) {
     }
 
     drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - 7 - 3,
-                          ((YRES_FRAMEBUFFER / 8) + 1) - (1) - 3,
+                          ((YRES_FRAMEBUFFER / 8) + 1) - (1) - 4,
                           7 + 2,
-                          2, "", CreditsScreen_options, 1, cursorPosition);
+                          3, "Credits", CreditsScreen_options, 1, cursorPosition);
 }
 
 enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
