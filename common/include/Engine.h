@@ -15,7 +15,7 @@ typedef void ( *UnloadStateCallback )(int32_t newState);
 #define kDefaultPresentationStateInterval 2000
 #define kMenuStateUnchanged -1
 
-int menuTick(long ms);
+uint8_t menuTick(long ms);
 
 void MainMenu_initStateCallback(int32_t tag);
 
@@ -93,8 +93,6 @@ enum ECommand getInput(void);
 
 void handleSystemEvents(void);
 
-int menuTick(long delta_time);
-
 #define MENU_ITEM_TIME_TO_BECOME_ACTIVE_MS 200
 
 extern InitStateCallback initStateCallback;
@@ -102,8 +100,8 @@ extern InitialPaintCallback initialPaintCallback;
 extern RepaintCallback repaintCallback;
 extern TickCallback tickCallback;
 extern UnloadStateCallback unloadStateCallback;
-extern int isRunning;
-extern int cursorPosition;
+extern uint8_t isRunning;
+extern int8_t cursorPosition;
 extern long timeUntilNextState;
 extern enum EPresentationState currentPresentationState;
 extern enum EGameMenuState nextNavigationSelection;

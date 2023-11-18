@@ -7,7 +7,7 @@
 #include "UI.h"
 #include "Renderer.h"
 
-extern int cursorPosition;
+extern int8_t cursorPosition;
 extern const char *mainText;
 const char *CreditsScreen_options[1] = {"Back"};
 

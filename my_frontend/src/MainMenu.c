@@ -8,7 +8,7 @@
 #include "Renderer.h"
 
 const uint8_t shapes[] = {
-        7, 2,
+        7,
         28, 103,
         16, 140,
         54, 140,
@@ -16,7 +16,7 @@ const uint8_t shapes[] = {
         38, 111,
         32, 100,
         32, 100,
-        7, 2,
+        7,
         30, 116,
         32, 109,
         40, 117,
@@ -24,7 +24,7 @@ const uint8_t shapes[] = {
         54, 140,
         28, 140,
         28, 140,
-        10, 2,
+        10,
         32, 68,
         31, 92,
         38, 106,
@@ -35,7 +35,7 @@ const uint8_t shapes[] = {
         31, 97,
         31, 92,
         31, 87,
-        8, 2,
+        8,
         54, 39,
         44, 38,
         34, 43,
@@ -44,7 +44,7 @@ const uint8_t shapes[] = {
         46, 82,
         54, 74,
         54, 74,
-        6, 2,
+        6,
         37, 79,
         39, 98,
         43, 99,
@@ -76,7 +76,7 @@ const uint8_t kMainMenuOptionsCount = 3;
 #endif
 
 extern size_t biggestOption;
-extern int cursorPosition;
+extern int8_t cursorPosition;
 
 void MainMenu_initStateCallback(int32_t tag) {
     cursorPosition = 0;
