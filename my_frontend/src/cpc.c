@@ -320,19 +320,21 @@ void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, 
 
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
-    int dx = abs(x1 - x0);
-    int sx = x0 < x1 ? 1 : -1;
-    int dy = abs(y1 - y0);
-    int sy = y0 < y1 ? 1 : -1;
-    int err = (dx > dy ? dx : -dy) >> 1;
-    int e2;
+    int16_t dx = abs(x1 - x0);
+    int16_t sx = x0 < x1 ? 1 : -1;
+    int16_t dy = abs(y1 - y0);
+    int16_t sy = y0 < y1 ? 1 : -1;
+    int16_t err = (dx > dy ? dx : -dy) >> 1;
+    int16_t e2;
+
     for (;;) {
 
-        if (x0 == x1 && y0 == y1) break;
+        if (x0 == x1 && y0 == y1) return;
 
         realPut(x0, y0, colour, NULL);
 
         e2 = err;
+
         if (e2 > -dx) {
             err -= dy;
             x0 += sx;
@@ -342,8 +344,4 @@ void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) 
             y0 += sy;
         }
     }
-}
-
-uint8_t getPaletteEntry(uint32_t colour) {
-    return colour & 3;
 }
