@@ -206,7 +206,7 @@ void logDelegate(const char *mesg) {
     showMessage(mesg);
 }
 
-void Crawler_initStateCallback(int32_t tag_unused) {
+void Crawler_initStateCallback(enum EGameMenuState tag_unused) {
     needs3dRefresh = 1;
     enteredFrom = 0;
     cameraRotation = 0;
@@ -222,7 +222,7 @@ void Crawler_initialPaintCallback(void) {
     HUD_initialPaint();
 }
 
-void Crawler_unloadStateCallback(int32_t newState) {
+void Crawler_unloadStateCallback(enum EGameMenuState newState) {
     needs3dRefresh = 0;
 }
 

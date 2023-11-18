@@ -7,7 +7,7 @@
 #include "UI.h"
 #include "Renderer.h"
 
-void GameMenu_initStateCallback(int32_t tag) {}
+void GameMenu_initStateCallback(enum EGameMenuState tag) {}
 
 void GameMenu_initialPaintCallback(void) {}
 
@@ -17,5 +17,5 @@ enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long data) {
     return kMainMenu;
 }
 
-void GameMenu_unloadStateCallback(int32_t newState) {}
+void GameMenu_unloadStateCallback(enum EGameMenuState newState) {}
 

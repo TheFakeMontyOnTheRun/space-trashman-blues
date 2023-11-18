@@ -36,7 +36,7 @@ const char *functionNames[5] = {
         "LoadDBReg"
 };
 
-void HackingScreen_initStateCallback(int32_t tag) {
+void HackingScreen_initStateCallback(enum EGameMenuState tag) {
 
     /* The middle pin */
     cursorPosition = 1;
@@ -160,6 +160,6 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
     return kResumeCurrentState;
 }
 
-void HackingScreen_unloadStateCallback(int32_t newState) {
+void HackingScreen_unloadStateCallback(enum EGameMenuState newState) {
     enableSmoothMovement = wasSmoothMovementPreviouslyEnabled;
 }

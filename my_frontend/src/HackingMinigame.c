@@ -25,7 +25,7 @@ const char *functionNames[5] = {
         "LoadDBReg"
 };
 
-void HackingScreen_initStateCallback(int32_t tag) {
+void HackingScreen_initStateCallback(enum EGameMenuState tag) {
     cursorPosition = 1;
     needs3dRefresh = 0;
 
@@ -81,12 +81,12 @@ void HackingScreen_initialPaintCallback(void) {
 
 }
 
-void HackingScreen_unloadStateCallback(int32_t newState) {
+void HackingScreen_unloadStateCallback(enum EGameMenuState newState) {
 
 }
 
 enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long data) {
-    
+
     uint8_t holdingDisk = getHoldingDisk();
 
     if (isHackingMinigameCompleted()) {

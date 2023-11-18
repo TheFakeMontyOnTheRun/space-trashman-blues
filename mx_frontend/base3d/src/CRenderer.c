@@ -49,6 +49,8 @@ struct MapWithCharKey colliders;
 struct MapWithCharKey enemySightBlockers;
 struct Bitmap *defaultFont;
 struct Mesh mesh;
+int needsToRedrawHUD = TRUE;
+int enable3DRendering = TRUE;
 
 #ifndef AGS
 uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];

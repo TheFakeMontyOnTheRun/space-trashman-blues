@@ -11,11 +11,11 @@ extern int8_t cursorPosition;
 extern const char *mainText;
 const char *CreditsScreen_options[1] = {"Back"};
 
-int32_t CreditsScreen_nextStateNavigation[1] = {
+enum EGameMenuState CreditsScreen_nextStateNavigation[1] = {
         kMainMenu,
 };
 
-void CreditsScreen_initStateCallback(int32_t tag) {
+void CreditsScreen_initStateCallback(enum EGameMenuState tag) {
     mainText = "Made by MontyOnTheRun";
 }
 
@@ -38,5 +38,5 @@ enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
     return handleCursor(CreditsScreen_nextStateNavigation, 1, cmd, kMainMenu);
 }
 
-void CreditsScreen_unloadStateCallback(int32_t newState) {
+void CreditsScreen_unloadStateCallback(enum EGameMenuState newState) {
 }
