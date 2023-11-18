@@ -30,7 +30,7 @@ Created by Daniel Monteiro on 2019-07-26.
 
 #define WALK_STEP 1
 
-int roomCount = 1; /* there's an implicit dummy first */
+uint8_t roomCount = 1; /* there's an implicit dummy first */
 struct Room rooms[TOTAL_ROOMS];
 uint8_t itemsCount = 0;
 struct Item item[TOTAL_ITEMS];
@@ -39,9 +39,9 @@ struct ObjectNode collectedObjectHead;
 struct ObjectNode roomObjectHeads[TOTAL_ROOMS];
 struct ObjectNode *collectedObject = NULL;
 uint8_t playerLocation = 1;
-int playerDirection;
-int playerRank;
-int gameStatus;
+int8_t playerDirection;
+uint8_t playerRank;
+uint8_t gameStatus;
 struct WorldPosition playerPosition;
 ErrorHandlerCallback errorHandlerCallback = NULL;
 
@@ -65,7 +65,7 @@ struct Item *addItem(const char *description,
         const char *info,
 #endif
 #ifdef ITEMS_HAVE_WEIGHT
-        int weight,
+        uint8_t weight,
 #endif
                      uint8_t pickable,
                      int8_t positionX,
@@ -142,7 +142,7 @@ struct ObjectNode *getPlayerItems(void) {
 }
 
 struct Item *getItemNamed(const char *name) {
-    int c;
+    uint8_t c;
 
     for (c = 0; c < itemsCount; ++c) {
         if (!strcmp(item[c].name, name)) {
@@ -153,8 +153,8 @@ struct Item *getItemNamed(const char *name) {
     return NULL;
 }
 
-int getRoomIdByName(const char *name) {
-    int c;
+uint8_t getRoomIdByName(const char *name) {
+    uint8_t c;
 
     if (name != NULL) {
         for (c = 1; c < roomCount; ++c) {
@@ -168,7 +168,7 @@ int getRoomIdByName(const char *name) {
 }
 
 struct Room *getRoomByName(const char *name) {
-    int c;
+    uint8_t c;
 
     if (name != NULL) {
         for (c = 1; c < roomCount; ++c) {
@@ -278,8 +278,8 @@ void setPlayerRank(uint8_t newRank) {
 }
 
 void moveBy(uint8_t direction) {
-    int c;
-    int previousLocation = playerLocation;
+    uint8_t c;
+    uint8_t previousLocation = playerLocation;
 
     struct Room *room = &rooms[playerLocation];
     if (direction <= 5 && room->connections[direction] != 0) {
@@ -425,7 +425,7 @@ uint8_t playerHasObject(const char *itemName) {
 uint8_t isPlayerAtRoom(const char *roomName) {
     struct Room *room = &rooms[playerLocation];
     const char *name = room->name;
-    int returnValue = !strcmp(name, roomName);
+    uint8_t returnValue = !strcmp(name, roomName);
     return returnValue;
 }
 
@@ -479,8 +479,8 @@ void walkTo(const char *operands) {
     struct WorldPosition pos;
     char *xStr;
     char *yStr;
-    int x;
-    int y;
+    int8_t x;
+    int8_t y;
 
     if (playerLocation != 1 && (!item[5].active || !playerHasObject("magnetic-boots"))) {
         defaultLogger("You can't move without your\nmagnetic-boots!");
@@ -698,12 +698,12 @@ void walkBy(uint8_t direction) {
 #endif
 }
 
-uint8_t getPlayerDirection(void) {
+int8_t getPlayerDirection(void) {
     return playerDirection;
 }
 
 void addToRoom(const char *roomName, struct Item *itemName) {
-    int r;
+    uint8_t r;
 
 #ifdef CLI_BUILD
     if (roomName == NULL || itemName == NULL || strlen(roomName) == 0) {

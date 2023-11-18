@@ -82,7 +82,7 @@ void setGameStatus(enum EGameStates newStatus);
 
 enum EGameStates getGameStatus(void);
 
-uint8_t getPlayerDirection(void);
+int8_t getPlayerDirection(void);
 
 void setPlayerDirection(uint8_t direction);
 
@@ -165,7 +165,7 @@ const char *getRoomDescription(void);
 
 struct Room *getRoom(uint8_t index);
 
-int getRoomIdByName(const char *name);
+uint8_t getRoomIdByName(const char *name);
 
 struct Room *getRoomByName(const char *name);
 
