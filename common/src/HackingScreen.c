@@ -26,6 +26,8 @@
 #include "Derelict.h"
 #include "HackingMinigameRules.h"
 
+int wasSmoothMovementPreviouslyEnabled;
+
 const char *functionNames[5] = {
         "???",
         "writeB",
@@ -33,8 +35,6 @@ const char *functionNames[5] = {
         "hackLogin",
         "LoadDBReg"
 };
-
-int wasSmoothMovementPreviouslyEnabled;
 
 void HackingScreen_initStateCallback(int32_t tag) {
 

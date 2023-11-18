@@ -13,7 +13,7 @@
 
 extern uint8_t playerLocation;
 
-extern int cursorPosition;
+extern int8_t cursorPosition;
 
 extern const struct CellPattern patterns[127];
 
@@ -25,13 +25,12 @@ void drawGraphic(const uint8_t *graphic) {
     while (*ptr) {
         uint8_t c;
         const uint8_t npoints = *ptr++;
-        const uint8_t colour = *ptr++;
         const uint8_t *shape = ptr;
 
         for (c = 0; c < npoints - 1; ++c) {
-            drawLine(shape[2 * c], shape[(2 * c) + 1], shape[(2 * c) + 2], shape[(2 * c) + 3], colour);
+            drawLine(shape[2 * c], shape[(2 * c) + 1], shape[(2 * c) + 2], shape[(2 * c) + 3], 2);
         }
-        drawLine(shape[2 * npoints - 2], shape[2 * npoints - 1], shape[0], shape[1], colour);
+        drawLine(shape[2 * npoints - 2], shape[2 * npoints - 1], shape[0], shape[1], 2);
         ptr += 2 * npoints;
     }
 }
@@ -41,23 +40,8 @@ void drawTextAt(uint8_t _x, uint8_t y, const char *text, uint8_t colour) {
 }
 
 void showMessage(const char *message) {
-    uint8_t keepGoing = 1;
     clearTextScreen();
     drawTextAt(1, 17, message, 1);
-
-#ifndef GAMEPAD
-    drawTextAt(1, 22, "Press SPACE button to continue", 1);
-#else
-    drawTextAt(1, 22, "Press start to continue", 1);
-#endif
-
-    while (keepGoing) {
-        uint8_t key = getInput();
-        if (key == kCommandFire1) {
-            keepGoing = 0;
-        }
-    }
-    clearTextScreen();
 }
 
 void drawMap(void) {

@@ -15,7 +15,7 @@
 #include "HackingMinigame.h"
 #include "HackingMinigameRules.h"
 
-extern int cursorPosition;
+extern int8_t cursorPosition;
 
 const char *functionNames[5] = {
         "???",
@@ -86,6 +86,7 @@ void HackingScreen_unloadStateCallback(int32_t newState) {
 }
 
 enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long data) {
+    
     uint8_t holdingDisk = getHoldingDisk();
 
     if (isHackingMinigameCompleted()) {
