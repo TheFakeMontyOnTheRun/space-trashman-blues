@@ -22,6 +22,8 @@
 #include "UI.h"
 #include "Engine.h"
 
+#include <gccore.h>
+
 struct Mesh mesh;
 int visibilityCached = FALSE;
 int needsToRedrawVisibleMeshes = TRUE;
@@ -55,6 +57,15 @@ void printMessageTo3DView(const char *message);
 
 enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
 struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
+
+
+extern GXRModeObj *rmode;
+extern Mtx model, modelview;
+extern Mtx view;
+
+guVector Yaxis = {0,1,0};
+guVector Xaxis = {1,0,0};
+
 
 
 void drawTriangle(const struct Vec3 pos1,
@@ -108,6 +119,15 @@ void enter3D(void) {
     if (leanY < 127) {
         _leanY = 0.25f * ((128 - leanY) / 127.0f);
     }
+
+    // do this before drawing
+    GX_SetViewport(0,0,rmode->fbWidth,rmode->efbHeight,0,1);
+    guMtxIdentity(model);
+    guMtxRotAxisDeg(model, &Xaxis, 0);
+    guMtxTransApply(model, model, 0.0f,0.0f, -20.0f);
+    guMtxConcat(view,model,modelview);
+    // load the modelview matrix into matrix memory
+    GX_LoadPosMtxImm(modelview, GX_PNMTX0);
 
 }
 

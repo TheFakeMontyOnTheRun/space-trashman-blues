@@ -21,6 +21,9 @@
 #include "Engine.h"
 #include "VisibilityStrategy.h"
 
+#include <gccore.h>
+
+
 uint8_t shouldDrawLights = TRUE;
 int useDither = TRUE;
 
@@ -70,7 +73,22 @@ void fillRect(
         const FramebufferPixelFormat pixel,
         const uint8_t stipple) {
 
+    float x = OFFSET_X + _x * NORMALIZE_ORTHO_X;
+    float y = OFFSET_Y + _y * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
+    float dx = _dx * NORMALIZE_ORTHO_X;
+    float dy = _dy * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
 
+    GX_Begin(GX_QUADS, GX_VTXFMT0, 4);			// Draw A Quad
+    GX_Position3f32(x + dx, y + dy, -1);	// Top Left
+    GX_Color3f32(0.75f,0.5f,1.0f);			// Set The Color To Blue
+    GX_Position3f32( x, y + dy, -1);		// Top Right
+    GX_Color3f32(0.25f,0.5f,1.0f);			// Set The Color To Blue
+
+    GX_Position3f32(x + dx, dy, -1);	// Bottom Left
+    GX_Color3f32(1.0f,0.5f,1.0f);			// Set The Color To Blue
+    GX_Position3f32( x, y, -1);	// Bottom Right
+    GX_Color3f32(0.5f,0.5f,1.0f);			// Set The Color To Blue
+    GX_End();									// Done Drawing The Quad
 }
 
 void drawBitmapRegion(const int _x,
@@ -81,6 +99,22 @@ void drawBitmapRegion(const int _x,
                       struct Bitmap *bitmap,
                       const uint8_t transparent,
                       float u0, float u1, float v0, float v1) {
+    float x = OFFSET_X + _x * NORMALIZE_ORTHO_X;
+    float y = OFFSET_Y + _y * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
+    float dx = _dx * NORMALIZE_ORTHO_X;
+    float dy = _dy * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
+
+    GX_Begin(GX_QUADS, GX_VTXFMT0, 4);			// Draw A Quad
+    GX_Position3f32(x + dx, y + dy, -1);	// Top Left
+    GX_Color3f32(0.75f,0.5f,1.0f);			// Set The Color To Blue
+    GX_Position3f32( x, y + dy, -1);		// Top Right
+    GX_Color3f32(0.25f,0.5f,1.0f);			// Set The Color To Blue
+
+    GX_Position3f32(x + dx, dy, -1);	// Bottom Left
+    GX_Color3f32(1.0f,0.5f,1.0f);			// Set The Color To Blue
+    GX_Position3f32( x, y, -1);	// Bottom Right
+    GX_Color3f32(0.5f,0.5f,1.0f);			// Set The Color To Blue
+    GX_End();									// Done Drawing The Quad
 
 }
 
