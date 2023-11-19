@@ -16,7 +16,7 @@ include $(DEVKITARM)/gba_rules
 # DATA is a list of directories containing data files
 # INCLUDES is a list of directories containing header files
 #---------------------------------------------------------------------------------
-TARGET		:=	$(shell basename $(CURDIR))
+TARGET		:=	derelict
 BUILD		:=	build
 SOURCES		:=	menu/src base3d/src base3d/src/ags SoundSystem
 DATA		:=
