@@ -22,84 +22,13 @@
 #include "FixP.h"
 #include "VisibilityStrategy.h"
 
-#include <kernel.h>
-#include <malloc.h>
-#include <tamtypes.h>
-#include <math3d.h>
-#include <packet.h>
-#include <dma_tags.h>
-#include <gif_tags.h>
-#include <gs_psm.h>
-#include <dma.h>
-#include <graph.h>
-#include <draw.h>
-#include <draw3d.h>
-#include <tamtypes.h>
-#include <kernel.h>
-#include <sifrpc.h>
-#include <loadfile.h>
-
-
-extern qword_t *_q;
-
 void bindTexture(struct Bitmap *bitmap) {
-    qword_t *q = _q;
 
-    // Using a texture involves setting up a lot of information.
-    clutbuffer_t clut;
-
-    lod_t lod;
-
-    lod.calculation = LOD_USE_K;
-    lod.max_level = 0;
-    lod.mag_filter = LOD_MAG_LINEAR;
-    lod.min_filter = LOD_MIN_LINEAR;
-    lod.l = 0;
-    lod.k = 0;
-
-    ((texbuffer_t*)bitmap->nativeBuffer)->info.width = draw_log2(bitmap->width);
-    ((texbuffer_t*)bitmap->nativeBuffer)->info.height = draw_log2(bitmap->height);
-    ((texbuffer_t*)bitmap->nativeBuffer)->info.components = TEXTURE_COMPONENTS_RGBA;
-    ((texbuffer_t*)bitmap->nativeBuffer)->info.function = TEXTURE_FUNCTION_MODULATE;
-
-    clut.storage_mode = CLUT_STORAGE_MODE1;
-    clut.start = 0;
-    clut.psm = 0;
-    clut.load_method = CLUT_NO_LOAD;
-    clut.address = 0;
-
-    q = draw_texture_sampling(q, 0, &lod);
-    q = draw_texturebuffer(q, 0, bitmap->nativeBuffer, &clut);
-    _q = q;
 }
 
 
 int submitBitmapToGPU(struct Bitmap *bitmap) {
 
-
-    bitmap->nativeBuffer = (texbuffer_t *) calloc(1, sizeof(texbuffer_t));
-    ((texbuffer_t*)bitmap->nativeBuffer)->width = bitmap->width;
-    ((texbuffer_t*)bitmap->nativeBuffer)->psm = GS_PSM_32;
-    ((texbuffer_t*)bitmap->nativeBuffer)->address = graph_vram_allocate(bitmap->width, bitmap->height, GS_PSM_32, GRAPH_ALIGN_BLOCK);
-
-    packet_t *packet = packet_init(50, PACKET_NORMAL);
-
-    qword_t *q;
-
-    q = packet->data;
-
-    q = draw_texture_transfer(q, bitmap->data, bitmap->width, bitmap->height, GS_PSM_32, ((texbuffer_t*)bitmap->nativeBuffer)->address,
-                              ((texbuffer_t*)bitmap->nativeBuffer)->width);
-    q = draw_texture_flush(q);
-    FlushCache(0);
-    dma_channel_send_chain(DMA_CHANNEL_GIF, packet->data, q - packet->data, 0, 0);
-    dma_wait_fast();
-
-    packet_free(packet);
-
-    disposeMem(bitmap->data);
-    bitmap->data = NULL;
-    bitmap->uploadId = 1;
 
     return 0;
 }
@@ -169,8 +98,7 @@ void releaseBitmap(struct Bitmap *ptr) {
     assert(ptr != NULL);
 
     if (ptr->nativeBuffer != NULL) {
-        graph_vram_free(((texbuffer_t*)ptr->nativeBuffer)->address);
-        disposeMem(((texbuffer_t*)ptr->nativeBuffer));
+        disposeMem(ptr->nativeBuffer);
     }
 
     disposeMem(ptr->data);
