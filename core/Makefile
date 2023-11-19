@@ -50,7 +50,7 @@ report:
 	./build-with-coverage.sh
 	lcov --no-external --capture --directory src --output-file lcov-output.info && genhtml lcov-output.info --output-directory coverage && rm lcov-output.info
 
-doxy:
+doxy-site:
 	(cat Doxyfile; echo 'OUTPUT_DIRECTORY="doxy-site"') | doxygen -
 
 serve:
