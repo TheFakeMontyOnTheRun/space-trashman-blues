@@ -9,7 +9,7 @@ EE_CFLAGS += -Ibase3d/include        \
     -DPLAYSTATION2 \
     -DINCLUDE_ITEM_DESCRIPTIONS -DENDIANESS_AWARE
 
-EE_BIN = derelict128.elf
+EE_BIN = derelict_ee.elf
 
 EE_OBJS= menu/src/Main.o \
 	../common/src/FixP.o \

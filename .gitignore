@@ -193,3 +193,10 @@ tools/wobj-compiler/target/libs/libstrip-1.0-SNAPSHOT.jar
 tools/wobj-compiler/target/maven-archiver/pom.properties
 tools/wobj-compiler/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
 tools/wobj-compiler/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+derelict.elf.map
+ee_frontend/derelict_ee.elf
+ee_frontend/build/derelict_gx.elf.map
+mx_frontend/derelict.elf
+mx_frontend/derelict.gba
+ee_frontend/derelict_gx.dol
+ee_frontend/derelict_gx.elf
