@@ -98,7 +98,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame, uint8_t *pr
                     int scale200To240);
 #endif
 
-void fill(
+void fillRect(
         const int x, const int y,
         const size_t dx, const size_t dy,
         const FramebufferPixelFormat pixel, const uint8_t stipple);
