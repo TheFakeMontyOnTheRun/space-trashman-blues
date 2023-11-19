@@ -18,7 +18,7 @@ jobs:
     - name: Install MKDocs
       run: pip install mkdocs
     - name: Install lcov and texinfo
-      run: sudo apt-get install lcov texinfo
+      run: sudo apt-get install lcov texinfo doxygen
     - name: Generate HTML from game design markdown files
       run: cd core && mkdocs build
     - name: Generate text coverage report
