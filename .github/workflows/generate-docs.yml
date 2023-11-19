@@ -17,7 +17,7 @@ jobs:
       run: git submodule update --init --recursive    
     - name: Install MKDocs
       run: pip install mkdocs
-    - name: Install lcov and texinfo
+    - name: Install lcov, texinfo and Doxygen
       run: sudo apt-get install lcov texinfo doxygen
     - name: Generate HTML from game design markdown files
       run: cd core && mkdocs build
