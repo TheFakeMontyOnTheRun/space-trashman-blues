@@ -291,16 +291,10 @@ void moveBy(uint8_t direction) {
             return;
         }
 
-        if (!getItemNamed("magnetic-boots")->active || !playerHasObject("magnetic-boots")) {
-            defaultLogger("You can't move without your\nmagnetic-boots!");
-            return;
-        }
-
         if (room == getRoomByName("hangar") && coupling->active && direction == 0) {
             defaultLogger("The magnetic coupling is\nengaged. The door won't open.");
             return;
         }
-
 
         playerLocation = room->connections[direction];
         room = &rooms[playerLocation];
@@ -481,10 +475,6 @@ void walkTo(const char *operands) {
     char *yStr;
     int8_t x;
     int8_t y;
-
-    if (playerLocation != 1 && (!item[5].active || !playerHasObject("magnetic-boots"))) {
-        defaultLogger("You can't move without your\nmagnetic-boots!");
-    }
 
     xStr = (char*)operands;
     yStr = strtok(NULL, "\n ");
