@@ -23,6 +23,10 @@
 
 #include <gccore.h>
 
+#ifdef WII
+#include <wiiuse/wpad.h>
+#endif
+
 int snapshotSignal = '.';
 int needsToRedrawHUD = TRUE;
 int enable3DRendering = TRUE;
@@ -48,7 +52,14 @@ void graphicsInit() {
     VIDEO_Init();
 
     rmode = VIDEO_GetPreferredMode(NULL);
+
+#ifdef GX
     PAD_Init();
+#endif
+
+#ifdef WII
+    WPAD_Init();
+#endif
 
     // allocate 2 framebuffers for double buffering
     frameBuffer[0] = MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode));
@@ -124,6 +135,7 @@ void graphicsInit() {
 }
 
 void handleSystemEvents() {
+#ifdef GX
     PAD_ScanPads();
 
     s8 tpad = PAD_StickX(0);
@@ -161,6 +173,37 @@ void handleSystemEvents() {
     if ( PAD_ButtonsDown(0) & PAD_BUTTON_START) {
         exit(0);
     }
+#endif
+
+#ifdef WII
+    WPAD_ScanPads();
+
+    if (WPAD_ButtonsDown(0) & WPAD_BUTTON_DOWN) {
+        mBufferedCommand = kCommandDown;
+    }
+
+    if (WPAD_ButtonsDown(0) & WPAD_BUTTON_UP) {
+        mBufferedCommand = kCommandUp;
+    }
+
+    if (WPAD_ButtonsDown(0) & WPAD_BUTTON_LEFT) {
+        mBufferedCommand = kCommandLeft;
+    }
+
+    if (WPAD_ButtonsDown(0) & WPAD_BUTTON_RIGHT){
+        mBufferedCommand = kCommandRight;
+    }
+
+    if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A) {
+        mBufferedCommand = kCommandFire1;
+    }
+
+
+    if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B) {
+        exit(0);
+    }
+
+#endif
 }
 
 void graphicsShutdown() {
