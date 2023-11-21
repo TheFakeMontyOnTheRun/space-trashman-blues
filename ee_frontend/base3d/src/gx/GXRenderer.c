@@ -123,15 +123,6 @@ void graphicsInit() {
             up = {0.0F, 1.0F, 0.0F},
             look = {0.0F, 0.0F, -1.0F};
     guLookAt(view, &cam, &up, &look);
-
-
-    // setup our projection matrix
-    // this creates a perspective matrix with a view angle of 90,
-    // and aspect ratio based on the display resolution
-    f32 w = rmode->viWidth;
-    f32 h = rmode->viHeight;
-    guPerspective(perspective, 45, (f32)w/h, 0.1F, 1024.0F);
-    GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
 }
 
 void handleSystemEvents() {
