@@ -62,7 +62,7 @@ struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
 extern GXRModeObj *rmode;
 extern Mtx model, modelview;
 extern Mtx view;
-
+extern Mtx44 perspective;
 guVector Yaxis = {0,1,0};
 guVector Xaxis = {1,0,0};
 
@@ -81,6 +81,24 @@ uint32_t getPaletteEntry(const uint32_t origin) {
 }
 
 void enter2D(void) {
+    // do this before drawing
+    GX_SetViewport(0,0,rmode->fbWidth,rmode->efbHeight,0,1);
+    guMtxIdentity(model);
+    guMtxRotAxisDeg(model, &Xaxis, 0);
+    guMtxTransApply(model, model, 0.0f,0.0f, 0.0f);
+    guMtxConcat(view,model,modelview);
+    // load the modelview matrix into matrix memory
+    GX_LoadPosMtxImm(modelview, GX_PNMTX0);
+
+    // setup our projection matrix
+    // this creates a perspective matrix with a view angle of 90,
+    // and aspect ratio based on the display resolution
+    f32 w = rmode->viWidth;
+    f32 h = rmode->viHeight;
+
+    guOrtho(perspective, -1.0f, 1.0f, 1.00f, -1.00f, 1.0f, 512.00f);
+
+    GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
 }
 
 void initGL() {
@@ -120,14 +138,14 @@ void enter3D(void) {
         _leanY = 0.25f * ((128 - leanY) / 127.0f);
     }
 
-    // do this before drawing
-    GX_SetViewport(0,0,rmode->fbWidth,rmode->efbHeight,0,1);
-    guMtxIdentity(model);
-    guMtxRotAxisDeg(model, &Xaxis, 0);
-    guMtxTransApply(model, model, 0.0f,0.0f, -20.0f);
-    guMtxConcat(view,model,modelview);
-    // load the modelview matrix into matrix memory
-    GX_LoadPosMtxImm(modelview, GX_PNMTX0);
+
+    // setup our projection matrix
+    // this creates a perspective matrix with a view angle of 90,
+    // and aspect ratio based on the display resolution
+    f32 w = rmode->viWidth;
+    f32 h = rmode->viHeight;
+    guPerspective(perspective, 45, (f32)w/h, 0.1F, 1024.0F);
+    GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
 
 }
 
