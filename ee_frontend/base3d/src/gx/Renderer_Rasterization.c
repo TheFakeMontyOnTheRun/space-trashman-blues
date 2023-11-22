@@ -23,6 +23,8 @@
 
 #include <gccore.h>
 
+#define NORMALIZE_ORTHO (1.0f / 100.0f)
+#define NORMALIZE_COLOUR (1.0f / 256.0f)
 
 uint8_t shouldDrawLights = TRUE;
 int useDither = TRUE;
@@ -73,22 +75,34 @@ void fillRect(
         const FramebufferPixelFormat pixel,
         const uint8_t stipple) {
 
-    float x = OFFSET_X + _x * NORMALIZE_ORTHO_X;
-    float y = OFFSET_Y + _y * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
-    float dx = _dx * NORMALIZE_ORTHO_X;
-    float dy = _dy * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
+    float x = _x * NORMALIZE_ORTHO;
+    float y = _y * NORMALIZE_ORTHO;
+    float dx = _dx * NORMALIZE_ORTHO;
+    float dy = _dy * NORMALIZE_ORTHO;
 
-    GX_Begin(GX_QUADS, GX_VTXFMT0, 4);			// Draw A Quad
-    GX_Position3f32(x + dx, y + dy, -1);	// Top Left
-    GX_Color3f32(0.75f,0.5f,1.0f);			// Set The Color To Blue
-    GX_Position3f32( x, y + dy, -1);		// Top Right
-    GX_Color3f32(0.25f,0.5f,1.0f);			// Set The Color To Blue
+    uint32_t fragment = pixel;//palette[pixel];
 
-    GX_Position3f32(x + dx, dy, -1);	// Bottom Left
-    GX_Color3f32(1.0f,0.5f,1.0f);			// Set The Color To Blue
-    GX_Position3f32( x, y, -1);	// Bottom Right
-    GX_Color3f32(0.5f,0.5f,1.0f);			// Set The Color To Blue
-    GX_End();									// Done Drawing The Quad
+    if (fragment != TRANSPARENCY_COLOR) {
+        float r, g, b;
+
+        r = (fragment & 0xFF) * NORMALIZE_COLOUR;
+        g = ((fragment & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+        b = ((fragment & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
+
+        GX_Begin(GX_QUADS, GX_VTXFMT0, 4);            // Draw A Quad
+        GX_Position3f32(x, y + dy, -1);	// Top Left
+        GX_Color3f32(r ,g ,b);
+
+        GX_Position3f32( x + dx, y + dy, -1);		// Top Right
+        GX_Color3f32(r ,g ,b);
+
+        GX_Position3f32( x +dx, y, -1);	// Bottom Right
+        GX_Color3f32(r ,g ,b);
+
+        GX_Position3f32(x, y, -1);	// Bottom Left
+        GX_Color3f32(r ,g ,b);
+        GX_End();                                    // Done Drawing The Quad
+    }
 }
 
 void drawBitmapRegion(const int _x,
@@ -104,16 +118,26 @@ void drawBitmapRegion(const int _x,
     float dx = _dx * NORMALIZE_ORTHO_X;
     float dy = _dy * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
 
-    GX_Begin(GX_QUADS, GX_VTXFMT0, 4);			// Draw A Quad
-    GX_Position3f32(x + dx, y + dy, -1);	// Top Left
-    GX_Color3f32(0.75f,0.5f,1.0f);			// Set The Color To Blue
-    GX_Position3f32( x, y + dy, -1);		// Top Right
-    GX_Color3f32(0.25f,0.5f,1.0f);			// Set The Color To Blue
+    float r, g, b;
 
-    GX_Position3f32(x + dx, dy, -1);	// Bottom Left
-    GX_Color3f32(1.0f,0.5f,1.0f);			// Set The Color To Blue
-    GX_Position3f32( x, y, -1);	// Bottom Right
-    GX_Color3f32(0.5f,0.5f,1.0f);			// Set The Color To Blue
+    r = (tint & 0xFF) * NORMALIZE_COLOUR;
+    g = ((tint & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+    b = ((tint & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
+
+    GX_Begin(GX_QUADS, GX_VTXFMT0, 4);			// Draw A Quad
+
+    GX_Position3f32(x, y + dy, -1);	// Top Left
+    GX_Color3f32(r ,g ,b);
+
+    GX_Position3f32( x + dx, y + dy, -1);		// Top Right
+    GX_Color3f32(r ,g ,b);
+
+    GX_Position3f32( x +dx, y, -1);	// Bottom Right
+    GX_Color3f32(r ,g ,b);
+
+    GX_Position3f32(x, y, -1);	// Bottom Left
+    GX_Color3f32(r ,g ,b);
+
     GX_End();									// Done Drawing The Quad
 
 }
