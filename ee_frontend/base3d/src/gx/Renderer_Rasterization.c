@@ -37,7 +37,7 @@ struct Bitmap *defaultFont;
 #define ADJUST_RESOLUTION_Y (((200.0f/256.0f) * 200.0f) / 240.0f )
 #define OFFSET_X (-0.5f)
 #define OFFSET_Y (-0.375f)
-#define NORMALIZE_COLOUR (2.0f / 256.0f)
+
 
 #define GEOMETRY_SCALE_X 2.0f
 #define GEOMETRY_SCALE_Y 1.0f
