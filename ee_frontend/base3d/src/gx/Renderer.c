@@ -96,7 +96,7 @@ void enter2D(void) {
     f32 w = rmode->viWidth;
     f32 h = rmode->viHeight;
 
-    guOrtho(perspective, -1.0f, 1.0f, 1.00f, -1.00f, 1.0f, 512.00f);
+    guOrtho(perspective, -1.0f, 1.0f, -1.00f, 1.00f, 1.0f, 512.00f);
 
     GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
 }
