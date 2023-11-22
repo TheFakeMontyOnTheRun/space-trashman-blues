@@ -162,7 +162,7 @@ void handleSystemEvents() {
 
 
     if ( PAD_ButtonsDown(0) & PAD_BUTTON_START) {
-        exit(0);
+        mBufferedCommand = kCommandBack;
     }
 #endif
 
@@ -191,7 +191,7 @@ void handleSystemEvents() {
 
 
     if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B) {
-        exit(0);
+        mBufferedCommand = kCommandBack;
     }
 
 #endif
