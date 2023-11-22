@@ -75,10 +75,10 @@ void fillRect(
         const FramebufferPixelFormat pixel,
         const uint8_t stipple) {
 
-    float x = _x * NORMALIZE_ORTHO;
-    float y = _y * NORMALIZE_ORTHO;
-    float dx = _dx * NORMALIZE_ORTHO;
-    float dy = _dy * NORMALIZE_ORTHO;
+    float x = OFFSET_X + _x * NORMALIZE_ORTHO_X;
+    float y = OFFSET_Y + _y * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
+    float dx = _dx * NORMALIZE_ORTHO_X;
+    float dy = _dy * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
 
     uint32_t fragment = pixel;//palette[pixel];
 
