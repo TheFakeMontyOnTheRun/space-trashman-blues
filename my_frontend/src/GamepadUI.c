@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
@@ -29,44 +30,8 @@ void initGamepadUI(void) {
     cursorPosition = 0;
 }
 
-void performActionJoypad(void) {
-    performAction();
-
-/*
-char *menuItems[] = {
- 0       "Use/Toggle current item",
- 1       "Use current item with...",
- 2       "Pick",
- 3       "Drop",
- 4       "Next item in inventory",
- 5       "Next room item in focus",
-};
-*/
-    switch (cursorPosition) {
-        case 0:
-            useObjectNamed(getItem(focusedItem->item)->name);
-            break;
-        case 1:
-            interactWithItemInRoom();
-            HUD_refresh();
-            break;
-        case 2:
-            pickItem();
-            HUD_refresh();
-            break;
-        case 3:
-            dropItem();
-            HUD_refresh();
-            break;
-        case 4:
-            nextItemInHand();
-            HUD_refresh();
-            break;
-        case 5:
-            nextItemInRoom();
-            HUD_refresh();
-            break;
-    }
+enum ECommand performActionJoypad(void) {
+    return kCommandFire1 + cursorPosition;
 }
 
 void HUD_initialPaint(void) {

@@ -25,7 +25,9 @@ enum ECommand {
     kCommandStrafeLeft,
     kCommandStrafeRight,
     kCommandFire3,
-    kCommandFire4
+    kCommandFire4,
+    kCommandFire5,
+    kCommandFire6
 };
 
 enum EGameMenuState {

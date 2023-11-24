@@ -71,13 +71,11 @@ enum ECommand getInput(void) {
     }
 
     if ((key & JOY_FIREA) /* && !cooldown */) {
-//        performActionJoypad();
         cooldown = COOLDOWN_MAX;
-        return kCommandFire1;
+        return performActionJoypad();
     }
 
     if ((key & JOY_FIREB) /* && !cooldown */ ) {
-        /*
         cursorPosition = (cursorPosition + 1);
 
         if (cursorPosition >= 6) {
@@ -87,8 +85,6 @@ enum ECommand getInput(void) {
         HUD_refresh();
         cooldown = COOLDOWN_MAX;
         return kCommandNone;
-         */
-        return kCommandFire2;
     }
 
     return kCommandNone;

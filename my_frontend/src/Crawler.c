@@ -90,29 +90,29 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
         case 'l':
             shutdownGraphics();
             exit(0);
-        case '7':
+        case kCommandFire5:
             nextItemInHand();
             break;
 
-        case '4':
+        case kCommandFire6:
             nextItemInRoom();
             break;
 
-        case '8':
+        case kCommandFire1:
             useItemInHand();
             updateMapItems();
             break;
 
-        case '5':
+        case kCommandFire2:
             interactWithItemInRoom();
             updateMapItems();
             break;
 
-        case '9':
+        case kCommandFire3:
             pickItem();
             break;
 
-        case '6':
+        case kCommandFire4:
             dropItem();
             break;
 #endif
