@@ -1,7 +1,7 @@
 #ifndef GAMEPADUI_H
 #define GAMEPADUI_H
 
-void performActionJoypad(void);
+enum ECommand performActionJoypad(void);
 
 void initGamepadUI(void);
 
