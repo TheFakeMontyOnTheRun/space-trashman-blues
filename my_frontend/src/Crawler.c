@@ -60,26 +60,10 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
     uint8_t newCell = 0;
 
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
-    if (roomTransitionAnimationStep >= 2) {
-        uint8_t y = roomTransitionAnimationStep--;
-        uint8_t x;
-        vLine(y, y, 95 + (MAP_SIZE_Y - y), 1);
-        vLine(95 + (MAP_SIZE_Y - y), y, 95 + (MAP_SIZE_Y - y), 1);
-
-        for (x = y; x < (95 + (MAP_SIZE_Y - y)); ++x) {
-            graphicsPut(x, y);
-            graphicsPut(x, 95 + (MAP_SIZE_Y - y));
-
-            /* door opening */
-            graphicsPut(x, 95 - 3 * (MAP_SIZE_Y - y));
-        }
-
+    if (roomTransitionAnimationStep) {
         return kResumeCurrentState;
-    } else
-#endif
-    {
-        renderScene();
     }
+#endif
 
     prevX = cameraX;
     prevZ = cameraZ;
@@ -184,7 +168,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
             newCell = '0';
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
         } else {
-            roomTransitionAnimationStep = 32;
+            roomTransitionAnimationStep = 30;
 #endif
         }
         setPlayerDirection(cameraRotation = (newCell - '0'));
@@ -195,7 +179,26 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
 }
 
 void Crawler_repaintCallback(void) {
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
+    if (roomTransitionAnimationStep) {
+        uint8_t y = roomTransitionAnimationStep--;
+        uint8_t x;
+        uint8_t val = 95 + (MAP_SIZE_Y - y);
+        vLine(y, y, val, 1);
+        vLine(val, y, val, 1);
 
+        for (x = y; x < val; ++x) {
+            graphicsPut(x, y);
+            graphicsPut(x, val);
+
+            /* door opening */
+            graphicsPut(x, 95 - 3 * (MAP_SIZE_Y - y));
+        }
+    } else
+#endif
+    {
+        renderScene();
+    }
 }
 
 void onError(const char *mesg) {
