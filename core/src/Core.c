@@ -30,19 +30,61 @@ Created by Daniel Monteiro on 2019-07-26.
 
 #define WALK_STEP 1
 
-uint8_t roomCount = 1; /* there's an implicit dummy first */
+/**
+ * there's an implicit dummy first
+ */
+uint8_t roomCount = 1;
+/**
+ *
+ */
 struct Room rooms[TOTAL_ROOMS];
+/**
+ *
+ */
 uint8_t itemsCount = 0;
+/**
+ *
+ */
 struct Item item[TOTAL_ITEMS];
+/*
+ *
+ */
 struct ObjectNode objectNodes[TOTAL_ITEMS];
+/**
+ *
+ */
 struct ObjectNode collectedObjectHead;
+/**
+ *
+ */
 struct ObjectNode roomObjectHeads[TOTAL_ROOMS];
+/**
+ *
+ */
 struct ObjectNode *collectedObject = NULL;
+/**
+ *
+ */
 uint8_t playerLocation = 1;
+/**
+ *
+ */
 int8_t playerDirection;
+/**
+ *
+ */
 uint8_t playerRank;
+/**
+ *
+ */
 uint8_t gameStatus;
+/**
+ *
+ */
 struct WorldPosition playerPosition;
+/**
+ *
+ */
 ErrorHandlerCallback errorHandlerCallback = NULL;
 
 void writeToLog(const char *errorMsg) {
@@ -520,8 +562,9 @@ void infoAboutItemNamed(const char *itemName) {
         }
         object2 = object2->next;
     }
-
+#ifdef CLI_BUILD
     defaultLogger("No such item could be found");
+#endif
 }
 #endif
 
@@ -535,12 +578,16 @@ void useObjectsTogether(const char *operands) {
     char *operand2 = strtok(NULL, "\n ");
 
     if (!playerHasObject(operand1)) {
+#ifdef CLI_BUILD
         defaultLogger("You do not have this object");
+#endif
         return;
     }
 
     if (!hasItemInRoom(getRoom(playerLocation)->name, operand2)) {
+#ifdef CLI_BUILD
         defaultLogger("That object is not present in the room");
+#endif
         return;
     }
 
