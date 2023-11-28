@@ -11,6 +11,7 @@ struct Bitmap {
     uint16_t height;
     int uploadId;
     void *nativeBuffer;
+    size_t nativeSize;
 };
 
 struct Texture {

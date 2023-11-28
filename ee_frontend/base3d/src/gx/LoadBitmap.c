@@ -22,13 +22,22 @@
 #include "FixP.h"
 #include "VisibilityStrategy.h"
 
-void bindTexture(struct Bitmap *bitmap) {
+#include <gccore.h>
+#include <gctypes.h>
+#include <ogc/gx.h>
 
+void bindTexture(struct Bitmap *bitmap) {
+    GX_LoadTexObj(bitmap->nativeBuffer, GX_TEXMAP0);
+    GX_ClearVtxDesc();
+    GX_InvVtxCache();
+    GX_InvalidateTexAll();
 }
 
 
 int submitBitmapToGPU(struct Bitmap *bitmap) {
-
+    bitmap->nativeBuffer = allocMem(sizeof(GXTexObj), TEXTURE_MEMORY, 1);
+    DCFlushRange(bitmap->data, bitmap->width * bitmap->height * 4);
+    GX_InitTexObj(bitmap->nativeBuffer, bitmap->data, bitmap->width, bitmap->height, GX_TF_RGB565, GX_REPEAT, GX_REPEAT, GX_FALSE);
 
     return 0;
 }
