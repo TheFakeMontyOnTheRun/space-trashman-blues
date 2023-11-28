@@ -76,9 +76,10 @@ void memCopyToFrom(void *dst, void *src, size_t sizeInBytes) {
 void memFill(void *dst, uint8_t val, size_t sizeInBytes) {
     memset(dst, val, sizeInBytes);
 }
-
 #endif
 
+
+#ifdef ENDIANESS_AWARE
 uint8_t isBigEndian(void) {
     union {
         uint32_t i;
@@ -104,3 +105,4 @@ uint32_t toNativeEndianess(const uint32_t val) {
 
     return val2;
 }
+#endif
