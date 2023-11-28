@@ -124,22 +124,34 @@ void drawBitmapRegion(const int _x,
     g = ((tint & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
     b = ((tint & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
 
+    if (bitmap->uploadId == -1) {
+        submitBitmapToGPU(bitmap);
+    }
+
+    bindTexture(bitmap);
+
+    GX_SetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);			// Draw A Quad
 
     GX_Position3f32(x, y + dy, -1);	// Top Left
     GX_Color3f32(r ,g ,b);
+    GX_TexCoord2f32(0.0f,1.0f);
 
     GX_Position3f32( x + dx, y + dy, -1);		// Top Right
     GX_Color3f32(r ,g ,b);
+    GX_TexCoord2f32(1.0f,1.0f);
 
     GX_Position3f32( x +dx, y, -1);	// Bottom Right
     GX_Color3f32(r ,g ,b);
+    GX_TexCoord2f32(1.0f,0.0f);
 
     GX_Position3f32(x, y, -1);	// Bottom Left
     GX_Color3f32(r ,g ,b);
+    GX_TexCoord2f32(0.0f,0.0f);
 
     GX_End();									// Done Drawing The Quad
-
+    GX_SetVtxDesc(GX_VA_TEX0, GX_NONE);
 }
 
 void drawBitmap(const int _x,

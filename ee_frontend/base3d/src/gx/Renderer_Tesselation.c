@@ -149,31 +149,30 @@ void drawQuad(
     vy4 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos4.mY) + centerY;
     vz4 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos4.mZ) + centerZ;
 
-    if (texture != NULL && texture->raw != NULL && texture->raw->nativeBuffer != NULL ) {
-        GX_SetTevOp(GX_TEVSTAGE0,GX_REPLACE);
-        GX_SetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-        GX_LoadTexObj(texture->raw->nativeBuffer, GX_TEXMAP0);
-    }
+    bindTexture(texture->raw);
 
+    GX_SetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);			// Draw A Quad
 
     GX_Position3f32(vx1, vy1, vz1);	// Top Left
     GX_Color3f32(0.75f,0.5f,1.0f);			// Set The Color To Blue
-    GX_TexCoord2f32(0.0f,0.0f);
+    GX_TexCoord2f32(0.0f,1.0f);
 
     GX_Position3f32( vx2, vy2, vz2);		// Top Right
     GX_Color3f32(0.25f,0.5f,1.0f);			// Set The Color To Blue
-    GX_TexCoord2f32(0.0f,0.0f);
+    GX_TexCoord2f32(1.0f,1.0f);
 
     GX_Position3f32(vx4, vy4, vz4);	// Bottom Left
     GX_Color3f32(1.0f,0.5f,1.0f);			// Set The Color To Blue
-    GX_TexCoord2f32(0.0f,0.0f);
+    GX_TexCoord2f32(1.0f,0.0f);
 
     GX_Position3f32( vx3, vy3, vz3);	// Bottom Right
     GX_Color3f32(0.5f,0.5f,1.0f);			// Set The Color To Blue
     GX_TexCoord2f32(0.0f,0.0f);
 
     GX_End();									// Done Drawing The Quad
+
+    GX_SetVtxDesc(GX_VA_TEX0, GX_NONE);
 }
 
 void drawRampAt(const struct Vec3 center0, const struct Vec3 center1,
