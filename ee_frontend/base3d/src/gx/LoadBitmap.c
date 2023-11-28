@@ -27,10 +27,11 @@
 #include <ogc/gx.h>
 
 void bindTexture(struct Bitmap *bitmap) {
+
+//    GX_SetTevOp(GX_TEVSTAGE0,GX_REPLACE);
+    GX_SetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+
     GX_LoadTexObj(bitmap->nativeBuffer, GX_TEXMAP0);
-    GX_ClearVtxDesc();
-    GX_InvVtxCache();
-    GX_InvalidateTexAll();
 }
 
 
@@ -38,6 +39,10 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
     bitmap->nativeBuffer = allocMem(sizeof(GXTexObj), TEXTURE_MEMORY, 1);
     DCFlushRange(bitmap->data, bitmap->width * bitmap->height * 4);
     GX_InitTexObj(bitmap->nativeBuffer, bitmap->data, bitmap->width, bitmap->height, GX_TF_RGB565, GX_REPEAT, GX_REPEAT, GX_FALSE);
+
+    disposeMem(bitmap->data);
+    bitmap->data = NULL;
+    bitmap->uploadId = 1;
 
     return 0;
 }

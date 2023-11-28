@@ -43,6 +43,8 @@ Mtx model, modelview;
 u32	fb = 0; 	// initial framebuffer index
 GXColor background = {0, 0, 0, 0xff};
 
+u32 first_frame = 1;
+
 void graphicsInit() {
 
     enableSmoothMovement = TRUE;
@@ -102,6 +104,7 @@ void graphicsInit() {
     GX_ClearVtxDesc();
     GX_SetVtxDesc(GX_VA_POS, GX_DIRECT);
     GX_SetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+    GX_SetVtxDesc(GX_VA_TEX0, GX_NONE);
 
     // setup the vertex attribute table
     // describes the data
@@ -121,6 +124,7 @@ void graphicsInit() {
     GX_SetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
 
     GX_InvVtxCache();
+    GX_InvalidateTexAll();
 
     // setup our camera at the origin
     // looking down the -z axis with y up
@@ -207,17 +211,18 @@ void graphicsShutdown() {
 }
 
 void flipRenderer() {
-    // do this stuff after drawing
-    GX_DrawDone();
-
-    fb ^= 1;		// flip framebuffer
     GX_SetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GX_SetColorUpdate(GX_TRUE);
     GX_CopyDisp(frameBuffer[fb],GX_TRUE);
 
+    GX_DrawDone();
+
     VIDEO_SetNextFramebuffer(frameBuffer[fb]);
-
+    if(first_frame) {
+        first_frame = 0;
+        VIDEO_SetBlack(FALSE);
+    }
     VIDEO_Flush();
-
     VIDEO_WaitVSync();
+    fb ^= 1;
 }
