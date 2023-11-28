@@ -94,21 +94,9 @@ void graphicsFlush(void) {
     if (needs3dRefresh) {
         flush3DBuffer();
         if (updateDirection) {
+            char direction[8] = {'N', 0, 'E', 0, 'S', 0, 'W', 0};
             updateDirection = 0;
-            switch (getPlayerDirection()) {
-                case 0:
-                    writeStrWithLimit(12, 17, "N", 31, 2, 0);
-                    break;
-                case 1:
-                    writeStrWithLimit(12, 17, "E", 31, 2, 0);
-                    break;
-                case 2:
-                    writeStrWithLimit(12, 17, "S", 31, 2, 0);
-                    break;
-                case 3:
-                    writeStrWithLimit(12, 17, "W", 31, 2, 0);
-                    break;
-            }
+            writeStrWithLimit(12, 17, &direction[getPlayerDirection() * 2], 31, 2, 0);
         }
     }
 }

@@ -64,7 +64,7 @@ const enum EGameMenuState MainMenu_nextStateNavigation[4] = {
         kPlayGame, kCredits, kHelp,
         kQuit};
 
-const uint8_t kMainMenuOptionsCount = 4;
+#define kMainMenuOptionsCount  4
 #else
 const char *MainMenu_options[3] = {
         "Play game", "Credits", "Help"};
@@ -72,7 +72,7 @@ const char *MainMenu_options[3] = {
 const int32_t MainMenu_nextStateNavigation[3] = {
         kPlayGame, kCredits, kHelp};
 
-const uint8_t kMainMenuOptionsCount = 3;
+#define kMainMenuOptionsCount 3
 #endif
 
 extern size_t biggestOption;
