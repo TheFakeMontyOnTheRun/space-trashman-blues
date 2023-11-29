@@ -20,14 +20,14 @@ enum ECommand {
     kCommandLeft,
     kCommandFire1,
     kCommandFire2,
-    kCommandBack,
-    kCommandQuit,
-    kCommandStrafeLeft,
-    kCommandStrafeRight,
     kCommandFire3,
     kCommandFire4,
     kCommandFire5,
-    kCommandFire6
+    kCommandFire6,
+    kCommandBack,
+    kCommandQuit,
+    kCommandStrafeLeft,
+    kCommandStrafeRight
 };
 
 enum EGameMenuState {

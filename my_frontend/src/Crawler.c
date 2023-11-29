@@ -69,11 +69,6 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
     prevZ = cameraZ;
 
     switch (cmd) {
-
-#ifndef GAMEPAD
-        case 'l':
-            shutdownGraphics();
-            exit(0);
         case kCommandFire5:
             nextItemInHand();
             break;
@@ -99,7 +94,14 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
         case kCommandFire4:
             dropItem();
             break;
-#endif
+        default:
+            goto handle_directions;
+    }
+    needs3dRefresh = 1;
+    HUD_refresh();
+    return kResumeCurrentState;
+handle_directions:
+    switch (cmd) {
         case kCommandLeft:
             turnLeft();
             break;
@@ -120,10 +122,11 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
         case kCommandUp:
             walkBy(0);
             break;
+        case kCommandNone:
+            needs3dRefresh = 0;
+            return kResumeCurrentState;
     }
-
-    HUD_refresh();
-
+    needs3dRefresh = 1;
     cameraRotation = getPlayerDirection();
     pos = getPlayerPosition();
 
@@ -179,6 +182,9 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
 }
 
 void Crawler_repaintCallback(void) {
+    if (!needs3dRefresh) {
+        return;
+    }
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
     if (roomTransitionAnimationStep) {
         uint8_t y = roomTransitionAnimationStep--;
@@ -210,7 +216,6 @@ void logDelegate(const char *mesg) {
 }
 
 void Crawler_initStateCallback(enum EGameMenuState tag_unused) {
-    needs3dRefresh = 1;
     enteredFrom = 0;
     cameraRotation = 0;
     initStation();
@@ -218,6 +223,7 @@ void Crawler_initStateCallback(enum EGameMenuState tag_unused) {
     setErrorHandlerCallback(onError);
     setLoggerDelegate(logDelegate);
     initMap();
+    needs3dRefresh = 1;
 }
 
 void Crawler_initialPaintCallback(void) {
