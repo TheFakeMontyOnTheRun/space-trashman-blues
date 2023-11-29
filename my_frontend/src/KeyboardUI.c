@@ -17,12 +17,12 @@ extern struct ObjectNode *roomItem;
 
 
 const char *menuItems[] = {
-        "8) Use",
-        "5) Use with",
-        "9) Pick",
-        "6) Drop",
-        "7) Next(hand)",
-        "4) Next(room)",
+        "1) Use",
+        "2) Use with",
+        "3) Pick",
+        "4) Drop",
+        "5) Next(hand)",
+        "6) Next(room)",
 };
 
 void initKeyboardUI(void) {

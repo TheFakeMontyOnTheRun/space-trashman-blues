@@ -10,7 +10,7 @@ int8_t cameraRotation = 0;
 
 int main(int argc, char **argv) {
     initHW();
-    enterState(kHackingGame);
+    enterState(kMainMenu);
 
   do {
       menuTick(10);

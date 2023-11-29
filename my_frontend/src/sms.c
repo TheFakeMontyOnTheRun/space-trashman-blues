@@ -92,6 +92,7 @@ enum ECommand getInput(void) {
 
 void graphicsFlush(void) {
     if (needs3dRefresh) {
+        needs3dRefresh = 0;
         flush3DBuffer();
         if (updateDirection) {
             char direction[8] = {'N', 0, 'E', 0, 'S', 0, 'W', 0};

@@ -124,7 +124,8 @@ void handleSystemEvents(void) {
 enum ECommand getInput(void) {
     SDL_Event event;
 
-    mBufferedCommand = 'p';
+    mBufferedCommand = kCommandNone;
+
     while (SDL_PollEvent(&event)) {
 
         if (event.type == SDL_QUIT) {
@@ -136,7 +137,7 @@ enum ECommand getInput(void) {
 
             switch (event.key.keysym.sym) {
                 case SDLK_RETURN:
-                case SDLK_z:
+                case SDLK_1:
                     mBufferedCommand = kCommandFire1;
                     break;
 
@@ -149,55 +150,33 @@ enum ECommand getInput(void) {
                     break;
 
                 case SDLK_KP_7:
-                case SDLK_7:
-                    mBufferedCommand = '7';
+                case SDLK_2:
+                    mBufferedCommand = kCommandFire2;
                     break;
 
                 case SDLK_KP_8:
-                case SDLK_8:
-                    mBufferedCommand = '8';
+                case SDLK_3:
+                    mBufferedCommand = kCommandFire3;
                     break;
 
 
                 case SDLK_KP_4:
                 case SDLK_4:
-                    mBufferedCommand = '4';
+                    mBufferedCommand = kCommandFire4;
                     break;
 
                 case SDLK_KP_5:
                 case SDLK_5:
-                    mBufferedCommand = '5';
+                    mBufferedCommand = kCommandFire5;
                     break;
 
                 case SDLK_KP_9:
                 case SDLK_9:
-                    mBufferedCommand = '9';
-                    break;
-
-                case SDLK_KP_6:
-                case SDLK_6:
-                    mBufferedCommand = '6';
+                    mBufferedCommand = kCommandFire6;
                     break;
 
                 case SDLK_s:
                     clearTextScreen();
-                    break;
-                case SDLK_x:
-                    mBufferedCommand = kCommandFire2;
-                    break;
-                case SDLK_v:
-                    mBufferedCommand = kCommandFire4;
-                    break;
-                case SDLK_b:
-                    break;
-                case SDLK_j:
-                    break;
-                case SDLK_k:
-                    break;
-                case SDLK_c:
-                    mBufferedCommand = kCommandFire3;
-                    break;
-                case SDLK_e:
                     break;
 
                 case SDLK_LEFT:
