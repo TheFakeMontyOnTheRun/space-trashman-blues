@@ -35,7 +35,12 @@ enum ECommand performActionJoypad(void) {
 }
 
 void HUD_initialPaint(void) {
-    drawLine(128, 0, 128, 128, 2);
+    drawWindow((XRES_FRAMEBUFFER / 8) / 2,
+               0,
+               (XRES_FRAMEBUFFER / 8) / 2 - 1,
+               (YRES_FRAMEBUFFER / 8) / 2 + 2,
+               "Map",
+               2);
     drawMap();
     writeStrWithLimit(1, 17, "Direction: ", 31, 2, 0);
     HUD_refresh();
