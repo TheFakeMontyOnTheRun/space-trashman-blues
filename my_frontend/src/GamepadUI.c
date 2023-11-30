@@ -42,7 +42,13 @@ void HUD_initialPaint(void) {
                "Map",
                2);
     drawMap();
-    writeStrWithLimit(1, 17, "Direction: ", 31, 2, 0);
+
+    drawWindow(0,
+               128 / 8,
+               (XRES_FRAMEBUFFER / 8) / 2,
+               7,
+               "Direction: ",
+               2);
     HUD_refresh();
 }
 
