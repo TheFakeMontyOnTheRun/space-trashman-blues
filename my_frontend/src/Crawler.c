@@ -61,6 +61,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
 
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
     if (roomTransitionAnimationStep) {
+        needs3dRefresh = 1;
         return kResumeCurrentState;
     }
 #endif
@@ -190,6 +191,14 @@ void Crawler_repaintCallback(void) {
         uint8_t y = roomTransitionAnimationStep--;
         uint8_t x;
         uint8_t val = 95 + (MAP_SIZE_Y - y);
+
+        if (roomTransitionAnimationStep == 0) {
+            HUD_initialPaint();
+            clearGraphics();
+            renderScene();
+            return;
+        }
+
         vLine(y, y, val, 1);
         vLine(val, y, val, 1);
 

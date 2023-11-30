@@ -52,10 +52,22 @@ void drawMap(void) {
         return;
     }
 
+    for (y = 0; y < 12; ++y) {
+        for (x = 0; x < 12; ++x) {
+            drawTextAt(16 + x + 2, 2 + y, " ", 0);
+        }
+    }
+
     for (y = 0; y < 32; ++y) {
         for (x = 0; x < 32; ++x) {
+
             if (patterns[(map[y][x] & 127) - 32].blockMovement) {
-                fillRect(128 + (x * 3) + 16, (y * 3) + 16, 128 + (x * 3) + 3 + 16, (y * 3) + 3 + 16, 15, 0);
+                fillRect(128 + (x * 3) + 16,
+                         (y * 3) + 16,
+                         128 + (x * 3) + 3 + 16,
+                         (y * 3) + 3 + 16,
+                         2,
+                         0);
             }
         }
     }
