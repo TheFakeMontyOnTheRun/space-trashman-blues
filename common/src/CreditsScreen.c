@@ -85,7 +85,7 @@ void CreditsScreen_repaintCallback(void) {
     drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - len - 3,
                           ((YRES_FRAMEBUFFER / 8) + 1) - (optionsHeight / 8) - 3,
                           len + 2,
-                          (optionsHeight / 8) + 2, "", &CreditsScreen_options, CreditsScreen_optionsCount, cursorPosition);
+                          (optionsHeight / 8) + 2, "", CreditsScreen_options, CreditsScreen_optionsCount, cursorPosition);
 }
 
 enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
