@@ -136,7 +136,7 @@ void Crawler_repaintCallback(void) {
                               biggestOption + 2,
                               (optionsHeight / 8) + 2,
                               AbandonMission_Title,
-                              &AbandonMission_options,
+                              AbandonMission_options,
                               AbandonMission_count,
                               cursorPosition);
     } else {
@@ -155,7 +155,6 @@ void Crawler_repaintCallback(void) {
 }
 
 enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
-    int returnCode;
 
     if (showPromptToAbandonMission) {
 
@@ -210,7 +209,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
             needsToRedrawHUD = TRUE;
         }
 
-        returnCode = loopTick(cmd);
+        loopTick(cmd);
 
         return kResumeCurrentState;
     }
