@@ -80,7 +80,7 @@ void fillRect(
     float dx = _dx * NORMALIZE_ORTHO_X;
     float dy = _dy * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
 
-    uint32_t fragment = pixel;//palette[pixel];
+    FramebufferPixelFormat fragment = pixel;//palette[pixel];
 
     if (fragment != TRANSPARENCY_COLOR) {
         float r, g, b;
