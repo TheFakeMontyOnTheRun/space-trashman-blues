@@ -81,14 +81,21 @@ uint32_t getPaletteEntry(const uint32_t origin) {
 }
 
 void enter2D(void) {
+    guVector cam = {0.0F, 0.0F, 0.0F},
+            up = {0.0F, 1.0F, 0.0F},
+            look = {0.0F, 0.0F, -1.0F};
+
+
+    // setup our camera at the origin
+    // looking down the -z axis with y up
+    guLookAt(view, &cam, &up, &look);
+
     // setup our projection matrix
     // this creates a perspective matrix with a view angle of 90,
     // and aspect ratio based on the display resolution
     f32 w = rmode->viWidth;
     f32 h = rmode->viHeight;
-
-    guOrtho(perspective, -1.0f, 1.0f, -1.00f, 1.00f, 1.0f, 512.00f);
-
+    guPerspective(perspective, 45, (f32)w/h, 0.1F, 1024.0F);
     GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
 }
 
