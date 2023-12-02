@@ -81,15 +81,6 @@ uint32_t getPaletteEntry(const uint32_t origin) {
 }
 
 void enter2D(void) {
-    // do this before drawing
-    GX_SetViewport(0,0,rmode->fbWidth,rmode->efbHeight,0,1);
-    guMtxIdentity(model);
-    guMtxRotAxisDeg(model, &Xaxis, 0);
-    guMtxTransApply(model, model, 0.0f,0.0f, 0.0f);
-    guMtxConcat(view,model,modelview);
-    // load the modelview matrix into matrix memory
-    GX_LoadPosMtxImm(modelview, GX_PNMTX0);
-
     // setup our projection matrix
     // this creates a perspective matrix with a view angle of 90,
     // and aspect ratio based on the display resolution
@@ -138,6 +129,14 @@ void enter3D(void) {
         _leanY = 0.25f * ((128 - leanY) / 127.0f);
     }
 
+    guVector cam = {0.0F, 0.0F, 0.0F},
+            up = {0.0F, 1.0F, 0.0F},
+            look = {0.0F, 0.0F, -1.0F};
+
+
+    // setup our camera at the origin
+    // looking down the -z axis with y up
+    guLookAt(view, &cam, &up, &look);
 
     // setup our projection matrix
     // this creates a perspective matrix with a view angle of 90,
@@ -146,7 +145,6 @@ void enter3D(void) {
     f32 h = rmode->viHeight;
     guPerspective(perspective, 45, (f32)w/h, 0.1F, 1024.0F);
     GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
-
 }
 
 void printMessageTo3DView(const char *message) {
