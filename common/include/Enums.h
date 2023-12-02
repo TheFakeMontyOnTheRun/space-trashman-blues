@@ -37,7 +37,9 @@ enum EGameMenuState {
     kPlayGame,
     kHelp,
     kCredits,
+#ifdef EMIT_QUIT_OPTION
     kQuit,
+#endif
     kBackToGame,
     kEndGame,
     kInspectItem,
