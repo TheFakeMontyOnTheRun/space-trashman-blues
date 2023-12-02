@@ -161,19 +161,19 @@ void drawQuad(
 
     GX_Position3f32(vx1, vy1, vz1);	// Top Left
     GX_Color3f32(1,1,1);
-    GX_TexCoord2f32(0.0f,1.0f);
+    GX_TexCoord2f32(u1, v1);
 
     GX_Position3f32( vx2, vy2, vz2);		// Top Right
     GX_Color3f32(1,1,1);
-    GX_TexCoord2f32(1.0f,1.0f);
+    GX_TexCoord2f32(u2, v2);
 
     GX_Position3f32(vx4, vy4, vz4);	// Bottom Left
     GX_Color3f32(1,1,1);
-    GX_TexCoord2f32(1.0f,0.0f);
+    GX_TexCoord2f32(u4, v4);
 
     GX_Position3f32( vx3, vy3, vz3);	// Bottom Right
     GX_Color3f32(1,1,1);
-    GX_TexCoord2f32(0.0f,0.0f);
+    GX_TexCoord2f32(u3, v3);
 
     GX_End();									// Done Drawing The Quad
 }
