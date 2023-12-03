@@ -215,8 +215,7 @@ void graphicsShutdown() {
 void flipRenderer() {
 
     guMtxIdentity(model);
-    guMtxRotAxisDeg(model, &cubeAxis, rquad);
-    guMtxTransApply(model, model, 1.0f,0.0f,zt-7.0f);
+    guMtxTransApply(model, model, 0.0f,0.0f,-0.8f);
     guMtxConcat(view,model,modelview);
     // load the modelview matrix into matrix memory
     GX_LoadPosMtxImm(modelview, GX_PNMTX3);
