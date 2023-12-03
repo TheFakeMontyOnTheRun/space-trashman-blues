@@ -181,15 +181,18 @@ enum ECommand getInput(void) {
             drawMap();
             return '.';
 
-        case 'u':
+        case '1':
             return kCommandFire1;
-        case 'i':
+        case '2':
             return kCommandFire2;
-        case 'o':
+        case '3':
             return kCommandFire3;
-        case 'p':
+        case '4':
             return kCommandFire4;
-
+        case '5':
+            return kCommandFire5;
+        case '6':
+            return kCommandFire6;
     }
     return input;
 }
