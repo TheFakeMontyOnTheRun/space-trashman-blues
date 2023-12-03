@@ -37,7 +37,7 @@ extern GXTexObj whiteTextureObj;
 #define NORMALIZE_ORTHO_Y (-1.0f / 200.0f)
 #define ADJUST_RESOLUTION_Y (((200.0f/256.0f) * 200.0f) / 240.0f )
 #define OFFSET_X (-0.5f)
-#define OFFSET_Y (-0.375f)
+#define OFFSET_Y (0.375f)
 
 
 #define GEOMETRY_SCALE_X 2.0f
@@ -198,7 +198,7 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
         defaultFont = loadBitmap("font.img");
     }
 
-    if (defaultFont->uploadId == -1) {
+    if (defaultFont->nativeBuffer == NULL || defaultFont->uploadId == -1) {
         submitBitmapToGPU(defaultFont);
     }
 
@@ -211,7 +211,7 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
     float col;
 
     float fontWidth = defaultFont->width;
-    float fontHeight = defaultFont->height;
+    float fontHeight = 32.0f; //defaultFont->height;
     float blockWidth = (8.0f / fontWidth) * 0.999f;
     float blockHeight = (8.0f / fontHeight) * 0.999f;
 
