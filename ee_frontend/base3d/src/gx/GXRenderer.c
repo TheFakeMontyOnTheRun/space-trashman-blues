@@ -213,7 +213,7 @@ void graphicsShutdown() {
 }
 
 void flipRenderer() {
-
+    GX_SetAlphaCompare(GX_GREATER,0,GX_AOP_AND,GX_ALWAYS,0);
     guMtxIdentity(model);
     guMtxTransApply(model, model, 0.0f,0.0f,-0.8f);
     guMtxConcat(view,model,modelview);
@@ -223,6 +223,7 @@ void flipRenderer() {
 
     GX_SetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GX_SetColorUpdate(GX_TRUE);
+    GX_SetAlphaUpdate(GX_TRUE);
     GX_CopyDisp(frameBuffer[fb],GX_TRUE);
 
     GX_DrawDone();
