@@ -142,12 +142,8 @@ struct Room *addRoom(
     toReturn->sizeX = sizeX;
     toReturn->sizeY = sizeY;
     toReturn->chanceOfRandomBattle = chanceOfRandomBattle;
-    toReturn->connections[0] = connections[0];
-    toReturn->connections[1] = connections[1];
-    toReturn->connections[2] = connections[2];
-    toReturn->connections[3] = connections[3];
-    toReturn->connections[4] = connections[4];
-    toReturn->connections[5] = connections[5];
+
+    memCopyToFrom(toReturn->connections, connections, 6);
 
     /* add list head to make manipulations easier */
     toReturn->itemsPresent = &roomObjectHeads[roomCount++];
@@ -171,9 +167,11 @@ void setPlayerPosition(struct WorldPosition *pos) {
     playerPosition.y = pos->y;
 }
 
+#ifndef CAN_PICK_OBJECT_AT_ANY_DISTANCE
 uint8_t isCloseToObject(struct WorldPosition *pos, struct Item *_item) {
     return (abs(pos->x - _item->position.x) + abs(pos->y - _item->position.y)) <= 1;
 }
+#endif
 
 enum EGameStates getGameStatus(void) {
     return gameStatus;
@@ -195,6 +193,7 @@ struct Item *getItemNamed(const char *name) {
     return NULL;
 }
 
+#ifdef MORE_OBJECTS
 uint8_t getRoomIdByName(const char *name) {
     uint8_t c;
 
@@ -208,6 +207,7 @@ uint8_t getRoomIdByName(const char *name) {
 
     return 0;
 }
+#endif
 
 struct Room *getRoomByName(const char *name) {
     uint8_t c;

@@ -371,14 +371,14 @@ const char *getRoomDescription(void);
  * @return
  */
 struct Room *getRoom(uint8_t index);
-
+#ifdef MORE_OBJECTS
 /**
  *
  * @param name
  * @return
  */
 uint8_t getRoomIdByName(const char *name);
-
+#endif
 /**
  *
  * @param name
