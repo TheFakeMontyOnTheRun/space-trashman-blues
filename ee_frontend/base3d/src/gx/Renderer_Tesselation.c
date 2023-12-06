@@ -157,6 +157,12 @@ void drawQuad(
     vz4 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos4.mZ) + centerZ;
 
     bindTexture(texture->raw);
+
+    if (enableAlpha) {
+        GX_SetAlphaUpdate(GX_TRUE);
+        GX_SetAlphaCompare(GX_GREATER,0,GX_AOP_AND,GX_ALWAYS,0);
+    }
+
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);			// Draw A Quad
 
     GX_Position3f32(vx1, vy1, vz1);	// Top Left
@@ -176,6 +182,8 @@ void drawQuad(
     GX_TexCoord2f32(u3, v3);
 
     GX_End();									// Done Drawing The Quad
+
+    GX_SetAlphaUpdate(GX_FALSE);
 }
 
 void drawRampAt(const struct Vec3 center0, const struct Vec3 center1,
@@ -310,7 +318,7 @@ void drawBillboardAt(const struct Vec3 center,
     p0.mY = p1.mY = geometryScale;
     p2.mY = p3.mY = -geometryScale;
 
-    drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, bitmap, 0);
+    drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, bitmap, 1);
 }
 
 void drawColumnAt(const struct Vec3 center,

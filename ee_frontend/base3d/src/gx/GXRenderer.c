@@ -223,7 +223,6 @@ void flipRenderer() {
 
     GX_SetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GX_SetColorUpdate(GX_TRUE);
-    GX_SetAlphaUpdate(GX_TRUE);
     GX_CopyDisp(frameBuffer[fb],GX_TRUE);
 
     GX_DrawDone();
