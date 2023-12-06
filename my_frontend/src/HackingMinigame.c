@@ -38,27 +38,27 @@ void HackingScreen_repaintCallback(void) {
     uint8_t holdingDisk;
 
     drawTextAt(1, 1, "Stack trace:", 1);
+    drawTextAt((12 * 0), 11, " CPU0 ", 1);
+    drawTextAt((12 * 1), 11, " CPU1 ", 1);
+    drawTextAt((12 * 2), 11, " CPU2 ", 1);
 
-    drawTextAt((12 * 0), 11, cursorPosition == 0 ? "[CPU0]" : " CPU0 ", 1);
-    drawTextAt((12 * 1), 11, cursorPosition == 1 ? "[CPU1]" : " CPU1 ", 1);
-    drawTextAt((12 * 2), 11, cursorPosition == 2 ? "[CPU2]" : " CPU2 ", 1);
+    drawTextAt((12 * cursorPosition), 11, ">", 1);
+    drawTextAt((12 * cursorPosition) + 5, 11, "<", 1);
 
-    for (c = 0; c < 31; ++c ) {
-        drawTextAt(c, 10, "-", 1);
-    }
+    drawLine(0, 80, XRES_FRAMEBUFFER - 1, 80, 2);
 
     for (pin = 0; pin < 3; ++pin) {
         uint8_t disk;
+
+        if (pin != 0) {
+            drawLine( 88 * pin, 40, 88 * pin, 80, 2);
+        }
 
         for (disk = 0; disk < 5; ++disk) {
 
             uint8_t diskIndex = getPositionForPin(pin, disk);
 
             char *funcName = (disk >= getDisksForPin(pin)) ? NULL : functionNames[diskIndex];
-
-            if (pin != 0) {
-                drawTextAt(10 * (pin), 4 + (4 - disk), "I", 1);
-            }
 
             if (funcName) {
                 drawTextAt(10 * (pin) + (pin == 0 ? 0 : 1), 4 + (4 - disk), funcName, 1);

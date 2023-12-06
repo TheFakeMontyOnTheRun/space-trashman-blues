@@ -17,12 +17,12 @@ extern struct ObjectNode *roomItem;
 
 
 const char *menuItems[] = {
-        "8) Use",
-        "5) Use with",
-        "9) Pick",
-        "6) Drop",
-        "7) Next(hand)",
-        "4) Next(room)",
+        "1) Use",
+        "2) Use with",
+        "3) Pick",
+        "4) Drop",
+        "5) Next(hand)",
+        "6) Next(room)",
 };
 
 void initKeyboardUI(void) {
@@ -30,14 +30,31 @@ void initKeyboardUI(void) {
 
 
 void HUD_initialPaint(void) {
-    drawLine(128, 0, 128, 128, 2);
+    drawWindow((XRES_FRAMEBUFFER / 8) / 2,
+               0,
+               (XRES_FRAMEBUFFER / 8) / 2 - 1,
+               (YRES_FRAMEBUFFER / 8) / 2 + 2,
+               "Map",
+               2);
     drawMap();
 
-    for (uint8_t i = 0; i < 6; ++i) {
-        drawTextAt(18, 17 + i, menuItems[i], 1);
-    }
-
+    drawWindow(0,
+               128 / 8,
+               (XRES_FRAMEBUFFER / 8) / 2,
+               7,
+               "Direction: ",
+               2);
     HUD_refresh();
+
+    drawWindowWithOptions(
+            (XRES_FRAMEBUFFER / 8) - (int) /*biggestOption*/ 12 - 3,
+            (YRES_FRAMEBUFFER / 8) - 3 - /*kMainMenuOptionsCount*/ 6,
+            12/*biggestOption*/ + 2,
+            6 /*kMainMenuOptionsCount*/ + 2,
+            "Actions",
+            menuItems,
+            6,
+            -1);
 }
 
 void HUD_refresh(void) {

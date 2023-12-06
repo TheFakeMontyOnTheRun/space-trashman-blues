@@ -20,12 +20,14 @@ enum ECommand {
     kCommandLeft,
     kCommandFire1,
     kCommandFire2,
+    kCommandFire3,
+    kCommandFire4,
+    kCommandFire5,
+    kCommandFire6,
     kCommandBack,
     kCommandQuit,
     kCommandStrafeLeft,
-    kCommandStrafeRight,
-    kCommandFire3,
-    kCommandFire4
+    kCommandStrafeRight
 };
 
 enum EGameMenuState {
@@ -35,7 +37,9 @@ enum EGameMenuState {
     kPlayGame,
     kHelp,
     kCredits,
+#ifdef EMIT_QUIT_OPTION
     kQuit,
+#endif
     kBackToGame,
     kEndGame,
     kInspectItem,

@@ -60,62 +60,49 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
     uint8_t newCell = 0;
 
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
-    if (roomTransitionAnimationStep >= 2) {
-        uint8_t y = roomTransitionAnimationStep--;
-        uint8_t x;
-        vLine(y, y, 95 + (MAP_SIZE_Y - y), 1);
-        vLine(95 + (MAP_SIZE_Y - y), y, 95 + (MAP_SIZE_Y - y), 1);
-
-        for (x = y; x < (95 + (MAP_SIZE_Y - y)); ++x) {
-            graphicsPut(x, y);
-            graphicsPut(x, 95 + (MAP_SIZE_Y - y));
-
-            /* door opening */
-            graphicsPut(x, 95 - 3 * (MAP_SIZE_Y - y));
-        }
-
+    if (roomTransitionAnimationStep) {
+        needs3dRefresh = 1;
         return kResumeCurrentState;
-    } else
-#endif
-    {
-        renderScene();
     }
+#endif
 
     prevX = cameraX;
     prevZ = cameraZ;
 
     switch (cmd) {
-
-#ifndef GAMEPAD
-        case 'l':
-            shutdownGraphics();
-            exit(0);
-        case '7':
+        case kCommandFire5:
             nextItemInHand();
             break;
 
-        case '4':
+        case kCommandFire6:
             nextItemInRoom();
             break;
 
-        case '8':
+        case kCommandFire1:
             useItemInHand();
             updateMapItems();
             break;
 
-        case '5':
+        case kCommandFire2:
             interactWithItemInRoom();
             updateMapItems();
             break;
 
-        case '9':
+        case kCommandFire3:
             pickItem();
             break;
 
-        case '6':
+        case kCommandFire4:
             dropItem();
             break;
-#endif
+        default:
+            goto handle_directions;
+    }
+    needs3dRefresh = 1;
+    HUD_refresh();
+    return kResumeCurrentState;
+handle_directions:
+    switch (cmd) {
         case kCommandLeft:
             turnLeft();
             break;
@@ -136,10 +123,11 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
         case kCommandUp:
             walkBy(0);
             break;
+        case kCommandNone:
+            needs3dRefresh = 0;
+            return kResumeCurrentState;
     }
-
-    HUD_refresh();
-
+    needs3dRefresh = 1;
     cameraRotation = getPlayerDirection();
     pos = getPlayerPosition();
 
@@ -184,7 +172,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
             newCell = '0';
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
         } else {
-            roomTransitionAnimationStep = 32;
+            roomTransitionAnimationStep = 30;
 #endif
         }
         setPlayerDirection(cameraRotation = (newCell - '0'));
@@ -195,7 +183,37 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
 }
 
 void Crawler_repaintCallback(void) {
+    if (!needs3dRefresh) {
+        return;
+    }
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
+    if (roomTransitionAnimationStep) {
+        uint8_t y = roomTransitionAnimationStep--;
+        uint8_t x;
+        uint8_t val = 95 + (MAP_SIZE_Y - y);
 
+        if (roomTransitionAnimationStep == 0) {
+            HUD_initialPaint();
+            clearGraphics();
+            renderScene();
+            return;
+        }
+
+        vLine(y, y, val, 1);
+        vLine(val, y, val, 1);
+
+        for (x = y; x < val; ++x) {
+            graphicsPut(x, y);
+            graphicsPut(x, val);
+
+            /* door opening */
+            graphicsPut(x, 95 - 3 * (MAP_SIZE_Y - y));
+        }
+    } else
+#endif
+    {
+        renderScene();
+    }
 }
 
 void onError(const char *mesg) {
@@ -207,7 +225,6 @@ void logDelegate(const char *mesg) {
 }
 
 void Crawler_initStateCallback(enum EGameMenuState tag_unused) {
-    needs3dRefresh = 1;
     enteredFrom = 0;
     cameraRotation = 0;
     initStation();
@@ -215,6 +232,7 @@ void Crawler_initStateCallback(enum EGameMenuState tag_unused) {
     setErrorHandlerCallback(onError);
     setLoggerDelegate(logDelegate);
     initMap();
+    needs3dRefresh = 1;
 }
 
 void Crawler_initialPaintCallback(void) {

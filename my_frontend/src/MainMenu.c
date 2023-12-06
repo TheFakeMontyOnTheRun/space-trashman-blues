@@ -53,7 +53,7 @@ const uint8_t shapes[] = {
         46, 81,
         0 };
 
-#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && !defined(AGS) && !defined(N64) && !defined(NDS)
+#ifdef EMIT_QUIT_OPTION
 const char *MainMenu_options[4] = {
         "Play game",
         "Credits",
@@ -64,15 +64,15 @@ const enum EGameMenuState MainMenu_nextStateNavigation[4] = {
         kPlayGame, kCredits, kHelp,
         kQuit};
 
-const uint8_t kMainMenuOptionsCount = 4;
+#define kMainMenuOptionsCount  4
 #else
 const char *MainMenu_options[3] = {
         "Play game", "Credits", "Help"};
 
-const int32_t MainMenu_nextStateNavigation[3] = {
+const enum EGameMenuState MainMenu_nextStateNavigation[3] = {
         kPlayGame, kCredits, kHelp};
 
-const uint8_t kMainMenuOptionsCount = 3;
+#define kMainMenuOptionsCount 3
 #endif
 
 extern size_t biggestOption;

@@ -45,6 +45,7 @@ clean:
 	rm -rf coverage
 	find . | grep gcno | xargs rm -f
 	find . | grep gcda | xargs rm -f
+	rm -rf doxy-site
 
 report:
 	./build-with-coverage.sh

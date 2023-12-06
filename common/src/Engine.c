@@ -108,9 +108,11 @@ void enterState(enum EGameMenuState newState) {
             unloadStateCallback = HackingScreen_unloadStateCallback;
         }
             break;
+#ifdef EMIT_QUIT_OPTION
         case kQuit:
             isRunning = FALSE;
             break;
+#endif
     }
 
     currentGameMenuState = newState;

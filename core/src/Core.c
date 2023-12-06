@@ -30,19 +30,61 @@ Created by Daniel Monteiro on 2019-07-26.
 
 #define WALK_STEP 1
 
-uint8_t roomCount = 1; /* there's an implicit dummy first */
+/**
+ * there's an implicit dummy first
+ */
+uint8_t roomCount = 1;
+/**
+ *
+ */
 struct Room rooms[TOTAL_ROOMS];
+/**
+ *
+ */
 uint8_t itemsCount = 0;
+/**
+ *
+ */
 struct Item item[TOTAL_ITEMS];
+/*
+ *
+ */
 struct ObjectNode objectNodes[TOTAL_ITEMS];
+/**
+ *
+ */
 struct ObjectNode collectedObjectHead;
+/**
+ *
+ */
 struct ObjectNode roomObjectHeads[TOTAL_ROOMS];
+/**
+ *
+ */
 struct ObjectNode *collectedObject = NULL;
+/**
+ *
+ */
 uint8_t playerLocation = 1;
+/**
+ *
+ */
 int8_t playerDirection;
+/**
+ *
+ */
 uint8_t playerRank;
+/**
+ *
+ */
 uint8_t gameStatus;
+/**
+ *
+ */
 struct WorldPosition playerPosition;
+/**
+ *
+ */
 ErrorHandlerCallback errorHandlerCallback = NULL;
 
 void writeToLog(const char *errorMsg) {
@@ -100,12 +142,8 @@ struct Room *addRoom(
     toReturn->sizeX = sizeX;
     toReturn->sizeY = sizeY;
     toReturn->chanceOfRandomBattle = chanceOfRandomBattle;
-    toReturn->connections[0] = connections[0];
-    toReturn->connections[1] = connections[1];
-    toReturn->connections[2] = connections[2];
-    toReturn->connections[3] = connections[3];
-    toReturn->connections[4] = connections[4];
-    toReturn->connections[5] = connections[5];
+
+    memCopyToFrom(toReturn->connections, connections, 6);
 
     /* add list head to make manipulations easier */
     toReturn->itemsPresent = &roomObjectHeads[roomCount++];
@@ -129,9 +167,11 @@ void setPlayerPosition(struct WorldPosition *pos) {
     playerPosition.y = pos->y;
 }
 
+#ifndef CAN_PICK_OBJECT_AT_ANY_DISTANCE
 uint8_t isCloseToObject(struct WorldPosition *pos, struct Item *_item) {
     return (abs(pos->x - _item->position.x) + abs(pos->y - _item->position.y)) <= 1;
 }
+#endif
 
 enum EGameStates getGameStatus(void) {
     return gameStatus;
@@ -153,6 +193,7 @@ struct Item *getItemNamed(const char *name) {
     return NULL;
 }
 
+#ifdef MORE_OBJECTS
 uint8_t getRoomIdByName(const char *name) {
     uint8_t c;
 
@@ -166,6 +207,7 @@ uint8_t getRoomIdByName(const char *name) {
 
     return 0;
 }
+#endif
 
 struct Room *getRoomByName(const char *name) {
     uint8_t c;
@@ -520,8 +562,9 @@ void infoAboutItemNamed(const char *itemName) {
         }
         object2 = object2->next;
     }
-
+#ifdef CLI_BUILD
     defaultLogger("No such item could be found");
+#endif
 }
 #endif
 
@@ -535,12 +578,16 @@ void useObjectsTogether(const char *operands) {
     char *operand2 = strtok(NULL, "\n ");
 
     if (!playerHasObject(operand1)) {
+#ifdef CLI_BUILD
         defaultLogger("You do not have this object");
+#endif
         return;
     }
 
     if (!hasItemInRoom(getRoom(playerLocation)->name, operand2)) {
+#ifdef CLI_BUILD
         defaultLogger("That object is not present in the room");
+#endif
         return;
     }
 
