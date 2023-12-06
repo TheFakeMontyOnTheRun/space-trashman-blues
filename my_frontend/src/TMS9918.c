@@ -15,12 +15,16 @@
 
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 
+void setColour(uint8_t colour) {
+    set_color(colour, 0, 0);
+}
+
 void flush3DBuffer(void) {
     uint8_t *ptr = &buffer[0];
 
     for (uint8_t y = 0; y < (BUFFER_RESY); y += 8) {
         /* 248 = ~7 */
-        vwrite(ptr, ((y & 248) << 5), 16 * 8);
+        vwrite(ptr, (y << 5), 16 * 8);
         ptr += 8 * 16;
     }
 
@@ -141,7 +145,7 @@ void shutdownGraphics(void) {
 }
 
 uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
-    set_color(colour, 1, 1);
+    setColour(colour);
     plot(x, y);
     return NULL;
 }
@@ -199,7 +203,7 @@ void clearTextScreen(void) {
 
 void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
     uint8_t x, y;
-    set_color(colour, 1, 1);
+    setColour(colour);
     for (y = y0; y < y1; ++y) {
         for (x = x0; x < x1; ++x) {
             plot(x, y);
@@ -208,6 +212,6 @@ void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) 
 }
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
-    set_color(colour, 1, 1);
+    setColour(colour);
     draw(x0, y0, x1, y1);
 }
