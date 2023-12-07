@@ -57,7 +57,7 @@ namespace editor {
      
      for (const auto& area : map.areas) {
        
-       for (int x = area.x0 + 1; x < (area.x0 + area.dx); ++x){
+       for (int x = area.x0; x <= (area.x0 + area.dx); ++x){
 	 cellMap[area.z0][x] = '#';
 	 cellMap[(area.z0 + area.dz)][x] = '#';
        }
