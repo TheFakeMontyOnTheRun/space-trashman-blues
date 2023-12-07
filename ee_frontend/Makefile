@@ -7,7 +7,7 @@ EE_CFLAGS += -Ibase3d/include        \
     -I../core/include \
     -I../common/include \
     -DPLAYSTATION2 \
-    -DINCLUDE_ITEM_DESCRIPTIONS
+    -DINCLUDE_ITEM_DESCRIPTIONS -DENDIANESS_AWARE
 
 EE_BIN = derelict128.elf
 
