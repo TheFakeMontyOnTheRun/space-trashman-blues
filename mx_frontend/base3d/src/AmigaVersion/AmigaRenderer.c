@@ -423,11 +423,11 @@ void handleSystemEvents() {
                 case 'd':
                     mBufferedCommand = kCommandStrafeRight;
                     break;
-
+#ifdef EMIT_QUIT_OPTION
                 case 'l':
                     mBufferedCommand = kCommandQuit;
                     break;
-
+#endif
                 case 'n':
                     mBufferedCommand = kCommandDown;
                     visibilityCached = FALSE;
