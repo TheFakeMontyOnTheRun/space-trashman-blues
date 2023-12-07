@@ -25,7 +25,9 @@ enum ECommand {
     kCommandFire5,
     kCommandFire6,
     kCommandBack,
+#ifdef EMIT_QUIT_OPTION    
     kCommandQuit,
+#endif
     kCommandStrafeLeft,
     kCommandStrafeRight
 };
