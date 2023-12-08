@@ -12,7 +12,7 @@ CFLAGS= -I/usr/X11R7/include \
     -flto		    \
     --pedantic		    \
     -DCLI_BUILD \
-    -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS -DSCALE_200_TO_240 -DPAGE_FLIP_ANIMATION
+    -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS -DSCALE_200_TO_240 -DPAGE_FLIP_ANIMATION -DENDIANESS_AWARE -DEMIT_QUIT_OPTION
 
 MENU_TARGET=game
 

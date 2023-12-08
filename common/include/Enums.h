@@ -1,6 +1,9 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
+#ifdef __MWERKS__
+#define EMIT_QUIT_OPTION
+#endif
 
 enum EDirection {
     kNorth, kEast, kSouth, kWest
@@ -25,7 +28,9 @@ enum ECommand {
     kCommandFire5,
     kCommandFire6,
     kCommandBack,
+#ifdef EMIT_QUIT_OPTION    
     kCommandQuit,
+#endif
     kCommandStrafeLeft,
     kCommandStrafeRight
 };

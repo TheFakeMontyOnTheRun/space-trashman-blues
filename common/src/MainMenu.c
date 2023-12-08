@@ -24,7 +24,7 @@
 #include "UI.h"
 #include "SoundSystem.h"
 
-#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && !defined(AGS) && !defined(N64) && !defined(NDS)
+#ifdef EMIT_QUIT_OPTION
 const char *MainMenu_options[4] = {
         "Play game", "Credits", "Help", "Quit"};
 
