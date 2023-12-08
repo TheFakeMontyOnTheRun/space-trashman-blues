@@ -1,7 +1,7 @@
 CXX = m68k-amigaos-g++
 CC = m68k-amigaos-gcc
 STRIP=m68k-amigaos-strip
-CFLAGS = -Ibase3d/include -I../common/include -I../core/include -DPAGE_FLIP_ANIMATION -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -Imenu/include -c -m68020 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -Ofast -DAGA8BPP -DCD32 -DFASTER_TEXTURE_MAP
+CFLAGS = -Ibase3d/include -I../common/include -I../core/include -DPAGE_FLIP_ANIMATION -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -Imenu/include -c -m68020 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -Ofast -DAGA8BPP -DCD32 -DFASTER_TEXTURE_MAP -DENDIANESS_AWARE
 LDFLAGS =  -msmall-code -fexpensive-optimizations -O3 -s -fomit-frame-pointer -noixemul
 
 MENU_TARGET=gamecd32

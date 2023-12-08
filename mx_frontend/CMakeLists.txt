@@ -15,7 +15,7 @@ include_directories(base3d/include)
 include_directories(common/include)
 include_directories(menu/include)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCLI_BUILD -DPAGE_FLIP_ANIMATION -DINCLUDE_ITEM_DESCRIPTIONS -Wall -Wextra -pedantic -g")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCLI_BUILD -DPAGE_FLIP_ANIMATION -DINCLUDE_ITEM_DESCRIPTIONS -Wall -Wextra -pedantic -g -DENDIANESS_AWARE -DEMIT_QUIT_OPTION")
 
 find_package(SDL2 REQUIRED)
 
