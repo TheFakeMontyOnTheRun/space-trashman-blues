@@ -27,7 +27,7 @@ INCLUDES	:= ../core/include ../common/include base3d/include common/include menu
 # options for code generation
 #---------------------------------------------------------------------------------
 
-CFLAGS	= -g -O2 -Wall $(MACHDEP) $(INCLUDE) -DWII -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS
+CFLAGS	= -g -O2 -Wall $(MACHDEP) $(INCLUDE) -DWII -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DENDIANESS_AWARE
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
