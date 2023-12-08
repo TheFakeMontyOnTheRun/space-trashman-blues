@@ -84,11 +84,11 @@ enum ECommand getInput(void) {
             mBufferedCommand = kCommandStrafeRight;
             break;
             
-            
+#ifdef EMIT_QUIT_OPTION            
         case 53: //esc
             mBufferedCommand = kCommandQuit;
             break;
-            
+#endif
             
         case 126:
             mBufferedCommand = kCommandUp;

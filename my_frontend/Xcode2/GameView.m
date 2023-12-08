@@ -30,7 +30,7 @@ long timeUntilNextState;
 enum EPresentationState currentPresentationState;
 enum EGameMenuState currentGameMenuState;
 int8_t cameraRotation = 0;
-int cursorPosition;
+int8_t cursorPosition;
 enum EGameMenuState nextNavigationSelection;
 enum EGameMenuState menuStateToReturn;
 enum ESoundDriver soundDriver = kNoSound;

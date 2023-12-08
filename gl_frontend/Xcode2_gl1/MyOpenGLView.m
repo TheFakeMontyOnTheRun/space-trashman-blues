@@ -47,7 +47,7 @@ extern int leanY;
 NSMutableSet *playingSounds;
 int nextAudioChannel = -1;
 float multiplier = 1.0f;
-extern int isRunning;
+extern uint8_t isRunning;
 NSSound *playerSounds[8];
 enum ESoundDriver soundDriver = kNoSound;
 
@@ -258,7 +258,7 @@ void flipRenderer() {
     
     /* Ugly hack to prevent garbage from appearing on the borders */
 	startFrameGL( 0, 0, rect.size.width, rect.size.height);
-    fill(0, 0, 320, 200, getPaletteEntry(0xFF000000), FALSE);
+    fillRect(0, 0, 320, 200, getPaletteEntry(0xFF000000), FALSE);
     
     
 	startFrameGL( (rect.size.width - width) / 2,

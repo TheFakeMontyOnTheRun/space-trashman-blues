@@ -143,7 +143,7 @@ struct Room *addRoom(
     toReturn->sizeY = sizeY;
     toReturn->chanceOfRandomBattle = chanceOfRandomBattle;
 
-    memCopyToFrom(toReturn->connections, connections, 6);
+    memCopyToFrom((void*)toReturn->connections, (void*)connections, 6);
 
     /* add list head to make manipulations easier */
     toReturn->itemsPresent = &roomObjectHeads[roomCount++];
