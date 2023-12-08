@@ -1,3 +1,7 @@
+#ifdef __MWERKS__
+#define ENDIANESS_AWARE
+#endif
+
 #ifdef AMIGA
 #include "AmigaInt.h"
 #endif

@@ -33,14 +33,14 @@ const enum EGameMenuState HelpScreen_nextStateNavigation[1] = {
 const int16_t HelpScreen_optionsCount = 1;
 
 void HelpScreen_initStateCallback(enum EGameMenuState tag) {
-    mainText = textBuffer;
-    memFill(textBuffer, 0, TEXT_BUFFER_SIZE);
 
 #ifndef AGS
     struct StaticBuffer textFile = loadBinaryFileFromPath("Help.txt");
 #else
     struct StaticBuffer textFile = loadBinaryFileFromPath("HelpAGS.txt");
 #endif
+    mainText = textBuffer;
+    memFill(textBuffer, 0, TEXT_BUFFER_SIZE);
 
     memCopyToFrom(textBuffer, (void *) textFile.data, textFile.size);
     disposeDiskBuffer(textFile);
