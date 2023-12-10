@@ -148,19 +148,19 @@ void drawBitmapRegion(const int _x,
 
     GX_Position3f32(x, y + dy, -0.125);	// Top Left
     GX_Color3f32(r ,g ,b);
-    GX_TexCoord2f32(0.0f,1.0f);
+    GX_TexCoord2f32(u0, v1);
 
     GX_Position3f32( x + dx, y + dy, -0.125);		// Top Right
     GX_Color3f32(r ,g ,b);
-    GX_TexCoord2f32(1.0f,1.0f);
+    GX_TexCoord2f32(u1, v1);
 
     GX_Position3f32( x +dx, y, -0.125);	// Bottom Right
     GX_Color3f32(r ,g ,b);
-    GX_TexCoord2f32(1.0f,0.0f);
+    GX_TexCoord2f32(u1,v0);
 
     GX_Position3f32(x, y, -0.125);	// Bottom Left
     GX_Color3f32(r ,g ,b);
-    GX_TexCoord2f32(0.0f,0.0f);
+    GX_TexCoord2f32(u0,v0);
 
     GX_End();									// Done Drawing The Quad
 
@@ -208,6 +208,7 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
         submitBitmapToGPU(defaultFont);
     }
 
+    bindTexture(defaultFont);
     size_t len = strlen(text);
     int32_t dstX = (_x - 1) * 8;
     int32_t dstY = (_y - 1) * 8;
