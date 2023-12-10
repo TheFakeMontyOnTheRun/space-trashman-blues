@@ -201,12 +201,20 @@ void clearTextScreen(void) {
     }
 }
 
-void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
+void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, uint8_t stipple) {
     uint8_t x, y;
     setColour(colour);
-    for (y = y0; y < y1; ++y) {
-        for (x = x0; x < x1; ++x) {
-            plot(x, y);
+    if (stipple) {
+        for (y = y0; y < y1; ++y) {
+            for (x = x0 + (y & 1); x < x1; x += 2) {
+                plot(x, y);
+            }
+        }
+    } else {
+        for (y = y0; y < y1; ++y) {
+            for (x = x0; x < x1; ++x) {
+                plot(x, y);
+            }
         }
     }
 }
