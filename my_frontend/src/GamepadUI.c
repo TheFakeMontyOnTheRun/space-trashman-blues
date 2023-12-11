@@ -69,7 +69,6 @@ void HUD_refresh(void) {
     if (roomItem != NULL) {
         struct Item *item = getItem(roomItem->item);
 
-
         if (item->active) {
             writeStrWithLimit(1, 19, "*", 16, 2, 0);
         }

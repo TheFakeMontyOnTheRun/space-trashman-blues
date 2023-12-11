@@ -117,8 +117,8 @@ void graphicsPutPointArray(uint8_t *y128Values) {
             }
             currByte |= (128 >> (x & 7));
         }
-        *ptr = currByte;
 
+        *ptr = currByte;
         ++x;
         ++stencilPtr;
     }
@@ -162,7 +162,7 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
     char lastChar = 0xFF;
     uint8_t *fontTop;
 
-    for (; c < len && y < 64; ++c) {
+    for (; c < len && y < (YRES_FRAMEBUFFER / 8); ++c) {
 
         char cha = *ptr;
 
