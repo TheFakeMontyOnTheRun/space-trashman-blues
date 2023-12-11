@@ -128,6 +128,14 @@ void graphicsInit() {
     GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGB8, 0);
 
+    GX_SetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+
+    // Set up TEV to paint the textures properly.
+    GX_SetTevOp(GX_TEVSTAGE0,GX_MODULATE);
+    GX_SetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+
+    GX_SetNumTexGens(1);
+    GX_SetNumChans(1);
     GX_InvVtxCache();
     GX_InvalidateTexAll();
 
