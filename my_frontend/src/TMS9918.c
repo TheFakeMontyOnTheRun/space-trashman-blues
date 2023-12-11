@@ -28,7 +28,7 @@ void flush3DBuffer(void) {
         ptr += 8 * 16;
     }
 
-    memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
+    clearGraphics();
 }
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
@@ -141,8 +141,10 @@ void clearGraphics(void) {
     memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
+#ifdef EMIT_QUIT_OPTION
 void shutdownGraphics(void) {
 }
+#endif
 
 uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
     setColour(colour);

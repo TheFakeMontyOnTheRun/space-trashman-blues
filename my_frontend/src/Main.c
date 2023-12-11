@@ -15,9 +15,12 @@ int main(int argc, char **argv) {
   do {
       menuTick(10);
       graphicsFlush();
+#ifdef EMIT_QUIT_OPTION
   } while (isRunning);
 
     unloadStateCallback(1);
-
+#else
+    } while (1);
+#endif
   return 0;
 }
