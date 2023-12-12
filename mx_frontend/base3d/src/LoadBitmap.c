@@ -153,15 +153,6 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
         }
     }
 #endif
-    for (y = 0; y < NATIVE_TEXTURE_SIZE; ++y) {
-        uint8_t *sourceLine = &buffer[y * NATIVE_TEXTURE_SIZE];
-        uint8_t *dstLine = &toReturn->rowMajor[y];
-        for (x = 0; x < NATIVE_TEXTURE_SIZE; ++x) {
-            *dstLine = *sourceLine;
-            sourceLine++;
-            dstLine += NATIVE_TEXTURE_SIZE;
-        }
-    }
 
     disposeDiskBuffer(staticBuffer);
 

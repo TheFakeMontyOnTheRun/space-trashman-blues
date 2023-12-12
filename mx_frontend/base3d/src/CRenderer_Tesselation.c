@@ -203,7 +203,7 @@ void drawColumnAt(const struct Vec3 center,
         if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
             maskWall(p2.mX, p0.mX, p2.mY, p3.mY, p0.mY, p1.mY);
         } else {
-            drawWall(p2.mX, p0.mX, p2.mY, p3.mY, p0.mY, p1.mY, texture->rowMajor,
+            drawWall(p2.mX, p0.mX, p2.mY, p3.mY, p0.mY, p1.mY, texture->rotations[1],
                      (textureScale), z);
         }
 
@@ -218,7 +218,7 @@ void drawColumnAt(const struct Vec3 center,
         if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
             maskWall(p1.mX, p3.mX, p0.mY, p1.mY, p2.mY, p3.mY);
         } else {
-            drawWall(p1.mX, p3.mX, p0.mY, p1.mY, p2.mY, p3.mY, texture->rowMajor,
+            drawWall(p1.mX, p3.mX, p0.mY, p1.mY, p2.mY, p3.mY, texture->rotations[1],
                      (textureScale), z);
         }
 
@@ -550,7 +550,7 @@ void drawLeftNear(const struct Vec3 center,
     if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
         maskWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY);
     } else {
-        drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture->rowMajor,
+        drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture->rotations[1],
                  textureScale, fixToInt(center.mZ));
     }
 }
@@ -712,7 +712,7 @@ void drawRightNear(const struct Vec3 center,
     if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
         maskWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY);
     } else {
-        drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture->rowMajor,
+        drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture->rotations[1],
                  textureScale, fixToInt(center.mZ));
     }
 }

@@ -20,7 +20,7 @@ struct Texture {
 #else
     uint8_t rotations[1][NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
 #endif
-    TexturePixelFormat rowMajor[NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
+  //  TexturePixelFormat rowMajor[NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
 };
 
 void clearTextures(void);

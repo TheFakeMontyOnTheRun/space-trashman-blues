@@ -1237,7 +1237,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
                         if (stipple && farEnoughForStipple) {
                             *destination = 0;
                         } else {
-                            *destination = *(&texture->rowMajor[0] + (NATIVE_TEXTURE_SIZE * v) + u);
+                            *destination = *(&texture->rotations[1][0] + (NATIVE_TEXTURE_SIZE * v) + u);
                         }
                     }
                     ++xPos;
@@ -1393,7 +1393,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
                         if (stipple && farEnoughForStipple) {
                             *destination = 0;
                         } else {
-                            *destination = *(&texture->rowMajor[0] + (NATIVE_TEXTURE_SIZE * v) + u);
+                            *destination = *(&texture->rotations[1][0] + (NATIVE_TEXTURE_SIZE * v) + u);
                         }
                     }
 
