@@ -188,7 +188,6 @@ void loadTileProperties(const uint8_t levelNumber) {
 }
 
 void loadTexturesForLevel(const uint8_t levelNumber) {
-    char buffer[256];
     struct StaticBuffer data;
     char tilesFilename[64];
     char *head;

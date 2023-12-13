@@ -95,7 +95,6 @@ struct Texture *makeTextureFrom(const char *filename) {
             (struct Texture *) calloc(1, sizeof(struct Texture));
 
     toReturn->raw = loadBitmap(filename);
-    submitBitmapToGPU(toReturn->raw);
 
     return toReturn;
 }
@@ -156,12 +155,14 @@ void drawQuad(
     vy4 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos4.mY) + centerY;
     vz4 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos4.mZ) + centerZ;
 
-    bindTexture(texture->raw);
 
-    if (enableAlpha) {
-        GX_SetAlphaUpdate(GX_TRUE);
-        GX_SetAlphaCompare(GX_GREATER,0,GX_AOP_AND,GX_ALWAYS,0);
+    struct Bitmap* bitmap = texture->raw;
+
+    if (bitmap->nativeBuffer == NULL || bitmap->uploadId == -1) {
+        submitBitmapToGPU(bitmap);
     }
+
+    bindTexture(bitmap);
 
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);			// Draw A Quad
 
@@ -183,7 +184,6 @@ void drawQuad(
 
     GX_End();									// Done Drawing The Quad
 
-    GX_SetAlphaUpdate(GX_FALSE);
 }
 
 void drawRampAt(const struct Vec3 center0, const struct Vec3 center1,

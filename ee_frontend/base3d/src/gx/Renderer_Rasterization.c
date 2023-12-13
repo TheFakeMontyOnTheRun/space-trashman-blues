@@ -139,11 +139,6 @@ void drawBitmapRegion(const int _x,
 
     bindTexture(bitmap);
 
-    if (transparent) {
-        GX_SetAlphaUpdate(GX_TRUE);
-        GX_SetAlphaCompare(GX_GREATER,0,GX_AOP_AND,GX_ALWAYS,0);
-    }
-
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);			// Draw A Quad
 
     GX_Position3f32(x, y + dy, -0.125);	// Top Left
@@ -163,8 +158,6 @@ void drawBitmapRegion(const int _x,
     GX_TexCoord2f32(u0,v0);
 
     GX_End();									// Done Drawing The Quad
-
-    GX_SetAlphaUpdate(GX_FALSE);
 }
 
 void drawBitmap(const int _x,
@@ -222,9 +215,6 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
     float blockWidth = (8.0f / fontWidth) * 0.999f;
     float blockHeight = (8.0f / fontHeight) * 0.999f;
 
-    GX_SetAlphaUpdate(GX_TRUE);
-    GX_SetAlphaCompare(GX_GREATER,0,GX_AOP_AND,GX_ALWAYS,0);
-
     for (c = 0; c < len; ++c) {
         if (text[c] == '\n' || dstX >= XRES_FRAMEBUFFER) {
             dstX = (_x - 1) * 8;
@@ -246,8 +236,6 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
 
         dstX += 8;
     }
-
-    GX_SetAlphaUpdate(GX_FALSE);
 }
 
 void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text,
