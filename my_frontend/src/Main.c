@@ -15,6 +15,7 @@ int main(int argc, char **argv) {
   do {
       menuTick(10);
       graphicsFlush();
+      soundTick();
 #ifdef EMIT_QUIT_OPTION
   } while (isRunning);
 
