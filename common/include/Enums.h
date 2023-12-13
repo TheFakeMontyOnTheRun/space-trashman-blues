@@ -66,7 +66,7 @@ enum ESoundDriver {
     kNoSound, kPcSpeaker, kOpl2Lpt, kAdlib
 };
 
-#define MENU_SELECTION_CHANGE_SOUND 0
-#define STATE_CHANGE_SOUND 1
-#define MAIN_MENU_THEME 7
+#define MENU_SELECTION_CHANGE_SOUND 1
+#define STATE_CHANGE_SOUND 2
+#define MAIN_MENU_THEME 3
 #endif
