@@ -134,12 +134,14 @@ uint8_t menuTick(long delta_time) {
     input = getInput();
 
     newState = tickCallback(input, delta_time);
-
+    
+#ifdef EMIT_QUIT_OPTION
     if (input == kCommandQuit) {
         isRunning = FALSE;
         return FALSE;
     }
-
+#endif
+    
     if (newState != currentGameMenuState && newState != kResumeCurrentState) {
         playSound(STATE_CHANGE_SOUND);
         enterState(newState);
