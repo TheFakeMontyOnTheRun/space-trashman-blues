@@ -35,37 +35,6 @@ extern int turning;
 extern int leanX;
 extern int leanY;
 
-typedef float t_mat4x4[16];
-
-static inline void mat4x4_ortho( t_mat4x4 out, float left, float right, float bottom, float top, float znear, float zfar )
-{
-    #define T(a, b) (a * 4 + b)
-
-    out[T(0,0)] = 2.0f / (right - left);
-    out[T(0,1)] = 0.0f;
-    out[T(0,2)] = 0.0f;
-    out[T(0,3)] = 0.0f;
-
-    out[T(1,1)] = 2.0f / (top - bottom);
-    out[T(1,0)] = 0.0f;
-    out[T(1,2)] = 0.0f;
-    out[T(1,3)] = 0.0f;
-
-    out[T(2,2)] = -2.0f / (zfar - znear);
-    out[T(2,0)] = 0.0f;
-    out[T(2,1)] = 0.0f;
-    out[T(2,3)] = 0.0f;
-
-    out[T(3,0)] = -(right + left) / (right - left);
-    out[T(3,1)] = -(top + bottom) / (top - bottom);
-    out[T(3,2)] = -(zfar + znear) / (zfar - znear);
-    out[T(3,3)] = 1.0f;
-
-    #undef T
-}
-
-
-
 static const char * vertex_shader =
     "#version 130\n"
     "in vec2 i_position;\n"
@@ -101,20 +70,8 @@ static const int height = 240;
 
 SDL_Window * window;
 SDL_GLContext context;
-GLuint vs, fs, program;
-GLuint vao, vbo;
-t_mat4x4 projection_matrix;
-
-const GLfloat g_vertex_buffer_data[] = {
-/*  R, G, B, A, X, Y  */
-    1, 0, 0, 1, 0, 0,
-    0, 1, 0, 1, XRES_FRAMEBUFFER, 0,
-    0, 0, 1, 1, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER,
-
-    1, 0, 0, 1, 0, 0,
-    0, 0, 1, 1, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER,
-    1, 1, 1, 1, 0, YRES_FRAMEBUFFER
-};
+unsigned int vs, fs, program;
+unsigned int vao, vbo;
 
 void graphicsInit() {
 
@@ -138,6 +95,9 @@ void graphicsInit() {
     window = SDL_CreateWindow( "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
     context = SDL_GL_CreateContext( window );
 
+    glViewport( 0, 0, width, height );
+
+    /* creating shader */
     vs = glCreateShader( GL_VERTEX_SHADER );
     fs = glCreateShader( GL_FRAGMENT_SHADER );
 
@@ -147,6 +107,7 @@ void graphicsInit() {
 
     GLint status;
     glGetShaderiv( vs, GL_COMPILE_STATUS, &status );
+    
     if( status == GL_FALSE )
     {
         fprintf( stderr, "vertex shader compilation failed\n" );
@@ -158,6 +119,7 @@ void graphicsInit() {
     glCompileShader( fs );
 
     glGetShaderiv( fs, GL_COMPILE_STATUS, &status );
+    
     if( status == GL_FALSE )
     {
         fprintf( stderr, "fragment shader compilation failed\n" );
@@ -167,16 +129,14 @@ void graphicsInit() {
     program = glCreateProgram();
     glAttachShader( program, vs );
     glAttachShader( program, fs );
-
-    glBindAttribLocation( program, attrib_position, "i_position" );
-    glBindAttribLocation( program, attrib_color, "i_color" );
     glLinkProgram( program );
 
     glUseProgram( program );
-
-    glDisable( GL_DEPTH_TEST );
-    glClearColor( 0.5, 0.0, 0.0, 0.0 );
-    glViewport( 0, 0, width, height );
+    
+    /* attaching data to shaders */
+  
+    glBindAttribLocation( program, attrib_position, "i_position" );
+    glBindAttribLocation( program, attrib_color, "i_color" );
 
     glGenVertexArrays( 1, &vao );
     glGenBuffers( 1, &vbo );
@@ -188,12 +148,6 @@ void graphicsInit() {
 
     glVertexAttribPointer( attrib_color, 4, GL_FLOAT, GL_FALSE, sizeof( float ) * 6, 0 );
     glVertexAttribPointer( attrib_position, 2, GL_FLOAT, GL_FALSE, sizeof( float ) * 6, ( void * )(4 * sizeof(float)) );
-
-
-    glBufferData( GL_ARRAY_BUFFER, sizeof( g_vertex_buffer_data ), g_vertex_buffer_data, GL_STATIC_DRAW );
-
-    mat4x4_ortho( projection_matrix, 0.0f, (float)width, (float)height, 0.0f, 0.0f, 100.0f );
-    glUniformMatrix4fv( glGetUniformLocation( program, "u_projection_matrix" ), 1, GL_FALSE, projection_matrix );
 }
 
 void handleSystemEvents() {

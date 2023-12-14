@@ -22,6 +22,11 @@
 #include "UI.h"
 #include "Engine.h"
 
+#define GL_GLEXT_PROTOTYPES
+
+#include <SDL.h>
+#include <SDL_opengl.h>
+
 struct Mesh mesh;
 int visibilityCached = FALSE;
 int needsToRedrawVisibleMeshes = TRUE;
@@ -51,6 +56,41 @@ char messageLogBuffer[256];
 
 int messageLogBufferCoolDown = 0;
 
+extern unsigned int vs, fs, program;
+extern unsigned int vao, vbo;
+
+typedef float t_mat4x4[16];
+
+t_mat4x4 projection_matrix;
+
+static inline void mat4x4_ortho( t_mat4x4 out, float left, float right, float bottom, float top, float znear, float zfar )
+{
+    #define T(a, b) (a * 4 + b)
+
+    out[T(0,0)] = 2.0f / (right - left);
+    out[T(0,1)] = 0.0f;
+    out[T(0,2)] = 0.0f;
+    out[T(0,3)] = 0.0f;
+
+    out[T(1,1)] = 2.0f / (top - bottom);
+    out[T(1,0)] = 0.0f;
+    out[T(1,2)] = 0.0f;
+    out[T(1,3)] = 0.0f;
+
+    out[T(2,2)] = -2.0f / (zfar - znear);
+    out[T(2,0)] = 0.0f;
+    out[T(2,1)] = 0.0f;
+    out[T(2,3)] = 0.0f;
+
+    out[T(3,0)] = -(right + left) / (right - left);
+    out[T(3,1)] = -(top + bottom) / (top - bottom);
+    out[T(3,2)] = -(zfar + znear) / (zfar - znear);
+    out[T(3,3)] = 1.0f;
+
+    #undef T
+}
+
+
 void printMessageTo3DView(const char *message);
 
 enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
@@ -70,6 +110,8 @@ uint32_t getPaletteEntry(const uint32_t origin) {
 }
 
 void enter2D(void) {
+  mat4x4_ortho( projection_matrix, 0.0f, (float)XRES_FRAMEBUFFER, (float)YRES_FRAMEBUFFER, 0.0f, 0.0f, 100.0f );
+  glUniformMatrix4fv( glGetUniformLocation( program, "u_projection_matrix" ), 1, GL_FALSE, projection_matrix );
 }
 
 void initGL() {
@@ -83,10 +125,31 @@ void clearRenderer() {
 void startFrameGL(int x, int y, int width, int height) {
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;
+
+
+
+    glDisable( GL_DEPTH_TEST );
+    glClearColor( 0.5, 0.0, 0.0, 0.0 );
+    
+
+    
     enter2D();
 }
 
+
+const float g_vertex_buffer_data[] = {
+/*  R, G, B, A, X, Y  */
+    1, 0, 0, 1, 0, 0,
+    0, 1, 0, 1, XRES_FRAMEBUFFER, 0,
+    0, 0, 1, 1, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER,
+
+    1, 0, 0, 1, 0, 0,
+    0, 0, 1, 1, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER,
+    1, 1, 1, 1, 0, YRES_FRAMEBUFFER
+};
+
 void endFrameGL() {
+  glBufferData( GL_ARRAY_BUFFER, sizeof( g_vertex_buffer_data ), g_vertex_buffer_data, GL_STATIC_DRAW );
 }
 
 void enter3D(void) {
