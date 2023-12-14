@@ -28,6 +28,13 @@
 
 #include <stdio.h>
 
+#define ANGLE_TURN_THRESHOLD 40
+#define ANGLE_TURN_STEP 5
+
+extern int turning;
+extern int leanX;
+extern int leanY;
+
 typedef float t_mat4x4[16];
 
 static inline void mat4x4_ortho( t_mat4x4 out, float left, float right, float bottom, float top, float znear, float zfar )
@@ -60,7 +67,7 @@ static inline void mat4x4_ortho( t_mat4x4 out, float left, float right, float bo
 
 
 static const char * vertex_shader =
-    "#version 330\n"
+    "#version 130\n"
     "in vec2 i_position;\n"
     "in vec4 i_color;\n"
     "out vec4 v_color;\n"
@@ -71,7 +78,7 @@ static const char * vertex_shader =
     "}\n";
 
 static const char * fragment_shader =
-    "#version 330\n"
+    "#version 130\n"
     "in vec4 v_color;\n"
     "out vec4 o_color;\n"
     "void main() {\n"
@@ -90,6 +97,8 @@ int enable3DRendering = TRUE;
 
 static const int width = 320;
 static const int height = 240;
+
+
 SDL_Window * window;
 SDL_GLContext context;
 GLuint vs, fs, program;
@@ -99,12 +108,12 @@ t_mat4x4 projection_matrix;
 const GLfloat g_vertex_buffer_data[] = {
 /*  R, G, B, A, X, Y  */
     1, 0, 0, 1, 0, 0,
-    0, 1, 0, 1, width, 0,
-    0, 0, 1, 1, width, height,
+    0, 1, 0, 1, XRES_FRAMEBUFFER, 0,
+    0, 0, 1, 1, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER,
 
     1, 0, 0, 1, 0, 0,
-    0, 0, 1, 1, width, height,
-    1, 1, 1, 1, 0, height
+    0, 0, 1, 1, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER,
+    1, 1, 1, 1, 0, YRES_FRAMEBUFFER
 };
 
 void graphicsInit() {
@@ -189,17 +198,152 @@ void graphicsInit() {
 
 void handleSystemEvents() {
     SDL_Event event;
-    while( SDL_PollEvent( &event ) )
-    {
-        switch( event.type )
-        {
-            case SDL_KEYUP:
-                if( event.key.keysym.sym == SDLK_ESCAPE )
+
+    while (SDL_PollEvent(&event)) {
+
+        if (event.type == SDL_QUIT) {
+            mBufferedCommand = kCommandQuit;
+            return;
+        }
+
+        if (event.type == SDL_KEYUP) {
+            visibilityCached = FALSE;
+            needsToRedrawVisibleMeshes = TRUE;
+        }
+
+        if (event.type == SDL_KEYDOWN) {
+            leanY = leanX = 0;
+            switch (event.key.keysym.sym) {
+                case SDLK_RETURN:
+                case SDLK_z:
+                    mBufferedCommand = kCommandFire1;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+                case SDLK_x:
+                    mBufferedCommand = kCommandFire2;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+                case SDLK_c:
+                    mBufferedCommand = kCommandFire3;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+                case SDLK_v:
+                    mBufferedCommand = kCommandFire4;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+
+                case SDLK_t:
+                    leanY = -1;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+
+                case SDLK_g:
+                    leanY = 1;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+
+                case SDLK_f:
+                    leanX = -1;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+
+                case SDLK_h:
+                    leanX = 1;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+
+                case SDLK_ESCAPE:
+                case SDLK_q:
+                    mBufferedCommand = kCommandBack;
+                    visibilityCached = FALSE;
+                    break;
+
+                case SDLK_SPACE:
+
+                case SDLK_s:
+                    mBufferedCommand = kCommandStrafeLeft;
+                    visibilityCached = FALSE;
+                    break;
+                case SDLK_d:
+                    mBufferedCommand = kCommandStrafeRight;
+                    visibilityCached = FALSE;
+                    break;
+
+                case SDLK_i:
+                    visibilityCached = FALSE;
+                    break;
+                case SDLK_o:
+                    visibilityCached = FALSE;
+                    break;
+
+                case SDLK_j:
+                    visibilityCached = FALSE;
+                    break;
+                case SDLK_k:
+                    visibilityCached = FALSE;
+                    break;
+
+
+                case SDLK_LEFT:
+                    turning = 1;
+                    leanX = -ANGLE_TURN_STEP;
+                    break;
+                case SDLK_RIGHT:
+                    leanX = ANGLE_TURN_STEP;
+                    turning = 1;
+                    break;
+                case SDLK_UP:
+                    mBufferedCommand = kCommandUp;
+                    visibilityCached = FALSE;
+                    break;
+                case SDLK_1:
+                    enableSmoothMovement = TRUE;
+                    break;
+
+                case SDLK_2:
+                    enableSmoothMovement = FALSE;
+                    break;
+
+                case SDLK_3:
+                    leanX = -ANGLE_TURN_STEP;
+                    break;
+
+                case SDLK_4:
+                    leanX = ANGLE_TURN_STEP;
+
+                    break;
+
+                case SDLK_DOWN:
+                    mBufferedCommand = kCommandDown;
+                    visibilityCached = FALSE;
+                    break;
+
+                case SDLK_n:
+                    needsToRedrawVisibleMeshes = TRUE;
+                    visibilityCached = FALSE;
+                    break;
+                case SDLK_m:
+                    needsToRedrawVisibleMeshes = TRUE;
+                    visibilityCached = FALSE;
+                    break;
+	    case SDLK_l:
+	      graphicsShutdown();
+	      exit(0);
+	      return;
+	      
+                default:
                     return;
-                break;
+            }
         }
     }
-
 }
 
 void graphicsShutdown() {
