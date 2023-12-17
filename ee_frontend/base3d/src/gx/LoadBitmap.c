@@ -35,22 +35,23 @@ void bindTexture(struct Bitmap *bitmap) {
 int submitBitmapToGPU(struct Bitmap *bitmap) {
     bitmap->nativeBuffer = allocMem(sizeof(GXTexObj), TEXTURE_MEMORY, 1);
     DCFlushRange(bitmap->data, bitmap->width * bitmap->height * 4);
-    GX_InitTexObj(bitmap->nativeBuffer, bitmap->data, bitmap->width, bitmap->height, GX_TF_RGBA8, GX_REPEAT, GX_REPEAT, GX_FALSE);
+    GX_InitTexObj(bitmap->nativeBuffer, bitmap->data, bitmap->width, bitmap->height, GX_TF_RGBA8, GX_REPEAT, GX_REPEAT,
+                  GX_FALSE);
     bitmap->uploadId = 1;
 
     return 0;
 }
 
 /* Based on code from GRRLIB - https://github.com/GRRLIB/GRRLIB */
-void  SetPixelToTexImg (const int x, const int y,
-                               struct Bitmap *tex, const uint32_t color) {
-    uint32_t  offs;
-    uint8_t*  bp = (uint8_t*)tex->data;
+void SetPixelToTexImg(const int x, const int y,
+                      struct Bitmap *tex, const uint32_t color) {
+    uint32_t offs;
+    uint8_t *bp = (uint8_t *) tex->data;
 
-    offs = (((y&(~3))<<2)*tex->width) + ((x&(~3))<<4) + ((((y&3)<<2) + (x&3)) <<1);
+    offs = (((y & (~3)) << 2) * tex->width) + ((x & (~3)) << 4) + ((((y & 3) << 2) + (x & 3)) << 1);
 
-    *((uint16_t*)(bp+offs   )) = (uint16_t)((color <<8) | (color >>24));
-    *((uint16_t*)(bp+offs+32)) = (uint16_t) (color >>8);
+    *((uint16_t *) (bp + offs)) = (uint16_t) ((color << 8) | (color >> 24));
+    *((uint16_t *) (bp + offs + 32)) = (uint16_t) (color >> 8);
 }
 
 struct Bitmap *loadBitmap(const char *filename) {
@@ -82,7 +83,7 @@ struct Bitmap *loadBitmap(const char *filename) {
 
     memCopyToFrom(buffer, ptr, sizeInDisk);
 
-    toReturn->data = (TexturePixelFormat *) memalign( 32, size);
+    toReturn->data = (TexturePixelFormat *) memalign(32, size);
     uint32_t *imgBuffer = allocMem(size, GENERAL_MEMORY, 0);
 
     uint8_t repetitions;
@@ -109,8 +110,8 @@ struct Bitmap *loadBitmap(const char *filename) {
         }
     }
 
-    for (int y = 0; y < toReturn->height; ++y ) {
-        for (int x = 0; x < toReturn->width; ++x ) {
+    for (int y = 0; y < toReturn->height; ++y) {
+        for (int x = 0; x < toReturn->width; ++x) {
             SetPixelToTexImg(x, y, toReturn, imgBuffer[y * toReturn->width + x]);
         }
     }

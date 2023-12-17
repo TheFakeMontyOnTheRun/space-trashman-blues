@@ -31,25 +31,25 @@ int snapshotSignal = '.';
 int needsToRedrawHUD = TRUE;
 int enable3DRendering = TRUE;
 
-#define DEFAULT_FIFO_SIZE	(256*1024)
+#define DEFAULT_FIFO_SIZE    (256*1024)
 
-static void *frameBuffer[2] = { NULL, NULL};
+static void *frameBuffer[2] = {NULL, NULL};
 GXRModeObj *rmode;
 f32 yscale;
 u32 xfbHeight;
 Mtx view;
 Mtx44 perspective;
 Mtx model, modelview;
-u32	fb = 0; 	// initial framebuffer index
+u32 fb = 0;
 GXColor background = {0, 0, 0, 0xff};
 
 u32 first_frame = 1;
-guVector cubeAxis = {1,1,1};
+guVector cubeAxis = {1, 1, 1};
 f32 rquad = 0.0f;
 f32 zt = 0;
 void *gpfifo = NULL;
 
-uint8_t whiteTextureData[ 32 * 32 * 4];
+uint8_t whiteTextureData[32 * 32 * 4];
 GXTexObj whiteTextureObj;
 
 void graphicsInit() {
@@ -69,8 +69,8 @@ void graphicsInit() {
 
     rmode = VIDEO_GetPreferredMode(NULL);
 
-    gpfifo = memalign(32,DEFAULT_FIFO_SIZE);
-    memset(gpfifo,0,DEFAULT_FIFO_SIZE);
+    gpfifo = memalign(32, DEFAULT_FIFO_SIZE);
+    memset(gpfifo, 0, DEFAULT_FIFO_SIZE);
 
     frameBuffer[0] = SYS_AllocateFramebuffer(rmode);
     frameBuffer[1] = SYS_AllocateFramebuffer(rmode);
@@ -79,22 +79,22 @@ void graphicsInit() {
     VIDEO_SetNextFramebuffer(frameBuffer[fb]);
     VIDEO_Flush();
     VIDEO_WaitVSync();
-    if(rmode->viTVMode&VI_NON_INTERLACE) VIDEO_WaitVSync();
+    if (rmode->viTVMode & VI_NON_INTERLACE) VIDEO_WaitVSync();
 
     fb ^= 1;
 
-    GX_Init(gpfifo,DEFAULT_FIFO_SIZE);
+    GX_Init(gpfifo, DEFAULT_FIFO_SIZE);
 
     GX_SetCopyClear(background, 0x00ffffff);
 
-    GX_SetViewport(0,0,rmode->fbWidth,rmode->efbHeight,0,1);
-    yscale = GX_GetYScaleFactor(rmode->efbHeight,rmode->xfbHeight);
+    GX_SetViewport(0, 0, rmode->fbWidth, rmode->efbHeight, 0, 1);
+    yscale = GX_GetYScaleFactor(rmode->efbHeight, rmode->xfbHeight);
     xfbHeight = GX_SetDispCopyYScale(yscale);
-    GX_SetScissor(0,0,rmode->fbWidth,rmode->efbHeight);
-    GX_SetDispCopySrc(0,0,rmode->fbWidth,rmode->efbHeight);
-    GX_SetDispCopyDst(rmode->fbWidth,xfbHeight);
-    GX_SetCopyFilter(rmode->aa,rmode->sample_pattern,GX_TRUE,rmode->vfilter);
-    GX_SetFieldMode(rmode->field_rendering,((rmode->viHeight==2*rmode->xfbHeight)?GX_ENABLE:GX_DISABLE));
+    GX_SetScissor(0, 0, rmode->fbWidth, rmode->efbHeight);
+    GX_SetDispCopySrc(0, 0, rmode->fbWidth, rmode->efbHeight);
+    GX_SetDispCopyDst(rmode->fbWidth, xfbHeight);
+    GX_SetCopyFilter(rmode->aa, rmode->sample_pattern, GX_TRUE, rmode->vfilter);
+    GX_SetFieldMode(rmode->field_rendering, ((rmode->viHeight == 2 * rmode->xfbHeight) ? GX_ENABLE : GX_DISABLE));
 
     if (rmode->aa) {
         GX_SetPixelFmt(GX_PF_RGB565_Z16, GX_ZC_LINEAR);
@@ -103,7 +103,7 @@ void graphicsInit() {
     }
 
     GX_SetCullMode(GX_CULL_NONE);
-    GX_CopyDisp(frameBuffer[fb],GX_TRUE);
+    GX_CopyDisp(frameBuffer[fb], GX_TRUE);
     GX_SetDispCopyGamma(GX_GM_1_0);
 
     GX_ClearVtxDesc();
@@ -117,7 +117,7 @@ void graphicsInit() {
 
     GX_SetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
 
-    GX_SetTevOp(GX_TEVSTAGE0,GX_MODULATE);
+    GX_SetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     GX_SetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
 
     GX_SetNumTexGens(1);
@@ -126,7 +126,7 @@ void graphicsInit() {
     GX_InvalidateTexAll();
 
     GX_SetAlphaUpdate(GX_TRUE);
-    GX_SetAlphaCompare(GX_GREATER,0,GX_AOP_AND,GX_ALWAYS,0);
+    GX_SetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GX_SetZCompLoc(GX_FALSE);
 
     memset(&whiteTextureData[0], 0xFF, 32 * 32 * 4);
@@ -211,22 +211,22 @@ void graphicsShutdown() {
 }
 
 void flipRenderer() {
-    GX_SetAlphaCompare(GX_GREATER,0,GX_AOP_AND,GX_ALWAYS,0);
+    GX_SetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
     guMtxIdentity(model);
-    guMtxTransApply(model, model, 0.0f,0.0f,-0.8f);
-    guMtxConcat(view,model,modelview);
-    // load the modelview matrix into matrix memory
+    guMtxTransApply(model, model, 0.0f, 0.0f, -0.8f);
+    guMtxConcat(view, model, modelview);
+
     GX_LoadPosMtxImm(modelview, GX_PNMTX3);
     GX_SetCurrentMtx(GX_PNMTX3);
 
     GX_SetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GX_SetColorUpdate(GX_TRUE);
-    GX_CopyDisp(frameBuffer[fb],GX_TRUE);
+    GX_CopyDisp(frameBuffer[fb], GX_TRUE);
 
     GX_DrawDone();
 
     VIDEO_SetNextFramebuffer(frameBuffer[fb]);
-    if(first_frame) {
+    if (first_frame) {
         first_frame = 0;
         VIDEO_SetBlack(FALSE);
     }
