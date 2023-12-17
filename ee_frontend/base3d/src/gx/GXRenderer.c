@@ -127,6 +127,7 @@ void graphicsInit() {
 
     GX_SetAlphaUpdate(GX_TRUE);
     GX_SetAlphaCompare(GX_GREATER,0,GX_AOP_AND,GX_ALWAYS,0);
+    GX_SetZCompLoc(GX_FALSE);
 
     memset(&whiteTextureData[0], 0xFF, 32 * 32 * 4);
 
