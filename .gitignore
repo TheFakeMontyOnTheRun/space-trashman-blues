@@ -203,3 +203,7 @@ ee_frontend/derelict_gx.elf
 ee_frontend/derelict_wii.dol
 ee_frontend/derelict_wii.elf
 derelict_wii.elf.map
+ee_frontend/CMakeFiles/derelict128.dir
+ee_frontend/CMakeFiles
+ee_frontend/derelict128
+ee_frontend/Makefile
