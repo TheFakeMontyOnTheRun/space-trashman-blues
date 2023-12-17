@@ -85,8 +85,7 @@ void graphicsInit() {
     SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 8 );
 
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 2 );
-    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 0 );
-    SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
+    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
 
 
     window = SDL_CreateWindow( "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
