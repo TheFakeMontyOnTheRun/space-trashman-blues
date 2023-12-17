@@ -35,7 +35,7 @@ extern GXTexObj whiteTextureObj;
 
 #define NORMALIZE_ORTHO_X (1.0f / 320.0f)
 #define NORMALIZE_ORTHO_Y (-1.0f / 200.0f)
-#define ADJUST_RESOLUTION_Y (((200.0f/256.0f) * 200.0f) / 240.0f )
+#define ADJUST_RESOLUTION_Y ( 0.75f )
 #define OFFSET_X (-0.5f)
 #define OFFSET_Y (0.375f)
 
@@ -76,42 +76,7 @@ void fillRect(
         const FramebufferPixelFormat pixel,
         const uint8_t stipple) {
 
-    float x = OFFSET_X + _x * NORMALIZE_ORTHO_X;
-    float y = OFFSET_Y + _y * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
-    float dx = _dx * NORMALIZE_ORTHO_X;
-    float dy = _dy * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
-
-    FramebufferPixelFormat fragment = pixel;//palette[pixel];
-
-    if (fragment != TRANSPARENCY_COLOR) {
-        float r, g, b;
-
-        r = (fragment & 0xFF) * NORMALIZE_COLOUR;
-        g = ((fragment & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
-        b = ((fragment & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
-
-        GX_LoadTexObj(&whiteTextureObj, GX_TEXMAP0);
-
-        GX_Begin(GX_QUADS, GX_VTXFMT0, 4);            // Draw A Quad
-
-        GX_Position3f32(x, y + dy, -0.15);	// Top Left
-        GX_Color3f32(r ,g ,b);
-        GX_TexCoord2f32(0.0f,1.0f);
-
-        GX_Position3f32( x + dx, y + dy, -0.15);		// Top Right
-        GX_Color3f32(r ,g ,b);
-        GX_TexCoord2f32(1.0f,1.0f);
-
-        GX_Position3f32( x +dx, y, -0.15);	// Bottom Right
-        GX_Color3f32(r ,g ,b);
-        GX_TexCoord2f32(1.0f,0.0f);
-
-        GX_Position3f32(x, y, -0.15);	// Bottom Left
-        GX_Color3f32(r ,g ,b);
-        GX_TexCoord2f32(0.0f,0.0f);
-
-        GX_End();                                    // Done Drawing The Quad
-    }
+    drawBitmapRegion(_x, _y, _dx, _dy, pixel,  NULL, 0, 0, 0, 1, 1);
 }
 
 void drawBitmapRegion(const int _x,
@@ -133,11 +98,16 @@ void drawBitmapRegion(const int _x,
     g = ((tint & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
     b = ((tint & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
 
-    if (bitmap->nativeBuffer == NULL || bitmap->uploadId == -1) {
-        submitBitmapToGPU(bitmap);
+    if (bitmap != NULL) {
+        if (bitmap->nativeBuffer == NULL || bitmap->uploadId == -1) {
+            submitBitmapToGPU(bitmap);
+        }
+
+        bindTexture(bitmap);
+    } else {
+        GX_LoadTexObj(&whiteTextureObj, GX_TEXMAP0);
     }
 
-    bindTexture(bitmap);
 
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);			// Draw A Quad
 
