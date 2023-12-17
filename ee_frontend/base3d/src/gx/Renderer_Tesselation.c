@@ -23,6 +23,8 @@
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 
+#include <gccore.h>
+
 #define kMinZCull 0
 struct Vec3 cameraOffset;
 FixP_t walkingBias = 0;
@@ -32,7 +34,7 @@ struct Texture *nativeTextures[TOTAL_TEXTURES];
 extern struct Texture *itemSprites[TOTAL_ITEMS];
 
 #define GEOMETRY_SCALE_X 2.0f
-#define GEOMETRY_SCALE_Y 1.0f
+#define GEOMETRY_SCALE_Y 2.0f
 #define GEOMETRY_SCALE_Z 2.0f
 #define GEOMETRY_TEXTURE_SCALE_X 1.0f
 #define GEOMETRY_TEXTURE_SCALE_Y 1.0f
@@ -41,6 +43,16 @@ extern struct Texture *itemSprites[TOTAL_ITEMS];
 #define REVERSE_BIAS (1.0f/8.0f)
 #define FOG_MAX_DISTANCE 32.0f
 #define Z_NEAR_PLANE_FRUSTUM 0
+
+extern GXRModeObj *rmode;
+extern Mtx model, modelview;
+extern guVector cubeAxis;
+extern GXRModeObj *rmode;
+extern Mtx model, modelview;
+extern Mtx view;
+extern Mtx44 perspective;
+extern guVector Yaxis;
+extern guVector Xaxis;
 
 void clearTextures(void) {
     int c;
@@ -83,7 +95,6 @@ struct Texture *makeTextureFrom(const char *filename) {
             (struct Texture *) calloc(1, sizeof(struct Texture));
 
     toReturn->raw = loadBitmap(filename);
-    submitBitmapToGPU(toReturn->raw);
 
     return toReturn;
 }
@@ -100,6 +111,79 @@ void drawQuad(
         const struct Vec2i uv4,
         const struct Texture *texture,
         const uint8_t enableAlpha) {
+
+    FixP_t acc;
+    FixP_t scaled;
+
+    float centerX;
+    float centerY;
+    float centerZ;
+
+    float vx1, vy1, vz1, u1, v1;
+    float vx2, vy2, vz2, u2, v2;
+    float vx3, vy3, vz3, u3, v3;
+    float vx4, vy4, vz4, u4, v4;
+
+
+    acc = center.mY + playerHeight + walkingBias + yCameraOffset;
+    scaled = Mul(acc, BIAS);
+    centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
+    centerX = GEOMETRY_SCALE_X * (fixToInt(Mul(center.mX + xCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
+    centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
+
+    u1 = 1.0f - (uv1.x) / 16.0f;
+    v1 = 1.0f - ((uv1.y) / 16.0f);
+    vx1 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos1.mX) + centerX;
+    vy1 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos1.mY) + centerY;
+    vz1 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos1.mZ) + centerZ;
+
+    u2 = 1.0f - (uv2.x) / 16.0f;
+    v2 = 1.0f - ((uv2.y) / 16.0f);
+    vx2 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos2.mX) + centerX;
+    vy2 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos2.mY) + centerY;
+    vz2 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos2.mZ) + centerZ;
+
+    u3 = 1.0f - (uv3.x) / 16.0f;
+    v3 = 1.0f - ((uv3.y) / 16.0f);
+    vx3 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos3.mX) + centerX;
+    vy3 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos3.mY) + centerY;
+    vz3 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos3.mZ) + centerZ;
+
+    u4 = 1.0f - (uv4.x) / 16.0f;
+    v4 = 1.0f - ((uv4.y) / 16.0f);
+    vx4 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos4.mX) + centerX;
+    vy4 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos4.mY) + centerY;
+    vz4 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos4.mZ) + centerZ;
+
+
+    struct Bitmap* bitmap = texture->raw;
+
+    if (bitmap->nativeBuffer == NULL || bitmap->uploadId == -1) {
+        submitBitmapToGPU(bitmap);
+    }
+
+    bindTexture(bitmap);
+
+    GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
+
+    GX_Position3f32(vx1, vy1, vz1);
+    GX_Color3f32(1, 1, 1);
+    GX_TexCoord2f32(u1, v1);
+
+    GX_Position3f32(vx2, vy2, vz2);
+    GX_Color3f32(1, 1, 1);
+    GX_TexCoord2f32(u2, v2);
+
+    GX_Position3f32(vx4, vy4, vz4);
+    GX_Color3f32(1, 1, 1);
+    GX_TexCoord2f32(u4, v4);
+
+    GX_Position3f32(vx3, vy3, vz3);
+    GX_Color3f32(1, 1, 1);
+    GX_TexCoord2f32(u3, v3);
+
+    GX_End();
+
 }
 
 void drawRampAt(const struct Vec3 center0, const struct Vec3 center1,
@@ -234,7 +318,7 @@ void drawBillboardAt(const struct Vec3 center,
     p0.mY = p1.mY = geometryScale;
     p2.mY = p3.mY = -geometryScale;
 
-    drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, bitmap, 0);
+    drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, bitmap, 1);
 }
 
 void drawColumnAt(const struct Vec3 center,

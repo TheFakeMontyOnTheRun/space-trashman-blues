@@ -21,18 +21,24 @@
 #include "Engine.h"
 #include "VisibilityStrategy.h"
 
+#include <gccore.h>
+
+#define NORMALIZE_ORTHO (1.0f / 100.0f)
+#define NORMALIZE_COLOUR (1.0f / 256.0f)
+
 uint8_t shouldDrawLights = TRUE;
 int useDither = TRUE;
 
 struct Bitmap *defaultFont;
 
+extern GXTexObj whiteTextureObj;
 
 #define NORMALIZE_ORTHO_X (1.0f / 320.0f)
-#define NORMALIZE_ORTHO_Y (1.0f / 200.0f)
-#define ADJUST_RESOLUTION_Y (((200.0f/256.0f) * 200.0f) / 240.0f )
+#define NORMALIZE_ORTHO_Y (-1.0f / 200.0f)
+#define ADJUST_RESOLUTION_Y ( 0.75f )
 #define OFFSET_X (-0.5f)
-#define OFFSET_Y (-0.375f)
-#define NORMALIZE_COLOUR (2.0f / 256.0f)
+#define OFFSET_Y (0.375f)
+
 
 #define GEOMETRY_SCALE_X 2.0f
 #define GEOMETRY_SCALE_Y 1.0f
@@ -70,7 +76,7 @@ void fillRect(
         const FramebufferPixelFormat pixel,
         const uint8_t stipple) {
 
-
+    drawBitmapRegion(_x, _y, _dx, _dy, pixel, NULL, 0, 0, 0, 1, 1);
 }
 
 void drawBitmapRegion(const int _x,
@@ -81,7 +87,47 @@ void drawBitmapRegion(const int _x,
                       struct Bitmap *bitmap,
                       const uint8_t transparent,
                       float u0, float u1, float v0, float v1) {
+    float x = OFFSET_X + _x * NORMALIZE_ORTHO_X;
+    float y = OFFSET_Y + _y * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
+    float dx = _dx * NORMALIZE_ORTHO_X;
+    float dy = _dy * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
 
+    float r, g, b;
+
+    r = (tint & 0xFF) * NORMALIZE_COLOUR;
+    g = ((tint & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+    b = ((tint & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
+
+    if (bitmap != NULL) {
+        if (bitmap->nativeBuffer == NULL || bitmap->uploadId == -1) {
+            submitBitmapToGPU(bitmap);
+        }
+
+        bindTexture(bitmap);
+    } else {
+        GX_LoadTexObj(&whiteTextureObj, GX_TEXMAP0);
+    }
+
+
+    GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
+
+    GX_Position3f32(x, y + dy, -0.125);
+    GX_Color3f32(r, g, b);
+    GX_TexCoord2f32(u0, v1);
+
+    GX_Position3f32(x + dx, y + dy, -0.125);
+    GX_Color3f32(r, g, b);
+    GX_TexCoord2f32(u1, v1);
+
+    GX_Position3f32(x + dx, y, -0.125);
+    GX_Color3f32(r, g, b);
+    GX_TexCoord2f32(u1, v0);
+
+    GX_Position3f32(x, y, -0.125);
+    GX_Color3f32(r, g, b);
+    GX_TexCoord2f32(u0, v0);
+
+    GX_End();
 }
 
 void drawBitmap(const int _x,
@@ -121,10 +167,11 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
         defaultFont = loadBitmap("font.img");
     }
 
-    if (defaultFont->uploadId == -1) {
+    if (defaultFont->nativeBuffer == NULL || defaultFont->uploadId == -1) {
         submitBitmapToGPU(defaultFont);
     }
 
+    bindTexture(defaultFont);
     size_t len = strlen(text);
     int32_t dstX = (_x - 1) * 8;
     int32_t dstY = (_y - 1) * 8;
@@ -134,7 +181,7 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
     float col;
 
     float fontWidth = defaultFont->width;
-    float fontHeight = defaultFont->height;
+    float fontHeight = 32.0f; //defaultFont->height;
     float blockWidth = (8.0f / fontWidth) * 0.999f;
     float blockHeight = (8.0f / fontHeight) * 0.999f;
 

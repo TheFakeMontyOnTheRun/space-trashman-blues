@@ -22,6 +22,8 @@
 #include "UI.h"
 #include "Engine.h"
 
+#include <gccore.h>
+
 struct Mesh mesh;
 int visibilityCached = FALSE;
 int needsToRedrawVisibleMeshes = TRUE;
@@ -57,6 +59,14 @@ enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
 struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
 
 
+extern GXRModeObj *rmode;
+extern Mtx model, modelview;
+extern Mtx view;
+extern Mtx44 perspective;
+guVector Yaxis = {0, 1, 0};
+guVector Xaxis = {1, 0, 0};
+
+
 void drawTriangle(const struct Vec3 pos1,
                   const struct Vec2i uv1,
                   const struct Vec3 pos2,
@@ -70,6 +80,16 @@ uint32_t getPaletteEntry(const uint32_t origin) {
 }
 
 void enter2D(void) {
+    guVector cam = {0.0F, 0.0F, 0.0F},
+            up = {0.0F, 1.0F, 0.0F},
+            look = {0.0F, 0.0F, -1.0F};
+
+    guLookAt(view, &cam, &up, &look);
+
+    f32 w = rmode->viWidth;
+    f32 h = rmode->viHeight;
+    guPerspective(perspective, 45, (f32) w / h, 0.1F, 1024.0F);
+    GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
 }
 
 void initGL() {
@@ -109,6 +129,16 @@ void enter3D(void) {
         _leanY = 0.25f * ((128 - leanY) / 127.0f);
     }
 
+    guVector cam = {0.0F, 0.0F, 0.0F},
+            up = {0.0F, 1.0F, 0.0F},
+            look = {0.0F, 0.0F, -1.0F};
+
+    guLookAt(view, &cam, &up, &look);
+
+    f32 w = rmode->viWidth;
+    f32 h = rmode->viHeight;
+    guPerspective(perspective, 90, (f32) w / h, 0.1F, 256.0F);
+    GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
 }
 
 void printMessageTo3DView(const char *message) {
@@ -145,7 +175,6 @@ void loadTileProperties(const uint8_t levelNumber) {
 }
 
 void loadTexturesForLevel(const uint8_t levelNumber) {
-    char buffer[256];
     struct StaticBuffer data;
     char tilesFilename[64];
     char *head;

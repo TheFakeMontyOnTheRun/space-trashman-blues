@@ -200,3 +200,6 @@ mx_frontend/derelict.elf
 mx_frontend/derelict.gba
 ee_frontend/derelict_gx.dol
 ee_frontend/derelict_gx.elf
+ee_frontend/derelict_wii.dol
+ee_frontend/derelict_wii.elf
+derelict_wii.elf.map
