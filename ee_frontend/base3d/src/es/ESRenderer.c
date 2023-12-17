@@ -78,18 +78,32 @@ void graphicsInit() {
     
     SDL_Init( SDL_INIT_VIDEO );
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-    SDL_GL_SetAttribute( SDL_GL_ACCELERATED_VISUAL, 1 );
+
     SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
     SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
     SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
     SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 8 );
 
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 2 );
+
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
 
-
     window = SDL_CreateWindow( "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
+
+    if( window == NULL )      {
+      printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
+    }
+
     context = SDL_GL_CreateContext( window );
+
+    if( context == NULL )      {
+      printf( "OpenGL context could not be created! SDL Error: %s\n", SDL_GetError() );
+    }
+
+    //Use Vsync
+    if( SDL_GL_SetSwapInterval( 1 ) < 0 )      {
+      printf( "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError() );
+    }
 
     glViewport( 0, 0, width, height );
 
