@@ -150,7 +150,7 @@ void enter3D(void) {
     // and aspect ratio based on the display resolution
     f32 w = rmode->viWidth;
     f32 h = rmode->viHeight;
-    guPerspective(perspective, 45, (f32)w/h, 0.1F, 1024.0F);
+    guPerspective(perspective, 90, (f32)w/h, 0.1F, 256.0F);
     GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
 }
 
