@@ -36,10 +36,9 @@ extern int leanX;
 extern int leanY;
 
 static const char * vertex_shader =
-    "#version 130\n"
-    "in vec2 i_position;\n"
-    "in vec4 i_color;\n"
-    "out vec4 v_color;\n"
+    "attribute vec2 i_position;\n"
+    "attribute vec4 i_color;\n"
+    "varying vec4 v_color;\n"
     "uniform mat4 u_projection_matrix;\n"
     "void main() {\n"
     "    v_color = i_color;\n"
@@ -47,11 +46,9 @@ static const char * vertex_shader =
     "}\n";
 
 static const char * fragment_shader =
-    "#version 130\n"
-    "in vec4 v_color;\n"
-    "out vec4 o_color;\n"
+    "varying vec4 v_color;\n"
     "void main() {\n"
-    "    o_color = v_color;\n"
+    "    gl_FragColor = v_color;\n"
     "}\n";
 
 typedef enum t_attrib_id
@@ -87,7 +84,7 @@ void graphicsInit() {
     SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
     SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 8 );
 
-    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
+    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 2 );
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 0 );
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
 
@@ -310,7 +307,7 @@ void graphicsShutdown() {
 
 void flipRenderer() {
     
-    glBindVertexArray( vao );
+
     glDrawArrays( GL_TRIANGLES, 0, 6 );
 
     SDL_GL_SwapWindow( window );
