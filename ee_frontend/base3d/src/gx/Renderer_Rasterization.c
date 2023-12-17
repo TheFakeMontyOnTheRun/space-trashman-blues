@@ -76,7 +76,7 @@ void fillRect(
         const FramebufferPixelFormat pixel,
         const uint8_t stipple) {
 
-    drawBitmapRegion(_x, _y, _dx, _dy, pixel,  NULL, 0, 0, 0, 1, 1);
+    drawBitmapRegion(_x, _y, _dx, _dy, pixel, NULL, 0, 0, 0, 1, 1);
 }
 
 void drawBitmapRegion(const int _x,
@@ -109,25 +109,25 @@ void drawBitmapRegion(const int _x,
     }
 
 
-    GX_Begin(GX_QUADS, GX_VTXFMT0, 4);			// Draw A Quad
+    GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
 
-    GX_Position3f32(x, y + dy, -0.125);	// Top Left
-    GX_Color3f32(r ,g ,b);
+    GX_Position3f32(x, y + dy, -0.125);
+    GX_Color3f32(r, g, b);
     GX_TexCoord2f32(u0, v1);
 
-    GX_Position3f32( x + dx, y + dy, -0.125);		// Top Right
-    GX_Color3f32(r ,g ,b);
+    GX_Position3f32(x + dx, y + dy, -0.125);
+    GX_Color3f32(r, g, b);
     GX_TexCoord2f32(u1, v1);
 
-    GX_Position3f32( x +dx, y, -0.125);	// Bottom Right
-    GX_Color3f32(r ,g ,b);
-    GX_TexCoord2f32(u1,v0);
+    GX_Position3f32(x + dx, y, -0.125);
+    GX_Color3f32(r, g, b);
+    GX_TexCoord2f32(u1, v0);
 
-    GX_Position3f32(x, y, -0.125);	// Bottom Left
-    GX_Color3f32(r ,g ,b);
-    GX_TexCoord2f32(u0,v0);
+    GX_Position3f32(x, y, -0.125);
+    GX_Color3f32(r, g, b);
+    GX_TexCoord2f32(u0, v0);
 
-    GX_End();									// Done Drawing The Quad
+    GX_End();
 }
 
 void drawBitmap(const int _x,

@@ -63,9 +63,8 @@ extern GXRModeObj *rmode;
 extern Mtx model, modelview;
 extern Mtx view;
 extern Mtx44 perspective;
-guVector Yaxis = {0,1,0};
-guVector Xaxis = {1,0,0};
-
+guVector Yaxis = {0, 1, 0};
+guVector Xaxis = {1, 0, 0};
 
 
 void drawTriangle(const struct Vec3 pos1,
@@ -85,17 +84,11 @@ void enter2D(void) {
             up = {0.0F, 1.0F, 0.0F},
             look = {0.0F, 0.0F, -1.0F};
 
-
-    // setup our camera at the origin
-    // looking down the -z axis with y up
     guLookAt(view, &cam, &up, &look);
 
-    // setup our projection matrix
-    // this creates a perspective matrix with a view angle of 90,
-    // and aspect ratio based on the display resolution
     f32 w = rmode->viWidth;
     f32 h = rmode->viHeight;
-    guPerspective(perspective, 45, (f32)w/h, 0.1F, 1024.0F);
+    guPerspective(perspective, 45, (f32) w / h, 0.1F, 1024.0F);
     GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
 }
 
@@ -140,17 +133,11 @@ void enter3D(void) {
             up = {0.0F, 1.0F, 0.0F},
             look = {0.0F, 0.0F, -1.0F};
 
-
-    // setup our camera at the origin
-    // looking down the -z axis with y up
     guLookAt(view, &cam, &up, &look);
 
-    // setup our projection matrix
-    // this creates a perspective matrix with a view angle of 90,
-    // and aspect ratio based on the display resolution
     f32 w = rmode->viWidth;
     f32 h = rmode->viHeight;
-    guPerspective(perspective, 90, (f32)w/h, 0.1F, 256.0F);
+    guPerspective(perspective, 90, (f32) w / h, 0.1F, 256.0F);
     GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
 }
 
