@@ -22,86 +22,36 @@
 #include "FixP.h"
 #include "VisibilityStrategy.h"
 
-#include <kernel.h>
-#include <malloc.h>
-#include <tamtypes.h>
-#include <math3d.h>
-#include <packet.h>
-#include <dma_tags.h>
-#include <gif_tags.h>
-#include <gs_psm.h>
-#include <dma.h>
-#include <graph.h>
-#include <draw.h>
-#include <draw3d.h>
-#include <tamtypes.h>
-#include <kernel.h>
-#include <sifrpc.h>
-#include <loadfile.h>
-
-
-extern qword_t *_q;
+#include <gccore.h>
+#include <gctypes.h>
+#include <ogc/gx.h>
 
 void bindTexture(struct Bitmap *bitmap) {
-    qword_t *q = _q;
 
-    // Using a texture involves setting up a lot of information.
-    clutbuffer_t clut;
-
-    lod_t lod;
-
-    lod.calculation = LOD_USE_K;
-    lod.max_level = 0;
-    lod.mag_filter = LOD_MAG_LINEAR;
-    lod.min_filter = LOD_MIN_LINEAR;
-    lod.l = 0;
-    lod.k = 0;
-
-    ((texbuffer_t*)bitmap->nativeBuffer)->info.width = draw_log2(bitmap->width);
-    ((texbuffer_t*)bitmap->nativeBuffer)->info.height = draw_log2(bitmap->height);
-    ((texbuffer_t*)bitmap->nativeBuffer)->info.components = TEXTURE_COMPONENTS_RGBA;
-    ((texbuffer_t*)bitmap->nativeBuffer)->info.function = TEXTURE_FUNCTION_MODULATE;
-
-    clut.storage_mode = CLUT_STORAGE_MODE1;
-    clut.start = 0;
-    clut.psm = 0;
-    clut.load_method = CLUT_NO_LOAD;
-    clut.address = 0;
-
-    q = draw_texture_sampling(q, 0, &lod);
-    q = draw_texturebuffer(q, 0, bitmap->nativeBuffer, &clut);
-    _q = q;
+    GX_LoadTexObj(bitmap->nativeBuffer, GX_TEXMAP0);
 }
 
 
 int submitBitmapToGPU(struct Bitmap *bitmap) {
-
-
-    bitmap->nativeBuffer = (texbuffer_t *) calloc(1, sizeof(texbuffer_t));
-    ((texbuffer_t*)bitmap->nativeBuffer)->width = bitmap->width;
-    ((texbuffer_t*)bitmap->nativeBuffer)->psm = GS_PSM_32;
-    ((texbuffer_t*)bitmap->nativeBuffer)->address = graph_vram_allocate(bitmap->width, bitmap->height, GS_PSM_32, GRAPH_ALIGN_BLOCK);
-
-    packet_t *packet = packet_init(50, PACKET_NORMAL);
-
-    qword_t *q;
-
-    q = packet->data;
-
-    q = draw_texture_transfer(q, bitmap->data, bitmap->width, bitmap->height, GS_PSM_32, ((texbuffer_t*)bitmap->nativeBuffer)->address,
-                              ((texbuffer_t*)bitmap->nativeBuffer)->width);
-    q = draw_texture_flush(q);
-    FlushCache(0);
-    dma_channel_send_chain(DMA_CHANNEL_GIF, packet->data, q - packet->data, 0, 0);
-    dma_wait_fast();
-
-    packet_free(packet);
-
-    disposeMem(bitmap->data);
-    bitmap->data = NULL;
+    bitmap->nativeBuffer = allocMem(sizeof(GXTexObj), TEXTURE_MEMORY, 1);
+    DCFlushRange(bitmap->data, bitmap->width * bitmap->height * 4);
+    GX_InitTexObj(bitmap->nativeBuffer, bitmap->data, bitmap->width, bitmap->height, GX_TF_RGBA8, GX_REPEAT, GX_REPEAT,
+                  GX_FALSE);
     bitmap->uploadId = 1;
 
     return 0;
+}
+
+/* Based on code from GRRLIB - https://github.com/GRRLIB/GRRLIB */
+void SetPixelToTexImg(const int x, const int y,
+                      struct Bitmap *tex, const uint32_t color) {
+    uint32_t offs;
+    uint8_t *bp = (uint8_t *) tex->data;
+
+    offs = (((y & (~3)) << 2) * tex->width) + ((x & (~3)) << 4) + ((((y & 3) << 2) + (x & 3)) << 1);
+
+    *((uint16_t *) (bp + offs)) = (uint16_t) ((color << 8) | (color >> 24));
+    *((uint16_t *) (bp + offs + 32)) = (uint16_t) (color >> 8);
 }
 
 struct Bitmap *loadBitmap(const char *filename) {
@@ -133,7 +83,8 @@ struct Bitmap *loadBitmap(const char *filename) {
 
     memCopyToFrom(buffer, ptr, sizeInDisk);
 
-    toReturn->data = (TexturePixelFormat *) calloc(1, size);
+    toReturn->data = (TexturePixelFormat *) memalign(32, size);
+    uint32_t *imgBuffer = allocMem(size, GENERAL_MEMORY, 0);
 
     uint8_t repetitions;
     int pixelIndex = 0;
@@ -152,8 +103,16 @@ struct Bitmap *loadBitmap(const char *filename) {
         }
         repetitions = buffer[c + 4];
 
+        pixel = toNativeEndianess(pixel);
+
         for (d = 0; d < repetitions; ++d) {
-            toReturn->data[pixelIndex++] = pixel;
+            imgBuffer[pixelIndex++] = pixel;
+        }
+    }
+
+    for (int y = 0; y < toReturn->height; ++y) {
+        for (int x = 0; x < toReturn->width; ++x) {
+            SetPixelToTexImg(x, y, toReturn, imgBuffer[y * toReturn->width + x]);
         }
     }
 
@@ -161,6 +120,7 @@ struct Bitmap *loadBitmap(const char *filename) {
     disposeDiskBuffer(src);
 
     toReturn->uploadId = -1;
+    toReturn->nativeBuffer = NULL;
 
     return toReturn;
 }
@@ -169,8 +129,7 @@ void releaseBitmap(struct Bitmap *ptr) {
     assert(ptr != NULL);
 
     if (ptr->nativeBuffer != NULL) {
-        graph_vram_free(((texbuffer_t*)ptr->nativeBuffer)->address);
-        disposeMem(((texbuffer_t*)ptr->nativeBuffer));
+        disposeMem(ptr->nativeBuffer);
     }
 
     disposeMem(ptr->data);

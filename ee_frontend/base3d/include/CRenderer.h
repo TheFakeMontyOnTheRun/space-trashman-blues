@@ -32,7 +32,12 @@
 #endif
 
 #define TOTAL_TEXTURES 64
+#ifdef PLAYSTATION2
 #define TRANSPARENCY_COLOR (0x00FF0000)
+#else
+#define TRANSPARENCY_COLOR (0x00000000)
+#endif
+
 #define VISIBILITY_CONE_NARROWING 6
 #define MASK_LEFT 1
 #define MASK_FRONT 2
@@ -98,7 +103,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame, uint8_t *pr
                     int scale200To240);
 #endif
 
-void fill(
+void fillRect(
         const int x, const int y,
         const size_t dx, const size_t dy,
         const FramebufferPixelFormat pixel, const uint8_t stipple);
