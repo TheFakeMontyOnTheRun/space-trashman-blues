@@ -35,27 +35,62 @@ extern int turning;
 extern int leanX;
 extern int leanY;
 
-static const char * vertex_shader =
-    "attribute vec2 i_position;\n"
-    "attribute vec4 i_color;\n"
-    "varying vec4 v_color;\n"
-    "uniform mat4 u_projection_matrix;\n"
-    "void main() {\n"
-    "    v_color = i_color;\n"
-    "    gl_Position = u_projection_matrix * vec4( i_position, 0.0, 1.0 );\n"
-    "}\n";
+unsigned int aPositionAttributeLocation;
+unsigned int aTexCoordAttributeLocation;
+unsigned int uProjectionViewUniformLocation;
+unsigned int sTextureUniformLocation;
+unsigned int uModUniformLocation;
+unsigned int uFadeUniformLocation;
+unsigned int uModelPositionUniformLocation;
 
-static const char * fragment_shader =
-    "varying vec4 v_color;\n"
-    "void main() {\n"
-    "    gl_FragColor = v_color;\n"
-    "}\n";
+static const char *vertex_shader =
+        "#ifdef GL_ES\n"
+        "precision mediump float;\n"
+        "#endif\n"
+        "#if __VERSION__ >= 140\n"
+        "in vec4 aPosition;\n"
+        "in vec2 aTexCoord;\n"
+        "out vec2 vTextureCoords;\n"
+        "#else\n"
+        "attribute vec4 aPosition;\n"
+        "attribute vec2 aTexCoord;\n"
+        "varying vec2 vTextureCoords;\n"
+        "#endif\n"
+        "uniform vec4 uModelPosition;\n"
+        "uniform mat4 uProjectionView;\n"
+        "void main() {\n"
+        "gl_Position =  uProjectionView * (aPosition + uModelPosition);\n"
+        "vTextureCoords = (aTexCoord );\n"
+        "}\n";
 
-typedef enum t_attrib_id
-{
-    attrib_position,
-    attrib_color
-} t_attrib_id;
+static const char *fragment_shader =
+        "#ifdef GL_ES\n"
+        "        precision mediump float;\n"
+        "#endif\n"
+        "#if __VERSION__ >= 140\n"
+        "        in vec2 vTextureCoords;\n"
+        "out vec4 fragColor;\n"
+        "#else\n"
+        "        varying vec2 vTextureCoords;\n"
+        "#endif\n"
+        "uniform sampler2D sTexture;\n"
+        "uniform vec4 uMod;\n"
+        "uniform vec4 uFade;\n"
+        "void main() {\n"
+        "#if __VERSION__ >= 140\n"
+        "    fragColor = texture2D( sTexture, vTextureCoords );\n"
+        "   if ( fragColor.a < 0.5 ) {\n"
+        "        discard;\n"
+        "    }\n"
+        "    fragColor = fragColor * uFade.a * uMod;\n"
+        "#else\n"
+        "    gl_FragColor = texture2D( sTexture, vTextureCoords );\n"
+        "    if ( gl_FragColor.a < 0.5 ) {\n"
+        "        discard;\n"
+        "    }\n"
+        "    gl_FragColor = gl_FragColor * uFade.a * uMod;\n"
+        "#endif\n"
+        "}\n";
 
 int snapshotSignal = '.';
 int needsToRedrawHUD = TRUE;
@@ -64,100 +99,97 @@ int enable3DRendering = TRUE;
 static const int width = 320;
 static const int height = 240;
 
-
-SDL_Window * window;
+SDL_Window *window;
 SDL_GLContext context;
+
 unsigned int vs, fs, program;
-unsigned int vao, vbo;
+
 
 void graphicsInit() {
 
     enableSmoothMovement = TRUE;
     defaultFont = NULL;
-    
-    
-    SDL_Init( SDL_INIT_VIDEO );
-    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 
-    SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
-    SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
-    SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
-    SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 8 );
+    SDL_Init(SDL_INIT_VIDEO);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 2 );
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 
-    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 
-    window = SDL_CreateWindow( "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
-    if( window == NULL )      {
-      printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
+    window = SDL_CreateWindow(
+            "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height,
+            SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+
+    if (window == NULL) {
+        printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
     }
 
-    context = SDL_GL_CreateContext( window );
+    context = SDL_GL_CreateContext(window);
 
-    if( context == NULL )      {
-      printf( "OpenGL context could not be created! SDL Error: %s\n", SDL_GetError() );
+    if (context == NULL) {
+        printf(
+                "OpenGL context could not be created! SDL Error: %s\n",
+                SDL_GetError());
     }
 
     //Use Vsync
-    if( SDL_GL_SetSwapInterval( 1 ) < 0 )      {
-      printf( "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError() );
+    if (SDL_GL_SetSwapInterval(1) < 0) {
+        printf("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
     }
 
-    glViewport( 0, 0, width, height );
+    glViewport(0, 0, width, height);
 
     /* creating shader */
-    vs = glCreateShader( GL_VERTEX_SHADER );
-    fs = glCreateShader( GL_FRAGMENT_SHADER );
+    vs = glCreateShader(GL_VERTEX_SHADER);
+    fs = glCreateShader(GL_FRAGMENT_SHADER);
 
-    int length = strlen( vertex_shader );
-    glShaderSource( vs, 1, ( const GLchar ** )&vertex_shader, &length );
-    glCompileShader( vs );
+    int length = strlen(vertex_shader);
+    glShaderSource(vs, 1, (const GLchar **) &vertex_shader, &length);
+    glCompileShader(vs);
 
     GLint status;
-    glGetShaderiv( vs, GL_COMPILE_STATUS, &status );
-    
-    if( status == GL_FALSE )
-    {
-        fprintf( stderr, "vertex shader compilation failed\n" );
+    glGetShaderiv(vs, GL_COMPILE_STATUS, &status);
+
+    if (status == GL_FALSE) {
+        fprintf(stderr, "vertex shader compilation failed\n");
         exit(0);
     }
 
-    length = strlen( fragment_shader );
-    glShaderSource( fs, 1, ( const GLchar ** )&fragment_shader, &length );
-    glCompileShader( fs );
+    length = strlen(fragment_shader);
+    glShaderSource(fs, 1, (const GLchar **) &fragment_shader, &length);
+    glCompileShader(fs);
 
-    glGetShaderiv( fs, GL_COMPILE_STATUS, &status );
-    
-    if( status == GL_FALSE )
-    {
-        fprintf( stderr, "fragment shader compilation failed\n" );
+    glGetShaderiv(fs, GL_COMPILE_STATUS, &status);
+
+    if (status == GL_FALSE) {
+        fprintf(stderr, "fragment shader compilation failed\n");
         exit(0);
     }
 
     program = glCreateProgram();
-    glAttachShader( program, vs );
-    glAttachShader( program, fs );
-    glLinkProgram( program );
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+    glLinkProgram(program);
 
-    glUseProgram( program );
-    
+    glUseProgram(program);
+
     /* attaching data to shaders */
-  
-    glBindAttribLocation( program, attrib_position, "i_position" );
-    glBindAttribLocation( program, attrib_color, "i_color" );
 
-    glGenVertexArrays( 1, &vao );
-    glGenBuffers( 1, &vbo );
-    glBindVertexArray( vao );
-    glBindBuffer( GL_ARRAY_BUFFER, vbo );
+    aPositionAttributeLocation = glGetAttribLocation(program, "aPosition");
+    aTexCoordAttributeLocation = glGetAttribLocation(program, "aTexCoord");
+    uProjectionViewUniformLocation = glGetUniformLocation(program, "uProjectionView");
+    sTextureUniformLocation = glGetUniformLocation(program, "sTexture");
+    uModUniformLocation = glGetUniformLocation(program, "uMod");
+    uFadeUniformLocation = glGetUniformLocation(program, "uFade");
+    uModelPositionUniformLocation = glGetUniformLocation(program, "uModelPosition");
 
-    glEnableVertexAttribArray( attrib_position );
-    glEnableVertexAttribArray( attrib_color );
-
-    glVertexAttribPointer( attrib_color, 4, GL_FLOAT, GL_FALSE, sizeof( float ) * 6, 0 );
-    glVertexAttribPointer( attrib_position, 2, GL_FLOAT, GL_FALSE, sizeof( float ) * 6, ( void * )(4 * sizeof(float)) );
+    initGL();
 }
 
 void handleSystemEvents() {
@@ -298,11 +330,11 @@ void handleSystemEvents() {
                     needsToRedrawVisibleMeshes = TRUE;
                     visibilityCached = FALSE;
                     break;
-	    case SDLK_l:
-	      graphicsShutdown();
-	      exit(0);
-	      return;
-	      
+                case SDLK_l:
+                    graphicsShutdown();
+                    exit(0);
+                    return;
+
                 default:
                     return;
             }
@@ -312,17 +344,13 @@ void handleSystemEvents() {
 
 void graphicsShutdown() {
     texturesUsed = 0;
-    
-    SDL_GL_DeleteContext( context );
-    SDL_DestroyWindow( window );
+
+    SDL_GL_DeleteContext(context);
+    SDL_DestroyWindow(window);
     SDL_Quit();
 }
 
 void flipRenderer() {
-    
-
-    glDrawArrays( GL_TRIANGLES, 0, 6 );
-
-    SDL_GL_SwapWindow( window );
-    SDL_Delay( 1 );
+    SDL_GL_SwapWindow(window);
+    SDL_Delay(1);
 }

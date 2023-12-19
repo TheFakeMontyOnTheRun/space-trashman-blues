@@ -57,14 +57,126 @@ char messageLogBuffer[256];
 int messageLogBufferCoolDown = 0;
 
 extern unsigned int vs, fs, program;
-extern unsigned int vao, vbo;
 
 typedef float t_mat4x4[16];
 
 t_mat4x4 projection_matrix;
 
-static inline void mat4x4_ortho( t_mat4x4 out, float left, float right, float bottom, float top, float znear, float zfar )
-{
+extern unsigned int aPositionAttributeLocation;
+extern unsigned int aTexCoordAttributeLocation;
+extern unsigned int uProjectionViewUniformLocation;
+extern unsigned int sTextureUniformLocation;
+extern unsigned int uModUniformLocation;
+extern unsigned int uFadeUniformLocation;
+
+
+
+const float billboardVertices[] = {
+        -1.0f, 1.0f, 0.0f, 0.0f, .0f,
+        1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+        1.0f, -1.0f, 0.0f, 1.0f, 1.0f,
+        -1.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+};
+
+
+const float cornerLeftFarVertices[] = {
+        -1.0f, 1.0f, -1.0f, 0.0f, .0f,
+        1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
+        -1.0f, -1.0f, -1.0f, 0.0f, 1.0f,
+};
+
+const float cornerLeftNearVertices[] = {
+        -1.0f, 1.0f, 1.0f, 0.0f, .0f,
+        1.0f, 1.0f, -1.0f, 1.0f, 0.0f,
+        1.0f, -1.0f, -1.0f, 1.0f, 1.0f,
+        -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
+};
+
+
+const float floorVertices[] = {
+        -1.0f, 0.0f, -1.0f, 0.0f, .0f,
+        1.0f, 0.0f, -1.0f, 1.0f, 0.0f,
+        1.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+        -1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+};
+
+const float cubeVertices[] = {
+        /*
+         4________5
+         /|       /|
+        / |      / |
+       0/__|___1_/  |
+       | 7|____|___|6
+       |  /    |  /
+       | /     | /
+      3|/______|/2
+     x, y, z, r, g, b, u, v
+         */
+        -1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
+        -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
+
+        -1.0f, 1.0f, -1.0f, 0.0f, 0.0f,
+        1.0f, 1.0f, -1.0f, 1.0f, 0.0f,
+        1.0f, -1.0f, -1.0f, 1.0f, 1.0f,
+        -1.0f, -1.0f, -1.0f, 0.0f, 1.0f,
+
+        -1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
+        -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
+
+        -1.0f, 1.0f, -1.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, -1.0f, 0.0f, 0.0f,
+        1.0f, -1.0f, -1.0f, 0.0f, 1.0f,
+        -1.0f, -1.0f, -1.0f, 1.0f, 1.0f
+};
+
+const unsigned short billboardIndices[] = {
+        0, 1, 2,
+        0, 2, 3
+};
+
+const unsigned short cornerLeftFarIndices[] = {
+        0, 1, 2,
+        0, 2, 3
+};
+
+const unsigned short cornerLeftNearIndices[] = {
+        0, 1, 2,
+        0, 2, 3
+};
+
+const unsigned short floorIndices[] = {
+        0, 1, 2,
+        0, 2, 3
+};
+
+const unsigned short skyIndices[] = {
+        0, 1, 2,
+        0, 2, 3
+};
+
+
+const unsigned short cubeIndices[] = {
+        0, 1, 2,
+        0, 2, 3,
+
+        5, 4, 7,
+        5, 7, 6,
+
+        9, 13, 14,
+        9, 14, 10,
+
+        12, 8, 15,
+        8, 11, 15
+};
+
+struct VBORegister billboardVBO, leftFarVBO, leftNearVBO, floorVBO, cubeVBO;
+
+static inline void mat4x4_ortho( t_mat4x4 out, float left, float right, float bottom, float top, float znear, float zfar ) {
     #define T(a, b) (a * 4 + b)
 
     out[T(0,0)] = 2.0f / (right - left);
@@ -91,6 +203,49 @@ static inline void mat4x4_ortho( t_mat4x4 out, float left, float right, float bo
 }
 
 
+static inline void mat4x4_perspective( t_mat4x4 out, float fov, float ratio, float znear, float zfar ) {
+    out[0] = 1.34444f;
+    out[1] = out[2] = out[3] = 0.0f;
+
+    out[5] = 1.79259f;
+    out[4] = out[6] = out[7] = 0.0f;
+
+    out[5] = 1.79259f;
+    out[4] = out[6] = out[7] = 0.0f;
+
+    out[10] = out[11] = -11.0f;
+    out[8] = out[9] = 0.0f;
+
+    out[13] = -0.2f;
+    out[12] = out[14] = out[15] = 0.0f;
+}
+
+struct VBORegister submitVBO(float *data, int vertices,
+                             unsigned short *indexData,
+                             unsigned int indices) {
+
+    unsigned int dataIndex;
+    unsigned int indicesIndex;
+
+    glGenBuffers(1, &dataIndex);
+    glBindBuffer(GL_ARRAY_BUFFER, dataIndex);
+    glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(float) * 5, data, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glGenBuffers(1, &indicesIndex);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesIndex);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices * sizeof(GLushort), indexData,
+                 GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    struct VBORegister toReturn;
+    toReturn.dataIndex = dataIndex;
+    toReturn.indicesIndex = indicesIndex;
+    toReturn.indices = indices;
+
+    return toReturn;
+}
+
 void printMessageTo3DView(const char *message);
 
 enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
@@ -110,46 +265,93 @@ uint32_t getPaletteEntry(const uint32_t origin) {
 }
 
 void enter2D(void) {
-  mat4x4_ortho( projection_matrix, 0.0f, (float)XRES_FRAMEBUFFER, (float)YRES_FRAMEBUFFER, 0.0f, 0.0f, 100.0f );
-  glUniformMatrix4fv( glGetUniformLocation( program, "u_projection_matrix" ), 1, GL_FALSE, projection_matrix );
+  mat4x4_ortho( projection_matrix, 0.0f, (float)XRES_FRAMEBUFFER, (float)YRES_FRAMEBUFFER, 0.0f, 0.1f, 100.0f );
+  glUniformMatrix4fv( uProjectionViewUniformLocation, 1, GL_FALSE, projection_matrix );
 }
 
 void initGL() {
     /* tmp */
     memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
+
+    cubeVBO = submitVBO((float *) cubeVertices, 16,
+                                      (unsigned short *) cubeIndices, 24);
+
+    billboardVBO = submitVBO((float *) billboardVertices, 4,
+                                           (unsigned short *) billboardIndices, 6);
+    leftFarVBO = submitVBO((float *) cornerLeftFarVertices, 4,
+                                         (unsigned short *) cornerLeftFarIndices, 6);
+    leftNearVBO = submitVBO((float *) cornerLeftNearVertices, 4,
+                                          (unsigned short *) cornerLeftNearIndices, 6);
+    floorVBO = submitVBO((float *) floorVertices, 4,
+                                       (unsigned short *) floorIndices, 6);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glFrontFace(GL_CW);
+    glDepthMask(1);
 }
 
 void clearRenderer() {
 }
 
+void bindTexture(struct Bitmap *bitmap) {
+    glBindTexture(GL_TEXTURE_2D, bitmap->uploadId);
+}
+
+int submitBitmapToGPU(struct Bitmap *bitmap) {
+    // Texture object handle
+    unsigned int textureId = 0;
+
+    //Generate texture storage
+    glGenTextures(1, &textureId);
+
+    //specify what we want for that texture
+    glBindTexture(GL_TEXTURE_2D, textureId);
+
+    //upload the data
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bitmap->width, bitmap->height, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, bitmap->data);
+
+    // Set the filtering mode - surprisingly, this is needed.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    return bitmap->uploadId = textureId;
+}
+
+
 void startFrameGL(int x, int y, int width, int height) {
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;
 
+    float fade[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 
+    glVertexAttribPointer(aPositionAttributeLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
+    glVertexAttribPointer(aTexCoordAttributeLocation, 2, GL_FLOAT, GL_TRUE,
+                          sizeof(float) * 5, (void *) (sizeof(float) * 3));
 
     glDisable( GL_DEPTH_TEST );
     glClearColor( 0.5, 0.0, 0.0, 0.0 );
-    
 
-    
+    glUniform4fv(uFadeUniformLocation, 1, &fade[0]);
+    glDepthFunc(GL_LEQUAL);
+    glEnableVertexAttribArray(aPositionAttributeLocation);
+    glEnableVertexAttribArray(aTexCoordAttributeLocation);
+    glUniform4f(uModUniformLocation, 1.0f, 1.0f, 1.0f, 1.0f);
+
+    glUniform1i(aTexCoordAttributeLocation, 0);
+    glActiveTexture(GL_TEXTURE0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
     enter2D();
 }
 
-
-const float g_vertex_buffer_data[] = {
-/*  R, G, B, A, X, Y  */
-    1, 0, 0, 1, 0, 0,
-    0, 1, 0, 1, XRES_FRAMEBUFFER, 0,
-    0, 0, 1, 1, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER,
-
-    1, 0, 0, 1, 0, 0,
-    0, 0, 1, 1, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER,
-    1, 1, 1, 1, 0, YRES_FRAMEBUFFER
-};
-
 void endFrameGL() {
-  glBufferData( GL_ARRAY_BUFFER, sizeof( g_vertex_buffer_data ), g_vertex_buffer_data, GL_STATIC_DRAW );
+  glDisableVertexAttribArray(aPositionAttributeLocation);
+  glDisableVertexAttribArray(aTexCoordAttributeLocation);
 }
 
 void enter3D(void) {
@@ -172,6 +374,8 @@ void enter3D(void) {
         _leanY = 0.25f * ((128 - leanY) / 127.0f);
     }
 
+    mat4x4_perspective( projection_matrix, 45.0f, (float)XRES_FRAMEBUFFER / (float)YRES_FRAMEBUFFER, 0.1f, 100.0f );
+    glUniformMatrix4fv( uProjectionViewUniformLocation, 1, GL_FALSE, projection_matrix );
 }
 
 void printMessageTo3DView(const char *message) {

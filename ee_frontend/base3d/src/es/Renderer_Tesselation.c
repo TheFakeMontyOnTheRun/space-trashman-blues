@@ -23,6 +23,11 @@
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 
+#define GL_GLEXT_PROTOTYPES
+
+#include <SDL.h>
+#include <SDL_opengl.h>
+
 #define kMinZCull 0
 struct Vec3 cameraOffset;
 FixP_t walkingBias = 0;
@@ -41,6 +46,17 @@ extern struct Texture *itemSprites[TOTAL_ITEMS];
 #define REVERSE_BIAS (1.0f/8.0f)
 #define FOG_MAX_DISTANCE 32.0f
 #define Z_NEAR_PLANE_FRUSTUM 0
+
+extern unsigned int aPositionAttributeLocation;
+extern unsigned int aTexCoordAttributeLocation;
+extern unsigned int uScaleUniformLocation;
+extern unsigned int uProjectionViewUniformLocation;
+extern unsigned int sTextureUniformLocation;
+extern unsigned int uModUniformLocation;
+extern unsigned int uFadeUniformLocation;
+extern unsigned int uModelPositionUniformLocation;
+
+extern struct VBORegister billboardVBO, leftFarVBO, leftNearVBO, floorVBO, cubeVBO;
 
 void clearTextures(void) {
     int c;
@@ -293,6 +309,10 @@ void drawColumnAt(const struct Vec3 center,
         p2.mZ = p3.mZ = p0.mZ = p1.mZ = intToFix(1);
         drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
     }
+
+    float x = -fixToFloat(center.mX);
+    float y = -fixToFloat(center.mY);
+    float z = -fixToFloat(center.mZ);
 }
 
 void drawFloorAt(const struct Vec3 center,
@@ -359,7 +379,20 @@ void drawFloorAt(const struct Vec3 center,
 
         p0.mY = p1.mY = p2.mY = p3.mY = 0;
 
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
+        float x = -fixToFloat(center.mX);
+        float y = -fixToFloat(center.mY);
+        float z = -fixToFloat(center.mZ);
+
+        glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
+
+        bindTexture(texture->raw);
+
+        glBindBuffer(GL_ARRAY_BUFFER, floorVBO.dataIndex);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, floorVBO.indicesIndex);
+
+        glDrawElements(GL_TRIANGLES, floorVBO.indices, GL_UNSIGNED_SHORT, 0);
+
     }
 }
 
@@ -427,7 +460,19 @@ void drawCeilingAt(const struct Vec3 center,
 
         p0.mY = p1.mY = p2.mY = p3.mY = 0;
 
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
+        float x = -fixToFloat(center.mX);
+        float y = -fixToFloat(center.mY);
+        float z = -fixToFloat(center.mZ);
+
+        glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
+
+        bindTexture(texture->raw);
+
+        glBindBuffer(GL_ARRAY_BUFFER, floorVBO.dataIndex);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, floorVBO.indicesIndex);
+
+        glDrawElements(GL_TRIANGLES, floorVBO.indices, GL_UNSIGNED_SHORT, 0);
     }
 }
 
@@ -474,7 +519,20 @@ void drawLeftNear(const struct Vec3 center,
     p0.mY = p1.mY = geometryScale;
     p2.mY = p3.mY = -geometryScale;
 
-    drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
+    float x = -fixToFloat(center.mX);
+    float y = -fixToFloat(center.mY);
+    float z = -fixToFloat(center.mZ);
+
+    glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
+
+    bindTexture(texture->raw);
+
+    glBindBuffer(GL_ARRAY_BUFFER, leftNearVBO.dataIndex);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, leftNearVBO.indicesIndex);
+
+    glDrawElements(GL_TRIANGLES, leftNearVBO.indices, GL_UNSIGNED_SHORT, 0);
+
 }
 
 void drawRightNear(const struct Vec3 center,
@@ -519,7 +577,20 @@ void drawRightNear(const struct Vec3 center,
     p0.mY = p1.mY = geometryScale;
     p2.mY = p3.mY = -geometryScale;
 
-    drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
+    float x = -fixToFloat(center.mX);
+    float y = -fixToFloat(center.mY);
+    float z = -fixToFloat(center.mZ);
+
+    glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
+
+    bindTexture(texture->raw);
+
+    glBindBuffer(GL_ARRAY_BUFFER, leftFarVBO.dataIndex);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, leftFarVBO.indicesIndex);
+
+    glDrawElements(GL_TRIANGLES, leftFarVBO.indices, GL_UNSIGNED_SHORT, 0);
+
 }
 
 void drawTriangle(const struct Vec3 pos1,

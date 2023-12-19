@@ -22,17 +22,6 @@
 #include "FixP.h"
 #include "VisibilityStrategy.h"
 
-void bindTexture(struct Bitmap *bitmap) {
-
-}
-
-
-int submitBitmapToGPU(struct Bitmap *bitmap) {
-
-
-    return 0;
-}
-
 struct Bitmap *loadBitmap(const char *filename) {
     size_t c;
     uint8_t d;

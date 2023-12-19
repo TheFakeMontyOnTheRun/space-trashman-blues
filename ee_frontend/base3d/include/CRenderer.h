@@ -292,4 +292,12 @@ extern FixP_t divLut[320];
 
 extern int leanX;
 extern int leanY;
+
+struct VBORegister {
+    uint8_t dataIndex;
+    uint8_t indicesIndex;
+    uint8_t indices;
+};
+
+
 #endif
