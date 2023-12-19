@@ -231,6 +231,12 @@ void handleSystemEvents() {
                     visibilityCached = FALSE;
                     needsToRedrawVisibleMeshes = TRUE;
                     break;
+                case SDLK_k:
+                    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+                    break;
+                case SDLK_w:
+                    SDL_SetWindowFullscreen(window, 0);
+                    break;
 
                 case SDLK_t:
                     leanY = -1;
@@ -283,10 +289,6 @@ void handleSystemEvents() {
                 case SDLK_j:
                     visibilityCached = FALSE;
                     break;
-                case SDLK_k:
-                    visibilityCached = FALSE;
-                    break;
-
 
                 case SDLK_LEFT:
                     turning = 1;
