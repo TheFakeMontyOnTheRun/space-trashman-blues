@@ -332,6 +332,12 @@ void startFrameGL(int x, int y, int width, int height) {
     glVertexAttribPointer(aTexCoordAttributeLocation, 2, GL_FLOAT, GL_TRUE,
                           sizeof(float) * 5, (void *) (sizeof(float) * 3));
 
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearDepthf(1.0f);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+
     glDisable( GL_DEPTH_TEST );
     glClearColor( 0.5, 0.0, 0.0, 0.0 );
 
