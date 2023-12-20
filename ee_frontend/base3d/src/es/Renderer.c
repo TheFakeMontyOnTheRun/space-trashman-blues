@@ -71,11 +71,18 @@ extern unsigned int uFadeUniformLocation;
 
 
 
-const float billboardVertices[] = {
+const float planeXYVertices[] = {
         -1.0f, 1.0f, 0.0f, 0.0f, .0f,
         1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
         1.0f, -1.0f, 0.0f, 1.0f, 1.0f,
         -1.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+};
+
+const float planeXZVertices[] = {
+        0.0f, 1.0f, -1.0f, 0.0f, .0f,
+        0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        0.0f, -1.0f, 1.0f, 1.0f, 1.0f,
+        0.0f, -1.0f, -1.0f, 0.0f, 1.0f,
 };
 
 
@@ -101,40 +108,12 @@ const float floorVertices[] = {
         -1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
 };
 
-const float cubeVertices[] = {
-        /*
-         4________5
-         /|       /|
-        / |      / |
-       0/__|___1_/  |
-       | 7|____|___|6
-       |  /    |  /
-       | /     | /
-      3|/______|/2
-     x, y, z, r, g, b, u, v
-         */
-        -1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-        1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-        1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
-        -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
-
-        -1.0f, 1.0f, -1.0f, 0.0f, 0.0f,
-        1.0f, 1.0f, -1.0f, 1.0f, 0.0f,
-        1.0f, -1.0f, -1.0f, 1.0f, 1.0f,
-        -1.0f, -1.0f, -1.0f, 0.0f, 1.0f,
-
-        -1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-        1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-        1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
-        -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
-
-        -1.0f, 1.0f, -1.0f, 1.0f, 0.0f,
-        1.0f, 1.0f, -1.0f, 0.0f, 0.0f,
-        1.0f, -1.0f, -1.0f, 0.0f, 1.0f,
-        -1.0f, -1.0f, -1.0f, 1.0f, 1.0f
+const unsigned short planeXYIndices[] = {
+        0, 1, 2,
+        0, 2, 3
 };
 
-const unsigned short billboardIndices[] = {
+const unsigned short planeXZIndices[] = {
         0, 1, 2,
         0, 2, 3
 };
@@ -154,27 +133,7 @@ const unsigned short floorIndices[] = {
         0, 2, 3
 };
 
-const unsigned short skyIndices[] = {
-        0, 1, 2,
-        0, 2, 3
-};
-
-
-const unsigned short cubeIndices[] = {
-        0, 1, 2,
-        0, 2, 3,
-
-        5, 4, 7,
-        5, 7, 6,
-
-        9, 13, 14,
-        9, 14, 10,
-
-        12, 8, 15,
-        8, 11, 15
-};
-
-struct VBORegister billboardVBO, leftFarVBO, leftNearVBO, floorVBO, cubeVBO;
+struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, planeXZVBO;
 
 static inline void mat4x4_ortho( t_mat4x4 out, float left, float right, float bottom, float top, float znear, float zfar ) {
     #define T(a, b) (a * 4 + b)
@@ -267,17 +226,20 @@ uint32_t getPaletteEntry(const uint32_t origin) {
 void enter2D(void) {
   mat4x4_ortho( projection_matrix, 0.0f, (float)XRES_FRAMEBUFFER, (float)YRES_FRAMEBUFFER, 0.0f, 0.1f, 100.0f );
   glUniformMatrix4fv( uProjectionViewUniformLocation, 1, GL_FALSE, projection_matrix );
+  glDisable( GL_DEPTH_TEST );
 }
 
 void initGL() {
     /* tmp */
     memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
 
-    cubeVBO = submitVBO((float *) cubeVertices, 16,
-                                      (unsigned short *) cubeIndices, 24);
 
-    billboardVBO = submitVBO((float *) billboardVertices, 4,
-                                           (unsigned short *) billboardIndices, 6);
+    planeXYVBO = submitVBO((float *) planeXYVertices, 4,
+                                           (unsigned short *) planeXYIndices, 6);
+
+    planeXZVBO = submitVBO((float *) planeXZVertices, 4,
+                                           (unsigned short *) planeXZIndices, 6);
+	
     leftFarVBO = submitVBO((float *) cornerLeftFarVertices, 4,
                                          (unsigned short *) cornerLeftFarIndices, 6);
     leftNearVBO = submitVBO((float *) cornerLeftNearVertices, 4,
@@ -331,15 +293,10 @@ void startFrameGL(int x, int y, int width, int height) {
     glVertexAttribPointer(aPositionAttributeLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
     glVertexAttribPointer(aTexCoordAttributeLocation, 2, GL_FLOAT, GL_TRUE,
                           sizeof(float) * 5, (void *) (sizeof(float) * 3));
-
-    glEnable(GL_DEPTH_TEST);
+    
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClearDepthf(1.0f);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
-
-    glDisable( GL_DEPTH_TEST );
-    glClearColor( 0.5, 0.0, 0.0, 0.0 );
 
     glUniform4fv(uFadeUniformLocation, 1, &fade[0]);
     glDepthFunc(GL_LEQUAL);
@@ -382,6 +339,7 @@ void enter3D(void) {
 
     mat4x4_perspective( projection_matrix, 45.0f, (float)XRES_FRAMEBUFFER / (float)YRES_FRAMEBUFFER, 0.1f, 100.0f );
     glUniformMatrix4fv( uProjectionViewUniformLocation, 1, GL_FALSE, projection_matrix );
+    glEnable(GL_DEPTH_TEST);
 }
 
 void printMessageTo3DView(const char *message) {

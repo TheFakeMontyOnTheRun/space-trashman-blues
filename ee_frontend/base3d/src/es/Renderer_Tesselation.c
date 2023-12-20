@@ -56,7 +56,7 @@ extern unsigned int uModUniformLocation;
 extern unsigned int uFadeUniformLocation;
 extern unsigned int uModelPositionUniformLocation;
 
-extern struct VBORegister billboardVBO, leftFarVBO, leftNearVBO, floorVBO, cubeVBO;
+extern struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, planeXZVBO;
 
 void clearTextures(void) {
     int c;
