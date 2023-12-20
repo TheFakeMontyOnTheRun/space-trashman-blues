@@ -287,14 +287,28 @@ void drawColumnAt(const struct Vec3 center,
     p0.mY = p1.mY = geometryScale;
     p2.mY = p3.mY = -geometryScale;
 
+
+    bindTexture(texture->raw);
+    
     if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0) || (mask & MASK_FORCE_RIGHT)) {
         p2.mX = p3.mX = p0.mX = p1.mX = -intToFix(1);
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
+
+        float x = -fixToFloat(center.mY) + 1.0f;
+        float y = fixToFloat(center.mY);
+        float z = -fixToFloat(center.mZ);
+
     }
+
+    return;
 
     if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0) || (mask & MASK_FORCE_LEFT)) {
         p2.mX = p3.mX = p0.mX = p1.mX = intToFix(1);
         drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
+
+
+        float x = -fixToFloat(center.mY) - 1.0f;
+        float y = fixToFloat(center.mY);
+        float z = -fixToFloat(center.mZ);
     }
 
     p0.mX = p2.mX = -intToFix(1);
@@ -303,16 +317,21 @@ void drawColumnAt(const struct Vec3 center,
     if ((mask & MASK_BEHIND)) {
         p2.mZ = p3.mZ = p0.mZ = p1.mZ = -intToFix(1);
         drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
+
+        float x = -fixToFloat(center.mY);
+        float y = fixToFloat(center.mY);
+        float z = -fixToFloat(center.mZ) + 1;     
     }
 
     if ((mask & MASK_FRONT)) {
         p2.mZ = p3.mZ = p0.mZ = p1.mZ = intToFix(1);
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
-    }
 
-    float x = -fixToFloat(center.mX);
-    float y = -fixToFloat(center.mY);
-    float z = -fixToFloat(center.mZ);
+
+        float x = -fixToFloat(center.mY);
+        float y = fixToFloat(center.mY);
+        float z = -fixToFloat(center.mZ) - 1;
+	glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
+    }
 }
 
 void drawFloorAt(const struct Vec3 center,
@@ -380,7 +399,7 @@ void drawFloorAt(const struct Vec3 center,
         p0.mY = p1.mY = p2.mY = p3.mY = 0;
 
         float x = -fixToFloat(center.mX);
-        float y = -fixToFloat(center.mY);
+        float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
 
         glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
@@ -461,7 +480,7 @@ void drawCeilingAt(const struct Vec3 center,
         p0.mY = p1.mY = p2.mY = p3.mY = 0;
 
         float x = -fixToFloat(center.mX);
-        float y = -fixToFloat(center.mY);
+        float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
 
         glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
@@ -520,7 +539,7 @@ void drawLeftNear(const struct Vec3 center,
     p2.mY = p3.mY = -geometryScale;
 
     float x = -fixToFloat(center.mX);
-    float y = -fixToFloat(center.mY);
+    float y = fixToFloat(center.mY);
     float z = -fixToFloat(center.mZ);
 
     glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
@@ -578,7 +597,7 @@ void drawRightNear(const struct Vec3 center,
     p2.mY = p3.mY = -geometryScale;
 
     float x = -fixToFloat(center.mX);
-    float y = -fixToFloat(center.mY);
+    float y = fixToFloat(center.mY);
     float z = -fixToFloat(center.mZ);
 
     glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
@@ -590,7 +609,6 @@ void drawRightNear(const struct Vec3 center,
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, leftFarVBO.indicesIndex);
 
     glDrawElements(GL_TRIANGLES, leftFarVBO.indices, GL_UNSIGNED_SHORT, 0);
-
 }
 
 void drawTriangle(const struct Vec3 pos1,

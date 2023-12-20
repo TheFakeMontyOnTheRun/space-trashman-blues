@@ -249,7 +249,7 @@ void initGL() {
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
-    glFrontFace(GL_CW);
+    //    glFrontFace(GL_CW);
     glDepthMask(1);
 }
 
