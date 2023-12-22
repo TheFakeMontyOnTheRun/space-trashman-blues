@@ -78,7 +78,7 @@ const float planeXYVertices[] = {
         -1.0f, -1.0f, 0.0f, 0.0f, 1.0f,
 };
 
-const float planeXZVertices[] = {
+const float planeYZVertices[] = {
         0.0f, 1.0f, -1.0f, 0.0f, .0f,
         0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
         0.0f, -1.0f, 1.0f, 1.0f, 1.0f,
@@ -113,7 +113,7 @@ const unsigned short planeXYIndices[] = {
         0, 2, 3
 };
 
-const unsigned short planeXZIndices[] = {
+const unsigned short planeYZIndices[] = {
         0, 1, 2,
         0, 2, 3
 };
@@ -133,7 +133,7 @@ const unsigned short floorIndices[] = {
         0, 2, 3
 };
 
-struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, planeXZVBO;
+struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, planeYZVBO;
 
 static inline void mat4x4_ortho( t_mat4x4 out, float left, float right, float bottom, float top, float znear, float zfar ) {
     #define T(a, b) (a * 4 + b)
@@ -237,8 +237,8 @@ void initGL() {
     planeXYVBO = submitVBO((float *) planeXYVertices, 4,
                                            (unsigned short *) planeXYIndices, 6);
 
-    planeXZVBO = submitVBO((float *) planeXZVertices, 4,
-                                           (unsigned short *) planeXZIndices, 6);
+    planeYZVBO = submitVBO((float *) planeYZVertices, 4,
+                                           (unsigned short *) planeYZIndices, 6);
 	
     leftFarVBO = submitVBO((float *) cornerLeftFarVertices, 4,
                                          (unsigned short *) cornerLeftFarIndices, 6);
@@ -289,10 +289,6 @@ void startFrameGL(int x, int y, int width, int height) {
     needsToRedrawVisibleMeshes = FALSE;
 
     float fade[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-
-    glVertexAttribPointer(aPositionAttributeLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
-    glVertexAttribPointer(aTexCoordAttributeLocation, 2, GL_FLOAT, GL_TRUE,
-                          sizeof(float) * 5, (void *) (sizeof(float) * 3));
     
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClearDepthf(1.0f);
@@ -300,8 +296,6 @@ void startFrameGL(int x, int y, int width, int height) {
 
     glUniform4fv(uFadeUniformLocation, 1, &fade[0]);
     glDepthFunc(GL_LEQUAL);
-    glEnableVertexAttribArray(aPositionAttributeLocation);
-    glEnableVertexAttribArray(aTexCoordAttributeLocation);
     glUniform4f(uModUniformLocation, 1.0f, 1.0f, 1.0f, 1.0f);
 
     glUniform1i(aTexCoordAttributeLocation, 0);
@@ -313,8 +307,6 @@ void startFrameGL(int x, int y, int width, int height) {
 }
 
 void endFrameGL() {
-  glDisableVertexAttribArray(aPositionAttributeLocation);
-  glDisableVertexAttribArray(aTexCoordAttributeLocation);
 }
 
 void enter3D(void) {

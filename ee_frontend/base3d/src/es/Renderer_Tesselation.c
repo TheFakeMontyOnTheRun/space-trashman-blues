@@ -56,7 +56,29 @@ extern unsigned int uModUniformLocation;
 extern unsigned int uFadeUniformLocation;
 extern unsigned int uModelPositionUniformLocation;
 
-extern struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, planeXZVBO;
+extern struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, planeYZVBO;
+
+
+void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float y, float z ) {
+  glVertexAttribPointer(aPositionAttributeLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
+  glVertexAttribPointer(aTexCoordAttributeLocation, 2, GL_FLOAT, GL_TRUE,
+			sizeof(float) * 5, (void *) (sizeof(float) * 3));
+  glEnableVertexAttribArray(aPositionAttributeLocation);
+  glEnableVertexAttribArray(aTexCoordAttributeLocation);
+  
+  glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
+  
+  bindTexture(bitmap);
+  
+  glBindBuffer(GL_ARRAY_BUFFER, vbo.dataIndex);
+  
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo.indicesIndex);
+  
+  glDrawElements(GL_TRIANGLES, vbo.indices, GL_UNSIGNED_SHORT, 0);
+  
+  glDisableVertexAttribArray(aPositionAttributeLocation);
+  glDisableVertexAttribArray(aTexCoordAttributeLocation);
+} 
 
 void clearTextures(void) {
     int c;
@@ -102,20 +124,6 @@ struct Texture *makeTextureFrom(const char *filename) {
     submitBitmapToGPU(toReturn->raw);
 
     return toReturn;
-}
-
-void drawQuad(
-        const struct Vec3 center,
-        const struct Vec3 pos1,
-        const struct Vec2i uv1,
-        const struct Vec3 pos2,
-        const struct Vec2i uv2,
-        const struct Vec3 pos3,
-        const struct Vec2i uv3,
-        const struct Vec3 pos4,
-        const struct Vec2i uv4,
-        const struct Texture *texture,
-        const uint8_t enableAlpha) {
 }
 
 void drawRampAt(const struct Vec3 center0, const struct Vec3 center1,
@@ -216,12 +224,12 @@ void drawRampAt(const struct Vec3 center0, const struct Vec3 center1,
         center.mY = Div(center0.mY + center1.mY, intToFix(2));
         center.mZ = center0.mZ;
 
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
+
     }
 }
 
 void drawBillboardAt(const struct Vec3 center,
-                     struct Texture *bitmap,
+                     struct Texture *texture,
                      const FixP_t scale,
                      const int size) {
     if ((center.mZ + zCameraOffset) <= Z_NEAR_PLANE_FRUSTUM) {
@@ -250,7 +258,12 @@ void drawBillboardAt(const struct Vec3 center,
     p0.mY = p1.mY = geometryScale;
     p2.mY = p3.mY = -geometryScale;
 
-    drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, bitmap, 0);
+
+    float x = -fixToFloat(center.mY) + 1.0f;
+    float y = fixToFloat(center.mY);
+    float z = -fixToFloat(center.mZ);
+    
+    renderVBOAt(texture->raw, planeXYVBO, x, y, z);
 }
 
 void drawColumnAt(const struct Vec3 center,
@@ -287,9 +300,6 @@ void drawColumnAt(const struct Vec3 center,
     p0.mY = p1.mY = geometryScale;
     p2.mY = p3.mY = -geometryScale;
 
-
-    bindTexture(texture->raw);
-    
     if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0) || (mask & MASK_FORCE_RIGHT)) {
         p2.mX = p3.mX = p0.mX = p1.mX = -intToFix(1);
 
@@ -297,18 +307,17 @@ void drawColumnAt(const struct Vec3 center,
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
 
+	renderVBOAt(texture->raw, planeYZVBO, x, y, z);
     }
-
-    return;
 
     if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0) || (mask & MASK_FORCE_LEFT)) {
         p2.mX = p3.mX = p0.mX = p1.mX = intToFix(1);
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
-
 
         float x = -fixToFloat(center.mY) - 1.0f;
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
+		
+	renderVBOAt(texture->raw, planeYZVBO, x, y, z);
     }
 
     p0.mX = p2.mX = -intToFix(1);
@@ -316,21 +325,21 @@ void drawColumnAt(const struct Vec3 center,
 
     if ((mask & MASK_BEHIND)) {
         p2.mZ = p3.mZ = p0.mZ = p1.mZ = -intToFix(1);
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
-
         float x = -fixToFloat(center.mY);
         float y = fixToFloat(center.mY);
-        float z = -fixToFloat(center.mZ) + 1;     
+        float z = -fixToFloat(center.mZ) + 1;
+
+	renderVBOAt(texture->raw, planeXYVBO, x, y, z);
     }
 
     if ((mask & MASK_FRONT)) {
         p2.mZ = p3.mZ = p0.mZ = p1.mZ = intToFix(1);
 
-
         float x = -fixToFloat(center.mY);
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ) - 1;
-	glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
+	
+	renderVBOAt(texture->raw, planeXYVBO, x, y, z);
     }
 }
 
@@ -402,16 +411,7 @@ void drawFloorAt(const struct Vec3 center,
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
 
-        glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
-
-        bindTexture(texture->raw);
-
-        glBindBuffer(GL_ARRAY_BUFFER, floorVBO.dataIndex);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, floorVBO.indicesIndex);
-
-        glDrawElements(GL_TRIANGLES, floorVBO.indices, GL_UNSIGNED_SHORT, 0);
-
+	renderVBOAt(texture->raw, floorVBO, x, y, z);
     }
 }
 
@@ -483,15 +483,7 @@ void drawCeilingAt(const struct Vec3 center,
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
 
-        glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
-
-        bindTexture(texture->raw);
-
-        glBindBuffer(GL_ARRAY_BUFFER, floorVBO.dataIndex);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, floorVBO.indicesIndex);
-
-        glDrawElements(GL_TRIANGLES, floorVBO.indices, GL_UNSIGNED_SHORT, 0);
+	renderVBOAt(texture->raw, floorVBO, x, y, z);
     }
 }
 
@@ -542,16 +534,7 @@ void drawLeftNear(const struct Vec3 center,
     float y = fixToFloat(center.mY);
     float z = -fixToFloat(center.mZ);
 
-    glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
-
-    bindTexture(texture->raw);
-
-    glBindBuffer(GL_ARRAY_BUFFER, leftNearVBO.dataIndex);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, leftNearVBO.indicesIndex);
-
-    glDrawElements(GL_TRIANGLES, leftNearVBO.indices, GL_UNSIGNED_SHORT, 0);
-
+    renderVBOAt(texture->raw, leftNearVBO, x, y, z);
 }
 
 void drawRightNear(const struct Vec3 center,
@@ -600,15 +583,7 @@ void drawRightNear(const struct Vec3 center,
     float y = fixToFloat(center.mY);
     float z = -fixToFloat(center.mZ);
 
-    glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
-
-    bindTexture(texture->raw);
-
-    glBindBuffer(GL_ARRAY_BUFFER, leftFarVBO.dataIndex);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, leftFarVBO.indicesIndex);
-
-    glDrawElements(GL_TRIANGLES, leftFarVBO.indices, GL_UNSIGNED_SHORT, 0);
+    renderVBOAt(texture->raw, leftFarVBO, x, y, z);
 }
 
 void drawTriangle(const struct Vec3 pos1,
