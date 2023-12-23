@@ -60,9 +60,6 @@ extern struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, planeYZ
 
 
 void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float y, float z ) {
-  glVertexAttribPointer(aPositionAttributeLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
-  glVertexAttribPointer(aTexCoordAttributeLocation, 2, GL_FLOAT, GL_TRUE,
-			sizeof(float) * 5, (void *) (sizeof(float) * 3));
   glEnableVertexAttribArray(aPositionAttributeLocation);
   glEnableVertexAttribArray(aTexCoordAttributeLocation);
   
@@ -71,8 +68,12 @@ void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float 
   bindTexture(bitmap);
   
   glBindBuffer(GL_ARRAY_BUFFER, vbo.dataIndex);
-  
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo.indicesIndex);
+
+    glVertexAttribPointer(aPositionAttributeLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
+    glVertexAttribPointer(aTexCoordAttributeLocation, 2, GL_FLOAT, GL_TRUE,
+                          sizeof(float) * 5, (void *) (sizeof(float) * 3));
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo.indicesIndex);
   
   glDrawElements(GL_TRIANGLES, vbo.indices, GL_UNSIGNED_SHORT, 0);
   
