@@ -163,20 +163,22 @@ static inline void mat4x4_ortho( t_mat4x4 out, float left, float right, float bo
 
 
 static inline void mat4x4_perspective( t_mat4x4 out, float fov, float ratio, float znear, float zfar ) {
-    out[0] = 1.34444f;
-    out[1] = out[2] = out[3] = 0.0f;
-
-    out[5] = 1.79259f;
-    out[4] = out[6] = out[7] = 0.0f;
-
-    out[5] = 1.79259f;
-    out[4] = out[6] = out[7] = 0.0f;
-
-    out[10] = out[11] = -11.0f;
-    out[8] = out[9] = 0.0f;
-
-    out[13] = -0.2f;
-    out[12] = out[14] = out[15] = 0.0f;
+    out[0] = 0.463027f;
+    out[1] = 0.0f;
+    out[2] = 0.0f;
+    out[3] = 0.0f;
+    out[4] = 0.0f;
+    out[5] = 0.61737;
+    out[6] = 0.0f;
+    out[7] = 0.0f;
+    out[8] = 0.0f;
+    out[9] = 0.0f;
+    out[10] = -1.002f;
+    out[11] = -1.0f;
+    out[12] = 0.0f;
+    out[13] = 0.0f;
+    out[14] = -0.2002f;
+    out[15] = 0.0f;
 }
 
 struct VBORegister submitVBO(float *data, int vertices,
