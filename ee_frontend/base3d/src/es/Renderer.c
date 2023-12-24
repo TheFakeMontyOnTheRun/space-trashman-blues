@@ -68,7 +68,7 @@ extern unsigned int uProjectionViewUniformLocation;
 extern unsigned int sTextureUniformLocation;
 extern unsigned int uModUniformLocation;
 extern unsigned int uFadeUniformLocation;
-
+extern unsigned int uScaleUniformLocation;
 
 
 const float planeXYVertices[] = {

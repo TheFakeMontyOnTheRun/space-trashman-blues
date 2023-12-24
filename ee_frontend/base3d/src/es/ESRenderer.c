@@ -42,6 +42,7 @@ unsigned int sTextureUniformLocation;
 unsigned int uModUniformLocation;
 unsigned int uFadeUniformLocation;
 unsigned int uModelPositionUniformLocation;
+unsigned int uScaleUniformLocation;
 
 static const char *vertex_shader =
         "#ifdef GL_ES\n"
@@ -58,9 +59,10 @@ static const char *vertex_shader =
         "#endif\n"
         "uniform vec4 uModelPosition;\n"
         "uniform mat4 uProjectionView;\n"
+        "uniform vec2 uScale;\n"
         "void main() {\n"
-        "gl_Position =  uProjectionView * (aPosition + uModelPosition);\n"
-        "vTextureCoords = (aTexCoord );\n"
+        "gl_Position =  uProjectionView * ( vec4(aPosition.x * uScale.x, aPosition.y * uScale.y, aPosition.z, aPosition.w) + uModelPosition);\n"
+        "vTextureCoords = aTexCoord  * uScale;\n"
         "}\n";
 
 static const char *fragment_shader =
@@ -187,6 +189,7 @@ void graphicsInit() {
     uModUniformLocation = glGetUniformLocation(program, "uMod");
     uFadeUniformLocation = glGetUniformLocation(program, "uFade");
     uModelPositionUniformLocation = glGetUniformLocation(program, "uModelPosition");
+    uScaleUniformLocation = glGetUniformLocation(program, "uScale");
 
     initGL();
 }

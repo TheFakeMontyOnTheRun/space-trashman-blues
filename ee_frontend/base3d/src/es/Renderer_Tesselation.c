@@ -59,13 +59,16 @@ extern unsigned int uModelPositionUniformLocation;
 extern struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, planeYZVBO;
 
 
-void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float y, float z ) {
+void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float y, float z, float scaleX, float scaleY ) {
   glEnableVertexAttribArray(aPositionAttributeLocation);
   glEnableVertexAttribArray(aTexCoordAttributeLocation);
   
   glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
-  
-  bindTexture(bitmap);
+
+  glUniform2f(uScaleUniformLocation,scaleX, scaleY);
+
+
+    bindTexture(bitmap);
   
   glBindBuffer(GL_ARRAY_BUFFER, vbo.dataIndex);
 
@@ -260,11 +263,11 @@ void drawBillboardAt(const struct Vec3 center,
     p2.mY = p3.mY = -geometryScale;
 
 
-    float x = -fixToFloat(center.mY) + 1.0f;
+    float x = fixToFloat(center.mX);
     float y = fixToFloat(center.mY);
     float z = -fixToFloat(center.mZ);
     
-    renderVBOAt(texture->raw, planeXYVBO, x, y, z);
+    renderVBOAt(texture->raw, planeXYVBO, x, y, z, 1.0f, fixToFloat(scale));
 }
 
 void drawColumnAt(const struct Vec3 center,
@@ -304,21 +307,19 @@ void drawColumnAt(const struct Vec3 center,
     if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0) || (mask & MASK_FORCE_RIGHT)) {
         p2.mX = p3.mX = p0.mX = p1.mX = -intToFix(1);
 
-        float x = -fixToFloat(center.mY) + 1.0f;
+        float x = fixToFloat(center.mX) - 1.0f;
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
-
-	renderVBOAt(texture->raw, planeYZVBO, x, y, z);
+        renderVBOAt(texture->raw, planeYZVBO, x, y, z, 1.0f, fixToFloat(scale));
     }
 
     if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0) || (mask & MASK_FORCE_LEFT)) {
         p2.mX = p3.mX = p0.mX = p1.mX = intToFix(1);
 
-        float x = -fixToFloat(center.mY) - 1.0f;
+        float x = fixToFloat(center.mX) + 1.0f;
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
-		
-	renderVBOAt(texture->raw, planeYZVBO, x, y, z);
+        renderVBOAt(texture->raw, planeYZVBO, x, y, z, 1.0f, fixToFloat(scale));
     }
 
     p0.mX = p2.mX = -intToFix(1);
@@ -326,21 +327,19 @@ void drawColumnAt(const struct Vec3 center,
 
     if ((mask & MASK_BEHIND)) {
         p2.mZ = p3.mZ = p0.mZ = p1.mZ = -intToFix(1);
-        float x = -fixToFloat(center.mY);
+        float x = fixToFloat(center.mX);
         float y = fixToFloat(center.mY);
-        float z = -fixToFloat(center.mZ) + 1;
-
-	renderVBOAt(texture->raw, planeXYVBO, x, y, z);
+        float z = -fixToFloat(center.mZ) - 1;
+        renderVBOAt(texture->raw, planeXYVBO, x, y, z, 1.0f, fixToFloat(scale));
     }
 
     if ((mask & MASK_FRONT)) {
         p2.mZ = p3.mZ = p0.mZ = p1.mZ = intToFix(1);
 
-        float x = -fixToFloat(center.mY);
+        float x = fixToFloat(center.mX);
         float y = fixToFloat(center.mY);
-        float z = -fixToFloat(center.mZ) - 1;
-	
-	renderVBOAt(texture->raw, planeXYVBO, x, y, z);
+        float z = -fixToFloat(center.mZ) + 1;
+        renderVBOAt(texture->raw, planeXYVBO, x, y, z, 1.0f, fixToFloat(scale));
     }
 }
 
@@ -408,11 +407,10 @@ void drawFloorAt(const struct Vec3 center,
 
         p0.mY = p1.mY = p2.mY = p3.mY = 0;
 
-        float x = -fixToFloat(center.mX);
+        float x = fixToFloat(center.mX);
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
-
-	renderVBOAt(texture->raw, floorVBO, x, y, z);
+        renderVBOAt(texture->raw, floorVBO, x, y, z, 1.0f, 1.0f);
     }
 }
 
@@ -480,11 +478,10 @@ void drawCeilingAt(const struct Vec3 center,
 
         p0.mY = p1.mY = p2.mY = p3.mY = 0;
 
-        float x = -fixToFloat(center.mX);
+        float x = fixToFloat(center.mX);
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
-
-	renderVBOAt(texture->raw, floorVBO, x, y, z);
+        renderVBOAt(texture->raw, floorVBO, x, y, z, 1.0f, 1.0f);
     }
 }
 
@@ -531,11 +528,17 @@ void drawLeftNear(const struct Vec3 center,
     p0.mY = p1.mY = geometryScale;
     p2.mY = p3.mY = -geometryScale;
 
-    float x = -fixToFloat(center.mX);
+    float x = fixToFloat(center.mX);
     float y = fixToFloat(center.mY);
     float z = -fixToFloat(center.mZ);
 
-    renderVBOAt(texture->raw, leftNearVBO, x, y, z);
+    if (cameraDirection == kWest || cameraDirection == kEast) {
+        renderVBOAt(
+                texture->raw, leftFarVBO, x, y, z, 1.0f, fixToFloat(scale));
+    } else {
+        renderVBOAt(
+                texture->raw, leftNearVBO, x, y, z, 1.0f, fixToFloat(scale));
+    }
 }
 
 void drawRightNear(const struct Vec3 center,
@@ -580,11 +583,15 @@ void drawRightNear(const struct Vec3 center,
     p0.mY = p1.mY = geometryScale;
     p2.mY = p3.mY = -geometryScale;
 
-    float x = -fixToFloat(center.mX);
+    float x = fixToFloat(center.mX);
     float y = fixToFloat(center.mY);
     float z = -fixToFloat(center.mZ);
 
-    renderVBOAt(texture->raw, leftFarVBO, x, y, z);
+    if (cameraDirection == kWest || cameraDirection == kEast) {
+        renderVBOAt(texture->raw, leftNearVBO, x, y, z, 1.0f, fixToFloat(scale));
+    } else {
+        renderVBOAt(texture->raw, leftFarVBO, x, y, z, 1.0f, fixToFloat(scale));
+    }
 }
 
 void drawTriangle(const struct Vec3 pos1,
