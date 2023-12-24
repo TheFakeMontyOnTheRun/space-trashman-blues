@@ -1,0 +1,74 @@
+CC = emcc
+CXX = em++
+
+LDFLAGS =  -O3 -s USE_ZLIB=1 -s USE_LIBPNG=1 -sUSE_SDL=2 -s --preload-file ./base.pfs --use-preload-plugins -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0 --shell-file ./minimal.html
+
+CFLAGS=-g -c -O3     \
+	-Ibase3d/include                                     \
+	-Imenu/include                                       \
+	-ISoundSystem                                       \
+	-I../common/include									\
+	$(SDL_INCLUDE)                                       \
+	-DSDLSW                                              \
+	-DVGA                                                \
+	-fomit-frame-pointer                                 \
+	-fno-exceptions                                      \
+	-ffast-math \
+	-I../core/include -DINCLUDE_ITEM_DESCRIPTIONS -DCLI_BUILD -sUSE_SDL=2 -DPAGE_FLIP_ANIMATION -DENDIANESS_AWARE
+
+MENU_TARGET=game.html
+
+MENU_OBJ=../common/src/MainMenu.o \
+	../common/src/FixP.o \
+	../common/src/Vec.o \
+	../common/src/Common.o \
+	../common/src/PackedFileReader.o \
+	../common/src/MapWithCharKey.o \
+	../common/src/CTile3DProperties.o \
+	../common/src/EDirection_Utils.o \
+	../common/src/Globals.o \
+	../common/src/VisibilityStrategy.o \
+	../common/src/Events.o \
+	../common/src/Dungeon.o \
+	../common/src/Crawler.o \
+	../common/src/Engine.o \
+	../common/src/UI.o \
+	../common/src/Mesh.o \
+	menu/src/Main.o \
+	base3d/src/es/ESRenderer.o \
+	base3d/src/es/LoadBitmap.o \
+	base3d/src/es/Renderer.o \
+	base3d/src/es/Renderer_Rasterization.o \
+	base3d/src/es/Renderer_Tesselation.o \
+	../common/src/NullMusic.o \
+	../common/src/HelpScreen.o \
+	../common/src/HackingScreen.o \
+	../common/src/GameMenu.o \
+	../common/src/CreditsScreen.o \
+	../core/src/Derelict.o \
+	../core/src/Core.o \
+	../common/src/HackingMinigameRules.o \
+	../core/src/Parser.o
+
+
+$(MENU_TARGET):	$(MENU_OBJ)
+	$(CC) -o$(MENU_TARGET) $(MENU_OBJ) $(LDFLAGS)
+
+all:   $(MENU_TARGET)
+
+serve: $(MENU_TARGET)
+	python3 -m http.server
+
+menudata: packager
+	rm -f ./menu.pfs
+	ls res/*.*  | xargs ./packer
+	mv ./data.pfs ./menu.pfs
+
+clean:
+	rm -f menu/src/*.o
+	rm -f ../core/src/*.o
+	rm -f ../common/src/*.o
+	rm -f base3d/src/*.o
+	rm -f common/src/*.o
+	rm -f SoundSystem/*.o
+	rm -f base3d/src/SDLVersion/*.o

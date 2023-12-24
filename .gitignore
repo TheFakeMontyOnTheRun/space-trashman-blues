@@ -207,3 +207,7 @@ ee_frontend/CMakeFiles/derelict128.dir
 ee_frontend/CMakeFiles
 ee_frontend/derelict128
 ee_frontend/Makefile
+ee_frontend/game.data
+ee_frontend/game.html
+ee_frontend/game.js
+ee_frontend/game.wasm
