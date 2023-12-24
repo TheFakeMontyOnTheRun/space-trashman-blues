@@ -199,10 +199,12 @@ void handleSystemEvents() {
 
     while (SDL_PollEvent(&event)) {
 
+#ifdef EMIT_QUIT_OPTION
         if (event.type == SDL_QUIT) {
             mBufferedCommand = kCommandQuit;
             return;
         }
+#endif
 
         if (event.type == SDL_KEYUP) {
             visibilityCached = FALSE;
