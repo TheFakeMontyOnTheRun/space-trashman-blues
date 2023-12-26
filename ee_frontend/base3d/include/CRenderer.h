@@ -53,6 +53,8 @@ typedef uint32_t OutputPixelFormat;
 typedef uint32_t FramebufferPixelFormat;
 typedef uint8_t UVCoord;
 
+typedef float t_mat4x4[16];
+
 struct Projection {
     struct Vec3 first;
     struct Vec2 second;
@@ -299,5 +301,12 @@ struct VBORegister {
     uint8_t indices;
 };
 
+void mat4x4_transform( t_mat4x4 out, float ox, float oy, float oz, float sx, float sy, float sz );
+
+void mat4x4_rotateX( t_mat4x4 out, float deg );
+
+void mat4x4_rotateY( t_mat4x4 out, float deg );
+
+void mat4x4_rotateZ( t_mat4x4 out, float deg );
 
 #endif

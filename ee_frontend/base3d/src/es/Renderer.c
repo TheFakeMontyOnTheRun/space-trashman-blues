@@ -58,24 +58,24 @@ int messageLogBufferCoolDown = 0;
 
 extern unsigned int vs, fs, program;
 
-typedef float t_mat4x4[16];
-
 t_mat4x4 projection_matrix;
 t_mat4x4 viewMatrix;
+
 t_mat4x4 transformMatrix;
 t_mat4x4 rotateXMatrix;
 t_mat4x4 rotateYMatrix;
 t_mat4x4 rotateZMatrix;
 
+extern unsigned int uTransformMatrixUniformLocation;
+extern unsigned int uRotateXMatrixUniformLocation;
+extern unsigned int uRotateYMatrixUniformLocation;
+extern unsigned int uRotateZMatrixUniformLocation;
+
 extern unsigned int aPositionAttributeLocation;
 extern unsigned int aTexCoordAttributeLocation;
 extern unsigned int uProjectionMatrixUniformLocation;
 extern unsigned int uViewMatrixUniformLocation;
-extern unsigned int uTransformMatrixUniformLocation;
 extern unsigned int sTextureUniformLocation;
-extern unsigned int uRotateXMatrixUniformLocation;
-extern unsigned int uRotateYMatrixUniformLocation;
-extern unsigned int uRotateZMatrixUniformLocation;
 extern unsigned int uModUniformLocation;
 extern unsigned int uFadeUniformLocation;
 extern unsigned int uScaleUniformLocation;
@@ -145,7 +145,7 @@ const unsigned short floorIndices[] = {
 
 struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, planeYZVBO;
 
-static inline void mat4x4_ortho( t_mat4x4 out, float left, float right, float bottom, float top, float znear, float zfar ) {
+void mat4x4_ortho( t_mat4x4 out, float left, float right, float bottom, float top, float znear, float zfar ) {
     #define T(a, b) (a * 4 + b)
 
     out[T(0,0)] = 2.0f / (right - left);
@@ -172,7 +172,7 @@ static inline void mat4x4_ortho( t_mat4x4 out, float left, float right, float bo
 }
 
 
-static inline void mat4x4_perspective( t_mat4x4 out, float fov, float ratio, float znear, float zfar ) {
+void mat4x4_perspective( t_mat4x4 out, float fov, float ratio, float znear, float zfar ) {
     out[0] = 0.463027f;
     out[1] = 0.0f;
     out[2] = 0.0f;
@@ -191,26 +191,7 @@ static inline void mat4x4_perspective( t_mat4x4 out, float fov, float ratio, flo
     out[15] = 0.0f;
 }
 
-static inline void mat4x4_transform( t_mat4x4 out, float ox, float oy, float oz, float sx, float sy, float sz ) {
-    out[0] = sx;
-    out[1] = 0.0f;
-    out[2] = 0.0f;
-    out[3] = ox;
-    out[4] = 0.0f;
-    out[5] = sy;
-    out[6] = 0.0f;
-    out[7] = oy;
-    out[8] = 0.0f;
-    out[9] = 0.0f;
-    out[10] = sz;
-    out[11] = oz;
-    out[12] = 0.0f;
-    out[13] = 0.0f;
-    out[14] = 0;
-    out[15] = 1;
-}
-
-static inline void mat4x4_view( t_mat4x4 out, float cx, float cy, float cz, float tx, float ty, float tz, float ux, float uy, float uz ) {
+void mat4x4_view( t_mat4x4 out, float cx, float cy, float cz, float tx, float ty, float tz, float ux, float uy, float uz ) {
     out[0] = 1;
     out[1] = 0.0f;
     out[2] = 0.0f;
@@ -229,7 +210,26 @@ static inline void mat4x4_view( t_mat4x4 out, float cx, float cy, float cz, floa
     out[15] = 1;
 }
 
-static inline void mat4x4_rotateX( t_mat4x4 out, float deg ) {
+void mat4x4_transform( t_mat4x4 out, float ox, float oy, float oz, float sx, float sy, float sz ) {
+    out[0] = sx;
+    out[1] = 0.0f;
+    out[2] = 0.0f;
+    out[3] = ox;
+    out[4] = 0.0f;
+    out[5] = sy;
+    out[6] = 0.0f;
+    out[7] = oy;
+    out[8] = 0.0f;
+    out[9] = 0.0f;
+    out[10] = sz;
+    out[11] = oz;
+    out[12] = 0.0f;
+    out[13] = 0.0f;
+    out[14] = 0;
+    out[15] = 1;
+}
+
+void mat4x4_rotateX( t_mat4x4 out, float deg ) {
 
     float ca = cosf(deg * M_PI / 180.0f);
     float sa = sinf(deg * M_PI / 180.0f);
@@ -252,7 +252,7 @@ static inline void mat4x4_rotateX( t_mat4x4 out, float deg ) {
     out[15] = 1;
 }
 
-static inline void mat4x4_rotateY( t_mat4x4 out, float deg ) {
+void mat4x4_rotateY( t_mat4x4 out, float deg ) {
 
     float ca = cosf(deg * M_PI / 180.0f);
     float sa = sinf(deg * M_PI / 180.0f);
@@ -278,7 +278,7 @@ static inline void mat4x4_rotateY( t_mat4x4 out, float deg ) {
     out[15] = 1;
 }
 
-static inline void mat4x4_rotateZ( t_mat4x4 out, float deg ) {
+void mat4x4_rotateZ( t_mat4x4 out, float deg ) {
 
     float ca = cosf(deg * M_PI / 180.0f);
     float sa = sinf(deg * M_PI / 180.0f);
@@ -453,12 +453,11 @@ void enter3D(void) {
     mat4x4_perspective( projection_matrix, 45.0f, (float)XRES_FRAMEBUFFER / (float)YRES_FRAMEBUFFER, 0.1f, 100.0f );
     glUniformMatrix4fv( uProjectionMatrixUniformLocation, 1, GL_FALSE, projection_matrix );
 
-    mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);
-    glUniformMatrix4fv( uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix );
-
     mat4x4_view(viewMatrix, 0, 0, 0, 0, 0, -1, 0, 1, 0);
     glUniformMatrix4fv( uViewMatrixUniformLocation, 1, GL_FALSE, viewMatrix );
 
+    mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);
+    glUniformMatrix4fv( uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix );
 
     mat4x4_rotateX(rotateXMatrix, leanY);
     glUniformMatrix4fv( uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix );

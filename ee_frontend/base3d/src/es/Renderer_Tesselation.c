@@ -56,6 +56,18 @@ extern unsigned int uModUniformLocation;
 extern unsigned int uFadeUniformLocation;
 extern unsigned int uModelPositionUniformLocation;
 
+
+extern t_mat4x4 transformMatrix;
+extern t_mat4x4 rotateXMatrix;
+extern t_mat4x4 rotateYMatrix;
+extern t_mat4x4 rotateZMatrix;
+
+extern unsigned int uTransformMatrixUniformLocation;
+extern unsigned int uRotateXMatrixUniformLocation;
+extern unsigned int uRotateYMatrixUniformLocation;
+extern unsigned int uRotateZMatrixUniformLocation;
+
+
 extern struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, planeYZVBO;
 
 
@@ -77,10 +89,37 @@ void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float 
                           sizeof(float) * 5, (void *) (sizeof(float) * 3));
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo.indicesIndex);
-  
-  glDrawElements(GL_TRIANGLES, vbo.indices, GL_UNSIGNED_SHORT, 0);
-  
-  glDisableVertexAttribArray(aPositionAttributeLocation);
+
+    mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);
+    glUniformMatrix4fv( uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix );
+
+    mat4x4_rotateX(rotateXMatrix, leanY);
+    glUniformMatrix4fv( uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix );
+
+    mat4x4_rotateY(rotateYMatrix, leanX);
+    glUniformMatrix4fv( uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix );
+
+    mat4x4_rotateZ(rotateZMatrix, 0);
+    glUniformMatrix4fv( uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix );
+
+
+    glDrawElements(GL_TRIANGLES, vbo.indices, GL_UNSIGNED_SHORT, 0);
+
+
+    mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);
+    glUniformMatrix4fv( uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix );
+
+    mat4x4_rotateX(rotateXMatrix, leanY);
+    glUniformMatrix4fv( uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix );
+
+    mat4x4_rotateY(rotateYMatrix, leanX);
+    glUniformMatrix4fv( uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix );
+
+    mat4x4_rotateZ(rotateZMatrix, 0);
+    glUniformMatrix4fv( uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix );
+
+
+    glDisableVertexAttribArray(aPositionAttributeLocation);
   glDisableVertexAttribArray(aTexCoordAttributeLocation);
 } 
 
