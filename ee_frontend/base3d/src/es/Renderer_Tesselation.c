@@ -50,7 +50,7 @@ extern struct Texture *itemSprites[TOTAL_ITEMS];
 extern unsigned int aPositionAttributeLocation;
 extern unsigned int aTexCoordAttributeLocation;
 extern unsigned int uScaleUniformLocation;
-extern unsigned int uProjectionViewUniformLocation;
+extern unsigned int uProjectionMatrixUniformLocation;
 extern unsigned int sTextureUniformLocation;
 extern unsigned int uModUniformLocation;
 extern unsigned int uFadeUniformLocation;

@@ -37,7 +37,12 @@ extern int leanY;
 
 unsigned int aPositionAttributeLocation;
 unsigned int aTexCoordAttributeLocation;
-unsigned int uProjectionViewUniformLocation;
+unsigned int uProjectionMatrixUniformLocation;
+unsigned int uViewMatrixUniformLocation;
+unsigned int uTransformMatrixUniformLocation;
+unsigned int uRotateXMatrixUniformLocation;
+unsigned int uRotateYMatrixUniformLocation;
+unsigned int uRotateZMatrixUniformLocation;
 unsigned int sTextureUniformLocation;
 unsigned int uModUniformLocation;
 unsigned int uFadeUniformLocation;
@@ -58,10 +63,15 @@ static const char *vertex_shader =
         "varying vec2 vTextureCoords;\n"
         "#endif\n"
         "uniform vec4 uModelPosition;\n"
-        "uniform mat4 uProjectionView;\n"
+        "uniform mat4 uProjectionMatrix;\n"
+        "uniform mat4 uViewMatrix;\n"
+        "uniform mat4 uTransformMatrix;\n"
+        "uniform mat4 uRotateXMatrix;\n"
+        "uniform mat4 uRotateYMatrix;\n"
+        "uniform mat4 uRotateZMatrix;\n"
         "uniform vec2 uScale;\n"
         "void main() {\n"
-        "gl_Position =  uProjectionView * ( vec4(aPosition.x * uScale.x, aPosition.y * uScale.y, aPosition.z, aPosition.w) + uModelPosition);\n"
+        "gl_Position =  uProjectionMatrix * uViewMatrix * uTransformMatrix * uRotateXMatrix * uRotateYMatrix * uRotateZMatrix * ( vec4(aPosition.x * uScale.x, aPosition.y * uScale.y, aPosition.z, aPosition.w) + uModelPosition);\n"
         "vTextureCoords = aTexCoord  * uScale;\n"
         "}\n";
 
@@ -184,7 +194,14 @@ void graphicsInit() {
 
     aPositionAttributeLocation = glGetAttribLocation(program, "aPosition");
     aTexCoordAttributeLocation = glGetAttribLocation(program, "aTexCoord");
-    uProjectionViewUniformLocation = glGetUniformLocation(program, "uProjectionView");
+    uProjectionMatrixUniformLocation = glGetUniformLocation(program, "uProjectionMatrix");
+    uViewMatrixUniformLocation = glGetUniformLocation(program, "uViewMatrix");
+    uTransformMatrixUniformLocation = glGetUniformLocation(program, "uTransformMatrix");
+
+    uRotateXMatrixUniformLocation = glGetUniformLocation(program, "uRotateXMatrix");
+    uRotateYMatrixUniformLocation = glGetUniformLocation(program, "uRotateYMatrix");
+    uRotateZMatrixUniformLocation = glGetUniformLocation(program, "uRotateZMatrix");
+
     sTextureUniformLocation = glGetUniformLocation(program, "sTexture");
     uModUniformLocation = glGetUniformLocation(program, "uMod");
     uFadeUniformLocation = glGetUniformLocation(program, "uFade");
@@ -212,7 +229,6 @@ void handleSystemEvents() {
         }
 
         if (event.type == SDL_KEYDOWN) {
-            leanY = leanX = 0;
             switch (event.key.keysym.sym) {
                 case SDLK_RETURN:
                 case SDLK_z:
@@ -243,25 +259,25 @@ void handleSystemEvents() {
                     break;
 
                 case SDLK_t:
-                    leanY = -1;
+                    leanY = -45;
                     visibilityCached = FALSE;
                     needsToRedrawVisibleMeshes = TRUE;
                     break;
 
                 case SDLK_g:
-                    leanY = 1;
+                    leanY = 45;
                     visibilityCached = FALSE;
                     needsToRedrawVisibleMeshes = TRUE;
                     break;
 
                 case SDLK_f:
-                    leanX = -1;
+                    leanX = -45;
                     visibilityCached = FALSE;
                     needsToRedrawVisibleMeshes = TRUE;
                     break;
 
                 case SDLK_h:
-                    leanX = 1;
+                    leanX = 45;
                     visibilityCached = FALSE;
                     needsToRedrawVisibleMeshes = TRUE;
                     break;
