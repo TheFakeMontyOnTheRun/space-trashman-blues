@@ -46,7 +46,6 @@ unsigned int uRotateZMatrixUniformLocation;
 unsigned int sTextureUniformLocation;
 unsigned int uModUniformLocation;
 unsigned int uFadeUniformLocation;
-unsigned int uModelPositionUniformLocation;
 unsigned int uScaleUniformLocation;
 
 static const char *vertex_shader =
@@ -62,7 +61,6 @@ static const char *vertex_shader =
         "attribute vec2 aTexCoord;\n"
         "varying vec2 vTextureCoords;\n"
         "#endif\n"
-        "uniform vec4 uModelPosition;\n"
         "uniform mat4 uProjectionMatrix;\n"
         "uniform mat4 uViewMatrix;\n"
         "uniform mat4 uTransformMatrix;\n"
@@ -71,7 +69,7 @@ static const char *vertex_shader =
         "uniform mat4 uRotateZMatrix;\n"
         "uniform vec2 uScale;\n"
         "void main() {\n"
-        "gl_Position =  uProjectionMatrix * uViewMatrix * uTransformMatrix * uRotateXMatrix * uRotateYMatrix * uRotateZMatrix * ( vec4(aPosition.x * uScale.x, aPosition.y * uScale.y, aPosition.z, aPosition.w) + uModelPosition);\n"
+        "gl_Position =  uProjectionMatrix * uViewMatrix * uTransformMatrix * uRotateXMatrix * uRotateYMatrix * uRotateZMatrix * aPosition;\n"
         "vTextureCoords = aTexCoord  * uScale;\n"
         "}\n";
 
@@ -205,7 +203,6 @@ void graphicsInit() {
     sTextureUniformLocation = glGetUniformLocation(program, "sTexture");
     uModUniformLocation = glGetUniformLocation(program, "uMod");
     uFadeUniformLocation = glGetUniformLocation(program, "uFade");
-    uModelPositionUniformLocation = glGetUniformLocation(program, "uModelPosition");
     uScaleUniformLocation = glGetUniformLocation(program, "uScale");
 
     initGL();
@@ -311,12 +308,12 @@ void handleSystemEvents() {
                     break;
 
                 case SDLK_LEFT:
-                    turning = 1;
-                    leanX = -ANGLE_TURN_STEP;
+                    mBufferedCommand = kCommandLeft;
+                    visibilityCached = FALSE;
                     break;
                 case SDLK_RIGHT:
-                    leanX = ANGLE_TURN_STEP;
-                    turning = 1;
+                    mBufferedCommand = kCommandRight;
+                    visibilityCached = FALSE;
                     break;
                 case SDLK_UP:
                     mBufferedCommand = kCommandUp;

@@ -54,8 +54,6 @@ extern unsigned int uProjectionMatrixUniformLocation;
 extern unsigned int sTextureUniformLocation;
 extern unsigned int uModUniformLocation;
 extern unsigned int uFadeUniformLocation;
-extern unsigned int uModelPositionUniformLocation;
-
 
 extern t_mat4x4 transformMatrix;
 extern t_mat4x4 rotateXMatrix;
@@ -75,10 +73,7 @@ void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float 
   glEnableVertexAttribArray(aPositionAttributeLocation);
   glEnableVertexAttribArray(aTexCoordAttributeLocation);
   
-  glUniform4f(uModelPositionUniformLocation, x, y, z, 1.0f);
-
   glUniform2f(uScaleUniformLocation,scaleX, scaleY);
-
 
     bindTexture(bitmap);
   
@@ -90,13 +85,13 @@ void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float 
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo.indicesIndex);
 
-    mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);
+    mat4x4_transform(transformMatrix, x, y, z, scaleX, scaleY, 1);
     glUniformMatrix4fv( uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix );
 
-    mat4x4_rotateX(rotateXMatrix, leanY);
+    mat4x4_rotateX(rotateXMatrix, 0);
     glUniformMatrix4fv( uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix );
 
-    mat4x4_rotateY(rotateYMatrix, leanX);
+    mat4x4_rotateY(rotateYMatrix, 0);
     glUniformMatrix4fv( uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix );
 
     mat4x4_rotateZ(rotateZMatrix, 0);
@@ -449,7 +444,7 @@ void drawFloorAt(const struct Vec3 center,
         float x = fixToFloat(center.mX);
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
-        renderVBOAt(texture->raw, floorVBO, x, y, z, 1.0f, 1.0f);
+        renderVBOAt(texture->raw, floorVBO, x, y, z, 2.0f, 2.0f);
     }
 }
 

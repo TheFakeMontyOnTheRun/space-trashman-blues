@@ -214,18 +214,18 @@ void mat4x4_transform( t_mat4x4 out, float ox, float oy, float oz, float sx, flo
     out[0] = sx;
     out[1] = 0.0f;
     out[2] = 0.0f;
-    out[3] = ox;
+    out[3] = 0;
     out[4] = 0.0f;
     out[5] = sy;
     out[6] = 0.0f;
-    out[7] = oy;
+    out[7] = 0;
     out[8] = 0.0f;
     out[9] = 0.0f;
     out[10] = sz;
-    out[11] = oz;
-    out[12] = 0.0f;
-    out[13] = 0.0f;
-    out[14] = 0;
+    out[11] = 0;
+    out[12] = ox;
+    out[13] = oy;
+    out[14] = oz;
     out[15] = 1;
 }
 
@@ -459,10 +459,10 @@ void enter3D(void) {
     mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);
     glUniformMatrix4fv( uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix );
 
-    mat4x4_rotateX(rotateXMatrix, leanY);
+    mat4x4_rotateX(rotateXMatrix, 0);
     glUniformMatrix4fv( uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix );
 
-    mat4x4_rotateY(rotateYMatrix, leanX);
+    mat4x4_rotateY(rotateYMatrix, 0);
     glUniformMatrix4fv( uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix );
 
     mat4x4_rotateZ(rotateZMatrix, 0);
