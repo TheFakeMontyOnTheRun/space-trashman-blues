@@ -66,14 +66,19 @@ extern unsigned int uRotateYMatrixUniformLocation;
 extern unsigned int uRotateZMatrixUniformLocation;
 
 
-extern struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, planeYZVBO;
+extern struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, rampVBO, planeYZVBO;
 
 
-void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float y, float z, float scaleX, float scaleY ) {
+void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float y, float z, float rx, float ry, float rz, float scaleX, float scaleY, uint8_t repeatTextures ) {
   glEnableVertexAttribArray(aPositionAttributeLocation);
   glEnableVertexAttribArray(aTexCoordAttributeLocation);
-  
-  glUniform2f(uScaleUniformLocation,scaleX, scaleY);
+
+  if (repeatTextures) {
+      glUniform2f(uScaleUniformLocation,scaleX, scaleY);
+  } else {
+      glUniform2f(uScaleUniformLocation,1.0f, 1.0f);
+  }
+
 
     bindTexture(bitmap);
   
@@ -88,14 +93,14 @@ void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float 
     mat4x4_transform(transformMatrix, x, y, z, scaleX, scaleY, 1);
     glUniformMatrix4fv( uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix );
 
-    mat4x4_rotateX(rotateXMatrix, 0);
-    glUniformMatrix4fv( uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix );
+    mat4x4_rotateX(rotateXMatrix, rx);
+    glUniformMatrix4fv( uRotateXMatrixUniformLocation, 1, GL_TRUE, rotateXMatrix );
 
-    mat4x4_rotateY(rotateYMatrix, 0);
-    glUniformMatrix4fv( uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix );
+    mat4x4_rotateY(rotateYMatrix, ry);
+    glUniformMatrix4fv( uRotateYMatrixUniformLocation, 1, GL_TRUE, rotateYMatrix );
 
-    mat4x4_rotateZ(rotateZMatrix, 0);
-    glUniformMatrix4fv( uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix );
+    mat4x4_rotateZ(rotateZMatrix, rz);
+    glUniformMatrix4fv( uRotateZMatrixUniformLocation, 1, GL_TRUE, rotateZMatrix );
 
 
     glDrawElements(GL_TRIANGLES, vbo.indices, GL_UNSIGNED_SHORT, 0);
@@ -173,9 +178,10 @@ void drawRampAt(const struct Vec3 center0, const struct Vec3 center1,
         struct Vec3 p0, p1, p2, p3, center;
 
         FixP_t geometryScale = (center1.mY - center0.mY);
-
+        float r = 0;
         switch (direction) {
             case kNorth: {
+                r = 180;
                 uv0.x = 0;
                 uv0.y = 0;
                 uv1.x = 16;
@@ -196,6 +202,7 @@ void drawRampAt(const struct Vec3 center0, const struct Vec3 center1,
             }
                 break;
             case kSouth: {
+                r = 0;
                 uv0.x = 16;
                 uv0.y = 16;
                 uv1.x = 0;
@@ -216,6 +223,7 @@ void drawRampAt(const struct Vec3 center0, const struct Vec3 center1,
             }
                 break;
             case kWest: {
+                r = 270;
                 uv0.x = 0;
                 uv0.y = 16;
                 uv1.x = 0;
@@ -237,6 +245,7 @@ void drawRampAt(const struct Vec3 center0, const struct Vec3 center1,
                 break;
             case kEast:
             default: {
+                r = 90;
                 uv0.x = 16;
                 uv0.y = 0;
                 uv1.x = 16;
@@ -262,7 +271,10 @@ void drawRampAt(const struct Vec3 center0, const struct Vec3 center1,
         center.mY = Div(center0.mY + center1.mY, intToFix(2));
         center.mZ = center0.mZ;
 
-
+        float x = fixToFloat(center.mX);
+        float y = fixToFloat(center.mY);
+        float z = -fixToFloat(center.mZ);
+        renderVBOAt(texture->raw, rampVBO, x, y, z, 0, r, 0, 1.0f, fixToFloat(geometryScale), FALSE);
     }
 }
 
@@ -301,7 +313,7 @@ void drawBillboardAt(const struct Vec3 center,
     float y = fixToFloat(center.mY);
     float z = -fixToFloat(center.mZ);
     
-    renderVBOAt(texture->raw, planeXYVBO, x, y, z, 1.0f, fixToFloat(scale));
+    renderVBOAt(texture->raw, planeXYVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), FALSE);
 }
 
 void drawColumnAt(const struct Vec3 center,
@@ -344,7 +356,7 @@ void drawColumnAt(const struct Vec3 center,
         float x = fixToFloat(center.mX) - 1.0f;
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
-        renderVBOAt(texture->raw, planeYZVBO, x, y, z, 1.0f, fixToFloat(scale));
+        renderVBOAt(texture->raw, planeYZVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), repeatTexture);
     }
 
     if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0) || (mask & MASK_FORCE_LEFT)) {
@@ -353,7 +365,7 @@ void drawColumnAt(const struct Vec3 center,
         float x = fixToFloat(center.mX) + 1.0f;
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
-        renderVBOAt(texture->raw, planeYZVBO, x, y, z, 1.0f, fixToFloat(scale));
+        renderVBOAt(texture->raw, planeYZVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), repeatTexture);
     }
 
     p0.mX = p2.mX = -intToFix(1);
@@ -364,7 +376,7 @@ void drawColumnAt(const struct Vec3 center,
         float x = fixToFloat(center.mX);
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ) - 1;
-        renderVBOAt(texture->raw, planeXYVBO, x, y, z, 1.0f, fixToFloat(scale));
+        renderVBOAt(texture->raw, planeXYVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), repeatTexture);
     }
 
     if ((mask & MASK_FRONT)) {
@@ -373,7 +385,7 @@ void drawColumnAt(const struct Vec3 center,
         float x = fixToFloat(center.mX);
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ) + 1;
-        renderVBOAt(texture->raw, planeXYVBO, x, y, z, 1.0f, fixToFloat(scale));
+        renderVBOAt(texture->raw, planeXYVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), repeatTexture);
     }
 }
 
@@ -444,7 +456,7 @@ void drawFloorAt(const struct Vec3 center,
         float x = fixToFloat(center.mX);
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
-        renderVBOAt(texture->raw, floorVBO, x, y, z, 2.0f, 2.0f);
+        renderVBOAt(texture->raw, floorVBO, x, y, z, 0, 0, 0, 1.0f, 1.0f, FALSE);
     }
 }
 
@@ -515,7 +527,7 @@ void drawCeilingAt(const struct Vec3 center,
         float x = fixToFloat(center.mX);
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
-        renderVBOAt(texture->raw, floorVBO, x, y, z, 1.0f, 1.0f);
+        renderVBOAt(texture->raw, floorVBO, x, y, z, 0, 0, 0, 1.0f, 1.0f, FALSE);
     }
 }
 
@@ -568,10 +580,10 @@ void drawLeftNear(const struct Vec3 center,
 
     if (cameraDirection == kWest || cameraDirection == kEast) {
         renderVBOAt(
-                texture->raw, leftFarVBO, x, y, z, 1.0f, fixToFloat(scale));
+                texture->raw, leftFarVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), repeatTexture);
     } else {
         renderVBOAt(
-                texture->raw, leftNearVBO, x, y, z, 1.0f, fixToFloat(scale));
+                texture->raw, leftNearVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), repeatTexture);
     }
 }
 
@@ -622,9 +634,9 @@ void drawRightNear(const struct Vec3 center,
     float z = -fixToFloat(center.mZ);
 
     if (cameraDirection == kWest || cameraDirection == kEast) {
-        renderVBOAt(texture->raw, leftNearVBO, x, y, z, 1.0f, fixToFloat(scale));
+        renderVBOAt(texture->raw, leftNearVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), repeatTexture);
     } else {
-        renderVBOAt(texture->raw, leftFarVBO, x, y, z, 1.0f, fixToFloat(scale));
+        renderVBOAt(texture->raw, leftFarVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), repeatTexture);
     }
 }
 

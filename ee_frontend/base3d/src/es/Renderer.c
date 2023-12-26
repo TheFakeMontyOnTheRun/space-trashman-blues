@@ -118,6 +118,14 @@ const float floorVertices[] = {
         -1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
 };
 
+const float rampVertices[] = {
+        -1.0f, -0.5f, -1.0f, 0.0f, .0f,
+        1.0f, -0.5f, -1.0f, 1.0f, 0.0f,
+        1.0f, 0.5f, 1.0f, 1.0f, 1.0f,
+        -1.0f, 0.5f, 1.0f, 0.0f, 1.0f,
+};
+
+
 const unsigned short planeXYIndices[] = {
         0, 1, 2,
         0, 2, 3
@@ -143,7 +151,13 @@ const unsigned short floorIndices[] = {
         0, 2, 3
 };
 
-struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, planeYZVBO;
+const unsigned short rampIndices[] = {
+        0, 1, 2,
+        0, 2, 3
+};
+
+
+struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, rampVBO, planeYZVBO;
 
 void mat4x4_ortho( t_mat4x4 out, float left, float right, float bottom, float top, float znear, float zfar ) {
     #define T(a, b) (a * 4 + b)
@@ -368,6 +382,10 @@ void initGL() {
                                           (unsigned short *) cornerLeftNearIndices, 6);
     floorVBO = submitVBO((float *) floorVertices, 4,
                                        (unsigned short *) floorIndices, 6);
+
+    rampVBO = submitVBO((float *) rampVertices, 4,
+                         (unsigned short *) rampIndices, 6);
+
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
