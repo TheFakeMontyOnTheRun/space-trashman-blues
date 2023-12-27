@@ -296,7 +296,8 @@ extern int leanX;
 extern int leanY;
 
 struct VBORegister {
-    uint8_t dataIndex;
+    uint8_t vertexDataIndex;
+    uint8_t uvDataIndex;
     uint8_t indicesIndex;
     uint8_t indices;
 };

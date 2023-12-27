@@ -82,49 +82,93 @@ extern unsigned int uScaleUniformLocation;
 
 
 const float planeXYVertices[] = {
-        -1.0f, 1.0f, 0.0f, 0.0f, .0f,
-        1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f, 1.0f, 1.0f,
-        -1.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+        -1.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, 0.0f,
+        1.0f, -1.0f, 0.0f,
+        -1.0f, -1.0f, 0.0f
 };
 
 const float planeYZVertices[] = {
-        0.0f, 1.0f, -1.0f, 0.0f, .0f,
-        0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-        0.0f, -1.0f, 1.0f, 1.0f, 1.0f,
-        0.0f, -1.0f, -1.0f, 0.0f, 1.0f,
+        0.0f, 1.0f, -1.0f,
+        0.0f, 1.0f, 1.0f,
+        0.0f, -1.0f, 1.0f,
+        0.0f, -1.0f, -1.0f
 };
 
 
 const float cornerLeftFarVertices[] = {
-        -1.0f, 1.0f, -1.0f, 0.0f, .0f,
-        1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-        1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
-        -1.0f, -1.0f, -1.0f, 0.0f, 1.0f,
+        -1.0f, 1.0f, -1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, -1.0f, 1.0f,
+        -1.0f, -1.0f, -1.0f
 };
 
 const float cornerLeftNearVertices[] = {
-        -1.0f, 1.0f, 1.0f, 0.0f, .0f,
-        1.0f, 1.0f, -1.0f, 1.0f, 0.0f,
-        1.0f, -1.0f, -1.0f, 1.0f, 1.0f,
-        -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f, 1.0f
 };
 
 
 const float floorVertices[] = {
-        -1.0f, 0.0f, -1.0f, 0.0f, .0f,
-        1.0f, 0.0f, -1.0f, 1.0f, 0.0f,
-        1.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-        -1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+        -1.0f, 0.0f, -1.0f,
+        1.0f, 0.0f, -1.0f,
+        1.0f, 0.0f, 1.0f,
+        -1.0f, 0.0f, 1.0f
 };
 
 const float rampVertices[] = {
-        -1.0f, -0.5f, -1.0f, 0.0f, .0f,
-        1.0f, -0.5f, -1.0f, 1.0f, 0.0f,
-        1.0f, 0.5f, 1.0f, 1.0f, 1.0f,
-        -1.0f, 0.5f, 1.0f, 0.0f, 1.0f,
+        -1.0f, -0.5f, -1.0f,
+        1.0f, -0.5f, -1.0f,
+        1.0f, 0.5f, 1.0f,
+        -1.0f, 0.5f, 1.0f
 };
 
+
+const float planeXYUVs[] = {
+        0.0f, .0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f
+};
+
+const float planeYZUVs[] = {
+        0.0f, .0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f
+};
+
+
+const float cornerLeftFarUVs[] = {
+        0.0f, .0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f
+};
+
+const float cornerLeftNearUVs[] = {
+        0.0f, .0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f
+};
+
+
+const float floorUVs[] = {
+        0.0f, .0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f
+};
+
+const float rampUVs[] = {
+        0.0f, .0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f
+};
 
 const unsigned short planeXYIndices[] = {
         0, 1, 2,
@@ -315,17 +359,24 @@ void mat4x4_rotateZ( t_mat4x4 out, float deg ) {
     out[15] = 1;
 }
 
-struct VBORegister submitVBO(float *data, int vertices,
+struct VBORegister submitVBO(float *vertexData, float *uvData, int vertices,
                              unsigned short *indexData,
                              unsigned int indices) {
 
-    unsigned int dataIndex;
+    unsigned int vertexDataIndex;
+    unsigned int uvDataIndex;
     unsigned int indicesIndex;
 
-    glGenBuffers(1, &dataIndex);
-    glBindBuffer(GL_ARRAY_BUFFER, dataIndex);
-    glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(float) * 5, data, GL_STATIC_DRAW);
+    glGenBuffers(1, &vertexDataIndex);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexDataIndex);
+    glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(float) * 3, vertexData, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glGenBuffers(1, &uvDataIndex);
+    glBindBuffer(GL_ARRAY_BUFFER, uvDataIndex);
+    glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(float) * 2, uvData, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 
     glGenBuffers(1, &indicesIndex);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesIndex);
@@ -334,7 +385,8 @@ struct VBORegister submitVBO(float *data, int vertices,
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     struct VBORegister toReturn;
-    toReturn.dataIndex = dataIndex;
+    toReturn.vertexDataIndex = vertexDataIndex;
+    toReturn.uvDataIndex = uvDataIndex;
     toReturn.indicesIndex = indicesIndex;
     toReturn.indices = indices;
 
@@ -387,20 +439,20 @@ void initGL() {
     memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
 
 
-    planeXYVBO = submitVBO((float *) planeXYVertices, 4,
+    planeXYVBO = submitVBO((float *) planeXYVertices, planeXYUVs, 4,
                                            (unsigned short *) planeXYIndices, 6);
 
-    planeYZVBO = submitVBO((float *) planeYZVertices, 4,
+    planeYZVBO = submitVBO((float *) planeYZVertices, planeYZUVs, 4,
                                            (unsigned short *) planeYZIndices, 6);
 	
-    leftFarVBO = submitVBO((float *) cornerLeftFarVertices, 4,
+    leftFarVBO = submitVBO((float *) cornerLeftFarVertices, cornerLeftFarUVs, 4,
                                          (unsigned short *) cornerLeftFarIndices, 6);
-    leftNearVBO = submitVBO((float *) cornerLeftNearVertices, 4,
+    leftNearVBO = submitVBO((float *) cornerLeftNearVertices, cornerLeftNearUVs, 4,
                                           (unsigned short *) cornerLeftNearIndices, 6);
-    floorVBO = submitVBO((float *) floorVertices, 4,
+    floorVBO = submitVBO((float *) floorVertices, floorUVs, 4,
                                        (unsigned short *) floorIndices, 6);
 
-    rampVBO = submitVBO((float *) rampVertices, 4,
+    rampVBO = submitVBO((float *) rampVertices, rampUVs, 4,
                          (unsigned short *) rampIndices, 6);
 
 
