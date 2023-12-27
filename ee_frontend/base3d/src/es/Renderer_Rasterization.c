@@ -92,6 +92,8 @@ void drawBitmapRegion(const int _x,
     if (bitmap->uploadId == -1) {
         bitmap->uploadId = submitBitmapToGPU(bitmap);
     }
+
+    renderVBOAt(bitmap, planeXYVBO, _x + _dx / 2.0f, _y + _dy / 2.0f, -1.0f, 0, 0, 0, _dx / 2.0f, -_dy / 2.0f, tint, FALSE);
 }
 
 void drawBitmap(const int _x,
