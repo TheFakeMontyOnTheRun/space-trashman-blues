@@ -68,8 +68,10 @@ extern unsigned int uRotateZMatrixUniformLocation;
 
 extern struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, rampVBO, planeYZVBO;
 
+#define NORMALIZE_COLOUR (1.0f / 256.0f)
 
-void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float y, float z, float rx, float ry, float rz, float scaleX, float scaleY, uint8_t repeatTextures ) {
+
+void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float y, float z, float rx, float ry, float rz, float scaleX, float scaleY, uint32_t tint, uint8_t repeatTextures ) {
   glEnableVertexAttribArray(aPositionAttributeLocation);
   glEnableVertexAttribArray(aTexCoordAttributeLocation);
 
@@ -79,10 +81,15 @@ void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float 
       glUniform2f(uScaleUniformLocation,1.0f, 1.0f);
   }
 
+    float r = (tint & 0xFF) * NORMALIZE_COLOUR;
+    float g = ((tint & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+    float b = ((tint & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
+
+    glUniform4f(uModUniformLocation, r, g, b, 1.0f);
 
     bindTexture(bitmap);
   
-  glBindBuffer(GL_ARRAY_BUFFER, vbo.dataIndex);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo.dataIndex);
 
     glVertexAttribPointer(aPositionAttributeLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
     glVertexAttribPointer(aTexCoordAttributeLocation, 2, GL_FLOAT, GL_TRUE,
@@ -274,7 +281,7 @@ void drawRampAt(const struct Vec3 center0, const struct Vec3 center1,
         float x = fixToFloat(center.mX);
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
-        renderVBOAt(texture->raw, rampVBO, x, y, z, 0, r, 0, 1.0f, fixToFloat(geometryScale), FALSE);
+        renderVBOAt(texture->raw, rampVBO, x, y, z, 0, r, 0, 1.0f, fixToFloat(geometryScale), 0xFFFFFFFF, FALSE);
     }
 }
 
@@ -313,7 +320,7 @@ void drawBillboardAt(const struct Vec3 center,
     float y = fixToFloat(center.mY);
     float z = -fixToFloat(center.mZ);
     
-    renderVBOAt(texture->raw, planeXYVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), FALSE);
+    renderVBOAt(texture->raw, planeXYVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), 0xFFFFFFFF, FALSE);
 }
 
 void drawColumnAt(const struct Vec3 center,
@@ -356,7 +363,7 @@ void drawColumnAt(const struct Vec3 center,
         float x = fixToFloat(center.mX) - 1.0f;
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
-        renderVBOAt(texture->raw, planeYZVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), repeatTexture);
+        renderVBOAt(texture->raw, planeYZVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), 0xFFFFFFFF, repeatTexture);
     }
 
     if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0) || (mask & MASK_FORCE_LEFT)) {
@@ -365,7 +372,7 @@ void drawColumnAt(const struct Vec3 center,
         float x = fixToFloat(center.mX) + 1.0f;
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
-        renderVBOAt(texture->raw, planeYZVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), repeatTexture);
+        renderVBOAt(texture->raw, planeYZVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), 0xFFFFFFFF, repeatTexture);
     }
 
     p0.mX = p2.mX = -intToFix(1);
@@ -376,7 +383,7 @@ void drawColumnAt(const struct Vec3 center,
         float x = fixToFloat(center.mX);
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ) - 1;
-        renderVBOAt(texture->raw, planeXYVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), repeatTexture);
+        renderVBOAt(texture->raw, planeXYVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), 0xFFFFFFFF, repeatTexture);
     }
 
     if ((mask & MASK_FRONT)) {
@@ -385,7 +392,7 @@ void drawColumnAt(const struct Vec3 center,
         float x = fixToFloat(center.mX);
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ) + 1;
-        renderVBOAt(texture->raw, planeXYVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), repeatTexture);
+        renderVBOAt(texture->raw, planeXYVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), 0xFFFFFFFF, repeatTexture);
     }
 }
 
@@ -456,7 +463,7 @@ void drawFloorAt(const struct Vec3 center,
         float x = fixToFloat(center.mX);
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
-        renderVBOAt(texture->raw, floorVBO, x, y, z, 0, 0, 0, 1.0f, 1.0f, FALSE);
+        renderVBOAt(texture->raw, floorVBO, x, y, z, 0, 0, 0, 1.0f, 1.0f, 0xFFFFFFFF, FALSE);
     }
 }
 
@@ -527,7 +534,7 @@ void drawCeilingAt(const struct Vec3 center,
         float x = fixToFloat(center.mX);
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
-        renderVBOAt(texture->raw, floorVBO, x, y, z, 0, 0, 0, 1.0f, 1.0f, FALSE);
+        renderVBOAt(texture->raw, floorVBO, x, y, z, 0, 0, 0, 1.0f, 1.0f, 0xFFFFFFFF, FALSE);
     }
 }
 
@@ -580,10 +587,10 @@ void drawLeftNear(const struct Vec3 center,
 
     if (cameraDirection == kWest || cameraDirection == kEast) {
         renderVBOAt(
-                texture->raw, leftFarVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), repeatTexture);
+                texture->raw, leftFarVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), 0xFFFFFFFF, repeatTexture);
     } else {
         renderVBOAt(
-                texture->raw, leftNearVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), repeatTexture);
+                texture->raw, leftNearVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), 0xFFFFFFFF, repeatTexture);
     }
 }
 
@@ -634,9 +641,9 @@ void drawRightNear(const struct Vec3 center,
     float z = -fixToFloat(center.mZ);
 
     if (cameraDirection == kWest || cameraDirection == kEast) {
-        renderVBOAt(texture->raw, leftNearVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), repeatTexture);
+        renderVBOAt(texture->raw, leftNearVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), 0xFFFFFFFF, repeatTexture);
     } else {
-        renderVBOAt(texture->raw, leftFarVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), repeatTexture);
+        renderVBOAt(texture->raw, leftFarVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), 0xFFFFFFFF, repeatTexture);
     }
 }
 

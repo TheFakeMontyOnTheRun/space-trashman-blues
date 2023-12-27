@@ -362,7 +362,24 @@ uint32_t getPaletteEntry(const uint32_t origin) {
 void enter2D(void) {
   mat4x4_ortho( projection_matrix, 0.0f, (float)XRES_FRAMEBUFFER, (float)YRES_FRAMEBUFFER, 0.0f, 0.1f, 100.0f );
   glUniformMatrix4fv( uProjectionMatrixUniformLocation, 1, GL_FALSE, projection_matrix );
+
   glDisable( GL_DEPTH_TEST );
+
+    mat4x4_view(viewMatrix, 0, 0, 0, 0, 0, -1, 0, 1, 0);
+    glUniformMatrix4fv( uViewMatrixUniformLocation, 1, GL_FALSE, viewMatrix );
+
+    mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);
+    glUniformMatrix4fv( uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix );
+
+    mat4x4_rotateX(rotateXMatrix, 0);
+    glUniformMatrix4fv( uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix );
+
+    mat4x4_rotateY(rotateYMatrix, 0);
+    glUniformMatrix4fv( uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix );
+
+    mat4x4_rotateZ(rotateZMatrix, 0);
+    glUniformMatrix4fv( uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix );
+
 }
 
 void initGL() {

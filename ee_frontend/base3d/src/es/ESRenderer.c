@@ -48,6 +48,10 @@ unsigned int uModUniformLocation;
 unsigned int uFadeUniformLocation;
 unsigned int uScaleUniformLocation;
 
+
+struct Bitmap whiteTexture;
+uint8_t whiteRaw[4];
+
 static const char *vertex_shader =
         "#ifdef GL_ES\n"
         "precision mediump float;\n"
@@ -114,6 +118,13 @@ SDL_GLContext context;
 
 unsigned int vs, fs, program;
 
+void checkError() {
+    int errorCode = glGetError();
+
+    if (errorCode != 0) {
+        printf("Error: %d\n", errorCode);
+    }
+}
 
 void graphicsInit() {
 
@@ -206,6 +217,12 @@ void graphicsInit() {
     uScaleUniformLocation = glGetUniformLocation(program, "uScale");
 
     initGL();
+
+    whiteTexture.height = 1;
+    whiteTexture.width = 1;
+    whiteRaw[0] = whiteRaw[1] = whiteRaw[2] = whiteRaw[3] = 0xFF;
+    whiteTexture.data = &whiteRaw[0];
+    whiteTexture.uploadId = submitBitmapToGPU(&whiteTexture);
 }
 
 void handleSystemEvents() {

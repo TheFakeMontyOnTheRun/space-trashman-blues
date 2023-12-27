@@ -25,7 +25,7 @@ uint8_t shouldDrawLights = TRUE;
 int useDither = TRUE;
 
 struct Bitmap *defaultFont;
-
+extern  struct Bitmap whiteTexture;
 
 #define NORMALIZE_ORTHO_X (1.0f / 320.0f)
 #define NORMALIZE_ORTHO_Y (1.0f / 200.0f)
@@ -43,6 +43,12 @@ struct Bitmap *defaultFont;
 #define BIAS (intToFix(8))
 #define REVERSE_BIAS (1.0f/8.0f)
 #define FOG_MAX_DISTANCE 32.0f
+
+
+void checkError();
+
+extern struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, rampVBO, planeYZVBO;
+
 
 int submitBitmapToGPU(struct Bitmap *bitmap);
 
@@ -70,7 +76,7 @@ void fillRect(
         const FramebufferPixelFormat pixel,
         const uint8_t stipple) {
 
-
+    renderVBOAt(&whiteTexture, planeXYVBO, _x + _dx / 2.0f, _y + _dy / 2.0f, -1.0f, 0, 0, 0, _dx / 2.0f, _dy / 2.0f, pixel, FALSE);
 }
 
 void drawBitmapRegion(const int _x,
@@ -81,7 +87,11 @@ void drawBitmapRegion(const int _x,
                       struct Bitmap *bitmap,
                       const uint8_t transparent,
                       float u0, float u1, float v0, float v1) {
+    checkError();
 
+    if (bitmap->uploadId == -1) {
+        bitmap->uploadId = submitBitmapToGPU(bitmap);
+    }
 }
 
 void drawBitmap(const int _x,

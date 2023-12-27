@@ -309,4 +309,6 @@ void mat4x4_rotateY( t_mat4x4 out, float deg );
 
 void mat4x4_rotateZ( t_mat4x4 out, float deg );
 
+void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float y, float z, float rx, float ry, float rz, float scaleX, float scaleY, uint32_t tint, uint8_t repeatTextures );
+
 #endif
