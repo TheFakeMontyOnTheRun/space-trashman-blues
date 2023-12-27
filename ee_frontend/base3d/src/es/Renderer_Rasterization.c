@@ -76,7 +76,7 @@ void fillRect(
         const FramebufferPixelFormat pixel,
         const uint8_t stipple) {
 
-    renderVBOAt(&whiteTexture, planeXYVBO, _x + _dx / 2.0f, _y + _dy / 2.0f, -1.0f, 0, 0, 0, _dx / 2.0f, _dy / 2.0f, pixel, FALSE);
+    renderVBOAt(&whiteTexture, planeXYVBO, _x + _dx / 2.0f, _y + _dy / 2.0f, -1.0f, 0, 0, 0, _dx / 2.0f, _dy / 2.0f, 0, 0, 1, 1, pixel, FALSE);
 }
 
 void drawBitmapRegion(const int _x,
@@ -93,7 +93,7 @@ void drawBitmapRegion(const int _x,
         bitmap->uploadId = submitBitmapToGPU(bitmap);
     }
 
-    renderVBOAt(bitmap, planeXYVBO, _x + _dx / 2.0f, _y + _dy / 2.0f, -1.0f, 0, 0, 0, _dx / 2.0f, -_dy / 2.0f, tint, FALSE);
+    renderVBOAt(bitmap, planeXYVBO, _x + _dx / 2.0f, _y + _dy / 2.0f, -1.0f, 0, 0, 0, _dx / 2.0f, -_dy / 2.0f, u0, v0, u1, v1, tint, FALSE);
 }
 
 void drawBitmap(const int _x,
