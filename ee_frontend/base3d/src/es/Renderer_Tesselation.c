@@ -113,7 +113,7 @@ void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float 
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo.indicesIndex);
 
-    mat4x4_transform(transformMatrix, x, y, z, scaleX, scaleY, 1);
+    mat4x4_transform(transformMatrix, x + fixToFloat(xCameraOffset), y - fixToFloat(yCameraOffset), z - fixToFloat(zCameraOffset), scaleX, scaleY, 1);
     glUniformMatrix4fv( uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix );
 
     mat4x4_rotateX(rotateXMatrix, rx);
