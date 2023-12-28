@@ -45,14 +45,6 @@ const int height = 480;
 SDL_Window *window;
 SDL_GLContext context;
 
-void checkError() {
-    int errorCode = glGetError();
-
-    if (errorCode != 0) {
-        printf("Error: %d\n", errorCode);
-    }
-}
-
 void graphicsInit() {
 
     enableSmoothMovement = TRUE;

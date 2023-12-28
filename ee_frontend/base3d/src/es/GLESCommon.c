@@ -389,6 +389,15 @@ void mat4x4_rotateZ( t_mat4x4 out, float deg ) {
     out[15] = 1;
 }
 
+
+void checkGLError(const char* operation) {
+    int errorCode = glGetError();
+
+    if (errorCode != 0) {
+        printf("Error: %d while %s\n", errorCode, operation);
+    }
+}
+
 struct VBORegister submitVBO(float *vertexData, float *uvData, int vertices,
                              unsigned short *indexData,
                              unsigned int indices) {
@@ -453,7 +462,7 @@ void enter2D(void) {
 
     mat4x4_rotateZ(rotateZMatrix, 0);
     glUniformMatrix4fv( uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix );
-
+    checkGLError("enter2D");
 }
 
 void initGL() {
@@ -542,10 +551,12 @@ void initGL() {
     glDepthFunc(GL_LEQUAL);
     //    glFrontFace(GL_CW);
     glDepthMask(1);
+    checkGLError("initGL");
 }
 
 void bindTexture(struct Bitmap *bitmap) {
     glBindTexture(GL_TEXTURE_2D, bitmap->uploadId);
+    checkGLError("bind texture");
 }
 
 int submitBitmapToGPU(struct Bitmap *bitmap) {
@@ -567,6 +578,7 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    checkGLError("submit bitmap to GPU");
 
     return bitmap->uploadId = textureId;
 }
@@ -577,23 +589,27 @@ void startFrameGL(int x, int y, int width, int height) {
     needsToRedrawVisibleMeshes = FALSE;
 
     float fade[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-    
+    checkGLError("start frame");
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
-    glUniform4fv(uFadeUniformLocation, 1, &fade[0]);
     glDepthFunc(GL_LEQUAL);
+    checkGLError("clear buffers");
+
+    glUniform4f(uFadeUniformLocation, fade[0], fade[1], fade[2], fade[3]);
     glUniform4f(uModUniformLocation, 1.0f, 1.0f, 1.0f, 1.0f);
 
-    glUniform1i(aTexCoordAttributeLocation, 0);
+    checkGLError("set uniforms");
+
     glActiveTexture(GL_TEXTURE0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    checkGLError("set texture");
 
     enter2D();
 }
 
 void endFrameGL() {
+    checkGLError("end frame");
 }
 
 void enter3D(void) {
@@ -635,4 +651,5 @@ void enter3D(void) {
     glUniformMatrix4fv( uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix );
 
     glEnable(GL_DEPTH_TEST);
+    checkGLError("enter3D");
 }
