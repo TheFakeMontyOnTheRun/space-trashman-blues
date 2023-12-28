@@ -56,7 +56,7 @@ char messageLogBuffer[256];
 
 int messageLogBufferCoolDown = 0;
 
-extern unsigned int vs, fs, program;
+extern const int width, height;
 
 t_mat4x4 projection_matrix;
 t_mat4x4 viewMatrix;
@@ -66,19 +66,7 @@ t_mat4x4 rotateXMatrix;
 t_mat4x4 rotateYMatrix;
 t_mat4x4 rotateZMatrix;
 
-extern unsigned int uTransformMatrixUniformLocation;
-extern unsigned int uRotateXMatrixUniformLocation;
-extern unsigned int uRotateYMatrixUniformLocation;
-extern unsigned int uRotateZMatrixUniformLocation;
-
-extern unsigned int aPositionAttributeLocation;
-extern unsigned int aTexCoordAttributeLocation;
-extern unsigned int uProjectionMatrixUniformLocation;
-extern unsigned int uViewMatrixUniformLocation;
-extern unsigned int sTextureUniformLocation;
-extern unsigned int uModUniformLocation;
-extern unsigned int uFadeUniformLocation;
-extern unsigned int uScaleUniformLocation;
+unsigned int vs, fs, program;
 
 
 const float planeXYVertices[] = {
@@ -199,6 +187,77 @@ const unsigned short rampIndices[] = {
         0, 1, 2,
         0, 2, 3
 };
+
+unsigned int aPositionAttributeLocation;
+unsigned int aTexCoordAttributeLocation;
+unsigned int uProjectionMatrixUniformLocation;
+unsigned int uViewMatrixUniformLocation;
+unsigned int uTransformMatrixUniformLocation;
+unsigned int uRotateXMatrixUniformLocation;
+unsigned int uRotateYMatrixUniformLocation;
+unsigned int uRotateZMatrixUniformLocation;
+unsigned int sTextureUniformLocation;
+unsigned int uModUniformLocation;
+unsigned int uFadeUniformLocation;
+unsigned int uScaleUniformLocation;
+
+
+struct Bitmap whiteTexture;
+uint8_t whiteRaw[4];
+
+static const char *vertex_shader =
+        "#ifdef GL_ES\n"
+        "precision mediump float;\n"
+        "#endif\n"
+        "#if __VERSION__ >= 140\n"
+        "in vec4 aPosition;\n"
+        "in vec2 aTexCoord;\n"
+        "out vec2 vTextureCoords;\n"
+        "#else\n"
+        "attribute vec4 aPosition;\n"
+        "attribute vec2 aTexCoord;\n"
+        "varying vec2 vTextureCoords;\n"
+        "#endif\n"
+        "uniform mat4 uProjectionMatrix;\n"
+        "uniform mat4 uViewMatrix;\n"
+        "uniform mat4 uTransformMatrix;\n"
+        "uniform mat4 uRotateXMatrix;\n"
+        "uniform mat4 uRotateYMatrix;\n"
+        "uniform mat4 uRotateZMatrix;\n"
+        "uniform vec2 uScale;\n"
+        "void main() {\n"
+        "gl_Position =  uProjectionMatrix * uViewMatrix * uTransformMatrix * uRotateXMatrix * uRotateYMatrix * uRotateZMatrix * aPosition;\n"
+        "vTextureCoords = aTexCoord  * uScale;\n"
+        "}\n";
+
+static const char *fragment_shader =
+        "#ifdef GL_ES\n"
+        "        precision mediump float;\n"
+        "#endif\n"
+        "#if __VERSION__ >= 140\n"
+        "        in vec2 vTextureCoords;\n"
+        "out vec4 fragColor;\n"
+        "#else\n"
+        "        varying vec2 vTextureCoords;\n"
+        "#endif\n"
+        "uniform sampler2D sTexture;\n"
+        "uniform vec4 uMod;\n"
+        "uniform vec4 uFade;\n"
+        "void main() {\n"
+        "#if __VERSION__ >= 140\n"
+        "    fragColor = texture2D( sTexture, vTextureCoords );\n"
+        "   if ( fragColor.a < 0.5 ) {\n"
+        "        discard;\n"
+        "    }\n"
+        "    fragColor = fragColor * uFade.a * uMod;\n"
+        "#else\n"
+        "    gl_FragColor = texture2D( sTexture, vTextureCoords );\n"
+        "    if ( gl_FragColor.a < 0.5 ) {\n"
+        "        discard;\n"
+        "    }\n"
+        "    gl_FragColor = gl_FragColor * uFade.a * uMod;\n"
+        "#endif\n"
+        "}\n";
 
 
 struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, rampVBO, planeYZVBO;
@@ -435,6 +494,66 @@ void enter2D(void) {
 }
 
 void initGL() {
+
+    glViewport(0, 0, width, height);
+
+    /* creating shader */
+    vs = glCreateShader(GL_VERTEX_SHADER);
+    fs = glCreateShader(GL_FRAGMENT_SHADER);
+
+    int length = strlen(vertex_shader);
+    glShaderSource(vs, 1, (const GLchar **) &vertex_shader, &length);
+    glCompileShader(vs);
+
+    GLint status;
+    glGetShaderiv(vs, GL_COMPILE_STATUS, &status);
+
+    if (status == GL_FALSE) {
+        fprintf(stderr, "vertex shader compilation failed\n");
+        exit(0);
+    }
+
+    length = strlen(fragment_shader);
+    glShaderSource(fs, 1, (const GLchar **) &fragment_shader, &length);
+    glCompileShader(fs);
+
+    glGetShaderiv(fs, GL_COMPILE_STATUS, &status);
+
+    if (status == GL_FALSE) {
+        fprintf(stderr, "fragment shader compilation failed\n");
+        exit(0);
+    }
+
+    program = glCreateProgram();
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+    glLinkProgram(program);
+
+    glUseProgram(program);
+
+    /* attaching data to shaders */
+
+    aPositionAttributeLocation = glGetAttribLocation(program, "aPosition");
+    aTexCoordAttributeLocation = glGetAttribLocation(program, "aTexCoord");
+    uProjectionMatrixUniformLocation = glGetUniformLocation(program, "uProjectionMatrix");
+    uViewMatrixUniformLocation = glGetUniformLocation(program, "uViewMatrix");
+    uTransformMatrixUniformLocation = glGetUniformLocation(program, "uTransformMatrix");
+
+    uRotateXMatrixUniformLocation = glGetUniformLocation(program, "uRotateXMatrix");
+    uRotateYMatrixUniformLocation = glGetUniformLocation(program, "uRotateYMatrix");
+    uRotateZMatrixUniformLocation = glGetUniformLocation(program, "uRotateZMatrix");
+
+    sTextureUniformLocation = glGetUniformLocation(program, "sTexture");
+    uModUniformLocation = glGetUniformLocation(program, "uMod");
+    uFadeUniformLocation = glGetUniformLocation(program, "uFade");
+    uScaleUniformLocation = glGetUniformLocation(program, "uScale");
+
+    whiteTexture.height = 1;
+    whiteTexture.width = 1;
+    whiteRaw[0] = whiteRaw[1] = whiteRaw[2] = whiteRaw[3] = 0xFF;
+    whiteTexture.data = &whiteRaw[0];
+    whiteTexture.uploadId = submitBitmapToGPU(&whiteTexture);
+
     /* tmp */
     memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
 
