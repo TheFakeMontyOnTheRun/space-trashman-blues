@@ -25,9 +25,10 @@ include_directories(${OPENGL_INCLUDE_DIR})
 
 add_executable(derelict128
 		menu/src/Main.c
-		base3d/src/es/ESRenderer.c
+		base3d/src/es/SDL2GL2Version.c
 		base3d/src/es/LoadBitmap.c
 		base3d/src/es/Renderer.c
+		base3d/src/es/GLESCommon.c
 		base3d/src/es/Renderer_Rasterization.c
 		base3d/src/es/Renderer_Tesselation.c
 		../common/src/MainMenu.c

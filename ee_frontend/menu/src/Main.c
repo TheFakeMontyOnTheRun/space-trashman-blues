@@ -28,6 +28,11 @@ long uclock() {
 #include "PackedFileReader.h"
 #include "Derelict.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten/html5.h>
+#include <emscripten/emscripten.h>
+#endif
+
 char *textBuffer;
 extern char *messageLogBuffer;
 extern enum EVisibility *visMap;
@@ -53,6 +58,16 @@ void shutdownHW() {
 
 long start_clock, end_clock, prev;
 
+#ifdef __EMSCRIPTEN__
+void mainLoop () {
+  startFrameGL(0, 0, 640, 480);
+  menuTick(10);
+  endFrameGL();
+  flipRenderer();
+}
+#endif
+
+
 
 int main(int argc, char **argv) {
 
@@ -67,7 +82,9 @@ int main(int argc, char **argv) {
     start_clock = uclock();
 
     clearRenderer();
-
+#ifdef __EMSCRIPTEN__
+    emscripten_set_main_loop(mainLoop, 0, 1);
+#else
     while (isRunning) {
 
         long now, delta_time;
@@ -88,7 +105,7 @@ int main(int argc, char **argv) {
         flipRenderer();
 
     }
-
+#endif
     unloadStateCallback(-1);
 
     shutdownHW();

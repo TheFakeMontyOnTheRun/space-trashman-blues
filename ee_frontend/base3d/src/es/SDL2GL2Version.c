@@ -39,8 +39,8 @@ int snapshotSignal = '.';
 int needsToRedrawHUD = TRUE;
 int enable3DRendering = TRUE;
 
-const int width = 320;
-const int height = 240;
+const int width = 640;
+const int height = 480;
 
 SDL_Window *window;
 SDL_GLContext context;

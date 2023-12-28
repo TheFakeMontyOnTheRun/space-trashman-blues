@@ -211,3 +211,12 @@ ee_frontend/game.data
 ee_frontend/game.html
 ee_frontend/game.js
 ee_frontend/game.wasm
+ee_frontend/game.data
+ee_frontend/index.html
+ee_frontend/index.js
+ee_frontend/index.wasm
+ee_frontend/index.data
+ee_frontend/.cmake
+ee_frontend/.ninja_*
+ee_frontend/Testing
+ee_frontend/build.ninja
