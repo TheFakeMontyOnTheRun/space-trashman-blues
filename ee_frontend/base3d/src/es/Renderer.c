@@ -46,7 +46,7 @@ int turnStep = 0;
 FixP_t xCameraOffset;
 FixP_t yCameraOffset;
 FixP_t zCameraOffset;
-struct Bitmap *mapTopLevel;
+struct Bitmap *mapTopLevel[8];
 char messageLogBuffer[256];
 
 int messageLogBufferCoolDown = 0;

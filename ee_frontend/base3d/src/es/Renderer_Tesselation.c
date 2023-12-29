@@ -23,12 +23,21 @@
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 
+#ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION
+/*
+ #include <OpenGL/gl.h>
+ */
+#include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/glext.h>
+#else
 #ifndef ANDROID
 #define GL_GLEXT_PROTOTYPES
 #include <SDL.h>
 #include <SDL_opengl.h>
 #else
 #include <GLES2/gl2.h>
+#endif
 #endif
 
 #define kMinZCull 0
@@ -160,9 +169,11 @@ void clearTextures(void) {
         }
     }
 
-    if (mapTopLevel) {
-        releaseBitmap(mapTopLevel);
-        mapTopLevel = NULL;
+    if (mapTopLevel[8]) {
+        for (c = 0; c < 8; ++c) {
+            releaseBitmap(mapTopLevel[c]);
+            mapTopLevel[c] = NULL;
+        }
     }
 
     for (c = 0; c < texturesUsed; ++c) {

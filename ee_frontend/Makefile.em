@@ -1,4 +1,4 @@
-CFLAGS = -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DENDIANESS_AWARE \
+CFLAGS = -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DENDIANESS_AWARE -DTILED_BITMAPS \
 	-Imenu/include                                       \
 	-ISoundSystem                                       \
 	-Ibase3d/include                                     \
