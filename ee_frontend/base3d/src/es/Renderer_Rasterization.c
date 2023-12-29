@@ -87,7 +87,6 @@ void drawBitmapRegion(const int _x,
                       struct Bitmap *bitmap,
                       const uint8_t transparent,
                       float u0, float u1, float v0, float v1) {
-    checkGLError("draw bitmap region");
 
     if (bitmap->uploadId == -1) {
         bitmap->uploadId = submitBitmapToGPU(bitmap);
