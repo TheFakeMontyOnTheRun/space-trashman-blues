@@ -36,7 +36,6 @@ extern int leanX;
 extern int leanY;
 
 int snapshotSignal = '.';
-int needsToRedrawHUD = TRUE;
 int enable3DRendering = TRUE;
 
 const int width = 640;
