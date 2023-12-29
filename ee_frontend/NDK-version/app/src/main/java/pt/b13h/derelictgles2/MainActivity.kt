@@ -2,7 +2,6 @@ package pt.b13h.derelictgles2
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import br.odb.nehe.lesson04.GL2JNIView
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,7 +33,6 @@ class MainActivity : AppCompatActivity() {
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
-                DerelictJNI.drawFrame()
             }
         }.start()
     }
