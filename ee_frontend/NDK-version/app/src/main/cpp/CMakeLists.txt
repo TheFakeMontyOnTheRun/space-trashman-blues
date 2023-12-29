@@ -3,13 +3,20 @@
 # For more examples on how to use CMake, see https://github.com/android/ndk-samples.
 
 # Sets the minimum CMake version required for this project.
-cmake_minimum_required(VERSION 3.22.1)
+cmake_minimum_required(VERSION 3.4.1)
 
-# Declares the project name. The project name can be accessed via ${ PROJECT_NAME},
-# Since this is the top level CMakeLists.txt, the project name is also accessible
-# with ${CMAKE_PROJECT_NAME} (both CMake variables are in-sync within the top level
-# build script scope).
-project("derelictgles2")
+set(CMAKE_C_STANDARD 11)
+
+
+
+include_directories(../../../../../../core/include)
+include_directories(../../../../../../common/include)
+include_directories(../../../../../base3d/include)
+include_directories(../../../../../common/include)
+include_directories(../../../../../menu/include)
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DANDROID -DENDIANESS_AWARE  -D_BSD_SOURCE")
+
 
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
@@ -24,14 +31,72 @@ project("derelictgles2")
 # System.loadLibrary() and pass the name of the library defined here;
 # for GameActivity/NativeActivity derived applications, the same library name must be
 # used in the AndroidManifest.xml file.
-add_library(${CMAKE_PROJECT_NAME} SHARED
-        # List C/C++ source files with relative paths to this CMakeLists.txt.
-        native-lib.cpp)
+add_library(native-lib SHARED
+        ../../../../../../core/src/Derelict.c
+        ../../../../../../core/src/Core.c
+        ../../../../../../core/src/Parser.c
+        ../../../../../../common/src/MainMenu.c
+        ../../../../../../common/src/HackingMinigameRules.c
+        ../../../../../../common/src/Mesh.c
+        ../../../../../../common/src/Crawler.c
+        ../../../../../../common/src/HelpScreen.c
+        ../../../../../../common/src/CreditsScreen.c
+        ../../../../../../common/src/HackingScreen.c
+        ../../../../../../common/src/GameMenu.c
+        ../../../../../../common/src/Globals.c
+        ../../../../../../common/src/Vec.c
+        ../../../../../../common/src/Common.c
+        ../../../../../../common/src/PackedFileReader.c
+        ../../../../../../common/src/MapWithCharKey.c
+        ../../../../../../common/src/FixP.c
+        ../../../../../../common/src/CTile3DProperties.c
+        ../../../../../../common/src/VisibilityStrategy.c
+        ../../../../../../common/src/Events.c
+        ../../../../../../common/src/EDirection_Utils.c
+        ../../../../../../common/src/Dungeon.c
+        ../../../../../../common/src/Engine.c
+        ../../../../../../common/src/UI.c
+        ../../../../../../common/src/PCMAudio.c
+        ../../../../../base3d/src/es/LoadBitmap.c
+        ../../../../../base3d/src/es/Renderer.c
+        ../../../../../base3d/src/es/GLESCommon.c
+        ../../../../../base3d/src/es/Renderer_Rasterization.c
+        ../../../../../base3d/src/es/Renderer_Tesselation.c
+        ../../../../../menu/src/Main.c
+        native-lib.c)
+
+
+
+# Searches for a specified prebuilt library and stores the path as a
+# variable. Because CMake includes system libraries in the search path by
+# default, you only need to specify the name of the public NDK library
+# you want to add. CMake verifies that the library exists before
+# completing its build.
+
+find_library( # Sets the name of the path variable.
+        log-lib
+
+        # Specifies the name of the NDK library that
+        # you want CMake to locate.
+        log)
+
+find_library( # Sets the name of the path variable.
+        android-lib
+
+        # Specifies the name of the NDK library that
+        # you want CMake to locate.
+        android )
+
 
 # Specifies libraries CMake should link to your target library. You
-# can link libraries from various origins, such as libraries defined in this
-# build script, prebuilt third-party libraries, or Android system libraries.
-target_link_libraries(${CMAKE_PROJECT_NAME}
-        # List libraries link to the target library
+# can link multiple libraries, such as libraries you define in this
+# build script, prebuilt third-party libraries, or system libraries.
+
+target_link_libraries(
+        native-lib
         android
+        jnigraphics
+        EGL
+        OpenSLES
+        GLESv2
         log)

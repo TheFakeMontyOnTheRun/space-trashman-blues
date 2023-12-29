@@ -2,33 +2,45 @@ package pt.b13h.derelictgles2
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
-import pt.b13h.derelictgles2.databinding.ActivityMainBinding
+import br.odb.nehe.lesson04.GL2JNIView
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private var mView: GL2JNIView? = null
+    private var running = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate(icicle: Bundle?) {
+        super.onCreate(icicle)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        // Example of a call to a native method
-        binding.sampleText.text = stringFromJNI()
+        DerelictJNI.initAssets(assets)
+        mView = GL2JNIView(application)
+        setContentView(mView)
     }
 
-    /**
-     * A native method that is implemented by the 'derelictgles2' native library,
-     * which is packaged with this application.
-     */
-    external fun stringFromJNI(): String
+    override fun onPause() {
+        super.onPause()
+        running = false
+        mView!!.onPause()
+    }
 
-    companion object {
-        // Used to load the 'derelictgles2' library on application startup.
-        init {
-            System.loadLibrary("derelictgles2")
-        }
+    override fun onResume() {
+        super.onResume()
+        mView!!.onResume()
+        Thread {
+            running = true
+            while (running) {
+                try {
+                    Thread.sleep(20)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+                DerelictJNI.drawFrame()
+            }
+        }.start()
+    }
+
+    override fun onDestroy() {
+        DerelictJNI.onDestroy()
+        super.onDestroy()
     }
 }
