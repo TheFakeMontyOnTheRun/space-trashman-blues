@@ -23,10 +23,13 @@
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 
+#ifndef ANDROID
 #define GL_GLEXT_PROTOTYPES
-
 #include <SDL.h>
 #include <SDL_opengl.h>
+#else
+#include <GLES2/gl2.h>
+#endif
 
 #define kMinZCull 0
 struct Vec3 cameraOffset;

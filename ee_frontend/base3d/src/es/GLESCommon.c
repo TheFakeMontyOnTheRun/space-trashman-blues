@@ -22,10 +22,15 @@
 #include "UI.h"
 #include "Engine.h"
 
+#ifndef ANDROID
 #define GL_GLEXT_PROTOTYPES
-
 #include <SDL.h>
 #include <SDL_opengl.h>
+#else
+#include <GLES2/gl2.h>
+#include <math.h>
+
+#endif
 
 extern const int width, height;
 
