@@ -23,18 +23,18 @@
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 
-#ifdef __APPLE__
-#define GL_SILENCE_DEPRECATION
-/*
- #include <OpenGL/gl.h>
- */
-#include <OpenGLES/ES2/gl.h>
-#include <OpenGLES/ES2/glext.h>
-#else
-#ifndef ANDROID
+#ifdef SDLGL
 #define GL_GLEXT_PROTOTYPES
 #include <SDL.h>
 #include <SDL_opengl.h>
+#else
+#ifndef ANDROID
+#define GL_SILENCE_DEPRECATION
+#include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/glext.h>
+/*
+ #include <OpenGL/gl.h>
+ */
 #else
 #include <GLES2/gl2.h>
 #endif
