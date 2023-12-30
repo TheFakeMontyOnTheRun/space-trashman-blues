@@ -36,7 +36,7 @@ extern int leanX;
 extern int leanY;
 
 int snapshotSignal = '.';
-int enable3DRendering = TRUE;
+int enable3DRendering = FALSE;
 
 const int width = 640;
 const int height = 480;
@@ -247,5 +247,4 @@ void graphicsShutdown() {
 
 void flipRenderer() {
     SDL_GL_SwapWindow(window);
-    SDL_Delay(1);
 }

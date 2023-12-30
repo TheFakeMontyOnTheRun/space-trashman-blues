@@ -60,10 +60,12 @@ long start_clock, end_clock, prev;
 
 #ifdef __EMSCRIPTEN__
 void mainLoop () {
-  startFrameGL(0, 0, 640, 480);
-  menuTick(10);
-  endFrameGL();
-  flipRenderer();
+    if (enable3DRendering) {
+        startFrameGL(0, 0, 640, 480);
+        menuTick(20);
+        endFrameGL();
+        flipRenderer();
+    }
 }
 #endif
 
@@ -82,8 +84,9 @@ int main(int argc, char **argv) {
     start_clock = uclock();
 
     clearRenderer();
+    enable3DRendering = TRUE;
 #ifdef __EMSCRIPTEN__
-    emscripten_set_main_loop(mainLoop, 0, 1);
+    emscripten_set_main_loop(mainLoop, 50, 1);
 #else
     while (isRunning) {
 
