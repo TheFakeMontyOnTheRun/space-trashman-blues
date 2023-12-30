@@ -603,7 +603,7 @@ void initGL() {
     
     whiteTexture.height = 1;
     whiteTexture.width = 1;
-    whiteRaw[0] = whiteRaw[1] = whiteRaw[2] = whiteRaw[3] = 0xFF;
+    whiteRaw[0] = whiteRaw[1] = whiteRaw[2] = whiteRaw[3] = 0xFFFFFFFF;
     whiteTexture.data = &whiteRaw[0];
     whiteTexture.uploadId = submitBitmapToGPU(&whiteTexture);
 
