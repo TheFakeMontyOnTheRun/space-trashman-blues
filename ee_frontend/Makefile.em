@@ -57,6 +57,6 @@ dist: $(TARGET)
 	zip dist.zip index.html index.data index.js index.wasm
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(OBJS) $(TARGET) dist.zip index.html index.data index.js index.wasm
 	rm *~
 	rm *.js
