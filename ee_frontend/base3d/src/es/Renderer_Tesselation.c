@@ -170,7 +170,7 @@ void clearTextures(void) {
     }
 
 #ifdef TILED_BITMAPS
-    if (mapTopLevel[8]) {
+    if (mapTopLevel[0]) {
         for (c = 0; c < 8; ++c) {
             releaseBitmap(mapTopLevel[c]);
             mapTopLevel[c] = NULL;
