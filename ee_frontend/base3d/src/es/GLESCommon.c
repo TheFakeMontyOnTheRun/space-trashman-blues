@@ -481,49 +481,16 @@ void enter2D(void) {
 }
 
 void initGL() {
+    GLint status;
 
     glViewport(0, 0, width, height);
-    checkGLError("glViewport");
-    
-    size_t length;
-    GLint logLength, status;
-	char* sourceString;
-	// Determine if GLSL version 140 is supported by this context.
-	//  We'll use this info to generate a GLSL shader source string
-	//  with the proper version preprocessor string prepended
-	float  glLanguageVersion;
-	
-#if TARGET_IOS
-	sscanf((char *)glGetString(GL_SHADING_LANGUAGE_VERSION), "OpenGL ES GLSL ES %f", &glLanguageVersion);
-#else
-	sscanf((char *)glGetString(GL_SHADING_LANGUAGE_VERSION), "%f", &glLanguageVersion);
-#endif
-	
-	// GL_SHADING_LANGUAGE_VERSION returns the version standard version form
-	//  with decimals, but the GLSL version preprocessor directive simply
-	//  uses integers (thus 1.10 should 110 and 1.40 should be 140, etc.)
-	//  We multiply the floating point number by 100 to get a proper
-	//  number for the GLSL preprocessor directive
-	GLuint version = 100 * glLanguageVersion;
-	
-	// Get the size of the version preprocessor string info so we know
-	//  how much memory to allocate for our sourceString
-	const GLsizei versionStringSize = sizeof("#version 123\n");
-    
+
     /* creating shader */
     vs = glCreateShader(GL_VERTEX_SHADER);
     fs = glCreateShader(GL_FRAGMENT_SHADER);
 
-    checkGLError("creating shader objects");
-    
-    sourceString = malloc(strlen(vertex_shader) + versionStringSize + 1);
-	
-	// Prepend our vertex shader source string with the supported GLSL version so
-	//  the shader will work on ES, Legacy, and OpenGL 3.2 Core Profile contexts
-	sprintf(sourceString, "#version %d\n%s", version, vertex_shader);
-    
-    length = strlen(sourceString);
-    glShaderSource(vs, 1, (const GLchar **) &sourceString, &length);
+    int length = strlen(vertex_shader);
+    glShaderSource(vs, 1, (const GLchar **) &vertex_shader, &length);
     glCompileShader(vs);
     checkGLError("compiling shaders");
 
@@ -543,22 +510,10 @@ void initGL() {
         exit(0);
     }
 
-    
-    
-    
-    
-    sourceString = malloc(strlen(fragment_shader) + versionStringSize + 1);
-	
-	// Prepend our vertex shader source string with the supported GLSL version so
-	//  the shader will work on ES, Legacy, and OpenGL 3.2 Core Profile contexts
-	sprintf(sourceString, "#version %d\n%s", version, fragment_shader);
-    
-    length = strlen(sourceString);
-    glShaderSource(fs, 1, (const GLchar **) &sourceString, &length);
+    length = strlen(fragment_shader);
+    glShaderSource(fs, 1, (const GLchar **) &fragment_shader, &length);
     glCompileShader(fs);
     
-    
-
     glGetShaderiv(fs, GL_COMPILE_STATUS, &status);
 
     if (status == GL_FALSE) {
