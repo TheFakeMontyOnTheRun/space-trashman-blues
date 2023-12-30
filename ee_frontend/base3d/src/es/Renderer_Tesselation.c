@@ -169,12 +169,19 @@ void clearTextures(void) {
         }
     }
 
+#ifdef TILED_BITMAPS
     if (mapTopLevel[8]) {
         for (c = 0; c < 8; ++c) {
             releaseBitmap(mapTopLevel[c]);
             mapTopLevel[c] = NULL;
         }
     }
+#else
+    if (mapTopLevel) {
+        releaseBitmap(mapTopLevel);
+        mapTopLevel = NULL;
+    }
+#endif
 
     for (c = 0; c < texturesUsed; ++c) {
         if (nativeTextures[c]) {

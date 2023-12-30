@@ -46,7 +46,13 @@ int turnStep = 0;
 FixP_t xCameraOffset;
 FixP_t yCameraOffset;
 FixP_t zCameraOffset;
+
+#ifdef TILED_BITMAPS
 struct Bitmap *mapTopLevel[8];
+#else
+struct Bitmap *mapTopLevel;
+#endif
+
 char messageLogBuffer[256];
 
 int messageLogBufferCoolDown = 0;
