@@ -28,7 +28,7 @@
 #endif
 
 int snapshotSignal = '.';
-int needsToRedrawHUD = TRUE;
+extern int needsToRedrawHUD;
 int enable3DRendering = TRUE;
 
 #define DEFAULT_FIFO_SIZE    (256*1024)
