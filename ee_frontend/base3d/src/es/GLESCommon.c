@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <stdint.h>
 #include <math.h>
+#include <string.h>
 
 #include "Core.h"
 #include "FixP.h"
@@ -30,11 +31,12 @@
 #else
 #ifndef ANDROID
 #define GL_SILENCE_DEPRECATION
+#if TARGET_IOS
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
-/*
- #include <OpenGL/gl.h>
- */
+#else
+#include <OpenGL/gl.h>
+#endif
 #else
 #include <GLES2/gl2.h>
 #endif
@@ -187,7 +189,7 @@ unsigned int uScaleUniformLocation;
 
 
 struct Bitmap whiteTexture;
-uint8_t whiteRaw[4];
+BitmapPixelFormat whiteRaw[4];
 
 static const char *vertex_shader =
         "#ifdef GL_ES\n"
@@ -229,7 +231,7 @@ static const char *fragment_shader =
         "uniform vec4 uFade;\n"
         "void main() {\n"
         "#if __VERSION__ >= 140\n"
-        "    fragColor = texture2D( sTexture, vTextureCoords );\n"
+        "    fragColor = texture( sTexture, vTextureCoords );\n"
         "   if ( fragColor.a < 0.1 ) {\n"
         "        discard;\n"
         "    }\n"
@@ -481,31 +483,95 @@ void enter2D(void) {
 void initGL() {
 
     glViewport(0, 0, width, height);
-
+    checkGLError("glViewport");
+    
+    size_t length;
+    GLint logLength, status;
+	char* sourceString;
+	// Determine if GLSL version 140 is supported by this context.
+	//  We'll use this info to generate a GLSL shader source string
+	//  with the proper version preprocessor string prepended
+	float  glLanguageVersion;
+	
+#if TARGET_IOS
+	sscanf((char *)glGetString(GL_SHADING_LANGUAGE_VERSION), "OpenGL ES GLSL ES %f", &glLanguageVersion);
+#else
+	sscanf((char *)glGetString(GL_SHADING_LANGUAGE_VERSION), "%f", &glLanguageVersion);
+#endif
+	
+	// GL_SHADING_LANGUAGE_VERSION returns the version standard version form
+	//  with decimals, but the GLSL version preprocessor directive simply
+	//  uses integers (thus 1.10 should 110 and 1.40 should be 140, etc.)
+	//  We multiply the floating point number by 100 to get a proper
+	//  number for the GLSL preprocessor directive
+	GLuint version = 100 * glLanguageVersion;
+	
+	// Get the size of the version preprocessor string info so we know
+	//  how much memory to allocate for our sourceString
+	const GLsizei versionStringSize = sizeof("#version 123\n");
+    
     /* creating shader */
     vs = glCreateShader(GL_VERTEX_SHADER);
     fs = glCreateShader(GL_FRAGMENT_SHADER);
 
-    int length = strlen(vertex_shader);
-    glShaderSource(vs, 1, (const GLchar **) &vertex_shader, &length);
+    checkGLError("creating shader objects");
+    
+    sourceString = malloc(strlen(vertex_shader) + versionStringSize + 1);
+	
+	// Prepend our vertex shader source string with the supported GLSL version so
+	//  the shader will work on ES, Legacy, and OpenGL 3.2 Core Profile contexts
+	sprintf(sourceString, "#version %d\n%s", version, vertex_shader);
+    
+    length = strlen(sourceString);
+    glShaderSource(vs, 1, (const GLchar **) &sourceString, &length);
     glCompileShader(vs);
+    checkGLError("compiling shaders");
 
-    GLint status;
     glGetShaderiv(vs, GL_COMPILE_STATUS, &status);
 
     if (status == GL_FALSE) {
-        fprintf(stderr, "vertex shader compilation failed\n");
+        
+        GLint maxLength = 0;
+        glGetShaderiv(vs, GL_INFO_LOG_LENGTH, &maxLength);
+        
+        char *errorLog = (char*)malloc(maxLength);
+        memset( errorLog, 0, maxLength);
+        
+        glGetShaderInfoLog(vs, maxLength, &maxLength, errorLog);
+        
+        fprintf(stderr, "vertex shader compilation failed:\n%s", errorLog);
         exit(0);
     }
 
-    length = strlen(fragment_shader);
-    glShaderSource(fs, 1, (const GLchar **) &fragment_shader, &length);
+    
+    
+    
+    
+    sourceString = malloc(strlen(fragment_shader) + versionStringSize + 1);
+	
+	// Prepend our vertex shader source string with the supported GLSL version so
+	//  the shader will work on ES, Legacy, and OpenGL 3.2 Core Profile contexts
+	sprintf(sourceString, "#version %d\n%s", version, fragment_shader);
+    
+    length = strlen(sourceString);
+    glShaderSource(fs, 1, (const GLchar **) &sourceString, &length);
     glCompileShader(fs);
+    
+    
 
     glGetShaderiv(fs, GL_COMPILE_STATUS, &status);
 
     if (status == GL_FALSE) {
-        fprintf(stderr, "fragment shader compilation failed\n");
+        GLint maxLength = 0;
+        glGetShaderiv(fs, GL_INFO_LOG_LENGTH, &maxLength);
+        
+        char *errorLog = (char*)malloc(maxLength);
+        memset( errorLog, 0, maxLength);
+        
+        glGetShaderInfoLog(fs, maxLength, &maxLength, errorLog);
+
+        
+        fprintf(stderr, "fragment shader compilation failed:\n%s", errorLog);
         exit(0);
     }
 
@@ -513,9 +579,10 @@ void initGL() {
     glAttachShader(program, vs);
     glAttachShader(program, fs);
     glLinkProgram(program);
-
     glUseProgram(program);
-
+    checkGLError("creating and using program");
+    
+    
     /* attaching data to shaders */
 
     aPositionAttributeLocation = glGetAttribLocation(program, "aPosition");
@@ -532,7 +599,8 @@ void initGL() {
     uModUniformLocation = glGetUniformLocation(program, "uMod");
     uFadeUniformLocation = glGetUniformLocation(program, "uFade");
     uScaleUniformLocation = glGetUniformLocation(program, "uScale");
-
+    checkGLError("Fetching locations in shaders");
+    
     whiteTexture.height = 1;
     whiteTexture.width = 1;
     whiteRaw[0] = whiteRaw[1] = whiteRaw[2] = whiteRaw[3] = 0xFF;
@@ -558,7 +626,7 @@ void initGL() {
 
     rampVBO = submitVBO((float *) rampVertices, rampUVs, 4,
                          (unsigned short *) rampIndices, 6);
-
+    checkGLError("Creating VBOs");
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);

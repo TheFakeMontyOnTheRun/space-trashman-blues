@@ -30,11 +30,12 @@
 #else
 #ifndef ANDROID
 #define GL_SILENCE_DEPRECATION
+#if TARGET_IOS
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
-/*
- #include <OpenGL/gl.h>
- */
+#else
+#include <OpenGL/gl.h>
+#endif
 #else
 #include <GLES2/gl2.h>
 #endif
@@ -85,30 +86,52 @@ extern struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, rampVBO
 float uvTemp[8];
 
 void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float y, float z, float rx, float ry, float rz, float scaleX, float scaleY, float u0, float v0, float u1, float v1, uint32_t tint, uint8_t repeatTextures ) {
+    
+  checkGLError("starting to draw VBO");
   glEnableVertexAttribArray(aPositionAttributeLocation);
+    checkGLError("Enabled vertex position attribute");
+    
   glEnableVertexAttribArray(aTexCoordAttributeLocation);
-
+    checkGLError("Enabled vertex uv attribute");
+    
   if (repeatTextures) {
       glUniform2f(uScaleUniformLocation,scaleX, scaleY);
   } else {
       glUniform2f(uScaleUniformLocation,1.0f, 1.0f);
   }
 
+        checkGLError("Setting texture scale");
+    
     float r = (tint & 0xFF) * NORMALIZE_COLOUR;
     float g = ((tint & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
     float b = ((tint & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
 
     glUniform4f(uModUniformLocation, r, g, b, 1.0f);
-
+    
+    checkGLError("Setting tint");
+    
     bindTexture(bitmap);
   
+    
+    checkGLError("Texture bound");
+    
     glBindBuffer(GL_ARRAY_BUFFER, vbo.vertexDataIndex);
 
+    
+    checkGLError("vertex data bound");
+    
     glVertexAttribPointer(aPositionAttributeLocation, 3, GL_FLOAT, GL_FALSE,
                           sizeof(float) * 3, 0);
 
+    
+    checkGLError("vertex data configured");
+    
+    
     glBindBuffer(GL_ARRAY_BUFFER, vbo.uvDataIndex);
 
+    
+    checkGLError("vertex indices bound");
+    
     uvTemp[0] = u0;
     uvTemp[1] = v0;
     uvTemp[2] = u1;
@@ -120,11 +143,21 @@ void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float 
 
     glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(float) * 2, &uvTemp[0], GL_DYNAMIC_DRAW);
 
+    
+    checkGLError("uv data provided");
+    
     glVertexAttribPointer(aTexCoordAttributeLocation, 2, GL_FLOAT, GL_TRUE,
                           sizeof(float) * 2, 0);
 
+    
+    checkGLError("uv data configured");
+    
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo.indicesIndex);
 
+    
+    checkGLError("indices elements bound");
+    
+    
     mat4x4_transform(transformMatrix, x + fixToFloat(xCameraOffset), y - fixToFloat(yCameraOffset), z - fixToFloat(zCameraOffset), scaleX, scaleY, 1);
     glUniformMatrix4fv( uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix );
 
@@ -137,10 +170,15 @@ void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float 
     mat4x4_rotateZ(rotateZMatrix, rz);
     glUniformMatrix4fv( uRotateZMatrixUniformLocation, 1, GL_TRUE, rotateZMatrix );
 
-
+    
+    checkGLError("matrices set");
+    
+    
     glDrawElements(GL_TRIANGLES, vbo.indices, GL_UNSIGNED_SHORT, 0);
 
-
+    
+    checkGLError("triangles drawn");
+    
     mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);
     glUniformMatrix4fv( uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix );
 
@@ -153,10 +191,14 @@ void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float 
     mat4x4_rotateZ(rotateZMatrix, 0);
     glUniformMatrix4fv( uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix );
 
-
+    
+    checkGLError("unsetting matrices");
+    
     glDisableVertexAttribArray(aPositionAttributeLocation);
-  glDisableVertexAttribArray(aTexCoordAttributeLocation);
-} 
+    glDisableVertexAttribArray(aTexCoordAttributeLocation);
+    
+    checkGLError("disabling attributes");
+}
 
 void clearTextures(void) {
     int c;
