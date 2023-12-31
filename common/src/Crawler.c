@@ -35,7 +35,7 @@ int leanX = 0;
 int leanY = 0;
 
 int showPromptToAbandonMission = FALSE;
-int needToRedrawHUD = FALSE;
+int needsToRedrawHUD = FALSE;
 
 const char *AbandonMission_Title = "Abandon game?";
 const char *AbandonMission_options[6] = {"Continue", "End game"};

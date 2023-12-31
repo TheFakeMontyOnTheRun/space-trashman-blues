@@ -49,7 +49,7 @@
 
 extern const char *thisMissionName;
 extern int16_t thisMissionNameLen;
-int needsToRedrawHUD = TRUE;
+
 int enable3DRendering = TRUE;
 extern int leanX;
 extern int leanY;

@@ -14,7 +14,7 @@ include_directories(../../../../../base3d/include)
 include_directories(../../../../../common/include)
 include_directories(../../../../../menu/include)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DANDROID  -D_BSD_SOURCE")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DANDROID -DENDIANESS_AWARE  -D_BSD_SOURCE")
 
 
 # Creates and names a library, sets it as either STATIC
@@ -33,6 +33,8 @@ add_library( # Sets the name of the library.
         ../../../../../../core/src/Core.c
         ../../../../../../core/src/Parser.c
         ../../../../../../common/src/MainMenu.c
+        ../../../../../../common/src/HackingMinigameRules.c
+        ../../../../../../common/src/Mesh.c
         ../../../../../../common/src/Crawler.c
         ../../../../../../common/src/HelpScreen.c
         ../../../../../../common/src/CreditsScreen.c

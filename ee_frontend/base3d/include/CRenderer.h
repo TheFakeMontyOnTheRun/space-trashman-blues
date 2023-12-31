@@ -53,6 +53,8 @@ typedef uint32_t OutputPixelFormat;
 typedef uint32_t FramebufferPixelFormat;
 typedef uint8_t UVCoord;
 
+typedef float t_mat4x4[16];
+
 struct Projection {
     struct Vec3 first;
     struct Vec2 second;
@@ -292,4 +294,23 @@ extern FixP_t divLut[320];
 
 extern int leanX;
 extern int leanY;
+
+struct VBORegister {
+    uint8_t vertexDataIndex;
+    uint8_t uvDataIndex;
+    uint8_t indicesIndex;
+    uint8_t indices;
+};
+
+void mat4x4_transform( t_mat4x4 out, float ox, float oy, float oz, float sx, float sy, float sz );
+
+void mat4x4_rotateX( t_mat4x4 out, float deg );
+
+void mat4x4_rotateY( t_mat4x4 out, float deg );
+
+void mat4x4_rotateZ( t_mat4x4 out, float deg );
+
+void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float y, float z, float rx, float ry, float rz, float scaleX, float scaleY, float u0, float v0, float u1, float v1, uint32_t tint, uint8_t repeatTextures );
+
+void checkGLError(const char* operation);
 #endif

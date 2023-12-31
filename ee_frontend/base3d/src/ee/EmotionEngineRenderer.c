@@ -55,7 +55,7 @@ static char padBuf[256] __attribute__((aligned(64)));
 
 static char actAlign[6];
 static int actuators;
-int needsToRedrawHUD = TRUE;
+extern int needsToRedrawHUD;
 int enable3DRendering = TRUE;
 framebuffer_t frame;
 zbuffer_t zBuffer;

@@ -43,8 +43,6 @@ enum ESoundDriver soundDriver = kNoSound;
 
 int isInstantApp = FALSE;
 
-void initHW(void);
-
 void enterState(enum EGameMenuState newState);
 
 void mainLoop(void);
@@ -138,7 +136,7 @@ Java_pt_b13h_spacetrashmanblues_DerelictJNI_initAssets(JNIEnv *env, jclass clazz
     AAssetManager *asset_manager = AAssetManager_fromJava(env, assetManager);
     defaultAssetManager = asset_manager;
     srand(time(NULL));
-    initHW();
+    initHW(0, NULL);
     enableSmoothMovement = TRUE;
     enterState(kPlayGame);
 }
