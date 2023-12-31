@@ -173,6 +173,50 @@ void flipRenderer() {
     flipRenderer();
 }
 
+
+
+-(IBAction)btnUpPressed:(id)sender {
+    mBufferedCommand = kCommandUp;
+}
+
+-(IBAction)btnDownPressed:(id)sender {
+    mBufferedCommand = kCommandDown;
+}
+
+-(IBAction)btnLeftPressed:(id)sender {
+    mBufferedCommand = kCommandLeft;
+}
+
+-(IBAction)btnRightPressed:(id)sender {
+    mBufferedCommand = kCommandRight;
+}
+
+
+-(IBAction)btnStrafeLeftPressed:(id)sender {
+    mBufferedCommand = kCommandStrafeLeft;
+}
+
+-(IBAction)btnStrafeRightPressed:(id)sender {
+    mBufferedCommand = kCommandStrafeRight;
+}
+
+
+-(IBAction)btnFire1Pressed:(id)sender {
+    mBufferedCommand = kCommandFire1;
+}
+
+-(IBAction)btnFire2Pressed:(id)sender {
+    mBufferedCommand = kCommandFire2;
+}
+
+-(IBAction)btnFire3Pressed:(id)sender {
+    mBufferedCommand = kCommandFire3;
+}
+
+-(IBAction)btnFire4Pressed:(id)sender {
+    mBufferedCommand = kCommandFire4;
+}
+
 @end
 
 void handleSystemEvents() {
@@ -223,4 +267,3 @@ void handleSystemEvents() {
 	}
 	bufferedInput = -1;
 }
-
