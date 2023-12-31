@@ -2,15 +2,11 @@ package pt.b13h.derelictgles2
 
 import android.content.Context
 import android.opengl.GLSurfaceView
-import android.util.Log
-import pt.b13h.derelictgles2.DerelictJNI
-import javax.microedition.khronos.egl.EGL10
+import android.util.AttributeSet
 import javax.microedition.khronos.egl.EGLConfig
-import javax.microedition.khronos.egl.EGLContext
-import javax.microedition.khronos.egl.EGLDisplay
 import javax.microedition.khronos.opengles.GL10
 
-internal class GL2JNIView(context: Context?) : GLSurfaceView(context), GLSurfaceView.Renderer {
+internal class GL2JNIView : GLSurfaceView, GLSurfaceView.Renderer {
     override fun onDrawFrame(gl: GL10) {
         DerelictJNI.drawFrame()
     }
@@ -23,7 +19,12 @@ internal class GL2JNIView(context: Context?) : GLSurfaceView(context), GLSurface
         // Do nothing.
     }
 
-    init {
+    constructor(context: Context) : super(context) {
+        setEGLContextClientVersion(2)
+        setRenderer(this)
+    }
+
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         setEGLContextClientVersion(2)
         setRenderer(this)
     }
