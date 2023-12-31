@@ -30,12 +30,8 @@
 #else
 #ifndef ANDROID
 #define GL_SILENCE_DEPRECATION
-#if TARGET_IOS
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
-#else
-#include <OpenGL/gl.h>
-#endif
 #else
 #include <GLES2/gl2.h>
 #endif

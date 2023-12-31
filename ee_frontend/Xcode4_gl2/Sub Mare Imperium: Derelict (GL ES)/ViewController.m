@@ -90,24 +90,6 @@ void graphicsShutdown() {
 void flipRenderer() {
 }
 
-/*
-- (void)keyDown:(NSEvent *)event {
-    leanY = leanX = 0;
-}
-
-- (void)keyUp:(NSEvent *)event {
-	bufferedInput = [event keyCode];
-}
-
-- (BOOL)acceptsFirstResponder {
-	return YES;
-}
-
-- (void)repaintGame:(NSTimer *)timer {
-	[self setNeedsDisplay:YES];
-}
-*/
-
 - (void)dealloc
 {
     [self tearDownGL];
