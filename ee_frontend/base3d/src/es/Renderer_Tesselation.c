@@ -29,13 +29,34 @@
 #include <SDL_opengl.h>
 #else
 #ifndef ANDROID
+#if __APPLE__
+#include <TargetConditionals.h>
 #define GL_SILENCE_DEPRECATION
+#include <TargetConditionals.h>
+#if TARGET_IPHONE_SIMULATOR
+// iOS, tvOS, or watchOS Simulator
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
+#elif TARGET_OS_MACCATALYST
+// Mac's Catalyst (ports iOS API into Mac, like UIKit).
+#include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/glext.h>
+#elif TARGET_OS_IPHONE
+#include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/glext.h>
+// iOS, tvOS, or watchOS device
+#elif TARGET_OS_MAC
+// Other kinds of Apple platforms
+#include <OpenGL/gl.h>
+#else
+#   error "Unknown Apple platform"
+#endif
+#endif
 #else
 #include <GLES2/gl2.h>
 #endif
 #endif
+
 
 #define kMinZCull 0
 struct Vec3 cameraOffset;
@@ -83,10 +104,13 @@ float uvTemp[8];
 
 void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float y, float z, float rx, float ry, float rz, float scaleX, float scaleY, float u0, float v0, float u1, float v1, uint32_t tint, uint8_t repeatTextures ) {
     
+    
+   
   checkGLError("starting to draw VBO");
   glEnableVertexAttribArray(aPositionAttributeLocation);
-    checkGLError("Enabled vertex position attribute");
+  checkGLError("Enabled vertex position attribute");
     
+   
   glEnableVertexAttribArray(aTexCoordAttributeLocation);
     checkGLError("Enabled vertex uv attribute");
     

@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F1BA23482B40842700F83542"
-               BuildableName = "Sub Mare Imperium Derelict (GL 2.1).app"
-               BlueprintName = "Sub Mare Imperium Derelict (GL 2.1)"
-               ReferencedContainer = "container:Sub Mare Imperium: Derelict (GL ES).xcodeproj">
+               BlueprintIdentifier = "F1A2C9D42B3EF09700F2E1CA"
+               BuildableName = "Derelict128.app"
+               BlueprintName = "Derelict128 iOS (GL ES)"
+               ReferencedContainer = "container:Derelict128.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F1BA23482B40842700F83542"
-            BuildableName = "Sub Mare Imperium Derelict (GL 2.1).app"
-            BlueprintName = "Sub Mare Imperium Derelict (GL 2.1)"
-            ReferencedContainer = "container:Sub Mare Imperium: Derelict (GL ES).xcodeproj">
+            BlueprintIdentifier = "F1A2C9D42B3EF09700F2E1CA"
+            BuildableName = "Derelict128.app"
+            BlueprintName = "Derelict128 iOS (GL ES)"
+            ReferencedContainer = "container:Derelict128.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -51,10 +51,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F1BA23482B40842700F83542"
-            BuildableName = "Sub Mare Imperium Derelict (GL 2.1).app"
-            BlueprintName = "Sub Mare Imperium Derelict (GL 2.1)"
-            ReferencedContainer = "container:Sub Mare Imperium: Derelict (GL ES).xcodeproj">
+            BlueprintIdentifier = "F1A2C9D42B3EF09700F2E1CA"
+            BuildableName = "Derelict128.app"
+            BlueprintName = "Derelict128 iOS (GL ES)"
+            ReferencedContainer = "container:Derelict128.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -69,10 +69,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F1BA23482B40842700F83542"
-            BuildableName = "Sub Mare Imperium Derelict (GL 2.1).app"
-            BlueprintName = "Sub Mare Imperium Derelict (GL 2.1)"
-            ReferencedContainer = "container:Sub Mare Imperium: Derelict (GL ES).xcodeproj">
+            BlueprintIdentifier = "F1A2C9D42B3EF09700F2E1CA"
+            BuildableName = "Derelict128.app"
+            BlueprintName = "Derelict128 iOS (GL ES)"
+            ReferencedContainer = "container:Derelict128.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

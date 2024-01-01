@@ -45,13 +45,11 @@ extern int leanX;
 extern int leanY;
 
 int enable3DRendering = FALSE;
-int width = 320;
-int height = 240;
+int width = 640;
+int height = 480;
 
-int nextAudioChannel = -1;
 float multiplier = 1.0f;
 extern uint8_t isRunning;
-enum ESoundDriver soundDriver = kNoSound;
 
 void enter2D(void);
 
@@ -59,19 +57,6 @@ int submitBitmapToGPU(struct Bitmap *bitmap);
 
 id delegate;
 int bufferedInput = -1;
-
-void setupOPL2(int port) {
-}
-
-void stopSounds(void) {}
-
-void playSound(const int action) {
-}
-
-
-void soundTick(void) {}
-
-void muteSound(void) {}
 
 char *textBuffer;
 extern char *messageLogBuffer;
@@ -185,8 +170,7 @@ void flipRenderer() {
         NSOpenGLPFAStencilSize, 8,
         NSOpenGLPFAAccumSize, 0,
         NSOpenGLPFAOpenGLProfile,
-		NSOpenGLProfileVersion3_2Core,
-
+		NSOpenGLProfileVersionLegacy,
         0
     };
     
@@ -234,26 +218,26 @@ void flipRenderer() {
     
     [[self openGLContext] makeCurrentContext];
     
-    int width = rect.size.width;
-    int height = rect.size.height;
+    int rectWidth = rect.size.width;
+    int rectHeight = rect.size.height;
     
-    if (width > height ) {
-        float heightBase = height / 240.0f;
-        width = 320 * heightBase;
-        height = 240 * heightBase;
+    if (rectWidth > rectHeight ) {
+        float heightBase = rectHeight / (float)height;
+        rectWidth = width * heightBase;
+        rectHeight = height * heightBase;
         /* height is the base, since width is too big and we must add borders*/
     } else {
         /* width is the base, since height is too big and we must add borders*/
-        float widthBase = width / 320.0f;
-        width = 320 * widthBase;
-        height = 240 * widthBase;
+        float widthBase = rectWidth / (float) width;
+        rectWidth = width * widthBase;
+        rectHeight = height * widthBase;
     }
     
 
-	startFrameGL( (rect.size.width - width) / 2,
-                 (rect.size.height - height) / 2,
-                 width,
-                 height);
+	startFrameGL( (rect.size.width - rectWidth) / 2,
+                 (rect.size.height - rectHeight) / 2,
+                 rectWidth,
+                 rectHeight);
 
     isRunning = isRunning && menuTick(20);
 
