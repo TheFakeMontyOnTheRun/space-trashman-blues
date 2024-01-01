@@ -88,10 +88,6 @@ void drawBitmapRegion(const int _x,
                       const uint8_t transparent,
                       float u0, float u1, float v0, float v1) {
 
-    if (bitmap->uploadId == -1) {
-        bitmap->uploadId = submitBitmapToGPU(bitmap);
-    }
-
     renderVBOAt(bitmap, planeXYVBO, _x + _dx / 2.0f, _y + _dy / 2.0f, -1.0f, 0, 0, 0, _dx / 2.0f, -_dy / 2.0f, u0, v0, u1, v1, tint, FALSE);
 }
 
@@ -130,10 +126,6 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
 
     if (defaultFont == NULL) {
         defaultFont = loadBitmap("font.img");
-    }
-
-    if (defaultFont->uploadId == -1) {
-        submitBitmapToGPU(defaultFont);
     }
 
     size_t len = strlen(text);

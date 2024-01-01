@@ -270,7 +270,6 @@ struct Texture *makeTextureFrom(const char *filename) {
             (struct Texture *) calloc(1, sizeof(struct Texture));
 
     toReturn->raw = loadBitmap(filename);
-    submitBitmapToGPU(toReturn->raw);
 
     return toReturn;
 }

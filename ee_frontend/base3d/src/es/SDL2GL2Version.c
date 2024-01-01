@@ -195,6 +195,10 @@ void handleSystemEvents() {
                     mBufferedCommand = kCommandUp;
                     visibilityCached = FALSE;
                     break;
+
+                case SDLK_u:
+                    unloadTextures();
+                    break;
                 case SDLK_1:
                     enableSmoothMovement = TRUE;
                     break;
