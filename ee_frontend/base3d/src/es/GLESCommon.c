@@ -30,9 +30,29 @@
 #include <SDL_opengl.h>
 #else
 #ifndef ANDROID
+#if __APPLE__
+#include <TargetConditionals.h>
 #define GL_SILENCE_DEPRECATION
+#include <TargetConditionals.h>
+#if TARGET_IPHONE_SIMULATOR
+// iOS, tvOS, or watchOS Simulator
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
+#elif TARGET_OS_MACCATALYST
+// Mac's Catalyst (ports iOS API into Mac, like UIKit).
+#include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/glext.h>
+#elif TARGET_OS_IPHONE
+#include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/glext.h>
+// iOS, tvOS, or watchOS device
+#elif TARGET_OS_MAC
+// Other kinds of Apple platforms
+#include <OpenGL/gl3.h>
+#else
+#   error "Unknown Apple platform"
+#endif
+#endif
 #else
 #include <GLES2/gl2.h>
 #endif
@@ -416,11 +436,12 @@ struct VBORegister submitVBO(float *vertexData, float *uvData, int vertices,
     unsigned int vertexDataIndex;
     unsigned int uvDataIndex;
     unsigned int indicesIndex;
-
+    
     glGenBuffers(1, &vertexDataIndex);
     glBindBuffer(GL_ARRAY_BUFFER, vertexDataIndex);
     glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(float) * 3, vertexData, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
 
     glGenBuffers(1, &uvDataIndex);
     glBindBuffer(GL_ARRAY_BUFFER, uvDataIndex);
@@ -439,7 +460,7 @@ struct VBORegister submitVBO(float *vertexData, float *uvData, int vertices,
     toReturn.uvDataIndex = uvDataIndex;
     toReturn.indicesIndex = indicesIndex;
     toReturn.indices = indices;
-
+    
     return toReturn;
 }
 
