@@ -497,6 +497,14 @@ void enter2D(void) {
     checkGLError("enter2D");
 }
 
+void unloadTextures(void) {
+    for (int c = 0; c < texturesUsed; ++c ) {
+        nativeTextures[c]->raw->uploadId = -1;
+    }
+
+    whiteTexture.uploadId = -1;
+}
+
 void initGL() {
     GLint status;
 
@@ -577,7 +585,7 @@ void initGL() {
     whiteTexture.width = 1;
     whiteRaw[0] = whiteRaw[1] = whiteRaw[2] = whiteRaw[3] = 0xFFFFFFFF;
     whiteTexture.data = &whiteRaw[0];
-    whiteTexture.uploadId = submitBitmapToGPU(&whiteTexture);
+    submitBitmapToGPU(&whiteTexture);
 
     /* tmp */
     memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
@@ -608,13 +616,18 @@ void initGL() {
 }
 
 void bindTexture(struct Bitmap *bitmap) {
+
+    if (bitmap->uploadId == -1) {
+        submitBitmapToGPU(bitmap);
+    }
+
     glBindTexture(GL_TEXTURE_2D, bitmap->uploadId);
     checkGLError("bind texture");
 }
 
 int submitBitmapToGPU(struct Bitmap *bitmap) {
     // Texture object handle
-    unsigned int textureId = 0;
+    int textureId = 0;
 
     //Generate texture storage
     glGenTextures(1, &textureId);
@@ -633,7 +646,9 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     checkGLError("submit bitmap to GPU");
 
-    return bitmap->uploadId = textureId;
+    bitmap->uploadId = textureId;
+
+    return textureId;
 }
 
 
