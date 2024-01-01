@@ -75,9 +75,6 @@ void initHW(int argc, char **argv) {
 
 	NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"base.pfs"];
 	initFileReader([path UTF8String]);
-
-
-	setupOPL2(0);
 }
 
 void graphicsInit() {
@@ -185,8 +182,6 @@ void flipRenderer() {
     [self setPixelFormat:fmt];
     
     [self setOpenGLContext:context];
-    
-	initHW(0, NULL);
 }
 
 - (void) prepareOpenGL
@@ -199,6 +194,7 @@ void flipRenderer() {
     
     [[self openGLContext] makeCurrentContext];
     
+    initHW(0, NULL);
 	graphicsInit();
     
     enable3DRendering = TRUE;
