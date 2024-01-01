@@ -86,7 +86,6 @@ Java_pt_b13h_derelictgles2_DerelictJNI_initAssets(JNIEnv *env, jclass clazz,
 
     AAssetManager *asset_manager = AAssetManager_fromJava(env, assetManager);
     defaultAssetManager = asset_manager;
-    srand(time(NULL));
 }
 
 int soundToPlay = -1;
