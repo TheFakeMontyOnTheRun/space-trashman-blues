@@ -167,7 +167,26 @@ void flipRenderer() {
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
-    startFrameGL(0, 0, 640, 480);
+    int rectWidth = rect.size.width;
+    int rectHeight = rect.size.height;
+    
+    if (rectWidth > rectHeight ) {
+        float heightBase = rectHeight / (float)height;
+        rectWidth = width * heightBase;
+        rectHeight = height * heightBase;
+        /* height is the base, since width is too big and we must add borders*/
+    } else {
+        /* width is the base, since height is too big and we must add borders*/
+        float widthBase = rectWidth / (float) width;
+        rectWidth = width * widthBase;
+        rectHeight = height * widthBase;
+    }
+    
+    
+	startFrameGL( (rect.size.width - rectWidth) / 2,
+                 (rect.size.height - rectHeight) / 2,
+                 rectWidth,
+                 rectHeight);
     menuTick(10);
     endFrameGL();
     flipRenderer();
