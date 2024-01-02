@@ -428,11 +428,13 @@ void mat4x4_rotateZ(t_mat4x4 out, float deg) {
 
 
 void checkGLError(const char *operation) {
+#ifndef __EMSCRIPTEN__
     int errorCode = glGetError();
 
     if (errorCode != 0) {
         printf("Error: %d while %s\n", errorCode, operation);
     }
+#endif
 }
 
 struct VBORegister submitVBO(float *vertexData, float *uvData, int vertices,
