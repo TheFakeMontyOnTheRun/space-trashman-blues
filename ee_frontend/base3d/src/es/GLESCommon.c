@@ -369,10 +369,10 @@ void mat4x4_rotateX(t_mat4x4 out, float deg) {
     out[3] = 0.0f;
     out[4] = 0.0f;
     out[5] = ca;
-    out[6] = sa;
+    out[6] = -sa;
     out[7] = 0.0f;
     out[8] = 0;
-    out[9] = -sa;
+    out[9] = sa;
     out[10] = ca;
     out[11] = 0.0f;
     out[12] = 0.0f;
@@ -388,19 +388,16 @@ void mat4x4_rotateY(t_mat4x4 out, float deg) {
 
     out[0] = ca;
     out[1] = 0.0f;
-    out[2] = -sa;
+    out[2] = sa;
     out[3] = 0.0f;
-
     out[4] = 0.0f;
     out[5] = 1;
     out[6] = 0.0f;
     out[7] = 0.0f;
-
-    out[8] = sa;
+    out[8] = -sa;
     out[9] = 0.0f;
     out[10] = ca;
     out[11] = 0.0f;
-
     out[12] = 0.0f;
     out[13] = 0.0f;
     out[14] = 0;
@@ -411,12 +408,11 @@ void mat4x4_rotateZ(t_mat4x4 out, float deg) {
 
     float ca = cosf(deg * M_PI / 180.0f);
     float sa = sinf(deg * M_PI / 180.0f);
-
     out[0] = ca;
-    out[1] = sa;
+    out[1] = -sa;
     out[2] = 0.0f;
     out[3] = 0.0f;
-    out[4] = -sa;
+    out[4] = sa;
     out[5] = ca;
     out[6] = 0.0f;
     out[7] = 0.0f;
@@ -695,7 +691,7 @@ void enter3D(void) {
                        (float) XRES_FRAMEBUFFER / (float) YRES_FRAMEBUFFER, 0.1f, 1024.0f);
     glUniformMatrix4fv(uProjectionMatrixUniformLocation, 1, GL_FALSE, projection_matrix);
 
-    mat4x4_rotateY(viewMatrix, leanX);
+    mat4x4_rotateY(viewMatrix, -leanX);
     glUniformMatrix4fv(uViewMatrixUniformLocation, 1, GL_FALSE, viewMatrix);
 
     mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);

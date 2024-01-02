@@ -185,13 +185,13 @@ void renderVBOAt(struct Bitmap *bitmap, struct VBORegister vbo, float x, float y
     glUniformMatrix4fv(uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix);
 
     mat4x4_rotateX(rotateXMatrix, rx);
-    glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_TRUE, rotateXMatrix);
+    glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix);
 
     mat4x4_rotateY(rotateYMatrix, ry);
-    glUniformMatrix4fv(uRotateYMatrixUniformLocation, 1, GL_TRUE, rotateYMatrix);
+    glUniformMatrix4fv(uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix);
 
     mat4x4_rotateZ(rotateZMatrix, rz);
-    glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_TRUE, rotateZMatrix);
+    glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
 
 
     checkGLError("matrices set");
