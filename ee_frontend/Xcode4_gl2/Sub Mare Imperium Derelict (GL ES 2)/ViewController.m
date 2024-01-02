@@ -184,11 +184,13 @@ void flipRenderer() {
 }
 
 -(IBAction)btnLeftPressed:(id)sender {
-    mBufferedCommand = kCommandLeft;
+    turning = 1;
+    leanX = -ANGLE_TURN_STEP;
 }
 
 -(IBAction)btnRightPressed:(id)sender {
-    mBufferedCommand = kCommandRight;
+    turning = 1;
+    leanX = ANGLE_TURN_STEP;
 }
 
 
