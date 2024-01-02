@@ -41,6 +41,10 @@
 
 int width = 640;
 int height = 480;
+#define ANGLE_TURN_THRESHOLD 40
+#define ANGLE_TURN_STEP 5
+
+extern int turning;
 
 enum ESoundDriver soundDriver = kNoSound;
 
@@ -56,7 +60,6 @@ int enable3DRendering = FALSE;
 
 AAssetManager *defaultAssetManager = NULL;
 
-
 void graphicsInit(void) {
 
     enableSmoothMovement = TRUE;
@@ -68,10 +71,7 @@ void handleSystemEvents(void) {
 }
 
 void graphicsShutdown(void) {
-
-
     releaseBitmap(defaultFont);
-
     texturesUsed = 0;
 }
 
@@ -141,16 +141,13 @@ Java_pt_b13h_derelictgles2_DerelictJNI_sendCommand(JNIEnv *env, jclass clazz, jc
             break;
 
         case 'a':
-            mBufferedCommand = kCommandLeft;
-            turnStep = 0;
-            turnTarget = 200;
+            turning = 1;
+            leanX = -ANGLE_TURN_STEP;
             break;
 
-
         case 'd':
-            mBufferedCommand = kCommandRight;
-            turnStep = 200;
-            turnTarget = 0;
+            turning = 1;
+            leanX = ANGLE_TURN_STEP;
             break;
 
         case 'q':
