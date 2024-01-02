@@ -25,7 +25,7 @@ uint8_t shouldDrawLights = TRUE;
 int useDither = TRUE;
 
 struct Bitmap *defaultFont;
-extern  struct Bitmap whiteTexture;
+extern struct Bitmap whiteTexture;
 
 #define NORMALIZE_ORTHO_X (1.0f / 320.0f)
 #define NORMALIZE_ORTHO_Y (1.0f / 200.0f)
@@ -76,7 +76,8 @@ void fillRect(
         const FramebufferPixelFormat pixel,
         const uint8_t stipple) {
 
-    renderVBOAt(&whiteTexture, planeXYVBO, _x + _dx / 2.0f, _y + _dy / 2.0f, -1.0f, 0, 0, 0, _dx / 2.0f, _dy / 2.0f, 0, 0, 1, 1, pixel, FALSE);
+    renderVBOAt(&whiteTexture, planeXYVBO, _x + _dx / 2.0f, _y + _dy / 2.0f, -1.0f, 0, 0, 0,
+                _dx / 2.0f, _dy / 2.0f, 0, 0, 1, 1, pixel, FALSE);
 }
 
 void drawBitmapRegion(const int _x,
@@ -88,14 +89,16 @@ void drawBitmapRegion(const int _x,
                       const uint8_t transparent,
                       float u0, float u1, float v0, float v1) {
 
-    renderVBOAt(bitmap, planeXYVBO, _x + _dx / 2.0f, _y + _dy / 2.0f, -1.0f, 0, 0, 0, _dx / 2.0f, -_dy / 2.0f, u0, v0, u1, v1, tint, FALSE);
+    renderVBOAt(bitmap, planeXYVBO, _x + _dx / 2.0f, _y + _dy / 2.0f, -1.0f, 0, 0, 0, _dx / 2.0f,
+                -_dy / 2.0f, u0, v0, u1, v1, tint, FALSE);
 }
 
 void drawBitmap(const int _x,
                 const int _y,
                 struct Bitmap *bitmap,
                 const uint8_t transparent) {
-    drawBitmapRegion(_x, _y, bitmap->width, bitmap->height, getPaletteEntry(0xFFFFFFFF), bitmap, transparent, 0.0f,
+    drawBitmapRegion(_x, _y, bitmap->width, bitmap->height, getPaletteEntry(0xFFFFFFFF), bitmap,
+                     transparent, 0.0f,
                      1.0f, 0.0f, 1.0f);
 }
 
@@ -158,17 +161,20 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
         line = (((float) ((ascii >> 5))) * blockHeight);
         col = (((ascii & 31)) * blockWidth);
 
-        drawBitmapRegion(dstX, dstY, 8, 8, colour, defaultFont, 1, col, col + blockWidth, line, line + blockHeight);
+        drawBitmapRegion(dstX, dstY, 8, 8, colour, defaultFont, 1, col, col + blockWidth, line,
+                         line + blockHeight);
 
         dstX += 8;
     }
 }
 
-void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text,
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin,
+                                       const char *__restrict__ text,
                                        const uint8_t colour, char charToReplaceHifenWith) {
     drawTextAt(x, y, text, colour);
 }
 
-void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour) {
+void drawTextAtWithMargin(const int x, const int y, int margin, const char *text,
+                          const FramebufferPixelFormat colour) {
     drawTextAt(x, y, text, colour);
 }

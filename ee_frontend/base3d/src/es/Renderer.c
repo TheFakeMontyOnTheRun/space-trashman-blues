@@ -356,17 +356,17 @@ void render(const long ms) {
 
         for (distance = (MAP_SIZE + MAP_SIZE - 1); distance >= 0; --distance) {
             uint8_t bucketPos;
-            
+
             for (bucketPos = 0; bucketPos < MAP_SIZE; ++bucketPos) {
-                
+
                 struct Vec2i visPos = distances[(distance * MAP_SIZE) + bucketPos];
-                
+
                 if (visPos.x < 0 || visPos.y < 0 || visPos.x >= MAP_SIZE
                     || visPos.y >= MAP_SIZE) {
                     bucketPos = MAP_SIZE;
                     continue;
                 }
-                
+
                 facesMask = MASK_LEFT | MASK_FRONT | MASK_RIGHT;
 
                 switch (cameraDirection) {
@@ -564,7 +564,8 @@ void render(const long ms) {
 
                             drawLeftNear(
                                     tmp, intToFix(tileProp->mFloorRepetitions),
-                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex], facesMask, TRUE);
+                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex], facesMask,
+                                    TRUE);
                             break;
 
                         case kCube:
@@ -831,7 +832,8 @@ void render(const long ms) {
                             addToVec3(&tmp, 0, (tileProp->mFloorHeight) * 2, 0);
                             addToVec3(&tmp2, 0, (tileProp->mCeilingHeight * 2), 0);
 
-                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection,
+                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex],
+                                       cameraDirection,
                                        flipTextureVertical);
                         }
                             break;
@@ -849,7 +851,8 @@ void render(const long ms) {
                             addToVec3(&tmp2, 0, (tileProp->mFloorHeight * 2), 0);
                             addToVec3(&tmp, 0, (tileProp->mCeilingHeight * 2), 0);
 
-                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection,
+                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex],
+                                       cameraDirection,
                                        flipTextureVertical);
                         }
                             break;
