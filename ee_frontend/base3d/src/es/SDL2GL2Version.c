@@ -184,11 +184,15 @@ void handleSystemEvents() {
                     break;
 
                 case SDLK_LEFT:
-                    mBufferedCommand = kCommandLeft;
+                    turning = 1;
+                    leanX = -ANGLE_TURN_STEP;
+
                     visibilityCached = FALSE;
                     break;
                 case SDLK_RIGHT:
-                    mBufferedCommand = kCommandRight;
+                    turning = 1;
+                    leanX = ANGLE_TURN_STEP;
+
                     visibilityCached = FALSE;
                     break;
                 case SDLK_UP:
