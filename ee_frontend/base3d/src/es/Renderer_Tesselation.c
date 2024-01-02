@@ -57,8 +57,6 @@
 #endif
 #endif
 
-
-#define kMinZCull 0
 struct Vec3 cameraOffset;
 FixP_t walkingBias = 0;
 FixP_t playerHeight = 0;
@@ -85,11 +83,13 @@ extern unsigned int sTextureUniformLocation;
 extern unsigned int uModUniformLocation;
 extern unsigned int uFadeUniformLocation;
 
+extern t_mat4x4 viewMatrix;
 extern t_mat4x4 transformMatrix;
 extern t_mat4x4 rotateXMatrix;
 extern t_mat4x4 rotateYMatrix;
 extern t_mat4x4 rotateZMatrix;
 
+extern unsigned int uViewMatrixUniformLocation;
 extern unsigned int uTransformMatrixUniformLocation;
 extern unsigned int uRotateXMatrixUniformLocation;
 extern unsigned int uRotateYMatrixUniformLocation;
@@ -177,6 +177,8 @@ void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float 
     
     checkGLError("indices elements bound");
     
+    mat4x4_rotateY(viewMatrix, leanX);
+    glUniformMatrix4fv( uViewMatrixUniformLocation, 1, GL_FALSE, viewMatrix );
     
     mat4x4_transform(transformMatrix, x + fixToFloat(xCameraOffset), y - fixToFloat(yCameraOffset), z - fixToFloat(zCameraOffset), scaleX, scaleY, 1);
     glUniformMatrix4fv( uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix );
@@ -277,7 +279,7 @@ struct Texture *makeTextureFrom(const char *filename) {
 void drawRampAt(const struct Vec3 center0, const struct Vec3 center1,
                 const struct Texture *texture, uint8_t direction, uint8_t flipTexture) {
 
-    if ((center0.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM && (center1.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM) {
+    if (/*(center0.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM && (center1.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM*/ TRUE) {
 
         struct Vec2i uv0, uv1, uv2, uv3;
         struct Vec3 p0, p1, p2, p3, center;
@@ -387,10 +389,12 @@ void drawBillboardAt(const struct Vec3 center,
                      struct Texture *texture,
                      const FixP_t scale,
                      const int size) {
+    /*
     if ((center.mZ + zCameraOffset) <= Z_NEAR_PLANE_FRUSTUM) {
         return;
     }
-
+     */
+    
     FixP_t geometryScale = Mul(scale, intToFix(2));
     float textureScale = 16;
     struct Vec2i uv0, uv1, uv2, uv3;
@@ -427,11 +431,11 @@ void drawColumnAt(const struct Vec3 center,
                   const uint8_t mask,
                   const uint8_t enableAlpha,
                   const uint8_t repeatTexture) {
-
+/*
     if ((center.mZ + zCameraOffset) <= Z_NEAR_PLANE_FRUSTUM) {
         return;
     }
-
+*/
     FixP_t geometryScale = Mul(scale, intToFix(2));
     float textureScale = 16;
     struct Vec2i uv0, uv1, uv2, uv3;
@@ -497,7 +501,7 @@ void drawColumnAt(const struct Vec3 center,
 void drawFloorAt(const struct Vec3 center,
                  const struct Texture *texture, enum EDirection cameraDirection) {
 
-    if (center.mY <= 0 && (center.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM) {
+    if (/*center.mY <= 0 && (center.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM*/ TRUE) {
         struct Vec2i uv0, uv1, uv2, uv3;
         struct Vec3 p0, p1, p2, p3;
 
@@ -568,7 +572,7 @@ void drawFloorAt(const struct Vec3 center,
 void drawCeilingAt(const struct Vec3 center,
                    const struct Texture *texture, enum EDirection cameraDirection) {
 
-    if (center.mY >= 0 && center.mZ > Z_NEAR_PLANE_FRUSTUM) {
+    if (/*center.mY >= 0 && center.mZ > Z_NEAR_PLANE_FRUSTUM*/ TRUE) {
         struct Vec2i uv0, uv1, uv2, uv3;
         struct Vec3 p0, p1, p2, p3;
 
@@ -642,11 +646,11 @@ void drawLeftNear(const struct Vec3 center,
                   const uint8_t mask,
                   const uint8_t repeatTexture) {
 
-
+/*
     if ((center.mZ + zCameraOffset) <= Z_NEAR_PLANE_FRUSTUM) {
         return;
     }
-
+*/
     FixP_t geometryScale = Mul(scale, intToFix(2));
     float textureScale = 16;
     struct Vec2i uv0, uv1, uv2, uv3;
@@ -697,11 +701,11 @@ void drawRightNear(const struct Vec3 center,
                    const struct Texture *texture,
                    const uint8_t mask,
                    const uint8_t repeatTexture) {
-
+/*
     if ((center.mZ + zCameraOffset) <= Z_NEAR_PLANE_FRUSTUM) {
         return;
     }
-
+*/
     FixP_t geometryScale = Mul(scale, intToFix(2));
     float textureScale = 16;
     struct Vec2i uv0, uv1, uv2, uv3;
@@ -762,7 +766,7 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
     FixP_t *vertexData = mesh->geometry;
     uint8_t *uvData = mesh->uvCoords;
 
-    if (mesh->texture != NULL && (center.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM) {
+    if (/*mesh->texture != NULL && (center.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM*/ TRUE) {
         for (c = 0; c < count; ++c) {
             struct Vec3 p1;
             struct Vec3 p2;

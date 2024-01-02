@@ -195,6 +195,7 @@ unsigned int aTexCoordAttributeLocation;
 unsigned int uProjectionMatrixUniformLocation;
 unsigned int uViewMatrixUniformLocation;
 unsigned int uTransformMatrixUniformLocation;
+unsigned int uViewMatrixUniformLocation;
 unsigned int uRotateXMatrixUniformLocation;
 unsigned int uRotateYMatrixUniformLocation;
 unsigned int uRotateZMatrixUniformLocation;
@@ -610,7 +611,6 @@ void initGL() {
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
-    //    glFrontFace(GL_CW);
     glDepthMask(1);
     checkGLError("initGL");
 }
@@ -681,25 +681,6 @@ void endFrameGL() {
 }
 
 void enter3D(void) {
-    float _leanX = 0.0f;
-    float _leanY = 0.0f;
-
-    if (leanX > 127) {
-        _leanX = -0.25f * ((leanX - 127) / 128.0f);
-    }
-
-    if (leanX < 127) {
-        _leanX = 0.25f * ((128 - leanX) / 127.0f);
-    }
-
-    if (leanY > 127) {
-        _leanY = -0.25f * ((leanY - 127) / 128.0f);
-    }
-
-    if (leanY < 127) {
-        _leanY = 0.25f * ((128 - leanY) / 127.0f);
-    }
-
     mat4x4_perspective( projection_matrix, 45.0f, (float)XRES_FRAMEBUFFER / (float)YRES_FRAMEBUFFER, 0.1f, 100.0f );
     glUniformMatrix4fv( uProjectionMatrixUniformLocation, 1, GL_FALSE, projection_matrix );
 
