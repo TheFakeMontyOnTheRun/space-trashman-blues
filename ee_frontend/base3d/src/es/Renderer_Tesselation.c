@@ -176,10 +176,7 @@ void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float 
 
     
     checkGLError("indices elements bound");
-    
-    mat4x4_rotateY(viewMatrix, leanX);
-    glUniformMatrix4fv( uViewMatrixUniformLocation, 1, GL_FALSE, viewMatrix );
-    
+        
     mat4x4_transform(transformMatrix, x + fixToFloat(xCameraOffset), y - fixToFloat(yCameraOffset), z - fixToFloat(zCameraOffset), scaleX, scaleY, 1);
     glUniformMatrix4fv( uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix );
 
