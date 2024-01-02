@@ -54,7 +54,9 @@
 #endif
 #endif
 #else
+
 #include <GLES2/gl2.h>
+
 #endif
 #endif
 
@@ -265,58 +267,60 @@ static const char *fragment_shader =
 
 struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, rampVBO, planeYZVBO;
 
-void mat4x4_ortho( t_mat4x4 out, float left, float right, float bottom, float top, float znear, float zfar ) {
-    #define T(a, b) (a * 4 + b)
+void mat4x4_ortho(t_mat4x4 out, float left, float right, float bottom, float top, float znear,
+                  float zfar) {
+#define T(a, b) (a * 4 + b)
 
-    out[T(0,0)] = 2.0f / (right - left);
-    out[T(0,1)] = 0.0f;
-    out[T(0,2)] = 0.0f;
-    out[T(0,3)] = 0.0f;
+    out[T(0, 0)] = 2.0f / (right - left);
+    out[T(0, 1)] = 0.0f;
+    out[T(0, 2)] = 0.0f;
+    out[T(0, 3)] = 0.0f;
 
-    out[T(1,1)] = 2.0f / (top - bottom);
-    out[T(1,0)] = 0.0f;
-    out[T(1,2)] = 0.0f;
-    out[T(1,3)] = 0.0f;
+    out[T(1, 1)] = 2.0f / (top - bottom);
+    out[T(1, 0)] = 0.0f;
+    out[T(1, 2)] = 0.0f;
+    out[T(1, 3)] = 0.0f;
 
-    out[T(2,2)] = -2.0f / (zfar - znear);
-    out[T(2,0)] = 0.0f;
-    out[T(2,1)] = 0.0f;
-    out[T(2,3)] = 0.0f;
+    out[T(2, 2)] = -2.0f / (zfar - znear);
+    out[T(2, 0)] = 0.0f;
+    out[T(2, 1)] = 0.0f;
+    out[T(2, 3)] = 0.0f;
 
-    out[T(3,0)] = -(right + left) / (right - left);
-    out[T(3,1)] = -(top + bottom) / (top - bottom);
-    out[T(3,2)] = -(zfar + znear) / (zfar - znear);
-    out[T(3,3)] = 1.0f;
+    out[T(3, 0)] = -(right + left) / (right - left);
+    out[T(3, 1)] = -(top + bottom) / (top - bottom);
+    out[T(3, 2)] = -(zfar + znear) / (zfar - znear);
+    out[T(3, 3)] = 1.0f;
 
-    #undef T
+#undef T
 }
 
 
-void mat4x4_perspective( t_mat4x4 out, float fov, float ratio, float znear, float zfar ) {
+void mat4x4_perspective(t_mat4x4 out, float fov, float ratio, float znear, float zfar) {
     float rad = M_PI / 180.0f;
-    float oneOverTanFovDiv2 = 1.0f / tan( fov * rad / 2.0f);
+    float oneOverTanFovDiv2 = 1.0f / tan(fov * rad / 2.0f);
     out[0] = oneOverTanFovDiv2 / (ratio);
     out[1] = 0.0f;
     out[2] = 0.0f;
     out[3] = 0.0f;
-    
+
     out[4] = 0.0f;
     out[5] = oneOverTanFovDiv2;
     out[6] = 0.0f;
     out[7] = 0.0f;
-    
+
     out[8] = 0.0f;
     out[9] = 0.0f;
-    out[10] = - ((zfar + znear) / (zfar - znear));
+    out[10] = -((zfar + znear) / (zfar - znear));
     out[11] = -1.0f;
-    
+
     out[12] = 0.0f;
     out[13] = 0.0f;
-    out[14] = - ((2.0f * zfar * znear) / (zfar - znear) );
+    out[14] = -((2.0f * zfar * znear) / (zfar - znear));
     out[15] = 0.0f;
 }
 
-void mat4x4_view( t_mat4x4 out, float cx, float cy, float cz, float tx, float ty, float tz, float ux, float uy, float uz ) {
+void mat4x4_view(t_mat4x4 out, float cx, float cy, float cz, float tx, float ty, float tz, float ux,
+                 float uy, float uz) {
     out[0] = 1;
     out[1] = 0.0f;
     out[2] = 0.0f;
@@ -335,7 +339,7 @@ void mat4x4_view( t_mat4x4 out, float cx, float cy, float cz, float tx, float ty
     out[15] = 1;
 }
 
-void mat4x4_transform( t_mat4x4 out, float ox, float oy, float oz, float sx, float sy, float sz ) {
+void mat4x4_transform(t_mat4x4 out, float ox, float oy, float oz, float sx, float sy, float sz) {
     out[0] = sx;
     out[1] = 0.0f;
     out[2] = 0.0f;
@@ -354,7 +358,7 @@ void mat4x4_transform( t_mat4x4 out, float ox, float oy, float oz, float sx, flo
     out[15] = 1;
 }
 
-void mat4x4_rotateX( t_mat4x4 out, float deg ) {
+void mat4x4_rotateX(t_mat4x4 out, float deg) {
 
     float ca = cosf(deg * M_PI / 180.0f);
     float sa = sinf(deg * M_PI / 180.0f);
@@ -377,7 +381,7 @@ void mat4x4_rotateX( t_mat4x4 out, float deg ) {
     out[15] = 1;
 }
 
-void mat4x4_rotateY( t_mat4x4 out, float deg ) {
+void mat4x4_rotateY(t_mat4x4 out, float deg) {
 
     float ca = cosf(deg * M_PI / 180.0f);
     float sa = sinf(deg * M_PI / 180.0f);
@@ -403,7 +407,7 @@ void mat4x4_rotateY( t_mat4x4 out, float deg ) {
     out[15] = 1;
 }
 
-void mat4x4_rotateZ( t_mat4x4 out, float deg ) {
+void mat4x4_rotateZ(t_mat4x4 out, float deg) {
 
     float ca = cosf(deg * M_PI / 180.0f);
     float sa = sinf(deg * M_PI / 180.0f);
@@ -427,7 +431,7 @@ void mat4x4_rotateZ( t_mat4x4 out, float deg ) {
 }
 
 
-void checkGLError(const char* operation) {
+void checkGLError(const char *operation) {
     int errorCode = glGetError();
 
     if (errorCode != 0) {
@@ -442,12 +446,12 @@ struct VBORegister submitVBO(float *vertexData, float *uvData, int vertices,
     unsigned int vertexDataIndex;
     unsigned int uvDataIndex;
     unsigned int indicesIndex;
-    
+
     glGenBuffers(1, &vertexDataIndex);
     glBindBuffer(GL_ARRAY_BUFFER, vertexDataIndex);
     glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(float) * 3, vertexData, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    
+
 
     glGenBuffers(1, &uvDataIndex);
     glBindBuffer(GL_ARRAY_BUFFER, uvDataIndex);
@@ -466,7 +470,7 @@ struct VBORegister submitVBO(float *vertexData, float *uvData, int vertices,
     toReturn.uvDataIndex = uvDataIndex;
     toReturn.indicesIndex = indicesIndex;
     toReturn.indices = indices;
-    
+
     return toReturn;
 }
 
@@ -481,30 +485,31 @@ void drawTriangle(const struct Vec3 pos1,
                   const struct Texture *texture);
 
 void enter2D(void) {
-  mat4x4_ortho( projection_matrix, 0.0f, (float)XRES_FRAMEBUFFER, (float)YRES_FRAMEBUFFER, 0.0f, 0.1f, 100.0f );
-  glUniformMatrix4fv( uProjectionMatrixUniformLocation, 1, GL_FALSE, projection_matrix );
+    mat4x4_ortho(projection_matrix, 0.0f, (float) XRES_FRAMEBUFFER, (float) YRES_FRAMEBUFFER, 0.0f,
+                 0.1f, 100.0f);
+    glUniformMatrix4fv(uProjectionMatrixUniformLocation, 1, GL_FALSE, projection_matrix);
 
-  glDisable( GL_DEPTH_TEST );
+    glDisable(GL_DEPTH_TEST);
 
     mat4x4_view(viewMatrix, 0, 0, 0, 0, 0, -1, 0, 1, 0);
-    glUniformMatrix4fv( uViewMatrixUniformLocation, 1, GL_FALSE, viewMatrix );
+    glUniformMatrix4fv(uViewMatrixUniformLocation, 1, GL_FALSE, viewMatrix);
 
     mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);
-    glUniformMatrix4fv( uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix );
+    glUniformMatrix4fv(uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix);
 
     mat4x4_rotateX(rotateXMatrix, 0);
-    glUniformMatrix4fv( uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix );
+    glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix);
 
     mat4x4_rotateY(rotateYMatrix, 0);
-    glUniformMatrix4fv( uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix );
+    glUniformMatrix4fv(uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix);
 
     mat4x4_rotateZ(rotateZMatrix, 0);
-    glUniformMatrix4fv( uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix );
+    glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
     checkGLError("enter2D");
 }
 
 void unloadTextures(void) {
-    for (int c = 0; c < texturesUsed; ++c ) {
+    for (int c = 0; c < texturesUsed; ++c) {
         nativeTextures[c]->raw->uploadId = -1;
     }
 
@@ -528,15 +533,15 @@ void initGL() {
     glGetShaderiv(vs, GL_COMPILE_STATUS, &status);
 
     if (status == GL_FALSE) {
-        
+
         GLint maxLength = 0;
         glGetShaderiv(vs, GL_INFO_LOG_LENGTH, &maxLength);
-        
-        char *errorLog = (char*)malloc(maxLength);
-        memset( errorLog, 0, maxLength);
-        
+
+        char *errorLog = (char *) malloc(maxLength);
+        memset(errorLog, 0, maxLength);
+
         glGetShaderInfoLog(vs, maxLength, &maxLength, errorLog);
-        
+
         fprintf(stderr, "vertex shader compilation failed:\n%s", errorLog);
         exit(0);
     }
@@ -544,19 +549,19 @@ void initGL() {
     length = strlen(fragment_shader);
     glShaderSource(fs, 1, (const GLchar **) &fragment_shader, &length);
     glCompileShader(fs);
-    
+
     glGetShaderiv(fs, GL_COMPILE_STATUS, &status);
 
     if (status == GL_FALSE) {
         GLint maxLength = 0;
         glGetShaderiv(fs, GL_INFO_LOG_LENGTH, &maxLength);
-        
-        char *errorLog = (char*)malloc(maxLength);
-        memset( errorLog, 0, maxLength);
-        
+
+        char *errorLog = (char *) malloc(maxLength);
+        memset(errorLog, 0, maxLength);
+
         glGetShaderInfoLog(fs, maxLength, &maxLength, errorLog);
 
-        
+
         fprintf(stderr, "fragment shader compilation failed:\n%s", errorLog);
         exit(0);
     }
@@ -567,8 +572,8 @@ void initGL() {
     glLinkProgram(program);
     glUseProgram(program);
     checkGLError("creating and using program");
-    
-    
+
+
     /* attaching data to shaders */
 
     aPositionAttributeLocation = glGetAttribLocation(program, "aPosition");
@@ -586,7 +591,7 @@ void initGL() {
     uFadeUniformLocation = glGetUniformLocation(program, "uFade");
     uScaleUniformLocation = glGetUniformLocation(program, "uScale");
     checkGLError("Fetching locations in shaders");
-    
+
     whiteTexture.height = 1;
     whiteTexture.width = 1;
     whiteRaw[0] = whiteRaw[1] = whiteRaw[2] = whiteRaw[3] = 0xFFFFFFFF;
@@ -598,20 +603,20 @@ void initGL() {
 
 
     planeXYVBO = submitVBO((float *) planeXYVertices, planeXYUVs, 4,
-                                           (unsigned short *) planeXYIndices, 6);
+                           (unsigned short *) planeXYIndices, 6);
 
     planeYZVBO = submitVBO((float *) planeYZVertices, planeYZUVs, 4,
-                                           (unsigned short *) planeYZIndices, 6);
-	
+                           (unsigned short *) planeYZIndices, 6);
+
     leftFarVBO = submitVBO((float *) cornerLeftFarVertices, cornerLeftFarUVs, 4,
-                                         (unsigned short *) cornerLeftFarIndices, 6);
+                           (unsigned short *) cornerLeftFarIndices, 6);
     leftNearVBO = submitVBO((float *) cornerLeftNearVertices, cornerLeftNearUVs, 4,
-                                          (unsigned short *) cornerLeftNearIndices, 6);
+                            (unsigned short *) cornerLeftNearIndices, 6);
     floorVBO = submitVBO((float *) floorVertices, floorUVs, 4,
-                                       (unsigned short *) floorIndices, 6);
+                         (unsigned short *) floorIndices, 6);
 
     rampVBO = submitVBO((float *) rampVertices, rampUVs, 4,
-                         (unsigned short *) rampIndices, 6);
+                        (unsigned short *) rampIndices, 6);
     checkGLError("Creating VBOs");
 
     glEnable(GL_DEPTH_TEST);
@@ -686,23 +691,24 @@ void endFrameGL() {
 }
 
 void enter3D(void) {
-    mat4x4_perspective( projection_matrix, 90.0f, (float)XRES_FRAMEBUFFER / (float)YRES_FRAMEBUFFER, 0.1f, 1024.0f );
-    glUniformMatrix4fv( uProjectionMatrixUniformLocation, 1, GL_FALSE, projection_matrix );
+    mat4x4_perspective(projection_matrix, 90.0f,
+                       (float) XRES_FRAMEBUFFER / (float) YRES_FRAMEBUFFER, 0.1f, 1024.0f);
+    glUniformMatrix4fv(uProjectionMatrixUniformLocation, 1, GL_FALSE, projection_matrix);
 
     mat4x4_rotateY(viewMatrix, leanX);
-    glUniformMatrix4fv( uViewMatrixUniformLocation, 1, GL_FALSE, viewMatrix );
+    glUniformMatrix4fv(uViewMatrixUniformLocation, 1, GL_FALSE, viewMatrix);
 
     mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);
-    glUniformMatrix4fv( uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix );
+    glUniformMatrix4fv(uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix);
 
     mat4x4_rotateX(rotateXMatrix, 0);
-    glUniformMatrix4fv( uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix );
+    glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix);
 
     mat4x4_rotateY(rotateYMatrix, 0);
-    glUniformMatrix4fv( uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix );
+    glUniformMatrix4fv(uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix);
 
     mat4x4_rotateZ(rotateZMatrix, 0);
-    glUniformMatrix4fv( uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix );
+    glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
 
     glEnable(GL_DEPTH_TEST);
     checkGLError("enter3D");
