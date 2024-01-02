@@ -293,21 +293,26 @@ void mat4x4_ortho( t_mat4x4 out, float left, float right, float bottom, float to
 
 
 void mat4x4_perspective( t_mat4x4 out, float fov, float ratio, float znear, float zfar ) {
-    out[0] = 0.463027f;
+    float rad = M_PI / 180.0f;
+    float oneOverTanFovDiv2 = 1.0f / tan( fov * rad / 2.0f);
+    out[0] = oneOverTanFovDiv2 / (ratio);
     out[1] = 0.0f;
     out[2] = 0.0f;
     out[3] = 0.0f;
+    
     out[4] = 0.0f;
-    out[5] = 0.61737;
+    out[5] = oneOverTanFovDiv2;
     out[6] = 0.0f;
     out[7] = 0.0f;
+    
     out[8] = 0.0f;
     out[9] = 0.0f;
-    out[10] = -1.002f;
+    out[10] = - ((zfar + znear) / (zfar - znear));
     out[11] = -1.0f;
+    
     out[12] = 0.0f;
     out[13] = 0.0f;
-    out[14] = -0.2002f;
+    out[14] = - ((2.0f * zfar * znear) / (zfar - znear) );
     out[15] = 0.0f;
 }
 
@@ -681,7 +686,7 @@ void endFrameGL() {
 }
 
 void enter3D(void) {
-    mat4x4_perspective( projection_matrix, 45.0f, (float)XRES_FRAMEBUFFER / (float)YRES_FRAMEBUFFER, 0.1f, 100.0f );
+    mat4x4_perspective( projection_matrix, 90.0f, (float)XRES_FRAMEBUFFER / (float)YRES_FRAMEBUFFER, 0.1f, 1024.0f );
     glUniformMatrix4fv( uProjectionMatrixUniformLocation, 1, GL_FALSE, projection_matrix );
 
     mat4x4_view(viewMatrix, 0, 0, 0, 0, 0, -1, 0, 1, 0);
