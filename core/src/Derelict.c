@@ -196,23 +196,10 @@ void useRegularFlush(struct Item *item) {
     defaultLogger("*FLUSH*");
 }
 
-
-void cantBeUsedCallback(struct Item *item) {
-    defaultLogger("You can't use it like this.");
-}
-
-void cantBeUsedWithOthersCallback(struct Item *item1, struct Item *item2) {
-    defaultLogger("Nothing happens.");
-}
-
 void inspectItemWithHelmetCallback(struct Item *helmet, struct Item *item) {
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
     defaultLogger(item->info);
 #endif
-}
-
-void cantToggleCallback(struct Item *item) {
-    defaultLogger("Can't disable this.");
 }
 
 void useCommWithRank(struct Item *item) {
@@ -567,7 +554,6 @@ void initStation(void) {
 #endif
                       TRUE, 9, 6);
     addToRoom("lss-daedalus", newItem);
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->useCallback = bombActivatedCallback;
 
 
@@ -584,7 +570,6 @@ void initStation(void) {
 #endif
                       TRUE, 10, 6);
     addToRoom("lss-daedalus", newItem);
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->useCallback = bombControllerActivatedCallback;
 
     newItem = addItem("ship-ignition",
@@ -598,7 +583,6 @@ void initStation(void) {
                       TRUE, 11, 6);
     addToRoom("lss-daedalus", newItem);
     newItem->useCallback = bombActivatedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
 
     newItem = addItem("magnetic-boots",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
@@ -618,8 +602,6 @@ void initStation(void) {
     newItem->pickable = FALSE;
     newItem->useWithCallback = useBootsWithMagneticCoupling;
 
-    newItem->useCallback = cantToggleCallback;
-
     newItem = addItem("helmet",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
             "Atmosphere-contained helmet for\n"
@@ -632,7 +614,6 @@ void initStation(void) {
     newItem->active = TRUE;
     pickObject(newItem);
     newItem->pickable = FALSE;
-    newItem->useCallback = cantToggleCallback;
     newItem->useWithCallback = inspectItemWithHelmetCallback;
 
 
@@ -647,7 +628,6 @@ void initStation(void) {
 #endif
                       TRUE, 4, 7);
     addToRoom("hall-2", newItem);
-    newItem->useCallback = cantBeUsedCallback;
     newItem->useWithCallback = useCardWithCardWriter;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
@@ -661,11 +641,8 @@ void initStation(void) {
             0,
 #endif
                       TRUE, 21, 9);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
-
 
     /* Hangar */
 
@@ -679,8 +656,6 @@ void initStation(void) {
                       FALSE, 2, 2);
     addToRoom("hangar", newItem);
     newItem->active = TRUE;
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
 
     /* Comm terminals*/
 
@@ -692,8 +667,6 @@ void initStation(void) {
             200,
 #endif
                       FALSE, 12, 3);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hangar", newItem);
 
 
@@ -707,7 +680,6 @@ void initStation(void) {
 #endif
                       FALSE, 7, 2);
     newItem->useCallback = useCommWithRank;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-1", newItem);
 
 
@@ -720,7 +692,6 @@ void initStation(void) {
 #endif
                       FALSE, 6, 2);
     newItem->useCallback = useCommWithRank;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-2", newItem);
 
 
@@ -733,7 +704,6 @@ void initStation(void) {
 #endif
                       FALSE, 7, 2);
     newItem->useCallback = useCommWithRank;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("hall-3", newItem);
 
     /* Diaries */
@@ -749,8 +719,6 @@ void initStation(void) {
             0,
 #endif
                       TRUE, 4, 6);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("pod-1", newItem);
 
 
@@ -766,8 +734,6 @@ void initStation(void) {
             0,
 #endif
                       TRUE, 11, 8);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("pod-2", newItem);
 
 
@@ -785,8 +751,6 @@ void initStation(void) {
             0,
 #endif
                       TRUE, 3, 2);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("pod-3", newItem);
 
 
@@ -802,8 +766,6 @@ void initStation(void) {
             0,
 #endif
                       TRUE, 5, 10);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("pod-4", newItem);
 
 
@@ -816,8 +778,6 @@ void initStation(void) {
             1,
 #endif
                       TRUE, 26, 8);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("crew-bunks", newItem);
 
     /* Misc */
@@ -830,8 +790,6 @@ void initStation(void) {
             3,
 #endif
                       FALSE, 22, 10);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("computer-core", newItem);
 
 
@@ -843,8 +801,6 @@ void initStation(void) {
             0,
 #endif
                       TRUE, 23, 17);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
 
@@ -859,7 +815,6 @@ void initStation(void) {
 #endif
                       FALSE, 16, 4);
     newItem->useCallback = useComputerRack;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("situation-room", newItem);
 
     newItem = addItem("computer-terminal",
@@ -872,7 +827,6 @@ void initStation(void) {
 #endif
                       FALSE, 16, 5);
     newItem->useCallback = useComputerRack;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("situation-room", newItem);
 
 
@@ -887,8 +841,6 @@ void initStation(void) {
             0,
 #endif
                       TRUE, 8, 6);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("situation-room", newItem);
 
     newItem = addItem("metal-mending",
@@ -899,8 +851,6 @@ void initStation(void) {
             74,
 #endif
                       FALSE, 5, 4);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("radar-array", newItem);
 
 
@@ -914,8 +864,6 @@ void initStation(void) {
             1,
 #endif
                       TRUE, 17, 17);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("wc", newItem);
 
 
@@ -928,7 +876,6 @@ void initStation(void) {
 #endif
                       FALSE, 22, 17);
     newItem->useCallback = useCloggedFlush;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("wc", newItem);
 
     newItem = addItem("flush",
@@ -940,7 +887,6 @@ void initStation(void) {
 #endif
                       FALSE, 18, 17);
     newItem->useCallback = useRegularFlush;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("wc", newItem);
 
 
@@ -954,8 +900,6 @@ void initStation(void) {
             209,
 #endif
                       FALSE, 29, 10);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("reactor-core", newItem);
 
 
@@ -969,7 +913,6 @@ void initStation(void) {
 #endif
                       FALSE, 21, 4);
     newItem->useCallback = reactorValveCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("reactor-core", newItem);
 
 
@@ -981,8 +924,6 @@ void initStation(void) {
             0,
 #endif
                       TRUE, 16, 3);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
 
@@ -996,7 +937,6 @@ void initStation(void) {
 #endif
                       FALSE, 2, 0);
     newItem->useCallback = elevatorGoDownCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-1", newItem);
 
     newItem = addItem("elevator-level2-go-down",
@@ -1008,7 +948,6 @@ void initStation(void) {
 #endif
                       FALSE, 2, 0);
     newItem->useCallback = elevatorGoDownCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-2", newItem);
 
     newItem = addItem("elevator-level2-go-up",
@@ -1020,7 +959,6 @@ void initStation(void) {
 #endif
                       FALSE, 3, 0);
     newItem->useCallback = elevatorGoUpCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-2", newItem);
 
     newItem = addItem("elevator-level3-go-up",
@@ -1032,7 +970,6 @@ void initStation(void) {
 #endif
                       FALSE, 3, 0);
     newItem->useCallback = elevatorGoUpCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("elevator-level-3", newItem);
 
     newItem = addItem("the-mistral-report",
@@ -1043,7 +980,5 @@ void initStation(void) {
             200,
 #endif
                       TRUE, 15, 19);
-    newItem->useCallback = cantBeUsedCallback;
-    newItem->useWithCallback = cantBeUsedWithOthersCallback;
     addToRoom("crew-bunks", newItem);
 }
