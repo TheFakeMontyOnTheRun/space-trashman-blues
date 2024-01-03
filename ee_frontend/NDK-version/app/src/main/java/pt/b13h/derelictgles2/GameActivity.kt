@@ -8,7 +8,9 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Display
 import android.view.KeyEvent
+import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewManager
 import android.widget.Button
 import android.widget.ImageButton
@@ -28,10 +30,9 @@ class GameActivity : AppCompatActivity() {
         DerelictJNI.initAssets(assets)
 
         if (Build.VERSION.SDK_INT >= 29) {
-            window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            enterStickyImmersiveMode()
         } else {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         }
 
         setContentView(R.layout.activity_main)
@@ -42,6 +43,11 @@ class GameActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
         mView = findViewById(R.id.imageView)
+    }
+
+    private fun enterStickyImmersiveMode() {
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
     }
 
     override fun onPostResume() {
