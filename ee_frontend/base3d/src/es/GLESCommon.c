@@ -72,6 +72,13 @@ t_mat4x4 rotateZMatrix;
 
 unsigned int vs, fs, program;
 
+extern struct Texture *itemSprites[TOTAL_ITEMS];
+
+#ifdef TILED_BITMAPS
+extern struct Bitmap *mapTopLevel[8];
+#else
+extern struct Bitmap *mapTopLevel;
+#endif
 
 const float planeXYVertices[] = {
         -1.0f, 1.0f, 0.0f,
@@ -512,6 +519,28 @@ void unloadTextures(void) {
     }
 
     whiteTexture.uploadId = -1;
+
+    for ( int c = 0; c < TOTAL_ITEMS; ++c ) {
+        if (itemSprites[c] != NULL) {
+            itemSprites[c]->raw->uploadId = -1;
+        }
+    }
+
+    if (defaultFont != NULL) {
+        defaultFont->uploadId = -1;
+    }
+
+#ifdef TILED_BITMAPS
+    for ( int c = 0; c < 8; ++c ) {
+        if (mapTopLevel[c] != NULL) {
+            mapTopLevel[c]->uploadId = -1;
+        }
+    }
+#else
+    if (mapTopLevel != NULL) {
+        mapTopLevel->uploadId = -1;
+    }
+#endif
 }
 
 void initGL() {
@@ -595,10 +624,6 @@ void initGL() {
     whiteRaw[0] = whiteRaw[1] = whiteRaw[2] = whiteRaw[3] = 0xFFFFFFFF;
     whiteTexture.data = &whiteRaw[0];
     submitBitmapToGPU(&whiteTexture);
-
-    /* tmp */
-    memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
-
 
     planeXYVBO = submitVBO((float *) planeXYVertices, planeXYUVs, 4,
                            (unsigned short *) planeXYIndices, 6);
