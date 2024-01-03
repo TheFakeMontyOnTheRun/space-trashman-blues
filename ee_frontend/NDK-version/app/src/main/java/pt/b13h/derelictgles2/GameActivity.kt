@@ -43,6 +43,49 @@ class GameActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
         mView = findViewById(R.id.imageView)
+        mView!!.setOnTouchListener(
+            object : OnSwipeTouchListener(this@GameActivity) {
+                override fun onTouch(v: View, event: MotionEvent): Boolean {
+                    synchronized(mView!!) {
+                        val downTime = event.eventTime - event.downTime
+                        val pressTimeout = ViewConfiguration.getLongPressTimeout().toLong()
+                        if (event.action == MotionEvent.ACTION_UP && downTime < pressTimeout) {
+                            DerelictJNI.sendCommand('z')
+                        }
+                    }
+                    return super.onTouch(v, event)
+                }
+
+                override fun onSwipeLeft() {
+                    super.onSwipeLeft()
+                    DerelictJNI.sendCommand('d')
+                }
+
+                override fun onSwipeRight() {
+                    super.onSwipeRight()
+                    DerelictJNI.sendCommand('a')
+                }
+
+                override fun onSwipeUp() {
+                    super.onSwipeUp()
+                    DerelictJNI.sendCommand('s')
+                }
+
+                override fun onDoubleTap() {
+                    super.onDoubleTap()
+                    DerelictJNI.sendCommand('x')
+                }
+
+                override fun onLongPress() {
+                    super.onLongPress()
+                    DerelictJNI.sendCommand('q')
+                }
+
+                override fun onSwipeDown() {
+                    super.onSwipeDown()
+                    DerelictJNI.sendCommand('w')
+                }
+            })
     }
 
     private fun enterStickyImmersiveMode() {
