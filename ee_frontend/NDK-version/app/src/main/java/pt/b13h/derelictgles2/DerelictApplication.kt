@@ -23,7 +23,9 @@ class DerelictApplication  : Application() {
     }
 
     private fun hasPhysicalKeyboard(): Boolean {
-        return resources.configuration.keyboard != Configuration.KEYBOARD_NOKEYS
+        return (resources.configuration.keyboard == Configuration.KEYBOARD_QWERTY) ||
+                ((resources.configuration.navigation != Configuration.NAVIGATION_NONAV) &&
+                        (resources.configuration.navigationHidden != Configuration.NAVIGATIONHIDDEN_NO))
     }
 
 
