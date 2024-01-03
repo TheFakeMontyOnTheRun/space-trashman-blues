@@ -38,6 +38,7 @@ extern char *messageLogBuffer;
 extern enum EVisibility *visMap;
 extern struct Vec2i *distances;
 extern uint8_t *collisionMap;
+extern struct Texture *nativeTextures[TOTAL_TEXTURES];
 
 void initHW(int argc, char** argv) {
     textBuffer = (char *) allocMem(TEXT_BUFFER_SIZE, GENERAL_MEMORY, 1);
@@ -47,6 +48,7 @@ void initHW(int argc, char** argv) {
     distances = (struct Vec2i *) allocMem(2 * MAP_SIZE * MAP_SIZE * sizeof(struct Vec2i), GENERAL_MEMORY, 1);
     itemsInMap = (uint8_t *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t *), GENERAL_MEMORY, 1);
     map = (uint8_t *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t *), GENERAL_MEMORY, 1);
+    memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
 
     initFileReader("base.pfs");
     graphicsInit();

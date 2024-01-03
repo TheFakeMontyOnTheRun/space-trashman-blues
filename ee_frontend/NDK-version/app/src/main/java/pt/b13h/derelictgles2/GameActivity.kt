@@ -27,21 +27,18 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        DerelictJNI.initAssets(assets)
-
         if (Build.VERSION.SDK_INT >= 29) {
             enterStickyImmersiveMode()
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         }
 
-        setContentView(R.layout.activity_main)
-
         if (savedInstanceState == null ) {
             DerelictJNI.initAssets(resources.assets)
         }
 
         setContentView(R.layout.activity_main)
+
         mView = findViewById(R.id.imageView)
         mView!!.setOnTouchListener(
             object : OnSwipeTouchListener(this@GameActivity) {
@@ -184,16 +181,6 @@ class GameActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         mView!!.onResume()
-        Thread {
-            running = true
-            while (running) {
-                try {
-                    Thread.sleep(20)
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
-            }
-        }.start()
     }
 
     override fun onDestroy() {

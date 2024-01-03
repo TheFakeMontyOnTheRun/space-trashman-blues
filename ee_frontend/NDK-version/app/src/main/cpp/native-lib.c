@@ -86,6 +86,9 @@ Java_pt_b13h_derelictgles2_DerelictJNI_initAssets(JNIEnv *env, jclass clazz,
 
     AAssetManager *asset_manager = AAssetManager_fromJava(env, assetManager);
     defaultAssetManager = asset_manager;
+    initHW(0, NULL);
+    enableSmoothMovement = TRUE;
+    enterState(kPlayGame);
 }
 
 int soundToPlay = -1;
@@ -169,12 +172,9 @@ Java_pt_b13h_derelictgles2_DerelictJNI_init(JNIEnv *env, jclass clazz, jint jwid
     width = jwidth;
     height = jheight;
 
-    initHW(0, NULL);
     initGL();
 
     enableSmoothMovement = TRUE;
-    enterState(kPlayGame);
-
     enable3DRendering = TRUE;
 }
 
@@ -192,4 +192,6 @@ Java_pt_b13h_derelictgles2_DerelictJNI_drawFrame(JNIEnv *env, jclass clazz) {
 
 JNIEXPORT void JNICALL
 Java_pt_b13h_derelictgles2_DerelictJNI_onDestroy(JNIEnv *env, jclass clazz) {
+    enable3DRendering = FALSE;
+    unloadTextures();
 }
