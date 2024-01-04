@@ -1,5 +1,5 @@
 /*
- * AY-3-8910: used on MSX, Amstrad CPC 464 and Atari ST
+ * SN76489: used on the Master System
  * Created by Daniel Monteiro on 11/07/2023.
  * */
 

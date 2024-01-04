@@ -10,6 +10,7 @@
 #include "Derelict.h"
 #include "Renderer.h"
 #include "Engine.h"
+#include "SoundSystem.h"
 
 extern uint8_t playerLocation;
 
@@ -161,9 +162,11 @@ enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t opt
         case kCommandBack:
             return backState;
         case kCommandUp:
+            playSound(2);
             --cursorPosition;
             break;
         case kCommandDown:
+            playSound(2);
             ++cursorPosition;
             break;
         case kCommandFire1:
