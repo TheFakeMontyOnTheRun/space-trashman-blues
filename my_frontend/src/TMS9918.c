@@ -15,16 +15,20 @@
 
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 
+void setColour(uint8_t colour) {
+    set_color(colour, 0, 0);
+}
+
 void flush3DBuffer(void) {
     uint8_t *ptr = &buffer[0];
 
     for (uint8_t y = 0; y < (BUFFER_RESY); y += 8) {
         /* 248 = ~7 */
-        vwrite(ptr, ((y & 248) << 5), 16 * 8);
+        vwrite(ptr, (y << 5), 16 * 8);
         ptr += 8 * 16;
     }
 
-    memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
+    clearGraphics();
 }
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
@@ -113,8 +117,8 @@ void graphicsPutPointArray(uint8_t *y128Values) {
             }
             currByte |= (128 >> (x & 7));
         }
-        *ptr = currByte;
 
+        *ptr = currByte;
         ++x;
         ++stencilPtr;
     }
@@ -137,11 +141,13 @@ void clearGraphics(void) {
     memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
+#ifdef EMIT_QUIT_OPTION
 void shutdownGraphics(void) {
 }
+#endif
 
 uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
-    set_color(colour, 1, 1);
+    setColour(colour);
     plot(x, y);
     return NULL;
 }
@@ -156,7 +162,7 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
     char lastChar = 0xFF;
     uint8_t *fontTop;
 
-    for (; c < len && y < 64; ++c) {
+    for (; c < len && y < (YRES_FRAMEBUFFER / 8); ++c) {
 
         char cha = *ptr;
 
@@ -197,17 +203,25 @@ void clearTextScreen(void) {
     }
 }
 
-void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
+void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, uint8_t stipple) {
     uint8_t x, y;
-    set_color(colour, 1, 1);
-    for (y = y0; y < y1; ++y) {
-        for (x = x0; x < x1; ++x) {
-            plot(x, y);
+    setColour(colour);
+    if (stipple) {
+        for (y = y0; y < y1; ++y) {
+            for (x = x0 + (y & 1); x < x1; x += 2) {
+                plot(x, y);
+            }
+        }
+    } else {
+        for (y = y0; y < y1; ++y) {
+            for (x = x0; x < x1; ++x) {
+                plot(x, y);
+            }
         }
     }
 }
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
-    set_color(colour, 1, 1);
+    setColour(colour);
     draw(x0, y0, x1, y1);
 }

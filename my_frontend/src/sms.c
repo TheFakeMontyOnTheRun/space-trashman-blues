@@ -12,6 +12,7 @@
 #include "GamepadUI.h"
 #include "TMS9918.h"
 #include "SN76489.h"
+#include "SoundSystem.h"
 
 #define COOLDOWN_MAX 0xFF
 
@@ -71,13 +72,14 @@ enum ECommand getInput(void) {
     }
 
     if ((key & JOY_FIREA) /* && !cooldown */) {
+        playSound(3);
         cooldown = COOLDOWN_MAX;
         return performActionJoypad();
     }
 
     if ((key & JOY_FIREB) /* && !cooldown */ ) {
         cursorPosition = (cursorPosition + 1);
-
+        playSound(2);
         if (cursorPosition >= 6) {
             cursorPosition = 0;
         }

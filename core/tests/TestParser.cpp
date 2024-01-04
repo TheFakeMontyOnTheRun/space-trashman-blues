@@ -3,6 +3,7 @@
 //
 
 #include <gtest/gtest.h>
+#include <stdint.h>
 
 extern "C" {
 #include "Core.h"

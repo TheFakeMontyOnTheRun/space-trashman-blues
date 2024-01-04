@@ -34,7 +34,7 @@ void HackingScreen_initStateCallback(enum EGameMenuState tag) {
 
 void HackingScreen_repaintCallback(void) {
     uint8_t pin;
-	uint8_t c;
+    uint8_t c;
     uint8_t holdingDisk;
 
     drawTextAt(1, 1, "Stack trace:", 1);
@@ -51,17 +51,20 @@ void HackingScreen_repaintCallback(void) {
         uint8_t disk;
 
         if (pin != 0) {
-            drawLine( 88 * pin, 40, 88 * pin, 80, 2);
+            drawLine(88 * pin, 40, 88 * pin, 80, 2);
         }
 
         for (disk = 0; disk < 5; ++disk) {
 
             uint8_t diskIndex = getPositionForPin(pin, disk);
 
-            char *funcName = (disk >= getDisksForPin(pin)) ? NULL : functionNames[diskIndex];
+            char *funcName = (disk >= getDisksForPin(pin)) ? NULL
+                                                           : functionNames[diskIndex];
 
             if (funcName) {
-                drawTextAt(10 * (pin) + (pin == 0 ? 0 : 1), 4 + (4 - disk), funcName, 1);
+                drawTextAt(
+                        10 * (pin) + (pin == 0 ? 0 : 1), 4 + (4 - disk),
+                        funcName, 1);
             }
         }
     }

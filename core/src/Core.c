@@ -102,6 +102,14 @@ void writeToLog(const char *errorMsg) {
 #endif
 }
 
+void cantBeUsedCallback(struct Item *item) {
+    defaultLogger("You can't use it like this.");
+}
+
+void cantBeUsedWithOthersCallback(struct Item *item1, struct Item *item2) {
+    defaultLogger("Nothing happens.");
+}
+
 struct Item *addItem(const char *description,
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
         const char *info,
@@ -123,6 +131,9 @@ struct Item *addItem(const char *description,
     toReturn->pickable = pickable;
     toReturn->position.x = positionX;
     toReturn->position.y = positionY;
+
+    toReturn->useCallback = cantBeUsedCallback;
+    toReturn->useWithCallback = cantBeUsedWithOthersCallback;
 
     return toReturn;
 }
