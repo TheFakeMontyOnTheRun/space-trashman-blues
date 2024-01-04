@@ -173,9 +173,9 @@ class GameActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
-        super.onPause()
         running = false
         mView!!.onPause()
+        super.onPause()
     }
 
     override fun onResume() {

@@ -16,7 +16,15 @@ internal class GL2JNIView : GLSurfaceView, GLSurfaceView.Renderer {
     }
 
     override fun onSurfaceCreated(gl: GL10, config: EGLConfig) {
-        // Do nothing.
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onPause() {
+        DerelictJNI.onDestroy()
+        super.onPause()
     }
 
     constructor(context: Context) : super(context) {
