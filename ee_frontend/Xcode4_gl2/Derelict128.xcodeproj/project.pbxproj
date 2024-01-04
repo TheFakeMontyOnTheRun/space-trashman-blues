@@ -96,6 +96,9 @@
 		F1A2C9DD2B3EF09700F2E1CA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A2C9DC2B3EF09700F2E1CA /* CoreGraphics.framework */; };
 		F1A2C9DF2B3EF09700F2E1CA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A2C9DE2B3EF09700F2E1CA /* GLKit.framework */; };
 		F1A2C9E12B3EF09700F2E1CA /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A2C9E02B3EF09700F2E1CA /* OpenGLES.framework */; };
+		F1F3E0FF2B46E77E00D86751 /* TitleScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = F1F3E0FD2B46E77E00D86751 /* TitleScreen.m */; };
+		F1F3E1002B46E77E00D86751 /* TitleScreen_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1F3E0FE2B46E77E00D86751 /* TitleScreen_iPad.xib */; };
+		F1F3E1022B46ED1200D86751 /* TitleScreen_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1F3E1012B46ED1200D86751 /* TitleScreen_iPhone.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -193,6 +196,10 @@
 		F1BA234D2B40842700F83542 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		F1BA234E2B40842700F83542 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F1BA234F2B40842700F83542 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		F1F3E0FC2B46E77E00D86751 /* TitleScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleScreen.h; sourceTree = "<group>"; };
+		F1F3E0FD2B46E77E00D86751 /* TitleScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleScreen.m; sourceTree = "<group>"; };
+		F1F3E0FE2B46E77E00D86751 /* TitleScreen_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TitleScreen_iPad.xib; sourceTree = "<group>"; };
+		F1F3E1012B46ED1200D86751 /* TitleScreen_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TitleScreen_iPhone.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -254,6 +261,10 @@
 				F1293B332B41C9050094E02B /* Shaders */,
 				F1293B362B41C9050094E02B /* ViewController.h */,
 				F1293B372B41C9050094E02B /* ViewController.m */,
+				F1F3E0FC2B46E77E00D86751 /* TitleScreen.h */,
+				F1F3E0FD2B46E77E00D86751 /* TitleScreen.m */,
+				F1F3E0FE2B46E77E00D86751 /* TitleScreen_iPad.xib */,
+				F1F3E1012B46ED1200D86751 /* TitleScreen_iPhone.xib */,
 			);
 			path = "Sub Mare Imperium Derelict (GL ES 2)";
 			sourceTree = "<group>";
@@ -527,6 +538,8 @@
 				F1293B3D2B41C9050094E02B /* InfoPlist.strings in Resources */,
 				F1293B3E2B41C9050094E02B /* ViewController_iPad.xib in Resources */,
 				F1293B3F2B41C9050094E02B /* ViewController_iPhone.xib in Resources */,
+				F1F3E1002B46E77E00D86751 /* TitleScreen_iPad.xib in Resources */,
+				F1F3E1022B46ED1200D86751 /* TitleScreen_iPhone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -613,6 +626,7 @@
 				F1293B412B41C9050094E02B /* Shader.fsh in Sources */,
 				F1293B422B41C9050094E02B /* Shader.vsh in Sources */,
 				F1293B432B41C9050094E02B /* ViewController.m in Sources */,
+				F1F3E0FF2B46E77E00D86751 /* TitleScreen.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
