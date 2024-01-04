@@ -10,7 +10,7 @@ class MainMenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_menu)
 
-        findViewById<Button>(R.id.btnPlayGame).setOnClickListener{
+        findViewById<Button>(R.id.btnPlayGame).setOnClickListener {
             startActivity(Intent(this, GameActivity::class.java))
         }
     }

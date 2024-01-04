@@ -8,9 +8,13 @@ public class DerelictJNI {
     }
 
     public static native void init(int width, int height);
+
     public static native void initAssets(AssetManager assetManager);
+
     public static native void sendCommand(char cmd);
+
     public static native int getSoundToPlay();
+
     public static native int isOnMainMenu();
 
     public static native void drawFrame();
