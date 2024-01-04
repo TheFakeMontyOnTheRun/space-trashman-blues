@@ -33,7 +33,7 @@ class GameActivity : AppCompatActivity() {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         }
 
-        if (savedInstanceState == null ) {
+        if (savedInstanceState == null) {
             DerelictJNI.initAssets(resources.assets)
         }
 
@@ -106,7 +106,8 @@ class GameActivity : AppCompatActivity() {
                             findViewById<LinearLayout>(R.id.llActions).visibility = View.VISIBLE
                             findViewById<LinearLayout>(R.id.llDirections).visibility = View.VISIBLE
                         } else {
-                            findViewById<LinearLayout>(R.id.llScreenControllers).visibility = View.VISIBLE
+                            findViewById<LinearLayout>(R.id.llScreenControllers).visibility =
+                                View.VISIBLE
                         }
 
                         findViewById<ImageButton>(R.id.btnUp).setOnClickListener {
@@ -156,7 +157,8 @@ class GameActivity : AppCompatActivity() {
                             findViewById<LinearLayout>(R.id.llActions).visibility = View.GONE
                             findViewById<LinearLayout>(R.id.llDirections).visibility = View.GONE
                         } else {
-                            findViewById<LinearLayout>(R.id.llScreenControllers).visibility = View.GONE
+                            findViewById<LinearLayout>(R.id.llScreenControllers).visibility =
+                                View.GONE
                         }
                     }
                 }
@@ -202,10 +204,10 @@ class GameActivity : AppCompatActivity() {
             KeyEvent.KEYCODE_BUTTON_R1, KeyEvent.KEYCODE_D -> 'm'
 
             KeyEvent.KEYCODE_BUTTON_A, KeyEvent.KEYCODE_Z -> 'z'
-            KeyEvent.KEYCODE_BUTTON_B, KeyEvent.KEYCODE_X-> 'x'
-            KeyEvent.KEYCODE_BUTTON_C, KeyEvent.KEYCODE_BUTTON_Y, KeyEvent.KEYCODE_C-> 'c'
+            KeyEvent.KEYCODE_BUTTON_B, KeyEvent.KEYCODE_X -> 'x'
+            KeyEvent.KEYCODE_BUTTON_C, KeyEvent.KEYCODE_BUTTON_Y, KeyEvent.KEYCODE_C -> 'c'
             KeyEvent.KEYCODE_BUTTON_START, KeyEvent.KEYCODE_BUTTON_X, KeyEvent.KEYCODE_ENTER -> 'q'
-            else -> return super.onKeyUp(keyCode, event )
+            else -> return super.onKeyUp(keyCode, event)
         }
         DerelictJNI.sendCommand(toSend)
         return true
@@ -231,7 +233,7 @@ class GameActivity : AppCompatActivity() {
 
     private fun useSecondaryDisplayForGameplayPresentation(presentationDisplay: Display) {
 
-        ( mView!!.parent as ViewManager).removeView(mView)
+        (mView!!.parent as ViewManager).removeView(mView)
         presentation =
             GamePresentation(this, presentationDisplay, mView!!)
 

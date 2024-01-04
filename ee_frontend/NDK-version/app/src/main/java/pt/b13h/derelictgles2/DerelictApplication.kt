@@ -7,7 +7,7 @@ import android.content.res.Configuration
 import android.media.AudioManager
 import android.view.InputDevice
 
-class DerelictApplication  : Application() {
+class DerelictApplication : Application() {
 
     fun mayEnableSound(): Boolean {
         val am = getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -42,7 +42,7 @@ class DerelictApplication  : Application() {
         return false
     }
 
-    fun hasPhysicalController() : Boolean {
+    fun hasPhysicalController(): Boolean {
         return hasPhysicalKeyboard() || hasGamepad() || !hasTouchscreen()
     }
 }
