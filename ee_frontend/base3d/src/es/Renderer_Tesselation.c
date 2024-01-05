@@ -202,21 +202,6 @@ void renderVBOAt(struct Bitmap *bitmap, struct VBORegister vbo, float x, float y
 
     checkGLError("triangles drawn");
 
-    mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);
-    glUniformMatrix4fv(uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix);
-
-    mat4x4_rotateX(rotateXMatrix, leanY);
-    glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix);
-
-    mat4x4_rotateY(rotateYMatrix, leanX);
-    glUniformMatrix4fv(uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix);
-
-    mat4x4_rotateZ(rotateZMatrix, 0);
-    glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
-
-
-    checkGLError("unsetting matrices");
-
     glDisableVertexAttribArray(aPositionAttributeLocation);
     glDisableVertexAttribArray(aTexCoordAttributeLocation);
 
