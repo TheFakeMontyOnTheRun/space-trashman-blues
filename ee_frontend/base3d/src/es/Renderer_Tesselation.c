@@ -391,11 +391,6 @@ void drawBillboardAt(const struct Vec3 center,
                      struct Texture *texture,
                      const FixP_t scale,
                      const int size) {
-    /*
-    if ((center.mZ + zCameraOffset) <= Z_NEAR_PLANE_FRUSTUM) {
-        return;
-    }
-     */
 
     FixP_t geometryScale = Mul(scale, intToFix(2));
     float textureScale = 16;
@@ -424,7 +419,7 @@ void drawBillboardAt(const struct Vec3 center,
     float y = fixToFloat(center.mY);
     float z = -fixToFloat(center.mZ);
 
-    renderVBOAt(texture->raw, planeXYVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), 0, 0, 1, 1,
+    renderVBOAt(texture->raw, planeXYVBO, x, y, z, 0, leanX, 0, 1.0f, fixToFloat(scale), 0, 0, 1, 1,
                 0xFFFFFFFF, FALSE);
 }
 
