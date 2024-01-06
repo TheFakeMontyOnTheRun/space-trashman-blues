@@ -22,6 +22,7 @@
 
 #else
 #include <genesis.h>
+int puts( const char* str );
 #endif
 
 #include "Core.h"
@@ -131,7 +132,7 @@ int16_t min(int16_t x1, int16_t x2) {
 }
 #endif
 
-uint16_t
+void
 drawWedge(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ, uint16_t elementMask, uint16_t type) {
 
     int16_t z1;
@@ -154,21 +155,21 @@ drawWedge(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ
     uint16_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? (3 + STIPPLE_COLOUR_THRESHOLD) : 3;
 
     if (z0 >= 32) {
-        return 0;
+        return;
     }
 
     z1 = z0 + dZ;
 
     if (z0 <= 2) {
-        return 0;
+        return;
     }
 
     if (z1 <= 2) {
-        return 0;
+        return;
     }
 
     if (z1 >= 32) {
-        return 0;
+        return;
     }
 
 
@@ -282,7 +283,7 @@ drawWedge(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ
             }
 
             if (lineX0 >= XRES) {
-                return 0;
+                return;
             }
 
             if (upperErr2 <= upperDx) {
@@ -314,12 +315,9 @@ drawWedge(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ
             vLine(px1z1, py0z1, py1z1, 0);
         }
     }
-
-
-    return 1;
 }
 
-uint16_t drawSquare(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, uint16_t elementMask) {
+void drawSquare(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, uint16_t elementMask) {
 
     int16_t z0px;
     int16_t z0py;
@@ -335,7 +333,7 @@ uint16_t drawSquare(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, 
     uint16_t drawContour;
 
     if (z0 >= 32) {
-        return 0;
+        return;
     }
 
     z0px = (projections[z0].px);
@@ -350,7 +348,7 @@ uint16_t drawSquare(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, 
     py1z0 = py0z0 + (dY * z0dx);
 
     if (px1z0 < 0 || px0z0 > XRESMINUSONE) {
-        return 0;
+        return;
     }
 
     uint16_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? (4 + STIPPLE_COLOUR_THRESHOLD) : 4;
@@ -375,14 +373,11 @@ uint16_t drawSquare(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, 
                 vLine(px1z0, py0z0, py1z0, 0);
             }
         }
-
     }
-
-    return 1;
 }
 
 
-uint16_t drawObjectAt(int16_t x0, int16_t z0) {
+void drawObjectAt(int16_t x0, int16_t z0) {
 
     int16_t z1;
     uint16_t z0px;
@@ -401,13 +396,13 @@ uint16_t drawObjectAt(int16_t x0, int16_t z0) {
     uint16_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? (5 + STIPPLE_COLOUR_THRESHOLD) : 5;
 
     if (z0 >= 32 || z0 <= 4) {
-        return 0;
+        return;
     }
 
     z1 = z0 + 1;
 
     if (z1 >= 32) {
-        return 0;
+        return;
     }
 
 
@@ -513,7 +508,7 @@ uint16_t drawObjectAt(int16_t x0, int16_t z0) {
             }
 
             if (lineX0 >= XRES) {
-                return 1;
+                return;
             }
 
             if (e2 <= dx) {
@@ -523,12 +518,9 @@ uint16_t drawObjectAt(int16_t x0, int16_t z0) {
             }
         }
     }
-
-
-    return 1;
 }
 
-uint16_t drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ, uint16_t elementMask) {
+void drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ, uint16_t elementMask) {
 
     int16_t y1 = y0 + dY;
     int16_t z1;
@@ -540,7 +532,6 @@ uint16_t drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, 
     int16_t z0dx;
     int16_t z1dx;
     int16_t py1z0;
-    int16_t py1z1;
     int16_t px0z0;
     int16_t py0z0;
     int16_t px1z0;
@@ -554,13 +545,13 @@ uint16_t drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, 
     uint16_t drawContour;
 
     if (z0 >= 32 || z0 <= 4) {
-        return 0;
+        return;
     }
 
     z1 = z0 + dZ;
 
     if (z1 >= 32) {
-        return 0;
+        return;
     }
 
     z0px = (projections[z0].px);
@@ -578,8 +569,6 @@ uint16_t drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, 
     py0z0 = z0py + ((y0) * z0dx);
     py0z1 = z1py + ((y0) * z1dx);
     py1z0 = z0py + ((y1) * z0dx);
-    py1z1 = z1py + ((y1) * z1dx);
-
     drawContour = (dY);
 
 
@@ -686,12 +675,9 @@ uint16_t drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, 
     if (IN_RANGE(0, XRESMINUSONE, px1z0)) {
         vLine(px1z0, py0z0, py1z0, 1);
     }
-
-
-    return 1;
 }
 
-uint16_t drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ, uint16_t elementMask) {
+void drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ, uint16_t elementMask) {
 
     int16_t z1;
 
@@ -711,13 +697,13 @@ uint16_t drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ,
     uint16_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? (2 + STIPPLE_COLOUR_THRESHOLD) : 2;
 
     if (z0 >= 32 || z0 < 1) {
-        return 0;
+        return;
     }
 
     z1 = z0 + dZ;
 
     if (z1 >= 32) {
-        return 0;
+        return;
     }
 
     z0px = (projections[z0].px);
@@ -736,7 +722,7 @@ uint16_t drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ,
     py0z1 = z1py + ((y0) * z1dx);
 
 
-    int16_t x, leftX0, leftX1, rightX0, rightX1;
+    int16_t leftX0, leftX1, rightX0, rightX1;
 
     leftX0 = px0z0;
     leftX1 = px0z1;
@@ -758,7 +744,7 @@ uint16_t drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ,
 
     while (currentY0 != py0z1) {
         if (leftX0 >= XRES) {
-            return 1;
+            return;
         }
 
         if (IN_RANGE(0, XRESMINUSONE, leftX0) || IN_RANGE(0, XRESMINUSONE, rightX0)) {
@@ -785,9 +771,6 @@ uint16_t drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ,
             currentY0 += sy;
         }
     }
-
-
-    return 1;
 }
 
 void drawPattern(uint16_t _pattern, int16_t x0, int16_t x1, int16_t z) {
@@ -883,28 +866,26 @@ void drawPattern(uint16_t _pattern, int16_t x0, int16_t x1, int16_t z) {
                 break;
         }
     } else if (type == kWallCorner) {
-        int returnVal = 0;
 
         switch (cameraRotation) {
 
             case 3:
             case 0:
-                returnVal = drawWedge(x0 - (cameraRotation == 3 ? 0 : 1),
+                drawWedge(x0 - (cameraRotation == 3 ? 0 : 1),
                                       floorHeight - cameraHeight, z + 2,
                                       0, diff, 1, 0xFF, kLeftNearWall);
 
-                returnVal = drawSquare(x0 - 1, floorHeight - cameraHeight, z + 1 + 2,
-                                       x1 - x0, diff, 0xFF) || returnVal;
+                drawSquare(x0 - 1, floorHeight - cameraHeight, z + 1 + 2,
+                                       x1 - x0, diff, 0xFF);
                 break;
 
             case 1:
             case 2:
-                returnVal = drawSquare(x0 - 1, floorHeight - cameraHeight, z + 2,
+                drawSquare(x0 - 1, floorHeight - cameraHeight, z + 2,
                                        x1 - x0, diff, 0xFF);
 
-                returnVal =
-                        drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), floorHeight - cameraHeight, z + 2,
-                                  0, diff, 1, 0xFF, kLeftNearWall) || returnVal;
+                drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), floorHeight - cameraHeight, z + 2,
+                                  0, diff, 1, 0xFF, kLeftNearWall);
 
                 break;
         }
@@ -959,8 +940,6 @@ void repaintMapItems(void) {
 
 /* all those refactors are due to a SDCC bug with very long functions */
 void renderScene(void) {
-    uint16_t x;
-
 
     uint16_t pattern = map[cameraZ][cameraX];
 
@@ -1420,7 +1399,6 @@ void tickRenderer(void) {
     }
 }
 
-
 void onError(const char *mesg) {
     puts(mesg);
 }
@@ -1428,7 +1406,6 @@ void onError(const char *mesg) {
 void logDelegate(const char *mesg) {
     showMessage(mesg);
 }
-
 
 #ifdef ATARIST
 int doMain(void);
