@@ -1,27 +1,34 @@
 #include <genesis.h>
 
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Engine3D.h"
 #include "Engine.h"
 
-void graphicsFlush();
+void graphicsFlush(void);
 
-void nextItemInHand();
+void nextItemInHand(void);
 
-void useItemInHand();
+void useItemInHand(void);
 
-void nextItemInRoom();
+void nextItemInRoom(void);
 
-void interactWithItemInRoom();
+void interactWithItemInRoom(void);
 
-void pickOrDrop();
+void pickOrDrop(void);
 
-void dropItem();
+void dropItem(void);
 
-void pickItem();
+void pickItem(void);
 
-void clearGraphics();
+void clearGraphics(void);
+
+void renderScene(void);
+
+void enterTextMode(void);
+
+void exitTextMode(void);
 
 
 extern int8_t map[32][32];
@@ -59,7 +66,6 @@ void backToGraphics() {
 }
 
 void performAction() {
-    struct Room *room = getRoom(getPlayerRoom());
 
     switch (getGameStatus()) {
         case kBadVictory:
@@ -456,9 +462,6 @@ void graphicsFlush() {
 }
 
 void HUD_initialPaint() {
-    struct Room *room = getRoom(getPlayerRoom());
-
-
     for (int16_t i = 0; i < 6; ++i) {
         writeStr(16, 13 + i, i == cursorPosition ? ">" : " ", 2, 0);
         writeStr(17, 13 + i, menuItems[i], 2, 0);

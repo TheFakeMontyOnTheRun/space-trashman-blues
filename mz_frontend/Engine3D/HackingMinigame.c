@@ -15,8 +15,8 @@
 #include "Engine3D.h"
 #include "HackingMinigame.h"
 
-extern int accessGrantedToSafe;
-extern int cursorPosition;
+extern uint8_t accessGrantedToSafe;
+extern uint8_t cursorPosition;
 
 char *functionNames[5] = {
         "???",
