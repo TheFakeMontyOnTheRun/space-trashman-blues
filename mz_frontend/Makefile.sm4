@@ -30,7 +30,7 @@ ifeq ($(OS),Windows_NT)
 endif
 
 # Includes: Local + GCC + SGDK + Newlib
-INCS     = -Isrc -Ires -Iinc -I../common/include -IEngine3D
+INCS     = -Isrc -Ires -Iinc -I../common/include -IEngine3D -I../core/include
 INCS    += -I$(MARSDEV)/m68k-elf/lib/gcc/m68k-elf/$(GCC_VER)/include
 INCS    += -I$(MARSDEV)/m68k-elf/inc
 INCS    += -I$(MARSDEV)/m68k-elf/res
@@ -45,7 +45,9 @@ LIBS     = -L$(MARSDEV)/m68k-elf/lib/gcc/m68k-elf/$(GCC_VER) -lgcc
 LIBS    += -u __modsi3 -u __divsi3 -u __mulsi3 -u __umodsi3 -u __udivsi3 -u __umulsi3
 
 # Any C or C++ standard should be fine here as long as GCC support it
-CCFLAGS  = -m68000 -Wall -Wextra -std=c99 -ffreestanding -fcommon -DSMD -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_HACKING_MINIGAME -D TRACE_OBJECTS_OVER_FLOOR -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DENDIANESS_AWARE -DGAMEPAD -DUSE_FILLED_POLYS -DRLE_COMPRESSED_MAPS -Wno-unused-parameter -Wno-char-subscripts -I../core/include
+CCFLAGS  = -m68000 -Wall -Wextra -std=c99 -ffreestanding -fcommon -Ofast -Wno-unused-parameter -Wno-char-subscripts \
+            -DSMD -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_HACKING_MINIGAME -DTRACE_OBJECTS_OVER_FLOOR\
+            -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DENDIANESS_AWARE -DGAMEPAD -DUSE_FILLED_POLYS -DRLE_COMPRESSED_MAPS
 
 # Extra options set by debug or release target
 ASFLAGS  = -m68000 --register-prefix-optional
