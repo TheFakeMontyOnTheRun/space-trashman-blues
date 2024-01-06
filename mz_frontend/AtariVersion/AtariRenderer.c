@@ -21,6 +21,37 @@
 #include <mint/sysbind.h>
 #include <mint/osbind.h>
 
+extern struct ObjectNode *focusedItem;
+extern struct ObjectNode *roomItem;
+extern int accessGrantedToSafe;
+
+char *menuItems[] = {
+        "8) Use/Toggle",
+        "5) Use with...",
+        "9) Use/pick...",
+        "6) Drop",
+        "7) Next item",
+        "4) Next in room",
+};
+
+void graphicsFlush(void);
+
+void nextItemInHand(void);
+
+void useItemInHand(void);
+
+void nextItemInRoom(void);
+
+void interactWithItemInRoom(void);
+
+void pickOrDrop(void);
+
+void dropItem(void);
+
+void pickItem(void);
+
+void clearGraphics(void);
+
 uint16_t *physBase;
 uint16_t *logBase;
 
@@ -60,7 +91,6 @@ void init(void) {
     framebuffer_set_palette_entry(15, NORMALIZE(0xFF), NORMALIZE(0xFF), NORMALIZE(0xFF));
 }
 
-
 /*Same as above*/
 void handleSystemEvents(void) {
     bufferInput = Cnecin();
@@ -74,7 +104,6 @@ uint8_t getKey(void) {
 }
 
 void clear(void) {}
-
 
 void graphicsPut(int16_t x, int16_t y, uint16_t colour) {
     framebuffer[(128 * y) + x] = colour;
@@ -114,9 +143,8 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t pixel) {
     }
 }
 
-
 void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
-    if (y < 0) {
+    if (y < 0 || y >= 128) {
         return;
     }
 
@@ -136,47 +164,16 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
         _x1 = 127;
     }
 
+    uint8_t *ptr = &framebuffer[(128 * y) + _x0];
     for (int x = _x0; x <= _x1; ++x) {
-        framebuffer[(128 * y) + x] = colour;
+        *ptr++ = colour;
     }
 }
-
-extern struct ObjectNode *focusedItem;
-extern struct ObjectNode *roomItem;
-extern int accessGrantedToSafe;
-
-char *menuItems[] = {
-        "8) Use/Toggle",
-        "5) Use with...",
-        "9) Use/pick...",
-        "6) Drop",
-        "7) Next item",
-        "4) Next in room",
-};
-
-void graphicsFlush();
-
-void nextItemInHand();
-
-void useItemInHand();
-
-void nextItemInRoom();
-
-void interactWithItemInRoom();
-
-void pickOrDrop();
-
-void dropItem();
-
-void pickItem();
-
-void clearGraphics();
 
 void shutdownGraphics(void) {
 }
 
 void realPut(int x, int y, uint8_t value) {
-
 }
 
 void clearGraphics(void) {
@@ -185,7 +182,6 @@ void clearGraphics(void) {
 
 void clearScreen(void) {
 }
-
 
 void writeStrWithLimit(int _x, int y, const char *text, int limitX) {
 }
@@ -200,13 +196,13 @@ void graphicsFlush(void) {
     memset(logBase, 0, 32000);
     uint8_t *index = &framebuffer[0];
     unsigned lineOffset = 0;
+    uint16_t *words = (uint16_t *) logBase;
 
     for (int y = 0; y < 128; ++y) {
         for (int x = 0; x < 128; ++x) {
 
-            unsigned value = *index;
+            unsigned value = *index++;
 
-            ++index;
             if (value > 16) {
                 if ((x + y) & 1) {
                     value = 0;
@@ -215,7 +211,6 @@ void graphicsFlush(void) {
                 }
             }
 
-            uint16_t *words = (uint16_t *) logBase;
             unsigned offset = lineOffset + ((x >> 4) << 2);
             unsigned bitPattern = (1 << (15 - (x & 15)));
 
@@ -251,9 +246,7 @@ void graphicsFlush(void) {
     Setscreen(logBase, physBase, -1);
 }
 
-
 void showMessage(const char *message) {
-
 }
 
 void titleScreen(void) {
