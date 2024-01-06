@@ -58,7 +58,7 @@ struct ObjectNode *focusedItem = NULL;
 struct ObjectNode *roomItem = NULL;
 struct MapWithCharKey tileProperties;
 extern int accessGrantedToSafe;
-int cursorPosition = 0;
+uint8_t cursorPosition = 0;
 
 void performAction();
 
@@ -79,7 +79,7 @@ uint16_t running = 1;
 int16_t cameraHeight = 1;
 uint16_t enteredFrom = 0xFF;
 
-extern int playerLocation;
+extern uint8_t playerLocation;
 
 struct Projection {
     uint8_t px;
@@ -842,6 +842,7 @@ void drawPattern(uint16_t _pattern, int16_t x0, int16_t x1, int16_t z) {
             case 2:
                 drawWedge(x0 - (cameraRotation == 0 ? 1 : 0), floorHeight - cameraHeight, z + 2,
                           0, diff, 1, 0xFF, kLeftNearWall);
+                break;
             case 1:
             case 3:
                 drawSquare(x0 - 1, floorHeight - cameraHeight,
