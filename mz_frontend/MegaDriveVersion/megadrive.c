@@ -48,7 +48,6 @@ char *menuItems[] = {
 };
 
 void refreshJustGraphics() {
-    clearGraphics();
     renderScene();
     graphicsFlush();
 }
@@ -454,7 +453,6 @@ void init() {
 
 void graphicsFlush() {
     BMP_flip(1);
-    BMP_clear();
 }
 
 void HUD_initialPaint() {
