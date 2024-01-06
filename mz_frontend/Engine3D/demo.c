@@ -1292,7 +1292,6 @@ void tickRenderer(void) {
     int previousLocation = playerLocation;
     uint16_t newCell = 0;
 
-    clearGraphics();
     renderScene();
 
     graphicsFlush();
