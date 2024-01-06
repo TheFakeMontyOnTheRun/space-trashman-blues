@@ -1,12 +1,15 @@
+#ifndef SMD
 #include <math.h>
 #include <stdlib.h>
 
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-#include <stdint.h>
 #include <unistd.h>
 #endif
+#endif
+
+#include <stdint.h>
 
 #include "FixP.h"
 
