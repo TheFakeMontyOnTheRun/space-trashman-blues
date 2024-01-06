@@ -2,7 +2,14 @@ CXX = m68k-amigaos-g++
 CC = m68k-amigaos-gcc
 STRIP=m68k-amigaos-strip
 AS = vasmm68k_mot
-CFLAGS = -I../common/include -I../core/include -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -Imenu/include -ISoundSystem -c -m68000 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -O3 -DAGA5BPP -IAmigaVersion -I../core/include -I../common/include -IEngine3D -DRES128X128 -DTRACE_OBJECTS_OVER_FLOOR -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DUSE_FILLED_POLYS -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DENDIANESS_AWARE
+CFLAGS = \
+    -c -m68000 -s -fexpensive-optimizations -fomit-frame-pointer -ffast-math -Ofast \
+    -I../common/include -IAmigaVersion -I../core/include -I../common/include -IEngine3D -I../core/include \
+    -Imenu/include -ISoundSystem \
+    -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DAGA5BPP -DRES128X128 -DTRACE_OBJECTS_OVER_FLOOR \
+    -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DUSE_FILLED_POLYS -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DENDIANESS_AWARE
+
+
 LDFLAGS =  -s -mcrt=nix13
 ASFLAGS = -phxass -Fhunk -m68000 -chklabels -no-fpu -wfail -I/opt/amiga/m68k-amigaos/ndk-include
 

@@ -1,7 +1,11 @@
 CXX = m68k-atari-mint-g++
 CC = m68k-atari-mint-gcc
 STRIP=m68k-atari-mint-strip
-CFLAGS = -std=c99 -DATARIST -I../common/include -I../core/include -DCLI_BUILD -Imenu/include -ISoundSystem -c -m68000 -s -fexpensive-optimizations -fomit-frame-pointer -Ofast -DAGA5BPP -IAtariVersion -I../core/include -I../common/include -IEngine3D -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DENDIANESS_AWARE
+CFLAGS = -std=c99 -c -m68000 -s -fexpensive-optimizations -fomit-frame-pointer -Ofast \
+        -DATARIST -DCLI_BUILD -DAGA5BPP -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DENDIANESS_AWARE \
+        -DSUPPORTS_ROOM_TRANSITION_ANIMATION \
+        -I../common/include -I../core/include -Imenu/include -ISoundSystem -IAtariVersion -I../core/include -IEngine3D \
+        -I../common/include
 
 MENU_TARGET=game.prg
 
