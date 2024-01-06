@@ -60,10 +60,6 @@ struct MapWithCharKey tileProperties;
 extern int accessGrantedToSafe;
 uint8_t cursorPosition = 0;
 
-void performAction();
-
-void startMusic();
-
 void renderCameraNorth();
 
 void renderCameraEast();
@@ -520,7 +516,7 @@ void drawObjectAt(int16_t x0, int16_t z0) {
     }
 }
 
-void drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ, uint16_t elementMask) {
+void drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ) {
 
     int16_t y1 = y0 + dY;
     int16_t z1;
@@ -677,7 +673,7 @@ void drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int1
     }
 }
 
-void drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ, uint16_t elementMask) {
+void drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ) {
 
     int16_t z1;
 
@@ -798,29 +794,27 @@ void drawPattern(uint16_t _pattern, int16_t x0, int16_t x1, int16_t z) {
 
     if (prop->mCeilingRepeatedTextureIndex != 0xFF && prop->mCeilingRepetitions > 0) {
         drawCubeAt(x0 - 1, ceilingHeight - cameraHeight, z + 2, x1 - x0,
-                   prop->mCeilingRepetitions, 1, 0xFF);
+                   prop->mCeilingRepetitions, 1);
     }
 
     if (prop->mFloorRepeatedTextureIndex != 0xFF && prop->mFloorRepetitions > 0) {
         drawCubeAt(x0 - 1, floorHeight - prop->mFloorRepetitions - cameraHeight, z + 2, x1 - x0,
-                   prop->mFloorRepetitions, 1, 0xFF);
+                   prop->mFloorRepetitions, 1);
     }
 
 
     if (prop->mCeilingTextureIndex != 0xFF) {
-        drawFloorAt(x0 - 1, ceilingHeight - cameraHeight, z + 2, x1 - x0,
-                    1, 0xFF);
+        drawFloorAt(x0 - 1, ceilingHeight - cameraHeight, z + 2, x1 - x0, 1);
     }
 
     if (prop->mFloorTextureIndex != 0xFF) {
-        drawFloorAt(x0 - 1, floorHeight - cameraHeight, z + 2, x1 - x0,
-                    1, 0xFF);
+        drawFloorAt(x0 - 1, floorHeight - cameraHeight, z + 2, x1 - x0, 1);
     }
 
 
     if (type == kCube) {
         drawCubeAt(x0 - 1, floorHeight - cameraHeight, z + 2, x1 - x0,
-                   diff, 1, 0xFF);
+                   diff, 1);
     } else if (type == kRightNearWall || type == kLeftNearWall) {
 
         if (cameraRotation == 0 || cameraRotation == 2) {
@@ -845,6 +839,7 @@ void drawPattern(uint16_t _pattern, int16_t x0, int16_t x1, int16_t z) {
                 break;
             case 1:
             case 3:
+            default:
                 drawSquare(x0 - 1, floorHeight - cameraHeight,
                            z + (cameraRotation == 3 ? 1 : 0) + 2,
                            x1 - x0, diff, 0xFF);
@@ -861,6 +856,7 @@ void drawPattern(uint16_t _pattern, int16_t x0, int16_t x1, int16_t z) {
                 break;
             case 1:
             case 3:
+            default:
                 drawWedge(x0 - (cameraRotation == 1 ? 1 : 0),
                           floorHeight - cameraHeight, z + 2,
                           0, diff, 1, 0xFF, kLeftNearWall);
@@ -882,6 +878,7 @@ void drawPattern(uint16_t _pattern, int16_t x0, int16_t x1, int16_t z) {
 
             case 1:
             case 2:
+            default:
                 drawSquare(x0 - 1, floorHeight - cameraHeight, z + 2,
                                        x1 - x0, diff, 0xFF);
 
@@ -899,10 +896,8 @@ void repaintMapItems(void) {
     /* ignore header node */
     node = getRoom(playerLocation)->itemsPresent->next;
 
-    //        drawObjectAt(x0 - 1, y + 2);
     switch (cameraRotation) {
         case 0:
-            //drawPattern(lastPattern, lastIndex - cameraX + 2, x - cameraX + 2, cameraZ - y);
             while (node != NULL) {
                 struct Item *item = getItem(node->item);
                 drawObjectAt(item->position.x - cameraX + 2 - 1, cameraZ - item->position.y + 2);
@@ -911,7 +906,6 @@ void repaintMapItems(void) {
             break;
 
         case 1:
-            //drawPattern(lastPattern, (lastIndex - cameraZ) + 2 , (y - cameraZ) + 2, x - cameraX);
             while (node != NULL) {
                 struct Item *item = getItem(node->item);
                 drawObjectAt((item->position.y - cameraZ) + 1, (item->position.x - cameraX) + 2);
@@ -920,7 +914,6 @@ void repaintMapItems(void) {
             break;
 
         case 2:
-            //drawPattern(lastPattern, -(x - cameraX) + 2, -(lastIndex - cameraX) + 2, y - cameraZ);
             while (node != NULL) {
                 struct Item *item = getItem(node->item);
                 drawObjectAt(-(item->position.x - cameraX) + 1, (item->position.y - cameraZ) + 2);
@@ -929,7 +922,7 @@ void repaintMapItems(void) {
             break;
 
         case 3:
-            //        drawPattern(lastPattern, -(y - cameraZ) + 2, -(lastIndex - cameraZ)  + 2, cameraX - x);
+        default:
             while (node != NULL) {
                 struct Item *item = getItem(node->item);
                 drawObjectAt(-(item->position.y - cameraZ) + 1, (cameraX - item->position.x) + 2);
@@ -964,6 +957,7 @@ void renderScene(void) {
             break;
 
         case DIRECTION_W:
+        default:
             renderCameraWest();
             break;
     }
@@ -1120,6 +1114,7 @@ void dropItem(void) {
                 break;
 
             case 3:
+            default:
                 item->position.x = pos->x - 3;
                 item->position.y = pos->y;
                 break;
@@ -1270,7 +1265,7 @@ void tickRenderer(void) {
     uint16_t prevZ;
     struct WorldPosition *pos;
     int previousLocation = playerLocation;
-    uint16_t newCell = 0;
+    uint16_t newCell;
 
     renderScene();
 
@@ -1363,6 +1358,7 @@ void tickRenderer(void) {
             newCell = map[cameraZ + 2][cameraX];
             break;
         case 3:
+        default:
             newCell = map[cameraZ][cameraX - 2];
             break;
     }
