@@ -54,7 +54,7 @@ void drawMap(void) {
 
     for (y = 0; y < 12; ++y) {
         for (x = 0; x < 12; ++x) {
-            drawTextAt(16 + x + 2, 2 + y, " ", 0);
+            drawTextAt((XRES_TEXT / 2) + x + 2, 2 + y, " ", 0);
         }
     }
 
@@ -62,9 +62,9 @@ void drawMap(void) {
         for (x = 0; x < 32; ++x) {
 
             if (patterns[(map[y][x] & 127) - 32].blockMovement) {
-                fillRect(128 + (x * 3) + 16,
+                fillRect((XRES_FRAMEBUFFER / 2) + (x * 3) + 16,
                          (y * 3) + 16,
-                         128 + (x * 3) + 3 + 16,
+                         (XRES_FRAMEBUFFER / 2) + (x * 3) + 3 + 16,
                          (y * 3) + 3 + 16,
                          2,
                          0);
