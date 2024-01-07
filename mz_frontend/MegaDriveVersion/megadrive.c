@@ -437,6 +437,7 @@ void init() {
 
     DMA_setBufferSize(2048);
 
+    /* create virtual 256x160 framebuffer */
     BMP_init(TRUE, BG_B, PAL0, 1);
 
     PAL_setColor(0, RGB24_TO_VDPCOLOR(0x000000));
