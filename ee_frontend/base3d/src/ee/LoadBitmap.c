@@ -42,7 +42,14 @@
 
 extern qword_t *_q;
 
+struct Bitmap *lastBoundBitmap = NULL;
+
 void bindTexture(struct Bitmap *bitmap) {
+
+    if (bitmap == lastBoundBitmap) {
+        return;
+    }
+
     qword_t *q = _q;
 
     // Using a texture involves setting up a lot of information.

@@ -58,6 +58,7 @@ extern int vertex_count;
 extern prim_t prim;
 extern color_t color;
 
+extern struct Bitmap *lastBoundBitmap;
 
 struct Mesh mesh;
 int visibilityCached = FALSE;
@@ -126,7 +127,7 @@ void clearRenderer() {
 }
 
 void startFrameGL(int x, int y, int width, int height) {
-
+    lastBoundBitmap = NULL;
     current = packets[context];
 
     // Grab our dmatag pointer for the dma chain.
