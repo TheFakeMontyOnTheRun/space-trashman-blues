@@ -214,8 +214,8 @@ void drawQuad(
     calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 
     VECTOR coordinates[4] = {
-            {u1, v1,            0, 0},
-            {u2, v2,            0, 0},
+            {u1, v1, 0, 0},
+            {u2, v2, 0, 0},
             {u3, v3, 0, 0},
             {u4, v4, 0, 0}
     };
@@ -347,7 +347,7 @@ void drawRampAt(const struct Vec3 center0, const struct Vec3 center1,
         center.mY = Div(center0.mY + center1.mY, intToFix(2));
         center.mZ = center0.mZ;
 
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
+        drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
     }
 }
 
@@ -381,7 +381,7 @@ void drawBillboardAt(const struct Vec3 center,
     p0.mY = p1.mY = geometryScale;
     p2.mY = p3.mY = -geometryScale;
 
-    drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, bitmap, 0);
+    drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, bitmap, 0);
 }
 
 void drawColumnAt(const struct Vec3 center,
@@ -420,12 +420,12 @@ void drawColumnAt(const struct Vec3 center,
 
     if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0) || (mask & MASK_FORCE_RIGHT)) {
         p2.mX = p3.mX = p0.mX = p1.mX = -intToFix(1);
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
+        drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
     }
 
     if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0) || (mask & MASK_FORCE_LEFT)) {
         p2.mX = p3.mX = p0.mX = p1.mX = intToFix(1);
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
+        drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
     }
 
     p0.mX = p2.mX = -intToFix(1);
@@ -433,12 +433,12 @@ void drawColumnAt(const struct Vec3 center,
 
     if ((mask & MASK_BEHIND)) {
         p2.mZ = p3.mZ = p0.mZ = p1.mZ = -intToFix(1);
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
+        drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
     }
 
     if ((mask & MASK_FRONT)) {
         p2.mZ = p3.mZ = p0.mZ = p1.mZ = intToFix(1);
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
+        drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
     }
 }
 
@@ -506,7 +506,7 @@ void drawFloorAt(const struct Vec3 center,
 
         p0.mY = p1.mY = p2.mY = p3.mY = 0;
 
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
+        drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
     }
 }
 
@@ -563,7 +563,7 @@ void drawCeilingAt(const struct Vec3 center,
                 uv3.x = 0;
                 uv3.y = 16;
             }
-            break;
+                break;
         }
 
         p0.mX = p2.mX = -intToFix(1);
@@ -574,7 +574,7 @@ void drawCeilingAt(const struct Vec3 center,
 
         p0.mY = p1.mY = p2.mY = p3.mY = 0;
 
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
+        drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
     }
 }
 
@@ -621,7 +621,7 @@ void drawLeftNear(const struct Vec3 center,
     p0.mY = p1.mY = geometryScale;
     p2.mY = p3.mY = -geometryScale;
 
-    drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
+    drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
 }
 
 void drawRightNear(const struct Vec3 center,
@@ -666,7 +666,7 @@ void drawRightNear(const struct Vec3 center,
     p0.mY = p1.mY = geometryScale;
     p2.mY = p3.mY = -geometryScale;
 
-    drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
+    drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
 }
 
 void drawTriangle(const struct Vec3 pos1,
@@ -709,8 +709,8 @@ void drawTriangle(const struct Vec3 pos1,
     vy3 = -GEOMETRY_SCALE_Y * 0.05f * fixToFloat(pos3.mY);
     vz3 = GEOMETRY_SCALE_Z * 0.05f * fixToFloat(pos3.mZ);
 
-    float centerZ = (vz1 + vz2 + vz3 ) / 3.0f;
-    float fogAttenuation =  1.0f; // centerZ / ((FOG_MAX_DISTANCE - fixToFloat(zCameraOffset)) * GEOMETRY_SCALE_Z * 0.05f );
+    float centerZ = (vz1 + vz2 + vz3) / 3.0f;
+    float fogAttenuation = 1.0f; // centerZ / ((FOG_MAX_DISTANCE - fixToFloat(zCameraOffset)) * GEOMETRY_SCALE_Z * 0.05f );
 
     VECTOR colours[3] = {
             {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},

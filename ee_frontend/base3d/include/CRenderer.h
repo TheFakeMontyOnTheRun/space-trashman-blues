@@ -300,9 +300,11 @@ struct VBORegister {
     uint8_t indices;
 };
 
-void renderVBOAt( struct Bitmap* bitmap, struct VBORegister vbo, float x, float y, float z, float rx, float ry, float rz, float scaleX, float scaleY, float u0, float v0, float u1, float v1, uint32_t tint, uint8_t repeatTextures );
+void renderVBOAt(struct Bitmap *bitmap, struct VBORegister vbo, float x, float y, float z, float rx, float ry, float rz,
+                 float scaleX, float scaleY, float u0, float v0, float u1, float v1, uint32_t tint,
+                 uint8_t repeatTextures);
 
-void checkGLError(const char* operation);
+void checkGLError(const char *operation);
 
 void unloadTextures(void);
 
