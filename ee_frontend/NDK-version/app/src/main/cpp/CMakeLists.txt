@@ -57,6 +57,7 @@ add_library(native-lib SHARED
         ../../../../../../common/src/Engine.c
         ../../../../../../common/src/UI.c
         ../../../../../../common/src/PCMAudio.c
+        ../../../../../../common/src/Matrices.c
         ../../../../../base3d/src/es/LoadBitmap.c
         ../../../../../base3d/src/es/Renderer.c
         ../../../../../base3d/src/es/GLESCommon.c

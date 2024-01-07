@@ -61,6 +61,8 @@
 		F1293B412B41C9050094E02B /* Shader.fsh in Sources */ = {isa = PBXBuildFile; fileRef = F1293B342B41C9050094E02B /* Shader.fsh */; };
 		F1293B422B41C9050094E02B /* Shader.vsh in Sources */ = {isa = PBXBuildFile; fileRef = F1293B352B41C9050094E02B /* Shader.vsh */; };
 		F1293B432B41C9050094E02B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1293B372B41C9050094E02B /* ViewController.m */; };
+		F13EF7A82B4AECC900708958 /* Matrices.c in Sources */ = {isa = PBXBuildFile; fileRef = F13EF7A72B4AECC800708958 /* Matrices.c */; };
+		F13EF7A92B4AECC900708958 /* Matrices.c in Sources */ = {isa = PBXBuildFile; fileRef = F13EF7A72B4AECC800708958 /* Matrices.c */; };
 		F163B9B72B3EF1A200C03D9E /* Common.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B98D2B3EF1A200C03D9E /* Common.c */; };
 		F163B9BA2B3EF1A200C03D9E /* Crawler.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9902B3EF1A200C03D9E /* Crawler.c */; };
 		F163B9BB2B3EF1A200C03D9E /* CreditsScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9912B3EF1A200C03D9E /* CreditsScreen.c */; };
@@ -131,6 +133,8 @@
 		F1293B352B41C9050094E02B /* Shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 		F1293B362B41C9050094E02B /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		F1293B372B41C9050094E02B /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		F13EF7A62B4AECBA00708958 /* Matrices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Matrices.h; sourceTree = "<group>"; };
+		F13EF7A72B4AECC800708958 /* Matrices.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Matrices.c; sourceTree = "<group>"; };
 		F163B9712B3EF1A200C03D9E /* CActor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CActor.h; sourceTree = "<group>"; };
 		F163B9722B3EF1A200C03D9E /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		F163B9732B3EF1A200C03D9E /* controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = controller.h; sourceTree = "<group>"; };
@@ -307,6 +311,7 @@
 				F163B97A2B3EF1A200C03D9E /* Globals.h */,
 				F163B97B2B3EF1A200C03D9E /* HackingMinigameRules.h */,
 				F163B97C2B3EF1A200C03D9E /* MapWithCharKey.h */,
+				F13EF7A62B4AECBA00708958 /* Matrices.h */,
 				F163B97D2B3EF1A200C03D9E /* Mesh.h */,
 				F163B9802B3EF1A200C03D9E /* PackedFileReader.h */,
 				F163B9812B3EF1A200C03D9E /* PCMAudio.h */,
@@ -326,6 +331,7 @@
 				F163B9902B3EF1A200C03D9E /* Crawler.c */,
 				F163B9912B3EF1A200C03D9E /* CreditsScreen.c */,
 				F163B9922B3EF1A200C03D9E /* CTile3DProperties.c */,
+				F13EF7A72B4AECC800708958 /* Matrices.c */,
 				F163B9932B3EF1A200C03D9E /* Dungeon.c */,
 				F163B9942B3EF1A200C03D9E /* EDirection_Utils.c */,
 				F163B9952B3EF1A200C03D9E /* Engine.c */,
@@ -584,6 +590,7 @@
 				F1293B212B41C8CE0094E02B /* GameWindow.m in Sources */,
 				F1293B222B41C8CE0094E02B /* main.m in Sources */,
 				F1293B232B41C8CE0094E02B /* MyOpenGLView.m in Sources */,
+				F13EF7A92B4AECC900708958 /* Matrices.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,6 +600,7 @@
 			files = (
 				F163B9B72B3EF1A200C03D9E /* Common.c in Sources */,
 				F163B9BA2B3EF1A200C03D9E /* Crawler.c in Sources */,
+				F13EF7A82B4AECC900708958 /* Matrices.c in Sources */,
 				F163B9BB2B3EF1A200C03D9E /* CreditsScreen.c in Sources */,
 				F163B9BC2B3EF1A200C03D9E /* CTile3DProperties.c in Sources */,
 				F163B9BD2B3EF1A200C03D9E /* Dungeon.c in Sources */,
