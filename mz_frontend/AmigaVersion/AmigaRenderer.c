@@ -24,6 +24,37 @@
 
 #define NORMALIZE(x) (((x * 16) / 256))
 
+extern struct ObjectNode *focusedItem;
+extern struct ObjectNode *roomItem;
+extern int accessGrantedToSafe;
+
+char *menuItems[] = {
+        "8) Use/Toggle",
+        "5) Use with...",
+        "9) Use/pick...",
+        "6) Drop",
+        "7) Next item",
+        "4) Next in room",
+};
+
+void graphicsFlush(void);
+
+void nextItemInHand(void);
+
+void useItemInHand(void);
+
+void nextItemInRoom(void);
+
+void interactWithItemInRoom(void);
+
+void pickOrDrop(void);
+
+void dropItem(void);
+
+void pickItem(void);
+
+void clearGraphics(void);
+
 extern void REGARGS
 c2p1x1_4_c5_bm(
 REG(d0, UWORD chunky_x),
@@ -380,55 +411,25 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
     }
 
     if (colour <= 16) {
+        uint8_t *ptr = &framebuffer[(128 * y) + _x0];
         for (int x = _x0; x <= _x1; ++x) {
-            framebuffer[(128 * y) + x] = colour;
+            *ptr++ = colour;
         }
     } else {
         colour = colour - 16;
         uint8_t stipple = ((x0 + y) & 1);
-
+        uint8_t *ptr = &framebuffer[(128 * y) + _x0];
         for (int x = _x0; x <= _x1; ++x) {
             stipple = ~stipple;
 
             if (stipple) {
-                framebuffer[(128 * y) + x] = colour;
+                *ptr++ = colour;
             } else {
-                framebuffer[(128 * y) + x] = 0;
+                *ptr++ = 0;
             }
         }
     }
 }
-
-extern struct ObjectNode *focusedItem;
-extern struct ObjectNode *roomItem;
-extern int accessGrantedToSafe;
-
-char *menuItems[] = {
-        "8) Use/Toggle",
-        "5) Use with...",
-        "9) Use/pick...",
-        "6) Drop",
-        "7) Next item",
-        "4) Next in room",
-};
-
-void graphicsFlush();
-
-void nextItemInHand();
-
-void useItemInHand();
-
-void nextItemInRoom();
-
-void interactWithItemInRoom();
-
-void pickOrDrop();
-
-void dropItem();
-
-void pickItem();
-
-void clearGraphics();
 
 void shutdownGraphics(void) {
     ClearPointer(my_window);
