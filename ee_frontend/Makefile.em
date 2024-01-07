@@ -22,6 +22,7 @@ OBJS = 		menu/src/Main.o \
        		../common/src/GameMenu.o \
        		../common/src/Engine.o \
        		../common/src/UI.o \
+       		../common/src/Matrices.o \
        		../common/src/HackingScreen.o \
        		../common/src/VisibilityStrategy.o \
        		../common/src/Globals.o \
