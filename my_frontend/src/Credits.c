@@ -21,13 +21,12 @@ void CreditsScreen_initStateCallback(enum EGameMenuState tag) {
 
 void CreditsScreen_initialPaintCallback(void) {
     clearScreen();
-}
-
-void CreditsScreen_repaintCallback(void) {
     if (mainText != NULL) {
         drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, 1 + 3, "Credits", mainText);
     }
+}
 
+void CreditsScreen_repaintCallback(void) {
     drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - 7 - 3,
                           ((YRES_FRAMEBUFFER / 8) + 1) - (1) - 4,
                           7 + 2,
