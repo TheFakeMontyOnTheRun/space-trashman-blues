@@ -27,6 +27,8 @@ extern uint8_t cursorPosition;
 
 enum ESoundDriver soundDriver = kNoSound;
 
+extern enum EGameMenuState currentGameMenuState;
+
 void initHW(void) {
     initGamepadUI();
     initTMS9918();
@@ -72,21 +74,29 @@ enum ECommand getInput(void) {
     }
 
     if ((key & JOY_FIREA) /* && !cooldown */) {
-        playSound(3);
-        cooldown = COOLDOWN_MAX;
-        return performActionJoypad();
+        if (currentGameMenuState == kPlayGame) {
+            playSound(3);
+            cooldown = COOLDOWN_MAX;
+            return performActionJoypad();
+        } else {
+            return kCommandFire1;
+        }
     }
 
     if ((key & JOY_FIREB) /* && !cooldown */ ) {
-        cursorPosition = (cursorPosition + 1);
-        playSound(2);
-        if (cursorPosition >= 6) {
-            cursorPosition = 0;
-        }
+        if (currentGameMenuState == kPlayGame) {
+            cursorPosition = (cursorPosition + 1);
+            playSound(2);
+            if (cursorPosition >= 6) {
+                cursorPosition = 0;
+            }
 
-        HUD_refresh();
-        cooldown = COOLDOWN_MAX;
-        return kCommandNone;
+            HUD_refresh();
+            cooldown = COOLDOWN_MAX;
+            return kCommandNone;
+        } else {
+            return kCommandFire1;
+        }
     }
 
     return kCommandNone;

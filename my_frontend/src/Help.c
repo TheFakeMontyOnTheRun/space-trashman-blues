@@ -22,14 +22,13 @@ void HelpScreen_initStateCallback(enum EGameMenuState tag) {
 
 void HelpScreen_initialPaintCallback(void) {
     clearScreen();
-}
-
-void HelpScreen_repaintCallback(void) {
 
     if (mainText != NULL) {
         drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, 1 + 3, "Help", mainText);
     }
+}
 
+void HelpScreen_repaintCallback(void) {
     drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - 4 - 3,
                           ((YRES_FRAMEBUFFER / 8) + 1) - 1 - 4,
                           4 + 2,

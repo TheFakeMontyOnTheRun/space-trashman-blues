@@ -83,11 +83,10 @@ void MainMenu_initStateCallback(enum EGameMenuState tag) {
 
 void MainMenu_initialPaintCallback() {
     clearScreen();
+    drawGraphic(shapes);
 }
 
 void MainMenu_repaintCallback(void) {
-    drawGraphic(shapes);
-
     drawWindowWithOptions(
             (XRES_FRAMEBUFFER / 8) - (int) 9 - 3,
             (YRES_FRAMEBUFFER / 8) - 3 - kMainMenuOptionsCount,
