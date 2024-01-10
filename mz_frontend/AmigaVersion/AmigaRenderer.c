@@ -412,14 +412,14 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
 
     if (colour <= 16) {
         uint8_t *ptr = &framebuffer[(128 * y) + _x0];
-        for (int x = _x0; x <= _x1; ++x) {
+        for (int16_t x = _x0; x <= _x1; ++x) {
             *ptr++ = colour;
         }
     } else {
         colour = colour - 16;
         uint8_t stipple = ((x0 + y) & 1);
         uint8_t *ptr = &framebuffer[(128 * y) + _x0];
-        for (int x = _x0; x <= _x1; ++x) {
+        for (int16_t x = _x0; x <= _x1; ++x) {
             stipple = ~stipple;
 
             if (stipple) {
