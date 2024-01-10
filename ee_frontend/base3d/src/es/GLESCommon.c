@@ -329,6 +329,13 @@ void drawTriangle(const struct Vec3 pos1,
                   const struct Vec2i uv3,
                   const struct Texture *texture);
 
+uint32_t getPaletteEntry(const uint32_t origin) {
+    return (0x80 << 24) + (origin & 0x00FFFFFF);
+}
+
+void clearRenderer() {
+}
+
 void enter2D(void) {
     mat4x4_ortho(projection_matrix, 0.0f, (float) XRES_FRAMEBUFFER, (float) YRES_FRAMEBUFFER, 0.0f,
                  0.1f, 100.0f);
