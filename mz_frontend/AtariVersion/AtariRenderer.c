@@ -165,7 +165,7 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
     }
 
     uint8_t *ptr = &framebuffer[(128 * y) + _x0];
-    for (int x = _x0; x <= _x1; ++x) {
+    for (int16_t x = _x0; x <= _x1; ++x) {
         *ptr++ = colour;
     }
 }
@@ -198,8 +198,8 @@ void graphicsFlush(void) {
     unsigned lineOffset = 0;
     uint16_t *words = (uint16_t *) logBase;
 
-    for (int y = 0; y < 128; ++y) {
-        for (int x = 0; x < 128; ++x) {
+    for (uint16_t y = 127; y; y--) {
+        for (uint16_t x = 0; x < 128; ++x) {
 
             unsigned value = *index++;
 
