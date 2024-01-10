@@ -311,7 +311,7 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
     if (colour < 16) {
         colour += (colour << 4); //double the pixel
 
-        for (int x = _x0; x <= _x1; ++x) {
+        for (int16_t x = _x0; x <= _x1; ++x) {
             BMP_setPixelFast(x, 16 + y, colour);
         }
     } else {
@@ -319,7 +319,7 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
         colour += (colour << 4); //double the pixel
         int16_t stipple = ((x0 + y) & 1);
 
-        for (int x = _x0; x <= _x1; ++x) {
+        for (int16_t x = _x0; x <= _x1; ++x) {
             stipple = ~stipple;
 
             if (stipple) {
