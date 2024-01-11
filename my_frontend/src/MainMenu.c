@@ -84,6 +84,16 @@ void MainMenu_initStateCallback(enum EGameMenuState tag) {
 void MainMenu_initialPaintCallback() {
     clearScreen();
     drawGraphic(shapes);
+
+    drawWindowWithOptions(
+            (XRES_FRAMEBUFFER / 8) - (int) 9 - 3,
+            (YRES_FRAMEBUFFER / 8) - 3 - kMainMenuOptionsCount,
+            9 + 2,
+            kMainMenuOptionsCount + 2,
+            "Episode 0",
+            MainMenu_options,
+            kMainMenuOptionsCount,
+            0xFF);
 }
 
 void MainMenu_repaintCallback(void) {
@@ -93,7 +103,7 @@ void MainMenu_repaintCallback(void) {
             9 + 2,
             kMainMenuOptionsCount + 2,
             "Episode 0",
-            MainMenu_options,
+            NULL,
             kMainMenuOptionsCount,
             cursorPosition);
 }
