@@ -11,7 +11,7 @@ CC = emcc
 OBJS = 		menu/src/Main.o \
        		base3d/src/es/SDL2GL2Version.o \
        		base3d/src/es/LoadBitmap.o \
-       		base3d/src/es/Renderer.o \
+       		base3d/src/Renderer.o \
        		base3d/src/es/GLESCommon.o \
        		base3d/src/es/Renderer_Rasterization.o \
        		base3d/src/es/Renderer_Tesselation.o \
