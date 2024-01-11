@@ -195,13 +195,13 @@ void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 void graphicsFlush(void) {
     memset(logBase, 0, 32000);
     uint8_t *index = &framebuffer[0];
-    unsigned lineOffset = 0;
+    uint16_t lineOffset = 0;
     uint16_t *words = (uint16_t *) logBase;
 
     for (uint16_t y = 127; y; y--) {
         for (uint16_t x = 0; x < 128; ++x) {
 
-            unsigned value = *index++;
+            uint8_t value = *index++;
 
             if (value > 16) {
                 if ((x + y) & 1) {
@@ -211,29 +211,30 @@ void graphicsFlush(void) {
                 }
             }
 
-            unsigned offset = lineOffset + ((x >> 4) << 2);
-            unsigned bitPattern = (1 << (15 - (x & 15)));
+            uint16_t offset = lineOffset + ((x >> 4) << 2);
+            uint16_t bitPattern = (1 << (15 - (x & 15)));
+            uint16_t *ptr = &words[offset];
 
             if (value & 1) {
-                words[offset] |= bitPattern;
+                *ptr |= bitPattern;
             }
 
-            offset++;
+            ptr++;
 
             if (value & 2) {
-                words[offset] |= bitPattern;
+                *ptr |= bitPattern;
             }
 
-            offset++;
+            ptr++;
 
             if (value & 4) {
-                words[offset] |= bitPattern;
+                *ptr |= bitPattern;
             }
 
-            offset++;
+            ptr++;
 
             if (value & 8) {
-                words[offset] |= bitPattern;
+                *ptr |= bitPattern;
             }
         }
         lineOffset += 80;
