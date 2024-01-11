@@ -16,7 +16,6 @@
 		F1293AF22B41C7D10094E02B /* Parser.c in Sources */ = {isa = PBXBuildFile; fileRef = F163BA0D2B3EF28900C03D9E /* Parser.c */; };
 		F1293AF32B41C7D60094E02B /* GLESCommon.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9E92B3EF25100C03D9E /* GLESCommon.c */; };
 		F1293AF42B41C7D60094E02B /* LoadBitmap.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EA2B3EF25100C03D9E /* LoadBitmap.c */; };
-		F1293AF52B41C7D60094E02B /* Renderer.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EB2B3EF25100C03D9E /* Renderer.c */; };
 		F1293AF62B41C7D60094E02B /* Renderer_Rasterization.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EC2B3EF25100C03D9E /* Renderer_Rasterization.c */; };
 		F1293AF72B41C7D60094E02B /* Renderer_Tesselation.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9ED2B3EF25100C03D9E /* Renderer_Tesselation.c */; };
 		F1293AF82B41C7DB0094E02B /* Common.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B98D2B3EF1A200C03D9E /* Common.c */; };
@@ -61,6 +60,8 @@
 		F1293B412B41C9050094E02B /* Shader.fsh in Sources */ = {isa = PBXBuildFile; fileRef = F1293B342B41C9050094E02B /* Shader.fsh */; };
 		F1293B422B41C9050094E02B /* Shader.vsh in Sources */ = {isa = PBXBuildFile; fileRef = F1293B352B41C9050094E02B /* Shader.vsh */; };
 		F1293B432B41C9050094E02B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1293B372B41C9050094E02B /* ViewController.m */; };
+		F13EF7A82B4AECC900708958 /* Matrices.c in Sources */ = {isa = PBXBuildFile; fileRef = F13EF7A72B4AECC800708958 /* Matrices.c */; };
+		F13EF7A92B4AECC900708958 /* Matrices.c in Sources */ = {isa = PBXBuildFile; fileRef = F13EF7A72B4AECC800708958 /* Matrices.c */; };
 		F163B9B72B3EF1A200C03D9E /* Common.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B98D2B3EF1A200C03D9E /* Common.c */; };
 		F163B9BA2B3EF1A200C03D9E /* Crawler.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9902B3EF1A200C03D9E /* Crawler.c */; };
 		F163B9BB2B3EF1A200C03D9E /* CreditsScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9912B3EF1A200C03D9E /* CreditsScreen.c */; };
@@ -84,7 +85,6 @@
 		F163B9D92B3EF1A200C03D9E /* VisibilityStrategy.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9AF2B3EF1A200C03D9E /* VisibilityStrategy.c */; };
 		F163B9FA2B3EF25100C03D9E /* GLESCommon.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9E92B3EF25100C03D9E /* GLESCommon.c */; };
 		F163B9FB2B3EF25100C03D9E /* LoadBitmap.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EA2B3EF25100C03D9E /* LoadBitmap.c */; };
-		F163B9FC2B3EF25100C03D9E /* Renderer.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EB2B3EF25100C03D9E /* Renderer.c */; };
 		F163B9FD2B3EF25100C03D9E /* Renderer_Rasterization.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EC2B3EF25100C03D9E /* Renderer_Rasterization.c */; };
 		F163B9FE2B3EF25100C03D9E /* Renderer_Tesselation.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9ED2B3EF25100C03D9E /* Renderer_Tesselation.c */; };
 		F163BA0E2B3EF28900C03D9E /* Core.c in Sources */ = {isa = PBXBuildFile; fileRef = F163BA0A2B3EF28900C03D9E /* Core.c */; };
@@ -96,6 +96,8 @@
 		F1A2C9DD2B3EF09700F2E1CA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A2C9DC2B3EF09700F2E1CA /* CoreGraphics.framework */; };
 		F1A2C9DF2B3EF09700F2E1CA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A2C9DE2B3EF09700F2E1CA /* GLKit.framework */; };
 		F1A2C9E12B3EF09700F2E1CA /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A2C9E02B3EF09700F2E1CA /* OpenGLES.framework */; };
+		F1C1249F2B4FD87900888791 /* Renderer.c in Sources */ = {isa = PBXBuildFile; fileRef = F1C1249E2B4FD87900888791 /* Renderer.c */; };
+		F1C124A02B4FD87900888791 /* Renderer.c in Sources */ = {isa = PBXBuildFile; fileRef = F1C1249E2B4FD87900888791 /* Renderer.c */; };
 		F1F3E0FF2B46E77E00D86751 /* TitleScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = F1F3E0FD2B46E77E00D86751 /* TitleScreen.m */; };
 		F1F3E1002B46E77E00D86751 /* TitleScreen_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1F3E0FE2B46E77E00D86751 /* TitleScreen_iPad.xib */; };
 		F1F3E1022B46ED1200D86751 /* TitleScreen_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1F3E1012B46ED1200D86751 /* TitleScreen_iPhone.xib */; };
@@ -131,6 +133,8 @@
 		F1293B352B41C9050094E02B /* Shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 		F1293B362B41C9050094E02B /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		F1293B372B41C9050094E02B /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		F13EF7A62B4AECBA00708958 /* Matrices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Matrices.h; sourceTree = "<group>"; };
+		F13EF7A72B4AECC800708958 /* Matrices.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Matrices.c; sourceTree = "<group>"; };
 		F163B9712B3EF1A200C03D9E /* CActor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CActor.h; sourceTree = "<group>"; };
 		F163B9722B3EF1A200C03D9E /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		F163B9732B3EF1A200C03D9E /* controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = controller.h; sourceTree = "<group>"; };
@@ -176,7 +180,6 @@
 		F163B9E02B3EF25100C03D9E /* LoadBitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadBitmap.h; sourceTree = "<group>"; };
 		F163B9E92B3EF25100C03D9E /* GLESCommon.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GLESCommon.c; sourceTree = "<group>"; };
 		F163B9EA2B3EF25100C03D9E /* LoadBitmap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = LoadBitmap.c; sourceTree = "<group>"; };
-		F163B9EB2B3EF25100C03D9E /* Renderer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Renderer.c; sourceTree = "<group>"; };
 		F163B9EC2B3EF25100C03D9E /* Renderer_Rasterization.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Renderer_Rasterization.c; sourceTree = "<group>"; };
 		F163B9ED2B3EF25100C03D9E /* Renderer_Tesselation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Renderer_Tesselation.c; sourceTree = "<group>"; };
 		F163BA062B3EF28900C03D9E /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
@@ -196,6 +199,7 @@
 		F1BA234D2B40842700F83542 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		F1BA234E2B40842700F83542 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F1BA234F2B40842700F83542 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		F1C1249E2B4FD87900888791 /* Renderer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Renderer.c; path = ../Renderer.c; sourceTree = "<group>"; };
 		F1F3E0FC2B46E77E00D86751 /* TitleScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleScreen.h; sourceTree = "<group>"; };
 		F1F3E0FD2B46E77E00D86751 /* TitleScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleScreen.m; sourceTree = "<group>"; };
 		F1F3E0FE2B46E77E00D86751 /* TitleScreen_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TitleScreen_iPad.xib; sourceTree = "<group>"; };
@@ -307,6 +311,7 @@
 				F163B97A2B3EF1A200C03D9E /* Globals.h */,
 				F163B97B2B3EF1A200C03D9E /* HackingMinigameRules.h */,
 				F163B97C2B3EF1A200C03D9E /* MapWithCharKey.h */,
+				F13EF7A62B4AECBA00708958 /* Matrices.h */,
 				F163B97D2B3EF1A200C03D9E /* Mesh.h */,
 				F163B9802B3EF1A200C03D9E /* PackedFileReader.h */,
 				F163B9812B3EF1A200C03D9E /* PCMAudio.h */,
@@ -326,6 +331,7 @@
 				F163B9902B3EF1A200C03D9E /* Crawler.c */,
 				F163B9912B3EF1A200C03D9E /* CreditsScreen.c */,
 				F163B9922B3EF1A200C03D9E /* CTile3DProperties.c */,
+				F13EF7A72B4AECC800708958 /* Matrices.c */,
 				F163B9932B3EF1A200C03D9E /* Dungeon.c */,
 				F163B9942B3EF1A200C03D9E /* EDirection_Utils.c */,
 				F163B9952B3EF1A200C03D9E /* Engine.c */,
@@ -374,7 +380,7 @@
 			children = (
 				F163B9E92B3EF25100C03D9E /* GLESCommon.c */,
 				F163B9EA2B3EF25100C03D9E /* LoadBitmap.c */,
-				F163B9EB2B3EF25100C03D9E /* Renderer.c */,
+				F1C1249E2B4FD87900888791 /* Renderer.c */,
 				F163B9EC2B3EF25100C03D9E /* Renderer_Rasterization.c */,
 				F163B9ED2B3EF25100C03D9E /* Renderer_Tesselation.c */,
 			);
@@ -555,7 +561,6 @@
 				F1293AF22B41C7D10094E02B /* Parser.c in Sources */,
 				F1293AF32B41C7D60094E02B /* GLESCommon.c in Sources */,
 				F1293AF42B41C7D60094E02B /* LoadBitmap.c in Sources */,
-				F1293AF52B41C7D60094E02B /* Renderer.c in Sources */,
 				F1293AF62B41C7D60094E02B /* Renderer_Rasterization.c in Sources */,
 				F1293AF72B41C7D60094E02B /* Renderer_Tesselation.c in Sources */,
 				F1293AF82B41C7DB0094E02B /* Common.c in Sources */,
@@ -584,6 +589,8 @@
 				F1293B212B41C8CE0094E02B /* GameWindow.m in Sources */,
 				F1293B222B41C8CE0094E02B /* main.m in Sources */,
 				F1293B232B41C8CE0094E02B /* MyOpenGLView.m in Sources */,
+				F13EF7A92B4AECC900708958 /* Matrices.c in Sources */,
+				F1C124A02B4FD87900888791 /* Renderer.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,6 +600,7 @@
 			files = (
 				F163B9B72B3EF1A200C03D9E /* Common.c in Sources */,
 				F163B9BA2B3EF1A200C03D9E /* Crawler.c in Sources */,
+				F13EF7A82B4AECC900708958 /* Matrices.c in Sources */,
 				F163B9BB2B3EF1A200C03D9E /* CreditsScreen.c in Sources */,
 				F163B9BC2B3EF1A200C03D9E /* CTile3DProperties.c in Sources */,
 				F163B9BD2B3EF1A200C03D9E /* Dungeon.c in Sources */,
@@ -614,7 +622,6 @@
 				F163B9D92B3EF1A200C03D9E /* VisibilityStrategy.c in Sources */,
 				F163B9FA2B3EF25100C03D9E /* GLESCommon.c in Sources */,
 				F163B9FB2B3EF25100C03D9E /* LoadBitmap.c in Sources */,
-				F163B9FC2B3EF25100C03D9E /* Renderer.c in Sources */,
 				F163B9FD2B3EF25100C03D9E /* Renderer_Rasterization.c in Sources */,
 				F163B9FE2B3EF25100C03D9E /* Renderer_Tesselation.c in Sources */,
 				F163BA0E2B3EF28900C03D9E /* Core.c in Sources */,
@@ -627,6 +634,7 @@
 				F1293B422B41C9050094E02B /* Shader.vsh in Sources */,
 				F1293B432B41C9050094E02B /* ViewController.m in Sources */,
 				F1F3E0FF2B46E77E00D86751 /* TitleScreen.m in Sources */,
+				F1C1249F2B4FD87900888791 /* Renderer.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

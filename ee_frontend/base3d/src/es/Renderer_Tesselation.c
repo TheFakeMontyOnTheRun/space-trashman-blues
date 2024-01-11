@@ -22,6 +22,7 @@
 #include "Engine.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
+#include "Matrices.h"
 
 #ifdef SDLGL
 #define GL_GLEXT_PROTOTYPES

@@ -64,22 +64,6 @@ void printMessageTo3DView(const char *message);
 enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
 struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
 
-
-void drawTriangle(const struct Vec3 pos1,
-                  const struct Vec2i uv1,
-                  const struct Vec3 pos2,
-                  const struct Vec2i uv2,
-                  const struct Vec3 pos3,
-                  const struct Vec2i uv3,
-                  const struct Texture *texture);
-
-uint32_t getPaletteEntry(const uint32_t origin) {
-    return (0x80 << 24) + (origin & 0x00FFFFFF);
-}
-
-void clearRenderer() {
-}
-
 void printMessageTo3DView(const char *message) {
     strcpy(&messageLogBuffer[0], message);
     messageLogBufferCoolDown = 5000;

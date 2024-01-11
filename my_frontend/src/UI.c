@@ -10,7 +10,6 @@
 #include "Derelict.h"
 #include "Renderer.h"
 #include "Engine.h"
-#include "SoundSystem.h"
 
 extern uint8_t playerLocation;
 
@@ -55,7 +54,7 @@ void drawMap(void) {
 
     for (y = 0; y < 12; ++y) {
         for (x = 0; x < 12; ++x) {
-            drawTextAt(16 + x + 2, 2 + y, " ", 0);
+            drawTextAt((XRES_TEXT / 2) + x + 2, 2 + y, " ", 0);
         }
     }
 
@@ -63,9 +62,9 @@ void drawMap(void) {
         for (x = 0; x < 32; ++x) {
 
             if (patterns[(map[y][x] & 127) - 32].blockMovement) {
-                fillRect(128 + (x * 3) + 16,
+                fillRect((XRES_FRAMEBUFFER / 2) + (x * 3) + 16,
                          (y * 3) + 16,
-                         128 + (x * 3) + 3 + 16,
+                         (XRES_FRAMEBUFFER / 2) + (x * 3) + 3 + 16,
                          (y * 3) + 3 + 16,
                          2,
                          0);
@@ -162,11 +161,9 @@ enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t opt
         case kCommandBack:
             return backState;
         case kCommandUp:
-            playSound(2);
             --cursorPosition;
             break;
         case kCommandDown:
-            playSound(2);
             ++cursorPosition;
             break;
         case kCommandFire1:

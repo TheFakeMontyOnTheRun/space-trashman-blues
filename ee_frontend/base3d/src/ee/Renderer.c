@@ -4,21 +4,6 @@
 #include <assert.h>
 #include <stdint.h>
 
-#include <kernel.h>
-#include <stdlib.h>
-#include <malloc.h>
-#include <tamtypes.h>
-#include <math3d.h>
-#include <packet.h>
-#include <dma_tags.h>
-#include <gif_tags.h>
-#include <gs_psm.h>
-#include <dma.h>
-#include <graph.h>
-#include <draw.h>
-#include <draw3d.h>
-#include <gs_gp.h>
-
 #include "Core.h"
 #include "FixP.h"
 #include "Enums.h"
@@ -36,28 +21,6 @@
 #include "PackedFileReader.h"
 #include "UI.h"
 #include "Engine.h"
-
-
-extern packet_t *packets[2];
-extern packet_t *current;
-extern MATRIX local_world;
-extern MATRIX world_view;
-extern MATRIX view_screen;
-extern int context;
-extern zbuffer_t zBuffer;
-extern framebuffer_t frame;
-extern qword_t *dmatag;
-
-extern MATRIX local_screen;
-extern packet_t *current;
-extern qword_t *_q;
-extern xyz_t *verts;
-extern color_t *colors;
-extern VECTOR *temp_vertices;
-extern int vertex_count;
-extern prim_t prim;
-extern color_t color;
-
 
 struct Mesh mesh;
 int visibilityCached = FALSE;
@@ -93,104 +56,6 @@ void printMessageTo3DView(const char *message);
 enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
 struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
 
-
-void drawTriangle(const struct Vec3 pos1,
-                  const struct Vec2i uv1,
-                  const struct Vec3 pos2,
-                  const struct Vec2i uv2,
-                  const struct Vec3 pos3,
-                  const struct Vec2i uv3,
-                  const struct Texture *texture);
-
-uint32_t getPaletteEntry(const uint32_t origin) {
-    return (0x80 << 24) + (origin & 0x00FFFFFF);
-}
-
-void enter2D(void) {
-    VECTOR camera_position = {0.00f, 0.0f, 2, 1.00f};
-    VECTOR camera_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
-
-    // Create the world_view matrix.
-    create_world_view(world_view, camera_position, camera_rotation);
-
-    create_view_screen(view_screen, graph_aspect_ratio(), -1.0f, 1.0f, 1.00f, -1.00f, 1.0f, 512.00f);
-
-}
-
-void initGL() {
-    /* tmp */
-    memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
-}
-
-void clearRenderer() {
-}
-
-void startFrameGL(int x, int y, int width, int height) {
-
-    current = packets[context];
-
-    // Grab our dmatag pointer for the dma chain.
-    dmatag = current->data;
-
-    // Now grab our qword pointer and increment past the dmatag.
-    _q = dmatag;
-    _q++;
-
-    PACK_GIFTAG(_q, GIF_SET_TAG(1, 0, 0, 0, GIF_FLG_PACKED, 1), GIF_REG_AD);
-    _q++;
-    PACK_GIFTAG(_q, GS_SET_TEST(DRAW_ENABLE, ATEST_METHOD_NOTEQUAL, 0x00, ATEST_KEEP_FRAMEBUFFER,
-                                DRAW_DISABLE, DRAW_DISABLE,
-                                DRAW_ENABLE, ZTEST_METHOD_ALLPASS), GS_REG_TEST + 0);
-    _q++;
-
-
-    _q = draw_clear(_q, 0, 2048.0f - 320.0f, 2048.0f - 256.0f, frame.width, frame.height, 0, 0, 0);
-
-    PACK_GIFTAG(_q, GIF_SET_TAG(1, 0, 0, 0, GIF_FLG_PACKED, 1), GIF_REG_AD);
-    _q++;
-    PACK_GIFTAG(_q, GS_SET_TEST(DRAW_ENABLE, ATEST_METHOD_GREATER, 0x0, ATEST_KEEP_ALL,
-                                DRAW_DISABLE, DRAW_DISABLE,
-                                DRAW_ENABLE, ZTEST_METHOD_GREATER_EQUAL), GS_REG_TEST + 0);
-    _q++;
-
-
-    visibilityCached = FALSE;
-    needsToRedrawVisibleMeshes = FALSE;
-    enter2D();
-}
-
-void endFrameGL() {
-}
-
-void enter3D(void) {
-    float _leanX = 0.0f;
-    float _leanY = 0.0f;
-
-    if (leanX > 127) {
-        _leanX = -0.25f * ((leanX - 127) / 128.0f);
-    }
-
-    if (leanX < 127) {
-        _leanX = 0.25f * ((128 - leanX) / 127.0f);
-    }
-
-    if (leanY > 127) {
-        _leanY = -0.25f * ((leanY - 127) / 128.0f);
-    }
-
-    if (leanY < 127) {
-        _leanY = 0.25f * ((128 - leanY) / 127.0f);
-    }
-
-    VECTOR camera_position = {0.00f, -0.25f, 2, 1.00f};
-    VECTOR camera_rotation = {_leanY, _leanX, 0.00f, 1.00f};
-
-    // Create the world_view matrix.
-    create_world_view(world_view, camera_position, camera_rotation);
-
-    create_view_screen(view_screen, graph_aspect_ratio(), -8.00f, 8.00f, -8.00f, 8.00f, 1.00f, 1024.00f);
-}
-
 void printMessageTo3DView(const char *message) {
     strcpy(&messageLogBuffer[0], message);
     messageLogBufferCoolDown = 5000;
@@ -225,7 +90,6 @@ void loadTileProperties(const uint8_t levelNumber) {
 }
 
 void loadTexturesForLevel(const uint8_t levelNumber) {
-    char buffer[256];
     struct StaticBuffer data;
     char tilesFilename[64];
     char *head;
