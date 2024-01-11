@@ -376,9 +376,7 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour) {
         uint8_t stipple = ((x0 + y0) & 1);
 
         for (int16_t y = _y0; y <= _y1; ++y) {
-            stipple = ~stipple;
-
-            if (stipple) {
+            if (stipple = ~stipple) {
                 *ptr = colour;
             } else {
                 *ptr = 0;
@@ -420,9 +418,7 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
         uint8_t stipple = ((x0 + y) & 1);
         uint8_t *ptr = &framebuffer[(128 * y) + _x0];
         for (int16_t x = _x0; x <= _x1; ++x) {
-            stipple = ~stipple;
-
-            if (stipple) {
+            if (stipple = ~stipple) {
                 *ptr++ = colour;
             } else {
                 *ptr++ = 0;
