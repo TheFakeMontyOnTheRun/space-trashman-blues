@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdio.h>
 #include "Matrices.h"
 
 void mat4x4_ortho(t_mat4x4 out, float left, float right, float bottom, float top, float znear,
@@ -158,4 +159,29 @@ void mat4x4_rotateZ(t_mat4x4 out, float deg) {
     out[13] = 0.0f;
     out[14] = 0;
     out[15] = 1;
+}
+
+void mat4x4_transpose( t_mat4x4 mat) {
+    float tmp[16];
+    /*
+    a b c d
+    e f g h
+    i j k l
+    m n o p
+    
+    
+    a e i m
+    b f j n
+    c g k p
+    d h l q
+     */
+    for ( int y = 0; y < 4; ++y) {
+        for (int x = 0; x < 4; ++x ) {
+            tmp[y * 4 + x] = mat[x * 4 + y];
+        }
+    }
+    
+    for (int c = 0; c < 16; ++c ) {
+        mat[c] = tmp[c];
+    }
 }
