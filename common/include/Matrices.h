@@ -19,4 +19,6 @@ void mat4x4_rotateY( t_mat4x4 out, float deg );
 
 void mat4x4_rotateZ( t_mat4x4 out, float deg );
 
+void mat4x4_transpose( t_mat4x4 mat);
+
 #endif /* MATRICES_H */
