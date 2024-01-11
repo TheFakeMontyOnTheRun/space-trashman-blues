@@ -59,7 +59,7 @@ add_library(native-lib SHARED
         ../../../../../../common/src/PCMAudio.c
         ../../../../../../common/src/Matrices.c
         ../../../../../base3d/src/es/LoadBitmap.c
-        ../../../../../base3d/src/es/Renderer.c
+        ../../../../../base3d/src/Renderer.c
         ../../../../../base3d/src/es/GLESCommon.c
         ../../../../../base3d/src/es/Renderer_Rasterization.c
         ../../../../../base3d/src/es/Renderer_Tesselation.c
