@@ -482,6 +482,14 @@ void initGL() {
     glDepthFunc(GL_LEQUAL);
     glDepthMask(1);
     checkGLError("initGL");
+
+    float fade[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+    glUniform4f(uFadeUniformLocation, fade[0], fade[1], fade[2], fade[3]);
+    glUniform4f(uModUniformLocation, 1.0f, 1.0f, 1.0f, 1.0f);
+
+    checkGLError("set uniforms");
+
+
 }
 
 void bindTexture(struct Bitmap *bitmap) {
@@ -511,6 +519,7 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
     // Set the filtering mode - surprisingly, this is needed.
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     checkGLError("submit bitmap to GPU");
@@ -525,23 +534,17 @@ void startFrameGL(int x, int y, int width, int height) {
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;
 
-    float fade[4] = {1.0f, 1.0f, 1.0f, 1.0f};
     checkGLError("start frame");
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-    glDepthFunc(GL_LEQUAL);
     checkGLError("clear buffers");
 
-    glUniform4f(uFadeUniformLocation, fade[0], fade[1], fade[2], fade[3]);
-    glUniform4f(uModUniformLocation, 1.0f, 1.0f, 1.0f, 1.0f);
+    glEnableVertexAttribArray(aPositionAttributeLocation);
+    checkGLError("Enabled vertex position attribute");
 
-    checkGLError("set uniforms");
-
-    glActiveTexture(GL_TEXTURE0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    checkGLError("set texture");
-
+    glEnableVertexAttribArray(aTexCoordAttributeLocation);
+    checkGLError("Enabled vertex uv attribute");
+    
     enter2D();
 }
 

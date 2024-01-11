@@ -111,12 +111,7 @@ void renderVBOAt(struct Bitmap *bitmap, struct VBORegister vbo, float x, float y
 
 
     checkGLError("starting to draw VBO");
-    glEnableVertexAttribArray(aPositionAttributeLocation);
-    checkGLError("Enabled vertex position attribute");
 
-
-    glEnableVertexAttribArray(aTexCoordAttributeLocation);
-    checkGLError("Enabled vertex uv attribute");
 
     if (repeatTextures) {
         glUniform2f(uScaleUniformLocation, scaleX, scaleY);
@@ -202,9 +197,6 @@ void renderVBOAt(struct Bitmap *bitmap, struct VBORegister vbo, float x, float y
 
 
     checkGLError("triangles drawn");
-
-    glDisableVertexAttribArray(aPositionAttributeLocation);
-    glDisableVertexAttribArray(aTexCoordAttributeLocation);
 
     checkGLError("disabling attributes");
 }
