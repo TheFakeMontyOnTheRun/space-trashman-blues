@@ -553,8 +553,8 @@ void endFrameGL() {
 }
 
 void enter3D(void) {
-    mat4x4_perspective(projection_matrix, 90.0f,
-                       (float) XRES_FRAMEBUFFER / (float) YRES_FRAMEBUFFER, 0.1f, 1024.0f);
+    mat4x4_perspective(projection_matrix, 75.0f,
+                       (float) XRES_FRAMEBUFFER / (float) YRES_FRAMEBUFFER, 1.0f, 1024.0f);
     glUniformMatrix4fv(uProjectionMatrixUniformLocation, 1, GL_FALSE, projection_matrix);
 
     mat4x4_rotateY(viewMatrix, -leanX);
