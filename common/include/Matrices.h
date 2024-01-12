@@ -21,4 +21,7 @@ void mat4x4_rotateZ( t_mat4x4 out, float deg );
 
 void mat4x4_transpose( t_mat4x4 mat);
 
+void mat4x4_mul( t_mat4x4 m1, t_mat4x4 m2, t_mat4x4 out);
+
+void mat4x4_identity(t_mat4x4 mat);
 #endif /* MATRICES_H */
