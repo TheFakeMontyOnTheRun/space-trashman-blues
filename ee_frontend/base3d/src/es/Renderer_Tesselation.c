@@ -109,7 +109,6 @@ void renderVBOAt(struct Bitmap *bitmap, struct VBORegister vbo, float x, float y
                  float ry, float rz, float scaleX, float scaleY, float u0, float v0, float u1,
                  float v1, uint32_t tint, uint8_t repeatTextures) {
 
-
     checkGLError("starting to draw VBO");
 
 
@@ -176,7 +175,7 @@ void renderVBOAt(struct Bitmap *bitmap, struct VBORegister vbo, float x, float y
 
     checkGLError("indices elements bound");
 
-    mat4x4_transform(transformMatrix, x + fixToFloat(xCameraOffset), y - fixToFloat(yCameraOffset),
+    mat4x4_transform(transformMatrix, x + fixToFloat(xCameraOffset), y - fixToFloat(yCameraOffset) + fixToFloat(playerHeight),
                      z - fixToFloat(zCameraOffset), scaleX, scaleY, 1);
     glUniformMatrix4fv(uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix);
 
