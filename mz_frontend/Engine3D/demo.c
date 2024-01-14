@@ -1404,6 +1404,36 @@ void logDelegate(const char *mesg) {
     showMessage(mesg);
 }
 
+void Crawler_initStateCallback(uint32_t tag) {
+    running = 1;
+    enteredFrom = 0;
+    cameraRotation = 0;
+
+    for (int c = 0; c < 32; ++c) {
+        map[c] = (uint8_t *) allocMem(32, GENERAL_MEMORY, 1);
+    }
+
+    initStation();
+    focusedItem = getPlayerItems();
+    initMap();
+}
+
+void Crawler_initialPaintCallback(void) {
+}
+
+
+void Crawler_repaintCallback(void) {
+    tickRenderer();
+}
+
+int Crawler_tickCallback(int cmd, long delta) {
+    return -1;
+}
+
+void Crawler_unloadStateCallback(int newState) {
+    shutdownGraphics();
+}
+
 #ifdef ATARIST
 int doMain(void);
 
@@ -1417,29 +1447,23 @@ int doMain(void) {
 
 int main(int argc, char **argv) {
 #endif
-
-    for (int c = 0; c < 32; ++c) {
-        map[c] = (uint8_t *) allocMem(32, GENERAL_MEMORY, 1);
-    }
-
-    running = 1;
-    enteredFrom = 0;
-    cameraRotation = 0;
-    initFileReader("base.pfs");
-    init();
-    initStation();
-    titleScreen();
-
-    focusedItem = getPlayerItems();
     setErrorHandlerCallback(onError);
     setLoggerDelegate(logDelegate);
-    initMap();
+    initFileReader("base.pfs");
+    init();
+
+    
+
+
+    Crawler_initStateCallback(0);
+    Crawler_initialPaintCallback();
 
     do {
-        tickRenderer();
+        Crawler_tickCallback(0, 0);
+        Crawler_repaintCallback();
     } while (running);
 
-    shutdownGraphics();
+    Crawler_unloadStateCallback(0);
 
     return 0;
 }
