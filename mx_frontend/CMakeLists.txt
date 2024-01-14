@@ -36,6 +36,7 @@ add_executable(derelict32
         ../common/src/Vec.c
         ../common/src/Common.c
         ../common/src/FixP.c
+        ../common/src/LerpFix.c
         ../common/src/Mesh.c
         ../common/src/MapWithCharKey.c
         ../common/src/PackedFileReader.c
