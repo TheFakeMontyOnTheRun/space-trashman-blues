@@ -14,7 +14,7 @@
 #include "SN76489.h"
 #include "SoundSystem.h"
 
-#define COOLDOWN_MAX 0xFF
+#define COOLDOWN_MAX 0x1F
 
 /*  Required since we have our own memory allocator abstraction */
 uint16_t heap = 0;
@@ -26,6 +26,8 @@ uint8_t updateDirection;
 extern uint8_t cursorPosition;
 
 enum ESoundDriver soundDriver = kNoSound;
+
+extern enum EGameMenuState currentGameMenuState;
 
 void initHW(void) {
     initGamepadUI();
@@ -45,11 +47,13 @@ enum ECommand getInput(void) {
         cooldown--;
     }
 
-    if (key & JOY_UP) {
+    if (key & JOY_UP && !cooldown) {
+        cooldown = COOLDOWN_MAX;
         return kCommandUp;
     }
 
-    if (key & JOY_LEFT) {
+    if (key & JOY_LEFT && !cooldown) {
+        cooldown = COOLDOWN_MAX;
         if (key & JOY_FIREB) {
             return kCommandStrafeLeft;
         } else {
@@ -58,7 +62,8 @@ enum ECommand getInput(void) {
         }
     }
 
-    if (key & JOY_RIGHT) {
+    if (key & JOY_RIGHT && !cooldown) {
+        cooldown = COOLDOWN_MAX;
         if (key & JOY_FIREB) {
             return kCommandStrafeRight;
         } else {
@@ -67,26 +72,35 @@ enum ECommand getInput(void) {
         }
     }
 
-    if (key & JOY_DOWN) {
+    if (key & JOY_DOWN && !cooldown) {
+        cooldown = COOLDOWN_MAX;
         return kCommandDown;
     }
 
-    if ((key & JOY_FIREA) /* && !cooldown */) {
-        playSound(3);
-        cooldown = COOLDOWN_MAX;
-        return performActionJoypad();
+    if ((key & JOY_FIREA) && !cooldown ) {
+        if (currentGameMenuState == kPlayGame) {
+            playSound(3);
+            cooldown = COOLDOWN_MAX;
+            return performActionJoypad();
+        } else {
+            return kCommandFire1;
+        }
     }
 
-    if ((key & JOY_FIREB) /* && !cooldown */ ) {
-        cursorPosition = (cursorPosition + 1);
-        playSound(2);
-        if (cursorPosition >= 6) {
-            cursorPosition = 0;
-        }
+    if ((key & JOY_FIREB) && !cooldown ) {
+        if (currentGameMenuState == kPlayGame) {
+            cursorPosition = (cursorPosition + 1);
+            playSound(2);
+            if (cursorPosition >= 6) {
+                cursorPosition = 0;
+            }
 
-        HUD_refresh();
-        cooldown = COOLDOWN_MAX;
-        return kCommandNone;
+            HUD_refresh();
+            cooldown = COOLDOWN_MAX;
+            return kCommandNone;
+        } else {
+            return kCommandFire1;
+        }
     }
 
     return kCommandNone;

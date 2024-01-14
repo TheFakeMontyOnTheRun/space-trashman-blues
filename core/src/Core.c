@@ -33,7 +33,7 @@ Created by Daniel Monteiro on 2019-07-26.
 /**
  * there's an implicit dummy first
  */
-uint8_t roomCount = 1;
+int roomCount = 1;
 /**
  *
  */

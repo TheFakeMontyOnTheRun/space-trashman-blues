@@ -127,24 +127,27 @@ drawWindowWithOptions(const uint8_t x,
                       const uint8_t selectedOption) {
     uint8_t c;
 
-    drawWindow(x - 1,
-               y - 1,
-               dx + 1,
-               dy + 1,
-               title,
-               2);
+    if (options != NULL) {
+        drawWindow(x - 1,
+                   y - 1,
+                   dx + 1,
+                   dy + 1,
+                   title,
+                   2);
+    }
 
     for (c = 0; c < optionsCount; ++c) {
-
         drawTextAt(x,
                    y + 2 + c,
                    (selectedOption == c) ? ">" : " ",
                    1);
 
-        drawTextAt(x + 1,
-                   y + 2 + c,
-                   &options[c][0],
-                   1);
+        if (options != NULL) {
+            drawTextAt(x + 1,
+                       y + 2 + c,
+                       &options[c][0],
+                       1);
+        }
     }
 }
 

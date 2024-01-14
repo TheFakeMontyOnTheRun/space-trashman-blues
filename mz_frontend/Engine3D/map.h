@@ -1,4 +1,4 @@
 #ifndef MAP_H
 #define MAP_H
-int8_t *map[32];
+uint8_t *map[32];
 #endif
