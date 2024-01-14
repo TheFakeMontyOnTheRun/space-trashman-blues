@@ -17,7 +17,6 @@
 #include "Core.h"
 #include "Enums.h"
 #include "FixP.h"
-#include "LerpFix.h"
 #include "Vec.h"
 #include "Common.h"
 #include "LoadBitmap.h"
