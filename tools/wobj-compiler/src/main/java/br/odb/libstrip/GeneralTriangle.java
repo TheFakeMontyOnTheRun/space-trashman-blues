@@ -28,6 +28,9 @@ public class GeneralTriangle implements Serializable {
 	public float nx;
 	public float ny;
 	public float nz;
+        
+	final public int[] indices = new int[3];
+        
 	private float[] mTextureCoordinates =  new float[]{ 0.0f, 0.0f,
 														0.0f, 0.0f,
 														0.0f, 0.0f
