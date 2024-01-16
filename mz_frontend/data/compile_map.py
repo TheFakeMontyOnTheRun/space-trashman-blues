@@ -51,7 +51,7 @@ def writeRawByte( file, value ):
 
 def writeAsFixedPoint(file, value):
 
-    valueAsInt = int( float(value) * float(0x10000) )
+    valueAsInt = int( float( value ) * float(0xFFFF) )
     writeByte(file, ( valueAsInt & 0x000000FF) >> 0 )
     writeByte(file, ( valueAsInt & 0x0000FF00) >> 8)
     writeByte(file, ( valueAsInt & 0x00FF0000) >> 16)

@@ -1,0 +1,90 @@
+CC=i386-pc-msdosdjgpp-gcc
+CXX=i386-pc-msdosdjgpp-g++
+STRIP=i386-pc-msdosdjgpp-strip
+LD=i386-pc-msdosdjgpp-ld
+
+LDFLAGS = -lemu -flto
+
+CFLAGS= -O6 -Ofast      \
+    -Ibase3d/include        \
+    -Imenu/include          \
+    -funroll-loops          \
+    -funroll-all-loops      \
+    -fomit-frame-pointer    \
+    -fno-exceptions         \
+    -ffast-math             \
+    -mtune=i486             \
+    -flto		    \
+    -march=i486             \
+    --pedantic		    \
+    -DCLI_BUILD -DPAGE_FLIP_ANIMATION -DEMIT_QUIT_OPTION -DENDIANESS_AWARE\
+    -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS
+
+CXXFLAGS= -O6 -Ofast      \
+    -Ibase3d/include        \
+    -flto		    \
+    -Imenu/include          \
+    -fno-threadsafe-statics \
+    -funroll-loops          \
+    -funroll-all-loops      \
+    -fomit-frame-pointer    \
+    -fno-exceptions         \
+    -ffast-math             \
+    -mtune=i486             \
+    -march=i486             \
+    -fpermissive \
+    -Wno-narrowing \
+    -DCLI_BUILD -DPAGE_FLIP_ANIMATION \
+    --pedantic		\
+    -I../core/include -I../common/include
+
+MENU_TARGET=game.exe
+
+MENU_OBJ= menu/src/Main.o \
+	  ../common/src/FixP.o \
+	  ../common/src/Vec.o \
+	  ../common/src/Common.o \
+	  ../common/src/PackedFileReader.o \
+	  ../common/src/MapWithCharKey.o \
+	  ../common/src/CTile3DProperties.o \
+	  ../common/src/EDirection_Utils.o \
+	  ../common/src/Globals.o \
+	  ../common/src/VisibilityStrategy.o \
+	  ../common/src/Events.o \
+	  ../common/src/Dungeon.o \
+	  ../common/src/MusicDOS.o \
+	  ../common/src/timer.o \
+	  ../common/src/OPL2.o \
+	  ../common/src/Mesh.o \
+	  ../common/src/controller.o \
+	  base3d/src/DOSVersion/DOSRenderer.o \
+	  base3d/src/LoadBitmap.o \
+	  base3d/src/CRenderer.o \
+	  base3d/src/CRenderer_Rasterization.o \
+	  base3d/src/CRenderer_Tesselation.o \
+	  ../common/src/GameMenu.o \
+	  ../common/src/MainMenu.o \
+	  ../common/src/Engine.o \
+	  ../common/src/UI.o \
+	  ../common/src/HackingScreen.o \
+	  ../common/src/HelpScreen.o \
+	  ../common/src/CreditsScreen.o \
+	  ../common/src/Crawler.o \
+	  ../core/src/Derelict.o \
+	  ../core/src/Core.o \
+	  ../common/src/HackingMinigameRules.o \
+	  ../core/src/Parser.o
+
+$(MENU_TARGET):	$(MENU_OBJ)
+	$(CXX) -o$(MENU_TARGET) $(MENU_OBJ) $(LDFLAGS)
+	$(STRIP) $(MENU_TARGET)
+
+all:   $(MENU_TARGET)
+
+clean:
+	rm -f menu/src/*.o
+	rm -f ../core/src/*.o
+	rm -f ../common/src/*.o
+	rm -f base3d/src/*.o
+	rm -f common/src/*.o
+	rm -f base3d/src/DOSVersion/*.o

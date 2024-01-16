@@ -1,0 +1,66 @@
+LDFLAGS=`sdl-config --libs` -lm
+
+
+CFLAGS= `sdl-config --cflags `  -g \
+    -Ibase3d/include        \
+    -Imenu/include          \
+    -fno-exceptions         \
+    -ffast-math             \
+    --pedantic		    \
+    -DCLI_BUILD \
+    -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS -DPAGE_FLIP_ANIMATION -DENDIANESS_AWARE -DEMIT_QUIT_OPTION
+
+MENU_TARGET=game
+
+MENU_OBJ= menu/src/Main.o \
+         	  ../common/src/FixP.o \
+         	  ../common/src/Vec.o \
+         	  ../common/src/Common.o \
+         	  ../common/src/PackedFileReader.o \
+         	  ../common/src/MapWithCharKey.o \
+         	  ../common/src/CTile3DProperties.o \
+         	  ../common/src/EDirection_Utils.o \
+         	  ../common/src/Globals.o \
+         	  ../common/src/VisibilityStrategy.o \
+         	  ../common/src/Dungeon.o \
+         	  ../common/src/Events.o \
+         	  base3d/src/LoadBitmap.o \
+         	  base3d/src/CRenderer.o \
+         	  base3d/src/CRenderer_Rasterization.o \
+         	  base3d/src/CRenderer_Tesselation.o \
+         	  ../common/src/GameMenu.o \
+         	  ../common/src/MainMenu.o \
+         	  ../common/src/Engine.o \
+         	  ../common/src/UI.o \
+         	  ../common/src/Mesh.o \
+         	  ../common/src/HackingScreen.o \
+         	  ../common/src/HelpScreen.o \
+         	  ../common/src/CreditsScreen.o \
+         	  ../common/src/Crawler.o \
+         	  ../core/src/Derelict.o \
+         	  ../core/src/Core.o \
+         	  ../core/src/Parser.o \
+         	  ../common/src/NullMusic.o \
+         	  ../common/src/HackingMinigameRules.o \
+         	  base3d/src/SDLVersion/SDL1Renderer.o
+
+
+$(MENU_TARGET):	$(MENU_OBJ)
+	$(CC) -o$(MENU_TARGET) $(MENU_OBJ) $(LDFLAGS)
+
+all:   $(MENU_TARGET)
+
+
+menudata: packager
+	rm -f ./menu.pfs
+	ls res/*.*  | xargs ./packer
+	mv ./data.pfs ./menu.pfs
+
+clean:
+	rm -f menu/src/*.o
+	rm -f ../core/src/*.o
+	rm -f ../common/src/*.o
+	rm -f base3d/src/*.o
+	rm -f common/src/*.o
+	rm -f SoundSystem/*.o
+	rm -f base3d/src/SDLVersion/*.o

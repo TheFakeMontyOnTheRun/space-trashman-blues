@@ -2,30 +2,41 @@ CXX = m68k-amigaos-g++
 CC = m68k-amigaos-gcc
 STRIP=m68k-amigaos-strip
 AS = vasmm68k_mot
-CFLAGS = \
-    -c -m68000 -s -fexpensive-optimizations -fomit-frame-pointer -ffast-math -Ofast \
-    -I../common/include -IAmigaVersion -I../core/include -I../common/include -IEngine3D -I../core/include \
-    -Imenu/include -ISoundSystem \
-    -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DAGA5BPP -DRES128X128 -DTRACE_OBJECTS_OVER_FLOOR \
-    -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DUSE_FILLED_POLYS -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DENDIANESS_AWARE
-
-
-LDFLAGS =  -s -mcrt=nix13
+LDFLAGS =  -s -noixemul
 ASFLAGS = -phxass -Fhunk -m68000 -chklabels -no-fpu -wfail -I/opt/amiga/m68k-amigaos/ndk-include
+CFLAGS = -Ibase3d/include -I../common/include -I../core/include -DPAGE_FLIP_ANIMATION -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -Imenu/include -c -m68000 \
+        -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -Ofast \
+        -DAGA4BPP -DFASTER_TEXTURE_MAP -DEMIT_QUIT_OPTION -DENDIANESS_AWARE
 
 MENU_TARGET=gameocs
 
-MENU_OBJ= \
-    Engine3D/demo.o \
-    AmigaVersion/AmigaRenderer.o \
-    ../core/src/Core.o \
-    ../core/src/Derelict.o \
-    ../common/src/MapWithCharKey.o \
-    ../common/src/PackedFileReader.o \
-    ../common/src/CTile3DProperties.o \
-    ../common/src/Common.o \
-    ../common/src/Globals.o \
-    ../common/src/c2p1x1_4_c5_bm.o
+MENU_OBJ= menu/src/Main.o \
+              base3d/src/Crawler.o \
+              base3d/src/LoadBitmap.o \
+              base3d/src/CRenderer_Rasterization.o \
+              ../common/src/MainMenu.o \
+              ../common/src/HelpScreen.o \
+              ../common/src/CreditsScreen.o \
+              ../common/src/GameMenu.o \
+              ../common/src/Engine.o \
+              ../common/src/Globals.o \
+              ../common/src/CTile3DProperties.o \
+              ../common/src/Vec.o \
+              ../common/src/Common.o \
+              ../common/src/FixP.o \
+              ../common/src/Mesh.o \
+              ../common/src/MapWithCharKey.o \
+              ../common/src/PackedFileReader.o \
+              ../common/src/EDirection_Utils.o \
+              ../common/src/HackingScreen.o \
+              ../common/src/HackingMinigameRules.o \
+              ../common/src/UI.o \
+              ../core/src/Derelict.o \
+              ../core/src/Core.o \
+	  ../common/src/MusicAGA.o \
+	  ../common/src/PCMAudio.o \
+	  ../common/src/c2p1x1_4_c5_bm.o \
+	  base3d/src/AmigaVersion/AmigaRenderer.o
 
 $(MENU_TARGET):	$(MENU_OBJ)
 	$(CC) -o$(MENU_TARGET) $(MENU_OBJ) $(LDFLAGS)
@@ -34,12 +45,15 @@ $(MENU_TARGET):	$(MENU_OBJ)
 all:   $(MENU_TARGET)
 
 adf: $(MENU_TARGET)
-	rm -f Derelict3D_ocs.adf
-	xdftool Derelict3D_ocs.adf format "Sub Mare Imperium - Derelict" + write gameocs gameocs + write base.pfs base.pfs
-	xdftool Derelict3D_ocs.adf list
+	rm -f Derelict3D_aga.adf
+	xdftool Derelict3D_aga.adf format "Sub Mare Imperium - Derelict" + write gameaga gameaga + write base.pfs base.pfs
+	xdftool Derelict3D_aga.adf list
 
 clean:
-	rm -f Engine3D/*.o
-	rm -f AmigaVersion/*.o
+	rm -f menu/src/*.o
+	rm -f base3d/src/*.o
+	rm -f base3d/src/AmigaVersion/*.o
+	rm -f common/src/*.o
+	rm -f SoundSystem/*.o
 	rm -f ../core/src/*.o
 	rm -f ../common/src/*.o

@@ -1,22 +1,26 @@
 .DEFAULT_GOAL := default
 
-CRUNCHER=wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
 PACKAGER=packer
 
+CRUNCHER=../../tools/wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
+
 $(CRUNCHER):
-	mvn -q -f wobj-compiler/pom.xml clean compile package install
-	mkdir -p wobj-compiler/dist
-	cp wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar wobj-compiler/dist
+	mvn -q -f ../../tools/wobj-compiler/pom.xml clean compile package install
 
 $(PACKAGER):
 	rm -f $(PACKAGER)
 	$(CXX) -std=c++14 -o$(PACKAGER) packer.cpp
 
-data:	$(PACKAGER) $(CRUNCHER)
+models: $(CRUNCHER)
+	ls src/*.obj  | xargs java -jar ../../tools/wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
+
+data:	$(PACKAGER)
+	#python3 ./check_textures.py
 	rm -f ./base.pfs
-	ls -r src/*.obj  | xargs java -jar wobj-compiler/dist/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
-	ls -r assets/*.*  | xargs ./packer
-	bin2c ../base.pfs ../Engine3D/basepfs.h basepfs
+	ls assets/*.*  | xargs ./packer
+	mkdir -p output
+	cp ./data.pfs output/base.pfs
+	bin2c ../base.pfs ../base3d/include/basepfs.h basepfs
 	mv ./data.pfs ../base.pfs
 
 images:
@@ -25,6 +29,6 @@ images:
 maps:
 	python3 ./compile_map.py
 
-full: images maps data
+full: images maps models data
 
 default: full

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:export-ydpi="25.4"
+   inkscape:export-xdpi="25.4"
+   inkscape:export-filename="/Users/monty/map11.png"
+   sodipodi:docname="floor2.svg"
+   inkscape:version="1.0 (4035a4f, 2020-05-01)"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 104.53333 25.208333"
+   height="55mm"
+   width="112mm">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     inkscape:window-maximized="0"
+     inkscape:window-y="23"
+     inkscape:window-x="0"
+     inkscape:window-height="855"
+     inkscape:window-width="1440"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox="true"
+     inkscape:snap-global="false"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="mm"
+     inkscape:cy="123.18388"
+     inkscape:cx="56.469146"
+     inkscape:zoom="0.9899495"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.603204"
+       id="rect34"
+       width="104.8944"
+       height="50.959385"
+       x="-0.26726976"
+       y="-12.971482" />
+    <rect
+       y="-23.603563"
+       x="7.4496207"
+       height="10.016456"
+       width="10.19856"
+       id="rect833"
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.251105;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       transform="rotate(90)" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.251105;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect835"
+       width="10.19856"
+       height="10.016456"
+       x="7.367806"
+       y="-42.441269"
+       transform="rotate(90)"
+       inkscape:export-filename="/Users/monty/map3.png"
+       inkscape:export-xdpi="25.4"
+       inkscape:export-ydpi="25.4" />
+    <rect
+       y="-60.274693"
+       x="7.6471539"
+       height="10.016456"
+       width="10.19856"
+       id="rect837"
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.251105;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/Users/monty/map5.png"
+       inkscape:export-xdpi="25.4"
+       inkscape:export-ydpi="25.4"
+       transform="rotate(90)" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.251105;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect839"
+       width="10.19856"
+       height="10.016456"
+       x="7.6471539"
+       y="-75.913231"
+       transform="rotate(90)"
+       inkscape:export-filename="/Users/monty/map9.png"
+       inkscape:export-xdpi="25.4"
+       inkscape:export-ydpi="25.4" />
+    <rect
+       y="-91.551773"
+       x="7.6471539"
+       height="10.016456"
+       width="10.19856"
+       id="rect841"
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.251105;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       transform="rotate(90)"
+       inkscape:export-filename="/Users/monty/map12.png"
+       inkscape:export-xdpi="25.4"
+       inkscape:export-ydpi="25.4" />
+    <path
+       id="path851"
+       d="m 23.635724,12.406863 h 8.827093"
+       style="fill:none;stroke:#ffffff;stroke-width:0.13703px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="path853"
+       d="m 42.550925,12.703156 h 7.663084"
+       style="fill:none;stroke:#ffffff;stroke-width:0.13703px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="path855"
+       d="m 60.399118,12.604392 h 5.529058"
+       style="fill:none;stroke:#ffffff;stroke-width:0.13703px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="path857"
+       d="m 76.016289,12.209334 h 5.723059"
+       style="fill:none;stroke:#ffffff;stroke-width:0.13703px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <rect
+       y="-42.441269"
+       x="-9.1243505"
+       height="10.016456"
+       width="10.19856"
+       id="rect987"
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.251105;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/Users/monty/map4.png"
+       inkscape:export-xdpi="25.4"
+       inkscape:export-ydpi="25.4"
+       transform="rotate(90)" />
+    <path
+       style="fill:none;stroke:#ffffff;stroke-width:0.217969px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 37.800982,1.204069 V 7.2649376"
+       id="path989" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.251105;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect991"
+       width="10.19856"
+       height="10.016456"
+       x="-9.1243505"
+       y="-60.150719"
+       transform="rotate(90)"
+       inkscape:export-filename="/Users/monty/map7.png"
+       inkscape:export-xdpi="25.4"
+       inkscape:export-ydpi="25.4" />
+    <path
+       id="path993"
+       d="M 55.510436,1.204069 V 7.2649376"
+       style="fill:none;stroke:#ffffff;stroke-width:0.217969px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <rect
+       y="-75.700478"
+       x="-8.6845598"
+       height="10.016456"
+       width="10.19856"
+       id="rect995"
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.251105;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       transform="rotate(90)"
+       inkscape:export-filename="/Users/monty/map10.png"
+       inkscape:export-xdpi="25.4"
+       inkscape:export-ydpi="25.4" />
+    <path
+       style="fill:none;stroke:#ffffff;stroke-width:0.217969px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 71.0602,1.64386 V 7.704728"
+       id="path997" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.251105;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect999"
+       width="10.19856"
+       height="10.016456"
+       x="23.731152"
+       y="-75.732727"
+       transform="rotate(90)"
+       inkscape:export-filename="/Users/monty/map11.png"
+       inkscape:export-xdpi="25.4"
+       inkscape:export-ydpi="25.4" />
+    <path
+       style="fill:none;stroke:#ffffff;stroke-width:0.215733px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 71.045556,17.776951 v 5.908607"
+       id="path1001" />
+    <rect
+       y="-60.150719"
+       x="23.969913"
+       height="10.016456"
+       width="10.19856"
+       id="rect1003"
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.251105;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       transform="rotate(90)"
+       inkscape:export-filename="/Users/monty/mpa8.png"
+       inkscape:export-xdpi="25.4"
+       inkscape:export-ydpi="25.4" />
+    <path
+       id="path1005"
+       d="m 55.463553,18.01571 v 5.908602"
+       style="fill:none;stroke:#ffffff;stroke-width:0.215733px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  </g>
+</svg>
