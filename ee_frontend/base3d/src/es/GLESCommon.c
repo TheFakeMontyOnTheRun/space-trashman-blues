@@ -275,7 +275,7 @@ static const char *fragment_shader =
 struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, rampVBO, planeYZVBO;
 
 void checkGLError(const char *operation) {
-#ifndef __EMSCRIPTEN__
+#ifdef DEBUG_GL_CALLS
     int errorCode = glGetError();
 
     if (errorCode != 0) {
@@ -504,7 +504,7 @@ void bindTexture(struct Bitmap *bitmap) {
 
 int submitBitmapToGPU(struct Bitmap *bitmap) {
     // Texture object handle
-    int textureId = 0;
+    unsigned int textureId = 0;
 
     //Generate texture storage
     glGenTextures(1, &textureId);
@@ -545,6 +545,18 @@ void startFrameGL(int x, int y, int width, int height) {
     glEnableVertexAttribArray(aTexCoordAttributeLocation);
     checkGLError("Enabled vertex uv attribute");
     
+    glUniform2f(uScaleUniformLocation, 1.0f, 1.0f);
+    glUniform4f(uModUniformLocation, 1.0f, 1.0f, 1.0f, 1.0f);
+    
+    mat4x4_rotateX(rotateXMatrix, 0);
+    glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix);
+
+    mat4x4_rotateY(rotateYMatrix, 0);
+    glUniformMatrix4fv(uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix);
+
+    mat4x4_rotateZ(rotateZMatrix, 0);
+    glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
+
     enter2D();
 }
 
