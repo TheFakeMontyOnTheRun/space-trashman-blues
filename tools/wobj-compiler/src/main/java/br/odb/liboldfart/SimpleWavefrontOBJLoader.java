@@ -71,6 +71,7 @@ public class SimpleWavefrontOBJLoader {
 
 				List<Vec3> temporary = new ArrayList<>();
 				List<Vec2> temporaryUV = new ArrayList<>();
+				List<Integer> indices = new ArrayList<>();
 
 				for (int c = 1; c < subToken.length; ++c) {
 					String substr = subToken[c];
@@ -79,6 +80,7 @@ public class SimpleWavefrontOBJLoader {
 						substr = substr.substring(0, substr.indexOf('/'));
 					}
 
+					indices.add(Integer.parseInt(substr) - 1);
 					temporary.add(vertexes.get(Integer.parseInt(substr) - 1));
 
 					substr = subToken[c];
@@ -110,6 +112,10 @@ public class SimpleWavefrontOBJLoader {
 				}
 
 				triangle.setTextureCoordinates(uv);
+                                
+				for (int c = 0; c < indices.size(); ++c) {
+                                    triangle.indices[c] = indices.get(c);
+				}                                
 
 				currentMesh.faces.add(triangle);
 			}
@@ -180,8 +186,8 @@ public class SimpleWavefrontOBJLoader {
 
 	final private List<TriangleMesh> meshList = new ArrayList<>();
 	final private Map<String, Material> materials = new HashMap<>();
-	final private List<Vec3> vertexes = new ArrayList<>();
-	final private List<Vec2> uvCoords = new ArrayList<>();
+	final public List<Vec3> vertexes = new ArrayList<>();
+	final public List<Vec2> uvCoords = new ArrayList<>();
 	private TriangleMesh currentMesh;
 	private Material currentMaterial;
 	private final Map<String, WavefrontCommandProcessor> processorMap = new HashMap<>();
