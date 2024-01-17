@@ -25,12 +25,6 @@
 #define YRES_FRAMEBUFFER 160
 #endif
 
-#ifndef AGS
-#define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
-#else
-#define FIXP_DISTANCE_FOR_DARKNESS (intToFix(32))
-#endif
-
 #define TOTAL_TEXTURES 16
 #define TRANSPARENCY_COLOR 199
 #define VISIBILITY_CONE_NARROWING 3
@@ -100,7 +94,7 @@ void fillRect(
         const FramebufferPixelFormat pixel, const uint8_t stipple);
 
 
-void drawMesh(const struct Mesh *mesh, const struct Vec3 at);
+void drawMesh(const struct Mesh *mesh, const struct Vec3 at, FramebufferPixelFormat tint);
 
 void renderRoomTransition(void);
 
@@ -117,50 +111,55 @@ void drawTextAt(const int x,
                 const FramebufferPixelFormat colour);
 
 void drawFloorAt(const struct Vec3 center,
-                 const struct Texture *texture, enum EDirection rotation);
+                 const struct Texture *texture, enum EDirection rotation, FramebufferPixelFormat tint);
 
 void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
-                const struct Texture *texture, uint8_t rotation, uint8_t flipTexture);
+                const struct Texture *texture, uint8_t rotation, uint8_t flipTexture, FramebufferPixelFormat tint);
 
 void drawCeilingAt(const struct Vec3 center,
-                   const struct Texture *texture, enum EDirection rotation);
+                   const struct Texture *texture, enum EDirection rotation, FramebufferPixelFormat tint);
 
 void drawLeftNear(const struct Vec3 center,
                   const FixP_t scale,
                   const struct Texture *texture,
                   const uint8_t mask,
-                  const uint8_t repeatedTexture);
+                  const uint8_t repeatedTexture, FramebufferPixelFormat tint);
 
 void drawRightNear(const struct Vec3 center,
                    const FixP_t scale,
                    const struct Texture *texture,
                    const uint8_t mask,
-                   const uint8_t repeatedTexture);
+                   const uint8_t repeatedTexture,
+                   FramebufferPixelFormat tint);
 
 void drawColumnAt(const struct Vec3 center,
                   const FixP_t scale,
                   const struct Texture *texture,
                   const uint8_t mask,
                   const uint8_t enableAlpha,
-                  const uint8_t repeatedTexture);
+                  const uint8_t repeatedTexture,
+                  FramebufferPixelFormat tint);
 
 void drawBillboardAt(const struct Vec3 center,
                      struct Bitmap *bitmap,
                      const FixP_t scale,
-                     const int size);
+                     const int size,
+                     FramebufferPixelFormat tint);
 
 void drawBitmapRaw(const int dx,
                    const int dy,
                    int width,
                    int height,
                    BitmapPixelFormat *bitmapData,
-                   const int transparent);
+                   const int transparent,
+                   FramebufferPixelFormat tint);
 
 
 void drawBitmap(const int x,
                 const int y,
                 struct Bitmap *tile,
-                const uint8_t transparent);
+                const uint8_t transparent,
+                FramebufferPixelFormat tint);
 
 void drawBitmapRegion(const int _x,
                       const int _y,
@@ -178,9 +177,9 @@ void drawRect(const int x,
               const FramebufferPixelFormat pixel);
 
 
-void fillTriangle(int *coords, FramebufferPixelFormat colour);
+void fillTriangle(int *coords, FramebufferPixelFormat colour, FramebufferPixelFormat tint);
 
-void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z);
+void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z, FramebufferPixelFormat tint);
 
 void drawWall(FixP_t x0,
               FixP_t x1,
@@ -190,7 +189,8 @@ void drawWall(FixP_t x0,
               FixP_t x1y1,
               const TexturePixelFormat *texture,
               const FixP_t textureScaleY,
-              const int z);
+              const int z,
+              FramebufferPixelFormat tint);
 
 void drawFloor(FixP_t y0,
                FixP_t y1,
@@ -199,7 +199,8 @@ void drawFloor(FixP_t y0,
                FixP_t x0y1,
                FixP_t x1y1,
                int z,
-               const TexturePixelFormat *texture);
+               const TexturePixelFormat *texture,
+               FramebufferPixelFormat tint);
 
 void drawFrontWall(FixP_t x0,
                    FixP_t y0,
@@ -209,12 +210,14 @@ void drawFrontWall(FixP_t x0,
                    const FixP_t textureScaleY,
                    const int z,
                    const int enableAlpha,
-                   const int size);
+                   const int size,
+                   FramebufferPixelFormat tint);
 
 void drawMask(const FixP_t x0,
               const FixP_t y0,
               const FixP_t x1,
-              const FixP_t y1);
+              const FixP_t y1,
+              FramebufferPixelFormat tint);
 
 void maskWall(
         FixP_t x0,
@@ -222,7 +225,8 @@ void maskWall(
         FixP_t x0y0,
         FixP_t x0y1,
         FixP_t x1y0,
-        FixP_t x1y1);
+        FixP_t x1y1,
+        FramebufferPixelFormat tint);
 
 void maskFloor(
         FixP_t y0,
@@ -231,16 +235,17 @@ void maskFloor(
         FixP_t x1y0,
         FixP_t x0y1,
         FixP_t x1y1,
-        FramebufferPixelFormat pixel
+        FramebufferPixelFormat pixel,
+        FramebufferPixelFormat tint
 );
 
 int submitBitmapToGPU(struct Bitmap *bitmap);
 
-void initGL(void);
+void initRenderer(void);
 
-void startFrameGL(int x, int y, int width, int height);
+void startFrame(int x, int y, int width, int height);
 
-void endFrameGL(void);
+void endFrame(void);
 
 extern struct MapWithCharKey occluders;
 extern struct MapWithCharKey enemySightBlockers;
@@ -258,7 +263,6 @@ extern uint8_t *framebuffer;
 extern enum EDirection cameraDirection;
 extern long gameTicks;
 extern int hasSnapshot;
-extern const int distanceForPenumbra;
 extern int turnTarget;
 extern int turnStep;
 extern int needsToRedrawHUD;

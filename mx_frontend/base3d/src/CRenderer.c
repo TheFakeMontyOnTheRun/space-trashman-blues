@@ -51,6 +51,7 @@ struct Bitmap *defaultFont;
 struct Mesh mesh;
 extern int needsToRedrawHUD;
 int enable3DRendering = TRUE;
+uint8_t lightMap[MAP_SIZE * MAP_SIZE];
 
 #ifndef AGS
 uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
@@ -66,9 +67,9 @@ long gameTicks = 0;
 int dirtyLineY0 = 0;
 int dirtyLineY1 = YRES_FRAMEBUFFER;
 #ifndef AGS
-const int distanceForPenumbra = 16;
+const int distanceForPenumbra = 0;
 #else
-const int distanceForPenumbra = 8;
+const int distanceForPenumbra = 0;
 #endif
 struct Bitmap *mapTopLevel = NULL;
 struct MapWithCharKey tileProperties;
@@ -94,6 +95,27 @@ char *messageLogBuffer;
 int messageLogBufferCoolDown = 0;
 
 void printMessageTo3DView(const char *message);
+
+
+void spreadLight(int x, int y, int intensity) {
+    if (x < 0 || x >= MAP_SIZE || y < 0 || y >= MAP_SIZE ) {
+        return;
+    }
+
+    if (!isPositionAllowed(x, y)) {
+        return;
+    }
+
+    if (intensity > 0) {
+        intensity /= 2;
+        lightMap[y * MAP_SIZE + x] += intensity;
+        intensity /= 2;
+        spreadLight(x, y - 1, intensity);
+        spreadLight(x, y + 1, intensity);
+        spreadLight(x - 1, y, intensity);
+        spreadLight(x + 1, y, intensity);
+    }
+}
 
 void enter2D() {
 
@@ -151,7 +173,8 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     char *end;
     char *nameStart;
     char *buffer;
-
+    struct ObjectNode* itemNode;
+    int x, y;
     sprintf (tilesFilename, "tiles%d.lst", levelNumber);
 
     data = loadBinaryFileFromPath(tilesFilename);
@@ -184,6 +207,20 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     playerHeightChangeRate = 0;
 
     loadMesh(&mesh, "fighter.mdl");
+
+    memset(&lightMap[0], 0, MAP_SIZE * MAP_SIZE);
+
+    itemNode = getRoom(getPlayerRoom())->itemsPresent;
+
+    while(itemNode != NULL) {
+        if (itemNode->item != 0) {
+            struct Item  *item = getItem(itemNode->item);
+            if ( item != NULL ) {
+                spreadLight( item->position.x, item->position.y, 16);
+            }
+        }
+        itemNode = itemNode->next;
+    }
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -205,6 +242,7 @@ void renderRoomTransition() {
         needsToRedrawHUD = TRUE;
 
     } else {
+        FramebufferPixelFormat tint = getPaletteEntry(0xFFFFFFFF);
         xCameraOffset = yCameraOffset = 0;
 
         fillRect(0, 0, XRES + 1, YRES, 0, 0);
@@ -212,28 +250,28 @@ void renderRoomTransition() {
         center.mY = 0;
         center.mZ = intToFix(3);
         center.mX = -intToFix(3);
-        drawColumnAt(center, intToFix(3), nativeTextures[1], MASK_LEFT, 0, 1);
+        drawColumnAt(center, intToFix(3), nativeTextures[1], MASK_LEFT, 0, 1, tint);
 
         center.mX = intToFix(3);
-        drawColumnAt(center, intToFix(3), nativeTextures[1], MASK_RIGHT, 0, 1);
+        drawColumnAt(center, intToFix(3), nativeTextures[1], MASK_RIGHT, 0, 1, tint);
 
         center.mY = intToFix(5) - zCameraOffset;
         center.mX = intToFix(-1);
-        drawColumnAt(center, intToFix(3), nativeTextures[0], MASK_FRONT, 0, 1);
+        drawColumnAt(center, intToFix(3), nativeTextures[0], MASK_FRONT, 0, 1, tint);
         center.mX = intToFix(1);
-        drawColumnAt(center, intToFix(3), nativeTextures[0], MASK_FRONT, 0, 1);
+        drawColumnAt(center, intToFix(3), nativeTextures[0], MASK_FRONT, 0, 1, tint);
 
 
 
         center.mX = intToFix(1);
         center.mY = intToFix(2) - zCameraOffset;
         center.mZ = intToFix(3);
-        drawCeilingAt(center, nativeTextures[0], 0);
+        drawCeilingAt(center, nativeTextures[0], 0, tint);
 
         center.mX = -intToFix(1);
         center.mY = intToFix(2) - zCameraOffset;
         center.mZ = intToFix(3);
-        drawCeilingAt(center, nativeTextures[0], 0);
+        drawCeilingAt(center, nativeTextures[0], 0, tint);
 
         drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, 255);
 
@@ -355,6 +393,7 @@ void render(const long ms) {
     }
 
     if (needsToRedrawVisibleMeshes) {
+        uint8_t lightIntensity;
         uint8_t itemsSnapshotElement = 0xFF;
         struct Vec3 tmp, tmp2;
         struct CTile3DProperties *tileProp;
@@ -406,7 +445,7 @@ void render(const long ms) {
                         x = visPos.x;
                         z = visPos.y;
                         element = LEVEL_MAP(x, z);
-
+                        lightIntensity = lightMap[ z * MAP_SIZE + x];
                         itemsSnapshotElement = ITEMS_IN_MAP(x, z);
 
                         position.mX =
@@ -446,6 +485,7 @@ void render(const long ms) {
                         z = visPos.y;
 
                         element = LEVEL_MAP(x, z);
+                        lightIntensity = lightMap[ z * MAP_SIZE + x];
                         itemsSnapshotElement = ITEMS_IN_MAP(x, z);
 
                         position.mX = mCamera.mX + intToFix(-2 * x);
@@ -478,6 +518,7 @@ void render(const long ms) {
                         z = visPos.x;
 
                         element = LEVEL_MAP(z, x);
+                        lightIntensity = lightMap[ x * MAP_SIZE + z];
                         itemsSnapshotElement = ITEMS_IN_MAP(z, x);
 
                         position.mX = mCamera.mX + intToFix(-2 * x);
@@ -515,6 +556,7 @@ void render(const long ms) {
 
                         /* yes, it's reversed */
                         element = LEVEL_MAP(z, x);
+                        lightIntensity = lightMap[ x * MAP_SIZE + z];
                         itemsSnapshotElement = ITEMS_IN_MAP(z, x);
 
                         position.mX = mCamera.mX + intToFix(2 * x);
@@ -574,7 +616,8 @@ void render(const long ms) {
                             drawRightNear(
                                     tmp, intToFix(tileProp->mFloorRepetitions),
                                     nativeTextures[tileProp->mFloorRepeatedTextureIndex],
-                                    facesMask, TRUE);
+                                    facesMask, TRUE,
+                                    lightIntensity);
 
                             break;
 
@@ -583,7 +626,8 @@ void render(const long ms) {
                                      ((tileProp->mFloorHeight * 2) - intToFix(tileProp->mFloorRepetitions));
                             drawLeftNear(
                                     tmp, intToFix(tileProp->mFloorRepetitions),
-                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex], facesMask, TRUE);
+                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex], facesMask, TRUE,
+                                    lightIntensity);
                             break;
 
                         case kCube:
@@ -595,7 +639,8 @@ void render(const long ms) {
                             drawColumnAt(
                                     tmp, intToFix(tileProp->mFloorRepetitions),
                                     nativeTextures[tileProp->mFloorRepeatedTextureIndex],
-                                    facesMask, FALSE, TRUE);
+                                    facesMask, FALSE, TRUE,
+                                    lightIntensity);
                             break;
                     }
                 }
@@ -610,7 +655,8 @@ void render(const long ms) {
                             drawRightNear(
                                     tmp, intToFix(tileProp->mCeilingRepetitions),
                                     nativeTextures[tileProp->mCeilingRepeatedTextureIndex],
-                                    facesMask, TRUE);
+                                    facesMask, TRUE,
+                                    lightIntensity);
                             break;
 
                         case kLeftNearWall:
@@ -619,7 +665,8 @@ void render(const long ms) {
                             drawLeftNear(
                                     tmp, intToFix(tileProp->mCeilingRepetitions),
                                     nativeTextures[tileProp->mCeilingRepeatedTextureIndex],
-                                    facesMask, TRUE);
+                                    facesMask, TRUE,
+                                    lightIntensity);
                             break;
 
                         case kCube:
@@ -631,14 +678,16 @@ void render(const long ms) {
                             drawColumnAt(
                                     tmp, intToFix(tileProp->mCeilingRepetitions),
                                     nativeTextures[tileProp->mCeilingRepeatedTextureIndex],
-                                    facesMask, FALSE, TRUE);
+                                    facesMask, FALSE, TRUE,
+                                    lightIntensity);
                             break;
                     }
                 }
 
                 if (tileProp->mFloorTextureIndex != 0xFF) {
                     tmp.mY = position.mY + (tileProp->mFloorHeight * 2);
-                    drawFloorAt(tmp, nativeTextures[tileProp->mFloorTextureIndex], cameraDirection);
+                    drawFloorAt(tmp, nativeTextures[tileProp->mFloorTextureIndex], cameraDirection,
+                                lightIntensity);
                 }
 
                 if (tileProp->mCeilingTextureIndex != 0xFF) {
@@ -654,7 +703,8 @@ void render(const long ms) {
                     }
 
                     drawCeilingAt(
-                            tmp, nativeTextures[tileProp->mCeilingTextureIndex], newDirection);
+                            tmp, nativeTextures[tileProp->mCeilingTextureIndex], newDirection,
+                            lightIntensity);
                 }
 
                 if (tileProp->mGeometryType != kNoGeometry
@@ -694,7 +744,8 @@ void render(const long ms) {
                             drawColumnAt(tmp, (heightDiff + adjust),
                                          nativeTextures[tileProp->mMainWallTextureIndex],
                                          facesMask, tileProp->mNeedsAlphaTest,
-                                         tileProp->mRepeatMainTexture);
+                                         tileProp->mRepeatMainTexture,
+                                         lightIntensity);
                             break;
                         case kWallWest:
                             tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) + heightDiff);
@@ -720,7 +771,8 @@ void render(const long ms) {
                             drawColumnAt(tmp, (heightDiff + adjust),
                                          nativeTextures[tileProp->mMainWallTextureIndex],
                                          facesMask, tileProp->mNeedsAlphaTest,
-                                         tileProp->mRepeatMainTexture);
+                                         tileProp->mRepeatMainTexture,
+                                         lightIntensity);
                             break;
 
                         case kWallCorner:
@@ -747,7 +799,8 @@ void render(const long ms) {
                             drawColumnAt(tmp, (heightDiff + adjust),
                                          nativeTextures[tileProp->mMainWallTextureIndex],
                                          facesMask, tileProp->mNeedsAlphaTest,
-                                         tileProp->mRepeatMainTexture);
+                                         tileProp->mRepeatMainTexture,
+                                         lightIntensity);
                             break;
 
                         case kRightNearWall:
@@ -756,7 +809,8 @@ void render(const long ms) {
                             drawRightNear(
                                     tmp, (heightDiff + adjust),
                                     nativeTextures[tileProp->mMainWallTextureIndex],
-                                    facesMask, tileProp->mRepeatMainTexture);
+                                    facesMask, tileProp->mRepeatMainTexture,
+                                    lightIntensity);
                             break;
 
                         case kLeftNearWall:
@@ -765,7 +819,8 @@ void render(const long ms) {
                             drawLeftNear(
                                     tmp, (heightDiff + adjust),
                                     nativeTextures[tileProp->mMainWallTextureIndex],
-                                    facesMask, tileProp->mRepeatMainTexture);
+                                    facesMask, tileProp->mRepeatMainTexture,
+                                    lightIntensity);
                             break;
 
                         case kRampNorth: {
@@ -776,7 +831,8 @@ void render(const long ms) {
                             flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kEast);
 
                             drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection,
-                                       flipTextureVertical);
+                                       flipTextureVertical,
+                                       lightIntensity);
                         }
                             break;
 
@@ -788,7 +844,8 @@ void render(const long ms) {
                             flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kWest);
 
                             drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection,
-                                       flipTextureVertical);
+                                       flipTextureVertical,
+                                       lightIntensity);
                         }
                             break;
 
@@ -800,7 +857,8 @@ void render(const long ms) {
                             flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kEast);
 
                             drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex],
-                                       (cameraDirection + 1) & 3, flipTextureVertical);
+                                       (cameraDirection + 1) & 3, flipTextureVertical,
+                                       lightIntensity);
                         }
                             break;
                         case kRampWest: {
@@ -811,7 +869,8 @@ void render(const long ms) {
                             flipTextureVertical = (cameraDirection == kNorth || cameraDirection == kWest);
 
                             drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex],
-                                       (cameraDirection + 3) & 3, flipTextureVertical);
+                                       (cameraDirection + 3) & 3, flipTextureVertical,
+                                       lightIntensity);
                         }
                             break;
                         case kCube:
@@ -819,7 +878,8 @@ void render(const long ms) {
                             drawColumnAt(tmp, (heightDiff + adjust),
                                          nativeTextures[tileProp->mMainWallTextureIndex],
                                          facesMask, tileProp->mNeedsAlphaTest,
-                                         tileProp->mRepeatMainTexture);
+                                         tileProp->mRepeatMainTexture,
+                                         lightIntensity);
                         default:
                             break;
                     }
@@ -836,7 +896,8 @@ void render(const long ms) {
                         itemSprites[itemsSnapshotElement] = loadBitmap(&buffer[0]);
                     }
 
-                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], intToFix(1), 32);
+                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], intToFix(1), 32,
+                                    lightIntensity);
                 }
             }
         }

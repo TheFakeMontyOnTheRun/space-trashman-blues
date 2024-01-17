@@ -87,7 +87,8 @@ void initZMap(void) {
 void drawBillboardAt(const struct Vec3 center,
                      struct Bitmap *bitmap,
                      const FixP_t scale,
-                     const int size) {
+                     const int size,
+                     FramebufferPixelFormat tint) {
 
     struct Vec2 ulz0;
     struct Vec2 lrz0;
@@ -111,11 +112,11 @@ void drawBillboardAt(const struct Vec3 center,
     ulz0 = projectionVertices[0].second;
     lrz0 = projectionVertices[1].second;
 
-    if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-        drawMask(ulz0.mX, ulz0.mY, lrz0.mX, lrz0.mY);
+    if (tint == 0) {
+        drawMask(ulz0.mX, ulz0.mY, lrz0.mX, lrz0.mY, tint);
     } else {
         drawFrontWall(ulz0.mX, ulz0.mY, lrz0.mX, lrz0.mY, bitmap->data,
-                      scale, fixToInt(center.mZ), TRUE, size);
+                      scale, fixToInt(center.mZ), TRUE, size, tint);
     }
 }
 
@@ -124,7 +125,8 @@ void drawColumnAt(const struct Vec3 center,
                   const struct Texture *texture,
                   const uint8_t mask,
                   const uint8_t enableAlpha,
-                  const uint8_t repeatedTexture) {
+                  const uint8_t repeatedTexture,
+                  FramebufferPixelFormat tint) {
 
     const FixP_t halfScale = scale;
     FixP_t textureScale;
@@ -186,11 +188,11 @@ void drawColumnAt(const struct Vec3 center,
     p3 = projectionVertices[3].second;
 
     if ((mask & MASK_BEHIND) || (enableAlpha && (mask & MASK_FRONT))) {
-        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-            drawMask(p2.mX, p2.mY, p3.mX, p3.mY);
+        if (tint == 0) {
+            drawMask(p2.mX, p2.mY, p3.mX, p3.mY, tint);
         } else {
             drawFrontWall(p2.mX, p2.mY, p3.mX, p3.mY, texture->rotations[0],
-                          (textureScale), z, enableAlpha, NATIVE_TEXTURE_SIZE);
+                          (textureScale), z, enableAlpha, NATIVE_TEXTURE_SIZE, tint);
         }
     }
 
@@ -200,11 +202,11 @@ void drawColumnAt(const struct Vec3 center,
             z -= 2;
         }
 
-        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-            maskWall(p2.mX, p0.mX, p2.mY, p3.mY, p0.mY, p1.mY);
+        if (tint == 0) {
+            maskWall(p2.mX, p0.mX, p2.mY, p3.mY, p0.mY, p1.mY, tint);
         } else {
             drawWall(p2.mX, p0.mX, p2.mY, p3.mY, p0.mY, p1.mY, texture->rowMajor,
-                     (textureScale), z);
+                     (textureScale), z, tint);
         }
 
         z = originalZ;
@@ -215,11 +217,11 @@ void drawColumnAt(const struct Vec3 center,
             z -= 2;
         }
 
-        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-            maskWall(p1.mX, p3.mX, p0.mY, p1.mY, p2.mY, p3.mY);
+        if (tint == 0) {
+            maskWall(p1.mX, p3.mX, p0.mY, p1.mY, p2.mY, p3.mY, tint);
         } else {
             drawWall(p1.mX, p3.mX, p0.mY, p1.mY, p2.mY, p3.mY, texture->rowMajor,
-                     (textureScale), z);
+                     (textureScale), z, tint);
         }
 
         z = originalZ;
@@ -230,17 +232,21 @@ void drawColumnAt(const struct Vec3 center,
             z -= 2;
         }
 
-        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-            drawMask(p0.mX, p0.mY, p1.mX, p1.mY);
+        if (tint == 0) {
+            drawMask(p0.mX, p0.mY, p1.mX, p1.mY, tint);
         } else {
             drawFrontWall(p0.mX, p0.mY, p1.mX, p1.mY, texture->rotations[0],
-                          (textureScale), z, enableAlpha, NATIVE_TEXTURE_SIZE);
+                          (textureScale), z, enableAlpha, NATIVE_TEXTURE_SIZE, tint);
         }
     }
 }
 
-void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
-                const struct Texture *texture, uint8_t cameraDirection, uint8_t flipTexture) {
+void drawRampAt(const struct Vec3 p0,
+                const struct Vec3 p1,
+                const struct Texture *texture,
+                        uint8_t cameraDirection,
+                        uint8_t flipTexture,
+                FramebufferPixelFormat tint) {
 
     struct Vec2 llz0;
     struct Vec2 lrz0;
@@ -299,7 +305,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         coords[4] = fixToInt(llz0.mX); /* 0 */
         coords[5] = fixToInt(llz0.mY);
 
-        if (p0.mZ < FIXP_DISTANCE_FOR_DARKNESS) {
+        if (tint > 0) {
             if (flipTexture) {
                 uvCoords[0] = 0;
                 uvCoords[1] = NATIVE_TEXTURE_SIZE;
@@ -316,9 +322,9 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
                 uvCoords[5] = 0;
             }
 
-            drawTexturedTriangle(&coords[0], &uvCoords[0], (struct Texture *) texture, fixToInt(p0.mZ));
+            drawTexturedTriangle(&coords[0], &uvCoords[0], (struct Texture *) texture, fixToInt(p0.mZ), tint);
         } else {
-            fillTriangle(&coords[0], 0);
+            fillTriangle(&coords[0], 0, tint);
         }
 
         coords[0] = fixToInt(llz0.mX); /* 0 */
@@ -328,7 +334,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         coords[4] = fixToInt(lrz0.mX); /* 1 */
         coords[5] = fixToInt(lrz0.mY);
 
-        if (p0.mZ < FIXP_DISTANCE_FOR_DARKNESS) {
+        if (tint) {
             if (flipTexture) {
                 uvCoords[0] = NATIVE_TEXTURE_SIZE;
                 uvCoords[1] = NATIVE_TEXTURE_SIZE;
@@ -345,9 +351,9 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
                 uvCoords[5] = NATIVE_TEXTURE_SIZE;
             }
 
-            drawTexturedTriangle(&coords[0], &uvCoords[0], (struct Texture *) texture, fixToInt(p0.mZ));
+            drawTexturedTriangle(&coords[0], &uvCoords[0], (struct Texture *) texture, fixToInt(p0.mZ), tint);
         } else {
-            fillTriangle(&coords[0], 0);
+            fillTriangle(&coords[0], 0, tint);
         }
 
         return;
@@ -365,20 +371,22 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
     llz1 = projectionVertices[2].second;
     lrz1 = projectionVertices[3].second;
 
-    if (p0.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-        maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0);
+    if (tint == 0) {
+        maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0, tint);
     } else {
 #ifndef AGS
         drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(p0.mZ),
-                  texture->rotations[cameraDirection]);
+                  texture->rotations[cameraDirection], tint);
 #else
-        drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(p0.mZ), texture->rotations[0] );
+        drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(p0.mZ), texture->rotations[0], tint );
 #endif
     }
 }
 
 void drawFloorAt(const struct Vec3 center,
-                 const struct Texture *texture, enum EDirection rotation) {
+                 const struct Texture *texture,
+                         enum EDirection rotation,
+                 FramebufferPixelFormat tint) {
 
     struct Vec2 llz0;
     struct Vec2 lrz0;
@@ -414,22 +422,24 @@ void drawFloorAt(const struct Vec3 center,
     lrz1 = projectionVertices[3].second;
 
     if (center.mY <= 0) {
-        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-            maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0);
+        if (tint == 0) {
+            maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0, tint);
         } else {
 #ifndef AGS
             drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
-                      texture->rotations[cameraDirection]);
+                      texture->rotations[cameraDirection], tint);
 #else
             drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
-                  texture->rotations[0]);
+                  texture->rotations[0], tint);
 #endif
         }
     }
 }
 
 void drawCeilingAt(const struct Vec3 center,
-                   const struct Texture *texture, enum EDirection rotation) {
+                   const struct Texture *texture,
+                           enum EDirection rotation,
+                   FramebufferPixelFormat tint) {
     struct Vec2 llz0;
     struct Vec2 lrz0;
     struct Vec2 llz1;
@@ -465,15 +475,15 @@ void drawCeilingAt(const struct Vec3 center,
 
     if (center.mY >= 0) {
 
-        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-            maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0);
+        if (tint == 0) {
+            maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0, tint);
         } else {
 #ifndef AGS
             drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
-                      texture->rotations[cameraDirection]);
+                      texture->rotations[cameraDirection], tint);
 #else
             drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
-                      texture->rotations[0]);
+                      texture->rotations[0], tint);
 #endif
         }
     }
@@ -483,7 +493,8 @@ void drawLeftNear(const struct Vec3 center,
                   const FixP_t scale,
                   const struct Texture *texture,
                   const uint8_t mask,
-                  const uint8_t repeatedTexture) {
+                  const uint8_t repeatedTexture,
+                  FramebufferPixelFormat tint) {
 
     FixP_t halfScale = scale;
     const FixP_t textureScale = (repeatedTexture ? halfScale : FIXP_ONE);
@@ -518,7 +529,7 @@ void drawLeftNear(const struct Vec3 center,
         projectAllVertices(2);
 
         drawMask(projectionVertices[0].second.mX, projectionVertices[0].second.mY,
-                 projectionVertices[1].second.mX, projectionVertices[1].second.mY);
+                 projectionVertices[1].second.mX, projectionVertices[1].second.mY, tint);
 
         return;
     }
@@ -547,15 +558,17 @@ void drawLeftNear(const struct Vec3 center,
     llz0 = projectionVertices[2].second;
     lrz0 = projectionVertices[3].second;
 
-    if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-        maskWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY);
+    if (tint == 0) {
+        maskWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, tint);
     } else {
         drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture->rowMajor,
-                 textureScale, fixToInt(center.mZ));
+                 textureScale, fixToInt(center.mZ), tint);
     }
 }
 
-void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
+void drawMesh(const struct Mesh *mesh,
+            const struct Vec3 center,
+              FramebufferPixelFormat tint) {
 
     int coords[6];
     int count = mesh->triangleCount;
@@ -566,7 +579,7 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
 	struct Vec3 *ptr2;
     int c;	
     
-    if (mesh->texture == NULL || center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
+    if (mesh->texture == NULL || tint == 0) {
         for (c = 0; c < count; ++c) {
             float vx, vy, vz;
 
@@ -599,7 +612,7 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
             coords[4] = fixToInt(projectionVertices[2].second.mX);
             coords[5] = fixToInt(projectionVertices[2].second.mY);
 
-            fillTriangle(&coords[0], colour);
+            fillTriangle(&coords[0], colour, tint);
             vertexData += 9;
         }
     } else {
@@ -631,7 +644,7 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
             coords[4] = fixToInt(projectionVertices[2].second.mX);
             coords[5] = fixToInt(projectionVertices[2].second.mY);
 
-            drawTexturedTriangle(&coords[0], uvData, mesh->texture, fixToInt(ptr0->mZ));
+            drawTexturedTriangle(&coords[0], uvData, mesh->texture, fixToInt(ptr0->mZ), tint);
 
             uvData += 6;
             vertexData += 9;
@@ -644,7 +657,8 @@ void drawRightNear(const struct Vec3 center,
                    const FixP_t scale,
                    const struct Texture *texture,
                    const uint8_t mask,
-                   const uint8_t repeatedTexture) {
+                   const uint8_t repeatedTexture,
+                   FramebufferPixelFormat tint) {
 
     FixP_t halfScale = scale;
     const FixP_t textureScale = (repeatedTexture ? halfScale : FIXP_ONE);
@@ -679,7 +693,7 @@ void drawRightNear(const struct Vec3 center,
         projectAllVertices(2);
 
         drawMask(projectionVertices[0].second.mX, projectionVertices[0].second.mY,
-                 projectionVertices[1].second.mX, projectionVertices[1].second.mY);
+                 projectionVertices[1].second.mX, projectionVertices[1].second.mY, tint);
 
         return;
     }
@@ -709,10 +723,10 @@ void drawRightNear(const struct Vec3 center,
     llz0 = projectionVertices[2].second;
     lrz0 = projectionVertices[3].second;
 
-    if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-        maskWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY);
+    if (tint == 0) {
+        maskWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, tint);
     } else {
         drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture->rowMajor,
-                 textureScale, fixToInt(center.mZ));
+                 textureScale, fixToInt(center.mZ), tint);
     }
 }

@@ -97,16 +97,16 @@ void MainMenu_repaintCallback(void) {
 
 #ifndef TILED_BITMAPS
 #ifndef AGS
-    drawBitmap(0, 0, logoBitmap, 0);
+    drawBitmap(0, 0, logoBitmap, 0, getPaletteEntry(0xFFFFFFFF));
 #endif
-    drawBitmap(XRES_FRAMEBUFFER - logo2Bitmap->width, logo2Bitmap->height / 2, logo2Bitmap, 1);
+    drawBitmap(XRES_FRAMEBUFFER - logo2Bitmap->width, logo2Bitmap->height / 2, logo2Bitmap, 1, getPaletteEntry(0xFFFFFFFF));
 #else
     for (c = 0; c < 28; ++c) {
-        drawBitmap((c & 3) * 32, (c >> 2) * 32, logoBitmap[c], 1);
+        drawBitmap((c & 3) * 32, (c >> 2) * 32, logoBitmap[c], 1, getPaletteEntry(0xFFFFFFFF));
     }
 
     for (c = 0; c < 15; ++c) {
-        drawBitmap(118 + (c & 7) * 32, 45 + (c >> 3) * 32, logo2Bitmap[c], 1);
+        drawBitmap(118 + (c & 7) * 32, 45 + (c >> 3) * 32, logo2Bitmap[c], 1, getPaletteEntry(0xFFFFFFFF));
     }
 #endif
 

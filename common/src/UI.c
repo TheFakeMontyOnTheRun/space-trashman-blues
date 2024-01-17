@@ -127,7 +127,7 @@ drawImageWindow(const int x, const int y, const unsigned int dx, const unsigned 
                 struct Bitmap *content) {
     fillRect((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
     fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
-    drawBitmap((x - 1) * 8, (y) * 8, content, TRUE);
+    drawBitmap((x - 1) * 8, (y) * 8, content, TRUE, getPaletteEntry(0xFFFFFFFF));
     drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
     fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
     drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
@@ -163,12 +163,12 @@ void redrawHUD(void) {
 
 #ifndef TILED_BITMAPS
     if (mapTopLevel != NULL) {
-        drawBitmap(XRES, 72, mapTopLevel, 0);
+        drawBitmap(XRES, 72, mapTopLevel, 0, getPaletteEntry(0xFFFFFFFF));
     }
 #else
     if (mapTopLevel[0] != NULL) {
         for (c = 0; c < 8; ++c) {
-            drawBitmap(((c & 3) * 32), 8 + (c >> 2) * 32, mapTopLevel[c], 1);
+            drawBitmap(((c & 3) * 32), 8 + (c >> 2) * 32, mapTopLevel[c], 1, getPaletteEntry(0xFFFFFFFF));
         }
     }
 #endif

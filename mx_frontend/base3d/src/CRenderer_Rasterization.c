@@ -57,7 +57,8 @@ void maskWall(
         FixP_t x0y0,
         FixP_t x0y1,
         FixP_t x1y0,
-        FixP_t x1y1) {
+        FixP_t x1y1,
+        FramebufferPixelFormat tint) {
 
     int32_t x;
     int32_t limit;
@@ -211,7 +212,8 @@ void drawWall(FixP_t x0,
               FixP_t x1y1,
               const TexturePixelFormat *texture,
               const FixP_t textureScaleY,
-              const int z) {
+              const int z,
+              FramebufferPixelFormat tint) {
     int32_t x;
     int32_t limit;
     FixP_t upperY0;
@@ -234,7 +236,7 @@ void drawWall(FixP_t x0,
     FixP_t du;
     int32_t ix;
     uint8_t *bufferData = &framebuffer[0];
-    int farForStipple = (z >= distanceForPenumbra);
+    int farForStipple = (tint < 8);
 
     if (x0 > x1) {
         FixP_t tmp = x0;
@@ -385,7 +387,8 @@ void drawMask(
         const FixP_t x0,
         const FixP_t y0,
         const FixP_t x1,
-        const FixP_t y1) {
+        const FixP_t y1,
+        FramebufferPixelFormat tint) {
 
     int32_t _x0 = fixToInt(x0);
     int32_t _y0 = fixToInt(y0);
@@ -439,7 +442,8 @@ void drawFrontWall(FixP_t x0,
                    const FixP_t textureScaleY,
                    const int z,
                    const int enableAlpha,
-                   const int size) {
+                   const int size,
+                   FramebufferPixelFormat tint) {
     int16_t y;
     int limit;
     FixP_t dY;
@@ -455,7 +459,7 @@ void drawFrontWall(FixP_t x0,
     int iX1;
     FixP_t du;
     uint8_t *bufferData = &framebuffer[0];
-    int farEnoughForStipple = (z >= distanceForPenumbra);
+    int farEnoughForStipple = (tint < 8);
 
     /* if we have a quad in which the base is smaller */
     if (y0 > y1) {
@@ -589,7 +593,7 @@ void drawFrontWall(FixP_t x0,
 __attribute__((target("arm"), section(".iwram"), noinline))
 #endif
 
-void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP_t x1y1, uint8_t pixel) {
+void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP_t x1y1, uint8_t pixel, FramebufferPixelFormat tint) {
 
     int32_t y;
     int32_t limit;
@@ -734,7 +738,8 @@ void drawFloor(FixP_t y0,
                FixP_t x0y1,
                FixP_t x1y1,
                int z,
-               const uint8_t *texture) {
+               const uint8_t *texture,
+               FramebufferPixelFormat tint) {
 
     int32_t y;
     int32_t limit;
@@ -782,7 +787,7 @@ void drawFloor(FixP_t y0,
     }
 
     bufferData = &framebuffer[0];
-    farEnoughForStipple = (z >= distanceForPenumbra);
+    farEnoughForStipple = (tint < 8);
 
     y = fixToInt(y0);
     limit = fixToInt(y1);
@@ -950,7 +955,7 @@ void drawRect(const int x,
     memFill(destination + (XRES_FRAMEBUFFER * (y + dy)) + x, pixel, dx);
 }
 
-void fillBottomFlat(const int *coords, uint8_t colour) {
+void fillBottomFlat(const int *coords, uint8_t colour, FramebufferPixelFormat tint) {
     int y = coords[1];
     FixP_t dXDy2;
     FixP_t dXDy1;
@@ -1001,7 +1006,7 @@ void fillBottomFlat(const int *coords, uint8_t colour) {
 }
 
 
-void fillTopFlat(int *coords, uint8_t colour) {
+void fillTopFlat(int *coords, FramebufferPixelFormat colour, FramebufferPixelFormat tint) {
     int y = coords[1];
     int yFinal = max(coords[3], coords[5]);
 
@@ -1048,7 +1053,7 @@ void fillTopFlat(int *coords, uint8_t colour) {
 }
 
 
-void fillTriangle(int *coords, uint8_t colour) {
+void fillTriangle(int *coords, FramebufferPixelFormat colour, FramebufferPixelFormat tint) {
     int newCoors[6];
     int newCoors2[6];
 
@@ -1094,12 +1099,12 @@ void fillTriangle(int *coords, uint8_t colour) {
     newCoors2[5] = coords[(2 * upper) + 1];
 
 
-    fillBottomFlat(&newCoors[0], colour);
-    fillTopFlat(&newCoors2[0], colour);
+    fillBottomFlat(&newCoors[0], colour, tint);
+    fillTopFlat(&newCoors2[0], colour, tint);
 }
 
 
-void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z) {
+void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z, FramebufferPixelFormat tint) {
     int y = coords[1];
     int u, v;
     FixP_t fU1, fU2, fV1, fV2;
@@ -1109,7 +1114,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
     FixP_t fDV2;
     int yFinal = coords[5]; /* not the lowest, neither the topmost */
     int stipple;
-    int farEnoughForStipple = (z >= distanceForPenumbra);
+    int farEnoughForStipple = (tint < 8);
 
     FixP_t x0 = intToFix(coords[0]);
     FixP_t y0 = intToFix(coords[1]);
@@ -1253,7 +1258,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
 }
 
 
-void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z) {
+void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z, FramebufferPixelFormat tint) {
     int y = coords[1];
     int u, v;
     FixP_t fU1, fU2, fV1, fV2;
@@ -1263,7 +1268,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     FixP_t fDV2;
     int stipple;
     int yFinal = coords[3]; /* not the upper, not the lowest */
-    int farEnoughForStipple = (z >= distanceForPenumbra);
+    int farEnoughForStipple = (tint < 8);
 
     FixP_t x0 = intToFix(coords[0]);
     FixP_t y0 = intToFix(coords[1]);
@@ -1410,7 +1415,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     }
 }
 
-void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z) {
+void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z, FramebufferPixelFormat tint) {
     int newCoors[6];
     uint8_t newUV[6];
     int c;
@@ -1457,7 +1462,7 @@ void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *textur
     newUV[5] = uvCoords[2 * other];
 
 
-    drawTexturedBottomFlatTriangle(&newCoors[0], &newUV[0], texture, z);
+    drawTexturedBottomFlatTriangle(&newCoors[0], &newUV[0], texture, z, tint);
 
     newCoors[0] = coords[2 * lower];
     newCoors[1] = coords[(2 * lower) + 1];
@@ -1476,7 +1481,7 @@ void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *textur
     newUV[5] = uvCoords[2 * upper];
 
 
-    drawTexturedTopFlatTriangle(&newCoors[0], &newUV[0], texture, z);
+    drawTexturedTopFlatTriangle(&newCoors[0], &newUV[0], texture, z, tint);
 }
 
 #ifdef AGS
@@ -1522,7 +1527,8 @@ void drawBitmapRaw(const int dx,
                    int width,
                    int height,
                    uint8_t *bitmapData,
-                   const int transparent) {
+                   const int transparent,
+                   FramebufferPixelFormat tint) {
 
     uint8_t *destination = &framebuffer[0];
     uint8_t *sourceLine = bitmapData;
@@ -1557,9 +1563,10 @@ void drawBitmapRaw(const int dx,
 void drawBitmap(const int x,
                 const int y,
                 struct Bitmap *tile,
-                const uint8_t transparent) {
+                const uint8_t transparent,
+                FramebufferPixelFormat tint) {
 
-    drawBitmapRaw(x, y, tile->width, tile->height, tile->data, transparent);
+    drawBitmapRaw(x, y, tile->width, tile->height, tile->data, transparent, tint);
 }
 
 void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text,
