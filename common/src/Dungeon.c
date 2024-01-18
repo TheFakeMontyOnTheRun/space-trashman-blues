@@ -157,6 +157,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                         parseCommand("use", item2->name);
                     }
                 }
+                computeLightning();
                 gameSnapshot.turn++;
             }
                 break;
@@ -209,6 +210,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                         currentSelectedItem = 0;
                     }
                 }
+                computeLightning();
                 gameSnapshot.turn++;
             }
                 break;

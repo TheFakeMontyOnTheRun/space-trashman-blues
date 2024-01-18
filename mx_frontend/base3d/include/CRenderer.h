@@ -85,6 +85,8 @@ void enter2D(void);
 
 void enter3D(void);
 
+void computeLightning(void);
+
 void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame, uint8_t *prevFrame, int turnState, int turnTarget,
                     int scale200To240);
 

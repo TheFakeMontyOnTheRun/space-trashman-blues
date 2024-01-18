@@ -98,22 +98,28 @@ void printMessageTo3DView(const char *message);
 
 
 void spreadLight(int x, int y, int intensity) {
+
     if (x < 0 || x >= MAP_SIZE || y < 0 || y >= MAP_SIZE ) {
         return;
     }
 
-    if (!isPositionAllowed(x, y)) {
-        return;
-    }
-
     if (intensity > 0) {
-        intensity /= 2;
-        lightMap[y * MAP_SIZE + x] += intensity;
-        intensity /= 2;
-        spreadLight(x, y - 1, intensity);
-        spreadLight(x, y + 1, intensity);
-        spreadLight(x - 1, y, intensity);
-        spreadLight(x + 1, y, intensity);
+
+        uint8_t currentIntensity = lightMap[y * MAP_SIZE + x];
+        
+        if ((intensity + currentIntensity) > 255 ) {
+            lightMap[y * MAP_SIZE + x] = 255;
+        } else {
+            lightMap[y * MAP_SIZE + x] = currentIntensity + intensity;
+        }
+
+        if (isPositionAllowed(x, y)) {
+            intensity /= 2;
+            spreadLight(x, y - 1, intensity);
+            spreadLight(x, y + 1, intensity);
+            spreadLight(x - 1, y, intensity);
+            spreadLight(x + 1, y, intensity);
+        }
     }
 }
 
@@ -166,6 +172,24 @@ void loadTileProperties(const uint8_t levelNumber) {
     disposeDiskBuffer(data);
 }
 
+void computeLightning(void) {
+    struct ObjectNode* itemNode;
+
+    memset(&lightMap[0], 4, MAP_SIZE * MAP_SIZE);
+    
+    itemNode = getRoom(getPlayerRoom())->itemsPresent;
+    
+    while(itemNode != NULL) {
+        if (itemNode->item != 0) {
+            struct Item  *item = getItem(itemNode->item);
+            if ( item != NULL ) {
+                spreadLight( item->position.x, item->position.y, 128);
+            }
+        }
+        itemNode = itemNode->next;
+    }
+}
+
 void loadTexturesForLevel(const uint8_t levelNumber) {
     char tilesFilename[64];
     struct StaticBuffer data;
@@ -173,7 +197,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     char *end;
     char *nameStart;
     char *buffer;
-    struct ObjectNode* itemNode;
     int x, y;
     sprintf (tilesFilename, "tiles%d.lst", levelNumber);
 
@@ -207,20 +230,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     playerHeightChangeRate = 0;
 
     loadMesh(&mesh, "fighter.mdl");
-
-    memset(&lightMap[0], 0, MAP_SIZE * MAP_SIZE);
-
-    itemNode = getRoom(getPlayerRoom())->itemsPresent;
-
-    while(itemNode != NULL) {
-        if (itemNode->item != 0) {
-            struct Item  *item = getItem(itemNode->item);
-            if ( item != NULL ) {
-                spreadLight( item->position.x, item->position.y, 16);
-            }
-        }
-        itemNode = itemNode->next;
-    }
+    computeLightning();
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -362,7 +372,7 @@ void drawMap(const struct CActor *current) {
 
     castVisibility(cameraDirection, visMap, cameraPosition,
                    distances, TRUE, &occluders);
-
+    
     ++gameTicks;
 }
 
