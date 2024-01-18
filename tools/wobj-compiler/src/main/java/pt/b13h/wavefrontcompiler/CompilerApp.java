@@ -69,7 +69,7 @@ public class CompilerApp {
 		if (args.length == 0) {
 			inputOBJFile = "/Users/monty/Desktop/fighter.obj";
 			inputMTLFile = "/Users/monty/Desktop/fighter.mtl";
-			ouputFile = "assets/output.mdl";
+			ouputFile = "/Users/monty/Desktop/output.mdl";
 		} else {
 			String radical = args[0].substring(args[0].lastIndexOf("/") + 1).replace(".obj", "");
 			inputOBJFile = "src/" + radical + ".obj";
@@ -94,7 +94,7 @@ public class CompilerApp {
 			total += m.faces.size();
 		}
 
-		bb = ByteBuffer.allocate(2 + (6 * total ) + (9 * 4 * total) + (textureName.length()) + 1 + 2 + ( 2 * meshLoader.vertexes.size()) + ( 6 * total ) );
+		bb = ByteBuffer.allocate(2 + (6 * total ) + (9 * 4 * total) + (textureName.length()) + 1 + 2 + ( 12 * meshLoader.vertexes.size()) + ( 6 * total ) );
 
 		bb.put((byte )(total & 0xFF));
 		bb.put((byte )((total >> 8) & 0xFF));
