@@ -25,6 +25,7 @@ void loadMesh(struct Mesh *mesh, char *filename) {
     uint8_t *uvCoord;
     FixP_t *coord;
     uint8_t read;
+    uint16_t *indexPtr;
     int c;
 
     read = (*(bufferHead++));
@@ -54,6 +55,30 @@ void loadMesh(struct Mesh *mesh, char *filename) {
         val += (*(bufferHead++) << 16);
         val += (*(bufferHead++) << 24);
         *(coord++) = val;
+    }
+
+    mesh->indexCount = (*(bufferHead++));
+    mesh->indexCount += (*(bufferHead++)) << 8;
+
+    mesh->vertices = allocMem(3 * mesh->indexCount * sizeof(FixP_t), GENERAL_MEMORY, 1);
+    coord = mesh->vertices;
+
+    for (c = 0; c < mesh->indexCount * 3; ++c) {
+        val = 0;
+        val += (*(bufferHead++) << 0);
+        val += (*(bufferHead++) << 8);
+        val += (*(bufferHead++) << 16);
+        val += (*(bufferHead++) << 24);
+        *(coord++) = val;
+    }
+
+    mesh->indices = allocMem(3 * mesh->triangleCount * sizeof(uint16_t), GENERAL_MEMORY, 1);
+    indexPtr = mesh->indices;
+    for (c = 0; c < mesh->triangleCount * 3; ++c ) {
+        uint16_t index;
+        index = (*(bufferHead++));
+        index += (*(bufferHead++)) << 8;;
+        *(indexPtr++) = index;
     }
 
     read = (*(bufferHead++));
