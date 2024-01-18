@@ -39,7 +39,6 @@
 #include "CRenderer.h"
 #include "Globals.h"
 
-enum ESoundDriver soundDriver = kNoSound;
 uint8_t finalBuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 
 #define NORMALIZE(x) (((x * 16) / 256))
