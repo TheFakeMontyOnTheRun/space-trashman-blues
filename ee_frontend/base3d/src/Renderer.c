@@ -335,7 +335,7 @@ void render(const long ms) {
 
         enter3D();
 
-        for (distance = 0; distance < (MAP_SIZE + MAP_SIZE); ++distance) {
+        for (distance = (MAP_SIZE + MAP_SIZE - 1); distance >= 0; --distance) {
             uint8_t bucketPos;
 
             for (bucketPos = 0; bucketPos < MAP_SIZE; ++bucketPos) {
