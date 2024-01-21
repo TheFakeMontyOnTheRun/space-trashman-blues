@@ -52,8 +52,8 @@ add_executable(derelict128
 		../common/src/Events.c
 		../common/src/Dungeon.c
 		../common/src/NullMusic.c
-		../common/src//PCMAudio.c
-		../common/src//Matrices.c
+		../common/src/PCMAudio.c
+		../common/src/Matrices.c
 		../common/src/HackingMinigameRules.c
 		../core/src/Derelict.c
 		../core/src/Core.c
