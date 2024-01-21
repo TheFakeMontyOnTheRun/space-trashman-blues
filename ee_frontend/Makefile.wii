@@ -70,7 +70,7 @@ CFILES		:=			../../common/src/MainMenu.c \
                 		../../common/src/Engine.c \
                 		../base3d/src/gx/GXRenderer.c \
                 		../base3d/src/gx/LoadBitmap.c \
-                		../base3d/src/gx/Renderer.c \
+                		../base3d/src/Renderer.c \
                 		../../common/src/VisibilityStrategy.c \
                 		../../common/src/Globals.c \
                 		../../common/src/CTile3DProperties.c \
