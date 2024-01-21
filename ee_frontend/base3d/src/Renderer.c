@@ -945,5 +945,6 @@ void render(const long ms) {
         }
 
         redrawHUD();
+        updateMap();
     }
 }
