@@ -147,9 +147,7 @@ void Crawler_repaintCallback(void) {
 
             renderTick(30);
 
-#ifndef PLAYSTATION2
             recenterView();
-#endif
         }
     }
 }
