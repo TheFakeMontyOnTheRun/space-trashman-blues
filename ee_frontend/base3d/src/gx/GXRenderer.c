@@ -144,12 +144,14 @@ void handleSystemEvents() {
 
     // Rotate left
     if (tpad < -8) {
-        mBufferedCommand = kCommandLeft;
+        turning = 1;
+        leanX = -ANGLE_TURN_STEP;
     }
 
     // Rotate right.
     if (tpad > 8) {
-        mBufferedCommand = kCommandRight;
+        turning = 1;
+        leanX = ANGLE_TURN_STEP;
     }
 
     // NOTE: walkbiasangle = head bob
@@ -165,7 +167,10 @@ void handleSystemEvents() {
         mBufferedCommand = kCommandDown;
     }
 
-    tpad = PAD_SubStickY(0);
+    if (!turning) {
+        leanX = PAD_SubStickX(0) / 5;
+        leanY = PAD_SubStickY(0) / 5;
+    }
 
     if ( PAD_ButtonsDown(0) & PAD_BUTTON_A) {
         mBufferedCommand = kCommandFire1;
@@ -208,7 +213,6 @@ void handleSystemEvents() {
     if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B) {
         mBufferedCommand = kCommandBack;
     }
-
 #endif
 }
 
