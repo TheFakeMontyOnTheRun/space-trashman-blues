@@ -51,6 +51,11 @@
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
 
+#define ANGLE_TURN_THRESHOLD 40
+#define ANGLE_TURN_STEP 5
+
+extern int turning;
+
 static char padBuf[256] __attribute__((aligned(64)));
 
 static char actAlign[6];
@@ -551,21 +556,8 @@ void enter3D(void) {
     float _leanX = 0.0f;
     float _leanY = 0.0f;
 
-    if (leanX > 127) {
-        _leanX = -0.25f * ((leanX - 127) / 128.0f);
-    }
-
-    if (leanX < 127) {
-        _leanX = 0.25f * ((128 - leanX) / 127.0f);
-    }
-
-    if (leanY > 127) {
-        _leanY = -0.25f * ((leanY - 127) / 128.0f);
-    }
-
-    if (leanY < 127) {
-        _leanY = 0.25f * ((128 - leanY) / 127.0f);
-    }
+    _leanY = (leanY * 3.14159f * 0.25f) / ((float)ANGLE_TURN_THRESHOLD);
+    _leanX = (-leanX * 3.14159f * 0.25f) / ((float)ANGLE_TURN_THRESHOLD);
 
     VECTOR camera_position = {0.00f, -0.25f, 2, 1.00f};
     VECTOR camera_rotation = {_leanY, _leanX, 0.00f, 1.00f};
@@ -581,7 +573,6 @@ void handleSystemEvents() {
     framePad++;
 //	printf("Frame pad %d\n", framePad);
     uint8_t entry = 0;
-    mBufferedCommand = kCommandNone;
 
     ret = padGetState(port, slot);
     while ((ret != PAD_STATE_STABLE) && (ret != PAD_STATE_FINDCTP1)) {
@@ -603,7 +594,11 @@ void handleSystemEvents() {
         // Directions
         if (new_pad & PAD_LEFT) {
             printf("LEFT\n");
-            mBufferedCommand = kCommandLeft;
+            turning = 1;
+            leanX = -ANGLE_TURN_STEP;
+
+            visibilityCached = FALSE;
+
         }
         if (new_pad & PAD_DOWN) {
             printf("DOWN\n");
@@ -611,7 +606,11 @@ void handleSystemEvents() {
         }
         if (new_pad & PAD_RIGHT) {
             printf("RIGHT\n");
-            mBufferedCommand = kCommandRight;
+            turning = 1;
+            leanX = ANGLE_TURN_STEP;
+
+            visibilityCached = FALSE;
+
         }
         if (new_pad & PAD_UP) {
             printf("UP\n");
@@ -663,8 +662,14 @@ void handleSystemEvents() {
         if (new_pad & PAD_L2) {
             printf("L2\n");
         }
-        leanX = buttons.rjoy_h;
-        leanY = buttons.rjoy_v;
+
+        if (!turning) {
+            leanX = (buttons.rjoy_h - 127) / 8;
+            leanY = -(buttons.rjoy_v - 127) / 8;
+            if (leanX != 0 || leanY != 0) {
+                printf("leanX: %d, leanY: %d\n", leanX, leanY);
+            }
+        }
     }
 }
 
