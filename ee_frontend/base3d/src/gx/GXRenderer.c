@@ -26,7 +26,9 @@
 #ifdef WII
 #include <wiiuse/wpad.h>
 #endif
-
+#define ANGLE_TURN_THRESHOLD 40
+#define ANGLE_TURN_STEP 5
+extern int turning;
 int snapshotSignal = '.';
 extern int needsToRedrawHUD;
 int enable3DRendering = TRUE;
@@ -187,11 +189,15 @@ void handleSystemEvents() {
     }
 
     if (WPAD_ButtonsDown(0) & WPAD_BUTTON_LEFT) {
-        mBufferedCommand = kCommandLeft;
+                            turning = 1;
+                    leanX = -ANGLE_TURN_STEP;
+
     }
 
     if (WPAD_ButtonsDown(0) & WPAD_BUTTON_RIGHT){
-        mBufferedCommand = kCommandRight;
+                    turning = 1;
+                    leanX = ANGLE_TURN_STEP;
+
     }
 
     if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A) {
@@ -234,9 +240,14 @@ uint32_t getPaletteEntry(const uint32_t origin) {
 void enter2D(void) {
     guVector cam = {0.0F, 0.0F, 0.0F},
             up = {0.0F, 1.0F, 0.0F},
-            look = {0.0F, 0.0F, -1.0F};
+            look = {-0.0F, 0.0F, -1.0F};
 
     guLookAt(view, &cam, &up, &look);
+    guMtxIdentity(model);
+    guMtxTransApply(model, model, 0.0f, 0.0f, -0.8f);
+    guMtxConcat(view, model, modelview);
+    GX_LoadPosMtxImm(modelview, GX_PNMTX3);
+    GX_SetCurrentMtx(GX_PNMTX3);
 
     f32 w = rmode->viWidth;
     f32 h = rmode->viHeight;
@@ -264,43 +275,28 @@ void endFrameGL() {
 void enter3D(void) {
     float _leanX = 0.0f;
     float _leanY = 0.0f;
-
-    if (leanX > 127) {
-        _leanX = -0.25f * ((leanX - 127) / 128.0f);
-    }
-
-    if (leanX < 127) {
-        _leanX = 0.25f * ((128 - leanX) / 127.0f);
-    }
-
-    if (leanY > 127) {
-        _leanY = -0.25f * ((leanY - 127) / 128.0f);
-    }
-
-    if (leanY < 127) {
-        _leanY = 0.25f * ((128 - leanY) / 127.0f);
-    }
-
-    guVector cam = {0.0F, 0.0F, 0.0F},
-            up = {0.0F, 1.0F, 0.0F},
-            look = {0.0F, 0.0F, -1.0F};
-
-    guLookAt(view, &cam, &up, &look);
-
+    _leanX = (leanX * 3.14159f * 0.25f) / ((float)ANGLE_TURN_THRESHOLD);
+    _leanY = (leanY * 3.14159f * 0.25f) / ((float)ANGLE_TURN_THRESHOLD);
     f32 w = rmode->viWidth;
     f32 h = rmode->viHeight;
     guPerspective(perspective, 90, (f32) w / h, 0.1F, 256.0F);
     GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
+
+    guVector cam = {0.0F, 0.0F, 0.0F},
+            up = {0.0F, 1.0F, 0.0F},
+            look = {_leanX, _leanY, -1.0F};
+
+    guLookAt(view, &cam, &up, &look);
+    guMtxIdentity(model);
+    guMtxTransApply(model, model, 0.0f, 0.0f, -0.8f);
+    guMtxConcat(view, model, modelview);
+    GX_LoadPosMtxImm(modelview, GX_PNMTX3);
+    GX_SetCurrentMtx(GX_PNMTX3);
+
 }
 
 void flipRenderer() {
     GX_SetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
-    guMtxIdentity(model);
-    guMtxTransApply(model, model, 0.0f, 0.0f, -0.8f);
-    guMtxConcat(view, model, modelview);
-
-    GX_LoadPosMtxImm(modelview, GX_PNMTX3);
-    GX_SetCurrentMtx(GX_PNMTX3);
 
     GX_SetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GX_SetColorUpdate(GX_TRUE);
