@@ -382,8 +382,6 @@ void unloadTextures(void) {
 void initGL() {
     GLint status;
 
-    glViewport(0, 0, width, height);
-
     /* creating shader */
     vs = glCreateShader(GL_VERTEX_SHADER);
     fs = glCreateShader(GL_FRAGMENT_SHADER);
@@ -531,6 +529,8 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 
 
 void startFrameGL(int x, int y, int width, int height) {
+    
+    glViewport(x, y, width, height);
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;
 
