@@ -234,7 +234,22 @@ void drawWall(FixP_t x0,
     FixP_t du;
     int32_t ix;
     uint8_t *bufferData = &framebuffer[0];
-    int farForStipple = (z >= distanceForPenumbra);
+    int farEnoughForStipple;
+    
+    if (z >= distanceForPenumbra) {
+        //1 and beyond
+        farEnoughForStipple = 3;
+    } else if (z < distanceForPenumbra && z >= distanceForPenumbra / 2) {
+        // 1/2 to 1
+        farEnoughForStipple = 2;
+    } else if (z < distanceForPenumbra / 2 && z >= distanceForPenumbra / 4) {
+        // 1/4 to 1/2
+        farEnoughForStipple = 1;
+    } else { // 0 to 1/4
+        farEnoughForStipple = 0;
+    }
+
+
 
     if (x0 > x1) {
         FixP_t tmp = x0;
@@ -357,10 +372,11 @@ void drawWall(FixP_t x0,
         for (; iy < iY1; ++iy) {
 
             const int32_t iv = fixToInt(v);
+            const int shouldStippleLine = (farEnoughForStipple == 2) || (farEnoughForStipple == 1 && iy & 1) || (farEnoughForStipple == 3);
 
             stipple = ~stipple;
 
-            if (iv != lastV && !(stipple && farForStipple)) {
+            if (iv != lastV && !(stipple && shouldStippleLine)) {
 
                 pixel = *(lineOffset);
                 lineOffset = ((iv & (NATIVE_TEXTURE_SIZE - 1)) + sourceLineStart);
@@ -368,7 +384,7 @@ void drawWall(FixP_t x0,
             }
 
             if (pixel != TRANSPARENCY_COLOR) {
-                *(destinationLine) = (farForStipple && stipple) ? 0 : pixel;
+                *(destinationLine) = ((shouldStippleLine && stipple) || (farEnoughForStipple == 3 && (iy & 1))) ? 0 : pixel;
             }
 
             destinationLine += (XRES_FRAMEBUFFER);
@@ -455,7 +471,20 @@ void drawFrontWall(FixP_t x0,
     int iX1;
     FixP_t du;
     uint8_t *bufferData = &framebuffer[0];
-    int farEnoughForStipple = (z >= distanceForPenumbra);
+    int farEnoughForStipple = 0;
+    
+    if (z >= distanceForPenumbra) {
+        //1 and beyond
+        farEnoughForStipple = 3;
+    } else if (z < distanceForPenumbra && z >= distanceForPenumbra / 2) {
+        // 1/2 to 1
+        farEnoughForStipple = 2;
+    } else if (z < distanceForPenumbra / 2 && z >= distanceForPenumbra / 4) {
+        // 1/4 to 1/2
+        farEnoughForStipple = 1;
+    } else { // 0 to 1/4
+        farEnoughForStipple = 0;
+    }
 
     /* if we have a quad in which the base is smaller */
     if (y0 > y1) {
@@ -520,6 +549,7 @@ void drawFrontWall(FixP_t x0,
         int ix;
         int stipple;
         lastU = 0;
+        int shouldStippleLine = (farEnoughForStipple == 2) || (farEnoughForStipple == 1 && iy & 1) || (farEnoughForStipple == 3);
 
         if (!farEnoughForStipple
             && ((!enableAlpha && iv == lastV)
@@ -561,7 +591,7 @@ void drawFrontWall(FixP_t x0,
                           thing anyway)
                            */
             if (iu != lastU
-                && !(stipple && farEnoughForStipple)) {
+                && !(stipple && shouldStippleLine)) {
 
                 pixel = *(sourceLineStart);
                 sourceLineStart += (iu - lastU);
@@ -570,7 +600,7 @@ void drawFrontWall(FixP_t x0,
             }
 
             if (pixel != TRANSPARENCY_COLOR) {
-                *(destinationLine) = (farEnoughForStipple && stipple) ? 0 : pixel;
+                *(destinationLine) = ((shouldStippleLine && stipple) || (farEnoughForStipple == 3 && (iy & 1))) ? 0 : pixel;
             }
             ++destinationLine;
             u += du;
@@ -782,8 +812,21 @@ void drawFloor(FixP_t y0,
     }
 
     bufferData = &framebuffer[0];
-    farEnoughForStipple = (z >= distanceForPenumbra);
+    
 
+    if (z >= distanceForPenumbra) {
+        //1 and beyond
+        farEnoughForStipple = 3;
+    } else if (z < distanceForPenumbra && z >= distanceForPenumbra / 2) {
+        // 1/2 to 1
+        farEnoughForStipple = 2;
+    } else if (z < distanceForPenumbra / 2 && z >= distanceForPenumbra / 4) {
+        // 1/4 to 1/2
+        farEnoughForStipple = 1;
+    } else { // 0 to 1/4
+        farEnoughForStipple = 0;
+    }
+    
     y = fixToInt(y0);
     limit = fixToInt(y1);
 
@@ -802,6 +845,7 @@ void drawFloor(FixP_t y0,
 
     leftDX = (lowerX0 - upperX0);
     rightDX = (lowerX1 - upperX1);
+
     dY = (y1 - y0);
 
     if (dY == 0) {
@@ -883,27 +927,11 @@ void drawFloor(FixP_t y0,
             iX1 = XRES;
         }
 
-        if (!farEnoughForStipple) {
-            for (; ix < iX1; ++ix) {
-                const int32_t iu = fixToInt(u);
-                /*
-                  only fetch the next texel if we really changed the
-                  u, v coordinates (otherwise, would fetch the same
-                  thing anyway)
-                */
-                if (iu != lastU) {
-                    pixel = *(sourceLineStart);
-                    sourceLineStart += (iu - lastU);
-                    lastU = iu;
-                }
-
-                *(destinationLine++) = pixel;
-                u += du;
-            }
-        } else {
+        if (farEnoughForStipple == 2  || ( farEnoughForStipple == 1 && iy & 1) || (farEnoughForStipple == 3) ) {
             for (; ix < iX1; ++ix) {
                 const int32_t iu = fixToInt(u);
                 stipple = ~stipple;
+                
                 /*ditto, but only if the stippling is not active for this fragment*/
                 if (!stipple &&
                     iu != lastU) {
@@ -913,7 +941,24 @@ void drawFloor(FixP_t y0,
                     lastU = iu;
                 }
 
-                *(destinationLine++) = (stipple) ? 0 : pixel;
+                *(destinationLine++) = (stipple || (farEnoughForStipple == 3 && (iy & 1))) ? 0 : pixel;
+                u += du;
+            }
+        } else {
+            for (; ix < iX1; ++ix) {
+                const int32_t iu = fixToInt(u);
+                /*
+                 only fetch the next texel if we really changed the
+                 u, v coordinates (otherwise, would fetch the same
+                 thing anyway)
+                 */
+                if (iu != lastU) {
+                    pixel = *(sourceLineStart);
+                    sourceLineStart += (iu - lastU);
+                    lastU = iu;
+                }
+                
+                *(destinationLine++) = pixel;
                 u += du;
             }
         }
