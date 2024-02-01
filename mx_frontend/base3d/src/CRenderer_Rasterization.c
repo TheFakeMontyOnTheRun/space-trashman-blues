@@ -236,20 +236,18 @@ void drawWall(FixP_t x0,
     uint8_t *bufferData = &framebuffer[0];
     int farEnoughForStipple;
     
-    if (z >= distanceForPenumbra) {
-        //1 and beyond
-        farEnoughForStipple = 3;
-    } else if (z < distanceForPenumbra && z >= distanceForPenumbra / 2) {
-        // 1/2 to 1
-        farEnoughForStipple = 2;
-    } else if (z < distanceForPenumbra / 2 && z >= distanceForPenumbra / 4) {
+    if (z < distanceForPenumbra / 4)  { // 0 to 1/4
+        farEnoughForStipple = 0;
+    } else if (z < distanceForPenumbra / 2) {
         // 1/4 to 1/2
         farEnoughForStipple = 1;
-    } else { // 0 to 1/4
-        farEnoughForStipple = 0;
+    } else if (z < distanceForPenumbra) {
+        // 1/2 to 1
+        farEnoughForStipple = 2;
+    } else {
+        //1 and beyond
+        farEnoughForStipple = 3;
     }
-
-
 
     if (x0 > x1) {
         FixP_t tmp = x0;
@@ -473,18 +471,19 @@ void drawFrontWall(FixP_t x0,
     uint8_t *bufferData = &framebuffer[0];
     int farEnoughForStipple = 0;
     
-    if (z >= distanceForPenumbra) {
-        //1 and beyond
-        farEnoughForStipple = 3;
-    } else if (z < distanceForPenumbra && z >= distanceForPenumbra / 2) {
-        // 1/2 to 1
-        farEnoughForStipple = 2;
-    } else if (z < distanceForPenumbra / 2 && z >= distanceForPenumbra / 4) {
+    if (z < distanceForPenumbra / 4)  { // 0 to 1/4
+        farEnoughForStipple = 0;
+    } else if (z < distanceForPenumbra / 2) {
         // 1/4 to 1/2
         farEnoughForStipple = 1;
-    } else { // 0 to 1/4
-        farEnoughForStipple = 0;
+    } else if (z < distanceForPenumbra) {
+        // 1/2 to 1
+        farEnoughForStipple = 2;
+    } else {
+        //1 and beyond
+        farEnoughForStipple = 3;
     }
+
 
     /* if we have a quad in which the base is smaller */
     if (y0 > y1) {
@@ -812,19 +811,18 @@ void drawFloor(FixP_t y0,
     }
 
     bufferData = &framebuffer[0];
-    
 
-    if (z >= distanceForPenumbra) {
-        //1 and beyond
-        farEnoughForStipple = 3;
-    } else if (z < distanceForPenumbra && z >= distanceForPenumbra / 2) {
-        // 1/2 to 1
-        farEnoughForStipple = 2;
-    } else if (z < distanceForPenumbra / 2 && z >= distanceForPenumbra / 4) {
+    if (z < distanceForPenumbra / 4)  { // 0 to 1/4
+        farEnoughForStipple = 0;
+    } else if (z < distanceForPenumbra / 2) {
         // 1/4 to 1/2
         farEnoughForStipple = 1;
-    } else { // 0 to 1/4
-        farEnoughForStipple = 0;
+    } else if (z < distanceForPenumbra) {
+        // 1/2 to 1
+        farEnoughForStipple = 2;
+    } else {
+        //1 and beyond
+        farEnoughForStipple = 3;
     }
     
     y = fixToInt(y0);
@@ -1156,17 +1154,17 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
     int stipple;
     int farEnoughForStipple;
     
-    if (z >= distanceForPenumbra) {
-        //1 and beyond
-        farEnoughForStipple = 3;
-    } else if (z < distanceForPenumbra && z >= distanceForPenumbra / 2) {
-        // 1/2 to 1
-        farEnoughForStipple = 2;
-    } else if (z < distanceForPenumbra / 2 && z >= distanceForPenumbra / 4) {
+    if (z < distanceForPenumbra / 4)  { // 0 to 1/4
+        farEnoughForStipple = 0;
+    } else if (z < distanceForPenumbra / 2) {
         // 1/4 to 1/2
         farEnoughForStipple = 1;
-    } else { // 0 to 1/4
-        farEnoughForStipple = 0;
+    } else if (z < distanceForPenumbra) {
+        // 1/2 to 1
+        farEnoughForStipple = 2;
+    } else {
+        //1 and beyond
+        farEnoughForStipple = 3;
     }
 
     FixP_t x0 = intToFix(coords[0]);
@@ -1324,18 +1322,18 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     int stipple;
     int yFinal = coords[3]; /* not the upper, not the lowest */
     int farEnoughForStipple;
-    
-    if (z >= distanceForPenumbra) {
-        //1 and beyond
-        farEnoughForStipple = 3;
-    } else if (z < distanceForPenumbra && z >= distanceForPenumbra / 2) {
-        // 1/2 to 1
-        farEnoughForStipple = 2;
-    } else if (z < distanceForPenumbra / 2 && z >= distanceForPenumbra / 4) {
+        
+    if (z < distanceForPenumbra / 4)  { // 0 to 1/4
+        farEnoughForStipple = 0;
+    } else if (z < distanceForPenumbra / 2) {
         // 1/4 to 1/2
         farEnoughForStipple = 1;
-    } else { // 0 to 1/4
-        farEnoughForStipple = 0;
+    } else if (z < distanceForPenumbra) {
+        // 1/2 to 1
+        farEnoughForStipple = 2;
+    } else {
+        //1 and beyond
+        farEnoughForStipple = 3;
     }
 
     FixP_t x0 = intToFix(coords[0]);
