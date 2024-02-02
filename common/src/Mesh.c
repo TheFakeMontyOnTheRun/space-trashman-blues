@@ -24,6 +24,7 @@ void loadMesh(struct Mesh *mesh, char *filename) {
     char *textureName;
     uint8_t *uvCoord;
     FixP_t *coord;
+    struct Vec3 *vecs;
     uint8_t read;
     uint16_t *indexPtr;
     int c;
@@ -61,15 +62,30 @@ void loadMesh(struct Mesh *mesh, char *filename) {
     mesh->indexCount += (*(bufferHead++)) << 8;
 
     mesh->vertices = allocMem(3 * mesh->indexCount * sizeof(FixP_t), GENERAL_MEMORY, 1);
-    coord = mesh->vertices;
+    vecs = mesh->vertices;
 
-    for (c = 0; c < mesh->indexCount * 3; ++c) {
+    for (c = 0; c < mesh->indexCount; ++c) {
         val = 0;
         val += (*(bufferHead++) << 0);
         val += (*(bufferHead++) << 8);
         val += (*(bufferHead++) << 16);
         val += (*(bufferHead++) << 24);
-        *(coord++) = val;
+        vecs->mX = val;
+
+        val = 0;
+        val += (*(bufferHead++) << 0);
+        val += (*(bufferHead++) << 8);
+        val += (*(bufferHead++) << 16);
+        val += (*(bufferHead++) << 24);
+        vecs->mY = val;
+
+        val = 0;
+        val += (*(bufferHead++) << 0);
+        val += (*(bufferHead++) << 8);
+        val += (*(bufferHead++) << 16);
+        val += (*(bufferHead++) << 24);
+        vecs->mZ = val;
+        vecs++;
     }
 
     mesh->indices = allocMem(3 * mesh->triangleCount * sizeof(uint16_t), GENERAL_MEMORY, 1);
