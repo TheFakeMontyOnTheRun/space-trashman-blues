@@ -236,16 +236,13 @@ void drawWall(FixP_t x0,
     uint8_t *bufferData = &framebuffer[0];
     int farEnoughForStipple;
     
-    if (z < distanceForPenumbra / 4)  { // 0 to 1/4
+    if (z < distanceForPenumbra / 4)  {
         farEnoughForStipple = 0;
     } else if (z < distanceForPenumbra / 2) {
-        // 1/4 to 1/2
         farEnoughForStipple = 1;
     } else if (z < distanceForPenumbra) {
-        // 1/2 to 1
         farEnoughForStipple = 2;
     } else {
-        //1 and beyond
         farEnoughForStipple = 3;
     }
 
@@ -471,16 +468,13 @@ void drawFrontWall(FixP_t x0,
     uint8_t *bufferData = &framebuffer[0];
     int farEnoughForStipple = 0;
     
-    if (z < distanceForPenumbra / 4)  { // 0 to 1/4
+    if (z < distanceForPenumbra / 4)  {
         farEnoughForStipple = 0;
     } else if (z < distanceForPenumbra / 2) {
-        // 1/4 to 1/2
         farEnoughForStipple = 1;
     } else if (z < distanceForPenumbra) {
-        // 1/2 to 1
         farEnoughForStipple = 2;
     } else {
-        //1 and beyond
         farEnoughForStipple = 3;
     }
 
@@ -812,16 +806,13 @@ void drawFloor(FixP_t y0,
 
     bufferData = &framebuffer[0];
 
-    if (z < distanceForPenumbra / 4)  { // 0 to 1/4
+    if (z < distanceForPenumbra / 4)  {
         farEnoughForStipple = 0;
     } else if (z < distanceForPenumbra / 2) {
-        // 1/4 to 1/2
         farEnoughForStipple = 1;
     } else if (z < distanceForPenumbra) {
-        // 1/2 to 1
         farEnoughForStipple = 2;
     } else {
-        //1 and beyond
         farEnoughForStipple = 3;
     }
     
@@ -1154,16 +1145,13 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
     int stipple;
     int farEnoughForStipple;
     
-    if (z < distanceForPenumbra / 4)  { // 0 to 1/4
+    if (z < distanceForPenumbra / 4)  {
         farEnoughForStipple = 0;
     } else if (z < distanceForPenumbra / 2) {
-        // 1/4 to 1/2
         farEnoughForStipple = 1;
     } else if (z < distanceForPenumbra) {
-        // 1/2 to 1
         farEnoughForStipple = 2;
     } else {
-        //1 and beyond
         farEnoughForStipple = 3;
     }
 
@@ -1323,16 +1311,13 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     int yFinal = coords[3]; /* not the upper, not the lowest */
     int farEnoughForStipple;
         
-    if (z < distanceForPenumbra / 4)  { // 0 to 1/4
+    if (z < distanceForPenumbra / 4)  {
         farEnoughForStipple = 0;
     } else if (z < distanceForPenumbra / 2) {
-        // 1/4 to 1/2
         farEnoughForStipple = 1;
     } else if (z < distanceForPenumbra) {
-        // 1/2 to 1
         farEnoughForStipple = 2;
     } else {
-        //1 and beyond
         farEnoughForStipple = 3;
     }
 
