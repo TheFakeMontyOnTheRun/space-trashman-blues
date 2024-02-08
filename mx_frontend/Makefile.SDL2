@@ -2,17 +2,10 @@ LDFLAGS=`sdl2-config --libs` -lm
 
 
 CFLAGS= `sdl2-config --cflags `  \
-    -O6 -Ofast      \
     -Ibase3d/include        \
     -Imenu/include          \
-    -funroll-loops          \
-    -fomit-frame-pointer    \
-    -fno-exceptions         \
-    -ffast-math             \
-    -flto		    \
-    --pedantic		    \
     -DCLI_BUILD \
-    -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS -DPAGE_FLIP_ANIMATION -DENDIANESS_AWARE -DEMIT_QUIT_OPTION
+    -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS -DPAGE_FLIP_ANIMATION -DENDIANESS_AWARE -DEMIT_QUIT_OPTION -DSDL_DISABLE_IMMINTRIN_H
 
 MENU_TARGET=game
 

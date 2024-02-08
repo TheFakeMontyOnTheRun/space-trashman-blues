@@ -1,19 +1,12 @@
 LDFLAGS=`sdl2-config --libs` -R/usr/pkg/lib -R/usr/X11R7/lib  -L/usr/pkg/lib -L/usr/X11R7/lib  -lm -lGL
 
 CFLAGS= `sdl2-config --cflags `  \
-    -O6 -Ofast      \
     -Ibase3d/include        \
     -Imenu/include          \
-    -funroll-loops          \
-    -fomit-frame-pointer    \
-    -fno-exceptions         \
-    -ffast-math             \
-    -flto		    \
-    --pedantic		    \
     -DCLI_BUILD \
     -I../core/include \
     -I../common/include \
-    -DINCLUDE_ITEM_DESCRIPTIONS -DTILED_BITMAPS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic -DEMIT_QUIT_OPTION -DENDIANESS_AWARE
+    -DINCLUDE_ITEM_DESCRIPTIONS -DTILED_BITMAPS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic -DEMIT_QUIT_OPTION -DENDIANESS_AWARE -DSDL_DISABLE_IMMINTRIN_H
 
 MENU_TARGET=game
 
