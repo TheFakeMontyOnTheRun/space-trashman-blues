@@ -9,13 +9,13 @@ include_directories(
         ${SDL2_INCLUDE_DIR}
 )
 
-include_directories(../core/include)
+    include_directories(../core/include)
 include_directories(../common/include)
 include_directories(base3d/include)
 include_directories(common/include)
 include_directories(menu/include)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCLI_BUILD -DPAGE_FLIP_ANIMATION -DINCLUDE_ITEM_DESCRIPTIONS -Wall -Wextra -pedantic -g -DENDIANESS_AWARE -DEMIT_QUIT_OPTION -DXRES_FRAMEBUFFER=256 -DYRES_FRAMEBUFFER=160")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCLI_BUILD -DPAGE_FLIP_ANIMATION -DINCLUDE_ITEM_DESCRIPTIONS -Wall -Wextra -pedantic -g -DENDIANESS_AWARE -DEMIT_QUIT_OPTION -DXRES_FRAMEBUFFER=256 -DYRES_FRAMEBUFFER=160 -DSDL_DISABLE_IMMINTRIN_H")
 
 find_package(SDL2 REQUIRED)
 
