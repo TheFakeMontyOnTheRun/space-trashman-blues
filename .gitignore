@@ -220,3 +220,4 @@ ee_frontend/.cmake
 ee_frontend/.ninja_*
 ee_frontend/Testing
 ee_frontend/build.ninja
+derelict.ram
