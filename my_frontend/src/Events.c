@@ -207,11 +207,12 @@ void initMap(void) {
         for (x = 0; x < MAP_SIZE_X; ++x) {
 
 #ifdef RLE_COMPRESSED_MAPS
-            if (head == headEnd) {
-                goto done_loading;
-            }
-
             if (repetitions < 1) {
+
+                if (head == headEnd) {
+                    goto done_loading;
+                }
+
                 repetitions = *head;
 
                 if (repetitions >= RLE_THRESHOLD) {
