@@ -46,6 +46,7 @@ EE_OBJS= menu/src/Main.o \
 all: $(EE_BIN)
 
 clean:
+	rm -f $(EE_BIN)
 	rm -f menu/src/*.o
 	rm -f ../core/src/*.o
 	rm -f ../common/src/*.o
