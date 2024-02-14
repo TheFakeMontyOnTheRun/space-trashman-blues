@@ -140,8 +140,8 @@ uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
 void clearTextScreen(void) {
     uint8_t c, d;
     for (c = 16; c < 24; ++c) {
-        for (d = 1; d < 32; ++d) {
-            writeStrWithLimit(d, c, " ", 256 / 8, 2, 0);
+        for (d = 0; d < 40; ++d) {
+            writeStrWithLimit(d, c, " ", 320 / 8, 2, 0);
         }
     }
 }

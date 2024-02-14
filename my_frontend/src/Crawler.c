@@ -98,7 +98,11 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
     }
     updateMapItems();
     needs3dRefresh = 1;
-    HUD_refresh();
+
+    if (!waitForKey) {
+        HUD_refresh();
+    }
+
     return kResumeCurrentState;
 handle_directions:
     switch (cmd) {

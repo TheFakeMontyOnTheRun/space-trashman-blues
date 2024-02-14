@@ -21,6 +21,8 @@ uint16_t heap = 0;
 
 uint8_t cooldown;
 
+extern uint8_t waitForKey;
+
 uint8_t updateDirection;
 
 extern uint8_t cursorPosition;
@@ -81,6 +83,13 @@ enum ECommand getInput(void) {
         if (currentGameMenuState == kPlayGame) {
             playSound(3);
             cooldown = COOLDOWN_MAX;
+
+            if (waitForKey) {
+                waitForKey = 0;
+                HUD_refresh();
+                return kCommandFire1;
+            }
+
             return performActionJoypad();
         } else {
             return kCommandFire1;

@@ -20,6 +20,8 @@ extern const struct CellPattern patterns[127];
 
 extern int8_t map[32][32];
 
+uint8_t waitForKey = 0;
+
 void drawGraphic(const uint8_t *graphic) {
     const uint8_t *ptr = graphic;
 
@@ -42,7 +44,8 @@ void drawTextAt(uint8_t _x, uint8_t y, const char *text, uint8_t colour) {
 
 void showMessage(const char *message) {
     clearTextScreen();
-    drawTextAt(1, 17, message, 1);
+    drawTextWindow(2, 17, (XRES_FRAMEBUFFER / 8) - 3, (YRES_FRAMEBUFFER / 8) - 18, "Message", message);
+    waitForKey = 1;
 }
 
 void drawMap(void) {

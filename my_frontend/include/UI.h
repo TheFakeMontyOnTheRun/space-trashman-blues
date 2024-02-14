@@ -35,4 +35,6 @@ enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t opt
 #define XRES_TEXT (XRES_FRAMEBUFFER / 8)
 #define YRES_TEXT (YRES_FRAMEBUFFER / 8)
 
+extern uint8_t waitForKey;
+
 #endif //DERELICT8_MENU_H
