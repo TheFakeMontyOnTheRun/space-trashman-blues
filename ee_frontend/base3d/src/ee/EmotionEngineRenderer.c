@@ -248,7 +248,6 @@ void init_drawing_environment() {
     // This is our generic qword pointer.
     qword_t *q = packet->data;
 
-    zBuffer.enable = 0;
     // This will setup a default drawing environment.
     q = draw_setup_environment_with_repeat(q, 0, &frame, &zBuffer);
 
