@@ -41,7 +41,7 @@ void HUD_initialPaint(void) {
     drawWindow(0,
                128 / 8,
                (XRES_FRAMEBUFFER / 8) / 2,
-               7,
+               (YRES_FRAMEBUFFER / 8) - 17,
                "Direction: ",
                2);
     HUD_refresh();
