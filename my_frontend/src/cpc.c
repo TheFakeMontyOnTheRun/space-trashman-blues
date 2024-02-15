@@ -154,11 +154,10 @@ enum ECommand getInput(void) {
         return kCommandNone;
     }
 
-    uint8_t input = getch();
 
     performAction();
 
-    switch (input) {
+    switch (getch()) {
         case 30:
         case 'w':
             return kCommandUp;
@@ -180,7 +179,6 @@ enum ECommand getInput(void) {
         case 'm':
             drawMap();
             return '.';
-
         case '1':
             return kCommandFire1;
         case '2':
@@ -194,7 +192,7 @@ enum ECommand getInput(void) {
         case '6':
             return kCommandFire6;
     }
-    return input;
+    return kCommandNone;
 }
 
 void shutdownGraphics(void) {
