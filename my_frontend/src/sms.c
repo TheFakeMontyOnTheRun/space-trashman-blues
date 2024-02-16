@@ -86,8 +86,8 @@ enum ECommand getInput(void) {
 
             if (waitForKey) {
                 waitForKey = 0;
-                HUD_refresh();
-                return kCommandFire1;
+                HUD_initialPaint();
+                return kCommandNone;
             }
 
             return performActionJoypad();
