@@ -44,7 +44,7 @@ void drawTextAt(uint8_t _x, uint8_t y, const char *text, uint8_t colour) {
 
 void showMessage(const char *message) {
     clearTextScreen();
-    drawTextWindow(2, 17, (XRES_FRAMEBUFFER / 8) - 3, (YRES_FRAMEBUFFER / 8) - 18, "Message", message);
+    drawTextWindow(1, 16, (XRES_FRAMEBUFFER / 8) - 3, (YRES_FRAMEBUFFER / 8) - 18, "", message);
     waitForKey = 1;
 }
 
