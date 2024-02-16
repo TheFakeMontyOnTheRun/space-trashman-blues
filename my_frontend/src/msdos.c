@@ -6,7 +6,7 @@
 #include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
-
+#include "UI.h"
 #include "KeyboardUI.h"
 
 unsigned char imageBuffer[128 * 32];
@@ -351,6 +351,12 @@ enum ECommand getInput(void) {
             return kCommandBack;
 
         case 'z':
+            if (waitForKey) {
+                waitForKey = 0;
+                HUD_initialPaint();
+                return kCommandNone;
+            }
+
             return kCommandFire1;
         case 'x':
             return kCommandFire2;
@@ -358,6 +364,8 @@ enum ECommand getInput(void) {
             return kCommandFire3;
         case 'v':
             return kCommandFire4;
+        case 'k':
+            exit(0);
     }
 
     return kCommandNone;
