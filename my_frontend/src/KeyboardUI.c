@@ -47,10 +47,10 @@ void HUD_initialPaint(void) {
     HUD_refresh();
 
     drawWindowWithOptions(
-            (XRES_FRAMEBUFFER / 8) - (int) /*biggestOption*/ 12 - 3,
-            (YRES_FRAMEBUFFER / 8) - 3 - /*kMainMenuOptionsCount*/ 6,
-            12/*biggestOption*/ + 2,
-            6 /*kMainMenuOptionsCount*/ + 2,
+            1 + (XRES_FRAMEBUFFER / 2) / 8,
+            (YRES_FRAMEBUFFER / 8) - 3 - /*kMainMenuOptionsCount*/ 6 - 1,
+            (XRES_FRAMEBUFFER / 8) - (1 + (XRES_FRAMEBUFFER / 2) / 8) - 1,
+            (YRES_FRAMEBUFFER / 8) - ((YRES_FRAMEBUFFER / 8) - 3 - /*kMainMenuOptionsCount*/ 6 - 1) - 1,
             "Actions",
             menuItems,
             6,
