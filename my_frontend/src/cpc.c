@@ -180,6 +180,12 @@ enum ECommand getInput(void) {
             drawMap();
             return '.';
         case '1':
+            if (waitForKey) {
+                waitForKey = 0;
+                HUD_initialPaint();
+                return kCommandNone;
+            }
+
             return kCommandFire1;
         case '2':
             return kCommandFire2;
