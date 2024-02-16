@@ -11,6 +11,7 @@
 
 #include "TMS9918.h"
 #include "AY-3-8910.h"
+#include "UI.h"
 #include "KeyboardUI.h"
 
 uint8_t updateDirection;
@@ -59,8 +60,23 @@ enum ECommand getInput(void) {
             return kCommandStrafeLeft;
         case 'v':
             return kCommandStrafeRight;
-        case 'z':
+        case '1':
+            if (waitForKey) {
+                waitForKey = 0;
+                HUD_initialPaint();
+                return kCommandNone;
+            }
             return kCommandFire1;
+        case '2':
+            return kCommandFire2;
+        case '3':
+            return kCommandFire3;
+        case '4':
+            return kCommandFire4;
+        case '5':
+            return kCommandFire5;
+        case '6':
+            return kCommandFire6;
 
     }
     return input;
