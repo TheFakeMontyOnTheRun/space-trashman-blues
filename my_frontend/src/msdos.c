@@ -350,7 +350,7 @@ enum ECommand getInput(void) {
         case 'l':
             return kCommandBack;
 
-        case 'z':
+        case '1':
             if (waitForKey) {
                 waitForKey = 0;
                 HUD_initialPaint();
@@ -358,12 +358,16 @@ enum ECommand getInput(void) {
             }
 
             return kCommandFire1;
-        case 'x':
+        case '2':
             return kCommandFire2;
-        case 'c':
+        case '3':
             return kCommandFire3;
-        case 'v':
+        case '4':
             return kCommandFire4;
+        case '5':
+            return kCommandFire5;
+        case '6':
+            return kCommandFire6;
         case 'k':
             exit(0);
     }
