@@ -107,6 +107,13 @@ void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *titl
     uint16_t x1 = (tx + tw) * 8;
     uint8_t y0 = ty * 8;
     uint8_t y1 = (ty + th) * 8;
+    int c, d;
+
+    for (c = 0; c < th; ++c) {
+        for (d = 0; d < tw; ++d) {
+            writeStrWithLimit( tx + d, ty + c, " ", 320 / 8, 2, 0);
+        }
+    }
 
     drawLine(x0, y0, x1, y0, colour);
 
