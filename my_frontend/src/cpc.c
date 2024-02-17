@@ -17,6 +17,10 @@
 #include "UI.h"
 #include "font.h"
 
+#define COOLDOWN_MAX 0x1F
+
+uint8_t cooldown;
+
 /* Sadly, I can't include conio.h - otherwise, I would get errors when building on OSX */
 int kbhit(void);
 int getch(void);
@@ -49,6 +53,7 @@ void initHW(void) {
     initKeyboardUI();
     updateDirection = 1;
     needs3dRefresh = 0;
+    cooldown = COOLDOWN_MAX;
 }
 
 void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
@@ -150,10 +155,12 @@ void handleSystemEvents(void) {}
 
 enum ECommand getInput(void) {
 
-    if (!kbhit()) {
+    if (cooldown) {
+        cooldown--;
         return kCommandNone;
     }
 
+    cooldown = COOLDOWN_MAX;
 
     performAction();
 
