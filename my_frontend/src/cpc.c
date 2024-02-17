@@ -229,7 +229,7 @@ void graphicsFlush(void) {
         if (updateDirection) {
             char direction[8] = {'N', 0, 'E', 0, 'S', 0, 'W', 0};
             updateDirection = 0;
-            writeStrWithLimit(12, 18, &direction[getPlayerDirection() * 2], 31, 2, 0);
+            writeStrWithLimit(12, 17, &direction[getPlayerDirection() * 2], 31, 2, 0);
         }
 
         memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
