@@ -28,6 +28,7 @@ void drawGraphic(const uint8_t *graphic) {
     while (*ptr) {
         uint8_t c;
         const uint8_t npoints = *ptr++;
+        ptr += 3; /* skip colours */
         const uint8_t *shape = ptr;
 
         for (c = 0; c < npoints - 1; ++c) {

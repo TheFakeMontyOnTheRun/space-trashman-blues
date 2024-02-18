@@ -1082,7 +1082,7 @@ void fillTopFlat(int *coords, uint8_t colour) {
 }
 
 
-void fillTriangle(int *coords, uint8_t colour) {
+void fillTriangle(int *coords, FramebufferPixelFormat colour) {
     int newCoors[6];
     int newCoors2[6];
 

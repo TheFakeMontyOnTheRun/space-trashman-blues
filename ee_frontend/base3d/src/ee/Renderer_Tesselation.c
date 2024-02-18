@@ -38,6 +38,13 @@
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 
+#define NORMALIZE_ORTHO_X (1.0f / 320.0f)
+#define NORMALIZE_ORTHO_Y (1.0f / 200.0f)
+#define ADJUST_RESOLUTION_Y (((200.0f/256.0f) * 200.0f) / 240.0f )
+#define OFFSET_X (-0.5f)
+#define OFFSET_Y (-0.375f)
+#define NORMALIZE_COLOUR (2.0f / 256.0f)
+
 #define kMinZCull 0
 struct Vec3 cameraOffset;
 FixP_t walkingBias = 0;
@@ -766,6 +773,110 @@ void drawTriangle(const struct Vec3 pos1,
 
     _q = q;
 
+}
+
+void fillTriangle(int *coords, FramebufferPixelFormat fragment) {
+
+
+    float r, g, b, a;
+
+    r = (pixel & 0xFF) * NORMALIZE_COLOUR;
+    g = ((pixel & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+    b = ((pixel & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
+    a = 1.0f;
+
+    if (defaultFont == NULL) {
+        defaultFont = loadBitmap("font.img");
+    }
+
+    if (defaultFont->uploadId == -1) {
+        submitBitmapToGPU(defaultFont);
+    }
+
+    bindTexture(defaultFont);
+
+    qword_t *q;
+
+    int points_count = 6;
+
+    int points[3] = {
+            0, 1, 2
+    };
+
+    u64 *dw;
+/*
+    float x = OFFSET_X + _x * NORMALIZE_ORTHO_X;
+    float y = OFFSET_Y + _y * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
+    float dx = _dx * NORMALIZE_ORTHO_X;
+    float dy = _dy * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
+*/
+    VECTOR object_position = {0, 0, -1.0f, 1.0f};
+    VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+
+    create_local_world(local_world, object_position, object_rotation);
+
+    create_local_screen(local_screen, local_world, world_view, view_screen);
+
+    q = _q;
+
+    VECTOR vertices[3] = {
+            {OFFSET_X + coords[0] * NORMALIZE_ORTHO_X, OFFSET_Y + coords[1] * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y, 0, 1.00f},
+            {OFFSET_X + coords[2] * NORMALIZE_ORTHO_X, OFFSET_Y + coords[3] * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y, 0, 1.00f},
+            {OFFSET_X + coords[4] * NORMALIZE_ORTHO_X, OFFSET_Y + coords[5] * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y,  0, 1.00f},
+    };
+
+    VECTOR coordinates[3] = {
+            {1, 0, 0, 0},
+            {0, 0, 0, 0},
+            {1, 1, 0, 0},
+    };
+
+    VECTOR colours[3] = {
+            {r, g, b, a},
+            {r, g, b, a},
+            {r, g, b, a},
+    };
+
+    // Calculate the vertex values.
+    calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
+
+    draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
+
+    // Convert floating point vertices to fixed point and translate to center of screen.
+    draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
+
+    // Convert floating point colours to fixed point.
+    draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
+
+    prim_t trig;
+
+    trig.type = PRIM_TRIANGLE;
+    trig.shading = PRIM_SHADE_GOURAUD;
+    trig.mapping = DRAW_DISABLE;
+    trig.fogging = DRAW_DISABLE;
+    trig.blending = DRAW_ENABLE;
+    trig.antialiasing = DRAW_DISABLE;
+    trig.mapping_type = PRIM_MAP_ST;
+    trig.colorfix = PRIM_UNFIXED;
+
+    dw = (u64 *) draw_prim_start(q, 0, &trig, &color);
+
+    for (int i = 0; i < points_count; i++) {
+        *dw++ = colors[points[i]].rgbaq;
+        *dw++ = st[points[i]].uv;
+        *dw++ = verts[points[i]].xyz;
+    }
+
+    // Check if we're in middle of a qword or not.
+    if ((u32) dw % 16) {
+        *dw++ = 0;
+    }
+
+    q = draw_prim_end((qword_t *) dw, 3, DRAW_STQ_REGLIST);
+
+    ++q;
+
+    _q = q;
 }
 
 void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {

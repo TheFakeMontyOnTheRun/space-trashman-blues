@@ -25,6 +25,15 @@
 
 #include <gccore.h>
 
+#define NORMALIZE_ORTHO_X (1.0f / 320.0f)
+#define NORMALIZE_ORTHO_Y (-1.0f / 200.0f)
+#define NORMALIZE_ORTHO (1.0f / 100.0f)
+#define NORMALIZE_COLOUR (1.0f / 256.0f)
+
+#define ADJUST_RESOLUTION_Y ( 0.75f )
+#define OFFSET_X (-0.5f)
+#define OFFSET_Y (0.375f)
+
 #define kMinZCull 0
 struct Vec3 cameraOffset;
 FixP_t walkingBias = 0;
@@ -53,6 +62,8 @@ extern Mtx view;
 extern Mtx44 perspective;
 extern guVector Yaxis;
 extern guVector Xaxis;
+
+extern GXTexObj whiteTextureObj;
 
 void clearTextures(void) {
     int c;
@@ -604,6 +615,42 @@ void drawRightNear(const struct Vec3 center,
     p2.mY = p3.mY = -geometryScale;
 
     drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
+}
+
+void fillTriangle(int *coords, FramebufferPixelFormat tint) {
+
+    float r, g, b, x, y;
+
+    r = (tint & 0xFF) * NORMALIZE_COLOUR;
+    g = ((tint & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+    b = ((tint & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
+
+    GX_LoadTexObj(&whiteTextureObj, GX_TEXMAP0);
+
+    GX_Begin(GX_TRIANGLES, GX_VTXFMT0, 3);
+
+    x = OFFSET_X + coords[0] * NORMALIZE_ORTHO_X;
+    y = OFFSET_Y + coords[1] * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
+
+    GX_Position3f32(x, y, -0.125);
+    GX_Color3f32(r, g, b);
+    GX_TexCoord2f32(1, 1);
+
+    x = OFFSET_X + coords[2] * NORMALIZE_ORTHO_X;
+    y = OFFSET_Y + coords[3] * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
+
+    GX_Position3f32(x, y, -0.125);
+    GX_Color3f32(r, g, b);
+    GX_TexCoord2f32(1, 1);
+
+    x = OFFSET_X + coords[4] * NORMALIZE_ORTHO_X;
+    y = OFFSET_Y + coords[5] * NORMALIZE_ORTHO_Y * ADJUST_RESOLUTION_Y;
+
+    GX_Position3f32(x, y, -0.125);
+    GX_Color3f32(r, g, b);
+    GX_TexCoord2f32(1, 1);
+
+    GX_End();
 }
 
 void drawTriangle(const struct Vec3 pos1,
