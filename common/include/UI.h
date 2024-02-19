@@ -30,4 +30,13 @@ int drawAppearingWindow(const int x, const int y, const unsigned int dx, const u
 
 void updateMap(void);
 
+enum EGameMenuState handleCursor(const enum EGameMenuState* options,
+				 uint8_t optionsCount,
+				 const enum ECommand cmd,
+				 enum EGameMenuState backState);
+
+void drawGraphic(const uint8_t *shapes);
+
+extern int8_t cursorPosition;
+
 #endif /*UI_H*/

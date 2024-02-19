@@ -44,20 +44,7 @@ const int32_t MainMenu_nextStateNavigation[3] = {
 const int kMainMenuOptionsCount = 3;
 #endif
 
-#ifndef TILED_BITMAPS
-struct Bitmap *logoBitmap;
-struct Bitmap *logo2Bitmap;
 
-void drawGraphic(const uint8_t *shapes);
-
-void drawLine(const uint8_t i, const uint8_t i1, const uint8_t i2, const uint8_t i3, int i4);
-
-void realPut(uint8_t x0, uint8_t y0, int colour, void *pVoid);
-
-#else
-struct Bitmap *logoBitmap[28];
-struct Bitmap *logo2Bitmap[15];
-#endif
 
 const uint8_t shapes[] = {
         6, 108, 103, 83,
@@ -175,23 +162,6 @@ const uint8_t shapes[] = {
 void MainMenu_initStateCallback(enum EGameMenuState tag) {
     int c;
 
-#ifndef TILED_BITMAPS
-    logoBitmap = loadBitmap("title.img");
-    logo2Bitmap = loadBitmap("logo.img");
-#else
-    for (c = 0; c < 28; ++c) {
-        char buffer[32];
-        sprintf(buffer, "title_tile%04d.img", c);
-        logoBitmap[c] = loadBitmap(buffer);
-    }
-
-    for (c = 0; c < 15; ++c) {
-        char buffer[32];
-        sprintf(buffer, "logo_tile%04d.img", c);
-        logo2Bitmap[c] = loadBitmap(buffer);
-    }
-#endif
-
     biggestOption = 0;
 
     for (c = 0; c < kMainMenuOptionsCount; ++c) {
@@ -209,66 +179,12 @@ void MainMenu_initStateCallback(enum EGameMenuState tag) {
 void MainMenu_initialPaintCallback() {
 }
 
-void drawGraphic(const uint8_t *graphic) {
-    const uint8_t *ptr = graphic;
-    int buffer[6];
-
-    while (*ptr) {
-        uint8_t c;
-        const uint8_t npoints = *ptr++;
-        const uint8_t r = *ptr++;
-        const uint8_t g = *ptr++;
-        const uint8_t b = *ptr++;
-        const uint32_t colour = getPaletteEntry( 0xFF000000 + (b << 16) + (g << 8) + r);
-        const uint8_t *shape = ptr;
-        int centerX = 0;
-        int centerY = 0;
-
-        for (c = 0; c < npoints; ++c) {
-            centerX += shape[2 * c];
-            centerY += shape[(2 * c) + 1];
-        }
-
-        centerX /= npoints;
-        centerY /= npoints;
-
-        buffer[4] = centerX;
-        buffer[5] = centerY;
-
-        for (c = 0; c < npoints - 1; ++c) {
-
-            buffer[0] = shape[(2 * c) + 0];
-            buffer[1] = shape[(2 * c) + 1];
-            buffer[2] = shape[(2 * c) + 2];
-            buffer[3] = shape[(2 * c) + 3];
-
-            fillTriangle(&buffer[0], colour);
-        }
-        ptr += 2 * npoints;
-    }
-}
-
 void MainMenu_repaintCallback(void) {
     int16_t c;
 
     uint8_t optionsHeight = 8 * kMainMenuOptionsCount;
 
     fillRect(0, 0, (XRES_FRAMEBUFFER), (YRES_FRAMEBUFFER), getPaletteEntry(0xFF6cb1a3), FALSE);
-//
-//#ifndef TILED_BITMAPS
-//#ifndef AGS
-//    drawBitmap(0, 0, logoBitmap, 0);
-//#endif
-//    drawBitmap(XRES_FRAMEBUFFER - logo2Bitmap->width, logo2Bitmap->height / 2, logo2Bitmap, 1);
-//#else
-//    for (c = 0; c < 28; ++c) {
-//        drawBitmap((c & 3) * 32, (c >> 2) * 32, logoBitmap[c], 1);
-//    }
-//
-//    for (c = 0; c < 15; ++c) {
-//        drawBitmap(118 + (c & 7) * 32, 45 + (c >> 3) * 32, logo2Bitmap[c], 1);
-//    }
-//#endif
 
     drawGraphic(shapes);
 
@@ -284,45 +200,8 @@ void MainMenu_repaintCallback(void) {
 }
 
 enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
-
-    switch (cmd) {
-        case kCommandUp:
-            playSound(MENU_SELECTION_CHANGE_SOUND);
-            --cursorPosition;
-            break;
-        case kCommandDown:
-            playSound(MENU_SELECTION_CHANGE_SOUND);
-            ++cursorPosition;
-            break;
-        case kCommandFire1:
-        case kCommandFire2:
-        case kCommandFire3:
-            return MainMenu_nextStateNavigation[cursorPosition];
-    }
-
-    if (cursorPosition > (kMainMenuOptionsCount - 1)) {
-        cursorPosition = (kMainMenuOptionsCount - 1);
-    }
-
-    if (cursorPosition < 0) {
-        cursorPosition = 0;
-    }
-
-    return kResumeCurrentState;
+  return handleCursor(MainMenu_nextStateNavigation, kMainMenuOptionsCount, cmd, kResumeCurrentState);
 }
 
 void MainMenu_unloadStateCallback(enum EGameMenuState newState) {
-#ifndef TILED_BITMAPS
-    releaseBitmap(logoBitmap);
-    releaseBitmap(logo2Bitmap);
-#else
-    int c;
-    for (c = 0; c < 28; ++c) {
-        releaseBitmap(logoBitmap[c]);
-    }
-
-    for (c = 0; c < 15; ++c) {
-        releaseBitmap(logo2Bitmap[c]);
-    }
-#endif
 }
