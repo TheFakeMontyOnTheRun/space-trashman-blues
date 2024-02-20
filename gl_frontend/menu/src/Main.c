@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
 
 #ifndef N64
 #ifndef NDS
-        startFrameGL(0, 0, 320, 240);
+        startFrame(0, 0, 320, 240);
 #else
         startFrameGL(0, 0, 255, 191);
 #endif
@@ -98,7 +98,7 @@ int main(int argc, char **argv) {
 
         isRunning = isRunning && menuTick(delta_time);
 
-        endFrameGL();
+        endFrame();
         flipRenderer();
 
     }

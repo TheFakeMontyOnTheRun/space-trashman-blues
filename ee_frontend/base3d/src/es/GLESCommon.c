@@ -684,8 +684,7 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
     return textureId;
 }
 
-
-void startFrameGL(int x, int y, int width, int height) {
+void startFrame(int x, int y, int width, int height) {
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;
 
@@ -709,7 +708,7 @@ void startFrameGL(int x, int y, int width, int height) {
     enter2D();
 }
 
-void endFrameGL() {
+void endFrame() {
     checkGLError("end frame");
 }
 

@@ -18,14 +18,6 @@
 #endif
 
 #ifndef AGS
-#define XRES_FRAMEBUFFER 320
-#define YRES_FRAMEBUFFER 200
-#else
-#define XRES_FRAMEBUFFER 240
-#define YRES_FRAMEBUFFER 160
-#endif
-
-#ifndef AGS
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
 #else
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(32))
@@ -240,9 +232,9 @@ int submitBitmapToGPU(struct Bitmap *bitmap);
 
 void initGL(void);
 
-void startFrameGL(int x, int y, int width, int height);
+void startFrame(int x, int y, int width, int height);
 
-void endFrameGL(void);
+void endFrame(void);
 
 extern struct MapWithCharKey occluders;
 extern struct MapWithCharKey colliders;

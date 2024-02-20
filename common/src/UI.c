@@ -24,6 +24,7 @@
 #include "Mesh.h"
 #include "CRenderer.h"
 #include "UI.h"
+#include "SoundSystem.h"
 
 void drawMenuBackground(void) {
     fillRect(0, 0, (XRES_FRAMEBUFFER), (YRES_FRAMEBUFFER), getPaletteEntry(0xFF6cb1a3), FALSE);
@@ -263,4 +264,8 @@ void drawGraphic(const uint8_t *graphic) {
         }
         ptr += 2 * npoints;
     }
+}
+
+void clearScreen(void) {
+    fillRect( 0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
 }

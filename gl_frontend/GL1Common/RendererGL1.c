@@ -143,7 +143,7 @@ void initGL(void) {
     memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
 }
 
-void startFrameGL(int x, int y, int width, int height) {
+void startFrame(int x, int y, int width, int height) {
 #ifdef N64
     surface_t *disp = display_get();
 
@@ -169,7 +169,7 @@ void startFrameGL(int x, int y, int width, int height) {
     enter2D();
 }
 
-void endFrameGL(void) {
+void endFrame(void) {
 #ifndef NDS
     int error;
     glFinish();

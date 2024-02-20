@@ -39,4 +39,6 @@ void drawGraphic(const uint8_t *shapes);
 
 extern int8_t cursorPosition;
 
+void clearScreen(void);
+
 #endif /*UI_H*/

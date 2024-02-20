@@ -102,11 +102,11 @@ int main(int argc, char **argv) {
             delta_time = 50;
         }
 
-        startFrameGL(0, 0, 640, 480);
+        startFrame(0, 0, 640, 480);
 
         isRunning = isRunning && menuTick(10);
 
-        endFrameGL();
+        endFrame();
         flipRenderer();
 
     }
