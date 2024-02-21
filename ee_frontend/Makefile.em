@@ -1,4 +1,4 @@
-CFLAGS = -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DENDIANESS_AWARE -DTILED_BITMAPS -DSDLGL \
+CFLAGS = -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DENDIANESS_AWARE -DTILED_BITMAPS -DSDLGL  -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200 \
 	-Imenu/include                                       \
 	-ISoundSystem                                       \
 	-Ibase3d/include                                     \

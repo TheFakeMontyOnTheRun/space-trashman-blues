@@ -5,6 +5,8 @@
 #ifndef UI_H
 #define UI_H
 
+struct Bitmap; /* temporary - soon this will be refactored out */
+
 void drawMenuBackground(void);
 
 void

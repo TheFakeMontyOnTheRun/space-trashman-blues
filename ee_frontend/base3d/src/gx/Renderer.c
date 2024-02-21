@@ -100,13 +100,13 @@ void initGL() {
 void clearRenderer() {
 }
 
-void startFrameGL(int x, int y, int width, int height) {
+void startFrame(int x, int y, int width, int height) {
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;
     enter2D();
 }
 
-void endFrameGL() {
+void endFrame() {
 }
 
 void enter3D(void) {

@@ -38,7 +38,7 @@ const int kMainMenuOptionsCount = 4;
 const char *MainMenu_options[3] = {
         "Play game", "Credits", "Help"};
 
-const int32_t MainMenu_nextStateNavigation[3] = {
+const enum EGameMenuState MainMenu_nextStateNavigation[3] = {
         kPlayGame, kCredits, kHelp};
 
 const int kMainMenuOptionsCount = 3;
@@ -200,7 +200,7 @@ void MainMenu_repaintCallback(void) {
 }
 
 enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
-  return handleCursor(MainMenu_nextStateNavigation, kMainMenuOptionsCount, cmd, kResumeCurrentState);
+  return handleCursor(&MainMenu_nextStateNavigation[0], kMainMenuOptionsCount, cmd, kResumeCurrentState);
 }
 
 void MainMenu_unloadStateCallback(enum EGameMenuState newState) {

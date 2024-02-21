@@ -52,7 +52,6 @@ add_executable(derelict32
         ../core/src/Derelict.c
         ../core/src/Core.c
         ../core/src/Parser.c
-        base3d/include/Rasterizer.h
 )
 
 

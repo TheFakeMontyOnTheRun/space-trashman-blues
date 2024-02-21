@@ -775,7 +775,7 @@ void drawTriangle(const struct Vec3 pos1,
 
 }
 
-void fillTriangle(int *coords, FramebufferPixelFormat fragment) {
+void fillTriangle(int *coords, FramebufferPixelFormat pixel) {
 
 
     float r, g, b, a;

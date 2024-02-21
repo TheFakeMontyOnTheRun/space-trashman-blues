@@ -18,7 +18,7 @@ CFLAGS= -O6 -Ofast      \
     -march=i486             \
     --pedantic		    \
     -DCLI_BUILD -DPAGE_FLIP_ANIMATION -DEMIT_QUIT_OPTION -DENDIANESS_AWARE\
-    -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS
+    -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200
 
 CXXFLAGS= -O6 -Ofast      \
     -Ibase3d/include        \

@@ -2,7 +2,7 @@ CXX = m68k-amigaos-g++
 CC = m68k-amigaos-gcc
 STRIP=m68k-amigaos-strip
 AS = vasmm68k_mot
-CFLAGS = -Ibase3d/include -I../common/include -I../core/include -DPAGE_FLIP_ANIMATION -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -Imenu/include -c -m68020 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -Ofast -DAGA8BPP -DFASTER_TEXTURE_MAP -DEMIT_QUIT_OPTION -DENDIANESS_AWARE
+CFLAGS = -Ibase3d/include -I../common/include -I../core/include -DPAGE_FLIP_ANIMATION -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -Imenu/include -c -m68020 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -Ofast -DAGA8BPP -DFASTER_TEXTURE_MAP -DEMIT_QUIT_OPTION -DENDIANESS_AWARE -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200
 LDFLAGS =  -s -noixemul
 ASFLAGS = -phxass -Fhunk -m68020 -chklabels -no-fpu -wfail -I/opt/amiga/m68k-amigaos/ndk-include
 
