@@ -230,7 +230,7 @@ void flipRenderer() {
     }
     
 
-	startFrameGL( (rect.size.width - rectWidth) / 2,
+	startFrame( (rect.size.width - rectWidth) / 2,
                  (rect.size.height - rectHeight) / 2,
                  rectWidth,
                  rectHeight);
@@ -241,7 +241,7 @@ void flipRenderer() {
 		exit(0);
 	}
 
-	endFrameGL();
+	endFrame();
 
 	[[self openGLContext] flushBuffer];
 }
