@@ -131,6 +131,8 @@ void renderVBOAt(struct Bitmap *bitmap,
         glUniform4f(uModUniformLocation, r, g, b, 1.0f);
     }
 
+    float vanishingFade = 1.0f - ( -z / 64.0f );
+    glUniform4f(uFadeUniformLocation, vanishingFade, vanishingFade, vanishingFade, vanishingFade);
 
     checkGLError("Setting tint");
 
