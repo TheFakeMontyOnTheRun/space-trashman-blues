@@ -528,7 +528,7 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 }
 
 
-void startFrameGL(int x, int y, int width, int height) {
+void startFrame(int x, int y, int width, int height) {
     
     glViewport(x, y, width, height);
     visibilityCached = FALSE;
@@ -560,7 +560,7 @@ void startFrameGL(int x, int y, int width, int height) {
     enter2D();
 }
 
-void endFrameGL() {
+void endFrame() {
     checkGLError("end frame");
 }
 

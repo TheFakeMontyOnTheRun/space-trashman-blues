@@ -247,9 +247,9 @@ int submitBitmapToGPU(struct Bitmap *bitmap);
 
 void initGL(void);
 
-void startFrameGL(int x, int y, int width, int height);
+void startFrame(int x, int y, int width, int height);
 
-void endFrameGL(void);
+void endFrame(void);
 
 extern struct MapWithCharKey occluders;
 extern struct MapWithCharKey colliders;
