@@ -514,7 +514,7 @@ void initGL() {
 void clearRenderer() {
 }
 
-void startFrameGL(int x, int y, int width, int height) {
+void startFrame(int x, int y, int width, int height) {
     lastBoundBitmap = NULL;
     current = packets[context];
 
@@ -548,7 +548,7 @@ void startFrameGL(int x, int y, int width, int height) {
     enter2D();
 }
 
-void endFrameGL() {
+void endFrame() {
 }
 
 void enter3D(void) {
