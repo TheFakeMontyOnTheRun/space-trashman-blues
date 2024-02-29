@@ -558,7 +558,7 @@ void enter3D(void) {
     _leanY = (leanY * 3.14159f * 0.25f) / ((float)ANGLE_TURN_THRESHOLD);
     _leanX = (-leanX * 3.14159f * 0.25f) / ((float)ANGLE_TURN_THRESHOLD);
 
-    VECTOR camera_position = {0.00f, -0.25f, 2, 1.00f};
+    VECTOR camera_position = {0.00f, -0.25f, 1, 1.00f};
     VECTOR camera_rotation = {_leanY, _leanX, 0.00f, 1.00f};
 
     // Create the world_view matrix.
@@ -663,8 +663,9 @@ void handleSystemEvents() {
         }
 
         if (!turning) {
-            leanX = (buttons.rjoy_h - 127) / 8;
-            leanY = -(buttons.rjoy_v - 127) / 8;
+            /* replace those 64 back to 8 when the turning is fixed */
+            leanX = (buttons.rjoy_h - 127) / 64;
+            leanY = -(buttons.rjoy_v - 127) / 64;
             if (leanX != 0 || leanY != 0) {
                 printf("leanX: %d, leanY: %d\n", leanX, leanY);
             }
