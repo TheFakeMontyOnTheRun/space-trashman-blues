@@ -213,7 +213,6 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
             }
                 break;
             case kCommandFire3: {
-                enterState(kInspectItem);
                 needsToRedrawHUD = TRUE;
             }
                 break;
