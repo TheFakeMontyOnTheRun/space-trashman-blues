@@ -28,7 +28,7 @@
 #include "UI.h"
 
 #ifndef SHORT_VIEW_ANGLE
-#define ANGLE_TURN_THRESHOLD 40
+#define ANGLE_TURN_THRESHOLD 45
 #define ANGLE_TURN_STEP 5
 #else
 #define ANGLE_TURN_THRESHOLD 5
