@@ -63,9 +63,9 @@ long start_clock, end_clock, prev;
 #ifdef __EMSCRIPTEN__
 void mainLoop () {
     if (enable3DRendering) {
-        startFrameGL(0, 0, 640, 480);
+        startFrame(0, 0, 640, 480);
         menuTick(20);
-        endFrameGL();
+        endFrame();
         flipRenderer();
     }
 }
