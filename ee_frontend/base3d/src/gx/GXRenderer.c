@@ -288,7 +288,7 @@ void enter3D(void) {
 
     guVector cam = {0.0F, 0.0F, 0.0F},
             up = {0.0F, 1.0F, 0.0F},
-            look = {_leanX, _leanY, -1.0F};
+            look = {_leanX, _leanY, -1.5F};
 
     guLookAt(view, &cam, &up, &look);
     guMtxIdentity(model);
