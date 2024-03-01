@@ -27,8 +27,13 @@
 #include "SoundSystem.h"
 #include "UI.h"
 
+#ifndef SHORT_VIEW_ANGLE
 #define ANGLE_TURN_THRESHOLD 40
 #define ANGLE_TURN_STEP 5
+#else
+#define ANGLE_TURN_THRESHOLD 5
+#define ANGLE_TURN_STEP 1
+#endif
 
 int turning = 0;
 int leanX = 0;
