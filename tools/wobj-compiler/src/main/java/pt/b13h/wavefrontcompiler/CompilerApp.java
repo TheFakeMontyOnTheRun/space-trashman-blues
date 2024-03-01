@@ -5,6 +5,7 @@ package pt.b13h.wavefrontcompiler;
  */
 
 import br.odb.gameutils.Color;
+import br.odb.gameutils.math.Vec3;
 import br.odb.liboldfart.SimpleWavefrontOBJLoader;
 import br.odb.liboldfart.WavefrontMaterial;
 import br.odb.liboldfart.WavefrontMaterialLoader;
@@ -93,7 +94,7 @@ public class CompilerApp {
 			total += m.faces.size();
 		}
 
-		bb = ByteBuffer.allocate(2 + (6 * total ) + (9 * 4 * total) + (textureName.length()) + 1);
+		bb = ByteBuffer.allocate(2 + (6 * total ) + (9 * 4 * total) + (textureName.length()) + 1 + 2 + ( 12 * meshLoader.vertexes.size()) + ( 6 * total ) );
 
 		bb.put((byte )(total & 0xFF));
 		bb.put((byte )((total >> 8) & 0xFF));
@@ -139,6 +140,34 @@ public class CompilerApp {
 				emitFP(bb, trig.x2 );
 				emitFP(bb, trig.y2 );
 				emitFP(bb, trig.z2 );
+			}
+		}
+
+		total = meshLoader.vertexes.size();
+
+		bb.put((byte )(total & 0xFF));          
+		bb.put((byte )((total >> 8) & 0xFF));
+
+		for (Vec3 v : meshLoader.vertexes) {
+                    emitFP(bb, v.x );
+                    emitFP(bb, v.y );
+                    emitFP(bb, v.z );
+		}
+                
+		for (TriangleMesh m : meshes ) {
+			for (GeneralTriangle trig : m.faces ) {
+                            int index;
+                            index = trig.indices[0];
+                            bb.put((byte )(index & 0xFF));
+                            bb.put((byte )((index >> 8) & 0xFF));
+                
+                            index = trig.indices[0];
+                            bb.put((byte )(index & 0xFF));
+                            bb.put((byte )((index >> 8) & 0xFF));
+
+                            index = trig.indices[0];
+                            bb.put((byte )(index & 0xFF));
+                            bb.put((byte )((index >> 8) & 0xFF));                          
 			}
 		}
 

@@ -8,6 +8,7 @@
 
 #include "Core.h"
 #include "FixP.h"
+#include "Matrices.h"
 #include "Enums.h"
 #include "Common.h"
 #include "Vec.h"
@@ -64,7 +65,6 @@ extern const int width, height;
 
 t_mat4x4 projection_matrix;
 t_mat4x4 viewMatrix;
-
 t_mat4x4 transformMatrix;
 t_mat4x4 rotateXMatrix;
 t_mat4x4 rotateYMatrix;
@@ -274,168 +274,8 @@ static const char *fragment_shader =
 
 struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, rampVBO, planeYZVBO;
 
-void mat4x4_ortho(t_mat4x4 out, float left, float right, float bottom, float top, float znear,
-                  float zfar) {
-#define T(a, b) (a * 4 + b)
-
-    out[T(0, 0)] = 2.0f / (right - left);
-    out[T(0, 1)] = 0.0f;
-    out[T(0, 2)] = 0.0f;
-    out[T(0, 3)] = 0.0f;
-
-    out[T(1, 1)] = 2.0f / (top - bottom);
-    out[T(1, 0)] = 0.0f;
-    out[T(1, 2)] = 0.0f;
-    out[T(1, 3)] = 0.0f;
-
-    out[T(2, 2)] = -2.0f / (zfar - znear);
-    out[T(2, 0)] = 0.0f;
-    out[T(2, 1)] = 0.0f;
-    out[T(2, 3)] = 0.0f;
-
-    out[T(3, 0)] = -(right + left) / (right - left);
-    out[T(3, 1)] = -(top + bottom) / (top - bottom);
-    out[T(3, 2)] = -(zfar + znear) / (zfar - znear);
-    out[T(3, 3)] = 1.0f;
-
-#undef T
-}
-
-
-void mat4x4_perspective(t_mat4x4 out, float fov, float ratio, float znear, float zfar) {
-    float rad = M_PI / 180.0f;
-    float oneOverTanFovDiv2 = 1.0f / tan(fov * rad / 2.0f);
-    out[0] = oneOverTanFovDiv2 / (ratio);
-    out[1] = 0.0f;
-    out[2] = 0.0f;
-    out[3] = 0.0f;
-
-    out[4] = 0.0f;
-    out[5] = oneOverTanFovDiv2;
-    out[6] = 0.0f;
-    out[7] = 0.0f;
-
-    out[8] = 0.0f;
-    out[9] = 0.0f;
-    out[10] = -((zfar + znear) / (zfar - znear));
-    out[11] = -1.0f;
-
-    out[12] = 0.0f;
-    out[13] = 0.0f;
-    out[14] = -((2.0f * zfar * znear) / (zfar - znear));
-    out[15] = 0.0f;
-}
-
-void mat4x4_view(t_mat4x4 out, float cx, float cy, float cz, float tx, float ty, float tz, float ux,
-                 float uy, float uz) {
-    out[0] = 1;
-    out[1] = 0.0f;
-    out[2] = 0.0f;
-    out[3] = 0.0f;
-    out[4] = 0.0f;
-    out[5] = 1;
-    out[6] = 0.0f;
-    out[7] = 0.0f;
-    out[8] = 0.0f;
-    out[9] = 0.0f;
-    out[10] = 1;
-    out[11] = 0.0f;
-    out[12] = 0.0f;
-    out[13] = 0.0f;
-    out[14] = 0;
-    out[15] = 1;
-}
-
-void mat4x4_transform(t_mat4x4 out, float ox, float oy, float oz, float sx, float sy, float sz) {
-    out[0] = sx;
-    out[1] = 0.0f;
-    out[2] = 0.0f;
-    out[3] = 0;
-    out[4] = 0.0f;
-    out[5] = sy;
-    out[6] = 0.0f;
-    out[7] = 0;
-    out[8] = 0.0f;
-    out[9] = 0.0f;
-    out[10] = sz;
-    out[11] = 0;
-    out[12] = ox;
-    out[13] = oy;
-    out[14] = oz;
-    out[15] = 1;
-}
-
-void mat4x4_rotateX(t_mat4x4 out, float deg) {
-
-    float ca = cosf(deg * M_PI / 180.0f);
-    float sa = sinf(deg * M_PI / 180.0f);
-
-    out[0] = 1;
-    out[1] = 0.0f;
-    out[2] = 0.0f;
-    out[3] = 0.0f;
-    out[4] = 0.0f;
-    out[5] = ca;
-    out[6] = -sa;
-    out[7] = 0.0f;
-    out[8] = 0;
-    out[9] = sa;
-    out[10] = ca;
-    out[11] = 0.0f;
-    out[12] = 0.0f;
-    out[13] = 0.0f;
-    out[14] = 0;
-    out[15] = 1;
-}
-
-void mat4x4_rotateY(t_mat4x4 out, float deg) {
-
-    float ca = cosf(deg * M_PI / 180.0f);
-    float sa = sinf(deg * M_PI / 180.0f);
-
-    out[0] = ca;
-    out[1] = 0.0f;
-    out[2] = sa;
-    out[3] = 0.0f;
-    out[4] = 0.0f;
-    out[5] = 1;
-    out[6] = 0.0f;
-    out[7] = 0.0f;
-    out[8] = -sa;
-    out[9] = 0.0f;
-    out[10] = ca;
-    out[11] = 0.0f;
-    out[12] = 0.0f;
-    out[13] = 0.0f;
-    out[14] = 0;
-    out[15] = 1;
-}
-
-void mat4x4_rotateZ(t_mat4x4 out, float deg) {
-
-    float ca = cosf(deg * M_PI / 180.0f);
-    float sa = sinf(deg * M_PI / 180.0f);
-    out[0] = ca;
-    out[1] = -sa;
-    out[2] = 0.0f;
-    out[3] = 0.0f;
-    out[4] = sa;
-    out[5] = ca;
-    out[6] = 0.0f;
-    out[7] = 0.0f;
-    out[8] = 0.0f;
-    out[9] = 0.0f;
-    out[10] = 1;
-    out[11] = 0.0f;
-    out[12] = 0.0f;
-    out[13] = 0.0f;
-    out[14] = 0;
-    out[15] = 1;
-}
-
-
 void checkGLError(const char *operation) {
-#ifndef __EMSCRIPTEN__
+#ifdef DEBUG_GL_CALLS
     int errorCode = glGetError();
 
     if (errorCode != 0) {
@@ -489,6 +329,13 @@ void drawTriangle(const struct Vec3 pos1,
                   const struct Vec2i uv3,
                   const struct Texture *texture);
 
+uint32_t getPaletteEntry(const uint32_t origin) {
+    return (0x80 << 24) + (origin & 0x00FFFFFF);
+}
+
+void clearRenderer() {
+}
+
 void enter2D(void) {
     mat4x4_ortho(projection_matrix, 0.0f, (float) XRES_FRAMEBUFFER, (float) YRES_FRAMEBUFFER, 0.0f,
                  0.1f, 100.0f);
@@ -499,17 +346,6 @@ void enter2D(void) {
     mat4x4_view(viewMatrix, 0, 0, 0, 0, 0, -1, 0, 1, 0);
     glUniformMatrix4fv(uViewMatrixUniformLocation, 1, GL_FALSE, viewMatrix);
 
-    mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);
-    glUniformMatrix4fv(uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix);
-
-    mat4x4_rotateX(rotateXMatrix, 0);
-    glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix);
-
-    mat4x4_rotateY(rotateYMatrix, 0);
-    glUniformMatrix4fv(uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix);
-
-    mat4x4_rotateZ(rotateZMatrix, 0);
-    glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
     checkGLError("enter2D");
 }
 
@@ -545,8 +381,6 @@ void unloadTextures(void) {
 
 void initGL() {
     GLint status;
-
-    glViewport(0, 0, width, height);
 
     /* creating shader */
     vs = glCreateShader(GL_VERTEX_SHADER);
@@ -646,6 +480,14 @@ void initGL() {
     glDepthFunc(GL_LEQUAL);
     glDepthMask(1);
     checkGLError("initGL");
+
+    float fade[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+    glUniform4f(uFadeUniformLocation, fade[0], fade[1], fade[2], fade[3]);
+    glUniform4f(uModUniformLocation, 1.0f, 1.0f, 1.0f, 1.0f);
+
+    checkGLError("set uniforms");
+
+
 }
 
 void bindTexture(struct Bitmap *bitmap) {
@@ -660,7 +502,7 @@ void bindTexture(struct Bitmap *bitmap) {
 
 int submitBitmapToGPU(struct Bitmap *bitmap) {
     // Texture object handle
-    int textureId = 0;
+    unsigned int textureId = 0;
 
     //Generate texture storage
     glGenTextures(1, &textureId);
@@ -685,43 +527,24 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 }
 
 void startFrame(int x, int y, int width, int height) {
+    
+    glViewport(x, y, width, height);
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;
 
-    float fade[4] = {1.0f, 1.0f, 1.0f, 1.0f};
     checkGLError("start frame");
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-    glDepthFunc(GL_LEQUAL);
     checkGLError("clear buffers");
 
-    glUniform4f(uFadeUniformLocation, fade[0], fade[1], fade[2], fade[3]);
+    glEnableVertexAttribArray(aPositionAttributeLocation);
+    checkGLError("Enabled vertex position attribute");
+
+    glEnableVertexAttribArray(aTexCoordAttributeLocation);
+    checkGLError("Enabled vertex uv attribute");
+    
+    glUniform2f(uScaleUniformLocation, 1.0f, 1.0f);
     glUniform4f(uModUniformLocation, 1.0f, 1.0f, 1.0f, 1.0f);
-
-    checkGLError("set uniforms");
-
-    glActiveTexture(GL_TEXTURE0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    checkGLError("set texture");
-
-    enter2D();
-}
-
-void endFrame() {
-    checkGLError("end frame");
-}
-
-void enter3D(void) {
-    mat4x4_perspective(projection_matrix, 90.0f,
-                       (float) XRES_FRAMEBUFFER / (float) YRES_FRAMEBUFFER, 0.1f, 1024.0f);
-    glUniformMatrix4fv(uProjectionMatrixUniformLocation, 1, GL_FALSE, projection_matrix);
-
-    mat4x4_rotateY(viewMatrix, -leanX);
-    glUniformMatrix4fv(uViewMatrixUniformLocation, 1, GL_FALSE, viewMatrix);
-
-    mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);
-    glUniformMatrix4fv(uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix);
 
     mat4x4_rotateX(rotateXMatrix, 0);
     glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix);
@@ -731,6 +554,21 @@ void enter3D(void) {
 
     mat4x4_rotateZ(rotateZMatrix, 0);
     glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
+
+    enter2D();
+}
+
+void endFrame() {
+    checkGLError("end frame");
+}
+
+void enter3D(void) {
+    mat4x4_perspective(projection_matrix, 75.0f,
+                       (float) XRES_FRAMEBUFFER / (float) YRES_FRAMEBUFFER, 1.0f, 1024.0f);
+    glUniformMatrix4fv(uProjectionMatrixUniformLocation, 1, GL_FALSE, projection_matrix);
+
+    mat4x4_rotateY(viewMatrix, -leanX);
+    glUniformMatrix4fv(uViewMatrixUniformLocation, 1, GL_FALSE, viewMatrix);
 
     glEnable(GL_DEPTH_TEST);
     checkGLError("enter3D");

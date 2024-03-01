@@ -86,8 +86,8 @@ struct NewScreen xnewscreen = {
 struct NewScreen xnewscreen = {
         0,              /* LeftEdge */
         0,              /* TopEdge  */
-        640,          /* Width    */
-        256,          /* Height   */
+        320,          /* Width    */
+        200,          /* Height   */
         8,              /* Depth    */
         0,              /* DetailPen */
         1,              /* BlockPen */
@@ -99,30 +99,6 @@ struct NewScreen xnewscreen = {
         NULL          /* BitMap */
 };
 #endif
-
-struct NewWindow my_new_window = {
-        0,                              /* LeftEdge*/
-        0,                              /* TopEdge*/
-        320,                          /* Width */
-        200,                          /* Height */
-        0,                              /* DetailPen  */
-        1,                              /* BlockPen   */
-        ACTIVEWINDOW | VANILLAKEY | CLOSEWINDOW | RAWKEY, /* IDCMPFlags  */
-        SMART_REFRESH |                      /* Flags       */
-        WINDOWDRAG |                      /*             */
-        WINDOWDEPTH |                      /*             */
-        ACTIVATE,                      /*            */
-        NULL,                          /* FirstGadget */
-        NULL,                          /* CheckMark   */
-        (UBYTE * ) "The Mistral Report",              /* Title       */
-        NULL,                          /* Screen      */
-        NULL,                          /* BitMap      */
-        320,                          /* MinWidth    */
-        200,                          /* MinHeight   */
-        320,                          /* MaxWidth    */
-        200,                          /* MaxHeight   */
-        CUSTOMSCREEN                      /* Type */
-};
 
 void openCOM() {}
 
@@ -226,9 +202,16 @@ void graphicsInit() {
     if ((screen = OpenScreen(&xnewscreen)) == NULL) {
     }
 
-    my_new_window.Screen = screen;
-
-    my_window = (struct Window *) OpenWindow(&my_new_window);
+    my_window = (struct Window *) OpenWindowTags(NULL,
+                                                 WA_Left, 0,
+                                                 WA_Top, 0,
+                                                 WA_Width, 320,
+                                                 WA_Height, 200,
+                                                 WA_IDCMP,
+                                                 ACTIVEWINDOW | VANILLAKEY | CLOSEWINDOW | RAWKEY,
+                                                 WA_Flags, SMART_REFRESH | WINDOWDRAG | WINDOWDEPTH | ACTIVATE,
+                                                 WA_CustomScreen, (ULONG)screen,
+                                                 TAG_DONE);
 
     if (my_window == NULL) {
         puts("nope 2!");

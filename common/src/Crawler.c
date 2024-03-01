@@ -27,8 +27,13 @@
 #include "SoundSystem.h"
 #include "UI.h"
 
-#define ANGLE_TURN_THRESHOLD 40
+#ifndef SHORT_VIEW_ANGLE
+#define ANGLE_TURN_THRESHOLD 45
 #define ANGLE_TURN_STEP 5
+#else
+#define ANGLE_TURN_THRESHOLD 5
+#define ANGLE_TURN_STEP 1
+#endif
 
 int turning = 0;
 int leanX = 0;
@@ -147,9 +152,7 @@ void Crawler_repaintCallback(void) {
 
             renderTick(30);
 
-#ifndef PLAYSTATION2
             recenterView();
-#endif
         }
     }
 }

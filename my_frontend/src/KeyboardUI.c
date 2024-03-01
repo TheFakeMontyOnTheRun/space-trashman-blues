@@ -66,27 +66,27 @@ void HUD_refresh(void) {
         }
     }
 
-    writeStrWithLimit(1, YRES_TEXT - 6, "In room", 16, 2, 0);
+    writeStrWithLimit(1, YRES_TEXT - 7, "In room", 16, 2, 0);
 
     if (roomItem != NULL) {
         struct Item *item = getItem(roomItem->item);
 
         if (item->active) {
-            writeStrWithLimit(1, YRES_TEXT - 5, "*", 16, 2, 0);
+            writeStrWithLimit(1, YRES_TEXT - 6, "*", 16, 2, 0);
         }
 
-        writeStrWithLimit(2, YRES_TEXT - 5, item->name, 16, 2, 0);
+        writeStrWithLimit(2, YRES_TEXT - 6, item->name, 16, 2, 0);
     }
 
-    writeStrWithLimit(1, YRES_TEXT - 3, "In hand", 16, 2, 0);
+    writeStrWithLimit(1, YRES_TEXT - 4, "In hand", 16, 2, 0);
 
     if (focusedItem != NULL) {
         struct Item *item = getItem(focusedItem->item);
 
         if (item->active) {
-            drawTextAt(1, YRES_TEXT - 2, "*", 1);
+            drawTextAt(1, YRES_TEXT - 3, "*", 1);
         }
 
-        writeStrWithLimit(2, YRES_TEXT - 2, item->name, 16, 2, 0);
+        writeStrWithLimit(2, YRES_TEXT - 3, item->name, 16, 2, 0);
     }
 }

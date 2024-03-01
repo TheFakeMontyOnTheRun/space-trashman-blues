@@ -38,7 +38,7 @@ CXXFLAGS= -O6 -Ofast      \
     --pedantic		\
     -I../core/include -I../common/include
 
-MENU_TARGET=game.exe
+MENU_TARGET=derelict.exe
 
 MENU_OBJ= menu/src/Main.o \
 	  ../common/src/FixP.o \

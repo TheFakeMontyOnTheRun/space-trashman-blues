@@ -51,6 +51,11 @@
 #include "CTile3DProperties.h"
 #include "CRenderer.h"
 
+#define ANGLE_TURN_THRESHOLD 40
+#define ANGLE_TURN_STEP 5
+
+extern int turning;
+
 static char padBuf[256] __attribute__((aligned(64)));
 
 static char actAlign[6];
@@ -64,6 +69,7 @@ qword_t *_q;
 qword_t *dmatag;
 prim_t prim;
 color_t color;
+int framePad = 0;
 
 xyz_t *verts;
 color_t *colors;
@@ -89,6 +95,27 @@ u32 paddata;
 u32 old_pad = 0;
 u32 new_pad;
 
+extern struct Bitmap *lastBoundBitmap;
+
+extern packet_t *packets[2];
+extern packet_t *current;
+extern MATRIX local_world;
+extern MATRIX world_view;
+extern MATRIX view_screen;
+extern int context;
+extern zbuffer_t zBuffer;
+extern framebuffer_t frame;
+extern qword_t *dmatag;
+
+extern MATRIX local_screen;
+extern packet_t *current;
+extern qword_t *_q;
+extern xyz_t *verts;
+extern color_t *colors;
+extern VECTOR *temp_vertices;
+extern int vertex_count;
+extern prim_t prim;
+extern color_t color;
 
 qword_t *draw_setup_environment_with_repeat(qword_t *q, int context, framebuffer_t *frame, zbuffer_t *z) {
 
@@ -456,14 +483,95 @@ void graphicsInit() {
     defaultFont = NULL;
 }
 
-int framePad = 0;
+void drawTriangle(const struct Vec3 pos1,
+                  const struct Vec2i uv1,
+                  const struct Vec3 pos2,
+                  const struct Vec2i uv2,
+                  const struct Vec3 pos3,
+                  const struct Vec2i uv3,
+                  const struct Texture *texture);
+
+uint32_t getPaletteEntry(const uint32_t origin) {
+    return (0x80 << 24) + (origin & 0x00FFFFFF);
+}
+
+void enter2D(void) {
+    VECTOR camera_position = {0.00f, 0.0f, 2, 1.00f};
+    VECTOR camera_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+
+    // Create the world_view matrix.
+    create_world_view(world_view, camera_position, camera_rotation);
+
+    create_view_screen(view_screen, graph_aspect_ratio(), -1.0f, 1.0f, 1.00f, -1.00f, 1.0f, 512.00f);
+
+}
+
+void initGL() {
+    /* tmp */
+    memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
+}
+
+void clearRenderer() {
+}
+
+void startFrame(int x, int y, int width, int height) {
+    lastBoundBitmap = NULL;
+    current = packets[context];
+
+    // Grab our dmatag pointer for the dma chain.
+    dmatag = current->data;
+
+    // Now grab our qword pointer and increment past the dmatag.
+    _q = dmatag;
+    _q++;
+
+    PACK_GIFTAG(_q, GIF_SET_TAG(1, 0, 0, 0, GIF_FLG_PACKED, 1), GIF_REG_AD);
+    _q++;
+    PACK_GIFTAG(_q, GS_SET_TEST(DRAW_ENABLE, ATEST_METHOD_NOTEQUAL, 0x00, ATEST_KEEP_FRAMEBUFFER,
+                                DRAW_DISABLE, DRAW_DISABLE,
+                                DRAW_ENABLE, ZTEST_METHOD_ALLPASS), GS_REG_TEST + 0);
+    _q++;
+
+
+    _q = draw_clear(_q, 0, 2048.0f - 320.0f, 2048.0f - 256.0f, frame.width, frame.height, 0, 0, 0);
+
+    PACK_GIFTAG(_q, GIF_SET_TAG(1, 0, 0, 0, GIF_FLG_PACKED, 1), GIF_REG_AD);
+    _q++;
+    PACK_GIFTAG(_q, GS_SET_TEST(DRAW_ENABLE, ATEST_METHOD_GREATER, 0x0, ATEST_KEEP_ALL,
+                                DRAW_DISABLE, DRAW_DISABLE,
+                                DRAW_ENABLE, ZTEST_METHOD_GREATER_EQUAL), GS_REG_TEST + 0);
+    _q++;
+
+
+    visibilityCached = FALSE;
+    needsToRedrawVisibleMeshes = FALSE;
+    enter2D();
+}
+
+void endFrame() {
+}
+
+void enter3D(void) {
+    float _leanX = 0.0f;
+    float _leanY = 0.0f;
+
+    _leanY = (leanY * 3.14159f * 0.25f) / ((float)ANGLE_TURN_THRESHOLD);
+    _leanX = (-leanX * 3.14159f * 0.25f) / ((float)ANGLE_TURN_THRESHOLD);
+
+    VECTOR camera_position = {0.00f, -0.25f, 1, 1.00f};
+    VECTOR camera_rotation = {_leanY, _leanX, 0.00f, 1.00f};
+
+    // Create the world_view matrix.
+    create_world_view(world_view, camera_position, camera_rotation);
+
+    create_view_screen(view_screen, graph_aspect_ratio(), -8.00f, 8.00f, -8.00f, 8.00f, 1.00f, 1024.00f);
+}
 
 void handleSystemEvents() {
 
     framePad++;
 //	printf("Frame pad %d\n", framePad);
     uint8_t entry = 0;
-    mBufferedCommand = kCommandNone;
 
     ret = padGetState(port, slot);
     while ((ret != PAD_STATE_STABLE) && (ret != PAD_STATE_FINDCTP1)) {
@@ -485,7 +593,11 @@ void handleSystemEvents() {
         // Directions
         if (new_pad & PAD_LEFT) {
             printf("LEFT\n");
-            mBufferedCommand = kCommandLeft;
+            turning = 1;
+            leanX = -ANGLE_TURN_STEP;
+
+            visibilityCached = FALSE;
+
         }
         if (new_pad & PAD_DOWN) {
             printf("DOWN\n");
@@ -493,7 +605,11 @@ void handleSystemEvents() {
         }
         if (new_pad & PAD_RIGHT) {
             printf("RIGHT\n");
-            mBufferedCommand = kCommandRight;
+            turning = 1;
+            leanX = ANGLE_TURN_STEP;
+
+            visibilityCached = FALSE;
+
         }
         if (new_pad & PAD_UP) {
             printf("UP\n");
@@ -545,8 +661,15 @@ void handleSystemEvents() {
         if (new_pad & PAD_L2) {
             printf("L2\n");
         }
-        leanX = buttons.rjoy_h;
-        leanY = buttons.rjoy_v;
+
+        if (!turning) {
+            /* replace those 64 back to 8 when the turning is fixed */
+            leanX = (buttons.rjoy_h - 127) / 64;
+            leanY = -(buttons.rjoy_v - 127) / 64;
+            if (leanX != 0 || leanY != 0) {
+                printf("leanX: %d, leanY: %d\n", leanX, leanY);
+            }
+        }
     }
 }
 
