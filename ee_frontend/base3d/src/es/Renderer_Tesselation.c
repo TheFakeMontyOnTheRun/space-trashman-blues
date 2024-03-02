@@ -22,6 +22,7 @@
 #include "Engine.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
+#include "Matrices.h"
 
 #ifdef SDLGL
 #define GL_GLEXT_PROTOTYPES
@@ -104,37 +105,38 @@ extern struct VBORegister planeXYVBO, leftFarVBO, leftNearVBO, floorVBO, rampVBO
 
 float uvTemp[8];
 
-void renderVBOAt(struct Bitmap *bitmap, struct VBORegister vbo, float x, float y, float z, float rx,
-                 float ry, float rz, float scaleX, float scaleY, float u0, float v0, float u1,
-                 float v1, uint32_t tint, uint8_t repeatTextures) {
-
+void renderVBOAt(struct Bitmap *bitmap,
+                 struct VBORegister vbo,
+                 float x, float y, float z,
+                 int16_t rx, int16_t ry, int16_t rz,
+                 float scaleX, float scaleY,
+                 float u0, float v0,
+                 float u1, float v1,
+                 uint32_t tint,
+                 uint8_t repeatTextures) {
 
     checkGLError("starting to draw VBO");
-    glEnableVertexAttribArray(aPositionAttributeLocation);
-    checkGLError("Enabled vertex position attribute");
 
-
-    glEnableVertexAttribArray(aTexCoordAttributeLocation);
-    checkGLError("Enabled vertex uv attribute");
 
     if (repeatTextures) {
         glUniform2f(uScaleUniformLocation, scaleX, scaleY);
-    } else {
-        glUniform2f(uScaleUniformLocation, 1.0f, 1.0f);
     }
 
     checkGLError("Setting texture scale");
 
-    float r = (tint & 0xFF) * NORMALIZE_COLOUR;
-    float g = ((tint & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
-    float b = ((tint & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
+    if (tint != 0xFFFFFFFF) {
+        float r = (tint & 0xFF) * NORMALIZE_COLOUR;
+        float g = ((tint & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+        float b = ((tint & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
+        glUniform4f(uModUniformLocation, r, g, b, 1.0f);
+    }
 
-    glUniform4f(uModUniformLocation, r, g, b, 1.0f);
+    float vanishingFade = 1.0f - ( -z / 64.0f );
+    glUniform4f(uFadeUniformLocation, vanishingFade, vanishingFade, vanishingFade, vanishingFade);
 
     checkGLError("Setting tint");
 
     bindTexture(bitmap);
-
 
     checkGLError("Texture bound");
 
@@ -146,12 +148,10 @@ void renderVBOAt(struct Bitmap *bitmap, struct VBORegister vbo, float x, float y
     glVertexAttribPointer(aPositionAttributeLocation, 3, GL_FLOAT, GL_FALSE,
                           sizeof(float) * 3, 0);
 
-
     checkGLError("vertex data configured");
 
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo.uvDataIndex);
-
 
     checkGLError("vertex indices bound");
 
@@ -177,48 +177,61 @@ void renderVBOAt(struct Bitmap *bitmap, struct VBORegister vbo, float x, float y
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo.indicesIndex);
 
-
     checkGLError("indices elements bound");
 
-    mat4x4_transform(transformMatrix, x + fixToFloat(xCameraOffset), y - fixToFloat(yCameraOffset),
+    mat4x4_transform(transformMatrix,
+                     x + fixToFloat(xCameraOffset),
+                     y - fixToFloat(yCameraOffset) + fixToFloat(playerHeight),
                      z - fixToFloat(zCameraOffset), scaleX, scaleY, 1);
+
     glUniformMatrix4fv(uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix);
 
-    mat4x4_rotateX(rotateXMatrix, rx);
-    glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix);
+    if (rx != 0) {
+        mat4x4_rotateX(rotateXMatrix, rx);
+        glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix);
+    }
 
-    mat4x4_rotateY(rotateYMatrix, ry);
-    glUniformMatrix4fv(uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix);
 
-    mat4x4_rotateZ(rotateZMatrix, rz);
-    glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
+    if (ry != 0) {
+        mat4x4_rotateY(rotateYMatrix, ry);
+        glUniformMatrix4fv(uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix);
+    }
 
+    if (rz != 0) {
+        mat4x4_rotateZ(rotateZMatrix, rz);
+        glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
+    }
 
     checkGLError("matrices set");
 
-
     glDrawElements(GL_TRIANGLES, vbo.indices, GL_UNSIGNED_SHORT, 0);
 
-
     checkGLError("triangles drawn");
+    
+    if (repeatTextures) {
+        glUniform2f(uScaleUniformLocation, 1.0f, 1.0f);
+    }
 
-    mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);
-    glUniformMatrix4fv(uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix);
+    if (tint != 0xFFFFFFFF) {
+        glUniform4f(uModUniformLocation, 1.0f, 1.0f, 1.0f, 1.0f);
+    }
+    
+    if (rx != 0) {
+        mat4x4_rotateX(rotateXMatrix, 0);
+        glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix);
+    }
+    
+    
+    if (ry != 0) {
+        mat4x4_rotateY(rotateYMatrix, 0);
+        glUniformMatrix4fv(uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix);
+    }
+    
+    if (rz != 0) {
+        mat4x4_rotateZ(rotateZMatrix, 0);
+        glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
+    }
 
-    mat4x4_rotateX(rotateXMatrix, leanY);
-    glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix);
-
-    mat4x4_rotateY(rotateYMatrix, leanX);
-    glUniformMatrix4fv(uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix);
-
-    mat4x4_rotateZ(rotateZMatrix, 0);
-    glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
-
-
-    checkGLError("unsetting matrices");
-
-    glDisableVertexAttribArray(aPositionAttributeLocation);
-    glDisableVertexAttribArray(aTexCoordAttributeLocation);
 
     checkGLError("disabling attributes");
 }
@@ -391,11 +404,6 @@ void drawBillboardAt(const struct Vec3 center,
                      struct Texture *texture,
                      const FixP_t scale,
                      const int size) {
-    /*
-    if ((center.mZ + zCameraOffset) <= Z_NEAR_PLANE_FRUSTUM) {
-        return;
-    }
-     */
 
     FixP_t geometryScale = Mul(scale, intToFix(2));
     float textureScale = 16;
@@ -424,7 +432,7 @@ void drawBillboardAt(const struct Vec3 center,
     float y = fixToFloat(center.mY);
     float z = -fixToFloat(center.mZ);
 
-    renderVBOAt(texture->raw, planeXYVBO, x, y, z, 0, 0, 0, 1.0f, fixToFloat(scale), 0, 0, 1, 1,
+    renderVBOAt(texture->raw, planeXYVBO, x, y, z, 0, leanX, 0, 1.0f, fixToFloat(scale), 0, 0, 1, 1,
                 0xFFFFFFFF, FALSE);
 }
 
