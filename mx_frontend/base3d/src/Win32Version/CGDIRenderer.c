@@ -48,7 +48,7 @@ extern ESoundDriver soundDriver;
 
 void setupOPL2(int port) {}
 
-void stopSounds() {}
+void stopSounds(void) {}
 
 #ifdef MSVC
 //char* files[] = {"menu_move.raw", "menu_select.raw", "gotclue.raw", "detected2.raw", "bong.raw", "fire.raw", "enemyfire.raw", "detected2.raw" };
@@ -61,14 +61,14 @@ void playSound( const int action ){
 void playSound( const int action ){
 }
 #endif
-void soundTick() {}
+void soundTick(void) {}
 
-void muteSound() {}
+void muteSound(void) {}
 
 
 long frame = 0;
 
-void graphicsShutdown() {
+void graphicsShutdown(void) {
     texturesUsed = 0;
 
 }
@@ -77,11 +77,11 @@ void putStr(int x, int y, const char *str, int fg, int bg) {
 
 }
 
-void drawTitleBox() {
+void drawTitleBox(void) {
 
 }
 
-void querySoundDriver() {
+void querySoundDriver(void) {
 
 }
 
@@ -194,7 +194,7 @@ uint8_t getPaletteEntry(const uint32_t origin) {
     return shade;
 }
 
-void graphicsInit() {
+void graphicsInit(void) {
 
     int r, g, b, index = 0;
     for (r = 0; r < 256; r += 16) {
@@ -443,7 +443,7 @@ WindProcedure(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) {
     return 0;
 }
 
-void handleSystemEvents() {
+void handleSystemEvents(void) {
     MSG msg;
     BOOL bRet;
 
@@ -456,11 +456,11 @@ void handleSystemEvents() {
     }
 }
 
-void flipRenderer() {
+void flipRenderer(void) {
     InvalidateRect(HWnd, NULL, 0);
 }
 
-void clear() {}
+void clear(void) {}
 
 
 

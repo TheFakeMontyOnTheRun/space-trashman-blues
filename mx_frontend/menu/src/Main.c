@@ -29,7 +29,7 @@
 
 #ifdef WIN32
 const long UCLOCKS_PER_SEC = 1000;
-long uclock() {
+long uclock(void) {
     SYSTEMTIME systime;
     GetSystemTime(&systime);
 
@@ -42,7 +42,7 @@ const long UCLOCKS_PER_SEC = 1000;
 
 long timeEllapsed = 0;
 
-long uclock() {
+long uclock(void) {
     timeEllapsed += (1000 / 60);
     return timeEllapsed;
 }
@@ -99,7 +99,7 @@ void initHW(int argc, char** argv) {
     graphicsInit();
 }
 
-void shutdownHW() {
+void shutdownHW(void) {
     graphicsShutdown();
 
     disposeMem(textBuffer);
@@ -114,7 +114,7 @@ void shutdownHW() {
 long start_clock, end_clock, prev;
 
 #ifdef __EMSCRIPTEN__
-void mainLoop () {
+void mainLoop (void) {
   menuTick ( 50 );
   flipRenderer();
 }

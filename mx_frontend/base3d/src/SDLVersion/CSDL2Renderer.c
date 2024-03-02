@@ -24,7 +24,7 @@
 #endif
 
 #ifdef __EMSCRIPTEN__
-void enterFullScreenMode() {
+void enterFullScreenMode(void) {
 	EmscriptenFullscreenStrategy s;
 	memset(&s, 0, sizeof(s));
 	s.scaleMode = EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
@@ -58,7 +58,7 @@ uint8_t getPaletteEntry(const uint32_t origin) {
 	return shade;
 }
 
-void graphicsInit() {
+void graphicsInit(void) {
 	int r, g, b;
 
 	SDL_Init(SDL_INIT_EVERYTHING);
@@ -87,7 +87,7 @@ void graphicsInit() {
 	enableSmoothMovement = TRUE;
 }
 
-void handleSystemEvents() {
+void handleSystemEvents(void) {
 	SDL_Event event;
 
 	if (playingDemo) {
@@ -239,7 +239,7 @@ void handleSystemEvents() {
 	}	  
 }
 
-void graphicsShutdown() {
+void graphicsShutdown(void) {
 	SDL_Quit();
 
 	releaseBitmap(defaultFont);
@@ -251,7 +251,7 @@ void graphicsShutdown() {
 	}
 }
 
-void flipRenderer() {
+void flipRenderer(void) {
 	SDL_Rect rect;
 	int x, y;
 
@@ -284,4 +284,4 @@ void flipRenderer() {
 	SDL_RenderPresent(renderer);
 }
 
-void clearRenderer() {}
+void clearRenderer(void) {}

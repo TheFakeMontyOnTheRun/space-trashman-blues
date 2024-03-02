@@ -100,17 +100,9 @@ struct NewScreen xnewscreen = {
 };
 #endif
 
-void openCOM() {}
-
-uint8_t readByte() {
-    return kCommandNone;
-}
-
-void writeByte(uint8_t command) {}
-
 long frame = 0;
 
-void graphicsShutdown() {
+void graphicsShutdown(void) {
     ClearPointer(my_window);
     CloseWindow(my_window);
     CloseScreen(screen);
@@ -119,9 +111,9 @@ void graphicsShutdown() {
 
 void putStr(int x, int y, const char *str, int fg, int bg) {}
 
-void drawTitleBox() {}
+void drawTitleBox(void) {}
 
-void querySoundDriver() {
+void querySoundDriver(void) {
     setupOPL2(1);
 }
 
@@ -176,7 +168,7 @@ static UWORD emptypointer[] = {
         0x0000, 0x0000    /* reserved, must be NULL */
 };
 
-void graphicsInit() {
+void graphicsInit(void) {
     int r, g, b;
     int c;
     struct RGB8 palete[256];
@@ -343,7 +335,7 @@ int xlate_key(UWORD rawkey, UWORD qualifier, APTR eventptr) {
 }
 
 /*Same as above*/
-void handleSystemEvents() {
+void handleSystemEvents(void) {
 
     struct IntuiMessage *my_message;
     ULONG messageClass;
@@ -434,7 +426,7 @@ void handleSystemEvents() {
     }
 }
 
-void flipRenderer() {
+void flipRenderer(void) {
     renderPageFlip(&finalBuffer[0], framebuffer,
                    previousFrame, turnStep, turnTarget, 0);
 
@@ -458,4 +450,4 @@ void flipRenderer() {
 
 }
 
-void clear() {}
+void clear(void) {}

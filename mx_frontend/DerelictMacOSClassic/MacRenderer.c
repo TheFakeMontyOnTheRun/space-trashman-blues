@@ -103,7 +103,7 @@ Rect TMRGetBounds()
 	return r;
 }
 //--------------------------------------------------------------------------------
-void DrawWindow() {
+void DrawWindow(void) {
 	Rect r = TMRGetBounds();
 	Rect pixelRect;
 	int x = 0, y = 0;
@@ -177,7 +177,7 @@ void DoCommand(long mResult)
 	HiliteMenu(0);
 }
 //--------------------------------------------------------------------------------
-void handleSystemEvents() {
+void handleSystemEvents(void) {
 	EventRecord    theEvent;
 	WindowPtr whichWindow;
 	Rect windRect;
@@ -362,7 +362,7 @@ void handleSystemEvents() {
 	}
 }
 //--------------------------------------------------------------------------------
-void SetUpMenus() {
+void SetUpMenus(void) {
 /*
 	short i;
 	OSErr err;
@@ -385,11 +385,11 @@ void SetUpMenus() {
 	DrawMenuBar();
 }
 //--------------------------------------------------------------------------------
-void graphicsShutdown() {
+void graphicsShutdown(void) {
 	ExitToShell();
 }
 //--------------------------------------------------------------------------------
-void flipRenderer() {
+void flipRenderer(void) {
 	long offset = 0;
 	int c;
 	Ptr baseAddr;
@@ -411,8 +411,7 @@ void flipRenderer() {
 	InvalRect(&qdGlobals.thePort->portRect);
 }
 //--------------------------------------------------------------------------------
-void clearRenderer() {
-
+void clearRenderer(void) {
 }
 //--------------------------------------------------------------------------------
 void Initialize(void) {

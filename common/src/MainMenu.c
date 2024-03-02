@@ -176,7 +176,7 @@ void MainMenu_initStateCallback(enum EGameMenuState tag) {
     playSound(MAIN_MENU_THEME);
 }
 
-void MainMenu_initialPaintCallback() {
+void MainMenu_initialPaintCallback(void) {
 }
 
 void MainMenu_repaintCallback(void) {

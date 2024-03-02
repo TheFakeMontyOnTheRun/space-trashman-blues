@@ -26,7 +26,7 @@ SDL_Surface *video;
 SDL_Surface *stretchedBuffer;
 
 #ifdef __EMSCRIPTEN__
-void enterFullScreenMode() {
+void enterFullScreenMode(void) {
     EmscriptenFullscreenStrategy s;
     memset(&s, 0, sizeof(s));
     s.scaleMode = EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
@@ -52,7 +52,7 @@ uint8_t getPaletteEntry(uint32_t origin) {
     return shade;
 }
 
-void graphicsInit() {
+void graphicsInit(void) {
     int r, g, b, c;
 
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -79,7 +79,7 @@ void graphicsInit() {
                                            video->format->Bmask, video->format->Amask);
 }
 
-void handleSystemEvents() {
+void handleSystemEvents(void) {
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
@@ -209,7 +209,7 @@ void handleSystemEvents() {
     }
 }
 
-void graphicsShutdown() {
+void graphicsShutdown(void) {
     SDL_Quit();
 
     releaseBitmap(defaultFont);
@@ -217,7 +217,7 @@ void graphicsShutdown() {
     texturesUsed = 0;
 }
 
-void flipRenderer() {
+void flipRenderer(void) {
 
     int x = 0, y = 0;
     int dstY = 0;
@@ -278,6 +278,6 @@ void flipRenderer() {
 
 }
 
-void clearRenderer() {
+void clearRenderer(void) {
     SDL_FillRect(video, NULL, 0);
 }
