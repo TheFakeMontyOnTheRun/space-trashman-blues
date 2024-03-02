@@ -118,6 +118,10 @@ void renderVBOAt(struct Bitmap *bitmap,
 
     checkGLError("starting to draw VBO");
 
+    glEnableVertexAttribArray(aPositionAttributeLocation);
+    checkGLError("Enabled vertex position attribute");
+    glEnableVertexAttribArray(aTexCoordAttributeLocation);
+    checkGLError("Enabled vertex uv attribute");
 
     if (repeatTextures) {
         glUniform2f(uScaleUniformLocation, scaleX, scaleY);
