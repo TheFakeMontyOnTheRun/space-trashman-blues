@@ -25,11 +25,11 @@ Created by Daniel Monteiro on 2019-07-26.
 
 uint8_t accessGrantedToSafe = FALSE;
 
-void grantAccessToSafe() {
+void grantAccessToSafe(void) {
     accessGrantedToSafe = TRUE;
 }
 
-uint8_t isAccessToSafeGranted() {
+uint8_t isAccessToSafeGranted(void) {
     return accessGrantedToSafe;
 }
 

@@ -220,7 +220,7 @@ qword_t *draw_setup_environment_with_repeat(qword_t *q, int context, framebuffer
 
 }
 
-void init_gs() {
+void init_gs(void) {
 
     // Define a 32-bit 640x512 framebuffer.
     frame.width = 640;
@@ -241,7 +241,7 @@ void init_gs() {
 }
 
 
-void init_drawing_environment() {
+void init_drawing_environment(void) {
 
     packet_t *packet = packet_init(16, PACKET_NORMAL);
 
@@ -400,7 +400,7 @@ loadModules(void) {
     }
 }
 
-void graphicsInit() {
+void graphicsInit(void) {
 
     enableSmoothMovement = TRUE;
 
@@ -506,12 +506,12 @@ void enter2D(void) {
 
 }
 
-void initGL() {
+void initGL(void) {
     /* tmp */
     memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
 }
 
-void clearRenderer() {
+void clearRenderer(void) {
 }
 
 void startFrame(int x, int y, int width, int height) {
@@ -548,7 +548,7 @@ void startFrame(int x, int y, int width, int height) {
     enter2D();
 }
 
-void endFrame() {
+void endFrame(void) {
 }
 
 void enter3D(void) {
@@ -567,7 +567,7 @@ void enter3D(void) {
     create_view_screen(view_screen, graph_aspect_ratio(), -8.00f, 8.00f, -8.00f, 8.00f, 1.00f, 1024.00f);
 }
 
-void handleSystemEvents() {
+void handleSystemEvents(void) {
 
     framePad++;
 //	printf("Frame pad %d\n", framePad);
@@ -673,13 +673,13 @@ void handleSystemEvents() {
     }
 }
 
-void graphicsShutdown() {
+void graphicsShutdown(void) {
     packet_free(packets[0]);
     packet_free(packets[1]);
     texturesUsed = 0;
 }
 
-void flipRenderer() {
+void flipRenderer(void) {
     _q = draw_finish(_q);
     graph_wait_vsync();
     dma_channel_send_normal(DMA_CHANNEL_GIF, current->data, _q - current->data, 0, 0);

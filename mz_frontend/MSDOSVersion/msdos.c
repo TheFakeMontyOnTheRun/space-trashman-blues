@@ -39,7 +39,7 @@ void clearGraphics();
 
 unsigned char imageBuffer[128 * 128];
 
-void shutdownGraphics() {
+void shutdownGraphics(void) {
 }
 
 void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour) {
@@ -137,11 +137,11 @@ void realPut(int x, int y, uint16_t value) {
             );
 }
 
-void clearGraphics() {
+void clearGraphics(void) {
     memset(imageBuffer, 0, 128 * 128);
 }
 
-void init() {
+void init(void) {
 
     asm volatile("movb $0x0, %%ah\n\t"
                  "movb $0x0D, %%al\n\t"
@@ -152,11 +152,11 @@ void init() {
             );
 }
 
-void clearScreen() {
+void clearScreen(void) {
     init();
 }
 
-uint8_t getKey() {
+uint8_t getKey(void) {
     unsigned char toReturn = 255;
 
 
@@ -231,7 +231,7 @@ void writeStr(int16_t _x, int16_t y, const char *text, uint16_t fg, uint16_t bg)
 
 void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 
-void graphicsFlush() {
+void graphicsFlush(void) {
     uint8_t *bufferPtr = &imageBuffer[0];
 
     for (int y = 0; y < 128; ++y) {
@@ -255,7 +255,7 @@ void showMessage(const char *message) {
     writeStr(1, 1, message, 2, 0);
 }
 
-void titleScreen() {
+void titleScreen(void) {
     int keepGoing = 1;
     clearGraphics();
 
@@ -274,7 +274,7 @@ void titleScreen() {
     clearScreen();
 }
 
-void HUD_initialPaint() {
+void HUD_initialPaint(void) {
     int c;
     for (c = 15; c < (128 + 16 + 1); ++c) {
         realPut(c, 35, 3);
@@ -297,7 +297,7 @@ void sleepForMS(uint32_t ms) {
     usleep(ms);
 }
 
-void HUD_refresh() {
+void HUD_refresh(void) {
     writeStr(21, 21, "                    ", 2, 0);
     writeStr(21, 22, "                    ", 2, 0);
     writeStr(1, 2, "                    ", 2, 0);

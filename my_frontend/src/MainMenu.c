@@ -81,7 +81,7 @@ void MainMenu_initStateCallback(enum EGameMenuState tag) {
     cursorPosition = 0;
 }
 
-void MainMenu_initialPaintCallback() {
+void MainMenu_initialPaintCallback(void) {
     clearScreen();
     drawGraphic(shapes);
 

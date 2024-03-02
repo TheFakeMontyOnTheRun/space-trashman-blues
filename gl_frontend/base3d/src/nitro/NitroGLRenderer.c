@@ -36,7 +36,7 @@ extern int leanX;
 extern int leanY;
 
 
-void graphicsInit() {
+void graphicsInit(void) {
     videoSetMode(MODE_0_3D);
     vramSetBankA(VRAM_A_TEXTURE);
     vramSetBankB(VRAM_B_TEXTURE);
@@ -49,7 +49,7 @@ void graphicsInit() {
 
 int cooldown = 0;
 
-void handleSystemEvents() {
+void handleSystemEvents(void) {
 
     touchPosition touch;
 
@@ -135,10 +135,10 @@ void handleSystemEvents() {
     }
 }
 
-void graphicsShutdown() {
+void graphicsShutdown(void) {
     texturesUsed = 0;
 }
 
-void flipRenderer() {
+void flipRenderer(void) {
     swiWaitForVBlank();
 }

@@ -117,12 +117,12 @@ void enter2D(void) {
 
 }
 
-void initGL() {
+void initGL(void) {
     /* tmp */
     memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
 }
 
-void clearRenderer() {
+void clearRenderer(void) {
 }
 
 void startFrame(int x, int y, int width, int height) {
@@ -159,7 +159,7 @@ void startFrame(int x, int y, int width, int height) {
     enter2D();
 }
 
-void endFrame() {
+void endFrame(void) {
 }
 
 void enter3D(void) {
@@ -271,7 +271,7 @@ void updateCursorForRenderer(const int x, const int z) {
     cursorZ = z;
 }
 
-void renderRoomTransition() {
+void renderRoomTransition(void) {
     struct Vec3 center;
 
     if (!enableSmoothMovement) {
@@ -409,7 +409,7 @@ void drawMap(const struct CActor *current) {
     ++gameTicks;
 }
 
-enum ECommand getInput() {
+enum ECommand getInput(void) {
     const enum ECommand toReturn = mBufferedCommand;
     mBufferedCommand = kCommandNone;
     return toReturn;

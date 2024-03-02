@@ -25,7 +25,7 @@
 #endif
 
 #ifdef __EMSCRIPTEN__
-void enterFullScreenMode() {
+void enterFullScreenMode(void) {
     EmscriptenFullscreenStrategy s;
     memset(&s, 0, sizeof(s));
     s.scaleMode = EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
@@ -46,7 +46,7 @@ extern int turning;
 extern int leanX;
 extern int leanY;
 
-void graphicsInit() {
+void graphicsInit(void) {
     int r, g, b;
 
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -67,7 +67,7 @@ void graphicsInit() {
     initGL();
 }
 
-void handleSystemEvents() {
+void handleSystemEvents(void) {
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
@@ -216,7 +216,7 @@ void handleSystemEvents() {
     }
 }
 
-void graphicsShutdown() {
+void graphicsShutdown(void) {
     SDL_DestroyWindow(window);
     SDL_Quit();
 
@@ -225,7 +225,7 @@ void graphicsShutdown() {
     texturesUsed = 0;
 }
 
-void flipRenderer() {
+void flipRenderer(void) {
     SDL_GL_SwapWindow(window);
 
 #ifndef __EMSCRIPTEN__

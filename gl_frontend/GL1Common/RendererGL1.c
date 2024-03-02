@@ -328,7 +328,7 @@ void updateCursorForRenderer(const int x, const int z) {
     cursorZ = z;
 }
 
-void renderRoomTransition() {
+void renderRoomTransition(void) {
     struct Vec3 center;
     FixP_t acc;
     FixP_t bias;
@@ -488,7 +488,7 @@ void drawMap(const struct CActor *current) {
     ++gameTicks;
 }
 
-enum ECommand getInput() {
+enum ECommand getInput(void) {
     const enum ECommand toReturn = mBufferedCommand;
     mBufferedCommand = kCommandNone;
     return toReturn;

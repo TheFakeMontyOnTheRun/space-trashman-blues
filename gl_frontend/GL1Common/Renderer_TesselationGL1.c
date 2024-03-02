@@ -53,7 +53,7 @@ extern struct Texture *itemSprites[TOTAL_ITEMS];
 #define BIAS (intToFix(128))
 #define REVERSE_BIAS (1.0f/128.0f)
 
-void clearTextures() {
+void clearTextures(void) {
     int c;
     texturesUsed = 0;
 

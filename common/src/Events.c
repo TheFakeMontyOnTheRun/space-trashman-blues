@@ -35,12 +35,12 @@ struct CActor actor;
 const char *thisMissionName;
 int16_t thisMissionNameLen;
 
-void clearMapCache() {
+void clearMapCache(void) {
     memFill(&(ITEMS_IN_MAP(0, 0)), 0xFF, MAP_SIZE * MAP_SIZE);
 }
 
 
-void clearTileProperties() {
+void clearTileProperties(void) {
     int c;
     for (c = 0; c < 256; ++c) {
         void *content = (void *) getFromMap(&tileProperties, c);

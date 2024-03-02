@@ -35,7 +35,7 @@ uint8_t getPositionForPin(uint8_t pin, uint8_t slot) {
     return pins[pin][slot];
 }
 
-uint8_t isHackingMinigameCompleted() {
+uint8_t isHackingMinigameCompleted(void) {
 	uint8_t pin;
     for (pin = 0; pin < 3; ++pin) {
         if (pins[pin][4] == 0) {

@@ -81,10 +81,10 @@ void Crawler_initStateCallback(enum EGameMenuState tag) {
     }
 }
 
-void Crawler_initialPaintCallback() {
+void Crawler_initialPaintCallback(void) {
 }
 
-void recenterView() {
+void recenterView(void) {
     if (leanX > 0 && !turning) {
         leanX -= ANGLE_TURN_STEP;
     }

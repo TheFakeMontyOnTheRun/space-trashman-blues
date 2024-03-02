@@ -333,7 +333,7 @@ uint32_t getPaletteEntry(const uint32_t origin) {
     return (0x80 << 24) + (origin & 0x00FFFFFF);
 }
 
-void clearRenderer() {
+void clearRenderer(void) {
 }
 
 void enter2D(void) {
@@ -379,7 +379,7 @@ void unloadTextures(void) {
 #endif
 }
 
-void initGL() {
+void initGL(void) {
     GLint status;
 
     /* creating shader */
@@ -558,7 +558,7 @@ void startFrame(int x, int y, int width, int height) {
     enter2D();
 }
 
-void endFrame() {
+void endFrame(void) {
     checkGLError("end frame");
 }
 
