@@ -19,7 +19,7 @@ include $(DEVKITARM)/ds_rules
 # ICON is the image used to create the game icon, leave blank to use default rule
 # NITRO is a directory that will be accessible via NitroFS
 #---------------------------------------------------------------------------------
-TARGET   := $(shell basename $(CURDIR))
+TARGET   := derelict
 BUILD    := build
 SOURCES  := menu/src base3d/src base3d/src/intro SoundSystem GL1Common
 INCLUDES := menu/include base3d/include SoundSystem
@@ -71,20 +71,20 @@ export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir))
 export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 
 CFILES   := ../../common/src/MainMenu.c \
-                              		../../common/src/Crawler.c \
-                              		../../common/src/HelpScreen.c \
-                              		../../common/src/CreditsScreen.c \
-                              		../../common/src/GameMenu.c \
                               		../menu/src/Main.c \
-                              		../../common/src/Engine.c \
-                              		../../common/src/UI.c \
-					                ../../common/src/Mesh.c \
-                              		../../common/src/HackingScreen.c \
                               		../base3d/src/nitro/NitroGLRenderer.c \
                               		../GL1Common/LoadBitmapGL1.c \
                               		../GL1Common/RendererGL1.c \
                               		../GL1Common/Renderer_RasterizationGL1.c \
                               		../GL1Common/Renderer_TesselationGL1.c \
+                              		../../common/src/Engine.c \
+                              		../../common/src/UI.c \
+					                ../../common/src/Mesh.c \
+                              		../../common/src/HackingScreen.c \
+                              		../../common/src/Crawler.c \
+                              		../../common/src/HelpScreen.c \
+                              		../../common/src/CreditsScreen.c \
+                              		../../common/src/GameMenu.c \
                               		../../common/src/VisibilityStrategy.c \
                               		../../common/src/Globals.c \
                               		../../common/src/CTile3DProperties.o \
@@ -98,9 +98,9 @@ CFILES   := ../../common/src/MainMenu.c \
                               		../../common/src/Dungeon.c \
                               		../../common/src/NullMusic.c \
                               		../../common/src/PCMAudio.c \
+                              		../../common/src/HackingMinigameRules.o \
                               		../../core/src/Derelict.c \
                               		../../core/src/Core.c \
-                              		../../common/src/HackingMinigameRules.o \
                               		../../core/src/Parser.c
 CPPFILES	:=
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
