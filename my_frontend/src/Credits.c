@@ -6,6 +6,7 @@
 #include "Enums.h"
 #include "UI.h"
 #include "Renderer.h"
+#include "Engine.h"
 
 extern int8_t cursorPosition;
 extern const char *mainText;
@@ -19,14 +20,13 @@ void CreditsScreen_initStateCallback(enum EGameMenuState tag) {
     mainText = "Made by MontyOnTheRun";
 }
 
-void CreditsScreen_initialPaintCallback(void) {
-    clearScreen();
-    if (mainText != NULL) {
+void CreditsScreen_repaintCallback(void) {
+
+    if (firstFrameOnCurrentState) {
+        clearScreen();
         drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, 1 + 3, "Credits", mainText);
     }
-}
 
-void CreditsScreen_repaintCallback(void) {
     drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - 7 - 3,
                           ((YRES_FRAMEBUFFER / 8) + 1) - (1) - 4,
                           7 + 2,

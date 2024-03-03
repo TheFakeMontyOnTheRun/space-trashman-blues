@@ -9,8 +9,6 @@
 
 void GameMenu_initStateCallback(enum EGameMenuState tag) {}
 
-void GameMenu_initialPaintCallback(void) {}
-
 void GameMenu_repaintCallback(void) {}
 
 enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long data) {

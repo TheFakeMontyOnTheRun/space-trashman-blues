@@ -14,6 +14,7 @@
 #include "Renderer.h"
 #include "HackingMinigame.h"
 #include "HackingMinigameRules.h"
+#include "Engine.h"
 
 extern int8_t cursorPosition;
 
@@ -37,10 +38,12 @@ void HackingScreen_repaintCallback(void) {
     uint8_t c;
     uint8_t holdingDisk;
 
-    drawTextAt(1, 1, "Stack trace:", 1);
-    drawTextAt((12 * 0), 11, " CPU0 ", 1);
-    drawTextAt((12 * 1), 11, " CPU1 ", 1);
-    drawTextAt((12 * 2), 11, " CPU2 ", 1);
+    if (firstFrameOnCurrentState) {
+        drawTextAt(1, 1, "Stack trace:", 1);
+        drawTextAt((12 * 0), 11, " CPU0 ", 1);
+        drawTextAt((12 * 1), 11, " CPU1 ", 1);
+        drawTextAt((12 * 2), 11, " CPU2 ", 1);
+    }
 
     drawTextAt((12 * cursorPosition), 11, ">", 1);
     drawTextAt((12 * cursorPosition) + 5, 11, "<", 1);

@@ -44,9 +44,7 @@ const enum EGameMenuState MainMenu_nextStateNavigation[3] = {
 const int kMainMenuOptionsCount = 3;
 #endif
 
-
-
-const uint8_t shapes[] = {
+static const uint8_t splashGraphics[] = {
         6, 108, 103, 83,
         40, 63,
         42, 40,
@@ -158,41 +156,20 @@ const uint8_t shapes[] = {
         52, 93,
         0 };
 
-
 void MainMenu_initStateCallback(enum EGameMenuState tag) {
-    int c;
-
-    biggestOption = 0;
-
-    for (c = 0; c < kMainMenuOptionsCount; ++c) {
-        const char *MainMenu_option = MainMenu_options[c];
-
-        size_t len = strlen(MainMenu_option);
-
-        if (len > biggestOption) {
-            biggestOption = len;
-        }
-    }
+    cursorPosition = 0;
     playSound(MAIN_MENU_THEME);
 }
 
-void MainMenu_initialPaintCallback(void) {
-}
-
 void MainMenu_repaintCallback(void) {
-    int16_t c;
-
-    uint8_t optionsHeight = 8 * kMainMenuOptionsCount;
-
-    fillRect(0, 0, (XRES_FRAMEBUFFER), (YRES_FRAMEBUFFER), getPaletteEntry(0xFF6cb1a3), FALSE);
-
-    drawGraphic(shapes);
+    clearScreen();
+    drawGraphic(splashGraphics);
 
     drawWindowWithOptions(
-            (XRES_FRAMEBUFFER / 8) - (int) biggestOption - 3,
-            (YRES_FRAMEBUFFER / 8) - 3 - (optionsHeight / 8),
-            biggestOption + 2,
-            (optionsHeight / 8) + 2,
+            (XRES_FRAMEBUFFER / 8) - (int) 9 - 3,
+            (YRES_FRAMEBUFFER / 8) - 3 - kMainMenuOptionsCount,
+            9 + 2,
+            kMainMenuOptionsCount + 2,
             "Episode 0",
             MainMenu_options,
             kMainMenuOptionsCount,
@@ -200,7 +177,7 @@ void MainMenu_repaintCallback(void) {
 }
 
 enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
-  return handleCursor(&MainMenu_nextStateNavigation[0], kMainMenuOptionsCount, cmd, kResumeCurrentState);
+    return handleCursor(&MainMenu_nextStateNavigation[0], kMainMenuOptionsCount, cmd, kResumeCurrentState);
 }
 
 void MainMenu_unloadStateCallback(enum EGameMenuState newState) {

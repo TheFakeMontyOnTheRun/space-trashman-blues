@@ -47,9 +47,6 @@ void HackingScreen_initStateCallback(enum EGameMenuState tag) {
     enableSmoothMovement = FALSE;
 }
 
-void HackingScreen_initialPaintCallback(void) {
-}
-
 void HackingScreen_repaintCallback(void) {
     uint8_t isSelected;
     int pin;

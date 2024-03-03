@@ -20,9 +20,6 @@ void CreditsScreen_initStateCallback(enum EGameMenuState tag) {
     mainText = "Made by MontyOnTheRun";
 }
 
-void CreditsScreen_initialPaintCallback(void) {
-}
-
 void CreditsScreen_repaintCallback(void) {
     clearScreen();
 

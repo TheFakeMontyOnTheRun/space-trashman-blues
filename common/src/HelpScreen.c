@@ -21,9 +21,6 @@ void HelpScreen_initStateCallback(enum EGameMenuState tag) {
     mainText = "This is the help";
 }
 
-void HelpScreen_initialPaintCallback(void) {
-}
-
 void HelpScreen_repaintCallback(void) {
     clearScreen();
 

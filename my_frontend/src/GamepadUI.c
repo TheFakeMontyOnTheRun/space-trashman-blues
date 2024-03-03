@@ -24,8 +24,6 @@ char *menuItems[] = {
         "Next(room)",
 };
 
-extern int cursorPosition;
-
 void initGamepadUI(void) {
     cursorPosition = 0;
 }

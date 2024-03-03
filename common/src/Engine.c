@@ -22,11 +22,11 @@
 #include "SoundSystem.h"
 
 InitStateCallback initStateCallback = NULL;
-InitialPaintCallback initialPaintCallback = NULL;
 RepaintCallback repaintCallback = NULL;
 TickCallback tickCallback = NULL;
 UnloadStateCallback unloadStateCallback = NULL;
 
+uint8_t firstFrameOnCurrentState = 1;
 enum EGameMenuState currentGameMenuState = kResumeCurrentState;
 enum EGameMenuState menuStateToReturn = kResumeCurrentState;
 enum EGameMenuState nextNavigationSelection = kResumeCurrentState;
@@ -54,7 +54,6 @@ void enterState(enum EGameMenuState newState) {
         default:
         case kMainMenu:
             initStateCallback = MainMenu_initStateCallback;
-            initialPaintCallback = MainMenu_initialPaintCallback;
             repaintCallback = MainMenu_repaintCallback;
             tickCallback = MainMenu_tickCallback;
             unloadStateCallback = MainMenu_unloadStateCallback;
@@ -64,21 +63,18 @@ void enterState(enum EGameMenuState newState) {
         case kGoodVictoryEpilogue:
         case kBadVictoryEpilogue:
             initStateCallback = GameMenu_initStateCallback;
-            initialPaintCallback = GameMenu_initialPaintCallback;
             repaintCallback = GameMenu_repaintCallback;
             tickCallback = GameMenu_tickCallback;
             unloadStateCallback = GameMenu_unloadStateCallback;
             break;
         case kHelp:
             initStateCallback = HelpScreen_initStateCallback;
-            initialPaintCallback = HelpScreen_initialPaintCallback;
             repaintCallback = HelpScreen_repaintCallback;
             tickCallback = HelpScreen_tickCallback;
             unloadStateCallback = HelpScreen_unloadStateCallback;
             break;
         case kCredits:
             initStateCallback = CreditsScreen_initStateCallback;
-            initialPaintCallback = CreditsScreen_initialPaintCallback;
             repaintCallback = CreditsScreen_repaintCallback;
             tickCallback = CreditsScreen_tickCallback;
             unloadStateCallback = CreditsScreen_unloadStateCallback;
@@ -87,14 +83,12 @@ void enterState(enum EGameMenuState newState) {
         case kBackToGame:
             menuStateToReturn = kMainMenu;
             initStateCallback = Crawler_initStateCallback;
-            initialPaintCallback = Crawler_initialPaintCallback;
             repaintCallback = Crawler_repaintCallback;
             tickCallback = Crawler_tickCallback;
             unloadStateCallback = Crawler_unloadStateCallback;
             break;
         case kInspectItem: {
             initStateCallback = GameMenu_initStateCallback;
-            initialPaintCallback = GameMenu_initialPaintCallback;
             repaintCallback = GameMenu_repaintCallback;
             tickCallback = GameMenu_tickCallback;
             unloadStateCallback = GameMenu_unloadStateCallback;
@@ -102,7 +96,6 @@ void enterState(enum EGameMenuState newState) {
             break;
         case kHackingGame: {
             initStateCallback = HackingScreen_initStateCallback;
-            initialPaintCallback = HackingScreen_initialPaintCallback;
             repaintCallback = HackingScreen_repaintCallback;
             tickCallback = HackingScreen_tickCallback;
             unloadStateCallback = HackingScreen_unloadStateCallback;
@@ -117,7 +110,7 @@ void enterState(enum EGameMenuState newState) {
 
     currentGameMenuState = newState;
     initStateCallback(newState);
-    initialPaintCallback();
+    firstFrameOnCurrentState = 1;
 }
 
 uint8_t menuTick(long delta_time) {
@@ -148,6 +141,7 @@ uint8_t menuTick(long delta_time) {
     }
 
     repaintCallback();
+    firstFrameOnCurrentState = 0;
 
     return isRunning;
 }

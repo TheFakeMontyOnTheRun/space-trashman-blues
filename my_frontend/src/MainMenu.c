@@ -6,8 +6,10 @@
 #include "Enums.h"
 #include "UI.h"
 #include "Renderer.h"
+#include "SoundSystem.h"
+#include "Engine.h"
 
-const uint8_t shapes[] = {
+static const uint8_t splashGraphics[] = {
         7, 0, 0, 0,
         28, 103,
         16, 140,
@@ -75,15 +77,16 @@ const enum EGameMenuState MainMenu_nextStateNavigation[3] = {
 #define kMainMenuOptionsCount 3
 #endif
 
-extern int8_t cursorPosition;
-
 void MainMenu_initStateCallback(enum EGameMenuState tag) {
     cursorPosition = 0;
+    playSound(MAIN_MENU_THEME);
 }
 
-void MainMenu_initialPaintCallback(void) {
-    clearScreen();
-    drawGraphic(shapes);
+void MainMenu_repaintCallback(void) {
+    if (firstFrameOnCurrentState) {
+        clearScreen();
+        drawGraphic(splashGraphics);
+    }
 
     drawWindowWithOptions(
             (XRES_FRAMEBUFFER / 8) - (int) 9 - 3,
@@ -93,23 +96,11 @@ void MainMenu_initialPaintCallback(void) {
             "Episode 0",
             MainMenu_options,
             kMainMenuOptionsCount,
-            0xFF);
-}
-
-void MainMenu_repaintCallback(void) {
-    drawWindowWithOptions(
-            (XRES_FRAMEBUFFER / 8) - (int) 9 - 3,
-            (YRES_FRAMEBUFFER / 8) - 3 - kMainMenuOptionsCount,
-            9 + 2,
-            kMainMenuOptionsCount + 2,
-            "Episode 0",
-            NULL,
-            kMainMenuOptionsCount,
             cursorPosition);
 }
 
 enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
-    return handleCursor(MainMenu_nextStateNavigation, kMainMenuOptionsCount, cmd, kResumeCurrentState);
+    return handleCursor(&MainMenu_nextStateNavigation[0], kMainMenuOptionsCount, cmd, kResumeCurrentState);
 }
 
 void MainMenu_unloadStateCallback(enum EGameMenuState newState) {

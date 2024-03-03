@@ -54,7 +54,7 @@ void HUD_initialPaint(void) {
             "Actions",
             menuItems,
             6,
-            -1);
+            0xFF);
 }
 
 void HUD_refresh(void) {

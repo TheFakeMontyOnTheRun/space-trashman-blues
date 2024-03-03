@@ -37,4 +37,6 @@ enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t opt
 
 extern uint8_t waitForKey;
 
+extern int8_t cursorPosition;
+
 #endif //DERELICT8_MENU_H

@@ -157,9 +157,6 @@ void GameMenu_initStateCallback(enum EGameMenuState tag) {
     featuredBitmap = NULL;
 }
 
-void GameMenu_initialPaintCallback(void) {
-}
-
 void GameMenu_repaintCallback(void) {
     int c;
     int16_t optionsHeight = 8 * (GameMenu_optionsCount);

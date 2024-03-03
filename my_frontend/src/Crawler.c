@@ -24,6 +24,7 @@ int8_t map[32][32];
 #ifdef SUPPORTS_HACKING_MINIGAME
 
 #include "HackingMinigame.h"
+#include "Engine.h"
 
 #endif
 
@@ -186,6 +187,12 @@ handle_directions:
 }
 
 void Crawler_repaintCallback(void) {
+
+    if (firstFrameOnCurrentState) {
+        clearScreen();
+        HUD_initialPaint();
+    }
+
     if (!needs3dRefresh) {
         return;
     }
@@ -228,11 +235,6 @@ void Crawler_initStateCallback(enum EGameMenuState tag_unused) {
     setLoggerDelegate(showMessage);
     initMap();
     needs3dRefresh = 1;
-}
-
-void Crawler_initialPaintCallback(void) {
-    clearScreen();
-    HUD_initialPaint();
 }
 
 void Crawler_unloadStateCallback(enum EGameMenuState newState) {
