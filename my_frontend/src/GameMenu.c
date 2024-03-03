@@ -1,11 +1,7 @@
 /*
    Created by monty on 01-10-2023.
 */
-#include <stdlib.h>
-#include <stdint.h>
 #include "Enums.h"
-#include "UI.h"
-#include "Renderer.h"
 
 void GameMenu_initStateCallback(enum EGameMenuState tag) {}
 

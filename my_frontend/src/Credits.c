@@ -1,8 +1,12 @@
 /*
    Created by monty on 01-10-2023.
 */
-#include <stdlib.h>
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
+#endif
+
 #include "Enums.h"
 #include "UI.h"
 #include "Renderer.h"

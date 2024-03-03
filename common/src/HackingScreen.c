@@ -1,10 +1,7 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
-#include <unistd.h>
-
 #endif
 
 #include <stdio.h>
@@ -15,15 +12,13 @@
 #include "FixP.h"
 #include "Vec.h"
 #include "Engine.h"
-#include "Common.h"
-#include "PackedFileReader.h"
-#include "LoadBitmap.h"
 #include "CActor.h"
 #include "Mesh.h"
 #include "CRenderer.h"
 #include "UI.h"
 #include "Core.h"
 #include "Derelict.h"
+#include "SoundSystem.h"
 #include "HackingMinigameRules.h"
 
 int wasSmoothMovementPreviouslyEnabled;

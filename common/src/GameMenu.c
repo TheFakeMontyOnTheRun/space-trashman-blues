@@ -1,29 +1,24 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
-#include <unistd.h>
-
 #endif
 
-#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
-#include "Enums.h"
 #include "FixP.h"
-#include "LoadBitmap.h"
-#include "Engine.h"
 #include "Vec.h"
+#include "Enums.h"
+#include "UI.h"
 #include "Common.h"
-#include "LoadBitmap.h"
 #include "CActor.h"
 #include "Mesh.h"
-#include "CRenderer.h"
-#include "UI.h"
-#include "Globals.h"
-#include "SoundSystem.h"
+#include "Engine.h"
 #include "Core.h"
+#include "CRenderer.h"
+#include "SoundSystem.h"
 
 const char **GameMenu_options;
 

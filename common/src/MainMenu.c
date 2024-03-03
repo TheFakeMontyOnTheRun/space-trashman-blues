@@ -1,29 +1,13 @@
-#include <string.h>
-#include <stdio.h>
-
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
-#include <unistd.h>
-
 #endif
 
-#include "FixP.h"
+#include <stdlib.h>
 #include "Enums.h"
-#include "Common.h"
-#include "Vec.h"
-#include "LoadBitmap.h"
-#include "Engine.h"
-#include "MapWithCharKey.h"
-#include "Mesh.h"
-#include "CTile3DProperties.h"
-#include "CActor.h"
-#include "CRenderer.h"
 #include "UI.h"
 #include "SoundSystem.h"
-#include "PackedFileReader.h"
 
 #ifdef EMIT_QUIT_OPTION
 const char *MainMenu_options[4] = {

@@ -1,40 +1,19 @@
 /*
    Created by monty on 01-10-2023.
 */
-#include <stdlib.h>
 #include <stdint.h>
 #include "Enums.h"
 #include "UI.h"
 #include "Renderer.h"
 
-
-#include <stddef.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
-
 #include "Core.h"
 #include "Derelict.h"
-#include "Enums.h"
-#include "Renderer.h"
 #include "map.h"
+#include "Engine.h"
 
 int8_t map[32][32];
 
-#ifdef SUPPORTS_HACKING_MINIGAME
 
-#include "HackingMinigame.h"
-#include "Engine.h"
-
-#endif
-
-#ifdef MSDOS
-#include "Common.h"
-#endif
-
-#ifndef EMBEDDED_DATA
-#include "PackedFileReader.h"
-#endif
 
 extern int8_t stencilHigh[XRES];
 extern struct ObjectNode *focusedItem;
