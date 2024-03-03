@@ -152,8 +152,6 @@ Java_pt_b13h_spacetrashmanblues_DerelictJNI_getPixelsFromNative(JNIEnv *env, jcl
 
 int soundToPlay = -1;
 
-void setupOPL2(void) {}
-
 void setupOPL2(int port) {}
 
 void playSound(const int action) {
@@ -162,7 +160,7 @@ void playSound(const int action) {
 
 void soundTick(void) {}
 
-void muteSound(void) {}
+void stopSounds(void) {}
 
 JNIEXPORT jint JNICALL
 Java_pt_b13h_spacetrashmanblues_DerelictJNI_getSoundToPlay(JNIEnv *env, jclass clazz) {
