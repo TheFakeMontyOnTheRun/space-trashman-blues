@@ -21,8 +21,6 @@
 #include "Derelict.h"
 #include "KeyboardUI.h"
 #include "Renderer.h"
-#include "Menu.h"
-
 
 const char *mainText;
 

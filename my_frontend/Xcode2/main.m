@@ -15,15 +15,6 @@
 #include <string.h>
 #include <stddef.h>
 
-#include "OSXRenderer.h"
-#include "GameView.h"
-
-#include "Core.h"
-#include "Derelict.h"
-#include "Renderer.h"
-#include "KeyboardUI.h"
-#include "Menu.h"
-
 int main(int argc, char **argv) {
     return NSApplicationMain(argc, (const char **)argv);
 }
