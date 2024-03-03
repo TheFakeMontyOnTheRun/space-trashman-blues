@@ -141,6 +141,17 @@ $(BUILD):
 clean:
 	@echo clean ...
 	@rm -fr $(BUILD) $(OUTPUT).elf $(OUTPUT).dol
+	@rm -f menu/src/*.o
+	@rm -f menu/src/*.d
+	@rm -f ../core/src/*.o
+	@rm -f ../core/src/*.d
+	@rm -f ../common/src/*.o
+	@rm -f ../common/src/*.d
+	@rm -f base3d/src/*.o
+	@rm -f base3d/src/*.d
+	@rm -f base3d/src/gx/*.o
+	@rm -f base3d/src/gx/*.d
+
 #---------------------------------------------------------------------------------
 run:
 	wiiload $(OUTPUT).dol
