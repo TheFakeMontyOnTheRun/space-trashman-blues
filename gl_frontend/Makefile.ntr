@@ -87,7 +87,7 @@ CFILES   := ../../common/src/MainMenu.c \
                               		../../common/src/GameMenu.c \
                               		../../common/src/VisibilityStrategy.c \
                               		../../common/src/Globals.c \
-                              		../../common/src/CTile3DProperties.o \
+                              		../../common/src/CTile3DProperties.c \
                               		../../common/src/Vec.c \
                               		../../common/src/Common.c \
                               		../../common/src/FixP.c \
@@ -98,7 +98,7 @@ CFILES   := ../../common/src/MainMenu.c \
                               		../../common/src/Dungeon.c \
                               		../../common/src/NullMusic.c \
                               		../../common/src/PCMAudio.c \
-                              		../../common/src/HackingMinigameRules.o \
+                              		../../common/src/HackingMinigameRules.c \
                               		../../core/src/Derelict.c \
                               		../../core/src/Core.c \
                               		../../core/src/Parser.c
@@ -144,24 +144,26 @@ $(BUILD):
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
-	@rm -fr $(BUILD) $(TARGET).elf $(TARGET).nds $(TARGET).ds.gba
-	@rm -f menu/src/*.o
-	@rm -f ../core/src/*.o
-	@rm -f ../common/src/*.o
-	@rm -f base3d/src/*.o
-	@rm -f GL1Common/*.o
-	@rm -f common/src/*.o
-	@rm -f SoundSystem/*.o
-	@rm -f base3d/src/nitro/*.o
-	@rm -f menu/src/*.d
-	@rm -f ../core/src/*.d
-	@rm -f ../common/src/*.d
-	@rm -f base3d/src/*.d
-	@rm -f GL1Common/*.d
-	@rm -f common/src/*.d
-	@rm -f SoundSystem/*.d
-	@rm -f base3d/src/nitro/*.d
-
+	rm -fvr $(BUILD) $(TARGET).elf $(TARGET).nds $(TARGET).ds.gba
+	rm -fv menu/src/*.o
+	rm -fv ../core/src/*.o
+	rm -fv ../common/src/*.o
+	rm -fv base3d/src/*.o
+	rm -fv GL1Common/*.o
+	rm -fv core/src/*.o
+	rm -fv common/src/*.o
+	rm -fv SoundSystem/*.o
+	rm -fv base3d/src/nitro/*.o
+	rm -fv menu/src/*.d
+	rm -fv ../core/src/*.d
+	rm -fv ../common/src/*.d
+	rm -fv core/src/*.d
+	rm -fv common/src/*.d
+	rm -fv base3d/src/*.d
+	rm -fv GL1Common/*.d
+	rm -fv common/src/*.d
+	rm -fv SoundSystem/*.d
+	rm -fv base3d/src/nitro/*.d
 
 #---------------------------------------------------------------------------------
 else
