@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <assert.h>
+#include <stdint.h>
 
 extern "C" {
 #include "Core.h"

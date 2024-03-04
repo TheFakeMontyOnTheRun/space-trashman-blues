@@ -22,6 +22,7 @@
 
 #else
 #include <genesis.h>
+int puts( const char* str );
 #endif
 
 #include "Core.h"
@@ -57,11 +58,7 @@ struct ObjectNode *focusedItem = NULL;
 struct ObjectNode *roomItem = NULL;
 struct MapWithCharKey tileProperties;
 extern int accessGrantedToSafe;
-int cursorPosition = 0;
-
-void performAction();
-
-void startMusic();
+uint8_t cursorPosition = 0;
 
 void renderCameraNorth();
 
@@ -78,7 +75,7 @@ uint16_t running = 1;
 int16_t cameraHeight = 1;
 uint16_t enteredFrom = 0xFF;
 
-extern int playerLocation;
+extern uint8_t playerLocation;
 
 struct Projection {
     uint8_t px;
@@ -86,7 +83,7 @@ struct Projection {
     int8_t dx;
 };
 
-const struct Projection projections[31] =
+const struct Projection projections[32] =
         {
                 {0,  128, -128},    //	1
                 {0,  127, -64},    //	2
@@ -131,7 +128,7 @@ int16_t min(int16_t x1, int16_t x2) {
 }
 #endif
 
-uint16_t
+void
 drawWedge(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ, uint16_t elementMask, uint16_t type) {
 
     int16_t z1;
@@ -154,21 +151,21 @@ drawWedge(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ
     uint16_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? (3 + STIPPLE_COLOUR_THRESHOLD) : 3;
 
     if (z0 >= 32) {
-        return 0;
+        return;
     }
 
     z1 = z0 + dZ;
 
     if (z0 <= 2) {
-        return 0;
+        return;
     }
 
     if (z1 <= 2) {
-        return 0;
+        return;
     }
 
     if (z1 >= 32) {
-        return 0;
+        return;
     }
 
 
@@ -282,7 +279,7 @@ drawWedge(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ
             }
 
             if (lineX0 >= XRES) {
-                return 0;
+                return;
             }
 
             if (upperErr2 <= upperDx) {
@@ -314,12 +311,9 @@ drawWedge(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ
             vLine(px1z1, py0z1, py1z1, 0);
         }
     }
-
-
-    return 1;
 }
 
-uint16_t drawSquare(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, uint16_t elementMask) {
+void drawSquare(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, uint16_t elementMask) {
 
     int16_t z0px;
     int16_t z0py;
@@ -335,7 +329,7 @@ uint16_t drawSquare(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, 
     uint16_t drawContour;
 
     if (z0 >= 32) {
-        return 0;
+        return;
     }
 
     z0px = (projections[z0].px);
@@ -350,7 +344,7 @@ uint16_t drawSquare(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, 
     py1z0 = py0z0 + (dY * z0dx);
 
     if (px1z0 < 0 || px0z0 > XRESMINUSONE) {
-        return 0;
+        return;
     }
 
     uint16_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? (4 + STIPPLE_COLOUR_THRESHOLD) : 4;
@@ -375,14 +369,11 @@ uint16_t drawSquare(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, 
                 vLine(px1z0, py0z0, py1z0, 0);
             }
         }
-
     }
-
-    return 1;
 }
 
 
-uint16_t drawObjectAt(int16_t x0, int16_t z0) {
+void drawObjectAt(int16_t x0, int16_t z0) {
 
     int16_t z1;
     uint16_t z0px;
@@ -401,13 +392,13 @@ uint16_t drawObjectAt(int16_t x0, int16_t z0) {
     uint16_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? (5 + STIPPLE_COLOUR_THRESHOLD) : 5;
 
     if (z0 >= 32 || z0 <= 4) {
-        return 0;
+        return;
     }
 
     z1 = z0 + 1;
 
     if (z1 >= 32) {
-        return 0;
+        return;
     }
 
 
@@ -513,7 +504,7 @@ uint16_t drawObjectAt(int16_t x0, int16_t z0) {
             }
 
             if (lineX0 >= XRES) {
-                return 1;
+                return;
             }
 
             if (e2 <= dx) {
@@ -523,12 +514,9 @@ uint16_t drawObjectAt(int16_t x0, int16_t z0) {
             }
         }
     }
-
-
-    return 1;
 }
 
-uint16_t drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ, uint16_t elementMask) {
+void drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ) {
 
     int16_t y1 = y0 + dY;
     int16_t z1;
@@ -540,7 +528,6 @@ uint16_t drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, 
     int16_t z0dx;
     int16_t z1dx;
     int16_t py1z0;
-    int16_t py1z1;
     int16_t px0z0;
     int16_t py0z0;
     int16_t px1z0;
@@ -554,13 +541,13 @@ uint16_t drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, 
     uint16_t drawContour;
 
     if (z0 >= 32 || z0 <= 4) {
-        return 0;
+        return;
     }
 
     z1 = z0 + dZ;
 
     if (z1 >= 32) {
-        return 0;
+        return;
     }
 
     z0px = (projections[z0].px);
@@ -578,8 +565,6 @@ uint16_t drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, 
     py0z0 = z0py + ((y0) * z0dx);
     py0z1 = z1py + ((y0) * z1dx);
     py1z0 = z0py + ((y1) * z0dx);
-    py1z1 = z1py + ((y1) * z1dx);
-
     drawContour = (dY);
 
 
@@ -686,12 +671,9 @@ uint16_t drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, 
     if (IN_RANGE(0, XRESMINUSONE, px1z0)) {
         vLine(px1z0, py0z0, py1z0, 1);
     }
-
-
-    return 1;
 }
 
-uint16_t drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ, uint16_t elementMask) {
+void drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ) {
 
     int16_t z1;
 
@@ -711,13 +693,13 @@ uint16_t drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ,
     uint16_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? (2 + STIPPLE_COLOUR_THRESHOLD) : 2;
 
     if (z0 >= 32 || z0 < 1) {
-        return 0;
+        return;
     }
 
     z1 = z0 + dZ;
 
     if (z1 >= 32) {
-        return 0;
+        return;
     }
 
     z0px = (projections[z0].px);
@@ -736,7 +718,7 @@ uint16_t drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ,
     py0z1 = z1py + ((y0) * z1dx);
 
 
-    int16_t x, leftX0, leftX1, rightX0, rightX1;
+    int16_t leftX0, leftX1, rightX0, rightX1;
 
     leftX0 = px0z0;
     leftX1 = px0z1;
@@ -758,7 +740,7 @@ uint16_t drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ,
 
     while (currentY0 != py0z1) {
         if (leftX0 >= XRES) {
-            return 1;
+            return;
         }
 
         if (IN_RANGE(0, XRESMINUSONE, leftX0) || IN_RANGE(0, XRESMINUSONE, rightX0)) {
@@ -785,9 +767,6 @@ uint16_t drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ,
             currentY0 += sy;
         }
     }
-
-
-    return 1;
 }
 
 void drawPattern(uint16_t _pattern, int16_t x0, int16_t x1, int16_t z) {
@@ -815,29 +794,27 @@ void drawPattern(uint16_t _pattern, int16_t x0, int16_t x1, int16_t z) {
 
     if (prop->mCeilingRepeatedTextureIndex != 0xFF && prop->mCeilingRepetitions > 0) {
         drawCubeAt(x0 - 1, ceilingHeight - cameraHeight, z + 2, x1 - x0,
-                   prop->mCeilingRepetitions, 1, 0xFF);
+                   prop->mCeilingRepetitions, 1);
     }
 
     if (prop->mFloorRepeatedTextureIndex != 0xFF && prop->mFloorRepetitions > 0) {
         drawCubeAt(x0 - 1, floorHeight - prop->mFloorRepetitions - cameraHeight, z + 2, x1 - x0,
-                   prop->mFloorRepetitions, 1, 0xFF);
+                   prop->mFloorRepetitions, 1);
     }
 
 
     if (prop->mCeilingTextureIndex != 0xFF) {
-        drawFloorAt(x0 - 1, ceilingHeight - cameraHeight, z + 2, x1 - x0,
-                    1, 0xFF);
+        drawFloorAt(x0 - 1, ceilingHeight - cameraHeight, z + 2, x1 - x0, 1);
     }
 
     if (prop->mFloorTextureIndex != 0xFF) {
-        drawFloorAt(x0 - 1, floorHeight - cameraHeight, z + 2, x1 - x0,
-                    1, 0xFF);
+        drawFloorAt(x0 - 1, floorHeight - cameraHeight, z + 2, x1 - x0, 1);
     }
 
 
     if (type == kCube) {
         drawCubeAt(x0 - 1, floorHeight - cameraHeight, z + 2, x1 - x0,
-                   diff, 1, 0xFF);
+                   diff, 1);
     } else if (type == kRightNearWall || type == kLeftNearWall) {
 
         if (cameraRotation == 0 || cameraRotation == 2) {
@@ -859,8 +836,10 @@ void drawPattern(uint16_t _pattern, int16_t x0, int16_t x1, int16_t z) {
             case 2:
                 drawWedge(x0 - (cameraRotation == 0 ? 1 : 0), floorHeight - cameraHeight, z + 2,
                           0, diff, 1, 0xFF, kLeftNearWall);
+                break;
             case 1:
             case 3:
+            default:
                 drawSquare(x0 - 1, floorHeight - cameraHeight,
                            z + (cameraRotation == 3 ? 1 : 0) + 2,
                            x1 - x0, diff, 0xFF);
@@ -877,34 +856,34 @@ void drawPattern(uint16_t _pattern, int16_t x0, int16_t x1, int16_t z) {
                 break;
             case 1:
             case 3:
+            default:
                 drawWedge(x0 - (cameraRotation == 1 ? 1 : 0),
                           floorHeight - cameraHeight, z + 2,
                           0, diff, 1, 0xFF, kLeftNearWall);
                 break;
         }
     } else if (type == kWallCorner) {
-        int returnVal = 0;
 
         switch (cameraRotation) {
 
             case 3:
             case 0:
-                returnVal = drawWedge(x0 - (cameraRotation == 3 ? 0 : 1),
+                drawWedge(x0 - (cameraRotation == 3 ? 0 : 1),
                                       floorHeight - cameraHeight, z + 2,
                                       0, diff, 1, 0xFF, kLeftNearWall);
 
-                returnVal = drawSquare(x0 - 1, floorHeight - cameraHeight, z + 1 + 2,
-                                       x1 - x0, diff, 0xFF) || returnVal;
+                drawSquare(x0 - 1, floorHeight - cameraHeight, z + 1 + 2,
+                                       x1 - x0, diff, 0xFF);
                 break;
 
             case 1:
             case 2:
-                returnVal = drawSquare(x0 - 1, floorHeight - cameraHeight, z + 2,
+            default:
+                drawSquare(x0 - 1, floorHeight - cameraHeight, z + 2,
                                        x1 - x0, diff, 0xFF);
 
-                returnVal =
-                        drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), floorHeight - cameraHeight, z + 2,
-                                  0, diff, 1, 0xFF, kLeftNearWall) || returnVal;
+                drawWedge(x0 - (cameraRotation == 1 ? 1 : 0), floorHeight - cameraHeight, z + 2,
+                                  0, diff, 1, 0xFF, kLeftNearWall);
 
                 break;
         }
@@ -917,10 +896,8 @@ void repaintMapItems(void) {
     /* ignore header node */
     node = getRoom(playerLocation)->itemsPresent->next;
 
-    //        drawObjectAt(x0 - 1, y + 2);
     switch (cameraRotation) {
         case 0:
-            //drawPattern(lastPattern, lastIndex - cameraX + 2, x - cameraX + 2, cameraZ - y);
             while (node != NULL) {
                 struct Item *item = getItem(node->item);
                 drawObjectAt(item->position.x - cameraX + 2 - 1, cameraZ - item->position.y + 2);
@@ -929,7 +906,6 @@ void repaintMapItems(void) {
             break;
 
         case 1:
-            //drawPattern(lastPattern, (lastIndex - cameraZ) + 2 , (y - cameraZ) + 2, x - cameraX);
             while (node != NULL) {
                 struct Item *item = getItem(node->item);
                 drawObjectAt((item->position.y - cameraZ) + 1, (item->position.x - cameraX) + 2);
@@ -938,7 +914,6 @@ void repaintMapItems(void) {
             break;
 
         case 2:
-            //drawPattern(lastPattern, -(x - cameraX) + 2, -(lastIndex - cameraX) + 2, y - cameraZ);
             while (node != NULL) {
                 struct Item *item = getItem(node->item);
                 drawObjectAt(-(item->position.x - cameraX) + 1, (item->position.y - cameraZ) + 2);
@@ -947,7 +922,7 @@ void repaintMapItems(void) {
             break;
 
         case 3:
-            //        drawPattern(lastPattern, -(y - cameraZ) + 2, -(lastIndex - cameraZ)  + 2, cameraX - x);
+        default:
             while (node != NULL) {
                 struct Item *item = getItem(node->item);
                 drawObjectAt(-(item->position.y - cameraZ) + 1, (cameraX - item->position.x) + 2);
@@ -959,8 +934,6 @@ void repaintMapItems(void) {
 
 /* all those refactors are due to a SDCC bug with very long functions */
 void renderScene(void) {
-    uint16_t x;
-
 
     uint16_t pattern = map[cameraZ][cameraX];
 
@@ -984,6 +957,7 @@ void renderScene(void) {
             break;
 
         case DIRECTION_W:
+        default:
             renderCameraWest();
             break;
     }
@@ -1140,6 +1114,7 @@ void dropItem(void) {
                 break;
 
             case 3:
+            default:
                 item->position.x = pos->x - 3;
                 item->position.y = pos->y;
                 break;
@@ -1290,9 +1265,8 @@ void tickRenderer(void) {
     uint16_t prevZ;
     struct WorldPosition *pos;
     int previousLocation = playerLocation;
-    uint16_t newCell = 0;
+    uint16_t newCell;
 
-    clearGraphics();
     renderScene();
 
     graphicsFlush();
@@ -1384,6 +1358,7 @@ void tickRenderer(void) {
             newCell = map[cameraZ + 2][cameraX];
             break;
         case 3:
+        default:
             newCell = map[cameraZ][cameraX - 2];
             break;
     }
@@ -1421,7 +1396,6 @@ void tickRenderer(void) {
     }
 }
 
-
 void onError(const char *mesg) {
     puts(mesg);
 }
@@ -1430,6 +1404,35 @@ void logDelegate(const char *mesg) {
     showMessage(mesg);
 }
 
+void Crawler_initStateCallback(uint32_t tag) {
+    running = 1;
+    enteredFrom = 0;
+    cameraRotation = 0;
+
+    for (int c = 0; c < 32; ++c) {
+        map[c] = (uint8_t *) allocMem(32, GENERAL_MEMORY, 1);
+    }
+
+    initStation();
+    focusedItem = getPlayerItems();
+    initMap();
+}
+
+void Crawler_initialPaintCallback(void) {
+}
+
+
+void Crawler_repaintCallback(void) {
+    tickRenderer();
+}
+
+int Crawler_tickCallback(int cmd, long delta) {
+    return -1;
+}
+
+void Crawler_unloadStateCallback(int newState) {
+    shutdownGraphics();
+}
 
 #ifdef ATARIST
 int doMain(void);
@@ -1444,29 +1447,23 @@ int doMain(void) {
 
 int main(int argc, char **argv) {
 #endif
-
-    for (int c = 0; c < 32; ++c) {
-        map[c] = (uint8_t *) allocMem(32, GENERAL_MEMORY, 1);
-    }
-
-    running = 1;
-    enteredFrom = 0;
-    cameraRotation = 0;
-    initFileReader("base.pfs");
-    init();
-    initStation();
-    titleScreen();
-
-    focusedItem = getPlayerItems();
     setErrorHandlerCallback(onError);
     setLoggerDelegate(logDelegate);
-    initMap();
+    initFileReader("base.pfs");
+    init();
+
+    
+
+
+    Crawler_initStateCallback(0);
+    Crawler_initialPaintCallback();
 
     do {
-        tickRenderer();
+        Crawler_tickCallback(0, 0);
+        Crawler_repaintCallback();
     } while (running);
 
-    shutdownGraphics();
+    Crawler_unloadStateCallback(0);
 
     return 0;
 }

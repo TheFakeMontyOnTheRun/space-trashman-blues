@@ -1,16 +1,17 @@
 /*
    Created by Daniel Monteiro on 10/02/2023.
 */
-#include <stdio.h>
-#include <stdlib.h>
 #include <stdint.h>
 
 #ifndef SMD
+#include <stdio.h>
+#include <stdlib.h>
 
 #include <assert.h>
 #include <string.h>
 
 #else
+typedef unsigned int size_t;
 #define assert(x) x
 #define exit(x) /* x */
 #endif

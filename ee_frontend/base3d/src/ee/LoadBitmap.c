@@ -22,9 +22,34 @@
 #include "FixP.h"
 #include "VisibilityStrategy.h"
 
+#include <kernel.h>
+#include <malloc.h>
+#include <tamtypes.h>
+#include <math3d.h>
+#include <packet.h>
+#include <dma_tags.h>
+#include <gif_tags.h>
+#include <gs_psm.h>
+#include <dma.h>
+#include <graph.h>
+#include <draw.h>
+#include <draw3d.h>
+#include <tamtypes.h>
+#include <kernel.h>
+#include <sifrpc.h>
+#include <loadfile.h>
+
+
 extern qword_t *_q;
 
+struct Bitmap *lastBoundBitmap = NULL;
+
 void bindTexture(struct Bitmap *bitmap) {
+
+    if (bitmap == lastBoundBitmap) {
+        return;
+    }
+
     qword_t *q = _q;
 
     // Using a texture involves setting up a lot of information.
@@ -39,10 +64,10 @@ void bindTexture(struct Bitmap *bitmap) {
     lod.l = 0;
     lod.k = 0;
 
-    bitmap->nativeBuffer->info.width = draw_log2(bitmap->width);
-    bitmap->nativeBuffer->info.height = draw_log2(bitmap->height);
-    bitmap->nativeBuffer->info.components = TEXTURE_COMPONENTS_RGBA;
-    bitmap->nativeBuffer->info.function = TEXTURE_FUNCTION_MODULATE;
+    ((texbuffer_t *) bitmap->nativeBuffer)->info.width = draw_log2(bitmap->width);
+    ((texbuffer_t *) bitmap->nativeBuffer)->info.height = draw_log2(bitmap->height);
+    ((texbuffer_t *) bitmap->nativeBuffer)->info.components = TEXTURE_COMPONENTS_RGBA;
+    ((texbuffer_t *) bitmap->nativeBuffer)->info.function = TEXTURE_FUNCTION_MODULATE;
 
     clut.storage_mode = CLUT_STORAGE_MODE1;
     clut.start = 0;
@@ -60,9 +85,10 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 
 
     bitmap->nativeBuffer = (texbuffer_t *) calloc(1, sizeof(texbuffer_t));
-    bitmap->nativeBuffer->width = bitmap->width;
-    bitmap->nativeBuffer->psm = GS_PSM_32;
-    bitmap->nativeBuffer->address = graph_vram_allocate(bitmap->width, bitmap->height, GS_PSM_32, GRAPH_ALIGN_BLOCK);
+    ((texbuffer_t *) bitmap->nativeBuffer)->width = bitmap->width;
+    ((texbuffer_t *) bitmap->nativeBuffer)->psm = GS_PSM_32;
+    ((texbuffer_t *) bitmap->nativeBuffer)->address = graph_vram_allocate(bitmap->width, bitmap->height, GS_PSM_32,
+                                                                          GRAPH_ALIGN_BLOCK);
 
     packet_t *packet = packet_init(50, PACKET_NORMAL);
 
@@ -70,8 +96,9 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 
     q = packet->data;
 
-    q = draw_texture_transfer(q, bitmap->data, bitmap->width, bitmap->height, GS_PSM_32, bitmap->nativeBuffer->address,
-                              bitmap->nativeBuffer->width);
+    q = draw_texture_transfer(q, bitmap->data, bitmap->width, bitmap->height, GS_PSM_32,
+                              ((texbuffer_t *) bitmap->nativeBuffer)->address,
+                              ((texbuffer_t *) bitmap->nativeBuffer)->width);
     q = draw_texture_flush(q);
     FlushCache(0);
     dma_channel_send_chain(DMA_CHANNEL_GIF, packet->data, q - packet->data, 0, 0);
@@ -151,8 +178,8 @@ void releaseBitmap(struct Bitmap *ptr) {
     assert(ptr != NULL);
 
     if (ptr->nativeBuffer != NULL) {
-        graph_vram_free(ptr->nativeBuffer->address);
-        disposeMem(ptr->nativeBuffer);
+        graph_vram_free(((texbuffer_t *) ptr->nativeBuffer)->address);
+        disposeMem(((texbuffer_t *) ptr->nativeBuffer));
     }
 
     disposeMem(ptr->data);

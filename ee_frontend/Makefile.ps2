@@ -7,9 +7,9 @@ EE_CFLAGS += -Ibase3d/include        \
     -I../core/include \
     -I../common/include \
     -DPLAYSTATION2 \
-    -DINCLUDE_ITEM_DESCRIPTIONS -DENDIANESS_AWARE
+    -DINCLUDE_ITEM_DESCRIPTIONS -DENDIANESS_AWARE -DSHORT_VIEW_ANGLE
 
-EE_BIN = derelict128.elf
+EE_BIN = derelict_ee.elf
 
 EE_OBJS= menu/src/Main.o \
 	../common/src/FixP.o \
@@ -39,13 +39,14 @@ EE_OBJS= menu/src/Main.o \
         base3d/src/ee/LoadBitmap.o \
         base3d/src/ee/Renderer_Rasterization.o \
         base3d/src/ee/Renderer_Tesselation.o \
-        base3d/src/ee/Renderer.o \
+        base3d/src/Renderer.o \
         ../common/src/HackingMinigameRules.o \
         base3d/src/ee/EmotionEngineRenderer.o
 
 all: $(EE_BIN)
 
 clean:
+	rm -f $(EE_BIN)
 	rm -f menu/src/*.o
 	rm -f ../core/src/*.o
 	rm -f ../common/src/*.o

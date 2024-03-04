@@ -65,7 +65,9 @@ void dropItem(void);
 
 void initMap(void);
 
+#ifdef EMIT_QUIT_OPTION
 void shutdownGraphics(void);
+#endif
 
 enum ECommand getInput(void);
 

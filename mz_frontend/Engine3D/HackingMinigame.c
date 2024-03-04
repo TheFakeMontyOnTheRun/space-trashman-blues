@@ -2,13 +2,12 @@
 // Created by Daniel Monteiro on 2021-11-01.
 //
 #include <stdint.h>
-#include <stdlib.h>
-#include <stdio.h>
+#define NULL (0)
 
 #ifndef SMD
-
+#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
-
 #endif
 
 #include "Core.h"
@@ -16,8 +15,8 @@
 #include "Engine3D.h"
 #include "HackingMinigame.h"
 
-extern int accessGrantedToSafe;
-extern int cursorPosition;
+extern uint8_t accessGrantedToSafe;
+extern uint8_t cursorPosition;
 
 char *functionNames[5] = {
         "???",

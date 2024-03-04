@@ -159,7 +159,10 @@ void handleSystemEvents() {
                     visibilityCached = FALSE;
                     break;
                 case SDLK_k:
-                    visibilityCached = FALSE;
+                    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+                    break;
+                case SDLK_w:
+                    SDL_SetWindowFullscreen(window, 0);
                     break;
 
 

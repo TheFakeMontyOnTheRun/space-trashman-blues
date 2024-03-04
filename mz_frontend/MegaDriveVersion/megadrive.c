@@ -1,27 +1,34 @@
 #include <genesis.h>
 
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Engine3D.h"
 #include "Engine.h"
 
-void graphicsFlush();
+void graphicsFlush(void);
 
-void nextItemInHand();
+void nextItemInHand(void);
 
-void useItemInHand();
+void useItemInHand(void);
 
-void nextItemInRoom();
+void nextItemInRoom(void);
 
-void interactWithItemInRoom();
+void interactWithItemInRoom(void);
 
-void pickOrDrop();
+void pickOrDrop(void);
 
-void dropItem();
+void dropItem(void);
 
-void pickItem();
+void pickItem(void);
 
-void clearGraphics();
+void clearGraphics(void);
+
+void renderScene(void);
+
+void enterTextMode(void);
+
+void exitTextMode(void);
 
 
 extern int8_t map[32][32];
@@ -48,7 +55,6 @@ char *menuItems[] = {
 };
 
 void refreshJustGraphics() {
-    clearGraphics();
     renderScene();
     graphicsFlush();
 }
@@ -60,7 +66,6 @@ void backToGraphics() {
 }
 
 void performAction() {
-    struct Room *room = getRoom(getPlayerRoom());
 
     switch (getGameStatus()) {
         case kBadVictory:
@@ -306,7 +311,7 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
     if (colour < 16) {
         colour += (colour << 4); //double the pixel
 
-        for (int x = _x0; x <= _x1; ++x) {
+        for (int16_t x = _x0; x <= _x1; ++x) {
             BMP_setPixelFast(x, 16 + y, colour);
         }
     } else {
@@ -314,7 +319,7 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
         colour += (colour << 4); //double the pixel
         int16_t stipple = ((x0 + y) & 1);
 
-        for (int x = _x0; x <= _x1; ++x) {
+        for (int16_t x = _x0; x <= _x1; ++x) {
             stipple = ~stipple;
 
             if (stipple) {
@@ -432,6 +437,7 @@ void init() {
 
     DMA_setBufferSize(2048);
 
+    /* create virtual 256x160 framebuffer */
     BMP_init(TRUE, BG_B, PAL0, 1);
 
     PAL_setColor(0, RGB24_TO_VDPCOLOR(0x000000));
@@ -454,13 +460,9 @@ void init() {
 
 void graphicsFlush() {
     BMP_flip(1);
-    BMP_clear();
 }
 
 void HUD_initialPaint() {
-    struct Room *room = getRoom(getPlayerRoom());
-
-
     for (int16_t i = 0; i < 6; ++i) {
         writeStr(16, 13 + i, i == cursorPosition ? ">" : " ", 2, 0);
         writeStr(17, 13 + i, menuItems[i], 2, 0);

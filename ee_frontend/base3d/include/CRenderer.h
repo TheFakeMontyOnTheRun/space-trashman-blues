@@ -32,8 +32,13 @@
 #endif
 
 #define TOTAL_TEXTURES 64
+#ifdef PLAYSTATION2
 #define TRANSPARENCY_COLOR (0x00FF0000)
-#define VISIBILITY_CONE_NARROWING 6
+#else
+#define TRANSPARENCY_COLOR (0x00000000)
+#endif
+
+#define VISIBILITY_CONE_NARROWING MAP_SIZE
 #define MASK_LEFT 1
 #define MASK_FRONT 2
 #define MASK_RIGHT 4
@@ -98,7 +103,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame, uint8_t *pr
                     int scale200To240);
 #endif
 
-void fill(
+void fillRect(
         const int x, const int y,
         const size_t dx, const size_t dy,
         const FramebufferPixelFormat pixel, const uint8_t stipple);
@@ -242,9 +247,9 @@ int submitBitmapToGPU(struct Bitmap *bitmap);
 
 void initGL(void);
 
-void startFrameGL(int x, int y, int width, int height);
+void startFrame(int x, int y, int width, int height);
 
-void endFrameGL(void);
+void endFrame(void);
 
 extern struct MapWithCharKey occluders;
 extern struct MapWithCharKey colliders;
@@ -287,4 +292,25 @@ extern FixP_t divLut[320];
 
 extern int leanX;
 extern int leanY;
+
+struct VBORegister {
+    uint8_t vertexDataIndex;
+    uint8_t uvDataIndex;
+    uint8_t indicesIndex;
+    uint8_t indices;
+};
+
+void renderVBOAt(struct Bitmap *bitmap, struct VBORegister vbo,
+                 float x, float y, float z,
+                 int16_t rx, int16_t ry, int16_t rz,
+                 float scaleX, float scaleY,
+                 float u0, float v0,
+                 float u1, float v1,
+                 uint32_t tint,
+                 uint8_t repeatTextures);
+
+void checkGLError(const char *operation);
+
+void unloadTextures(void);
+
 #endif

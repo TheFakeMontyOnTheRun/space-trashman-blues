@@ -80,12 +80,10 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
 
         case kCommandFire1:
             useItemInHand();
-            updateMapItems();
             break;
 
         case kCommandFire2:
             interactWithItemInRoom();
-            updateMapItems();
             break;
 
         case kCommandFire3:
@@ -98,6 +96,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
         default:
             goto handle_directions;
     }
+    updateMapItems();
     needs3dRefresh = 1;
     HUD_refresh();
     return kResumeCurrentState;
@@ -216,21 +215,13 @@ void Crawler_repaintCallback(void) {
     }
 }
 
-void onError(const char *mesg) {
-    showMessage(mesg);
-}
-
-void logDelegate(const char *mesg) {
-    showMessage(mesg);
-}
-
 void Crawler_initStateCallback(enum EGameMenuState tag_unused) {
     enteredFrom = 0;
     cameraRotation = 0;
     initStation();
     focusedItem = getPlayerItems();
-    setErrorHandlerCallback(onError);
-    setLoggerDelegate(logDelegate);
+    setErrorHandlerCallback(showMessage);
+    setLoggerDelegate(showMessage);
     initMap();
     needs3dRefresh = 1;
 }

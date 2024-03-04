@@ -75,28 +75,35 @@ const enum EGameMenuState MainMenu_nextStateNavigation[3] = {
 #define kMainMenuOptionsCount 3
 #endif
 
-extern size_t biggestOption;
 extern int8_t cursorPosition;
 
 void MainMenu_initStateCallback(enum EGameMenuState tag) {
     cursorPosition = 0;
-    biggestOption = 9;
 }
 
 void MainMenu_initialPaintCallback() {
     clearScreen();
-}
-
-void MainMenu_repaintCallback(void) {
     drawGraphic(shapes);
 
     drawWindowWithOptions(
-            (XRES_FRAMEBUFFER / 8) - (int) biggestOption - 3,
+            (XRES_FRAMEBUFFER / 8) - (int) 9 - 3,
             (YRES_FRAMEBUFFER / 8) - 3 - kMainMenuOptionsCount,
-            biggestOption + 2,
+            9 + 2,
             kMainMenuOptionsCount + 2,
             "Episode 0",
             MainMenu_options,
+            kMainMenuOptionsCount,
+            0xFF);
+}
+
+void MainMenu_repaintCallback(void) {
+    drawWindowWithOptions(
+            (XRES_FRAMEBUFFER / 8) - (int) 9 - 3,
+            (YRES_FRAMEBUFFER / 8) - 3 - kMainMenuOptionsCount,
+            9 + 2,
+            kMainMenuOptionsCount + 2,
+            "Episode 0",
+            NULL,
             kMainMenuOptionsCount,
             cursorPosition);
 }
