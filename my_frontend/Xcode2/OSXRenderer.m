@@ -117,7 +117,7 @@ enum ECommand getInput(void) {
 extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
-uint8_t updateDirection;
+uint8_t updateDirection = 0;
 
 uint8_t mBufferedCommand;
 uint32_t palette[16];
