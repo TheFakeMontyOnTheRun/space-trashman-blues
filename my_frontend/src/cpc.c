@@ -30,7 +30,7 @@ int getch(void);
 uint16_t heap = 0;
 
 enum ESoundDriver soundDriver = kNoSound;
-
+extern uint8_t firstFrameOnCurrentState;
 extern struct ObjectNode *focusedItem;
 
 extern struct ObjectNode *roomItem;
@@ -189,7 +189,8 @@ enum ECommand getInput(void) {
         case '1':
             if (waitForKey) {
                 waitForKey = 0;
-                HUD_initialPaint();
+                firstFrameOnCurrentState = 1;
+                needs3dRefresh = 1;
                 return kCommandNone;
             }
 

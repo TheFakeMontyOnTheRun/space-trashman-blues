@@ -139,7 +139,7 @@ drawWindowWithOptions(const uint8_t x,
                       const uint8_t selectedOption) {
     uint8_t c;
 
-    if (firstFrameOnCurrentState) {
+    if (firstFrameOnCurrentState || selectedOption == 0xFF) {
         drawWindow(x - 1,
                    y - 1,
                    dx + 1,
@@ -154,7 +154,7 @@ drawWindowWithOptions(const uint8_t x,
                    (selectedOption == c) ? ">" : " ",
                    1);
 
-        if (firstFrameOnCurrentState) {
+        if (firstFrameOnCurrentState || selectedOption == 0xFF) {
             drawTextAt(x + 1,
                        y + 2 + c,
                        &options[c][0],

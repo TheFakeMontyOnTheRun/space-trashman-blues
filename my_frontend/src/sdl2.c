@@ -14,6 +14,7 @@
 
 #include "SDL.h"
 
+extern uint8_t firstFrameOnCurrentState;
 extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
@@ -136,7 +137,8 @@ enum ECommand getInput(void) {
                 case SDLK_1:
                     if (waitForKey) {
                         waitForKey = 0;
-                        HUD_initialPaint();
+                        firstFrameOnCurrentState = 1;
+                        needs3dRefresh = 1;
                         return kCommandNone;
                     }
                     return kCommandFire1;

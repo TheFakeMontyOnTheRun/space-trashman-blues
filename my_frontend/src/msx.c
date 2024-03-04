@@ -19,7 +19,7 @@ uint8_t updateDirection;
 /* Sadly, I can't include conio.h - otherwise, I would get errors when building on OSX */
 int kbhit(void);
 int getch(void);
-
+extern uint8_t firstFrameOnCurrentState;
 enum ESoundDriver soundDriver = kNoSound;
 
 /*  Required since we have our own memory allocator abstraction */
@@ -63,7 +63,8 @@ enum ECommand getInput(void) {
         case '1':
             if (waitForKey) {
                 waitForKey = 0;
-                HUD_initialPaint();
+                firstFrameOnCurrentState = 1;
+                needs3dRefresh = 1;
                 return kCommandNone;
             }
             return kCommandFire1;

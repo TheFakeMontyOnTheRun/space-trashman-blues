@@ -21,6 +21,7 @@ uint16_t heap = 0;
 
 uint8_t cooldown;
 
+extern uint8_t firstFrameOnCurrentState;
 extern uint8_t waitForKey;
 
 uint8_t updateDirection;
@@ -86,7 +87,8 @@ enum ECommand getInput(void) {
 
             if (waitForKey) {
                 waitForKey = 0;
-                HUD_initialPaint();
+                firstFrameOnCurrentState = 1;
+                needs3dRefresh = 1;
                 return kCommandNone;
             }
 
@@ -104,7 +106,7 @@ enum ECommand getInput(void) {
                 cursorPosition = 0;
             }
 
-            HUD_refresh();
+            HUD_initialPaint();
             cooldown = COOLDOWN_MAX;
             return kCommandNone;
         } else {

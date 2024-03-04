@@ -1,6 +1,7 @@
 /*
    Created by monty on 01-10-2023.
 */
+#include <stdlib.h>
 #include <stdint.h>
 #include "Enums.h"
 #include "UI.h"
@@ -31,6 +32,33 @@ uint8_t needs3dRefresh;
 uint8_t roomTransitionAnimationStep = 0;
 #endif
 
+void HUD_refresh(void) {
+    uint8_t d, e;
+
+    writeStrWithLimit(1, YRES_TEXT - 7, "In room", 16, 2, 0);
+
+    if (roomItem != NULL) {
+        struct Item *item = getItem(roomItem->item);
+
+        if (item->active) {
+            writeStrWithLimit(1, YRES_TEXT - 6, "*", 16, 2, 0);
+        }
+
+        writeStrWithLimit(2, YRES_TEXT - 6, item->name, 16, 2, 0);
+    }
+
+    writeStrWithLimit(1, YRES_TEXT - 4, "In hand", 16, 2, 0);
+
+    if (focusedItem != NULL) {
+        struct Item *item = getItem(focusedItem->item);
+
+        if (item->active) {
+            drawTextAt(1, YRES_TEXT - 3, "*", 1);
+        }
+
+        writeStrWithLimit(2, YRES_TEXT - 3, item->name, 16, 2, 0);
+    }
+}
 
 enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
     uint8_t prevX;
@@ -107,7 +135,6 @@ handle_directions:
             walkBy(0);
             break;
         case kCommandNone:
-            needs3dRefresh = 0;
             return kResumeCurrentState;
     }
     needs3dRefresh = 1;
