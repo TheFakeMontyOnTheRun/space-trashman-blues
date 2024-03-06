@@ -617,7 +617,7 @@ void drawTriangle(const struct Vec3 pos1,
 
 }
 
-void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
+void drawMesh(struct Mesh *mesh, const struct Vec3 center) {
     int c;
     int count = mesh->triangleCount;
     FixP_t *vertexData = mesh->geometry;

@@ -109,7 +109,7 @@ void fillRect(
         const FramebufferPixelFormat pixel, const uint8_t stipple);
 
 
-void drawMesh(const struct Mesh *mesh, const struct Vec3 at);
+void drawMesh(struct Mesh *mesh, const struct Vec3 at);
 
 void renderRoomTransition(void);
 
@@ -297,7 +297,7 @@ struct VBORegister {
     uint8_t vertexDataIndex;
     uint8_t uvDataIndex;
     uint8_t indicesIndex;
-    uint8_t indices;
+    uint32_t indices;
 };
 
 void renderVBOAt(struct Bitmap *bitmap, struct VBORegister vbo,
