@@ -61,6 +61,11 @@ void loadMesh(struct Mesh *mesh, char *filename) {
     mesh->indexCount = (*(bufferHead++));
     mesh->indexCount += (*(bufferHead++)) << 8;
 
+    mesh->nativeVertexBuffer = NULL;
+    mesh->nativeTexCoordBuffer = NULL;
+    mesh->nativeIndicesBuffer = NULL;
+    mesh->nativeBuffer = NULL;
+
     mesh->vertices = allocMem(3 * mesh->indexCount * sizeof(FixP_t), GENERAL_MEMORY, 1);
     vecs = mesh->vertices;
 

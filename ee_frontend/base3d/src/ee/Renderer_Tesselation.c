@@ -821,13 +821,13 @@ void drawTriangle(const struct Vec3 pos1,
     }
 }
 
-void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
+void drawMesh(struct Mesh *mesh, const struct Vec3 center) {
     int c;
     int count = mesh->triangleCount;
     FixP_t *vertexData = mesh->geometry;
     uint8_t *uvData = mesh->uvCoords;
 
-    if (mesh->texture != NULL && (center.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM) {
+    if (/*mesh->texture != NULL && (center.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM*/TRUE) {
         for (c = 0; c < count; ++c) {
             struct Vec3 p1;
             struct Vec3 p2;
