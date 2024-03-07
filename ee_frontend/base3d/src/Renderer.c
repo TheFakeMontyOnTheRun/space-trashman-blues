@@ -505,6 +505,20 @@ void render(const long ms) {
                 heightDiff = tileProp->mCeilingHeight - tileProp->mFloorHeight;
                 lastElement = element;
 
+                if (element == 's') {
+                    struct Vec3 tmp;
+
+                    tmp.mX = position.mX;
+                    tmp.mY = position.mY;
+                    tmp.mZ = position.mZ;
+
+                    addToVec3(&tmp, 0,
+                              ((tileProp->mFloorHeight * 2) + heightDiff),
+                              0);
+
+                    drawMesh(&mesh, tmp, cameraDirection);
+                }
+
                 if (tileProp->mFloorRepeatedTextureIndex != 0xFF
                     && tileProp->mFloorRepetitions > 0) {
 
