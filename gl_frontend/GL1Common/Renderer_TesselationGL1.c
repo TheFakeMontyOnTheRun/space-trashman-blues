@@ -561,16 +561,16 @@ void drawRightNear(const struct Vec3 center,
     glTranslatef(0.0f, -centerY, 0.0f);
 }
 
-void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
+void drawMesh(const struct Mesh *mesh, const struct Vec3 center, enum EDirection rotation) {
     int c;
     int count = mesh->triangleCount;
     FixP_t *vertexData = mesh->geometry;
     uint8_t *uvData = mesh->uvCoords;
     float x, y, z;
 
-    x = fixToFloat(center.mX);
-    y = fixToFloat(center.mX);
-    z = -fixToFloat(center.mZ);
+    x = fixToFloat(center.mX + xCameraOffset);
+    y = fixToFloat(center.mY + yCameraOffset);
+    z = -fixToFloat(center.mZ + zCameraOffset);
 
     glTranslatef(x, y, z);
 
