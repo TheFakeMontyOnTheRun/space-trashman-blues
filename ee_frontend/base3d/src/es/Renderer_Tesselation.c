@@ -785,9 +785,9 @@ void drawTriangle(const struct Vec3 pos1,
 
 }
 
-void drawMesh(struct Mesh *mesh, const struct Vec3 center) {
-    int c;
-    int count = mesh->triangleCount;
+void drawMesh(struct Mesh *mesh, const struct Vec3 center, enum EDirection rotation) {
+    uint32_t c;
+    uint32_t count = mesh->triangleCount;
     FixP_t *vertexData = mesh->geometry;
     uint8_t *uvData = mesh->uvCoords;
 
@@ -859,7 +859,7 @@ void drawMesh(struct Mesh *mesh, const struct Vec3 center) {
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
 
-        renderVBOAt( mesh->texture->raw, *((struct VBORegister*)mesh->nativeBuffer), x, y, z, 0, 0, 0, 1.0f, 1.0f, NAN, 0, 1, 1,
+        renderVBOAt( mesh->texture->raw, *((struct VBORegister*)mesh->nativeBuffer), x, y, z, 0, (rotation * 90), 0, 1.0f, 1.0f, NAN, 0, 1, 1,
                     0xFFFFFFFF, 0);
 
     }

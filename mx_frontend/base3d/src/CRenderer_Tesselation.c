@@ -555,7 +555,7 @@ void drawLeftNear(const struct Vec3 center,
     }
 }
 
-void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
+void drawMesh(const struct Mesh *mesh, const struct Vec3 center, enum EDirection rotation) {
 
     int coords[6];
     int count = mesh->triangleCount;
