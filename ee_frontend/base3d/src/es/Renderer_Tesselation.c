@@ -859,7 +859,7 @@ void drawMesh(struct Mesh *mesh, const struct Vec3 center, enum EDirection rotat
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
 
-        renderVBOAt( mesh->texture->raw, *((struct VBORegister*)mesh->nativeBuffer), x, y, z, 0, (rotation * 90), 0, 1.0f, 1.0f, NAN, 0, 1, 1,
+        renderVBOAt( mesh->texture->raw, *((struct VBORegister*)mesh->nativeBuffer), x, y, z, 0, 360 - (rotation * 90), 0, 1.0f, 1.0f, NAN, 0, 1, 1,
                     0xFFFFFFFF, 0);
 
     }
