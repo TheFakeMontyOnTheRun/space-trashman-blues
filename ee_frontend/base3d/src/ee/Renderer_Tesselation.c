@@ -731,8 +731,6 @@ void drawTriangle(
     } else {
         qword_t *q;
         u64 *dw;
-        FixP_t acc;
-        FixP_t scaled;
 
         int points_count = 6;
 
@@ -740,20 +738,9 @@ void drawTriangle(
                 0, 1, 2
         };
 
-        float centerX;
-        float centerY;
-        float centerZ;
-
         float vx1, vy1, vz1, u1, v1;
         float vx2, vy2, vz2, u2, v2;
         float vx3, vy3, vz3, u3, v3;
-
-
-        acc = center.mY + playerHeight + walkingBias + yCameraOffset;
-        scaled = Mul(acc, BIAS);
-        centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
-        centerX = GEOMETRY_SCALE_X * (fixToInt(Mul(center.mX + xCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
-        centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 
         u1 = 1.0f - (uv1.x) / 16.0f;
         v1 = 1.0f - ((uv1.y) / 16.0f);
@@ -772,7 +759,7 @@ void drawTriangle(
         vx3 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos3.mX);
         vy3 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos3.mY);
         vz3 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos3.mZ);
-
+        float centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
         float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
 
         bindTexture(texture->raw);
@@ -783,12 +770,6 @@ void drawTriangle(
                 {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
         };
 
-        VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
-        VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
-
-        create_local_world(local_world, object_position, object_rotation);
-
-        create_local_screen(local_screen, local_world, world_view, view_screen);
 
         q = _q;
 
@@ -842,6 +823,25 @@ void drawMesh(struct Mesh *mesh, const struct Vec3 center, enum EDirection rotat
     int count = mesh->triangleCount;
     FixP_t *vertexData = mesh->geometry;
     uint8_t *uvData = mesh->uvCoords;
+    FixP_t acc;
+    FixP_t scaled;
+
+    float centerX;
+    float centerY;
+    float centerZ;
+
+    acc = center.mY + playerHeight + walkingBias + yCameraOffset;
+    scaled = Mul(acc, BIAS);
+    centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
+    centerX = GEOMETRY_SCALE_X * (fixToInt(Mul(center.mX + xCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
+    centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
+
+    VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
+    VECTOR object_rotation = {0.00f, (rotation * 90.00f) * (3.14159f / 180.0f), 0.00f, 1.00f};
+
+    create_local_world(local_world, object_position, object_rotation);
+
+    create_local_screen(local_screen, local_world, world_view, view_screen);
 
     if (mesh->texture != NULL && (center.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM) {
         for (c = 0; c < count; ++c) {
