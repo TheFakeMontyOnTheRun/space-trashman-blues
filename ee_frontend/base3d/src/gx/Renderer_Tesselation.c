@@ -628,12 +628,11 @@ void drawTriangle(
     float vx2, vy2, vz2, u2, v2;
     float vx3, vy3, vz3, u3, v3;
 
-
     acc = center.mY + playerHeight + walkingBias + yCameraOffset;
     scaled = Mul(acc, BIAS);
     centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
-    centerX = GEOMETRY_SCALE_X * (fixToInt(Mul(center.mX + xCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
-    centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
+    centerX = GEOMETRY_SCALE_X * (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
+    centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
 
     u1 = 1.0f - (uv1.x) / 16.0f;
     v1 = 1.0f - ((uv1.y) / 16.0f);
@@ -682,10 +681,21 @@ void drawTriangle(
 void drawMesh(struct Mesh *mesh, const struct Vec3 center, enum EDirection rotation) {
     int c;
     int count = mesh->triangleCount;
+    struct Vec3 origin;
     FixP_t *vertexData = mesh->geometry;
     uint8_t *uvData = mesh->uvCoords;
 
+    origin.mX = origin.mY = origin.mZ = 0;
+
     if (/*mesh->texture != NULL && (center.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM*/ TRUE) {
+        guVector up = {0.0F, 1.0F, 0.0F};
+        guMtxIdentity(model);
+        guMtxRotAxisDeg(model, &up, rotation * 90);
+        guMtxTransApply(model, model, fixToFloat(center.mX + xCameraOffset), fixToFloat(center.mY), -fixToFloat(center.mZ + zCameraOffset));
+        guMtxConcat(view, model, modelview);
+        GX_LoadPosMtxImm(modelview, GX_PNMTX3);
+        GX_SetCurrentMtx(GX_PNMTX3);
+
         for (c = 0; c < count; ++c) {
             struct Vec3 p1;
             struct Vec3 p2;
@@ -712,9 +722,15 @@ void drawMesh(struct Mesh *mesh, const struct Vec3 center, enum EDirection rotat
             p3.mY = *(vertexData + 7);
             p3.mZ = *(vertexData + 8);
 
-            drawTriangle( center,p1, uv1, p2, uv2, p3, uv3, mesh->texture, 0);
+            drawTriangle( origin,p1, uv1, p2, uv2, p3, uv3, mesh->texture, 0);
 
             vertexData += 9;
         }
+
+        guMtxIdentity(model);
+        guMtxTransApply(model, model, 0.0f, 0.0f, -0.8f);
+        guMtxConcat(view, model, modelview);
+        GX_LoadPosMtxImm(modelview, GX_PNMTX3);
+        GX_SetCurrentMtx(GX_PNMTX3);
     }
 }
