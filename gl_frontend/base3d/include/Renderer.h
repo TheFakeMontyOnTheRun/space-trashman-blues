@@ -94,7 +94,7 @@ void fillRect(
         const FramebufferPixelFormat pixel, const uint8_t stipple);
 
 
-void drawMesh(const struct Mesh *mesh, const struct Vec3 at);
+void drawMesh(const struct Mesh *mesh, const struct Vec3 at, enum EDirection rotation);
 
 void renderRoomTransition(void);
 

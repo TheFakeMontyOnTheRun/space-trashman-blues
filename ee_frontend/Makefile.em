@@ -59,5 +59,3 @@ dist: $(TARGET)
 
 clean:
 	rm -f $(OBJS) $(TARGET) dist.zip index.html index.data index.js index.wasm
-	rm *~
-	rm *.js
