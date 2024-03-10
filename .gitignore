@@ -228,3 +228,4 @@ font.font64
 IDEWorkspaceChecks.plist
 gl_frontend/derelict.elf
 gl_frontend/derelict.nds
+filesystem
