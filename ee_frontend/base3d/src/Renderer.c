@@ -22,7 +22,6 @@
 #include "UI.h"
 #include "Engine.h"
 
-struct Mesh mesh;
 int visibilityCached = FALSE;
 int needsToRedrawVisibleMeshes = TRUE;
 uint8_t texturesUsed = 0;
@@ -38,6 +37,7 @@ enum EDirection cameraDirection;
 struct Vec3 mCamera;
 long gameTicks = 0;
 struct MapWithCharKey tileProperties;
+struct MapWithCharKey customMeshes;
 struct Vec2i cameraPosition;
 enum ECommand mBufferedCommand = kCommandNone;
 struct Texture *itemSprites[TOTAL_ITEMS];
@@ -74,12 +74,13 @@ void loadTileProperties(const uint8_t levelNumber) {
     setLoggerDelegate(printMessageTo3DView);
 
     clearMap(&tileProperties);
+    clearMap(&customMeshes);
     clearMap(&occluders);
     clearMap(&colliders);
 
     sprintf(buffer, "props%d.bin", levelNumber);
     struct StaticBuffer data = loadBinaryFileFromPath(buffer);
-    loadPropertyList(&buffer[0], &tileProperties);
+    loadPropertyList(&buffer[0], &tileProperties, &customMeshes);
 
     for (c = 0; c < 256; ++c) {
         struct CTile3DProperties *prop =
@@ -130,8 +131,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 
     /* tmp */
     playerHeight = -intToFix(1);
-
-    loadMesh(&mesh, "fighter.mdl");
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -504,20 +503,6 @@ void render(const long ms) {
 
                 heightDiff = tileProp->mCeilingHeight - tileProp->mFloorHeight;
                 lastElement = element;
-
-                if (element == 's') {
-                    struct Vec3 tmp;
-
-                    tmp.mX = position.mX;
-                    tmp.mY = position.mY;
-                    tmp.mZ = position.mZ;
-
-                    addToVec3(&tmp, 0,
-                              ((tileProp->mFloorHeight * 2) + heightDiff),
-                              0);
-
-                    drawMesh(&mesh, tmp, cameraDirection);
-                }
 
                 if (tileProp->mFloorRepeatedTextureIndex != 0xFF
                     && tileProp->mFloorRepetitions > 0) {
@@ -896,6 +881,19 @@ void render(const long ms) {
                         default:
                             break;
                     }
+                }
+
+                if (tileProp->mGeometryType >= kCustomMeshStart) {
+
+                    tmp.mX = position.mX;
+                    tmp.mY = position.mY;
+                    tmp.mZ = position.mZ;
+
+                    addToVec3(&tmp, 0,
+                              ((tileProp->mFloorHeight * 2) + heightDiff),
+                              0);
+
+                    drawMesh((struct Mesh*)getFromMap(&customMeshes, tileProp->mGeometryType), tmp, cameraDirection);
                 }
 
                 if (itemsSnapshotElement != 0xFF) {
