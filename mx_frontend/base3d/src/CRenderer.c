@@ -48,7 +48,6 @@ struct MapWithCharKey occluders;
 struct MapWithCharKey colliders;
 struct MapWithCharKey enemySightBlockers;
 struct Bitmap *defaultFont;
-struct Mesh mesh;
 extern int needsToRedrawHUD;
 int enable3DRendering = TRUE;
 
@@ -72,6 +71,7 @@ const int distanceForPenumbra = 8;
 #endif
 struct Bitmap *mapTopLevel = NULL;
 struct MapWithCharKey tileProperties;
+struct MapWithCharKey customMeshes;
 struct Vec2i cameraPosition;
 uint8_t texturesUsed = 0;
 enum ECommand mBufferedCommand = kCommandNone;
@@ -115,13 +115,15 @@ void loadTileProperties(const uint8_t levelNumber) {
 
     setLoggerDelegate(printMessageTo3DView);
 
+    clearMap(&tileProperties);
+    clearMap(&customMeshes);
     clearMap(&occluders);
     clearMap(&colliders);
     clearMap(&enemySightBlockers);
     sprintf (buffer, "props%d.bin", levelNumber);
 
     data = loadBinaryFileFromPath(buffer);
-    loadPropertyList(&buffer[0], &tileProperties);
+    loadPropertyList(&buffer[0], &tileProperties, &customMeshes);
 
     for (c = 0; c < 256; ++c) {
         struct CTile3DProperties *prop =
@@ -182,8 +184,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     /* tmp */
     playerHeight = 0;
     playerHeightChangeRate = 0;
-
-    loadMesh(&mesh, "fighter.mdl");
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -561,20 +561,6 @@ void render(const long ms) {
                 heightDiff = tileProp->mCeilingHeight - tileProp->mFloorHeight;
                 lastElement = element;
 
-                if (element == 's') {
-                    struct Vec3 tmp;
-
-                    tmp.mX = position.mX;
-                    tmp.mY = position.mY;
-                    tmp.mZ = position.mZ;
-
-                    addToVec3(&tmp, 0,
-                              ((tileProp->mFloorHeight * 2) + heightDiff),
-                              0);
-
-                    drawMesh(&mesh, tmp, cameraDirection);
-                }
-
                 tmp.mX = tmp2.mX = position.mX;
                 tmp.mZ = tmp2.mZ = position.mZ;
 
@@ -839,6 +825,18 @@ void render(const long ms) {
                     }
                 }
 
+                if (tileProp->mGeometryType >= kCustomMeshStart) {
+
+                    tmp.mX = position.mX;
+                    tmp.mY = position.mY;
+                    tmp.mZ = position.mZ;
+
+                    addToVec3(&tmp, 0,
+                              ((tileProp->mFloorHeight * 2) + heightDiff),
+                              0);
+
+                    drawMesh((struct Mesh*)getFromMap(&customMeshes, tileProp->mGeometryType), tmp, cameraDirection);
+                }
 
                 if (itemsSnapshotElement != 0xFF) {
                     tmp.mY = position.mY + (tileProp->mFloorHeight * 2) + intToFix(1);

@@ -8,7 +8,10 @@ textureList = []
 textureIndices = {
     "null": 0xFF
 }
+
 tilesProperties = {}
+
+customMeshes = {}
 
 geometryIndex = {
     "null": 0,
@@ -77,6 +80,12 @@ def dumpProps(path):
             writeByte(f, textureIndices[prp.ceilingTexture.replace(".img", "")])
             writeByte(f, textureIndices[prp.floorTexture.replace(".img", "")])
             writeByte(f, textureIndices[prp.mainTexture.replace(".img", "")])
+
+            if prp.geometryType not in geometryIndex.keys():
+                newIndex = len(geometryIndex)
+                geometryIndex[prp.geometryType] = newIndex
+                customMeshes[prp.geometryType] = newIndex
+
             writeByte(f, geometryIndex[prp.geometryType])
             writeByte(f, textureIndices[
                 prp.ceilingRepeatTexture.replace(".img", "")])
@@ -86,6 +95,13 @@ def dumpProps(path):
             writeByte(f, prp.floorRepeats)
             writeAsFixedPoint(f, prp.ceilingHeight)
             writeAsFixedPoint(f, prp.floorHeight)
+
+    if len(customMeshes) > 0:
+        f.write(bytearray([int(0), len(customMeshes)]))
+
+        for mesh in customMeshes:
+            f.write(bytearray([len(mesh)]))
+            f.write(mesh.encode())
 
 
 def parseLine(line):
@@ -215,6 +231,7 @@ def compileMap(sourcePath, textureListPath, mapPath, outputPath):
 if __name__ == "__main__":
     if len(sys.argv) == 1:
         for i in range(0, 24):
+            customMeshes = {}
             iAsString = str(i)
             compileMap("src/tiles" + iAsString + ".prp", "assets/tiles" +
                        iAsString + ".lst", "assets/map" + iAsString + ".txt",
