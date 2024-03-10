@@ -855,7 +855,9 @@ void drawMesh(struct Mesh *mesh, const struct Vec3 center, enum EDirection rotat
         *((struct VBORegister*)mesh->nativeBuffer) = submitVBO((float *) mesh->nativeVertexBuffer, mesh->nativeTexCoordBuffer, count * 3,
                                (unsigned short *) mesh->nativeIndicesBuffer, count * 3);
 
-    } else {
+    }
+
+    {
         float x = fixToFloat(center.mX);
         float y = fixToFloat(center.mY);
         float z = -fixToFloat(center.mZ);
