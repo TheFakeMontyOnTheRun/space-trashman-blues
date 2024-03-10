@@ -43,7 +43,7 @@
 
 #include "CTile3DProperties.h"
 #include "LoadBitmap.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 #include "Engine.h"
 #include "VisibilityStrategy.h"

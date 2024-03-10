@@ -22,7 +22,7 @@
 #include "LoadBitmap.h"
 #include "CActor.h"
 #include "Mesh.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "UI.h"
 #include "SoundSystem.h"
 

@@ -23,7 +23,7 @@
 #include "MapWithCharKey.h"
 #include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 #define COOLDOWN 0x10
 int snapshotSignal = '.';

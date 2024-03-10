@@ -25,7 +25,7 @@
 #include "Engine.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 
 

@@ -17,7 +17,7 @@
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>

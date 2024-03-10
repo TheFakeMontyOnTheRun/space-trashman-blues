@@ -19,9 +19,9 @@ MENU_OBJ= menu/src/Main.o \
 	  ../common/src/Dungeon.o \
 	  ../common/src/Events.o \
 	  base3d/src/LoadBitmap.o \
-	  base3d/src/CRenderer.o \
-	  base3d/src/CRenderer_Rasterization.o \
-	  base3d/src/CRenderer_Tesselation.o \
+	  base3d/src/Renderer.o \
+	  base3d/src/RendererRasterization.o \
+	  base3d/src/RendererTesselation.o \
 	  ../common/src/GameMenu.o \
 	  ../common/src/MainMenu.o \
 	  ../common/src/Engine.o \

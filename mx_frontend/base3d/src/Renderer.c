@@ -21,7 +21,7 @@
 #include "Common.h"
 #include "LoadBitmap.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "Core.h"

@@ -29,7 +29,7 @@
 #include "Core.h"
 #include "Engine.h"
 #include "LoadBitmap.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 
 HACCEL hAccelTable;

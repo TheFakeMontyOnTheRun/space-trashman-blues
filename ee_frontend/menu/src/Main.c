@@ -23,7 +23,7 @@ long uclock(void) {
 #include "Core.h"
 #include "Engine.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "Derelict.h"

@@ -55,9 +55,9 @@ add_library( # Sets the name of the library.
         ../../../../../../common/src/UI.c
         ../../../../../../common/src/PCMAudio.c
         ../../../../../base3d/src/LoadBitmap.c
-        ../../../../../base3d/src/CRenderer.c
-        ../../../../../base3d/src/CRenderer_Rasterization.c
-        ../../../../../base3d/src/CRenderer_Tesselation.c
+        ../../../../../base3d/src/Renderer.c
+        ../../../../../base3d/src/RendererRasterization.c
+        ../../../../../base3d/src/RendererTesselation.c
         ../../../../../menu/src/Main.c
         native-lib.c)
 

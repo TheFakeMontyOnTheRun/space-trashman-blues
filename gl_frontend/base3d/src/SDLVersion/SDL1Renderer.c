@@ -15,7 +15,7 @@
 #include "MapWithCharKey.h"
 #include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 #ifdef __APPLE__
 

@@ -19,7 +19,7 @@
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 #define GL_GLEXT_PROTOTYPES
 

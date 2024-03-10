@@ -17,7 +17,7 @@
 #include "Mesh.h"
 #include "Engine.h"
 #include "Core.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "SoundSystem.h"
 
 const char **GameMenu_options;

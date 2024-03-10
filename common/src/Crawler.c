@@ -18,7 +18,7 @@
 #include "Engine.h"
 #include "CActor.h"
 #include "Mesh.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "Dungeon.h"
 #include "Common.h"
 #include "Core.h"

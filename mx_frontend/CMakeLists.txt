@@ -29,7 +29,7 @@ add_executable(derelict32
         ../common/src/Engine.c
         base3d/src/SDLVersion/CSDL2Renderer.c
         base3d/src/LoadBitmap.c
-        base3d/src/CRenderer.c
+        base3d/src/Renderer.c
         ../common/src/VisibilityStrategy.c
         ../common/src/Globals.c
         ../common/src/CTile3DProperties.c
@@ -42,8 +42,8 @@ add_executable(derelict32
         ../common/src/EDirection_Utils.c
         ../common/src/Dungeon.c
         ../common/src/Events.c
-        base3d/src/CRenderer_Rasterization.c
-        base3d/src/CRenderer_Tesselation.c
+        base3d/src/RendererRasterization.c
+        base3d/src/RendererTesselation.c
         ../common/src/NullMusic.c
         ../common/src/UI.c
         ../common/src/HackingScreen.c

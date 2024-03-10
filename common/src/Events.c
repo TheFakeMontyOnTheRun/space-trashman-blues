@@ -20,7 +20,7 @@
 #include "MapWithCharKey.h"
 #include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "PackedFileReader.h"
 #include "Dungeon.h"
 #include "Core.h"

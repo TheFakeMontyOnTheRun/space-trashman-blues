@@ -61,7 +61,7 @@ long uclock(void) {
 #include "Engine.h"
 #include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "Derelict.h"

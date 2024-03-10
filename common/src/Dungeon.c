@@ -28,7 +28,7 @@
    And it's not, but ISO requires. 
 */
 #include "Mesh.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 
 const char *focusItemName = NULL;

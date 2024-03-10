@@ -22,7 +22,7 @@
 #include "MapWithCharKey.h"
 #include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 int snapshotSignal = '.';
 rdpq_font_t *fnt1;

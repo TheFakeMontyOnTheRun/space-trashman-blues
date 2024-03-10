@@ -49,7 +49,7 @@
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 #define ANGLE_TURN_THRESHOLD 40
 #define ANGLE_TURN_STEP 5
