@@ -220,3 +220,9 @@ ee_frontend/.cmake
 ee_frontend/.ninja_*
 ee_frontend/Testing
 ee_frontend/build.ninja
+/tools/wobj-compiler/target/
+derelict.ram
+derelict64.z64
+gl_frontend/build
+font.font64
+filesystem

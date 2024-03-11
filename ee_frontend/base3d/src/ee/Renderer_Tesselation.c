@@ -118,6 +118,34 @@ struct Texture *makeTextureFrom(const char *filename) {
     return toReturn;
 }
 
+int isInsideFrustum(const struct Vec3 v, const struct Vec3 center) {
+    FixP_t acc = center.mY + playerHeight + walkingBias + yCameraOffset;
+    FixP_t scaled = Mul(acc, BIAS);
+    float centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
+    float centerX = GEOMETRY_SCALE_X * (fixToInt(Mul(center.mX + xCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
+    float centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
+
+    float x = centerX + GEOMETRY_SCALE_X * 0.5f * fixToFloat(v.mX);
+    float y = centerY -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(v.mY);
+    float z = centerZ + GEOMETRY_SCALE_Z * 0.5f * fixToFloat(v.mZ);
+
+    float threshold = (-8.0f + (z * 2.0f ));
+
+    if (x < threshold || x > -threshold) {
+        return 0;
+    }
+
+    if (y < threshold || y > -threshold) {
+        return 0;
+    }
+
+    if (z > 0.0f || z < -1024.0f) {
+        return 0;
+    }
+
+    return 1;
+}
+
 void drawQuad(
         const struct Vec3 center,
         const struct Vec3 pos1,
@@ -131,122 +159,134 @@ void drawQuad(
         const struct Texture *texture,
         const uint8_t enableAlpha) {
 
-    qword_t *q;
-    u64 *dw;
-    FixP_t acc;
-    FixP_t scaled;
-
-    int points_count = 6;
-
-    int points[6] = {
-            0, 1, 2,
-            1, 2, 3
-    };
-
-    float centerX;
-    float centerY;
-    float centerZ;
-
-    float vx1, vy1, vz1, u1, v1;
-    float vx2, vy2, vz2, u2, v2;
-    float vx3, vy3, vz3, u3, v3;
-    float vx4, vy4, vz4, u4, v4;
+    int allPointsInside = isInsideFrustum(pos1, center) &&
+            isInsideFrustum(pos2, center) &&
+            isInsideFrustum(pos3, center) &&
+            isInsideFrustum(pos4, center);
 
 
-    acc = center.mY + playerHeight + walkingBias + yCameraOffset;
-    scaled = Mul(acc, BIAS);
-    centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
-    centerX = GEOMETRY_SCALE_X * (fixToInt(Mul(center.mX + xCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
-    centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 
-    u1 = 1.0f - (uv1.x) / 16.0f;
-    v1 = 1.0f - ((uv1.y) / 16.0f);
-    vx1 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos1.mX);
-    vy1 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos1.mY);
-    vz1 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos1.mZ);
+    if (!allPointsInside) {
+        /* Eventually, clipping will go here, for partially visible quads */
+        return;
+    } else {
+        qword_t *q;
+        u64 *dw;
+        FixP_t acc;
+        FixP_t scaled;
 
-    u2 = 1.0f - (uv2.x) / 16.0f;
-    v2 = 1.0f - ((uv2.y) / 16.0f);
-    vx2 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos2.mX);
-    vy2 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos2.mY);
-    vz2 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos2.mZ);
+        int points_count = 6;
 
-    u3 = 1.0f - (uv3.x) / 16.0f;
-    v3 = 1.0f - ((uv3.y) / 16.0f);
-    vx3 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos3.mX);
-    vy3 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos3.mY);
-    vz3 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos3.mZ);
+        int points[6] = {
+                0, 1, 2,
+                1, 2, 3
+        };
 
-    u4 = 1.0f - (uv4.x) / 16.0f;
-    v4 = 1.0f - ((uv4.y) / 16.0f);
-    vx4 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos4.mX);
-    vy4 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos4.mY);
-    vz4 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos4.mZ);
+        float centerX;
+        float centerY;
+        float centerZ;
 
-    float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
+        float vx1, vy1, vz1, u1, v1;
+        float vx2, vy2, vz2, u2, v2;
+        float vx3, vy3, vz3, u3, v3;
+        float vx4, vy4, vz4, u4, v4;
 
-    bindTexture(texture->raw);
 
-    VECTOR colours[4] = {
-            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
-            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
-            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
-            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
-    };
+        acc = center.mY + playerHeight + walkingBias + yCameraOffset;
+        scaled = Mul(acc, BIAS);
+        centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
+        centerX = GEOMETRY_SCALE_X * (fixToInt(Mul(center.mX + xCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
+        centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
 
-    VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
-    VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+        u1 = 1.0f - (uv1.x) / 16.0f;
+        v1 = 1.0f - ((uv1.y) / 16.0f);
+        vx1 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos1.mX);
+        vy1 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos1.mY);
+        vz1 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos1.mZ);
 
-    create_local_world(local_world, object_position, object_rotation);
+        u2 = 1.0f - (uv2.x) / 16.0f;
+        v2 = 1.0f - ((uv2.y) / 16.0f);
+        vx2 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos2.mX);
+        vy2 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos2.mY);
+        vz2 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos2.mZ);
 
-    create_local_screen(local_screen, local_world, world_view, view_screen);
+        u3 = 1.0f - (uv3.x) / 16.0f;
+        v3 = 1.0f - ((uv3.y) / 16.0f);
+        vx3 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos3.mX);
+        vy3 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos3.mY);
+        vz3 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos3.mZ);
 
-    q = _q;
+        u4 = 1.0f - (uv4.x) / 16.0f;
+        v4 = 1.0f - ((uv4.y) / 16.0f);
+        vx4 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos4.mX);
+        vy4 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos4.mY);
+        vz4 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos4.mZ);
 
-    VECTOR vertices[4] = {
-            {vx1, vy1, vz1, 1.00f},
-            {vx2, vy2, vz2, 1.00f},
-            {vx3, vy3, vz3, 1.00f},
-            {vx4, vy4, vz4, 1.00f}
-    };
+        float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
 
-    // Calculate the vertex values.
-    calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
+        bindTexture(texture->raw);
 
-    VECTOR coordinates[4] = {
-            {u1, v1,            0, 0},
-            {u2, v2,            0, 0},
-            {u3, v3, 0, 0},
-            {u4, v4, 0, 0}
-    };
+        VECTOR colours[4] = {
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+        };
 
-    draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
+        VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
+        VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
 
-    // Convert floating point vertices to fixed point and translate to center of screen.
-    draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
+        create_local_world(local_world, object_position, object_rotation);
 
-    // Convert floating point colours to fixed point.
-    draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
+        create_local_screen(local_screen, local_world, world_view, view_screen);
 
-    // Draw the triangles using triangle primitive type.
-    dw = (u64 *) draw_prim_start(q, 0, &prim, &color);
+        q = _q;
 
-    for (int i = 0; i < points_count; i++) {
-        *dw++ = colors[points[i]].rgbaq;
-        *dw++ = st[points[i]].uv;
-        *dw++ = verts[points[i]].xyz;
+        VECTOR vertices[4] = {
+                {vx1, vy1, vz1, 1.00f},
+                {vx2, vy2, vz2, 1.00f},
+                {vx3, vy3, vz3, 1.00f},
+                {vx4, vy4, vz4, 1.00f}
+        };
+
+        // Calculate the vertex values.
+        calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
+
+        VECTOR coordinates[4] = {
+                {u1, v1, 0, 0},
+                {u2, v2, 0, 0},
+                {u3, v3, 0, 0},
+                {u4, v4, 0, 0}
+        };
+
+        draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
+
+        // Convert floating point vertices to fixed point and translate to center of screen.
+        draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
+
+        // Convert floating point colours to fixed point.
+        draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
+
+        // Draw the triangles using triangle primitive type.
+        dw = (u64 *) draw_prim_start(q, 0, &prim, &color);
+
+        for (int i = 0; i < points_count; i++) {
+            *dw++ = colors[points[i]].rgbaq;
+            *dw++ = st[points[i]].uv;
+            *dw++ = verts[points[i]].xyz;
+        }
+
+        // Check if we're in middle of a qword or not.
+        if ((u32) dw % 16) {
+            *dw++ = 0;
+        }
+
+        q = draw_prim_end((qword_t *) dw, 3, DRAW_STQ_REGLIST);
+
+        ++q;
+
+        _q = q;
     }
-
-    // Check if we're in middle of a qword or not.
-    if ((u32) dw % 16) {
-        *dw++ = 0;
-    }
-
-    q = draw_prim_end((qword_t *) dw, 3, DRAW_STQ_REGLIST);
-
-    ++q;
-
-    _q = q;
 }
 
 void drawRampAt(const struct Vec3 center0, const struct Vec3 center1,
@@ -347,7 +387,7 @@ void drawRampAt(const struct Vec3 center0, const struct Vec3 center1,
         center.mY = Div(center0.mY + center1.mY, intToFix(2));
         center.mZ = center0.mZ;
 
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
+        drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
     }
 }
 
@@ -381,7 +421,7 @@ void drawBillboardAt(const struct Vec3 center,
     p0.mY = p1.mY = geometryScale;
     p2.mY = p3.mY = -geometryScale;
 
-    drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, bitmap, 0);
+    drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, bitmap, 0);
 }
 
 void drawColumnAt(const struct Vec3 center,
@@ -420,12 +460,12 @@ void drawColumnAt(const struct Vec3 center,
 
     if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0) || (mask & MASK_FORCE_RIGHT)) {
         p2.mX = p3.mX = p0.mX = p1.mX = -intToFix(1);
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
+        drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
     }
 
     if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0) || (mask & MASK_FORCE_LEFT)) {
         p2.mX = p3.mX = p0.mX = p1.mX = intToFix(1);
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
+        drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
     }
 
     p0.mX = p2.mX = -intToFix(1);
@@ -433,12 +473,12 @@ void drawColumnAt(const struct Vec3 center,
 
     if ((mask & MASK_BEHIND)) {
         p2.mZ = p3.mZ = p0.mZ = p1.mZ = -intToFix(1);
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
+        drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
     }
 
     if ((mask & MASK_FRONT)) {
         p2.mZ = p3.mZ = p0.mZ = p1.mZ = intToFix(1);
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
+        drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, enableAlpha);
     }
 }
 
@@ -506,7 +546,7 @@ void drawFloorAt(const struct Vec3 center,
 
         p0.mY = p1.mY = p2.mY = p3.mY = 0;
 
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
+        drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
     }
 }
 
@@ -563,7 +603,7 @@ void drawCeilingAt(const struct Vec3 center,
                 uv3.x = 0;
                 uv3.y = 16;
             }
-            break;
+                break;
         }
 
         p0.mX = p2.mX = -intToFix(1);
@@ -574,7 +614,7 @@ void drawCeilingAt(const struct Vec3 center,
 
         p0.mY = p1.mY = p2.mY = p3.mY = 0;
 
-        drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
+        drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
     }
 }
 
@@ -621,7 +661,7 @@ void drawLeftNear(const struct Vec3 center,
     p0.mY = p1.mY = geometryScale;
     p2.mY = p3.mY = -geometryScale;
 
-    drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
+    drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
 }
 
 void drawRightNear(const struct Vec3 center,
@@ -666,113 +706,142 @@ void drawRightNear(const struct Vec3 center,
     p0.mY = p1.mY = geometryScale;
     p2.mY = p3.mY = -geometryScale;
 
-    drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
+    drawQuad(center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
 }
 
-void drawTriangle(const struct Vec3 pos1,
-                  const struct Vec2i uv1,
-                  const struct Vec3 pos2,
-                  const struct Vec2i uv2,
-                  const struct Vec3 pos3,
-                  const struct Vec2i uv3,
-                  const struct Texture *texture) {
+void drawTriangle(
+        const struct Vec3 center,
+        const struct Vec3 pos1,
+        const struct Vec2i uv1,
+        const struct Vec3 pos2,
+        const struct Vec2i uv2,
+        const struct Vec3 pos3,
+        const struct Vec2i uv3,
+        const struct Texture *texture,
+        const uint8_t enableAlpha) {
 
-    bindTexture(texture->raw);
+    int allPointsInside = isInsideFrustum(pos1, center) &&
+                          isInsideFrustum(pos2, center) &&
+                          isInsideFrustum(pos3, center);
 
-    float vx1, vy1, vz1, u1, v1;
-    float vx2, vy2, vz2, u2, v2;
-    float vx3, vy3, vz3, u3, v3;
 
-    int points_count = 3;
+    if (!allPointsInside) {
+        /* Eventually, clipping will go here, for partially visible quads */
+        return;
+    } else {
+        qword_t *q;
+        u64 *dw;
 
-    VECTOR object_position = {0, 0, 0, 1.00f};
-    VECTOR object_rotation = {0.00f, 0.00f, 0.00f, 1.00f};
+        int points_count = 6;
 
-    /* GS UVs go from 0..2, or so it seems */
-    u1 = 1.0f - (uv1.x) / 16.0f;
-    v1 = 1.0f - ((uv1.y) / 16.0f);
+        int points[3] = {
+                0, 1, 2
+        };
 
-    /* having the X coordinates being half the others is intentional */
-    vx1 = GEOMETRY_SCALE_X * 0.025f * fixToFloat(pos1.mX);
-    vy1 = -GEOMETRY_SCALE_Y * 0.05f * fixToFloat(pos1.mY);
-    vz1 = GEOMETRY_SCALE_Z * 0.05f * fixToFloat(pos1.mZ);
+        float vx1, vy1, vz1, u1, v1;
+        float vx2, vy2, vz2, u2, v2;
+        float vx3, vy3, vz3, u3, v3;
 
-    u2 = 1.0f - (uv2.x) / 16.0f;
-    v2 = 1.0f - ((uv2.y) / 16.0f);
-    vx2 = GEOMETRY_SCALE_X * 0.025f * fixToFloat(pos2.mX);
-    vy2 = -GEOMETRY_SCALE_Y * 0.05f * fixToFloat(pos2.mY);
-    vz2 = GEOMETRY_SCALE_Z * 0.05f * fixToFloat(pos2.mZ);
+        u1 = 1.0f - (uv1.x) / 16.0f;
+        v1 = 1.0f - ((uv1.y) / 16.0f);
+        vx1 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos1.mX);
+        vy1 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos1.mY);
+        vz1 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos1.mZ);
 
-    u3 = 1.0f - (uv3.x) / 16.0f;
-    v3 = 1.0f - ((uv3.y) / 16.0f);
-    vx3 = GEOMETRY_SCALE_X * 0.025f * fixToFloat(pos3.mX);
-    vy3 = -GEOMETRY_SCALE_Y * 0.05f * fixToFloat(pos3.mY);
-    vz3 = GEOMETRY_SCALE_Z * 0.05f * fixToFloat(pos3.mZ);
+        u2 = 1.0f - (uv2.x) / 16.0f;
+        v2 = 1.0f - ((uv2.y) / 16.0f);
+        vx2 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos2.mX);
+        vy2 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos2.mY);
+        vz2 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos2.mZ);
 
-    float centerZ = (vz1 + vz2 + vz3 ) / 3.0f;
-    float fogAttenuation =  1.0f; // centerZ / ((FOG_MAX_DISTANCE - fixToFloat(zCameraOffset)) * GEOMETRY_SCALE_Z * 0.05f );
+        u3 = 1.0f - (uv3.x) / 16.0f;
+        v3 = 1.0f - ((uv3.y) / 16.0f);
+        vx3 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos3.mX);
+        vy3 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos3.mY);
+        vz3 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos3.mZ);
+        float centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
+        float fogAttenuation = 1.0f - (1.0f - (centerZ / FOG_MAX_DISTANCE));
 
-    VECTOR colours[3] = {
-            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
-            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
-            {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
-    };
+        bindTexture(texture->raw);
 
-    VECTOR vertices[3] = {
-            {vx1, vy1, vz1, 1.00f},
-            {vx2, vy2, vz2, 1.00f},
-            {vx3, vy3, vz3, 1.00f},
-    };
+        VECTOR colours[3] = {
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+                {fogAttenuation, fogAttenuation, fogAttenuation, 1.00f},
+        };
 
-    VECTOR coordinates[3] = {
-            {u1, v1, 0, 0},
-            {u2, v2, 0, 0},
-            {u3, v3, 0, 0},
-    };
 
-    create_local_world(local_world, object_position, object_rotation);
+        q = _q;
 
-    create_local_screen(local_screen, local_world, world_view, view_screen);
+        VECTOR vertices[3] = {
+                {vx1, vy1, vz1, 1.00f},
+                {vx2, vy2, vz2, 1.00f},
+                {vx3, vy3, vz3, 1.00f}
+        };
 
-    // Calculate the vertex values.
-    calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
+        // Calculate the vertex values.
+        calculate_vertices(temp_vertices, vertex_count, vertices, local_screen);
 
-    draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
+        VECTOR coordinates[3] = {
+                {u1, v1, 0, 0},
+                {u2, v2, 0, 0},
+                {u3, v3, 0, 0}
+        };
 
-    // Convert floating point vertices to fixed point and translate to center of screen.
-    draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
+        draw_convert_st(st, vertex_count, (vertex_f_t *) temp_vertices, (texel_f_t *) coordinates);
 
-    // Convert floating point colours to fixed point.
-    draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
+        // Convert floating point vertices to fixed point and translate to center of screen.
+        draw_convert_xyz(verts, 2048, 2048, 2048, vertex_count, (vertex_f_t *) temp_vertices);
 
-    qword_t *q = _q;
-    u64 *dw;
+        // Convert floating point colours to fixed point.
+        draw_convert_rgbaq(colors, vertex_count, (vertex_f_t *) temp_vertices, (color_f_t *) colours);
 
-    // Draw the triangles using triangle primitive type.
-    dw = (u64 *) draw_prim_start(q, 0, &prim, &color);
+        // Draw the triangles using triangle primitive type.
+        dw = (u64 *) draw_prim_start(q, 0, &prim, &color);
 
-    for (int i = 0; i < points_count; i++) {
-        *dw++ = colors[i].rgbaq;
-        *dw++ = st[i].uv;
-        *dw++ = verts[i].xyz;
+        for (int i = 0; i < points_count; i++) {
+            *dw++ = colors[points[i]].rgbaq;
+            *dw++ = st[points[i]].uv;
+            *dw++ = verts[points[i]].xyz;
+        }
+
+        // Check if we're in middle of a qword or not.
+        if ((u32) dw % 16) {
+            *dw++ = 0;
+        }
+
+        q = draw_prim_end((qword_t *) dw, 3, DRAW_STQ_REGLIST);
+
+        ++q;
+
+        _q = q;
     }
-
-    // Check if we're in middle of a qword or not.
-    if ((u32) dw % 16) {
-        *dw++ = 0;
-    }
-
-    q = draw_prim_end((qword_t *) dw, 3, DRAW_STQ_REGLIST);
-
-    _q = q;
-
 }
 
-void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
+void drawMesh(struct Mesh *mesh, const struct Vec3 center, enum EDirection rotation) {
     int c;
     int count = mesh->triangleCount;
     FixP_t *vertexData = mesh->geometry;
     uint8_t *uvData = mesh->uvCoords;
+    FixP_t acc;
+    FixP_t scaled;
+
+    float centerX;
+    float centerY;
+    float centerZ;
+
+    acc = center.mY + playerHeight + walkingBias + yCameraOffset;
+    scaled = Mul(acc, BIAS);
+    centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
+    centerX = GEOMETRY_SCALE_X * (fixToInt(Mul(center.mX + xCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
+    centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ + zCameraOffset, BIAS)) * 0.5f * REVERSE_BIAS);
+
+    VECTOR object_position = {centerX, centerY, centerZ, 1.00f};
+    VECTOR object_rotation = {0.00f, (rotation * 90.00f) * (3.14159f / 180.0f), 0.00f, 1.00f};
+
+    create_local_world(local_world, object_position, object_rotation);
+
+    create_local_screen(local_screen, local_world, world_view, view_screen);
 
     if (mesh->texture != NULL && (center.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM) {
         for (c = 0; c < count; ++c) {
@@ -785,23 +854,23 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
 
             uv1.x = (*uvData++);
             uv1.y = (*uvData++);
-            p1.mX = center.mX + *(vertexData + 0);
-            p1.mY = center.mY + *(vertexData + 1);
-            p1.mZ = center.mZ + *(vertexData + 2);
+            p1.mX = *(vertexData + 0);
+            p1.mY = *(vertexData + 1);
+            p1.mZ = *(vertexData + 2);
 
             uv2.x = (*uvData++);
             uv2.y = (*uvData++);
-            p2.mX = center.mX + *(vertexData + 3);
-            p2.mY = center.mY + *(vertexData + 4);
-            p2.mZ = center.mZ + *(vertexData + 5);
+            p2.mX = *(vertexData + 3);
+            p2.mY = *(vertexData + 4);
+            p2.mZ = *(vertexData + 5);
 
             uv3.x = (*uvData++);
             uv3.y = (*uvData++);
-            p3.mX = center.mX + *(vertexData + 6);
-            p3.mY = center.mY + *(vertexData + 7);
-            p3.mZ = center.mZ + *(vertexData + 8);
+            p3.mX = *(vertexData + 6);
+            p3.mY = *(vertexData + 7);
+            p3.mZ = *(vertexData + 8);
 
-            drawTriangle(p1, uv1, p2, uv2, p3, uv3, mesh->texture);
+            drawTriangle( center,p1, uv1, p2, uv2, p3, uv3, mesh->texture, 0);
 
             vertexData += 9;
         }

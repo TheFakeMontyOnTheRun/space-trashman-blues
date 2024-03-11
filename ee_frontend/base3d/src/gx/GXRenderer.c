@@ -26,7 +26,9 @@
 #ifdef WII
 #include <wiiuse/wpad.h>
 #endif
-
+#define ANGLE_TURN_THRESHOLD 40
+#define ANGLE_TURN_STEP 5
+extern int turning;
 int snapshotSignal = '.';
 extern int needsToRedrawHUD;
 int enable3DRendering = TRUE;
@@ -142,12 +144,14 @@ void handleSystemEvents() {
 
     // Rotate left
     if (tpad < -8) {
-        mBufferedCommand = kCommandLeft;
+        turning = 1;
+        leanX = -ANGLE_TURN_STEP;
     }
 
     // Rotate right.
     if (tpad > 8) {
-        mBufferedCommand = kCommandRight;
+        turning = 1;
+        leanX = ANGLE_TURN_STEP;
     }
 
     // NOTE: walkbiasangle = head bob
@@ -163,7 +167,10 @@ void handleSystemEvents() {
         mBufferedCommand = kCommandDown;
     }
 
-    tpad = PAD_SubStickY(0);
+    if (!turning) {
+        leanX = PAD_SubStickX(0) / 5;
+        leanY = PAD_SubStickY(0) / 5;
+    }
 
     if ( PAD_ButtonsDown(0) & PAD_BUTTON_A) {
         mBufferedCommand = kCommandFire1;
@@ -187,11 +194,15 @@ void handleSystemEvents() {
     }
 
     if (WPAD_ButtonsDown(0) & WPAD_BUTTON_LEFT) {
-        mBufferedCommand = kCommandLeft;
+                            turning = 1;
+                    leanX = -ANGLE_TURN_STEP;
+
     }
 
     if (WPAD_ButtonsDown(0) & WPAD_BUTTON_RIGHT){
-        mBufferedCommand = kCommandRight;
+                    turning = 1;
+                    leanX = ANGLE_TURN_STEP;
+
     }
 
     if (WPAD_ButtonsDown(0) & WPAD_BUTTON_A) {
@@ -202,7 +213,6 @@ void handleSystemEvents() {
     if (WPAD_ButtonsDown(0) & WPAD_BUTTON_B) {
         mBufferedCommand = kCommandBack;
     }
-
 #endif
 }
 
@@ -210,14 +220,87 @@ void graphicsShutdown() {
     texturesUsed = 0;
 }
 
-void flipRenderer() {
-    GX_SetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
+
+extern GXRModeObj *rmode;
+extern Mtx model, modelview;
+extern Mtx view;
+extern Mtx44 perspective;
+guVector Yaxis = {0, 1, 0};
+guVector Xaxis = {1, 0, 0};
+
+
+void drawTriangle(const struct Vec3 pos1,
+                  const struct Vec2i uv1,
+                  const struct Vec3 pos2,
+                  const struct Vec2i uv2,
+                  const struct Vec3 pos3,
+                  const struct Vec2i uv3,
+                  const struct Texture *texture);
+
+uint32_t getPaletteEntry(const uint32_t origin) {
+    return (0x80 << 24) + (origin & 0x00FFFFFF);
+}
+
+void enter2D(void) {
+    guVector cam = {0.0F, 0.0F, 0.0F},
+            up = {0.0F, 1.0F, 0.0F},
+            look = {-0.0F, 0.0F, -1.0F};
+
+    guLookAt(view, &cam, &up, &look);
     guMtxIdentity(model);
     guMtxTransApply(model, model, 0.0f, 0.0f, -0.8f);
     guMtxConcat(view, model, modelview);
-
     GX_LoadPosMtxImm(modelview, GX_PNMTX3);
     GX_SetCurrentMtx(GX_PNMTX3);
+
+    f32 w = rmode->viWidth;
+    f32 h = rmode->viHeight;
+    guPerspective(perspective, 45, (f32) w / h, 0.1F, 1024.0F);
+    GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
+}
+
+void initGL() {
+    /* tmp */
+    memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
+}
+
+void clearRenderer() {
+}
+
+void startFrame(int x, int y, int width, int height) {
+    visibilityCached = FALSE;
+    needsToRedrawVisibleMeshes = FALSE;
+    enter2D();
+}
+
+void endFrame() {
+}
+
+void enter3D(void) {
+    float _leanX = 0.0f;
+    float _leanY = 0.0f;
+    _leanX = (leanX * 3.14159f * 0.25f) / ((float)ANGLE_TURN_THRESHOLD);
+    _leanY = (leanY * 3.14159f * 0.25f) / ((float)ANGLE_TURN_THRESHOLD);
+    f32 w = rmode->viWidth;
+    f32 h = rmode->viHeight;
+    guPerspective(perspective, 90, (f32) w / h, 0.1F, 256.0F);
+    GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
+
+    guVector cam = {0.0F, 0.0F, 0.0F},
+            up = {0.0F, 1.0F, 0.0F},
+            look = {_leanX, _leanY, -1.5F};
+
+    guLookAt(view, &cam, &up, &look);
+    guMtxIdentity(model);
+    guMtxTransApply(model, model, 0.0f, 0.0f, -0.8f);
+    guMtxConcat(view, model, modelview);
+    GX_LoadPosMtxImm(modelview, GX_PNMTX3);
+    GX_SetCurrentMtx(GX_PNMTX3);
+
+}
+
+void flipRenderer() {
+    GX_SetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
 
     GX_SetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GX_SetColorUpdate(GX_TRUE);

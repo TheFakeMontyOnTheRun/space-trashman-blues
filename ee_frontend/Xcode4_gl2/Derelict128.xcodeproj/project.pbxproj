@@ -16,7 +16,6 @@
 		F1293AF22B41C7D10094E02B /* Parser.c in Sources */ = {isa = PBXBuildFile; fileRef = F163BA0D2B3EF28900C03D9E /* Parser.c */; };
 		F1293AF32B41C7D60094E02B /* GLESCommon.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9E92B3EF25100C03D9E /* GLESCommon.c */; };
 		F1293AF42B41C7D60094E02B /* LoadBitmap.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EA2B3EF25100C03D9E /* LoadBitmap.c */; };
-		F1293AF52B41C7D60094E02B /* Renderer.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EB2B3EF25100C03D9E /* Renderer.c */; };
 		F1293AF62B41C7D60094E02B /* Renderer_Rasterization.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EC2B3EF25100C03D9E /* Renderer_Rasterization.c */; };
 		F1293AF72B41C7D60094E02B /* Renderer_Tesselation.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9ED2B3EF25100C03D9E /* Renderer_Tesselation.c */; };
 		F1293AF82B41C7DB0094E02B /* Common.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B98D2B3EF1A200C03D9E /* Common.c */; };
@@ -84,13 +83,17 @@
 		F163B9D92B3EF1A200C03D9E /* VisibilityStrategy.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9AF2B3EF1A200C03D9E /* VisibilityStrategy.c */; };
 		F163B9FA2B3EF25100C03D9E /* GLESCommon.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9E92B3EF25100C03D9E /* GLESCommon.c */; };
 		F163B9FB2B3EF25100C03D9E /* LoadBitmap.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EA2B3EF25100C03D9E /* LoadBitmap.c */; };
-		F163B9FC2B3EF25100C03D9E /* Renderer.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EB2B3EF25100C03D9E /* Renderer.c */; };
 		F163B9FD2B3EF25100C03D9E /* Renderer_Rasterization.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EC2B3EF25100C03D9E /* Renderer_Rasterization.c */; };
 		F163B9FE2B3EF25100C03D9E /* Renderer_Tesselation.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9ED2B3EF25100C03D9E /* Renderer_Tesselation.c */; };
 		F163BA0E2B3EF28900C03D9E /* Core.c in Sources */ = {isa = PBXBuildFile; fileRef = F163BA0A2B3EF28900C03D9E /* Core.c */; };
 		F163BA0F2B3EF28900C03D9E /* Derelict.c in Sources */ = {isa = PBXBuildFile; fileRef = F163BA0B2B3EF28900C03D9E /* Derelict.c */; };
 		F163BA112B3EF28900C03D9E /* Parser.c in Sources */ = {isa = PBXBuildFile; fileRef = F163BA0D2B3EF28900C03D9E /* Parser.c */; };
 		F163BA132B3EFA1E00C03D9E /* base.pfs in Resources */ = {isa = PBXBuildFile; fileRef = F163BA122B3EFA1E00C03D9E /* base.pfs */; };
+		F17FD5482B8A23B7002C0D45 /* Renderer.c in Sources */ = {isa = PBXBuildFile; fileRef = F17FD5472B8A23B7002C0D45 /* Renderer.c */; };
+		F17FD5492B8A23B7002C0D45 /* Renderer.c in Sources */ = {isa = PBXBuildFile; fileRef = F17FD5472B8A23B7002C0D45 /* Renderer.c */; };
+		F17FD54C2B8A2462002C0D45 /* Matrices.c in Sources */ = {isa = PBXBuildFile; fileRef = F17FD54B2B8A2462002C0D45 /* Matrices.c */; };
+		F17FD54D2B8A2462002C0D45 /* Matrices.c in Sources */ = {isa = PBXBuildFile; fileRef = F17FD54B2B8A2462002C0D45 /* Matrices.c */; };
+		F17FD54F2B8A26C3002C0D45 /* title_art.png in Resources */ = {isa = PBXBuildFile; fileRef = F17FD54E2B8A26C3002C0D45 /* title_art.png */; };
 		F1A2C9D92B3EF09700F2E1CA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A2C9D82B3EF09700F2E1CA /* UIKit.framework */; };
 		F1A2C9DB2B3EF09700F2E1CA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A2C9DA2B3EF09700F2E1CA /* Foundation.framework */; };
 		F1A2C9DD2B3EF09700F2E1CA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A2C9DC2B3EF09700F2E1CA /* CoreGraphics.framework */; };
@@ -176,7 +179,6 @@
 		F163B9E02B3EF25100C03D9E /* LoadBitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadBitmap.h; sourceTree = "<group>"; };
 		F163B9E92B3EF25100C03D9E /* GLESCommon.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GLESCommon.c; sourceTree = "<group>"; };
 		F163B9EA2B3EF25100C03D9E /* LoadBitmap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = LoadBitmap.c; sourceTree = "<group>"; };
-		F163B9EB2B3EF25100C03D9E /* Renderer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Renderer.c; sourceTree = "<group>"; };
 		F163B9EC2B3EF25100C03D9E /* Renderer_Rasterization.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Renderer_Rasterization.c; sourceTree = "<group>"; };
 		F163B9ED2B3EF25100C03D9E /* Renderer_Tesselation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Renderer_Tesselation.c; sourceTree = "<group>"; };
 		F163BA062B3EF28900C03D9E /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
@@ -186,6 +188,10 @@
 		F163BA0B2B3EF28900C03D9E /* Derelict.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Derelict.c; sourceTree = "<group>"; };
 		F163BA0D2B3EF28900C03D9E /* Parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Parser.c; sourceTree = "<group>"; };
 		F163BA122B3EFA1E00C03D9E /* base.pfs */ = {isa = PBXFileReference; lastKnownFileType = file; name = base.pfs; path = ../base.pfs; sourceTree = "<group>"; };
+		F17FD5472B8A23B7002C0D45 /* Renderer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Renderer.c; path = ../Renderer.c; sourceTree = "<group>"; };
+		F17FD54A2B8A23E7002C0D45 /* Matrices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Matrices.h; sourceTree = "<group>"; };
+		F17FD54B2B8A2462002C0D45 /* Matrices.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Matrices.c; sourceTree = "<group>"; };
+		F17FD54E2B8A26C3002C0D45 /* title_art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title_art.png; path = ../../art/title_art.png; sourceTree = "<group>"; };
 		F1A2C9D52B3EF09700F2E1CA /* Derelict128.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Derelict128.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1A2C9D82B3EF09700F2E1CA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F1A2C9DA2B3EF09700F2E1CA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -281,6 +287,7 @@
 		F163B96E2B3EF18600C03D9E /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				F17FD54E2B8A26C3002C0D45 /* title_art.png */,
 				F163BA122B3EFA1E00C03D9E /* base.pfs */,
 				F163BA052B3EF28900C03D9E /* include */,
 				F163BA092B3EF28900C03D9E /* src */,
@@ -298,6 +305,7 @@
 				F163B9712B3EF1A200C03D9E /* CActor.h */,
 				F163B9722B3EF1A200C03D9E /* Common.h */,
 				F163B9732B3EF1A200C03D9E /* controller.h */,
+				F17FD54A2B8A23E7002C0D45 /* Matrices.h */,
 				F163B9742B3EF1A200C03D9E /* CTile3DProperties.h */,
 				F163B9752B3EF1A200C03D9E /* Dungeon.h */,
 				F163B9762B3EF1A200C03D9E /* EDirection_Utils.h */,
@@ -327,6 +335,7 @@
 				F163B9912B3EF1A200C03D9E /* CreditsScreen.c */,
 				F163B9922B3EF1A200C03D9E /* CTile3DProperties.c */,
 				F163B9932B3EF1A200C03D9E /* Dungeon.c */,
+				F17FD54B2B8A2462002C0D45 /* Matrices.c */,
 				F163B9942B3EF1A200C03D9E /* EDirection_Utils.c */,
 				F163B9952B3EF1A200C03D9E /* Engine.c */,
 				F163B9962B3EF1A200C03D9E /* Events.c */,
@@ -372,9 +381,9 @@
 		F163B9E82B3EF25100C03D9E /* es */ = {
 			isa = PBXGroup;
 			children = (
+				F17FD5472B8A23B7002C0D45 /* Renderer.c */,
 				F163B9E92B3EF25100C03D9E /* GLESCommon.c */,
 				F163B9EA2B3EF25100C03D9E /* LoadBitmap.c */,
-				F163B9EB2B3EF25100C03D9E /* Renderer.c */,
 				F163B9EC2B3EF25100C03D9E /* Renderer_Rasterization.c */,
 				F163B9ED2B3EF25100C03D9E /* Renderer_Tesselation.c */,
 			);
@@ -540,6 +549,7 @@
 				F1293B3F2B41C9050094E02B /* ViewController_iPhone.xib in Resources */,
 				F1F3E1002B46E77E00D86751 /* TitleScreen_iPad.xib in Resources */,
 				F1F3E1022B46ED1200D86751 /* TitleScreen_iPhone.xib in Resources */,
+				F17FD54F2B8A26C3002C0D45 /* title_art.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -555,7 +565,6 @@
 				F1293AF22B41C7D10094E02B /* Parser.c in Sources */,
 				F1293AF32B41C7D60094E02B /* GLESCommon.c in Sources */,
 				F1293AF42B41C7D60094E02B /* LoadBitmap.c in Sources */,
-				F1293AF52B41C7D60094E02B /* Renderer.c in Sources */,
 				F1293AF62B41C7D60094E02B /* Renderer_Rasterization.c in Sources */,
 				F1293AF72B41C7D60094E02B /* Renderer_Tesselation.c in Sources */,
 				F1293AF82B41C7DB0094E02B /* Common.c in Sources */,
@@ -584,6 +593,8 @@
 				F1293B212B41C8CE0094E02B /* GameWindow.m in Sources */,
 				F1293B222B41C8CE0094E02B /* main.m in Sources */,
 				F1293B232B41C8CE0094E02B /* MyOpenGLView.m in Sources */,
+				F17FD5492B8A23B7002C0D45 /* Renderer.c in Sources */,
+				F17FD54D2B8A2462002C0D45 /* Matrices.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -614,7 +625,6 @@
 				F163B9D92B3EF1A200C03D9E /* VisibilityStrategy.c in Sources */,
 				F163B9FA2B3EF25100C03D9E /* GLESCommon.c in Sources */,
 				F163B9FB2B3EF25100C03D9E /* LoadBitmap.c in Sources */,
-				F163B9FC2B3EF25100C03D9E /* Renderer.c in Sources */,
 				F163B9FD2B3EF25100C03D9E /* Renderer_Rasterization.c in Sources */,
 				F163B9FE2B3EF25100C03D9E /* Renderer_Tesselation.c in Sources */,
 				F163BA0E2B3EF28900C03D9E /* Core.c in Sources */,
@@ -627,6 +637,8 @@
 				F1293B422B41C9050094E02B /* Shader.vsh in Sources */,
 				F1293B432B41C9050094E02B /* ViewController.m in Sources */,
 				F1F3E0FF2B46E77E00D86751 /* TitleScreen.m in Sources */,
+				F17FD5482B8A23B7002C0D45 /* Renderer.c in Sources */,
+				F17FD54C2B8A2462002C0D45 /* Matrices.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -700,6 +712,8 @@
 					INCLUDE_ITEM_DESCRIPTIONS,
 					TILED_BITMAPS,
 					ENDIANESS_AWARE,
+					"YRES_FRAMEBUFFER=200",
+					"XRES_FRAMEBUFFER=320",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Sub Mare Imperium Derelict (GL 2.1)/Derelict128-OSX-info.plist";
@@ -727,6 +741,8 @@
 					INCLUDE_ITEM_DESCRIPTIONS,
 					TILED_BITMAPS,
 					ENDIANESS_AWARE,
+					"YRES_FRAMEBUFFER=200",
+					"XRES_FRAMEBUFFER=320",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Sub Mare Imperium Derelict (GL 2.1)/Derelict128-OSX-info.plist";
@@ -814,6 +830,8 @@
 					INCLUDE_ITEM_DESCRIPTIONS,
 					TILED_BITMAPS,
 					ENDIANESS_AWARE,
+					"YRES_FRAMEBUFFER=200",
+					"XRES_FRAMEBUFFER=320",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Sub Mare Imperium Derelict (GL ES 2)/Derelict128-iOS-Info.plist";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
@@ -831,6 +849,8 @@
 					INCLUDE_ITEM_DESCRIPTIONS,
 					TILED_BITMAPS,
 					ENDIANESS_AWARE,
+					"YRES_FRAMEBUFFER=200",
+					"XRES_FRAMEBUFFER=320",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Sub Mare Imperium Derelict (GL ES 2)/Derelict128-iOS-Info.plist";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;

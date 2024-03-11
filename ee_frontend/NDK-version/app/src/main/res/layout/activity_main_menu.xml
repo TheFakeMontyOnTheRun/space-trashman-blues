@@ -5,15 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#222"
+	android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp"
     tools:context=".MainMenuActivity">
 
-    <Button
-        android:id="@+id/btnPlayGame"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Play game"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="#5FFF"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <Button
+            android:id="@+id/btnPlayGame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Play"
+            android:textColor="#795548" />
+
+        <Button
+            android:id="@+id/btnHelp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="22dp"
+            android:text="Help" />
+
+        <Switch
+            android:id="@+id/swEnableSound"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:text="Enable sound"
+            android:textColor="#FAFAFA" />
+    </LinearLayout>
+
 </LinearLayout>

@@ -22,9 +22,6 @@
 #include "UI.h"
 #include "Engine.h"
 
-#include <gccore.h>
-
-struct Mesh mesh;
 int visibilityCached = FALSE;
 int needsToRedrawVisibleMeshes = TRUE;
 uint8_t texturesUsed = 0;
@@ -40,6 +37,7 @@ enum EDirection cameraDirection;
 struct Vec3 mCamera;
 long gameTicks = 0;
 struct MapWithCharKey tileProperties;
+struct MapWithCharKey customMeshes;
 struct Vec2i cameraPosition;
 enum ECommand mBufferedCommand = kCommandNone;
 struct Texture *itemSprites[TOTAL_ITEMS];
@@ -48,7 +46,13 @@ int turnStep = 0;
 FixP_t xCameraOffset;
 FixP_t yCameraOffset;
 FixP_t zCameraOffset;
+
+#ifdef TILED_BITMAPS
+struct Bitmap *mapTopLevel[8];
+#else
 struct Bitmap *mapTopLevel;
+#endif
+
 char messageLogBuffer[256];
 
 int messageLogBufferCoolDown = 0;
@@ -57,89 +61,6 @@ void printMessageTo3DView(const char *message);
 
 enum EVisibility visMap[MAP_SIZE * MAP_SIZE];
 struct Vec2i distances[2 * MAP_SIZE * MAP_SIZE];
-
-
-extern GXRModeObj *rmode;
-extern Mtx model, modelview;
-extern Mtx view;
-extern Mtx44 perspective;
-guVector Yaxis = {0, 1, 0};
-guVector Xaxis = {1, 0, 0};
-
-
-void drawTriangle(const struct Vec3 pos1,
-                  const struct Vec2i uv1,
-                  const struct Vec3 pos2,
-                  const struct Vec2i uv2,
-                  const struct Vec3 pos3,
-                  const struct Vec2i uv3,
-                  const struct Texture *texture);
-
-uint32_t getPaletteEntry(const uint32_t origin) {
-    return (0x80 << 24) + (origin & 0x00FFFFFF);
-}
-
-void enter2D(void) {
-    guVector cam = {0.0F, 0.0F, 0.0F},
-            up = {0.0F, 1.0F, 0.0F},
-            look = {0.0F, 0.0F, -1.0F};
-
-    guLookAt(view, &cam, &up, &look);
-
-    f32 w = rmode->viWidth;
-    f32 h = rmode->viHeight;
-    guPerspective(perspective, 45, (f32) w / h, 0.1F, 1024.0F);
-    GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
-}
-
-void initGL() {
-    /* tmp */
-    memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
-}
-
-void clearRenderer() {
-}
-
-void startFrameGL(int x, int y, int width, int height) {
-    visibilityCached = FALSE;
-    needsToRedrawVisibleMeshes = FALSE;
-    enter2D();
-}
-
-void endFrameGL() {
-}
-
-void enter3D(void) {
-    float _leanX = 0.0f;
-    float _leanY = 0.0f;
-
-    if (leanX > 127) {
-        _leanX = -0.25f * ((leanX - 127) / 128.0f);
-    }
-
-    if (leanX < 127) {
-        _leanX = 0.25f * ((128 - leanX) / 127.0f);
-    }
-
-    if (leanY > 127) {
-        _leanY = -0.25f * ((leanY - 127) / 128.0f);
-    }
-
-    if (leanY < 127) {
-        _leanY = 0.25f * ((128 - leanY) / 127.0f);
-    }
-
-    guVector cam = {0.0F, 0.0F, 0.0F},
-            up = {0.0F, 1.0F, 0.0F},
-            look = {0.0F, 0.0F, -1.0F};
-
-    guLookAt(view, &cam, &up, &look);
-
-    f32 w = rmode->viWidth;
-    f32 h = rmode->viHeight;
-    guPerspective(perspective, 90, (f32) w / h, 0.1F, 256.0F);
-    GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
-}
 
 void printMessageTo3DView(const char *message) {
     strcpy(&messageLogBuffer[0], message);
@@ -153,12 +74,13 @@ void loadTileProperties(const uint8_t levelNumber) {
     setLoggerDelegate(printMessageTo3DView);
 
     clearMap(&tileProperties);
+    clearMap(&customMeshes);
     clearMap(&occluders);
     clearMap(&colliders);
 
     sprintf(buffer, "props%d.bin", levelNumber);
     struct StaticBuffer data = loadBinaryFileFromPath(buffer);
-    loadPropertyList(&buffer[0], &tileProperties);
+    loadPropertyList(&buffer[0], &tileProperties, &customMeshes);
 
     for (c = 0; c < 256; ++c) {
         struct CTile3DProperties *prop =
@@ -209,8 +131,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 
     /* tmp */
     playerHeight = -intToFix(1);
-
-    loadMesh(&mesh, "fighter.mdl");
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -285,8 +205,6 @@ void renderRoomTransition() {
 }
 
 void drawMap(const struct CActor *current) {
-
-    int8_t z, x;
     const struct Vec2i mapCamera = current->position;
     cameraDirection = current->rotation;
     hasSnapshot = TRUE;
@@ -381,8 +299,6 @@ void render(const long ms) {
     }
 
     if (needsToRedrawVisibleMeshes) {
-        char buffer[64];
-        char directions[4] = {'N', 'E', 'S', 'W'};
         struct Vec3 tmp;
         struct CTile3DProperties *tileProp;
         FixP_t heightDiff;
@@ -391,10 +307,9 @@ void render(const long ms) {
         uint8_t element = 0;
         struct Vec3 position;
         FixP_t tileHeight = 0;
-        int16_t x, y, z;
+        int16_t x, z;
         int distance;
         FixP_t cameraHeight;
-        int c;
         uint8_t facesMask;
 
         needsToRedrawVisibleMeshes = FALSE;
@@ -968,6 +883,19 @@ void render(const long ms) {
                     }
                 }
 
+                if (tileProp->mGeometryType >= kCustomMeshStart) {
+
+                    tmp.mX = position.mX;
+                    tmp.mY = position.mY;
+                    tmp.mZ = position.mZ;
+
+                    addToVec3(&tmp, 0,
+                              ((tileProp->mFloorHeight * 2) + heightDiff),
+                              0);
+
+                    drawMesh((struct Mesh*)getFromMap(&customMeshes, tileProp->mGeometryType), tmp, cameraDirection);
+                }
+
                 if (itemsSnapshotElement != 0xFF) {
                     tmp.mX = position.mX;
                     tmp.mY = position.mY;
@@ -1024,5 +952,6 @@ void render(const long ms) {
         }
 
         redrawHUD();
+        updateMap();
     }
 }

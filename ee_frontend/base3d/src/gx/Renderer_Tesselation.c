@@ -606,24 +606,96 @@ void drawRightNear(const struct Vec3 center,
     drawQuad( center, p0, uv0, p1, uv1, p2, uv2, p3, uv3, texture, 0);
 }
 
-void drawTriangle(const struct Vec3 pos1,
-                  const struct Vec2i uv1,
-                  const struct Vec3 pos2,
-                  const struct Vec2i uv2,
-                  const struct Vec3 pos3,
-                  const struct Vec2i uv3,
-                  const struct Texture *texture) {
+void drawTriangle(
+        const struct Vec3 center,
+        const struct Vec3 pos1,
+        const struct Vec2i uv1,
+        const struct Vec3 pos2,
+        const struct Vec2i uv2,
+        const struct Vec3 pos3,
+        const struct Vec2i uv3,
+        const struct Texture *texture,
+        const uint8_t enableAlpha) {
 
+    FixP_t acc;
+    FixP_t scaled;
+
+    float centerX;
+    float centerY;
+    float centerZ;
+
+    float vx1, vy1, vz1, u1, v1;
+    float vx2, vy2, vz2, u2, v2;
+    float vx3, vy3, vz3, u3, v3;
+
+    acc = center.mY + playerHeight + walkingBias + yCameraOffset;
+    scaled = Mul(acc, BIAS);
+    centerY = GEOMETRY_SCALE_Y * (fixToInt(scaled) * REVERSE_BIAS);
+    centerX = GEOMETRY_SCALE_X * (fixToInt(Mul(center.mX, BIAS)) * 0.5f * REVERSE_BIAS);
+    centerZ = -GEOMETRY_SCALE_Z * (fixToInt(Mul(center.mZ, BIAS)) * 0.5f * REVERSE_BIAS);
+
+    u1 = 1.0f - (uv1.x) / 16.0f;
+    v1 = 1.0f - ((uv1.y) / 16.0f);
+    vx1 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos1.mX) + centerX;
+    vy1 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos1.mY) + centerY;
+    vz1 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos1.mZ) + centerZ;
+
+    u2 = 1.0f - (uv2.x) / 16.0f;
+    v2 = 1.0f - ((uv2.y) / 16.0f);
+    vx2 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos2.mX) + centerX;
+    vy2 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos2.mY) + centerY;
+    vz2 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos2.mZ) + centerZ;
+
+    u3 = 1.0f - (uv3.x) / 16.0f;
+    v3 = 1.0f - ((uv3.y) / 16.0f);
+    vx3 = GEOMETRY_SCALE_X * 0.5f * fixToFloat(pos3.mX) + centerX;
+    vy3 = -GEOMETRY_SCALE_Y * 0.5f * fixToFloat(pos3.mY) + centerY;
+    vz3 = GEOMETRY_SCALE_Z * 0.5f * fixToFloat(pos3.mZ) + centerZ;
+
+    struct Bitmap* bitmap = texture->raw;
+
+    if (bitmap->nativeBuffer == NULL || bitmap->uploadId == -1) {
+        submitBitmapToGPU(bitmap);
+    }
+
+    bindTexture(bitmap);
+
+    GX_Begin(GX_TRIANGLES, GX_VTXFMT0, 3);
+
+    GX_Position3f32(vx1, vy1, vz1);
+    GX_Color3f32(1, 1, 1);
+    GX_TexCoord2f32(u1, v1);
+
+    GX_Position3f32(vx2, vy2, vz2);
+    GX_Color3f32(1, 1, 1);
+    GX_TexCoord2f32(u2, v2);
+
+    GX_Position3f32(vx3, vy3, vz3);
+    GX_Color3f32(1, 1, 1);
+    GX_TexCoord2f32(u3, v3);
+
+    GX_End();
 
 }
 
-void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
+void drawMesh(struct Mesh *mesh, const struct Vec3 center, enum EDirection rotation) {
     int c;
     int count = mesh->triangleCount;
+    struct Vec3 origin;
     FixP_t *vertexData = mesh->geometry;
     uint8_t *uvData = mesh->uvCoords;
 
-    if (mesh->texture != NULL && (center.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM) {
+    origin.mX = origin.mY = origin.mZ = 0;
+
+    if (/*mesh->texture != NULL && (center.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM*/ TRUE) {
+        guVector up = {0.0F, 1.0F, 0.0F};
+        guMtxIdentity(model);
+        guMtxRotAxisDeg(model, &up, rotation * 90);
+        guMtxTransApply(model, model, fixToFloat(center.mX + xCameraOffset), fixToFloat(center.mY), -fixToFloat(center.mZ + zCameraOffset));
+        guMtxConcat(view, model, modelview);
+        GX_LoadPosMtxImm(modelview, GX_PNMTX3);
+        GX_SetCurrentMtx(GX_PNMTX3);
+
         for (c = 0; c < count; ++c) {
             struct Vec3 p1;
             struct Vec3 p2;
@@ -634,25 +706,31 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
 
             uv1.x = (*uvData++);
             uv1.y = (*uvData++);
-            p1.mX = center.mX + *(vertexData + 0);
-            p1.mY = center.mY + *(vertexData + 1);
-            p1.mZ = center.mZ + *(vertexData + 2);
+            p1.mX = *(vertexData + 0);
+            p1.mY = *(vertexData + 1);
+            p1.mZ = *(vertexData + 2);
 
             uv2.x = (*uvData++);
             uv2.y = (*uvData++);
-            p2.mX = center.mX + *(vertexData + 3);
-            p2.mY = center.mY + *(vertexData + 4);
-            p2.mZ = center.mZ + *(vertexData + 5);
+            p2.mX = *(vertexData + 3);
+            p2.mY = *(vertexData + 4);
+            p2.mZ = *(vertexData + 5);
 
             uv3.x = (*uvData++);
             uv3.y = (*uvData++);
-            p3.mX = center.mX + *(vertexData + 6);
-            p3.mY = center.mY + *(vertexData + 7);
-            p3.mZ = center.mZ + *(vertexData + 8);
+            p3.mX = *(vertexData + 6);
+            p3.mY = *(vertexData + 7);
+            p3.mZ = *(vertexData + 8);
 
-            drawTriangle(p1, uv1, p2, uv2, p3, uv3, mesh->texture);
+            drawTriangle( origin,p1, uv1, p2, uv2, p3, uv3, mesh->texture, 0);
 
             vertexData += 9;
         }
+
+        guMtxIdentity(model);
+        guMtxTransApply(model, model, 0.0f, 0.0f, -0.8f);
+        guMtxConcat(view, model, modelview);
+        GX_LoadPosMtxImm(modelview, GX_PNMTX3);
+        GX_SetCurrentMtx(GX_PNMTX3);
     }
 }
