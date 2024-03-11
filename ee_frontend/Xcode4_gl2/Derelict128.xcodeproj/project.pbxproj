@@ -16,8 +16,8 @@
 		F1293AF22B41C7D10094E02B /* Parser.c in Sources */ = {isa = PBXBuildFile; fileRef = F163BA0D2B3EF28900C03D9E /* Parser.c */; };
 		F1293AF32B41C7D60094E02B /* GLESCommon.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9E92B3EF25100C03D9E /* GLESCommon.c */; };
 		F1293AF42B41C7D60094E02B /* LoadBitmap.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EA2B3EF25100C03D9E /* LoadBitmap.c */; };
-		F1293AF62B41C7D60094E02B /* Renderer_Rasterization.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EC2B3EF25100C03D9E /* Renderer_Rasterization.c */; };
-		F1293AF72B41C7D60094E02B /* Renderer_Tesselation.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9ED2B3EF25100C03D9E /* Renderer_Tesselation.c */; };
+		F1293AF62B41C7D60094E02B /* RendererRasterization.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EC2B3EF25100C03D9E /* RendererRasterization.c */; };
+		F1293AF72B41C7D60094E02B /* RendererTesselation.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9ED2B3EF25100C03D9E /* RendererTesselation.c */; };
 		F1293AF82B41C7DB0094E02B /* Common.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B98D2B3EF1A200C03D9E /* Common.c */; };
 		F1293AF92B41C7DB0094E02B /* Crawler.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9902B3EF1A200C03D9E /* Crawler.c */; };
 		F1293AFA2B41C7DB0094E02B /* CreditsScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9912B3EF1A200C03D9E /* CreditsScreen.c */; };
@@ -83,8 +83,8 @@
 		F163B9D92B3EF1A200C03D9E /* VisibilityStrategy.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9AF2B3EF1A200C03D9E /* VisibilityStrategy.c */; };
 		F163B9FA2B3EF25100C03D9E /* GLESCommon.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9E92B3EF25100C03D9E /* GLESCommon.c */; };
 		F163B9FB2B3EF25100C03D9E /* LoadBitmap.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EA2B3EF25100C03D9E /* LoadBitmap.c */; };
-		F163B9FD2B3EF25100C03D9E /* Renderer_Rasterization.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EC2B3EF25100C03D9E /* Renderer_Rasterization.c */; };
-		F163B9FE2B3EF25100C03D9E /* Renderer_Tesselation.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9ED2B3EF25100C03D9E /* Renderer_Tesselation.c */; };
+		F163B9FD2B3EF25100C03D9E /* RendererRasterization.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9EC2B3EF25100C03D9E /* RendererRasterization.c */; };
+		F163B9FE2B3EF25100C03D9E /* RendererTesselation.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9ED2B3EF25100C03D9E /* RendererTesselation.c */; };
 		F163BA0E2B3EF28900C03D9E /* Core.c in Sources */ = {isa = PBXBuildFile; fileRef = F163BA0A2B3EF28900C03D9E /* Core.c */; };
 		F163BA0F2B3EF28900C03D9E /* Derelict.c in Sources */ = {isa = PBXBuildFile; fileRef = F163BA0B2B3EF28900C03D9E /* Derelict.c */; };
 		F163BA112B3EF28900C03D9E /* Parser.c in Sources */ = {isa = PBXBuildFile; fileRef = F163BA0D2B3EF28900C03D9E /* Parser.c */; };
@@ -175,12 +175,12 @@
 		F163B9AE2B3EF1A200C03D9E /* Vec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Vec.c; sourceTree = "<group>"; };
 		F163B9AF2B3EF1A200C03D9E /* VisibilityStrategy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = VisibilityStrategy.c; sourceTree = "<group>"; };
 		F163B9DE2B3EF25100C03D9E /* basepfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = basepfs.h; sourceTree = "<group>"; };
-		F163B9DF2B3EF25100C03D9E /* CRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRenderer.h; sourceTree = "<group>"; };
+		F163B9DF2B3EF25100C03D9E /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 		F163B9E02B3EF25100C03D9E /* LoadBitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadBitmap.h; sourceTree = "<group>"; };
 		F163B9E92B3EF25100C03D9E /* GLESCommon.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GLESCommon.c; sourceTree = "<group>"; };
 		F163B9EA2B3EF25100C03D9E /* LoadBitmap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = LoadBitmap.c; sourceTree = "<group>"; };
-		F163B9EC2B3EF25100C03D9E /* Renderer_Rasterization.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Renderer_Rasterization.c; sourceTree = "<group>"; };
-		F163B9ED2B3EF25100C03D9E /* Renderer_Tesselation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Renderer_Tesselation.c; sourceTree = "<group>"; };
+		F163B9EC2B3EF25100C03D9E /* RendererRasterization.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RendererRasterization.c; sourceTree = "<group>"; };
+		F163B9ED2B3EF25100C03D9E /* RendererTesselation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RendererTesselation.c; sourceTree = "<group>"; };
 		F163BA062B3EF28900C03D9E /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
 		F163BA072B3EF28900C03D9E /* Derelict.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Derelict.h; sourceTree = "<group>"; };
 		F163BA082B3EF28900C03D9E /* Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parser.h; sourceTree = "<group>"; };
@@ -362,7 +362,7 @@
 			isa = PBXGroup;
 			children = (
 				F163B9DE2B3EF25100C03D9E /* basepfs.h */,
-				F163B9DF2B3EF25100C03D9E /* CRenderer.h */,
+				F163B9DF2B3EF25100C03D9E /* Renderer.h */,
 				F163B9E02B3EF25100C03D9E /* LoadBitmap.h */,
 			);
 			name = include;
@@ -384,8 +384,8 @@
 				F17FD5472B8A23B7002C0D45 /* Renderer.c */,
 				F163B9E92B3EF25100C03D9E /* GLESCommon.c */,
 				F163B9EA2B3EF25100C03D9E /* LoadBitmap.c */,
-				F163B9EC2B3EF25100C03D9E /* Renderer_Rasterization.c */,
-				F163B9ED2B3EF25100C03D9E /* Renderer_Tesselation.c */,
+				F163B9EC2B3EF25100C03D9E /* RendererRasterization.c */,
+				F163B9ED2B3EF25100C03D9E /* RendererTesselation.c */,
 			);
 			path = es;
 			sourceTree = "<group>";
@@ -565,8 +565,8 @@
 				F1293AF22B41C7D10094E02B /* Parser.c in Sources */,
 				F1293AF32B41C7D60094E02B /* GLESCommon.c in Sources */,
 				F1293AF42B41C7D60094E02B /* LoadBitmap.c in Sources */,
-				F1293AF62B41C7D60094E02B /* Renderer_Rasterization.c in Sources */,
-				F1293AF72B41C7D60094E02B /* Renderer_Tesselation.c in Sources */,
+				F1293AF62B41C7D60094E02B /* RendererRasterization.c in Sources */,
+				F1293AF72B41C7D60094E02B /* RendererTesselation.c in Sources */,
 				F1293AF82B41C7DB0094E02B /* Common.c in Sources */,
 				F1293AF92B41C7DB0094E02B /* Crawler.c in Sources */,
 				F1293AFA2B41C7DB0094E02B /* CreditsScreen.c in Sources */,
@@ -625,8 +625,8 @@
 				F163B9D92B3EF1A200C03D9E /* VisibilityStrategy.c in Sources */,
 				F163B9FA2B3EF25100C03D9E /* GLESCommon.c in Sources */,
 				F163B9FB2B3EF25100C03D9E /* LoadBitmap.c in Sources */,
-				F163B9FD2B3EF25100C03D9E /* Renderer_Rasterization.c in Sources */,
-				F163B9FE2B3EF25100C03D9E /* Renderer_Tesselation.c in Sources */,
+				F163B9FD2B3EF25100C03D9E /* RendererRasterization.c in Sources */,
+				F163B9FE2B3EF25100C03D9E /* RendererTesselation.c in Sources */,
 				F163BA0E2B3EF28900C03D9E /* Core.c in Sources */,
 				F163BA0F2B3EF28900C03D9E /* Derelict.c in Sources */,
 				F163BA112B3EF28900C03D9E /* Parser.c in Sources */,
