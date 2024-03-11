@@ -25,10 +25,10 @@ MENU_OBJ= menu/src/Main.o \
           	  ../common/src/VisibilityStrategy.o \
           	  ../common/src/Events.o \
           	  ../common/src/Dungeon.o \
-          	  GL1Common/LoadBitmapGL1.o \
-          	  GL1Common/RendererGL1.o \
-          	  GL1Common/Renderer_RasterizationGL1.o \
-          	  GL1Common/Renderer_TesselationGL1.o \
+          	  GL1Common/LoadBitmap.o \
+          	  GL1Common/Renderer.o \
+          	  GL1Common/RendererRasterization.o \
+          	  GL1Common/RendererTesselation.o \
           	  ../common/src/GameMenu.o \
           	  ../common/src/MainMenu.o \
           	  ../common/src/Engine.o \

@@ -24,10 +24,10 @@ find_package(OpenGL REQUIRED)
 add_executable(derelict64
         menu/src/Main.c
         base3d/src/SDLVersion/CSDL2Renderer.c
-        GL1Common/LoadBitmapGL1.c
-        GL1Common/RendererGL1.c
-        GL1Common/Renderer_RasterizationGL1.c
-        GL1Common/Renderer_TesselationGL1.c
+        GL1Common/LoadBitmap.c
+        GL1Common/Renderer.c
+        GL1Common/RendererRasterization.c
+        GL1Common/RendererTesselation.c
         ../common/src/MainMenu.c
         ../common/src/Crawler.c
         ../common/src/HelpScreen.c

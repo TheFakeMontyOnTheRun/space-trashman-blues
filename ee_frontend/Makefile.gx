@@ -82,8 +82,8 @@ CFILES		:=			../../common/src/MainMenu.c \
                 		../../common/src/EDirection_Utils.o \
                 		../../common/src/Events.c \
                 		../../common/src/Dungeon.c \
-                		../base3d/src/gx/Renderer_Rasterization.c \
-                		../base3d/src/gx/Renderer_Tesselation.c \
+                		../base3d/src/gx/RendererRasterization.c \
+                		../base3d/src/gx/RendererTesselation.c \
                 		../../common/src/NullMusic.c \
                 		../../common/src/UI.c \
                 		../../common/src/Mesh.c \

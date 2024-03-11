@@ -29,8 +29,8 @@ add_executable(derelict128
 		base3d/src/es/LoadBitmap.c
 		base3d/src/Renderer.c
 		base3d/src/es/GLESCommon.c
-		base3d/src/es/Renderer_Rasterization.c
-		base3d/src/es/Renderer_Tesselation.c
+        base3d/src/es/RendererRasterization.c
+		base3d/src/es/RendererTesselation.c
 		../common/src/MainMenu.c
 		../common/src/Crawler.c
 		../common/src/HelpScreen.c

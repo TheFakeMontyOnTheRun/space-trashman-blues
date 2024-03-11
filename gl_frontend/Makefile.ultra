@@ -25,10 +25,10 @@ src = ../common/src/MainMenu.c \
                   		menu/src/Main.c \
                   		../common/src/Engine.c \
                   		base3d/src/ultra/UltraGLRenderer.c \
-                  		GL1Common/LoadBitmapGL1.c \
-                  		GL1Common/RendererGL1.c \
-                  		GL1Common/Renderer_RasterizationGL1.c \
-                  		GL1Common/Renderer_TesselationGL1.c \
+                  		GL1Common/LoadBitmap.c \
+                  		GL1Common/Renderer.c \
+                  		GL1Common/RendererRasterization.c \
+                  		GL1Common/RendererTesselation.c \
                   		../common/src/VisibilityStrategy.c \
                   		../common/src/Globals.c \
                   		../common/src/CTile3DProperties.o \

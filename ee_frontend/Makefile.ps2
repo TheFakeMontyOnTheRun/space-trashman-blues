@@ -37,8 +37,8 @@ EE_OBJS= menu/src/Main.o \
         ../core/src/Parser.o \
         ../common/src/NullMusic.o \
         base3d/src/ee/LoadBitmap.o \
-        base3d/src/ee/Renderer_Rasterization.o \
-        base3d/src/ee/Renderer_Tesselation.o \
+        base3d/src/ee/RendererRasterization.o \
+        base3d/src/ee/RendererTesselation.o \
         base3d/src/Renderer.o \
         ../common/src/HackingMinigameRules.o \
         base3d/src/ee/EmotionEngineRenderer.o
