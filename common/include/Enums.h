@@ -47,7 +47,6 @@ enum EGameMenuState {
 #endif
     kBackToGame,
     kEndGame,
-    kInspectItem,
     kHackingGame,
     kGoodVictoryEpilogue,
     kBadVictoryEpilogue,

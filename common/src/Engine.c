@@ -87,13 +87,6 @@ void enterState(enum EGameMenuState newState) {
             tickCallback = Crawler_tickCallback;
             unloadStateCallback = Crawler_unloadStateCallback;
             break;
-        case kInspectItem: {
-            initStateCallback = GameMenu_initStateCallback;
-            repaintCallback = GameMenu_repaintCallback;
-            tickCallback = GameMenu_tickCallback;
-            unloadStateCallback = GameMenu_unloadStateCallback;
-        }
-            break;
         case kHackingGame: {
             initStateCallback = HackingScreen_initStateCallback;
             repaintCallback = HackingScreen_repaintCallback;

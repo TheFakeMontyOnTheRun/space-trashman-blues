@@ -33,7 +33,7 @@ const char *inspectItem_options[1] = {"Back"};
 const enum EGameMenuState InspectItem_nextStateNavigation[1] = {
         kBackToGame};
 
-const enum EGameMenuState GameMenu_EndGame_nextStateNavigation[2] = {kInspectItem, kMainMenu};
+const enum EGameMenuState GameMenu_EndGame_nextStateNavigation[1] = {kMainMenu};
 
 const char *GameMenu_EndGame_options[2] = {"No", "Yes"};
 
@@ -108,35 +108,6 @@ void GameMenu_initStateCallback(enum EGameMenuState tag) {
             GameMenu_options = GameMenu_Story_options;
             GameMenu_nextStateNavigation = &GameMenu_Story_nextStateNavigation[0];
             break;
-
-        case kInspectItem: {
-            struct ObjectNode *head;
-            int index = 0;
-
-            GameMenu_StateTitle = "CyDeck";
-
-            GameMenu_optionsCount = 1;
-            GameMenu_options = inspectItem_options;
-
-            head = getPlayerItems();
-
-            while (head != NULL && index < currentSelectedItem) {
-                ++index;
-                head = head->next;
-            }
-
-            if (head != NULL && getItem(head->item) != NULL) {
-                struct Item *item = getItem(head->item);
-                mainText = item->name;
-#ifdef INCLUDE_ITEM_DESCRIPTIONS
-                strcpy(textBuffer, item->info);
-#endif
-                GameMenu_optionsCount = 1;
-                GameMenu_options = &inspectItem_options[0];
-                GameMenu_nextStateNavigation =
-                        &InspectItem_nextStateNavigation[0];
-            }
-        }
     }
 
     biggestOption = strlen(GameMenu_StateTitle);
