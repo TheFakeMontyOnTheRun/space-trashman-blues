@@ -38,10 +38,10 @@ OBJS = \
     src/UI.o \
     src/HackingMinigame.o \
     src/Crawler.o \
-    src/Credits.o \
     src/GameMenu.o \
-    src/MainMenu.o \
-    src/Help.o \
+    ../common/src/CreditsScreen.o \
+    ../common/src/MainMenu.o \
+    ../common/src/HelpScreen.o \
     ../common/src/Engine.o \
     ../common/src/AY-3-8910.o \
     ../common/src/Common.o \

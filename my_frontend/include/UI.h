@@ -32,6 +32,8 @@ void drawTextWindow(const uint8_t x, const uint8_t y, const uint8_t dx, const ui
 
 enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t optionsCount, const enum ECommand cmd, enum EGameMenuState backState);
 
+void clearScreen(void);
+
 #define XRES_TEXT (XRES_FRAMEBUFFER / 8)
 #define YRES_TEXT (YRES_FRAMEBUFFER / 8)
 

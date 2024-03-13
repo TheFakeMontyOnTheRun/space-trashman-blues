@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "Enums.h"
 #include "UI.h"
+#include "Engine.h"
 
 extern const char *mainText;
 extern int8_t cursorPosition;
@@ -22,10 +23,12 @@ void HelpScreen_initStateCallback(enum EGameMenuState tag) {
 }
 
 void HelpScreen_repaintCallback(void) {
-    clearScreen();
+    if (firstFrameOnCurrentState) {
+        clearScreen();
 
-    if (mainText != NULL) {
-        drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, 1 + 3, "Help", mainText);
+        if (mainText != NULL) {
+            drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, 1 + 3, "Help", mainText);
+        }
     }
 
     drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - 4 - 3,

@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "Enums.h"
 #include "UI.h"
+#include "Engine.h"
 
 extern int8_t cursorPosition;
 extern const char *mainText;
@@ -21,11 +22,14 @@ void CreditsScreen_initStateCallback(enum EGameMenuState tag) {
 }
 
 void CreditsScreen_repaintCallback(void) {
-    clearScreen();
-
-    if (mainText != NULL) {
-        drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, 1 + 3, "Credits", mainText);
+    if (firstFrameOnCurrentState) {
+        clearScreen();
+        if (mainText != NULL) {
+            drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, 1 + 3, "Credits", mainText);
+        }
     }
+
+
 
     drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - 7 - 3,
                           ((YRES_FRAMEBUFFER / 8) + 1) - (1) - 4,

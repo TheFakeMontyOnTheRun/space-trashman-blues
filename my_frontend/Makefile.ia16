@@ -31,10 +31,10 @@ OBJS = \
     src/Main.o \
     src/UI.o \
     src/Crawler.o \
-    src/Credits.o \
     src/GameMenu.o \
-    src/MainMenu.o \
-    src/Help.o \
+    ../common/src/CreditsScreen.o \
+    ../common/src/MainMenu.o \
+    ../common/src/HelpScreen.o \
     ../common/src/Engine.o \
     src/HackingMinigame.o \
     src/KeyboardUI.o \

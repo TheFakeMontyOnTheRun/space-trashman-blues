@@ -33,10 +33,10 @@ add_executable(derelict8
         src/RendererScene.c
         src/KeyboardUI.c
         src/Crawler.c
-        src/Help.c
-        src/MainMenu.c
-        src/Credits.c
         src/GameMenu.c
+        ../common/src/HelpScreen.c
+        ../common/src/MainMenu.c
+        ../common/src/CreditsScreen.c
         ../common/src/HackingMinigameRules.c
         ../common/include/HackingMinigameRules.h
         )

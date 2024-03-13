@@ -8,6 +8,7 @@
 #include "Enums.h"
 #include "UI.h"
 #include "SoundSystem.h"
+#include "Engine.h"
 
 #ifdef EMIT_QUIT_OPTION
 const char *MainMenu_options[4] = {
@@ -146,8 +147,10 @@ void MainMenu_initStateCallback(enum EGameMenuState tag) {
 }
 
 void MainMenu_repaintCallback(void) {
-    clearScreen();
-    drawGraphic(splashGraphics);
+    if (firstFrameOnCurrentState) {
+        clearScreen();
+        drawGraphic(splashGraphics);
+    }
 
     drawWindowWithOptions(
             (XRES_FRAMEBUFFER / 8) - (int) 9 - 3,
