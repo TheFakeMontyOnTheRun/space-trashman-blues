@@ -527,7 +527,7 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 }
 
 void startFrame(int x, int y, int width, int height) {
-    
+    firstFrameOnCurrentState = 1;
     glViewport(x, y, width, height);
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;
