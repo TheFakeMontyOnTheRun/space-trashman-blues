@@ -251,7 +251,7 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_
     }
 }
 
-void initHW(void) {
+void initHW(int, char **pString) {
     initKeyboardUI();
     updateDirection = 1;
 
@@ -338,7 +338,11 @@ void flushVirtualFramebuffer(void) {
     SDL_RenderPresent(renderer);
 }
 
-void graphicsFlush(void) {
+void startFrame(int x, int y, int width, int height) {
+
+}
+
+void endFrame(void) {
     if (needs3dRefresh) {
         if (updateDirection) {
             updateDirection = 0;

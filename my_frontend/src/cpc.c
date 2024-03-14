@@ -29,7 +29,7 @@ int getch(void);
 /*  Required since we have our own memory allocator abstraction */
 uint16_t heap = 0;
 
-enum ESoundDriver soundDriver = kNoSound;
+enum ESoundDriver soundDriver = kAY38910;
 extern uint8_t firstFrameOnCurrentState;
 extern struct ObjectNode *focusedItem;
 
@@ -48,7 +48,7 @@ int getch(void);
 
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 
-void initHW(void) {
+void initHW(int argc, char **argv) {
     initAY38910();
     initKeyboardUI();
     updateDirection = 1;
@@ -220,7 +220,11 @@ void clearGraphics(void) {
     memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
-void graphicsFlush(void) {
+void startFrame(int x, int y, int width, int height) {
+
+}
+
+void endFrame(void) {
     if (needs3dRefresh) {
         for (uint8_t y = 0; y < BUFFER_SIZEY; ++y) {
             uint8_t *line = (unsigned char *) 0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048);

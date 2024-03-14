@@ -20,12 +20,12 @@ uint8_t updateDirection;
 int kbhit(void);
 int getch(void);
 extern uint8_t firstFrameOnCurrentState;
-enum ESoundDriver soundDriver = kNoSound;
+enum ESoundDriver soundDriver = kAY38910;
 
 /*  Required since we have our own memory allocator abstraction */
 uint16_t heap = 0;
 
-void initHW(void) {
+void initHW(int argc, char **argv) {
     initTMS9918();
     initAY38910();
     initKeyboardUI();
@@ -83,7 +83,12 @@ enum ECommand getInput(void) {
     return input;
 }
 
-void graphicsFlush(void) {
+void startFrame(int x, int y, int width, int height) {
+
+}
+
+void endFrame(void) {
+
     if (needs3dRefresh) {
         flush3DBuffer();
 

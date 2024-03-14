@@ -71,7 +71,9 @@ void shutdownGraphics(void);
 
 enum ECommand getInput(void);
 
-void graphicsFlush(void);
+void endFrame(void);
+
+void startFrame(int x, int y, int width, int height);
 
 void graphicsPut(uint8_t x, uint8_t y);
 
@@ -83,7 +85,7 @@ void HUD_initialPaint(void);
 
 void HUD_refresh(void);
 
-void initHW(void);
+void initHW(int, char **pString);
 
 void interactWithItemInRoom(void);
 

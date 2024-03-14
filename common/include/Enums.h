@@ -62,7 +62,7 @@ enum EPresentationState {
 };
 
 enum ESoundDriver {
-    kNoSound, kPcSpeaker, kOpl2Lpt, kAdlib
+    kNoSound, kPcSpeaker, kOpl2Lpt, kAdlib, kSN76489, kAY38910
 };
 
 #define MENU_SELECTION_CHANGE_SOUND 1

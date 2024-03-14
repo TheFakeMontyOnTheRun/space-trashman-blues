@@ -28,11 +28,11 @@ uint8_t updateDirection;
 
 extern uint8_t cursorPosition;
 
-enum ESoundDriver soundDriver = kNoSound;
+enum ESoundDriver soundDriver = kSN76489;
 
 extern enum EGameMenuState currentGameMenuState;
 
-void initHW(void) {
+void initHW(int argc, char **argv) {
     initGamepadUI();
     initTMS9918();
     initSN76489();
@@ -117,7 +117,12 @@ enum ECommand getInput(void) {
     return kCommandNone;
 }
 
-void graphicsFlush(void) {
+void startFrame(int x, int y, int width, int height) {
+
+}
+
+void endFrame(void) {
+
     if (needs3dRefresh) {
         needs3dRefresh = 0;
         flush3DBuffer();

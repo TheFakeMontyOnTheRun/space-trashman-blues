@@ -13,7 +13,7 @@ unsigned char imageBuffer[128 * 32];
 
 uint8_t updateDirection;
 
-enum ESoundDriver soundDriver = kNoSound;
+enum ESoundDriver soundDriver = kPcSpeaker;
 extern uint8_t firstFrameOnCurrentState;
 
 void shutdownGraphics(void) {
@@ -286,7 +286,7 @@ void clearGraphics(void) {
     memset(imageBuffer, 0, 128 * 32);
 }
 
-void initHW(void) {
+void initHW(int argc, char **argv) {
     asm volatile(
             "movb $0x0, %%ah\n\t"
             "movb $0x4, %%al\n\t"
@@ -423,7 +423,12 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_
 }
 
 
-void graphicsFlush(void) {
+void startFrame(int x, int y, int width, int height) {
+
+}
+
+void endFrame(void) {
+
     uint16_t baseOffset = 0;
     uint16_t index = 0;
 
