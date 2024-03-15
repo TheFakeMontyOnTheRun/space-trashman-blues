@@ -12,24 +12,16 @@
 #include "UI.h"
 #include "font.h"
 
-#define COOLDOWN_MAX 0x1F
-
-uint8_t cooldown;
+uint8_t updateDirection;
 
 /* Sadly, I can't include conio.h - otherwise, I would get errors when building on OSX */
 int kbhit(void);
 int getch(void);
+extern uint8_t firstFrameOnCurrentState;
+enum ESoundDriver soundDriver = kAY38910;
 
 /*  Required since we have our own memory allocator abstraction */
 uint16_t heap = 0;
-
-enum ESoundDriver soundDriver = kAY38910;
-extern uint8_t firstFrameOnCurrentState;
-extern struct ObjectNode *focusedItem;
-
-extern struct ObjectNode *roomItem;
-
-uint8_t updateDirection;
 
 #define BUFFER_SIZEX 32
 #define BUFFER_SIZEY 128
@@ -47,7 +39,6 @@ void initHW(int argc, char **argv) {
     initKeyboardUI();
     updateDirection = 1;
     needs3dRefresh = 0;
-    cooldown = COOLDOWN_MAX;
 }
 
 void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
@@ -150,12 +141,11 @@ void handleSystemEvents(void) {}
 
 enum ECommand getInput(void) {
 
-    if (cooldown) {
-        cooldown--;
+    if (!kbhit()) {
         return kCommandNone;
     }
 
-    cooldown = COOLDOWN_MAX;
+    uint8_t input = getch();
 
     performAction();
 
@@ -202,9 +192,6 @@ enum ECommand getInput(void) {
             return kCommandFire6;
     }
     return kCommandNone;
-}
-
-void shutdownGraphics(void) {
 }
 
 void clearScreen(void) {
