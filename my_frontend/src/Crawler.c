@@ -3,10 +3,11 @@
 */
 #include <stdlib.h>
 #include <stdint.h>
+
+#include "Common.h"
 #include "Enums.h"
 #include "UI.h"
 #include "Renderer.h"
-
 #include "Core.h"
 #include "Derelict.h"
 #include "map.h"

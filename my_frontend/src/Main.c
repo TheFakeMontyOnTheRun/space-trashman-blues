@@ -1,4 +1,6 @@
 #include <stdint.h>
+
+#include "Common.h"
 #include "Enums.h"
 #include "Renderer.h"
 #include "Engine.h"

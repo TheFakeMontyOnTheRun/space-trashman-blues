@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "Common.h"
 #include "Enums.h"
 #include "UI.h"
 #include "Derelict.h"

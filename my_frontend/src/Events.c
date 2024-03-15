@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "Common.h"
 #include "Core.h"
 #include "Enums.h"
 #include "Renderer.h"

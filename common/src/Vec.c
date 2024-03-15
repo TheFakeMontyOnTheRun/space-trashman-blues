@@ -7,6 +7,7 @@
 
 #endif
 
+#include "Common.h"
 #include "FixP.h"
 #include "Vec.h"
 

@@ -12,11 +12,11 @@
 
 #endif
 
+#include "Common.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "Enums.h"
 #include "Dungeon.h"
-#include "Common.h"
 #include "EDirection_Utils.h"
 #include "Core.h"
 #include "Engine.h"

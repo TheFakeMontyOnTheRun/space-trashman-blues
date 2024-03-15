@@ -3,6 +3,8 @@
 */
 #include <stdint.h>
 #include <string.h>
+
+#include "Common.h"
 #include "HackingMinigameRules.h"
 
 uint8_t holdingDisk = 3;

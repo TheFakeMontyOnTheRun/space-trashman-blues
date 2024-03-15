@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "Common.h"
 #include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"

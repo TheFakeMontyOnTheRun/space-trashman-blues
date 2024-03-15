@@ -12,12 +12,12 @@
 
 #endif
 
+#include "Common.h"
 #include "Enums.h"
 #include "FixP.h"
 #include "LoadBitmap.h"
 #include "Vec.h"
 #include "CActor.h"
-#include "Common.h"
 #include "PackedFileReader.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"

@@ -13,12 +13,12 @@
 
 #endif
 
+#include "Common.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "Enums.h"
 #include "CActor.h"
 #include "MapWithCharKey.h"
-#include "Common.h"
 #include "Vec.h"
 #include "Globals.h"
 #include "LoadBitmap.h"

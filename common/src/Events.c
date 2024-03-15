@@ -12,11 +12,11 @@
 
 #endif
 
+#include "Common.h"
 #include "Enums.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "CActor.h"
-#include "Common.h"
 #include "MapWithCharKey.h"
 #include "Mesh.h"
 #include "CTile3DProperties.h"

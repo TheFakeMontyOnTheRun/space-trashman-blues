@@ -10,8 +10,8 @@
 #endif
 #endif
 
-#include "Enums.h"
 #include "Common.h"
+#include "Enums.h"
 #include "Engine.h"
 #include "SoundSystem.h"
 

@@ -8,6 +8,7 @@
 #include <string.h>
 #include <assert.h>
 
+#include "Common.h"
 #include "Enums.h"
 #include "FixP.h"
 #include "Vec.h"

@@ -12,8 +12,8 @@
 
 #endif
 
-#include "Enums.h"
 #include "Common.h"
+#include "Enums.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "MapWithCharKey.h"

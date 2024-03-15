@@ -5,12 +5,12 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
 #include <unistd.h>
-
 #endif
 
+
+#include "Common.h"
 #include "FixP.h"
 #include "Enums.h"
 #include "Vec.h"
@@ -20,7 +20,6 @@
 #include "Mesh.h"
 #include "Renderer.h"
 #include "Dungeon.h"
-#include "Common.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "MapWithCharKey.h"
@@ -79,9 +78,6 @@ void Crawler_initStateCallback(enum EGameMenuState tag) {
         clearMap(&tileProperties);
         initRoom(getPlayerRoom());
     }
-}
-
-void Crawler_initialPaintCallback(void) {
 }
 
 void recenterView(void) {

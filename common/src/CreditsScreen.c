@@ -5,6 +5,8 @@
 #endif
 
 #include <stdlib.h>
+
+#include "Common.h"
 #include "Enums.h"
 #include "UI.h"
 #include "Engine.h"

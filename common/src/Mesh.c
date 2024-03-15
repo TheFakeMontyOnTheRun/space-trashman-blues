@@ -7,10 +7,10 @@
 
 #endif
 
+#include "Common.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "Mesh.h"
-#include "Common.h"
 #include "PackedFileReader.h"
 #include "LoadBitmap.h"
 

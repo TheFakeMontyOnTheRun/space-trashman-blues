@@ -1,12 +1,10 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "Common.h"
 #include "Renderer.h"
 #include "map.h"
 
-#ifdef MSDOS
-#include "Common.h"
-#endif
 
 #ifndef EMBEDDED_DATA
 #include "PackedFileReader.h"

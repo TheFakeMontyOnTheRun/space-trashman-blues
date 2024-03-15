@@ -19,9 +19,10 @@ Created by Daniel Monteiro on 2019-07-26.
 #include <genesis.h>
 #endif
 
+#include "Common.h"
 #include "Core.h"
 #include "Derelict.h"
-#include "Common.h"
+
 
 uint8_t accessGrantedToSafe = FALSE;
 
@@ -97,11 +98,11 @@ void useBootsWithMagneticCoupling(struct Item *item1, struct Item *item2) {
  bad game over - you failed to blow the station and died.
  */
 void bombActivatedCallback(struct Item *item) {
-    (void)item;
     uint8_t empOnReactor = hasItemInRoom("reactor-core", "emp-bomb");
     uint8_t playerLocation = getPlayerRoom();
     uint8_t playerAtDaedaus = (playerLocation == 1);
     uint8_t playerAtSameLocationAsBomb = hasItemInRoom(getRoom(playerLocation)->name, "emp-bomb");
+    (void)item;
 
     if (empOnReactor) {
         if (playerAtDaedaus) {
@@ -188,8 +189,9 @@ void elevatorGoUpCallback(struct Item *item) {
 }
 
 void useCloggedFlush(struct Item *item) {
-    (void)item;
     struct Item *highRankKeycard = getItemNamed("high-rank-keycard");
+    (void)item;
+
     if (highRankKeycard->roomId == 0) {
         defaultLogger("Found something among the\n...stuff...");
         addToRoom("wc", highRankKeycard);

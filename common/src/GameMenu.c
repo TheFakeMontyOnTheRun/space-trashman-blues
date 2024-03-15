@@ -8,11 +8,11 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "Common.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "Enums.h"
 #include "UI.h"
-#include "Common.h"
 #include "CActor.h"
 #include "Mesh.h"
 #include "Engine.h"

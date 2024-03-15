@@ -50,12 +50,12 @@ long uclock(void) {
 #endif
 #endif
 
+#include "Common.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "Enums.h"
 #include "CActor.h"
 #include "MapWithCharKey.h"
-#include "Common.h"
 #include "LoadBitmap.h"
 #include "Core.h"
 #include "Engine.h"

@@ -4,6 +4,7 @@
 #include <stdint.h>
 #endif
 
+#include "Common.h"
 #include "Enums.h"
 #include "UI.h"
 #include "SoundSystem.h"

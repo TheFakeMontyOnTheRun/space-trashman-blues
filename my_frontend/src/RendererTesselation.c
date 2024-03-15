@@ -1,13 +1,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "Common.h"
 #include "Core.h"
 #include "Renderer.h"
 #include "map.h"
-
-#ifdef MSDOS
-#include "Common.h"
-#endif
 
 const struct CellPattern patterns[96] = {
         {BASE_CEILING_HEIGHT, 3,  CUBE,       0}, /*    32 */
