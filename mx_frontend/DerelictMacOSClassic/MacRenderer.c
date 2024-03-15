@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "Common.h"
 #include "Core.h"
 #include "Enums.h"
 #include "FixP.h"
@@ -308,10 +309,26 @@ void handleSystemEvents(void) {
 
 				case 16:
 				lastKey = kCommandRight;
+	            if ((currentGameMenuState == kPlayGame ||
+    	             currentGameMenuState == kBackToGame) &&
+        	        currentPresentationState == kWaitingForInput
+            	    ) {
+                	
+	                turnStep = 200;
+    	            turnTarget = 0;
+        	    }
 				break;
 
 				case 8:
 				lastKey = kCommandLeft;
+    	        if ((currentGameMenuState == kPlayGame ||
+        	        currentGameMenuState == kBackToGame) &&
+            	    currentPresentationState == kWaitingForInput
+                	) {
+                
+	                turnStep = 0;
+    	            turnTarget = 200;
+        	    }
 				break;
 
 				case 268435456: //enter

@@ -534,7 +534,7 @@ void drawFrontWall(FixP_t x0,
     }
 
     for (; iy < limit; ++iy) {
-
+        int shouldStippleLine;
         FixP_t u = 0;
         const uint8_t iv = fixToInt(v) & (NATIVE_TEXTURE_SIZE - 1);
         const uint8_t *sourceLineStart = data + (iv * NATIVE_TEXTURE_SIZE);
@@ -542,7 +542,7 @@ void drawFrontWall(FixP_t x0,
         int ix;
         int stipple;
         lastU = 0;
-        int shouldStippleLine = (farEnoughForStipple == 2) || (farEnoughForStipple == 1 && iy & 1) || (farEnoughForStipple == 3);
+        shouldStippleLine = (farEnoughForStipple == 2) || (farEnoughForStipple == 1 && iy & 1) || (farEnoughForStipple == 3);
 
         if (!farEnoughForStipple
             && ((!enableAlpha && iv == lastV)
@@ -1145,16 +1145,6 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
     int stipple;
     int farEnoughForStipple;
     
-    if (z < distanceForPenumbra / 4)  {
-        farEnoughForStipple = 0;
-    } else if (z < distanceForPenumbra / 2) {
-        farEnoughForStipple = 1;
-    } else if (z < distanceForPenumbra) {
-        farEnoughForStipple = 2;
-    } else {
-        farEnoughForStipple = 3;
-    }
-
     FixP_t x0 = intToFix(coords[0]);
     FixP_t y0 = intToFix(coords[1]);
     FixP_t x1 = intToFix(coords[2]);
@@ -1179,6 +1169,16 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
     FixP_t dXDy1;
     FixP_t fX0;
     FixP_t fX1;
+    
+    if (z < distanceForPenumbra / 4)  {
+        farEnoughForStipple = 0;
+    } else if (z < distanceForPenumbra / 2) {
+        farEnoughForStipple = 1;
+    } else if (z < distanceForPenumbra) {
+        farEnoughForStipple = 2;
+    } else {
+        farEnoughForStipple = 3;
+    }
 
     if (dY2Y0 == 0 || dY1Y0 == 0) {
         return;
@@ -1269,10 +1269,10 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
             }
 
             if (y >= 0 && y <= YRES) {
-
                 int xPos = iFX0;
+				const int shouldStippleLine = (farEnoughForStipple == 2) || (farEnoughForStipple == 1 && y & 1) || (farEnoughForStipple == 3);
                 stipple = ((xPos + y) & 1) ? 0xFFFFFFFF : 0;
-                const int shouldStippleLine = (farEnoughForStipple == 2) || (farEnoughForStipple == 1 && y & 1) || (farEnoughForStipple == 3);
+
                 
                 while (limit--) {
                     stipple = ~stipple;
@@ -1311,16 +1311,6 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     int yFinal = coords[3]; /* not the upper, not the lowest */
     int farEnoughForStipple;
         
-    if (z < distanceForPenumbra / 4)  {
-        farEnoughForStipple = 0;
-    } else if (z < distanceForPenumbra / 2) {
-        farEnoughForStipple = 1;
-    } else if (z < distanceForPenumbra) {
-        farEnoughForStipple = 2;
-    } else {
-        farEnoughForStipple = 3;
-    }
-
     FixP_t x0 = intToFix(coords[0]);
     FixP_t y0 = intToFix(coords[1]);
     FixP_t x1 = intToFix(coords[2]);
@@ -1346,6 +1336,16 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     FixP_t fX0;
     FixP_t fX1;
     FixP_t effectiveDelta;
+    
+    if (z < distanceForPenumbra / 4)  {
+        farEnoughForStipple = 0;
+    } else if (z < distanceForPenumbra / 2) {
+        farEnoughForStipple = 1;
+    } else if (z < distanceForPenumbra) {
+        farEnoughForStipple = 2;
+    } else {
+        farEnoughForStipple = 3;
+    }    
 
     if (dY0Y1 == 0 || dY0Y2 == 0) {
         return;
