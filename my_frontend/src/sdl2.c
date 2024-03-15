@@ -198,7 +198,7 @@ enum ECommand getInput(void) {
     return kCommandNone;
 }
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
+void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
     uint8_t len = strlen(text);
     char *ptr = text;
     uint8_t c = 0;

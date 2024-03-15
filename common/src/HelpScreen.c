@@ -19,6 +19,7 @@ const enum EGameMenuState HelpScreen_nextStateNavigation[1] = {
 };
 
 void HelpScreen_initStateCallback(enum EGameMenuState tag) {
+    (void)tag;
     mainText = "This is the help";
 }
 
@@ -38,8 +39,10 @@ void HelpScreen_repaintCallback(void) {
 }
 
 enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, long delta) {
+    (void)delta;
     return handleCursor(HelpScreen_nextStateNavigation, 1, cmd, kMainMenu);
 }
 
 void HelpScreen_unloadStateCallback(enum EGameMenuState newState) {
+    (void)newState;
 }

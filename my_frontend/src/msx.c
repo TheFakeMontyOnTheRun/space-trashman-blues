@@ -1,12 +1,7 @@
 #include <stdint.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
 
 #include "Enums.h"
 #include "Core.h"
-#include "Derelict.h"
 #include "Renderer.h"
 
 #include "TMS9918.h"
@@ -26,6 +21,8 @@ enum ESoundDriver soundDriver = kAY38910;
 uint16_t heap = 0;
 
 void initHW(int argc, char **argv) {
+    (void)argc;
+    (void)argv;
     initTMS9918();
     initAY38910();
     initKeyboardUI();
@@ -84,11 +81,13 @@ enum ECommand getInput(void) {
 }
 
 void startFrame(int x, int y, int width, int height) {
-
+    (void)x;
+    (void)y;
+    (void)width;
+    (void)height;
 }
 
 void endFrame(void) {
-
     if (needs3dRefresh) {
         flush3DBuffer();
 

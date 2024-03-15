@@ -21,6 +21,6 @@ int main(int argc, char **argv) {
 
 #ifdef EMIT_QUIT_OPTION
     unloadStateCallback(1);
+    return 0;
 #endif
-  return 0;
 }

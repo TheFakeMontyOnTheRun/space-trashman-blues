@@ -1,7 +1,4 @@
 #include <time.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #ifdef AMIGA
 #include "AmigaInt.h"
@@ -9,10 +6,7 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
-#include <unistd.h>
-
 #endif
 #endif
 

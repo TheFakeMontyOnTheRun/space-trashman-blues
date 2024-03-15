@@ -19,6 +19,10 @@ void setColour(uint8_t colour) {
     set_color(colour, 0, 0);
 }
 
+void clearGraphics(void) {
+    memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
+}
+
 void flush3DBuffer(void) {
     uint8_t *ptr = &buffer[0];
 
@@ -74,16 +78,6 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
     }
 }
 
-uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
-    if (ptr == NULL) {
-        ptr = &buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)];
-    }
-
-    *ptr |= (128 >> (x & 7));
-
-    return ptr;
-}
-
 void graphicsPutPointArray(uint8_t *y128Values) {
     uint8_t *stencilPtr = y128Values;
     uint16_t x;
@@ -137,20 +131,10 @@ void initTMS9918(void) {
     clearScreen();
 }
 
-void clearGraphics(void) {
-    memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
-}
-
 #ifdef EMIT_QUIT_OPTION
 void shutdownGraphics(void) {
 }
 #endif
-
-uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
-    setColour(colour);
-    plot(x, y);
-    return NULL;
-}
 
 void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
 

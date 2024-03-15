@@ -56,11 +56,13 @@ void updateRankFromKeycards(void) {
 }
 
 void keycardPickCallback(struct Item *item) {
+    (void)item;
     updateRankFromKeycards();
 }
 
 
 void keycardDropCallback(struct Item *item) {
+    (void)item;
     updateRankFromKeycards();
 }
 
@@ -95,7 +97,7 @@ void useBootsWithMagneticCoupling(struct Item *item1, struct Item *item2) {
  bad game over - you failed to blow the station and died.
  */
 void bombActivatedCallback(struct Item *item) {
-
+    (void)item;
     uint8_t empOnReactor = hasItemInRoom("reactor-core", "emp-bomb");
     uint8_t playerLocation = getPlayerRoom();
     uint8_t playerAtDaedaus = (playerLocation == 1);
@@ -121,6 +123,7 @@ void bombActivatedCallback(struct Item *item) {
 }
 
 void bombControllerActivatedCallback(struct Item *item) {
+    (void)item;
     bombActivatedCallback(NULL);
 }
 
@@ -185,6 +188,7 @@ void elevatorGoUpCallback(struct Item *item) {
 }
 
 void useCloggedFlush(struct Item *item) {
+    (void)item;
     struct Item *highRankKeycard = getItemNamed("high-rank-keycard");
     if (highRankKeycard->roomId == 0) {
         defaultLogger("Found something among the\n...stuff...");
@@ -193,10 +197,13 @@ void useCloggedFlush(struct Item *item) {
 }
 
 void useRegularFlush(struct Item *item) {
+    (void)item;
     defaultLogger("*FLUSH*");
 }
 
 void inspectItemWithHelmetCallback(struct Item *helmet, struct Item *item) {
+    (void)helmet;
+    (void)item;
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
     defaultLogger(item->info);
 #endif
@@ -217,7 +224,7 @@ void useCommWithRank(struct Item *item) {
  * @param item
  */
 void useComputerRack(struct Item *item) {
-
+    (void)item;
     if (!getItemNamed("comm-terminal-1")->active ||
         !getItemNamed("comm-terminal-2")->active ||
         !getItemNamed("comm-terminal-3")->active) {
@@ -236,6 +243,7 @@ void useComputerRack(struct Item *item) {
 }
 
 void reactorValveCallback(struct Item *item) {
+    (void)item;
     setGameStatus(kBadVictory);
 }
 

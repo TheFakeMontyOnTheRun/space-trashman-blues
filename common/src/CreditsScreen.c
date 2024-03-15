@@ -18,6 +18,7 @@ enum EGameMenuState CreditsScreen_nextStateNavigation[1] = {
 };
 
 void CreditsScreen_initStateCallback(enum EGameMenuState tag) {
+    (void)tag;
     mainText = "Made by MontyOnTheRun";
 }
 
@@ -38,8 +39,10 @@ void CreditsScreen_repaintCallback(void) {
 }
 
 enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
+    (void)delta;
     return handleCursor(CreditsScreen_nextStateNavigation, 1, cmd, kMainMenu);
 }
 
 void CreditsScreen_unloadStateCallback(enum EGameMenuState newState) {
+    (void)newState;
 }

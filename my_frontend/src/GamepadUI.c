@@ -2,18 +2,15 @@
    Created by monty on 18-07-2023.
 */
 #include <stdint.h>
-#include <stdlib.h>
 
 #include "Enums.h"
-#include "Core.h"
-#include "Derelict.h"
 #include "Renderer.h"
 #include "UI.h"
 #include "GamepadUI.h"
 
 extern uint8_t firstFrameOnCurrentState;
 
-char *menuItems[] = {
+const char *menuItems[] = {
         "Use/Toggle",
         "Use with",
         "Use/pick",

@@ -45,6 +45,8 @@
 #ifndef USE_CUSTOM_MEMORY_HANDLER
 
 void *allocMem(size_t sizeInBytes, enum MemoryType type, uint8_t clearAfterAlloc) {
+
+    (void)type;
     /*
     For the general allocator, we're not worried about the type of memory. It all comes from the
     same place.

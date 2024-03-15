@@ -1,15 +1,10 @@
 #include <stdint.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include <games.h>
-#include <psg.h>
-#include <sound.h>
 
 #include "Enums.h"
 #include "Core.h"
-#include "Derelict.h"
 #include "Renderer.h"
 
 #include "AY-3-8910.h"
@@ -24,7 +19,6 @@ uint8_t cooldown;
 /* Sadly, I can't include conio.h - otherwise, I would get errors when building on OSX */
 int kbhit(void);
 int getch(void);
-
 
 /*  Required since we have our own memory allocator abstraction */
 uint16_t heap = 0;
@@ -44,11 +38,11 @@ uint8_t updateDirection;
 
 #define MARGIN_TEXT_SCREEN_LIMIT 40
 
-int getch(void);
-
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 
 void initHW(int argc, char **argv) {
+    (void)argc;
+    (void)argv;
     initAY38910();
     initKeyboardUI();
     updateDirection = 1;
@@ -56,10 +50,11 @@ void initHW(int argc, char **argv) {
     cooldown = COOLDOWN_MAX;
 }
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
-
+void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
+    (void)fg;
+    (void)bg;
     uint8_t len = strlen(text);
-    char *ptr = text;
+    const char *ptr = text;
     uint8_t c = 0;
     uint8_t x = _x;
 
@@ -221,7 +216,10 @@ void clearGraphics(void) {
 }
 
 void startFrame(int x, int y, int width, int height) {
-
+    (void)x;
+    (void)y;
+    (void)width;
+    (void)height;
 }
 
 void endFrame(void) {
@@ -272,7 +270,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 }
 
 uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
-
+    (void)colour;
     if (ptr == NULL) {
         ptr = &buffer[(y * (BUFFER_SIZEX)) + (x / 4)]; /* skip to the line in pattern */
     }

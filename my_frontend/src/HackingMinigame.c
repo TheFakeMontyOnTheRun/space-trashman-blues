@@ -2,21 +2,16 @@
    Created by Daniel Monteiro on 2021-11-01.
 */
 
-#include <stdlib.h>
 #include <stdint.h>
-#include <stdio.h>
 #include <string.h>
 
 #include "Enums.h"
 #include "UI.h"
-#include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
 #include "HackingMinigame.h"
 #include "HackingMinigameRules.h"
 #include "Engine.h"
-
-extern int8_t cursorPosition;
 
 const char *functionNames[5] = {
         "???",
@@ -27,6 +22,7 @@ const char *functionNames[5] = {
 };
 
 void HackingScreen_initStateCallback(enum EGameMenuState tag) {
+    (void)tag;
     cursorPosition = 1;
     needs3dRefresh = 0;
 
@@ -35,7 +31,6 @@ void HackingScreen_initStateCallback(enum EGameMenuState tag) {
 
 void HackingScreen_repaintCallback(void) {
     uint8_t pin;
-    uint8_t c;
     uint8_t holdingDisk;
 
     if (firstFrameOnCurrentState) {
@@ -61,7 +56,7 @@ void HackingScreen_repaintCallback(void) {
 
             uint8_t diskIndex = getPositionForPin(pin, disk);
 
-            char *funcName = (disk >= getDisksForPin(pin)) ? NULL
+            const char *funcName = (disk >= getDisksForPin(pin)) ? NULL
                                                            : functionNames[diskIndex];
 
             if (funcName) {
@@ -83,16 +78,12 @@ void HackingScreen_repaintCallback(void) {
     }
 }
 
-void HackingScreen_initialPaintCallback(void) {
-
-}
-
 void HackingScreen_unloadStateCallback(enum EGameMenuState newState) {
-
+    (void)newState;
 }
 
 enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long data) {
-
+    (void)data;
     uint8_t holdingDisk = getHoldingDisk();
 
     if (isHackingMinigameCompleted()) {

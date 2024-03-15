@@ -1,13 +1,11 @@
 /*
    Created by Daniel Monteiro on 11/07/2023.
 */
-#include <stdlib.h>
 #include <stdint.h>
 
 #include "Enums.h"
 #include "UI.h"
 #include "Core.h"
-#include "Derelict.h"
 #include "Renderer.h"
 #include "Engine.h"
 #include "SoundSystem.h"
@@ -28,7 +26,9 @@ void drawGraphic(const uint8_t *graphic) {
     while (*ptr) {
         uint8_t c;
         const uint8_t npoints = *ptr++;
+#ifndef MONOCHROME_VECTORS
         ptr += 3; /* skip colours */
+#endif
         const uint8_t *shape = ptr;
 
         for (c = 0; c < npoints - 1; ++c) {

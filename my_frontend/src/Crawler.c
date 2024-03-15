@@ -33,8 +33,6 @@ uint8_t roomTransitionAnimationStep = 0;
 #endif
 
 void HUD_refresh(void) {
-    uint8_t d, e;
-
     writeStrWithLimit(1, YRES_TEXT - 7, "In room", 16, 2, 0);
 
     if (roomItem != NULL) {
@@ -61,6 +59,7 @@ void HUD_refresh(void) {
 }
 
 enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
+    (void)data;
     uint8_t prevX;
     uint8_t prevZ;
     struct WorldPosition *pos;
@@ -232,7 +231,8 @@ void Crawler_repaintCallback(void) {
     }
 }
 
-void Crawler_initStateCallback(enum EGameMenuState tag_unused) {
+void Crawler_initStateCallback(enum EGameMenuState tag) {
+    (void)tag;
     enteredFrom = 0;
     cameraRotation = 0;
     initStation();
@@ -244,6 +244,7 @@ void Crawler_initStateCallback(enum EGameMenuState tag_unused) {
 }
 
 void Crawler_unloadStateCallback(enum EGameMenuState newState) {
+    (void)newState;
     needs3dRefresh = 0;
 }
 

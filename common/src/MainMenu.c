@@ -4,7 +4,6 @@
 #include <stdint.h>
 #endif
 
-#include <stdlib.h>
 #include "Enums.h"
 #include "UI.h"
 #include "SoundSystem.h"
@@ -30,14 +29,20 @@ const int kMainMenuOptionsCount = 3;
 #endif
 
 static const uint8_t splashGraphics[] = {
-        6, 108, 103, 83,
+        6,
+#ifndef MONOCHROME_VECTORS
+        108, 103, 83,
+#endif
         40, 63,
         42, 40,
         54, 39,
         54, 65,
         42, 66,
         40, 63,
-        7, 85, 0, 0,
+        7,
+#ifndef MONOCHROME_VECTORS
+        85, 0, 0,
+#endif
         32, 102,
         24, 112,
         21, 139,
@@ -45,7 +50,10 @@ static const uint8_t splashGraphics[] = {
         59, 97,
         41, 94,
         24, 92,
-        8, 43, 0, 0,
+        8,
+#ifndef MONOCHROME_VECTORS
+        43, 0, 0,
+#endif
         35, 115,
         42, 116,
         59, 116,
@@ -54,7 +62,10 @@ static const uint8_t splashGraphics[] = {
         35, 132,
         35, 115,
         37, 90,
-        10, 170, 0, 0,
+        10,
+#ifndef MONOCHROME_VECTORS
+        170, 0, 0,
+#endif
         36, 64,
         35, 91,
         42, 105,
@@ -65,7 +76,10 @@ static const uint8_t splashGraphics[] = {
         35, 96,
         35, 91,
         36, 64,
-        7, 85, 68, 0,
+        7,
+#ifndef MONOCHROME_VECTORS
+        85, 68, 0,
+#endif
         35, 91,
         38, 74,
         59, 73,
@@ -73,7 +87,10 @@ static const uint8_t splashGraphics[] = {
         57, 99,
         42, 105,
         35, 91,
-        8, 170, 0, 0,
+        8,
+#ifndef MONOCHROME_VECTORS
+        170, 0, 0,
+#endif
         59, 38,
         51, 34,
         38, 42,
@@ -82,7 +99,10 @@ static const uint8_t splashGraphics[] = {
         50, 81,
         59, 74,
         59, 38,
-        9, 212, 170, 0,
+        9,
+#ifndef MONOCHROME_VECTORS
+        212, 170, 0,
+#endif
         36, 71,
         35, 91,
         42, 105,
@@ -92,7 +112,10 @@ static const uint8_t splashGraphics[] = {
         50, 80,
         39, 77,
         36, 67,
-        8, 43, 34, 0,
+        8,
+#ifndef MONOCHROME_VECTORS
+        43, 34, 0,
+#endif
         54, 88,
         55, 92,
         56, 95,
@@ -101,7 +124,10 @@ static const uint8_t splashGraphics[] = {
         45, 97,
         50, 91,
         55, 85,
-        8, 85, 68, 0,
+        8,
+#ifndef MONOCHROME_VECTORS
+        85, 68, 0,
+#endif
         41, 78,
         41, 85,
         43, 97,
@@ -110,28 +136,40 @@ static const uint8_t splashGraphics[] = {
         57, 75,
         50, 81,
         41, 78,
-        6, 147, 172, 147,
+        6,
+#ifndef MONOCHROME_VECTORS
+        147, 172, 147,
+#endif
         39, 43,
         45, 40,
         58, 45,
         58, 39,
         49, 35,
         39, 43,
-        6, 170, 212, 0,
+        6,
+#ifndef MONOCHROME_VECTORS
+        170, 212, 0,
+#endif
         36, 64,
         39, 75,
         40, 51,
         39, 49,
         38, 43,
         36, 64,
-        6, 255, 221, 85,
+        6,
+#ifndef MONOCHROME_VECTORS
+        255, 221, 85,
+#endif
         50, 78,
         53, 53,
         56, 52,
         59, 47,
         59, 72,
         50, 78,
-        7, 170, 212, 0,
+        7,
+#ifndef MONOCHROME_VECTORS
+        170, 212, 0,
+#endif
         39, 104,
         37, 100,
         31, 101,
@@ -142,6 +180,7 @@ static const uint8_t splashGraphics[] = {
         0 };
 
 void MainMenu_initStateCallback(enum EGameMenuState tag) {
+    (void)tag;
     cursorPosition = 0;
     playSound(MAIN_MENU_THEME);
 }
@@ -164,8 +203,10 @@ void MainMenu_repaintCallback(void) {
 }
 
 enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
+    (void)delta;
     return handleCursor(&MainMenu_nextStateNavigation[0], kMainMenuOptionsCount, cmd, kResumeCurrentState);
 }
 
 void MainMenu_unloadStateCallback(enum EGameMenuState newState) {
+    (void)newState;
 }

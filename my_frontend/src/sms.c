@@ -33,6 +33,8 @@ enum ESoundDriver soundDriver = kSN76489;
 extern enum EGameMenuState currentGameMenuState;
 
 void initHW(int argc, char **argv) {
+    (void)argc;
+    (void)argv;
     initGamepadUI();
     initTMS9918();
     initSN76489();
@@ -118,11 +120,13 @@ enum ECommand getInput(void) {
 }
 
 void startFrame(int x, int y, int width, int height) {
-
+    (void)x;
+    (void)y;
+    (void)width;
+    (void)height;
 }
 
 void endFrame(void) {
-
     if (needs3dRefresh) {
         needs3dRefresh = 0;
         flush3DBuffer();

@@ -13,7 +13,7 @@ uint8_t getDisksForPin(uint8_t pin);
 
 uint8_t getPositionForPin(uint8_t pin, uint8_t slot);
 
-uint8_t isHackingMinigameCompleted();
+uint8_t isHackingMinigameCompleted(void);
 
 void pickDisk(uint8_t pin);
 

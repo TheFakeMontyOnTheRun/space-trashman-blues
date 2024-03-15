@@ -1,18 +1,8 @@
-#include <stddef.h>
-#include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
 
-#include "Core.h"
-#include "Derelict.h"
 #include "Renderer.h"
 #include "map.h"
-
-#ifdef SUPPORTS_HACKING_MINIGAME
-
-#include "HackingMinigame.h"
-
-#endif
 
 #ifdef MSDOS
 #include "Common.h"

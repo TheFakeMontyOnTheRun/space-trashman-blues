@@ -3,10 +3,8 @@
 #include <string.h>
 
 #include "Core.h"
-#include "Derelict.h"
 #include "Enums.h"
 #include "Renderer.h"
-#include "map.h"
 #include "map-data.h"
 #include "Engine.h"
 
