@@ -101,7 +101,7 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour) {
     }
 }
 
-void shutdownGraphics() {
+void shutdownGraphics(void) {
     SDL_Quit();
 }
 
@@ -111,7 +111,7 @@ void showMessage(const char *mesg) {
 
 void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 
-void clearGraphics() {
+void clearGraphics(void) {
     memset(framebuffer, 0, 256 * 160);
 }
 
@@ -119,7 +119,7 @@ void writeStr(int16_t nColumn, int16_t nLine, const char *str, uint16_t fg, uint
     puts(str);
 }
 
-void printSituation() {
+void printSituation(void) {
     struct ObjectNode *playerObjects = getPlayerItems();
     puts("---------------");
     puts("\nPlayer items:");
@@ -149,10 +149,10 @@ void dropItem();
 
 void pickItem();
 
-void clearScreen() {}
+void clearScreen(void) {}
 
 
-uint8_t getKey() {
+uint8_t getKey(void) {
     SDL_Event event;
 
     mBufferedCommand = '.';
@@ -256,7 +256,7 @@ uint8_t getKey() {
 void sleepForMS(uint32_t unused) {
 }
 
-void init() {
+void init(void) {
     int r, g, b;
     mBufferedCommand = '.';
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -291,7 +291,7 @@ void init() {
 }
 
 
-void titleScreen() {
+void titleScreen(void) {
     int keepGoing = 1;
     clearGraphics();
 
@@ -310,7 +310,7 @@ void titleScreen() {
     clearScreen();
 }
 
-void flipRenderer() {
+void flipRenderer(void) {
     SDL_Rect rect;
     uint32_t pixel;
     int x, y;
@@ -362,15 +362,15 @@ void flipRenderer() {
 #endif
 }
 
-void graphicsFlush() {
+void graphicsFlush(void) {
     flipRenderer();
 }
 
 
-void HUD_initialPaint() {
+void HUD_initialPaint(void) {
 }
 
-void HUD_refresh() {
+void HUD_refresh(void) {
 
 
     for (uint16_t i = 0; i < 6; ++i) {

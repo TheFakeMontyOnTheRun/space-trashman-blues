@@ -13,17 +13,17 @@
 
 #endif
 
-
+#include "Common.h"
 #include "Core.h"
 #include "Enums.h"
 #include "FixP.h"
 #include "Vec.h"
-#include "Common.h"
 #include "LoadBitmap.h"
 #include "CActor.h"
 #include "Mesh.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "UI.h"
+#include "SoundSystem.h"
 
 void drawMenuBackground(void) {
     fillRect(0, 0, (XRES_FRAMEBUFFER), (YRES_FRAMEBUFFER), getPaletteEntry(0xFF6cb1a3), FALSE);
@@ -194,4 +194,77 @@ void redrawHUD(void) {
         }
         head = head->next;
     }
+}
+
+enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t optionsCount, const enum ECommand cmd, enum EGameMenuState backState) {
+
+    switch (cmd) {
+        case kCommandBack:
+            return backState;
+        case kCommandUp:
+            playSound(2);
+            --cursorPosition;
+            break;
+        case kCommandDown:
+            playSound(2);
+            ++cursorPosition;
+            break;
+        case kCommandFire1:
+        case kCommandFire2:
+        case kCommandFire3:
+            return options[cursorPosition];
+    }
+
+    if (cursorPosition >= optionsCount) {
+        cursorPosition = optionsCount - 1;
+    }
+
+    if (cursorPosition < 0) {
+        cursorPosition = 0;
+    }
+
+    return kResumeCurrentState;
+}
+
+void drawGraphic(const uint8_t *graphic) {
+    const uint8_t *ptr = graphic;
+    int buffer[6];
+
+    while (*ptr) {
+        uint8_t c;
+        const uint8_t npoints = *ptr++;
+        const uint8_t r = *ptr++;
+        const uint8_t g = *ptr++;
+        const uint8_t b = *ptr++;
+        const uint32_t colour = getPaletteEntry( 0xFF000000 + (b << 16) + (g << 8) + r);
+        const uint8_t *shape = ptr;
+        int centerX = 0;
+        int centerY = 0;
+
+        for (c = 0; c < npoints; ++c) {
+            centerX += shape[2 * c];
+            centerY += shape[(2 * c) + 1];
+        }
+
+        centerX /= npoints;
+        centerY /= npoints;
+
+        buffer[4] = centerX;
+        buffer[5] = centerY;
+
+        for (c = 0; c < npoints - 1; ++c) {
+
+            buffer[0] = shape[(2 * c) + 0];
+            buffer[1] = shape[(2 * c) + 1];
+            buffer[2] = shape[(2 * c) + 2];
+            buffer[3] = shape[(2 * c) + 3];
+
+            fillTriangle(&buffer[0], colour, getPaletteEntry(0xFFFFFFFF));
+        }
+        ptr += 2 * npoints;
+    }
+}
+
+void clearScreen(void) {
+    fillRect( 0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
 }

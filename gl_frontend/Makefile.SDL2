@@ -6,7 +6,9 @@ CFLAGS= `sdl2-config --cflags `  \
     -DCLI_BUILD \
     -I../core/include \
     -I../common/include \
-    -DINCLUDE_ITEM_DESCRIPTIONS -DTILED_BITMAPS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic -DEMIT_QUIT_OPTION -DENDIANESS_AWARE -DSDL_DISABLE_IMMINTRIN_H
+    -DINCLUDE_ITEM_DESCRIPTIONS -DTILED_BITMAPS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable \
+    -pedantic -DEMIT_QUIT_OPTION -DENDIANESS_AWARE -DSDL_DISABLE_IMMINTRIN_H \
+    -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=240
 
 MENU_TARGET=game
 
@@ -23,10 +25,10 @@ MENU_OBJ= menu/src/Main.o \
           	  ../common/src/VisibilityStrategy.o \
           	  ../common/src/Events.o \
           	  ../common/src/Dungeon.o \
-          	  GL1Common/LoadBitmapGL1.o \
-          	  GL1Common/RendererGL1.o \
-          	  GL1Common/Renderer_RasterizationGL1.o \
-          	  GL1Common/Renderer_TesselationGL1.o \
+          	  GL1Common/LoadBitmap.o \
+          	  GL1Common/Renderer.o \
+          	  GL1Common/RendererRasterization.o \
+          	  GL1Common/RendererTesselation.o \
           	  ../common/src/GameMenu.o \
           	  ../common/src/MainMenu.o \
           	  ../common/src/Engine.o \

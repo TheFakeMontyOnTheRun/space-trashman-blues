@@ -225,3 +225,7 @@ derelict.ram
 derelict64.z64
 gl_frontend/build
 font.font64
+IDEWorkspaceChecks.plist
+gl_frontend/derelict.elf
+gl_frontend/derelict.nds
+filesystem

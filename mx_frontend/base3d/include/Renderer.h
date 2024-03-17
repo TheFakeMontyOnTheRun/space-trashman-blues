@@ -18,22 +18,14 @@
 #endif
 
 #ifndef AGS
-#define XRES_FRAMEBUFFER 320
-#define YRES_FRAMEBUFFER 200
-#else
-#define XRES_FRAMEBUFFER 240
-#define YRES_FRAMEBUFFER 160
-#endif
-
-#ifndef AGS
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
 #else
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(32))
 #endif
 
-#define TOTAL_TEXTURES 64
-#define TRANSPARENCY_COLOR 0
-#define VISIBILITY_CONE_NARROWING MAP_SIZE
+#define TOTAL_TEXTURES 16
+#define TRANSPARENCY_COLOR 199
+#define VISIBILITY_CONE_NARROWING 3
 #define MASK_LEFT 1
 #define MASK_FRONT 2
 #define MASK_RIGHT 4
@@ -45,7 +37,7 @@
 #define ITEMS_IN_MAP(x, y) (itemsInMap[ ( (MAP_SIZE) * (y) ) + (x) ])
 
 typedef uint32_t OutputPixelFormat;
-typedef uint32_t FramebufferPixelFormat;
+typedef uint8_t FramebufferPixelFormat;
 typedef uint8_t UVCoord;
 
 struct Projection {
@@ -91,18 +83,17 @@ void enter2D(void);
 
 void enter3D(void);
 
-#ifdef PAGE_FLIP_ANIMATION
+void computeLightning(void);
+
 void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame, uint8_t *prevFrame, int turnState, int turnTarget,
                     int scale200To240);
-#endif
 
 void fillRect(
         const int x, const int y,
         const size_t dx, const size_t dy,
         const FramebufferPixelFormat pixel, const uint8_t stipple);
 
-
-void drawMesh(const struct Mesh *mesh, const struct Vec3 at);
+void drawMesh(const struct Mesh *mesh, const struct Vec3 at, enum EDirection rotation, FramebufferPixelFormat tint);
 
 void renderRoomTransition(void);
 
@@ -119,50 +110,55 @@ void drawTextAt(const int x,
                 const FramebufferPixelFormat colour);
 
 void drawFloorAt(const struct Vec3 center,
-                 const struct Texture *texture, enum EDirection rotation);
+                 const struct Texture *texture, enum EDirection rotation, FramebufferPixelFormat tint);
 
 void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
-                const struct Texture *texture, uint8_t rotation, uint8_t flipTexture);
+                const struct Texture *texture, uint8_t rotation, uint8_t flipTexture, FramebufferPixelFormat tint);
 
 void drawCeilingAt(const struct Vec3 center,
-                   const struct Texture *texture, enum EDirection rotation);
+                   const struct Texture *texture, enum EDirection rotation, FramebufferPixelFormat tint);
 
 void drawLeftNear(const struct Vec3 center,
                   const FixP_t scale,
                   const struct Texture *texture,
                   const uint8_t mask,
-                  const uint8_t repeatedTexture);
+                  const uint8_t repeatedTexture, FramebufferPixelFormat tint);
 
 void drawRightNear(const struct Vec3 center,
                    const FixP_t scale,
                    const struct Texture *texture,
                    const uint8_t mask,
-                   const uint8_t repeatedTexture);
+                   const uint8_t repeatedTexture,
+                   FramebufferPixelFormat tint);
 
 void drawColumnAt(const struct Vec3 center,
                   const FixP_t scale,
                   const struct Texture *texture,
                   const uint8_t mask,
                   const uint8_t enableAlpha,
-                  const uint8_t repeatedTexture);
+                  const uint8_t repeatedTexture,
+                  FramebufferPixelFormat tint);
 
 void drawBillboardAt(const struct Vec3 center,
-                     struct Texture *bitmap,
+                     struct Bitmap *bitmap,
                      const FixP_t scale,
-                     const int size);
+                     const int size,
+                     FramebufferPixelFormat tint);
 
 void drawBitmapRaw(const int dx,
                    const int dy,
                    int width,
                    int height,
                    BitmapPixelFormat *bitmapData,
-                   const int transparent);
+                   const int transparent,
+                   FramebufferPixelFormat tint);
 
 
 void drawBitmap(const int x,
                 const int y,
                 struct Bitmap *tile,
-                const uint8_t transparent);
+                const uint8_t transparent,
+                FramebufferPixelFormat tint);
 
 void drawBitmapRegion(const int _x,
                       const int _y,
@@ -180,9 +176,9 @@ void drawRect(const int x,
               const FramebufferPixelFormat pixel);
 
 
-void fillTriangle(int *coords, FramebufferPixelFormat colour);
+void fillTriangle(int *coords, FramebufferPixelFormat colour, FramebufferPixelFormat tint);
 
-void drawTexturedTriangle(int *coords, UVCoord *uvCoords, struct Texture *texture, int z);
+void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z, FramebufferPixelFormat tint);
 
 void drawWall(FixP_t x0,
               FixP_t x1,
@@ -192,7 +188,8 @@ void drawWall(FixP_t x0,
               FixP_t x1y1,
               const TexturePixelFormat *texture,
               const FixP_t textureScaleY,
-              const int z);
+              const int z,
+              FramebufferPixelFormat tint);
 
 void drawFloor(FixP_t y0,
                FixP_t y1,
@@ -201,7 +198,8 @@ void drawFloor(FixP_t y0,
                FixP_t x0y1,
                FixP_t x1y1,
                int z,
-               const TexturePixelFormat *texture);
+               const TexturePixelFormat *texture,
+               FramebufferPixelFormat tint);
 
 void drawFrontWall(FixP_t x0,
                    FixP_t y0,
@@ -211,12 +209,14 @@ void drawFrontWall(FixP_t x0,
                    const FixP_t textureScaleY,
                    const int z,
                    const int enableAlpha,
-                   const int size);
+                   const int size,
+                   FramebufferPixelFormat tint);
 
 void drawMask(const FixP_t x0,
               const FixP_t y0,
               const FixP_t x1,
-              const FixP_t y1);
+              const FixP_t y1,
+              FramebufferPixelFormat tint);
 
 void maskWall(
         FixP_t x0,
@@ -224,7 +224,8 @@ void maskWall(
         FixP_t x0y0,
         FixP_t x0y1,
         FixP_t x1y0,
-        FixP_t x1y1);
+        FixP_t x1y1,
+        FramebufferPixelFormat tint);
 
 void maskFloor(
         FixP_t y0,
@@ -233,28 +234,35 @@ void maskFloor(
         FixP_t x1y0,
         FixP_t x0y1,
         FixP_t x1y1,
-        FramebufferPixelFormat pixel
+        FramebufferPixelFormat pixel,
+        FramebufferPixelFormat tint
 );
 
 int submitBitmapToGPU(struct Bitmap *bitmap);
 
-void initGL(void);
+void initRenderer(void);
 
-void startFrameGL(int x, int y, int width, int height);
+void startFrame(int x, int y, int width, int height);
 
-void endFrameGL(void);
+void endFrame(void);
 
 extern struct MapWithCharKey occluders;
+extern struct MapWithCharKey enemySightBlockers;
 extern struct MapWithCharKey colliders;
 extern int visibilityCached;
 extern int needsToRedrawVisibleMeshes;
-extern uint8_t *visibleElementsMap;
-#ifndef N64
 extern struct Bitmap *defaultFont;
+#ifndef AGS
+extern uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+extern uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+extern uint32_t palette[256];
+#else
+extern uint8_t *framebuffer;
 #endif
 extern enum EDirection cameraDirection;
 extern long gameTicks;
 extern int hasSnapshot;
+extern const int distanceForPenumbra;
 extern int turnTarget;
 extern int turnStep;
 extern int needsToRedrawHUD;
@@ -263,9 +271,12 @@ extern struct Vec2i cameraPosition;
 extern uint8_t texturesUsed;
 extern enum ECommand mBufferedCommand;
 extern struct Texture *nativeTextures[TOTAL_TEXTURES];
+extern uint16_t clippingY1;
+extern struct Projection projectionVertices[8];
 extern FixP_t playerHeight;
 extern FixP_t walkingBias;
 extern FixP_t playerHeightChangeRate;
+extern FixP_t playerHeightTarget;
 extern FixP_t xCameraOffset;
 extern FixP_t yCameraOffset;
 extern FixP_t zCameraOffset;
@@ -276,6 +287,9 @@ extern struct Bitmap *mapTopLevel[8];
 #else
 extern struct Bitmap *mapTopLevel;
 #endif
+extern int dirtyLineY0;
+extern int dirtyLineY1;
+extern char mTurnBuffer;
 extern uint8_t *map;
 extern uint8_t *itemsInMap;
 extern FixP_t divLut[320];

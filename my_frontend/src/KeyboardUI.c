@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "Common.h"
 #include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
@@ -15,6 +16,7 @@ extern struct ObjectNode *focusedItem;
 
 extern struct ObjectNode *roomItem;
 
+extern uint8_t firstFrameOnCurrentState;
 
 const char *menuItems[] = {
         "1) Use",
@@ -30,63 +32,35 @@ void initKeyboardUI(void) {
 
 
 void HUD_initialPaint(void) {
-    drawWindow((XRES_FRAMEBUFFER / 8) / 2,
-               0,
-               (XRES_FRAMEBUFFER / 8) / 2 - 1,
-               (YRES_FRAMEBUFFER / 8) / 2 + 2,
-               "Map",
-               2);
-    drawMap();
+
+    if (firstFrameOnCurrentState) {
+        drawWindow((XRES_FRAMEBUFFER / 8) / 2,
+                   0,
+                   (XRES_FRAMEBUFFER / 8) / 2 - 1,
+                   (YRES_FRAMEBUFFER / 8) / 2 + 2,
+                   "Map",
+                   2);
+
+        drawMap();
+    }
 
     drawWindow(0,
-               YRES_TEXT - 8,
+               128 / 8,
                (XRES_FRAMEBUFFER / 8) / 2,
-               7,
+               (YRES_FRAMEBUFFER / 8) - 17,
                "Direction: ",
                2);
-    HUD_refresh();
 
     drawWindowWithOptions(
-            (XRES_FRAMEBUFFER / 8) - (int) /*biggestOption*/ 12 - 3,
-            (YRES_FRAMEBUFFER / 8) - 3 - /*kMainMenuOptionsCount*/ 6,
-            12/*biggestOption*/ + 2,
-            6 /*kMainMenuOptionsCount*/ + 2,
+            1 + (XRES_FRAMEBUFFER / 2) / 8,
+            (YRES_FRAMEBUFFER / 8) - 3 - /*kMainMenuOptionsCount*/ 6 - 1,
+            (XRES_FRAMEBUFFER / 8) - (1 + (XRES_FRAMEBUFFER / 2) / 8) - 1,
+            (YRES_FRAMEBUFFER / 8) - ((YRES_FRAMEBUFFER / 8) - 3 - /*kMainMenuOptionsCount*/ 6 - 1) - 1,
             "Actions",
             menuItems,
             6,
-            -1);
+            0xFF);
+
+    HUD_refresh();
 }
 
-void HUD_refresh(void) {
-	uint8_t d, e;
-
-    for (d = 0; d < 15; ++d) {
-        for (e = 2; e < 6; ++e) {
-            drawTextAt(1 + d, YRES_TEXT - e, " ", 1);
-        }
-    }
-
-    writeStrWithLimit(1, YRES_TEXT - 7, "In room", 16, 2, 0);
-
-    if (roomItem != NULL) {
-        struct Item *item = getItem(roomItem->item);
-
-        if (item->active) {
-            writeStrWithLimit(1, YRES_TEXT - 6, "*", 16, 2, 0);
-        }
-
-        writeStrWithLimit(2, YRES_TEXT - 6, item->name, 16, 2, 0);
-    }
-
-    writeStrWithLimit(1, YRES_TEXT - 4, "In hand", 16, 2, 0);
-
-    if (focusedItem != NULL) {
-        struct Item *item = getItem(focusedItem->item);
-
-        if (item->active) {
-            drawTextAt(1, YRES_TEXT - 3, "*", 1);
-        }
-
-        writeStrWithLimit(2, YRES_TEXT - 3, item->name, 16, 2, 0);
-    }
-}

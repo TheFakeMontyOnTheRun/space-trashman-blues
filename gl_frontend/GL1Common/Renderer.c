@@ -38,7 +38,7 @@
 #include "LoadBitmap.h"
 #include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "UI.h"
@@ -70,6 +70,7 @@ long gameTicks = 0;
 uint8_t linesOfSight[MAP_SIZE][MAP_SIZE];
 uint8_t revealed[MAP_SIZE][MAP_SIZE];
 struct MapWithCharKey tileProperties;
+struct MapWithCharKey customMeshes;
 struct Vec2i cameraPosition;
 enum ECommand mBufferedCommand = kCommandNone;
 struct Texture *itemSprites[TOTAL_ITEMS];
@@ -80,7 +81,6 @@ FixP_t yCameraOffset;
 FixP_t zCameraOffset;
 struct Bitmap *mapTopLevel[8];
 char *messageLogBuffer;
-struct Mesh mesh;
 int messageLogBufferCoolDown = 0;
 
 void printMessageTo3DView(const char *message);
@@ -143,7 +143,8 @@ void initGL(void) {
     memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
 }
 
-void startFrameGL(int x, int y, int width, int height) {
+void startFrame(int x, int y, int width, int height) {
+    firstFrameOnCurrentState = 1;
 #ifdef N64
     surface_t *disp = display_get();
 
@@ -169,7 +170,7 @@ void startFrameGL(int x, int y, int width, int height) {
     enter2D();
 }
 
-void endFrameGL(void) {
+void endFrame(void) {
 #ifndef NDS
     int error;
     glFinish();
@@ -257,6 +258,7 @@ void loadTileProperties(const uint8_t levelNumber) {
     setLoggerDelegate(printMessageTo3DView);
 
     clearMap(&tileProperties);
+    clearMap(&customMeshes);
     clearMap(&occluders);
     clearMap(&colliders);
 
@@ -267,7 +269,7 @@ void loadTileProperties(const uint8_t levelNumber) {
         disposeMem((void *) getFromMap(&tileProperties, c));
     }
 
-    loadPropertyList(&buffer[0], &tileProperties);
+    loadPropertyList(&buffer[0], &tileProperties, &customMeshes);
 
     for (c = 0; c < 256; ++c) {
         struct CTile3DProperties *prop =
@@ -317,8 +319,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 
     /* tmp */
     playerHeight = -intToFix(1);
-
-    loadMesh(&mesh, "fighter.mdl");
 }
 
 void updateCursorForRenderer(const int x, const int z) {
@@ -328,7 +328,7 @@ void updateCursorForRenderer(const int x, const int z) {
     cursorZ = z;
 }
 
-void renderRoomTransition() {
+void renderRoomTransition(void) {
     struct Vec3 center;
     FixP_t acc;
     FixP_t bias;
@@ -488,7 +488,7 @@ void drawMap(const struct CActor *current) {
     ++gameTicks;
 }
 
-enum ECommand getInput() {
+enum ECommand getInput(void) {
     const enum ECommand toReturn = mBufferedCommand;
     mBufferedCommand = kCommandNone;
     return toReturn;
@@ -963,6 +963,19 @@ void render(const long ms) {
                         default:
                             break;
                     }
+                }
+
+                if (tileProp->mGeometryType >= kCustomMeshStart) {
+
+                    tmp.mX = position.mX;
+                    tmp.mY = position.mY;
+                    tmp.mZ = position.mZ;
+
+                    addToVec3(&tmp, 0,
+                              ((tileProp->mFloorHeight * 2) + heightDiff),
+                              0);
+
+                    drawMesh((struct Mesh*)getFromMap(&customMeshes, tileProp->mGeometryType), tmp, cameraDirection);
                 }
 
                 if (itemsSnapshotElement != 0xFF) {

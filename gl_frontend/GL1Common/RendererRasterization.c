@@ -36,7 +36,7 @@
 #include "Mesh.h"
 #include "CTile3DProperties.h"
 #include "LoadBitmap.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 #include "Engine.h"
 #include "VisibilityStrategy.h"
@@ -118,7 +118,44 @@ void drawRect(
     }
 }
 
-void fillTriangle(int *coords, FramebufferPixelFormat colour) {
+void fillTriangle(int *coords, FramebufferPixelFormat fragment) {
+    float r, g, b;
+    float x;
+    float y;
+
+    r = (fragment & 0xFF) * NORMALIZE_COLOUR;
+    g = ((fragment & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+    b = ((fragment & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
+
+    glBegin(GL_TRIANGLES);
+
+    glColor3f(r,
+              g,
+              b);
+
+    x = coords[0] * NORMALIZE_ORTHO;
+    y = coords[1] * NORMALIZE_ORTHO;
+
+    glVertex3f(x, y, -0.13);
+
+    glColor3f(r,
+              g,
+              b);
+
+    x = coords[2] * NORMALIZE_ORTHO;
+    y = coords[3] * NORMALIZE_ORTHO;
+
+    glVertex3f(x, y, -0.13);
+
+    glColor3f(r,
+              g,
+              b);
+
+    x = coords[4] * NORMALIZE_ORTHO;
+    y = coords[5] * NORMALIZE_ORTHO;
+
+    glVertex3f(x, y, -0.13);
+    glEnd();
 }
 
 void drawTexturedTriangle(int *coords, UVCoord *uvCoords, struct Texture *texture, int z) {

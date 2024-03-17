@@ -12,15 +12,15 @@
 
 #endif
 
+#include "Common.h"
 #include "Enums.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "CActor.h"
-#include "Common.h"
 #include "MapWithCharKey.h"
 #include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "PackedFileReader.h"
 #include "Dungeon.h"
 #include "Core.h"
@@ -35,12 +35,12 @@ struct CActor actor;
 const char *thisMissionName;
 int16_t thisMissionNameLen;
 
-void clearMapCache() {
+void clearMapCache(void) {
     memFill(&(ITEMS_IN_MAP(0, 0)), 0xFF, MAP_SIZE * MAP_SIZE);
 }
 
 
-void clearTileProperties() {
+void clearTileProperties(void) {
     int c;
     for (c = 0; c < 256; ++c) {
         void *content = (void *) getFromMap(&tileProperties, c);

@@ -12,7 +12,7 @@ CFLAGS= -I/usr/X11R7/include \
     -flto		    \
     --pedantic		    \
     -DCLI_BUILD \
-    -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS -DSCALE_200_TO_240 -DPAGE_FLIP_ANIMATION -DENDIANESS_AWARE -DEMIT_QUIT_OPTION
+    -I../core/include -I../common/include -DINCLUDE_ITEM_DESCRIPTIONS -DSCALE_200_TO_240 -DPAGE_FLIP_ANIMATION -DENDIANESS_AWARE -DEMIT_QUIT_OPTION -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200
 
 MENU_TARGET=game
 
@@ -29,9 +29,9 @@ MENU_OBJ= menu/src/Main.o \
          	  ../common/src/Events.o \
          	  ../common/src/Dungeon.o \
          	  base3d/src/LoadBitmap.o \
-         	  base3d/src/CRenderer.o \
-         	  base3d/src/CRenderer_Rasterization.o \
-         	  base3d/src/CRenderer_Tesselation.o \
+         	  base3d/src/Renderer.o \
+         	  base3d/src/RendererRasterization.o \
+         	  base3d/src/RendererTesselation.o \
          	  ../common/src/GameMenu.o \
          	  ../common/src/MainMenu.o \
          	  ../common/src/Engine.o \

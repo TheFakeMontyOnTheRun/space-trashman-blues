@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F136B294293CDB1A00131388 /* LoadBitmapGL1.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B28F293CDB1A00131388 /* LoadBitmapGL1.c */; };
-		F136B295293CDB1A00131388 /* Renderer_RasterizationGL1.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B290293CDB1A00131388 /* Renderer_RasterizationGL1.c */; };
-		F136B296293CDB1A00131388 /* Renderer_TesselationGL1.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B291293CDB1A00131388 /* Renderer_TesselationGL1.c */; };
-		F136B297293CDB1A00131388 /* RendererGL1.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B292293CDB1A00131388 /* RendererGL1.c */; };
+		F136B294293CDB1A00131388 /* LoadBitmap.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B28F293CDB1A00131388 /* LoadBitmap.c */; };
+		F136B295293CDB1A00131388 /* RendererRasterization.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B290293CDB1A00131388 /* RendererRasterization.c */; };
+		F136B296293CDB1A00131388 /* RendererTesselation.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B291293CDB1A00131388 /* RendererTesselation.c */; };
+		F136B297293CDB1A00131388 /* Renderer.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B292293CDB1A00131388 /* Renderer.c */; };
 		F136B29A293CDB3900131388 /* MainMenuGL1.nib in Resources */ = {isa = PBXBuildFile; fileRef = F136B298293CDB3900131388 /* MainMenuGL1.nib */; };
 		F149B82A263CB11700A3F597 /* Core.c in Sources */ = {isa = PBXBuildFile; fileRef = F149B829263CB11700A3F597 /* Core.c */; };
 		F1A132302AA6276B00D2EEFC /* GameWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F1A1322F2AA6276B00D2EEFC /* GameWindow.m */; };
@@ -73,12 +73,12 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F1277A02236DE62100478B2C /* LoadBitmap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = LoadBitmap.h; path = ../base3d/include/LoadBitmap.h; sourceTree = SOURCE_ROOT; };
-		F136B28F293CDB1A00131388 /* LoadBitmapGL1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = LoadBitmapGL1.c; path = ../GL1Common/LoadBitmapGL1.c; sourceTree = "<group>"; };
-		F136B290293CDB1A00131388 /* Renderer_RasterizationGL1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Renderer_RasterizationGL1.c; path = ../GL1Common/Renderer_RasterizationGL1.c; sourceTree = "<group>"; };
-		F136B291293CDB1A00131388 /* Renderer_TesselationGL1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Renderer_TesselationGL1.c; path = ../GL1Common/Renderer_TesselationGL1.c; sourceTree = "<group>"; };
-		F136B292293CDB1A00131388 /* RendererGL1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = RendererGL1.c; path = ../GL1Common/RendererGL1.c; sourceTree = "<group>"; };
+		F136B28F293CDB1A00131388 /* LoadBitmap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = LoadBitmap.c; path = ../GL1Common/LoadBitmap.c; sourceTree = "<group>"; };
+		F136B290293CDB1A00131388 /* RendererRasterization.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = RendererRasterization.c; path = ../GL1Common/RendererRasterization.c; sourceTree = "<group>"; };
+		F136B291293CDB1A00131388 /* RendererTesselation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = RendererTesselation.c; path = ../GL1Common/RendererTesselation.c; sourceTree = "<group>"; };
+		F136B292293CDB1A00131388 /* Renderer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Renderer.c; path = ../GL1Common/Renderer.c; sourceTree = "<group>"; };
 		F136B298293CDB3900131388 /* MainMenuGL1.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = MainMenuGL1.nib; sourceTree = "<group>"; };
-		F136B29C293CDC2300131388 /* CRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CRenderer.h; path = ../base3d/include/CRenderer.h; sourceTree = "<group>"; };
+		F136B29C293CDC2300131388 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Renderer.h; path = ../base3d/include/Renderer.h; sourceTree = "<group>"; };
 		F149B829263CB11700A3F597 /* Core.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Core.c; path = ../../core/src/Core.c; sourceTree = "<group>"; };
 		F149B82B263CB12B00A3F597 /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Core.h; path = ../../core/include/Core.h; sourceTree = "<group>"; };
 		F15E9FEA2AC833B2003E6C7F /* SoundSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundSystem.h; path = ../../common/include/SoundSystem.h; sourceTree = SOURCE_ROOT; };
@@ -138,7 +138,7 @@
 		F1C704D7294298C000E2F806 /* MyOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOpenGLView.m; sourceTree = "<group>"; };
 		F1C704D8294298C000E2F806 /* MyOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOpenGLView.h; sourceTree = "<group>"; };
 		F1CA76B32610A8BF00FD1E04 /* Derelict.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Derelict.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Derelict-Info.plist"; sourceTree = "<group>"; };
+		F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Derelict-Info.plist"; sourceTree = "<group>"; };
 		F1CD08C62450E41C00D4794D /* base.pfs */ = {isa = PBXFileReference; lastKnownFileType = file; name = base.pfs; path = ../base.pfs; sourceTree = SOURCE_ROOT; };
 		F1D1CE292A3B9E9E009F1F69 /* CTile3DProperties.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = CTile3DProperties.c; path = ../../common/src/CTile3DProperties.c; sourceTree = SOURCE_ROOT; };
 		F1D1CE2B2A3B9EAA009F1F69 /* CTile3DProperties.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CTile3DProperties.h; path = ../../common/include/CTile3DProperties.h; sourceTree = SOURCE_ROOT; };
@@ -248,10 +248,10 @@
 				F1C6235E2AA3A9840026195F /* Globals.h */,
 				F1C6235F2AA3A9840026195F /* UI.h */,
 				F1C623602AA3A9840026195F /* VisibilityStrategy.h */,
-				F136B28F293CDB1A00131388 /* LoadBitmapGL1.c */,
-				F136B290293CDB1A00131388 /* Renderer_RasterizationGL1.c */,
-				F136B291293CDB1A00131388 /* Renderer_TesselationGL1.c */,
-				F136B292293CDB1A00131388 /* RendererGL1.c */,
+				F136B28F293CDB1A00131388 /* LoadBitmap.c */,
+				F136B290293CDB1A00131388 /* RendererRasterization.c */,
+				F136B291293CDB1A00131388 /* RendererTesselation.c */,
+				F136B292293CDB1A00131388 /* Renderer.c */,
 				F1B8CB2F27CFCFE700C06E6F /* Common.h */,
 				F1B8CB3027CFCFE700C06E6F /* FixP.h */,
 				F1D1CE2B2A3B9EAA009F1F69 /* CTile3DProperties.h */,
@@ -260,7 +260,7 @@
 				F1B8CB3227CFCFE700C06E6F /* PackedFileReader.h */,
 				F1B8CB3327CFCFE700C06E6F /* Vec.h */,
 				F149B82B263CB12B00A3F597 /* Core.h */,
-				F136B29C293CDC2300131388 /* CRenderer.h */,
+				F136B29C293CDC2300131388 /* Renderer.h */,
 				F1B8CB1627CFCCBD00C06E6F /* Common.c */,
 				F1B8CB1727CFCCBD00C06E6F /* FixP.c */,
 				F1B8CB1827CFCCBD00C06E6F /* MapWithCharKey.c */,
@@ -405,10 +405,10 @@
 				F1B8CB1D27CFCCBD00C06E6F /* MapWithCharKey.c in Sources */,
 				F1B8CB1E27CFCCBD00C06E6F /* PackedFileReader.c in Sources */,
 				F1B8CB1F27CFCCBD00C06E6F /* Vec.c in Sources */,
-				F136B294293CDB1A00131388 /* LoadBitmapGL1.c in Sources */,
-				F136B295293CDB1A00131388 /* Renderer_RasterizationGL1.c in Sources */,
-				F136B296293CDB1A00131388 /* Renderer_TesselationGL1.c in Sources */,
-				F136B297293CDB1A00131388 /* RendererGL1.c in Sources */,
+				F136B294293CDB1A00131388 /* LoadBitmap.c in Sources */,
+				F136B295293CDB1A00131388 /* RendererRasterization.c in Sources */,
+				F136B296293CDB1A00131388 /* RendererTesselation.c in Sources */,
+				F136B297293CDB1A00131388 /* Renderer.c in Sources */,
 				F1D1CE2A2A3B9E9E009F1F69 /* CTile3DProperties.c in Sources */,
 				F1C6236E2AA3A9B00026195F /* Crawler.c in Sources */,
 				F1C6236F2AA3A9B00026195F /* CreditsScreen.c in Sources */,
@@ -452,9 +452,11 @@
 					TILED_BITMAPS,
 					EMIT_QUIT_OPTION,
 					ENDIANESS_AWARE,
+					"XRES_FRAMEBUFFER=320",
+					"YRES_FRAMEBUFFER=200",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = "";
 			};
 			name = Debug;
 		};
@@ -467,9 +469,11 @@
 					TILED_BITMAPS,
 					EMIT_QUIT_OPTION,
 					ENDIANESS_AWARE,
+					"XRES_FRAMEBUFFER=320",
+					"YRES_FRAMEBUFFER=200",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = "";
 			};
 			name = Release;
 		};
@@ -479,6 +483,7 @@
 				INFOPLIST_FILE = "Derelict-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = Derelict;
+				SDKROOT = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -489,6 +494,7 @@
 				INFOPLIST_FILE = "Derelict-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = Derelict;
+				SDKROOT = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

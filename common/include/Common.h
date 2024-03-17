@@ -1,6 +1,17 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#ifdef __MWERKS__
+/* WHAT A HORRIBLE NIGHT TO HAVE A KLUDGE! */
+#define XRES_FRAMEBUFFER 320
+#define YRES_FRAMEBUFFER 200
+#define SDLSW
+#define CLI_BUILD
+#define PAGE_FLIP_ANIMATION
+#define INCLUDE_ITEM_DESCRIPTIONS
+#define ENDIANESS_AWARE
+#endif
+
 #ifndef SMD
 #ifdef WIN32
 #include "Win32Int.h"

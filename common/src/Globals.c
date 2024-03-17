@@ -3,5 +3,8 @@
 */
 
 #include <stdint.h>
+
+#include "Common.h"
 #include "Globals.h"
+
 uint8_t unused = 0;

@@ -2,20 +2,17 @@
    Created by Daniel Monteiro on 2021-11-01.
 */
 
-#include <stdlib.h>
 #include <stdint.h>
-#include <stdio.h>
 #include <string.h>
 
+#include "Common.h"
 #include "Enums.h"
 #include "UI.h"
-#include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
 #include "HackingMinigame.h"
 #include "HackingMinigameRules.h"
-
-extern int8_t cursorPosition;
+#include "Engine.h"
 
 const char *functionNames[5] = {
         "???",
@@ -26,6 +23,7 @@ const char *functionNames[5] = {
 };
 
 void HackingScreen_initStateCallback(enum EGameMenuState tag) {
+    (void)tag;
     cursorPosition = 1;
     needs3dRefresh = 0;
 
@@ -34,13 +32,14 @@ void HackingScreen_initStateCallback(enum EGameMenuState tag) {
 
 void HackingScreen_repaintCallback(void) {
     uint8_t pin;
-    uint8_t c;
     uint8_t holdingDisk;
 
-    drawTextAt(1, 1, "Stack trace:", 1);
-    drawTextAt((12 * 0), 11, " CPU0 ", 1);
-    drawTextAt((12 * 1), 11, " CPU1 ", 1);
-    drawTextAt((12 * 2), 11, " CPU2 ", 1);
+    if (firstFrameOnCurrentState) {
+        drawTextAt(1, 1, "Stack trace:", 1);
+        drawTextAt((12 * 0), 11, " CPU0 ", 1);
+        drawTextAt((12 * 1), 11, " CPU1 ", 1);
+        drawTextAt((12 * 2), 11, " CPU2 ", 1);
+    }
 
     drawTextAt((12 * cursorPosition), 11, ">", 1);
     drawTextAt((12 * cursorPosition) + 5, 11, "<", 1);
@@ -58,7 +57,7 @@ void HackingScreen_repaintCallback(void) {
 
             uint8_t diskIndex = getPositionForPin(pin, disk);
 
-            char *funcName = (disk >= getDisksForPin(pin)) ? NULL
+            const char *funcName = (disk >= getDisksForPin(pin)) ? NULL
                                                            : functionNames[diskIndex];
 
             if (funcName) {
@@ -80,16 +79,12 @@ void HackingScreen_repaintCallback(void) {
     }
 }
 
-void HackingScreen_initialPaintCallback(void) {
-
-}
-
 void HackingScreen_unloadStateCallback(enum EGameMenuState newState) {
-
+    (void)newState;
 }
 
 enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long data) {
-
+    (void)data;
     uint8_t holdingDisk = getHoldingDisk();
 
     if (isHackingMinigameCompleted()) {

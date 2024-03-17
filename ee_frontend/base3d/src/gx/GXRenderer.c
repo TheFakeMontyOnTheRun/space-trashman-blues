@@ -19,7 +19,7 @@
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 #include <gccore.h>
 
@@ -54,7 +54,7 @@ void *gpfifo = NULL;
 uint8_t whiteTextureData[32 * 32 * 4];
 GXTexObj whiteTextureObj;
 
-void graphicsInit() {
+void graphicsInit(void) {
 
     enableSmoothMovement = TRUE;
     defaultFont = NULL;
@@ -136,7 +136,7 @@ void graphicsInit() {
     GX_InitTexObj(&whiteTextureObj, &whiteTextureData[0], 32, 32, GX_TF_RGBA8, GX_REPEAT, GX_REPEAT, GX_FALSE);
 }
 
-void handleSystemEvents() {
+void handleSystemEvents(void) {
 #ifdef GX
     PAD_ScanPads();
 
@@ -216,7 +216,7 @@ void handleSystemEvents() {
 #endif
 }
 
-void graphicsShutdown() {
+void graphicsShutdown(void) {
     texturesUsed = 0;
 }
 
@@ -259,21 +259,22 @@ void enter2D(void) {
     GX_LoadProjectionMtx(perspective, GX_PERSPECTIVE);
 }
 
-void initGL() {
+void initGL(void) {
     /* tmp */
     memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
 }
 
-void clearRenderer() {
+void clearRenderer(void) {
 }
 
 void startFrame(int x, int y, int width, int height) {
+    firstFrameOnCurrentState = 1;
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;
     enter2D();
 }
 
-void endFrame() {
+void endFrame(void) {
 }
 
 void enter3D(void) {
@@ -299,7 +300,7 @@ void enter3D(void) {
 
 }
 
-void flipRenderer() {
+void flipRenderer(void) {
     GX_SetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
 
     GX_SetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);

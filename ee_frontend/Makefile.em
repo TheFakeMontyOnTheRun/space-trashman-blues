@@ -1,4 +1,4 @@
-CFLAGS = -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DENDIANESS_AWARE -DTILED_BITMAPS -DSDLGL \
+CFLAGS = -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DENDIANESS_AWARE -DTILED_BITMAPS -DSDLGL  -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200 \
 	-Imenu/include                                       \
 	-ISoundSystem                                       \
 	-Ibase3d/include                                     \
@@ -13,8 +13,8 @@ OBJS = 		menu/src/Main.o \
        		base3d/src/es/LoadBitmap.o \
        		base3d/src/Renderer.o \
        		base3d/src/es/GLESCommon.o \
-       		base3d/src/es/Renderer_Rasterization.o \
-       		base3d/src/es/Renderer_Tesselation.o \
+       		base3d/src/es/RendererRasterization.o \
+       		base3d/src/es/RendererTesselation.o \
        		../common/src/MainMenu.o \
        		../common/src/Crawler.o \
        		../common/src/HelpScreen.o \
@@ -59,5 +59,3 @@ dist: $(TARGET)
 
 clean:
 	rm -f $(OBJS) $(TARGET) dist.zip index.html index.data index.js index.wasm
-	rm *~
-	rm *.js

@@ -6,14 +6,15 @@
 #include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
-
+#include "UI.h"
 #include "KeyboardUI.h"
 
 unsigned char imageBuffer[128 * 32];
 
 uint8_t updateDirection;
 
-enum ESoundDriver soundDriver = kNoSound;
+enum ESoundDriver soundDriver = kPcSpeaker;
+extern uint8_t firstFrameOnCurrentState;
 
 void shutdownGraphics(void) {
 }
@@ -285,7 +286,7 @@ void clearGraphics(void) {
     memset(imageBuffer, 0, 128 * 32);
 }
 
-void initHW(void) {
+void initHW(int argc, char **argv) {
     asm volatile(
             "movb $0x0, %%ah\n\t"
             "movb $0x4, %%al\n\t"
@@ -350,20 +351,33 @@ enum ECommand getInput(void) {
         case 'l':
             return kCommandBack;
 
-        case 'z':
+        case '1':
+            if (waitForKey) {
+                waitForKey = 0;
+                firstFrameOnCurrentState = 1;
+                needs3dRefresh = 1;
+                return kCommandNone;
+            }
+
             return kCommandFire1;
-        case 'x':
+        case '2':
             return kCommandFire2;
-        case 'c':
+        case '3':
             return kCommandFire3;
-        case 'v':
+        case '4':
             return kCommandFire4;
+        case '5':
+            return kCommandFire5;
+        case '6':
+            return kCommandFire6;
+        case 'k':
+            exit(0);
     }
 
     return kCommandNone;
 }
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
+void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
 
     const char *ptr = text;
     uint16_t c = 0;
@@ -409,7 +423,12 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_
 }
 
 
-void graphicsFlush(void) {
+void startFrame(int x, int y, int width, int height) {
+
+}
+
+void endFrame(void) {
+
     uint16_t baseOffset = 0;
     uint16_t index = 0;
 
@@ -476,16 +495,16 @@ void graphicsFlush(void) {
         updateDirection = 0;
         switch (getPlayerDirection()) {
             case 0:
-                writeStrWithLimit(12, 18, "N", 31, 2, 0);
+                writeStrWithLimit(12, 17, "N", 31, 2, 0);
                 break;
             case 1:
-                writeStrWithLimit(12, 18, "E", 31, 2, 0);
+                writeStrWithLimit(12, 17, "E", 31, 2, 0);
                 break;
             case 2:
-                writeStrWithLimit(12, 18, "S", 31, 2, 0);
+                writeStrWithLimit(12, 17, "S", 31, 2, 0);
                 break;
             case 3:
-                writeStrWithLimit(12, 18, "W", 31, 2, 0);
+                writeStrWithLimit(12, 17, "W", 31, 2, 0);
                 break;
         }
     }
@@ -497,8 +516,8 @@ void graphicsFlush(void) {
 void clearTextScreen(void) {
     int c, d;
     for (c = 16; c < 24; ++c) {
-        for (d = 1; d < 32; ++d) {
-            writeStrWithLimit(d, c, " ", 256 / 8, 2, 0);
+        for (d = 0; d < 40; ++d) {
+            writeStrWithLimit(d, c, " ", 320 / 8, 2, 0);
         }
     }
 }

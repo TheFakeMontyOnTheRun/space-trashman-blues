@@ -21,15 +21,20 @@ uint16_t heap = 0;
 
 uint8_t cooldown;
 
+extern uint8_t firstFrameOnCurrentState;
+extern uint8_t waitForKey;
+
 uint8_t updateDirection;
 
 extern uint8_t cursorPosition;
 
-enum ESoundDriver soundDriver = kNoSound;
+enum ESoundDriver soundDriver = kSN76489;
 
 extern enum EGameMenuState currentGameMenuState;
 
-void initHW(void) {
+void initHW(int argc, char **argv) {
+    (void)argc;
+    (void)argv;
     initGamepadUI();
     initTMS9918();
     initSN76489();
@@ -81,6 +86,14 @@ enum ECommand getInput(void) {
         if (currentGameMenuState == kPlayGame) {
             playSound(3);
             cooldown = COOLDOWN_MAX;
+
+            if (waitForKey) {
+                waitForKey = 0;
+                firstFrameOnCurrentState = 1;
+                needs3dRefresh = 1;
+                return kCommandNone;
+            }
+
             return performActionJoypad();
         } else {
             return kCommandFire1;
@@ -95,7 +108,7 @@ enum ECommand getInput(void) {
                 cursorPosition = 0;
             }
 
-            HUD_refresh();
+            HUD_initialPaint();
             cooldown = COOLDOWN_MAX;
             return kCommandNone;
         } else {
@@ -106,7 +119,14 @@ enum ECommand getInput(void) {
     return kCommandNone;
 }
 
-void graphicsFlush(void) {
+void startFrame(int x, int y, int width, int height) {
+    (void)x;
+    (void)y;
+    (void)width;
+    (void)height;
+}
+
+void endFrame(void) {
     if (needs3dRefresh) {
         needs3dRefresh = 0;
         flush3DBuffer();

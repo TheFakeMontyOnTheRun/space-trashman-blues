@@ -65,12 +65,12 @@ void elevatorGoUpCallback(struct Item *item);
 /**
  *
  */
-void grantAccessToSafe();
+void grantAccessToSafe(void);
 
 /**
  *
  * @return
  */
-uint8_t isAccessToSafeGranted();
+uint8_t isAccessToSafeGranted(void);
 
 #endif
