@@ -144,6 +144,7 @@ void initGL(void) {
 }
 
 void startFrame(int x, int y, int width, int height) {
+    firstFrameOnCurrentState = 1;
 #ifdef N64
     surface_t *disp = display_get();
 

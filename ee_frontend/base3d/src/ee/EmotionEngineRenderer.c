@@ -515,6 +515,7 @@ void clearRenderer(void) {
 }
 
 void startFrame(int x, int y, int width, int height) {
+    firstFrameOnCurrentState = 1;
     lastBoundBitmap = NULL;
     current = packets[context];
 

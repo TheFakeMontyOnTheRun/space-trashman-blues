@@ -268,6 +268,7 @@ void clearRenderer(void) {
 }
 
 void startFrame(int x, int y, int width, int height) {
+    firstFrameOnCurrentState = 1;
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;
     enter2D();
