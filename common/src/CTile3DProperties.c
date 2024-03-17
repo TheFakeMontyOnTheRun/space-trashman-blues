@@ -32,6 +32,7 @@ typedef unsigned long size_t;
 
 void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map, struct MapWithCharKey *meshes) {
     int c;
+    struct CTile3DProperties *prop;
     struct StaticBuffer buffer = loadBinaryFileFromPath(propertyFile);
     const uint8_t *limit = buffer.data + buffer.size;
     const uint8_t *bufferHead = buffer.data;
@@ -55,7 +56,7 @@ void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map, stru
             meshCount = *(bufferHead++);
             goto end;
         }
-        struct CTile3DProperties *prop = (struct CTile3DProperties *) allocMem(
+		prop = (struct CTile3DProperties *) allocMem(
                 sizeof(struct CTile3DProperties), GENERAL_MEMORY, 1);
 
         prop->mNeedsAlphaTest = *(bufferHead++);
@@ -92,11 +93,12 @@ void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map, stru
     }
 end:
     for (c = 0; c < meshCount; ++c ) {
+        struct Mesh* mesh;
         uint8_t len = *(bufferHead++);
 
         char* meshName = allocMem(len + 1, GENERAL_MEMORY, 1);
         memcpy(meshName, bufferHead, len);
-        struct Mesh* mesh = allocMem(sizeof(struct Mesh), GENERAL_MEMORY, 1);
+        mesh = allocMem(sizeof(struct Mesh), GENERAL_MEMORY, 1);
         sprintf(&meshNameWithExtension[0], "%s.mdl", meshName);
         loadMesh(mesh, &meshNameWithExtension[0]);
         setInMap(meshes, kCustomMeshStart + c, mesh);

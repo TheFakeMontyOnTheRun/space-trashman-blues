@@ -19,7 +19,7 @@
 #include "Mesh.h"
 #include "CTile3DProperties.h"
 #include "LoadBitmap.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "Engine.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
@@ -68,7 +68,8 @@ struct VBORegister submitVBO(float *vertexData, float *uvData, int vertices,
 struct Vec3 cameraOffset;
 FixP_t walkingBias = 0;
 FixP_t playerHeight = 0;
-
+extern struct Bitmap whiteTexture;
+extern const float planeXYVertices[12];
 struct Texture *nativeTextures[TOTAL_TEXTURES];
 extern struct Texture *itemSprites[TOTAL_ITEMS];
 
@@ -122,6 +123,10 @@ void renderVBOAt(struct Bitmap *bitmap,
 
     checkGLError("starting to draw VBO");
 
+    glEnableVertexAttribArray(aPositionAttributeLocation);
+    checkGLError("Enabled vertex position attribute");
+    glEnableVertexAttribArray(aTexCoordAttributeLocation);
+    checkGLError("Enabled vertex uv attribute");
 
     if (repeatTextures) {
         glUniform2f(uScaleUniformLocation, scaleX, scaleY);
@@ -237,6 +242,140 @@ void renderVBOAt(struct Bitmap *bitmap,
         glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
     }
 
+
+    checkGLError("disabling attributes");
+}
+
+void fillTriangle(int *coords, FramebufferPixelFormat fragment) {
+
+
+    checkGLError("starting to draw VBO");
+    glEnableVertexAttribArray(aPositionAttributeLocation);
+    checkGLError("Enabled vertex position attribute");
+
+
+    glEnableVertexAttribArray(aTexCoordAttributeLocation);
+    checkGLError("Enabled vertex uv attribute");
+
+    glUniform2f(uScaleUniformLocation, 1.0f, 1.0f);
+
+    checkGLError("Setting texture scale");
+
+    float r = (fragment & 0xFF) * NORMALIZE_COLOUR;
+    float g = ((fragment & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+    float b = ((fragment & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
+
+    glUniform4f(uModUniformLocation, r, g, b, 1.0f);
+
+    checkGLError("Setting tint");
+
+    bindTexture(&whiteTexture);
+
+
+    checkGLError("Texture bound");
+
+    glBindBuffer(GL_ARRAY_BUFFER, planeXYVBO.vertexDataIndex);
+
+    float trigVertex[12];
+    trigVertex[0] = coords[0];
+    trigVertex[1] = coords[1];
+    trigVertex[2] = -1;
+    trigVertex[3] = coords[2];
+    trigVertex[4] = coords[3];
+    trigVertex[5] = -1;
+    trigVertex[6] = coords[4];
+    trigVertex[7] = coords[5];
+    trigVertex[8] = -1;
+    trigVertex[9] = coords[4];
+    trigVertex[10] = coords[5];
+    trigVertex[11] = -1;
+
+    glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(float) * 3, &trigVertex[0], GL_DYNAMIC_DRAW);
+
+
+
+    checkGLError("vertex data bound");
+
+    glVertexAttribPointer(aPositionAttributeLocation, 3, GL_FLOAT, GL_FALSE,
+                          sizeof(float) * 3, 0);
+
+
+    checkGLError("vertex data configured");
+
+
+    glBindBuffer(GL_ARRAY_BUFFER, planeXYVBO.uvDataIndex);
+
+
+    checkGLError("vertex indices bound");
+
+    float uvTemp[8];
+    uvTemp[0] = 1;
+    uvTemp[1] = 1;
+    uvTemp[2] = 1;
+    uvTemp[3] = 1;
+    uvTemp[4] = 1;
+    uvTemp[5] = 1;
+    uvTemp[6] = 1;
+    uvTemp[7] = 1;
+
+    glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(float) * 2, &uvTemp[0], GL_DYNAMIC_DRAW);
+
+
+    checkGLError("uv data provided");
+
+    glVertexAttribPointer(aTexCoordAttributeLocation, 2, GL_FLOAT, GL_TRUE,
+                          sizeof(float) * 2, 0);
+
+
+    checkGLError("uv data configured");
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, planeXYVBO.indicesIndex);
+
+
+    checkGLError("indices elements bound");
+
+    mat4x4_transform(transformMatrix, 0 + fixToFloat(xCameraOffset), 0 - fixToFloat(yCameraOffset),
+                     - 1 - fixToFloat(zCameraOffset), 1, 1, 1);
+    glUniformMatrix4fv(uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix);
+
+    mat4x4_rotateX(rotateXMatrix, 0);
+    glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix);
+
+    mat4x4_rotateY(rotateYMatrix, 0);
+    glUniformMatrix4fv(uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix);
+
+    mat4x4_rotateZ(rotateZMatrix, 0);
+    glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
+
+
+    checkGLError("matrices set");
+
+
+    glDrawElements(GL_TRIANGLES, planeXYVBO.indices, GL_UNSIGNED_SHORT, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, planeXYVBO.vertexDataIndex);
+
+    glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(float) * 3, &planeXYVertices[0], GL_DYNAMIC_DRAW);
+
+    checkGLError("triangles drawn");
+
+    mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);
+    glUniformMatrix4fv(uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix);
+
+    mat4x4_rotateX(rotateXMatrix, leanY);
+    glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix);
+
+    mat4x4_rotateY(rotateYMatrix, leanX);
+    glUniformMatrix4fv(uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix);
+
+    mat4x4_rotateZ(rotateZMatrix, 0);
+    glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
+
+
+    checkGLError("unsetting matrices");
+
+    glDisableVertexAttribArray(aPositionAttributeLocation);
+    glDisableVertexAttribArray(aTexCoordAttributeLocation);
 
     checkGLError("disabling attributes");
 }

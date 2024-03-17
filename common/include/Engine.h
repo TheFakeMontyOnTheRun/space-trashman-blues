@@ -3,8 +3,6 @@
 
 typedef void ( *InitStateCallback )(enum EGameMenuState tag);
 
-typedef void ( *InitialPaintCallback )(void);
-
 typedef void ( *RepaintCallback )(void);
 
 typedef enum EGameMenuState ( *TickCallback )(enum ECommand, long data);
@@ -19,8 +17,6 @@ uint8_t menuTick(long ms);
 
 void MainMenu_initStateCallback(enum EGameMenuState tag);
 
-void MainMenu_initialPaintCallback(void);
-
 void MainMenu_repaintCallback(void);
 
 enum EGameMenuState MainMenu_tickCallback(enum ECommand, long data);
@@ -28,8 +24,6 @@ enum EGameMenuState MainMenu_tickCallback(enum ECommand, long data);
 void MainMenu_unloadStateCallback(enum EGameMenuState newState);
 
 void Crawler_initStateCallback(enum EGameMenuState tag);
-
-void Crawler_initialPaintCallback(void);
 
 void Crawler_repaintCallback(void);
 
@@ -39,8 +33,6 @@ void Crawler_unloadStateCallback(enum EGameMenuState newState);
 
 void HelpScreen_initStateCallback(enum EGameMenuState tag);
 
-void HelpScreen_initialPaintCallback(void);
-
 void HelpScreen_repaintCallback(void);
 
 enum EGameMenuState HelpScreen_tickCallback(enum ECommand, long data);
@@ -48,8 +40,6 @@ enum EGameMenuState HelpScreen_tickCallback(enum ECommand, long data);
 void HelpScreen_unloadStateCallback(enum EGameMenuState newState);
 
 void CreditsScreen_initStateCallback(enum EGameMenuState tag);
-
-void CreditsScreen_initialPaintCallback(void);
 
 void CreditsScreen_repaintCallback(void);
 
@@ -59,8 +49,6 @@ void CreditsScreen_unloadStateCallback(enum EGameMenuState newState);
 
 void GameMenu_initStateCallback(enum EGameMenuState tag);
 
-void GameMenu_initialPaintCallback(void);
-
 void GameMenu_repaintCallback(void);
 
 enum EGameMenuState GameMenu_tickCallback(enum ECommand, long data);
@@ -68,8 +56,6 @@ enum EGameMenuState GameMenu_tickCallback(enum ECommand, long data);
 void GameMenu_unloadStateCallback(enum EGameMenuState newState);
 
 void HackingScreen_initStateCallback(enum EGameMenuState tag);
-
-void HackingScreen_initialPaintCallback(void);
 
 void HackingScreen_repaintCallback(void);
 
@@ -96,7 +82,6 @@ void handleSystemEvents(void);
 #define MENU_ITEM_TIME_TO_BECOME_ACTIVE_MS 200
 
 extern InitStateCallback initStateCallback;
-extern InitialPaintCallback initialPaintCallback;
 extern RepaintCallback repaintCallback;
 extern TickCallback tickCallback;
 extern UnloadStateCallback unloadStateCallback;
@@ -107,5 +92,6 @@ extern enum EPresentationState currentPresentationState;
 extern enum EGameMenuState nextNavigationSelection;
 extern enum EGameMenuState menuStateToReturn;
 extern enum EGameMenuState currentGameMenuState;
+extern uint8_t firstFrameOnCurrentState;
 
 #endif /* ENGINE_H */

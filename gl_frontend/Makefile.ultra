@@ -14,7 +14,7 @@ CFLAGS += -Ofast      \
     -I../core/include \
     -I../common/include \
     -DN64 \
-    -DINCLUDE_ITEM_DESCRIPTIONS -DTILED_BITMAPS -DENDIANESS_AWARE \
+    -DINCLUDE_ITEM_DESCRIPTIONS -DTILED_BITMAPS -DENDIANESS_AWARE -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200 \
     -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic -Wno-discarded-qualifiers
 
 src = ../common/src/MainMenu.c \
@@ -25,10 +25,10 @@ src = ../common/src/MainMenu.c \
                   		menu/src/Main.c \
                   		../common/src/Engine.c \
                   		base3d/src/ultra/UltraGLRenderer.c \
-                  		GL1Common/LoadBitmapGL1.c \
-                  		GL1Common/RendererGL1.c \
-                  		GL1Common/Renderer_RasterizationGL1.c \
-                  		GL1Common/Renderer_TesselationGL1.c \
+                  		GL1Common/LoadBitmap.c \
+                  		GL1Common/Renderer.c \
+                  		GL1Common/RendererRasterization.c \
+                  		GL1Common/RendererTesselation.c \
                   		../common/src/VisibilityStrategy.c \
                   		../common/src/Globals.c \
                   		../common/src/CTile3DProperties.o \

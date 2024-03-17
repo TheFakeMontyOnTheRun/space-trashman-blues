@@ -16,7 +16,7 @@
 #define HALF_XRES 100
 #define HALF_YRES 100
 #endif
-
+/*
 #ifndef AGS
 #define XRES_FRAMEBUFFER 320
 #define YRES_FRAMEBUFFER 200
@@ -24,16 +24,16 @@
 #define XRES_FRAMEBUFFER 240
 #define YRES_FRAMEBUFFER 160
 #endif
-
+*/
 #ifndef AGS
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
 #else
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(32))
 #endif
 
-#define TOTAL_TEXTURES 64
-#define TRANSPARENCY_COLOR 0
-#define VISIBILITY_CONE_NARROWING MAP_SIZE
+#define TOTAL_TEXTURES 16
+#define TRANSPARENCY_COLOR 199
+#define VISIBILITY_CONE_NARROWING 3
 #define MASK_LEFT 1
 #define MASK_FRONT 2
 #define MASK_RIGHT 4
@@ -45,7 +45,7 @@
 #define ITEMS_IN_MAP(x, y) (itemsInMap[ ( (MAP_SIZE) * (y) ) + (x) ])
 
 typedef uint32_t OutputPixelFormat;
-typedef uint32_t FramebufferPixelFormat;
+typedef uint8_t FramebufferPixelFormat;
 typedef uint8_t UVCoord;
 
 struct Projection {
@@ -91,10 +91,8 @@ void enter2D(void);
 
 void enter3D(void);
 
-#ifdef PAGE_FLIP_ANIMATION
 void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame, uint8_t *prevFrame, int turnState, int turnTarget,
                     int scale200To240);
-#endif
 
 void fillRect(
         const int x, const int y,
@@ -147,7 +145,7 @@ void drawColumnAt(const struct Vec3 center,
                   const uint8_t repeatedTexture);
 
 void drawBillboardAt(const struct Vec3 center,
-                     struct Texture *bitmap,
+                     struct Bitmap *bitmap,
                      const FixP_t scale,
                      const int size);
 
@@ -182,7 +180,7 @@ void drawRect(const int x,
 
 void fillTriangle(int *coords, FramebufferPixelFormat colour);
 
-void drawTexturedTriangle(int *coords, UVCoord *uvCoords, struct Texture *texture, int z);
+void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z);
 
 void drawWall(FixP_t x0,
               FixP_t x1,
@@ -240,21 +238,27 @@ int submitBitmapToGPU(struct Bitmap *bitmap);
 
 void initGL(void);
 
-void startFrameGL(int x, int y, int width, int height);
+void startFrame(int x, int y, int width, int height);
 
-void endFrameGL(void);
+void endFrame(void);
 
 extern struct MapWithCharKey occluders;
+extern struct MapWithCharKey enemySightBlockers;
 extern struct MapWithCharKey colliders;
 extern int visibilityCached;
 extern int needsToRedrawVisibleMeshes;
-extern uint8_t *visibleElementsMap;
-#ifndef N64
 extern struct Bitmap *defaultFont;
+#ifndef AGS
+extern uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+extern uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+extern uint32_t palette[256];
+#else
+extern uint8_t *framebuffer;
 #endif
 extern enum EDirection cameraDirection;
 extern long gameTicks;
 extern int hasSnapshot;
+extern const int distanceForPenumbra;
 extern int turnTarget;
 extern int turnStep;
 extern int needsToRedrawHUD;
@@ -263,9 +267,12 @@ extern struct Vec2i cameraPosition;
 extern uint8_t texturesUsed;
 extern enum ECommand mBufferedCommand;
 extern struct Texture *nativeTextures[TOTAL_TEXTURES];
+extern uint16_t clippingY1;
+extern struct Projection projectionVertices[8];
 extern FixP_t playerHeight;
 extern FixP_t walkingBias;
 extern FixP_t playerHeightChangeRate;
+extern FixP_t playerHeightTarget;
 extern FixP_t xCameraOffset;
 extern FixP_t yCameraOffset;
 extern FixP_t zCameraOffset;
@@ -276,6 +283,9 @@ extern struct Bitmap *mapTopLevel[8];
 #else
 extern struct Bitmap *mapTopLevel;
 #endif
+extern int dirtyLineY0;
+extern int dirtyLineY1;
+extern char mTurnBuffer;
 extern uint8_t *map;
 extern uint8_t *itemsInMap;
 extern FixP_t divLut[320];

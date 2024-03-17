@@ -12,8 +12,8 @@
 
 #endif
 
-#include "Enums.h"
 #include "Common.h"
+#include "Enums.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "MapWithCharKey.h"
@@ -24,7 +24,7 @@
 #include "Mesh.h"
 #include "CTile3DProperties.h"
 #include "EDirection_Utils.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "Core.h"
 #include "Engine.h"
 #include "FixP.h"

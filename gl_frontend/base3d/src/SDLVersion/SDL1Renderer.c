@@ -15,7 +15,7 @@
 #include "MapWithCharKey.h"
 #include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 #ifdef __APPLE__
 
@@ -40,7 +40,7 @@ int leanY = 0;
 
 SDL_Surface *video;
 
-void graphicsInit() {
+void graphicsInit(void) {
     SDL_Init(SDL_INIT_EVERYTHING);
     video = SDL_SetVideoMode(320, 240, 32, SDL_OPENGL);
 
@@ -52,7 +52,7 @@ void graphicsInit() {
     initGL();
 }
 
-void handleSystemEvents() {
+void handleSystemEvents(void) {
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
@@ -181,7 +181,7 @@ void handleSystemEvents() {
     }
 }
 
-void graphicsShutdown() {
+void graphicsShutdown(void) {
     SDL_Quit();
 
     releaseBitmap(defaultFont);
@@ -189,7 +189,7 @@ void graphicsShutdown() {
     texturesUsed = 0;
 }
 
-void flipRenderer() {
+void flipRenderer(void) {
     SDL_GL_SwapBuffers();
 
 #ifndef __EMSCRIPTEN__

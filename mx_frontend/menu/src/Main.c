@@ -29,7 +29,7 @@
 
 #ifdef WIN32
 const long UCLOCKS_PER_SEC = 1000;
-long uclock() {
+long uclock(void) {
     SYSTEMTIME systime;
     GetSystemTime(&systime);
 
@@ -42,7 +42,7 @@ const long UCLOCKS_PER_SEC = 1000;
 
 long timeEllapsed = 0;
 
-long uclock() {
+long uclock(void) {
     timeEllapsed += (1000 / 60);
     return timeEllapsed;
 }
@@ -50,18 +50,18 @@ long uclock() {
 #endif
 #endif
 
+#include "Common.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "Enums.h"
 #include "CActor.h"
 #include "MapWithCharKey.h"
-#include "Common.h"
 #include "LoadBitmap.h"
 #include "Core.h"
 #include "Engine.h"
 #include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "Derelict.h"
@@ -99,7 +99,7 @@ void initHW(int argc, char** argv) {
     graphicsInit();
 }
 
-void shutdownHW() {
+void shutdownHW(void) {
     graphicsShutdown();
 
     disposeMem(textBuffer);
@@ -114,7 +114,7 @@ void shutdownHW() {
 long start_clock, end_clock, prev;
 
 #ifdef __EMSCRIPTEN__
-void mainLoop () {
+void mainLoop (void) {
   menuTick ( 50 );
   flipRenderer();
 }

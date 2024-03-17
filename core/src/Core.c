@@ -103,10 +103,13 @@ void writeToLog(const char *errorMsg) {
 }
 
 void cantBeUsedCallback(struct Item *item) {
+    (void)item;
     defaultLogger("You can't use it like this.");
 }
 
 void cantBeUsedWithOthersCallback(struct Item *item1, struct Item *item2) {
+    (void)item1;
+    (void)item2;
     defaultLogger("Nothing happens.");
 }
 

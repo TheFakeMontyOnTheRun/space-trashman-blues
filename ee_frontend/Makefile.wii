@@ -27,7 +27,7 @@ INCLUDES	:= ../core/include ../common/include base3d/include common/include menu
 # options for code generation
 #---------------------------------------------------------------------------------
 
-CFLAGS	= -g -O2 -Wall $(MACHDEP) $(INCLUDE) -DWII -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DENDIANESS_AWARE
+CFLAGS	= -g -O2 -Wall $(MACHDEP) $(INCLUDE) -DWII -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DENDIANESS_AWARE -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
@@ -82,8 +82,8 @@ CFILES		:=			../../common/src/MainMenu.c \
                 		../../common/src/EDirection_Utils.o \
                 		../../common/src/Events.c \
                 		../../common/src/Dungeon.c \
-                		../base3d/src/gx/Renderer_Rasterization.c \
-                		../base3d/src/gx/Renderer_Tesselation.c \
+                		../base3d/src/gx/RendererRasterization.c \
+                		../base3d/src/gx/RendererTesselation.c \
                 		../../common/src/NullMusic.c \
                 		../../common/src/UI.c \
                 		../../common/src/Mesh.c \
@@ -141,6 +141,17 @@ $(BUILD):
 clean:
 	@echo clean ...
 	@rm -fr $(BUILD) $(OUTPUT).elf $(OUTPUT).dol
+	@rm -f menu/src/*.o
+	@rm -f menu/src/*.d
+	@rm -f ../core/src/*.o
+	@rm -f ../core/src/*.d
+	@rm -f ../common/src/*.o
+	@rm -f ../common/src/*.d
+	@rm -f base3d/src/*.o
+	@rm -f base3d/src/*.d
+	@rm -f base3d/src/gx/*.o
+	@rm -f base3d/src/gx/*.d
+
 #---------------------------------------------------------------------------------
 run:
 	wiiload $(OUTPUT).dol

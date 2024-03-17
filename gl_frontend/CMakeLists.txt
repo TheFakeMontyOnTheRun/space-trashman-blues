@@ -16,7 +16,7 @@ include_directories(../common/include)
 include_directories(base3d/include)
 include_directories(menu/include)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCLI_BUILD -DTILED_BITMAPS -DINCLUDE_ITEM_DESCRIPTIONS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic -g -DENDIANESS_AWARE -DEMIT_QUIT_OPTION -DSDL_DISABLE_IMMINTRIN_H")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCLI_BUILD -DTILED_BITMAPS -DINCLUDE_ITEM_DESCRIPTIONS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic -g -DENDIANESS_AWARE -DEMIT_QUIT_OPTION -DSDL_DISABLE_IMMINTRIN_H -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200")
 
 find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -24,10 +24,10 @@ find_package(OpenGL REQUIRED)
 add_executable(derelict64
         menu/src/Main.c
         base3d/src/SDLVersion/CSDL2Renderer.c
-        GL1Common/LoadBitmapGL1.c
-        GL1Common/RendererGL1.c
-        GL1Common/Renderer_RasterizationGL1.c
-        GL1Common/Renderer_TesselationGL1.c
+        GL1Common/LoadBitmap.c
+        GL1Common/Renderer.c
+        GL1Common/RendererRasterization.c
+        GL1Common/RendererTesselation.c
         ../common/src/MainMenu.c
         ../common/src/Crawler.c
         ../common/src/HelpScreen.c

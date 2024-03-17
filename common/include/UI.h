@@ -5,6 +5,8 @@
 #ifndef UI_H
 #define UI_H
 
+struct Bitmap; /* temporary - soon this will be refactored out */
+
 void drawMenuBackground(void);
 
 void
@@ -29,5 +31,16 @@ int drawAppearingWindow(const int x, const int y, const unsigned int dx, const u
                         long remainingTime);
 
 void updateMap(void);
+
+enum EGameMenuState handleCursor(const enum EGameMenuState* options,
+				 uint8_t optionsCount,
+				 const enum ECommand cmd,
+				 enum EGameMenuState backState);
+
+void drawGraphic(const uint8_t *shapes);
+
+extern int8_t cursorPosition;
+
+void clearScreen(void);
 
 #endif /*UI_H*/

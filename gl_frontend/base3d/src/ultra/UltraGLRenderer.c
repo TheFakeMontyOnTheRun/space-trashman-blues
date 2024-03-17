@@ -22,7 +22,7 @@
 #include "MapWithCharKey.h"
 #include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 int snapshotSignal = '.';
 rdpq_font_t *fnt1;
@@ -33,7 +33,7 @@ extern int turning;
 extern int leanX;
 extern int leanY;
 
-void graphicsInit() {
+void graphicsInit(void) {
 
     debug_init_isviewer();
     debug_init_usblog();
@@ -51,7 +51,7 @@ void graphicsInit() {
     rdpq_text_register_font(1, fnt1);
 }
 
-void handleSystemEvents() {
+void handleSystemEvents(void) {
 
     controller_scan();
     struct controller_data pressed = get_keys_pressed();
@@ -131,9 +131,9 @@ void handleSystemEvents() {
     }
 }
 
-void graphicsShutdown() {
+void graphicsShutdown(void) {
     texturesUsed = 0;
 }
 
-void flipRenderer() {
+void flipRenderer(void) {
 }

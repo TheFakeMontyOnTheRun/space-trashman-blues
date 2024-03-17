@@ -16,7 +16,7 @@
 #include "LoadBitmap.h"
 #include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "UI.h"
@@ -140,7 +140,7 @@ void updateCursorForRenderer(const int x, const int z) {
     cursorZ = z;
 }
 
-void renderRoomTransition() {
+void renderRoomTransition(void) {
     struct Vec3 center;
 
     if (!enableSmoothMovement) {
@@ -276,7 +276,7 @@ void drawMap(const struct CActor *current) {
     ++gameTicks;
 }
 
-enum ECommand getInput() {
+enum ECommand getInput(void) {
     const enum ECommand toReturn = mBufferedCommand;
     mBufferedCommand = kCommandNone;
     return toReturn;

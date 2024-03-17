@@ -1,7 +1,7 @@
 CXX = m68k-amigaos-g++
 CC = m68k-amigaos-gcc
 STRIP=m68k-amigaos-strip
-CFLAGS = -Ibase3d/include -I../common/include -I../core/include -DPAGE_FLIP_ANIMATION -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -Imenu/include -c -m68020 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -Ofast -DAGA8BPP -DCD32 -DFASTER_TEXTURE_MAP -DENDIANESS_AWARE
+CFLAGS = -Ibase3d/include -I../common/include -I../core/include -DPAGE_FLIP_ANIMATION -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -Imenu/include -c -m68020 -s -fexpensive-optimizations -fno-keep-inline-functions -fomit-frame-pointer -ffast-math -Ofast -DAGA8BPP -DCD32 -DFASTER_TEXTURE_MAP -DENDIANESS_AWARE -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200
 LDFLAGS =  -msmall-code -fexpensive-optimizations -O3 -s -fomit-frame-pointer -noixemul
 
 MENU_TARGET=gamecd32
@@ -19,9 +19,9 @@ MENU_OBJ= menu/src/Main.o \
 	  ../common/src/Dungeon.o \
 	  ../common/src/Events.o \
 	  base3d/src/LoadBitmap.o \
-	  base3d/src/CRenderer.o \
-	  base3d/src/CRenderer_Rasterization.o \
-	  base3d/src/CRenderer_Tesselation.o \
+	  base3d/src/Renderer.o \
+	  base3d/src/RendererRasterization.o \
+	  base3d/src/RendererTesselation.o \
 	  ../common/src/GameMenu.o \
 	  ../common/src/MainMenu.o \
 	  ../common/src/Engine.o \

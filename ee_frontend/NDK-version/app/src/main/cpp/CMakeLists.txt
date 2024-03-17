@@ -15,7 +15,7 @@ include_directories(../../../../../base3d/include)
 include_directories(../../../../../common/include)
 include_directories(../../../../../menu/include)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DANDROID -DENDIANESS_AWARE -DTILED_BITMAPS -D_BSD_SOURCE")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DANDROID -DENDIANESS_AWARE -DTILED_BITMAPS -D_BSD_SOURCE -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200")
 
 
 # Creates and names a library, sets it as either STATIC
@@ -61,8 +61,8 @@ add_library(native-lib SHARED
         ../../../../../base3d/src/es/LoadBitmap.c
         ../../../../../base3d/src/Renderer.c
         ../../../../../base3d/src/es/GLESCommon.c
-        ../../../../../base3d/src/es/Renderer_Rasterization.c
-        ../../../../../base3d/src/es/Renderer_Tesselation.c
+        ../../../../../base3d/src/es/RendererRasterization.c
+        ../../../../../base3d/src/es/RendererTesselation.c
         ../../../../../menu/src/Main.c
         native-lib.c)
 

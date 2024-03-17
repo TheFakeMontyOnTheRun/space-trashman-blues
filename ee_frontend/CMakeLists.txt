@@ -16,7 +16,7 @@ include_directories(common/include)
 include_directories(menu/include)
 include_directories(SoundSystem)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DEMIT_QUIT_OPTION -DENDIANESS_AWARE -DTILED_BITMAPS -DSDLGL -DSDL_DISABLE_IMMINTRIN_H" )
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DEMIT_QUIT_OPTION -DENDIANESS_AWARE -DTILED_BITMAPS -DSDLGL -DSDL_DISABLE_IMMINTRIN_H  -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200" )
 
 find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -29,8 +29,8 @@ add_executable(derelict128
 		base3d/src/es/LoadBitmap.c
 		base3d/src/Renderer.c
 		base3d/src/es/GLESCommon.c
-		base3d/src/es/Renderer_Rasterization.c
-		base3d/src/es/Renderer_Tesselation.c
+        base3d/src/es/RendererRasterization.c
+		base3d/src/es/RendererTesselation.c
 		../common/src/MainMenu.c
 		../common/src/Crawler.c
 		../common/src/HelpScreen.c
