@@ -57,8 +57,6 @@ struct CellPattern {
 
 void clearGraphics(void);
 
-void clearScreen(void);
-
 void clearTextScreen(void);
 
 void dropItem(void);
@@ -71,11 +69,11 @@ void shutdownGraphics(void);
 
 enum ECommand getInput(void);
 
-void graphicsFlush(void);
+void endFrame(void);
+
+void startFrame(int x, int y, int width, int height);
 
 void graphicsPut(uint8_t x, uint8_t y);
-
-uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr);
 
 void graphicsPutPointArray(uint8_t *y128Values);
 
@@ -83,15 +81,13 @@ void HUD_initialPaint(void);
 
 void HUD_refresh(void);
 
-void initHW(void);
+void initHW(int, char **pString);
 
 void interactWithItemInRoom(void);
 
 void nextItemInHand(void);
 
 void nextItemInRoom(void);
-
-void performAction(void);
 
 void pickItem(void);
 
@@ -105,21 +101,15 @@ void renderCameraWest(void);
 
 void renderScene(void);
 
-void showMessage(const char *msg);
-
-void shutdownGraphics(void);
-
 void updateMapItems(void);
 
 void useItemInHand(void);
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple);
 
-void drawTextAt(uint8_t column, uint8_t line, const char *str, uint8_t colour);
-
 void flush3DBuffer(void);
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg);
+void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg);
 
 uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr);
 

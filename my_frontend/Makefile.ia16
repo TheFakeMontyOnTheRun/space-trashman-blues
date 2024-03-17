@@ -17,7 +17,8 @@ CFLAGS = \
     -DCAN_PICK_OBJECT_AT_ANY_DISTANCE  \
     -DSUPPORTS_ROOM_TRANSITION_ANIMATION \
     -DSUPPORTS_HACKING_MINIGAME \
-    -DENDIANESS_AWARE
+    -DENDIANESS_AWARE \
+    -DMONOCHROME_VECTORS
 
 CC = ia16-elf-gcc
 STRIP = ia16-elf-strip
@@ -31,10 +32,10 @@ OBJS = \
     src/Main.o \
     src/UI.o \
     src/Crawler.o \
-    src/Credits.o \
     src/GameMenu.o \
-    src/MainMenu.o \
-    src/Help.o \
+    ../common/src/CreditsScreen.o \
+    ../common/src/MainMenu.o \
+    ../common/src/HelpScreen.o \
     ../common/src/Engine.o \
     src/HackingMinigame.o \
     src/KeyboardUI.o \

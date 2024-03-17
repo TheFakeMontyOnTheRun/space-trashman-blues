@@ -1,15 +1,10 @@
 #include <stdint.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include <games.h>
-#include <psg.h>
-#include <sound.h>
 
 #include "Enums.h"
 #include "Core.h"
-#include "Derelict.h"
 #include "Renderer.h"
 
 #include "AY-3-8910.h"
@@ -17,21 +12,16 @@
 #include "UI.h"
 #include "font.h"
 
+uint8_t updateDirection;
+
 /* Sadly, I can't include conio.h - otherwise, I would get errors when building on OSX */
 int kbhit(void);
 int getch(void);
-
+extern uint8_t firstFrameOnCurrentState;
+enum ESoundDriver soundDriver = kAY38910;
 
 /*  Required since we have our own memory allocator abstraction */
 uint16_t heap = 0;
-
-enum ESoundDriver soundDriver = kNoSound;
-
-extern struct ObjectNode *focusedItem;
-
-extern struct ObjectNode *roomItem;
-
-uint8_t updateDirection;
 
 #define BUFFER_SIZEX 32
 #define BUFFER_SIZEY 128
@@ -40,21 +30,22 @@ uint8_t updateDirection;
 
 #define MARGIN_TEXT_SCREEN_LIMIT 40
 
-int getch(void);
-
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 
-void initHW(void) {
+void initHW(int argc, char **argv) {
+    (void)argc;
+    (void)argv;
     initAY38910();
     initKeyboardUI();
     updateDirection = 1;
     needs3dRefresh = 0;
 }
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
-
+void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
+    (void)fg;
+    (void)bg;
     uint8_t len = strlen(text);
-    char *ptr = text;
+    const char *ptr = text;
     uint8_t c = 0;
     uint8_t x = _x;
 
@@ -140,8 +131,8 @@ uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
 void clearTextScreen(void) {
     uint8_t c, d;
     for (c = 16; c < 24; ++c) {
-        for (d = 1; d < 32; ++d) {
-            writeStrWithLimit(d, c, " ", 256 / 8, 2, 0);
+        for (d = 0; d < 40; ++d) {
+            writeStrWithLimit(d, c, " ", 320 / 8, 2, 0);
         }
     }
 }
@@ -158,7 +149,7 @@ enum ECommand getInput(void) {
 
     performAction();
 
-    switch (input) {
+    switch (getch()) {
         case 30:
         case 'w':
             return kCommandUp;
@@ -180,8 +171,14 @@ enum ECommand getInput(void) {
         case 'm':
             drawMap();
             return '.';
-
         case '1':
+            if (waitForKey) {
+                waitForKey = 0;
+                firstFrameOnCurrentState = 1;
+                needs3dRefresh = 1;
+                return kCommandNone;
+            }
+
             return kCommandFire1;
         case '2':
             return kCommandFire2;
@@ -194,10 +191,7 @@ enum ECommand getInput(void) {
         case '6':
             return kCommandFire6;
     }
-    return input;
-}
-
-void shutdownGraphics(void) {
+    return kCommandNone;
 }
 
 void clearScreen(void) {
@@ -208,7 +202,14 @@ void clearGraphics(void) {
     memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
-void graphicsFlush(void) {
+void startFrame(int x, int y, int width, int height) {
+    (void)x;
+    (void)y;
+    (void)width;
+    (void)height;
+}
+
+void endFrame(void) {
     if (needs3dRefresh) {
         for (uint8_t y = 0; y < BUFFER_SIZEY; ++y) {
             uint8_t *line = (unsigned char *) 0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048);
@@ -218,7 +219,7 @@ void graphicsFlush(void) {
         if (updateDirection) {
             char direction[8] = {'N', 0, 'E', 0, 'S', 0, 'W', 0};
             updateDirection = 0;
-            writeStrWithLimit(12, 18, &direction[getPlayerDirection() * 2], 31, 2, 0);
+            writeStrWithLimit(12, 17, &direction[getPlayerDirection() * 2], 31, 2, 0);
         }
 
         memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
@@ -256,7 +257,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 }
 
 uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
-
+    (void)colour;
     if (ptr == NULL) {
         ptr = &buffer[(y * (BUFFER_SIZEX)) + (x / 4)]; /* skip to the line in pattern */
     }
@@ -311,8 +312,8 @@ void graphicsPut(uint8_t x, uint8_t y) {
 }
 
 void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, uint8_t stipple) {
+    uint8_t y;
     uint16_t x;
-    uint8_t  y;
     for (y = y0; y < y1; ++y) {
         for (x = x0; x < x1; ++x) {
             if (!stipple || ((x + y) & 1 )) {

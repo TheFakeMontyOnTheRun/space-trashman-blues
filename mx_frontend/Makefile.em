@@ -14,7 +14,7 @@ CFLAGS=-g -c -O3     \
 	-Imenu/include                                       \
 	-ISoundSystem                                       \
 	-Ibase3d/include                                     \
-	-I../core/include -DINCLUDE_ITEM_DESCRIPTIONS -DCLI_BUILD -sUSE_SDL -DPAGE_FLIP_ANIMATION -DENDIANESS_AWARE
+	-I../core/include -DINCLUDE_ITEM_DESCRIPTIONS -DCLI_BUILD -sUSE_SDL -DPAGE_FLIP_ANIMATION -DENDIANESS_AWARE -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200
 
 MENU_TARGET=game.html
 
@@ -37,9 +37,9 @@ MENU_OBJ=../common/src/MainMenu.o \
 	menu/src/Main.o \
 	base3d/src/SDLVersion/SDL1Renderer.o \
 	base3d/src/LoadBitmap.o \
-	base3d/src/CRenderer.o \
-	base3d/src/CRenderer_Rasterization.o \
-	base3d/src/CRenderer_Tesselation.o \
+	base3d/src/Renderer.o \
+	base3d/src/RendererRasterization.o \
+	base3d/src/RendererTesselation.o \
 	../common/src/NullMusic.o \
 	../common/src/HelpScreen.o \
 	../common/src/HackingScreen.o \

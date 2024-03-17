@@ -24,7 +24,7 @@
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "Enums.h"
@@ -34,7 +34,7 @@
 #include "LoadBitmap.h"
 #include "Engine.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "SoundSystem.h"
@@ -93,15 +93,15 @@ Java_pt_b13h_derelictgles2_DerelictJNI_initAssets(JNIEnv *env, jclass clazz,
 
 int soundToPlay = -1;
 
-void stopSounds() {}
+void stopSounds(void) {}
 
 void playSound(const int action) {
     soundToPlay = action;
 }
 
-void soundTick() {}
+void soundTick(void) {}
 
-void muteSound() {}
+void muteSound(void) {}
 
 JNIEXPORT jint JNICALL
 Java_pt_b13h_derelictgles2_DerelictJNI_getSoundToPlay(JNIEnv *env, jclass clazz) {

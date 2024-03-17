@@ -7,7 +7,7 @@ EE_CFLAGS += -Ibase3d/include        \
     -I../core/include \
     -I../common/include \
     -DPLAYSTATION2 \
-    -DINCLUDE_ITEM_DESCRIPTIONS -DENDIANESS_AWARE -DSHORT_VIEW_ANGLE
+    -DINCLUDE_ITEM_DESCRIPTIONS -DENDIANESS_AWARE -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200 -DSHORT_VIEW_ANGLE
 
 EE_BIN = derelict_ee.elf
 
@@ -37,8 +37,8 @@ EE_OBJS= menu/src/Main.o \
         ../core/src/Parser.o \
         ../common/src/NullMusic.o \
         base3d/src/ee/LoadBitmap.o \
-        base3d/src/ee/Renderer_Rasterization.o \
-        base3d/src/ee/Renderer_Tesselation.o \
+        base3d/src/ee/RendererRasterization.o \
+        base3d/src/ee/RendererTesselation.o \
         base3d/src/Renderer.o \
         ../common/src/HackingMinigameRules.o \
         base3d/src/ee/EmotionEngineRenderer.o

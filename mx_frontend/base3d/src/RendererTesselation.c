@@ -13,12 +13,12 @@
 
 #endif
 
+#include "Common.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "Enums.h"
 #include "CActor.h"
 #include "MapWithCharKey.h"
-#include "Common.h"
 #include "Vec.h"
 #include "Globals.h"
 #include "LoadBitmap.h"
@@ -27,7 +27,7 @@
 #include "MapWithCharKey.h"
 #include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 #define kMinZCull 0
 #define FIXP_HALF_XRES  (intToFix(HALF_XRES))

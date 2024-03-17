@@ -19,7 +19,7 @@
 #include "LoadBitmap.h"
 #include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "UI.h"
@@ -333,7 +333,7 @@ uint32_t getPaletteEntry(const uint32_t origin) {
     return (0x80 << 24) + (origin & 0x00FFFFFF);
 }
 
-void clearRenderer() {
+void clearRenderer(void) {
 }
 
 void enter2D(void) {
@@ -379,7 +379,7 @@ void unloadTextures(void) {
 #endif
 }
 
-void initGL() {
+void initGL(void) {
     GLint status;
 
     /* creating shader */
@@ -517,7 +517,6 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
     // Set the filtering mode - surprisingly, this is needed.
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     checkGLError("submit bitmap to GPU");
@@ -527,9 +526,8 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
     return textureId;
 }
 
-
 void startFrame(int x, int y, int width, int height) {
-    
+    firstFrameOnCurrentState = 1;
     glViewport(x, y, width, height);
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;
@@ -547,7 +545,7 @@ void startFrame(int x, int y, int width, int height) {
     
     glUniform2f(uScaleUniformLocation, 1.0f, 1.0f);
     glUniform4f(uModUniformLocation, 1.0f, 1.0f, 1.0f, 1.0f);
-    
+
     mat4x4_rotateX(rotateXMatrix, 0);
     glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix);
 
@@ -560,7 +558,7 @@ void startFrame(int x, int y, int width, int height) {
     enter2D();
 }
 
-void endFrame() {
+void endFrame(void) {
     checkGLError("end frame");
 }
 

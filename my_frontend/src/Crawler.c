@@ -3,37 +3,19 @@
 */
 #include <stdlib.h>
 #include <stdint.h>
+
+#include "Common.h"
 #include "Enums.h"
 #include "UI.h"
 #include "Renderer.h"
-
-
-#include <stddef.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
-
 #include "Core.h"
 #include "Derelict.h"
-#include "Enums.h"
-#include "Renderer.h"
 #include "map.h"
+#include "Engine.h"
 
 int8_t map[32][32];
 
-#ifdef SUPPORTS_HACKING_MINIGAME
 
-#include "HackingMinigame.h"
-
-#endif
-
-#ifdef MSDOS
-#include "Common.h"
-#endif
-
-#ifndef EMBEDDED_DATA
-#include "PackedFileReader.h"
-#endif
 
 extern int8_t stencilHigh[XRES];
 extern struct ObjectNode *focusedItem;
@@ -51,8 +33,34 @@ uint8_t needs3dRefresh;
 uint8_t roomTransitionAnimationStep = 0;
 #endif
 
+void HUD_refresh(void) {
+    writeStrWithLimit(1, YRES_TEXT - 7, "In room", 16, 2, 0);
+
+    if (roomItem != NULL) {
+        struct Item *item = getItem(roomItem->item);
+
+        if (item->active) {
+            writeStrWithLimit(1, YRES_TEXT - 6, "*", 16, 2, 0);
+        }
+
+        writeStrWithLimit(2, YRES_TEXT - 6, item->name, 16, 2, 0);
+    }
+
+    writeStrWithLimit(1, YRES_TEXT - 4, "In hand", 16, 2, 0);
+
+    if (focusedItem != NULL) {
+        struct Item *item = getItem(focusedItem->item);
+
+        if (item->active) {
+            drawTextAt(1, YRES_TEXT - 3, "*", 1);
+        }
+
+        writeStrWithLimit(2, YRES_TEXT - 3, item->name, 16, 2, 0);
+    }
+}
 
 enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
+    (void)data;
     uint8_t prevX;
     uint8_t prevZ;
     struct WorldPosition *pos;
@@ -98,7 +106,11 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
     }
     updateMapItems();
     needs3dRefresh = 1;
-    HUD_refresh();
+
+    if (!waitForKey) {
+        HUD_refresh();
+    }
+
     return kResumeCurrentState;
 handle_directions:
     switch (cmd) {
@@ -123,7 +135,6 @@ handle_directions:
             walkBy(0);
             break;
         case kCommandNone:
-            needs3dRefresh = 0;
             return kResumeCurrentState;
     }
     needs3dRefresh = 1;
@@ -182,6 +193,12 @@ handle_directions:
 }
 
 void Crawler_repaintCallback(void) {
+
+    if (firstFrameOnCurrentState) {
+        clearScreen();
+        HUD_initialPaint();
+    }
+
     if (!needs3dRefresh) {
         return;
     }
@@ -215,7 +232,8 @@ void Crawler_repaintCallback(void) {
     }
 }
 
-void Crawler_initStateCallback(enum EGameMenuState tag_unused) {
+void Crawler_initStateCallback(enum EGameMenuState tag) {
+    (void)tag;
     enteredFrom = 0;
     cameraRotation = 0;
     initStation();
@@ -226,12 +244,8 @@ void Crawler_initStateCallback(enum EGameMenuState tag_unused) {
     needs3dRefresh = 1;
 }
 
-void Crawler_initialPaintCallback(void) {
-    clearScreen();
-    HUD_initialPaint();
-}
-
 void Crawler_unloadStateCallback(enum EGameMenuState newState) {
+    (void)newState;
     needs3dRefresh = 0;
 }
 

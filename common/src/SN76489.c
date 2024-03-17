@@ -41,10 +41,10 @@ void initSN76489(void) {
     psg_channels(chanAll, chanNone); // set all channels to tone generation
 #endif
 
-    psg_tone(0, 0);
     soundPos = 0;
     soundNum = 0;
     soundDuration = 0;
+    psg_tone(0, 0);
     psg_volume(0, 10);
 }
 

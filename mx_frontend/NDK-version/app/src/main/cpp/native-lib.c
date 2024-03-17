@@ -24,7 +24,7 @@
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "Enums.h"
@@ -34,7 +34,7 @@
 #include "LoadBitmap.h"
 #include "Engine.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "SoundSystem.h"
@@ -152,17 +152,15 @@ Java_pt_b13h_spacetrashmanblues_DerelictJNI_getPixelsFromNative(JNIEnv *env, jcl
 
 int soundToPlay = -1;
 
-void setupOPL2() {}
-
-void stopSounds() {}
+void setupOPL2(int port) {}
 
 void playSound(const int action) {
     soundToPlay = action;
 }
 
-void soundTick() {}
+void soundTick(void) {}
 
-void muteSound() {}
+void stopSounds(void) {}
 
 JNIEXPORT jint JNICALL
 Java_pt_b13h_spacetrashmanblues_DerelictJNI_getSoundToPlay(JNIEnv *env, jclass clazz) {

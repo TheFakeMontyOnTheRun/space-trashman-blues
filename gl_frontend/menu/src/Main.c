@@ -19,7 +19,7 @@
 #include "Engine.h"
 #include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "Derelict.h"
@@ -86,19 +86,9 @@ int main(int argc, char **argv) {
             delta_time = 20;
         }
 
-#ifndef N64
-#ifndef NDS
-        startFrameGL(0, 0, 320, 240);
-#else
-        startFrameGL(0, 0, 255, 191);
-#endif
-#else
-        startFrameGL(0, 0, 320, 240);
-#endif
-
+        startFrame(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER);
         isRunning = isRunning && menuTick(delta_time);
-
-        endFrameGL();
+        endFrame();
         flipRenderer();
 
     }

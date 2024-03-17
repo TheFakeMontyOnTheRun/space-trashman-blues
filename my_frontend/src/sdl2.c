@@ -14,6 +14,7 @@
 
 #include "SDL.h"
 
+extern uint8_t firstFrameOnCurrentState;
 extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
@@ -21,7 +22,6 @@ SDL_Window *window;
 SDL_Renderer *renderer;
 uint8_t updateDirection;
 
-uint8_t mBufferedCommand;
 uint32_t palette[16];
 uint8_t framebuffer[128 * 128];
 uint8_t vfb[256 * 192];
@@ -124,13 +124,10 @@ void handleSystemEvents(void) {
 enum ECommand getInput(void) {
     SDL_Event event;
 
-    mBufferedCommand = kCommandNone;
-
     while (SDL_PollEvent(&event)) {
 
         if (event.type == SDL_QUIT) {
-
-            mBufferedCommand = 'q';
+            return kCommandQuit;
         }
 
         if (event.type == SDL_KEYUP) {
@@ -138,42 +135,39 @@ enum ECommand getInput(void) {
             switch (event.key.keysym.sym) {
                 case SDLK_RETURN:
                 case SDLK_1:
-                    mBufferedCommand = kCommandFire1;
-                    break;
+                    if (waitForKey) {
+                        waitForKey = 0;
+                        firstFrameOnCurrentState = 1;
+                        needs3dRefresh = 1;
+                        return kCommandNone;
+                    }
+                    return kCommandFire1;
 
                 case SDLK_ESCAPE:
-                    mBufferedCommand = kCommandBack;
-                    break;
+                    return kCommandBack;
 
                 case SDLK_q:
-                    mBufferedCommand = kCommandQuit;
-                    break;
+                    return kCommandQuit;
 
                 case SDLK_KP_7:
                 case SDLK_2:
-                    mBufferedCommand = kCommandFire2;
-                    break;
+                    return kCommandFire2;
 
                 case SDLK_KP_8:
                 case SDLK_3:
-                    mBufferedCommand = kCommandFire3;
-                    break;
-
+                    return kCommandFire3;
 
                 case SDLK_KP_4:
                 case SDLK_4:
-                    mBufferedCommand = kCommandFire4;
-                    break;
+                    return kCommandFire4;
 
                 case SDLK_KP_5:
                 case SDLK_5:
-                    mBufferedCommand = kCommandFire5;
-                    break;
+                    return kCommandFire5;
 
                 case SDLK_KP_9:
                 case SDLK_9:
-                    mBufferedCommand = kCommandFire6;
-                    break;
+                    return kCommandFire6;
 
                 case SDLK_s:
                     clearTextScreen();
@@ -181,18 +175,17 @@ enum ECommand getInput(void) {
 
                 case SDLK_LEFT:
                     updateDirection = 1;
-                    mBufferedCommand = kCommandLeft;
-                    break;
+                    return kCommandLeft;
+
                 case SDLK_RIGHT:
                     updateDirection = 1;
-                    mBufferedCommand = kCommandRight;
-                    break;
+                    return kCommandRight;
+
                 case SDLK_UP:
-                    mBufferedCommand = kCommandUp;
-                    break;
+                    return kCommandUp;
+
                 case SDLK_DOWN:
-                    mBufferedCommand = kCommandDown;
-                    break;
+                    return kCommandDown;
 
                 default:
                     return kCommandNone;
@@ -202,10 +195,10 @@ enum ECommand getInput(void) {
 
     performAction();
 
-    return mBufferedCommand;
+    return kCommandNone;
 }
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
+void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
     uint8_t len = strlen(text);
     char *ptr = text;
     uint8_t c = 0;
@@ -258,11 +251,10 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_
     }
 }
 
-void initHW(void) {
+void initHW(int, char **pString) {
     initKeyboardUI();
     updateDirection = 1;
 
-    mBufferedCommand = '.';
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     clearGraphics();
@@ -346,7 +338,11 @@ void flushVirtualFramebuffer(void) {
     SDL_RenderPresent(renderer);
 }
 
-void graphicsFlush(void) {
+void startFrame(int x, int y, int width, int height) {
+
+}
+
+void endFrame(void) {
     if (needs3dRefresh) {
         if (updateDirection) {
             updateDirection = 0;

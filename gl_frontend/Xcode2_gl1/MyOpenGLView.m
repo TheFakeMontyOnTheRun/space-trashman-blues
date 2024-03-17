@@ -26,7 +26,7 @@
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "Engine.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
@@ -257,11 +257,11 @@ void flipRenderer() {
     
     
     /* Ugly hack to prevent garbage from appearing on the borders */
-	startFrameGL( 0, 0, rect.size.width, rect.size.height);
+	startFrame( 0, 0, rect.size.width, rect.size.height);
     fillRect(0, 0, 320, 200, getPaletteEntry(0xFF000000), FALSE);
     
     
-	startFrameGL( (rect.size.width - width) / 2,
+	startFrame( (rect.size.width - width) / 2,
                  (rect.size.height - height) / 2,
                  width,
                  height);
@@ -272,7 +272,7 @@ void flipRenderer() {
 		exit(0);
 	}
 
-	endFrameGL();
+	endFrame();
 
 	[[self openGLContext] flushBuffer];
 }

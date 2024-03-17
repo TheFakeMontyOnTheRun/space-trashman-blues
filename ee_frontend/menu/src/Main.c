@@ -8,7 +8,7 @@ const long UCLOCKS_PER_SEC = 1000;
 
 long timeEllapsed = 0;
 
-long uclock() {
+long uclock(void) {
     timeEllapsed += (1000 / 60);
     return timeEllapsed;
 }
@@ -23,7 +23,7 @@ long uclock() {
 #include "Core.h"
 #include "Engine.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "Derelict.h"
@@ -54,14 +54,14 @@ void initHW(int argc, char** argv) {
     graphicsInit();
 }
 
-void shutdownHW() {
+void shutdownHW(void) {
     graphicsShutdown();
 }
 
 long start_clock, end_clock, prev;
 
 #ifdef __EMSCRIPTEN__
-void mainLoop () {
+void mainLoop (void) {
     if (enable3DRendering) {
         startFrame(0, 0, 640, 480);
         menuTick(20);

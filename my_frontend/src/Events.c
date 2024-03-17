@@ -1,23 +1,13 @@
 #include <stddef.h>
-#include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
 
+#include "Common.h"
 #include "Core.h"
-#include "Derelict.h"
 #include "Enums.h"
 #include "Renderer.h"
-#include "map.h"
 #include "map-data.h"
-
-extern int8_t map[32][32];
-
-#ifdef SUPPORTS_HACKING_MINIGAME
-
-#include "HackingMinigame.h"
 #include "Engine.h"
-
-#endif
 
 #ifdef MSDOS
 #include "Common.h"
@@ -26,6 +16,7 @@ extern int8_t map[32][32];
 #ifndef EMBEDDED_DATA
 #include "PackedFileReader.h"
 #endif
+extern int8_t map[32][32];
 
 extern int8_t stencilHigh[XRES];
 
@@ -207,11 +198,12 @@ void initMap(void) {
         for (x = 0; x < MAP_SIZE_X; ++x) {
 
 #ifdef RLE_COMPRESSED_MAPS
-            if (head == headEnd) {
-                goto done_loading;
-            }
-
             if (repetitions < 1) {
+
+                if (head == headEnd) {
+                    goto done_loading;
+                }
+
                 repetitions = *head;
 
                 if (repetitions >= RLE_THRESHOLD) {

@@ -60,6 +60,8 @@ void *allocMem(size_t sizeInBytes, enum MemoryType type, uint8_t clearAfterAlloc
     if (clearAfterAlloc) {
         memset(ptr, 0, sizeInBytes);
     }
+    
+    (void)type;
 
     return ptr;
 }

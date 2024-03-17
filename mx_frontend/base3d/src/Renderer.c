@@ -12,16 +12,16 @@
 
 #endif
 
+#include "Common.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "Common.h"
 #include "Enums.h"
 #include "CActor.h"
 #include "MapWithCharKey.h"
-#include "Common.h"
 #include "LoadBitmap.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "Core.h"
@@ -95,11 +95,11 @@ int messageLogBufferCoolDown = 0;
 
 void printMessageTo3DView(const char *message);
 
-void enter2D() {
+void enter2D(void) {
 
 }
 
-void enter3D() {
+void enter3D(void) {
 
 }
 
@@ -193,7 +193,7 @@ void updateCursorForRenderer(const int x, const int z) {
 #endif
 }
 
-void renderRoomTransition() {
+void renderRoomTransition(void) {
     struct Vec3 center;
 
     dirtyLineY0 = 0;
