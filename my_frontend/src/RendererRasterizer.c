@@ -1,10 +1,13 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include "Common.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
+
+#ifdef MSDOS
+#include "Common.h"
+#endif
 
 int8_t stencilHigh[XRES];
 
