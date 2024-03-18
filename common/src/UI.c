@@ -184,9 +184,11 @@ void redrawHUD(void) {
                 sprintf(&textBuffer[0], "%s", itemPtr->name);
                 textBuffer[14] = 0;
 
-//                drawBitmapRaw(XRES + 8, 199 - 32 - 16 - 16, 32, 32, itemSprites[itemPtr->index]->rotations[0], 1);
-
-                drawTextAtWithMarginWithFiltering(2 + ((XRES) / 8), 23, 311, itemPtr->name,
+	     /*
+	        drawBitmapRaw(XRES + 8, 199 - 32 - 16 - 16, 32, 32,
+		itemSprites[itemPtr->index]->rotations[0], 1);
+	     */
+                drawTextAtWithMarginWithFiltering(2 + ((XRES) / 8), 23, XRES_FRAMEBUFFER, itemPtr->name,
                                                   itemPtr->active ? getPaletteEntry(0xFFAAAAAA) : getPaletteEntry(
                                                           0xFFFFFFFF), '\n');
             }

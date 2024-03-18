@@ -1643,7 +1643,6 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
             currentChar = charToReplaceHifenWith;
         }
 
-
         ascii = text[c] - ' ';
         line = ascii >> 5;
         col = ascii & 31;

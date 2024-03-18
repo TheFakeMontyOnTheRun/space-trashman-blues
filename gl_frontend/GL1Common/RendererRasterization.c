@@ -348,6 +348,11 @@ void drawRepeatBitmap(
 }
 
 void drawTextAt(const int x, const int y, const char *text, const FramebufferPixelFormat colour) {
+    drawTextAtWithMargin(x, y, XRES_FRAMEBUFFER / 8,  text, colour);
+}
+
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text,
+                                       const uint8_t colour, char charToReplaceHifenWith) {
 
     size_t len = strlen(text);
     int32_t dstX = (x - 1) * 8;
@@ -403,19 +408,24 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
     });
 #endif
     for (c = 0; c < len; ++c) {
-        if (text[c] == '\n' || dstX >= XRES_FRAMEBUFFER) {
+        char currentChar = text[c];
+
+        if (currentChar == '-') {
+            currentChar = charToReplaceHifenWith;
+        }
+        if (currentChar == '\n' || dstX >= XRES_FRAMEBUFFER) {
             dstX = (x - 1) * 8;
             dstY += 8;
             continue;
         }
 
-        if (text[c] == ' ' || text[c] == '\r') {
+        if (currentChar == ' ' || currentChar == '\r') {
             dstX += 8;
             continue;
         }
 
 #ifndef N64
-        ascii = text[c] - ' ';
+        ascii = currentChar - ' ';
         line = (((ascii >> 5) + 1) * blockHeight);
         col = (((ascii & 31)) * blockWidth);
 
@@ -428,7 +438,7 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
         glTexCoord2f(col, line);
         glVertex3f(dstX * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -0.1);
 #else
-        shortStr[0] = text[c];
+        shortStr[0] = currentChar;
         rdpq_text_print(NULL, 1, dstX, dstY, &shortStr[0]);
 #endif
 
@@ -442,15 +452,11 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 
     glColor3f(1, 1, 1);
     glDisable(GL_ALPHA_TEST);
-}
 
-void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text,
-                                       const uint8_t colour, char charToReplaceHifenWith) {
-    drawTextAt(x, y, text, colour);
 }
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour) {
-    drawTextAt(x, y, text, colour);
+    drawTextAtWithMarginWithFiltering(x, y, margin, text, colour, '-');
 }
 
 void renderPageFlip(OutputPixelFormat *stretchedBuffer, FramebufferPixelFormat *currentFrame,

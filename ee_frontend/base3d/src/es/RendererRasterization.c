@@ -125,9 +125,16 @@ void drawRepeatBitmap(
     }
 }
 
-void drawTextAt(const int _x, const int _y, const char *text, const FramebufferPixelFormat colour) {
+void drawTextAt(const int x, const int y, const char *text, const FramebufferPixelFormat colour) {
+    drawTextAtWithMargin(x, y, XRES_FRAMEBUFFER / 8, text, colour);
+}
 
-    if (defaultFont == NULL) {
+void drawTextAtWithMarginWithFiltering(const int _x, const int _y, int margin,
+                                       const char *__restrict__ text,
+                                       const uint8_t colour, char charToReplaceHifenWith) {
+
+
+     if (defaultFont == NULL) {
         defaultFont = loadBitmap("font.img");
     }
 
@@ -145,18 +152,24 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
     float blockHeight = (8.0f / fontHeight) * 0.999f;
 
     for (c = 0; c < len; ++c) {
-        if (text[c] == '\n' || dstX >= XRES_FRAMEBUFFER) {
+        char currentChar = text[c];
+
+	if (currentChar == '-') {
+	    currentChar = charToReplaceHifenWith;
+	}
+
+        if (currentChar == '\n' || dstX >= XRES_FRAMEBUFFER) {
             dstX = (_x - 1) * 8;
             dstY += 8;
             continue;
         }
 
-        if (text[c] == ' ' || text[c] == '\r') {
+        if (currentChar == ' ' || currentChar == '\r') {
             dstX += 8;
             continue;
         }
 
-        ascii = text[c] - ' ';
+        ascii = currentChar - ' ';
 
         line = (((float) ((ascii >> 5))) * blockHeight);
         col = (((ascii & 31)) * blockWidth);
@@ -168,13 +181,9 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
     }
 }
 
-void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin,
-                                       const char *__restrict__ text,
-                                       const uint8_t colour, char charToReplaceHifenWith) {
-    drawTextAt(x, y, text, colour);
-}
+
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *text,
                           const FramebufferPixelFormat colour) {
-    drawTextAt(x, y, text, colour);
+    drawTextAtWithMarginWithFiltering(x, y, margin, text, colour, '-');
 }
