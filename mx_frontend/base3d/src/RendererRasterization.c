@@ -236,9 +236,9 @@ void drawWall(FixP_t x0,
     uint8_t *bufferData = &framebuffer[0];
     int farEnoughForStipple;
     
-    if (z < distanceForPenumbra / 4)  {
+    if (z < distanceForPenumbra -4)  {
         farEnoughForStipple = 0;
-    } else if (z < distanceForPenumbra / 2) {
+    } else if (z < distanceForPenumbra -2) {
         farEnoughForStipple = 1;
     } else if (z < distanceForPenumbra) {
         farEnoughForStipple = 2;
@@ -468,9 +468,9 @@ void drawFrontWall(FixP_t x0,
     uint8_t *bufferData = &framebuffer[0];
     int farEnoughForStipple = 0;
     
-    if (z < distanceForPenumbra / 4)  {
+    if (z < distanceForPenumbra -4)  {
         farEnoughForStipple = 0;
-    } else if (z < distanceForPenumbra / 2) {
+    } else if (z < distanceForPenumbra -2) {
         farEnoughForStipple = 1;
     } else if (z < distanceForPenumbra) {
         farEnoughForStipple = 2;
@@ -806,9 +806,9 @@ void drawFloor(FixP_t y0,
 
     bufferData = &framebuffer[0];
 
-    if (z < distanceForPenumbra / 4)  {
+    if (z < distanceForPenumbra -4)  {
         farEnoughForStipple = 0;
-    } else if (z < distanceForPenumbra / 2) {
+    } else if (z < distanceForPenumbra -2) {
         farEnoughForStipple = 1;
     } else if (z < distanceForPenumbra) {
         farEnoughForStipple = 2;
@@ -1170,9 +1170,9 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
     FixP_t fX0;
     FixP_t fX1;
     
-    if (z < distanceForPenumbra / 4)  {
+    if (z < distanceForPenumbra -4)  {
         farEnoughForStipple = 0;
-    } else if (z < distanceForPenumbra / 2) {
+    } else if (z < distanceForPenumbra -2) {
         farEnoughForStipple = 1;
     } else if (z < distanceForPenumbra) {
         farEnoughForStipple = 2;
@@ -1337,9 +1337,9 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     FixP_t fX1;
     FixP_t effectiveDelta;
     
-    if (z < distanceForPenumbra / 4)  {
+    if (z < distanceForPenumbra -4)  {
         farEnoughForStipple = 0;
-    } else if (z < distanceForPenumbra / 2) {
+    } else if (z < distanceForPenumbra -2) {
         farEnoughForStipple = 1;
     } else if (z < distanceForPenumbra) {
         farEnoughForStipple = 2;
