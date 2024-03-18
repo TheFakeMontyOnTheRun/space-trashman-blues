@@ -25,11 +25,8 @@
 #define YRES_FRAMEBUFFER 160
 #endif
 */
-#ifndef AGS
+
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
-#else
-#define FIXP_DISTANCE_FOR_DARKNESS (intToFix(32))
-#endif
 
 #define TOTAL_TEXTURES 16
 #define TRANSPARENCY_COLOR 199

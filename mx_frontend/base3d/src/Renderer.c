@@ -64,11 +64,7 @@ struct Vec3 mCamera;
 long gameTicks = 0;
 int dirtyLineY0 = 0;
 int dirtyLineY1 = YRES_FRAMEBUFFER;
-#ifndef AGS
 const int distanceForPenumbra = 16;
-#else
-const int distanceForPenumbra = 8;
-#endif
 struct Bitmap *mapTopLevel = NULL;
 struct MapWithCharKey tileProperties;
 struct MapWithCharKey customMeshes;
