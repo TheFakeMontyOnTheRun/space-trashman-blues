@@ -13,12 +13,12 @@
 
 #endif
 
+#include "Common.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "Enums.h"
 #include "CActor.h"
 #include "MapWithCharKey.h"
-#include "Common.h"
 #include "Vec.h"
 #include "Globals.h"
 #include "LoadBitmap.h"
@@ -27,7 +27,7 @@
 #include "MapWithCharKey.h"
 #include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 #define kMinZCull 0
 #define FIXP_HALF_XRES  (intToFix(HALF_XRES))
@@ -555,7 +555,7 @@ void drawLeftNear(const struct Vec3 center,
     }
 }
 
-void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
+void drawMesh(const struct Mesh *mesh, const struct Vec3 center, enum EDirection rotation) {
 
     int coords[6];
     int count = mesh->triangleCount;
@@ -578,17 +578,53 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
             ptr1 = &projectionVertices[1].first;
             ptr2 = &projectionVertices[2].first;
 
-            ptr0->mX = center.mX + *(vertexData + 0);
-            ptr1->mX = center.mX + *(vertexData + 3);
-            ptr2->mX = center.mX + *(vertexData + 6);
+            switch (rotation) {
+                case kEast:
+                    ptr0->mX = center.mX - *(vertexData + 2);
+                    ptr0->mZ = center.mZ + *(vertexData + 0);
+
+                    ptr1->mX = center.mX - *(vertexData + 5);
+                    ptr1->mZ = center.mZ + *(vertexData + 3);
+
+                    ptr2->mX = center.mX - *(vertexData + 8);
+                    ptr2->mZ = center.mZ + *(vertexData + 6);
+                    break;
+                case kWest:
+                    ptr0->mX = center.mX + *(vertexData + 2);
+                    ptr0->mZ = center.mZ - *(vertexData + 0);
+
+                    ptr1->mX = center.mX + *(vertexData + 5);
+                    ptr1->mZ = center.mZ - *(vertexData + 3);
+
+                    ptr2->mX = center.mX + *(vertexData + 8);
+                    ptr2->mZ = center.mZ - *(vertexData + 6);
+                    break;
+                case kSouth:
+                    ptr0->mX = center.mX - *(vertexData + 0);
+                    ptr0->mZ = center.mZ - *(vertexData + 2);
+
+                    ptr1->mX = center.mX - *(vertexData + 3);
+                    ptr1->mZ = center.mZ - *(vertexData + 5);
+
+                    ptr2->mX = center.mX - *(vertexData + 6);
+                    ptr2->mZ = center.mZ - *(vertexData + 8);
+                    break;
+
+                case kNorth:
+                default:
+                    ptr0->mX = center.mX + *(vertexData + 0);
+                    ptr1->mX = center.mX + *(vertexData + 3);
+                    ptr2->mX = center.mX + *(vertexData + 6);
+
+                    ptr0->mZ = center.mZ + *(vertexData + 2);
+                    ptr1->mZ = center.mZ + *(vertexData + 5);
+                    ptr2->mZ = center.mZ + *(vertexData + 8);
+                    break;
+            }
 
             ptr0->mY = center.mY + *(vertexData + 1);
             ptr1->mY = center.mY + *(vertexData + 4);
             ptr2->mY = center.mY + *(vertexData + 7);
-
-            ptr0->mZ = center.mZ + *(vertexData + 2);
-            ptr1->mZ = center.mZ + *(vertexData + 5);
-            ptr2->mZ = center.mZ + *(vertexData + 8);
 
             projectAllVertices(3);
 
@@ -610,17 +646,53 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
             ptr1 = &projectionVertices[1].first;
             ptr2 = &projectionVertices[2].first;
 
-            ptr0->mX = center.mX + *(vertexData + 0);
-            ptr1->mX = center.mX + *(vertexData + 3);
-            ptr2->mX = center.mX + *(vertexData + 6);
+            switch (rotation) {
+                case kEast:
+                    ptr0->mX = center.mX - *(vertexData + 2);
+                    ptr0->mZ = center.mZ + *(vertexData + 0);
+
+                    ptr1->mX = center.mX - *(vertexData + 5);
+                    ptr1->mZ = center.mZ + *(vertexData + 3);
+
+                    ptr2->mX = center.mX - *(vertexData + 8);
+                    ptr2->mZ = center.mZ + *(vertexData + 6);
+                    break;
+                case kWest:
+                    ptr0->mX = center.mX + *(vertexData + 2);
+                    ptr0->mZ = center.mZ - *(vertexData + 0);
+
+                    ptr1->mX = center.mX + *(vertexData + 5);
+                    ptr1->mZ = center.mZ - *(vertexData + 3);
+
+                    ptr2->mX = center.mX + *(vertexData + 8);
+                    ptr2->mZ = center.mZ - *(vertexData + 6);
+                    break;
+                case kSouth:
+                    ptr0->mX = center.mX - *(vertexData + 0);
+                    ptr0->mZ = center.mZ - *(vertexData + 2);
+
+                    ptr1->mX = center.mX - *(vertexData + 3);
+                    ptr1->mZ = center.mZ - *(vertexData + 5);
+
+                    ptr2->mX = center.mX - *(vertexData + 6);
+                    ptr2->mZ = center.mZ - *(vertexData + 8);
+                    break;
+
+                case kNorth:
+                default:
+                    ptr0->mX = center.mX + *(vertexData + 0);
+                    ptr1->mX = center.mX + *(vertexData + 3);
+                    ptr2->mX = center.mX + *(vertexData + 6);
+
+                    ptr0->mZ = center.mZ + *(vertexData + 2);
+                    ptr1->mZ = center.mZ + *(vertexData + 5);
+                    ptr2->mZ = center.mZ + *(vertexData + 8);
+                    break;
+            }
 
             ptr0->mY = center.mY + *(vertexData + 1);
             ptr1->mY = center.mY + *(vertexData + 4);
             ptr2->mY = center.mY + *(vertexData + 7);
-
-            ptr0->mZ = center.mZ + *(vertexData + 2);
-            ptr1->mZ = center.mZ + *(vertexData + 5);
-            ptr2->mZ = center.mZ + *(vertexData + 8);
 
             projectAllVertices(3);
 

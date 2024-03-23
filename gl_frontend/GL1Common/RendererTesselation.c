@@ -38,7 +38,7 @@
 #include "Mesh.h"
 #include "CTile3DProperties.h"
 #include "LoadBitmap.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "Engine.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
@@ -53,7 +53,7 @@ extern struct Texture *itemSprites[TOTAL_ITEMS];
 #define BIAS (intToFix(128))
 #define REVERSE_BIAS (1.0f/128.0f)
 
-void clearTextures() {
+void clearTextures(void) {
     int c;
     texturesUsed = 0;
 
@@ -561,19 +561,19 @@ void drawRightNear(const struct Vec3 center,
     glTranslatef(0.0f, -centerY, 0.0f);
 }
 
-void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
+void drawMesh(const struct Mesh *mesh, const struct Vec3 center, enum EDirection rotation) {
     int c;
     int count = mesh->triangleCount;
     FixP_t *vertexData = mesh->geometry;
     uint8_t *uvData = mesh->uvCoords;
     float x, y, z;
 
-    x = fixToFloat(center.mX);
-    y = fixToFloat(center.mX);
-    z = -fixToFloat(center.mZ);
+    x = fixToFloat(center.mX + xCameraOffset);
+    y = fixToFloat(center.mY + yCameraOffset);
+    z = -fixToFloat(center.mZ + zCameraOffset);
 
     glTranslatef(x, y, z);
-
+    glRotatef(((rotation * 90)), 0.0f, 1.0f, 0.0f);
 #ifndef NDS
     glAlphaFunc(GL_GREATER, 0.5f);
 #endif
@@ -613,6 +613,6 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
             vertexData += 9;
         }
     }
-
+    glRotatef(360-((rotation * 90)), 0.0f, 1.0f, 0.0f);
     glTranslatef(-x, -y, -z);
 }

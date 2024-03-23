@@ -18,26 +18,13 @@
 #endif
 
 #ifndef AGS
-#define XRES_FRAMEBUFFER 320
-#define YRES_FRAMEBUFFER 200
-#else
-#define XRES_FRAMEBUFFER 240
-#define YRES_FRAMEBUFFER 160
-#endif
-
-#ifndef AGS
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
 #else
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(32))
 #endif
 
 #define TOTAL_TEXTURES 64
-#ifdef PLAYSTATION2
-#define TRANSPARENCY_COLOR (0x00FF0000)
-#else
-#define TRANSPARENCY_COLOR (0x00000000)
-#endif
-
+#define TRANSPARENCY_COLOR 0
 #define VISIBILITY_CONE_NARROWING MAP_SIZE
 #define MASK_LEFT 1
 #define MASK_FRONT 2
@@ -86,8 +73,6 @@ void clearTileProperties(void);
 
 void shutdownHW(void);
 
-void loadMesh(struct Mesh *mesh, char *filename);
-
 void initZMap(void);
 
 void projectAllVertices(const uint8_t count);
@@ -109,7 +94,7 @@ void fillRect(
         const FramebufferPixelFormat pixel, const uint8_t stipple);
 
 
-void drawMesh(const struct Mesh *mesh, const struct Vec3 at);
+void drawMesh(const struct Mesh *mesh, const struct Vec3 at, enum EDirection rotation);
 
 void renderRoomTransition(void);
 
@@ -283,34 +268,7 @@ extern struct Bitmap *mapTopLevel[8];
 #else
 extern struct Bitmap *mapTopLevel;
 #endif
-extern int dirtyLineY0;
-extern int dirtyLineY1;
-extern char mTurnBuffer;
 extern uint8_t *map;
 extern uint8_t *itemsInMap;
 extern FixP_t divLut[320];
-
-extern int leanX;
-extern int leanY;
-
-struct VBORegister {
-    uint8_t vertexDataIndex;
-    uint8_t uvDataIndex;
-    uint8_t indicesIndex;
-    uint8_t indices;
-};
-
-void renderVBOAt(struct Bitmap *bitmap, struct VBORegister vbo,
-                 float x, float y, float z,
-                 int16_t rx, int16_t ry, int16_t rz,
-                 float scaleX, float scaleY,
-                 float u0, float v0,
-                 float u1, float v1,
-                 uint32_t tint,
-                 uint8_t repeatTextures);
-
-void checkGLError(const char *operation);
-
-void unloadTextures(void);
-
 #endif

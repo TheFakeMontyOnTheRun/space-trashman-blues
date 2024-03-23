@@ -1,15 +1,14 @@
 /*
    Created by Daniel Monteiro on 11/07/2023.
 */
-#include <stdlib.h>
 #include <stdint.h>
 
 #include "Enums.h"
 #include "UI.h"
 #include "Core.h"
-#include "Derelict.h"
 #include "Renderer.h"
 #include "Engine.h"
+#include "SoundSystem.h"
 
 extern uint8_t playerLocation;
 
@@ -19,12 +18,17 @@ extern const struct CellPattern patterns[127];
 
 extern int8_t map[32][32];
 
+uint8_t waitForKey = 0;
+
 void drawGraphic(const uint8_t *graphic) {
     const uint8_t *ptr = graphic;
 
     while (*ptr) {
         uint8_t c;
         const uint8_t npoints = *ptr++;
+#ifndef MONOCHROME_VECTORS
+        ptr += 3; /* skip colours */
+#endif
         const uint8_t *shape = ptr;
 
         for (c = 0; c < npoints - 1; ++c) {
@@ -41,7 +45,8 @@ void drawTextAt(uint8_t _x, uint8_t y, const char *text, uint8_t colour) {
 
 void showMessage(const char *message) {
     clearTextScreen();
-    drawTextAt(1, 17, message, 1);
+    drawTextWindow(1, 16, (XRES_FRAMEBUFFER / 8) - 3, (YRES_FRAMEBUFFER / 8) - 18, "", message);
+    waitForKey = 1;
 }
 
 void drawMap(void) {
@@ -54,7 +59,7 @@ void drawMap(void) {
 
     for (y = 0; y < 12; ++y) {
         for (x = 0; x < 12; ++x) {
-            drawTextAt((XRES_TEXT / 2) + x + 2, 2 + y, " ", 0);
+            drawTextAt(((XRES_FRAMEBUFFER / 8) / 2) + x + 2, 2 + y, " ", 0);
         }
     }
 
@@ -64,7 +69,7 @@ void drawMap(void) {
             if (patterns[(map[y][x] & 127) - 32].blockMovement) {
                 fillRect((XRES_FRAMEBUFFER / 2) + (x * 3) + 16,
                          (y * 3) + 16,
-                         (XRES_FRAMEBUFFER / 2) + (x * 3) + 3 + 16,
+                         (XRES_FRAMEBUFFER / 2) + (x * 3) + 16 + 3,
                          (y * 3) + 3 + 16,
                          2,
                          0);
@@ -103,6 +108,13 @@ void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *titl
     uint16_t x1 = (tx + tw) * 8;
     uint8_t y0 = ty * 8;
     uint8_t y1 = (ty + th) * 8;
+    int c, d;
+
+    for (c = 0; c < th; ++c) {
+        for (d = 0; d < tw; ++d) {
+            writeStrWithLimit( tx + d, ty + c, " ", 320 / 8, 2, 0);
+        }
+    }
 
     drawLine(x0, y0, x1, y0, colour);
 
@@ -127,7 +139,7 @@ drawWindowWithOptions(const uint8_t x,
                       const uint8_t selectedOption) {
     uint8_t c;
 
-    if (options != NULL) {
+    if (firstFrameOnCurrentState || selectedOption == 0xFF) {
         drawWindow(x - 1,
                    y - 1,
                    dx + 1,
@@ -142,7 +154,7 @@ drawWindowWithOptions(const uint8_t x,
                    (selectedOption == c) ? ">" : " ",
                    1);
 
-        if (options != NULL) {
+        if (firstFrameOnCurrentState || selectedOption == 0xFF) {
             drawTextAt(x + 1,
                        y + 2 + c,
                        &options[c][0],
@@ -164,9 +176,11 @@ enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t opt
         case kCommandBack:
             return backState;
         case kCommandUp:
+            playSound(2);
             --cursorPosition;
             break;
         case kCommandDown:
+            playSound(2);
             ++cursorPosition;
             break;
         case kCommandFire1:

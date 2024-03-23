@@ -21,8 +21,6 @@
 #include "Derelict.h"
 #include "KeyboardUI.h"
 #include "Renderer.h"
-#include "Menu.h"
-
 
 const char *mainText;
 
@@ -49,7 +47,7 @@ CGDataProviderRef provider;
 CGImageRef ref;
 extern uint8_t mBufferedCommand;
 float multiplier = 1.0f;
-int updateDirection = 0;
+extern uint8_t updateDirection;
 id delegate;
 
 void stopSounds(void) {
@@ -70,7 +68,7 @@ void handleSystemEvents(void) {
 
 void initHW(void) {
     initKeyboardUI();
-    updateDirection = 1;
+    updateDirection = 0;
     
     mBufferedCommand = '.';
     memset(framebuffer, 0, 128 * 128);

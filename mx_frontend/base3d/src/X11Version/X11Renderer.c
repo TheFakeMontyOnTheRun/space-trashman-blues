@@ -17,7 +17,7 @@
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -30,7 +30,7 @@ char *data;
 XImage *img;
 Window win;
 
-void graphicsInit() {
+void graphicsInit(void) {
 	int r, g, b;
 
 	display = XOpenDisplay(NULL);
@@ -95,7 +95,7 @@ uint8_t getPaletteEntry(uint32_t origin) {
     return shade;
 }
 
-void handleSystemEvents() {
+void handleSystemEvents(void) {
 
 	XEvent event;
 	//while(1)
@@ -208,12 +208,12 @@ void handleSystemEvents() {
 	}
 }
 
-void graphicsShutdown() {
+void graphicsShutdown(void) {
   XCloseDisplay(display);
   texturesUsed = 0;
 }
 
- void flipRenderer() {
+ void flipRenderer(void) {
    int x = 0, y = 0;
    int dstY = 0;
    int scaller = 0;
@@ -238,5 +238,5 @@ void graphicsShutdown() {
  }
 
 
- void clearRenderer() {
+ void clearRenderer(void) {
  }

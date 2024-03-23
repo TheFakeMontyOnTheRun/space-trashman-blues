@@ -9,10 +9,10 @@
 
 #endif
 
+#include "Common.h"
 #include "Enums.h"
 #include "FixP.h"
 #include "Vec.h"
-#include "Common.h"
 #include "EDirection_Utils.h"
 
 struct Vec2i mapOffsetForDirection(const enum EDirection aDirection) {

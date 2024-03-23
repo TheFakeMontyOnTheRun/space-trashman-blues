@@ -16,7 +16,7 @@
 #define HALF_XRES 100
 #define HALF_YRES 100
 #endif
-
+/*
 #ifndef AGS
 #define XRES_FRAMEBUFFER 320
 #define YRES_FRAMEBUFFER 200
@@ -24,12 +24,9 @@
 #define XRES_FRAMEBUFFER 240
 #define YRES_FRAMEBUFFER 160
 #endif
+*/
 
-#ifndef AGS
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
-#else
-#define FIXP_DISTANCE_FOR_DARKNESS (intToFix(32))
-#endif
 
 #define TOTAL_TEXTURES 16
 #define TRANSPARENCY_COLOR 199
@@ -100,7 +97,7 @@ void fillRect(
         const FramebufferPixelFormat pixel, const uint8_t stipple);
 
 
-void drawMesh(const struct Mesh *mesh, const struct Vec3 at);
+void drawMesh(const struct Mesh *mesh, const struct Vec3 at, enum EDirection rotation);
 
 void renderRoomTransition(void);
 
@@ -238,9 +235,9 @@ int submitBitmapToGPU(struct Bitmap *bitmap);
 
 void initGL(void);
 
-void startFrameGL(int x, int y, int width, int height);
+void startFrame(int x, int y, int width, int height);
 
-void endFrameGL(void);
+void endFrame(void);
 
 extern struct MapWithCharKey occluders;
 extern struct MapWithCharKey enemySightBlockers;

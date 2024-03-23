@@ -57,6 +57,7 @@ enum DIRECTION {
 struct ObjectNode *focusedItem = NULL;
 struct ObjectNode *roomItem = NULL;
 struct MapWithCharKey tileProperties;
+struct MapWithCharKey customMeshes;
 extern int accessGrantedToSafe;
 uint8_t cursorPosition = 0;
 
@@ -1218,10 +1219,14 @@ void initMap(void) {
     disposeDiskBuffer(datafile);
 
     sprintf(&buffer[0], "props%d.bin", getPlayerRoom());
-    loadPropertyList(&buffer[0], &tileProperties);
+    loadPropertyList(&buffer[0], &tileProperties, &customMeshes);
 
     //updateMapItems();
     HUD_initialPaint();
+}
+
+void loadMesh(struct Mesh *mesh, char *filename) {
+    /* Dummy, just to satisfy the linker */
 }
 
 void startRoomTransitionAnimation(void) {

@@ -19,7 +19,7 @@
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 #define GL_GLEXT_PROTOTYPES
 
@@ -44,7 +44,7 @@ const int height = 480;
 SDL_Window *window;
 SDL_GLContext context;
 
-void graphicsInit() {
+void graphicsInit(void) {
 
     enableSmoothMovement = TRUE;
     defaultFont = NULL;
@@ -84,7 +84,7 @@ void graphicsInit() {
     initGL();
 }
 
-void handleSystemEvents() {
+void handleSystemEvents(void) {
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
@@ -245,7 +245,7 @@ void handleSystemEvents() {
     }
 }
 
-void graphicsShutdown() {
+void graphicsShutdown(void) {
     texturesUsed = 0;
 
     SDL_GL_DeleteContext(context);
@@ -253,6 +253,6 @@ void graphicsShutdown() {
     SDL_Quit();
 }
 
-void flipRenderer() {
+void flipRenderer(void) {
     SDL_GL_SwapWindow(window);
 }

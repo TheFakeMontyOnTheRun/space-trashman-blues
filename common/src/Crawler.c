@@ -5,12 +5,12 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
 #include <unistd.h>
-
 #endif
 
+
+#include "Common.h"
 #include "FixP.h"
 #include "Enums.h"
 #include "Vec.h"
@@ -18,9 +18,8 @@
 #include "Engine.h"
 #include "CActor.h"
 #include "Mesh.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "Dungeon.h"
-#include "Common.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "MapWithCharKey.h"
@@ -81,10 +80,7 @@ void Crawler_initStateCallback(enum EGameMenuState tag) {
     }
 }
 
-void Crawler_initialPaintCallback() {
-}
-
-void recenterView() {
+void recenterView(void) {
     if (leanX > 0 && !turning) {
         leanX -= ANGLE_TURN_STEP;
     }
@@ -223,7 +219,6 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
 void Crawler_unloadStateCallback(enum EGameMenuState newState) {
 
     if (newState != kBackToGame &&
-        newState != kInspectItem &&
         newState != kHackingGame) {
         clearTextures();
         clearTileProperties();

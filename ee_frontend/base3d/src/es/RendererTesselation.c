@@ -1,3 +1,4 @@
+#include <math.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -18,7 +19,7 @@
 #include "Mesh.h"
 #include "CTile3DProperties.h"
 #include "LoadBitmap.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "Engine.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
@@ -60,10 +61,15 @@
 #endif
 #endif
 
+struct VBORegister submitVBO(float *vertexData, float *uvData, int vertices,
+                             unsigned short *indexData,
+                             unsigned int indices);
+
 struct Vec3 cameraOffset;
 FixP_t walkingBias = 0;
 FixP_t playerHeight = 0;
-
+extern struct Bitmap whiteTexture;
+extern const float planeXYVertices[12];
 struct Texture *nativeTextures[TOTAL_TEXTURES];
 extern struct Texture *itemSprites[TOTAL_ITEMS];
 
@@ -117,6 +123,10 @@ void renderVBOAt(struct Bitmap *bitmap,
 
     checkGLError("starting to draw VBO");
 
+    glEnableVertexAttribArray(aPositionAttributeLocation);
+    checkGLError("Enabled vertex position attribute");
+    glEnableVertexAttribArray(aTexCoordAttributeLocation);
+    checkGLError("Enabled vertex uv attribute");
 
     if (repeatTextures) {
         glUniform2f(uScaleUniformLocation, scaleX, scaleY);
@@ -155,19 +165,19 @@ void renderVBOAt(struct Bitmap *bitmap,
 
     checkGLError("vertex indices bound");
 
-    uvTemp[0] = u0;
-    uvTemp[1] = v0;
-    uvTemp[2] = u1;
-    uvTemp[3] = v0;
-    uvTemp[4] = u1;
-    uvTemp[5] = v1;
-    uvTemp[6] = u0;
-    uvTemp[7] = v1;
+    if (!isnan(u0)) {
+        uvTemp[0] = u0;
+        uvTemp[1] = v0;
+        uvTemp[2] = u1;
+        uvTemp[3] = v0;
+        uvTemp[4] = u1;
+        uvTemp[5] = v1;
+        uvTemp[6] = u0;
+        uvTemp[7] = v1;
 
-    glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(float) * 2, &uvTemp[0], GL_DYNAMIC_DRAW);
-
-
-    checkGLError("uv data provided");
+        glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(float) * 2, &uvTemp[0], GL_DYNAMIC_DRAW);
+        checkGLError("uv data provided");
+    }
 
     glVertexAttribPointer(aTexCoordAttributeLocation, 2, GL_FLOAT, GL_TRUE,
                           sizeof(float) * 2, 0);
@@ -232,6 +242,140 @@ void renderVBOAt(struct Bitmap *bitmap,
         glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
     }
 
+
+    checkGLError("disabling attributes");
+}
+
+void fillTriangle(int *coords, FramebufferPixelFormat fragment) {
+
+
+    checkGLError("starting to draw VBO");
+    glEnableVertexAttribArray(aPositionAttributeLocation);
+    checkGLError("Enabled vertex position attribute");
+
+
+    glEnableVertexAttribArray(aTexCoordAttributeLocation);
+    checkGLError("Enabled vertex uv attribute");
+
+    glUniform2f(uScaleUniformLocation, 1.0f, 1.0f);
+
+    checkGLError("Setting texture scale");
+
+    float r = (fragment & 0xFF) * NORMALIZE_COLOUR;
+    float g = ((fragment & 0x00FF00) >> 8) * NORMALIZE_COLOUR;
+    float b = ((fragment & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
+
+    glUniform4f(uModUniformLocation, r, g, b, 1.0f);
+
+    checkGLError("Setting tint");
+
+    bindTexture(&whiteTexture);
+
+
+    checkGLError("Texture bound");
+
+    glBindBuffer(GL_ARRAY_BUFFER, planeXYVBO.vertexDataIndex);
+
+    float trigVertex[12];
+    trigVertex[0] = coords[0];
+    trigVertex[1] = coords[1];
+    trigVertex[2] = -1;
+    trigVertex[3] = coords[2];
+    trigVertex[4] = coords[3];
+    trigVertex[5] = -1;
+    trigVertex[6] = coords[4];
+    trigVertex[7] = coords[5];
+    trigVertex[8] = -1;
+    trigVertex[9] = coords[4];
+    trigVertex[10] = coords[5];
+    trigVertex[11] = -1;
+
+    glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(float) * 3, &trigVertex[0], GL_DYNAMIC_DRAW);
+
+
+
+    checkGLError("vertex data bound");
+
+    glVertexAttribPointer(aPositionAttributeLocation, 3, GL_FLOAT, GL_FALSE,
+                          sizeof(float) * 3, 0);
+
+
+    checkGLError("vertex data configured");
+
+
+    glBindBuffer(GL_ARRAY_BUFFER, planeXYVBO.uvDataIndex);
+
+
+    checkGLError("vertex indices bound");
+
+    float uvTemp[8];
+    uvTemp[0] = 1;
+    uvTemp[1] = 1;
+    uvTemp[2] = 1;
+    uvTemp[3] = 1;
+    uvTemp[4] = 1;
+    uvTemp[5] = 1;
+    uvTemp[6] = 1;
+    uvTemp[7] = 1;
+
+    glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(float) * 2, &uvTemp[0], GL_DYNAMIC_DRAW);
+
+
+    checkGLError("uv data provided");
+
+    glVertexAttribPointer(aTexCoordAttributeLocation, 2, GL_FLOAT, GL_TRUE,
+                          sizeof(float) * 2, 0);
+
+
+    checkGLError("uv data configured");
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, planeXYVBO.indicesIndex);
+
+
+    checkGLError("indices elements bound");
+
+    mat4x4_transform(transformMatrix, 0 + fixToFloat(xCameraOffset), 0 - fixToFloat(yCameraOffset),
+                     - 1 - fixToFloat(zCameraOffset), 1, 1, 1);
+    glUniformMatrix4fv(uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix);
+
+    mat4x4_rotateX(rotateXMatrix, 0);
+    glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix);
+
+    mat4x4_rotateY(rotateYMatrix, 0);
+    glUniformMatrix4fv(uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix);
+
+    mat4x4_rotateZ(rotateZMatrix, 0);
+    glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
+
+
+    checkGLError("matrices set");
+
+
+    glDrawElements(GL_TRIANGLES, planeXYVBO.indices, GL_UNSIGNED_SHORT, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, planeXYVBO.vertexDataIndex);
+
+    glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(float) * 3, &planeXYVertices[0], GL_DYNAMIC_DRAW);
+
+    checkGLError("triangles drawn");
+
+    mat4x4_transform(transformMatrix, 0, 0, 0, 1, 1, 1);
+    glUniformMatrix4fv(uTransformMatrixUniformLocation, 1, GL_FALSE, transformMatrix);
+
+    mat4x4_rotateX(rotateXMatrix, leanY);
+    glUniformMatrix4fv(uRotateXMatrixUniformLocation, 1, GL_FALSE, rotateXMatrix);
+
+    mat4x4_rotateY(rotateYMatrix, leanX);
+    glUniformMatrix4fv(uRotateYMatrixUniformLocation, 1, GL_FALSE, rotateYMatrix);
+
+    mat4x4_rotateZ(rotateZMatrix, 0);
+    glUniformMatrix4fv(uRotateZMatrixUniformLocation, 1, GL_FALSE, rotateZMatrix);
+
+
+    checkGLError("unsetting matrices");
+
+    glDisableVertexAttribArray(aPositionAttributeLocation);
+    glDisableVertexAttribArray(aTexCoordAttributeLocation);
 
     checkGLError("disabling attributes");
 }
@@ -781,42 +925,84 @@ void drawTriangle(const struct Vec3 pos1,
 
 }
 
-void drawMesh(const struct Mesh *mesh, const struct Vec3 center) {
-    int c;
-    int count = mesh->triangleCount;
+void drawMesh(struct Mesh *mesh, const struct Vec3 center, enum EDirection rotation) {
+    uint32_t c;
+    uint32_t count = mesh->triangleCount;
     FixP_t *vertexData = mesh->geometry;
     uint8_t *uvData = mesh->uvCoords;
 
-    if (/*mesh->texture != NULL && (center.mZ + zCameraOffset) > Z_NEAR_PLANE_FRUSTUM*/ TRUE) {
+    if (mesh->nativeBuffer == NULL) {
+
+        mesh->nativeVertexBuffer = calloc( 3 * 3 * count, sizeof(float));
+        mesh->nativeTexCoordBuffer = calloc( 2 * 3 * count, sizeof(float));
+        mesh->nativeIndicesBuffer = calloc( 3 * count, sizeof(unsigned short));
+
+        float*  vP = mesh->nativeVertexBuffer;
+        float* tP = mesh->nativeTexCoordBuffer;
+        unsigned short* iP = mesh->nativeIndicesBuffer;
+
         for (c = 0; c < count; ++c) {
-            struct Vec3 p1;
-            struct Vec3 p2;
-            struct Vec3 p3;
-            struct Vec2i uv1;
-            struct Vec2i uv2;
-            struct Vec2i uv3;
 
-            uv1.x = (*uvData++);
-            uv1.y = (*uvData++);
-            p1.mX = center.mX + *(vertexData + 0);
-            p1.mY = center.mY + *(vertexData + 1);
-            p1.mZ = center.mZ + *(vertexData + 2);
+            float uv1x = 1.0f - ((*uvData++) / 16.0f);
+            float uv1y = 1.0f - ((*uvData++) / 16.0f);
+            float p1mX = fixToFloat(*(vertexData + 0));
+            float p1mY = fixToFloat(*(vertexData + 1));
+            float p1mZ = fixToFloat(*(vertexData + 2));
 
-            uv2.x = (*uvData++);
-            uv2.y = (*uvData++);
-            p2.mX = center.mX + *(vertexData + 3);
-            p2.mY = center.mY + *(vertexData + 4);
-            p2.mZ = center.mZ + *(vertexData + 5);
+            float uv2x = 1.0f - ((*uvData++) / 16.0f);
+            float uv2y = 1.0f - ((*uvData++) / 16.0f);
+            float p2mX = fixToFloat(*(vertexData + 3));
+            float p2mY = fixToFloat(*(vertexData + 4));
+            float p2mZ = fixToFloat(*(vertexData + 5));
 
-            uv3.x = (*uvData++);
-            uv3.y = (*uvData++);
-            p3.mX = center.mX + *(vertexData + 6);
-            p3.mY = center.mY + *(vertexData + 7);
-            p3.mZ = center.mZ + *(vertexData + 8);
+            float uv3x = 1.0f - ((*uvData++) / 16.0f);
+            float uv3y = 1.0f - ((*uvData++) / 16.0f);
+            float p3mX = fixToFloat(*(vertexData + 6));
+            float p3mY = fixToFloat(*(vertexData + 7));
+            float p3mZ = fixToFloat(*(vertexData + 8));
 
-            drawTriangle(p1, uv1, p2, uv2, p3, uv3, mesh->texture);
+            *vP++ = p1mX;
+            *vP++ = p1mY;
+            *vP++ = p1mZ;
+
+            *vP++ = p2mX;
+            *vP++ = p2mY;
+            *vP++ = p2mZ;
+
+            *vP++ = p3mX;
+            *vP++ = p3mY;
+            *vP++ = p3mZ;
+
+            *tP++ = uv1x;
+            *tP++ = uv1y;
+
+            *tP++ = uv2x;
+            *tP++ = uv2y;
+
+            *tP++ = uv3x;
+            *tP++ = uv3y;
+
+            *iP++ =  (c * 3) + 0;
+            *iP++ =  (c * 3) + 1;
+            *iP++ =  (c * 3) + 2;
 
             vertexData += 9;
         }
+
+        mesh->nativeBuffer = calloc(1, sizeof(struct VBORegister));
+
+        *((struct VBORegister*)mesh->nativeBuffer) = submitVBO((float *) mesh->nativeVertexBuffer, mesh->nativeTexCoordBuffer, count * 3,
+                               (unsigned short *) mesh->nativeIndicesBuffer, count * 3);
+
+    }
+
+    {
+        float x = fixToFloat(center.mX);
+        float y = fixToFloat(center.mY);
+        float z = -fixToFloat(center.mZ);
+
+        renderVBOAt( mesh->texture->raw, *((struct VBORegister*)mesh->nativeBuffer), x, y, z, 0, 360 - (rotation * 90), 0, 1.0f, 1.0f, NAN, 0, 1, 1,
+                    0xFFFFFFFF, 0);
+
     }
 }

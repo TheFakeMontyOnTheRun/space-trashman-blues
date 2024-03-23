@@ -54,18 +54,18 @@ char *menuItems[] = {
         "Next in room",
 };
 
-void refreshJustGraphics() {
+void refreshJustGraphics(void) {
     renderScene();
     graphicsFlush();
 }
 
-void backToGraphics() {
+void backToGraphics(void) {
     clearScreen();
     HUD_initialPaint();
     refreshJustGraphics();
 }
 
-void performAction() {
+void performAction(void) {
 
     switch (getGameStatus()) {
         case kBadVictory:
@@ -135,7 +135,7 @@ char *menuItems[] = {
 }
 
 
-static void handleInput() {
+static void handleInput(void) {
     u16 value;
     buffered = '.';
 
@@ -201,7 +201,7 @@ static void handleInput() {
     }
 }
 
-void shutdownGraphics() {
+void shutdownGraphics(void) {
 }
 
 
@@ -362,14 +362,14 @@ void showMessage(const char *message) {
     backToGraphics();
 }
 
-void clearScreen() {
+void clearScreen(void) {
 }
 
-void clearGraphics() {
+void clearGraphics(void) {
     BMP_clear();
 }
 
-void clearTextScreen() {
+void clearTextScreen(void) {
     for (int16_t c = 0; c < 23; ++c) {
         VDP_clearText(0, c, 256 / 8);
     }
@@ -377,19 +377,19 @@ void clearTextScreen() {
     movementCooldown = COOLDOWN_MAX;
 }
 
-void enterTextMode() {
+void enterTextMode(void) {
     clearGraphics();
     BMP_flip(1);
     clearTextScreen();
 }
 
-void exitTextMode() {
+void exitTextMode(void) {
     clearTextScreen();
 }
 
 void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 
-uint8_t getKey() {
+uint8_t getKey(void) {
     handleInput();
     return buffered;
 }
@@ -398,7 +398,7 @@ void sleepForMS(uint32_t ms) {
     //we cant afford to sleep
 }
 
-void titleScreen() {
+void titleScreen(void) {
     int16_t keepGoing = 1;
     clearGraphics();
     writeStr(1, 5, "   Sub Mare Imperium  ", 2, 0);
@@ -429,7 +429,7 @@ void assert(int unused) {
 
 }
 
-void init() {
+void init(void) {
     JOY_setEventHandler(joyEvent);
     VDP_setScreenWidth256();
     VDP_setHInterrupt(0);
@@ -458,11 +458,11 @@ void init() {
     PAL_setColor(15, RGB24_TO_VDPCOLOR(0xFFFFFF));
 }
 
-void graphicsFlush() {
+void graphicsFlush(void) {
     BMP_flip(1);
 }
 
-void HUD_initialPaint() {
+void HUD_initialPaint(void) {
     for (int16_t i = 0; i < 6; ++i) {
         writeStr(16, 13 + i, i == cursorPosition ? ">" : " ", 2, 0);
         writeStr(17, 13 + i, menuItems[i], 2, 0);
@@ -471,7 +471,7 @@ void HUD_initialPaint() {
     HUD_refresh();
 }
 
-void HUD_refresh() {
+void HUD_refresh(void) {
 
     for (int16_t i = 0; i < 13; ++i) {
         VDP_clearText(16, i, 16);

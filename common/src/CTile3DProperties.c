@@ -28,12 +28,16 @@ typedef unsigned long size_t;
 #include "CTile3DProperties.h"
 #include "PackedFileReader.h"
 #include "MapWithCharKey.h"
+#include "Mesh.h"
 
-void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map) {
+void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map, struct MapWithCharKey *meshes) {
     int c;
+    struct CTile3DProperties *prop;
     struct StaticBuffer buffer = loadBinaryFileFromPath(propertyFile);
     const uint8_t *limit = buffer.data + buffer.size;
     const uint8_t *bufferHead = buffer.data;
+    uint8_t meshCount = 0;
+    char meshNameWithExtension[256];
 
     for (c = 0; c < 256; ++c) {
         struct CTile3DProperties *prop = (struct CTile3DProperties *) getFromMap(map, c);
@@ -47,7 +51,12 @@ void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map) {
     while (bufferHead != limit) {
         FixP_t val = 0;
         uint8_t key = *(bufferHead++);
-        struct CTile3DProperties *prop = (struct CTile3DProperties *) allocMem(
+        if (key == 0) {
+            /* mesh list reached */
+            meshCount = *(bufferHead++);
+            goto end;
+        }
+		prop = (struct CTile3DProperties *) allocMem(
                 sizeof(struct CTile3DProperties), GENERAL_MEMORY, 1);
 
         prop->mNeedsAlphaTest = *(bufferHead++);
@@ -60,7 +69,7 @@ void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map) {
         prop->mFloorTextureIndex = *(bufferHead++);
         prop->mMainWallTextureIndex = *(bufferHead++);
 
-        prop->mGeometryType = (enum GeometryType) (*(bufferHead++));
+        prop->mGeometryType = (*(bufferHead++));
 
         prop->mCeilingRepeatedTextureIndex = *(bufferHead++);
         prop->mFloorRepeatedTextureIndex = *(bufferHead++);
@@ -82,6 +91,19 @@ void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map) {
 
         setInMap(map, key, prop);
     }
+end:
+    for (c = 0; c < meshCount; ++c ) {
+        struct Mesh* mesh;
+        uint8_t len = *(bufferHead++);
 
+        char* meshName = allocMem(len + 1, GENERAL_MEMORY, 1);
+        memcpy(meshName, bufferHead, len);
+        mesh = allocMem(sizeof(struct Mesh), GENERAL_MEMORY, 1);
+        sprintf(&meshNameWithExtension[0], "%s.mdl", meshName);
+        loadMesh(mesh, &meshNameWithExtension[0]);
+        setInMap(meshes, kCustomMeshStart + c, mesh);
+        disposeMem(meshName);
+        bufferHead += len;
+    }
     disposeDiskBuffer(buffer);
 }

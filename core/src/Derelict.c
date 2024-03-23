@@ -19,17 +19,18 @@ Created by Daniel Monteiro on 2019-07-26.
 #include <genesis.h>
 #endif
 
+#include "Common.h"
 #include "Core.h"
 #include "Derelict.h"
-#include "Common.h"
+
 
 uint8_t accessGrantedToSafe = FALSE;
 
-void grantAccessToSafe() {
+void grantAccessToSafe(void) {
     accessGrantedToSafe = TRUE;
 }
 
-uint8_t isAccessToSafeGranted() {
+uint8_t isAccessToSafeGranted(void) {
     return accessGrantedToSafe;
 }
 
@@ -56,11 +57,13 @@ void updateRankFromKeycards(void) {
 }
 
 void keycardPickCallback(struct Item *item) {
+    (void)item;
     updateRankFromKeycards();
 }
 
 
 void keycardDropCallback(struct Item *item) {
+    (void)item;
     updateRankFromKeycards();
 }
 
@@ -95,11 +98,11 @@ void useBootsWithMagneticCoupling(struct Item *item1, struct Item *item2) {
  bad game over - you failed to blow the station and died.
  */
 void bombActivatedCallback(struct Item *item) {
-
     uint8_t empOnReactor = hasItemInRoom("reactor-core", "emp-bomb");
     uint8_t playerLocation = getPlayerRoom();
     uint8_t playerAtDaedaus = (playerLocation == 1);
     uint8_t playerAtSameLocationAsBomb = hasItemInRoom(getRoom(playerLocation)->name, "emp-bomb");
+    (void)item;
 
     if (empOnReactor) {
         if (playerAtDaedaus) {
@@ -121,6 +124,7 @@ void bombActivatedCallback(struct Item *item) {
 }
 
 void bombControllerActivatedCallback(struct Item *item) {
+    (void)item;
     bombActivatedCallback(NULL);
 }
 
@@ -186,6 +190,8 @@ void elevatorGoUpCallback(struct Item *item) {
 
 void useCloggedFlush(struct Item *item) {
     struct Item *highRankKeycard = getItemNamed("high-rank-keycard");
+    (void)item;
+
     if (highRankKeycard->roomId == 0) {
         defaultLogger("Found something among the\n...stuff...");
         addToRoom("wc", highRankKeycard);
@@ -193,10 +199,13 @@ void useCloggedFlush(struct Item *item) {
 }
 
 void useRegularFlush(struct Item *item) {
+    (void)item;
     defaultLogger("*FLUSH*");
 }
 
 void inspectItemWithHelmetCallback(struct Item *helmet, struct Item *item) {
+    (void)helmet;
+    (void)item;
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
     defaultLogger(item->info);
 #endif
@@ -217,7 +226,7 @@ void useCommWithRank(struct Item *item) {
  * @param item
  */
 void useComputerRack(struct Item *item) {
-
+    (void)item;
     if (!getItemNamed("comm-terminal-1")->active ||
         !getItemNamed("comm-terminal-2")->active ||
         !getItemNamed("comm-terminal-3")->active) {
@@ -236,6 +245,7 @@ void useComputerRack(struct Item *item) {
 }
 
 void reactorValveCallback(struct Item *item) {
+    (void)item;
     setGameStatus(kBadVictory);
 }
 

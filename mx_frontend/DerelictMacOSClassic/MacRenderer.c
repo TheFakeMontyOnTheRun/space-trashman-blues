@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "Common.h"
 #include "Core.h"
 #include "Enums.h"
 #include "FixP.h"
@@ -10,7 +11,7 @@
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "Engine.h"
 
 #include <stdio.h>
@@ -103,7 +104,7 @@ Rect TMRGetBounds()
 	return r;
 }
 //--------------------------------------------------------------------------------
-void DrawWindow() {
+void DrawWindow(void) {
 	Rect r = TMRGetBounds();
 	Rect pixelRect;
 	int x = 0, y = 0;
@@ -177,7 +178,7 @@ void DoCommand(long mResult)
 	HiliteMenu(0);
 }
 //--------------------------------------------------------------------------------
-void handleSystemEvents() {
+void handleSystemEvents(void) {
 	EventRecord    theEvent;
 	WindowPtr whichWindow;
 	Rect windRect;
@@ -308,10 +309,26 @@ void handleSystemEvents() {
 
 				case 16:
 				lastKey = kCommandRight;
+	            if ((currentGameMenuState == kPlayGame ||
+    	             currentGameMenuState == kBackToGame) &&
+        	        currentPresentationState == kWaitingForInput
+            	    ) {
+                	
+	                turnStep = 200;
+    	            turnTarget = 0;
+        	    }
 				break;
 
 				case 8:
 				lastKey = kCommandLeft;
+    	        if ((currentGameMenuState == kPlayGame ||
+        	        currentGameMenuState == kBackToGame) &&
+            	    currentPresentationState == kWaitingForInput
+                	) {
+                
+	                turnStep = 0;
+    	            turnTarget = 200;
+        	    }
 				break;
 
 				case 268435456: //enter
@@ -362,7 +379,7 @@ void handleSystemEvents() {
 	}
 }
 //--------------------------------------------------------------------------------
-void SetUpMenus() {
+void SetUpMenus(void) {
 /*
 	short i;
 	OSErr err;
@@ -385,11 +402,11 @@ void SetUpMenus() {
 	DrawMenuBar();
 }
 //--------------------------------------------------------------------------------
-void graphicsShutdown() {
+void graphicsShutdown(void) {
 	ExitToShell();
 }
 //--------------------------------------------------------------------------------
-void flipRenderer() {
+void flipRenderer(void) {
 	long offset = 0;
 	int c;
 	Ptr baseAddr;
@@ -411,8 +428,7 @@ void flipRenderer() {
 	InvalRect(&qdGlobals.thePort->portRect);
 }
 //--------------------------------------------------------------------------------
-void clearRenderer() {
-
+void clearRenderer(void) {
 }
 //--------------------------------------------------------------------------------
 void Initialize(void) {

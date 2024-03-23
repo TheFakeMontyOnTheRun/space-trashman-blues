@@ -1,7 +1,5 @@
-#include <stddef.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <string.h>
 
 #include "Core.h"
 #include "Derelict.h"

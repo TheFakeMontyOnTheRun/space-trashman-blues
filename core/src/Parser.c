@@ -11,6 +11,7 @@ Created by Daniel Monteiro on 08/10/2019.
 
 #endif
 
+#include "Common.h"
 #include "Core.h"
 #include "Parser.h"
 #include <string.h>
