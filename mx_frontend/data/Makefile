@@ -6,6 +6,8 @@ CRUNCHER=../../tools/wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-de
 
 DISTILLER=distiller
 
+TRIGGER=trigger
+
 $(CRUNCHER):
 	mvn -q -f ../../tools/wobj-compiler/pom.xml clean compile package install
 
@@ -17,8 +19,8 @@ models: $(CRUNCHER)
 	ls src/*.obj  | xargs java -jar ../../tools/wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 
-graphics: $(DISTILLER)
-	ls svg  | xargs ./$(DISTILLER)
+graphics: $(DISTILLER) $(TRIGGER)
+	ls svg  | xargs ./$(TRIGGER) | xargs ./$(DISTILLER)
 
 data:	$(PACKAGER)
 	#python3 ./check_textures.py
