@@ -261,9 +261,18 @@ int main(int argc, char **argv) {
         std::cout << "/* " << filename << " is not an SVG file! */" << std::endl;
         return 0;
     }
+
+    filename = filename.substr(0, extensionPos);
+
+    for (auto& c : filename) {
+        if ( c == '.' || c == '-' || c == '/' ) {
+            c = '_';
+        }
+    }
+
     std::ifstream svg(argv[1]);
 
-    std::cout << "static const uint8_t graphic[] = {" << std::endl;
+    std::cout << "static const uint8_t " << filename << "[] = {" << std::endl;
 
     while (svg.good()) {
         std::string line;
