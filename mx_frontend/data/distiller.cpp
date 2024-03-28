@@ -254,6 +254,13 @@ int main(int argc, char **argv) {
         return 0;
     }
 
+    std::string filename = argv[1];
+
+    auto extensionPos = filename.rfind(".svg");
+    if ( extensionPos > filename.length() ) {
+        std::cout << "/* " << filename << " is not an SVG file! */" << std::endl;
+        return 0;
+    }
     std::ifstream svg(argv[1]);
 
     std::cout << "static const uint8_t graphic[] = {" << std::endl;

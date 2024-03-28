@@ -650,6 +650,13 @@ int main(int argc, char **argv) {
         return 0;
     }
 
+    std::string filename = argv[1];
+
+    if (filename.rfind(".svg") > filename.length() ) {
+        std::cout << "/* " << filename << " is not an SVG file! */" << std::endl;
+        return 0;
+    }
+
     std::ifstream svg(argv[1]);
 
     std::cout << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<svg>\n" << std::endl;
