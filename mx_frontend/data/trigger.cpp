@@ -659,7 +659,14 @@ int main(int argc, char **argv) {
 
     std::ifstream svg(argv[1]);
 
-    std::cout << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<svg>\n" << std::endl;
+    std::cout << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<svg\n";
+    std::cout << "width=\"800\"\n"
+                 "   height=\"480\"\n"
+                 "   version=\"1.1\"\n"
+                 "   id=\"svg1\"\n"
+                 "   xmlns=\"http://www.w3.org/2000/svg\"\n"
+                 "   xmlns:svg=\"http://www.w3.org/2000/svg\"";
+    std::cout << ">\n" << std::endl;
 
     while (svg.good()) {
         std::string line;
