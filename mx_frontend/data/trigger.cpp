@@ -569,7 +569,7 @@ RGB handleStyle(const std::string &style) {
     return {};
 }
 
-void handlePathNode(std::ifstream &svg, std::ofstream &output) {
+void handlePathNode(std::ifstream &svg) {
 
     RGB colour;
     bool inPath = false;
@@ -645,13 +645,12 @@ void handlePathNode(std::ifstream &svg, std::ofstream &output) {
 }
 
 int main(int argc, char **argv) {
-    if (argc <= 2) {
-        std::cout << "USAGE: trigger [svgin] [svgout]" << std::endl;
+    if (argc <= 1) {
+        std::cout << "USAGE: trigger [svg]" << std::endl;
         return 0;
     }
 
     std::ifstream svg(argv[1]);
-    std::ofstream output(argv[2]);
 
     std::cout << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<svg>\n" << std::endl;
 
@@ -662,7 +661,7 @@ int main(int argc, char **argv) {
 
         auto pathStart = line.find("<path");
         if (pathStart != std::string::npos) {
-            handlePathNode(svg, output);
+            handlePathNode(svg);
         }
     }
 
