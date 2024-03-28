@@ -14,11 +14,11 @@ struct RGB {
 };
 
 struct Graphic {
-    std::vector<Vec> points;
+    std::vector <Vec> points;
     RGB colour;
 };
 
-std::string to_string(const RGB& c) {
+std::string to_string(const RGB &c) {
     std::stringstream ss;
 
     ss << c.r;
@@ -30,28 +30,29 @@ std::string to_string(const RGB& c) {
     return ss.str();
 }
 
-std::string to_string(const Vec& v) {
+std::string to_string(const Vec &v) {
     std::stringstream ss;
-    ss << ((v.x * 128) / 800);
+    ss << static_cast<int>((v.x * 127.0f) / 800.0f);
     ss << ", ";
-    ss << ((v.y * 128) / 480);
+    ss << static_cast<int>((v.y * 127.0f) / 480.0f);
     ss << ",\n";
     return ss.str();
 }
-std::string to_string(const Graphic& g) {
+
+std::string to_string(const Graphic &g) {
     std::stringstream ss;
-    ss << g.points.size()<< ",\n" ;
+    ss << g.points.size() << ",\n";
     ss << "#ifndef MONOCHROME_VECTORS\n";
     ss << to_string(g.colour);
     ss << "#endif\n";
-    for (const auto &v : g.points) {
+    for (const auto &v: g.points) {
         ss << to_string(v);
     }
 
     return ss.str();
 }
 
-RGB handleColour(const std::string& colour) {
+RGB handleColour(const std::string &colour) {
     std::stringstream ss;
     RGB toReturn;
 
@@ -71,11 +72,11 @@ RGB handleColour(const std::string& colour) {
     return toReturn;
 }
 
-Graphic parsePath(const std::string& path) {
+Graphic parsePath(const std::string &path) {
     Graphic toReturn;
     bool absolute = false;
     std::stringstream ss(path);
-    std::vector<std::string> tokens;
+    std::vector <std::string> tokens;
     char cmd;
     float lastX, lastY;
     std::string s;
@@ -92,6 +93,18 @@ Graphic parsePath(const std::string& path) {
 
     while (p < end) {
         Vec v;
+
+        if (tokens[p] == "Z") {
+            absolute = true;
+            ++p;
+            continue;
+        }
+
+        if (tokens[p] == "z") {
+            absolute = false;
+            ++p;
+            continue;
+        }
 
         if (tokens[p] == "M") {
             absolute = true;
@@ -132,13 +145,13 @@ Graphic parsePath(const std::string& path) {
         auto commaPos = token.find(",");
 
         if (commaPos == std::string::npos) {
-            v.x = std::atoi(tokens[p++].c_str());
-            v.y = std::atoi(tokens[p++].c_str());
+            v.x = std::atof(tokens[p++].c_str());
+            v.y = std::atof(tokens[p++].c_str());
         } else {
             std::string part1 = token.substr(0, commaPos);
             std::string part2 = token.substr(commaPos + 1);
-            v.x = std::atoi(part1.c_str());
-            v.y = std::atoi(part2.c_str());
+            v.x = std::atof(part1.c_str());
+            v.y = std::atof(part2.c_str());
             p++;
         }
 
@@ -156,7 +169,7 @@ Graphic parsePath(const std::string& path) {
     return toReturn;
 }
 
-RGB handleStyle(const std::string& style) {
+RGB handleStyle(const std::string &style) {
 
     int pos = 0;
     int end = style.length();
@@ -172,7 +185,7 @@ RGB handleStyle(const std::string& style) {
     return {};
 }
 
-void handlePathNode( std::ifstream& svg, std::ofstream& output) {
+void handlePathNode(std::ifstream &svg, std::ofstream &output) {
 
     RGB colour;
     bool inPath = false;
@@ -181,7 +194,7 @@ void handlePathNode( std::ifstream& svg, std::ofstream& output) {
     while (svg.good()) {
         std::string line;
 
-        std::getline( svg, line);
+        std::getline(svg, line);
 
         if (line.find("/>") != std::string::npos) {
             return;
@@ -190,7 +203,7 @@ void handlePathNode( std::ifstream& svg, std::ofstream& output) {
 
         auto style = line.find("style=");
         if (style != std::string::npos) {
-            line = line.substr( style + 7);
+            line = line.substr(style + 7);
             colour = handleStyle(line.substr(0, line.length() - 1));
             continue;
         }
@@ -198,16 +211,12 @@ void handlePathNode( std::ifstream& svg, std::ofstream& output) {
         if (!inPath) {
 
             auto pathStart = line.find("d=");
-            if (pathStart == 0 || ( pathStart != std::string::npos && line[pathStart - 1] == ' ')) {
+            if (pathStart == 0 || (pathStart != std::string::npos && line[pathStart - 1] == ' ')) {
                 line = line.substr(pathStart + 3);
                 inPath = true;
                 currentPath.clear();
 
-                auto pathEnd = line.find("z");
-
-                if (pathEnd == std::string::npos) {
-                    pathEnd = line.find("Z");
-                }
+                auto pathEnd = line.find("\"");
 
                 if (pathEnd != std::string::npos) {
                     inPath = false;
@@ -215,21 +224,19 @@ void handlePathNode( std::ifstream& svg, std::ofstream& output) {
                     Graphic g;
                     g = parsePath(line);
                     g.colour = colour;
+
                     std::cout << to_string(g);
+
                 } else {
                     currentPath << line;
                 }
             }
         } else {
-            auto pathEnd = line.find("z");
-
-            if (pathEnd == std::string::npos) {
-                pathEnd = line.find("Z");
-            }
+            auto pathEnd = line.find("\"");
 
             if (pathEnd != std::string::npos) {
                 inPath = false;
-                currentPath << line.substr( 0, pathEnd - 1);
+                currentPath << line.substr(0, pathEnd - 1);
                 Graphic g;
                 g = parsePath(currentPath.str());
                 g.colour = colour;
@@ -241,7 +248,7 @@ void handlePathNode( std::ifstream& svg, std::ofstream& output) {
     }
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
     if (argc <= 2) {
         std::cout << "USAGE: distiller [svg] [output]" << std::endl;
         return 0;
@@ -255,7 +262,7 @@ int main(int argc, char** argv) {
     while (svg.good()) {
         std::string line;
 
-        std::getline( svg, line);
+        std::getline(svg, line);
 
         auto pathStart = line.find("<path");
         if (pathStart != std::string::npos) {

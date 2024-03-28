@@ -4,6 +4,8 @@ PACKAGER=packer
 
 CRUNCHER=../../tools/wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
 
+DISTILLER=distiller
+
 $(CRUNCHER):
 	mvn -q -f ../../tools/wobj-compiler/pom.xml clean compile package install
 
@@ -13,6 +15,10 @@ $(PACKAGER):
 
 models: $(CRUNCHER)
 	ls src/*.obj  | xargs java -jar ../../tools/wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
+
+
+graphics: $(DISTILLER)
+	ls svg  | xargs ./$(DISTILLER)
 
 data:	$(PACKAGER)
 	#python3 ./check_textures.py
@@ -29,6 +35,6 @@ images:
 maps:
 	python3 ./compile_map.py
 
-full: images maps models data
+full: images maps models graphics data
 
 default: full
