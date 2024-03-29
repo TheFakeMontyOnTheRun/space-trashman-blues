@@ -455,6 +455,10 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
 
 }
 
+void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
+
+}
+
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour) {
     drawTextAtWithMarginWithFiltering(x, y, margin, text, colour, '-');
 }

@@ -208,6 +208,10 @@ void drawTextAt(const int _x, const int _y, const char *text, const FramebufferP
     }
 }
 
+void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
+
+}
+
 void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text,
                                        const uint8_t colour, char charToReplaceHifenWith) {
     drawTextAt(x, y, text, colour);

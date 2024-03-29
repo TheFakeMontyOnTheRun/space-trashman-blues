@@ -238,32 +238,51 @@ void drawGraphic(const uint8_t *graphic) {
         const uint8_t r = *ptr++;
         const uint8_t g = *ptr++;
         const uint8_t b = *ptr++;
-        const uint32_t colour = getPaletteEntry( 0xFF000000 + (b << 16) + (g << 8) + r);
+        const FramebufferPixelFormat colour = getPaletteEntry( 0xFF000000 + (b << 16) + (g << 8) + r);
         const uint8_t *shape = ptr;
         int centerX = 0;
         int centerY = 0;
 
-        for (c = 0; c < npoints; ++c) {
-            centerX += shape[2 * c];
-            centerY += shape[(2 * c) + 1];
-        }
+        if (npoints > 3) {
+            for (c = 0; c < npoints; ++c) {
+                centerX += shape[2 * c];
+                centerY += shape[(2 * c) + 1];
+            }
 
-        centerX /= npoints;
-        centerY /= npoints;
+            centerX /= npoints;
+            centerY /= npoints;
 
-        buffer[4] = centerX;
-        buffer[5] = centerY;
+            buffer[4] = centerX;
+            buffer[5] = centerY;
 
-        for (c = 0; c < npoints - 1; ++c) {
+            for (c = 0; c < npoints - 1; ++c) {
 
-            buffer[0] = shape[(2 * c) + 0];
-            buffer[1] = shape[(2 * c) + 1];
-            buffer[2] = shape[(2 * c) + 2];
-            buffer[3] = shape[(2 * c) + 3];
+                buffer[0] = shape[(2 * c) + 0];
+                buffer[1] = shape[(2 * c) + 1];
+                buffer[2] = shape[(2 * c) + 2];
+                buffer[3] = shape[(2 * c) + 3];
+
+                fillTriangle(&buffer[0], colour);
+            }
+            ptr += 2 * npoints;
+        } else if (npoints == 3) {
+            buffer[0] = shape[0];
+            buffer[1] = shape[1];
+            buffer[2] = shape[2];
+            buffer[3] = shape[3];
+            buffer[4] = shape[4];
+            buffer[5] = shape[5];
 
             fillTriangle(&buffer[0], colour);
+
+            ptr += 2 * npoints;
+        } else if (npoints == 2) {
+            drawLine(shape[0], shape[1], shape[2], shape[3], colour);
+            ptr += 2 * npoints;
+        } else if (npoints == 1) {
+            fillRect(shape[0], shape[1], 1, 1, colour, FALSE);
+            ptr += 2 * npoints;
         }
-        ptr += 2 * npoints;
     }
 }
 

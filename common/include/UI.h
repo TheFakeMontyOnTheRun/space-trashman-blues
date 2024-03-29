@@ -43,4 +43,6 @@ extern int8_t cursorPosition;
 
 void clearScreen(void);
 
+void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour);
+
 #endif /*UI_H*/

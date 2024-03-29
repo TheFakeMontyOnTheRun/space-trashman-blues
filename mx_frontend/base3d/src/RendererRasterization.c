@@ -1692,6 +1692,31 @@ void drawTextAt(const int x, const int y, const char *text, const uint8_t colour
     drawTextAtWithMargin(x, y, (XRES_FRAMEBUFFER - 1), text, colour);
 }
 
+void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
+    int dx = abs(x1 - x0);
+    int sx = x0 < x1 ? 1 : -1;
+    int dy = abs(y1 - y0);
+    int sy = y0 < y1 ? 1 : -1;
+    int err = (dx > dy ? dx : -dy) >> 1;
+    int e2;
+    for (;;) {
+
+        if (x0 == x1 && y0 == y1) break;
+
+        framebuffer[(x0 * XRES_FRAMEBUFFER) + y0] = colour;
+
+        e2 = err;
+        if (e2 > -dx) {
+            err -= dy;
+            x0 += sx;
+        }
+        if (e2 < dy) {
+            err += dx;
+            y0 += sy;
+        }
+    }
+}
+
 void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
                     uint8_t *prevFrame, int turnState, int turnTarget, int scale200To240) {
 
