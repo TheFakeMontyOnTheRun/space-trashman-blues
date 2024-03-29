@@ -285,7 +285,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    std::cout << "0};" << std::endl;
+    std::cout << "0};\n" << std::endl;
 
     return 0;
 }

@@ -18,10 +18,6 @@ $(PACKAGER):
 models: $(CRUNCHER)
 	ls src/*.obj  | xargs java -jar ../../tools/wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
 
-
-graphics: $(DISTILLER) $(TRIGGER)
-	ls svg  | xargs ./$(TRIGGER) | xargs ./$(DISTILLER)
-
 data:	$(PACKAGER)
 	#python3 ./check_textures.py
 	rm -f ./base.pfs
@@ -37,6 +33,6 @@ images:
 maps:
 	python3 ./compile_map.py
 
-full: images maps models graphics data
+full: images maps models data
 
 default: full
