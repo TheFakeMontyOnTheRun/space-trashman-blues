@@ -183,13 +183,13 @@ static const uint8_t splashGraphics[] = {
 void MainMenu_initStateCallback(enum EGameMenuState tag) {
     (void)tag;
     cursorPosition = 0;
-    playSound(MAIN_MENU_THEME);
 }
 
 void MainMenu_repaintCallback(void) {
     if (firstFrameOnCurrentState) {
         clearScreen();
         drawGraphic(splashGraphics);
+        playSound(MAIN_MENU_THEME);
     }
 
     drawWindowWithOptions(
