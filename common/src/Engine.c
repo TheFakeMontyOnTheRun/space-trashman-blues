@@ -81,6 +81,7 @@ void enterState(enum EGameMenuState newState) {
             tickCallback = Crawler_tickCallback;
             unloadStateCallback = Crawler_unloadStateCallback;
             break;
+#ifdef SUPPORTS_HACKING_MINIGAME
         case kHackingGame: {
             initStateCallback = HackingScreen_initStateCallback;
             repaintCallback = HackingScreen_repaintCallback;
@@ -88,6 +89,7 @@ void enterState(enum EGameMenuState newState) {
             unloadStateCallback = HackingScreen_unloadStateCallback;
         }
             break;
+#endif
 #ifdef EMIT_QUIT_OPTION
         case kQuit:
             isRunning = FALSE;
