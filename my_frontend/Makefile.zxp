@@ -1,0 +1,51 @@
+CC = zcc
+
+CFLAGS = \
+        +zx -vn \
+        -compiler=sdcc \
+        -SO3 \
+        --max-allocs-per-node200000 \
+        --opt-code-speed \
+        -Iinclude \
+        -I../core/include \
+        -I../common/include \
+        -DXRES_FRAMEBUFFER=256 \
+        -DYRES_FRAMEBUFFER=192 \
+        -DSPECCY \
+        -DCAN_PICK_OBJECT_AT_ANY_DISTANCE \
+        -DRLE_COMPRESSED_MAPS \
+        -DEMBEDDED_DATA \
+        -DMONOCHROME_VECTORS
+
+TARGET = derelict.bin
+
+OBJS = \
+    src/Events.o \
+    src/RendererRasterizer.o \
+    src/RendererScene.o \
+    src/RendererTesselation.o \
+    src/speccy.o \
+    src/Main.o \
+    src/KeyboardUI.o \
+    src/UI.o \
+    src/Crawler.o \
+    src/GameMenu.o \
+    ../common/src/CreditsScreen.o \
+    ../common/src/MainMenu.o \
+    ../common/src/HelpScreen.o \
+    ../common/src/Engine.o \
+    ../common/src/Common.o \
+    ../common/src/NullMusic.o \
+    ../core/src/Core.o \
+    ../core/src/Derelict.o
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS)  -lndos -create-app  $(OBJS) -o $(TARGET) $(LDFLAGS)
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+	rm -f *.bin
+	rm -f *~
+
