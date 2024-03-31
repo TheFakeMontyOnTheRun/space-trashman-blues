@@ -145,8 +145,6 @@ enum ECommand getInput(void) {
         return kCommandNone;
     }
 
-    uint8_t input = getch();
-
     performAction();
 
     switch (getch()) {
