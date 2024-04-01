@@ -111,17 +111,13 @@ enum ECommand getInput(void) {
     performAction();
 
     switch (getch()) {
-        case 30:
         case 'w':
             return kCommandUp;
-        case 31:
         case 's':
             return kCommandDown;
-        case 29:
         case 'q':
             updateDirection = 1;
             return kCommandLeft;
-        case 28:
         case 'e':
             updateDirection = 1;
             return kCommandRight;
@@ -129,9 +125,6 @@ enum ECommand getInput(void) {
             return kCommandStrafeLeft;
         case 'x':
             return kCommandStrafeRight;
-        case 'm':
-            drawMap();
-            return '.';
         case '1':
             if (waitForKey) {
                 waitForKey = 0;
