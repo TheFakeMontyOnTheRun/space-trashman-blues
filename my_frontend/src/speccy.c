@@ -154,7 +154,7 @@ void clearScreen(void) {
 }
 
 void clearGraphics(void) {
-
+    clga(0, 0, 128, 128);
 }
 
 void startFrame(int x, int y, int width, int height) {
