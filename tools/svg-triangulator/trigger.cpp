@@ -6,18 +6,7 @@
 #include <algorithm>
 #include <vector>
 
-struct Vec {
-    float x, y;
-};
-
-struct RGB {
-    int r, g, b;
-};
-
-struct Graphic {
-    std::vector <Vec> points;
-    RGB colour;
-};
+#include "xml.h"
 
 std::vector <Graphic> triangulate(Graphic g);
 
@@ -457,7 +446,9 @@ RGB handleColour(const std::string &colour) {
     return toReturn;
 }
 
-Graphic parsePath(const std::string &path) {
+ Graphic parsePath(const char *pathStr) {
+    std::string path = pathStr;
+
     Graphic toReturn;
     bool absolute = false;
     std::stringstream ss(path);
@@ -493,6 +484,30 @@ Graphic parsePath(const std::string &path) {
 
         if (tokens[p] == "M") {
             absolute = true;
+            ++p;
+            continue;
+        }
+
+        if (tokens[p] == "H") {
+            absolute = true;
+            ++p;
+            continue;
+        }
+
+        if (tokens[p] == "V") {
+            absolute = true;
+            ++p;
+            continue;
+        }
+
+        if (tokens[p] == "v") {
+            absolute = false;
+            ++p;
+            continue;
+        }
+
+        if (tokens[p] == "h") {
+            absolute = false;
             ++p;
             continue;
         }
@@ -554,8 +569,8 @@ Graphic parsePath(const std::string &path) {
     return toReturn;
 }
 
-RGB handleStyle(const std::string &style) {
-
+RGB parseStyle(const char* styleStr) {
+    std::string style = styleStr;
     int pos = 0;
     int end = style.length();
     while (pos <= end) {
@@ -568,81 +583,6 @@ RGB handleStyle(const std::string &style) {
     }
 
     return {};
-}
-
-void handlePathNode(std::ifstream &svg) {
-
-    RGB colour;
-    bool inPath = false;
-    std::stringstream currentPath;
-
-    while (svg.good()) {
-        std::string line;
-
-        std::getline(svg, line);
-
-        if (line.find("/>") != std::string::npos) {
-            return;
-        }
-
-
-        auto style = line.find("style=");
-        if (style != std::string::npos) {
-            line = line.substr(style + 7);
-            colour = handleStyle(line.substr(0, line.length() - 1));
-            continue;
-        }
-
-        if (!inPath) {
-
-            auto pathStart = line.find("d=");
-            if (pathStart == 0 || (pathStart != std::string::npos && line[pathStart - 1] == ' ')) {
-                line = line.substr(pathStart + 3);
-                inPath = true;
-                currentPath.clear();
-
-                auto pathEnd = line.find("\"");
-
-                if (pathEnd != std::string::npos) {
-                    inPath = false;
-                    line = line.substr(0, pathEnd - 1);
-                    Graphic g;
-                    g = parsePath(line);
-                    g.colour = colour;
-
-                    std::vector<Graphic> input;
-                    input.push_back(g);
-                    auto triangulated = splitIntoMonotones(input);
-                    for (const auto &t: triangulated) {
-                        std::cout << to_string(t);
-                    }
-
-
-                } else {
-                    currentPath << line;
-                }
-            }
-        } else {
-            auto pathEnd = line.find("\"");
-
-            if (pathEnd != std::string::npos) {
-                inPath = false;
-                currentPath << line.substr(0, pathEnd - 1);
-                Graphic g;
-                g = parsePath(currentPath.str());
-                g.colour = colour;
-                std::vector<Graphic> input;
-                input.push_back(g);
-                auto triangulated = splitIntoMonotones(input);
-                for (const auto &t: triangulated) {
-                    std::cout << to_string(t);
-                }
-
-            } else {
-                currentPath << line;
-            }
-        }
-    }
 }
 
 int main(int argc, char **argv) {
@@ -658,8 +598,6 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    std::ifstream svg(argv[1]);
-
     std::cout << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<svg\n";
     std::cout << "width=\"800\"\n"
                  "   height=\"480\"\n"
@@ -669,16 +607,7 @@ int main(int argc, char **argv) {
                  "   xmlns:svg=\"http://www.w3.org/2000/svg\"";
     std::cout << ">\n" << std::endl;
 
-    while (svg.good()) {
-        std::string line;
-
-        std::getline(svg, line);
-
-        auto pathStart = line.find("<path");
-        if (pathStart != std::string::npos) {
-            handlePathNode(svg);
-        }
-    }
+    openXML(filename.c_str(), true);
 
     std::cout << "\n</svg>" << std::endl;
 
