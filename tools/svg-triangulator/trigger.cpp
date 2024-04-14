@@ -110,7 +110,7 @@ Graphic CullXNoMoreThan(float aSpan, Graphic aSrc) {
                 b2 = aSrc.points[c].y - aSrc.points[prev].y;
                 DX = aSrc.points[c].y - ((b1 * b2) / a2);
 
-                Vec tmp = {.x = (int) aSpan, .y = (int) DX};
+                Vec tmp = {.x = aSpan, .y = DX};
                 pa.points.push_back(tmp);
 
                 lastinside = false;
@@ -148,7 +148,7 @@ Graphic CullXNoLessThan(float aSpan, Graphic aSrc) {
                 b2 = aSrc.points[c].y - aSrc.points[prev].y;
                 DX = aSrc.points[c].y - ((b1 * b2) / a2);
 
-                Vec tmp = {.x = (int) aSpan, .y = (int) DX};
+                Vec tmp = {.x =  aSpan, .y =  DX};
                 pa.points.push_back(tmp);
 
                 lastinside = true;
@@ -172,7 +172,7 @@ Graphic CullXNoLessThan(float aSpan, Graphic aSrc) {
                 b2 = aSrc.points[c].y - aSrc.points[prev].y;
                 DX = aSrc.points[c].y - ((b1 * b2) / a2);
 
-                Vec tmp = {.x = (int) aSpan, .y = (int) DX};
+                Vec tmp = {.x =  aSpan, .y =  DX};
                 pa.points.push_back(tmp);
 
                 lastinside = false;
@@ -228,7 +228,7 @@ std::vector <Graphic> decomposeMonotone(Graphic proc) {
             c++;
         }
 
-        Vec tmp = {.x = (int) v1x, .y = (int) v1y};
+        Vec tmp = {.x =  v1x, .y =  v1y};
         p.points.push_back(tmp);
 
 
@@ -248,7 +248,7 @@ std::vector <Graphic> decomposeMonotone(Graphic proc) {
         v3x = vx;
         v3y = vy;
         {
-            Vec tmp = {.x = (int) v2x, .y = (int) v2y};
+            Vec tmp = {.x =  v2x, .y =  v2y};
             p.points.push_back(tmp);
         }
         while (c < polygon.points.size()) {
@@ -267,11 +267,11 @@ std::vector <Graphic> decomposeMonotone(Graphic proc) {
         }
 
         {
-            Vec tmp = {.x = (int) v3x, .y = (int) v3y};
+            Vec tmp = {.x =  v3x, .y =  v3y};
             p.points.push_back(tmp);
         }
         {
-            Vec tmp = {.x = (int) vx, .y = (int) vy};
+            Vec tmp = {.x =  vx, .y =  vy};
             p.points.push_back(tmp);
         }
 
@@ -286,7 +286,7 @@ std::vector <Graphic> decomposeMonotone(Graphic proc) {
             vy = v.y;
 
             {
-                Vec tmp = {.x = (int) vx, .y = (int) vy};
+                Vec tmp = {.x =  vx, .y =  vy};
                 p.points.push_back(tmp);
 
             }
