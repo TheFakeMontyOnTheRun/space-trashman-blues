@@ -446,7 +446,7 @@ RGB handleColour(const std::string &colour) {
     return toReturn;
 }
 
- Graphic parsePath(const char *pathStr) {
+ Graphic parsePath(const char *pathStr, float parentTransformX, float parentTransformY) {
     std::string path = pathStr;
 
     Graphic toReturn;
@@ -545,13 +545,13 @@ RGB handleColour(const std::string &colour) {
         auto commaPos = token.find(",");
 
         if (commaPos == std::string::npos) {
-            v.x = std::atof(tokens[p++].c_str());
-            v.y = std::atof(tokens[p++].c_str());
+            v.x = std::atof(tokens[p++].c_str())  + parentTransformX;
+            v.y = std::atof(tokens[p++].c_str())  + parentTransformY;
         } else {
             std::string part1 = token.substr(0, commaPos);
             std::string part2 = token.substr(commaPos + 1);
-            v.x = std::atof(part1.c_str());
-            v.y = std::atof(part2.c_str());
+            v.x = std::atof(part1.c_str())  + parentTransformX;
+            v.y = std::atof(part2.c_str())  + parentTransformY;
             p++;
         }
 

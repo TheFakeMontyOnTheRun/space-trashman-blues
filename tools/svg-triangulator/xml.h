@@ -19,7 +19,7 @@ void openXML(const char* filename, bool triangulate);
 
 std::vector <Graphic> splitIntoMonotones(std::vector <Graphic> polytonics);
 
-struct Graphic parsePath(const char* pathStr);
+struct Graphic parsePath(const char* pathStr, float parentTransformX, float parentTransformY);
 
 struct RGB parseStyle(const char* styleStr);
 
