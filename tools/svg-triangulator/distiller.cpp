@@ -33,9 +33,9 @@ std::string to_string(const RGB &c) {
 
 std::string to_string(const Vec &v) {
     std::stringstream ss;
-    ss << static_cast<int>((v.x * 127.0f) / 800.0f);
+    ss << static_cast<int>(v.x);
     ss << ", ";
-    ss << static_cast<int>((v.y * 127.0f) / 480.0f);
+    ss << static_cast<int>(v.y);
     ss << ",\n";
     return ss.str();
 }
