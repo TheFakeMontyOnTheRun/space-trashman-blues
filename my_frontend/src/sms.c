@@ -102,6 +102,14 @@ enum ECommand getInput(void) {
 
     if ((key & JOY_FIREB) && !cooldown ) {
         if (currentGameMenuState == kPlayGame) {
+
+            if (waitForKey) {
+                waitForKey = 0;
+                firstFrameOnCurrentState = 1;
+                needs3dRefresh = 1;
+                return kCommandNone;
+            }
+
             cursorPosition = (cursorPosition + 1);
             playSound(2);
             if (cursorPosition >= 6) {
