@@ -44,7 +44,7 @@ void HUD_initialPaint(void) {
                128 / 8,
                (XRES_FRAMEBUFFER / 8) / 2,
                (YRES_FRAMEBUFFER / 8) - 17,
-               "Direction: ",
+               "",
                2);
 
     drawWindowWithOptions(
