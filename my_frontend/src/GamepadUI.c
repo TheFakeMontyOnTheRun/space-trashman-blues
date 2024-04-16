@@ -40,13 +40,6 @@ void HUD_initialPaint(void) {
         drawMap();
     }
 
-    drawWindow(0,
-               128 / 8,
-               (XRES_FRAMEBUFFER / 8) / 2,
-               (YRES_FRAMEBUFFER / 8) - 17,
-               "",
-               2);
-
     drawWindowWithOptions(
             1 + (XRES_FRAMEBUFFER / 2) / 8,
             (YRES_FRAMEBUFFER / 8) - 3 - /*kMainMenuOptionsCount*/ 6 - 1,
