@@ -12,8 +12,6 @@
 #include "UI.h"
 #include "font.h"
 
-uint8_t updateDirection;
-
 /* Sadly, I can't include conio.h - otherwise, I would get errors when building on OSX */
 int kbhit(void);
 int getch(void);
@@ -37,7 +35,6 @@ void initHW(int argc, char **argv) {
     (void)argv;
     initAY38910();
     initKeyboardUI();
-    updateDirection = 1;
     needs3dRefresh = 0;
 }
 
@@ -156,11 +153,9 @@ enum ECommand getInput(void) {
             return kCommandDown;
         case 29:
         case 'q':
-            updateDirection = 1;
             return kCommandLeft;
         case 28:
         case 'e':
-            updateDirection = 1;
             return kCommandRight;
         case 'z':
             return kCommandStrafeLeft;
@@ -213,13 +208,6 @@ void endFrame(void) {
             uint8_t *line = (unsigned char *) 0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048);
             memcpy(line, buffer + (y * BUFFER_SIZEX), BUFFER_SIZEX);
         }
-
-        if (updateDirection) {
-            char direction[8] = {'N', 0, 'E', 0, 'S', 0, 'W', 0};
-            updateDirection = 0;
-            writeStrWithLimit(12, 17, &direction[getPlayerDirection() * 2], 31, 2, 0);
-        }
-
         memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
     }
 }
