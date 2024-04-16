@@ -24,8 +24,6 @@ uint8_t cooldown;
 extern uint8_t firstFrameOnCurrentState;
 extern uint8_t waitForKey;
 
-uint8_t updateDirection;
-
 extern uint8_t cursorPosition;
 
 enum ESoundDriver soundDriver = kSN76489;
@@ -39,7 +37,6 @@ void initHW(int argc, char **argv) {
     initTMS9918();
     initSN76489();
     cooldown = COOLDOWN_MAX;
-    updateDirection = 1;
     needs3dRefresh = 0;
 }
 
@@ -62,7 +59,6 @@ enum ECommand getInput(void) {
         if (key & JOY_FIREB) {
             return kCommandStrafeLeft;
         } else {
-            updateDirection = 1;
             return kCommandLeft;
         }
     }
@@ -72,7 +68,6 @@ enum ECommand getInput(void) {
         if (key & JOY_FIREB) {
             return kCommandStrafeRight;
         } else {
-            updateDirection = 1;
             return kCommandRight;
         }
     }
