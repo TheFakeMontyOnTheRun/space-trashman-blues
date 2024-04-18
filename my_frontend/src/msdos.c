@@ -11,8 +11,6 @@
 
 unsigned char imageBuffer[128 * 32];
 
-uint8_t updateDirection;
-
 enum ESoundDriver soundDriver = kPcSpeaker;
 extern uint8_t firstFrameOnCurrentState;
 
@@ -297,7 +295,6 @@ void initHW(int argc, char **argv) {
             );
 
     initKeyboardUI();
-    updateDirection = 1;
     clearGraphics();
 }
 
@@ -335,14 +332,12 @@ enum ECommand getInput(void) {
 
     switch(toReturn) {
         case 'q':
-            updateDirection = 1;
             return kCommandLeft;
         case 'w':
             return kCommandUp;
         case 's':
             return kCommandDown;
         case 'e':
-            updateDirection = 1;
             return kCommandRight;
         case 'a':
             return kCommandStrafeLeft;
@@ -489,24 +484,6 @@ void endFrame(void) {
                 : "r"( baseOffset ), "r"(index)
                 : "ax", "cx", "es", "di", "si"
                 );
-    }
-
-    if (updateDirection) {
-        updateDirection = 0;
-        switch (getPlayerDirection()) {
-            case 0:
-                writeStrWithLimit(12, 17, "N", 31, 2, 0);
-                break;
-            case 1:
-                writeStrWithLimit(12, 17, "E", 31, 2, 0);
-                break;
-            case 2:
-                writeStrWithLimit(12, 17, "S", 31, 2, 0);
-                break;
-            case 3:
-                writeStrWithLimit(12, 17, "W", 31, 2, 0);
-                break;
-        }
     }
 
     memset(imageBuffer, 0, 128 * 32);
