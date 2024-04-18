@@ -1,7 +1,7 @@
 LDFLAGS=`xml2-config --libs`
 CXXFLAGS=`xml2-config --cflags`
 
-OBJ=xml.o trigger.o
+OBJ=xml.o trigger.o svg.o
 
 full: $(OBJ)
 	$(CXX) $(CXXFLAGS) $(OBJ) -onewtrigger $(LDFLAGS)
