@@ -30,11 +30,13 @@ class DerelictApplication  : Application() {
     private fun hasGamepad(): Boolean {
         for (deviceId in InputDevice.getDeviceIds()) {
             val dev = InputDevice.getDevice(deviceId)
-            val sources = dev.sources
-            if ((sources and InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD ||
-                ((sources and InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK)
-            ) {
-                return true
+            val sources = dev?.sources
+            if (sources != null) {
+                if ((sources and InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD ||
+                    ((sources and InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK)
+                ) {
+                    return true
+                }
             }
         }
         return false
