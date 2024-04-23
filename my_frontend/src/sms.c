@@ -24,8 +24,6 @@ uint8_t cooldown;
 extern uint8_t firstFrameOnCurrentState;
 extern uint8_t waitForKey;
 
-uint8_t updateDirection;
-
 extern uint8_t cursorPosition;
 
 enum ESoundDriver soundDriver = kSN76489;
@@ -39,7 +37,6 @@ void initHW(int argc, char **argv) {
     initTMS9918();
     initSN76489();
     cooldown = COOLDOWN_MAX;
-    updateDirection = 1;
     needs3dRefresh = 0;
 }
 
@@ -62,7 +59,6 @@ enum ECommand getInput(void) {
         if (key & JOY_FIREB) {
             return kCommandStrafeLeft;
         } else {
-            updateDirection = 1;
             return kCommandLeft;
         }
     }
@@ -72,7 +68,6 @@ enum ECommand getInput(void) {
         if (key & JOY_FIREB) {
             return kCommandStrafeRight;
         } else {
-            updateDirection = 1;
             return kCommandRight;
         }
     }
@@ -102,6 +97,14 @@ enum ECommand getInput(void) {
 
     if ((key & JOY_FIREB) && !cooldown ) {
         if (currentGameMenuState == kPlayGame) {
+
+            if (waitForKey) {
+                waitForKey = 0;
+                firstFrameOnCurrentState = 1;
+                needs3dRefresh = 1;
+                return kCommandNone;
+            }
+
             cursorPosition = (cursorPosition + 1);
             playSound(2);
             if (cursorPosition >= 6) {
@@ -130,10 +133,5 @@ void endFrame(void) {
     if (needs3dRefresh) {
         needs3dRefresh = 0;
         flush3DBuffer();
-        if (updateDirection) {
-            char direction[8] = {'N', 0, 'E', 0, 'S', 0, 'W', 0};
-            updateDirection = 0;
-            writeStrWithLimit(12, 17, &direction[getPlayerDirection() * 2], 31, 2, 0);
-        }
     }
 }

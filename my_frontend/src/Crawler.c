@@ -34,6 +34,13 @@ uint8_t roomTransitionAnimationStep = 0;
 #endif
 
 void HUD_refresh(void) {
+    drawWindow(0,
+               128 / 8,
+               (XRES_FRAMEBUFFER / 8) / 2,
+               (YRES_FRAMEBUFFER / 8) - 17,
+               "",
+               2);
+
     writeStrWithLimit(1, YRES_TEXT - 7, "In room", 16, 2, 0);
 
     if (roomItem != NULL) {
@@ -44,6 +51,8 @@ void HUD_refresh(void) {
         }
 
         writeStrWithLimit(2, YRES_TEXT - 6, item->name, 16, 2, 0);
+    } else {
+        writeStrWithLimit(2, YRES_TEXT - 6, "Nothing", 16, 2, 0);
     }
 
     writeStrWithLimit(1, YRES_TEXT - 4, "In hand", 16, 2, 0);
@@ -56,6 +65,8 @@ void HUD_refresh(void) {
         }
 
         writeStrWithLimit(2, YRES_TEXT - 3, item->name, 16, 2, 0);
+    } else {
+        writeStrWithLimit(2, YRES_TEXT - 3, "Nothing", 16, 2, 0);
     }
 }
 

@@ -110,7 +110,7 @@ Graphic CullXNoMoreThan(float aSpan, Graphic aSrc) {
                 b2 = aSrc.points[c].y - aSrc.points[prev].y;
                 DX = aSrc.points[c].y - ((b1 * b2) / a2);
 
-                Vec tmp = {.x = (int) aSpan, .y = (int) DX};
+                Vec tmp = {.x = aSpan, .y = DX};
                 pa.points.push_back(tmp);
 
                 lastinside = false;
@@ -148,7 +148,7 @@ Graphic CullXNoLessThan(float aSpan, Graphic aSrc) {
                 b2 = aSrc.points[c].y - aSrc.points[prev].y;
                 DX = aSrc.points[c].y - ((b1 * b2) / a2);
 
-                Vec tmp = {.x = (int) aSpan, .y = (int) DX};
+                Vec tmp = {.x =  aSpan, .y =  DX};
                 pa.points.push_back(tmp);
 
                 lastinside = true;
@@ -172,7 +172,7 @@ Graphic CullXNoLessThan(float aSpan, Graphic aSrc) {
                 b2 = aSrc.points[c].y - aSrc.points[prev].y;
                 DX = aSrc.points[c].y - ((b1 * b2) / a2);
 
-                Vec tmp = {.x = (int) aSpan, .y = (int) DX};
+                Vec tmp = {.x =  aSpan, .y =  DX};
                 pa.points.push_back(tmp);
 
                 lastinside = false;
@@ -228,7 +228,7 @@ std::vector <Graphic> decomposeMonotone(Graphic proc) {
             c++;
         }
 
-        Vec tmp = {.x = (int) v1x, .y = (int) v1y};
+        Vec tmp = {.x =  v1x, .y =  v1y};
         p.points.push_back(tmp);
 
 
@@ -248,7 +248,7 @@ std::vector <Graphic> decomposeMonotone(Graphic proc) {
         v3x = vx;
         v3y = vy;
         {
-            Vec tmp = {.x = (int) v2x, .y = (int) v2y};
+            Vec tmp = {.x =  v2x, .y =  v2y};
             p.points.push_back(tmp);
         }
         while (c < polygon.points.size()) {
@@ -267,11 +267,11 @@ std::vector <Graphic> decomposeMonotone(Graphic proc) {
         }
 
         {
-            Vec tmp = {.x = (int) v3x, .y = (int) v3y};
+            Vec tmp = {.x =  v3x, .y =  v3y};
             p.points.push_back(tmp);
         }
         {
-            Vec tmp = {.x = (int) vx, .y = (int) vy};
+            Vec tmp = {.x =  vx, .y =  vy};
             p.points.push_back(tmp);
         }
 
@@ -286,7 +286,7 @@ std::vector <Graphic> decomposeMonotone(Graphic proc) {
             vy = v.y;
 
             {
-                Vec tmp = {.x = (int) vx, .y = (int) vy};
+                Vec tmp = {.x =  vx, .y =  vy};
                 p.points.push_back(tmp);
 
             }
@@ -394,196 +394,6 @@ std::vector <Graphic> triangulate(Graphic proc2) {
     return toReturn;
 }
 
-std::string to_string(const RGB &c) {
-    std::stringstream ss;
-
-    ss << "fill:#";
-    ss << std::setw(2) << std::setfill('0') << std::hex << c.r;
-    ss << std::setw(2) << std::setfill('0') << std::hex << c.g;
-    ss << std::setw(2) << std::setfill('0') << std::hex << c.b;
-    return ss.str();
-}
-
-std::string to_string(const Vec &v) {
-    std::stringstream ss;
-    ss << static_cast<int>(v.x);
-    ss << ",";
-    ss << static_cast<int>(v.y);
-    ss << " ";
-    return ss.str();
-}
-
-std::string to_string(const Graphic &g) {
-    std::stringstream ss;
-    ss << "<path " << "\nstyle=\"";
-    ss << to_string(g.colour);
-    ss << "\"\nd=\"M ";
-    for (const auto &v: g.points) {
-        ss << to_string(v);
-    }
-    ss << "Z\"\n />\n";
-
-    return ss.str();
-}
-
-RGB handleColour(const std::string &colour) {
-    std::stringstream ss;
-    RGB toReturn;
-
-    ss << colour.substr(0, 2);
-    ss >> std::hex >> toReturn.r;
-    ss.clear();
-
-    ss << colour.substr(2, 2);
-    ss >> std::hex >> toReturn.g;
-    ss.clear();
-
-    ss << colour.substr(4, 2);
-    ss >> std::hex >> toReturn.b;
-    ss.clear();
-
-
-    return toReturn;
-}
-
- Graphic parsePath(const char *pathStr) {
-    std::string path = pathStr;
-
-    Graphic toReturn;
-    bool absolute = false;
-    std::stringstream ss(path);
-    std::vector <std::string> tokens;
-    char cmd;
-    float lastX, lastY;
-    std::string s;
-    int p, end;
-    lastX = lastY = 0;
-
-    while (getline(ss, s, ' ')) {
-        tokens.push_back(s);
-    }
-
-    end = tokens.size();
-
-    p = 0;
-
-    while (p < end) {
-        Vec v;
-
-        if (tokens[p] == "Z") {
-            absolute = true;
-            ++p;
-            continue;
-        }
-
-        if (tokens[p] == "z") {
-            absolute = false;
-            ++p;
-            continue;
-        }
-
-        if (tokens[p] == "M") {
-            absolute = true;
-            ++p;
-            continue;
-        }
-
-        if (tokens[p] == "H") {
-            absolute = true;
-            ++p;
-            continue;
-        }
-
-        if (tokens[p] == "V") {
-            absolute = true;
-            ++p;
-            continue;
-        }
-
-        if (tokens[p] == "v") {
-            absolute = false;
-            ++p;
-            continue;
-        }
-
-        if (tokens[p] == "h") {
-            absolute = false;
-            ++p;
-            continue;
-        }
-
-        if (tokens[p] == "m") {
-            absolute = false;
-            ++p;
-            continue;
-        }
-
-        if (tokens[p] == "C") {
-            absolute = true;
-            ++p;
-            continue;
-        }
-
-        if (tokens[p] == "c") {
-            absolute = false;
-            ++p;
-            continue;
-        }
-
-        if (tokens[p] == "L") {
-            absolute = true;
-            ++p;
-            continue;
-        }
-
-        if (tokens[p] == "l") {
-            absolute = false;
-            ++p;
-            continue;
-        }
-        std::string token = tokens[p];
-        auto commaPos = token.find(",");
-
-        if (commaPos == std::string::npos) {
-            v.x = std::atof(tokens[p++].c_str());
-            v.y = std::atof(tokens[p++].c_str());
-        } else {
-            std::string part1 = token.substr(0, commaPos);
-            std::string part2 = token.substr(commaPos + 1);
-            v.x = std::atof(part1.c_str());
-            v.y = std::atof(part2.c_str());
-            p++;
-        }
-
-        if (!absolute) {
-            v.x += lastX;
-            v.y += lastY;
-        }
-
-        toReturn.points.push_back(v);
-
-        lastX = v.x;
-        lastY = v.y;
-    }
-
-    return toReturn;
-}
-
-RGB parseStyle(const char* styleStr) {
-    std::string style = styleStr;
-    int pos = 0;
-    int end = style.length();
-    while (pos <= end) {
-        auto fillPos = style.find("fill:");
-        if (fillPos == 0) {
-            auto colour = style.substr(6);
-            //tmp;
-            return handleColour(colour);
-        }
-    }
-
-    return {};
-}
 
 int main(int argc, char **argv) {
     if (argc <= 1) {
