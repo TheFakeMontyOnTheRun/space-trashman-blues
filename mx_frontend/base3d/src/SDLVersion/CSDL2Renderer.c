@@ -176,7 +176,6 @@ void handleSystemEvents(void) {
 
 				case SDLK_LEFT:
 					snapshotSignal = kCommandLeft;
-					visibilityCached = FALSE;
 					if ((currentGameMenuState == kPlayGame ||
 						 currentGameMenuState == kBackToGame) &&
 						currentPresentationState == kWaitingForInput
@@ -187,7 +186,6 @@ void handleSystemEvents(void) {
 					break;
 				case SDLK_RIGHT:
 					snapshotSignal = kCommandRight;
-					visibilityCached = FALSE;
 					if ((currentGameMenuState == kPlayGame ||
 						 currentGameMenuState == kBackToGame) &&
 						currentPresentationState == kWaitingForInput
