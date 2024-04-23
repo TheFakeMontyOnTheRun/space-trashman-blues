@@ -185,7 +185,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 void updateCursorForRenderer(const int x, const int z) {
 #ifndef AGS
     needsToRedrawVisibleMeshes = TRUE;
-    visibilityCached = FALSE;
 #endif
 }
 
@@ -277,13 +276,6 @@ void drawMap(const struct CActor *current) {
         needsToRedrawVisibleMeshes = TRUE;
     }
 
-    if (visibilityCached) {
-        return;
-    }
-
-    visibilityCached = TRUE;
-    needsToRedrawVisibleMeshes = TRUE;
-
     cameraPosition = mapCamera;
 
     switch (cameraDirection) {
@@ -318,10 +310,18 @@ void drawMap(const struct CActor *current) {
     walkingBias = 0;
 #endif
 
+    ++gameTicks;
+    
+    if (visibilityCached) {
+        return;
+    }
+
+    visibilityCached = TRUE;
+    needsToRedrawVisibleMeshes = TRUE;
+
+    
     castVisibility(cameraDirection, visMap, cameraPosition,
                    distances, TRUE, &occluders);
-
-    ++gameTicks;
 }
 
 enum ECommand getInput(void) {

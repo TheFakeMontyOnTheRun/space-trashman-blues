@@ -1725,8 +1725,9 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
     uint8_t *dst;
     int x, y, chunky;
 
-    if (abs(turnTarget - turnStep) < PAGE_FLIP_INCREMENT) {
+    if (turnTarget != turnStep && abs(turnTarget - turnStep) < PAGE_FLIP_INCREMENT) {
         turnStep = turnTarget;
+	visibilityCached = FALSE;
     }
 
 #ifdef SCALE_200_TO_240
@@ -1817,6 +1818,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
         }
 
         turnStep += PAGE_FLIP_INCREMENT;
+	visibilityCached = FALSE;
     } else {
 
         for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
@@ -1859,7 +1861,8 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
                 dstY++;
             }
         }
-        turnStep -= PAGE_FLIP_INCREMENT;
+        turnStep -= PAGE_FLIP_INCREMENT;    
+	visibilityCached = FALSE;
     }
 #else
     if (turnTarget == turnStep || (mTurnBuffer != kCommandNone)) {
@@ -1883,6 +1886,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
         }
 
         turnStep += PAGE_FLIP_INCREMENT;
+	visibilityCached = FALSE;
     } else {
         for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
             size_t lineOffset = (y * XRES_FRAMEBUFFER);
@@ -1893,6 +1897,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
                           (XRES_FRAMEBUFFER - XRES));
         }
         turnStep -= PAGE_FLIP_INCREMENT;
+	visibilityCached = FALSE;
     }
 #endif
 }

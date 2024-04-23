@@ -97,7 +97,7 @@ void handleSystemEvents(void) {
 #endif
 
         if (event.type == SDL_KEYUP) {
-            visibilityCached = FALSE;
+	  /*            visibilityCached = FALSE; */
             needsToRedrawVisibleMeshes = TRUE;
         }
 
@@ -186,18 +186,13 @@ void handleSystemEvents(void) {
                 case SDLK_LEFT:
                     turning = 1;
                     leanX = -ANGLE_TURN_STEP;
-
-                    visibilityCached = FALSE;
                     break;
                 case SDLK_RIGHT:
                     turning = 1;
                     leanX = ANGLE_TURN_STEP;
-
-                    visibilityCached = FALSE;
                     break;
                 case SDLK_UP:
                     mBufferedCommand = kCommandUp;
-                    visibilityCached = FALSE;
                     break;
 
                 case SDLK_u:

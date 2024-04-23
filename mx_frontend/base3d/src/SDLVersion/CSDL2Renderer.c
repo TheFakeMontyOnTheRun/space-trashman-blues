@@ -198,7 +198,6 @@ void handleSystemEvents(void) {
 					break;
 				case SDLK_UP:
 					mBufferedCommand = kCommandUp;
-					visibilityCached = FALSE;
 					break;
 				case SDLK_1:
 					enableSmoothMovement = TRUE;

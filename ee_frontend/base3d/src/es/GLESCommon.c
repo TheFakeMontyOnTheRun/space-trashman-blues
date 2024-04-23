@@ -529,9 +529,6 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 void startFrame(int x, int y, int width, int height) {
     firstFrameOnCurrentState = 1;
     glViewport(x, y, width, height);
-    visibilityCached = FALSE;
-    needsToRedrawVisibleMeshes = FALSE;
-
     checkGLError("start frame");
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);

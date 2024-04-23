@@ -122,7 +122,6 @@ void recenterView(void) {
 
 void Crawler_repaintCallback(void) {
 
-    visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = TRUE;
 
     if (showPromptToAbandonMission) {
