@@ -16,7 +16,7 @@ include_directories(../common/include)
 include_directories(base3d/include)
 include_directories(menu/include)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCLI_BUILD -DTILED_BITMAPS -DINCLUDE_ITEM_DESCRIPTIONS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic -g -DENDIANESS_AWARE -DEMIT_QUIT_OPTION -DSDL_DISABLE_IMMINTRIN_H -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCLI_BUILD -DTILED_BITMAPS -DINCLUDE_ITEM_DESCRIPTIONS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic -g -DENDIANESS_AWARE -DEMIT_QUIT_OPTION -DSDL_DISABLE_IMMINTRIN_H -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200 -DXRES_SCREEN=320 -DYRES_SCREEN=240")
 
 find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
