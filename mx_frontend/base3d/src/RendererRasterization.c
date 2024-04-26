@@ -1727,7 +1727,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 
     if (turnTarget != turnStep && abs(turnTarget - turnStep) < PAGE_FLIP_INCREMENT) {
         turnStep = turnTarget;
-	visibilityCached = FALSE;
+	    visibilityCached = FALSE;
     }
 
 #ifdef SCALE_200_TO_240

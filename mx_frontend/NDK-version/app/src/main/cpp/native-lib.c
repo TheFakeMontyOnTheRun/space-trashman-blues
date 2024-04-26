@@ -49,6 +49,8 @@ void mainLoop(void);
 
 extern int currentGameMenuState;
 
+int snapshotSignal = '.';
+
 uint8_t framebufferFinal[320 * 240 * 4];
 
 AAssetManager *defaultAssetManager = NULL;
@@ -125,6 +127,9 @@ void flipRenderer(void) {
             ++ptr;
         }
     }
+
+    mBufferedCommand = snapshotSignal;
+    snapshotSignal = '.';
 }
 
 void clearRenderer(void) {}
@@ -203,14 +208,14 @@ Java_pt_b13h_spacetrashmanblues_DerelictJNI_sendCommand(JNIEnv *env, jclass claz
             break;
 
         case 'a':
-            mBufferedCommand = kCommandLeft;
+            snapshotSignal = kCommandLeft;
             turnStep = 0;
             turnTarget = 200;
             break;
 
 
         case 'd':
-            mBufferedCommand = kCommandRight;
+            snapshotSignal = kCommandRight;
             turnStep = 200;
             turnTarget = 0;
             break;
