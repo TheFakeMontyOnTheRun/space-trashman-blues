@@ -527,6 +527,23 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 }
 
 void startFrame(int x, int y, int width, int height) {
+
+    if (width > height) {
+        /* height is smaller */
+        float fWidth = (((float)height) * 320.0f) / 240.0f;
+        x = (width - fWidth) / 2.0f;
+        y = 0;
+        width = fWidth;
+    } else {
+        /* width is smaller */
+        float fHeight = (((float)width) * 240.0f) / 320.0f;
+        y = (height - fHeight) / 2.0f;
+        x = 0;
+        height = fHeight;
+    }
+
+
+
     firstFrameOnCurrentState = 1;
     glViewport(x, y, width, height);
     checkGLError("start frame");
