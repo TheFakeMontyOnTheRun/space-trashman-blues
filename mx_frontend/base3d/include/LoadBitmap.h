@@ -15,7 +15,7 @@ struct Bitmap {
 
 
 struct Texture {
-#ifndef AGS
+#ifndef FLOOR_TEXTURES_DONT_ROTATE
     TexturePixelFormat rotations[4][NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
 #else
     uint8_t rotations[1][NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];

@@ -121,7 +121,7 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
             dstLine++;
         }
     }
-#ifndef AGS
+#ifndef FLOOR_TEXTURES_DONT_ROTATE
     for (y = (NATIVE_TEXTURE_SIZE - 1); y >= 0; --y) {
         uint8_t *sourceLine = &buffer[(y * NATIVE_TEXTURE_SIZE) + (NATIVE_TEXTURE_SIZE - 1)];
         uint8_t *dstLine = &toReturn->rotations[1][y];
