@@ -181,6 +181,7 @@ Java_pt_b13h_spacetrashmanblues_DerelictJNI_isOnMainMenu(JNIEnv *env, jclass cla
 
 JNIEXPORT void JNICALL
 Java_pt_b13h_spacetrashmanblues_DerelictJNI_sendCommand(JNIEnv *env, jclass clazz, jchar cmd) {
+    visibilityCached = FALSE;
     switch (cmd) {
         case 'w':
             mBufferedCommand = kCommandUp;
