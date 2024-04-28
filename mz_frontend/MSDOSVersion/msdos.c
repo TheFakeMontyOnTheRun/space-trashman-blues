@@ -10,15 +10,6 @@ extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
 
-char *menuItems[] = {
-        "8) Use/Toggle",
-        "5) Use with...",
-        "9) Use/pick...",
-        "6) Drop",
-        "7) Next item",
-        "4) Next in room",
-};
-
 void graphicsFlush();
 
 void nextItemInHand();
@@ -247,41 +238,9 @@ void showMessage(const char *message) {
 }
 
 void titleScreen(void) {
-    int keepGoing = 1;
-    clearGraphics();
-
-    writeStr(1, 1, "Space Mare Imperium:", 2, 0);
-    writeStr(1, 2, "     Derelict", 2, 0);
-    writeStr(1, 4, "by Daniel Monteiro", 2, 0);
-    writeStr(1, 6, "   Press any key", 2, 0);
-    writeStr(1, 7, "     to start", 2, 0);
-
-    while (keepGoing) {
-        if (getKey() != '.') {
-            keepGoing = 0;
-        }
-    }
-
-    clearScreen();
 }
 
 void HUD_initialPaint(void) {
-    int c;
-    for (c = 15; c < (128 + 16 + 1); ++c) {
-        realPut(c, 35, 3);
-        realPut(c, 36 + 128, 3);
-    }
-
-    for (c = 35; c < (128 + 36 + 1); ++c) {
-        realPut(15, c, 3);
-        realPut(16 + 128, c, 3);
-    }
-
-    for (uint16_t i = 0; i < 6; ++i) {
-        writeStr(21, 14 + i, menuItems[i], 2, 0);
-    }
-
-    HUD_refresh();
 }
 
 void sleepForMS(uint32_t ms) {
@@ -289,30 +248,4 @@ void sleepForMS(uint32_t ms) {
 }
 
 void HUD_refresh(void) {
-    writeStr(21, 21, "                    ", 2, 0);
-    writeStr(21, 22, "                    ", 2, 0);
-    writeStr(1, 2, "                    ", 2, 0);
-    writeStr(1, 3, "                    ", 2, 0);
-
-    if (focusedItem != NULL) {
-        struct Item *item = getItem(focusedItem->item);
-
-        if (item->active) {
-            writeStr(21, 21, "*", 2, 0);
-            writeStr(22, 21, item->name, 2, 0);
-        } else {
-            writeStr(21, 21, item->name, 2, 0);
-        }
-    }
-
-    if (roomItem != NULL) {
-        struct Item *item = getItem(roomItem->item);
-
-        if (item->active) {
-            writeStr(1, 2, "*", 2, 0);
-            writeStr(2, 2, item->name, 2, 0);
-        } else {
-            writeStr(1, 2, item->name, 2, 0);
-        }
-    }
 }
