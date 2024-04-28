@@ -242,15 +242,7 @@ void writeStr(int16_t _x, int16_t y, const char *text, uint16_t fg, uint16_t bg)
 }
 
 void graphicsPut(int16_t x, int16_t y, uint16_t colour) {
-    if (colour >= 16) {
-        if ((x + y) & 1) {
-            BMP_setPixelFast(x, 16 + y, 0);
-        } else {
-            BMP_setPixelFast(x, 16 + y, colour - 16);
-        }
-    } else {
         BMP_setPixelFast(x, 16 + y, colour);
-    }
 }
 
 void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour) {
@@ -262,27 +254,9 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour) {
         y1 = tmp;
     }
 
-    int16_t stipple;
-
-    if (colour < 16) {
-        colour += (colour << 4); //double the pixel
-        for (int16_t y = y0; y < y1; ++y) {
-            BMP_setPixelFast(x0, 16 + y, colour);
-        }
-    } else {
-        stipple = (x0 & 1);
-        colour -= 16;
-        colour += (colour << 4); //double the pixel
-
-        for (int16_t y = y0; y < y1; ++y) {
-            stipple = ~stipple;
-
-            if (stipple) {
-                BMP_setPixelFast(x0, 16 + y, colour);
-            } else {
-                BMP_setPixelFast(x0, 16 + y, 0);
-            }
-        }
+    colour += (colour << 4); //double the pixel
+    for (int16_t y = y0; y < y1; ++y) {
+        BMP_setPixelFast(x0, 16 + y, colour);
     }
 }
 
@@ -308,26 +282,10 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
         _x1 = 127;
     }
 
-    if (colour < 16) {
-        colour += (colour << 4); //double the pixel
+    colour += (colour << 4); //double the pixel
 
-        for (int16_t x = _x0; x <= _x1; ++x) {
-            BMP_setPixelFast(x, 16 + y, colour);
-        }
-    } else {
-        colour -= 16;
-        colour += (colour << 4); //double the pixel
-        int16_t stipple = ((x0 + y) & 1);
-
-        for (int16_t x = _x0; x <= _x1; ++x) {
-            stipple = ~stipple;
-
-            if (stipple) {
-                BMP_setPixelFast(x, 16 + y, colour);
-            } else {
-                BMP_setPixelFast(x, 16 + y, 0);
-            }
-        }
+    for (int16_t x = _x0; x <= _x1; ++x) {
+        BMP_setPixelFast(x, 16 + y, colour);
     }
 }
 

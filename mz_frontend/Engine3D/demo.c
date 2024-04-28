@@ -52,7 +52,7 @@ enum DIRECTION {
 #define IN_RANGE(V0, V1, V)  ((V0) <= (V) && (V) <= (V1))
 
 #define STIPPLE_DISTANCE 13
-#define STIPPLE_COLOUR_THRESHOLD 16
+#define STIPPLE_COLOUR_THRESHOLD 8
 
 struct ObjectNode *focusedItem = NULL;
 struct ObjectNode *roomItem = NULL;
@@ -148,8 +148,8 @@ drawWedge(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ
     int16_t py1z1;
     int16_t px1z1;
 
-    uint16_t shouldStippleFill = (z0 >= STIPPLE_DISTANCE) ? (11 + STIPPLE_COLOUR_THRESHOLD) : 11;
-    uint16_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? (3 + STIPPLE_COLOUR_THRESHOLD) : 3;
+    uint16_t shouldStippleFill = (z0 >= STIPPLE_DISTANCE) ? 6 : (6 + STIPPLE_COLOUR_THRESHOLD);
+    uint16_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? 0 : (0 + STIPPLE_COLOUR_THRESHOLD);
 
     if (z0 >= 32) {
         return;
@@ -303,13 +303,13 @@ drawWedge(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int16_t dZ
 
     if (elementMask & 2) {
         if (IN_RANGE(0, XRESMINUSONE, px0z0)) {
-            vLine(px0z0, py0z0, py1z0, 0);
+            vLine(px0z0, py0z0, py1z0, shouldStippleBorder);
         }
     }
 
     if (elementMask & 1) {
         if (IN_RANGE(0, XRESMINUSONE, px1z1)) {
-            vLine(px1z1, py0z1, py1z1, 0);
+            vLine(px1z1, py0z1, py1z1, shouldStippleBorder);
         }
     }
 }
@@ -348,7 +348,8 @@ void drawSquare(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, uint
         return;
     }
 
-    uint16_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? (4 + STIPPLE_COLOUR_THRESHOLD) : 4;
+    uint16_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? 0 : (0 + STIPPLE_COLOUR_THRESHOLD);
+    uint16_t shouldStippleFill = (z0 >= STIPPLE_DISTANCE) ? 4: (4 + STIPPLE_COLOUR_THRESHOLD);
 
     drawContour = (dY);
 
@@ -357,17 +358,17 @@ void drawSquare(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, uint
     if (drawContour) {
         for (x = px0z0; x <= px1z0; ++x) {
             if (IN_RANGE(0, XRESMINUSONE, x)) {
-                vLine(x, py0z0, py1z0, shouldStipple);
+                vLine(x, py0z0, py1z0, shouldStippleFill);
             }
         }
 
         if (elementMask & 2) {
             if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0)) {
-                vLine(px0z0, py0z0, py1z0, 0);
+                vLine(px0z0, py0z0, py1z0, shouldStippleBorder);
             }
 
             if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0)) {
-                vLine(px1z0, py0z0, py1z0, 0);
+                vLine(px1z0, py0z0, py1z0, shouldStippleBorder);
             }
         }
     }
@@ -390,7 +391,7 @@ void drawObjectAt(int16_t x0, int16_t z0) {
     int16_t px0z1;
     int16_t py0z1;
     int16_t px1z1;
-    uint16_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? (5 + STIPPLE_COLOUR_THRESHOLD) : 5;
+    uint16_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? 0 : (0 + STIPPLE_COLOUR_THRESHOLD);
 
     if (z0 >= 32 || z0 <= 4) {
         return;
@@ -536,8 +537,8 @@ void drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int1
     int16_t py0z1;
     int16_t px1z1;
 
-    uint16_t shouldStippleFill = (z0 >= STIPPLE_DISTANCE) ? (9 + STIPPLE_COLOUR_THRESHOLD) : 9;
-    uint16_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? (1 + STIPPLE_COLOUR_THRESHOLD) : 1;
+    uint16_t shouldStippleFill = (z0 >= STIPPLE_DISTANCE) ? 7 : (7 + STIPPLE_COLOUR_THRESHOLD);
+    uint16_t shouldStippleBorder = (z0 >= STIPPLE_DISTANCE) ? 0 : (0 + STIPPLE_COLOUR_THRESHOLD);
 
     uint16_t drawContour;
 
@@ -588,7 +589,7 @@ void drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int1
 
             if (drawContour) {
                 if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
-                    vLine(lineX0, lineY0, py1z0, 6);
+                    vLine(lineX0, lineY0, py1z0, shouldStippleFill);
                     graphicsPut(lineX0, lineY0, shouldStippleBorder);
                 }
             }
@@ -630,7 +631,7 @@ void drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int1
 
             if (drawContour) {
                 if (IN_RANGE(0, XRESMINUSONE, lineX0)) {
-                    vLine(lineX0, lineY0, py1z0, 6);
+                    vLine(lineX0, lineY0, py1z0, shouldStippleFill);
                     graphicsPut(lineX0, lineY0, shouldStippleBorder);
                 }
             }
@@ -666,11 +667,11 @@ void drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int1
     }
 
     if (IN_RANGE(0, XRESMINUSONE, px0z0)) {
-        vLine(px0z0, py0z0, py1z0, 1);
+        vLine(px0z0, py0z0, py1z0, shouldStippleBorder);
     }
 
     if (IN_RANGE(0, XRESMINUSONE, px1z0)) {
-        vLine(px1z0, py0z0, py1z0, 1);
+        vLine(px1z0, py0z0, py1z0, shouldStippleBorder);
     }
 }
 
@@ -691,7 +692,7 @@ void drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ) {
     int16_t py0z1;
     int16_t px1z1;
 
-    uint16_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? (2 + STIPPLE_COLOUR_THRESHOLD) : 2;
+    uint16_t shouldStipple = (z0 >= STIPPLE_DISTANCE) ? 2 : (2 + STIPPLE_COLOUR_THRESHOLD);
 
     if (z0 >= 32 || z0 < 1) {
         return;

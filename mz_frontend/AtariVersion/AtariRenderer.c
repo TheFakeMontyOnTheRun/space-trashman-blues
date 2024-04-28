@@ -202,15 +202,6 @@ void graphicsFlush(void) {
         for (uint16_t x = 0; x < 128; ++x) {
 
             uint8_t value = *index++;
-
-            if (value > 16) {
-                if ((x + y) & 1) {
-                    value = 0;
-                } else {
-                    value = value - 16;
-                }
-            }
-
             uint16_t offset = lineOffset + ((x >> 4) << 2);
             uint16_t bitPattern = (1 << (15 - (x & 15)));
             uint16_t *ptr = &words[offset];

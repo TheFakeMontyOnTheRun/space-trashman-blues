@@ -119,8 +119,6 @@ void graphicsPut(int16_t x, int16_t y, uint16_t colour) {
 
 void realPut(int x, int y, uint16_t value) {
 
-    int pixelRead = 0;
-
     int pixel = value;
     int px = x;
     int py = y;
@@ -237,13 +235,6 @@ void graphicsFlush(void) {
     for (int y = 0; y < 128; ++y) {
         for (int x = 0; x < 128; ++x) {
             uint16_t index = *bufferPtr;
-            if (index > 16) {
-                if ((x + y) & 1) {
-                    index = 0;
-                } else {
-                    index = index - 16;
-                }
-            }
 
             realPut(16 + x, 36 + y, index);
             bufferPtr++;
