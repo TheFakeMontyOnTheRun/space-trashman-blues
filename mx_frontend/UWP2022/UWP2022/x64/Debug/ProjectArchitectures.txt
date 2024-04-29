@@ -1,0 +1,1 @@
+C:\ci\space-trashman-blues\mx_frontend\UWP2022\UWP2022.vcxproj;x64

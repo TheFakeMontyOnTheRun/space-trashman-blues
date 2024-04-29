@@ -25,6 +25,7 @@ Created by Daniel Monteiro on 2019-07-26.
 #include <genesis.h>
 #endif
 
+#include "Enums.h"
 #include "Common.h"
 #include "Core.h"
 
@@ -638,7 +639,7 @@ void useObjectsTogether(const char *operands) {
 #endif
 
 void turnLeft(void) {
-	uint8_t pDir = (int)playerDirection;
+	uint8_t pDir = (uint8_t) playerDirection;
 	pDir--;
     
     pDir = pDir & 3;
@@ -646,7 +647,7 @@ void turnLeft(void) {
 }
 
 void turnRight(void) {
-	uint8_t pDir = (int)playerDirection;
+	uint8_t pDir = (uint8_t) playerDirection;
     pDir++;
 
     pDir = pDir & 3;

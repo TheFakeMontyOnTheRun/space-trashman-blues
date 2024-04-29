@@ -8,7 +8,7 @@ CFLAGS= `sdl2-config --cflags `  \
     -I../common/include \
     -DINCLUDE_ITEM_DESCRIPTIONS -DTILED_BITMAPS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable \
     -pedantic -DEMIT_QUIT_OPTION -DENDIANESS_AWARE -DSDL_DISABLE_IMMINTRIN_H \
-    -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=240
+    -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200 -DXRES_SCREEN=320 -DYRES_SCREEN=240
 
 MENU_TARGET=game
 

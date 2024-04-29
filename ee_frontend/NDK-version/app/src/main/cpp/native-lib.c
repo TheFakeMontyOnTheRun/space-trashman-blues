@@ -181,7 +181,7 @@ Java_pt_b13h_derelictgles2_DerelictJNI_init(JNIEnv *env, jclass clazz, jint jwid
 JNIEXPORT void JNICALL
 Java_pt_b13h_derelictgles2_DerelictJNI_drawFrame(JNIEnv *env, jclass clazz) {
     if (enable3DRendering) {
-        startFrame(0, 0, 640, 480);
+        startFrame(0, 0, width, height);
 
         isRunning = isRunning && menuTick(10);
 

@@ -232,3 +232,6 @@ filesystem
 distiller
 trigger
 derelict.tap
+newtrigger
+xcschememanagement.plist
+out.ram

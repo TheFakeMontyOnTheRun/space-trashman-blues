@@ -116,7 +116,8 @@ void flipRenderer() {
     GLKView *view = (GLKView *)self.view;
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
-    
+    width = view.bounds.size.width;
+    height = view.bounds.size.height;
     defaultFont = NULL;
     enableSmoothMovement = TRUE;
     
@@ -167,26 +168,13 @@ void flipRenderer() {
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
-    int rectWidth = rect.size.width;
-    int rectHeight = rect.size.height;
     
-    if (rectWidth > rectHeight ) {
-        float heightBase = rectHeight / (float)height;
-        rectWidth = width * heightBase;
-        rectHeight = height * heightBase;
-        /* height is the base, since width is too big and we must add borders*/
-    } else {
-        /* width is the base, since height is too big and we must add borders*/
-        float widthBase = rectWidth / (float) width;
-        rectWidth = width * widthBase;
-        rectHeight = height * widthBase;
-    }
-    
-    
-	startFrame( (rect.size.width - rectWidth) / 2,
-                 (rect.size.height - rectHeight) / 2,
-                 rectWidth,
-                 rectHeight);
+    view.contentScaleFactor = 1.0f;
+
+    startFrame( 0, 0,
+               view.bounds.size.width,
+               view.bounds.size.height);
+
     menuTick(10);
     endFrame();
     flipRenderer();

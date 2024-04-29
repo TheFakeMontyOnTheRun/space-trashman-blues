@@ -97,7 +97,6 @@ void handleSystemEvents(void) {
 #endif
 
         if (event.type == SDL_KEYUP) {
-	  /*            visibilityCached = FALSE; */
             needsToRedrawVisibleMeshes = TRUE;
         }
 

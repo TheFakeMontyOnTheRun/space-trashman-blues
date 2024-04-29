@@ -21,6 +21,7 @@ using std::tr1::shared_ptr;
 #endif
 
 extern "C" {
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Parser.h"
@@ -120,10 +121,10 @@ TEST_F(TestMovement, canWalkInsideRooms) {
 
 
     parseCommand("e", NULL);
-    ASSERT_EQ(getPlayerDirection(), 1);
+    ASSERT_EQ(getPlayerDirection(), kEast);
 
-    setPlayerDirection(1);
-    ASSERT_EQ(getPlayerDirection(), 1);
+    setPlayerDirection(kEast);
+    ASSERT_EQ(getPlayerDirection(), kEast);
 
     parseCommand("w", NULL);
     pos = getPlayerPosition();
