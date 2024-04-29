@@ -223,12 +223,12 @@ void renderRoomTransition(void) {
         center.mX = intToFix(1);
         center.mY = intToFix(2) - zCameraOffset;
         center.mZ = intToFix(3);
-        drawCeilingAt(center, nativeTextures[0], 0);
+        drawCeilingAt(center, nativeTextures[0], kNorth);
 
         center.mX = -intToFix(1);
         center.mY = intToFix(2) - zCameraOffset;
         center.mZ = intToFix(3);
-        drawCeilingAt(center, nativeTextures[0], 0);
+        drawCeilingAt(center, nativeTextures[0], kNorth);
 
         drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, 255);
 
@@ -638,7 +638,7 @@ void render(const long ms) {
                 }
 
                 if (tileProp->mCeilingTextureIndex != 0xFF) {
-                    uint8_t newDirection = cameraDirection;
+                    enum EDirection newDirection = cameraDirection;
 
                     tmp.mY = position.mY + (tileProp->mCeilingHeight * 2);
 

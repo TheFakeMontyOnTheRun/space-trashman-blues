@@ -69,7 +69,7 @@ uint8_t playerLocation = 1;
 /**
  *
  */
-int8_t playerDirection;
+enum EDirection playerDirection;
 /**
  *
  */
@@ -77,7 +77,7 @@ uint8_t playerRank;
 /**
  *
  */
-uint8_t gameStatus;
+enum EGameStates gameStatus;
 /**
  *
  */
@@ -638,17 +638,19 @@ void useObjectsTogether(const char *operands) {
 #endif
 
 void turnLeft(void) {
-    playerDirection--;
-
-    while (playerDirection < 0) {
-        playerDirection += 4;
-    }
+	uint8_t pDir = (int)playerDirection;
+	pDir--;
+    
+    pDir = pDir & 3;
+	playerDirection = (enum EDirection)pDir;
 }
 
 void turnRight(void) {
-    playerDirection++;
+	uint8_t pDir = (int)playerDirection;
+    pDir++;
 
-    playerDirection = playerDirection & 3;
+    pDir = pDir & 3;
+	playerDirection = (enum EDirection)pDir;
 }
 
 void setPlayerLocation(uint8_t location) {
@@ -749,7 +751,7 @@ void walkBy(uint8_t direction) {
 #endif
 }
 
-int8_t getPlayerDirection(void) {
+enum EDirection getPlayerDirection(void) {
     return playerDirection;
 }
 
@@ -782,7 +784,7 @@ void setLoggerDelegate(LogDelegate newDelegate) {
 }
 
 
-void setPlayerDirection(uint8_t direction) {
+void setPlayerDirection(enum EDirection direction) {
     playerDirection = direction;
 }
 
@@ -802,8 +804,8 @@ void initCore(void) {
     itemsCount = 0;
     roomCount = 1; /* there's an implicit dummy first */
     playerRank = 0;
-    gameStatus = 0;
-    playerDirection = 0;
+    gameStatus = kNormalGameplay;
+    playerDirection = kNorth;
     playerPosition.x = 15;
     playerPosition.y = 15;
 

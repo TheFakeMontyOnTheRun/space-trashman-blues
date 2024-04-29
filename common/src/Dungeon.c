@@ -340,7 +340,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
         if (currentPlayerRoom != getPlayerRoom()) {
             enable3DRendering = FALSE;
             enteredThru = 0;
-            setPlayerDirection(enteredThru);
+            setPlayerDirection((enum EDirection)enteredThru);
             initRoom(getPlayerRoom());
 
             thisMissionName = getRoomDescription();
@@ -369,7 +369,7 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
                 }
 
                 enable3DRendering = FALSE;
-                setPlayerDirection(enteredThru);
+                setPlayerDirection((enum EDirection)enteredThru);
                 zCameraOffset = intToFix(4);
                 currentPresentationState = kRoomTransitioning;
                 initRoom(room);
@@ -409,7 +409,7 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
 
     gameSnapshot.should_continue = kCrawlerGameInProgress;
     gameSnapshot.camera_rotation = 0;
-    playerCrawler.rotation = 0;
+    playerCrawler.rotation = kNorth;
     memCopyToFrom(collisionMap, (void *) collisions, 256);
 
     for (y = 0; y < MAP_SIZE; ++y) {

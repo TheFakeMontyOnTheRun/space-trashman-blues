@@ -142,13 +142,13 @@ enum EGameStates getGameStatus(void);
  *
  * @return
  */
-int8_t getPlayerDirection(void);
+enum EDirection getPlayerDirection(void);
 
 /**
  *
  * @param direction
  */
-void setPlayerDirection(uint8_t direction);
+void setPlayerDirection(enum EDirection direction);
 
 /**
  *
