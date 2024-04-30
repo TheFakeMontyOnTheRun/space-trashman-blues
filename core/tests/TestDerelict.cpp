@@ -20,6 +20,7 @@ using std::tr1::shared_ptr;
 #endif
 
 extern "C" {
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Parser.h"

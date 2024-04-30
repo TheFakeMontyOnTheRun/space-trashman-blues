@@ -38,8 +38,8 @@ void loadMesh(struct Mesh *mesh, char *filename) {
     coordsCount = trigCount * 9;
 
     mesh->triangleCount = trigCount;
-    mesh->uvCoords = allocMem(uvCoordsCount, GENERAL_MEMORY, 1);
-    mesh->geometry = allocMem(sizeof(FixP_t) * coordsCount, GENERAL_MEMORY, 1);
+    mesh->uvCoords = (uint8_t*)allocMem(uvCoordsCount, GENERAL_MEMORY, 1);
+    mesh->geometry = (FixP_t*)allocMem(sizeof(FixP_t) * coordsCount, GENERAL_MEMORY, 1);
 
     uvCoord = mesh->uvCoords;
     coord = mesh->geometry;
@@ -66,7 +66,7 @@ void loadMesh(struct Mesh *mesh, char *filename) {
     mesh->nativeIndicesBuffer = NULL;
     mesh->nativeBuffer = NULL;
 
-    mesh->vertices = allocMem(3 * mesh->indexCount * sizeof(FixP_t), GENERAL_MEMORY, 1);
+    mesh->vertices = (struct Vec3*)allocMem(3 * mesh->indexCount * sizeof(FixP_t), GENERAL_MEMORY, 1);
     vecs = mesh->vertices;
 
     for (c = 0; c < mesh->indexCount; ++c) {
@@ -93,7 +93,7 @@ void loadMesh(struct Mesh *mesh, char *filename) {
         vecs++;
     }
 
-    mesh->indices = allocMem(3 * mesh->triangleCount * sizeof(uint16_t), GENERAL_MEMORY, 1);
+    mesh->indices = (uint16_t*)allocMem(3 * mesh->triangleCount * sizeof(uint16_t), GENERAL_MEMORY, 1);
     indexPtr = mesh->indices;
     for (c = 0; c < mesh->triangleCount * 3; ++c ) {
         uint16_t index;
@@ -108,7 +108,7 @@ void loadMesh(struct Mesh *mesh, char *filename) {
         mesh->colour = *bufferHead;
         mesh->texture = NULL;
     } else {
-        textureName = allocMem(read + 1, GENERAL_MEMORY, 1);
+        textureName = (char*)allocMem(read + 1, GENERAL_MEMORY, 1);
         memCopyToFrom(textureName, (void *) bufferHead, read);
         mesh->texture = makeTextureFrom(textureName);
         disposeMem(textureName);

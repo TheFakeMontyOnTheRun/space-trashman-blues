@@ -282,7 +282,7 @@ extern struct Bitmap *mapTopLevel;
 #endif
 extern int dirtyLineY0;
 extern int dirtyLineY1;
-extern char mTurnBuffer;
+extern enum ECommand mTurnBuffer;
 extern uint8_t *map;
 extern uint8_t *itemsInMap;
 extern FixP_t divLut[320];

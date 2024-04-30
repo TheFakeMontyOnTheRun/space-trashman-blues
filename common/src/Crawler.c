@@ -194,7 +194,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     if (cmd == kCommandBack) {
         showPromptToAbandonMission = TRUE;
         timeUntilNextState = 0;
-        return kMenuStateUnchanged;
+        return kResumeCurrentState;
     }
 
     if (timeUntilNextState != kNonExpiringPresentationState) {
@@ -212,7 +212,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
         return kResumeCurrentState;
     }
 
-    return kMenuStateUnchanged;
+    return kResumeCurrentState;
 }
 
 void Crawler_unloadStateCallback(enum EGameMenuState newState) {
