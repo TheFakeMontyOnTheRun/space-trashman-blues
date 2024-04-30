@@ -336,8 +336,6 @@ void MainPage::Update(Xaml::CanvasAnimatedControl^ sender,
 
                                     if ((reading.Buttons & Windows::Gaming::Input::GamepadButtons::DPadLeft) == Windows::Gaming::Input::GamepadButtons::DPadLeft) {
                                         mTurnBuffer = kCommandLeft;
-                                        visibilityCached = false;
-                                        needsToRedrawVisibleMeshes = true;
 
                                         if (controllerCooldown <= 0) {
                                             controllerCooldown = CONTROLLER_COOLDOWN_TIME;
@@ -347,8 +345,6 @@ void MainPage::Update(Xaml::CanvasAnimatedControl^ sender,
 
                                         if ((reading.Buttons & Windows::Gaming::Input::GamepadButtons::DPadRight) == Windows::Gaming::Input::GamepadButtons::DPadRight) {
                                             mTurnBuffer = kCommandRight;
-                                            visibilityCached = false;
-                                            needsToRedrawVisibleMeshes = true;
 
                                             if (controllerCooldown <= 0) {
                                                 controllerCooldown = CONTROLLER_COOLDOWN_TIME;
@@ -386,7 +382,7 @@ void MainPage::Update(Xaml::CanvasAnimatedControl^ sender,
             controllerTriggerCooldown -= 30;
         }
     }
-
+    visibilityCached = false;
     menuTick(30);
 }
 
@@ -524,8 +520,6 @@ void MainPage::OnKeyUp(CoreWindow^ sender, KeyEventArgs^ args)
                                 if (args->VirtualKey == VirtualKey::Left)
                                 {
                                     mTurnBuffer = kCommandLeft;
-                                    visibilityCached = false;
-                                    needsToRedrawVisibleMeshes = true;
 
                                     if (controllerCooldown <= 0) {
                                         controllerCooldown = CONTROLLER_COOLDOWN_TIME;
@@ -535,8 +529,6 @@ void MainPage::OnKeyUp(CoreWindow^ sender, KeyEventArgs^ args)
                                     if (args->VirtualKey == VirtualKey::Right)
                                     {
                                         mTurnBuffer = kCommandRight;
-                                        visibilityCached = false;
-                                        needsToRedrawVisibleMeshes = true;
 
                                         if (controllerCooldown <= 0) {
                                             controllerCooldown = CONTROLLER_COOLDOWN_TIME;
