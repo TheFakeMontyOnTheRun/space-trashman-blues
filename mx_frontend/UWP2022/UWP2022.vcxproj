@@ -221,7 +221,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\base.pfs" />
+    <CopyFileToFolders Include="..\base.pfs">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

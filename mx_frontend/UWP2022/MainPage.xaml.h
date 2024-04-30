@@ -34,8 +34,34 @@ namespace UWP2022
 
 		void Draw(Xaml::CanvasAnimatedControl^ sender, Xaml::CanvasAnimatedDrawEventArgs^ args);
 
-		void OnGamepadAdded(Platform::Object^ sender, Windows::Gaming::Input::Gamepad^ args);
 
-		void OnKeyDown(CoreWindow^ sender, KeyEventArgs^ args);
+        //---------------------------------------------------------------------
+        void OnKeyDown(CoreWindow^ sender, KeyEventArgs^ args);
+
+
+        void Page_BackRequested(Object^ sender, BackRequestedEventArgs^ args);
+
+        //---------------------------------------------------------------------
+        void OnKeyUp(CoreWindow^ sender, KeyEventArgs^ args);
+
+        //---------------------------------------------------------------------
+        void OnCharReceived(CoreWindow^ sender, CharacterReceivedEventArgs^ args);
+
+        //---------------------------------------------------------------------
+        void OnPointerPressed(CoreWindow^ sender, PointerEventArgs^ args);
+
+        //---------------------------------------------------------------------
+        void OnPointerWheelChanged(CoreWindow^ sender, PointerEventArgs^ args);
+
+        //---------------------------------------------------------------------
+        void OnPointerMoved(CoreWindow^ sender, PointerEventArgs^ args);
+
+
+        //---------------------------------------------------------------------
+
+
+        //---------------------------------------------------------------------
+        void OnGamepadAdded(Platform::Object^ sender,
+            Windows::Gaming::Input::Gamepad^ args);
 	};
 }

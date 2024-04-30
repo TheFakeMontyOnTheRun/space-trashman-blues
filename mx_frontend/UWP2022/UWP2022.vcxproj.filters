@@ -49,8 +49,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="..\base.pfs">
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="..\base.pfs">
       <Filter>Assets</Filter>
-    </None>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>
