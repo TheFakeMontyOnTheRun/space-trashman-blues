@@ -221,7 +221,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="..\base.pfs">
+    <CopyFileToFolders Include="..\..\ee_frontend\base.pfs">
       <FileType>Document</FileType>
     </CopyFileToFolders>
     <None Include="packages.config" />

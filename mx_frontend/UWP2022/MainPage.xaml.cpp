@@ -7,10 +7,7 @@
 #include "MainPage.xaml.h"
 
 #define SDLSW
-
-
-
-
+#define RGBA32_FRAMEBUFFER
 #define CLI_BUILD
 #define PAGE_FLIP_ANIMATION
 #define INCLUDE_ITEM_DESCRIPTIONS
@@ -82,13 +79,6 @@ using namespace Microsoft::Graphics::Canvas::Effects;
 using namespace Windows::UI::Core;
 using namespace Windows::UI::ViewManagement;
 
-
-struct RGBEntry {
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
-};
-
 #define CONTROLLER_COOLDOWN_TIME 150
 #define CONTROLLER_TRIGGER_COOLDOWN_TIME 500
 
@@ -96,7 +86,6 @@ Platform::Array<uint8_t>^ data = nullptr;
 CanvasSpriteBatch^ spriteBatch2 = nullptr;
 Microsoft::Graphics::Canvas::CanvasBitmap^ bitmap = nullptr;
 Windows::Gaming::Input::Gamepad^ mainGamepad = nullptr;
-struct RGBEntry paletteRef[256];
 uint8_t pixels[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * 4];
 int32_t controllerCooldown = 0;
 int32_t controllerTriggerCooldown = 0;
@@ -201,35 +190,19 @@ MainPage::MainPage()
 }
 
 
-uint8_t getPaletteEntry(const uint32_t origin) {
-	uint8_t shade;
+OutputPixelFormat getPaletteEntry(const FramebufferPixelFormat origin) {
 
 	if (!(origin & 0xFF000000)) {
 		return TRANSPARENCY_COLOR;
 	}
 
-	shade = 0;
-	shade += (((((origin & 0x0000FF)      ) << 2) >> 8)) << 6;
-	shade += (((((origin & 0x00FF00) >>  8) << 3) >> 8)) << 3;
-	shade += (((((origin & 0xFF0000) >> 16) << 3) >> 8)) << 0;
-
-	return shade;
+    return ((origin & 0xFF000000)) +
+        ((origin & 0x00FF0000) >> 16) +
+        ((origin & 0x0000FF00)) +
+        ((origin & 0x000000FF) << 16);
 }
 
 void graphicsInit(void) {
-    int r, g, b;
-
-    for (r = 0; r < 256; r += 16) {
-        for (g = 0; g < 256; g += 8) {
-            for (b = 0; b < 256; b += 8) {
-                uint32_t pixel = 0xFF000000 + (r << 16) + (g << 8) + (b);
-                uint8_t paletteEntry = getPaletteEntry(pixel);
-                pixel = 0xFF000000 + (b << 16) + (g << 8) + (r);
-                palette[paletteEntry] = pixel;
-            }
-        }
-    }
-
     defaultFont = loadBitmap("font.img");
     enableSmoothMovement = TRUE;
 }
@@ -651,7 +624,7 @@ void flipRenderer(void) {
     int x, y;
     int i = 0;
     int		    index = 0;
-    uint8_t stretchedBuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+    FramebufferPixelFormat stretchedBuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
     OutputPixelFormat	    bigPixel;
 
     renderPageFlip(&stretchedBuffer[0], &framebuffer[0],
@@ -660,13 +633,12 @@ void flipRenderer(void) {
 
     for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
         for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
-            bigPixel = palette[stretchedBuffer[index]];
+            bigPixel = stretchedBuffer[index];
 
-            pixels[((XRES_FRAMEBUFFER * 4) * y) + (x * 4) + 0] = (bigPixel & 0xFF) - 0x10;
-            pixels[((XRES_FRAMEBUFFER * 4) * y) + (x * 4) + 1] = ((bigPixel >> 8) & 0xFF) - 0x18;
-            pixels[((XRES_FRAMEBUFFER * 4) * y) + (x * 4) + 2] = ((bigPixel >> 16) & 0xFF) - 0x38;
+            pixels[((XRES_FRAMEBUFFER * 4) * y) + (x * 4) + 1] = ((bigPixel >> 8) & 0xFF);
+            pixels[((XRES_FRAMEBUFFER * 4) * y) + (x * 4) + 2] = ((bigPixel >> 16) & 0xFF);
             pixels[((XRES_FRAMEBUFFER * 4) * y) + (x * 4) + 3] = ((bigPixel >> 24) & 0xFF);
-
+            pixels[((XRES_FRAMEBUFFER * 4) * y) + (x * 4) + 0] = (bigPixel & 0xFF);
 
             ++index;
         }

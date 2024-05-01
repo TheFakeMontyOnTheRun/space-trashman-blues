@@ -52,11 +52,11 @@ extern int needsToRedrawHUD;
 int enable3DRendering = TRUE;
 
 #ifndef AGS
-uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
-uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
-uint32_t palette[256];
+FramebufferPixelFormat framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+FramebufferPixelFormat previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+OutputPixelFormat palette[256];
 #else
-uint8_t *framebuffer;
+FramebufferPixelFormat *framebuffer;
 #endif
 
 enum EDirection cameraDirection;
@@ -202,7 +202,7 @@ void renderRoomTransition(void) {
     } else {
         xCameraOffset = yCameraOffset = 0;
 
-        fillRect(0, 0, XRES + 1, YRES, 0, 0);
+        fillRect(0, 0, XRES + 1, YRES, getPaletteEntry(0xFF000000), 0);
 
         center.mY = 0;
         center.mZ = intToFix(3);
@@ -230,7 +230,7 @@ void renderRoomTransition(void) {
         center.mZ = intToFix(3);
         drawCeilingAt(center, nativeTextures[0], kNorth);
 
-        drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, 255);
+        drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, getPaletteEntry(0xFFFFFFFF));
 
         zCameraOffset -= Div(intToFix(1), intToFix(4));
 

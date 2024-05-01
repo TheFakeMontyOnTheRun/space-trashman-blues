@@ -51,7 +51,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="..\base.pfs">
+    <CopyFileToFolders Include="..\..\ee_frontend\base.pfs">
       <Filter>Assets</Filter>
     </CopyFileToFolders>
   </ItemGroup>

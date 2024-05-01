@@ -73,7 +73,7 @@ void maskWall(
     FixP_t upperDyDx;
     FixP_t lowerDyDx;
     int32_t ix;
-    uint8_t *bufferData = &framebuffer[0];
+    FramebufferPixelFormat *bufferData = &framebuffer[0];
 
     if (x0 > x1) {
         FixP_t tmp = x0;
@@ -158,7 +158,7 @@ void maskWall(
         const FixP_t diffY = (y1 - y0);
         int32_t iY0;
         int32_t iY1 = fixToInt(y1);
-        uint8_t *destinationLine;
+        FramebufferPixelFormat *destinationLine;
         int32_t iy;
 
         if (diffY == 0) {
@@ -225,15 +225,15 @@ void drawWall(FixP_t x0,
     FixP_t dX;
     FixP_t upperDyDx;
     FixP_t lowerDyDx;
-    uint8_t pixel = 0;
+    BitmapPixelFormat pixel = 0;
     FixP_t u = 0;
     uint8_t lastV;
     FixP_t lastDiffY = 0xFFFFFFFF;
-    const uint8_t *data = texture;
+    const TexturePixelFormat *data = texture;
 
     FixP_t du;
     int32_t ix;
-    uint8_t *bufferData = &framebuffer[0];
+    FramebufferPixelFormat *bufferData = &framebuffer[0];
     int farEnoughForStipple;
     
     if (z < distanceForPenumbra -4)  {
@@ -327,9 +327,9 @@ void drawWall(FixP_t x0,
         int32_t iu = fixToInt(u);
         int32_t iY0 = fixToInt(y0);
         int32_t iY1 = fixToInt(y1);
-        const uint8_t *sourceLineStart = data + (iu * NATIVE_TEXTURE_SIZE);
-        const uint8_t *lineOffset = sourceLineStart;
-        uint8_t *destinationLine = bufferData + (XRES_FRAMEBUFFER * iY0) + ix;
+        const TexturePixelFormat *sourceLineStart = data + (iu * NATIVE_TEXTURE_SIZE);
+        const TexturePixelFormat *lineOffset = sourceLineStart;
+        FramebufferPixelFormat *destinationLine = bufferData + (XRES_FRAMEBUFFER * iY0) + ix;
         /*
             Yes, this would cause a div by zero...but the lastDiffY is set to be different from diffY, causing it be
             initialized with the Div between the texture size and the diffY
@@ -454,18 +454,18 @@ void drawFrontWall(FixP_t x0,
     int16_t y;
     int limit;
     FixP_t dY;
-    uint8_t pixel = 0;
+    TexturePixelFormat pixel = 0;
     FixP_t v = 0;
     uint8_t lastU;
     uint8_t lastV = 0xFF;
     int32_t iy;
-    const uint8_t *data = texture;
+    const TexturePixelFormat *data = texture;
     FixP_t dv;
     FixP_t diffX;
     int iX0;
     int iX1;
     FixP_t du;
-    uint8_t *bufferData = &framebuffer[0];
+    FramebufferPixelFormat *bufferData = &framebuffer[0];
     int farEnoughForStipple = 0;
     
     if (z < distanceForPenumbra -4)  {
@@ -537,8 +537,8 @@ void drawFrontWall(FixP_t x0,
         int shouldStippleLine;
         FixP_t u = 0;
         const uint8_t iv = fixToInt(v) & (NATIVE_TEXTURE_SIZE - 1);
-        const uint8_t *sourceLineStart = data + (iv * NATIVE_TEXTURE_SIZE);
-        uint8_t *destinationLine = bufferData + (XRES_FRAMEBUFFER * iy) + iX0;
+        const TexturePixelFormat *sourceLineStart = data + (iv * NATIVE_TEXTURE_SIZE);
+        FramebufferPixelFormat *destinationLine = bufferData + (XRES_FRAMEBUFFER * iy) + iX0;
         int ix;
         int stipple;
         lastU = 0;
@@ -553,7 +553,7 @@ void drawFrontWall(FixP_t x0,
             destinationLine = bufferData + (XRES_FRAMEBUFFER * iy);
             sourceLineStart = destinationLine - XRES_FRAMEBUFFER;
             memCopyToFrom(destinationLine + start, (void *) (sourceLineStart + start),
-                          finish - start);
+                          (finish - start) * sizeof(FramebufferPixelFormat));
 
             continue;
         }
@@ -612,7 +612,7 @@ void drawFrontWall(FixP_t x0,
 __attribute__((target("arm"), section(".iwram"), noinline))
 #endif
 
-void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP_t x1y1, uint8_t pixel) {
+void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP_t x1y1, FramebufferPixelFormat pixel) {
 
     int32_t y;
     int32_t limit;
@@ -627,7 +627,7 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
     FixP_t rightDxDy;
     FixP_t x0;
     FixP_t x1;
-    uint8_t *bufferData = &framebuffer[0];
+    FramebufferPixelFormat *bufferData = &framebuffer[0];
     int32_t iy;
 
     /* if we have a trapezoid in which the base is smaller */
@@ -732,7 +732,16 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
             iX0 = XRES - 1;
         }
 
+#ifdef RGBA32_FRAMEBUFFER
+        unsigned int px;
+        FramebufferPixelFormat* ptr = bufferData + (XRES_FRAMEBUFFER * iy) + iX0;
+        for (px = 0; px < iX1 - iX0; ++px) {
+            *ptr = pixel;
+            ptr++;
+        }
+#else
         memFill(bufferData + (XRES_FRAMEBUFFER * iy) + iX0, pixel, iX1 - iX0);
+#endif
 
 
         x0 += leftDxDy;
@@ -757,7 +766,7 @@ void drawFloor(FixP_t y0,
                FixP_t x0y1,
                FixP_t x1y1,
                int z,
-               const uint8_t *texture) {
+               const TexturePixelFormat *texture) {
 
     int32_t y;
     int32_t limit;
@@ -772,13 +781,13 @@ void drawFloor(FixP_t y0,
     FixP_t rightDxDy;
     FixP_t x0;
     FixP_t x1;
-    uint8_t pixel;
+    TexturePixelFormat pixel;
     FixP_t v = 0;
     int32_t iy;
-    uint8_t *bufferData;
+    FramebufferPixelFormat *bufferData;
     FixP_t dv;
     FixP_t lastDiffX = 0xFFFFFFFF;
-    const uint8_t *sourceLineStart;
+    const TexturePixelFormat *sourceLineStart;
     int farEnoughForStipple;
 
     if (y0 == y1) {
@@ -877,7 +886,7 @@ void drawFloor(FixP_t y0,
         int32_t iX1;
         int32_t ix;
         FixP_t du;
-        uint8_t *destinationLine;
+        FramebufferPixelFormat *destinationLine;
         const FixP_t diffX = (x1 - x0);
         uint8_t lastU = 0;
         FixP_t u = 0;
@@ -965,15 +974,19 @@ void drawRect(const int x,
               const size_t dy,
               const FramebufferPixelFormat pixel) {
 
-    uint8_t *destination = &framebuffer[0];
-    uint8_t *destinationLineStart = destination + (XRES_FRAMEBUFFER * (y)) + x;
+    FramebufferPixelFormat *destination = &framebuffer[0];
+    FramebufferPixelFormat *destinationLineStart = destination + (XRES_FRAMEBUFFER * (y)) + x;
     uint16_t py;
 
     if (pixel == TRANSPARENCY_COLOR) {
         return;
     }
 
-    memFill(destinationLineStart, pixel, dx);
+    unsigned int px;
+    for (px = 0; px < dx; ++px) {
+        *destinationLineStart = pixel;
+        destinationLineStart++;
+    }
 
     for (py = 0; py < (dy); ++py) {
         destinationLineStart = destination + (XRES_FRAMEBUFFER * (y + py)) + x;
@@ -981,10 +994,14 @@ void drawRect(const int x,
         destinationLineStart += dx;
         *destinationLineStart = pixel;
     }
-    memFill(destination + (XRES_FRAMEBUFFER * (y + dy)) + x, pixel, dx);
+
+    for (px = 0; px < dx; ++px) {
+        *destination = pixel;
+        destination++;
+    }
 }
 
-void fillBottomFlat(const int *coords, uint8_t colour) {
+void fillBottomFlat(const int *coords, FramebufferPixelFormat colour) {
     int y = coords[1];
     FixP_t dXDy2;
     FixP_t dXDy1;
@@ -1024,8 +1041,19 @@ void fillBottomFlat(const int *coords, uint8_t colour) {
         } else if (y >= 0) {
             int iFX1 = max(min((XRES - 1), fixToInt(fX1)), 0);
             int iFX0 = max(min((XRES - 1), fixToInt(fX0)), 0);
-            uint8_t *destination = &framebuffer[(XRES_FRAMEBUFFER * y) + min(iFX0, iFX1)];
+            FramebufferPixelFormat *destination = &framebuffer[(XRES_FRAMEBUFFER * y) + min(iFX0, iFX1)];
+
+#ifdef RGBA32_FRAMEBUFFER
+            unsigned int px;
+            size_t length = abs(iFX1 - iFX0);
+            FramebufferPixelFormat* ptr = destination;
+            for (px = 0; px < length; ++px) {
+                *ptr = colour;
+                ptr++;
+            }
+#else
             memFill(destination, colour, abs(iFX1 - iFX0));
+#endif
         }
         fX0 -= dXDy2;
         fX1 += dXDy1;
@@ -1035,7 +1063,7 @@ void fillBottomFlat(const int *coords, uint8_t colour) {
 }
 
 
-void fillTopFlat(int *coords, uint8_t colour) {
+void fillTopFlat(int *coords, FramebufferPixelFormat colour) {
     int y = coords[1];
     int yFinal = max(coords[3], coords[5]);
 
@@ -1072,8 +1100,19 @@ void fillTopFlat(int *coords, uint8_t colour) {
         } else if (y < YRES) {
             int iFX1 = max(min((XRES - 1), fixToInt(fX1)), 0);
             int iFX0 = max(min((XRES - 1), fixToInt(fX0)), 0);
-            uint8_t *destination = &framebuffer[(XRES_FRAMEBUFFER * y) + min(iFX0, iFX1)];
+            FramebufferPixelFormat *destination = &framebuffer[(XRES_FRAMEBUFFER * y) + min(iFX0, iFX1)];
+
+#ifdef RGBA32_FRAMEBUFFER
+            unsigned int px;
+            size_t length = abs(iFX1 - iFX0);
+            FramebufferPixelFormat* ptr = destination;
+            for (px = 0; px < length; ++px) {
+                *ptr = colour;
+                ptr++;
+            }
+#else
             memFill(destination, colour, abs(iFX1 - iFX0));
+#endif
         }
 
         fX0 += dXDy1;
@@ -1244,7 +1283,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
         limit = iFX1 - iFX0;
 
         if (limit) {
-            uint8_t *destination;
+            FramebufferPixelFormat *destination;
             if (limit > 0 && limit < 320) {
                 oneOverLimit = divLut[limit];
             } else if (limit < 0 && limit > -320) {
@@ -1412,7 +1451,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
         limit = iFX1 - iFX0;
 
         if (limit) {
-            uint8_t *destination;
+            FramebufferPixelFormat *destination;
             if (limit > 0 && limit < 320) {
                 oneOverLimit = divLut[limit];
             } else if (limit < 0 && limit > -320) {
@@ -1545,9 +1584,9 @@ void fillRect(
         const size_t dx, const size_t dy,
         const FramebufferPixelFormat pixel, const uint8_t stipple) {
 
-    uint8_t *destination = &framebuffer[0];
+    FramebufferPixelFormat *destination = &framebuffer[0];
     unsigned int py;
-    uint8_t *destinationLineStart;
+    FramebufferPixelFormat *destinationLineStart;
 
     if (pixel == TRANSPARENCY_COLOR) {
         return;
@@ -1557,8 +1596,17 @@ void fillRect(
 
     if (!stipple) {
         for (py = 0; py < dy; ++py) {
+#ifdef RGBA32_FRAMEBUFFER
+            unsigned int px;
+            for (px = 0; px < dx; ++px) {
+                *destinationLineStart = pixel;
+                destinationLineStart++;
+            }
+            destinationLineStart += XRES_FRAMEBUFFER - dx;
+#else
             memFill(destinationLineStart, pixel, dx);
-            destinationLineStart += XRES_FRAMEBUFFER;
+            destinationLineStart += XRES_FRAMEBUFFER;   
+#endif
         }
     } else {
         for (py = 0; py < dy; ++py) {
@@ -1578,11 +1626,11 @@ void drawBitmapRaw(const int dx,
                    const int dy,
                    int width,
                    int height,
-                   uint8_t *bitmapData,
+                   BitmapPixelFormat *bitmapData,
                    const int transparent) {
 
-    uint8_t *destination = &framebuffer[0];
-    uint8_t *sourceLine = bitmapData;
+    FramebufferPixelFormat *destination = &framebuffer[0];
+    BitmapPixelFormat *sourceLine = bitmapData;
 
     int y;
 
@@ -1590,8 +1638,8 @@ void drawBitmapRaw(const int dx,
         height = (YRES_FRAMEBUFFER - dy);
     }
     for (y = 0; y < height; ++y) {
-        uint8_t *destinationLineStart = destination + (XRES_FRAMEBUFFER * (dy + y)) + dx;
-        uint8_t *sourceLineStart = sourceLine + (width * y);
+        FramebufferPixelFormat *destinationLineStart = destination + (XRES_FRAMEBUFFER * (dy + y)) + dx;
+        BitmapPixelFormat *sourceLineStart = sourceLine + (width * y);
         int x;
 
         if ((dy + y) >= clippingY1) {
@@ -1599,7 +1647,7 @@ void drawBitmapRaw(const int dx,
         }
 
         for (x = 0; x < width; ++x) {
-            uint8_t pixel = *sourceLineStart;
+            BitmapPixelFormat pixel = *sourceLineStart;
 
             if (!transparent || (pixel != TRANSPARENCY_COLOR)) {
                 *destinationLineStart = pixel;
@@ -1620,14 +1668,14 @@ void drawBitmap(const int x,
 }
 
 void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text,
-                                       const uint8_t colour, char charToReplaceHifenWith) {
+                                       const FramebufferPixelFormat colour, char charToReplaceHifenWith) {
 
     size_t len = strlen(text);
     int32_t dstX = (x - 1) * 8;
     int32_t dstY = (y - 1) * 8;
-    uint8_t *dstBuffer = &framebuffer[0];
+    FramebufferPixelFormat *dstBuffer = &framebuffer[0];
     size_t fontWidth = defaultFont->width;
-    uint8_t *fontPixelData = defaultFont->data;
+    BitmapPixelFormat *fontPixelData = defaultFont->data;
     size_t c;
     int32_t srcX, srcY;
 
@@ -1635,7 +1683,7 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
         uint8_t ascii;
         uint8_t line;
         uint8_t col;
-        uint8_t *letter;
+        BitmapPixelFormat *letter;
 
         char currentChar = text[c];
 
@@ -1666,8 +1714,8 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
 
         for (srcY = 0; srcY < 8; ++srcY) {
 
-            uint8_t *letterSrc = letter + (fontWidth * srcY);
-            uint8_t *letterDst = dstBuffer + dstX + (XRES_FRAMEBUFFER * (dstY + srcY));
+            BitmapPixelFormat *letterSrc = letter + (fontWidth * srcY);
+            FramebufferPixelFormat *letterDst = dstBuffer + dstX + (XRES_FRAMEBUFFER * (dstY + srcY));
 
             for (srcX = 0; srcX < 8; ++srcX) {
 
@@ -1683,16 +1731,16 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
     }
 }
 
-void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const uint8_t colour) {
+void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour) {
     drawTextAtWithMarginWithFiltering(x, y, margin, text, colour, '-');
 }
 
-void drawTextAt(const int x, const int y, const char *text, const uint8_t colour) {
+void drawTextAt(const int x, const int y, const char *text, const FramebufferPixelFormat colour) {
 
     drawTextAtWithMargin(x, y, (XRES_FRAMEBUFFER - 1), text, colour);
 }
 
-void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
+void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, FramebufferPixelFormat colour) {
     int dx = abs(x1 - x0);
     int sx = x0 < x1 ? 1 : -1;
     int dy = abs(y1 - y0);
@@ -1717,12 +1765,12 @@ void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) 
     }
 }
 
-void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
-                    uint8_t *prevFrame, int turnState, int turnTarget, int scale200To240) {
+void renderPageFlip(FramebufferPixelFormat *stretchedBuffer, FramebufferPixelFormat *currentFrame,
+                    FramebufferPixelFormat *prevFrame, int turnState, int turnTarget, int scale200To240) {
 
-    uint8_t index;
-    uint8_t *src;
-    uint8_t *dst;
+    FramebufferPixelFormat index;
+    FramebufferPixelFormat *src;
+    FramebufferPixelFormat *dst;
     int x, y, chunky;
 
     if (turnTarget != turnStep && abs(turnTarget - turnStep) < PAGE_FLIP_INCREMENT) {
@@ -1774,7 +1822,7 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 
         mTurnBuffer = kCommandNone;
 
-        memCopyToFrom(prevFrame, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
+        memCopyToFrom(prevFrame, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(FramebufferPixelFormat));
 
     } else if (turnState < turnTarget) {
 
@@ -1872,17 +1920,17 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
 
         mTurnBuffer = kCommandNone;
 
-        memCopyToFrom(stretchedBuffer, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
-        memCopyToFrom(prevFrame, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(uint8_t));
+        memCopyToFrom(stretchedBuffer, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(FramebufferPixelFormat));
+        memCopyToFrom(prevFrame, currentFrame, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER * sizeof(FramebufferPixelFormat));
 
     } else if (turnState < turnTarget) {
         for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
             size_t lineOffset = (y * XRES_FRAMEBUFFER);
             memCopyToFrom(stretchedBuffer + lineOffset,
-                          currentFrame + lineOffset + (XRES_FRAMEBUFFER - turnStep - HUD_WIDTH), turnStep);
-            memCopyToFrom(stretchedBuffer + lineOffset + turnStep, prevFrame + lineOffset, (XRES - turnStep));
+                          currentFrame + lineOffset + (XRES_FRAMEBUFFER - turnStep - HUD_WIDTH), turnStep * sizeof(FramebufferPixelFormat));
+            memCopyToFrom(stretchedBuffer + lineOffset + turnStep, prevFrame + lineOffset, (XRES - turnStep) * sizeof(FramebufferPixelFormat));
             memCopyToFrom(stretchedBuffer + lineOffset + XRES, currentFrame + lineOffset + XRES,
-                          (XRES_FRAMEBUFFER - XRES));
+                          (XRES_FRAMEBUFFER - XRES) * sizeof(FramebufferPixelFormat));
         }
 
         turnStep += PAGE_FLIP_INCREMENT;
@@ -1891,10 +1939,10 @@ void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame,
         for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
             size_t lineOffset = (y * XRES_FRAMEBUFFER);
             memCopyToFrom(stretchedBuffer + lineOffset,
-                          prevFrame + lineOffset + (XRES_FRAMEBUFFER - turnStep - HUD_WIDTH), turnStep);
-            memCopyToFrom(stretchedBuffer + lineOffset + turnStep, currentFrame + lineOffset, (XRES - turnStep));
+                          prevFrame + lineOffset + (XRES_FRAMEBUFFER - turnStep - HUD_WIDTH), turnStep * sizeof(FramebufferPixelFormat));
+            memCopyToFrom(stretchedBuffer + lineOffset + turnStep, currentFrame + lineOffset, (XRES - turnStep) * sizeof(FramebufferPixelFormat));
             memCopyToFrom(stretchedBuffer + lineOffset + XRES, currentFrame + lineOffset + XRES,
-                          (XRES_FRAMEBUFFER - XRES));
+                          (XRES_FRAMEBUFFER - XRES) * sizeof(FramebufferPixelFormat));
         }
         turnStep -= PAGE_FLIP_INCREMENT;
 	    visibilityCached = FALSE;

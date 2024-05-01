@@ -29,7 +29,11 @@
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
 
 #define TOTAL_TEXTURES 16
+#ifndef RGBA32_FRAMEBUFFER
 #define TRANSPARENCY_COLOR 199
+#else
+#define TRANSPARENCY_COLOR 0
+#endif
 #define VISIBILITY_CONE_NARROWING 3
 #define MASK_LEFT 1
 #define MASK_FRONT 2
@@ -42,7 +46,11 @@
 #define ITEMS_IN_MAP(x, y) (itemsInMap[ ( (MAP_SIZE) * (y) ) + (x) ])
 
 typedef uint32_t OutputPixelFormat;
+#ifdef RGBA32_FRAMEBUFFER
+typedef uint32_t FramebufferPixelFormat;
+#else
 typedef uint8_t FramebufferPixelFormat;
+#endif
 typedef uint8_t UVCoord;
 
 struct Projection {
@@ -88,7 +96,7 @@ void enter2D(void);
 
 void enter3D(void);
 
-void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame, uint8_t *prevFrame, int turnState, int turnTarget,
+void renderPageFlip(FramebufferPixelFormat *stretchedBuffer, FramebufferPixelFormat *currentFrame, FramebufferPixelFormat *prevFrame, int turnState, int turnTarget,
                     int scale200To240);
 
 void fillRect(
@@ -105,7 +113,7 @@ void drawMap(const struct CActor *current);
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour);
 
-void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text, const uint8_t colour,
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour,
                                        char charToReplaceHifenWith);
 
 void drawTextAt(const int x,
@@ -246,11 +254,11 @@ extern int visibilityCached;
 extern int needsToRedrawVisibleMeshes;
 extern struct Bitmap *defaultFont;
 #ifndef AGS
-extern uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
-extern uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
-extern uint32_t palette[256];
+extern FramebufferPixelFormat framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+extern FramebufferPixelFormat previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+extern OutputPixelFormat palette[256];
 #else
-extern uint8_t *framebuffer;
+extern FramebufferPixelFormat *framebuffer;
 #endif
 extern enum EDirection cameraDirection;
 extern long gameTicks;
