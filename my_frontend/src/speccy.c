@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <stdio.h>
+#include <games.h>
 #include <graphics.h>
 
 #include "Enums.h"
@@ -14,8 +16,6 @@
 
 uint8_t updateDirection;
 
-int kbhit(void);
-int getch(void);
 extern uint8_t firstFrameOnCurrentState;
 
 /*  Required since we have our own memory allocator abstraction */
@@ -93,60 +93,56 @@ uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
 }
 
 void clearTextScreen(void) {
-    uint8_t c, d;
-    for (c = 16; c < 24; ++c) {
-        for (d = 0; d < 40; ++d) {
-            writeStrWithLimit(d, c, " ", 320 / 8, 2, 0);
-        }
-    }
+    clga(0, 128, 256, 192);
 }
 
 void handleSystemEvents(void) {}
 
+uint8_t inputCounter = 0;
 enum ECommand getInput(void) {
-    if (!kbhit()) {
-        return kCommandNone;
-    }
-
     performAction();
 
-    switch (getch()) {
-        case 'w':
-            return kCommandUp;
-        case 's':
-            return kCommandDown;
-        case 'q':
-            updateDirection = 1;
-            return kCommandLeft;
-        case 'e':
-            updateDirection = 1;
-            return kCommandRight;
-        case 'z':
-            return kCommandStrafeLeft;
-        case 'x':
-            return kCommandStrafeRight;
-        case '1':
-            if (waitForKey) {
-                waitForKey = 0;
-                firstFrameOnCurrentState = 1;
-                needs3dRefresh = 1;
-                return kCommandNone;
-            }
+    int j = joystick(4);
+    if (j & MOVE_RIGHT) {
+        clearGraphics();
+        return kCommandRight;
+    }
+    if (j & MOVE_LEFT) {
+        clearGraphics();
+        return kCommandLeft;
+    }
+    if (j & MOVE_DOWN) {
+        clearGraphics();
+        return kCommandDown;
+    }
+    if (j & MOVE_UP) {
+        clearGraphics();
+        return kCommandUp;
+    }
 
-            return kCommandFire1;
-        case '2':
-            return kCommandFire2;
-        case '3':
-            return kCommandFire3;
-        case '4':
-            return kCommandFire4;
-        case '5':
-            return kCommandFire5;
-        case '6':
-            return kCommandFire6;
+    if (j & MOVE_FIRE1) {
+        clearGraphics();
+        return kCommandFire1;
+    }
+
+    if (j & MOVE_FIRE2) {
+        clearGraphics();
+        return kCommandFire2;
+    }
+
+    if (j & MOVE_FIRE3) {
+        clearGraphics();
+        return kCommandFire3;
+    }
+
+
+    if (j & MOVE_FIRE4) {
+        clearGraphics();
+        return kCommandFire4;
     }
 
     return kCommandNone;
+
 }
 
 void clearScreen(void) {
