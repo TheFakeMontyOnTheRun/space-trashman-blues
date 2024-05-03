@@ -25,8 +25,8 @@
 #include <nds/arm9/trig_lut.h>
 #endif
 
-#include "Core.h"
 #include "Enums.h"
+#include "Core.h"
 #include "FixP.h"
 #include "Common.h"
 #include "LoadBitmap.h"

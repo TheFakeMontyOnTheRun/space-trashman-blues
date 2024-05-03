@@ -23,9 +23,9 @@
 #include <rdpq_text.h>
 #endif
 
+#include "Enums.h"
 #include "Core.h"
 #include "FixP.h"
-#include "Enums.h"
 #include "Common.h"
 #include "Vec.h"
 #include "CActor.h"
