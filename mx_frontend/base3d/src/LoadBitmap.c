@@ -83,6 +83,8 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
         buffer[c] = bPtr->data[c];
     }
 
+    releaseBitmap(bPtr);
+
     toReturn = &textures[usedTexture++];
 
     for (y = 0; y < NATIVE_TEXTURE_SIZE; ++y) {
@@ -135,8 +137,6 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
             dstLine += NATIVE_TEXTURE_SIZE;
         }
     }
-
-   // disposeDiskBuffer(staticBuffer);
 
     return toReturn;
 }
