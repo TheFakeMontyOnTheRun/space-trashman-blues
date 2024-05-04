@@ -70,6 +70,7 @@ void graphicsInit(void) {
             for (b = 0; b < 256; b += 8) {
                 uint32_t pixel = 0xFF000000 + (r << 16) + (g << 8) + (b);
                 uint8_t paletteEntry = getPaletteEntry(pixel);
+                pixel = 0xFF000000 + ((b - 0x38) << 16) + ((g - 0x18) << 8) + (r - 0x10);
                 palette[paletteEntry] = pixel;
             }
         }
@@ -80,7 +81,7 @@ void graphicsInit(void) {
 }
 
 
-uint8_t getPaletteEntry(uint32_t origin) {
+uint8_t getPaletteEntry(const uint32_t origin) {
     uint8_t shade;
 
     if (!(origin & 0xFF000000)) {
@@ -88,9 +89,9 @@ uint8_t getPaletteEntry(uint32_t origin) {
     }
 
     shade = 0;
-    shade += (((((origin & 0x0000FF)) << 3) >> 8)) << 0;
+    shade += (((((origin & 0x0000FF)) << 2) >> 8)) << 6;
     shade += (((((origin & 0x00FF00) >> 8) << 3) >> 8)) << 3;
-    shade += (((((origin & 0xFF0000) >> 16) << 2) >> 8)) << 6;
+    shade += (((((origin & 0xFF0000) >> 16) << 3) >> 8)) << 0;
 
     return shade;
 }
@@ -103,28 +104,7 @@ void handleSystemEvents(void) {
 
         if (XCheckWindowEvent(display, win, ExposureMask | KeyPressMask, &event)) {
             if (event.type == Expose) {
-
-                int x = 0, y = 0;
-                int dstY = 0;
-                int scaller = 0;
-                int even = 0;
-                int heightY = 1;
-
-                uint8_t *src;
-                uint32_t *dst;
-
-                uint8_t newFrame[320 * 240];
-
-                renderPageFlip(newFrame, framebuffer,
-                               previousFrame, turnStep, turnTarget, 1);
-
-                for (int y = 0; y < 240; ++y) {
-                    for (int x = 0; x < 320; ++x) {
-                        XPutPixel(img, x, y, palette[newFrame[(320 * y) + x]]);
-                    }
-                }
-                XPutImage(display, win, DefaultGC(display, screen_num), img, 0, 0, 0, 0, 320, 240);
-                XFlush(display);
+                flipRenderer();
             }
 
             if (event.type == KeyPress) {
@@ -215,10 +195,6 @@ void graphicsShutdown(void) {
 
 void flipRenderer(void) {
     int x = 0, y = 0;
-    int dstY = 0;
-    int scaller = 0;
-    int even = 0;
-    int heightY = 1;
 
     uint8_t *src;
     uint32_t *dst;
@@ -228,8 +204,8 @@ void flipRenderer(void) {
     renderPageFlip(newFrame, framebuffer,
                    previousFrame, turnStep, turnTarget, 1);
 
-    for (int y = 0; y < 240; ++y) {
-        for (int x = 0; x < 320; ++x) {
+    for (y = 0; y < 240; ++y) {
+        for (x = 0; x < 320; ++x) {
             XPutPixel(img, x, y, palette[newFrame[(320 * y) + x]]);
         }
     }
