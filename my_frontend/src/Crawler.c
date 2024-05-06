@@ -220,6 +220,7 @@ void Crawler_repaintCallback(void) {
         uint8_t val = 95 + (MAP_SIZE_Y - y);
 
         if (roomTransitionAnimationStep == 0) {
+            firstFrameOnCurrentState = TRUE;
             HUD_initialPaint();
             clearGraphics();
             renderScene();
