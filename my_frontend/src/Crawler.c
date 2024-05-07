@@ -34,39 +34,44 @@ uint8_t roomTransitionAnimationStep = 0;
 #endif
 
 void HUD_refresh(void) {
-    drawWindow(0,
-               128 / 8,
-               (XRES_FRAMEBUFFER / 8) / 2,
-               (YRES_FRAMEBUFFER / 8) - 17,
-               "",
-               2);
 
-    writeStrWithLimit(1, YRES_TEXT - 7, "In room", 16, 2, 0);
+    if (redrawStatus) {
+        redrawStatus = 0;
 
-    if (roomItem != NULL) {
-        struct Item *item = getItem(roomItem->item);
+        drawWindow(0,
+                   128 / 8,
+                   (XRES_FRAMEBUFFER / 8) / 2,
+                   (YRES_FRAMEBUFFER / 8) - 17,
+                   "",
+                   2);
 
-        if (item->active) {
-            writeStrWithLimit(1, YRES_TEXT - 6, "*", 16, 2, 0);
+        writeStrWithLimit(1, YRES_TEXT - 7, "In room", 16, 2, 0);
+
+        writeStrWithLimit(1, YRES_TEXT - 4, "In hand", 16, 2, 0);
+
+        if (roomItem != NULL) {
+            struct Item *item = getItem(roomItem->item);
+
+            if (item->active) {
+                writeStrWithLimit(1, YRES_TEXT - 6, "*", 16, 2, 0);
+            }
+
+            writeStrWithLimit(2, YRES_TEXT - 6, item->name, 16, 2, 0);
+        } else {
+            writeStrWithLimit(2, YRES_TEXT - 6, "Nothing", 16, 2, 0);
         }
 
-        writeStrWithLimit(2, YRES_TEXT - 6, item->name, 16, 2, 0);
-    } else {
-        writeStrWithLimit(2, YRES_TEXT - 6, "Nothing", 16, 2, 0);
-    }
+        if (focusedItem != NULL) {
+            struct Item *item = getItem(focusedItem->item);
 
-    writeStrWithLimit(1, YRES_TEXT - 4, "In hand", 16, 2, 0);
+            if (item->active) {
+                drawTextAt(1, YRES_TEXT - 3, "*", 1);
+            }
 
-    if (focusedItem != NULL) {
-        struct Item *item = getItem(focusedItem->item);
-
-        if (item->active) {
-            drawTextAt(1, YRES_TEXT - 3, "*", 1);
+            writeStrWithLimit(2, YRES_TEXT - 3, item->name, 16, 2, 0);
+        } else {
+            writeStrWithLimit(2, YRES_TEXT - 3, "Nothing", 16, 2, 0);
         }
-
-        writeStrWithLimit(2, YRES_TEXT - 3, item->name, 16, 2, 0);
-    } else {
-        writeStrWithLimit(2, YRES_TEXT - 3, "Nothing", 16, 2, 0);
     }
 }
 
@@ -119,7 +124,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
     needs3dRefresh = 1;
 
     if (!waitForKey) {
-        HUD_refresh();
+        redrawStatus = 1;
     }
 
     return kResumeCurrentState;
@@ -207,8 +212,13 @@ void Crawler_repaintCallback(void) {
 
     if (firstFrameOnCurrentState) {
         clearScreen();
+        redrawMap = redrawStatus = 1;
         HUD_initialPaint();
     }
+
+    HUD_refresh();
+
+    drawMap();
 
     if (!needs3dRefresh) {
         return;
@@ -220,8 +230,7 @@ void Crawler_repaintCallback(void) {
         uint8_t val = 95 + (MAP_SIZE_Y - y);
 
         if (roomTransitionAnimationStep == 0) {
-            firstFrameOnCurrentState = TRUE;
-            HUD_initialPaint();
+            redrawMap = redrawStatus = needs3dRefresh = 1;
             clearGraphics();
             renderScene();
             return;

@@ -36,8 +36,6 @@ void HUD_initialPaint(void) {
                    (YRES_FRAMEBUFFER / 8) / 2 + 2,
                    "Map",
                    2);
-
-        drawMap();
     }
 
     drawWindowWithOptions(

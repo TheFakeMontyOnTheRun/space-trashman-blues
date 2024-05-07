@@ -20,6 +20,10 @@ extern int8_t map[32][32];
 
 uint8_t waitForKey = 0;
 
+uint8_t redrawMap;
+
+uint8_t redrawStatus;
+
 void drawGraphic(const uint8_t *graphic) {
     const uint8_t *ptr = graphic;
 
@@ -50,12 +54,17 @@ void showMessage(const char *message) {
 }
 
 void drawMap(void) {
-
     uint8_t x, y;
+
+    if (!redrawMap) {
+        return;
+    }
 
     if (playerLocation == 0) {
         return;
     }
+
+    redrawMap = 0;
 
     for (y = 0; y < 12; ++y) {
         for (x = 0; x < 12; ++x) {

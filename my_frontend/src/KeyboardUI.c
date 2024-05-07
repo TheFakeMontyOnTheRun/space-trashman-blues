@@ -40,16 +40,7 @@ void HUD_initialPaint(void) {
                    (YRES_FRAMEBUFFER / 8) / 2 + 2,
                    "Map",
                    2);
-
-        drawMap();
     }
-
-    drawWindow(0,
-               128 / 8,
-               (XRES_FRAMEBUFFER / 8) / 2,
-               (YRES_FRAMEBUFFER / 8) - 17,
-               "Direction: ",
-               2);
 
     drawWindowWithOptions(
             1 + (XRES_FRAMEBUFFER / 2) / 8,
@@ -61,6 +52,7 @@ void HUD_initialPaint(void) {
             6,
             0xFF);
 
+    redrawStatus = 1;
     HUD_refresh();
 }
 

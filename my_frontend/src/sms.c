@@ -13,6 +13,7 @@
 #include "TMS9918.h"
 #include "SN76489.h"
 #include "SoundSystem.h"
+#include "UI.h"
 
 #define COOLDOWN_MAX 0x1F
 
@@ -24,7 +25,7 @@ uint8_t cooldown;
 extern uint8_t firstFrameOnCurrentState;
 extern uint8_t waitForKey;
 
-extern uint8_t cursorPosition;
+extern int8_t cursorPosition;
 
 enum ESoundDriver soundDriver = kSN76489;
 
@@ -84,8 +85,6 @@ enum ECommand getInput(void) {
 
             if (waitForKey) {
                 waitForKey = 0;
-                firstFrameOnCurrentState = 1;
-                needs3dRefresh = 1;
                 return kCommandNone;
             }
 

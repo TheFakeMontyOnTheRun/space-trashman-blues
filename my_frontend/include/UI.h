@@ -41,4 +41,8 @@ extern uint8_t waitForKey;
 
 extern int8_t cursorPosition;
 
+extern uint8_t redrawMap;
+
+extern uint8_t redrawStatus;
+
 #endif //DERELICT8_MENU_H
