@@ -43,19 +43,27 @@ int playingDemo = 0;
 int commandRepetitions = 0;
 uint8_t lastCommand = 255;
 
-uint8_t getPaletteEntry(const uint32_t origin) {
-	uint8_t shade;
+FramebufferPixelFormat getPaletteEntry(const OutputPixelFormat origin) {
+	FramebufferPixelFormat shade;
 
 	if (!(origin & 0xFF000000)) {
 		return TRANSPARENCY_COLOR;
 	}
 
+#ifndef RGBA32_FRAMEBUFFER
 	shade = 0;
 	shade += (((((origin & 0x0000FF)) << 2) >> 8)) << 6;
 	shade += (((((origin & 0x00FF00) >> 8) << 3) >> 8)) << 3;
 	shade += (((((origin & 0xFF0000) >> 16) << 3) >> 8)) << 0;
 
-	return shade;
+    return shade;
+#else
+    return ((origin & 0xFF000000)) +
+           ((origin & 0x00FF0000) >> 16) +
+           ((origin & 0x0000FF00)) +
+           ((origin & 0x000000FF) << 16);
+
+#endif
 }
 
 void graphicsInit(void) {
@@ -69,16 +77,17 @@ void graphicsInit(void) {
 							 SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
 
 	renderer = SDL_CreateRenderer(window, -1, 0);
-
+#ifndef RGBA32_FRAMEBUFFER
 	for (r = 0; r < 256; r += 16) {
 		for (g = 0; g < 256; g += 8) {
 			for (b = 0; b < 256; b += 8) {
-				uint32_t pixel = 0xFF000000 + (r << 16) + (g << 8) + (b);
-				uint8_t paletteEntry = getPaletteEntry(pixel);
+				OutputPixelFormat pixel = 0xFF000000 + (r << 16) + (g << 8) + (b);
+				FramebufferPixelFormat paletteEntry = getPaletteEntry(pixel);
 				palette[paletteEntry] = pixel;
 			}
 		}
 	}
+#endif
 
 #ifdef __EMSCRIPTEN__
 	enterFullScreenMode ();
@@ -253,25 +262,33 @@ void flipRenderer(void) {
 	SDL_Rect rect;
 	int x, y;
 
-    uint8_t newFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+    FramebufferPixelFormat newFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 
     renderPageFlip(newFrame, framebuffer,
                    previousFrame, turnStep, turnTarget, 0);
 
     for (y = dirtyLineY0; y < dirtyLineY1; ++y) {
         for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
-            uint32_t pixel;
+            OutputPixelFormat pixel;
 
             rect.x = 2 * x;
             rect.y = (24 * y) / 10;
             rect.w = 2;
             rect.h = 3;
-
+#ifndef RGBA32_FRAMEBUFFER
             pixel = palette[newFrame[(XRES_FRAMEBUFFER * y) + x]];
-
             SDL_SetRenderDrawColor(renderer, (pixel & 0x000000FF) - 0x38,
                                    ((pixel & 0x0000FF00) >> 8) - 0x18,
                                    ((pixel & 0x00FF0000) >> 16) - 0x10, 255);
+
+#else
+            pixel = newFrame[(XRES_FRAMEBUFFER * y) + x];
+            SDL_SetRenderDrawColor(renderer,
+                                   ((pixel & 0x00FF0000) >> 16),
+                                   ((pixel & 0x0000FF00) >> 8),
+                                   (pixel & 0x000000FF),
+                                   255);
+#endif
             SDL_RenderFillRect(renderer, &rect);
         }
     }
