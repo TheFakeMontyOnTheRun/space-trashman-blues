@@ -18,24 +18,18 @@
 		F17418372BE952FC00363B9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17418362BE952FC00363B9D /* AppDelegate.swift */; };
 		F17418392BE952FC00363B9D /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17418382BE952FC00363B9D /* GameViewController.swift */; };
 		F174183C2BE952FC00363B9D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F174183A2BE952FC00363B9D /* Main.storyboard */; };
-		F174183E2BE952FC00363B9D /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = F174180B2BE952F700363B9D /* Actions.sks */; };
-		F174183F2BE952FC00363B9D /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = F174180B2BE952F700363B9D /* Actions.sks */; };
-		F17418402BE952FC00363B9D /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = F174180B2BE952F700363B9D /* Actions.sks */; };
-		F17418412BE952FC00363B9D /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = F174180C2BE952F700363B9D /* GameScene.sks */; };
-		F17418422BE952FC00363B9D /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = F174180C2BE952F700363B9D /* GameScene.sks */; };
-		F17418432BE952FC00363B9D /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = F174180C2BE952F700363B9D /* GameScene.sks */; };
-		F17418442BE952FC00363B9D /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F174180D2BE952F700363B9D /* GameScene.swift */; };
-		F17418452BE952FC00363B9D /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F174180D2BE952F700363B9D /* GameScene.swift */; };
-		F17418462BE952FC00363B9D /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F174180D2BE952F700363B9D /* GameScene.swift */; };
 		F17418472BE952FC00363B9D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F174180E2BE952FB00363B9D /* Assets.xcassets */; };
 		F17418482BE952FC00363B9D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F174180E2BE952FB00363B9D /* Assets.xcassets */; };
 		F17418492BE952FC00363B9D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F174180E2BE952FB00363B9D /* Assets.xcassets */; };
+		F17674DE2BED5479007C6302 /* GameViewTouch.xib in Resources */ = {isa = PBXBuildFile; fileRef = F17674DD2BED5479007C6302 /* GameViewTouch.xib */; };
+		F17674DF2BED5479007C6302 /* GameViewTouch.xib in Resources */ = {isa = PBXBuildFile; fileRef = F17674DD2BED5479007C6302 /* GameViewTouch.xib */; };
+		F17674E62BED54E3007C6302 /* GameViewTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = F17674E52BED54E3007C6302 /* GameViewTouch.mm */; };
+		F17674E72BED54E3007C6302 /* GameViewTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = F17674E52BED54E3007C6302 /* GameViewTouch.mm */; };
+		F17674EC2BED5523007C6302 /* GameViewDesktop.xib in Resources */ = {isa = PBXBuildFile; fileRef = F17674E92BED5523007C6302 /* GameViewDesktop.xib */; };
+		F17674F12BED553C007C6302 /* GameViewDesktop.mm in Sources */ = {isa = PBXBuildFile; fileRef = F17674EE2BED553C007C6302 /* GameViewDesktop.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F174180B2BE952F700363B9D /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
-		F174180C2BE952F700363B9D /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
-		F174180D2BE952F700363B9D /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		F174180E2BE952FB00363B9D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F17418132BE952FC00363B9D /* Super Mare Imperium - Derelict.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Super Mare Imperium - Derelict.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F17418162BE952FC00363B9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -52,6 +46,15 @@
 		F17418382BE952FC00363B9D /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		F174183B2BE952FC00363B9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F174183D2BE952FC00363B9D /* Super_Mare_Imperium___Derelict_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Super_Mare_Imperium___Derelict_macOS.entitlements"; sourceTree = "<group>"; };
+		F17674DD2BED5479007C6302 /* GameViewTouch.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GameViewTouch.xib; sourceTree = "<group>"; };
+		F17674E12BED54E2007C6302 /* Super Mare Imperium - Derelict iOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Super Mare Imperium - Derelict iOS-Bridging-Header.h"; sourceTree = "<group>"; };
+		F17674E22BED54E2007C6302 /* Super Mare Imperium - Derelict tvOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Super Mare Imperium - Derelict tvOS-Bridging-Header.h"; sourceTree = "<group>"; };
+		F17674E32BED54E2007C6302 /* Super Mare Imperium - Derelict macOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Super Mare Imperium - Derelict macOS-Bridging-Header.h"; sourceTree = "<group>"; };
+		F17674E42BED54E3007C6302 /* GameViewTouch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewTouch.h; sourceTree = "<group>"; };
+		F17674E52BED54E3007C6302 /* GameViewTouch.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameViewTouch.mm; sourceTree = "<group>"; };
+		F17674E92BED5523007C6302 /* GameViewDesktop.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GameViewDesktop.xib; sourceTree = "<group>"; };
+		F17674ED2BED553C007C6302 /* GameViewDesktop.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewDesktop.h; sourceTree = "<group>"; };
+		F17674EE2BED553C007C6302 /* GameViewDesktop.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameViewDesktop.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,10 +96,16 @@
 		F174180A2BE952F700363B9D /* Super Mare Imperium - Derelict Shared */ = {
 			isa = PBXGroup;
 			children = (
-				F174180B2BE952F700363B9D /* Actions.sks */,
-				F174180C2BE952F700363B9D /* GameScene.sks */,
-				F174180D2BE952F700363B9D /* GameScene.swift */,
 				F174180E2BE952FB00363B9D /* Assets.xcassets */,
+				F17674DD2BED5479007C6302 /* GameViewTouch.xib */,
+				F17674E42BED54E3007C6302 /* GameViewTouch.h */,
+				F17674E52BED54E3007C6302 /* GameViewTouch.mm */,
+				F17674E12BED54E2007C6302 /* Super Mare Imperium - Derelict iOS-Bridging-Header.h */,
+				F17674E22BED54E2007C6302 /* Super Mare Imperium - Derelict tvOS-Bridging-Header.h */,
+				F17674E32BED54E2007C6302 /* Super Mare Imperium - Derelict macOS-Bridging-Header.h */,
+				F17674E92BED5523007C6302 /* GameViewDesktop.xib */,
+				F17674ED2BED553C007C6302 /* GameViewDesktop.h */,
+				F17674EE2BED553C007C6302 /* GameViewDesktop.mm */,
 			);
 			path = "Super Mare Imperium - Derelict Shared";
 			sourceTree = "<group>";
@@ -210,12 +219,15 @@
 				TargetAttributes = {
 					F17418122BE952FC00363B9D = {
 						CreatedOnToolsVersion = 14.2;
+						LastSwiftMigration = 1420;
 					};
 					F17418232BE952FC00363B9D = {
 						CreatedOnToolsVersion = 14.2;
+						LastSwiftMigration = 1420;
 					};
 					F17418332BE952FC00363B9D = {
 						CreatedOnToolsVersion = 14.2;
+						LastSwiftMigration = 1420;
 					};
 				};
 			};
@@ -244,9 +256,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F17418412BE952FC00363B9D /* GameScene.sks in Resources */,
+				F17674DE2BED5479007C6302 /* GameViewTouch.xib in Resources */,
 				F174181C2BE952FC00363B9D /* Main.storyboard in Resources */,
-				F174183E2BE952FC00363B9D /* Actions.sks in Resources */,
 				F174181F2BE952FC00363B9D /* LaunchScreen.storyboard in Resources */,
 				F17418472BE952FC00363B9D /* Assets.xcassets in Resources */,
 			);
@@ -256,9 +267,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F17418422BE952FC00363B9D /* GameScene.sks in Resources */,
+				F17674DF2BED5479007C6302 /* GameViewTouch.xib in Resources */,
 				F174182C2BE952FC00363B9D /* Main.storyboard in Resources */,
-				F174183F2BE952FC00363B9D /* Actions.sks in Resources */,
 				F174182F2BE952FC00363B9D /* LaunchScreen.storyboard in Resources */,
 				F17418482BE952FC00363B9D /* Assets.xcassets in Resources */,
 			);
@@ -269,9 +279,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				F174183C2BE952FC00363B9D /* Main.storyboard in Resources */,
-				F17418432BE952FC00363B9D /* GameScene.sks in Resources */,
+				F17674EC2BED5523007C6302 /* GameViewDesktop.xib in Resources */,
 				F17418492BE952FC00363B9D /* Assets.xcassets in Resources */,
-				F17418402BE952FC00363B9D /* Actions.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,8 +291,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F17418442BE952FC00363B9D /* GameScene.swift in Sources */,
 				F17418192BE952FC00363B9D /* GameViewController.swift in Sources */,
+				F17674E62BED54E3007C6302 /* GameViewTouch.mm in Sources */,
 				F17418172BE952FC00363B9D /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -292,8 +301,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F17418452BE952FC00363B9D /* GameScene.swift in Sources */,
 				F17418292BE952FC00363B9D /* GameViewController.swift in Sources */,
+				F17674E72BED54E3007C6302 /* GameViewTouch.mm in Sources */,
 				F17418272BE952FC00363B9D /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -302,8 +311,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F17418462BE952FC00363B9D /* GameScene.swift in Sources */,
 				F17418392BE952FC00363B9D /* GameViewController.swift in Sources */,
+				F17674F12BED553C007C6302 /* GameViewDesktop.mm in Sources */,
 				F17418372BE952FC00363B9D /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -468,6 +477,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R9WS5X9CG7;
@@ -488,6 +498,8 @@
 				PRODUCT_NAME = "Super Mare Imperium - Derelict";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Super Mare Imperium - Derelict Shared/Super Mare Imperium - Derelict iOS-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -498,6 +510,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R9WS5X9CG7;
@@ -518,6 +531,7 @@
 				PRODUCT_NAME = "Super Mare Imperium - Derelict";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Super Mare Imperium - Derelict Shared/Super Mare Imperium - Derelict iOS-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -529,6 +543,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "tvOS App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R9WS5X9CG7;
@@ -545,6 +560,8 @@
 				PRODUCT_NAME = "Super Mare Imperium - Derelict";
 				SDKROOT = appletvos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Super Mare Imperium - Derelict Shared/Super Mare Imperium - Derelict tvOS-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 16.1;
@@ -556,6 +573,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "tvOS App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R9WS5X9CG7;
@@ -572,6 +590,7 @@
 				PRODUCT_NAME = "Super Mare Imperium - Derelict";
 				SDKROOT = appletvos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Super Mare Imperium - Derelict Shared/Super Mare Imperium - Derelict tvOS-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 16.1;
@@ -584,6 +603,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Super Mare Imperium - Derelict macOS/Super_Mare_Imperium___Derelict_macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -604,6 +624,8 @@
 				PRODUCT_NAME = "Super Mare Imperium - Derelict";
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Super Mare Imperium - Derelict Shared/Super Mare Imperium - Derelict macOS-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -613,6 +635,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Super Mare Imperium - Derelict macOS/Super_Mare_Imperium___Derelict_macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -633,6 +656,7 @@
 				PRODUCT_NAME = "Super Mare Imperium - Derelict";
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Super Mare Imperium - Derelict Shared/Super Mare Imperium - Derelict macOS-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
