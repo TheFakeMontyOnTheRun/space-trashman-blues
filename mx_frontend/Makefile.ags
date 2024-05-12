@@ -89,7 +89,7 @@ CFILES		:=			../../common/src/MainMenu.c \
                 		../../common/src/Common.c \
                 		../../common/src/FixP.c \
                 		../../common/src/MapWithCharKey.c \
-			        ../../common/src/EDirection_Utils.o \
+                		../../common/src/EDirection_Utils.c \
                 		../../common/src/Events.c \
                 		../../common/src/Dungeon.c \
                 		../base3d/src/RendererRasterization.c \
@@ -101,7 +101,7 @@ CFILES		:=			../../common/src/MainMenu.c \
                 		../../common/src/PCMAudio.c \
                 		../../core/src/Derelict.c \
                 		../../core/src/Core.c \
-                		../../common/src/HackingMinigameRules.o \
+                		../../common/src/HackingMinigameRules.c \
                 		../../core/src/Parser.c
 CPPFILES	:=
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
