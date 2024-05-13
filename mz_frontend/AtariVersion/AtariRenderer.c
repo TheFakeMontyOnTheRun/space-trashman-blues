@@ -193,12 +193,13 @@ void writeStr(int16_t _x, int16_t y, const char *text, uint16_t fg, uint16_t bg)
 void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 
 void graphicsFlush(void) {
-    memset(logBase, 0, 32000);
+
     uint8_t *index = &framebuffer[0];
     uint16_t lineOffset = 0;
     uint16_t *words = (uint16_t *) logBase;
 
     for (uint16_t y = 127; y; y--) {
+        memset(logBase + lineOffset, 0, 80);
         for (uint16_t x = 0; x < 128; ++x) {
 
             uint8_t value = *index++;
