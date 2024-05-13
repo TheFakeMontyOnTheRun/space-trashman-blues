@@ -25,6 +25,7 @@
 int puts( const char* str );
 #endif
 
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Engine3D.h"
@@ -34,6 +35,7 @@ int puts( const char* str );
 #include "HackingMinigame.h"
 
 #endif
+
 
 #include "Common.h"
 #include "PackedFileReader.h"
