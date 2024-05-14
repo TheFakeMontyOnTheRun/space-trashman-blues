@@ -112,7 +112,7 @@ void performAction(void) {
     }
 }
 
-void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title, uint8_t colour) {
+void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {
     uint16_t x0 = tx * 8;
     uint16_t x1 = (tx + tw) * 8;
     uint8_t y0 = ty * 8;
@@ -125,13 +125,13 @@ void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *titl
         }
     }
 
-    drawLine(x0, y0, x1, y0, colour);
+    drawLine(x0, y0, x1, y0, 2);
 
-    drawLine(x0, y1, x1, y1, colour);
+    drawLine(x0, y1, x1, y1, 2);
 
-    drawLine(x0, y0, x0, y1, colour);
+    drawLine(x0, y0, x0, y1, 2);
 
-    drawLine(x1, y0, x1, y1, colour);
+    drawLine(x1, y0, x1, y1, 2);
 
     drawTextAt(tx + 1, ty + 1, title, 1);
 }
@@ -153,8 +153,7 @@ drawWindowWithOptions(const uint8_t x,
                    y - 1,
                    dx + 1,
                    dy + 1,
-                   title,
-                   2);
+                   title);
     }
 
     for (c = 0; c < optionsCount; ++c) {
@@ -175,7 +174,7 @@ drawWindowWithOptions(const uint8_t x,
 void
 drawTextWindow(const uint8_t x, const uint8_t y, const uint8_t dx, const uint8_t dy, const char *title,
                const char *content) {
-    drawWindow(x, y, dx, dy, title, 2);
+    drawWindow(x, y, dx, dy, title);
     drawTextAt(x + 1, y + 2, content, 2);
 }
 

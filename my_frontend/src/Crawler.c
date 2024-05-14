@@ -42,8 +42,7 @@ void HUD_refresh(void) {
                    128 / 8,
                    (XRES_FRAMEBUFFER / 8) / 2,
                    (YRES_FRAMEBUFFER / 8) - 17,
-                   "",
-                   2);
+                   "");
 
         writeStrWithLimit(1, YRES_TEXT - 7, "In room", 16, 2, 0);
 
