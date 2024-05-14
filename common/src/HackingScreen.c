@@ -1,7 +1,9 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
+
 #endif
 
 #include <stdio.h>
@@ -22,7 +24,9 @@
 #include "SoundSystem.h"
 #include "HackingMinigameRules.h"
 
+#ifdef PAGE_FLIP_ANIMATION
 int wasSmoothMovementPreviouslyEnabled;
+#endif
 
 const char *functionNames[5] = {
         "???",
@@ -38,9 +42,10 @@ void HackingScreen_initStateCallback(enum EGameMenuState tag) {
     cursorPosition = 1;
 
     initHackingMinigame();
-
+#ifdef PAGE_FLIP_ANIMATION
     wasSmoothMovementPreviouslyEnabled = enableSmoothMovement;
     enableSmoothMovement = FALSE;
+#endif
 }
 
 void HackingScreen_repaintCallback(void) {
@@ -127,13 +132,17 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
             if (cursorPosition > 0) {
                 cursorPosition--;
             }
+#ifdef PAGE_FLIP_ANIMATION
             turnTarget = turnStep;
+#endif
             break;
         case kCommandRight:
             if (cursorPosition < 2) {
                 cursorPosition++;
             }
+#ifdef PAGE_FLIP_ANIMATION
             turnTarget = turnStep;
+#endif
             break;
         case kCommandBack:
         case kCommandDown:
@@ -154,5 +163,7 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void HackingScreen_unloadStateCallback(enum EGameMenuState newState) {
+#ifdef PAGE_FLIP_ANIMATION
     enableSmoothMovement = wasSmoothMovementPreviouslyEnabled;
+#endif
 }
