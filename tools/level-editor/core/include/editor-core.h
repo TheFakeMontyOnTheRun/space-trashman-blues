@@ -38,11 +38,13 @@ namespace editor {
     uint8_t connections[6];
     std::string name;
   public:
-    void createArea(uint8_t x0, uint8_t y0, uint8_t z0, uint8_t x1, uint8_t y1, uint8_t z1);
+    uint32_t createArea(uint8_t x0, uint8_t y0, uint8_t z0, uint8_t x1, uint8_t y1, uint8_t z1);
     uint8_t getConnection(int slot);
     void setConnetion(int slot, uint8_t connection);
     void setName(const std::string& name);
     std::string getName();
+    std::vector<uint32_t> getAreaIds();
+    const Area& getArea(const uint32_t id);
 
 
    friend std::string to_string(const Map& map) {

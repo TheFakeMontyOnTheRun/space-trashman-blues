@@ -21,7 +21,16 @@ int main(int argc, char** argv) {
 
     if ("q" == input || "quit" == input) {
       quit = true;
-    } else if ("set-connection" == input) {
+    } else if ("l" == input || "list" == input) {
+      std::vector<uint32_t> ids = map.getAreaIds();
+      std::vector<uint32_t>::iterator it = ids.begin();
+      std::vector<uint32_t>::iterator end = ids.end();
+
+      while(it != end) {
+	std::cout << *it << ")" << std::endl;
+	++it;
+      }
+    } else if ("sc" == input || "set-connection" == input) {
       int slot;
       uint8_t connection;
       std::cin >> slot;
@@ -29,7 +38,7 @@ int main(int argc, char** argv) {
       
       map.setConnetion(slot, connection);
       std::cout << "connecting to " << connection << " over " << slot << std::endl;
-    } else if ("create-area" == input) {
+    } else if ("ca" == input || "create-area" == input) {
       int x0, dx, y0, dy, z0, dz;
 
       std::cin >> x0;
