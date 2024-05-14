@@ -52,7 +52,8 @@ void HackingScreen_repaintCallback(void) {
         uint8_t disk;
 
         if (pin != 0) {
-            drawLine(88 * pin, 40, 88 * pin, 80, 2);
+            uint8_t pinX = (10 * (pin) ) * 8;
+            drawLine(pinX, 40, pinX, 80, 2);
         }
 
         for (disk = 0; disk < 5; ++disk) {
@@ -94,27 +95,34 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long data) {
     }
 
     switch (cmd) {
-        case 'q':
-        case 'a':
+        case kCommandLeft:
             if (cursorPosition > 0) {
                 cursorPosition--;
+                firstFrameOnCurrentState = 1;
             }
+#ifdef PAGE_FLIP_ANIMATION
+            turnTarget = turnStep;
+#endif
             break;
-        case 'e':
-        case 'd':
+        case kCommandRight:
             if (cursorPosition < 2) {
                 cursorPosition++;
+                firstFrameOnCurrentState = 1;
             }
+#ifdef PAGE_FLIP_ANIMATION
+            turnTarget = turnStep;
+#endif
             break;
-        case 's':
-            return -1;
-        case 'w':
-            clearScreen();
+        case kCommandBack:
+        case kCommandDown:
+            return kBackToGame;
+        case kCommandFire1:
             if (holdingDisk == 0xFF) {
                 pickDisk(cursorPosition);
             } else {
                 dropDisk(cursorPosition);
             }
+            firstFrameOnCurrentState = 1;
             break;
 
         default:
