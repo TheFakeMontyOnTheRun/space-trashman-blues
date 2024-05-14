@@ -10,7 +10,7 @@ CFLAGS = -std=c99 -c -m68000 -s -fexpensive-optimizations -fomit-frame-pointer -
 MENU_TARGET=game.prg
 
 MENU_OBJ= \
-    Engine3D/demo.o \
+    Engine3D/Engine3D.o \
     AtariVersion/AtariRenderer.o \
     ../core/src/Core.o \
     ../core/src/Derelict.o \
