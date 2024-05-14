@@ -1,44 +1,50 @@
 <!doctype html>
 <html lang="en-us">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8"/>
 
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
 
-    <link rel="apple-touch-icon" href="pwa/apple/single-page-icon.png">
+    <link rel="manifest" href="manifest.json"/>
+
+    <link rel="icon" href="favicon.ico" />
+
+    <link rel="apple-touch-icon" href="pwa/apple/single-page-icon.png"/>
+
+    <link rel="apple-touch-icon-precomposed" href="pwa/apple/single-page-icon-precomposed.png"/>
 
     <!-- iPhone Xs Max (1242px x 2688px) -->
-    <link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" href="pwa/apple/iphonexsmax_splash.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" href="pwa/apple/iphonexsmax_splash.png"/>
 
     <!-- iPhone Xr (828px x 1792px) -->
-    <link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" href="pwa/apple/iphonexr_splash.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" href="pwa/apple/iphonexr_splash.png"/>
 
     <!-- iPhone X, Xs (1125px x 2436px) -->
-    <link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="pwa/apple/iphonex_splash.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="pwa/apple/iphonex_splash.png"/>
 
     <!-- iPhone 8 Plus, 7 Plus, 6s Plus, 6 Plus (1242px x 2208px) -->
-    <link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)" href="pwa/apple/iphoneplus_splash.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)" href="pwa/apple/iphoneplus_splash.png"/>
 
     <!-- iPhone 8, 7, 6s, 6 (750px x 1334px) -->
-    <link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="pwa/apple/iphone6_splash.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="pwa/apple/iphone6_splash.png"/>
 
     <!-- iPad Pro 12.9" (2048px x 2732px) -->
-    <link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" href="pwa/apple/ipadpro2_splash.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" href="pwa/apple/ipadpro2_splash.png"/>
 
     <!-- iPad Pro 11” (1668px x 2388px) -->
-    <link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" href="pwa/apple/ipadpro3_splash.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" href="pwa/apple/ipadpro3_splash.png"/>
 
     <!-- iPad Pro 10.5" (1668px x 2224px) -->
-    <link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" href="pwa/apple/ipadpro1_splash.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" href="pwa/apple/ipadpro1_splash.png"/>
 
     <!-- iPad Mini, Air (1536px x 2048px) -->
-    <link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" href="pwa/apple/ipad_splash.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" href="pwa/apple/ipad_splash.png"/>
 
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
 
-    <meta name="apple-mobile-web-app-title" content="Derelict">
+    <meta name="apple-mobile-web-app-title" content="Derelict"/>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Sub Mare Imperium: Derelict (software renderer)</title>
     <style>
       .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
@@ -191,6 +197,11 @@
           if (text) Module.printErr('[post-exception status] ' + text);
         };
       };
+
+
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("service-worker.js");
+      }
     </script>
     {{{ SCRIPT }}}
   </body>
