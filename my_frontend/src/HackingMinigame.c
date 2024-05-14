@@ -25,7 +25,7 @@ const char *functionNames[5] = {
 void HackingScreen_initStateCallback(enum EGameMenuState tag) {
     (void)tag;
     cursorPosition = 1;
-    needs3dRefresh = 0;
+    needsToRedrawVisibleMeshes = 0;
 
     initHackingMinigame();
 }
@@ -35,6 +35,8 @@ void HackingScreen_repaintCallback(void) {
     uint8_t holdingDisk;
 
     if (firstFrameOnCurrentState) {
+        clearScreen();
+        needsToRedrawVisibleMeshes = 0;
         drawTextAt(1, 1, "Stack trace:", 1);
         drawTextAt((12 * 0), 11, " CPU0 ", 1);
         drawTextAt((12 * 1), 11, " CPU1 ", 1);

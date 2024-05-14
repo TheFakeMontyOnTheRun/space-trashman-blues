@@ -27,7 +27,7 @@ extern int8_t cameraRotation;
 extern uint8_t enteredFrom;
 extern uint8_t playerLocation;
 
-uint8_t needs3dRefresh;
+uint8_t needsToRedrawVisibleMeshes;
 
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
 uint8_t roomTransitionAnimationStep = 0;
@@ -35,8 +35,8 @@ uint8_t roomTransitionAnimationStep = 0;
 
 void HUD_refresh(void) {
 
-    if (redrawStatus) {
-        redrawStatus = 0;
+    if (needsToRedrawHUD) {
+        needsToRedrawHUD = 0;
 
         drawWindow(0,
                    128 / 8,
@@ -84,7 +84,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
 
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
     if (roomTransitionAnimationStep) {
-        needs3dRefresh = 1;
+        needsToRedrawVisibleMeshes = 1;
         return kResumeCurrentState;
     }
 #endif
@@ -120,10 +120,10 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
             goto handle_directions;
     }
     updateMapItems();
-    needs3dRefresh = 1;
+    needsToRedrawVisibleMeshes = 1;
 
     if (!waitForKey) {
-        redrawStatus = 1;
+        needsToRedrawHUD = 1;
     }
 
     return kResumeCurrentState;
@@ -152,7 +152,7 @@ handle_directions:
         case kCommandNone:
             return kResumeCurrentState;
     }
-    needs3dRefresh = 1;
+    needsToRedrawVisibleMeshes = 1;
     cameraRotation = getPlayerDirection();
     pos = getPlayerPosition();
 
@@ -211,7 +211,7 @@ void Crawler_repaintCallback(void) {
 
     if (firstFrameOnCurrentState) {
         clearScreen();
-        redrawMap = redrawStatus = 1;
+        redrawMap = needsToRedrawHUD = 1;
         HUD_initialPaint();
     }
 
@@ -219,7 +219,7 @@ void Crawler_repaintCallback(void) {
 
     drawMap();
 
-    if (!needs3dRefresh) {
+    if (!needsToRedrawVisibleMeshes) {
         return;
     }
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
@@ -229,7 +229,7 @@ void Crawler_repaintCallback(void) {
         uint8_t val = 95 + (MAP_SIZE_Y - y);
 
         if (roomTransitionAnimationStep == 0) {
-            redrawMap = redrawStatus = needs3dRefresh = 1;
+            redrawMap = needsToRedrawHUD = needsToRedrawVisibleMeshes = 1;
             clearGraphics();
             renderScene();
             return;
@@ -261,11 +261,11 @@ void Crawler_initStateCallback(enum EGameMenuState tag) {
     setErrorHandlerCallback(showMessage);
     setLoggerDelegate(showMessage);
     initMap();
-    needs3dRefresh = 1;
+    needsToRedrawVisibleMeshes = 1;
 }
 
 void Crawler_unloadStateCallback(enum EGameMenuState newState) {
     (void)newState;
-    needs3dRefresh = 0;
+    needsToRedrawVisibleMeshes = 0;
 }
 

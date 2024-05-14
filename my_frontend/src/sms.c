@@ -38,7 +38,7 @@ void initHW(int argc, char **argv) {
     initTMS9918();
     initSN76489();
     cooldown = COOLDOWN_MAX;
-    needs3dRefresh = 0;
+    needsToRedrawVisibleMeshes = 0;
 }
 
 void handleSystemEvents(void) {}
@@ -100,7 +100,7 @@ enum ECommand getInput(void) {
             if (waitForKey) {
                 waitForKey = 0;
                 firstFrameOnCurrentState = 1;
-                needs3dRefresh = 1;
+                needsToRedrawVisibleMeshes = 1;
                 return kCommandNone;
             }
 
@@ -129,8 +129,8 @@ void startFrame(int x, int y, int width, int height) {
 }
 
 void endFrame(void) {
-    if (needs3dRefresh) {
-        needs3dRefresh = 0;
+    if (needsToRedrawVisibleMeshes) {
+        needsToRedrawVisibleMeshes = 0;
         flush3DBuffer();
     }
 }

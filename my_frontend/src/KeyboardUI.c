@@ -51,7 +51,7 @@ void HUD_initialPaint(void) {
             6,
             0xFF);
 
-    redrawStatus = 1;
+    needsToRedrawHUD = 1;
     HUD_refresh();
 }
 

@@ -27,7 +27,7 @@ void initHW(int argc, char **argv) {
     initKeyboardUI();
     clg();
     updateDirection = 1;
-    needs3dRefresh = 0;
+    needsToRedrawVisibleMeshes = 0;
 }
 
 void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {

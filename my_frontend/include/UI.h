@@ -43,6 +43,6 @@ extern int8_t cursorPosition;
 
 extern uint8_t redrawMap;
 
-extern uint8_t redrawStatus;
+extern uint8_t needsToRedrawHUD;
 
 #endif //DERELICT8_MENU_H

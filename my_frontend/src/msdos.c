@@ -350,7 +350,7 @@ enum ECommand getInput(void) {
             if (waitForKey) {
                 waitForKey = 0;
                 firstFrameOnCurrentState = 1;
-                needs3dRefresh = 1;
+                needsToRedrawVisibleMeshes = 1;
                 return kCommandNone;
             }
 
@@ -427,7 +427,7 @@ void endFrame(void) {
     uint16_t baseOffset = 0;
     uint16_t index = 0;
 
-    if (!needs3dRefresh) {
+    if (!needsToRedrawVisibleMeshes) {
         return;
     }
 

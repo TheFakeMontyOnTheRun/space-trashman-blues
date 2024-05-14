@@ -35,7 +35,7 @@ void initHW(int argc, char **argv) {
     (void)argv;
     initAY38910();
     initKeyboardUI();
-    needs3dRefresh = 0;
+    needsToRedrawVisibleMeshes = 0;
 }
 
 void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
@@ -168,7 +168,7 @@ enum ECommand getInput(void) {
             if (waitForKey) {
                 waitForKey = 0;
                 firstFrameOnCurrentState = 1;
-                needs3dRefresh = 1;
+                needsToRedrawVisibleMeshes = 1;
                 return kCommandNone;
             }
 
@@ -203,7 +203,7 @@ void startFrame(int x, int y, int width, int height) {
 }
 
 void endFrame(void) {
-    if (needs3dRefresh) {
+    if (needsToRedrawVisibleMeshes) {
         for (uint8_t y = 0; y < BUFFER_SIZEY; ++y) {
             uint8_t *line = (unsigned char *) 0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048);
             memcpy(line, buffer + (y * BUFFER_SIZEX), BUFFER_SIZEX);

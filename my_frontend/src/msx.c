@@ -24,7 +24,7 @@ void initHW(int argc, char **argv) {
     initTMS9918();
     initAY38910();
     initKeyboardUI();
-    needs3dRefresh = 0;
+    needsToRedrawVisibleMeshes = 0;
 }
 
 void handleSystemEvents(void) {}
@@ -56,7 +56,7 @@ enum ECommand getInput(void) {
             if (waitForKey) {
                 waitForKey = 0;
                 firstFrameOnCurrentState = 1;
-                needs3dRefresh = 1;
+                needsToRedrawVisibleMeshes = 1;
                 return kCommandNone;
             }
             return kCommandFire1;
@@ -83,7 +83,7 @@ void startFrame(int x, int y, int width, int height) {
 }
 
 void endFrame(void) {
-    if (needs3dRefresh) {
+    if (needsToRedrawVisibleMeshes) {
         flush3DBuffer();
     }
 }

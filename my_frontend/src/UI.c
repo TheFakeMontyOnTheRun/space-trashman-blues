@@ -22,7 +22,7 @@ uint8_t waitForKey = 0;
 
 uint8_t redrawMap;
 
-uint8_t redrawStatus;
+uint8_t needsToRedrawHUD;
 
 void drawGraphic(const uint8_t *graphic) {
     const uint8_t *ptr = graphic;

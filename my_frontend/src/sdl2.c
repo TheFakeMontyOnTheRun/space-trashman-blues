@@ -138,7 +138,7 @@ enum ECommand getInput(void) {
                     if (waitForKey) {
                         waitForKey = 0;
                         firstFrameOnCurrentState = 1;
-                        needs3dRefresh = 1;
+                        needsToRedrawVisibleMeshes = 1;
                         return kCommandNone;
                     }
                     return kCommandFire1;
@@ -343,7 +343,7 @@ void startFrame(int x, int y, int width, int height) {
 }
 
 void endFrame(void) {
-    if (needs3dRefresh) {
+    if (needsToRedrawVisibleMeshes) {
         if (updateDirection) {
             updateDirection = 0;
             switch (getPlayerDirection()) {
