@@ -235,3 +235,7 @@ derelict.tap
 newtrigger
 xcschememanagement.plist
 out.ram
+mx_frontend/index.data
+mx_frontend/index.html
+mx_frontend/index.js
+mx_frontend/index.wasm
