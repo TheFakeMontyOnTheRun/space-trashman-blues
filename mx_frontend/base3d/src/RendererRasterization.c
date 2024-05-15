@@ -1751,7 +1751,7 @@ void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, FramebufferPixel
 
         if (x0 == x1 && y0 == y1) break;
 
-        framebuffer[(x0 * XRES_FRAMEBUFFER) + y0] = colour;
+        framebuffer[(y0 * XRES_FRAMEBUFFER) + x0] = colour;
 
         e2 = err;
         if (e2 > -dx) {
