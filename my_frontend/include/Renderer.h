@@ -55,6 +55,8 @@ struct CellPattern {
     uint8_t blockMovement: 1;
 };
 
+uint8_t getPaletteEntry(uint32_t colour);
+
 void clearGraphics(void);
 
 void clearTextScreen(void);

@@ -336,3 +336,12 @@ void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) 
         }
     }
 }
+
+uint8_t getPaletteEntry(const uint32_t origin) {
+
+    if (!(origin & 0xFF000000)) {
+        return 0;
+    }
+
+    return (origin - 0xFF000000) % 3;
+}
