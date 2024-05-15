@@ -139,8 +139,8 @@ void drawTextAtWithMarginWithFiltering(const int _x, const int _y, int margin,
     }
 
     size_t len = strlen(text);
-    int32_t dstX = (_x - 1) * 8;
-    int32_t dstY = (_y - 1) * 8;
+    int32_t dstX = (_x) * 8;
+    int32_t dstY = (_y) * 8;
     size_t c;
     uint32_t ascii;
     float line;

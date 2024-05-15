@@ -356,8 +356,8 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
                                        const uint8_t colour, char charToReplaceHifenWith) {
 
     size_t len = strlen(text);
-    int32_t dstX = (x - 1) * 8;
-    int32_t dstY = (y - 1) * 8;
+    int32_t dstX = (x) * 8;
+    int32_t dstY = (y) * 8;
     size_t c;
     uint32_t ascii;
     float line;
@@ -397,8 +397,8 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
     
     shortStr[1] = 0;
 
-    dstX = (x - 1) * 8;
-    dstY = (y + 1) * 9;
+    dstX = (x + 1) * 8;
+    dstY = (y + 2) * 9;
 
     r = (colour & 0xFF);
     g = ((colour & 0x00FF00) >> 8);

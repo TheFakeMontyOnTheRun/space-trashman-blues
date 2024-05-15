@@ -59,8 +59,8 @@ drawWindowWithOptions(const int x,
                      FALSE);
         }
 
-        drawTextAt(x + 1,
-                   y + 2 + c,
+        drawTextAt(x,
+                   y + 1 + c,
                    &options[c][0],
                    isCursor ? getPaletteEntry(0xFFFFFFFF) : getPaletteEntry(0xFF000000));
     }
@@ -75,7 +75,7 @@ drawWindow(const int x, const int y, const unsigned int dx, const unsigned int d
     fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
 
     if (title != NULL) {
-        drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
+        drawTextAt(x, y - 1, title, getPaletteEntry(0xFFFFFFFF));
     }
 }
 

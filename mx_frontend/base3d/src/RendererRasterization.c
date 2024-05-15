@@ -1671,8 +1671,8 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
                                        const FramebufferPixelFormat colour, char charToReplaceHifenWith) {
 
     size_t len = strlen(text);
-    int32_t dstX = (x - 1) * 8;
-    int32_t dstY = (y - 1) * 8;
+    int32_t dstX = x * 8;
+    int32_t dstY = y * 8;
     FramebufferPixelFormat *dstBuffer = &framebuffer[0];
     size_t fontWidth = defaultFont->width;
     BitmapPixelFormat *fontPixelData = defaultFont->data;
