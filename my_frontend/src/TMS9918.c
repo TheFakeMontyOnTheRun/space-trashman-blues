@@ -8,6 +8,53 @@
 
 #include "font.h"
 
+char playerPositionSprite[4][8]={
+        {
+                0b00011000,
+                0b00111100,
+                0b01111110,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b00000100,
+                0b00000110,
+                0b00000111,
+                0b00000111,
+                0b00000110,
+                0b00000100,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b01111110,
+                0b00111100,
+                0b00011000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b00100000,
+                0b01100000,
+                0b11100000,
+                0b11100000,
+                0b01100000,
+                0b00100000,
+                0b00000000,
+                0b00000000
+        },
+};
+
+extern int8_t cameraX;
+extern int8_t cameraZ;
+extern enum EDirection playerDirection;
+
 #define BUFFER_SIZEX 16
 #define BUFFER_SIZEY 128
 #define BUFFER_RESX 128
@@ -31,6 +78,19 @@ void flush3DBuffer(void) {
         vwrite(ptr, (y << 5), 16 * 8);
         ptr += 8 * 16;
     }
+
+    vdp_set_sprite_mode(sprite_default);
+
+    vdp_set_sprite_8(0, playerPositionSprite[0]);
+    vdp_set_sprite_8(1, playerPositionSprite[1]);
+    vdp_set_sprite_8(2, playerPositionSprite[2]);
+    vdp_set_sprite_8(3, playerPositionSprite[3]);
+
+    vdp_put_sprite_8(0,
+                     (XRES_FRAMEBUFFER / 2) + (cameraX * 3) + 10,
+                     (cameraZ * 3) + 10,
+                     playerDirection,
+                     15);
 
     clearGraphics();
 }
