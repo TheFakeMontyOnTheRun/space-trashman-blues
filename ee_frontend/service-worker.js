@@ -1,4 +1,4 @@
-const cacheName = "sub-mare-imperium-derelict-sw-v1";
+const cacheName = "sub-mare-imperium-derelict-webgl-v1";
 
 const appShellFiles = [
     "/",
