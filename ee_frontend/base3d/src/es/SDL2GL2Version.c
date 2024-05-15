@@ -28,6 +28,20 @@
 
 #include <stdio.h>
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten/html5.h>
+
+void enterFullScreenMode(void) {
+    EmscriptenFullscreenStrategy s;
+    memset(&s, 0, sizeof(s));
+    s.scaleMode = EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
+    s.canvasResolutionScaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_NONE;
+    s.filteringMode = EMSCRIPTEN_FULLSCREEN_FILTERING_DEFAULT;
+    emscripten_enter_soft_fullscreen(0, &s);
+}
+#endif
+
+
 #define ANGLE_TURN_THRESHOLD 40
 #define ANGLE_TURN_STEP 5
 
@@ -43,6 +57,10 @@ const int height = 480;
 
 SDL_Window *window;
 SDL_GLContext context;
+
+time_t lastMouseButtonTime = 0;
+time_t lastClickTime = 0;
+uint8_t sucessiveClicks = 0;
 
 void graphicsInit(void) {
 
@@ -82,6 +100,10 @@ void graphicsInit(void) {
     }
 
     initGL();
+
+#ifdef __EMSCRIPTEN__
+    enterFullScreenMode ();
+#endif
 }
 
 void handleSystemEvents(void) {
@@ -95,6 +117,64 @@ void handleSystemEvents(void) {
             return;
         }
 #endif
+
+        if (event.type == SDL_MOUSEBUTTONDOWN) {
+            lastMouseButtonTime = SDL_GetTicks();
+            time_t timeDiff = (SDL_GetTicks() - lastClickTime);
+
+            if (timeDiff > 500 ) {
+                lastClickTime = 0;
+                sucessiveClicks = 0;
+            }
+
+            return;
+        }
+
+        if (event.type == SDL_MOUSEBUTTONUP) {
+            time_t timeDiff = (SDL_GetTicks() - lastMouseButtonTime);
+            if (timeDiff >= 500) {
+                sucessiveClicks = 0;
+                /* long press */
+                mBufferedCommand = kCommandFire2;
+                needsToRedrawVisibleMeshes = TRUE;
+                visibilityCached = FALSE;
+
+            } else {
+                sucessiveClicks++;
+
+                if (sucessiveClicks >= 2) {
+                    mBufferedCommand = kCommandFire1;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    visibilityCached = FALSE;
+
+                } else if (sucessiveClicks == 1) {
+
+                    if ( ((height / 3) > event.button.y)) {
+                        mBufferedCommand = kCommandUp;
+                    }
+
+                    if ( (event.button.y > (2* height / 3)) ) {
+                        mBufferedCommand = kCommandDown;
+                    }
+
+                    if ( ((height / 3) < event.button.y) && (event.button.y < (2* height / 3)) ) {
+                        if ( event.button.x  < (width / 2) ) {
+                            turning = 1;
+                            leanX = -ANGLE_TURN_STEP;
+                        } else {
+                            turning = 1;
+                            leanX = ANGLE_TURN_STEP;
+                        }
+                    }
+
+                    needsToRedrawVisibleMeshes = TRUE;
+                    visibilityCached = FALSE;
+                }
+            }
+            lastClickTime = SDL_GetTicks();
+            lastMouseButtonTime = 0;
+            return;
+        }
 
         if (event.type == SDL_KEYUP) {
             needsToRedrawVisibleMeshes = TRUE;
