@@ -2,7 +2,11 @@
    Created by Daniel Monteiro on 2021-11-01.
 */
 
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
+#endif
 #include <string.h>
 
 #include "Common.h"
@@ -13,6 +17,10 @@
 #include "HackingMinigame.h"
 #include "HackingMinigameRules.h"
 #include "Engine.h"
+
+#ifdef PAGE_FLIP_ANIMATION
+int wasSmoothMovementPreviouslyEnabled;
+#endif
 
 const char *functionNames[5] = {
         "???",
@@ -37,14 +45,14 @@ void HackingScreen_repaintCallback(void) {
     if (firstFrameOnCurrentState) {
         clearScreen();
         needsToRedrawVisibleMeshes = 0;
-        drawTextAt(1, 1, "Stack trace:", 1);
-        drawTextAt((12 * 0), 11, " CPU0 ", 1);
-        drawTextAt((12 * 1), 11, " CPU1 ", 1);
-        drawTextAt((12 * 2), 11, " CPU2 ", 1);
+        drawTextAt(1, 1, "Stack trace:", getPaletteEntry(0xFF999999));
+        drawTextAt((12 * 0), 11, " CPU0 ", getPaletteEntry(0xFF999999));
+        drawTextAt((12 * 1), 11, " CPU1 ", getPaletteEntry(0xFF999999));
+        drawTextAt((12 * 2), 11, " CPU2 ", getPaletteEntry(0xFF999999));
     }
 
-    drawTextAt((12 * cursorPosition), 11, ">", 1);
-    drawTextAt((12 * cursorPosition) + 5, 11, "<", 1);
+    drawTextAt((12 * cursorPosition), 11, ">", getPaletteEntry(0xFF999999));
+    drawTextAt((12 * cursorPosition) + 5, 11, "<", getPaletteEntry(0xFF999999));
 
     drawLine(0, 80, XRES_FRAMEBUFFER - 1, 80, 2);
 
@@ -66,24 +74,27 @@ void HackingScreen_repaintCallback(void) {
             if (funcName) {
                 drawTextAt(
                         10 * (pin) + (pin == 0 ? 0 : 1), 4 + (4 - disk),
-                        funcName, 1);
+                        funcName, getPaletteEntry(0xFF999999));
             }
         }
     }
 
-    drawTextAt(1, 2, "Pointer:", 1);
+    drawTextAt(1, 2, "Pointer:", getPaletteEntry(0xFF999999));
 
     holdingDisk = getHoldingDisk();
 
     if (holdingDisk != 0xFF) {
-        drawTextAt(19, 2, functionNames[holdingDisk], 1);
+        drawTextAt(19, 2, functionNames[holdingDisk], getPaletteEntry(0xFF999999));
     } else {
-        drawTextAt(19, 2, "NULL", 1);
+        drawTextAt(19, 2, "NULL", getPaletteEntry(0xFF999999));
     }
 }
 
 void HackingScreen_unloadStateCallback(enum EGameMenuState newState) {
     (void)newState;
+#ifdef PAGE_FLIP_ANIMATION
+    enableSmoothMovement = wasSmoothMovementPreviouslyEnabled;
+#endif
 }
 
 enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long data) {
