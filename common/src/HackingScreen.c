@@ -1,14 +1,11 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
-
 #endif
-
-#include <stdio.h>
 #include <string.h>
-#include <assert.h>
+
+#include <string.h>
 
 #include "Common.h"
 #include "Enums.h"
@@ -37,78 +34,52 @@ const char *functionNames[5] = {
 };
 
 void HackingScreen_initStateCallback(enum EGameMenuState tag) {
-
-    /* The middle pin */
+    (void)tag;
     cursorPosition = 1;
+    needsToRedrawVisibleMeshes = 0;
 
     initHackingMinigame();
-#ifdef PAGE_FLIP_ANIMATION
-    wasSmoothMovementPreviouslyEnabled = enableSmoothMovement;
-    enableSmoothMovement = FALSE;
-#endif
 }
 
 void HackingScreen_repaintCallback(void) {
-    uint8_t isSelected;
-    int pin;
-    int pinPosition = 0;
+    uint8_t pin;
     uint8_t holdingDisk;
-    drawWindow(1, 1, XRES_FRAMEBUFFER / 8, 15, "Disassembly: CONTROLLER.PRG (stack)");
 
-#ifndef AGS
-    drawTextAt(6 + (12 * 0), 11, "CPU0",
-               cursorPosition == 0 ? getPaletteEntry(0xFF999999) : getPaletteEntry(0xFF000000));
-    drawTextAt(6 + (12 * 1), 11, "CPU1",
-               cursorPosition == 1 ? getPaletteEntry(0xFF999999) : getPaletteEntry(0xFF000000));
-    drawTextAt(6 + (12 * 2), 11, "CPU2",
-               cursorPosition == 2 ? getPaletteEntry(0xFF999999) : getPaletteEntry(0xFF000000));
+    if (firstFrameOnCurrentState) {
+        clearScreen();
+        needsToRedrawVisibleMeshes = 0;
+        drawTextAt(1, 1, "Stack trace:", getPaletteEntry(0xFF999999));
+        drawTextAt((12 * 0), 11, " CPU0 ", getPaletteEntry(0xFF999999));
+        drawTextAt((12 * 1), 11, " CPU1 ", getPaletteEntry(0xFF999999));
+        drawTextAt((12 * 2), 11, " CPU2 ", getPaletteEntry(0xFF999999));
+    }
 
-    for (pin = 0; pin < 3; ++pin)
-#else
-        pin = cursorPosition;
-#endif
-    {
-        int disk;
-        int isCursorOnThisPin = cursorPosition == pin;
+    drawTextAt((12 * cursorPosition), 11, ">", getPaletteEntry(0xFF999999));
+    drawTextAt((12 * cursorPosition) + 5, 11, "<", getPaletteEntry(0xFF999999));
 
-#ifndef AGS
-        pinPosition = pin;
-#else
-        pinPosition = 0;
+    for (pin = 0; pin < 3; ++pin) {
+        uint8_t disk;
 
-        char buffer[8];
-        sprintf(buffer, "CPU%d", cursorPosition);
-        drawTextAt( 6 + (12), 11, buffer, 128);
-#endif
+        if (pin != 0) {
+            uint8_t pinX = (10 * (pin) ) * 8;
+        }
 
         for (disk = 0; disk < 5; ++disk) {
 
-            int diskIndex = getPositionForPin(pin, disk);
-            const char *funcName = (disk >= getDisksForPin(pin)) ? NULL : functionNames[diskIndex];
+            uint8_t diskIndex = getPositionForPin(pin, disk);
 
-            if (isCursorOnThisPin) {
-                isSelected = getPaletteEntry(0xFF999999);
-            } else if (diskIndex == 3) {
-                isSelected = getPaletteEntry(0xFF444444);
-            } else {
-                isSelected = 0;
-            }
-
-            if (isAccessToSafeGranted()) {
-                isSelected = getPaletteEntry(0xFF00AA00);
-            }
-
-            drawTextAt(13 * (pinPosition) + 1, 4 + (5 - disk), "|", isSelected);
+            const char *funcName = (disk >= getDisksForPin(pin)) ? NULL
+                                                                 : functionNames[diskIndex];
 
             if (funcName) {
-                drawTextAt(13 * (pinPosition) + 2, 4 + (5 - disk), funcName, isSelected);
+                drawTextAt(
+                        10 * (pin) + (pin == 0 ? 0 : 1), 4 + (4 - disk),
+                        funcName, getPaletteEntry(0xFF999999));
             }
-
-            drawTextAt(13 * (pinPosition) + 1, 10, "-------------", isSelected);
         }
     }
 
-    drawTextAt(1, 2, "register pointer:", getPaletteEntry(0xFF000000));
+    drawTextAt(1, 2, "Pointer:", getPaletteEntry(0xFF999999));
 
     holdingDisk = getHoldingDisk();
 
@@ -119,8 +90,8 @@ void HackingScreen_repaintCallback(void) {
     }
 }
 
-enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
-
+enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long data) {
+    (void)data;
     uint8_t holdingDisk = getHoldingDisk();
 
     if (isHackingMinigameCompleted()) {
@@ -131,6 +102,7 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
         case kCommandLeft:
             if (cursorPosition > 0) {
                 cursorPosition--;
+                firstFrameOnCurrentState = 1;
             }
 #ifdef PAGE_FLIP_ANIMATION
             turnTarget = turnStep;
@@ -139,6 +111,7 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
         case kCommandRight:
             if (cursorPosition < 2) {
                 cursorPosition++;
+                firstFrameOnCurrentState = 1;
             }
 #ifdef PAGE_FLIP_ANIMATION
             turnTarget = turnStep;
@@ -153,6 +126,7 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
             } else {
                 dropDisk(cursorPosition);
             }
+            firstFrameOnCurrentState = 1;
             break;
 
         default:
@@ -163,6 +137,7 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long delta) {
 }
 
 void HackingScreen_unloadStateCallback(enum EGameMenuState newState) {
+    (void)newState;
 #ifdef PAGE_FLIP_ANIMATION
     enableSmoothMovement = wasSmoothMovementPreviouslyEnabled;
 #endif
