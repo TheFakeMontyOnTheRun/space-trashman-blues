@@ -129,18 +129,11 @@ void nextItemInRoom(void) {
 }
 
 void interactWithItemInRoom(void) {
-    struct Item *item = NULL;
-    struct Item *itemToPick = NULL;
-
-    if (roomItem != NULL) {
-        itemToPick = getItem(roomItem->item);
-        if (itemToPick != NULL) {
-            if (focusedItem != NULL) {
-                item = getItem(focusedItem->item);
-                if (item != NULL && item->useWithCallback) {
-                    item->useWithCallback(item, itemToPick);
-                }
-            }
+    if (roomItem && focusedItem) {
+        struct Item *itemToPick = getItem(roomItem->item);
+        struct Item *item = getItem(focusedItem->item);
+        if (itemToPick && item && item->useWithCallback) {
+            item->useWithCallback(item, itemToPick);
         }
     }
 }

@@ -34,43 +34,43 @@ uint8_t roomTransitionAnimationStep = 0;
 #endif
 
 void HUD_refresh(void) {
+    if (!needsToRedrawHUD) {
+        return;
+    }
 
-    if (needsToRedrawHUD) {
-        needsToRedrawHUD = 0;
+    needsToRedrawHUD = 0;
 
-        drawWindow(0,
-                   128 / 8,
-                   (XRES_FRAMEBUFFER / 8) / 2,
-                   (YRES_FRAMEBUFFER / 8) - 17,
-                   "");
+    drawWindow(0,
+               128 / 8,
+               (XRES_FRAMEBUFFER / 8) / 2,
+               (YRES_FRAMEBUFFER / 8) - 17,
+               "");
 
-        writeStrWithLimit(1, YRES_TEXT - 7, "In room", 16, 2, 0);
+    writeStrWithLimit(1, YRES_TEXT - 7, "In room", 16, 2, 0);
+    writeStrWithLimit(1, YRES_TEXT - 4, "In hand", 16, 2, 0);
 
-        writeStrWithLimit(1, YRES_TEXT - 4, "In hand", 16, 2, 0);
+    struct Item *item;
 
-        if (roomItem != NULL) {
-            struct Item *item = getItem(roomItem->item);
-
-            if (item->active) {
-                writeStrWithLimit(1, YRES_TEXT - 6, "*", 16, 2, 0);
-            }
-
-            writeStrWithLimit(2, YRES_TEXT - 6, item->name, 16, 2, 0);
-        } else {
-            writeStrWithLimit(2, YRES_TEXT - 6, "Nothing", 16, 2, 0);
+    // Display "In room" item
+    if (roomItem != NULL) {
+        item = getItem(roomItem->item);
+        if (item->active) {
+            writeStrWithLimit(1, YRES_TEXT - 6, "*", 16, 2, 0);
         }
+        writeStrWithLimit(2, YRES_TEXT - 6, item->name, 16, 2, 0);
+    } else {
+        writeStrWithLimit(2, YRES_TEXT - 6, "Nothing", 16, 2, 0);
+    }
 
-        if (focusedItem != NULL) {
-            struct Item *item = getItem(focusedItem->item);
-
-            if (item->active) {
-                drawTextAt(1, YRES_TEXT - 3, "*", 1);
-            }
-
-            writeStrWithLimit(2, YRES_TEXT - 3, item->name, 16, 2, 0);
-        } else {
-            writeStrWithLimit(2, YRES_TEXT - 3, "Nothing", 16, 2, 0);
+    // Display "In hand" item
+    if (focusedItem != NULL) {
+        item = getItem(focusedItem->item);
+        if (item->active) {
+            drawTextAt(1, YRES_TEXT - 3, "*", 1);
         }
+        writeStrWithLimit(2, YRES_TEXT - 3, item->name, 16, 2, 0);
+    } else {
+        writeStrWithLimit(2, YRES_TEXT - 3, "Nothing", 16, 2, 0);
     }
 }
 

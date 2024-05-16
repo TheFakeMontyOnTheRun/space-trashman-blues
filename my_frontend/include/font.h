@@ -5,7 +5,8 @@
 #ifndef DERELICT8_FONT_H
 #define DERELICT8_FONT_H
 
-uint8_t font[] = {
+/* Adding const here actually doubles the ROM size! */
+static uint8_t font[] = {
         /*  ASCII table starting on SPACE. */
         /*  Being on line 32 is no accident. */
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 /*  space */

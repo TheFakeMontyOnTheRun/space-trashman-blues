@@ -71,26 +71,26 @@ void clearGraphics(void) {
 }
 
 void flush3DBuffer(void) {
-    uint8_t *ptr = &buffer[0];
+    uint8_t *ptr = buffer;
 
-    for (uint8_t y = 0; y < (BUFFER_RESY); y += 8) {
-        /* 248 = ~7 */
-        vwrite(ptr, (y << 5), 16 * 8);
-        ptr += 8 * 16;
+    for (uint8_t y = 0; y < BUFFER_RESY; y += 8) {
+        vwrite(ptr, y << 5, 16 * 8);
+        ptr += 128; // 8 * 16
     }
 
     vdp_set_sprite_mode(sprite_default);
 
-    vdp_set_sprite_8(0, playerPositionSprite[0]);
-    vdp_set_sprite_8(1, playerPositionSprite[1]);
-    vdp_set_sprite_8(2, playerPositionSprite[2]);
-    vdp_set_sprite_8(3, playerPositionSprite[3]);
+    for (uint8_t i = 0; i < 4; ++i) {
+        vdp_set_sprite_8(i, playerPositionSprite[i]);
+    }
 
-    vdp_put_sprite_8(0,
-                     (XRES_FRAMEBUFFER / 2) + (cameraX * 3) + 10,
-                     (cameraZ * 3) + 10,
-                     playerDirection,
-                     15);
+    vdp_put_sprite_8(
+            0,
+            (XRES_FRAMEBUFFER / 2) + (cameraX * 3) + 10,
+            (cameraZ * 3) + 10,
+            playerDirection,
+            15
+    );
 
     clearGraphics();
 }
@@ -140,43 +140,47 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
 void graphicsPutPointArray(uint8_t *y128Values) {
     uint8_t *stencilPtr = y128Values;
-    uint16_t x;
+    uint16_t x = 0;
 
-    for (x = 0; x < (BUFFER_RESX - 1);) {
-        uint8_t y, prevY, c;
-        uint8_t *ptr;
-        uint8_t currByte;
-        next_cluster:
+    while (x < (BUFFER_RESX - 1)) {
+        uint8_t y = *stencilPtr;
+        uint8_t prevY = y;
+        uint8_t *ptr = &buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)];
+        uint8_t currByte = *ptr;
 
-        y = *stencilPtr;
-        prevY = y;
-        ptr = &buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)];
-        currByte = *ptr;
-        currByte |= (128 >> (x & 7));
+        // Main processing loop
+        while (1) {
+            currByte |= (128 >> (x & 7));
 
-        if (x & 7) {
+            if (x & 7) {
+                *ptr = currByte;
+                ++x;
+                ++stencilPtr;
+                break;
+            }
+
+            for (uint8_t c = 2; c < 8; ++c) {
+                ++x;
+                ++stencilPtr;
+                y = *stencilPtr;
+                if (y != prevY) {
+                    *ptr = currByte;
+                    goto next_point;
+                }
+                currByte |= (128 >> (x & 7));
+            }
+
             *ptr = currByte;
             ++x;
             ++stencilPtr;
-            continue;
+            break;
         }
 
-        for (c = 2; c < 8; ++c) {
-            ++x;
-            ++stencilPtr;
-            y = *stencilPtr;
-            if (y != prevY) {
-                *ptr = currByte;
-                goto next_cluster;
-            }
-            currByte |= (128 >> (x & 7));
-        }
-
-        *ptr = currByte;
-        ++x;
-        ++stencilPtr;
+        next_point:
+        continue;
     }
 }
+
 
 void graphicsPut(uint8_t x, uint8_t y) {
     buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)] |= (128 >> (x & 7));
@@ -197,35 +201,27 @@ void shutdownGraphics(void) {
 #endif
 
 void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
-
-    uint8_t len = strlen(text);
-    char *ptr = text;
-    uint8_t c = 0;
-    uint8_t chary = 0;
     uint8_t x = _x;
+    char *ptr = text;
     char lastChar = 0xFF;
     uint8_t *fontTop;
 
-    for (; c < len && y < (YRES_FRAMEBUFFER / 8); ++c) {
-
+    while (*ptr && y < (YRES_FRAMEBUFFER / 8)) {
         char cha = *ptr;
 
-        if (x == limitX) {
+        if (x == limitX || cha == '\n') {
             ++y;
             x = _x;
-        } else if (cha == '\n') {
-            ++y;
-            x = _x;
-            ++ptr;
-            continue;
+            if (cha == '\n') {
+                ++ptr;
+                continue;
+            }
         }
 
-        if (cha >= 'a') {
-            if (cha <= 'z') {
-                cha = (cha - 'a') + 'A';
-            } else {
-                cha -= ('z' - 'a');
-            }
+        if (cha >= 'a' && cha <= 'z') {
+            cha -= ('a' - 'A');
+        } else if (cha > 'z') {
+            cha -= ('z' - 'a');
         }
 
         if (cha != lastChar) {
@@ -258,9 +254,7 @@ void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, 
         }
     } else {
         for (y = y0; y < y1; ++y) {
-            for (x = x0; x < x1; ++x) {
-                plot(x, y);
-            }
+            draw(x0, y, x1, y);
         }
     }
 }
@@ -268,13 +262,4 @@ void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
     setColour(colour);
     draw(x0, y0, x1, y1);
-}
-
-uint8_t getPaletteEntry(const uint32_t origin) {
-
-    if (!(origin & 0xFF000000)) {
-        return 0;
-    }
-
-    return (origin - 0xFF000000) % 3;
 }

@@ -55,7 +55,7 @@ struct CellPattern {
     uint8_t blockMovement: 1;
 };
 
-uint8_t getPaletteEntry(uint32_t colour);
+#define getPaletteEntry(c) (( (c) - 0xFF000000 ) % 3)
 
 void clearGraphics(void);
 
