@@ -63,7 +63,7 @@ extern enum EDirection playerDirection;
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 
 void setColour(uint8_t colour) {
-    set_color(colour, 0, 0);
+    (void) colour;
 }
 
 void clearGraphics(void) {
