@@ -41,17 +41,17 @@ void HUD_refresh(void) {
     needsToRedrawHUD = 0;
 
     drawWindow(0,
-               128 / 8,
+               (128 / 8),
                (XRES_FRAMEBUFFER / 8) / 2,
                (YRES_FRAMEBUFFER / 8) - 17,
-               "");
+               "Status");
 
-    writeStrWithLimit(1, YRES_TEXT - 7, "In room", 16, 2, 0);
-    writeStrWithLimit(1, YRES_TEXT - 4, "In hand", 16, 2, 0);
+    writeStrWithLimit(1, YRES_TEXT - 7, "In room:", 16, 2, 0);
+    writeStrWithLimit(1, YRES_TEXT - 4, "In hand:", 16, 2, 0);
 
     struct Item *item;
 
-    // Display "In room" item
+    /* Display "In room" item */
     if (roomItem != NULL) {
         item = getItem(roomItem->item);
         if (item->active) {
@@ -62,7 +62,7 @@ void HUD_refresh(void) {
         writeStrWithLimit(2, YRES_TEXT - 6, "Nothing", 16, 2, 0);
     }
 
-    // Display "In hand" item
+    /* Display "In hand" item */
     if (focusedItem != NULL) {
         item = getItem(focusedItem->item);
         if (item->active) {

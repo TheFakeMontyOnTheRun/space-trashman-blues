@@ -68,7 +68,7 @@ void drawMap(void) {
 
     for (y = 0; y < 12; ++y) {
         for (x = 0; x < 12; ++x) {
-            drawTextAt(((XRES_FRAMEBUFFER / 8) / 2) + x + 2, 2 + y, " ", 0);
+            drawTextAt(((XRES_FRAMEBUFFER / 8) / 2) + x + 2, 1 + y, " ", 0);
         }
     }
 
@@ -77,7 +77,7 @@ void drawMap(void) {
 
             if (patterns[(map[y][x] & 127) - 32].blockMovement) {
                 fillRect((XRES_FRAMEBUFFER / 2) + (x * 3) + 16,
-                         (y * 3) + 16,
+                         (y * 3) + 15,
                          (XRES_FRAMEBUFFER / 2) + (x * 3) + 16 + 3,
                          (y * 3) + 3 + 16,
                          2,
@@ -133,7 +133,7 @@ void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *titl
 
     drawLine(x1, y0, x1, y1, 2);
 
-    drawTextAt(tx + 1, ty + 1, title, 1);
+    drawTextAt(tx + 1, ty, title, 1);
 }
 
 
@@ -158,13 +158,13 @@ drawWindowWithOptions(const uint8_t x,
 
     for (c = 0; c < optionsCount; ++c) {
         drawTextAt(x,
-                   y + 2 + c,
+                   y + 1 + c,
                    (selectedOption == c) ? ">" : " ",
                    1);
 
         if (firstFrameOnCurrentState || selectedOption == 0xFF) {
             drawTextAt(x + 1,
-                       y + 2 + c,
+                       y + 1 + c,
                        &options[c][0],
                        1);
         }
