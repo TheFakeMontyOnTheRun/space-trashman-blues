@@ -20,7 +20,6 @@ extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
 SDL_Window *window;
 SDL_Renderer *renderer;
-uint8_t updateDirection;
 
 uint32_t palette[16];
 uint8_t framebuffer[128 * 128];
@@ -174,11 +173,9 @@ enum ECommand getInput(void) {
                     break;
 
                 case SDLK_LEFT:
-                    updateDirection = 1;
                     return kCommandLeft;
 
                 case SDLK_RIGHT:
-                    updateDirection = 1;
                     return kCommandRight;
 
                 case SDLK_UP:
@@ -253,7 +250,6 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, 
 
 void initHW(int, char **pString) {
     initKeyboardUI();
-    updateDirection = 1;
 
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
@@ -344,24 +340,6 @@ void startFrame(int x, int y, int width, int height) {
 
 void endFrame(void) {
     if (needsToRedrawVisibleMeshes) {
-        if (updateDirection) {
-            updateDirection = 0;
-            switch (getPlayerDirection()) {
-                case 0:
-                    writeStrWithLimit(12, 17, "N", 31, 2, 0);
-                    break;
-                case 1:
-                    writeStrWithLimit(12, 17, "E", 31, 2, 0);
-                    break;
-                case 2:
-                    writeStrWithLimit(12, 17, "S", 31, 2, 0);
-                    break;
-                case 3:
-                    writeStrWithLimit(12, 17, "W", 31, 2, 0);
-                    break;
-            }
-        }
-
         flipRenderer();
     }
     flushVirtualFramebuffer();
