@@ -231,7 +231,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F17418092BE952F600363B9D /* Build configuration list for PBXProject "Super Mare Imperium - Derelict" */;
+			buildConfigurationList = F17418092BE952F600363B9D /* Build configuration list for PBXProject "Sub Mare Imperium - Derelict" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -664,7 +664,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F17418092BE952F600363B9D /* Build configuration list for PBXProject "Super Mare Imperium - Derelict" */ = {
+		F17418092BE952F600363B9D /* Build configuration list for PBXProject "Sub Mare Imperium - Derelict" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F174184A2BE952FC00363B9D /* Debug */,
