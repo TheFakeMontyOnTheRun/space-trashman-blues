@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  Super Mare Imperium - Derelict iOS
+//  Sub Mare Imperium - Derelict iOS
 //
 //  Created by Daniel Monteiro on 06/05/2024.
 //

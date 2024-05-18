@@ -1,6 +1,6 @@
 //
 //  GameViewController.swift
-//  Super Mare Imperium - Derelict macOS
+//  Sub Mare Imperium - Derelict macOS
 //
 //  Created by Daniel Monteiro on 06/05/2024.
 //

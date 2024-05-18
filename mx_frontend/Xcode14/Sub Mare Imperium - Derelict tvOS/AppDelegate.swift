@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  Super Mare Imperium - Derelict tvOS
+//  Sub Mare Imperium - Derelict tvOS
 //
 //  Created by Daniel Monteiro on 06/05/2024.
 //

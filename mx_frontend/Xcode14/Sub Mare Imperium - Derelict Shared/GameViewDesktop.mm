@@ -1,6 +1,6 @@
 //
 //  GameViewDesktop.m
-//  Super Mare Imperium - Derelict
+//  Sub Mare Imperium - Derelict
 //
 //  Created by Daniel Monteiro on 09/05/2024.
 //
