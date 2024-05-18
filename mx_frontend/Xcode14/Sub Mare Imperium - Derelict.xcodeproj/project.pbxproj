@@ -31,17 +31,17 @@
 
 /* Begin PBXFileReference section */
 		F174180E2BE952FB00363B9D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		F17418132BE952FC00363B9D /* Super Mare Imperium - Derelict.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Super Mare Imperium - Derelict.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F17418132BE952FC00363B9D /* Sub Mare Imperium - Derelict.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sub Mare Imperium - Derelict.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F17418162BE952FC00363B9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F17418182BE952FC00363B9D /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		F174181B2BE952FC00363B9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F174181E2BE952FC00363B9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		F17418242BE952FC00363B9D /* Super Mare Imperium - Derelict.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Super Mare Imperium - Derelict.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F17418242BE952FC00363B9D /* Sub Mare Imperium - Derelict.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sub Mare Imperium - Derelict.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F17418262BE952FC00363B9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F17418282BE952FC00363B9D /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		F174182B2BE952FC00363B9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F174182E2BE952FC00363B9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		F17418342BE952FC00363B9D /* Super Mare Imperium - Derelict.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Super Mare Imperium - Derelict.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F17418342BE952FC00363B9D /* Sub Mare Imperium - Derelict.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sub Mare Imperium - Derelict.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F17418362BE952FC00363B9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F17418382BE952FC00363B9D /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		F174183B2BE952FC00363B9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -113,9 +113,9 @@
 		F17418142BE952FC00363B9D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F17418132BE952FC00363B9D /* Super Mare Imperium - Derelict.app */,
-				F17418242BE952FC00363B9D /* Super Mare Imperium - Derelict.app */,
-				F17418342BE952FC00363B9D /* Super Mare Imperium - Derelict.app */,
+				F17418132BE952FC00363B9D /* Sub Mare Imperium - Derelict.app */,
+				F17418242BE952FC00363B9D /* Sub Mare Imperium - Derelict.app */,
+				F17418342BE952FC00363B9D /* Sub Mare Imperium - Derelict.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -156,9 +156,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F17418122BE952FC00363B9D /* Super Mare Imperium - Derelict iOS */ = {
+		F17418122BE952FC00363B9D /* Sub Mare Imperium - Derelict iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F174184C2BE952FC00363B9D /* Build configuration list for PBXNativeTarget "Super Mare Imperium - Derelict iOS" */;
+			buildConfigurationList = F174184C2BE952FC00363B9D /* Build configuration list for PBXNativeTarget "Sub Mare Imperium - Derelict iOS" */;
 			buildPhases = (
 				F174180F2BE952FC00363B9D /* Sources */,
 				F17418102BE952FC00363B9D /* Frameworks */,
@@ -168,14 +168,14 @@
 			);
 			dependencies = (
 			);
-			name = "Super Mare Imperium - Derelict iOS";
+			name = "Sub Mare Imperium - Derelict iOS";
 			productName = "Super Mare Imperium - Derelict iOS";
-			productReference = F17418132BE952FC00363B9D /* Super Mare Imperium - Derelict.app */;
+			productReference = F17418132BE952FC00363B9D /* Sub Mare Imperium - Derelict.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F17418232BE952FC00363B9D /* Super Mare Imperium - Derelict tvOS */ = {
+		F17418232BE952FC00363B9D /* Sub Mare Imperium - Derelict tvOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F174184F2BE952FC00363B9D /* Build configuration list for PBXNativeTarget "Super Mare Imperium - Derelict tvOS" */;
+			buildConfigurationList = F174184F2BE952FC00363B9D /* Build configuration list for PBXNativeTarget "Sub Mare Imperium - Derelict tvOS" */;
 			buildPhases = (
 				F17418202BE952FC00363B9D /* Sources */,
 				F17418212BE952FC00363B9D /* Frameworks */,
@@ -185,14 +185,14 @@
 			);
 			dependencies = (
 			);
-			name = "Super Mare Imperium - Derelict tvOS";
+			name = "Sub Mare Imperium - Derelict tvOS";
 			productName = "Super Mare Imperium - Derelict tvOS";
-			productReference = F17418242BE952FC00363B9D /* Super Mare Imperium - Derelict.app */;
+			productReference = F17418242BE952FC00363B9D /* Sub Mare Imperium - Derelict.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F17418332BE952FC00363B9D /* Super Mare Imperium - Derelict macOS */ = {
+		F17418332BE952FC00363B9D /* Sub Mare Imperium - Derelict macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F17418522BE952FC00363B9D /* Build configuration list for PBXNativeTarget "Super Mare Imperium - Derelict macOS" */;
+			buildConfigurationList = F17418522BE952FC00363B9D /* Build configuration list for PBXNativeTarget "Sub Mare Imperium - Derelict macOS" */;
 			buildPhases = (
 				F17418302BE952FC00363B9D /* Sources */,
 				F17418312BE952FC00363B9D /* Frameworks */,
@@ -202,9 +202,9 @@
 			);
 			dependencies = (
 			);
-			name = "Super Mare Imperium - Derelict macOS";
+			name = "Sub Mare Imperium - Derelict macOS";
 			productName = "Super Mare Imperium - Derelict macOS";
-			productReference = F17418342BE952FC00363B9D /* Super Mare Imperium - Derelict.app */;
+			productReference = F17418342BE952FC00363B9D /* Sub Mare Imperium - Derelict.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -244,9 +244,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F17418122BE952FC00363B9D /* Super Mare Imperium - Derelict iOS */,
-				F17418232BE952FC00363B9D /* Super Mare Imperium - Derelict tvOS */,
-				F17418332BE952FC00363B9D /* Super Mare Imperium - Derelict macOS */,
+				F17418122BE952FC00363B9D /* Sub Mare Imperium - Derelict iOS */,
+				F17418232BE952FC00363B9D /* Sub Mare Imperium - Derelict tvOS */,
+				F17418332BE952FC00363B9D /* Sub Mare Imperium - Derelict macOS */,
 			);
 		};
 /* End PBXProject section */
@@ -495,7 +495,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "pt.dc.Super-Mare-Imperium---Derelict";
-				PRODUCT_NAME = "Super Mare Imperium - Derelict";
+				PRODUCT_NAME = "Sub Mare Imperium - Derelict";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Super Mare Imperium - Derelict Shared/Super Mare Imperium - Derelict iOS-Bridging-Header.h";
@@ -528,7 +528,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "pt.dc.Super-Mare-Imperium---Derelict";
-				PRODUCT_NAME = "Super Mare Imperium - Derelict";
+				PRODUCT_NAME = "Sub Mare Imperium - Derelict";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Super Mare Imperium - Derelict Shared/Super Mare Imperium - Derelict iOS-Bridging-Header.h";
@@ -557,7 +557,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "pt.dc.Super-Mare-Imperium---Derelict";
-				PRODUCT_NAME = "Super Mare Imperium - Derelict";
+				PRODUCT_NAME = "Sub Mare Imperium - Derelict";
 				SDKROOT = appletvos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Super Mare Imperium - Derelict Shared/Super Mare Imperium - Derelict tvOS-Bridging-Header.h";
@@ -587,7 +587,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "pt.dc.Super-Mare-Imperium---Derelict";
-				PRODUCT_NAME = "Super Mare Imperium - Derelict";
+				PRODUCT_NAME = "Sub Mare Imperium - Derelict";
 				SDKROOT = appletvos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Super Mare Imperium - Derelict Shared/Super Mare Imperium - Derelict tvOS-Bridging-Header.h";
@@ -621,7 +621,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 12.7;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "pt.dc.Super-Mare-Imperium---Derelict";
-				PRODUCT_NAME = "Super Mare Imperium - Derelict";
+				PRODUCT_NAME = "Sub Mare Imperium - Derelict";
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Super Mare Imperium - Derelict Shared/Super Mare Imperium - Derelict macOS-Bridging-Header.h";
@@ -653,7 +653,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 12.7;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "pt.dc.Super-Mare-Imperium---Derelict";
-				PRODUCT_NAME = "Super Mare Imperium - Derelict";
+				PRODUCT_NAME = "Sub Mare Imperium - Derelict";
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Super Mare Imperium - Derelict Shared/Super Mare Imperium - Derelict macOS-Bridging-Header.h";
@@ -673,7 +673,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F174184C2BE952FC00363B9D /* Build configuration list for PBXNativeTarget "Super Mare Imperium - Derelict iOS" */ = {
+		F174184C2BE952FC00363B9D /* Build configuration list for PBXNativeTarget "Sub Mare Imperium - Derelict iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F174184D2BE952FC00363B9D /* Debug */,
@@ -682,7 +682,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F174184F2BE952FC00363B9D /* Build configuration list for PBXNativeTarget "Super Mare Imperium - Derelict tvOS" */ = {
+		F174184F2BE952FC00363B9D /* Build configuration list for PBXNativeTarget "Sub Mare Imperium - Derelict tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F17418502BE952FC00363B9D /* Debug */,
@@ -691,7 +691,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F17418522BE952FC00363B9D /* Build configuration list for PBXNativeTarget "Super Mare Imperium - Derelict macOS" */ = {
+		F17418522BE952FC00363B9D /* Build configuration list for PBXNativeTarget "Sub Mare Imperium - Derelict macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F17418532BE952FC00363B9D /* Debug */,
