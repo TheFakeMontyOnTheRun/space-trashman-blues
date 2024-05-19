@@ -84,7 +84,7 @@ void flush3DBuffer(void) {
 
     vdp_put_sprite_8(
             0,
-            (XRES_FRAMEBUFFER / 2) + (cameraX * 3) + 9,
+            (XRES_FRAMEBUFFER / 2) + (cameraX * 3) + 10,
             (cameraZ * 3) + 10,
             playerDirection,
             15
