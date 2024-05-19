@@ -152,7 +152,7 @@ void Crawler_repaintCallback(void) {
     }
 }
 
-enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
+enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
 
     if (showPromptToAbandonMission) {
 
@@ -198,7 +198,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     }
 
     if (timeUntilNextState != kNonExpiringPresentationState) {
-        timeUntilNextState -= delta;
+        timeUntilNextState -= *((long*)data);
     }
 
     if (currentPresentationState == kWaitingForInput) {

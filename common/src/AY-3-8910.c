@@ -2,6 +2,7 @@
  * AY-3-8910: used on MSX, Amstrad CPC 464 and Atari ST
  * Created by Daniel Monteiro on 11/07/2023.
  * */
+#include <stdint.h>
 
 #include "AY-3-8910.h"
 
@@ -71,7 +72,7 @@ void soundTick(void) {
 }
 
 
-void playSound(int num) {
+void playSound(uint8_t num) {
     soundPos = 0;
     soundNum = 0;
 

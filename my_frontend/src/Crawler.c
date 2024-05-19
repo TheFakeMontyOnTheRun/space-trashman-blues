@@ -15,8 +15,6 @@
 
 int8_t map[32][32];
 
-
-
 extern int8_t stencilHigh[XRES];
 extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
@@ -74,7 +72,7 @@ void HUD_refresh(void) {
     }
 }
 
-enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
+enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
     (void)data;
     uint8_t prevX;
     uint8_t prevZ;

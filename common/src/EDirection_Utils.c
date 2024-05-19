@@ -69,7 +69,7 @@ enum EDirection rightOf(const enum EDirection d) {
     }
 }
 
-int oppositeOf(int d) {
+uint8_t oppositeOf(uint8_t d) {
     switch (d) {
         case 0:
             return 2;

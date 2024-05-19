@@ -97,7 +97,7 @@ void HackingScreen_unloadStateCallback(enum EGameMenuState newState) {
 #endif
 }
 
-enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long data) {
+enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, void* data) {
     (void)data;
     uint8_t holdingDisk = getHoldingDisk();
 

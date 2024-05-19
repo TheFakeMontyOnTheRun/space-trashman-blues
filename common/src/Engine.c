@@ -115,7 +115,7 @@ uint8_t menuTick(long delta_time) {
 
     input = getInput();
 
-    newState = tickCallback(input, delta_time);
+    newState = tickCallback(input, &delta_time);
     
 #ifdef EMIT_QUIT_OPTION
     if (input == kCommandQuit) {

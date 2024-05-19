@@ -18,7 +18,7 @@ const enum EGameMenuState MainMenu_nextStateNavigation[4] = {
         kPlayGame, kCredits, kHelp,
         kQuit};
 
-const int kMainMenuOptionsCount = 4;
+const uint8_t kMainMenuOptionsCount = 4;
 #else
 const char *MainMenu_options[3] = {
         "Play game", "Credits", "Help"};
@@ -26,7 +26,7 @@ const char *MainMenu_options[3] = {
 const enum EGameMenuState MainMenu_nextStateNavigation[3] = {
         kPlayGame, kCredits, kHelp};
 
-const int kMainMenuOptionsCount = 3;
+const uint8_t kMainMenuOptionsCount = 3;
 #endif
 
 static const uint8_t splashGraphics[] = {
@@ -233,8 +233,8 @@ void MainMenu_repaintCallback(void) {
             cursorPosition);
 }
 
-enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, long delta) {
-    (void)delta;
+enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, void *data) {
+    (void)data;
     return handleCursor(&MainMenu_nextStateNavigation[0], kMainMenuOptionsCount, cmd, kResumeCurrentState);
 }
 

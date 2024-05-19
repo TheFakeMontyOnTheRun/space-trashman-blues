@@ -30,6 +30,7 @@ int8_t min(int8_t x1, int8_t x2) {
 
 /* all those refactors are due to a SDCC bug with very long functions */
 void renderScene(void) {
+    memset(stencilHigh, 0, XRES);
 
     switch (cameraRotation) {
         case DIRECTION_N:
@@ -51,8 +52,6 @@ void renderScene(void) {
 
     graphicsPutPointArray(&stencilHigh[0]);
     repaintMapItems();
-
-    memset(stencilHigh, 0, XRES);
 }
 
 void renderCameraWest(void) {

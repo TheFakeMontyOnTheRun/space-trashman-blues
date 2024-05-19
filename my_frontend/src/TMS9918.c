@@ -75,10 +75,8 @@ void flush3DBuffer(void) {
 
     for (uint8_t y = 0; y < BUFFER_RESY; y += 8) {
         vwrite(ptr, y << 5, 16 * 8);
-        ptr += 128; // 8 * 16
+        ptr += 128; /* 8 * 16 */
     }
-
-    vdp_set_sprite_mode(sprite_default);
 
     for (uint8_t i = 0; i < 4; ++i) {
         vdp_set_sprite_8(i, playerPositionSprite[i]);
@@ -148,7 +146,6 @@ void graphicsPutPointArray(uint8_t *y128Values) {
         uint8_t *ptr = &buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)];
         uint8_t currByte = *ptr;
 
-        // Main processing loop
         while (1) {
             currByte |= (128 >> (x & 7));
 
@@ -245,21 +242,14 @@ void clearTextScreen(void) {
 
 void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, uint8_t stipple) {
     uint8_t x, y;
-    setColour(colour);
-    if (stipple) {
-        for (y = y0; y < y1; ++y) {
-            for (x = x0 + (y & 1); x < x1; x += 2) {
-                plot(x, y);
-            }
-        }
-    } else {
-        for (y = y0; y < y1; ++y) {
-            draw(x0, y, x1, y);
+
+    for (y = y0; y < y1; ++y) {
+        for (x = x0 + ((y & 1) && stipple); x < x1; x += ( stipple ? 2 : 1)) {
+            plot(x, y);
         }
     }
 }
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
-    setColour(colour);
     draw(x0, y0, x1, y1);
 }

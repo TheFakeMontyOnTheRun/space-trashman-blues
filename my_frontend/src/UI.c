@@ -66,6 +66,12 @@ void drawMap(void) {
 
     redrawMap = 0;
 
+    drawWindow((XRES_FRAMEBUFFER / 8) / 2,
+               0,
+               (XRES_FRAMEBUFFER / 8) / 2 - 1,
+               (YRES_FRAMEBUFFER / 8) / 2 + 2,
+               "Map");
+
     for (y = 0; y < 12; ++y) {
         for (x = 0; x < 12; ++x) {
             drawTextAt(((XRES_FRAMEBUFFER / 8) / 2) + x + 2, 1 + y, " ", 0);
@@ -117,7 +123,7 @@ void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *titl
     uint16_t x1 = (tx + tw) * 8;
     uint8_t y0 = ty * 8;
     uint8_t y1 = (ty + th) * 8;
-    int c, d;
+    uint8_t c, d;
 
     for (c = 0; c < th; ++c) {
         for (d = 0; d < tw; ++d) {

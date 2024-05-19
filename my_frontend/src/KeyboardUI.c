@@ -33,14 +33,6 @@ void initKeyboardUI(void) {
 
 void HUD_initialPaint(void) {
 
-    if (firstFrameOnCurrentState) {
-        drawWindow((XRES_FRAMEBUFFER / 8) / 2,
-                   0,
-                   (XRES_FRAMEBUFFER / 8) / 2 - 1,
-                   (YRES_FRAMEBUFFER / 8) / 2 + 3,
-                   "Map");
-    }
-
     drawWindowWithOptions(
             1 + (XRES_FRAMEBUFFER / 2) / 8,
             (YRES_FRAMEBUFFER / 8) - 3 - /*kMainMenuOptionsCount*/ 6,
@@ -50,8 +42,5 @@ void HUD_initialPaint(void) {
             menuItems,
             6,
             0xFF);
-
-    needsToRedrawHUD = 1;
-    HUD_refresh();
 }
 

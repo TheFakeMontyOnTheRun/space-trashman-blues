@@ -159,8 +159,6 @@ void initMap(void) {
     uint16_t offsetOnDataStrip = 0;
     int16_t repetitions = -1;
 
-    memset(stencilHigh, 0, XRES);
-
 #ifdef EMBEDDED_DATA
     for (c = 0; c < playerLocation; ++c) {
         offsetOnDataStrip += dataPositions[c];
@@ -222,10 +220,8 @@ void initMap(void) {
                 (current == 'e' && enteredFrom == 3)) {
 
                 struct WorldPosition newPos;
-                cameraX = x;
-                cameraZ = y;
-                newPos.x = x;
-                newPos.y = y;
+                cameraX = newPos.x = x;
+                cameraZ = newPos.y = y;
                 setPlayerPosition(&newPos);
                 enteredFrom = 0xFF;
                 current = NEUTRAL_CELL;

@@ -40,8 +40,8 @@ void CreditsScreen_repaintCallback(void) {
                           3, "Credits", CreditsScreen_options, 1, cursorPosition);
 }
 
-enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
-    (void)delta;
+enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, void* data) {
+    (void)data;
     return handleCursor(CreditsScreen_nextStateNavigation, 1, cmd, kMainMenu);
 }
 

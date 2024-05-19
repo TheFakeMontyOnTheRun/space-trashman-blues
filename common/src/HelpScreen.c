@@ -40,8 +40,8 @@ void HelpScreen_repaintCallback(void) {
                           1 + 2, "Help", HelpScreen_options, 1, cursorPosition);
 }
 
-enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, long delta) {
-    (void)delta;
+enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, void* data) {
+    (void)data;
     return handleCursor(HelpScreen_nextStateNavigation, 1, cmd, kMainMenu);
 }
 
