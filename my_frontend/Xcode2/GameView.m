@@ -50,6 +50,9 @@ float multiplier = 1.0f;
 extern uint8_t updateDirection;
 id delegate;
 
+
+void graphicsFlush(void);
+
 void stopSounds(void) {
     
 }
@@ -58,7 +61,21 @@ void soundTick(void) {
     
 }
 
-void playSound(int unused) {
+void startFrame(int x, int y, int width, int height) {
+    (void)x;
+    (void)y;
+    (void)width;
+    (void)height;
+}
+
+void endFrame(void) {
+    if (needsToRedrawVisibleMeshes) {
+        graphicsFlush();
+    }
+    flushVirtualFramebuffer();
+}
+
+void playSound(uint8_t unused) {
     
 }
 
@@ -66,7 +83,7 @@ void handleSystemEvents(void) {
     
 }
 
-void initHW(void) {
+void initHW(int argc, char** argv) {
     initKeyboardUI();
     updateDirection = 0;
     
@@ -80,9 +97,9 @@ void shutdownGraphics(void) {
 
 - (void) repaintGame:(NSTimer *)timer
 {
-    
+    startFrame(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER);
     menuTick(10);
-    graphicsFlush();
+    endFrame();
 
     
     [self setNeedsDisplay: YES ];
@@ -128,7 +145,7 @@ void setMultiplier(CGSize size) {
         palette[15] = 0xFFAAAAFF;
         
         
-        initHW();
+        initHW(0, NULL);
         enterState(kMainMenu);
 
         
