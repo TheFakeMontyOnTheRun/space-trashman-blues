@@ -358,12 +358,6 @@ void drawSquare(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, uint
     /* Draw the horizontal outlines of z0 and z1 */
     /* Ceiling is lower than camera */
     if (drawContour) {
-        for (x = px0z0; x <= px1z0; ++x) {
-            if (IN_RANGE(0, XRESMINUSONE, x)) {
-                vLine(x, py0z0, py1z0, shouldStippleFill);
-            }
-        }
-
         if (elementMask & 2) {
             if ((elementMask != 255) && IN_RANGE(0, XRESMINUSONE, px0z0)) {
                 vLine(px0z0, py0z0, py1z0, shouldStippleBorder);
@@ -372,6 +366,18 @@ void drawSquare(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, uint
             if ((elementMask != 127) && IN_RANGE(0, XRESMINUSONE, px1z0)) {
                 vLine(px1z0, py0z0, py1z0, shouldStippleBorder);
             }
+        }
+
+	for (x = px0z0; x < px1z0; ++x) {
+	    if ( x < 0 ) {
+  	        continue;
+	    }
+
+	    if (x >= XRES ) {
+	        return;
+	    }
+
+	    vLine(x, py0z0, py1z0, shouldStippleFill);
         }
     }
 }
@@ -744,6 +750,10 @@ void drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ) {
 
     while (currentY0 != py0z1) {
         if (leftX0 >= XRES) {
+            return;
+        }
+
+        if (rightX1 < 0) {
             return;
         }
 
