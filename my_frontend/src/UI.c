@@ -69,7 +69,7 @@ void drawMap(void) {
     drawWindow((XRES_FRAMEBUFFER / 8) / 2,
                0,
                (XRES_FRAMEBUFFER / 8) / 2 - 1,
-               (YRES_FRAMEBUFFER / 8) / 2 + 2,
+               (YRES_FRAMEBUFFER / 8) / 2 + 3,
                "Map");
 
     for (y = 0; y < 12; ++y) {
