@@ -117,7 +117,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
             patternLine += 2;
             ptr += 2;
 
-            if (patternLine == 8) {
+            if (patternLine >= 8) {
                 patternLine = 0;
                 ptr += (16 * 8) - 8;
             }
@@ -128,7 +128,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
             ++patternLine;
             ++ptr;
 
-            if (patternLine == 8) {
+            if (patternLine >= 8) {
                 patternLine = 0;
                 ptr += (16 * 8) - 8;
             }
