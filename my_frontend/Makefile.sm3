@@ -14,7 +14,13 @@ CFLAGS = \
         -pragma-define:CLIB_DISABLE_MODE0=1 \
         -pragma-define:CLIB_DISABLE_MODE1=1 \
         -pragma-define:CLIB_DISABLE_MODE3=1 \
-        -pragma-define:CRT_FONT=0 \
+        -pragma-export:CRT_FONT=0 \
+        -pragma-export:ansi_SCROLLUP=0 \
+        -pragma-define:CRT_ENABLE_STDIO=0 \
+        -pragma-export:__tms9918_mode2_printc=0 \
+        -pragma-redirect:fputc_cons=l_ret \
+        -pragma-define:CRT_ENABLE_STDIO=0 \
+        -pragma-export:CLIB_GENCON_CAPS=0 \
         -vn \
         -Iinclude \
         -I../core/include \
