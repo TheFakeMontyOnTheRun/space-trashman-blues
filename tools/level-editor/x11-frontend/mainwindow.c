@@ -206,13 +206,13 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
 
 void ClickCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean *dispatch) {
     if (event->type == ButtonPress) {
-        Display *display = XtDisplay(widget);
+        Display *display = XtDisplay(draw_area);
         XButtonEvent *button_event = (XButtonEvent *)event;
         Window window = XtWindow(draw_area);
         XWindowAttributes attr;
         XGetWindowAttributes(display, window, &attr);
 
-        map[attr.height / 32][ attr.width / 32] = 1;
+        map[(32 * button_event->y) / attr.height][ (32 * button_event->x ) / attr.width] = 1;
 
         if (line_count < MAX_LINES) {
             lines[line_count].x1 = 10;
