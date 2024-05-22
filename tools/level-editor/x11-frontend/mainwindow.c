@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
                                        XtNheight, 200,
                                        NULL);
     
-    draw_area = XtVaCreateManagedWidget("draw_area", labelWidgetClass, viewport,
+    draw_area = XtVaCreateManagedWidget("", labelWidgetClass, viewport,
                                         XtNwidth, 200,
                                         XtNheight, 200,
                                         NULL);
@@ -150,15 +150,28 @@ void ClosePopup(Widget widget, XtPointer client_data, XtPointer call_data) {
     XtDestroyWidget(popup);
 }
 
+
+
 void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean *dispatch) {
     if (event->type == Expose) {
         Display *display = XtDisplay(widget);
         Window window = XtWindow(widget);
+        XWindowAttributes attr;
+        XGetWindowAttributes(display, window, &attr);
+
         GC gc;
         XGCValues values;
 
         gc = XCreateGC(display, window, 0, &values);
         XSetForeground(display, gc, BlackPixel(display, DefaultScreen(display)));
+
+        for (int y = 1; y <= 32; ++y) {
+            XDrawLine(display, window, gc, 0, y * (attr.height / 32), attr.width, y * (attr.height / 32));
+        }
+
+        for (int x = 1; x <= 32; ++x) {
+            XDrawLine(display, window, gc, x * (attr.width / 32), 0, x * (attr.width / 32), attr.height);
+        }
 
         for (int i = 0; i < line_count; i++) {
             XDrawLine(display, window, gc, lines[i].x1, lines[i].y1, lines[i].x2, lines[i].y2);
