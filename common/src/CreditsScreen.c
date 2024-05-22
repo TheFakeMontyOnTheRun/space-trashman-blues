@@ -21,14 +21,15 @@ enum EGameMenuState CreditsScreen_nextStateNavigation[1] = {
 
 void CreditsScreen_initStateCallback(enum EGameMenuState tag) {
     (void)tag;
-    mainText = "Made by MontyOnTheRun";
+    mainText = "Made by Daniel \n\"MontyOnTheRun\" Monteiro, with the help of many\npeople. Please check\nCREDITS.TXT"
+               " on the source code tree for further\nacknowledgements.";
 }
 
 void CreditsScreen_repaintCallback(void) {
     if (firstFrameOnCurrentState) {
         clearScreen();
         if (mainText != NULL) {
-            drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, 1 + 3, "Credits", mainText);
+            drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 4, 10, "Credits", mainText);
         }
     }
 
