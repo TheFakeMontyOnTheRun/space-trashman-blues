@@ -181,7 +181,7 @@ void
 drawTextWindow(const uint8_t x, const uint8_t y, const uint8_t dx, const uint8_t dy, const char *title,
                const char *content) {
     drawWindow(x, y, dx, dy, title);
-    drawTextAt(x + 1, y + 2, content, 2);
+    writeStrWithLimit(x + 1, y + 2, content, x + dx - 1, 1, 0);
 }
 
 enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t optionsCount, const enum ECommand cmd, enum EGameMenuState backState) {
