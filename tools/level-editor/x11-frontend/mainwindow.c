@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
 
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
@@ -21,6 +23,8 @@ Line lines[MAX_LINES];
 int line_count = 0;
 Widget draw_area;
 
+uint8_t map[32][32];
+
 void PopupDialog(Widget widget, XtPointer client_data, XtPointer call_data);
 void SaveAsDialog(Widget widget, XtPointer client_data, XtPointer call_data);
 void SaveFile(Widget widget, XtPointer client_data, XtPointer call_data);
@@ -34,7 +38,13 @@ int main(int argc, char **argv) {
     Display *display;
     int screen;
     Window window;
-    
+
+    for (int y = 0; y < 32; ++y ) {
+        for (int x = 0; x < 32; ++x) {
+            map[y][x] = 0;
+        }
+    }
+
     topLevel = XtVaAppInitialize(&app_context, "XawExample", NULL, 0, &argc, argv, NULL, NULL);
     
     form = XtVaCreateManagedWidget("form", formWidgetClass, topLevel, NULL);
@@ -177,13 +187,32 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
             XDrawLine(display, window, gc, lines[i].x1, lines[i].y1, lines[i].x2, lines[i].y2);
         }
 
+        for (int y = 0; y < 32; ++y ) {
+            for (int x = 0; x < 32; ++x ) {
+                if (map[y][x]) {
+                    values.foreground = rand() % (1 << 24);
+                    XChangeGC(display, gc, GCForeground, &values);
+                    XFillRectangle(display, window, gc,
+                                   (x + 0) * (attr.width / 32), (y + 0) * (attr.height / 32),
+                                   (attr.width / 32), (attr.height / 32) );
+
+                }
+            }
+        }
+
         XFreeGC(display, gc);
     }
 }
 
 void ClickCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean *dispatch) {
     if (event->type == ButtonPress) {
+        Display *display = XtDisplay(widget);
         XButtonEvent *button_event = (XButtonEvent *)event;
+        Window window = XtWindow(draw_area);
+        XWindowAttributes attr;
+        XGetWindowAttributes(display, window, &attr);
+
+        map[attr.height / 32][ attr.width / 32] = 1;
 
         if (line_count < MAX_LINES) {
             lines[line_count].x1 = 10;
