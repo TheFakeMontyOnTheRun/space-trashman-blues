@@ -13,14 +13,6 @@
 #include <X11/Xlib.h>
 #include <X11/Shell.h>
 
-#define MAX_LINES 100
-
-typedef struct {
-    int x1, y1, x2, y2;
-} Line;
-
-Line lines[MAX_LINES];
-int line_count = 0;
 Widget draw_area;
 
 uint8_t map[32][32];
@@ -50,7 +42,7 @@ int main(int argc, char **argv) {
     form = XtVaCreateManagedWidget("form", formWidgetClass, topLevel, NULL);
     
     button = XtVaCreateManagedWidget("button", commandWidgetClass, form,
-                                     XtNlabel, "Show Popup",
+                                     XtNlabel, "About",
                                      XtNfromVert, NULL,
                                      XtNwidth, 100,
                                      XtNheight, 30,
@@ -103,7 +95,7 @@ void PopupDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
                                  NULL);
 
     dialog = XtVaCreateManagedWidget("dialog", dialogWidgetClass, popup,
-                                     XtNlabel, "Button clicked!",
+                                     XtNlabel, "Level editor by Daniel \"MontyOnTheRun\" Monteiro",
                                      NULL);
     
     popup_button = XtVaCreateManagedWidget("popup_button", commandWidgetClass, dialog,
@@ -147,9 +139,6 @@ void SaveFile(Widget widget, XtPointer client_data, XtPointer call_data) {
     if (filename != NULL && *filename != '\0') {
         FILE *file = fopen(filename, "w");
         if (file != NULL) {
-            for (int i = 0; i < line_count; i++) {
-                fprintf(file, "%d %d %d %d\n", lines[i].x1, lines[i].y1, lines[i].x2, lines[i].y2);
-            }
             fclose(file);
         }
     }
@@ -183,10 +172,6 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
             XDrawLine(display, window, gc, x * (attr.width / 32), 0, x * (attr.width / 32), attr.height);
         }
 
-        for (int i = 0; i < line_count; i++) {
-            XDrawLine(display, window, gc, lines[i].x1, lines[i].y1, lines[i].x2, lines[i].y2);
-        }
-
         for (int y = 0; y < 32; ++y ) {
             for (int x = 0; x < 32; ++x ) {
                 if (map[y][x]) {
@@ -213,15 +198,7 @@ void ClickCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean 
         XGetWindowAttributes(display, window, &attr);
 
         map[(32 * button_event->y) / attr.height][ (32 * button_event->x ) / attr.width] = 1;
+	XClearArea(XtDisplay(widget), XtWindow(widget), 0, 0, 0, 0, True);
 
-        if (line_count < MAX_LINES) {
-            lines[line_count].x1 = 10;
-            lines[line_count].y1 = 10;
-            lines[line_count].x2 = button_event->x;
-            lines[line_count].y2 = button_event->y;
-            line_count++;
-
-            XClearArea(XtDisplay(widget), XtWindow(widget), 0, 0, 0, 0, True);
-        }
     }
 }
