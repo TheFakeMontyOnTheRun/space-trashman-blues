@@ -178,6 +178,12 @@ enum ECommand getInput(void) {
                 case SDLK_RIGHT:
                     return kCommandRight;
 
+                case SDLK_z:
+                    return kCommandStrafeLeft;
+
+                case SDLK_x:
+                    return kCommandStrafeRight;
+
                 case SDLK_UP:
                     return kCommandUp;
 
