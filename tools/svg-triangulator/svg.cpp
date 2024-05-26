@@ -189,12 +189,11 @@ RGB parseStyle(const char* styleStr) {
     int end = style.length();
     while (pos <= end) {
         auto fillPos = style.find("fill:");
-        if (fillPos == 0) {
-            auto colour = style.substr(6);
+        if (fillPos != std::string::npos) {
+            auto colour = style.substr(fillPos + 6, 6);
             //tmp;
             return handleColour(colour);
         }
     }
-
     return {};
 }

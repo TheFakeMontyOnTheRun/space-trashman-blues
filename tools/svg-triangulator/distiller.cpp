@@ -170,19 +170,18 @@ Graphic parsePath(const std::string &path) {
     return toReturn;
 }
 
-RGB handleStyle(const std::string &style) {
-
+RGB handleStyle(const std::string &styleStr) {
+    std::string style = styleStr;
     int pos = 0;
     int end = style.length();
     while (pos <= end) {
         auto fillPos = style.find("fill:");
-        if (fillPos == 0) {
-            auto colour = style.substr(6);
+        if (fillPos != std::string::npos) {
+            auto colour = style.substr(fillPos + 6, 6);
             //tmp;
             return handleColour(colour);
         }
     }
-
     return {};
 }
 
@@ -258,15 +257,15 @@ int main(int argc, char **argv) {
     std::string filename = argv[1];
 
     auto extensionPos = filename.rfind(".svg");
-    if ( extensionPos > filename.length() ) {
+    if (extensionPos > filename.length()) {
         std::cout << "/* " << filename << " is not an SVG file! */" << std::endl;
         return 0;
     }
 
     filename = filename.substr(0, extensionPos);
 
-    for (auto& c : filename) {
-        if ( c == '.' || c == '-' || c == '/' ) {
+    for (auto &c: filename) {
+        if (c == '.' || c == '-' || c == '/') {
             c = '_';
         }
     }
