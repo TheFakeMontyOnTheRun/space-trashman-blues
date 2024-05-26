@@ -22,7 +22,7 @@ const enum EGameMenuState HelpScreen_nextStateNavigation[1] = {
 
 void HelpScreen_initStateCallback(enum EGameMenuState tag) {
     (void)tag;
-    mainText = "This is the help";
+    mainText = "You must gain access to the reactor, place the EMP\ndevice and, from a safe\ndistance, activate it.";
 }
 
 void HelpScreen_repaintCallback(void) {
@@ -30,7 +30,7 @@ void HelpScreen_repaintCallback(void) {
         clearScreen();
 
         if (mainText != NULL) {
-            drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, 1 + 3, "Help", mainText);
+            drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, 1 + 6, "Help", mainText);
         }
     }
 
