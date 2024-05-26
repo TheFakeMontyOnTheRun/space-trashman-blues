@@ -92,7 +92,11 @@ void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) 
 
         if (x0 == x1 && y0 == y1) break;
 
-        realPut(x0, y0, colour, NULL);
+        if (x0 >= 0 && y0 >= 0 && x0 < 256 && y0 < 192) {
+            realPut(x0, y0, colour, NULL);
+        } else {
+            return;
+        }
 
         e2 = err;
         if (e2 > -dx) {
