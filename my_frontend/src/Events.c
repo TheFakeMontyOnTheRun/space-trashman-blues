@@ -176,6 +176,7 @@ void initMap(void) {
 #else
     struct StaticBuffer datafile = loadBinaryFileFromPath(playerLocation);
     head = datafile.data;
+    headEnd = head + datafile.size;
 #endif
     /* first item in the list is always a dummy */
     roomItem = getRoom(playerLocation)->itemsPresent->next;
@@ -211,6 +212,10 @@ void initMap(void) {
                 repetitions--;
             }
 #else
+            if (head == headEnd) {
+                goto done_loading;
+            }
+
             current = *head;
 #endif
 
