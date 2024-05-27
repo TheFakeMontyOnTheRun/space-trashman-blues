@@ -55,6 +55,11 @@ extern int8_t cameraX;
 extern int8_t cameraZ;
 extern enum EDirection playerDirection;
 
+
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
+extern uint8_t roomTransitionAnimationStep;
+#endif
+
 #define BUFFER_SIZEX 16
 #define BUFFER_SIZEY 128
 #define BUFFER_RESX 128
@@ -82,6 +87,14 @@ void flush3DBuffer(void) {
         vdp_set_sprite_8(i, playerPositionSprite[i]);
     }
 
+    clearGraphics();
+
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
+    if (roomTransitionAnimationStep) {
+        return;
+    }
+#endif
+
     vdp_put_sprite_8(
             0,
             (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
@@ -89,8 +102,6 @@ void flush3DBuffer(void) {
             playerDirection,
             15
     );
-
-    clearGraphics();
 }
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
