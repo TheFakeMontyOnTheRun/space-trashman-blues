@@ -90,7 +90,6 @@ extern unsigned int uScaleUniformLocation;
 extern unsigned int uProjectionMatrixUniformLocation;
 extern unsigned int sTextureUniformLocation;
 extern unsigned int uModUniformLocation;
-extern unsigned int uFadeUniformLocation;
 
 extern t_mat4x4 viewMatrix;
 extern t_mat4x4 transformMatrix;
@@ -140,9 +139,6 @@ void renderVBOAt(struct Bitmap *bitmap,
         float b = ((tint & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
         glUniform4f(uModUniformLocation, r, g, b, 1.0f);
     }
-
-    float vanishingFade = 1.0f - ( -z / 64.0f );
-    glUniform4f(uFadeUniformLocation, vanishingFade, vanishingFade, vanishingFade, vanishingFade);
 
     checkGLError("Setting tint");
 

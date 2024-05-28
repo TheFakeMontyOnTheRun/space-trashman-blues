@@ -10,8 +10,13 @@ CFLAGS = \
         -pragma-define:CRT_MODEL=3 \
         -pragma-define:CRT_ENABLE_CLOSE=0 \
         -pragma-define:CLIB_STDIO_HEAP_SIZE=0 \
-        -pragma-define:CRT_FONT=0 \
-        -pragma-define:CLIB_EXIT_STACK_SIZE=0 \
+        -pragma-export:CRT_FONT=0 \
+        -pragma-export:ansi_SCROLLUP=0 \
+        -pragma-define:CRT_ENABLE_STDIO=0 \
+        -pragma-redirect:fputc_cons=l_ret \
+        -pragma-define:CRT_ENABLE_STDIO=0 \
+        -pragma-export:CLIB_GENCON_CAPS=0 \
+        -pragma-define:CLIB_FIRMWARE_KEYBOARD_CLICK=0 \
         -pragma-define:CRT_DISABLELOADER=1 \
         -Iinclude \
         -I../core/include \

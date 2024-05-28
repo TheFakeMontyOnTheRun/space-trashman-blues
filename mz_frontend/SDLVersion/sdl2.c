@@ -330,17 +330,7 @@ void flipRenderer(void) {
             rect.w = 2;
             rect.h = 2;
             int index = framebuffer[(256 * y) + x];
-            if (index > 16) {
-                if ((x + y) & 1) {
-                    index = 0;
-                } else {
-                    index = index - 16;
-                }
-            }
-
-            if (index < 0 || index >= 16) {
-                continue;
-            }
+            assert( !(index < 0 || index >= 16));
 
             pixel = palette[index];
 

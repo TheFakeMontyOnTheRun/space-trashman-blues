@@ -16,7 +16,7 @@ ASFLAGS = -phxass -Fhunk -m68000 -chklabels -no-fpu -wfail -I/opt/amiga/m68k-ami
 MENU_TARGET=gameocs
 
 MENU_OBJ= \
-    Engine3D/demo.o \
+    Engine3D/Engine3D.o \
     AmigaVersion/AmigaRenderer.o \
     ../core/src/Core.o \
     ../core/src/Derelict.o \

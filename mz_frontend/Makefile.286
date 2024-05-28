@@ -5,7 +5,7 @@ CFLAGS = -fomit-frame-pointer -fno-exceptions -ffast-math \
 
 CC = i386-pc-msdosdjgpp-gcc
 
-OBJS = Engine3D/demo.o MSDOSVersion/msdos.o \
+OBJS = Engine3D/Engine3D.o MSDOSVersion/msdos.o \
     ../core/src/Core.o \
     ../core/src/Derelict.o \
     ../common/src/PackedFileReader.o \

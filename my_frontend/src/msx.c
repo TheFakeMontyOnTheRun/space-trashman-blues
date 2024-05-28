@@ -9,8 +9,6 @@
 #include "UI.h"
 #include "KeyboardUI.h"
 
-uint8_t updateDirection;
-
 /* Sadly, I can't include conio.h - otherwise, I would get errors when building on OSX */
 int kbhit(void);
 int getch(void);
@@ -26,8 +24,7 @@ void initHW(int argc, char **argv) {
     initTMS9918();
     initAY38910();
     initKeyboardUI();
-    updateDirection = 1;
-    needs3dRefresh = 0;
+    needsToRedrawVisibleMeshes = 0;
 }
 
 void handleSystemEvents(void) {}
@@ -48,10 +45,8 @@ enum ECommand getInput(void) {
         case 31:
             return kCommandDown;
         case 29:
-            updateDirection = 1;
             return kCommandLeft;
         case 28:
-            updateDirection = 1;
             return kCommandRight;
         case 'c':
             return kCommandStrafeLeft;
@@ -61,7 +56,7 @@ enum ECommand getInput(void) {
             if (waitForKey) {
                 waitForKey = 0;
                 firstFrameOnCurrentState = 1;
-                needs3dRefresh = 1;
+                needsToRedrawVisibleMeshes = 1;
                 return kCommandNone;
             }
             return kCommandFire1;
@@ -88,13 +83,7 @@ void startFrame(int x, int y, int width, int height) {
 }
 
 void endFrame(void) {
-    if (needs3dRefresh) {
+    if (needsToRedrawVisibleMeshes) {
         flush3DBuffer();
-
-        if (updateDirection) {
-            char direction[8] = {'N', 0, 'E', 0, 'S', 0, 'W', 0};
-            updateDirection = 0;
-            writeStrWithLimit(12, 17, &direction[getPlayerDirection() * 2], 31, 2, 0);
-        }
     }
 }

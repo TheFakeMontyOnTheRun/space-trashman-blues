@@ -5,7 +5,7 @@
 #ifndef SOUNDSYSTEM_H
 #define SOUNDSYSTEM_H
 
-void playSound(const int action);
+void playSound(const uint8_t action);
 
 void soundTick(void);
 

@@ -147,7 +147,7 @@ void GameMenu_repaintCallback(void) {
                           cursorPosition);
 }
 
-enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long delta) {
+enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, void* data) {
 
     switch (cmd) {
         case kCommandBack:

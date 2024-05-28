@@ -11,8 +11,6 @@
 
 unsigned char imageBuffer[128 * 32];
 
-uint8_t updateDirection;
-
 enum ESoundDriver soundDriver = kPcSpeaker;
 extern uint8_t firstFrameOnCurrentState;
 
@@ -297,7 +295,6 @@ void initHW(int argc, char **argv) {
             );
 
     initKeyboardUI();
-    updateDirection = 1;
     clearGraphics();
 }
 
@@ -335,14 +332,12 @@ enum ECommand getInput(void) {
 
     switch(toReturn) {
         case 'q':
-            updateDirection = 1;
             return kCommandLeft;
         case 'w':
             return kCommandUp;
         case 's':
             return kCommandDown;
         case 'e':
-            updateDirection = 1;
             return kCommandRight;
         case 'a':
             return kCommandStrafeLeft;
@@ -355,7 +350,7 @@ enum ECommand getInput(void) {
             if (waitForKey) {
                 waitForKey = 0;
                 firstFrameOnCurrentState = 1;
-                needs3dRefresh = 1;
+                needsToRedrawVisibleMeshes = 1;
                 return kCommandNone;
             }
 
@@ -432,7 +427,7 @@ void endFrame(void) {
     uint16_t baseOffset = 0;
     uint16_t index = 0;
 
-    if (!needs3dRefresh) {
+    if (!needsToRedrawVisibleMeshes) {
         return;
     }
 
@@ -491,24 +486,6 @@ void endFrame(void) {
                 );
     }
 
-    if (updateDirection) {
-        updateDirection = 0;
-        switch (getPlayerDirection()) {
-            case 0:
-                writeStrWithLimit(12, 17, "N", 31, 2, 0);
-                break;
-            case 1:
-                writeStrWithLimit(12, 17, "E", 31, 2, 0);
-                break;
-            case 2:
-                writeStrWithLimit(12, 17, "S", 31, 2, 0);
-                break;
-            case 3:
-                writeStrWithLimit(12, 17, "W", 31, 2, 0);
-                break;
-        }
-    }
-
     memset(imageBuffer, 0, 128 * 32);
 }
 
@@ -561,8 +538,4 @@ void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) 
             y0 += sy;
         }
     }
-}
-
-uint8_t getPaletteEntry(uint32_t colour) {
-    return colour & 3;
 }

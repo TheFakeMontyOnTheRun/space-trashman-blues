@@ -38,7 +38,7 @@ NITRO    := filesystem
 ARCH := -marm -mthumb-interwork -march=armv5te -mtune=arm946e-s
 
 CFLAGS   := -g -Wall -O3\
-            $(ARCH) $(INCLUDE) -DARM9 -DTILED_BITMAPS -DNDS -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -I../base3d/include -DENDIANESS_AWARE  -DXRES_FRAMEBUFFER=255 -DYRES_FRAMEBUFFER=191     \
+            $(ARCH) $(INCLUDE) -DARM9 -DTILED_BITMAPS -DNDS -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -I../base3d/include -DENDIANESS_AWARE  -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200 -DXRES_SCREEN=255 -DYRES_SCREEN=191   -DSUPPORTS_HACKING_MINIGAME \
             -I../menu/include          \
             -I../../core/include \
             -I../../common/include \

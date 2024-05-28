@@ -327,15 +327,7 @@ void clear(void) {}
 
 
 void graphicsPut(int16_t x, int16_t y, uint16_t colour) {
-    if (colour >= 16) {
-        if ((x + y) & 1) {
-            framebuffer[(128 * y) + x] = 0;
-        } else {
-            framebuffer[(128 * y) + x] = colour - 16;
-        }
-    } else {
-        framebuffer[(128 * y) + x] = colour;
-    }
+    framebuffer[(128 * y) + x] = colour;
 }
 
 void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour) {
@@ -366,24 +358,9 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour) {
 
     ptr = &framebuffer[(128 * _y0) + (x0)];
 
-    if (colour <= 16) {
-        for (int16_t y = _y0; y <= _y1; ++y) {
-            *ptr = colour;
-            ptr += 128;
-        }
-    } else {
-        colour = colour - 16;
-        uint8_t stipple = ((x0 + y0) & 1);
-
-        for (int16_t y = _y0; y <= _y1; ++y) {
-            if (stipple = ~stipple) {
-                *ptr = colour;
-            } else {
-                *ptr = 0;
-            }
-
-            ptr += 128;
-        }
+    for (int16_t y = _y0; y <= _y1; ++y) {
+        *ptr = colour;
+        ptr += 128;
     }
 }
 
@@ -408,22 +385,9 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
         _x1 = 127;
     }
 
-    if (colour <= 16) {
-        uint8_t *ptr = &framebuffer[(128 * y) + _x0];
-        for (int16_t x = _x0; x <= _x1; ++x) {
-            *ptr++ = colour;
-        }
-    } else {
-        colour = colour - 16;
-        uint8_t stipple = ((x0 + y) & 1);
-        uint8_t *ptr = &framebuffer[(128 * y) + _x0];
-        for (int16_t x = _x0; x <= _x1; ++x) {
-            if (stipple = ~stipple) {
-                *ptr++ = colour;
-            } else {
-                *ptr++ = 0;
-            }
-        }
+    uint8_t *ptr = &framebuffer[(128 * y) + _x0];
+    for (int16_t x = _x0; x <= _x1; ++x) {
+        *ptr++ = colour;
     }
 }
 

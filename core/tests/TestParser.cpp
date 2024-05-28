@@ -6,6 +6,7 @@
 #include <stdint.h>
 
 extern "C" {
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Parser.h"

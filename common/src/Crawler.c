@@ -27,7 +27,7 @@
 #include "UI.h"
 
 #ifndef SHORT_VIEW_ANGLE
-#define ANGLE_TURN_THRESHOLD 45
+#define ANGLE_TURN_THRESHOLD 40
 #define ANGLE_TURN_STEP 5
 #else
 #define ANGLE_TURN_THRESHOLD 5
@@ -122,7 +122,6 @@ void recenterView(void) {
 
 void Crawler_repaintCallback(void) {
 
-    visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = TRUE;
 
     if (showPromptToAbandonMission) {
@@ -153,7 +152,7 @@ void Crawler_repaintCallback(void) {
     }
 }
 
-enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
+enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
 
     if (showPromptToAbandonMission) {
 
@@ -195,11 +194,11 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
     if (cmd == kCommandBack) {
         showPromptToAbandonMission = TRUE;
         timeUntilNextState = 0;
-        return kMenuStateUnchanged;
+        return kResumeCurrentState;
     }
 
     if (timeUntilNextState != kNonExpiringPresentationState) {
-        timeUntilNextState -= delta;
+        timeUntilNextState -= *((long*)data);
     }
 
     if (currentPresentationState == kWaitingForInput) {
@@ -213,7 +212,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long delta) {
         return kResumeCurrentState;
     }
 
-    return kMenuStateUnchanged;
+    return kResumeCurrentState;
 }
 
 void Crawler_unloadStateCallback(enum EGameMenuState newState) {

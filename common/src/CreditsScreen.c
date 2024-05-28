@@ -21,14 +21,15 @@ enum EGameMenuState CreditsScreen_nextStateNavigation[1] = {
 
 void CreditsScreen_initStateCallback(enum EGameMenuState tag) {
     (void)tag;
-    mainText = "Made by MontyOnTheRun";
+    mainText = "Made by Daniel \n\"MontyOnTheRun\" Monteiro, with the help of many\npeople. Please check\nCREDITS.TXT"
+               " on the source code tree for further\nacknowledgements.";
 }
 
 void CreditsScreen_repaintCallback(void) {
     if (firstFrameOnCurrentState) {
         clearScreen();
         if (mainText != NULL) {
-            drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, 1 + 3, "Credits", mainText);
+            drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 4, 10, "Credits", mainText);
         }
     }
 
@@ -40,8 +41,8 @@ void CreditsScreen_repaintCallback(void) {
                           3, "Credits", CreditsScreen_options, 1, cursorPosition);
 }
 
-enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, long delta) {
-    (void)delta;
+enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, void* data) {
+    (void)data;
     return handleCursor(CreditsScreen_nextStateNavigation, 1, cmd, kMainMenu);
 }
 

@@ -29,22 +29,9 @@ uint8_t mPalette[256];
 struct Bitmap *mFont;
 uint8_t mBufferedCommand = '.';
 
-void flushVirtualFramebuffer(void);
+void performAction();
 
-uint8_t getPaletteEntry(const uint32_t origin) {
-    uint8_t shade;
-    /*
-    if (!(origin & 0xFF000000)) {
-        return TRANSPARENCY_COLOR;
-    }
-    */
-    shade = 0;
-    shade += (((((origin & 0x0000FF)) << 2) >> 8)) << 6;
-    shade += (((((origin & 0x00FF00) >> 8) << 3) >> 8)) << 3;
-    shade += (((((origin & 0xFF0000) >> 16) << 3) >> 8)) << 0;
-    
-    return shade;
-}
+void flushVirtualFramebuffer(void);
 
 void graphicsInit() {
 }
@@ -210,7 +197,7 @@ void clearScreen(void) {
     fillRect(0, 0, 255, 192, 0, 0);
 }
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
+void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
     uint8_t len = strlen(text);
     char *ptr = text;
     uint8_t c = 0;
@@ -299,7 +286,7 @@ void graphicsFlush(void) {
         }
     }
     
-	if (needs3dRefresh) {
+	if (needsToRedrawVisibleMeshes) {
         flipRenderer();
         clearGraphics();
 	}

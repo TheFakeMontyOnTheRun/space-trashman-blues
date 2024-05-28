@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "Enums.h"
 #include "SoundSystem.h"
 
@@ -7,7 +8,7 @@ void setupOPL2(int port) {}
 
 void stopSounds(void) {}
 
-void playSound(int action) {}
+void playSound(uint8_t action) {}
 
 void soundTick(void) {}
 

@@ -14,9 +14,9 @@ CFLAGS=-g -c -O3     \
 	-Imenu/include                                       \
 	-ISoundSystem                                       \
 	-Ibase3d/include                                     \
-	-I../core/include -DINCLUDE_ITEM_DESCRIPTIONS -DCLI_BUILD -sUSE_SDL -DPAGE_FLIP_ANIMATION -DENDIANESS_AWARE -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200
+	-I../core/include -DINCLUDE_ITEM_DESCRIPTIONS -DSUPPORTS_HACKING_MINIGAME -DCLI_BUILD -sUSE_SDL -DPAGE_FLIP_ANIMATION -DENDIANESS_AWARE -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200
 
-MENU_TARGET=game.html
+MENU_TARGET=index.html
 
 MENU_OBJ=../common/src/MainMenu.o \
 	../common/src/FixP.o \

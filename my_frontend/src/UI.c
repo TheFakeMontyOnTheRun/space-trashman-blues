@@ -20,6 +20,10 @@ extern int8_t map[32][32];
 
 uint8_t waitForKey = 0;
 
+uint8_t redrawMap;
+
+uint8_t needsToRedrawHUD;
+
 void drawGraphic(const uint8_t *graphic) {
     const uint8_t *ptr = graphic;
 
@@ -50,16 +54,27 @@ void showMessage(const char *message) {
 }
 
 void drawMap(void) {
-
     uint8_t x, y;
+
+    if (!redrawMap) {
+        return;
+    }
 
     if (playerLocation == 0) {
         return;
     }
 
+    redrawMap = 0;
+
+    drawWindow((XRES_FRAMEBUFFER / 8) / 2,
+               0,
+               (XRES_FRAMEBUFFER / 8) / 2 - 1,
+               (YRES_FRAMEBUFFER / 8) / 2 + 1,
+               "Map");
+
     for (y = 0; y < 12; ++y) {
         for (x = 0; x < 12; ++x) {
-            drawTextAt(((XRES_FRAMEBUFFER / 8) / 2) + x + 2, 2 + y, " ", 0);
+            drawTextAt(((XRES_FRAMEBUFFER / 8) / 2) + x + 2, 1 + y, " ", 0);
         }
     }
 
@@ -68,7 +83,7 @@ void drawMap(void) {
 
             if (patterns[(map[y][x] & 127) - 32].blockMovement) {
                 fillRect((XRES_FRAMEBUFFER / 2) + (x * 3) + 16,
-                         (y * 3) + 16,
+                         (y * 3) + 15,
                          (XRES_FRAMEBUFFER / 2) + (x * 3) + 16 + 3,
                          (y * 3) + 3 + 16,
                          2,
@@ -103,12 +118,12 @@ void performAction(void) {
     }
 }
 
-void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title, uint8_t colour) {
+void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {
     uint16_t x0 = tx * 8;
     uint16_t x1 = (tx + tw) * 8;
     uint8_t y0 = ty * 8;
     uint8_t y1 = (ty + th) * 8;
-    int c, d;
+    uint8_t c, d;
 
     for (c = 0; c < th; ++c) {
         for (d = 0; d < tw; ++d) {
@@ -116,15 +131,15 @@ void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *titl
         }
     }
 
-    drawLine(x0, y0, x1, y0, colour);
+    drawLine(x0, y0, x1, y0, 2);
 
-    drawLine(x0, y1, x1, y1, colour);
+    drawLine(x0, y1, x1, y1, 2);
 
-    drawLine(x0, y0, x0, y1, colour);
+    drawLine(x0, y0, x0, y1, 2);
 
-    drawLine(x1, y0, x1, y1, colour);
+    drawLine(x1, y0, x1, y1, 2);
 
-    drawTextAt(tx + 1, ty + 1, title, 1);
+    drawTextAt(tx + 1, ty, title, 1);
 }
 
 
@@ -144,19 +159,18 @@ drawWindowWithOptions(const uint8_t x,
                    y - 1,
                    dx + 1,
                    dy + 1,
-                   title,
-                   2);
+                   title);
     }
 
     for (c = 0; c < optionsCount; ++c) {
         drawTextAt(x,
-                   y + 2 + c,
+                   y + 1 + c,
                    (selectedOption == c) ? ">" : " ",
                    1);
 
         if (firstFrameOnCurrentState || selectedOption == 0xFF) {
             drawTextAt(x + 1,
-                       y + 2 + c,
+                       y + 1 + c,
                        &options[c][0],
                        1);
         }
@@ -166,8 +180,8 @@ drawWindowWithOptions(const uint8_t x,
 void
 drawTextWindow(const uint8_t x, const uint8_t y, const uint8_t dx, const uint8_t dy, const char *title,
                const char *content) {
-    drawWindow(x, y, dx, dy, title, 2);
-    drawTextAt(x + 1, y + 2, content, 2);
+    drawWindow(x, y, dx, dy, title);
+    writeStrWithLimit(x + 1, y + 2, content, x + dx - 1, 1, 0);
 }
 
 enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t optionsCount, const enum ECommand cmd, enum EGameMenuState backState) {

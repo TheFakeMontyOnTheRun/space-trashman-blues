@@ -55,6 +55,8 @@ struct CellPattern {
     uint8_t blockMovement: 1;
 };
 
+#define getPaletteEntry(c) (( (c) - 0xFF000000 ) % 3)
+
 void clearGraphics(void);
 
 void clearTextScreen(void);
@@ -129,6 +131,6 @@ void repaintMapItems(void);
 
 uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y);
 
-extern uint8_t needs3dRefresh;
+extern uint8_t needsToRedrawVisibleMeshes;
 
 #endif /* DERELICT8_RENDERER_H */

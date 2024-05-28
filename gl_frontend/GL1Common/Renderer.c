@@ -26,9 +26,9 @@
 #include <nds/arm9/trig_lut.h>
 #endif
 
+#include "Enums.h"
 #include "Core.h"
 #include "FixP.h"
-#include "Enums.h"
 #include "Common.h"
 #include "Vec.h"
 #include "CActor.h"
@@ -101,7 +101,7 @@ uint32_t getPaletteEntry(const uint32_t origin) {
 void enter2D(void) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, 3.2, 2, 0, -0.3, 100);
+    glOrtho(0, 3.2, 2.4, 0, -0.3, 100);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -165,7 +165,6 @@ void startFrame(int x, int y, int width, int height) {
     glClearDepth(GL_MAX_DEPTH);
 #endif
 
-    visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = FALSE;
     enter2D();
 }
@@ -323,7 +322,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 
 void updateCursorForRenderer(const int x, const int z) {
     needsToRedrawVisibleMeshes = TRUE;
-    visibilityCached = FALSE;
     cursorX = x;
     cursorZ = z;
 }
@@ -445,13 +443,6 @@ void drawMap(const struct CActor *current) {
         needsToRedrawVisibleMeshes = TRUE;
     }
 
-    if (visibilityCached) {
-        return;
-    }
-
-    visibilityCached = TRUE;
-    needsToRedrawVisibleMeshes = TRUE;
-
     cameraPosition = mapCamera;
 
     switch (cameraDirection) {
@@ -482,10 +473,18 @@ void drawMap(const struct CActor *current) {
         walkingBias = 0;
     }
 
+    ++gameTicks;
+
+    if (visibilityCached) {
+        return;
+    }
+
+    visibilityCached = TRUE;
+    needsToRedrawVisibleMeshes = TRUE;
+
+    
     castVisibility(cameraDirection, visMap, cameraPosition,
                    distances, TRUE, &occluders);
-
-    ++gameTicks;
 }
 
 enum ECommand getInput(void) {

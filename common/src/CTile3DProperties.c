@@ -1,4 +1,4 @@
-#ifdef WIN32
+	#ifdef WIN32
 #include "Win32Int.h"
 #else
 
@@ -96,9 +96,9 @@ end:
         struct Mesh* mesh;
         uint8_t len = *(bufferHead++);
 
-        char* meshName = allocMem(len + 1, GENERAL_MEMORY, 1);
+        char* meshName = (char*)allocMem(len + 1, GENERAL_MEMORY, 1);
         memcpy(meshName, bufferHead, len);
-        mesh = allocMem(sizeof(struct Mesh), GENERAL_MEMORY, 1);
+        mesh = (struct Mesh*)allocMem(sizeof(struct Mesh), GENERAL_MEMORY, 1);
         sprintf(&meshNameWithExtension[0], "%s.mdl", meshName);
         loadMesh(mesh, &meshNameWithExtension[0]);
         setInMap(meshes, kCustomMeshStart + c, mesh);
