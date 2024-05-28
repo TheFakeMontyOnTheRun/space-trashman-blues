@@ -3,19 +3,21 @@
 //
 
 #include <gtest/gtest.h>
+#include <stdint.h>
 
 extern "C" {
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Parser.h"
 }
 
-static void myDummyOutputHandler(const char*msg) {}
+static void myDummyOutputHandler(const char *msg) {}
 
 
 TEST(TestParser, willNotRunCommandsWithInvalidInput) {
 
-	setLoggerDelegate(myDummyOutputHandler);
+    setLoggerDelegate(myDummyOutputHandler);
 
-  	ASSERT_FALSE(parseCommand("", ""));
+    ASSERT_FALSE(parseCommand("", ""));
 }

@@ -1,437 +1,89 @@
 #include <stdint.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <msx.h>
-#include <stdio.h>
-#include <msx/gfx.h>
 
-#include <games.h>
-#include <psg.h>
-#include <sound.h>
-#include <stdlib.h>
-#include <time.h>
-
+#include "Enums.h"
 #include "Core.h"
-#include "Derelict.h"
-#include "Engine3D.h"
+#include "Renderer.h"
 
-char getch();
+#include "TMS9918.h"
+#include "AY-3-8910.h"
+#include "UI.h"
+#include "KeyboardUI.h"
 
-extern const struct Pattern patterns[127];
+/* Sadly, I can't include conio.h - otherwise, I would get errors when building on OSX */
+int kbhit(void);
+int getch(void);
+extern uint8_t firstFrameOnCurrentState;
+enum ESoundDriver soundDriver = kAY38910;
 
-extern int8_t map[32][32];
+/*  Required since we have our own memory allocator abstraction */
+uint16_t heap = 0;
 
-extern struct ObjectNode *focusedItem;
-
-extern struct ObjectNode *roomItem;
-
-extern uint8_t accessGrantedToSafe;
-
-uint8_t cursorPosition = 0;
-
-#define BUFFER_SIZEX 16
-#define BUFFER_SIZEY 128
-#define BUFFER_RESX 128
-#define BUFFER_RESY 128
-#define COOLDOWN_MAX 0x2EF
-#define MARGIN_TEXT_SCREEN_LIMIT 35
-
-uint8_t font[] = {
-		// ASCII table starting on SPACE.
-		// Being on line 32 is no accident.
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 // space
-		, 0x10, 0x38, 0x38, 0x10, 0x10, 0x00, 0x10, 0x00, 0x6c, 0x6c, 0x48, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x28,
-		0x7c, 0x28, 0x28, 0x7c, 0x28, 0x00, 0x20, 0x38, 0x40, 0x30, 0x08, 0x70, 0x10, 0x00, 0x64, 0x64, 0x08, 0x10,
-		0x20, 0x4c, 0x4c, 0x00, 0x20, 0x50, 0x50, 0x20, 0x54, 0x48, 0x34, 0x00, 0x30, 0x30, 0x20, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x10, 0x20, 0x20, 0x20, 0x20, 0x20, 0x10, 0x00, 0x20, 0x10, 0x10, 0x10, 0x10, 0x10, 0x20, 0x00,
-		0x00, 0x28, 0x38, 0x7c, 0x38, 0x28, 0x00, 0x00, 0x00, 0x10, 0x10, 0x7c, 0x10, 0x10, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x30, 0x30, 0x20, 0x00, 0x00, 0x00, 0x7c, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x30, 0x30, 0x00, 0x00, 0x04, 0x08, 0x10, 0x20, 0x40, 0x00, 0x00 // /space - 15
-		, 0x38, 0x44, 0x4c, 0x54, 0x64, 0x44, 0x38, 0x00 // 0
-		, 0x10, 0x30, 0x10, 0x10, 0x10, 0x10, 0x38, 0x00, 0x38, 0x44, 0x04, 0x18, 0x20, 0x40, 0x7c, 0x00, 0x38, 0x44,
-		0x04, 0x38, 0x04, 0x44, 0x38, 0x00, 0x08, 0x18, 0x28, 0x48, 0x7c, 0x08, 0x08, 0x00, 0x7c, 0x40, 0x40, 0x78,
-		0x04, 0x44, 0x38, 0x00, 0x18, 0x20, 0x40, 0x78, 0x44, 0x44, 0x38, 0x00, 0x7c, 0x04, 0x08, 0x10, 0x20, 0x20,
-		0x20, 0x00, 0x38, 0x44, 0x44, 0x38, 0x44, 0x44, 0x38, 0x00, 0x38, 0x44, 0x44, 0x3c, 0x04, 0x08, 0x30, 0x00,
-		0x00, 0x00, 0x30, 0x30, 0x00, 0x30, 0x30, 0x00, 0x00, 0x00, 0x30, 0x30, 0x00, 0x30, 0x30, 0x20, 0x08, 0x10,
-		0x20, 0x40, 0x20, 0x10, 0x08, 0x00, 0x00, 0x00, 0x7c, 0x00, 0x00, 0x7c, 0x00, 0x00, 0x20, 0x10, 0x08, 0x04,
-		0x08, 0x10, 0x20, 0x00, 0x38, 0x44, 0x04, 0x18, 0x10, 0x00, 0x10, 0x00, 0x38, 0x44, 0x5c, 0x54, 0x5c, 0x40,
-		0x38, 0x00 // /0
-		, 0x38, 0x44, 0x44, 0x44, 0x7c, 0x44, 0x44, 0x00 // a
-		, 0x78, 0x44, 0x44, 0x78, 0x44, 0x44, 0x78, 0x00, 0x38, 0x44, 0x40, 0x40, 0x40, 0x44, 0x38, 0x00, 0x78, 0x44,
-		0x44, 0x44, 0x44, 0x44, 0x78, 0x00, 0x7c, 0x40, 0x40, 0x78, 0x40, 0x40, 0x7c, 0x00, 0x7c, 0x40, 0x40, 0x78,
-		0x40, 0x40, 0x40, 0x00, 0x38, 0x44, 0x40, 0x5c, 0x44, 0x44, 0x3c, 0x00, 0x44, 0x44, 0x44, 0x7c, 0x44, 0x44,
-		0x44, 0x00, 0x38, 0x10, 0x10, 0x10, 0x10, 0x10, 0x38, 0x00, 0x04, 0x04, 0x04, 0x04, 0x44, 0x44, 0x38, 0x00,
-		0x44, 0x48, 0x50, 0x60, 0x50, 0x48, 0x44, 0x00, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x7c, 0x00, 0x44, 0x6c,
-		0x54, 0x44, 0x44, 0x44, 0x44, 0x00, 0x44, 0x64, 0x54, 0x4c, 0x44, 0x44, 0x44, 0x00, 0x38, 0x44, 0x44, 0x44,
-		0x44, 0x44, 0x38, 0x00, 0x78, 0x44, 0x44, 0x78, 0x40, 0x40, 0x40, 0x00, 0x38, 0x44, 0x44, 0x44, 0x54, 0x48,
-		0x34, 0x00, 0x78, 0x44, 0x44, 0x78, 0x48, 0x44, 0x44, 0x00, 0x38, 0x44, 0x40, 0x38, 0x04, 0x44, 0x38, 0x00,
-		0x7c, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x00, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x38, 0x00, 0x44, 0x44,
-		0x44, 0x44, 0x44, 0x28, 0x10, 0x00, 0x44, 0x44, 0x54, 0x54, 0x54, 0x54, 0x28, 0x00, 0x44, 0x44, 0x28, 0x10,
-		0x28, 0x44, 0x44, 0x00, 0x44, 0x44, 0x44, 0x28, 0x10, 0x10, 0x10, 0x00, 0x78, 0x08, 0x10, 0x20, 0x40, 0x40,
-		0x78, 0x00, 0x38, 0x20, 0x20, 0x20, 0x20, 0x20, 0x38, 0x00, 0x00, 0x40, 0x20, 0x10, 0x08, 0x04, 0x00, 0x00,
-		0x38, 0x08, 0x08, 0x08, 0x08, 0x08, 0x38, 0x00, 0x10, 0x28, 0x44, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0xfc, 0x30, 0x30, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x78, 0x08,
-		0x30, 0x40, 0x78, 0x00, 0x18, 0x20, 0x20, 0x60, 0x20, 0x20, 0x18, 0x00, 0x10, 0x10, 0x10, 0x00, 0x10, 0x10,
-		0x10, 0x00, 0x30, 0x08, 0x08, 0x0c, 0x08, 0x08, 0x30, 0x00, 0x28, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x10, 0x38, 0x6c, 0x44, 0x44, 0x7c, 0x00, 0x00
-};
-
-void graphicsFlush();
-
-void nextItemInHand();
-
-void useItemInHand();
-
-void nextItemInRoom();
-
-void interactWithItemInRoom();
-
-void pickOrDrop();
-
-void dropItem();
-
-void pickItem();
-
-void clearGraphics();
-
-void backToGraphics();
-
-uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
-uint16_t cooldown;
-
-void init() {
-	set_color(15, 1, 1);
-	set_mode(mode_2);
-	fill(MODE2_ATTR, 0xF1, MODE2_MAX);
-	cooldown = COOLDOWN_MAX;
+void initHW(int argc, char **argv) {
+    (void)argc;
+    (void)argv;
+    initTMS9918();
+    initAY38910();
+    initKeyboardUI();
+    needsToRedrawVisibleMeshes = 0;
 }
 
-char *menuItems[] = {
-		"8) Use/Toggle",
-		"5) Use with...",
-		"9) Use/pick...",
-		"6) Drop",
-		"7) Next item",
-		"4) Next in room",
-};
+void handleSystemEvents(void) {}
 
-void graphicsFlush();
+enum ECommand getInput(void) {
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
+    if (!kbhit()) {
+        return kCommandNone;
+    }
 
-	uint8_t len = strlen(text);
-	char *ptr = text;
-	uint8_t c = 0;
-	uint8_t chary = 0;
-	uint8_t x = _x;
+    uint8_t input = getch();
 
-	for (; c < len && y < 64; ++c) {
+    performAction();
 
-		char cha = *ptr;
+    switch (input) {
+        case 30:
+            return kCommandUp;
+        case 31:
+            return kCommandDown;
+        case 29:
+            return kCommandLeft;
+        case 28:
+            return kCommandRight;
+        case 'c':
+            return kCommandStrafeLeft;
+        case 'v':
+            return kCommandStrafeRight;
+        case '1':
+            if (waitForKey) {
+                waitForKey = 0;
+                firstFrameOnCurrentState = 1;
+                needsToRedrawVisibleMeshes = 1;
+                return kCommandNone;
+            }
+            return kCommandFire1;
+        case '2':
+            return kCommandFire2;
+        case '3':
+            return kCommandFire3;
+        case '4':
+            return kCommandFire4;
+        case '5':
+            return kCommandFire5;
+        case '6':
+            return kCommandFire6;
 
-		if (x == limitX) {
-			++y;
-			x = _x;
-		} else if (cha == '\n') {
-			++y;
-			x = _x;
-			++ptr;
-			continue;
-		}
-
-		if (cha >= 'a') {
-			if (cha <= 'z') {
-				cha = (cha - 'a') + 'A';
-			} else {
-				cha -= ('z' - 'a');
-			}
-		}
-
-		uint8_t baseY = (y << 3);
-
-		uint8_t *fontTop = &font[((cha - 32) << 3)];
-		vwrite(fontTop, map_pixel(x << 3, y << 3), 8);
-
-		++x;
-		++ptr;
-	}
+    }
+    return input;
 }
 
-void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
-	writeStrWithLimit(_x, y, text, MARGIN_TEXT_SCREEN_LIMIT);
+void startFrame(int x, int y, int width, int height) {
+    (void)x;
+    (void)y;
+    (void)width;
+    (void)height;
 }
 
-void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {}
-
-
-void showMessage(const char *message) {
-	uint8_t keepGoing = 1;
-	clearScreen();
-
-	writeStr(1, 1, message, 2, 0);
-	writeStr(2, 22, "Press SPACE button to continue", 2, 0);
-
-	while (keepGoing) {
-		if (getKey() == ' ') {
-			keepGoing = 0;
-		}
-	}
-
-	backToGraphics();
+void endFrame(void) {
+    if (needsToRedrawVisibleMeshes) {
+        flush3DBuffer();
+    }
 }
-
-void titleScreen() {
-	uint8_t keepGoing = 1;
-	clearScreen();
-
-	writeStr(1, 1, "Sub Mare Imperium: Derelict", 2, 0);
-	writeStr(1, 4, "by Daniel Monteiro", 2, 0);
-	writeStr(1, 6, " Press SPACE to start ", 2, 0);
-
-
-	psg_init();
-	psg_channels(chanAll, chanNone); // set all channels to tone generation
-	psg_volume(0, 10);
-	psg_volume(1, 10);
-	psg_volume(2, 10);
-
-	psg_tone(0, psgT(262));
-
-	psg_tone(0, 0);
-
-	while (keepGoing) {
-		if (getKey() == ' ') {
-			keepGoing = 0;
-		}
-	}
-	backToGraphics();
-}
-
-void refreshJustGraphics() {
-	clearGraphics();
-	renderScene();
-	graphicsFlush();
-}
-
-void backToGraphics() {
-	clearScreen();
-	HUD_initialPaint();
-	refreshJustGraphics();
-}
-
-void performAction(void) {
-	switch (getGameStatus()) {
-		case kBadVictory:
-			showMessage("Victory! Too bad you didn't survive");
-			while (1);
-
-		case kBadGameOver:
-			showMessage("You're dead! And so are the\n"
-						"other people on the path of\n"
-						"destruction faulty reactor");
-			while (1);
-
-		case kGoodVictory:
-			showMessage("Victory! You managed to destroy the\nship and get out alive");
-			while (1);
-
-		case kGoodGameOver:
-			showMessage("You failed! While you're alive\n"
-						"you failed to prevent the worst\n"
-						"scenario and now EVERYBODY is\n"
-						"dead!)");
-			while (1);
-
-		default:
-		case kNormalGameplay:
-			break;
-	}
-}
-
-void clearTextScreen() {
-	clearScreen();
-}
-
-void enterTextMode() {
-}
-
-void exitTextMode() {
-}
-
-uint8_t getKey() {
-	uint8_t input = getch();
-
-	performAction();
-
-	switch (input) {
-		case 30:
-			return 'w';
-		case 31:
-			return 's';
-		case 29:
-			return 'q';
-		case 28:
-			return 'e';
-		case 'z':
-			return 'a';
-
-		case 'x':
-			return 'd';
-
-	}
-	return input;
-}
-
-void shutdownGraphics() {
-}
-
-void clearScreen() {
-	set_mode(mode_2);
-	fill(MODE2_ATTR, 0xF1, MODE2_MAX);
-}
-
-void clearGraphics() {
-	memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
-}
-
-void graphicsFlush() {
-	uint8_t *ptr = &buffer[0];
-	for (uint8_t y = 0; y < BUFFER_RESY; y += 8) {
-		uint16_t addr = map_pixel(0, y + 32);
-		vwrite(ptr, addr, 16 * 8);
-		ptr += 8 * 16;
-	}
-	memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
-}
-
-void sleepForMS(uint32_t ms) {
-	//we cant afford to sleep
-}
-
-void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
-
-#ifdef HALF_BUFFER
-	x0 = x0 >> 1;
-	y0 = y0 >> 1;
-	y1 = y1 >> 1;
-#endif
-
-	uint8_t _y0 = y0;
-	uint8_t _y1 = y1;
-
-
-	if (y0 > y1) {
-		_y0 = y1;
-		_y1 = y0;
-	}
-
-	uint8_t patternLine = (_y0 & 7); //which line inside the pattern;
-
-	/*
-	// originally was this
-	ptr = &buffer[(16 * 8 * (y >> 3)) + //skip the entire row of patterns along the y
-				  (8 * (x >> 3)) + //skip to the correct pattern in the row
-				  (y & 7)]; //skip to the line in pattern
-	*/
-	uint8_t *ptr = &buffer[((_y0 & ~7) << 4) + (x0 & ~7) + (_y0 & 7)];
-
-	uint8_t shiftXAnd7 = 128 >> (x0 & 7);
-
-	for (uint8_t y = _y0; y <= _y1; ++y) {
-		if (!shouldStipple || (y & 1)) {
-			*ptr |= shiftXAnd7;
-		}
-
-		++patternLine;
-		++ptr;
-
-		if (patternLine >= 8) {
-			patternLine = 0;
-			ptr += (16 * 8) - 8;
-		}
-	}
-}
-
-
-uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t *ptr) {
-
-#ifdef HALF_BUFFER
-	x = x >> 1;
-	y = y >> 1;
-#endif
-
-	if (ptr == NULL) {
-		/*
-		// originally was this
-		ptr = &buffer[(16 * 8 * (y >> 3)) + //skip the entire row of patterns along the y
-					  (8 * (x >> 3)) + //skip to the correct pattern in the row
-					  (y & 7)]; //skip to the line in pattern
-		*/
-		ptr = &buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)];
-	}
-
-	*ptr |= (128 >> (x & 7));
-
-	return ptr;
-}
-
-void graphicsPut(uint8_t x, uint8_t y) {
-
-#ifdef HALF_BUFFER
-	x = x >> 1;
-	y = y >> 1;
-#endif
-
-
-	buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)] |= (128 >> (x & 7));
-}
-
-
-void HUD_initialPaint() {
-	struct Room *room = getRoom(getPlayerRoom());
-
-	draw(BUFFER_RESX, 0, BUFFER_RESX, 191);
-	draw(0, 31, 128, 31);
-	draw(0, 160, 128, 160);
-
-	for (uint8_t i = 0; i < 6; ++i) {
-		writeStr(17, 14 + i, menuItems[i], 2, 0);
-	}
-
-	HUD_refresh();
-}
-
-void HUD_refresh() {
-
-	writeStrWithLimit(17, 5, "Object in hand", MARGIN_TEXT_SCREEN_LIMIT);
-
-	if (focusedItem != NULL) {
-		struct Item *item = getItem(focusedItem->item);
-
-
-		if (item->active) {
-			writeStr(17, 6, "*", 2, 0);
-		}
-
-		writeStrWithLimit(17, 6, item->name, MARGIN_TEXT_SCREEN_LIMIT);
-	} else {
-		writeStrWithLimit(17, 6, "Nothing", MARGIN_TEXT_SCREEN_LIMIT);
-	}
-
-	writeStrWithLimit(17, 1, "Object in room", MARGIN_TEXT_SCREEN_LIMIT);
-
-	if (roomItem != NULL) {
-		struct Item *item = getItem(roomItem->item);
-
-
-		if (item->active) {
-			writeStrWithLimit(17, 2, "*", MARGIN_TEXT_SCREEN_LIMIT);
-		}
-
-		writeStrWithLimit(17, 2, item->name, MARGIN_TEXT_SCREEN_LIMIT);
-	} else {
-		writeStrWithLimit(17, 2, "Nothing", MARGIN_TEXT_SCREEN_LIMIT);
-	}
-}
-

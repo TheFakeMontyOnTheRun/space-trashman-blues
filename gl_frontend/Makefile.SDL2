@@ -1,52 +1,47 @@
-LDFLAGS=`sdl2-config --libs` -lm -framework OpenGL
+LDFLAGS=`sdl2-config --libs` -R/usr/pkg/lib -R/usr/X11R7/lib  -L/usr/pkg/lib -L/usr/X11R7/lib  -lm -lGL
 
 CFLAGS= `sdl2-config --cflags `  \
-    -O6 -Ofast      \
     -Ibase3d/include        \
-    -ISoundSystem           \
     -Imenu/include          \
-    -funroll-loops          \
-    -fomit-frame-pointer    \
-    -fno-exceptions         \
-    -ffast-math             \
-    -flto		    \
-    --pedantic		    \
     -DCLI_BUILD \
     -I../core/include \
     -I../common/include \
-    -DINCLUDE_ITEM_DESCRIPTIONS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic
+    -DINCLUDE_ITEM_DESCRIPTIONS -DSUPPORTS_HACKING_MINIGAME -DTILED_BITMAPS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable \
+    -pedantic -DEMIT_QUIT_OPTION -DENDIANESS_AWARE -DSDL_DISABLE_IMMINTRIN_H \
+    -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200 -DXRES_SCREEN=320 -DYRES_SCREEN=240
 
 MENU_TARGET=game
 
 MENU_OBJ= menu/src/Main.o \
           	  ../common/src/FixP.o \
+          	  ../common/src/Mesh.o \
           	  ../common/src/Vec.o \
           	  ../common/src/Common.o \
           	  ../common/src/PackedFileReader.o \
           	  ../common/src/MapWithCharKey.o \
           	  ../common/src/CTile3DProperties.o \
-          	  GL1Common/LoadBitmapGL1.o \
-          	  GL1Common/RendererGL1.o \
-          	  base3d/src/VisibilityStrategy.o \
-          	  base3d/src/Globals.o \
-          	  base3d/src/Events.o \
-          	  GL1Common/Renderer_RasterizationGL1.o \
-          	  GL1Common/Renderer_TesselationGL1.o \
-          	  base3d/src/EDirection_Utils.o \
-          	  base3d/src/Dungeon.o \
-          	  menu/src/GameMenu.o \
-          	  menu/src/MainMenu.o \
-          	  menu/src/Engine.o \
-          	  menu/src/UI.o \
-          	  menu/src/HackingScreen.o \
-          	  menu/src/BattleScreen.o \
-          	  menu/src/HelpScreen.o \
-          	  menu/src/CreditsScreen.o \
-          	  menu/src/Crawler.o \
+          	  ../common/src/EDirection_Utils.o \
+          	  ../common/src/Globals.o \
+          	  ../common/src/VisibilityStrategy.o \
+          	  ../common/src/Events.o \
+          	  ../common/src/Dungeon.o \
+          	  GL1Common/LoadBitmap.o \
+          	  GL1Common/Renderer.o \
+          	  GL1Common/RendererRasterization.o \
+          	  GL1Common/RendererTesselation.o \
+          	  ../common/src/GameMenu.o \
+          	  ../common/src/MainMenu.o \
+          	  ../common/src/Engine.o \
+          	  ../common/src/UI.o \
+          	  ../common/src/HackingScreen.o \
+          	  ../common/src/HelpScreen.o \
+          	  ../common/src/CreditsScreen.o \
+          	  ../common/src/Crawler.o \
           	  ../core/src/Derelict.o \
           	  ../core/src/Core.o \
           	  ../core/src/Parser.o \
-          	  SoundSystem/NullMusic.o \
+          	  ../common/src/NullMusic.o \
+          	  ../common/src/HackingMinigameRules.o \
          	  base3d/src/SDLVersion/CSDL2Renderer.o
 
 

@@ -36,8 +36,11 @@
 #include "Core.h"
 #include "Engine.h"
 #include "LoadBitmap.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "Globals.h"
+
+enum ESoundDriver soundDriver = kNoSound;
+uint8_t finalBuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 
 #define NORMALIZE(x) (((x * 16) / 256))
 
@@ -83,8 +86,8 @@ struct NewScreen xnewscreen = {
 struct NewScreen xnewscreen = {
         0,              /* LeftEdge */
         0,              /* TopEdge  */
-        640,          /* Width    */
-        256,          /* Height   */
+        320,          /* Width    */
+        200,          /* Height   */
         8,              /* Depth    */
         0,              /* DetailPen */
         1,              /* BlockPen */
@@ -97,41 +100,9 @@ struct NewScreen xnewscreen = {
 };
 #endif
 
-struct NewWindow my_new_window = {
-        0,                              /* LeftEdge*/
-        0,                              /* TopEdge*/
-        320,                          /* Width */
-        200,                          /* Height */
-        0,                              /* DetailPen  */
-        1,                              /* BlockPen   */
-        ACTIVEWINDOW | VANILLAKEY | CLOSEWINDOW | RAWKEY, /* IDCMPFlags  */
-        SMART_REFRESH |                      /* Flags       */
-        WINDOWDRAG |                      /*             */
-        WINDOWDEPTH |                      /*             */
-        ACTIVATE,                      /*            */
-        NULL,                          /* FirstGadget */
-        NULL,                          /* CheckMark   */
-        (UBYTE * ) "The Mistral Report",              /* Title       */
-        NULL,                          /* Screen      */
-        NULL,                          /* BitMap      */
-        320,                          /* MinWidth    */
-        200,                          /* MinHeight   */
-        320,                          /* MaxWidth    */
-        200,                          /* MaxHeight   */
-        CUSTOMSCREEN                      /* Type */
-};
-
-void openCOM() {}
-
-uint8_t readByte() {
-    return kCommandNone;
-}
-
-void writeByte(uint8_t command) {}
-
 long frame = 0;
 
-void graphicsShutdown() {
+void graphicsShutdown(void) {
     ClearPointer(my_window);
     CloseWindow(my_window);
     CloseScreen(screen);
@@ -140,10 +111,10 @@ void graphicsShutdown() {
 
 void putStr(int x, int y, const char *str, int fg, int bg) {}
 
-void drawTitleBox() {}
+void drawTitleBox(void) {}
 
-void querySoundDriver() {
-    setupOPL2();
+void querySoundDriver(void) {
+    setupOPL2(1);
 }
 
 struct RGB8 {
@@ -197,7 +168,7 @@ static UWORD emptypointer[] = {
         0x0000, 0x0000    /* reserved, must be NULL */
 };
 
-void graphicsInit() {
+void graphicsInit(void) {
     int r, g, b;
     int c;
     struct RGB8 palete[256];
@@ -223,9 +194,16 @@ void graphicsInit() {
     if ((screen = OpenScreen(&xnewscreen)) == NULL) {
     }
 
-    my_new_window.Screen = screen;
-
-    my_window = (struct Window *) OpenWindow(&my_new_window);
+    my_window = (struct Window *) OpenWindowTags(NULL,
+                                                 WA_Left, 0,
+                                                 WA_Top, 0,
+                                                 WA_Width, 320,
+                                                 WA_Height, 200,
+                                                 WA_IDCMP,
+                                                 ACTIVEWINDOW | VANILLAKEY | CLOSEWINDOW | RAWKEY,
+                                                 WA_Flags, SMART_REFRESH | WINDOWDRAG | WINDOWDEPTH | ACTIVATE,
+                                                 WA_CustomScreen, (ULONG)screen,
+                                                 TAG_DONE);
 
     if (my_window == NULL) {
         puts("nope 2!");
@@ -357,7 +335,7 @@ int xlate_key(UWORD rawkey, UWORD qualifier, APTR eventptr) {
 }
 
 /*Same as above*/
-void handleSystemEvents() {
+void handleSystemEvents(void) {
 
     struct IntuiMessage *my_message;
     ULONG messageClass;
@@ -420,11 +398,11 @@ void handleSystemEvents() {
                 case 'd':
                     mBufferedCommand = kCommandStrafeRight;
                     break;
-
+#ifdef EMIT_QUIT_OPTION
                 case 'l':
                     mBufferedCommand = kCommandQuit;
                     break;
-
+#endif
                 case 'n':
                     mBufferedCommand = kCommandDown;
                     visibilityCached = FALSE;
@@ -448,24 +426,28 @@ void handleSystemEvents() {
     }
 }
 
-void flipRenderer() {
+void flipRenderer(void) {
+    renderPageFlip(&finalBuffer[0], framebuffer,
+                   previousFrame, turnStep, turnTarget, 0);
+
+
 #ifdef CD32
 
-    WriteChunkyPixels(my_window->RPort, 0, 0, 320, 200, &framebuffer[0], 320);
+    WriteChunkyPixels(my_window->RPort, 0, 0, 320, 200, &finalBuffer[0], 320);
 
 #else
 
 #ifdef AGA8BPP
     OwnBlitter();
     WaitBlit();
-    c2p1x1_8_c5_bm(320,200,0,0,&framebuffer[0], my_window->RPort->BitMap);
+    c2p1x1_8_c5_bm(320,200,0,0,&finalBuffer[0], my_window->RPort->BitMap);
     DisownBlitter();
 #else
-    WriteChunkyPixels(my_window->RPort, 0, 0, 319, 199, &framebuffer[0], 320);
+    WriteChunkyPixels(my_window->RPort, 0, 0, 319, 199, &finalBuffer[0], 320);
 #endif
 
 #endif
 
 }
 
-void clear() {}
+void clear(void) {}

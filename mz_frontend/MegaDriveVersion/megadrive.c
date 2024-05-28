@@ -1,26 +1,34 @@
 #include <genesis.h>
 
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Engine3D.h"
+#include "Engine.h"
 
-void graphicsFlush();
+void graphicsFlush(void);
 
-void nextItemInHand();
+void nextItemInHand(void);
 
-void useItemInHand();
+void useItemInHand(void);
 
-void nextItemInRoom();
+void nextItemInRoom(void);
 
-void interactWithItemInRoom();
+void interactWithItemInRoom(void);
 
-void pickOrDrop();
+void pickOrDrop(void);
 
-void dropItem();
+void dropItem(void);
 
-void pickItem();
+void pickItem(void);
 
-void clearGraphics();
+void clearGraphics(void);
+
+void renderScene(void);
+
+void enterTextMode(void);
+
+void exitTextMode(void);
 
 
 extern int8_t map[32][32];
@@ -33,104 +41,28 @@ extern uint8_t accessGrantedToSafe;
 
 #define COOLDOWN_MAX 0x2EF
 
-uint8_t buffered = '.';
-uint8_t cursorPosition = 0;
+int16_t buffered = '.';
 uint16_t cooldown;
 uint16_t movementCooldown = 0;
 
-char *menuItems[] = {
-        "Use/Toggle",
-        "Use with...",
-        "Use/pick...",
-        "Drop",
-        "Next item",
-        "Next in room",
-};
 
-void refreshJustGraphics() {
-    clearGraphics();
+void refreshJustGraphics(void) {
     renderScene();
     graphicsFlush();
 }
 
-void backToGraphics() {
+void backToGraphics(void) {
     clearScreen();
     HUD_initialPaint();
     refreshJustGraphics();
 }
 
-void performAction() {
-    struct Room *room = getRoom(getPlayerRoom());
-
-    switch (getGameStatus()) {
-        case kBadVictory:
-            showMessage("Victory! Too bad you didn't survive\nto tell the story\n\n\n\n\n\n");
-            while (1);
-
-        case kBadGameOver:
-            showMessage("You're dead! And so are millions of\n"
-                        "other people on the path of\n"
-                        "destruction faulty reactor\n\n\n\n\n\n");
-            while (1);
-
-        case kGoodVictory:
-            showMessage("Victory! You managed to destroy the\nship and get out alive\n\n\n\n\n\n");
-            while (1);
-
-        case kGoodGameOver:
-            showMessage("You failed! While you fled the ship\n"
-                        "alive, you failed to prevent the \n"
-                        "worstscenario and now EVERYBODY is\n"
-                        "dead (and that includes you!)\n\n\n\n\n");
-            while (1);
-
-        default:
-        case kNormalGameplay:
-            break;
-    }
-
-/*
-char *menuItems[] = {
- 0       "Use/Toggle current item",
- 1       "Use current item with...",
- 2       "Pick",
- 3       "Drop",
- 4       "Next item in inventory",
- 5       "Next room item in focus",
-};
-*/
-
-    switch (cursorPosition) {
-        case 0:
-            useObjectNamed(getItem(focusedItem->item)->name);
-            break;
-        case 1:
-            interactWithItemInRoom();
-            HUD_refresh();
-            break;
-        case 2:
-            pickItem();
-            refreshJustGraphics();
-            HUD_refresh();
-            break;
-        case 3:
-            dropItem();
-            refreshJustGraphics();
-            HUD_refresh();
-            break;
-        case 4:
-            nextItemInHand();
-            break;
-        case 5:
-            nextItemInRoom();
-            break;
-    }
-
+void performAction(void) {
 
 }
 
 
-static void handleInput() {
+static void handleInput(void) {
     u16 value;
     buffered = '.';
 
@@ -196,20 +128,20 @@ static void handleInput() {
     }
 }
 
-void shutdownGraphics() {
+void shutdownGraphics(void) {
 }
 
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, char *str, uint8_t limitX) {
+void writeStrWithLimit(int16_t _x, int16_t y, char *str, int16_t limitX) {
 
     char textBuffer[2];
     char *charPtr = &textBuffer[0];
 
-    uint8_t len = strlen(str);
-    uint8_t x = _x;
+    int16_t len = strlen(str);
+    int16_t x = _x;
     textBuffer[1] = 0;
 
-    for (uint8_t c = 0; c < len && y < 19; ++c) {
+    for (int16_t c = 0; c < len && y < 19; ++c) {
 
         char cha = *str;
 
@@ -232,57 +164,31 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, char *str, uint8_t limitX) {
     }
 }
 
-void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
+void writeStr(int16_t _x, int16_t y, const char *text, uint16_t fg, uint16_t bg) {
     writeStrWithLimit(_x, y, text, 31);
 }
 
-void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
-    if (colour >= 16) {
-        if ((x + y) & 1) {
-            BMP_setPixelFast(x, 16 + y, 0);
-        } else {
-            BMP_setPixelFast(x, 16 + y, colour - 16);
-        }
-    } else {
+void graphicsPut(int16_t x, int16_t y, uint16_t colour) {
         BMP_setPixelFast(x, 16 + y, colour);
-    }
 }
 
-void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour) {
 
 
     if (y0 > y1) {
-        uint8_t tmp = y0;
+        int16_t tmp = y0;
         y0 = y1;
         y1 = tmp;
     }
 
-    uint8_t stipple;
-
-    if (colour < 16) {
-        colour += (colour << 4); //double the pixel
-        for (uint8_t y = y0; y < y1; ++y) {
-            BMP_setPixelFast(x0, 16 + y, colour);
-        }
-    } else {
-        stipple = (x0 & 1);
-        colour -= 16;
-        colour += (colour << 4); //double the pixel
-
-        for (uint8_t y = y0; y < y1; ++y) {
-            stipple = !stipple;
-
-            if (stipple) {
-                BMP_setPixelFast(x0, 16 + y, colour);
-            } else {
-                BMP_setPixelFast(x0, 16 + y, 0);
-            }
-        }
+    colour += (colour << 4); //double the pixel
+    for (int16_t y = y0; y < y1; ++y) {
+        BMP_setPixelFast(x0, 16 + y, colour);
     }
 }
 
 
-void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
+void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
     if (y < 0) {
         return;
     }
@@ -303,26 +209,10 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
         _x1 = 127;
     }
 
-    if (colour < 16) {
-        colour += (colour << 4); //double the pixel
+    colour += (colour << 4); //double the pixel
 
-        for (int x = _x0; x <= _x1; ++x) {
-            BMP_setPixelFast(x, 16 + y, colour);
-        }
-    } else {
-        colour -= 16;
-        colour += (colour << 4); //double the pixel
-        uint8_t stipple = ((x0 + y) & 1);
-
-        for (int x = _x0; x <= _x1; ++x) {
-            stipple = !stipple;
-
-            if (stipple) {
-                BMP_setPixelFast(x, 16 + y, colour);
-            } else {
-                BMP_setPixelFast(x, 16 + y, 0);
-            }
-        }
+    for (int16_t x = _x0; x <= _x1; ++x) {
+        BMP_setPixelFast(x, 16 + y, colour);
     }
 }
 
@@ -332,9 +222,9 @@ static void joyEvent(u16 joy, u16 changed, u16 state) {
 
 void showMessage(const char *message) {
     enterTextMode();
-    uint8_t keepGoing = 1;
+    int16_t keepGoing = 1;
 
-    for (uint8_t i = 0; i < 19; ++i) {
+    for (int16_t i = 0; i < 19; ++i) {
         VDP_clearText(16, i, 16);
     }
 
@@ -349,7 +239,7 @@ void showMessage(const char *message) {
 
     clearScreen();
 
-    for (uint8_t i = 0; i < 19; ++i) {
+    for (int16_t i = 0; i < 19; ++i) {
         VDP_clearText(16, i, 16);
     }
 
@@ -357,34 +247,34 @@ void showMessage(const char *message) {
     backToGraphics();
 }
 
-void clearScreen() {
+void clearScreen(void) {
 }
 
-void clearGraphics() {
+void clearGraphics(void) {
     BMP_clear();
 }
 
-void clearTextScreen() {
-    for (uint8_t c = 0; c < 23; ++c) {
+void clearTextScreen(void) {
+    for (int16_t c = 0; c < 23; ++c) {
         VDP_clearText(0, c, 256 / 8);
     }
     cooldown = COOLDOWN_MAX;
     movementCooldown = COOLDOWN_MAX;
 }
 
-void enterTextMode() {
+void enterTextMode(void) {
     clearGraphics();
     BMP_flip(1);
     clearTextScreen();
 }
 
-void exitTextMode() {
+void exitTextMode(void) {
     clearTextScreen();
 }
 
 void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 
-uint8_t getKey() {
+uint8_t getKey(void) {
     handleInput();
     return buffered;
 }
@@ -393,28 +283,8 @@ void sleepForMS(uint32_t ms) {
     //we cant afford to sleep
 }
 
-void titleScreen() {
-    uint8_t keepGoing = 1;
-    clearGraphics();
-    //               |
-    writeStr(1, 5, "   Sub Mare Imperium  ", 2, 0);
-    writeStr(1, 6, "        Derelict        ", 2, 0);
-    writeStr(1, 8, "   by Daniel Monteiro   ", 2, 0);
-    writeStr(1, 10, "   Press start button!  ", 2, 0);
+void titleScreen(void) {
 
-    while (keepGoing) {
-        if (getKey() == 'k') {
-            keepGoing = 0;
-        }
-    }
-
-
-    VDP_clearText(1, 5, 24);
-    VDP_clearText(1, 6, 24);
-    VDP_clearText(1, 8, 24);
-    VDP_clearText(1, 10, 24);
-
-    clearScreen();
 }
 
 void puts(char *unused) {
@@ -425,7 +295,7 @@ void assert(int unused) {
 
 }
 
-void init() {
+void init(void) {
     JOY_setEventHandler(joyEvent);
     VDP_setScreenWidth256();
     VDP_setHInterrupt(0);
@@ -433,6 +303,7 @@ void init() {
 
     DMA_setBufferSize(2048);
 
+    /* create virtual 256x160 framebuffer */
     BMP_init(TRUE, BG_B, PAL0, 1);
 
     PAL_setColor(0, RGB24_TO_VDPCOLOR(0x000000));
@@ -453,61 +324,13 @@ void init() {
     PAL_setColor(15, RGB24_TO_VDPCOLOR(0xFFFFFF));
 }
 
-void graphicsFlush() {
-    HUD_initialPaint();
+void graphicsFlush(void) {
     BMP_flip(1);
-    BMP_clear();
 }
 
-void HUD_initialPaint() {
-    struct Room *room = getRoom(getPlayerRoom());
-
-
-    for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(16, 13 + i, i == cursorPosition ? ">" : " ", 2, 0);
-        writeStr(17, 13 + i, menuItems[i], 2, 0);
-    }
-
-    HUD_refresh();
+void HUD_initialPaint(void) {
 }
 
-void HUD_refresh() {
+void HUD_refresh(void) {
 
-    for (uint8_t i = 0; i < 13; ++i) {
-        VDP_clearText(16, i, 16);
-    }
-
-    for (uint8_t i = 0; i < 6; ++i) {
-        writeStr(16, 13 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
-    }
-
-
-    writeStrWithLimit(16, 5, "Object in hand:", 31);
-    if (focusedItem != NULL) {
-        struct Item *item = getItem(focusedItem->item);
-
-
-        if (item->active) {
-            writeStr(16, 6, "*", 2, 0);
-        }
-
-        writeStrWithLimit(17, 6, item->name, 31);
-    } else {
-        writeStrWithLimit(16, 6, "Nothing", 31);
-    }
-
-    writeStrWithLimit(16, 8, "Object in room:", 31);
-
-    if (roomItem != NULL) {
-        struct Item *item = getItem(roomItem->item);
-
-
-        if (item->active) {
-            writeStrWithLimit(16, 9, "*", 31);
-        }
-
-        writeStrWithLimit(17, 9, item->name, 31);
-    } else {
-        writeStrWithLimit(16, 9, "Nothing", 31);
-    }
 }

@@ -7,9 +7,6 @@
 #include <math.h>
 #include <stdint.h>
 
-#include <osbind.h>
-#include <mint/sysbind.h>
-
 #include "AtariInt.h"
 #include "Core.h"
 #include "Derelict.h"
@@ -19,8 +16,41 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <mint/osbind.h>
+
+#include <osbind.h>
 #include <mint/sysbind.h>
+#include <mint/osbind.h>
+
+extern struct ObjectNode *focusedItem;
+extern struct ObjectNode *roomItem;
+extern int accessGrantedToSafe;
+
+char *menuItems[] = {
+        "8) Use/Toggle",
+        "5) Use with...",
+        "9) Use/pick...",
+        "6) Drop",
+        "7) Next item",
+        "4) Next in room",
+};
+
+void graphicsFlush(void);
+
+void nextItemInHand(void);
+
+void useItemInHand(void);
+
+void nextItemInRoom(void);
+
+void interactWithItemInRoom(void);
+
+void pickOrDrop(void);
+
+void dropItem(void);
+
+void pickItem(void);
+
+void clearGraphics(void);
 
 uint16_t *physBase;
 uint16_t *logBase;
@@ -30,18 +60,11 @@ uint8_t bufferInput = '.';
 
 #define NORMALIZE(x) (((x * 8) / 256))
 
-void putStr(int x, int y, const char *str, int fg, int bg) {}
-
-void drawTitleBox() {}
-
-void querySoundDriver() {
-}
-
 void framebuffer_set_palette_entry(int index, int red, int green, int blue) {
     *(uint16_t *) (0xffff8240 + (index * 2)) = blue | (green << 4) | (red << 8);
 }
 
-void init() {
+void init(void) {
     framebuffer = (uint8_t *) calloc(1, 128 * 128);
 
     physBase = Physbase();
@@ -49,8 +72,6 @@ void init() {
     memset(logBase, 0, 32000);
     memset(physBase, 0, 32000);
     Setscreen(-1, -1, 0);
-    querySoundDriver();
-
 
     framebuffer_set_palette_entry(0, NORMALIZE(0x00), NORMALIZE(0x00), NORMALIZE(0x00));
     framebuffer_set_palette_entry(1, NORMALIZE(0x00), NORMALIZE(0x00), NORMALIZE(0xAA));
@@ -70,27 +91,25 @@ void init() {
     framebuffer_set_palette_entry(15, NORMALIZE(0xFF), NORMALIZE(0xFF), NORMALIZE(0xFF));
 }
 
-
 /*Same as above*/
-void handleSystemEvents() {
+void handleSystemEvents(void) {
     bufferInput = Cnecin();
 }
 
-uint8_t getKey() {
+uint8_t getKey(void) {
     handleSystemEvents();
     uint8_t toReturn = bufferInput;
     bufferInput = '.';
     return toReturn;
 }
 
-void clear() {}
+void clear(void) {}
 
-
-void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
+void graphicsPut(int16_t x, int16_t y, uint16_t colour) {
     framebuffer[(128 * y) + x] = colour;
 }
 
-void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t pixel) {
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t pixel) {
     uint8_t *ptr;
     int16_t _y0 = y0;
     int16_t _y1 = y1;
@@ -124,9 +143,8 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t pixel) {
     }
 }
 
-
-void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
-    if (y < 0) {
+void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
+    if (y < 0 || y >= 128) {
         return;
     }
 
@@ -146,110 +164,69 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
         _x1 = 127;
     }
 
-    for (int x = _x0; x <= _x1; ++x) {
-        framebuffer[(128 * y) + x] = colour;
+    uint8_t *ptr = &framebuffer[(128 * y) + _x0];
+    for (int16_t x = _x0; x <= _x1; ++x) {
+        *ptr++ = colour;
     }
 }
 
-extern struct ObjectNode *focusedItem;
-extern struct ObjectNode *roomItem;
-extern int accessGrantedToSafe;
-int cursorPosition = 0;
-
-char *menuItems[] = {
-        "8) Use/Toggle",
-        "5) Use with...",
-        "9) Use/pick...",
-        "6) Drop",
-        "7) Next item",
-        "4) Next in room",
-};
-
-void graphicsFlush();
-
-void nextItemInHand();
-
-void useItemInHand();
-
-void nextItemInRoom();
-
-void interactWithItemInRoom();
-
-void pickOrDrop();
-
-void dropItem();
-
-void pickItem();
-
-void clearGraphics();
-
-void shutdownGraphics() {
+void shutdownGraphics(void) {
 }
 
 void realPut(int x, int y, uint8_t value) {
-
 }
 
-void clearGraphics() {
+void clearGraphics(void) {
     memset(framebuffer, 0, 128 * 128);
 }
 
-void clearScreen() {
+void clearScreen(void) {
 }
-
 
 void writeStrWithLimit(int _x, int y, const char *text, int limitX) {
 }
 
-void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
+void writeStr(int16_t _x, int16_t y, const char *text, uint16_t fg, uint16_t bg) {
     writeStrWithLimit(_x, y, text, 40);
 }
 
 void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 
-void graphicsFlush() {
-    memset(logBase, 0, 32000);
+void graphicsFlush(void) {
+
     uint8_t *index = &framebuffer[0];
-    unsigned lineOffset = 0;
+    uint16_t lineOffset = 0;
+    uint16_t *words = (uint16_t *) logBase;
 
-    for (int y = 0; y < 128; ++y) {
-        for (int x = 0; x < 128; ++x) {
+    for (uint16_t y = 127; y; y--) {
+        memset(logBase + lineOffset, 0, 80);
+        for (uint16_t x = 0; x < 128; ++x) {
 
-            unsigned value = *index;
-
-            ++index;
-            if (value > 16) {
-                if ((x + y) & 1) {
-                    value = 0;
-                } else {
-                    value = value - 16;
-                }
-            }
-
-            uint16_t *words = (uint16_t *) logBase;
-            unsigned offset = lineOffset + ((x >> 4) << 2);
-            unsigned bitPattern = (1 << (15 - (x & 15)));
+            uint8_t value = *index++;
+            uint16_t offset = lineOffset + ((x >> 4) << 2);
+            uint16_t bitPattern = (1 << (15 - (x & 15)));
+            uint16_t *ptr = &words[offset];
 
             if (value & 1) {
-                words[offset] |= bitPattern;
+                *ptr |= bitPattern;
             }
 
-            offset++;
+            ptr++;
 
             if (value & 2) {
-                words[offset] |= bitPattern;
+                *ptr |= bitPattern;
             }
 
-            offset++;
+            ptr++;
 
             if (value & 4) {
-                words[offset] |= bitPattern;
+                *ptr |= bitPattern;
             }
 
-            offset++;
+            ptr++;
 
             if (value & 8) {
-                words[offset] |= bitPattern;
+                *ptr |= bitPattern;
             }
         }
         lineOffset += 80;
@@ -262,19 +239,17 @@ void graphicsFlush() {
     Setscreen(logBase, physBase, -1);
 }
 
-
 void showMessage(const char *message) {
-
 }
 
-void titleScreen() {
+void titleScreen(void) {
 }
 
-void HUD_initialPaint() {
+void HUD_initialPaint(void) {
 }
 
 void sleepForMS(uint32_t ms) {
 }
 
-void HUD_refresh() {
+void HUD_refresh(void) {
 }

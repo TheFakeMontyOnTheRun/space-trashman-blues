@@ -6,8 +6,10 @@
 
 
 #include "SDL.h"
+#include "Engine3D.h"
+#include "Common.h"
+#include "Engine.h"
 
-int cursorPosition = 0;
 extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
@@ -20,21 +22,7 @@ uint8_t mBufferedCommand;
 uint32_t palette[16];
 uint8_t framebuffer[256 * 160];
 
-void graphicsFlush();
-
-void nextItemInHand();
-
-void useItemInHand();
-
-void nextItemInRoom();
-
-void interactWithItemInRoom();
-
-void pickOrDrop();
-
-void pickItem();
-
-void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
+void graphicsPut(int16_t x, int16_t y, uint16_t colour) {
     if (x < 0) {
         x = 0;
     }
@@ -59,7 +47,7 @@ void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
 #endif
 }
 
-void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
+void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
     if (y < 0) {
         return;
     }
@@ -85,9 +73,9 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
     }
 }
 
-void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour) {
 
-    if (x0 < 0) {
+    if (x0 < 0 || x0 > XRESMINUSONE) {
         return;
     }
 
@@ -113,7 +101,7 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
     }
 }
 
-void shutdownGraphics() {
+void shutdownGraphics(void) {
     SDL_Quit();
 }
 
@@ -123,15 +111,15 @@ void showMessage(const char *mesg) {
 
 void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 
-void clearGraphics() {
+void clearGraphics(void) {
     memset(framebuffer, 0, 256 * 160);
 }
 
-void writeStr(uint8_t nColumn, uint8_t nLine, char *str, uint8_t fg, uint8_t bg) {
+void writeStr(int16_t nColumn, int16_t nLine, const char *str, uint16_t fg, uint16_t bg) {
     puts(str);
 }
 
-void printSituation() {
+void printSituation(void) {
     struct ObjectNode *playerObjects = getPlayerItems();
     puts("---------------");
     puts("\nPlayer items:");
@@ -161,10 +149,10 @@ void dropItem();
 
 void pickItem();
 
-void clearScreen() {}
+void clearScreen(void) {}
 
 
-uint8_t getKey() {
+uint8_t getKey(void) {
     SDL_Event event;
 
     mBufferedCommand = '.';
@@ -194,30 +182,34 @@ uint8_t getKey() {
                     break;
 
                 case SDLK_KP_7:
+                case SDLK_7:		  
                     mBufferedCommand = '7';
                     break;
 
                 case SDLK_KP_8:
+                case SDLK_8:		  
                     mBufferedCommand = '8';
                     break;
 
-
                 case SDLK_KP_4:
+                case SDLK_4:		  
                     mBufferedCommand = '4';
                     break;
 
                 case SDLK_KP_5:
+                case SDLK_5:		  
                     mBufferedCommand = '5';
                     break;
 
                 case SDLK_KP_9:
+                case SDLK_9:		  
                     mBufferedCommand = '9';
                     break;
 
                 case SDLK_KP_6:
+                case SDLK_6:		  
                     mBufferedCommand = '6';
                     break;
-
 
                 case SDLK_s:
                     break;
@@ -261,10 +253,10 @@ uint8_t getKey() {
     return mBufferedCommand;
 }
 
-void sleepForMS() {
+void sleepForMS(uint32_t unused) {
 }
 
-void init() {
+void init(void) {
     int r, g, b;
     mBufferedCommand = '.';
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -299,7 +291,7 @@ void init() {
 }
 
 
-void titleScreen() {
+void titleScreen(void) {
     int keepGoing = 1;
     clearGraphics();
 
@@ -318,7 +310,7 @@ void titleScreen() {
     clearScreen();
 }
 
-void flipRenderer() {
+void flipRenderer(void) {
     SDL_Rect rect;
     uint32_t pixel;
     int x, y;
@@ -338,17 +330,7 @@ void flipRenderer() {
             rect.w = 2;
             rect.h = 2;
             int index = framebuffer[(256 * y) + x];
-            if (index > 16) {
-                if ((x + y) & 1) {
-                    index = 0;
-                } else {
-                    index = index - 16;
-                }
-            }
-
-            if (index < 0 || index >= 16) {
-                continue;
-            }
+            assert( !(index < 0 || index >= 16));
 
             pixel = palette[index];
 
@@ -370,15 +352,50 @@ void flipRenderer() {
 #endif
 }
 
-void graphicsFlush() {
+void graphicsFlush(void) {
     flipRenderer();
 }
 
 
-void HUD_initialPaint() {
+void HUD_initialPaint(void) {
 }
 
-void HUD_refresh() {
+void HUD_refresh(void) {
+
+
+    for (uint16_t i = 0; i < 6; ++i) {
+        writeStr(16, 13 + i, (i == cursorPosition) ? ">" : " ", 2, 0);
+    }
+
+
+    writeStr(16, 5, "Object in hand:", 2, 0);
+    if (focusedItem != NULL) {
+        struct Item *item = getItem(focusedItem->item);
+
+
+        if (item->active) {
+            writeStr(16, 6, "*", 2, 0);
+        }
+
+        writeStr(17, 6, item->name, 2, 0);
+    } else {
+        writeStr(16, 6, "Nothing", 2, 0);
+    }
+
+    writeStr(16, 8, "Object in room:", 2, 0);
+
+    if (roomItem != NULL) {
+        struct Item *item = getItem(roomItem->item);
+
+
+        if (item->active) {
+            writeStr(16, 9, "*", 2, 0);
+        }
+
+        writeStr(17, 9, item->name, 2, 0);
+    } else {
+        writeStr(16, 9, "Nothing", 2, 0);
+    }
 }
 
 

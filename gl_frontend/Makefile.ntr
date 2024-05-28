@@ -19,7 +19,7 @@ include $(DEVKITARM)/ds_rules
 # ICON is the image used to create the game icon, leave blank to use default rule
 # NITRO is a directory that will be accessible via NitroFS
 #---------------------------------------------------------------------------------
-TARGET   := $(shell basename $(CURDIR))
+TARGET   := derelict
 BUILD    := build
 SOURCES  := menu/src base3d/src base3d/src/intro SoundSystem GL1Common
 INCLUDES := menu/include base3d/include SoundSystem
@@ -38,11 +38,10 @@ NITRO    := filesystem
 ARCH := -marm -mthumb-interwork -march=armv5te -mtune=arm946e-s
 
 CFLAGS   := -g -Wall -O3\
-            $(ARCH) $(INCLUDE) -DARM9 -DNDS -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -I../base3d/include        \
-                                                                                                     -I../SoundSystem           \
-                                                                                                     -I../menu/include          \
-                                                                                                     -I../../core/include \
-                                                                                                     -I../../common/include \
+            $(ARCH) $(INCLUDE) -DARM9 -DTILED_BITMAPS -DNDS -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -I../base3d/include -DENDIANESS_AWARE  -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200 -DXRES_SCREEN=255 -DYRES_SCREEN=191   -DSUPPORTS_HACKING_MINIGAME \
+            -I../menu/include          \
+            -I../../core/include \
+            -I../../common/include \
             -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic
 
 ASFLAGS  := -g $(ARCH)
@@ -71,34 +70,35 @@ export OUTPUT	:=	$(CURDIR)/$(TARGET)
 export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir))
 export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 
-CFILES   := ../menu/src/MainMenu.c \
-                              		../menu/src/Crawler.c \
-                              		../menu/src/HelpScreen.c \
-                              		../menu/src/BattleScreen.c \
-                              		../menu/src/CreditsScreen.c \
-                              		../menu/src/GameMenu.c \
+CFILES   := ../../common/src/MainMenu.c \
                               		../menu/src/Main.c \
-                              		../menu/src/Engine.c \
                               		../base3d/src/nitro/NitroGLRenderer.c \
-                              		../base3d/src/Globals.c \
-                              		../GL1Common/LoadBitmapGL1.c \
-                              		../GL1Common/RendererGL1.c \
-                              		../GL1Common/Renderer_RasterizationGL1.c \
-                              		../GL1Common/Renderer_TesselationGL1.c \
-                              		../base3d/src/VisibilityStrategy.c \
-                              		../../common/src/CTile3DProperties.o \
+                              		../GL1Common/LoadBitmap.c \
+                              		../GL1Common/Renderer.c \
+                              		../GL1Common/RendererRasterization.c \
+                              		../GL1Common/RendererTesselation.c \
+                              		../../common/src/Engine.c \
+                              		../../common/src/UI.c \
+					                ../../common/src/Mesh.c \
+                              		../../common/src/HackingScreen.c \
+                              		../../common/src/Crawler.c \
+                              		../../common/src/HelpScreen.c \
+                              		../../common/src/CreditsScreen.c \
+                              		../../common/src/GameMenu.c \
+                              		../../common/src/VisibilityStrategy.c \
+                              		../../common/src/Globals.c \
+                              		../../common/src/CTile3DProperties.c \
                               		../../common/src/Vec.c \
                               		../../common/src/Common.c \
                               		../../common/src/FixP.c \
                               		../../common/src/MapWithCharKey.c \
                               		../../common/src/PackedFileReader.c \
-                              		../base3d/src/Events.c \
-                              		../base3d/src/EDirection_Utils.c \
-                              		../SoundSystem/NullMusic.c \
-                              		../base3d/src/Dungeon.c \
-                              		../menu/src/UI.c \
-                              		../menu/src/HackingScreen.c \
-                              		../SoundSystem/PCMAudio.c \
+                              		../../common/src/EDirection_Utils.c \
+                              		../../common/src/Events.c \
+                              		../../common/src/Dungeon.c \
+                              		../../common/src/NullMusic.c \
+                              		../../common/src/PCMAudio.c \
+                              		../../common/src/HackingMinigameRules.c \
                               		../../core/src/Derelict.c \
                               		../../core/src/Core.c \
                               		../../core/src/Parser.c
@@ -144,24 +144,26 @@ $(BUILD):
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
-	@rm -fr $(BUILD) $(TARGET).elf $(TARGET).nds $(TARGET).ds.gba
-	@rm -f menu/src/*.o
-	@rm -f ../core/src/*.o
-	@rm -f ../common/src/*.o
-	@rm -f base3d/src/*.o
-	@rm -f GL1Common/*.o
-	@rm -f common/src/*.o
-	@rm -f SoundSystem/*.o
-	@rm -f base3d/src/nitro/*.o
-	@rm -f menu/src/*.d
-	@rm -f ../core/src/*.d
-	@rm -f ../common/src/*.d
-	@rm -f base3d/src/*.d
-	@rm -f GL1Common/*.d
-	@rm -f common/src/*.d
-	@rm -f SoundSystem/*.d
-	@rm -f base3d/src/nitro/*.d
-
+	rm -fvr $(BUILD) $(TARGET).elf $(TARGET).nds $(TARGET).ds.gba
+	rm -fv menu/src/*.o
+	rm -fv ../core/src/*.o
+	rm -fv ../common/src/*.o
+	rm -fv base3d/src/*.o
+	rm -fv GL1Common/*.o
+	rm -fv core/src/*.o
+	rm -fv common/src/*.o
+	rm -fv SoundSystem/*.o
+	rm -fv base3d/src/nitro/*.o
+	rm -fv menu/src/*.d
+	rm -fv ../core/src/*.d
+	rm -fv ../common/src/*.d
+	rm -fv core/src/*.d
+	rm -fv common/src/*.d
+	rm -fv base3d/src/*.d
+	rm -fv GL1Common/*.d
+	rm -fv common/src/*.d
+	rm -fv SoundSystem/*.d
+	rm -fv base3d/src/nitro/*.d
 
 #---------------------------------------------------------------------------------
 else

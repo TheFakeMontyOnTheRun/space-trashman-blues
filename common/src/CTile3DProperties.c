@@ -1,15 +1,21 @@
-#ifdef WIN32
+	#ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
+
 #endif
 
 #ifndef SMD
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
 #ifndef WIN32
+
 #include <unistd.h>
+
 #endif
 #else
 #include <genesis.h>
@@ -22,12 +28,16 @@ typedef unsigned long size_t;
 #include "CTile3DProperties.h"
 #include "PackedFileReader.h"
 #include "MapWithCharKey.h"
+#include "Mesh.h"
 
-void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map) {
+void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map, struct MapWithCharKey *meshes) {
     int c;
+    struct CTile3DProperties *prop;
     struct StaticBuffer buffer = loadBinaryFileFromPath(propertyFile);
     const uint8_t *limit = buffer.data + buffer.size;
     const uint8_t *bufferHead = buffer.data;
+    uint8_t meshCount = 0;
+    char meshNameWithExtension[256];
 
     for (c = 0; c < 256; ++c) {
         struct CTile3DProperties *prop = (struct CTile3DProperties *) getFromMap(map, c);
@@ -41,8 +51,13 @@ void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map) {
     while (bufferHead != limit) {
         FixP_t val = 0;
         uint8_t key = *(bufferHead++);
-        struct CTile3DProperties *prop = (struct CTile3DProperties *) allocMem(
-                 sizeof(struct CTile3DProperties), GENERAL_MEMORY, 1);
+        if (key == 0) {
+            /* mesh list reached */
+            meshCount = *(bufferHead++);
+            goto end;
+        }
+		prop = (struct CTile3DProperties *) allocMem(
+                sizeof(struct CTile3DProperties), GENERAL_MEMORY, 1);
 
         prop->mNeedsAlphaTest = *(bufferHead++);
         prop->mBlockVisibility = *(bufferHead++);
@@ -54,7 +69,7 @@ void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map) {
         prop->mFloorTextureIndex = *(bufferHead++);
         prop->mMainWallTextureIndex = *(bufferHead++);
 
-        prop->mGeometryType = (enum GeometryType) (*(bufferHead++));
+        prop->mGeometryType = (*(bufferHead++));
 
         prop->mCeilingRepeatedTextureIndex = *(bufferHead++);
         prop->mFloorRepeatedTextureIndex = *(bufferHead++);
@@ -76,6 +91,19 @@ void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map) {
 
         setInMap(map, key, prop);
     }
+end:
+    for (c = 0; c < meshCount; ++c ) {
+        struct Mesh* mesh;
+        uint8_t len = *(bufferHead++);
 
+        char* meshName = (char*)allocMem(len + 1, GENERAL_MEMORY, 1);
+        memcpy(meshName, bufferHead, len);
+        mesh = (struct Mesh*)allocMem(sizeof(struct Mesh), GENERAL_MEMORY, 1);
+        sprintf(&meshNameWithExtension[0], "%s.mdl", meshName);
+        loadMesh(mesh, &meshNameWithExtension[0]);
+        setInMap(meshes, kCustomMeshStart + c, mesh);
+        disposeMem(meshName);
+        bufferHead += len;
+    }
     disposeDiskBuffer(buffer);
 }

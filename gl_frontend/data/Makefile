@@ -1,11 +1,20 @@
 .DEFAULT_GOAL := default
 
-packager:
-	rm -f base3d/packer
-	$(CXX) -std=c++14 -opacker packer.cpp
+PACKAGER=packer
 
-data:	packager
-	python3 ./check_textures.py
+CRUNCHER=../../tools/wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
+
+$(CRUNCHER):
+	mvn -q -f ../../tools/wobj-compiler/pom.xml clean compile package install
+
+$(PACKAGER):
+	rm -f $(PACKAGER)
+	$(CXX) -std=c++14 -o$(PACKAGER) packer.cpp
+
+models: $(CRUNCHER)
+	ls src/*.obj  | xargs java -jar ../../tools/wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
+
+data:	$(PACKAGER)
 	rm -f ./base.pfs
 	ls assets/*.*  | xargs ./packer
 	mv ./data.pfs ../base.pfs
@@ -17,6 +26,6 @@ images:
 maps:
 	python3 ./compile_map.py
 
-full: images maps data
+full: images maps models data
 
 default: full

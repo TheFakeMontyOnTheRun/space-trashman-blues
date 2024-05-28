@@ -11,6 +11,8 @@
 #include <proto/dos.h>
 #include <proto/exec.h>
 #include <proto/intuition.h>
+#include <clib/graphics_protos.h>
+#include <proto/keymap.h>
 
 #include "AmigaInt.h"
 #include "Core.h"
@@ -21,6 +23,37 @@
 #define REGARGS __regargs
 
 #define NORMALIZE(x) (((x * 16) / 256))
+
+extern struct ObjectNode *focusedItem;
+extern struct ObjectNode *roomItem;
+extern int accessGrantedToSafe;
+
+char *menuItems[] = {
+        "8) Use/Toggle",
+        "5) Use with...",
+        "9) Use/pick...",
+        "6) Drop",
+        "7) Next item",
+        "4) Next in room",
+};
+
+void graphicsFlush(void);
+
+void nextItemInHand(void);
+
+void useItemInHand(void);
+
+void nextItemInRoom(void);
+
+void interactWithItemInRoom(void);
+
+void pickOrDrop(void);
+
+void dropItem(void);
+
+void pickItem(void);
+
+void clearGraphics(void);
 
 extern void REGARGS
 c2p1x1_4_c5_bm(
@@ -47,13 +80,13 @@ struct NewScreen xnewscreen = {
         0,              /* TopEdge   */
         320,          /* Width     */
         200,          /* Height    */
-        5,              /* Depth   */
+        4,              /* Depth   */
         0,              /* DetailPen */
         1,              /* BlockPen */
         0,              /* ViewModes High-resolution, Interlaced */
         CUSTOMSCREEN,      /* Type customized screen. */
         NULL,          /* Font */
-        "The Mistral Report", /* Title */
+        "Sub Mare Imperium: Derelict", /* Title */
         NULL,          /* Gadget */
         NULL          /* BitMap */
 };
@@ -72,7 +105,7 @@ struct NewWindow my_new_window = {
         ACTIVATE,                      /*            */
         NULL,                          /* FirstGadget */
         NULL,                          /* CheckMark   */
-        (UBYTE * ) "The Mistral Report",              /* Title       */
+        (UBYTE * ) "Sub Mare Imperium: Derelict",              /* Title       */
         NULL,                          /* Screen      */
         NULL,                          /* BitMap      */
         320,                          /* MinWidth    */
@@ -83,19 +116,6 @@ struct NewWindow my_new_window = {
 };
 
 long frame = 0;
-
-void putStr(int x, int y, const char *str, int fg, int bg) {}
-
-void drawTitleBox() {}
-
-void querySoundDriver() {
-}
-
-struct RGB8 {
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
-};
 
 /*
  * Code lifted (and heavily modified) from the Strife AGA port by Lantus
@@ -108,22 +128,9 @@ static UWORD emptypointer[] = {
         0x0000, 0x0000    /* reserved, must be NULL */
 };
 
-void init() {
-    int r, g, b;
-    int c;
-    struct RGB8 palete[256];
-    struct ColorMap *cm;
-    struct Window *window;
-    struct IntuiMessage *msg;
-    struct DisplayInfo displayinfo;
-    struct TagItem taglist[3];
-    int OpenA2024 = FALSE;
-    int IsV36 = FALSE;
-    int IsPAL;
+void init(void) {
 
     framebuffer = (uint8_t *) calloc(1, 128 * 128);
-
-    drawTitleBox();
 
     IntuitionBase =
             (struct IntuitionBase *) OpenLibrary("intuition.library", 0);
@@ -163,9 +170,8 @@ void init() {
     SetRGB4(&screen->ViewPort, 14, NORMALIZE(0xFF), NORMALIZE(0xFF), NORMALIZE(0x55));
     SetRGB4(&screen->ViewPort, 15, NORMALIZE(0xFF), NORMALIZE(0xFF), NORMALIZE(0xFF));
 
-    SetPointer(my_window, emptypointer, 1, 16, 0, 0);
 
-    querySoundDriver();
+    SetPointer(my_window, emptypointer, 1, 16, 0, 0);
 }
 
 /*
@@ -223,7 +229,7 @@ int xlate_key(UWORD rawkey, UWORD qualifier, APTR eventptr) {
 }
 
 /*Same as above*/
-void handleSystemEvents() {
+void handleSystemEvents(void) {
 
     struct IntuiMessage *my_message;
     ULONG messageClass;
@@ -310,29 +316,21 @@ void handleSystemEvents() {
     }
 }
 
-uint8_t getKey() {
+uint8_t getKey(void) {
     handleSystemEvents();
     uint8_t toReturn = bufferInput;
     bufferInput = '.';
     return toReturn;
 }
 
-void clear() {}
+void clear(void) {}
 
 
-void graphicsPut(int16_t x, int16_t y, uint8_t colour) {
-    if (colour >= 16) {
-        if ((x + y) & 1) {
-            framebuffer[(128 * y) + x] = 0;
-        } else {
-            framebuffer[(128 * y) + x] = colour - 16;
-        }
-    } else {
-        framebuffer[(128 * y) + x] = colour;
-    }
+void graphicsPut(int16_t x, int16_t y, uint16_t colour) {
+    framebuffer[(128 * y) + x] = colour;
 }
 
-void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
+void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour) {
     uint8_t *ptr;
     int16_t _y0 = y0;
     int16_t _y1 = y1;
@@ -360,30 +358,13 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint8_t colour) {
 
     ptr = &framebuffer[(128 * _y0) + (x0)];
 
-    if (colour <= 16) {
-        for (int16_t y = _y0; y <= _y1; ++y) {
-            *ptr = colour;
-            ptr += 128;
-        }
-    } else {
-        colour = colour - 16;
-        uint8_t stipple = ((x0 + y0) & 1);
-
-        for (int16_t y = _y0; y <= _y1; ++y) {
-            stipple = !stipple;
-
-            if (stipple) {
-                *ptr = colour;
-            } else {
-                *ptr = 0;
-            }
-
-            ptr += 128;
-        }
+    for (int16_t y = _y0; y <= _y1; ++y) {
+        *ptr = colour;
+        ptr += 128;
     }
 }
 
-void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
+void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
     if (y < 0) {
         return;
     }
@@ -404,59 +385,13 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint8_t colour) {
         _x1 = 127;
     }
 
-    if (colour <= 16) {
-        for (int x = _x0; x <= _x1; ++x) {
-            framebuffer[(128 * y) + x] = colour;
-        }
-    } else {
-        colour = colour - 16;
-        uint8_t stipple = ((x0 + y) & 1);
-
-        for (int x = _x0; x <= _x1; ++x) {
-            stipple = !stipple;
-
-            if (stipple) {
-                framebuffer[(128 * y) + x] = colour;
-            } else {
-                framebuffer[(128 * y) + x] = 0;
-            }
-        }
+    uint8_t *ptr = &framebuffer[(128 * y) + _x0];
+    for (int16_t x = _x0; x <= _x1; ++x) {
+        *ptr++ = colour;
     }
 }
 
-extern struct ObjectNode *focusedItem;
-extern struct ObjectNode *roomItem;
-extern int accessGrantedToSafe;
-int cursorPosition = 0;
-
-char *menuItems[] = {
-        "8) Use/Toggle",
-        "5) Use with...",
-        "9) Use/pick...",
-        "6) Drop",
-        "7) Next item",
-        "4) Next in room",
-};
-
-void graphicsFlush();
-
-void nextItemInHand();
-
-void useItemInHand();
-
-void nextItemInRoom();
-
-void interactWithItemInRoom();
-
-void pickOrDrop();
-
-void dropItem();
-
-void pickItem();
-
-void clearGraphics();
-
-void shutdownGraphics() {
+void shutdownGraphics(void) {
     ClearPointer(my_window);
     CloseWindow(my_window);
     CloseScreen(screen);
@@ -467,40 +402,39 @@ void realPut(int x, int y, uint8_t value) {
 
 }
 
-void clearGraphics() {
+void clearGraphics(void) {
     memset(framebuffer, 0, 128 * 128);
 }
 
-void clearScreen() {
+void clearScreen(void) {
 }
 
 
 void writeStrWithLimit(int _x, int y, const char *text, int limitX) {
 }
 
-void writeStr(uint8_t _x, uint8_t y, const char *text, uint8_t fg, uint8_t bg) {
+void writeStr(int16_t _x, int16_t y, const char *text, uint16_t fg, uint16_t bg) {
     writeStrWithLimit(_x, y, text, 40);
 }
 
 void drawWindow(int tx, int ty, int tw, int th, const char *title) {}
 
-void graphicsFlush() {
+void graphicsFlush(void) {
     c2p1x1_4_c5_bm(128, 128, 0, 0, &framebuffer[0], my_window->RPort->BitMap);
 }
-
 
 void showMessage(const char *message) {
 
 }
 
-void titleScreen() {
+void titleScreen(void) {
 }
 
-void HUD_initialPaint() {
+void HUD_initialPaint(void) {
 }
 
 void sleepForMS(uint32_t ms) {
 }
 
-void HUD_refresh() {
+void HUD_refresh(void) {
 }

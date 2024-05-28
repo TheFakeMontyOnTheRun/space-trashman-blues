@@ -8,7 +8,7 @@ const long UCLOCKS_PER_SEC = 1000;
 
 long timeEllapsed = 0;
 
-long uclock() {
+long uclock(void) {
     timeEllapsed += (1000 / 60);
     return timeEllapsed;
 }
@@ -23,29 +23,61 @@ long uclock() {
 #include "Core.h"
 #include "Engine.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "Derelict.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten/html5.h>
+#include <emscripten/emscripten.h>
+#endif
 
-void initHW() {
+char *textBuffer;
+extern char *messageLogBuffer;
+extern enum EVisibility *visMap;
+extern struct Vec2i *distances;
+extern uint8_t *collisionMap;
+extern struct Texture *nativeTextures[TOTAL_TEXTURES];
+
+void initHW(int argc, char** argv) {
+    textBuffer = (char *) allocMem(TEXT_BUFFER_SIZE, GENERAL_MEMORY, 1);
+    messageLogBuffer = (char *) allocMem(256, GENERAL_MEMORY, 1);
+    collisionMap = (uint8_t *) allocMem(256, GENERAL_MEMORY, 1);
+    visMap = (enum EVisibility *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(enum EVisibility), GENERAL_MEMORY, 1);
+    distances = (struct Vec2i *) allocMem(2 * MAP_SIZE * MAP_SIZE * sizeof(struct Vec2i), GENERAL_MEMORY, 1);
+    itemsInMap = (uint8_t *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t *), GENERAL_MEMORY, 1);
+    map = (uint8_t *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t *), GENERAL_MEMORY, 1);
+    memFill(&nativeTextures[0], 0, sizeof(struct Texture) * TOTAL_TEXTURES);
+
     initFileReader("base.pfs");
     graphicsInit();
 }
 
-void shutdownHW() {
+void shutdownHW(void) {
     graphicsShutdown();
 }
 
 long start_clock, end_clock, prev;
 
+#ifdef __EMSCRIPTEN__
+void mainLoop (void) {
+    if (enable3DRendering) {
+        startFrame(0, 0, 640, 480);
+        menuTick(20);
+        endFrame();
+        flipRenderer();
+    }
+}
+#endif
+
+
 
 int main(int argc, char **argv) {
 
-	initStation();
+    initStation();
 
-    initHW();
+    initHW(0, NULL);
 
     enterState(kMainMenu);
 
@@ -53,8 +85,11 @@ int main(int argc, char **argv) {
     prev = 0;
     start_clock = uclock();
 
-	clearRenderer();
-
+    clearRenderer();
+    enable3DRendering = TRUE;
+#ifdef __EMSCRIPTEN__
+    emscripten_set_main_loop(mainLoop, 50, 1);
+#else
     while (isRunning) {
 
         long now, delta_time;
@@ -67,16 +102,16 @@ int main(int argc, char **argv) {
             delta_time = 50;
         }
 
-		startFrameGL(640, 480);
+        startFrame(0, 0, 640, 480);
 
         isRunning = isRunning && menuTick(10);
 
-		endFrameGL();
-		flipRenderer();
+        endFrame();
+        flipRenderer();
 
-	}
-
-    unloadStateCallback();
+    }
+#endif
+    unloadStateCallback(-1);
 
     shutdownHW();
 

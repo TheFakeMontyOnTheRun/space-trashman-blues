@@ -16,11 +16,11 @@ include $(DEVKITARM)/gba_rules
 # DATA is a list of directories containing data files
 # INCLUDES is a list of directories containing header files
 #---------------------------------------------------------------------------------
-TARGET		:=	$(shell basename $(CURDIR))
+TARGET		:=	derelict
 BUILD		:=	build
 SOURCES		:=	menu/src base3d/src base3d/src/ags SoundSystem
 DATA		:=
-INCLUDES	:= ../core/include ../common/include base3d/include common/include menu/include SoundSystem
+INCLUDES	:= ../core/include ../common/include base3d/include common/include menu/include
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -34,7 +34,7 @@ CFLAGS	:=	-Wall -Ofast \
 			-ffast-math -Wno-switch\
 			$(ARCH)
 
-CFLAGS	+=	$(INCLUDE) -DAGS -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS
+CFLAGS	+=	$(INCLUDE) -DAGS -DSUPPORTS_HACKING_MINIGAME -DFLOOR_TEXTURES_DONT_ROTATE -DCLI_BUILD -DPAGE_FLIP_ANIMATION -DINCLUDE_ITEM_DESCRIPTIONS -DFASTER_TEXTURE_MAP -DENDIANESS_AWARE -DXRES_FRAMEBUFFER=240 -DYRES_FRAMEBUFFER=160
 
 ASFLAGS	:=	$(ARCH)
 LDFLAGS	=	-g $(ARCH) -Wl,-Map,$(notdir $@).map
@@ -71,35 +71,37 @@ export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 #---------------------------------------------------------------------------------
 # automatically build a list of object files for our project
 #---------------------------------------------------------------------------------
-CFILES		:=			../menu/src/MainMenu.c \
-                		../menu/src/Crawler.c \
-                		../menu/src/HelpScreen.c \
-                		../menu/src/CreditsScreen.c \
-                		../menu/src/GameMenu.c \
+CFILES		:=			../../common/src/MainMenu.c \
+                		../../common/src/Crawler.c \
+                		../../common/src/HelpScreen.c \
+                		../../common/src/CreditsScreen.c \
+                		../../common/src/GameMenu.c \
                 		../menu/src/Main.c \
-                		../menu/src/Engine.c \
+                		../../common/src/Engine.c \
                 		../base3d/src/AGSVersion/AGSRenderer.c \
-                		../base3d/src/Globals.c \
                 		../base3d/src/LoadBitmap.c \
-                		../base3d/src/CRenderer.c \
-                		../base3d/src/VisibilityStrategy.c \
+                		../base3d/src/Renderer.c \
+                		../../common/src/VisibilityStrategy.c \
+                		../../common/src/Globals.c \
                 		../../common/src/CTile3DProperties.c \
                 		../../common/src/ArrayPackedFileReader.c \
                 		../../common/src/Vec.c \
                 		../../common/src/Common.c \
                 		../../common/src/FixP.c \
                 		../../common/src/MapWithCharKey.c \
-                		../base3d/src/Events.c \
-                		../base3d/src/CRenderer_Rasterization.c \
-                		../base3d/src/EDirection_Utils.c \
-                		../base3d/src/CRenderer_Tesselation.c \
-                		../SoundSystem/NullMusic.c \
-                		../base3d/src/Dungeon.c \
-                		../menu/src/UI.c \
-                		../menu/src/HackingScreen.c \
-                		../SoundSystem/PCMAudio.c \
+                		../../common/src/EDirection_Utils.c \
+                		../../common/src/Events.c \
+                		../../common/src/Dungeon.c \
+                		../base3d/src/RendererRasterization.c \
+                		../base3d/src/RendererTesselation.c \
+                		../../common/src/NullMusic.c \
+                		../../common/src/UI.c \
+                		../../common/src/Mesh.c \
+                		../../common/src/HackingScreen.c \
+                		../../common/src/PCMAudio.c \
                 		../../core/src/Derelict.c \
                 		../../core/src/Core.c \
+                		../../common/src/HackingMinigameRules.c \
                 		../../core/src/Parser.c
 CPPFILES	:=
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))

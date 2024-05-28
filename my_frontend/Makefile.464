@@ -1,14 +1,67 @@
 CC = zcc
 
-CFLAGS = +cpc -lm -compiler=sdcc -SO3 --max-allocs-per-node200000 --opt-code-speed -DTRACE_OBJECTS_OVER_FLOOR -pragma-define:CLIB_EXIT_STACK_SIZE=0 -pragma-define:CRT_MODEL=2 --opt-code-speed -I../core/include -I../common/include -DCPC -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_HACKING_MINIGAME -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DRLE_COMPRESSED_MAPS -DEMBEDDED_DATA
+CFLAGS = \
+        +cpc \
+        -compiler=sdcc \
+        -SO3 \
+        --max-allocs-per-node200000 \
+        --opt-code-speed \
+        -pragma-define:CLIB_EXIT_STACK_SIZE=0 \
+        -pragma-define:CRT_MODEL=3 \
+        -pragma-define:CRT_ENABLE_CLOSE=0 \
+        -pragma-define:CLIB_STDIO_HEAP_SIZE=0 \
+        -pragma-export:CRT_FONT=0 \
+        -pragma-export:ansi_SCROLLUP=0 \
+        -pragma-define:CRT_ENABLE_STDIO=0 \
+        -pragma-redirect:fputc_cons=l_ret \
+        -pragma-define:CRT_ENABLE_STDIO=0 \
+        -pragma-export:CLIB_GENCON_CAPS=0 \
+        -pragma-define:CLIB_FIRMWARE_KEYBOARD_CLICK=0 \
+        -pragma-define:CRT_DISABLELOADER=1 \
+        -Iinclude \
+        -I../core/include \
+        -I../common/include \
+        -DXRES_FRAMEBUFFER=320 \
+        -DYRES_FRAMEBUFFER=200 \
+        -DCPC \
+        -DCAN_PICK_OBJECT_AT_ANY_DISTANCE \
+        -DSUPPORTS_HACKING_MINIGAME \
+        -DSUPPORTS_ROOM_TRANSITION_ANIMATION \
+        -DRLE_COMPRESSED_MAPS \
+        -DEMBEDDED_DATA \
+        -DMONOCHROME_VECTORS
 
-all: derelict.dsk
+TARGET = derelict.dsk
 
-derelict.dsk: src/demo.o src/cpc.o src/HackingMinigame.o ../core/src/Core.o ../core/src/Derelict.o ../common/src/Common.o
-	$(CC) $(CFLAGS) -lcpcfs -subtype=dsk -create-app -oderelict.dsk src/demo.o src/cpc.o ../common/src/Common.o src/HackingMinigame.o ../core/src/Core.o ../core/src/Derelict.o $(LDFLAGS)
+OBJS = \
+    src/Events.o \
+    src/RendererRasterizer.o \
+    src/RendererScene.o \
+    src/RendererTesselation.o \
+    src/cpc.o \
+    src/Main.o \
+    src/KeyboardUI.o \
+    src/UI.o \
+    src/HackingMinigame.o \
+    src/Crawler.o \
+    src/GameMenu.o \
+    ../common/src/CreditsScreen.o \
+    ../common/src/MainMenu.o \
+    ../common/src/HelpScreen.o \
+    ../common/src/Engine.o \
+    ../common/src/AY-3-8910.o \
+    ../common/src/Common.o \
+    ../common/src/HackingMinigameRules.o \
+    ../core/src/Core.o \
+    ../core/src/Derelict.o
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -subtype=dsk -create-app -o $(TARGET) $(OBJS) $(LDFLAGS)
 
 clean:
 	rm -f $(OBJS) $(TARGET)
-	$(RM) -f *.obj *.sym *.map *.o* *.bin zcc_opt.def *.reloc *.cas *.COM *.img ex8 *.rom
-	$(RM) -f ../core/src/*.o src/*.o ../common/src/*.o
-	rm *~
+	rm -f *.bin
+	rm -f *~
+

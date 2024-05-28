@@ -8,15 +8,6 @@
 #include <libdragon.h>
 #endif
 
-const long UCLOCKS_PER_SEC = 1000;
-
-long timeEllapsed = 0;
-
-long uclock() {
-	timeEllapsed += (1000 / 60);
-	return timeEllapsed;
-}
-
 #include "FixP.h"
 #include "Vec.h"
 #include "Enums.h"
@@ -26,8 +17,9 @@ long uclock() {
 #include "LoadBitmap.h"
 #include "Core.h"
 #include "Engine.h"
+#include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "Derelict.h"
@@ -37,83 +29,72 @@ long uclock() {
 #include <emscripten/emscripten.h>
 #endif
 
+char *textBuffer;
+extern char *messageLogBuffer;
+extern enum EVisibility *visMap;
+extern struct Vec2i *distances;
+extern uint8_t *collisionMap;
+
 void initHW(int argc, char **argv) {
+    textBuffer = (char *) allocMem(TEXT_BUFFER_SIZE, GENERAL_MEMORY, 1);
+    messageLogBuffer = (char *) allocMem(256, GENERAL_MEMORY, 1);
+    collisionMap = (uint8_t *) allocMem(256, GENERAL_MEMORY, 1);
+    visMap = (enum EVisibility *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(enum EVisibility), GENERAL_MEMORY, 1);
+    distances = (struct Vec2i *) allocMem(2 * MAP_SIZE * MAP_SIZE * sizeof(struct Vec2i), GENERAL_MEMORY, 1);
+    itemsInMap = (uint8_t *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t *), GENERAL_MEMORY, 1);
+    map = (uint8_t *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t *), GENERAL_MEMORY, 1);
+
 #ifndef N64
 #ifndef NDS
-	initFileReader("base.pfs");
+    initFileReader("base.pfs");
 #else
-	nitroFSInit(argv[0]);
-	initFileReader("nitro:/base.pfs");
+    nitroFSInit(argv[0]);
+    initFileReader("nitro:/base.pfs");
 #endif
 #else
-	dfs_init(DFS_DEFAULT_LOCATION);
-	initFileReader("rom:/base.pfs");
+    dfs_init(DFS_DEFAULT_LOCATION);
+    initFileReader("rom:/base.pfs");
 #endif
-	graphicsInit();
+    graphicsInit();
 }
 
 void shutdownHW(void) {
-	graphicsShutdown();
+    graphicsShutdown();
 }
 
 long start_clock, end_clock, prev;
 
-#ifdef __EMSCRIPTEN__
-void mainLoop();
-#endif
-
-#ifndef ANDROID
-
-
 int main(int argc, char **argv) {
 
-	initHW(argc, argv);
+    initHW(argc, argv);
 
-	enterState(kMainMenu);
+    enterState(kMainMenu);
 
-	end_clock = uclock();
-	prev = 0;
-	start_clock = uclock();
+    end_clock = 0;
+    prev = 0;
+    start_clock = 0;
 
-#ifdef __EMSCRIPTEN__
-	emscripten_set_main_loop(mainLoop, 0, 1);
-#else
-	clearRenderer();
+    while (isRunning) {
 
-	while (isRunning) {
+        long now, delta_time;
 
-		long now, delta_time;
+        now = (end_clock - start_clock);
+        delta_time = now - prev;
+        prev = now;
 
-		now = (end_clock - start_clock) / (UCLOCKS_PER_SEC / 1000);
-		delta_time = now - prev;
-		prev = now;
+        if (delta_time < 20) {
+            delta_time = 20;
+        }
 
-		if (delta_time < 50) {
-			delta_time = 50;
-		}
+        startFrame(0, 0, XRES_SCREEN, YRES_SCREEN);
+        isRunning = isRunning && menuTick(delta_time);
+        endFrame();
+        flipRenderer();
 
-#ifndef N64
-#ifndef NDS
-		startFrameGL(640, 480);
-#else
-		startFrameGL(255, 191);
-#endif
-#else
-		startFrameGL(320, 240);
-#endif
-
-		isRunning = isRunning && menuTick(20);
-
-		endFrameGL();
-		flipRenderer();
-
-	}
-#endif
+    }
 
 
-	shutdownHW();
+    shutdownHW();
 
-	return 0;
+    return 0;
 }
-
-#endif

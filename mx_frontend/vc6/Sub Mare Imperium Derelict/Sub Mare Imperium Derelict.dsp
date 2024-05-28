@@ -106,11 +106,11 @@ SOURCE=..\..\..\core\src\Core.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\menu\src\Crawler.c
+SOURCE=..\..\..\common\src\Crawler.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\menu\src\CreditsScreen.c
+SOURCE=..\..\..\common\src\CreditsScreen.c
 # End Source File
 # Begin Source File
 
@@ -134,19 +134,19 @@ SOURCE=..\..\..\core\src\Derelict.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\base3d\src\Dungeon.c
+SOURCE=..\..\..\common\src\Dungeon.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\base3d\src\EDirection_Utils.c
+SOURCE=..\..\..\common\src\EDirection_Utils.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\menu\src\Engine.c
+SOURCE=..\..\..\common\src\Engine.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\base3d\src\Events.c
+SOURCE=..\..\..\common\src\Events.c
 # End Source File
 # Begin Source File
 
@@ -154,19 +154,19 @@ SOURCE=..\..\..\common\src\FixP.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\menu\src\GameMenu.c
+SOURCE=..\..\..\common\src\GameMenu.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\base3d\src\Globals.c
+SOURCE=..\..\..\common\src\Globals.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\menu\src\HackingScreen.c
+SOURCE=..\..\..\common\src\HackingScreen.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\menu\src\HelpScreen.c
+SOURCE=..\..\..\common\src\HelpScreen.c
 # End Source File
 # Begin Source File
 
@@ -187,7 +187,7 @@ SOURCE=..\..\menu\src\Main.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\menu\src\MainMenu.c
+SOURCE=..\..\..\common\src\MainMenu.c
 # End Source File
 # Begin Source File
 
@@ -203,7 +203,7 @@ SOURCE=..\..\..\core\src\Parser.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\menu\src\UI.c
+SOURCE=..\..\..\common\src\UI.c
 # End Source File
 # Begin Source File
 
@@ -211,7 +211,7 @@ SOURCE=..\..\..\common\src\Vec.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\base3d\src\VisibilityStrategy.c
+SOURCE=..\..\..\common\src\VisibilityStrategy.c
 # End Source File
 # End Group
 # Begin Group "Header Files"

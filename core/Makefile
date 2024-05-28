@@ -21,7 +21,7 @@ TESTOBJS = tests/TestMovement.o \
 		$(GMOCK_DIR)/src/gmock-all.o \
 		$(GMOCK_DIR)/src/gmock_main.o
 
-OBJS = src/Derelict.o src/Parser.o src/Core.o ../common/src/Common.o
+OBJS = src/Derelict.o src/Parser.o src/Core.o ../common/src/Common.o ../common/src/Globals.o
 
 MAIN_GAME_OBJ = src/main.o
 
@@ -43,10 +43,16 @@ all:	$(TARGET)
 clean:
 	rm -f $(OBJS) $(TESTTARGET) $(MAIN_GAME_OBJ) $(TESTOBJS) $(TARGET)
 	rm -rf coverage
-	find . | grep ~ | xargs rm -f
 	find . | grep gcno | xargs rm -f
 	find . | grep gcda | xargs rm -f
+	rm -rf doxy-site
 
 report:
 	./build-with-coverage.sh
 	lcov --no-external --capture --directory src --output-file lcov-output.info && genhtml lcov-output.info --output-directory coverage && rm lcov-output.info
+
+doxy-site:
+	(cat Doxyfile; echo 'OUTPUT_DIRECTORY="doxy-site"') | doxygen -
+
+serve:
+	python3 -m http.server

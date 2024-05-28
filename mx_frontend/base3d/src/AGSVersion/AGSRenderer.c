@@ -25,13 +25,13 @@
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 #define VRAM_PAGE_A ((uint8_t*)0x6000000)
 #define VRAM_PAGE_B ((uint8_t*)0x600A000)
 
 
-#define COOLDOWN 0x10
+#define COOLDOWN 0x5
 int snapshotSignal = '.';
 int cooldown = 0;
 
@@ -50,11 +50,11 @@ uint8_t getPaletteEntry(const uint32_t origin) {
 	return shade;
 }
 
-void VblankInterrupt() {
+void VblankInterrupt(void) {
     scanKeys();
 }
 
-void graphicsInit() {
+void graphicsInit(void) {
 	int r, g, b;
     uint16_t palette[256];
     // Set up the interrupt handlers
@@ -89,7 +89,7 @@ void graphicsInit() {
 	enableSmoothMovement = TRUE;
 }
 
-void handleSystemEvents() {
+void handleSystemEvents(void) {
 
     scanKeys();
 
@@ -168,18 +168,18 @@ void handleSystemEvents() {
     }
 }
 
-void graphicsShutdown() {
+void graphicsShutdown(void) {
 
 	releaseBitmap(defaultFont);
 
 	texturesUsed = 0;
 }
 
-void flipRenderer() {
+void flipRenderer(void) {
 
     renderPageFlip(VRAM_PAGE_A, framebuffer,
                    VRAM_PAGE_B, turnStep, turnTarget, 0);
     VBlankIntrWait();
 }
 
-void clearRenderer() {}
+void clearRenderer(void) {}

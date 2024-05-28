@@ -28,12 +28,12 @@
 #include "Core.h"
 #include "Engine.h"
 #include "LoadBitmap.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "Globals.h"
 
 typedef int ESoundDriver;
 
-extern ESoundDriver soundDriver;
+enum ESoundDriver soundDriver = kNoSound;
 
 uint8_t turnBuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 
@@ -58,7 +58,7 @@ enum EColor {
 
 long frame = 0;
 
-void graphicsShutdown() {
+void graphicsShutdown(void) {
 	texturesUsed = 0;
 
 	textmode(C80);
@@ -82,16 +82,16 @@ void putStr(int x, int y, const char *str, int fg, int bg) {
 	}
 }
 
-void drawTitleBox() {
-
+void drawTitleBox(void) {
+    int c, d;
 	putStr(1, 2, "\xc9", COLOR_WHITE, COLOR_BLUE);
 
-	for (int c = 0; c < 75; ++c) {
+	for (c = 0; c < 75; ++c) {
 		putStr(c + 2, 2, "\xcd", COLOR_WHITE, COLOR_BLUE);
 	}
 	putStr(76, 2, "\xbb", COLOR_WHITE, COLOR_BLUE);
 
-	for (int d = 3; d < 10; ++d) {
+	for (d = 3; d < 10; ++d) {
 		putStr(1, d, "\xba", COLOR_WHITE, COLOR_BLUE);
 
 		for (int c = 0; c < 75; ++c) {
@@ -103,9 +103,10 @@ void drawTitleBox() {
 
 	putStr(1, 10, "\xc8", COLOR_WHITE, COLOR_BLUE);
 
-	for (int c = 0; c < 75; ++c) {
+	for (c = 0; c < 75; ++c) {
 		putStr(c + 2, 10, "\xcd", COLOR_WHITE, COLOR_BLUE);
 	}
+
 	putStr(76, 10, "\xbc", COLOR_WHITE, COLOR_BLUE);
 
 	putStr(17, 4, "Sub Mare Imperium - Derelict - v0.9", COLOR_WHITE,
@@ -117,13 +118,14 @@ void drawTitleBox() {
 	putStr(30, 7, "PRE-RELEASE version! Beware!", COLOR_WHITE, COLOR_BLUE);
 }
 
-void querySoundDriver() {
+void querySoundDriver(void) {
+    int option = -1;
+
 	putStr(30, 14, "Select Sound Driver:", COLOR_YELLOW, COLOR_BLACK);
 	putStr(27, 16, "1) IBM Sound", COLOR_YELLOW, COLOR_BLACK);
 	putStr(27, 17, "2) Ad lib Sound Board", COLOR_YELLOW, COLOR_BLACK);
 	putStr(27, 18, "3) OPL2LPT on LPT1", COLOR_YELLOW, COLOR_BLACK);
 	putStr(27, 19, "4) No Sound", COLOR_YELLOW, COLOR_BLACK);
-	int option = -1;
 
 	while (option == -1) {
 
@@ -168,7 +170,7 @@ uint8_t getPaletteEntry(uint32_t origin) {
 	return shade;
 }
 
-void graphicsInit() {
+void graphicsInit(void) {
 	textmode(C80);
 	clrscr();
 	drawTitleBox();
@@ -195,7 +197,7 @@ void graphicsInit() {
 	enableSmoothMovement = TRUE;
 }
 
-void handleSystemEvents() {
+void handleSystemEvents(void) {
 
 	int lastKey = 0;
 
@@ -314,7 +316,7 @@ void handleSystemEvents() {
 	}
 }
 
-void waitVSync() {
+void waitVSync(void) {
     /*
 	DrawWait:
 	asm
@@ -327,68 +329,10 @@ void waitVSync() {
      */
 }
 
-void flipRenderer() {
-
-    int x, y;
-
-
-
-    if ( !enableSmoothMovement || turnTarget == turnStep ) {
-        dosmemput(&framebuffer[0], XRES_FRAMEBUFFER * YRES_FRAMEBUFFER, 0xa0000);
-        memcpy( previousFrame, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
-    } else if ( turnStep < turnTarget ) {
-
-        uint8_t *bufferPtr = &turnBuffer[0];
-        for ( y = 0; y < YRES_FRAMEBUFFER; ++y ) {
-            for ( x = 0; x < XRES_FRAMEBUFFER; ++x ) {
-                uint8_t index;
-
-                if (x < XRES ) {
-
-                    if ( x  >= turnStep ) {
-                        index = previousFrame[ (XRES_FRAMEBUFFER * y) - turnStep + x ];
-                    } else {
-                        index = framebuffer[ (XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
-                    }
-                } else {
-                    index = framebuffer[ (XRES_FRAMEBUFFER * y) + x];
-                }
-
-                *bufferPtr = index;
-                ++bufferPtr;
-            }
-        }
-
-        turnStep+= 20;
-        dosmemput(&turnBuffer[0], XRES_FRAMEBUFFER * YRES_FRAMEBUFFER, 0xa0000);
-    } else {
-
-        uint8_t *bufferPtr = &turnBuffer[0];
-        for ( y = 0; y < YRES_FRAMEBUFFER; ++y ) {
-            for ( x = 0; x < XRES_FRAMEBUFFER; ++x ) {
-                uint8_t index;
-
-                if (x < XRES  ) {
-
-                    if ( x  >= turnStep ) {
-                        index = framebuffer[ (XRES_FRAMEBUFFER * y) - turnStep + x ];
-                    } else {
-                        index = previousFrame[ (XRES_FRAMEBUFFER * y) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
-                    }
-
-                } else {
-                    index = framebuffer[ (XRES_FRAMEBUFFER * y) + x];
-                }
-
-                *bufferPtr = index;
-                ++bufferPtr;
-            }
-        }
-
-        turnStep-= 20;
-        dosmemput(&turnBuffer[0], XRES_FRAMEBUFFER * YRES_FRAMEBUFFER, 0xa0000);
-    }
-
+void flipRenderer(void) {
+    renderPageFlip(&turnBuffer[0], framebuffer,
+                   previousFrame, turnStep, turnTarget, 0);
+    dosmemput(&turnBuffer[0], XRES_FRAMEBUFFER * YRES_FRAMEBUFFER, 0xa0000);
 }
 
-void clear() {}
+void clear(void) {}

@@ -17,12 +17,14 @@ jobs:
       run: git submodule update --init --recursive    
     - name: Install MKDocs
       run: pip install mkdocs
-    - name: Install lcov and texinfo
-      run: sudo apt-get install lcov texinfo
+    - name: Install lcov, texinfo and Doxygen
+      run: sudo apt-get install lcov texinfo doxygen
     - name: Generate HTML from game design markdown files
       run: cd core && mkdocs build
     - name: Generate text coverage report
       run: cd core && make report && mv coverage site
+    - name: Generate Doxygen docs
+      run: cd core && make doxy-site && mv doxy-site site
     - name: Deploy 	
       uses: JamesIves/github-pages-deploy-action@v4
       with:

@@ -7,35 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F136B294293CDB1A00131388 /* LoadBitmapGL1.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B28F293CDB1A00131388 /* LoadBitmapGL1.c */; };
-		F136B295293CDB1A00131388 /* Renderer_RasterizationGL1.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B290293CDB1A00131388 /* Renderer_RasterizationGL1.c */; };
-		F136B296293CDB1A00131388 /* Renderer_TesselationGL1.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B291293CDB1A00131388 /* Renderer_TesselationGL1.c */; };
-		F136B297293CDB1A00131388 /* RendererGL1.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B292293CDB1A00131388 /* RendererGL1.c */; };
+		F136B294293CDB1A00131388 /* LoadBitmap.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B28F293CDB1A00131388 /* LoadBitmap.c */; };
+		F136B295293CDB1A00131388 /* RendererRasterization.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B290293CDB1A00131388 /* RendererRasterization.c */; };
+		F136B296293CDB1A00131388 /* RendererTesselation.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B291293CDB1A00131388 /* RendererTesselation.c */; };
+		F136B297293CDB1A00131388 /* Renderer.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B292293CDB1A00131388 /* Renderer.c */; };
 		F136B29A293CDB3900131388 /* MainMenuGL1.nib in Resources */ = {isa = PBXBuildFile; fileRef = F136B298293CDB3900131388 /* MainMenuGL1.nib */; };
 		F149B82A263CB11700A3F597 /* Core.c in Sources */ = {isa = PBXBuildFile; fileRef = F149B829263CB11700A3F597 /* Core.c */; };
+		F1A132302AA6276B00D2EEFC /* GameWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F1A1322F2AA6276B00D2EEFC /* GameWindow.m */; };
 		F1B8CB1B27CFCCBD00C06E6F /* Common.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1627CFCCBD00C06E6F /* Common.c */; };
 		F1B8CB1C27CFCCBD00C06E6F /* FixP.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1727CFCCBD00C06E6F /* FixP.c */; };
 		F1B8CB1D27CFCCBD00C06E6F /* MapWithCharKey.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1827CFCCBD00C06E6F /* MapWithCharKey.c */; };
 		F1B8CB1E27CFCCBD00C06E6F /* PackedFileReader.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1927CFCCBD00C06E6F /* PackedFileReader.c */; };
 		F1B8CB1F27CFCCBD00C06E6F /* Vec.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1A27CFCCBD00C06E6F /* Vec.c */; };
-		F1B8CB7327CFD4F200C06E6F /* BattleScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB7227CFD4F200C06E6F /* BattleScreen.c */; };
+		F1C6236E2AA3A9B00026195F /* Crawler.c in Sources */ = {isa = PBXBuildFile; fileRef = F1C623612AA3A9B00026195F /* Crawler.c */; };
+		F1C6236F2AA3A9B00026195F /* CreditsScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F1C623622AA3A9B00026195F /* CreditsScreen.c */; };
+		F1C623702AA3A9B00026195F /* Dungeon.c in Sources */ = {isa = PBXBuildFile; fileRef = F1C623632AA3A9B00026195F /* Dungeon.c */; };
+		F1C623712AA3A9B00026195F /* EDirection_Utils.c in Sources */ = {isa = PBXBuildFile; fileRef = F1C623642AA3A9B00026195F /* EDirection_Utils.c */; };
+		F1C623722AA3A9B00026195F /* Engine.c in Sources */ = {isa = PBXBuildFile; fileRef = F1C623652AA3A9B00026195F /* Engine.c */; };
+		F1C623732AA3A9B00026195F /* Events.c in Sources */ = {isa = PBXBuildFile; fileRef = F1C623662AA3A9B00026195F /* Events.c */; };
+		F1C623742AA3A9B00026195F /* GameMenu.c in Sources */ = {isa = PBXBuildFile; fileRef = F1C623672AA3A9B00026195F /* GameMenu.c */; };
+		F1C623752AA3A9B00026195F /* Globals.c in Sources */ = {isa = PBXBuildFile; fileRef = F1C623682AA3A9B00026195F /* Globals.c */; };
+		F1C623762AA3A9B00026195F /* HackingScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F1C623692AA3A9B00026195F /* HackingScreen.c */; };
+		F1C623772AA3A9B00026195F /* HelpScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F1C6236A2AA3A9B00026195F /* HelpScreen.c */; };
+		F1C623782AA3A9B00026195F /* MainMenu.c in Sources */ = {isa = PBXBuildFile; fileRef = F1C6236B2AA3A9B00026195F /* MainMenu.c */; };
+		F1C623792AA3A9B00026195F /* UI.c in Sources */ = {isa = PBXBuildFile; fileRef = F1C6236C2AA3A9B00026195F /* UI.c */; };
+		F1C6237A2AA3A9B00026195F /* VisibilityStrategy.c in Sources */ = {isa = PBXBuildFile; fileRef = F1C6236D2AA3A9B00026195F /* VisibilityStrategy.c */; };
 		F1C704D9294298C000E2F806 /* MyOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C704D7294298C000E2F806 /* MyOpenGLView.m */; };
 		F1CA76C22610A91800FD1E04 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
-		F1CA76C42610A92000FD1E04 /* Events.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E5236DE60800478B2C /* Events.c */; };
-		F1CA76C52610A92000FD1E04 /* HackingScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F18C31BB2608BDE8002C2CDA /* HackingScreen.c */; };
-		F1CA76C62610A92400FD1E04 /* HelpScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A0D236DE63E00478B2C /* HelpScreen.c */; };
-		F1CA76CB2610A92D00FD1E04 /* VisibilityStrategy.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E9236DE60800478B2C /* VisibilityStrategy.c */; };
-		F1CA76CC2610A92E00FD1E04 /* Engine.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B679BA24E4AA3F00FCEF8E /* Engine.c */; };
-		F1CA76CD2610A92E00FD1E04 /* CreditsScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A0A236DE63E00478B2C /* CreditsScreen.c */; };
-		F1CA76CF2610A93600FD1E04 /* Globals.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E4236DE60800478B2C /* Globals.c */; };
 		F1CA76D02610A93600FD1E04 /* Derelict.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D5B5D22531D2BF0094ED78 /* Derelict.c */; };
-		F1CA76D12610A93600FD1E04 /* EDirection_Utils.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779DF236DE60800478B2C /* EDirection_Utils.c */; };
-		F1CA76D22610A93700FD1E04 /* MainMenu.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A10236DE63E00478B2C /* MainMenu.c */; };
-		F1CA76D32610A93700FD1E04 /* Dungeon.c in Sources */ = {isa = PBXBuildFile; fileRef = F12779E3236DE60800478B2C /* Dungeon.c */; };
-		F1CA76D52610A93900FD1E04 /* GameMenu.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A0C236DE63E00478B2C /* GameMenu.c */; };
 		F1CA76D62610A93B00FD1E04 /* Parser.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D5B5D32531D2BF0094ED78 /* Parser.c */; };
-		F1CA76D82610A93C00FD1E04 /* UI.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A12236DE63E00478B2C /* UI.c */; };
-		F1CA76DA2610A94100FD1E04 /* Crawler.c in Sources */ = {isa = PBXBuildFile; fileRef = F1277A09236DE63E00478B2C /* Crawler.c */; };
 		F1CA76DD2610A98800FD1E04 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D1107310486CEB800E47090 /* Info.plist */; };
 		F1CA76DE2610A98900FD1E04 /* enemyfire.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850E25581D370012292B /* enemyfire.wav */; };
 		F1CA76DF2610A98900FD1E04 /* gotclue.wav in Resources */ = {isa = PBXBuildFile; fileRef = F18B850C25581D370012292B /* gotclue.wav */; };
@@ -60,6 +60,8 @@
 		F1CA774E2610AFA000FD1E04 /* Derelict-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */; };
 		F1D1CE2A2A3B9E9E009F1F69 /* CTile3DProperties.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D1CE292A3B9E9E009F1F69 /* CTile3DProperties.c */; };
 		F1DE9C4B2951FD9100EC0235 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1DE9C4A2951FD9100EC0235 /* OpenGL.framework */; };
+		F1E350512AF7BB01003A6154 /* HackingMinigameRules.c in Sources */ = {isa = PBXBuildFile; fileRef = F1E3504F2AF7BB01003A6154 /* HackingMinigameRules.c */; };
+		F1E350522AF7BB01003A6154 /* Mesh.c in Sources */ = {isa = PBXBuildFile; fileRef = F1E350502AF7BB01003A6154 /* Mesh.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,34 +72,16 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		F12779DF236DE60800478B2C /* EDirection_Utils.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = EDirection_Utils.c; path = ../base3d/src/EDirection_Utils.c; sourceTree = SOURCE_ROOT; };
-		F12779E3236DE60800478B2C /* Dungeon.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Dungeon.c; path = ../base3d/src/Dungeon.c; sourceTree = SOURCE_ROOT; };
-		F12779E4236DE60800478B2C /* Globals.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Globals.c; path = ../base3d/src/Globals.c; sourceTree = SOURCE_ROOT; };
-		F12779E5236DE60800478B2C /* Events.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Events.c; path = ../base3d/src/Events.c; sourceTree = SOURCE_ROOT; };
-		F12779E9236DE60800478B2C /* VisibilityStrategy.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = VisibilityStrategy.c; path = ../base3d/src/VisibilityStrategy.c; sourceTree = SOURCE_ROOT; };
-		F12779F9236DE62100478B2C /* CActor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CActor.h; path = ../base3d/include/CActor.h; sourceTree = SOURCE_ROOT; };
-		F12779FE236DE62100478B2C /* Dungeon.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Dungeon.h; path = ../base3d/include/Dungeon.h; sourceTree = SOURCE_ROOT; };
-		F12779FF236DE62100478B2C /* EDirection_Utils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = EDirection_Utils.h; path = ../base3d/include/EDirection_Utils.h; sourceTree = SOURCE_ROOT; };
-		F1277A00236DE62100478B2C /* Enums.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Enums.h; path = ../base3d/include/Enums.h; sourceTree = SOURCE_ROOT; };
 		F1277A02236DE62100478B2C /* LoadBitmap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = LoadBitmap.h; path = ../base3d/include/LoadBitmap.h; sourceTree = SOURCE_ROOT; };
-		F1277A05236DE62100478B2C /* VisibilityStrategy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = VisibilityStrategy.h; path = ../base3d/include/VisibilityStrategy.h; sourceTree = SOURCE_ROOT; };
-		F1277A06236DE63700478B2C /* Engine.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Engine.h; path = ../menu/include/Engine.h; sourceTree = SOURCE_ROOT; };
-		F1277A08236DE63700478B2C /* UI.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = UI.h; path = ../menu/include/UI.h; sourceTree = SOURCE_ROOT; };
-		F1277A09236DE63E00478B2C /* Crawler.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Crawler.c; path = ../menu/src/Crawler.c; sourceTree = SOURCE_ROOT; };
-		F1277A0A236DE63E00478B2C /* CreditsScreen.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = CreditsScreen.c; path = ../menu/src/CreditsScreen.c; sourceTree = SOURCE_ROOT; };
-		F1277A0C236DE63E00478B2C /* GameMenu.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = GameMenu.c; path = ../menu/src/GameMenu.c; sourceTree = SOURCE_ROOT; };
-		F1277A0D236DE63E00478B2C /* HelpScreen.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = HelpScreen.c; path = ../menu/src/HelpScreen.c; sourceTree = SOURCE_ROOT; };
-		F1277A10236DE63E00478B2C /* MainMenu.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = MainMenu.c; path = ../menu/src/MainMenu.c; sourceTree = SOURCE_ROOT; };
-		F1277A12236DE63E00478B2C /* UI.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = UI.c; path = ../menu/src/UI.c; sourceTree = SOURCE_ROOT; };
-		F136B28F293CDB1A00131388 /* LoadBitmapGL1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = LoadBitmapGL1.c; path = ../GL1Common/LoadBitmapGL1.c; sourceTree = "<group>"; };
-		F136B290293CDB1A00131388 /* Renderer_RasterizationGL1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Renderer_RasterizationGL1.c; path = ../GL1Common/Renderer_RasterizationGL1.c; sourceTree = "<group>"; };
-		F136B291293CDB1A00131388 /* Renderer_TesselationGL1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Renderer_TesselationGL1.c; path = ../GL1Common/Renderer_TesselationGL1.c; sourceTree = "<group>"; };
-		F136B292293CDB1A00131388 /* RendererGL1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = RendererGL1.c; path = ../GL1Common/RendererGL1.c; sourceTree = "<group>"; };
-		F136B293293CDB1A00131388 /* RendererGL1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RendererGL1.h; path = ../GL1Common/RendererGL1.h; sourceTree = "<group>"; };
+		F136B28F293CDB1A00131388 /* LoadBitmap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = LoadBitmap.c; path = ../GL1Common/LoadBitmap.c; sourceTree = "<group>"; };
+		F136B290293CDB1A00131388 /* RendererRasterization.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = RendererRasterization.c; path = ../GL1Common/RendererRasterization.c; sourceTree = "<group>"; };
+		F136B291293CDB1A00131388 /* RendererTesselation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = RendererTesselation.c; path = ../GL1Common/RendererTesselation.c; sourceTree = "<group>"; };
+		F136B292293CDB1A00131388 /* Renderer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Renderer.c; path = ../GL1Common/Renderer.c; sourceTree = "<group>"; };
 		F136B298293CDB3900131388 /* MainMenuGL1.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = MainMenuGL1.nib; sourceTree = "<group>"; };
-		F136B29C293CDC2300131388 /* CRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CRenderer.h; path = ../base3d/include/CRenderer.h; sourceTree = "<group>"; };
+		F136B29C293CDC2300131388 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Renderer.h; path = ../base3d/include/Renderer.h; sourceTree = "<group>"; };
 		F149B829263CB11700A3F597 /* Core.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Core.c; path = ../../core/src/Core.c; sourceTree = "<group>"; };
 		F149B82B263CB12B00A3F597 /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Core.h; path = ../../core/include/Core.h; sourceTree = "<group>"; };
+		F15E9FEA2AC833B2003E6C7F /* SoundSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundSystem.h; path = ../../common/include/SoundSystem.h; sourceTree = SOURCE_ROOT; };
 		F18B850725581D370012292B /* magbootson.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = magbootson.wav; path = ../data/wavogg/magbootson.wav; sourceTree = "<group>"; };
 		F18B850825581D370012292B /* menu_select.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = menu_select.wav; path = ../data/wavogg/menu_select.wav; sourceTree = "<group>"; };
 		F18B850925581D370012292B /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = click.wav; path = ../data/wavogg/click.wav; sourceTree = "<group>"; };
@@ -115,9 +99,9 @@
 		F18B851525581D370012292B /* detected2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = detected2.wav; path = ../data/wavogg/detected2.wav; sourceTree = "<group>"; };
 		F18B851625581D370012292B /* bonk.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = bonk.wav; path = ../data/wavogg/bonk.wav; sourceTree = "<group>"; };
 		F18B851725581D380012292B /* fire.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = fire.wav; path = ../data/wavogg/fire.wav; sourceTree = "<group>"; };
-		F18C31BB2608BDE8002C2CDA /* HackingScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = HackingScreen.c; path = ../menu/src/HackingScreen.c; sourceTree = "<group>"; };
 		F19BC7A0260F901800C734C4 /* derelicttheme.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = derelicttheme.wav; path = ../data/wavogg/derelicttheme.wav; sourceTree = "<group>"; };
-		F1B679BA24E4AA3F00FCEF8E /* Engine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Engine.c; path = ../menu/src/Engine.c; sourceTree = "<group>"; };
+		F1A1322E2AA6276B00D2EEFC /* GameWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameWindow.h; sourceTree = "<group>"; };
+		F1A1322F2AA6276B00D2EEFC /* GameWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameWindow.m; sourceTree = "<group>"; };
 		F1B8CB1627CFCCBD00C06E6F /* Common.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Common.c; path = ../../common/src/Common.c; sourceTree = SOURCE_ROOT; };
 		F1B8CB1727CFCCBD00C06E6F /* FixP.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = FixP.c; path = ../../common/src/FixP.c; sourceTree = SOURCE_ROOT; };
 		F1B8CB1827CFCCBD00C06E6F /* MapWithCharKey.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = MapWithCharKey.c; path = ../../common/src/MapWithCharKey.c; sourceTree = SOURCE_ROOT; };
@@ -128,15 +112,33 @@
 		F1B8CB3127CFCFE700C06E6F /* MapWithCharKey.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = MapWithCharKey.h; path = ../../common/include/MapWithCharKey.h; sourceTree = SOURCE_ROOT; };
 		F1B8CB3227CFCFE700C06E6F /* PackedFileReader.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = PackedFileReader.h; path = ../../common/include/PackedFileReader.h; sourceTree = SOURCE_ROOT; };
 		F1B8CB3327CFCFE700C06E6F /* Vec.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Vec.h; path = ../../common/include/Vec.h; sourceTree = SOURCE_ROOT; };
-		F1B8CB7227CFD4F200C06E6F /* BattleScreen.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = BattleScreen.c; path = ../menu/src/BattleScreen.c; sourceTree = SOURCE_ROOT; };
 		F1BD0D30236EF697002329C6 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		F1BD0D31236EF697002329C6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
-		F1BF22812450F4AF0088A1C4 /* SoundSystem.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SoundSystem.h; path = ../SoundSystem/SoundSystem.h; sourceTree = SOURCE_ROOT; };
+		F1C623592AA3A9840026195F /* CActor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CActor.h; path = ../../common/include/CActor.h; sourceTree = SOURCE_ROOT; };
+		F1C6235A2AA3A9840026195F /* Dungeon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Dungeon.h; path = ../../common/include/Dungeon.h; sourceTree = SOURCE_ROOT; };
+		F1C6235B2AA3A9840026195F /* EDirection_Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EDirection_Utils.h; path = ../../common/include/EDirection_Utils.h; sourceTree = SOURCE_ROOT; };
+		F1C6235C2AA3A9840026195F /* Engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Engine.h; path = ../../common/include/Engine.h; sourceTree = SOURCE_ROOT; };
+		F1C6235D2AA3A9840026195F /* Enums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Enums.h; path = ../../common/include/Enums.h; sourceTree = SOURCE_ROOT; };
+		F1C6235E2AA3A9840026195F /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Globals.h; path = ../../common/include/Globals.h; sourceTree = SOURCE_ROOT; };
+		F1C6235F2AA3A9840026195F /* UI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UI.h; path = ../../common/include/UI.h; sourceTree = SOURCE_ROOT; };
+		F1C623602AA3A9840026195F /* VisibilityStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VisibilityStrategy.h; path = ../../common/include/VisibilityStrategy.h; sourceTree = SOURCE_ROOT; };
+		F1C623612AA3A9B00026195F /* Crawler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Crawler.c; path = ../../common/src/Crawler.c; sourceTree = SOURCE_ROOT; };
+		F1C623622AA3A9B00026195F /* CreditsScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CreditsScreen.c; path = ../../common/src/CreditsScreen.c; sourceTree = SOURCE_ROOT; };
+		F1C623632AA3A9B00026195F /* Dungeon.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Dungeon.c; path = ../../common/src/Dungeon.c; sourceTree = SOURCE_ROOT; };
+		F1C623642AA3A9B00026195F /* EDirection_Utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = EDirection_Utils.c; path = ../../common/src/EDirection_Utils.c; sourceTree = SOURCE_ROOT; };
+		F1C623652AA3A9B00026195F /* Engine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Engine.c; path = ../../common/src/Engine.c; sourceTree = SOURCE_ROOT; };
+		F1C623662AA3A9B00026195F /* Events.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Events.c; path = ../../common/src/Events.c; sourceTree = SOURCE_ROOT; };
+		F1C623672AA3A9B00026195F /* GameMenu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = GameMenu.c; path = ../../common/src/GameMenu.c; sourceTree = SOURCE_ROOT; };
+		F1C623682AA3A9B00026195F /* Globals.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Globals.c; path = ../../common/src/Globals.c; sourceTree = SOURCE_ROOT; };
+		F1C623692AA3A9B00026195F /* HackingScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = HackingScreen.c; path = ../../common/src/HackingScreen.c; sourceTree = SOURCE_ROOT; };
+		F1C6236A2AA3A9B00026195F /* HelpScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = HelpScreen.c; path = ../../common/src/HelpScreen.c; sourceTree = SOURCE_ROOT; };
+		F1C6236B2AA3A9B00026195F /* MainMenu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = MainMenu.c; path = ../../common/src/MainMenu.c; sourceTree = SOURCE_ROOT; };
+		F1C6236C2AA3A9B00026195F /* UI.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = UI.c; path = ../../common/src/UI.c; sourceTree = SOURCE_ROOT; };
+		F1C6236D2AA3A9B00026195F /* VisibilityStrategy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = VisibilityStrategy.c; path = ../../common/src/VisibilityStrategy.c; sourceTree = SOURCE_ROOT; };
 		F1C704D7294298C000E2F806 /* MyOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOpenGLView.m; sourceTree = "<group>"; };
 		F1C704D8294298C000E2F806 /* MyOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOpenGLView.h; sourceTree = "<group>"; };
 		F1CA76B32610A8BF00FD1E04 /* Derelict.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Derelict.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Derelict-Info.plist"; sourceTree = "<group>"; };
-		F1CD088E2450E32D00D4794D /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Globals.h; path = ../base3d/include/Globals.h; sourceTree = SOURCE_ROOT; };
+		F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Derelict-Info.plist"; sourceTree = "<group>"; };
 		F1CD08C62450E41C00D4794D /* base.pfs */ = {isa = PBXFileReference; lastKnownFileType = file; name = base.pfs; path = ../base.pfs; sourceTree = SOURCE_ROOT; };
 		F1D1CE292A3B9E9E009F1F69 /* CTile3DProperties.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = CTile3DProperties.c; path = ../../common/src/CTile3DProperties.c; sourceTree = SOURCE_ROOT; };
 		F1D1CE2B2A3B9EAA009F1F69 /* CTile3DProperties.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CTile3DProperties.h; path = ../../common/include/CTile3DProperties.h; sourceTree = SOURCE_ROOT; };
@@ -145,6 +147,10 @@
 		F1D5B5D62531D2C90094ED78 /* Parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Parser.h; path = ../../core/include/Parser.h; sourceTree = "<group>"; };
 		F1D5B5D72531D2CA0094ED78 /* Derelict.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Derelict.h; path = ../../core/include/Derelict.h; sourceTree = "<group>"; };
 		F1DE9C4A2951FD9100EC0235 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		F1E3504D2AF7BAF1003A6154 /* Mesh.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Mesh.h; path = ../../common/include/Mesh.h; sourceTree = SOURCE_ROOT; };
+		F1E3504E2AF7BAF1003A6154 /* HackingMinigameRules.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = HackingMinigameRules.h; path = ../../common/include/HackingMinigameRules.h; sourceTree = SOURCE_ROOT; };
+		F1E3504F2AF7BB01003A6154 /* HackingMinigameRules.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = HackingMinigameRules.c; path = ../../common/src/HackingMinigameRules.c; sourceTree = SOURCE_ROOT; };
+		F1E350502AF7BB01003A6154 /* Mesh.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Mesh.c; path = ../../common/src/Mesh.c; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +169,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				F1A1322E2AA6276B00D2EEFC /* GameWindow.h */,
+				F1A1322F2AA6276B00D2EEFC /* GameWindow.m */,
 				F1C704D8294298C000E2F806 /* MyOpenGLView.h */,
 				F1C704D7294298C000E2F806 /* MyOpenGLView.m */,
 			);
@@ -214,11 +222,36 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				F136B28F293CDB1A00131388 /* LoadBitmapGL1.c */,
-				F136B290293CDB1A00131388 /* Renderer_RasterizationGL1.c */,
-				F136B291293CDB1A00131388 /* Renderer_TesselationGL1.c */,
-				F136B292293CDB1A00131388 /* RendererGL1.c */,
-				F136B293293CDB1A00131388 /* RendererGL1.h */,
+				F15E9FEA2AC833B2003E6C7F /* SoundSystem.h */,
+				F1C623612AA3A9B00026195F /* Crawler.c */,
+				F1C623622AA3A9B00026195F /* CreditsScreen.c */,
+				F1C623632AA3A9B00026195F /* Dungeon.c */,
+				F1C623642AA3A9B00026195F /* EDirection_Utils.c */,
+				F1C623652AA3A9B00026195F /* Engine.c */,
+				F1C623662AA3A9B00026195F /* Events.c */,
+				F1E3504D2AF7BAF1003A6154 /* Mesh.h */,
+				F1E3504E2AF7BAF1003A6154 /* HackingMinigameRules.h */,
+				F1C623672AA3A9B00026195F /* GameMenu.c */,
+				F1E3504F2AF7BB01003A6154 /* HackingMinigameRules.c */,
+				F1E350502AF7BB01003A6154 /* Mesh.c */,
+				F1C623682AA3A9B00026195F /* Globals.c */,
+				F1C623692AA3A9B00026195F /* HackingScreen.c */,
+				F1C6236A2AA3A9B00026195F /* HelpScreen.c */,
+				F1C6236B2AA3A9B00026195F /* MainMenu.c */,
+				F1C6236C2AA3A9B00026195F /* UI.c */,
+				F1C6236D2AA3A9B00026195F /* VisibilityStrategy.c */,
+				F1C623592AA3A9840026195F /* CActor.h */,
+				F1C6235A2AA3A9840026195F /* Dungeon.h */,
+				F1C6235B2AA3A9840026195F /* EDirection_Utils.h */,
+				F1C6235C2AA3A9840026195F /* Engine.h */,
+				F1C6235D2AA3A9840026195F /* Enums.h */,
+				F1C6235E2AA3A9840026195F /* Globals.h */,
+				F1C6235F2AA3A9840026195F /* UI.h */,
+				F1C623602AA3A9840026195F /* VisibilityStrategy.h */,
+				F136B28F293CDB1A00131388 /* LoadBitmap.c */,
+				F136B290293CDB1A00131388 /* RendererRasterization.c */,
+				F136B291293CDB1A00131388 /* RendererTesselation.c */,
+				F136B292293CDB1A00131388 /* Renderer.c */,
 				F1B8CB2F27CFCFE700C06E6F /* Common.h */,
 				F1B8CB3027CFCFE700C06E6F /* FixP.h */,
 				F1D1CE2B2A3B9EAA009F1F69 /* CTile3DProperties.h */,
@@ -226,11 +259,8 @@
 				F1B8CB3127CFCFE700C06E6F /* MapWithCharKey.h */,
 				F1B8CB3227CFCFE700C06E6F /* PackedFileReader.h */,
 				F1B8CB3327CFCFE700C06E6F /* Vec.h */,
-				F12779F9236DE62100478B2C /* CActor.h */,
-				F1277A09236DE63E00478B2C /* Crawler.c */,
 				F149B82B263CB12B00A3F597 /* Core.h */,
-				F1277A0A236DE63E00478B2C /* CreditsScreen.c */,
-				F136B29C293CDC2300131388 /* CRenderer.h */,
+				F136B29C293CDC2300131388 /* Renderer.h */,
 				F1B8CB1627CFCCBD00C06E6F /* Common.c */,
 				F1B8CB1727CFCCBD00C06E6F /* FixP.c */,
 				F1B8CB1827CFCCBD00C06E6F /* MapWithCharKey.c */,
@@ -239,30 +269,10 @@
 				F149B829263CB11700A3F597 /* Core.c */,
 				F1D5B5D22531D2BF0094ED78 /* Derelict.c */,
 				F1D5B5D72531D2CA0094ED78 /* Derelict.h */,
-				F12779E3236DE60800478B2C /* Dungeon.c */,
-				F12779FE236DE62100478B2C /* Dungeon.h */,
-				F12779DF236DE60800478B2C /* EDirection_Utils.c */,
-				F12779FF236DE62100478B2C /* EDirection_Utils.h */,
-				F1B679BA24E4AA3F00FCEF8E /* Engine.c */,
-				F1277A06236DE63700478B2C /* Engine.h */,
-				F1277A00236DE62100478B2C /* Enums.h */,
-				F12779E5236DE60800478B2C /* Events.c */,
-				F1277A0C236DE63E00478B2C /* GameMenu.c */,
-				F12779E4236DE60800478B2C /* Globals.c */,
-				F1CD088E2450E32D00D4794D /* Globals.h */,
-				F18C31BB2608BDE8002C2CDA /* HackingScreen.c */,
-				F1277A0D236DE63E00478B2C /* HelpScreen.c */,
 				F1277A02236DE62100478B2C /* LoadBitmap.h */,
-				F1B8CB7227CFD4F200C06E6F /* BattleScreen.c */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
-				F1277A10236DE63E00478B2C /* MainMenu.c */,
 				F1D5B5D32531D2BF0094ED78 /* Parser.c */,
 				F1D5B5D62531D2C90094ED78 /* Parser.h */,
-				F1BF22812450F4AF0088A1C4 /* SoundSystem.h */,
-				F1277A12236DE63E00478B2C /* UI.c */,
-				F1277A08236DE63700478B2C /* UI.h */,
-				F12779E9236DE60800478B2C /* VisibilityStrategy.c */,
-				F1277A05236DE62100478B2C /* VisibilityStrategy.h */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -387,33 +397,35 @@
 			files = (
 				F149B82A263CB11700A3F597 /* Core.c in Sources */,
 				F1CA76C22610A91800FD1E04 /* main.m in Sources */,
-				F1CA76C42610A92000FD1E04 /* Events.c in Sources */,
-				F1CA76C52610A92000FD1E04 /* HackingScreen.c in Sources */,
-				F1CA76C62610A92400FD1E04 /* HelpScreen.c in Sources */,
-				F1CA76CB2610A92D00FD1E04 /* VisibilityStrategy.c in Sources */,
-				F1CA76CC2610A92E00FD1E04 /* Engine.c in Sources */,
-				F1CA76CD2610A92E00FD1E04 /* CreditsScreen.c in Sources */,
-				F1CA76CF2610A93600FD1E04 /* Globals.c in Sources */,
 				F1CA76D02610A93600FD1E04 /* Derelict.c in Sources */,
-				F1CA76D12610A93600FD1E04 /* EDirection_Utils.c in Sources */,
-				F1CA76D22610A93700FD1E04 /* MainMenu.c in Sources */,
-				F1CA76D32610A93700FD1E04 /* Dungeon.c in Sources */,
-				F1CA76D52610A93900FD1E04 /* GameMenu.c in Sources */,
 				F1CA76D62610A93B00FD1E04 /* Parser.c in Sources */,
-				F1CA76D82610A93C00FD1E04 /* UI.c in Sources */,
-				F1CA76DA2610A94100FD1E04 /* Crawler.c in Sources */,
 				F1C704D9294298C000E2F806 /* MyOpenGLView.m in Sources */,
 				F1B8CB1B27CFCCBD00C06E6F /* Common.c in Sources */,
 				F1B8CB1C27CFCCBD00C06E6F /* FixP.c in Sources */,
 				F1B8CB1D27CFCCBD00C06E6F /* MapWithCharKey.c in Sources */,
 				F1B8CB1E27CFCCBD00C06E6F /* PackedFileReader.c in Sources */,
 				F1B8CB1F27CFCCBD00C06E6F /* Vec.c in Sources */,
-				F1B8CB7327CFD4F200C06E6F /* BattleScreen.c in Sources */,
-				F136B294293CDB1A00131388 /* LoadBitmapGL1.c in Sources */,
-				F136B295293CDB1A00131388 /* Renderer_RasterizationGL1.c in Sources */,
-				F136B296293CDB1A00131388 /* Renderer_TesselationGL1.c in Sources */,
-				F136B297293CDB1A00131388 /* RendererGL1.c in Sources */,
+				F136B294293CDB1A00131388 /* LoadBitmap.c in Sources */,
+				F136B295293CDB1A00131388 /* RendererRasterization.c in Sources */,
+				F136B296293CDB1A00131388 /* RendererTesselation.c in Sources */,
+				F136B297293CDB1A00131388 /* Renderer.c in Sources */,
 				F1D1CE2A2A3B9E9E009F1F69 /* CTile3DProperties.c in Sources */,
+				F1C6236E2AA3A9B00026195F /* Crawler.c in Sources */,
+				F1C6236F2AA3A9B00026195F /* CreditsScreen.c in Sources */,
+				F1C623702AA3A9B00026195F /* Dungeon.c in Sources */,
+				F1C623712AA3A9B00026195F /* EDirection_Utils.c in Sources */,
+				F1C623722AA3A9B00026195F /* Engine.c in Sources */,
+				F1C623732AA3A9B00026195F /* Events.c in Sources */,
+				F1C623742AA3A9B00026195F /* GameMenu.c in Sources */,
+				F1C623752AA3A9B00026195F /* Globals.c in Sources */,
+				F1C623762AA3A9B00026195F /* HackingScreen.c in Sources */,
+				F1C623772AA3A9B00026195F /* HelpScreen.c in Sources */,
+				F1C623782AA3A9B00026195F /* MainMenu.c in Sources */,
+				F1C623792AA3A9B00026195F /* UI.c in Sources */,
+				F1C6237A2AA3A9B00026195F /* VisibilityStrategy.c in Sources */,
+				F1A132302AA6276B00D2EEFC /* GameWindow.m in Sources */,
+				F1E350512AF7BB01003A6154 /* HackingMinigameRules.c in Sources */,
+				F1E350522AF7BB01003A6154 /* Mesh.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,8 +449,14 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					CLI_BUILD,
 					INCLUDE_ITEM_DESCRIPTIONS,
+					TILED_BITMAPS,
+					EMIT_QUIT_OPTION,
+					ENDIANESS_AWARE,
+					"XRES_FRAMEBUFFER=320",
+					"YRES_FRAMEBUFFER=200",
 				);
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				SDKROOT = "";
 			};
 			name = Debug;
 		};
@@ -448,8 +466,14 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					CLI_BUILD,
 					INCLUDE_ITEM_DESCRIPTIONS,
+					TILED_BITMAPS,
+					EMIT_QUIT_OPTION,
+					ENDIANESS_AWARE,
+					"XRES_FRAMEBUFFER=320",
+					"YRES_FRAMEBUFFER=200",
 				);
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				SDKROOT = "";
 			};
 			name = Release;
 		};
@@ -459,6 +483,7 @@
 				INFOPLIST_FILE = "Derelict-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = Derelict;
+				SDKROOT = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -469,6 +494,7 @@
 				INFOPLIST_FILE = "Derelict-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = Derelict;
+				SDKROOT = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

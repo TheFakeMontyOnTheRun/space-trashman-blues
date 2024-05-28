@@ -14,8 +14,9 @@
 #include "Engine.h"
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
+#include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 #include "SDL.h"
 
@@ -24,82 +25,86 @@
 #endif
 
 #ifdef __EMSCRIPTEN__
-void enterFullScreenMode() {
-	EmscriptenFullscreenStrategy s;
-	memset(&s, 0, sizeof(s));
-	s.scaleMode = EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
-	s.canvasResolutionScaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_NONE;
-	s.filteringMode = EMSCRIPTEN_FULLSCREEN_FILTERING_DEFAULT;
-	emscripten_enter_soft_fullscreen(0, &s);
+void enterFullScreenMode(void) {
+    EmscriptenFullscreenStrategy s;
+    memset(&s, 0, sizeof(s));
+    s.scaleMode = EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
+    s.canvasResolutionScaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_NONE;
+    s.filteringMode = EMSCRIPTEN_FULLSCREEN_FILTERING_DEFAULT;
+    emscripten_enter_soft_fullscreen(0, &s);
 }
 #endif
 
 SDL_Window *window;
 SDL_GLContext glContext;
 int snapshotSignal = '.';
-int leanX;
-int leanY;
 
-void graphicsInit() {
-	int r, g, b;
+#define ANGLE_TURN_THRESHOLD 40
+#define ANGLE_TURN_STEP 5
 
-	SDL_Init(SDL_INIT_EVERYTHING);
-	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
+extern int turning;
+extern int leanX;
+extern int leanY;
 
-	window =
-			SDL_CreateWindow("Sub Mare Imperium - Derelict", SDL_WINDOWPOS_CENTERED,
-							 SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+void graphicsInit(void) {
+    int r, g, b;
 
-	glContext = SDL_GL_CreateContext(window);
+    SDL_Init(SDL_INIT_EVERYTHING);
+    SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
+
+    window =
+            SDL_CreateWindow("Sub Mare Imperium - Derelict", SDL_WINDOWPOS_CENTERED,
+                             SDL_WINDOWPOS_CENTERED, 320, 240, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+
+    glContext = SDL_GL_CreateContext(window);
 
 #ifdef __EMSCRIPTEN__
-	enterFullScreenMode ();
+    enterFullScreenMode ();
 #endif
-	defaultFont = loadBitmap("font.img");
-	enableSmoothMovement = TRUE;
+    defaultFont = loadBitmap("font.img");
+    enableSmoothMovement = TRUE;
 
-	initGL();
+    initGL();
 }
 
-void handleSystemEvents() {
-	SDL_Event event;
+void handleSystemEvents(void) {
+    SDL_Event event;
 
-	while (SDL_PollEvent(&event)) {
+    while (SDL_PollEvent(&event)) {
 
-		if (event.type == SDL_QUIT) {
-			mBufferedCommand = kCommandQuit;
-			return;
-		}
+        if (event.type == SDL_QUIT) {
+            mBufferedCommand = kCommandQuit;
+            return;
+        }
 
         if (event.type == SDL_KEYUP) {
-            leanY = leanX = 0;
-            visibilityCached = FALSE;
             needsToRedrawVisibleMeshes = TRUE;
         }
 
         if (event.type == SDL_KEYDOWN) {
+            leanY = leanX = 0;
             switch (event.key.keysym.sym) {
-				case SDLK_RETURN:
-				case SDLK_z:
-					mBufferedCommand = kCommandFire1;
-					visibilityCached = FALSE;
-					needsToRedrawVisibleMeshes = TRUE;
-					break;
-				case SDLK_x:
-					mBufferedCommand = kCommandFire2;
-					visibilityCached = FALSE;
-					needsToRedrawVisibleMeshes = TRUE;
-					break;
-				case SDLK_c:
-					mBufferedCommand = kCommandFire3;
-					visibilityCached = FALSE;
-					needsToRedrawVisibleMeshes = TRUE;
-					break;
-				case SDLK_v:
-					mBufferedCommand = kCommandFire4;
-					visibilityCached = FALSE;
-					needsToRedrawVisibleMeshes = TRUE;
-					break;
+                case SDLK_RETURN:
+                case SDLK_z:
+                    mBufferedCommand = kCommandFire1;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+                case SDLK_x:
+                    mBufferedCommand = kCommandFire2;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+                case SDLK_c:
+                    mBufferedCommand = kCommandFire3;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
+                case SDLK_v:
+                    mBufferedCommand = kCommandFire4;
+                    visibilityCached = FALSE;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    break;
 
                 case SDLK_t:
                     leanY = -1;
@@ -125,107 +130,103 @@ void handleSystemEvents() {
                     needsToRedrawVisibleMeshes = TRUE;
                     break;
 
-				case SDLK_ESCAPE:
-				case SDLK_q:
-					mBufferedCommand = kCommandBack;
-					visibilityCached = FALSE;
-					break;
+                case SDLK_ESCAPE:
+                case SDLK_q:
+                    mBufferedCommand = kCommandBack;
+                    visibilityCached = FALSE;
+                    break;
 
-				case SDLK_SPACE:
+                case SDLK_SPACE:
 
-				case SDLK_s:
-					mBufferedCommand = kCommandStrafeLeft;
-					visibilityCached = FALSE;
-					break;
-				case SDLK_d:
-					mBufferedCommand = kCommandStrafeRight;
-					visibilityCached = FALSE;
-					break;
+                case SDLK_s:
+                    mBufferedCommand = kCommandStrafeLeft;
+                    visibilityCached = FALSE;
+                    break;
+                case SDLK_d:
+                    mBufferedCommand = kCommandStrafeRight;
+                    visibilityCached = FALSE;
+                    break;
 
-				case SDLK_i:
-					visibilityCached = FALSE;
-					break;
-				case SDLK_o:
-					visibilityCached = FALSE;
-					break;
+                case SDLK_i:
+                    visibilityCached = FALSE;
+                    break;
+                case SDLK_o:
+                    visibilityCached = FALSE;
+                    break;
 
-				case SDLK_j:
-					visibilityCached = FALSE;
-					break;
-				case SDLK_k:
-					visibilityCached = FALSE;
-					break;
+                case SDLK_j:
+                    visibilityCached = FALSE;
+                    break;
+                case SDLK_k:
+                    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+                    break;
+                case SDLK_w:
+                    SDL_SetWindowFullscreen(window, 0);
+                    break;
 
 
-				case SDLK_LEFT:
-					mBufferedCommand = kCommandLeft;
-					visibilityCached = FALSE;
-					if ((currentGameMenuState == kPlayGame ||
-						 currentGameMenuState == kBackToGame) &&
-						currentPresentationState == kWaitingForInput
-							) {
-						turnStep = 0;
-						turnTarget = 200;
-					}
-					break;
-				case SDLK_RIGHT:
-					mBufferedCommand = kCommandRight;
-					visibilityCached = FALSE;
-					if ((currentGameMenuState == kPlayGame ||
-						 currentGameMenuState == kBackToGame) &&
-						currentPresentationState == kWaitingForInput
-							) {
-						turnStep = 200;
-						turnTarget = 0;
-					}
-					break;
-				case SDLK_UP:
-					mBufferedCommand = kCommandUp;
-					visibilityCached = FALSE;
-					break;
-				case SDLK_1:
-					enableSmoothMovement = TRUE;
-					break;
+                case SDLK_LEFT:
+                    turning = 1;
+                    leanX = -ANGLE_TURN_STEP;
+                    break;
+                case SDLK_RIGHT:
+                    leanX = ANGLE_TURN_STEP;
+                    turning = 1;
+                    break;
+                case SDLK_UP:
+                    mBufferedCommand = kCommandUp;
+                    break;
+                case SDLK_1:
+                    enableSmoothMovement = TRUE;
+                    break;
 
-				case SDLK_2:
-					enableSmoothMovement = FALSE;
-					break;
+                case SDLK_2:
+                    enableSmoothMovement = FALSE;
+                    break;
 
-				case SDLK_DOWN:
-					mBufferedCommand = kCommandDown;
-					visibilityCached = FALSE;
-					break;
+                case SDLK_3:
+                    leanX = -ANGLE_TURN_STEP;
+                    break;
 
-				case SDLK_n:
-					needsToRedrawVisibleMeshes = TRUE;
-					visibilityCached = FALSE;
-					break;
-				case SDLK_m:
-					needsToRedrawVisibleMeshes = TRUE;
-					visibilityCached = FALSE;
-					break;
+                case SDLK_4:
+                    leanX = ANGLE_TURN_STEP;
 
-				default:
-					return;
-			}
-		}
-	}
+                    break;
+
+                case SDLK_DOWN:
+                    mBufferedCommand = kCommandDown;
+                    visibilityCached = FALSE;
+                    break;
+
+                case SDLK_n:
+                    needsToRedrawVisibleMeshes = TRUE;
+                    visibilityCached = FALSE;
+                    break;
+                case SDLK_m:
+                    needsToRedrawVisibleMeshes = TRUE;
+                    visibilityCached = FALSE;
+                    break;
+
+                default:
+                    return;
+            }
+        }
+    }
 }
 
-void graphicsShutdown() {
-	SDL_DestroyWindow(window);
-	SDL_Quit();
+void graphicsShutdown(void) {
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 
-	releaseBitmap(defaultFont);
+    releaseBitmap(defaultFont);
 
-	texturesUsed = 0;
+    texturesUsed = 0;
 }
 
-void flipRenderer() {
-
-	SDL_GL_SwapWindow(window);
+void flipRenderer(void) {
+    SDL_GL_SwapWindow(window);
 
 #ifndef __EMSCRIPTEN__
-	SDL_Delay(1000 / 60);
+    SDL_Delay(1000 / 60);
 #endif
 }

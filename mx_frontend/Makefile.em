@@ -1,12 +1,9 @@
 CC = emcc
 CXX = em++
 
-LDFLAGS =  -O3 -s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_SDL=1 -s --preload-file ./base.pfs --use-preload-plugins -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0 --shell-file ./minimal.html
+LDFLAGS =  -O3 -s USE_ZLIB=1 -s USE_LIBPNG=1 -sUSE_SDL -s --preload-file ./base.pfs --use-preload-plugins -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0 --shell-file ./minimal.html
 
 CFLAGS=-g -c -O3     \
-	-Ibase3d/include                                     \
-	-Imenu/include                                       \
-	-ISoundSystem                                       \
 	-I../common/include									\
 	$(SDL_INCLUDE)                                       \
 	-DSDLSW                                              \
@@ -14,38 +11,43 @@ CFLAGS=-g -c -O3     \
 	-fomit-frame-pointer                                 \
 	-fno-exceptions                                      \
 	-ffast-math \
-	-I../core/include -DINCLUDE_ITEM_DESCRIPTIONS -DCLI_BUILD
+	-Imenu/include                                       \
+	-ISoundSystem                                       \
+	-Ibase3d/include                                     \
+	-I../core/include -DINCLUDE_ITEM_DESCRIPTIONS -DSUPPORTS_HACKING_MINIGAME -DCLI_BUILD -sUSE_SDL -DPAGE_FLIP_ANIMATION -DENDIANESS_AWARE -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200
 
-MENU_TARGET=game.html
+MENU_TARGET=index.html
 
-MENU_OBJ=menu/src/MainMenu.o \
+MENU_OBJ=../common/src/MainMenu.o \
 	../common/src/FixP.o \
 	../common/src/Vec.o \
 	../common/src/Common.o \
 	../common/src/PackedFileReader.o \
 	../common/src/MapWithCharKey.o \
 	../common/src/CTile3DProperties.o \
-	menu/src/Crawler.o \
-	menu/src/Engine.o \
-	menu/src/UI.o \
+	../common/src/EDirection_Utils.o \
+	../common/src/Globals.o \
+	../common/src/VisibilityStrategy.o \
+	../common/src/Events.o \
+	../common/src/Dungeon.o \
+	../common/src/Crawler.o \
+	../common/src/Engine.o \
+	../common/src/UI.o \
+	../common/src/Mesh.o \
 	menu/src/Main.o \
-	base3d/src/Globals.o \
 	base3d/src/SDLVersion/SDL1Renderer.o \
 	base3d/src/LoadBitmap.o \
-	base3d/src/CRenderer.o \
-	base3d/src/VisibilityStrategy.o \
-	base3d/src/Events.o \
-	base3d/src/CRenderer_Rasterization.o \
-	base3d/src/EDirection_Utils.o \
-	base3d/src/CRenderer_Tesselation.o \
-	SoundSystem/NullMusic.o \
-	menu/src/HelpScreen.o \
-	menu/src/HackingScreen.o \
-	menu/src/GameMenu.o \
-	menu/src/CreditsScreen.o \
-	base3d/src/Dungeon.o \
+	base3d/src/Renderer.o \
+	base3d/src/RendererRasterization.o \
+	base3d/src/RendererTesselation.o \
+	../common/src/NullMusic.o \
+	../common/src/HelpScreen.o \
+	../common/src/HackingScreen.o \
+	../common/src/GameMenu.o \
+	../common/src/CreditsScreen.o \
 	../core/src/Derelict.o \
 	../core/src/Core.o \
+	../common/src/HackingMinigameRules.o \
 	../core/src/Parser.o
 
 

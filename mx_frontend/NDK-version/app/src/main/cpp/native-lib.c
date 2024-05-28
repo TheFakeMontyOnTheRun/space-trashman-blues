@@ -24,7 +24,7 @@
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "Enums.h"
@@ -34,20 +34,22 @@
 #include "LoadBitmap.h"
 #include "Engine.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "SoundSystem.h"
 
-int isInstantApp = FALSE;
+enum ESoundDriver soundDriver = kNoSound;
 
-void initHW(void);
+int isInstantApp = FALSE;
 
 void enterState(enum EGameMenuState newState);
 
 void mainLoop(void);
 
 extern int currentGameMenuState;
+
+int snapshotSignal = '.';
 
 uint8_t framebufferFinal[320 * 240 * 4];
 
@@ -99,106 +101,35 @@ void graphicsShutdown(void) {
 
 void flipRenderer(void) {
 
-    int x,y;
-    uint8_t r, g, b, a;
+    uint8_t newFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+
+    renderPageFlip(newFrame, framebuffer,
+                   previousFrame, turnStep, turnTarget, 0);
 
     unsigned char *ptr = &framebufferFinal[0];
 
-    if ( turnTarget == turnStep ) {
+    for (int y = 0; y < 240; ++y) {
+        for (int x = 0; x < 320; ++x) {
 
-        for (int y = 0; y < 240; ++y) {
-            for (int x = 0; x < 320; ++x) {
+            int32_t pixel = palette[newFrame[(int) (XRES_FRAMEBUFFER * ((200 * y) / 240)) + x]];
 
-                int32_t pixel = palette[framebuffer[(int)(XRES_FRAMEBUFFER * ((200 * y) / 240 )) + x]];
+            int r = (pixel & 0x000000FF) - 0x38;
+            int g = ((pixel & 0x0000FF00) >> 8) - 0x18;
+            int b = ((pixel & 0x00FF0000) >> 16) - 0x10;
 
-                int r = (pixel & 0x000000FF) - 0x38;
-                int g = ((pixel & 0x0000FF00) >> 8) - 0x18;
-                int b = ((pixel & 0x00FF0000) >> 16) - 0x10;
-
-                *ptr = r;
-                ++ptr;
-                *ptr = g;
-                ++ptr;
-                *ptr = b;
-                ++ptr;
-                *ptr = 255;
-                ++ptr;
-            }
+            *ptr = r;
+            ++ptr;
+            *ptr = g;
+            ++ptr;
+            *ptr = b;
+            ++ptr;
+            *ptr = 255;
+            ++ptr;
         }
-
-        memcpy( previousFrame, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
-
-    } else if ( turnStep < turnTarget ) {
-
-        for ( y = 0; y < 240; ++y ) {
-            for ( x = 0; x < 320; ++x ) {
-                uint8_t index;
-
-                if (x < XRES) {
-                    if ( x  >= turnStep ) {
-                        index = previousFrame[ (int)(XRES_FRAMEBUFFER * ((200 * y) / 240 )) - turnStep + x ];
-                    } else {
-                        index = framebuffer[ (int)(XRES_FRAMEBUFFER * ((200 * y) / 240 )) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
-                    }
-                } else {
-                    index = framebuffer[ (int)(XRES_FRAMEBUFFER * ((200 * y) / 240 )) + x];
-                }
-
-                uint32_t pixel = palette[ index ];
-
-                int r = (pixel & 0x000000FF) - 0x38;
-                int g = ((pixel & 0x0000FF00) >> 8) - 0x18;
-                int b = ((pixel & 0x00FF0000) >> 16) - 0x10;
-
-                *ptr = r;
-                ++ptr;
-                *ptr = g;
-                ++ptr;
-                *ptr = b;
-                ++ptr;
-                *ptr = 255;
-                ++ptr;
-            }
-        }
-
-        turnStep+= 20;
-    } else {
-
-        for ( y = 0; y < 240; ++y ) {
-            for ( x = 0; x < 320; ++x ) {
-                uint8_t index;
-
-                if (x < XRES) {
-
-                    if ( x  >= turnStep ) {
-                        index = framebuffer[ (int)(XRES_FRAMEBUFFER * ((200 * y) / 240 )) - turnStep + x ];
-                    } else {
-                        index = previousFrame[ (int)(XRES_FRAMEBUFFER * ((200 * y) / 240 )) + x - (XRES_FRAMEBUFFER - XRES) - turnStep];
-                    }
-
-                } else {
-                    index = framebuffer[ (int)(XRES_FRAMEBUFFER * ((200 * y) / 240 )) + x];
-                }
-
-                uint32_t pixel = palette[ index ];
-
-                int r = (pixel & 0x000000FF) - 0x38;
-                int g = ((pixel & 0x0000FF00) >> 8) - 0x18;
-                int b = ((pixel & 0x00FF0000) >> 16) - 0x10;
-
-                *ptr = r;
-                ++ptr;
-                *ptr = g;
-                ++ptr;
-                *ptr = b;
-                ++ptr;
-                *ptr = 255;
-                ++ptr;
-            }
-        }
-
-        turnStep-= 20;
     }
+
+    mBufferedCommand = snapshotSignal;
+    snapshotSignal = '.';
 }
 
 void clearRenderer(void) {}
@@ -210,7 +141,7 @@ Java_pt_b13h_spacetrashmanblues_DerelictJNI_initAssets(JNIEnv *env, jclass clazz
     AAssetManager *asset_manager = AAssetManager_fromJava(env, assetManager);
     defaultAssetManager = asset_manager;
     srand(time(NULL));
-    initHW();
+    initHW(0, NULL);
     enableSmoothMovement = TRUE;
     enterState(kPlayGame);
 }
@@ -218,39 +149,39 @@ Java_pt_b13h_spacetrashmanblues_DerelictJNI_initAssets(JNIEnv *env, jclass clazz
 JNIEXPORT void JNICALL
 Java_pt_b13h_spacetrashmanblues_DerelictJNI_getPixelsFromNative(JNIEnv *env, jclass clazz,
                                                                 jbyteArray array) {
-    menuTick ( 33 );
+    menuTick(33);
+    flipRenderer();
     jbyte *narr = (*env)->GetByteArrayElements(env, array, NULL);
     memcpy(narr, &framebufferFinal[0], 320 * 240 * 4);
 }
 
 int soundToPlay = -1;
 
-void setupOPL2() {}
-
-void stopSounds() {}
+void setupOPL2(int port) {}
 
 void playSound(const int action) {
     soundToPlay = action;
 }
 
-void soundTick() {}
+void soundTick(void) {}
 
-void muteSound() {}
+void stopSounds(void) {}
 
-    JNIEXPORT jint JNICALL
-    Java_pt_b13h_spacetrashmanblues_DerelictJNI_getSoundToPlay(JNIEnv *env, jclass clazz) {
+JNIEXPORT jint JNICALL
+Java_pt_b13h_spacetrashmanblues_DerelictJNI_getSoundToPlay(JNIEnv *env, jclass clazz) {
     int toReturn = soundToPlay;
     soundToPlay = -1;
     return toReturn;
 }
 
-    JNIEXPORT jint JNICALL
-    Java_pt_b13h_spacetrashmanblues_DerelictJNI_isOnMainMenu(JNIEnv *env, jclass clazz) {
+JNIEXPORT jint JNICALL
+Java_pt_b13h_spacetrashmanblues_DerelictJNI_isOnMainMenu(JNIEnv *env, jclass clazz) {
     return currentGameMenuState == (kMainMenu);
 }
 
 JNIEXPORT void JNICALL
-    Java_pt_b13h_spacetrashmanblues_DerelictJNI_sendCommand(JNIEnv *env, jclass clazz, jchar cmd) {
+Java_pt_b13h_spacetrashmanblues_DerelictJNI_sendCommand(JNIEnv *env, jclass clazz, jchar cmd) {
+    visibilityCached = FALSE;
     switch (cmd) {
         case 'w':
             mBufferedCommand = kCommandUp;
@@ -278,14 +209,14 @@ JNIEXPORT void JNICALL
             break;
 
         case 'a':
-            mBufferedCommand = kCommandLeft;
+            snapshotSignal = kCommandLeft;
             turnStep = 0;
             turnTarget = 200;
             break;
 
 
         case 'd':
-            mBufferedCommand = kCommandRight;
+            snapshotSignal = kCommandRight;
             turnStep = 200;
             turnTarget = 0;
             break;
@@ -301,9 +232,5 @@ JNIEXPORT void JNICALL
         case 'm':
             mBufferedCommand = kCommandStrafeRight;
             break;
-
-        defaut:
-            mBufferedCommand = kCommandNone;
-
     }
 }

@@ -26,9 +26,9 @@
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "Engine.h"
-
+#include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 
 #import "MyOpenGLView.h"
@@ -37,13 +37,19 @@
 
 void initStation(void);
 
-float leanX, leanY = 0.0f;
+#define ANGLE_TURN_THRESHOLD 40
+#define ANGLE_TURN_STEP 5
+
+extern int turning;
+extern int leanX;
+extern int leanY;
 
 NSMutableSet *playingSounds;
 int nextAudioChannel = -1;
 float multiplier = 1.0f;
-extern int isRunning;
+extern uint8_t isRunning;
 NSSound *playerSounds[8];
+enum ESoundDriver soundDriver = kNoSound;
 
 void enter2D(void);
 
@@ -94,8 +100,20 @@ void soundTick(void) {}
 
 void muteSound(void) {}
 
+char *textBuffer;
+extern char *messageLogBuffer;
+extern enum EVisibility *visMap;
+extern struct Vec2i *distances;
+extern uint8_t *collisionMap;
 
-void initHW(int argc, char** argv) {
+void initHW(int argc, char **argv) {
+    textBuffer = (char *) allocMem(TEXT_BUFFER_SIZE, GENERAL_MEMORY, 1);
+    messageLogBuffer = (char *) allocMem(256, GENERAL_MEMORY, 1);
+    collisionMap = (uint8_t *) allocMem(256, GENERAL_MEMORY, 1);
+    visMap = (enum EVisibility *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(enum EVisibility), GENERAL_MEMORY, 1);
+    distances = (struct Vec2i *) allocMem(2 * MAP_SIZE * MAP_SIZE * sizeof(struct Vec2i), GENERAL_MEMORY, 1);
+    itemsInMap = (uint8_t *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t *), GENERAL_MEMORY, 1);
+    map = (uint8_t *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t *), GENERAL_MEMORY, 1);
 
 	NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"base.pfs"];
 	initFileReader([path UTF8String]);
@@ -112,7 +130,7 @@ void graphicsInit() {
 }
 
 void handleSystemEvents() {
-	mBufferedCommand = kCommandNone;
+	
 
 	switch (bufferedInput) {
 		case 0: //a
@@ -148,11 +166,13 @@ void handleSystemEvents() {
 			break;
 
 		case 123:
-			mBufferedCommand = kCommandLeft;
+            turning = 1;
+            leanX = -ANGLE_TURN_STEP;
 			break;
 
 		case 124:
-			mBufferedCommand = kCommandRight;
+            turning = 1;
+            leanX = ANGLE_TURN_STEP;
 			break;
 	}
 	bufferedInput = -1;
@@ -165,6 +185,7 @@ void flipRenderer() {
 }
 
 - (void)keyDown:(NSEvent *)event {
+    leanY = leanX = 0;
 }
 
 - (void)keyUp:(NSEvent *)event {
@@ -219,7 +240,31 @@ void flipRenderer() {
 }
 
 - (void)drawRect:(NSRect)rect {
-	startFrameGL((GLsizei) rect.size.width, (GLsizei) rect.size.height);
+    int width = rect.size.width;
+    int height = rect.size.height;
+    
+    if (width > height ) {
+        float heightBase = height / 240.0f;
+        width = 320 * heightBase;
+        height = 240 * heightBase;
+        /* height is the base, since width is too big and we must add borders*/
+    } else {
+        /* width is the base, since height is too big and we must add borders*/
+        float widthBase = width / 320.0f;
+        width = 320 * widthBase;
+        height = 240 * widthBase;
+    }
+    
+    
+    /* Ugly hack to prevent garbage from appearing on the borders */
+	startFrame( 0, 0, rect.size.width, rect.size.height);
+    fillRect(0, 0, 320, 200, getPaletteEntry(0xFF000000), FALSE);
+    
+    
+	startFrame( (rect.size.width - width) / 2,
+                 (rect.size.height - height) / 2,
+                 width,
+                 height);
 
     isRunning = isRunning && menuTick(20);
 
@@ -227,7 +272,7 @@ void flipRenderer() {
 		exit(0);
 	}
 
-	endFrameGL();
+	endFrame();
 
 	[[self openGLContext] flushBuffer];
 }

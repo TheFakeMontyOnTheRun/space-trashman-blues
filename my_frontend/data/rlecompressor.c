@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
 
     fclose(input);
 
-    //not proud of this
+    /* not proud of this */
     fprintf(stderr, "%d,\n", used);
 
     return 0;

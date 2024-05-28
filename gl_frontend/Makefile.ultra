@@ -1,9 +1,10 @@
+# built with revision 4409fe77e208aaef77800b684602d4ea5a74da0b of unstable branch of libdraon
+
 BUILD_DIR=build
 include $(N64_INST)/include/n64.mk
 
 CFLAGS += -Ofast      \
     -Ibase3d/include        \
-    -ISoundSystem           \
     -Imenu/include          \
     -funroll-loops          \
     -fomit-frame-pointer    \
@@ -13,39 +14,40 @@ CFLAGS += -Ofast      \
     -I../core/include \
     -I../common/include \
     -DN64 \
-    -DINCLUDE_ITEM_DESCRIPTIONS \
+    -DINCLUDE_ITEM_DESCRIPTIONS -DTILED_BITMAPS -DENDIANESS_AWARE -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200 -DXRES_SCREEN=320 -DYRES_SCREEN=240 -DSUPPORTS_HACKING_MINIGAME \
     -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable -pedantic -Wno-discarded-qualifiers
 
-src = menu/src/MainMenu.c \
-                  		menu/src/Crawler.c \
-                  		menu/src/HelpScreen.c \
-                  		menu/src/BattleScreen.c \
-                  		menu/src/CreditsScreen.c \
-                  		menu/src/GameMenu.c \
+src = ../common/src/MainMenu.c \
+                  		../common/src/Crawler.c \
+                  		../common/src/HelpScreen.c \
+                  		../common/src/CreditsScreen.c \
+                  		../common/src/GameMenu.c \
                   		menu/src/Main.c \
-                  		menu/src/Engine.c \
+                  		../common/src/Engine.c \
                   		base3d/src/ultra/UltraGLRenderer.c \
-                  		base3d/src/Globals.c \
-                  		GL1Common/LoadBitmapGL1.c \
-                  		GL1Common/RendererGL1.c \
-                  		GL1Common/Renderer_RasterizationGL1.c \
-                  		GL1Common/Renderer_TesselationGL1.c \
-                  		base3d/src/VisibilityStrategy.c \
+                  		GL1Common/LoadBitmap.c \
+                  		GL1Common/Renderer.c \
+                  		GL1Common/RendererRasterization.c \
+                  		GL1Common/RendererTesselation.c \
+                  		../common/src/VisibilityStrategy.c \
+                  		../common/src/Globals.c \
                   		../common/src/CTile3DProperties.o \
                   		../common/src/Vec.c \
                   		../common/src/Common.c \
                   		../common/src/FixP.c \
+                  		../common/src/Mesh.c \
                   		../common/src/MapWithCharKey.c \
                   		../common/src/PackedFileReader.c \
-                  		base3d/src/Events.c \
-                  		base3d/src/EDirection_Utils.c \
-                  		SoundSystem/NullMusic.c \
-                  		base3d/src/Dungeon.c \
-                  		menu/src/UI.c \
-                  		menu/src/HackingScreen.c \
-                  		SoundSystem/PCMAudio.c \
+                  		../common/src/EDirection_Utils.c \
+                  		../common/src/Events.c \
+                  		../common/src/Dungeon.c \
+                  		../common/src/NullMusic.c \
+                  		../common/src/UI.c \
+                  		../common/src/HackingScreen.c \
+                  		../common/src/PCMAudio.c \
                   		../core/src/Derelict.c \
                   		../core/src/Core.c \
+                  		../common/src/HackingMinigameRules.o \
                   		../core/src/Parser.c
 
 all: derelict64.z64

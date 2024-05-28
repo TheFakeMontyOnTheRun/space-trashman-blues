@@ -7,7 +7,7 @@
 #ifdef AMIGA
 #include "AmigaInt.h"
 
-#define VERSTAG "\0$VER: The Mistral Report 1.0 (05.07.2020)"
+#define VERSTAG "\0$VER: Sub Mare Imperium - Derelict 1.0 (10.10.2023)"
 #else
 
 #ifdef WIN32
@@ -29,7 +29,7 @@
 
 #ifdef WIN32
 const long UCLOCKS_PER_SEC = 1000;
-long uclock() {
+long uclock(void) {
     SYSTEMTIME systime;
     GetSystemTime(&systime);
 
@@ -42,7 +42,7 @@ const long UCLOCKS_PER_SEC = 1000;
 
 long timeEllapsed = 0;
 
-long uclock() {
+long uclock(void) {
     timeEllapsed += (1000 / 60);
     return timeEllapsed;
 }
@@ -50,17 +50,18 @@ long uclock() {
 #endif
 #endif
 
+#include "Common.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "Enums.h"
 #include "CActor.h"
 #include "MapWithCharKey.h"
-#include "Common.h"
 #include "LoadBitmap.h"
 #include "Core.h"
 #include "Engine.h"
+#include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 #include "VisibilityStrategy.h"
 #include "PackedFileReader.h"
 #include "Derelict.h"
@@ -70,24 +71,24 @@ long uclock() {
 #include <emscripten/emscripten.h>
 #endif
 
-extern char *textBuffer;
+char *textBuffer;
 extern char *messageLogBuffer;
 extern enum EVisibility *visMap;
 extern struct Vec2i *distances;
 extern uint8_t *collisionMap;
-extern struct Texture* textures;
+extern struct Texture *textures;
 
 struct Texture internalTexturesMem[TOTAL_TEXTURES];
 
-void initHW(void) {
-    textBuffer = (char*)allocMem(40 * 25, GENERAL_MEMORY, 1);
-    messageLogBuffer = (char*)allocMem(256, GENERAL_MEMORY, 1);
-    collisionMap = (uint8_t*)allocMem(256, GENERAL_MEMORY, 1);
-    visMap = (enum EVisibility*)allocMem(MAP_SIZE * MAP_SIZE * sizeof(enum EVisibility), GENERAL_MEMORY, 1);
-    distances = (struct Vec2i*)allocMem(2 * MAP_SIZE * MAP_SIZE * sizeof(struct Vec2i), GENERAL_MEMORY, 1);
+void initHW(int argc, char** argv) {
+    textBuffer = (char *) allocMem(TEXT_BUFFER_SIZE, GENERAL_MEMORY, 1);
+    messageLogBuffer = (char *) allocMem(256, GENERAL_MEMORY, 1);
+    collisionMap = (uint8_t *) allocMem(256, GENERAL_MEMORY, 1);
+    visMap = (enum EVisibility *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(enum EVisibility), GENERAL_MEMORY, 1);
+    distances = (struct Vec2i *) allocMem(2 * MAP_SIZE * MAP_SIZE * sizeof(struct Vec2i), GENERAL_MEMORY, 1);
     textures = &internalTexturesMem[0];
-    itemsInMap = (uint8_t*)allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t*), GENERAL_MEMORY, 1);
-    map = (uint8_t*)allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t*), GENERAL_MEMORY, 1);
+    itemsInMap = (uint8_t *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t *), GENERAL_MEMORY, 1);
+    map = (uint8_t *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t *), GENERAL_MEMORY, 1);
 
 #ifndef CD32
     initFileReader("base.pfs");
@@ -98,7 +99,7 @@ void initHW(void) {
     graphicsInit();
 }
 
-void shutdownHW() {
+void shutdownHW(void) {
     graphicsShutdown();
 
     disposeMem(textBuffer);
@@ -113,7 +114,10 @@ void shutdownHW() {
 long start_clock, end_clock, prev;
 
 #ifdef __EMSCRIPTEN__
-void mainLoop();
+void mainLoop (void) {
+  menuTick ( 50 );
+  flipRenderer();
+}
 #endif
 
 #ifndef ANDROID
@@ -134,7 +138,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         
 
         WNDCLASSEX WndCls;
-		RECT window_rect = {0, 0, 640, 480};
+        RECT window_rect = {0, 0, 640, 480};
         static char szAppName[] = "Sub Mare Imperium Derelict 95";
 
         hInst = hInstance;
@@ -169,32 +173,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                        NULL);
 
 
-		AdjustWindowRectEx(&window_rect, 
-							WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-							FALSE,
-							WS_EX_OVERLAPPEDWINDOW
-							);
+        AdjustWindowRectEx(&window_rect,
+                            WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+                            FALSE,
+                            WS_EX_OVERLAPPEDWINDOW
+                            );
 
-		MoveWindow(HWnd, 
-					CW_USEDEFAULT, 
-					CW_USEDEFAULT, 
-					window_rect.right - window_rect.left,
-					window_rect.bottom - window_rect.top,
-					TRUE
-					);
+        MoveWindow(HWnd,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    window_rect.right - window_rect.left,
+                    window_rect.bottom - window_rect.top,
+                    TRUE
+                    );
 
 
 #else
 
 int main(int argc, char **argv) {
 #endif
-
-    puts(
-            "Sub Mare Imperium - Derelict, 2021 - by the Brotherhood "
-            "of 13h");
-
-
-    initHW();
+    initHW(argc, argv);
     initStation();
     enterState(kMainMenu);
 
@@ -227,9 +225,10 @@ int main(int argc, char **argv) {
         }
 #endif
         isRunning = isRunning && menuTick(delta_time);
+        flipRenderer();
     }
 #endif
-    unloadStateCallback();
+    unloadStateCallback(-1);
     shutdownHW();
 
     return 0;

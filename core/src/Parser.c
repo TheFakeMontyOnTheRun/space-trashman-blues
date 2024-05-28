@@ -6,15 +6,20 @@ Created by Daniel Monteiro on 08/10/2019.
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+
 #include <stdint.h>
+
 #endif
 
+#include "Enums.h"
+#include "Common.h"
 #include "Core.h"
 #include "Parser.h"
 #include <string.h>
+
 #endif
 
-int parseCommand(const char *cmd, const char *operand) {
+uint8_t parseCommand(const char *cmd, const char *operand) {
     if (!strcmp(cmd, "pick")) {
         pickObjectByName(operand);
     } else if (!strcmp(cmd, "drop")) {
@@ -24,7 +29,7 @@ int parseCommand(const char *cmd, const char *operand) {
         if (operand != NULL && operand[0] != '\0') {
             moveBy(operand[0] - '0');
         } else {
-			errorHandlerCallback("Please specify a valid direction");
+            errorHandlerCallback("Please specify a valid direction");
         }
     } else if (!strcmp(cmd, "use")) {
         useObjectNamed(operand);
@@ -43,8 +48,8 @@ int parseCommand(const char *cmd, const char *operand) {
     } else if (!strcmp(cmd, "walkTo")) {
         walkTo(operand);
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-    } else if (!strcmp(cmd, "info")) {
-        infoAboutItemNamed(operand);
+        } else if (!strcmp(cmd, "info")) {
+            infoAboutItemNamed(operand);
 #endif
     } else if (!strcmp(cmd, "use-with")) {
         useObjectsTogether(operand);

@@ -1,7 +1,7 @@
 # Sample Makefile for Marsdev (With SGDK, Optional Newlib)
 
 # Default paths, can be overridden by setting MARSDEV before calling make
-MARSDEV ?= ${HOME}/mars
+MARSDEV  = /opt/toolchains/mars
 MARSBIN  = $(MARSDEV)/m68k-elf/bin
 TOOLSBIN = $(MARSDEV)/bin
 
@@ -30,9 +30,10 @@ ifeq ($(OS),Windows_NT)
 endif
 
 # Includes: Local + GCC + SGDK + Newlib
-INCS     = -Isrc -Ires -Iinc -I../common/include -IEngine3D
+INCS     = -Isrc -Ires -Iinc -I../common/include -IEngine3D -I../core/include
 INCS    += -I$(MARSDEV)/m68k-elf/lib/gcc/m68k-elf/$(GCC_VER)/include
-INCS    += -I$(MARSDEV)/m68k-elf/include
+INCS    += -I$(MARSDEV)/m68k-elf/inc
+INCS    += -I$(MARSDEV)/m68k-elf/res
 #INCS    += -I$(MARSDEV)/m68k-elf/m68k-elf/include
 
 # Libraries: GCC + Newlib (SGDK libs are with release/debug targets)
@@ -44,20 +45,21 @@ LIBS     = -L$(MARSDEV)/m68k-elf/lib/gcc/m68k-elf/$(GCC_VER) -lgcc
 LIBS    += -u __modsi3 -u __divsi3 -u __mulsi3 -u __umodsi3 -u __udivsi3 -u __umulsi3
 
 # Any C or C++ standard should be fine here as long as GCC support it
-CCFLAGS  = -m68000 -Wall -Wextra -std=c99 -ffreestanding -fcommon -DSMD -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_HACKING_MINIGAME -D TRACE_OBJECTS_OVER_FLOOR -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DGAMEPAD -DUSE_FILLED_POLYS -DRLE_COMPRESSED_MAPS -Wno-unused-parameter -Wno-char-subscripts -I../core/include
+CCFLAGS  = -m68000 -Wall -Wextra -std=c99 -ffreestanding -fcommon -Ofast -Wno-unused-parameter -Wno-char-subscripts \
+            -DSMD -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_HACKING_MINIGAME -DTRACE_OBJECTS_OVER_FLOOR\
+            -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DENDIANESS_AWARE -DGAMEPAD -DUSE_FILLED_POLYS -DRLE_COMPRESSED_MAPS
 
 # Extra options set by debug or release target
 ASFLAGS  = -m68000 --register-prefix-optional
 
 # If you use Newlib, use the link with -nostartfiles instead
-LDFLAGS  = -T $(MARSDEV)/ldscripts/sgdk.ld -nostdlib
+LDFLAGS  = -T $(MARSDEV)/m68k-elf/md.ld -nostdlib
 
 RESS  = $(wildcard res/*.res)
 SS    = $(wildcard src/*.s)
 
 OBJS  = $(RESS:.res=.o)
-OBJS += Engine3D/demo.o  ../common/src/FixP.o ../common/src/CTile3DProperties.o ../common/src/MapWithCharKey.o MegaDriveVersion/megadrive.o Engine3D/HackingMinigame.o ../core/src/Core.o ../core/src/Derelict.o ../common/src/Common.o ../common/src/ArrayPackedFileReader.o
-
+OBJS += Engine3D/Engine3D.o  ../common/src/FixP.o ../common/src/Globals.o ../common/src/CTile3DProperties.o ../common/src/MapWithCharKey.o MegaDriveVersion/megadrive.o Engine3D/HackingMinigame.o ../core/src/Core.o ../core/src/Derelict.o ../common/src/Common.o ../common/src/ArrayPackedFileReader.o
 OBJS += $(SS:.s=.o)
 
 ASMO  = $(RESS:.res=.o)
@@ -130,5 +132,5 @@ asmout/%.s: %.c
 
 clean:
 	rm -f $(OBJS) out.bin out.elf symbol.txt
-	rm -f boot/sega.o boot/rom_head.o boot/rom_head.bin
+	rm -f boot/sega.o boot/rom_head.o
 	rm -rf asmout

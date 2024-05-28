@@ -20,118 +20,120 @@
 #include "Engine.h"
 #include "Dungeon.h"
 #include "MapWithCharKey.h"
+#include "Mesh.h"
 #include "CTile3DProperties.h"
-#include "CRenderer.h"
+#include "Renderer.h"
 
 int snapshotSignal = '.';
 rdpq_font_t *fnt1;
-int leanX = 0;
-int leanY = 0;
+#define ANGLE_TURN_THRESHOLD 40
+#define ANGLE_TURN_STEP 5
 
-void graphicsInit() {
+extern int turning;
+extern int leanX;
+extern int leanY;
 
-	debug_init_isviewer();
-	debug_init_usblog();
+void graphicsInit(void) {
 
-	display_init(RESOLUTION_320x240, DEPTH_16_BPP, 3, GAMMA_NONE, ANTIALIAS_RESAMPLE_FETCH_ALWAYS);
+    debug_init_isviewer();
+    debug_init_usblog();
 
-	enableSmoothMovement = TRUE;
+    display_init(RESOLUTION_320x240, DEPTH_16_BPP, 3, GAMMA_NONE, ANTIALIAS_RESAMPLE_FETCH_ALWAYS);
 
-	// that is from the N64 SDK...not our own initGL
-	gl_init();
-	rdpq_init();
-	initGL();
-	controller_init();
-	fnt1 = rdpq_font_load("rom:/font.font64");
+    enableSmoothMovement = TRUE;
+
+    // that is from the N64 SDK...not our own initGL
+    gl_init();
+    rdpq_init();
+    initGL();
+    controller_init();
+    fnt1 = rdpq_font_load("rom:/font.font64");
+    rdpq_text_register_font(1, fnt1);
 }
 
-void handleSystemEvents() {
+void handleSystemEvents(void) {
 
-	controller_scan();
-	struct controller_data pressed = get_keys_pressed();
+    controller_scan();
+    struct controller_data pressed = get_keys_pressed();
 //	struct controller_data down = get_keys_down();
 
-	switch (get_dpad_direction(0)) {
-		case 2:
-			mBufferedCommand = kCommandUp;
-			break;
-		case 0:
-			mBufferedCommand = kCommandRight;
-			break;
-		case 6:
-			mBufferedCommand = kCommandDown;
-			break;
-		case 4:
-			mBufferedCommand = kCommandLeft;
-			break;
-		case -1:
-			mBufferedCommand = kCommandNone;
-			break;
-	}
+    switch (get_dpad_direction(0)) {
+        case 2:
+            mBufferedCommand = kCommandUp;
+            break;
+        case 0:
+            turning = 1;
+            leanX = ANGLE_TURN_STEP;
+            break;
+        case 6:
+            mBufferedCommand = kCommandDown;
+            break;
+        case 4:
+            turning = 1;
+            leanX = -ANGLE_TURN_STEP;
+            break;
+    }
 
-	if (pressed.c[0].C_up) {
-		mBufferedCommand = kCommandFire1;
-	}
+    if (pressed.c[0].C_up) {
+        mBufferedCommand = kCommandFire1;
+    }
 
-	if (pressed.c[0].C_down) {
-		mBufferedCommand = kCommandFire2;
-	}
+    if (pressed.c[0].C_down) {
+        mBufferedCommand = kCommandFire2;
+    }
 
-	if (pressed.c[0].C_left) {
-		mBufferedCommand = kCommandFire3;
-	}
+    if (pressed.c[0].C_left) {
+        mBufferedCommand = kCommandFire3;
+    }
 
-	if (pressed.c[0].C_right) {
-		mBufferedCommand = kCommandFire4;
-	}
+    if (pressed.c[0].C_right) {
+        mBufferedCommand = kCommandFire4;
+    }
 
-	if (pressed.c[0].start) {
-		mBufferedCommand = kCommandBack;
-	}
+    if (pressed.c[0].start) {
+        mBufferedCommand = kCommandBack;
+    }
 
-	if (pressed.c[0].A) {
-		mBufferedCommand = kCommandFire1;
-	}
+    if (pressed.c[0].A) {
+        mBufferedCommand = kCommandFire1;
+    }
 
-	if (pressed.c[0].B) {
-		mBufferedCommand = kCommandFire2;
-	}
+    if (pressed.c[0].B) {
+        mBufferedCommand = kCommandFire2;
+    }
 
-	if (pressed.c[0].Z) {
-		mBufferedCommand = kCommandFire3;
-	}
+    if (pressed.c[0].Z) {
+        mBufferedCommand = kCommandFire3;
+    }
 
-	if (pressed.c[0].L) {
-		mBufferedCommand = kCommandStrafeLeft;
-	}
+    if (pressed.c[0].L) {
+        mBufferedCommand = kCommandStrafeLeft;
+    }
 
-	if (pressed.c[0].R) {
-		mBufferedCommand = kCommandStrafeRight;
-	}
-
-    leanX = leanY = 0;
+    if (pressed.c[0].R) {
+        mBufferedCommand = kCommandStrafeRight;
+    }
 
     if (pressed.c[0].x < 0) {
-        leanX = -1;
+        leanX = -ANGLE_TURN_THRESHOLD;
     }
 
     if (pressed.c[0].x > 0) {
-        leanX = 1;
+        leanX = ANGLE_TURN_THRESHOLD;
     }
 
     if (pressed.c[0].y < 0) {
-        leanY = 1;
+        leanY = ANGLE_TURN_THRESHOLD;
     }
 
     if (pressed.c[0].y > 0) {
-        leanY = -1;
+        leanY = -ANGLE_TURN_THRESHOLD;
     }
 }
 
-void graphicsShutdown() {
-	texturesUsed = 0;
+void graphicsShutdown(void) {
+    texturesUsed = 0;
 }
 
-void flipRenderer() {
-	gl_swap_buffers();
+void flipRenderer(void) {
 }

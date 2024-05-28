@@ -3,33 +3,36 @@
 
 #define NATIVE_TEXTURE_SIZE 16
 
+#ifdef RGBA32_FRAMEBUFFER
+typedef uint32_t TexturePixelFormat;
+typedef uint32_t BitmapPixelFormat;
+#else
+typedef uint8_t TexturePixelFormat;
+typedef uint8_t BitmapPixelFormat;
+#endif
+
 struct Bitmap {
-	uint8_t *data;
-	uint16_t width;
-	uint16_t height;
+    BitmapPixelFormat *data;
+    uint16_t width;
+    uint16_t height;
 };
 
 
-
 struct Texture {
-#ifndef AGS
-	uint8_t rotations[4][NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
+#ifndef FLOOR_TEXTURES_DONT_ROTATE
+    TexturePixelFormat rotations[4][NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
 #else
-    uint8_t rotations[1][NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
+    TexturePixelFormat rotations[1][NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
 #endif
-	uint8_t rowMajor[NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
+    TexturePixelFormat rowMajor[NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
 };
 
 void clearTextures(void);
 
-struct Texture *makeTextureFrom(const char * __restrict__ filename);
+struct Texture *makeTextureFrom(const char *__restrict__ filename);
 
-struct Bitmap *loadBitmap(const char * __restrict__ filename);
+struct Bitmap *loadBitmap(const char *__restrict__ filename);
 
 void releaseBitmap(struct Bitmap *ptr);
-
-FixP_t lerpFix(const FixP_t v0, const FixP_t v1, const FixP_t t, const FixP_t total);
-
-int lerpInt(const int v0, const int v1, const long t, const long total);
 
 #endif

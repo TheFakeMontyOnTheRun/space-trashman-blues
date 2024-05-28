@@ -1,166 +1,144 @@
-//
-// Created by Daniel Monteiro on 2021-11-01.
-//
-#ifndef SMD
+/*
+   Created by Daniel Monteiro on 2021-11-01.
+*/
 
-#include <stdlib.h>
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
-#include <stdio.h>
+#endif
 #include <string.h>
 
-#else
-#include <genesis.h>
+#include "Common.h"
+#include "Enums.h"
+#include "UI.h"
+#include "Derelict.h"
+#include "Renderer.h"
+#include "HackingMinigame.h"
+#include "HackingMinigameRules.h"
+#include "Engine.h"
+
+#ifdef PAGE_FLIP_ANIMATION
+int wasSmoothMovementPreviouslyEnabled;
 #endif
 
-#include "Core.h"
-#include "Derelict.h"
-#include "Engine3D.h"
-#include "HackingMinigame.h"
-
-extern int accessGrantedToSafe;
-extern int cursorPosition;
-
-char *functionNames[5] = {
-		"???",
-		"writeB",
-		"snprintf",
-		"hackLogin",
-		"LoadDBReg"
+const char *functionNames[5] = {
+        "???",
+        "writeB",
+        "snprintf",
+        "hackLogin",
+        "LoadDBReg"
 };
 
-uint8_t holdingDisk = 3;
-uint8_t pins[3][5];
-uint8_t pinTop[3];
+void HackingScreen_initStateCallback(enum EGameMenuState tag) {
+    (void)tag;
+    cursorPosition = 1;
+    needsToRedrawVisibleMeshes = 0;
 
-void HackingScreen_initStateCallback() {
-
-	cursorPosition = 1;
-	memset(&pins[0][0], 0xFF, sizeof(pins));
-
-	pins[0][0] = 4;
-	pins[0][1] = 2;
-	pins[0][2] = 1;
-	pins[0][3] = 0;
-
-	pinTop[0] = 4;
-	pinTop[1] = 0;
-	pinTop[2] = 0;
-	holdingDisk = 3;
+    initHackingMinigame();
 }
 
 void HackingScreen_repaintCallback(void) {
-	uint8_t pin;
+    uint8_t pin;
+    uint8_t holdingDisk;
 
-	drawWindow(1, 1, 40, 15, "Disassembly: CONTROLLER.PRG (stack)");
+    if (firstFrameOnCurrentState) {
+        clearScreen();
+        needsToRedrawVisibleMeshes = 0;
+        drawTextAt(1, 1, "Stack trace:", getPaletteEntry(0xFF999999));
+        drawTextAt((12 * 0), 11, " CPU0 ", getPaletteEntry(0xFF999999));
+        drawTextAt((12 * 1), 11, " CPU1 ", getPaletteEntry(0xFF999999));
+        drawTextAt((12 * 2), 11, " CPU2 ", getPaletteEntry(0xFF999999));
+    }
 
-	writeStr((12 * 0), 11, cursorPosition == 0 ? "[CPU0]" : " CPU0 ", 0, 0);
-	writeStr((12 * 1), 11, cursorPosition == 1 ? "[CPU1]" : " CPU1 ", 0, 0);
-	writeStr((12 * 2), 11, cursorPosition == 2 ? "[CPU2]" : " CPU2 ", 0, 0);
+    drawTextAt((12 * cursorPosition), 11, ">", getPaletteEntry(0xFF999999));
+    drawTextAt((12 * cursorPosition) + 5, 11, "<", getPaletteEntry(0xFF999999));
 
-	writeStr(0, 10, "-------------------------------", 1, 0);
+    drawLine(0, 80, XRES_FRAMEBUFFER - 1, 80, 2);
 
+    for (pin = 0; pin < 3; ++pin) {
+        uint8_t disk;
 
-	for (pin = 0; pin < 3; ++pin) {
-		uint8_t disk;
+        if (pin != 0) {
+            uint8_t pinX = (10 * (pin) ) * 8;
+            drawLine(pinX, 40, pinX, 80, 2);
+        }
 
-		if (pins[pin][4] == 0) {
-			accessGrantedToSafe = TRUE;
-		}
+        for (disk = 0; disk < 5; ++disk) {
 
-		for (disk = 0; disk < 5; ++disk) {
+            uint8_t diskIndex = getPositionForPin(pin, disk);
 
-			uint8_t diskIndex = pins[pin][disk];
+            const char *funcName = (disk >= getDisksForPin(pin)) ? NULL
+                                                           : functionNames[diskIndex];
 
-			char *funcName = (disk >= pinTop[pin]) ? NULL : functionNames[diskIndex];
+            if (funcName) {
+                drawTextAt(
+                        10 * (pin) + (pin == 0 ? 0 : 1), 4 + (4 - disk),
+                        funcName, getPaletteEntry(0xFF999999));
+            }
+        }
+    }
 
-			if (pin != 0) {
-				writeStr(10 * (pin), 4 + (4 - disk), "I", 1, 0);
-			}
+    drawTextAt(1, 2, "Pointer:", getPaletteEntry(0xFF999999));
 
-			if (funcName) {
-				writeStr(10 * (pin) + (pin == 0 ? 0 : 1), 4 + (4 - disk), funcName, 1, 0);
-			}
-		}
-	}
+    holdingDisk = getHoldingDisk();
 
-	writeStr(1, 2, "register pointer:", 0, 15);
-
-	if (holdingDisk != 0xFF) {
-		writeStr(19, 2, functionNames[holdingDisk], 128, 15);
-	} else {
-		writeStr(19, 2, "NULL", 128, 15);
-	}
+    if (holdingDisk != 0xFF) {
+        drawTextAt(19, 2, functionNames[holdingDisk], getPaletteEntry(0xFF999999));
+    } else {
+        drawTextAt(19, 2, "NULL", getPaletteEntry(0xFF999999));
+    }
 }
 
-int8_t HackingScreen_tickCallback(char cmd) {
-
-	uint8_t pin;
-
-	for (pin = 0; pin < 3; ++pin) {
-		if (pins[pin][4] == 0) {
-			accessGrantedToSafe = TRUE;
-		}
-	}
-
-	switch (cmd) {
-		case 'q':
-		case 'a':
-			if (cursorPosition > 0) {
-				cursorPosition--;
-			}
-			break;
-		case 'e':
-		case 'd':
-			if (cursorPosition < 2) {
-				cursorPosition++;
-			}
-			break;
-		case 's':
-			return -1;
-		case 'w':
-			if (holdingDisk == 0xFF) {
-				if (pinTop[cursorPosition] > 0) {
-					pinTop[cursorPosition]--;
-					holdingDisk = pins[cursorPosition][pinTop[cursorPosition]];
-				}
-			} else {
-
-				if (pinTop[cursorPosition] == 0 || holdingDisk < pins[cursorPosition][pinTop[cursorPosition] - 1]) {
-					pins[cursorPosition][pinTop[cursorPosition]] = holdingDisk;
-					pinTop[cursorPosition]++;
-					holdingDisk = 0xFF;
-				}
-			}
-			break;
-
-		default:
-			break;
-	}
-
-	return 0;
+void HackingScreen_unloadStateCallback(enum EGameMenuState newState) {
+    (void)newState;
+#ifdef PAGE_FLIP_ANIMATION
+    enableSmoothMovement = wasSmoothMovementPreviouslyEnabled;
+#endif
 }
 
-void runHackingMinigame(void) {
-	uint8_t cmd;
-	uint8_t state = 0;
-	clearScreen();
-	enterTextMode();
-	HackingScreen_initStateCallback();
-	HackingScreen_repaintCallback();
+enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, void* data) {
+    (void)data;
+    uint8_t holdingDisk = getHoldingDisk();
 
+    if (isHackingMinigameCompleted()) {
+        grantAccessToSafe();
+    }
 
-	while (state == 0) {
-		cmd = '.';
+    switch (cmd) {
+        case kCommandLeft:
+            if (cursorPosition > 0) {
+                cursorPosition--;
+                firstFrameOnCurrentState = 1;
+            }
+#ifdef PAGE_FLIP_ANIMATION
+            turnTarget = turnStep;
+#endif
+            break;
+        case kCommandRight:
+            if (cursorPosition < 2) {
+                cursorPosition++;
+                firstFrameOnCurrentState = 1;
+            }
+#ifdef PAGE_FLIP_ANIMATION
+            turnTarget = turnStep;
+#endif
+            break;
+        case kCommandBack:
+        case kCommandDown:
+            return kBackToGame;
+        case kCommandFire1:
+            if (holdingDisk == 0xFF) {
+                pickDisk(cursorPosition);
+            } else {
+                dropDisk(cursorPosition);
+            }
+            firstFrameOnCurrentState = 1;
+            break;
 
-		while (cmd == '.') {
-			cmd = getKey();
-		}
+        default:
+            break;
+    }
 
-		state = HackingScreen_tickCallback(cmd);
-		clearTextScreen();
-		HackingScreen_repaintCallback();
-	}
-	exitTextMode();
-	clearScreen();
-	HUD_initialPaint();
+    return kResumeCurrentState;
 }

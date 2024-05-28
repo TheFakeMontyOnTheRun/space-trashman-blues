@@ -9,8 +9,8 @@ SET(CMAKE_C_STANDARD_REQUIRED ON)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-set(DERELICT_CORE_FEATURE_FLAGS "-DCLI_BUILD -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEN_PICKING -DMORE_OBJECTS")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${DERELICT_CORE_FEATURE_FLAGS} -Werror -W -Wall -Wextra -Wno-unused-parameter")
+set(DERELICT_CORE_FEATURE_FLAGS "-DCLI_BUILD -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEN_PICKING -DMORE_OBJECTS ")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${DERELICT_CORE_FEATURE_FLAGS} -W -Wall -Wextra -Wno-unused-parameter")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DERELICT_CORE_FEATURE_FLAGS} -Wno-writable-strings ")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_LANG_CXX11=0")
 
@@ -22,6 +22,7 @@ enable_testing()
 
 include_directories(include)
 
+include_directories(../common/include)
 include_directories(gtest)
 include_directories(gtest/include)
 
@@ -46,6 +47,8 @@ set(SOURCE_FILES
 		src/Derelict.c
 		src/Core.c
 		src/Parser.c
+		../common/src/Globals.c
+		../common/src/Common.c
 		)
 
 add_executable(derelict-core src/main.c ${SOURCE_FILES} )

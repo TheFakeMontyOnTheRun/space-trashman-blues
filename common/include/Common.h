@@ -1,6 +1,17 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#ifdef __MWERKS__
+/* WHAT A HORRIBLE NIGHT TO HAVE A KLUDGE! */
+#define XRES_FRAMEBUFFER 320
+#define YRES_FRAMEBUFFER 200
+#define SDLSW
+#define CLI_BUILD
+#define PAGE_FLIP_ANIMATION
+#define INCLUDE_ITEM_DESCRIPTIONS
+#define ENDIANESS_AWARE
+#endif
+
 #ifndef SMD
 #ifdef WIN32
 #include "Win32Int.h"
@@ -31,7 +42,7 @@ struct StaticBuffer {
     size_t size;
 };
 
-void *allocMem(size_t sizeInBytes, enum MemoryType type, int clearAfterAlloc);
+void *allocMem(size_t sizeInBytes, enum MemoryType type, uint8_t clearAfterAlloc);
 
 void disposeMem(void* ptr);
 
@@ -39,11 +50,24 @@ void memCopyToFrom(void* dst, void* src, size_t sizeInBytes);
 
 void memFill(void* dst, uint8_t val, size_t sizeInBytes);
 
-int isBigEndian(void);
+uint8_t isBigEndian(void);
 
 void initFileReader(const char *  dataFilePath);
 
 uint32_t toNativeEndianess(const uint32_t val);
+
+
+extern const char *mainText;
+extern char *textBuffer;
+extern size_t biggestOption;
+extern const char *focusItemName;
+extern int currentSelectedItem;
+extern int shouldContinue;
+extern const char *thisMissionName;
+extern int16_t thisMissionNameLen;
+extern size_t biggestOption;
+
+#define TEXT_BUFFER_SIZE (40 * 25)
 
 #ifndef SMD
 #ifndef WIN32

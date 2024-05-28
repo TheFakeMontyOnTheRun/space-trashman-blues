@@ -1,9 +1,9 @@
-CFLAGS = -Iinclude -O3 -g -c   -march=i486
+CFLAGS = -Iinclude -I../common/include -O3 -g -c -march=i486 -DCLI_BUILD -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEN_PICKING -DINCLUDE_ITEM_DESCRIPTIONS -DMORE_OBJECTS
 
-CC = i586-pc-msdosdjgpp-gcc
-CXX = i586-pc-msdosdjgpp-g++
+CC = i386-pc-msdosdjgpp-gcc
+CXX = i386-pc-msdosdjgpp-g++
 
-OBJS = src/Derelict.o src/Parser.o
+OBJS = src/Derelict.o src/Parser.o src/Core.o ../common/src/Common.o ../common/src/Globals.o
 
 MAIN_GAME_OBJ = src/main.o
 
@@ -11,12 +11,12 @@ TARGET = blues.exe
 
 $(TARGET):	$(OBJS) $(MAIN_GAME_OBJ)
 	$(CXX) -o $(TARGET) $(OBJS) $(MAIN_GAME_OBJ) $(LDFLAGS)
-	i586-pc-msdosdjgpp-strip $(TARGET)
+	i386-pc-msdosdjgpp-strip $(TARGET)
 
 all:	$(TARGET)
 
 clean:
 	rm -f $(OBJS) $(TESTTARGET) $(MAIN_GAME_OBJ) $(TESTOBJS) $(TARGET)
-	find . | grep ~ | xargs rm
-	find . | grep gcno | xargs rm
-	find . | grep gcda | xargs rm
+	rm -rf coverage
+	find . | grep gcno | xargs rm -f
+	find . | grep gcda | xargs rm -f

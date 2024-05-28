@@ -13,9 +13,8 @@ include_directories(../../../../../../common/include)
 include_directories(../../../../../base3d/include)
 include_directories(../../../../../common/include)
 include_directories(../../../../../menu/include)
-include_directories(../../../../../SoundSystem)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DANDROID  -D_BSD_SOURCE")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DANDROID -DENDIANESS_AWARE  -D_BSD_SOURCE -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200")
 
 
 # Creates and names a library, sets it as either STATIC
@@ -33,31 +32,33 @@ add_library( # Sets the name of the library.
         ../../../../../../core/src/Derelict.c
         ../../../../../../core/src/Core.c
         ../../../../../../core/src/Parser.c
-        ../../../../../menu/src/MainMenu.c
-        ../../../../../menu/src/Crawler.c
-        ../../../../../menu/src/HelpScreen.c
-        ../../../../../menu/src/CreditsScreen.c
-        ../../../../../menu/src/HackingScreen.c
-        ../../../../../menu/src/GameMenu.c
-        ../../../../../menu/src/Main.c
-        ../../../../../base3d/src/Globals.c
+        ../../../../../../common/src/MainMenu.c
+        ../../../../../../common/src/HackingMinigameRules.c
+        ../../../../../../common/src/Mesh.c
+        ../../../../../../common/src/Crawler.c
+        ../../../../../../common/src/HelpScreen.c
+        ../../../../../../common/src/CreditsScreen.c
+        ../../../../../../common/src/HackingScreen.c
+        ../../../../../../common/src/GameMenu.c
+        ../../../../../../common/src/Globals.c
         ../../../../../../common/src/Vec.c
         ../../../../../../common/src/Common.c
         ../../../../../../common/src/PackedFileReader.c
         ../../../../../../common/src/MapWithCharKey.c
         ../../../../../../common/src/FixP.c
         ../../../../../../common/src/CTile3DProperties.c
+        ../../../../../../common/src/VisibilityStrategy.c
+        ../../../../../../common/src/Events.c
+        ../../../../../../common/src/EDirection_Utils.c
+        ../../../../../../common/src/Dungeon.c
+        ../../../../../../common/src/Engine.c
+        ../../../../../../common/src/UI.c
+        ../../../../../../common/src/PCMAudio.c
         ../../../../../base3d/src/LoadBitmap.c
-        ../../../../../base3d/src/CRenderer.c
-        ../../../../../base3d/src/VisibilityStrategy.c
-        ../../../../../menu/src/Engine.c
-        ../../../../../base3d/src/Events.c
-        ../../../../../base3d/src/CRenderer_Rasterization.c
-        ../../../../../base3d/src/EDirection_Utils.c
-        ../../../../../base3d/src/CRenderer_Tesselation.c
-        ../../../../../base3d/src/Dungeon.c
-        ../../../../../menu/src/UI.c
-        ../../../../../SoundSystem/PCMAudio.c
+        ../../../../../base3d/src/Renderer.c
+        ../../../../../base3d/src/RendererRasterization.c
+        ../../../../../base3d/src/RendererTesselation.c
+        ../../../../../menu/src/Main.c
         native-lib.c)
 
 # Searches for a specified prebuilt library and stores the path as a
