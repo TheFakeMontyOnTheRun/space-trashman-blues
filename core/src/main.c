@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "Enums.h"
 #include "Core.h"
 #include "Derelict.h"
 #include "Parser.h"

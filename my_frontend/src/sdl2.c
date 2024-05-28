@@ -20,7 +20,6 @@ extern struct ObjectNode *roomItem;
 extern int accessGrantedToSafe;
 SDL_Window *window;
 SDL_Renderer *renderer;
-uint8_t updateDirection;
 
 uint32_t palette[16];
 uint8_t framebuffer[128 * 128];
@@ -93,7 +92,11 @@ void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) 
 
         if (x0 == x1 && y0 == y1) break;
 
-        realPut(x0, y0, colour, NULL);
+        if (x0 >= 0 && y0 >= 0 && x0 < 256 && y0 < 192) {
+            realPut(x0, y0, colour, NULL);
+        } else {
+            return;
+        }
 
         e2 = err;
         if (e2 > -dx) {
@@ -138,7 +141,7 @@ enum ECommand getInput(void) {
                     if (waitForKey) {
                         waitForKey = 0;
                         firstFrameOnCurrentState = 1;
-                        needs3dRefresh = 1;
+                        needsToRedrawVisibleMeshes = 1;
                         return kCommandNone;
                     }
                     return kCommandFire1;
@@ -174,12 +177,16 @@ enum ECommand getInput(void) {
                     break;
 
                 case SDLK_LEFT:
-                    updateDirection = 1;
                     return kCommandLeft;
 
                 case SDLK_RIGHT:
-                    updateDirection = 1;
                     return kCommandRight;
+
+                case SDLK_z:
+                    return kCommandStrafeLeft;
+
+                case SDLK_x:
+                    return kCommandStrafeRight;
 
                 case SDLK_UP:
                     return kCommandUp;
@@ -253,7 +260,6 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, 
 
 void initHW(int, char **pString) {
     initKeyboardUI();
-    updateDirection = 1;
 
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
@@ -343,25 +349,7 @@ void startFrame(int x, int y, int width, int height) {
 }
 
 void endFrame(void) {
-    if (needs3dRefresh) {
-        if (updateDirection) {
-            updateDirection = 0;
-            switch (getPlayerDirection()) {
-                case 0:
-                    writeStrWithLimit(12, 17, "N", 31, 2, 0);
-                    break;
-                case 1:
-                    writeStrWithLimit(12, 17, "E", 31, 2, 0);
-                    break;
-                case 2:
-                    writeStrWithLimit(12, 17, "S", 31, 2, 0);
-                    break;
-                case 3:
-                    writeStrWithLimit(12, 17, "W", 31, 2, 0);
-                    break;
-            }
-        }
-
+    if (needsToRedrawVisibleMeshes) {
         flipRenderer();
     }
     flushVirtualFramebuffer();
@@ -377,8 +365,4 @@ void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, 
             }
         }
     }
-}
-
-uint8_t getPaletteEntry(uint32_t colour) {
-    return colour & 3;
 }

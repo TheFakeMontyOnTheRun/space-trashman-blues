@@ -14,7 +14,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSDLSW -DRES128X128 -DSUPPORTS_HACKING_MINI
 find_package(SDL2 REQUIRED)
 
 add_executable(derelict16
-		Engine3D/demo.c
+		Engine3D/Engine3D.c
 		Engine3D/HackingMinigame.c
 		SDLVersion/sdl2.c
 		../core/src/Derelict.c

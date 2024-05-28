@@ -129,18 +129,11 @@ void nextItemInRoom(void) {
 }
 
 void interactWithItemInRoom(void) {
-    struct Item *item = NULL;
-    struct Item *itemToPick = NULL;
-
-    if (roomItem != NULL) {
-        itemToPick = getItem(roomItem->item);
-        if (itemToPick != NULL) {
-            if (focusedItem != NULL) {
-                item = getItem(focusedItem->item);
-                if (item != NULL && item->useWithCallback) {
-                    item->useWithCallback(item, itemToPick);
-                }
-            }
+    if (roomItem && focusedItem) {
+        struct Item *itemToPick = getItem(roomItem->item);
+        struct Item *item = getItem(focusedItem->item);
+        if (itemToPick && item && item->useWithCallback) {
+            item->useWithCallback(item, itemToPick);
         }
     }
 }
@@ -166,8 +159,6 @@ void initMap(void) {
     uint16_t offsetOnDataStrip = 0;
     int16_t repetitions = -1;
 
-    memset(stencilHigh, 0, XRES);
-
 #ifdef EMBEDDED_DATA
     for (c = 0; c < playerLocation; ++c) {
         offsetOnDataStrip += dataPositions[c];
@@ -185,6 +176,7 @@ void initMap(void) {
 #else
     struct StaticBuffer datafile = loadBinaryFileFromPath(playerLocation);
     head = datafile.data;
+    headEnd = head + datafile.size;
 #endif
     /* first item in the list is always a dummy */
     roomItem = getRoom(playerLocation)->itemsPresent->next;
@@ -220,6 +212,10 @@ void initMap(void) {
                 repetitions--;
             }
 #else
+            if (head == headEnd) {
+                goto done_loading;
+            }
+
             current = *head;
 #endif
 
@@ -229,10 +225,8 @@ void initMap(void) {
                 (current == 'e' && enteredFrom == 3)) {
 
                 struct WorldPosition newPos;
-                cameraX = x;
-                cameraZ = y;
-                newPos.x = x;
-                newPos.y = y;
+                cameraX = newPos.x = x;
+                cameraZ = newPos.y = y;
                 setPlayerPosition(&newPos);
                 enteredFrom = 0xFF;
                 current = NEUTRAL_CELL;

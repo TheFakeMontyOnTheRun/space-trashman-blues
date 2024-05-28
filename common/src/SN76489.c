@@ -2,7 +2,7 @@
  * SN76489: used on the Master System
  * Created by Daniel Monteiro on 11/07/2023.
  * */
-
+#include <stdint.h>
 #include "SN76489.h"
 
 #include <games.h>
@@ -40,16 +40,15 @@ void initSN76489(void) {
     psg_init();
     psg_channels(chanAll, chanNone); // set all channels to tone generation
 #endif
+    stopSounds();
+}
 
+void stopSounds(void) {
     soundPos = 0;
     soundNum = 0;
     soundDuration = 0;
     psg_tone(0, 0);
     psg_volume(0, 10);
-}
-
-void stopSounds(void) {
-    soundNum = 0;
 }
 
 void soundTick(void) {
@@ -62,17 +61,12 @@ void soundTick(void) {
             soundDuration = SOUND_DURATION;
         }
     } else {
-        psg_tone(0, 0);
-        soundPos = 0;
-        soundNum = 0;
+        stopSounds();
     }
 }
 
 
-void playSound(int num) {
-    soundPos = 0;
-    soundNum = 0;
-
+void playSound(uint8_t num) {
     while (--num) {
         soundNum += 1 + sounds[soundNum];
     }

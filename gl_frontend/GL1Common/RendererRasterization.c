@@ -23,9 +23,9 @@
 #include <rdpq_text.h>
 #endif
 
+#include "Enums.h"
 #include "Core.h"
 #include "FixP.h"
-#include "Enums.h"
 #include "Common.h"
 #include "Vec.h"
 #include "CActor.h"
@@ -50,7 +50,8 @@ struct Bitmap *defaultFont;
 extern rdpq_font_t *fnt1;
 #endif
 
-#define NORMALIZE_ORTHO (1.0f / 100.0f)
+#define NORMALIZE_ORTHO_X (1.0f / 100.0f)
+#define NORMALIZE_ORTHO_Y (1.2f / 100.0f)
 #define NORMALIZE_COLOUR (1.0f / 256.0f)
 
 int submitBitmapToGPU(struct Bitmap *bitmap);
@@ -62,10 +63,10 @@ void drawRect(
         const size_t _dy,
         const FramebufferPixelFormat pixel) {
 
-    float x = _x * NORMALIZE_ORTHO;
-    float y = _y * NORMALIZE_ORTHO;
-    float dx = _dx * NORMALIZE_ORTHO;
-    float dy = _dy * NORMALIZE_ORTHO;
+    float x = _x * NORMALIZE_ORTHO_X;
+    float y = _y * NORMALIZE_ORTHO_Y;
+    float dx = _dx * NORMALIZE_ORTHO_X;
+    float dy = _dy * NORMALIZE_ORTHO_Y;
 
     uint32_t fragment = pixel;//palette[pixel];
 
@@ -133,8 +134,8 @@ void fillTriangle(int *coords, FramebufferPixelFormat fragment) {
               g,
               b);
 
-    x = coords[0] * NORMALIZE_ORTHO;
-    y = coords[1] * NORMALIZE_ORTHO;
+    x = coords[0] * NORMALIZE_ORTHO_X;
+    y = coords[1] * NORMALIZE_ORTHO_Y;
 
     glVertex3f(x, y, -0.13);
 
@@ -142,8 +143,8 @@ void fillTriangle(int *coords, FramebufferPixelFormat fragment) {
               g,
               b);
 
-    x = coords[2] * NORMALIZE_ORTHO;
-    y = coords[3] * NORMALIZE_ORTHO;
+    x = coords[2] * NORMALIZE_ORTHO_X;
+    y = coords[3] * NORMALIZE_ORTHO_Y;
 
     glVertex3f(x, y, -0.13);
 
@@ -151,8 +152,8 @@ void fillTriangle(int *coords, FramebufferPixelFormat fragment) {
               g,
               b);
 
-    x = coords[4] * NORMALIZE_ORTHO;
-    y = coords[5] * NORMALIZE_ORTHO;
+    x = coords[4] * NORMALIZE_ORTHO_X;
+    y = coords[5] * NORMALIZE_ORTHO_Y;
 
     glVertex3f(x, y, -0.13);
     glEnd();
@@ -171,10 +172,10 @@ void fillRect(
 
     uint32_t fragment = pixel;//palette[pixel];
 
-    float x = _x * NORMALIZE_ORTHO;
-    float y = _y * NORMALIZE_ORTHO;
-    float dx = _dx * NORMALIZE_ORTHO;
-    float dy = _dy * NORMALIZE_ORTHO;
+    float x = _x * NORMALIZE_ORTHO_X;
+    float y = _y * NORMALIZE_ORTHO_Y;
+    float dx = _dx * NORMALIZE_ORTHO_X;
+    float dy = _dy * NORMALIZE_ORTHO_Y;
 
     if (fragment != TRANSPARENCY_COLOR) {
 
@@ -232,13 +233,13 @@ void fillRect(
                     size_t dstY = _y + ((c * 8));
 
                     glTexCoord2f(col, line - blockHeight);
-                    glVertex3f(dstX * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -0.1);
+                    glVertex3f(dstX * NORMALIZE_ORTHO_X, dstY * NORMALIZE_ORTHO_Y, -0.1);
                     glTexCoord2f(col + blockWidth, line - blockHeight);
-                    glVertex3f((dstX + 8) * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -0.1);
+                    glVertex3f((dstX + 8) * NORMALIZE_ORTHO_X, dstY * NORMALIZE_ORTHO_Y, -0.1);
                     glTexCoord2f(col + blockWidth, line);
-                    glVertex3f((dstX + 8) * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -0.1);
+                    glVertex3f((dstX + 8) * NORMALIZE_ORTHO_X, (dstY + 8) * NORMALIZE_ORTHO_Y, -0.1);
                     glTexCoord2f(col, line);
-                    glVertex3f(dstX * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -0.1);
+                    glVertex3f(dstX * NORMALIZE_ORTHO_X, (dstY + 8) * NORMALIZE_ORTHO_Y, -0.1);
                 }
             }
 
@@ -291,10 +292,10 @@ void drawBitmap(const int _dx,
         bitmap->uploadId = submitBitmapToGPU(bitmap);
     }
 
-    x = _dx * NORMALIZE_ORTHO;
-    y = _dy * NORMALIZE_ORTHO;
-    dx = bitmap->width * NORMALIZE_ORTHO;
-    dy = bitmap->height * NORMALIZE_ORTHO;
+    x = _dx * NORMALIZE_ORTHO_X;
+    y = _dy * NORMALIZE_ORTHO_Y;
+    dx = bitmap->width * NORMALIZE_ORTHO_X;
+    dy = bitmap->height * NORMALIZE_ORTHO_Y;
 
     if (bitmap->uploadId != -1) {
 
@@ -348,10 +349,15 @@ void drawRepeatBitmap(
 }
 
 void drawTextAt(const int x, const int y, const char *text, const FramebufferPixelFormat colour) {
+    drawTextAtWithMargin(x, y, XRES_FRAMEBUFFER / 8,  text, colour);
+}
+
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text,
+                                       const uint8_t colour, char charToReplaceHifenWith) {
 
     size_t len = strlen(text);
-    int32_t dstX = (x - 1) * 8;
-    int32_t dstY = (y - 1) * 8;
+    int32_t dstX = (x) * 8;
+    int32_t dstY = (y) * 8;
     size_t c;
     uint32_t ascii;
     float line;
@@ -391,8 +397,8 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
     
     shortStr[1] = 0;
 
-    dstX = (x - 1) * 8;
-    dstY = (y + 1) * 9;
+    dstX = (x + 1) * 8;
+    dstY = (y + 2) * 9;
 
     r = (colour & 0xFF);
     g = ((colour & 0x00FF00) >> 8);
@@ -403,32 +409,37 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
     });
 #endif
     for (c = 0; c < len; ++c) {
-        if (text[c] == '\n' || dstX >= XRES_FRAMEBUFFER) {
+        char currentChar = text[c];
+
+        if (currentChar == '-') {
+            currentChar = charToReplaceHifenWith;
+        }
+        if (currentChar == '\n' || dstX >= XRES_FRAMEBUFFER) {
             dstX = (x - 1) * 8;
             dstY += 8;
             continue;
         }
 
-        if (text[c] == ' ' || text[c] == '\r') {
+        if (currentChar == ' ' || currentChar == '\r') {
             dstX += 8;
             continue;
         }
 
 #ifndef N64
-        ascii = text[c] - ' ';
+        ascii = currentChar - ' ';
         line = (((ascii >> 5) + 1) * blockHeight);
         col = (((ascii & 31)) * blockWidth);
 
         glTexCoord2f(col, line - blockHeight);
-        glVertex3f(dstX * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -0.1);
+        glVertex3f(dstX * NORMALIZE_ORTHO_X, dstY * NORMALIZE_ORTHO_Y, -0.1);
         glTexCoord2f(col + blockWidth, line - blockHeight);
-        glVertex3f((dstX + 8) * NORMALIZE_ORTHO, dstY * NORMALIZE_ORTHO, -0.1);
+        glVertex3f((dstX + 8) * NORMALIZE_ORTHO_X, dstY * NORMALIZE_ORTHO_Y, -0.1);
         glTexCoord2f(col + blockWidth, line);
-        glVertex3f((dstX + 8) * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -0.1);
+        glVertex3f((dstX + 8) * NORMALIZE_ORTHO_X, (dstY + 8) * NORMALIZE_ORTHO_Y, -0.1);
         glTexCoord2f(col, line);
-        glVertex3f(dstX * NORMALIZE_ORTHO, (dstY + 8) * NORMALIZE_ORTHO, -0.1);
+        glVertex3f(dstX * NORMALIZE_ORTHO_X, (dstY + 8) * NORMALIZE_ORTHO_Y, -0.1);
 #else
-        shortStr[0] = text[c];
+        shortStr[0] = currentChar;
         rdpq_text_print(NULL, 1, dstX, dstY, &shortStr[0]);
 #endif
 
@@ -442,15 +453,15 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 
     glColor3f(1, 1, 1);
     glDisable(GL_ALPHA_TEST);
+
 }
 
-void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text,
-                                       const uint8_t colour, char charToReplaceHifenWith) {
-    drawTextAt(x, y, text, colour);
+void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
+
 }
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour) {
-    drawTextAt(x, y, text, colour);
+    drawTextAtWithMarginWithFiltering(x, y, margin, text, colour, '-');
 }
 
 void renderPageFlip(OutputPixelFormat *stretchedBuffer, FramebufferPixelFormat *currentFrame,

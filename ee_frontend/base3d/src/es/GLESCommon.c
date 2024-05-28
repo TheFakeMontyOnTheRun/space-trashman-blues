@@ -210,7 +210,6 @@ unsigned int uRotateYMatrixUniformLocation;
 unsigned int uRotateZMatrixUniformLocation;
 unsigned int sTextureUniformLocation;
 unsigned int uModUniformLocation;
-unsigned int uFadeUniformLocation;
 unsigned int uScaleUniformLocation;
 
 
@@ -254,20 +253,20 @@ static const char *fragment_shader =
         "#endif\n"
         "uniform sampler2D sTexture;\n"
         "uniform vec4 uMod;\n"
-        "uniform vec4 uFade;\n"
         "void main() {\n"
         "#if __VERSION__ >= 140\n"
         "    fragColor = texture( sTexture, vTextureCoords );\n"
         "   if ( fragColor.a < 0.1 ) {\n"
         "        discard;\n"
         "    }\n"
-        "    fragColor = fragColor * uFade.a * uMod;\n"
+        "    fragColor = fragColor * uMod;\n"
         "#else\n"
         "    gl_FragColor = texture2D( sTexture, vTextureCoords );\n"
         "    if ( gl_FragColor.a < 0.1 ) {\n"
         "        discard;\n"
         "    }\n"
-        "    gl_FragColor = gl_FragColor * uFade.a * uMod;\n"
+        "    float originalZ = 1.0 - ((gl_FragCoord.z / gl_FragCoord.w) * 0.025);\n"
+        "    gl_FragColor = gl_FragColor * uMod * originalZ;\n"
         "#endif\n"
         "}\n";
 
@@ -449,7 +448,6 @@ void initGL(void) {
 
     sTextureUniformLocation = glGetUniformLocation(program, "sTexture");
     uModUniformLocation = glGetUniformLocation(program, "uMod");
-    uFadeUniformLocation = glGetUniformLocation(program, "uFade");
     uScaleUniformLocation = glGetUniformLocation(program, "uScale");
     checkGLError("Fetching locations in shaders");
 
@@ -481,8 +479,6 @@ void initGL(void) {
     glDepthMask(1);
     checkGLError("initGL");
 
-    float fade[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-    glUniform4f(uFadeUniformLocation, fade[0], fade[1], fade[2], fade[3]);
     glUniform4f(uModUniformLocation, 1.0f, 1.0f, 1.0f, 1.0f);
 
     checkGLError("set uniforms");
@@ -527,11 +523,25 @@ int submitBitmapToGPU(struct Bitmap *bitmap) {
 }
 
 void startFrame(int x, int y, int width, int height) {
+
+    if (width > height) {
+        /* height is smaller */
+        float fWidth = (((float)height) * 320.0f) / 240.0f;
+        x = (width - fWidth) / 2.0f;
+        y = 0;
+        width = fWidth;
+    } else {
+        /* width is smaller */
+        float fHeight = (((float)width) * 240.0f) / 320.0f;
+        y = (height - fHeight) / 2.0f;
+        x = 0;
+        height = fHeight;
+    }
+
+
+
     firstFrameOnCurrentState = 1;
     glViewport(x, y, width, height);
-    visibilityCached = FALSE;
-    needsToRedrawVisibleMeshes = FALSE;
-
     checkGLError("start frame");
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);

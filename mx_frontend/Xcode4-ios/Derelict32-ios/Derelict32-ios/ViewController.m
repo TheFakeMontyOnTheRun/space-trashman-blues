@@ -282,14 +282,17 @@ void shutdownHW(void) {
 
 
 -(IBAction)btnUpPressed:(id)sender {
+    visibilityCached = FALSE;
     mBufferedCommand = kCommandUp;
 }
 
 -(IBAction)btnDownPressed:(id)sender {
+    visibilityCached = FALSE;
     mBufferedCommand = kCommandDown;
 }
 
 -(IBAction)btnLeftPressed:(id)sender {
+    visibilityCached = FALSE;
     mBufferedCommand = kCommandLeft;
     if ((currentGameMenuState == kPlayGame ||
          currentGameMenuState == kBackToGame) &&
@@ -302,6 +305,7 @@ void shutdownHW(void) {
 }
 
 -(IBAction)btnRightPressed:(id)sender {
+    visibilityCached = FALSE;
     mBufferedCommand = kCommandRight;
     if ((currentGameMenuState == kPlayGame ||
          currentGameMenuState == kBackToGame) &&
@@ -315,27 +319,33 @@ void shutdownHW(void) {
 
 
 -(IBAction)btnStrafeLeftPressed:(id)sender {
+    visibilityCached = FALSE;
     mBufferedCommand = kCommandStrafeLeft;
 }
 
 -(IBAction)btnStrafeRightPressed:(id)sender {
+    visibilityCached = FALSE;
     mBufferedCommand = kCommandStrafeRight;
 }
 
 
 -(IBAction)btnFire1Pressed:(id)sender {
+    visibilityCached = FALSE;
     mBufferedCommand = kCommandFire1;
 }
 
 -(IBAction)btnFire2Pressed:(id)sender {
+    visibilityCached = FALSE;
     mBufferedCommand = kCommandFire2;
 }
 
 -(IBAction)btnFire3Pressed:(id)sender {
+    visibilityCached = FALSE;
     mBufferedCommand = kCommandFire3;
 }
 
 -(IBAction)btnFire4Pressed:(id)sender {
+    visibilityCached = FALSE;
     mBufferedCommand = kCommandFire4;
 }
 

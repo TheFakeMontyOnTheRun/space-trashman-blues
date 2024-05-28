@@ -52,11 +52,11 @@ extern int needsToRedrawHUD;
 int enable3DRendering = TRUE;
 
 #ifndef AGS
-uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
-uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
-uint32_t palette[256];
+FramebufferPixelFormat framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+FramebufferPixelFormat previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+OutputPixelFormat palette[256];
 #else
-uint8_t *framebuffer;
+FramebufferPixelFormat *framebuffer;
 #endif
 
 enum EDirection cameraDirection;
@@ -64,11 +64,7 @@ struct Vec3 mCamera;
 long gameTicks = 0;
 int dirtyLineY0 = 0;
 int dirtyLineY1 = YRES_FRAMEBUFFER;
-#ifndef AGS
 const int distanceForPenumbra = 16;
-#else
-const int distanceForPenumbra = 8;
-#endif
 struct Bitmap *mapTopLevel = NULL;
 struct MapWithCharKey tileProperties;
 struct MapWithCharKey customMeshes;
@@ -189,7 +185,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 void updateCursorForRenderer(const int x, const int z) {
 #ifndef AGS
     needsToRedrawVisibleMeshes = TRUE;
-    visibilityCached = FALSE;
 #endif
 }
 
@@ -207,7 +202,7 @@ void renderRoomTransition(void) {
     } else {
         xCameraOffset = yCameraOffset = 0;
 
-        fillRect(0, 0, XRES + 1, YRES, 0, 0);
+        fillRect(0, 0, XRES + 1, YRES, getPaletteEntry(0xFF000000), 0);
 
         center.mY = 0;
         center.mZ = intToFix(3);
@@ -228,14 +223,14 @@ void renderRoomTransition(void) {
         center.mX = intToFix(1);
         center.mY = intToFix(2) - zCameraOffset;
         center.mZ = intToFix(3);
-        drawCeilingAt(center, nativeTextures[0], 0);
+        drawCeilingAt(center, nativeTextures[0], kNorth);
 
         center.mX = -intToFix(1);
         center.mY = intToFix(2) - zCameraOffset;
         center.mZ = intToFix(3);
-        drawCeilingAt(center, nativeTextures[0], 0);
+        drawCeilingAt(center, nativeTextures[0], kNorth);
 
-        drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, 255);
+        drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, getPaletteEntry(0xFFFFFFFF));
 
         zCameraOffset -= Div(intToFix(1), intToFix(4));
 
@@ -281,13 +276,6 @@ void drawMap(const struct CActor *current) {
         needsToRedrawVisibleMeshes = TRUE;
     }
 
-    if (visibilityCached) {
-        return;
-    }
-
-    visibilityCached = TRUE;
-    needsToRedrawVisibleMeshes = TRUE;
-
     cameraPosition = mapCamera;
 
     switch (cameraDirection) {
@@ -322,10 +310,18 @@ void drawMap(const struct CActor *current) {
     walkingBias = 0;
 #endif
 
+    ++gameTicks;
+    
+    if (visibilityCached) {
+        return;
+    }
+
+    visibilityCached = TRUE;
+    needsToRedrawVisibleMeshes = TRUE;
+
+    
     castVisibility(cameraDirection, visMap, cameraPosition,
                    distances, TRUE, &occluders);
-
-    ++gameTicks;
 }
 
 enum ECommand getInput(void) {
@@ -642,7 +638,7 @@ void render(const long ms) {
                 }
 
                 if (tileProp->mCeilingTextureIndex != 0xFF) {
-                    uint8_t newDirection = cameraDirection;
+                    enum EDirection newDirection = cameraDirection;
 
                     tmp.mY = position.mY + (tileProp->mCeilingHeight * 2);
 

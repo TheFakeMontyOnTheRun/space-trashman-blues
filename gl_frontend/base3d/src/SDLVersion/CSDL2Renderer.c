@@ -78,7 +78,6 @@ void handleSystemEvents(void) {
         }
 
         if (event.type == SDL_KEYUP) {
-            visibilityCached = FALSE;
             needsToRedrawVisibleMeshes = TRUE;
         }
 
@@ -176,7 +175,6 @@ void handleSystemEvents(void) {
                     break;
                 case SDLK_UP:
                     mBufferedCommand = kCommandUp;
-                    visibilityCached = FALSE;
                     break;
                 case SDLK_1:
                     enableSmoothMovement = TRUE;

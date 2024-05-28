@@ -16,6 +16,9 @@
 		F14601DC2AC82536007A09B5 /* RendererTesselation.c in Sources */ = {isa = PBXBuildFile; fileRef = F14601D72AC82536007A09B5 /* RendererTesselation.c */; };
 		F14601DD2AC82536007A09B5 /* Events.c in Sources */ = {isa = PBXBuildFile; fileRef = F14601D82AC82536007A09B5 /* Events.c */; };
 		F149B82A263CB11700A3F597 /* Core.c in Sources */ = {isa = PBXBuildFile; fileRef = F149B829263CB11700A3F597 /* Core.c */; };
+		F17ABEC62BFBDEEB00B69054 /* CreditsScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F17ABEC32BFBDEEB00B69054 /* CreditsScreen.c */; };
+		F17ABEC72BFBDEEB00B69054 /* HelpScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F17ABEC42BFBDEEB00B69054 /* HelpScreen.c */; };
+		F17ABEC82BFBDEEB00B69054 /* MainMenu.c in Sources */ = {isa = PBXBuildFile; fileRef = F17ABEC52BFBDEEB00B69054 /* MainMenu.c */; };
 		F194EAD62610B51400E292ED /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		F1CA76BB2610A8E200FD1E04 /* GameView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1277A26236DE6DD00478B2C /* GameView.m */; };
 		F1CA76BC2610A8ED00FD1E04 /* OSXRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = F1277A28236DE6DD00478B2C /* OSXRenderer.m */; };
@@ -28,10 +31,7 @@
 		F1CA774E2610AFA000FD1E04 /* Derelict-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */; };
 		F1D4FFCD2AF8D85900F8A437 /* Engine.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D4FFCC2AF8D85900F8A437 /* Engine.c */; };
 		F1D4FFD62AF8D8C000F8A437 /* Crawler.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D4FFD02AF8D8C000F8A437 /* Crawler.c */; };
-		F1D4FFD72AF8D8C000F8A437 /* Credits.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D4FFD12AF8D8C000F8A437 /* Credits.c */; };
 		F1D4FFD82AF8D8C000F8A437 /* GameMenu.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D4FFD22AF8D8C000F8A437 /* GameMenu.c */; };
-		F1D4FFDA2AF8D8C000F8A437 /* Help.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D4FFD42AF8D8C000F8A437 /* Help.c */; };
-		F1D4FFDB2AF8D8C000F8A437 /* MainMenu.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D4FFD52AF8D8C000F8A437 /* MainMenu.c */; };
 		F1D4FFDD2AF8D8E000F8A437 /* HackingMinigameRules.c in Sources */ = {isa = PBXBuildFile; fileRef = F1D4FFDC2AF8D8E000F8A437 /* HackingMinigameRules.c */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +65,9 @@
 		F14601E82AC82B69007A09B5 /* UI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UI.h; path = ../include/UI.h; sourceTree = SOURCE_ROOT; };
 		F149B829263CB11700A3F597 /* Core.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Core.c; path = ../../core/src/Core.c; sourceTree = "<group>"; };
 		F149B82B263CB12B00A3F597 /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Core.h; path = ../../core/include/Core.h; sourceTree = "<group>"; };
+		F17ABEC32BFBDEEB00B69054 /* CreditsScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CreditsScreen.c; path = ../../common/src/CreditsScreen.c; sourceTree = "<group>"; };
+		F17ABEC42BFBDEEB00B69054 /* HelpScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = HelpScreen.c; path = ../../common/src/HelpScreen.c; sourceTree = "<group>"; };
+		F17ABEC52BFBDEEB00B69054 /* MainMenu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = MainMenu.c; path = ../../common/src/MainMenu.c; sourceTree = "<group>"; };
 		F1B679BC24E4AAE400FCEF8E /* GameWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameWindow.h; sourceTree = "<group>"; };
 		F1B679BD24E4AAE400FCEF8E /* GameWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameWindow.m; sourceTree = "<group>"; };
 		F1B8CB2F27CFCFE700C06E6F /* Common.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Common.h; path = ../../common/include/Common.h; sourceTree = SOURCE_ROOT; };
@@ -79,10 +82,7 @@
 		F1D4FFCE2AF8D87600F8A437 /* Enums.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Enums.h; path = ../../common/include/Enums.h; sourceTree = "<group>"; };
 		F1D4FFCF2AF8D88800F8A437 /* SoundSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SoundSystem.h; path = ../../common/include/SoundSystem.h; sourceTree = "<group>"; };
 		F1D4FFD02AF8D8C000F8A437 /* Crawler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Crawler.c; path = ../src/Crawler.c; sourceTree = "<group>"; };
-		F1D4FFD12AF8D8C000F8A437 /* Credits.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Credits.c; path = ../src/Credits.c; sourceTree = "<group>"; };
 		F1D4FFD22AF8D8C000F8A437 /* GameMenu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = GameMenu.c; path = ../src/GameMenu.c; sourceTree = "<group>"; };
-		F1D4FFD42AF8D8C000F8A437 /* Help.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Help.c; path = ../src/Help.c; sourceTree = "<group>"; };
-		F1D4FFD52AF8D8C000F8A437 /* MainMenu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = MainMenu.c; path = ../src/MainMenu.c; sourceTree = "<group>"; };
 		F1D4FFDC2AF8D8E000F8A437 /* HackingMinigameRules.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = HackingMinigameRules.c; path = ../../common/src/HackingMinigameRules.c; sourceTree = "<group>"; };
 		F1D5B5D22531D2BF0094ED78 /* Derelict.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Derelict.c; path = ../../core/src/Derelict.c; sourceTree = "<group>"; };
 		F1D5B5D32531D2BF0094ED78 /* Parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Parser.c; path = ../../core/src/Parser.c; sourceTree = "<group>"; };
@@ -167,15 +167,15 @@
 				F14601D82AC82536007A09B5 /* Events.c */,
 				F1D4FFCB2AF8D83600F8A437 /* HackingMinigameRules.h */,
 				F13B519E2AA5F241006BE693 /* HackingMinigame.c */,
+				F17ABEC32BFBDEEB00B69054 /* CreditsScreen.c */,
+				F17ABEC42BFBDEEB00B69054 /* HelpScreen.c */,
+				F17ABEC52BFBDEEB00B69054 /* MainMenu.c */,
 				F14601E72AC82B5E007A09B5 /* Renderer.h */,
 				F1D4FFCE2AF8D87600F8A437 /* Enums.h */,
 				F1D4FFCF2AF8D88800F8A437 /* SoundSystem.h */,
 				F1D4FFD02AF8D8C000F8A437 /* Crawler.c */,
-				F1D4FFD12AF8D8C000F8A437 /* Credits.c */,
 				F1D4FFD22AF8D8C000F8A437 /* GameMenu.c */,
 				F1D4FFDC2AF8D8E000F8A437 /* HackingMinigameRules.c */,
-				F1D4FFD42AF8D8C000F8A437 /* Help.c */,
-				F1D4FFD52AF8D8C000F8A437 /* MainMenu.c */,
 				F1D4FFCC2AF8D85900F8A437 /* Engine.c */,
 				F13B519F2AA5F241006BE693 /* KeyboardUI.c */,
 				F13B51A62AA5F255006BE693 /* font.h */,
@@ -282,6 +282,7 @@
 			files = (
 				F149B82A263CB11700A3F597 /* Core.c in Sources */,
 				F1CA76BB2610A8E200FD1E04 /* GameView.m in Sources */,
+				F17ABEC72BFBDEEB00B69054 /* HelpScreen.c in Sources */,
 				F1CA76BC2610A8ED00FD1E04 /* OSXRenderer.m in Sources */,
 				F1CA76BD2610A8EE00FD1E04 /* GameWindow.m in Sources */,
 				F1CA76C22610A91800FD1E04 /* main.m in Sources */,
@@ -294,13 +295,12 @@
 				F14601DA2AC82536007A09B5 /* RendererRasterizer.c in Sources */,
 				F14601DB2AC82536007A09B5 /* RendererScene.c in Sources */,
 				F14601DC2AC82536007A09B5 /* RendererTesselation.c in Sources */,
+				F17ABEC62BFBDEEB00B69054 /* CreditsScreen.c in Sources */,
 				F14601DD2AC82536007A09B5 /* Events.c in Sources */,
+				F17ABEC82BFBDEEB00B69054 /* MainMenu.c in Sources */,
 				F1D4FFCD2AF8D85900F8A437 /* Engine.c in Sources */,
 				F1D4FFD62AF8D8C000F8A437 /* Crawler.c in Sources */,
-				F1D4FFD72AF8D8C000F8A437 /* Credits.c in Sources */,
 				F1D4FFD82AF8D8C000F8A437 /* GameMenu.c in Sources */,
-				F1D4FFDA2AF8D8C000F8A437 /* Help.c in Sources */,
-				F1D4FFDB2AF8D8C000F8A437 /* MainMenu.c in Sources */,
 				F1D4FFDD2AF8D8E000F8A437 /* HackingMinigameRules.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

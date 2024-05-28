@@ -2,7 +2,11 @@
    Created by Daniel Monteiro on 2021-11-01.
 */
 
+#ifdef WIN32
+#include "Win32Int.h"
+#else
 #include <stdint.h>
+#endif
 #include <string.h>
 
 #include "Common.h"
@@ -13,6 +17,10 @@
 #include "HackingMinigame.h"
 #include "HackingMinigameRules.h"
 #include "Engine.h"
+
+#ifdef PAGE_FLIP_ANIMATION
+int wasSmoothMovementPreviouslyEnabled;
+#endif
 
 const char *functionNames[5] = {
         "???",
@@ -25,7 +33,7 @@ const char *functionNames[5] = {
 void HackingScreen_initStateCallback(enum EGameMenuState tag) {
     (void)tag;
     cursorPosition = 1;
-    needs3dRefresh = 0;
+    needsToRedrawVisibleMeshes = 0;
 
     initHackingMinigame();
 }
@@ -35,14 +43,16 @@ void HackingScreen_repaintCallback(void) {
     uint8_t holdingDisk;
 
     if (firstFrameOnCurrentState) {
-        drawTextAt(1, 1, "Stack trace:", 1);
-        drawTextAt((12 * 0), 11, " CPU0 ", 1);
-        drawTextAt((12 * 1), 11, " CPU1 ", 1);
-        drawTextAt((12 * 2), 11, " CPU2 ", 1);
+        clearScreen();
+        needsToRedrawVisibleMeshes = 0;
+        drawTextAt(1, 1, "Stack trace:", getPaletteEntry(0xFF999999));
+        drawTextAt((12 * 0), 11, " CPU0 ", getPaletteEntry(0xFF999999));
+        drawTextAt((12 * 1), 11, " CPU1 ", getPaletteEntry(0xFF999999));
+        drawTextAt((12 * 2), 11, " CPU2 ", getPaletteEntry(0xFF999999));
     }
 
-    drawTextAt((12 * cursorPosition), 11, ">", 1);
-    drawTextAt((12 * cursorPosition) + 5, 11, "<", 1);
+    drawTextAt((12 * cursorPosition), 11, ">", getPaletteEntry(0xFF999999));
+    drawTextAt((12 * cursorPosition) + 5, 11, "<", getPaletteEntry(0xFF999999));
 
     drawLine(0, 80, XRES_FRAMEBUFFER - 1, 80, 2);
 
@@ -50,7 +60,8 @@ void HackingScreen_repaintCallback(void) {
         uint8_t disk;
 
         if (pin != 0) {
-            drawLine(88 * pin, 40, 88 * pin, 80, 2);
+            uint8_t pinX = (10 * (pin) ) * 8;
+            drawLine(pinX, 40, pinX, 80, 2);
         }
 
         for (disk = 0; disk < 5; ++disk) {
@@ -63,27 +74,30 @@ void HackingScreen_repaintCallback(void) {
             if (funcName) {
                 drawTextAt(
                         10 * (pin) + (pin == 0 ? 0 : 1), 4 + (4 - disk),
-                        funcName, 1);
+                        funcName, getPaletteEntry(0xFF999999));
             }
         }
     }
 
-    drawTextAt(1, 2, "Pointer:", 1);
+    drawTextAt(1, 2, "Pointer:", getPaletteEntry(0xFF999999));
 
     holdingDisk = getHoldingDisk();
 
     if (holdingDisk != 0xFF) {
-        drawTextAt(19, 2, functionNames[holdingDisk], 1);
+        drawTextAt(19, 2, functionNames[holdingDisk], getPaletteEntry(0xFF999999));
     } else {
-        drawTextAt(19, 2, "NULL", 1);
+        drawTextAt(19, 2, "NULL", getPaletteEntry(0xFF999999));
     }
 }
 
 void HackingScreen_unloadStateCallback(enum EGameMenuState newState) {
     (void)newState;
+#ifdef PAGE_FLIP_ANIMATION
+    enableSmoothMovement = wasSmoothMovementPreviouslyEnabled;
+#endif
 }
 
-enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long data) {
+enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, void* data) {
     (void)data;
     uint8_t holdingDisk = getHoldingDisk();
 
@@ -92,27 +106,34 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, long data) {
     }
 
     switch (cmd) {
-        case 'q':
-        case 'a':
+        case kCommandLeft:
             if (cursorPosition > 0) {
                 cursorPosition--;
+                firstFrameOnCurrentState = 1;
             }
+#ifdef PAGE_FLIP_ANIMATION
+            turnTarget = turnStep;
+#endif
             break;
-        case 'e':
-        case 'd':
+        case kCommandRight:
             if (cursorPosition < 2) {
                 cursorPosition++;
+                firstFrameOnCurrentState = 1;
             }
+#ifdef PAGE_FLIP_ANIMATION
+            turnTarget = turnStep;
+#endif
             break;
-        case 's':
-            return -1;
-        case 'w':
-            clearScreen();
+        case kCommandBack:
+        case kCommandDown:
+            return kBackToGame;
+        case kCommandFire1:
             if (holdingDisk == 0xFF) {
                 pickDisk(cursorPosition);
             } else {
                 dropDisk(cursorPosition);
             }
+            firstFrameOnCurrentState = 1;
             break;
 
         default:

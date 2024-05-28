@@ -19,6 +19,7 @@ Created by Daniel Monteiro on 2019-07-26.
 #include <genesis.h>
 #endif
 
+#include "Enums.h"
 #include "Common.h"
 #include "Core.h"
 #include "Derelict.h"

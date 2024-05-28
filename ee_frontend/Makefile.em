@@ -52,7 +52,7 @@ $(TARGET):	$(OBJS)
 all:	$(TARGET)
 
 serve: $(TARGET)
-	python3 -m http.server
+	python3 -m http.server 5050
 
 dist: $(TARGET)
 	zip dist.zip index.html index.data index.js index.wasm

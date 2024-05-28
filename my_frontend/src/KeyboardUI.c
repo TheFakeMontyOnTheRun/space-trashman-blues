@@ -33,34 +33,14 @@ void initKeyboardUI(void) {
 
 void HUD_initialPaint(void) {
 
-    if (firstFrameOnCurrentState) {
-        drawWindow((XRES_FRAMEBUFFER / 8) / 2,
-                   0,
-                   (XRES_FRAMEBUFFER / 8) / 2 - 1,
-                   (YRES_FRAMEBUFFER / 8) / 2 + 2,
-                   "Map",
-                   2);
-
-        drawMap();
-    }
-
-    drawWindow(0,
-               128 / 8,
-               (XRES_FRAMEBUFFER / 8) / 2,
-               (YRES_FRAMEBUFFER / 8) - 17,
-               "Direction: ",
-               2);
-
     drawWindowWithOptions(
             1 + (XRES_FRAMEBUFFER / 2) / 8,
-            (YRES_FRAMEBUFFER / 8) - 3 - /*kMainMenuOptionsCount*/ 6 - 1,
+            (YRES_FRAMEBUFFER / 8) - 3 - /*kMainMenuOptionsCount*/ 6,
             (XRES_FRAMEBUFFER / 8) - (1 + (XRES_FRAMEBUFFER / 2) / 8) - 1,
-            (YRES_FRAMEBUFFER / 8) - ((YRES_FRAMEBUFFER / 8) - 3 - /*kMainMenuOptionsCount*/ 6 - 1) - 1,
+            (YRES_FRAMEBUFFER / 8) - ((YRES_FRAMEBUFFER / 8) - 3 - /*kMainMenuOptionsCount*/ 6 - 1) - 2,
             "Actions",
             menuItems,
             6,
             0xFF);
-
-    HUD_refresh();
 }
 

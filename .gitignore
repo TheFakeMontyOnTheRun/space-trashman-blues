@@ -229,3 +229,14 @@ IDEWorkspaceChecks.plist
 gl_frontend/derelict.elf
 gl_frontend/derelict.nds
 filesystem
+distiller
+trigger
+derelict.tap
+newtrigger
+xcschememanagement.plist
+out.ram
+mx_frontend/index.data
+mx_frontend/index.html
+mx_frontend/index.js
+mx_frontend/index.wasm
+core/cmake-build-debug-coverage
