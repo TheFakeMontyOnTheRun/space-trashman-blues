@@ -397,7 +397,7 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
     
     shortStr[1] = 0;
 
-    dstX = (x + 1) * 8;
+    dstX = (x) * 8;
     dstY = (y + 2) * 9;
 
     r = (colour & 0xFF);
