@@ -17,7 +17,7 @@ int kbhit(void);
 int getch(void);
 extern uint8_t firstFrameOnCurrentState;
 enum ESoundDriver soundDriver = kAY38910;
-
+extern enum EGameMenuState currentGameMenuState;
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
 extern uint8_t roomTransitionAnimationStep;
 #endif
@@ -208,12 +208,15 @@ enum ECommand getInput(void) {
         return kCommandNone;
     }
 
-    put_sprite_8(
-            (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
-            (cameraZ * 3) + 10,
-            &playerPositionSprite[playerDirection][0],
-            0
-    );
+    if (currentGameMenuState == kPlayGame) {
+        put_sprite_8(
+                (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
+                (cameraZ * 3) + 10,
+                &playerPositionSprite[playerDirection][0],
+                0
+        );
+    }
+
 
     performAction();
 
@@ -288,14 +291,14 @@ void endFrame(void) {
             return;
         }
 #endif
-
-        put_sprite_8(
-                (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
-                (cameraZ * 3) + 10,
-                &playerPositionSprite[playerDirection][0],
-                1
-        );
-
+        if (currentGameMenuState == kPlayGame) {
+            put_sprite_8(
+                    (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
+                    (cameraZ * 3) + 10,
+                    &playerPositionSprite[playerDirection][0],
+                    1
+            );
+        }
     }
 }
 
