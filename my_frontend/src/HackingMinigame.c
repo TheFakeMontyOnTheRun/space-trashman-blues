@@ -98,8 +98,8 @@ void HackingScreen_unloadStateCallback(enum EGameMenuState newState) {
 }
 
 enum EGameMenuState HackingScreen_tickCallback(enum ECommand cmd, void* data) {
-    (void)data;
     uint8_t holdingDisk = getHoldingDisk();
+    (void)data;
 
     if (isHackingMinigameCompleted()) {
         grantAccessToSafe();

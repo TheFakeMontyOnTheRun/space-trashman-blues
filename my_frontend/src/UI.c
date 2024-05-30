@@ -30,10 +30,11 @@ void drawGraphic(const uint8_t *graphic) {
     while (*ptr) {
         uint8_t c;
         const uint8_t npoints = *ptr++;
+        const uint8_t *shape;
 #ifndef MONOCHROME_VECTORS
         ptr += 3; /* skip colours */
 #endif
-        const uint8_t *shape = ptr;
+        shape = ptr;
 
         for (c = 0; c < npoints - 1; ++c) {
             drawLine(shape[2 * c], shape[(2 * c) + 1], shape[(2 * c) + 2], shape[(2 * c) + 3], 2);

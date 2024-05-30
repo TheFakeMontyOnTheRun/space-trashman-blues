@@ -28,6 +28,11 @@
 #define FALSE 0
 #endif
 
+#ifdef NES
+#define NULL 0
+#endif
+
+
 enum MemoryType {
     GENERAL_MEMORY,
     BITMAP_MEMORY,

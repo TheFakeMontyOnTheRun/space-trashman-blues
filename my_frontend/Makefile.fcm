@@ -6,12 +6,32 @@ CC = $(CC65_ROOT)/bin/cc65
 AS = $(CC65_ROOT)/bin/ca65
 LD = $(CC65_ROOT)/bin/ld65
 
-CFLAGS = -t nes -Oirs -DTRACE_OBJECTS_OVER_FLOOR -DGAMEPAD -I../core/include -DNES -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_HACKING_MINIGAME -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DRLE_COMPRESSED_MAPS -DEMBEDDED_DATA
+CFLAGS = -t nes -Oirs -DTRACE_OBJECTS_OVER_FLOOR -DGAMEPAD -I../core/include -Iinclude -I../common/include   -DNES -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_HACKING_MINIGAME -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DRLE_COMPRESSED_MAPS -DEMBEDDED_DATA -DXRES_FRAMEBUFFER=256 -DYRES_FRAMEBUFFER=192
 
 INCLUDE = $(CC65_ROOT)/include
 ASMINC = $(CC65_ROOT)/libsrc/nes
 
-SRC = src/demo.c src/nes.c src/HackingMinigame.c ../core/src/Core.c ../core/src/Derelict.c
+SRC = \
+    src/Events.c \
+    src/RendererRasterizer.c \
+    src/RendererScene.c \
+    src/RendererTesselation.c \
+    src/Main.c \
+    src/nes.c \
+    src/UI.c \
+    src/Crawler.c \
+    src/GameMenu.c \
+    ../common/src/CreditsScreen.c \
+    ../common/src/MainMenu.c \
+    ../common/src/HelpScreen.c \
+    ../common/src/Engine.c \
+    src/HackingMinigame.c \
+    src/GamepadUI.c \
+    ../core/src/Core.c \
+    ../core/src/Derelict.c \
+    ../common/src/HackingMinigameRules.c \
+    ../common/src/Common.o
+
 ASMSRC = src/neslib/crt0.s
 OBJS = $(ASMSRC:.s=.o) $(SRC:.c=.o) 
 

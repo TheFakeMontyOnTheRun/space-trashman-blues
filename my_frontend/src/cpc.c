@@ -253,8 +253,8 @@ uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
     return ptr;
 }
 
-void graphicsPutPointArray(uint8_t *y128Values) {
-    uint8_t *stencilPtr = y128Values;
+void graphicsPutPointArray(int8_t *y128Values) {
+    int8_t *stencilPtr = y128Values;
     uint16_t x;
 
     for (x = 0; x < XRESMINUSONE;) {
