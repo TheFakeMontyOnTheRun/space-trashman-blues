@@ -13,7 +13,7 @@ unsigned char imageBuffer[128 * 32];
 
 enum ESoundDriver soundDriver = kPcSpeaker;
 extern uint8_t firstFrameOnCurrentState;
-
+extern enum EGameMenuState currentGameMenuState;
 
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
 extern uint8_t roomTransitionAnimationStep;
@@ -396,12 +396,14 @@ enum ECommand getInput(void) {
             : "ax"
             );
 
-    put_sprite_8(
-            (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
-            (cameraZ * 3) + 10,
-            &playerPositionSprite[playerDirection][0],
-            0
-    );
+    if (currentGameMenuState == kPlayGame) {
+        put_sprite_8(
+                (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
+                (cameraZ * 3) + 10,
+                &playerPositionSprite[playerDirection][0],
+                0
+        );
+    }
 
     switch(toReturn) {
         case 'q':
@@ -504,12 +506,14 @@ void endFrame(void) {
         return;
     }
 
-    put_sprite_8(
-            (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
-            (cameraZ * 3) + 10,
-            &playerPositionSprite[playerDirection][0],
-            1
-    );
+    if (currentGameMenuState == kPlayGame) {
+        put_sprite_8(
+                (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
+                (cameraZ * 3) + 10,
+                &playerPositionSprite[playerDirection][0],
+                1
+        );
+    }
 
 /*
  * DS ES and SS already have the same value as CS
