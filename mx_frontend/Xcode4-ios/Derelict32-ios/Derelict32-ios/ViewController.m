@@ -104,7 +104,7 @@ void setupOPL2(int port) {
 void stopSounds() {
 }
 
-void playSound( const int action ){
+void playSound( const uint8_t action ){
 }
 
 
