@@ -6,15 +6,7 @@
 #include "pch.h"
 #include "MainPage.xaml.h"
 
-#define SDLSW
 #define RGBA32_FRAMEBUFFER
-#define CLI_BUILD
-#define PAGE_FLIP_ANIMATION
-#define INCLUDE_ITEM_DESCRIPTIONS
-#define ENDIANESS_AWARE
-#define EMIT_QUIT_OPTION
-#define XRES_FRAMEBUFFER 320
-#define YRES_FRAMEBUFFER 200
 
 
 #include "Crawler.c"
@@ -578,7 +570,7 @@ void OnMediaEnded(Windows::Media::Playback::MediaPlayer^ mp, Object^ obj) {
 
 }
 
-void playSound(const int action) {
+void playSound(const uint8_t action) {
 
 
 
