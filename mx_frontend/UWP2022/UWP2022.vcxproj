@@ -162,13 +162,14 @@
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>C:\ci\space-trashman-blues\common\include;C:\ci\space-trashman-blues\common\src;C:\ci\space-trashman-blues\mx_frontend\menu\src;C:\ci\space-trashman-blues\mx_frontend\base3d\include;C:\ci\space-trashman-blues\mx_frontend\base3d\src;C:\ci\space-trashman-blues\core\include;C:\ci\space-trashman-blues\core\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);SUPPORTS_HACKING_MINIGAME;CLI_BUILD;PAGE_FLIP_ANIMATION;ENDIANESS_AWARE;SUPPORTS_HACKING_MINIGAME;INCLUDE_ITEM_DESCRIPTIONS;XRES_FRAMEBUFFER=320;YRES_FRAMEBUFFER=200</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);SUPPORTS_HACKING_MINIGAME;CLI_BUILD;PAGE_FLIP_ANIMATION;ENDIANESS_AWARE;SUPPORTS_HACKING_MINIGAME;INCLUDE_ITEM_DESCRIPTIONS;XRES_FRAMEBUFFER=320;YRES_FRAMEBUFFER=200</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -10,6 +10,14 @@
 #include "SoundSystem.h"
 #include "Engine.h"
 
+#ifndef MONOCHROME_VECTORS
+#include "FixP.h"
+#include "Vec.h"
+#include "Mesh.h"
+#include "CActor.h"
+#include "Renderer.h"
+#endif
+
 #ifdef EMIT_QUIT_OPTION
 const char *MainMenu_options[4] = {
         "Play game", "Credits", "Help", "Quit"};
@@ -2090,6 +2098,9 @@ void MainMenu_initStateCallback(enum EGameMenuState tag) {
 void MainMenu_repaintCallback(void) {
     if (firstFrameOnCurrentState) {
         clearScreen();
+#ifndef MONOCHROME_VECTORS
+        fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF00FF00), 0);
+#endif
         drawGraphic(splashGraphics);
         playSound(MAIN_MENU_THEME);
     }

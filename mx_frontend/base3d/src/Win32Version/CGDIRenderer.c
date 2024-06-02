@@ -40,11 +40,9 @@ uint8_t slideBitmap[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 COLORREF transparencyRef;
 extern HWND HWnd;
-typedef int ESoundDriver;
 extern HINSTANCE hInst;
 float multiplier;
-
-extern ESoundDriver soundDriver;
+enum ESoundDriver soundDriver;
 
 void setupOPL2(int port) {}
 

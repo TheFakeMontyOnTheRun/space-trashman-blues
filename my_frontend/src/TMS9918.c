@@ -7,6 +7,7 @@
 #include <msx/gfx.h>
 
 #include "font.h"
+#include "Enums.h"
 
 char playerPositionSprite[4][8]={
         {
@@ -54,7 +55,7 @@ char playerPositionSprite[4][8]={
 extern int8_t cameraX;
 extern int8_t cameraZ;
 extern enum EDirection playerDirection;
-
+extern enum EGameMenuState currentGameMenuState;
 
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
 extern uint8_t roomTransitionAnimationStep;
@@ -95,13 +96,15 @@ void flush3DBuffer(void) {
     }
 #endif
 
-    vdp_put_sprite_8(
-            0,
-            (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
-            (cameraZ * 3) + 10,
-            playerDirection,
-            15
-    );
+    if (currentGameMenuState == kPlayGame) {
+        vdp_put_sprite_8(
+                0,
+                (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
+                (cameraZ * 3) + 10,
+                playerDirection,
+                15
+        );
+    }
 }
 
 void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {

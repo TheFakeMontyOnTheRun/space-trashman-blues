@@ -25,6 +25,71 @@ uint32_t palette[16];
 uint8_t framebuffer[128 * 128];
 uint8_t vfb[256 * 192];
 
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
+extern uint8_t roomTransitionAnimationStep;
+#endif
+
+extern enum EDirection playerDirection;
+extern int8_t cameraX;
+extern int8_t cameraZ;
+
+char playerPositionSprite[4][8]={
+        {
+                0b00011000,
+                0b00111100,
+                0b01111110,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b00100000,
+                0b01100000,
+                0b11100000,
+                0b11100000,
+                0b01100000,
+                0b00100000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b01111110,
+                0b00111100,
+                0b00011000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b00000100,
+                0b00000110,
+                0b00000111,
+                0b00000111,
+                0b00000110,
+                0b00000100,
+                0b00000000,
+                0b00000000
+        },
+};
+
+void put_sprite_8(uint16_t x, uint8_t y, uint8_t *sprite, uint8_t colour) {
+
+    for(uint8_t c = 0; c < 8; ++c) {
+        uint8_t line = *sprite;
+        for (uint16_t d = 0; d < 8; ++d) {
+            if (line & 1) {
+                realPut( x + d, y + c, colour, NULL);
+            }
+            line = line >> 1;
+        }
+        ++sprite;
+    }
+}
+
 void graphicsPut(uint8_t x, uint8_t y) {
     framebuffer[(128 * y) + x] = 1;
 #ifdef PUTAFLIP
@@ -134,6 +199,12 @@ enum ECommand getInput(void) {
         }
 
         if (event.type == SDL_KEYUP) {
+            put_sprite_8(
+                    (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
+                    (cameraZ * 3) + 10,
+                    &playerPositionSprite[playerDirection][0],
+                    0
+            );
 
             switch (event.key.keysym.sym) {
                 case SDLK_RETURN:
@@ -351,6 +422,13 @@ void startFrame(int x, int y, int width, int height) {
 void endFrame(void) {
     if (needsToRedrawVisibleMeshes) {
         flipRenderer();
+        put_sprite_8(
+                (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
+                (cameraZ * 3) + 10,
+                &playerPositionSprite[playerDirection][0],
+                1
+        );
+
     }
     flushVirtualFramebuffer();
 }

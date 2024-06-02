@@ -159,7 +159,7 @@ int soundToPlay = -1;
 
 void setupOPL2(int port) {}
 
-void playSound(const int action) {
+void playSound(const uint8_t action) {
     soundToPlay = action;
 }
 

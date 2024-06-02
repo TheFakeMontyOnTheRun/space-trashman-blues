@@ -17,6 +17,10 @@ int kbhit(void);
 int getch(void);
 extern uint8_t firstFrameOnCurrentState;
 enum ESoundDriver soundDriver = kAY38910;
+extern enum EGameMenuState currentGameMenuState;
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
+extern uint8_t roomTransitionAnimationStep;
+#endif
 
 /*  Required since we have our own memory allocator abstraction */
 uint16_t heap = 0;
@@ -28,6 +32,54 @@ uint16_t heap = 0;
 
 #define MARGIN_TEXT_SCREEN_LIMIT 40
 
+extern enum EDirection playerDirection;
+extern int8_t cameraX;
+extern int8_t cameraZ;
+
+
+char playerPositionSprite[4][8]={
+        {
+                0b00011000,
+                0b00111100,
+                0b01111110,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b00100000,
+                0b01100000,
+                0b11100000,
+                0b11100000,
+                0b01100000,
+                0b00100000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b01111110,
+                0b00111100,
+                0b00011000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b00000100,
+                0b00000110,
+                0b00000111,
+                0b00000111,
+                0b00000110,
+                0b00000100,
+                0b00000000,
+                0b00000000
+        },
+};
+
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 
 void initHW(int argc, char **argv) {
@@ -36,6 +88,20 @@ void initHW(int argc, char **argv) {
     initAY38910();
     initKeyboardUI();
     needsToRedrawVisibleMeshes = 0;
+}
+
+void put_sprite_8(uint16_t x, uint8_t y, uint8_t *sprite, uint8_t colour) {
+
+    for(uint8_t c = 0; c < 8; ++c) {
+        uint8_t line = *sprite;
+        for (uint16_t d = 0; d < 8; ++d) {
+            if (line & 1) {
+                realPut( x + d, y + c, colour, NULL);
+            }
+            line = line >> 1;
+        }
+        ++sprite;
+    }
 }
 
 void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
@@ -142,6 +208,16 @@ enum ECommand getInput(void) {
         return kCommandNone;
     }
 
+    if (currentGameMenuState == kPlayGame) {
+        put_sprite_8(
+                (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
+                (cameraZ * 3) + 10,
+                &playerPositionSprite[playerDirection][0],
+                0
+        );
+    }
+
+
     performAction();
 
     switch (getch()) {
@@ -209,6 +285,20 @@ void endFrame(void) {
             memcpy(line, buffer + (y * BUFFER_SIZEX), BUFFER_SIZEX);
         }
         memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
+
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
+        if (roomTransitionAnimationStep) {
+            return;
+        }
+#endif
+        if (currentGameMenuState == kPlayGame) {
+            put_sprite_8(
+                    (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
+                    (cameraZ * 3) + 10,
+                    &playerPositionSprite[playerDirection][0],
+                    1
+            );
+        }
     }
 }
 

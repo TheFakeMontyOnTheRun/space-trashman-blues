@@ -973,7 +973,7 @@ void drawRect(const int x,
               const size_t dx,
               const size_t dy,
               const FramebufferPixelFormat pixel) {
-
+    unsigned int px;
     FramebufferPixelFormat *destination = &framebuffer[0];
     FramebufferPixelFormat *destinationLineStart = destination + (XRES_FRAMEBUFFER * (y)) + x;
     uint16_t py;
@@ -982,7 +982,6 @@ void drawRect(const int x,
         return;
     }
 
-    unsigned int px;
     for (px = 0; px < dx; ++px) {
         *destinationLineStart = pixel;
         destinationLineStart++;

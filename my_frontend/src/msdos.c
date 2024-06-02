@@ -13,6 +13,72 @@ unsigned char imageBuffer[128 * 32];
 
 enum ESoundDriver soundDriver = kPcSpeaker;
 extern uint8_t firstFrameOnCurrentState;
+extern enum EGameMenuState currentGameMenuState;
+
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
+extern uint8_t roomTransitionAnimationStep;
+#endif
+
+extern enum EDirection playerDirection;
+extern int8_t cameraX;
+extern int8_t cameraZ;
+
+char playerPositionSprite[4][8]={
+        {
+                0b00011000,
+                0b00111100,
+                0b01111110,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b00100000,
+                0b01100000,
+                0b11100000,
+                0b11100000,
+                0b01100000,
+                0b00100000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b01111110,
+                0b00111100,
+                0b00011000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b00000100,
+                0b00000110,
+                0b00000111,
+                0b00000111,
+                0b00000110,
+                0b00000100,
+                0b00000000,
+                0b00000000
+        },
+};
+
+void put_sprite_8(uint16_t x, uint8_t y, uint8_t *sprite, uint8_t colour) {
+
+    for(uint8_t c = 0; c < 8; ++c) {
+        uint8_t line = *sprite;
+        for (uint16_t d = 0; d < 8; ++d) {
+            if (line & 1) {
+                realPut( x + d, y + c, colour, NULL);
+            }
+            line = line >> 1;
+        }
+        ++sprite;
+    }
+}
 
 void shutdownGraphics(void) {
 }
@@ -330,6 +396,15 @@ enum ECommand getInput(void) {
             : "ax"
             );
 
+    if (currentGameMenuState == kPlayGame) {
+        put_sprite_8(
+                (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
+                (cameraZ * 3) + 10,
+                &playerPositionSprite[playerDirection][0],
+                0
+        );
+    }
+
     switch(toReturn) {
         case 'q':
             return kCommandLeft;
@@ -429,6 +504,15 @@ void endFrame(void) {
 
     if (!needsToRedrawVisibleMeshes) {
         return;
+    }
+
+    if (currentGameMenuState == kPlayGame) {
+        put_sprite_8(
+                (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
+                (cameraZ * 3) + 10,
+                &playerPositionSprite[playerDirection][0],
+                1
+        );
     }
 
 /*
