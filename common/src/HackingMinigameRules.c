@@ -1,7 +1,13 @@
 /*
   Created by Daniel Monteiro on 2023-11-04.
 */
+#ifdef WIN32
+#include "Win32Int.h"
+#else
+
 #include <stdint.h>
+
+#endif
 #include <string.h>
 
 #include "Common.h"
