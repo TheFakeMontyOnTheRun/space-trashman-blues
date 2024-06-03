@@ -157,9 +157,8 @@ void redrawHUD(void) {
     struct ObjectNode *head;
     int c;
     struct Item *itemPtr;
-    drawTextAtWithMargin(1, 1, XRES, thisMissionName, getPaletteEntry(0xFFFFFFFF));
 
-    drawTextAt(1 + (XRES / 8), 1, " Map:", getPaletteEntry(0xFFFFFFFF));
+    drawTextAt((XRES / 8), 0, thisMissionName, getPaletteEntry(0xFFFFFFFF));
 
 #ifndef TILED_BITMAPS
     if (mapTopLevel != NULL) {
@@ -188,9 +187,8 @@ void redrawHUD(void) {
 	        drawBitmapRaw(XRES + 8, 199 - 32 - 16 - 16, 32, 32,
 		itemSprites[itemPtr->index]->rotations[0], 1);
 	     */
-                drawTextAtWithMarginWithFiltering(2 + ((XRES) / 8), 23, XRES_FRAMEBUFFER, itemPtr->name,
-                                                  itemPtr->active ? getPaletteEntry(0xFFAAAAAA) : getPaletteEntry(
-                                                          0xFFFFFFFF), '\n');
+                drawTextAtWithMarginWithFiltering(((XRES) / 8), 22, XRES_FRAMEBUFFER, itemPtr->name,
+                                                  itemPtr->active ? getPaletteEntry(0xFFAAAAAA) : getPaletteEntry(0xFFFFFFFF), '\n');
             }
             ++line;
         }

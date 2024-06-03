@@ -134,7 +134,7 @@ void drawTextAtWithMarginWithFiltering(const int _x, const int _y, int margin,
                                        const uint8_t colour, char charToReplaceHifenWith) {
 
 
-     if (defaultFont == NULL) {
+    if (defaultFont == NULL) {
         defaultFont = loadBitmap("font.img");
     }
 
@@ -159,7 +159,7 @@ void drawTextAtWithMarginWithFiltering(const int _x, const int _y, int margin,
 	}
 
         if (currentChar == '\n' || dstX >= XRES_FRAMEBUFFER) {
-            dstX = (_x - 1) * 8;
+            dstX = (_x) * 8;
             dstY += 8;
             continue;
         }

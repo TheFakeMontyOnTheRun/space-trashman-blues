@@ -230,8 +230,6 @@ void renderRoomTransition(void) {
         center.mZ = intToFix(3);
         drawCeilingAt(center, nativeTextures[0], kNorth);
 
-        drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName, getPaletteEntry(0xFFFFFFFF));
-
         zCameraOffset -= Div(intToFix(1), intToFix(4));
 
         if (zCameraOffset == 0) {

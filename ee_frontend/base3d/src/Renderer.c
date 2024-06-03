@@ -190,9 +190,6 @@ void renderRoomTransition(void) {
 
     enter2D();
 
-    drawTextAtWithMargin(((XRES / 8) / 2) - (thisMissionNameLen / 2), 1, XRES, thisMissionName,
-                         getPaletteEntry(0xFFFFFFFF));
-
     zCameraOffset -= Div(intToFix(1), intToFix(32));
 
     if (zCameraOffset == 0) {
