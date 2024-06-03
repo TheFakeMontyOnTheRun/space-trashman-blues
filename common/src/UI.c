@@ -51,16 +51,16 @@ drawWindowWithOptions(const int x,
         int isCursor = (selectedOption == c);
 
         if (isCursor) {
-            fillRect(x * 8 - 8,
-                     (y + 2 + c) * 8 - 8,
+            fillRect((x) * 8,
+                     (y + 2 + c) * 8,
                      dx * 8,
                      8,
                      getPaletteEntry(0xFF000000),
                      FALSE);
         }
 
-        drawTextAt(x,
-                   y + 1 + c,
+        drawTextAt(x + 1,
+                   y + 2 + c,
                    &options[c][0],
                    isCursor ? getPaletteEntry(0xFFFFFFFF) : getPaletteEntry(0xFF000000));
     }
@@ -69,13 +69,19 @@ drawWindowWithOptions(const int x,
 void
 drawWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title) {
 
-    fillRect((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
-    fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
-    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
-    fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
+    /* shadow */
+    fillRect((x + 1) * 8, (y + 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
 
+    /* background */
+    fillRect((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
+    /* frame */
+    drawRect((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
+    /* title tab */
+    fillRect((x) * 8, (y) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
+
+    /* title text */
     if (title != NULL) {
-        drawTextAt(x, y - 1, title, getPaletteEntry(0xFFFFFFFF));
+        drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
     }
 }
 

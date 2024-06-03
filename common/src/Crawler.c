@@ -131,8 +131,8 @@ void Crawler_repaintCallback(void) {
         /* The dithered filter on top of the 3D rendering*/
         fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), TRUE);
 
-        drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - biggestOption - 3,
-                              ((YRES_FRAMEBUFFER / 8) + 1) - (optionsHeight / 8) - 3,
+        drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - biggestOption - 4,
+                              ((YRES_FRAMEBUFFER / 8) + 1) - (optionsHeight / 8) - 4,
                               biggestOption + 2,
                               (optionsHeight / 8) + 2,
                               AbandonMission_Title,

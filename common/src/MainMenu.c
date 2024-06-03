@@ -2106,8 +2106,8 @@ void MainMenu_repaintCallback(void) {
     }
 
     drawWindowWithOptions(
-            (XRES_FRAMEBUFFER / 8) - (int) 9 - 3,
-            (YRES_FRAMEBUFFER / 8) - 3 - kMainMenuOptionsCount,
+            (XRES_FRAMEBUFFER / 8) - (int) 9 - 4,
+            (YRES_FRAMEBUFFER / 8) - 4 - kMainMenuOptionsCount,
             9 + 2,
             kMainMenuOptionsCount + 2,
             "Episode 0",

@@ -35,8 +35,8 @@ void CreditsScreen_repaintCallback(void) {
 
 
 
-    drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - 7 - 3,
-                          ((YRES_FRAMEBUFFER / 8) + 1) - (1) - 4,
+    drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - 7 - 4,
+                          ((YRES_FRAMEBUFFER / 8) + 1) - (1) - 5,
                           7 + 2,
                           3, "Credits", CreditsScreen_options, 1, cursorPosition);
 }
