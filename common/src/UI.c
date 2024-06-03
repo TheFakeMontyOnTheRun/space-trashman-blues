@@ -167,7 +167,7 @@ void redrawHUD(void) {
 #else
     if (mapTopLevel[0] != NULL) {
         for (c = 0; c < 8; ++c) {
-            drawBitmap(((c & 3) * 32), 8 + (c >> 2) * 32, mapTopLevel[c], 1);
+            drawBitmap(XRES + ((c & 3) * 32), 72 + (c >> 2) * 32, mapTopLevel[c], 1);
         }
     }
 #endif
