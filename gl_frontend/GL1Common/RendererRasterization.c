@@ -414,7 +414,7 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
         if (currentChar == '-') {
             currentChar = charToReplaceHifenWith;
         }
-        if (currentChar == '\n' || dstX >= XRES_FRAMEBUFFER) {
+        if (currentChar == '\n' || (dstX >= XRES_FRAMEBUFFER) || (dstX >= ((margin - 1) * 8)) ) {
             dstX = (x - 1) * 8;
             dstY += 8;
             continue;
