@@ -416,7 +416,11 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
         }
         if (currentChar == '\n' || (dstX >= XRES_FRAMEBUFFER) || (dstX >= ((margin - 1) * 8)) ) {
             dstX = (x) * 8;
+#ifndef N64
             dstY += 8;
+#else
+            dstY += 9;
+#endif
             continue;
         }
 
