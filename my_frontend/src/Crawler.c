@@ -55,7 +55,7 @@ void HUD_refresh(void) {
         if (item->active) {
             writeStrWithLimit(1, YRES_TEXT - 6, "*", 16, 2, 0);
         }
-        writeStrWithLimit(2, YRES_TEXT - 6, item->name, 16, 2, 0);
+        writeStrWithLimit(2, YRES_TEXT - 6, item->name, (XRES_FRAMEBUFFER / 8) / 2, 2, 0);
     } else {
         writeStrWithLimit(2, YRES_TEXT - 6, "Nothing", 16, 2, 0);
     }
@@ -66,7 +66,7 @@ void HUD_refresh(void) {
         if (item->active) {
             drawTextAt(1, YRES_TEXT - 3, "*", 1);
         }
-        writeStrWithLimit(2, YRES_TEXT - 3, item->name, 16, 2, 0);
+        writeStrWithLimit(2, YRES_TEXT - 3, item->name, (XRES_FRAMEBUFFER / 8) / 2, 2, 0);
     } else {
         writeStrWithLimit(2, YRES_TEXT - 3, "Nothing", 16, 2, 0);
     }
