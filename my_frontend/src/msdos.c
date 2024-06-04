@@ -452,23 +452,25 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, 
     const char *ptr = text;
     uint16_t c = 0;
     uint16_t chary = 0;
-    uint16_t x = _x - 1;
+    uint16_t x = _x;
     char cha = *ptr;
 
     for (; cha && y < 25; ++c) {
 
-        if (x == limitX) {
+        if (x >= limitX || x >= (XRES_TEXT)) {
             ++y;
-            x = _x - 1;
+            x = _x + 1;
         } else if (cha == '\n') {
             ++y;
-            x = _x - 1;
+            x = _x + 1;
             ++ptr;
             cha = *ptr;
             continue;
         } else {
             ++x;
         }
+
+        uint8_t biosX = x - 1;
 
         asm volatile (
                 "movb $0x02, %%ah\n\t"
@@ -483,7 +485,7 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, 
                 "movb $0x03, %%bl\n"
                 "int  $0x10\n\t"
                 :
-                : "rm" (x), "rm" (y), "rm"(cha)
+                : "rm" (biosX), "rm" (y), "rm"(cha)
                 : "ax", "bx", "cx", "dx"
                 );
 
