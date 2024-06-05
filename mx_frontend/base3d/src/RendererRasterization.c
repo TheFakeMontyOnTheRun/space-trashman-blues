@@ -1676,7 +1676,9 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
     size_t fontWidth = defaultFont->width;
     BitmapPixelFormat *fontPixelData = defaultFont->data;
     size_t c;
+    size_t d;
     int32_t srcX, srcY;
+    uint8_t lastSpacePos = 0xFF;
 
     for (c = 0; c < len; ++c) {
         uint8_t ascii;
@@ -1695,9 +1697,8 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
         col = ascii & 31;
         letter = fontPixelData + (col * 8) + (fontWidth * (line * 8));
 
-
-        if (currentChar == '\n' || dstX >= margin) {
-            dstX = (x - 1) * 8;
+        if (currentChar == '\n' || dstX >= (margin)) {
+            dstX = x * 8;
             dstY += 8;
             continue;
         }
@@ -1707,8 +1708,19 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
         }
 
         if (currentChar == ' ') {
+            lastSpacePos = c;
             dstX += 8;
             continue;
+        } else {
+            if ((c - 1) == lastSpacePos) {
+                d = c;
+                while (d < len && text[d] != ' ') ++d;
+
+                if ((dstX + ((d - c ) * 8)) >= margin ) {
+                    dstX = x * 8;
+                    dstY += 8;
+                }
+            }
         }
 
         for (srcY = 0; srcY < 8; ++srcY) {
