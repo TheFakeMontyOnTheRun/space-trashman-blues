@@ -104,13 +104,16 @@ void put_sprite_8(uint16_t x, uint8_t y, uint8_t *sprite, uint8_t colour) {
     }
 }
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
+void drawTextAtWithMarginWithFiltering(const int _x, const int _y, int limitX, const char *text, const uint8_t fg,
+                                       char charToReplaceHifenWith) {
     (void)fg;
-    (void)bg;
     uint8_t len = strlen(text);
     const char *ptr = text;
     uint8_t c = 0;
+    uint8_t d = 0;
     uint8_t x = _x;
+    uint8_t y = _y;
+    uint8_t lastSpacePos = 0xFF;
 
     uint8_t *lineBase = (unsigned char *) 0xC000 + ((((y * 8)) / 8) * 80) + ((((y * 8)) & 7) * 2048);
 
@@ -195,7 +198,7 @@ void clearTextScreen(void) {
     uint8_t c, d;
     for (c = 16; c < 24; ++c) {
         for (d = 0; d < 40; ++d) {
-            writeStrWithLimit(d, c, " ", 320 / 8, 2, 0);
+            drawTextAtWithMarginWithFiltering(d, c, 320, " ", 2, ' ');
         }
     }
 }

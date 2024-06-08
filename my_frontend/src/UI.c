@@ -44,7 +44,11 @@ void drawGraphic(const uint8_t *graphic) {
 }
 
 void drawTextAt(uint8_t _x, uint8_t y, const char *text, uint8_t colour) {
-    writeStrWithLimit(_x, y, text, (XRES_FRAMEBUFFER / 8), colour, 0);
+    drawTextAtWithMargin(_x, y, (XRES_FRAMEBUFFER), text, colour);
+}
+
+void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const uint8_t colour) {
+    drawTextAtWithMarginWithFiltering(x, y, margin, text, colour, '-');
 }
 
 void showMessage(const char *message) {
@@ -127,7 +131,7 @@ void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *titl
 
     for (c = 0; c < th; ++c) {
         for (d = 0; d < tw; ++d) {
-            writeStrWithLimit( tx + d, ty + c, " ", 320 / 8, 2, 0);
+            drawTextAtWithMarginWithFiltering( tx + d, ty + c, XRES_FRAMEBUFFER, " ", 2, ' ');
         }
     }
 
@@ -181,7 +185,7 @@ void
 drawTextWindow(const uint8_t x, const uint8_t y, const uint8_t dx, const uint8_t dy, const char *title,
                const char *content) {
     drawWindow(x, y, dx, dy, title);
-    writeStrWithLimit(x + 1, y + 2, content, x + dx - 1, 1, 0);
+    drawTextAtWithMargin(x + 1, y + 2, (x + dx - 1) * 8, content, 1);
 }
 
 enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t optionsCount, const enum ECommand cmd, enum EGameMenuState backState) {

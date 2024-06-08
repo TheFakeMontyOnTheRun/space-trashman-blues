@@ -211,37 +211,63 @@ void shutdownGraphics(void) {
 }
 #endif
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, char *text, uint8_t limitX) {
-    uint8_t x = _x;
-    char *ptr = text;
-    char lastChar = 0xFF;
-    uint8_t *fontTop;
 
-    while (*ptr && y < (YRES_FRAMEBUFFER / 8)) {
-        char cha = *ptr;
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text, const uint8_t fg,
+                                       char charToReplaceHifenWith) {
 
-        if (x == limitX || cha == '\n') {
-            ++y;
-            x = _x;
-            if (cha == '\n') {
-                ++ptr;
-                continue;
+    size_t len = strlen(text);
+    int32_t dstX = x * 8;
+    int32_t dstY = y * 8;
+
+    size_t c;
+    size_t d;
+    uint8_t lastSpacePos = 0xFF;
+
+    for (c = 0; c < len; ++c) {
+
+        char currentChar = text[c];
+
+        if (currentChar == '-') {
+            currentChar = charToReplaceHifenWith;
+        }
+
+        if (currentChar == '\n' || dstX >= (margin)) {
+            dstX = x * 8;
+            dstY += 8;
+            continue;
+        }
+
+        if (dstY >= YRES_FRAMEBUFFER) {
+            return;
+        }
+
+        if (currentChar == ' ') {
+            lastSpacePos = c;
+        } else {
+            if ((c - 1) == lastSpacePos) {
+                d = c;
+                while (d < len && text[d] != ' ') ++d;
+
+                if ((dstX + ((d - c ) * 8)) >= margin ) {
+                    dstX = x * 8;
+                    dstY += 8;
+                }
             }
         }
 
-        if (cha >= 'a' && cha <= 'z') {
-            cha -= ('a' - 'A');
-        } else if (cha > 'z') {
-            cha -= ('z' - 'a');
+
+        if (currentChar >= 'a') {
+            if (currentChar <= 'z') {
+                currentChar = (currentChar - 'a') + 'A';
+            } else {
+                currentChar -= ('z' - 'a');
+            }
         }
 
-        if (cha != lastChar) {
-            fontTop = &font[((cha - 32) << 3)];
-            lastChar = cha;
-        }
-        vwrite(fontTop, map_pixel(x << 3, y << 3), 8);
-        ++x;
-        ++ptr;
+        uint8_t *fontTop = &font[((currentChar - 32) << 3)];
+
+        vwrite(fontTop, map_pixel(dstX, dstY), 8);
+        dstX += 8;
     }
 }
 
@@ -249,7 +275,7 @@ void clearTextScreen(void) {
     uint8_t c, d;
     for (c = 16; c < 24; ++c) {
         for (d = 0; d < 32; ++d) {
-            writeStrWithLimit(d, c, " ", 256 / 8);
+            drawTextAtWithMarginWithFiltering(d, c, 256, " ", 2,  ' ');
         }
     }
 }

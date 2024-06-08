@@ -111,7 +111,10 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple);
 
 void flush3DBuffer(void);
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg);
+void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const uint8_t colour);
+
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text, const uint8_t colour,
+                                       char charToReplaceHifenWith);
 
 uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr);
 

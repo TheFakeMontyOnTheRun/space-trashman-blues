@@ -44,8 +44,8 @@ void HUD_refresh(void) {
                (YRES_FRAMEBUFFER / 8) - 17,
                "Status");
 
-    writeStrWithLimit(1, YRES_TEXT - 7, "In room:", 16, 2, 0);
-    writeStrWithLimit(1, YRES_TEXT - 4, "In hand:", 16, 2, 0);
+    drawTextAt(1, YRES_TEXT - 7, "In room:", 2);
+    drawTextAt(1, YRES_TEXT - 4, "In hand:", 2);
 
     struct Item *item;
 
@@ -53,11 +53,11 @@ void HUD_refresh(void) {
     if (roomItem != NULL) {
         item = getItem(roomItem->item);
         if (item->active) {
-            writeStrWithLimit(1, YRES_TEXT - 6, "*", 16, 2, 0);
+            drawTextAt(1, YRES_TEXT - 6, "*", 2);
         }
-        writeStrWithLimit(2, YRES_TEXT - 6, item->name, (XRES_FRAMEBUFFER / 8) / 2, 2, 0);
+        drawTextAtWithMarginWithFiltering(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, item->name,  2, ' ');
     } else {
-        writeStrWithLimit(2, YRES_TEXT - 6, "Nothing", 16, 2, 0);
+        drawTextAt(2, YRES_TEXT - 6, "Nothing", 2);
     }
 
     /* Display "In hand" item */
@@ -66,9 +66,9 @@ void HUD_refresh(void) {
         if (item->active) {
             drawTextAt(1, YRES_TEXT - 3, "*", 1);
         }
-        writeStrWithLimit(2, YRES_TEXT - 3, item->name, (XRES_FRAMEBUFFER / 8) / 2, 2, 0);
+        drawTextAtWithMarginWithFiltering(2, YRES_TEXT - 3, (XRES_FRAMEBUFFER) / 2, item->name,  2, ' ');
     } else {
-        writeStrWithLimit(2, YRES_TEXT - 3, "Nothing", 16, 2, 0);
+        drawTextAt(2, YRES_TEXT - 3, "Nothing", 2);
     }
 }
 
