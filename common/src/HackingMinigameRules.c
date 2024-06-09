@@ -4,10 +4,14 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
+#ifndef SMD
 #include <stdint.h>
-
+#else
+#include <genesis.h>
+typedef unsigned long size_t;
 #endif
+#endif
+
 #include <string.h>
 
 #include "Common.h"

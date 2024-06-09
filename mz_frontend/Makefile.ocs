@@ -4,8 +4,10 @@ STRIP=m68k-amigaos-strip
 AS = vasmm68k_mot
 CFLAGS = \
     -c -m68000 -s -fexpensive-optimizations -fomit-frame-pointer -ffast-math -Ofast \
-    -I../common/include -IAmigaVersion -I../core/include -I../common/include -IEngine3D -I../core/include \
+    -Isrc -I../core/src -I../core/include -Iinclude -I../common/include \
+    -I../common/include -IAmigaVersion -I../core/include -I../common/include -IEngine3D -I../core/include -Isrc/AmigaVersion \
     -Imenu/include -ISoundSystem \
+    -DSDLW -DENDIANESS_AWARE -DMONOCHROME_VECTORS -DEMBEDDED_DATA -DRLE_COMPRESSED_MAPS -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DSUPPORTS_HACKING_MINIGAME -DTRACE_OBJECTS_OVER_FLOOR -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DRES128X128 -Wall -Wextra -pedantic -Wunused-parameter -DXRES_FRAMEBUFFER=256 -DYRES_FRAMEBUFFER=192 -DENDIANESS_AWARE \
     -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DAGA5BPP -DRES128X128 -DTRACE_OBJECTS_OVER_FLOOR \
     -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DUSE_FILLED_POLYS -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DENDIANESS_AWARE
 
@@ -16,15 +18,29 @@ ASFLAGS = -phxass -Fhunk -m68000 -chklabels -no-fpu -wfail -I/opt/amiga/m68k-ami
 MENU_TARGET=gameocs
 
 MENU_OBJ= \
-    Engine3D/Engine3D.o \
-    AmigaVersion/AmigaRenderer.o \
-    ../core/src/Core.o \
+    src/RendererTesselation.o \
+    src/RendererRasterizer.o \
+    src/RendererScene.o \
+    ../common/src/HelpScreen.o \
+    ../common/src/MainMenu.o \
+    ../common/src/CreditsScreen.o \
+    ../common/src/HackingMinigameRules.o \
+    src/AmigaVersion/AmigaRenderer.o \
+    src/Main.o \
     ../core/src/Derelict.o \
-    ../common/src/MapWithCharKey.o \
+    ../core/src/Core.o \
     ../common/src/PackedFileReader.o \
-    ../common/src/CTile3DProperties.o \
+    ../common/src/NullMusic.o \
     ../common/src/Common.o \
-    ../common/src/Globals.o \
+    ../common/src/Engine.o \
+    ../common/src/CTile3DProperties.o \
+    ../common/src/MapWithCharKey.o \
+    src/HackingMinigame.o \
+    src/UI.o \
+    src/Events.o \
+    src/KeyboardUI.o \
+    src/Crawler.o \
+    src/GameMenu.o \
     ../common/src/c2p1x1_4_c5_bm.o
 
 $(MENU_TARGET):	$(MENU_OBJ)
@@ -39,7 +55,7 @@ adf: $(MENU_TARGET)
 	xdftool Derelict3D_ocs.adf list
 
 clean:
-	rm -f Engine3D/*.o
-	rm -f AmigaVersion/*.o
+	rm -f src/*.o
+	rm -f src/AmigaVersion/*.o
 	rm -f ../core/src/*.o
 	rm -f ../common/src/*.o

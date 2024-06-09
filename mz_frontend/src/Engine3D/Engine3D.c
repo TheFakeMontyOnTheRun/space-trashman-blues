@@ -14,12 +14,10 @@
 #endif
 
 #ifndef SMD
-
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-
 #else
 #include <genesis.h>
 int puts( const char* str );
@@ -1470,7 +1468,7 @@ int main(int argc, char **argv) {
     initFileReader("base.pfs");
     init();
 
-    
+
 
 
     Crawler_initStateCallback(0);
