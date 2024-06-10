@@ -3,6 +3,7 @@
 */
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "Common.h"
 #include "Enums.h"
@@ -52,10 +53,19 @@ void HUD_refresh(void) {
     /* Display "In room" item */
     if (roomItem != NULL) {
         item = getItem(roomItem->item);
-        if (item->active) {
-            drawTextAt(1, YRES_TEXT - 6, "*", 2);
+
+        if (strstr(item->name, "go-down")) {
+            drawTextAtWithMarginWithFiltering(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, "go down",  2, ' ');
+        } else {
+            if (strstr(item->name, "go-up")) {
+                drawTextAtWithMarginWithFiltering(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, "go up",  2, ' ');
+            } else {
+                if (item->active) {
+                    drawTextAt(1, YRES_TEXT - 6, "*", 2);
+                }
+                drawTextAtWithMarginWithFiltering(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, item->name,  2, ' ');
+            }
         }
-        drawTextAtWithMarginWithFiltering(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, item->name,  2, ' ');
     } else {
         drawTextAt(2, YRES_TEXT - 6, "Nothing", 2);
     }
