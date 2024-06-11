@@ -104,78 +104,72 @@ void put_sprite_8(uint16_t x, uint8_t y, uint8_t *sprite, uint8_t colour) {
     }
 }
 
-void drawTextAtWithMarginWithFiltering(const int _x, const int _y, int limitX, const char *text, const uint8_t fg,
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text, const uint8_t fg,
                                        char charToReplaceHifenWith) {
-    (void)fg;
-    uint8_t len = strlen(text);
-    const char *ptr = text;
-    uint8_t c = 0;
-    uint8_t d = 0;
-    uint8_t x = _x;
-    uint8_t y = _y;
+    size_t len = strlen(text);
+    uint16_t dstX = x * 8;
+    int8_t dstY = y * 8;
+
+    uint8_t c;
+    uint8_t d;
     uint8_t lastSpacePos = 0xFF;
 
-    uint8_t *lineBase = (unsigned char *) 0xC000 + ((((y * 8)) / 8) * 80) + ((((y * 8)) & 7) * 2048);
+    for (c = 0; c < len; ++c) {
 
-    for (; c < len && y < 64; ++c) {
+        char currentChar = text[c];
 
-        char cha = *ptr;
+        if (currentChar == '-') {
+            currentChar = charToReplaceHifenWith;
+        }
 
-        if (x == limitX) {
-            ++y;
-            lineBase = (unsigned char *) 0xC000 + ((((y * 8)) / 8) * 80) + ((((y * 8)) & 7) * 2048);
-            x = _x;
-        } else if (cha == '\n') {
-            ++y;
-            lineBase = (unsigned char *) 0xC000 + ((((y * 8)) / 8) * 80) + ((((y * 8)) & 7) * 2048);
-            x = _x;
-            ++ptr;
+        if (currentChar == '\n' || dstX >= (margin)) {
+            dstX = x * 8;
+            dstY += 8;
             continue;
         }
 
-        if (cha >= 'a') {
-            if (cha <= 'z') {
-                cha = (cha - 'a') + 'A';
-            } else {
-                cha -= ('z' - 'a');
+        if (dstY >= YRES_FRAMEBUFFER) {
+            return;
+        }
+
+        if (currentChar == ' ') {
+            lastSpacePos = c;
+        } else {
+            if ((c - 1) == lastSpacePos) {
+                d = c;
+                while (d < len && text[d] != ' ') ++d;
+
+                if ((dstX + ((d - c ) * 8)) >= margin ) {
+                    dstX = x * 8;
+                    dstY += 8;
+                }
             }
         }
 
-        uint8_t *fontTop = &font[((cha - 32) << 3)];
 
-        uint8_t *line = lineBase + 2 * x + 1;
+        if (currentChar >= 'a') {
+            if (currentChar <= 'z') {
+                currentChar = (currentChar - 'a') + 'A';
+            } else {
+                currentChar -= ('z' - 'a');
+            }
+        }
 
-        for (uint8_t d = 0; d < 8; ++d) {
+        uint8_t *fontTop = &font[((currentChar - 32) << 3)];
+
+        for (uint8_t f = 0; f < 8; ++f) {
             uint8_t e;
             uint8_t chunk = *fontTop;
-            uint8_t *pixel = line;
 
-            *pixel = 0;
-
-            for (e = 0; e < 4; ++e) {
-                if (chunk & 1) {
-                    *pixel |= (16 << e);
-                }
-                chunk = chunk >> 1;
-            }
-
-            --pixel;
-
-            *pixel = 0;
-
-            for (e = 0; e < 4; ++e) {
-                if (chunk & 1) {
-                    *pixel |= (16 << e);
-                }
+            for (e = 0; e < 8; ++e) {
+                realPut(dstX + (7 - e), dstY + (f), (chunk & 1), NULL);
                 chunk = chunk >> 1;
             }
 
             fontTop++;
-            line += 2048;
         }
 
-        ++x;
-        ++ptr;
+        dstX += 8;
     }
 }
 
@@ -195,12 +189,7 @@ uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
 }
 
 void clearTextScreen(void) {
-    uint8_t c, d;
-    for (c = 16; c < 24; ++c) {
-        for (d = 0; d < 40; ++d) {
-            drawTextAtWithMarginWithFiltering(d, c, 320, " ", 2, ' ');
-        }
-    }
+    fillRect(8, YRES + 8, XRES_FRAMEBUFFER - 8, YRES_FRAMEBUFFER -8, 0, 0);
 }
 
 void handleSystemEvents(void) {}
@@ -287,7 +276,7 @@ void endFrame(void) {
             uint8_t *line = (unsigned char *) 0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048);
             memcpy(line, buffer + (y * BUFFER_SIZEX), BUFFER_SIZEX);
         }
-        memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
+        clearGraphics();
 
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
         if (roomTransitionAnimationStep) {
@@ -333,17 +322,6 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
             ptr += BUFFER_SIZEX;
         }
     }
-}
-
-uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
-    (void)colour;
-    if (ptr == NULL) {
-        ptr = &buffer[(y * (BUFFER_SIZEX)) + (x / 4)]; /* skip to the line in pattern */
-    }
-
-    *ptr |= (8 >> (x & 3));
-
-    return ptr;
 }
 
 void graphicsPutPointArray(uint8_t *y128Values) {
