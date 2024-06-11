@@ -447,17 +447,23 @@ enum ECommand getInput(void) {
     return kCommandNone;
 }
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
+void drawTextAtWithMarginWithFiltering(const int _x, const int _y, int limitX, const char *text, const uint8_t fg,
+                                       char charToReplaceHifenWith) {
 
     const char *ptr = text;
     uint16_t c = 0;
     uint16_t chary = 0;
     uint16_t x = _x;
+    uint8_t y = _y;
     char cha = *ptr;
 
     for (; cha && y < 25; ++c) {
 
-        if (x >= limitX || x >= (XRES_TEXT)) {
+        if (cha == '-') {
+            cha = charToReplaceHifenWith;
+        }
+
+        if (x >= (limitX / 8) || x >= (XRES_TEXT)) {
             ++y;
             x = _x + 1;
         } else if (cha == '\n') {
@@ -493,7 +499,6 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, 
         cha = *ptr;
     }
 }
-
 
 void startFrame(int x, int y, int width, int height) {
 
@@ -580,7 +585,7 @@ void clearTextScreen(void) {
     int c, d;
     for (c = 16; c < 24; ++c) {
         for (d = 0; d < 40; ++d) {
-            writeStrWithLimit(d, c, " ", 320 / 8, 2, 0);
+            drawTextAtWithMarginWithFiltering(d, c, 320, " ", 2, ' ');
         }
     }
 }
