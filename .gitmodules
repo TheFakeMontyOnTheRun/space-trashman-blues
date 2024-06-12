@@ -7,3 +7,6 @@
 [submodule "cmake-modules"]
 	path = cmake-modules
 	url = https://github.com/bilke/cmake-modules
+[submodule "my_frontend/src/neslib"]
+	path = my_frontend/src/neslib
+	url = https://github.com/TheFakeMontyOnTheRun/neslib

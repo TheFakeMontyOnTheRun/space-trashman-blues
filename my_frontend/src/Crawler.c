@@ -32,6 +32,8 @@ uint8_t roomTransitionAnimationStep = 0;
 #endif
 
 void HUD_refresh(void) {
+    struct Item *item;
+
     if (!needsToRedrawHUD) {
         return;
     }
@@ -47,7 +49,7 @@ void HUD_refresh(void) {
     writeStrWithLimit(1, YRES_TEXT - 7, "In room:", 16, 2, 0);
     writeStrWithLimit(1, YRES_TEXT - 4, "In hand:", 16, 2, 0);
 
-    struct Item *item;
+
 
     /* Display "In room" item */
     if (roomItem != NULL) {
@@ -73,12 +75,14 @@ void HUD_refresh(void) {
 }
 
 enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
-    (void)data;
+
     uint8_t prevX;
     uint8_t prevZ;
     struct WorldPosition *pos;
     uint8_t previousLocation = playerLocation;
     uint8_t newCell = 0;
+
+    (void)data;
 
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
     if (roomTransitionAnimationStep) {
