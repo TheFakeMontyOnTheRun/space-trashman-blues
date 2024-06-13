@@ -42,6 +42,1385 @@ const enum EGameMenuState MainMenu_nextStateNavigation[3] = {
 const uint8_t kMainMenuOptionsCount = 3;
 #endif
 
+#ifndef MONOCHROME_VECTORS
+static const uint8_t logoGraphics[] = {
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        0, 14,
+        0, 14,
+        0, 14,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        0, 14,
+        0, 14,
+        0, 14,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        0, 0,
+        0, 12,
+        0, 12,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        0, 0,
+        0, 12,
+        0, 12,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        0, 13,
+        0, 14,
+        0, 14,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        0, 13,
+        0, 14,
+        0, 14,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        3, 0,
+        0, 0,
+        0, 12,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        3, 0,
+        0, 12,
+        3, 10,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        3, 11,
+        0, 13,
+        0, 14,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        3, 11,
+        0, 14,
+        3, 14,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        3, 4,
+        10, 1,
+        10, 0,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        3, 4,
+        10, 0,
+        3, 0,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        3, 10,
+        10, 5,
+        10, 5,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        3, 10,
+        10, 5,
+        3, 11,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        3, 14,
+        10, 13,
+        10, 3,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        3, 14,
+        10, 3,
+        3, 4,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        10, 1,
+        11, 0,
+        11, 0,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        10, 1,
+        11, 0,
+        10, 0,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        10, 13,
+        11, 13,
+        11, 2,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        10, 13,
+        11, 2,
+        10, 3,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        11, 13,
+        13, 13,
+        13, 2,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        11, 13,
+        13, 2,
+        11, 2,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        16, 1,
+        16, 14,
+        16, 14,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        16, 1,
+        16, 14,
+        16, 14,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        21, 9,
+        16, 1,
+        16, 14,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        21, 9,
+        16, 14,
+        21, 14,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        21, 14,
+        28, 14,
+        28, 0,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        21, 14,
+        28, 0,
+        21, 9,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        28, 14,
+        28, 14,
+        28, 14,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        28, 14,
+        28, 14,
+        28, 0,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        66, 37,
+        65, 50,
+        65, 50,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        66, 37,
+        65, 50,
+        66, 50,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        71, 45,
+        66, 37,
+        66, 50,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        71, 45,
+        66, 50,
+        71, 50,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        71, 50,
+        77, 50,
+        77, 36,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        71, 50,
+        77, 36,
+        71, 45,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        77, 50,
+        78, 50,
+        78, 50,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        77, 50,
+        78, 50,
+        77, 36,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        31, 2,
+        31, 13,
+        31, 13,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        31, 2,
+        31, 13,
+        31, 13,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        33, 3,
+        31, 2,
+        31, 13,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        33, 3,
+        31, 13,
+        33, 12,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        37, 4,
+        33, 3,
+        33, 12,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        37, 4,
+        33, 12,
+        37, 9,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        37, 9,
+        33, 6,
+        33, 6,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        37, 9,
+        33, 6,
+        37, 4,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        37, 9,
+        37, 9,
+        37, 9,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        37, 9,
+        37, 9,
+        37, 9,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        0, 30,
+        1, 17,
+        1, 30,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        0, 30,
+        1, 30,
+        0, 30,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        1, 17,
+        3, 20,
+        3, 29,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        1, 17,
+        3, 29,
+        1, 30,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        3, 20,
+        6, 23,
+        6, 29,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        3, 20,
+        6, 29,
+        3, 26,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        6, 23,
+        6, 24,
+        6, 28,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        6, 23,
+        6, 28,
+        6, 29,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        6, 24,
+        9, 22,
+        9, 25,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        6, 24,
+        9, 25,
+        6, 28,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        9, 22,
+        13, 18,
+        13, 30,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        9, 22,
+        13, 30,
+        9, 30,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        13, 18,
+        13, 31,
+        13, 31,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        13, 18,
+        13, 31,
+        13, 30,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        80, 50,
+        81, 37,
+        81, 49,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        80, 50,
+        81, 49,
+        80, 50,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        81, 37,
+        83, 40,
+        83, 49,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        81, 37,
+        83, 49,
+        81, 49,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        83, 40,
+        86, 43,
+        86, 48,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        83, 40,
+        86, 48,
+        83, 45,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        86, 43,
+        87, 44,
+        87, 48,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        86, 43,
+        87, 48,
+        86, 48,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        87, 44,
+        89, 41,
+        89, 45,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        87, 44,
+        89, 45,
+        87, 48,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        89, 41,
+        93, 38,
+        93, 50,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        89, 41,
+        93, 50,
+        89, 50,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        93, 38,
+        93, 50,
+        93, 50,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        93, 38,
+        93, 50,
+        93, 50,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        8, 47,
+        9, 35,
+        9, 47,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        8, 47,
+        9, 47,
+        8, 47,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        9, 35,
+        12, 38,
+        12, 47,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        9, 35,
+        12, 47,
+        9, 47,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        12, 38,
+        14, 41,
+        14, 46,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        12, 38,
+        14, 46,
+        12, 43,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        14, 41,
+        15, 42,
+        15, 45,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        14, 41,
+        15, 45,
+        14, 46,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        15, 42,
+        18, 39,
+        18, 43,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        15, 42,
+        18, 43,
+        15, 45,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        18, 39,
+        21, 35,
+        21, 48,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        18, 39,
+        21, 48,
+        18, 47,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        21, 35,
+        22, 48,
+        22, 48,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        21, 35,
+        22, 48,
+        21, 48,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        16, 30,
+        16, 19,
+        16, 19,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        16, 30,
+        16, 19,
+        16, 19,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        21, 27,
+        16, 30,
+        16, 19,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        21, 27,
+        16, 19,
+        21, 19,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        21, 19,
+        27, 19,
+        27, 32,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        21, 19,
+        27, 32,
+        21, 27,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        32, 31,
+        31, 17,
+        31, 17,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        32, 31,
+        31, 17,
+        32, 18,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        36, 31,
+        32, 31,
+        32, 18,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        36, 31,
+        32, 18,
+        36, 20,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        41, 32,
+        36, 31,
+        36, 20,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        41, 32,
+        36, 20,
+        41, 22,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        41, 23,
+        36, 24,
+        36, 24,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        41, 23,
+        36, 24,
+        41, 32,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        41, 22,
+        42, 22,
+        42, 22,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        41, 22,
+        42, 22,
+        41, 23,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        46, 48,
+        45, 34,
+        45, 34,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        46, 48,
+        45, 34,
+        46, 35,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        50, 48,
+        46, 48,
+        46, 35,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        50, 48,
+        46, 35,
+        50, 37,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        55, 49,
+        50, 48,
+        50, 37,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        55, 49,
+        50, 37,
+        55, 39,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        55, 40,
+        50, 42,
+        50, 42,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        55, 40,
+        50, 42,
+        55, 49,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        55, 39,
+        57, 39,
+        57, 39,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        55, 39,
+        57, 39,
+        55, 40,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        44, 32,
+        43, 17,
+        43, 17,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        44, 32,
+        43, 17,
+        44, 17,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        48, 32,
+        44, 32,
+        44, 17,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        48, 32,
+        44, 17,
+        48, 17,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        48, 26,
+        49, 27,
+        49, 32,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        48, 26,
+        49, 32,
+        48, 32,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        48, 17,
+        49, 17,
+        49, 26,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        48, 17,
+        49, 26,
+        48, 26,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        49, 27,
+        51, 32,
+        51, 32,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        49, 27,
+        51, 32,
+        49, 32,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        49, 17,
+        51, 18,
+        51, 20,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        49, 17,
+        51, 20,
+        49, 22,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        49, 22,
+        51, 24,
+        51, 25,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        49, 22,
+        51, 25,
+        49, 26,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        51, 18,
+        52, 18,
+        52, 19,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        51, 18,
+        52, 19,
+        51, 20,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        51, 24,
+        52, 24,
+        52, 24,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        51, 24,
+        52, 24,
+        51, 25,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        52, 18,
+        54, 18,
+        54, 18,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        52, 18,
+        54, 18,
+        52, 19,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        34, 50,
+        34, 35,
+        34, 35,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        34, 50,
+        34, 35,
+        34, 35,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        39, 50,
+        34, 50,
+        34, 35,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        39, 50,
+        34, 35,
+        39, 35,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        39, 44,
+        39, 45,
+        39, 50,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        39, 44,
+        39, 50,
+        39, 50,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        39, 35,
+        39, 35,
+        39, 44,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        39, 35,
+        39, 44,
+        39, 44,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        39, 45,
+        42, 50,
+        42, 50,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        39, 45,
+        42, 50,
+        39, 50,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        39, 35,
+        42, 35,
+        42, 37,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        39, 35,
+        42, 37,
+        39, 40,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        39, 40,
+        42, 42,
+        42, 43,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        39, 40,
+        42, 43,
+        39, 44,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        42, 35,
+        43, 35,
+        43, 37,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        42, 35,
+        43, 37,
+        42, 37,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        42, 42,
+        43, 42,
+        43, 42,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        42, 42,
+        43, 42,
+        42, 43,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        43, 35,
+        45, 35,
+        45, 35,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        43, 35,
+        45, 35,
+        43, 37,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        3, 35,
+        0, 46,
+        0, 46,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        3, 35,
+        0, 46,
+        3, 35,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        4, 47,
+        1, 46,
+        1, 46,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        4, 47,
+        1, 46,
+        4, 34,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        8, 47,
+        4, 47,
+        4, 34,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        8, 47,
+        4, 34,
+        8, 47,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        60, 50,
+        57, 49,
+        57, 49,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        60, 50,
+        57, 49,
+        60, 37,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        64, 50,
+        60, 50,
+        60, 37,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        64, 50,
+        60, 37,
+        64, 50,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        25, 46,
+        24, 35,
+        24, 35,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        25, 46,
+        24, 35,
+        25, 35,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        27, 42,
+        25, 46,
+        25, 35,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        27, 42,
+        25, 35,
+        27, 36,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        27, 36,
+        33, 40,
+        33, 40,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        27, 36,
+        33, 40,
+        27, 42,
+        0};
+
+
+
+#else
+static const uint8_t logoGraphics[] = {
+        8,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        11, 0,
+        0, 0,
+        0, 12,
+        10, 5,
+        0, 14,
+        13, 13,
+        13, 2,
+        3, 4,
+        5,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        16, 1,
+        16, 14,
+        28, 14,
+        28, 0,
+        21, 9,
+        5,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        66, 37,
+        65, 50,
+        78, 50,
+        77, 36,
+        71, 45,
+        5,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        31, 2,
+        31, 13,
+        37, 9,
+        33, 6,
+        37, 4,
+        10,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        1, 17,
+        6, 24,
+        13, 18,
+        13, 31,
+        9, 30,
+        9, 25,
+        6, 29,
+        3, 26,
+        3, 29,
+        0, 30,
+        10,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        81, 37,
+        87, 44,
+        93, 38,
+        93, 50,
+        89, 50,
+        89, 45,
+        86, 48,
+        83, 45,
+        83, 49,
+        80, 50,
+        10,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        9, 35,
+        15, 42,
+        21, 35,
+        22, 48,
+        18, 47,
+        18, 43,
+        14, 46,
+        12, 43,
+        12, 47,
+        8, 47,
+        5,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        16, 30,
+        16, 19,
+        27, 19,
+        27, 32,
+        21, 27,
+        5,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        32, 31,
+        31, 17,
+        42, 22,
+        36, 24,
+        41, 32,
+        5,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        46, 48,
+        45, 34,
+        57, 39,
+        50, 42,
+        55, 49,
+        7,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        51, 32,
+        44, 32,
+        43, 17,
+        54, 18,
+        49, 22,
+        52, 24,
+        48, 26,
+        7,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        42, 50,
+        34, 50,
+        34, 35,
+        45, 35,
+        39, 40,
+        43, 42,
+        39, 44,
+        2,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        0, 46,
+        3, 35,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        1, 46,
+        4, 34,
+        8, 47,
+        3,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        57, 49,
+        60, 37,
+        64, 50,
+        4,
+#ifndef MONOCHROME_VECTORS
+        128, 128, 0,
+#endif
+        25, 46,
+        24, 35,
+        33, 40,
+        27, 42,
+        0};
+
+
+
+
+#endif
+
+
+
 static const uint8_t splashGraphics[] = {
 #ifdef MONOCHROME_VECTORS
         5,
@@ -2106,7 +3485,8 @@ void MainMenu_repaintCallback(void) {
 #ifndef MONOCHROME_VECTORS
         fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF00FF00), 0);
 #endif
-        drawGraphic(splashGraphics);
+        drawGraphic(0, 0, splashGraphics);
+        drawGraphic(XRES_FRAMEBUFFER / 2, 0, logoGraphics);
         playSound(MAIN_MENU_THEME);
     }
 
@@ -2115,7 +3495,7 @@ void MainMenu_repaintCallback(void) {
             (YRES_FRAMEBUFFER / 8) - 4 - kMainMenuOptionsCount,
             9 + 2,
             kMainMenuOptionsCount + 2,
-            "Episode 0",
+            "Derelict",
             MainMenu_options,
             kMainMenuOptionsCount,
             cursorPosition);

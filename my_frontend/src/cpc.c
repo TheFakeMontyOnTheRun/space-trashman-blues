@@ -88,6 +88,7 @@ void initHW(int argc, char **argv) {
     initAY38910();
     initKeyboardUI();
     needsToRedrawVisibleMeshes = 0;
+    waitForKey = 0;
 }
 
 void put_sprite_8(uint16_t x, uint8_t y, uint8_t *sprite, uint8_t colour) {

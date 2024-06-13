@@ -25,7 +25,7 @@ drawWindowWithOptions(const uint8_t x,
                       const uint8_t optionsCount,
                       const uint8_t selectedOption);
 
-void drawGraphic(const uint8_t *graphic);
+void drawGraphic(uint16_t x, uint8_t  y, const uint8_t *graphic);
 
 void drawTextWindow(const uint8_t x, const uint8_t y, const uint8_t dx, const uint8_t dy, const char *title,
                     const char *content);
