@@ -119,6 +119,12 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
 
         case kCommandFire3:
             pickItem();
+
+            if (playerLocation != previousLocation) {
+                redrawMap = needsToRedrawHUD = needsToRedrawVisibleMeshes = 1;
+                initMap();
+            }
+
             break;
 
         case kCommandFire4:

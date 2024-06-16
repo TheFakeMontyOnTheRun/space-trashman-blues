@@ -356,10 +356,14 @@ void moveBy(uint8_t direction) {
         playerLocation = room->connections[direction];
         room = &rooms[playerLocation];
 
-        for (c = 0; c < 6; ++c) {
-            if (room->connections[c] == previousLocation) {
-                direction = c;
+        if (direction < 4) {
+            for (c = 0; c < 6; ++c) {
+                if (room->connections[c] == previousLocation) {
+                    direction = c;
+                }
             }
+        } else {
+            return;
         }
 
         switch (direction) {
