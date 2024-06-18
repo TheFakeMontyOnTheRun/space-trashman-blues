@@ -1453,7 +1453,7 @@ static const uint8_t splashGraphics[] = {
 42, 57,
 4,
 #ifndef MONOCHROME_VECTORS
-0, 0, 0,
+68, 120, 33,
 #endif
 42, 57,
 39, 75,
@@ -1477,13 +1477,13 @@ static const uint8_t splashGraphics[] = {
 46, 35,
 63, 37,
 81, 38,
-88, 35,
-88, 21,
+87, 35,
+87, 21,
 49, 18,
 46, 35,
 5,
 #ifndef MONOCHROME_VECTORS
-0, 0, 0,
+108, 103, 83,
 #endif
 49, 18,
 46, 35,
@@ -1496,8 +1496,8 @@ static const uint8_t splashGraphics[] = {
 #endif
 48, 18,
 73, 22,
-88, 21,
-88, 1,
+87, 21,
+87, 1,
 77, 1,
 52, 15,
 7,
@@ -1539,11 +1539,10 @@ static const uint8_t splashGraphics[] = {
 56, 124,
 42, 123,
 27, 98,
-5,
+4,
 #ifndef MONOCHROME_VECTORS
 205, 222, 135,
 #endif
-1, 108,
 25, 106,
 36, 125,
 1, 125,
@@ -1557,17 +1556,13 @@ static const uint8_t splashGraphics[] = {
 61, 53,
 45, 53,
 46, 47,
-8,
+4,
 #ifndef MONOCHROME_VECTORS
 147, 172, 147,
 #endif
 59, 39,
-59, 39,
-88, 42,
-88, 42,
-88, 36,
-88, 36,
-59, 39,
+87, 41,
+87, 36,
 59, 39,
 8,
 #ifndef MONOCHROME_VECTORS
@@ -1583,18 +1578,18 @@ static const uint8_t splashGraphics[] = {
 59, 94,
 7,
 #ifndef MONOCHROME_VECTORS
-0, 0, 218639482,
+0, 0, 111017082,
 #endif
 27, 98,
 36, 98,
 49, 18,
-78, 1,
+77, 1,
 68, 1,
 43, 15,
 27, 98,
 5,
 #ifndef MONOCHROME_VECTORS
-0, 0, 218639482,
+0, 0, 111017082,
 #endif
 1, 1,
 1, 7,
@@ -1603,14 +1598,14 @@ static const uint8_t splashGraphics[] = {
 68, 1,
 3,
 #ifndef MONOCHROME_VECTORS
-0, 0, 218639482,
+0, 0, 111017082,
 #endif
 43, 17,
-46, 1,
+45, 1,
 68, 1,
 4,
 #ifndef MONOCHROME_VECTORS
-0, 0, 218639482,
+0, 0, 111017082,
 #endif
 49, 18,
 43, 17,
@@ -1618,11 +1613,11 @@ static const uint8_t splashGraphics[] = {
 78, 1,
 4,
 #ifndef MONOCHROME_VECTORS
-36, 34, 28,
+108, 93, 83,
 #endif
 43, 17,
 1, 9,
-0, 1,
+1, 1,
 46, 1,
 6,
 #ifndef MONOCHROME_VECTORS
@@ -1643,17 +1638,16 @@ static const uint8_t splashGraphics[] = {
 87, 107,
 87, 125,
 46, 125,
-8,
+7,
 #ifndef MONOCHROME_VECTORS
 170, 0, 0,
 #endif
-87, 32,
 71, 33,
 55, 36,
 51, 57,
 51, 86,
 62, 98,
-88, 92,
+87, 92,
 87, 32,
 6,
 #ifndef MONOCHROME_VECTORS
@@ -1719,25 +1713,23 @@ static const uint8_t splashGraphics[] = {
 70, 125,
 3,
 #ifndef MONOCHROME_VECTORS
-0, 0, 218639482,
+0, 0, 111017082,
 #endif
 62, 95,
 58, 67,
 53, 84,
 3,
 #ifndef MONOCHROME_VECTORS
-0, 0, 218639482,
+0, 0, 111017082,
 #endif
 53, 84,
 58, 67,
 53, 59,
-5,
+3,
 #ifndef MONOCHROME_VECTORS
 43, 0, 0,
 #endif
 49, 99,
-49, 99,
-87, 101,
 87, 101,
 87, 98,
 3,
@@ -1762,6 +1754,8 @@ static const uint8_t splashGraphics[] = {
 85, 61,
 85, 88,
 0};
+
+
 #else
         3,
 #ifndef MONOCHROME_VECTORS
@@ -1905,28 +1899,28 @@ static const uint8_t splashGraphics[] = {
         81, 124,
         3,
 #ifndef MONOCHROME_VECTORS
-        0, 0, 0,
+        68, 120, 33,
 #endif
         42, 57,
         39, 75,
         39, 75,
         3,
 #ifndef MONOCHROME_VECTORS
-        0, 0, 0,
+        68, 120, 33,
 #endif
         42, 57,
         39, 75,
         42, 73,
         3,
 #ifndef MONOCHROME_VECTORS
-        0, 0, 0,
+        68, 120, 33,
 #endif
         42, 73,
         71, 58,
         71, 58,
         3,
 #ifndef MONOCHROME_VECTORS
-        0, 0, 0,
+        68, 120, 33,
 #endif
         42, 73,
         71, 58,
@@ -2076,67 +2070,67 @@ static const uint8_t splashGraphics[] = {
         183, 200, 183,
 #endif
         81, 38,
-        88, 35,
-        88, 21,
+        87, 35,
+        87, 21,
         3,
 #ifndef MONOCHROME_VECTORS
         183, 200, 183,
 #endif
         81, 38,
-        88, 21,
+        87, 21,
         81, 21,
         3,
 #ifndef MONOCHROME_VECTORS
         183, 200, 183,
 #endif
-        88, 35,
-        88, 21,
-        88, 21,
+        87, 35,
+        87, 35,
+        87, 35,
         3,
 #ifndef MONOCHROME_VECTORS
         183, 200, 183,
 #endif
-        88, 35,
-        88, 21,
-        88, 21,
+        87, 35,
+        87, 35,
+        87, 21,
         3,
 #ifndef MONOCHROME_VECTORS
-        0, 0, 0,
+        108, 103, 83,
 #endif
         49, 18,
         46, 35,
         46, 35,
         3,
 #ifndef MONOCHROME_VECTORS
-        0, 0, 0,
+        108, 103, 83,
 #endif
         49, 18,
         46, 35,
         49, 35,
         3,
 #ifndef MONOCHROME_VECTORS
-        0, 0, 0,
+        108, 103, 83,
 #endif
         49, 35,
         72, 38,
         72, 22,
         3,
 #ifndef MONOCHROME_VECTORS
-        0, 0, 0,
+        108, 103, 83,
 #endif
         49, 35,
         72, 22,
         49, 18,
         3,
 #ifndef MONOCHROME_VECTORS
-        0, 0, 0,
+        108, 103, 83,
 #endif
         72, 38,
         73, 22,
         73, 22,
         3,
 #ifndef MONOCHROME_VECTORS
-        0, 0, 0,
+        108, 103, 83,
 #endif
         72, 38,
         73, 22,
@@ -2188,29 +2182,29 @@ static const uint8_t splashGraphics[] = {
         138, 145, 111,
 #endif
         77, 22,
-        88, 21,
-        88, 1,
+        87, 21,
+        87, 1,
         3,
 #ifndef MONOCHROME_VECTORS
         138, 145, 111,
 #endif
         77, 22,
-        88, 1,
+        87, 1,
         77, 1,
         3,
 #ifndef MONOCHROME_VECTORS
         138, 145, 111,
 #endif
-        88, 21,
-        88, 21,
-        88, 21,
+        87, 21,
+        87, 1,
+        87, 1,
         3,
 #ifndef MONOCHROME_VECTORS
         138, 145, 111,
 #endif
-        88, 21,
-        88, 21,
-        88, 1,
+        87, 21,
+        87, 1,
+        87, 1,
         3,
 #ifndef MONOCHROME_VECTORS
         196, 200, 183,
@@ -2468,20 +2462,6 @@ static const uint8_t splashGraphics[] = {
         205, 222, 135,
 #endif
         1, 108,
-        1, 108,
-        1, 125,
-        3,
-#ifndef MONOCHROME_VECTORS
-        205, 222, 135,
-#endif
-        1, 108,
-        1, 125,
-        1, 125,
-        3,
-#ifndef MONOCHROME_VECTORS
-        205, 222, 135,
-#endif
-        1, 108,
         25, 106,
         25, 125,
         3,
@@ -2552,29 +2532,29 @@ static const uint8_t splashGraphics[] = {
         147, 172, 147,
 #endif
         59, 39,
-        88, 42,
-        88, 36,
+        87, 41,
+        87, 36,
         3,
 #ifndef MONOCHROME_VECTORS
         147, 172, 147,
 #endif
         59, 39,
-        88, 36,
+        87, 36,
         59, 39,
         3,
 #ifndef MONOCHROME_VECTORS
         147, 172, 147,
 #endif
-        88, 42,
-        88, 36,
-        88, 36,
+        87, 41,
+        87, 41,
+        87, 41,
         3,
 #ifndef MONOCHROME_VECTORS
         147, 172, 147,
 #endif
-        88, 42,
-        88, 36,
-        88, 36,
+        87, 41,
+        87, 41,
+        87, 36,
         3,
 #ifndef MONOCHROME_VECTORS
         170, 212, 0,
@@ -2664,14 +2644,14 @@ static const uint8_t splashGraphics[] = {
         227, 226, 219,
 #endif
         68, 7,
-        78, 1,
-        78, 1,
+        77, 1,
+        77, 1,
         3,
 #ifndef MONOCHROME_VECTORS
         227, 226, 219,
 #endif
         68, 7,
-        78, 1,
+        77, 1,
         68, 1,
         3,
 #ifndef MONOCHROME_VECTORS
@@ -2686,20 +2666,20 @@ static const uint8_t splashGraphics[] = {
 #endif
         1, 1,
         1, 7,
-        1, 21,
+        1, 11,
         3,
 #ifndef MONOCHROME_VECTORS
         145, 138, 111,
 #endif
         1, 1,
         1, 1,
-        1, 21,
+        1, 11,
         3,
 #ifndef MONOCHROME_VECTORS
         145, 138, 111,
 #endif
         1, 1,
-        1, 21,
+        1, 11,
         1, 21,
         3,
 #ifndef MONOCHROME_VECTORS
@@ -2733,29 +2713,29 @@ static const uint8_t splashGraphics[] = {
 #ifndef MONOCHROME_VECTORS
         72, 62, 55,
 #endif
-        46, 15,
+        45, 15,
         43, 17,
         43, 17,
         3,
 #ifndef MONOCHROME_VECTORS
         72, 62, 55,
 #endif
-        46, 15,
+        45, 15,
         43, 17,
-        46, 1,
-        3,
-#ifndef MONOCHROME_VECTORS
-        72, 62, 55,
-#endif
-        68, 1,
-        46, 15,
-        46, 1,
+        45, 1,
         3,
 #ifndef MONOCHROME_VECTORS
         72, 62, 55,
 #endif
         68, 1,
-        46, 1,
+        45, 15,
+        45, 1,
+        3,
+#ifndef MONOCHROME_VECTORS
+        72, 62, 55,
+#endif
+        68, 1,
+        45, 1,
         68, 1,
         3,
 #ifndef MONOCHROME_VECTORS
@@ -2801,42 +2781,42 @@ static const uint8_t splashGraphics[] = {
         78, 1,
         3,
 #ifndef MONOCHROME_VECTORS
-        36, 34, 28,
+        108, 93, 83,
 #endif
         1, 9,
-        0, 1,
-        0, 1,
+        1, 9,
+        1, 9,
         3,
 #ifndef MONOCHROME_VECTORS
-        36, 34, 28,
+        108, 93, 83,
 #endif
         1, 9,
-        0, 1,
+        1, 9,
         1, 1,
         3,
 #ifndef MONOCHROME_VECTORS
-        36, 34, 28,
+        108, 93, 83,
 #endif
         43, 17,
         1, 9,
         1, 1,
         3,
 #ifndef MONOCHROME_VECTORS
-        36, 34, 28,
+        108, 93, 83,
 #endif
         43, 17,
         1, 1,
         43, 1,
         3,
 #ifndef MONOCHROME_VECTORS
-        36, 34, 28,
+        108, 93, 83,
 #endif
         46, 1,
         43, 17,
         43, 1,
         3,
 #ifndef MONOCHROME_VECTORS
-        36, 34, 28,
+        108, 93, 83,
 #endif
         46, 1,
         43, 1,
@@ -3042,14 +3022,14 @@ static const uint8_t splashGraphics[] = {
         170, 0, 0,
 #endif
         87, 92,
-        88, 92,
-        88, 92,
+        87, 92,
+        87, 92,
         3,
 #ifndef MONOCHROME_VECTORS
         170, 0, 0,
 #endif
         87, 92,
-        88, 92,
+        87, 92,
         87, 32,
         3,
 #ifndef MONOCHROME_VECTORS
@@ -3377,14 +3357,14 @@ static const uint8_t splashGraphics[] = {
 #ifndef MONOCHROME_VECTORS
         43, 0, 0,
 #endif
-        87, 98,
-        87, 98,
+        87, 101,
+        87, 101,
         87, 101,
         3,
 #ifndef MONOCHROME_VECTORS
         43, 0, 0,
 #endif
-        87, 98,
+        87, 101,
         87, 101,
         87, 98,
         3,
