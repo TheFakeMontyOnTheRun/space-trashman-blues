@@ -213,7 +213,20 @@ enum ECommand getInput(void) {
 
     performAction();
 
-    switch (getch()) {
+    uint8_t toReturn = getch();
+
+    if (waitForKey) {
+        if (toReturn == '2') {
+            waitForKey = 0;
+            firstFrameOnCurrentState = 1;
+            needsToRedrawVisibleMeshes = 1;
+            return kCommandNone;
+        }
+
+        return kCommandNone;
+    }
+
+    switch (toReturn) {
         case 30:
         case 'w':
             return kCommandUp;
@@ -230,17 +243,7 @@ enum ECommand getInput(void) {
             return kCommandStrafeLeft;
         case 'x':
             return kCommandStrafeRight;
-        case 'm':
-            drawMap();
-            return '.';
         case '1':
-            if (waitForKey) {
-                waitForKey = 0;
-                firstFrameOnCurrentState = 1;
-                needsToRedrawVisibleMeshes = 1;
-                return kCommandNone;
-            }
-
             return kCommandFire1;
         case '2':
             return kCommandFire2;

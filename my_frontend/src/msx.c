@@ -39,6 +39,16 @@ enum ECommand getInput(void) {
 
     performAction();
 
+    if (waitForKey) {
+        if (input == '2') {
+            waitForKey = 0;
+            firstFrameOnCurrentState = 1;
+            needsToRedrawVisibleMeshes = 1;
+            return kCommandNone;
+        }
+        return kCommandNone;
+    }
+
     switch (input) {
         case 30:
             return kCommandUp;
@@ -48,17 +58,11 @@ enum ECommand getInput(void) {
             return kCommandLeft;
         case 28:
             return kCommandRight;
-        case 'c':
+        case 'z':
             return kCommandStrafeLeft;
-        case 'v':
+        case 'x':
             return kCommandStrafeRight;
         case '1':
-            if (waitForKey) {
-                waitForKey = 0;
-                firstFrameOnCurrentState = 1;
-                needsToRedrawVisibleMeshes = 1;
-                return kCommandNone;
-            }
             return kCommandFire1;
         case '2':
             return kCommandFire2;
@@ -70,7 +74,6 @@ enum ECommand getInput(void) {
             return kCommandFire5;
         case '6':
             return kCommandFire6;
-
     }
     return input;
 }

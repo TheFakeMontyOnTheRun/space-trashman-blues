@@ -209,12 +209,6 @@ enum ECommand getInput(void) {
             switch (event.key.keysym.sym) {
                 case SDLK_RETURN:
                 case SDLK_1:
-                    if (waitForKey) {
-                        waitForKey = 0;
-                        firstFrameOnCurrentState = 1;
-                        needsToRedrawVisibleMeshes = 1;
-                        return kCommandNone;
-                    }
                     return kCommandFire1;
 
                 case SDLK_ESCAPE:
@@ -225,6 +219,12 @@ enum ECommand getInput(void) {
 
                 case SDLK_KP_7:
                 case SDLK_2:
+                    if (waitForKey) {
+                        waitForKey = 0;
+                        firstFrameOnCurrentState = 1;
+                        needsToRedrawVisibleMeshes = 1;
+                        return kCommandNone;
+                    }
                     return kCommandFire2;
 
                 case SDLK_KP_8:

@@ -53,7 +53,7 @@ void drawTextAtWithMargin(const int x, const int y, int margin, const char *text
 
 void showMessage(const char *message) {
     clearTextScreen();
-    drawTextWindow(1, 16, (XRES_FRAMEBUFFER / 8) - 3, (YRES_FRAMEBUFFER / 8) - 18, "", message);
+    drawTextWindow(1, 16, (XRES_FRAMEBUFFER / 8) - 3, (YRES_FRAMEBUFFER / 8) - 18, "Press 2 to continue", message);
     waitForKey = 1;
 }
 
