@@ -50,7 +50,7 @@ void pickItem(void) {
         struct Item *itemToPick = getItem(roomItem->item);
         if (itemToPick != NULL) {
 
-            if (!strcmp(itemToPick->name, "digital-safe")) {
+            if (!strcmp(itemToPick->name, "computer-terminal")) {
 
 #ifdef SUPPORTS_HACKING_MINIGAME
                 enterState(kHackingGame);
