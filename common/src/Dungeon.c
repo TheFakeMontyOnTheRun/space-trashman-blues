@@ -46,7 +46,7 @@ uint8_t isPositionAllowed(int8_t x, int8_t y) {
            && collisionMap[LEVEL_MAP(x, y)] != '1';
 }
 
-struct GameSnapshot dungeon_tick(const enum ECommand command) {
+struct GameSnapshot dungeonTick(const enum ECommand command) {
     int currentPlayerRoom;
     int cell;
     struct WorldPosition worldPos;

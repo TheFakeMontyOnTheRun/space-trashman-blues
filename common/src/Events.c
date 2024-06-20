@@ -66,7 +66,7 @@ void onLevelLoaded(int index) {
 
 void tickMission(enum ECommand cmd) {
 
-    struct GameSnapshot snapshot = dungeon_tick(cmd);
+    struct GameSnapshot snapshot = dungeonTick(cmd);
 
     x = snapshot.camera_x;
     z = snapshot.camera_z;
