@@ -1045,7 +1045,7 @@ void render(const long ms) {
             size_t len = strlen(focusItemName);
             int lines = 1 + (len / 27);
             fillRect(0, YRES - (8 * lines), XRES, lines * 8, 0, 1);
-            drawTextAtWithMarginWithFiltering(1, 26 - lines, XRES, focusItemName, 255, ' ');
+            drawTextAtWithMarginWithFiltering(1, (YRES / 8) - lines, XRES, focusItemName, 255, ' ');
         }
 
 

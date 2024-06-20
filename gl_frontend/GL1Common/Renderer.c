@@ -1003,7 +1003,7 @@ void render(const long ms) {
             size_t len = strlen(focusItemName);
             int lines = 1 + (len / 27);
             fillRect(0, YRES - (8 * lines), XRES, lines * 8, getPaletteEntry(0xFF000000), TRUE);
-            drawTextAtWithMarginWithFiltering(1, 26 - lines, XRES, focusItemName, getPaletteEntry(0xFFFFFFFF), ' ');
+            drawTextAtWithMarginWithFiltering(1, (YRES / 8) - lines, XRES, focusItemName, getPaletteEntry(0xFFFFFFFF), ' ');
         }
 
 
