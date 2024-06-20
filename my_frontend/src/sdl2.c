@@ -240,7 +240,7 @@ enum ECommand getInput(void) {
                     return kCommandFire5;
 
                 case SDLK_KP_9:
-                case SDLK_9:
+                case SDLK_6:
                     return kCommandFire6;
 
                 case SDLK_s:
