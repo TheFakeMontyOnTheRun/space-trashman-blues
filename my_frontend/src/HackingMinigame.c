@@ -49,44 +49,44 @@ void HackingScreen_repaintCallback(void) {
         drawTextAt((12 * 0), 11, " CPU0 ", getPaletteEntry(0xFF999999));
         drawTextAt((12 * 1), 11, " CPU1 ", getPaletteEntry(0xFF999999));
         drawTextAt((12 * 2), 11, " CPU2 ", getPaletteEntry(0xFF999999));
-    }
 
-    drawTextAt((12 * cursorPosition), 11, ">", getPaletteEntry(0xFF999999));
-    drawTextAt((12 * cursorPosition) + 5, 11, "<", getPaletteEntry(0xFF999999));
+        drawTextAt((12 * cursorPosition), 11, ">", getPaletteEntry(0xFF999999));
+        drawTextAt((12 * cursorPosition) + 5, 11, "<", getPaletteEntry(0xFF999999));
 
-    drawLine(0, 80, XRES_FRAMEBUFFER - 1, 80, 2);
+        drawLine(0, 80, XRES_FRAMEBUFFER - 1, 80, 2);
 
-    for (pin = 0; pin < 3; ++pin) {
-        uint8_t disk;
+        for (pin = 0; pin < 3; ++pin) {
+            uint8_t disk;
 
-        if (pin != 0) {
-            uint8_t pinX = (10 * (pin) ) * 8;
-            drawLine(pinX, 40, pinX, 80, 2);
-        }
+            if (pin != 0) {
+                uint8_t pinX = (10 * (pin) ) * 8;
+                drawLine(pinX, 40, pinX, 80, 2);
+            }
 
-        for (disk = 0; disk < 5; ++disk) {
+            for (disk = 0; disk < 5; ++disk) {
 
-            uint8_t diskIndex = getPositionForPin(pin, disk);
+                uint8_t diskIndex = getPositionForPin(pin, disk);
 
-            const char *funcName = (disk >= getDisksForPin(pin)) ? NULL
-                                                           : functionNames[diskIndex];
+                const char *funcName = (disk >= getDisksForPin(pin)) ? NULL
+                                                                     : functionNames[diskIndex];
 
-            if (funcName) {
-                drawTextAt(
-                        10 * (pin) + (pin == 0 ? 0 : 1), 4 + (4 - disk),
-                        funcName, getPaletteEntry(0xFF999999));
+                if (funcName) {
+                    drawTextAt(
+                            10 * (pin) + (pin == 0 ? 0 : 1), 4 + (4 - disk),
+                            funcName, getPaletteEntry(0xFF999999));
+                }
             }
         }
-    }
 
-    drawTextAt(1, 2, "Pointer:", getPaletteEntry(0xFF999999));
+        drawTextAt(1, 2, "Pointer:", getPaletteEntry(0xFF999999));
 
-    holdingDisk = getHoldingDisk();
+        holdingDisk = getHoldingDisk();
 
-    if (holdingDisk != 0xFF) {
-        drawTextAt(19, 2, functionNames[holdingDisk], getPaletteEntry(0xFF999999));
-    } else {
-        drawTextAt(19, 2, "NULL", getPaletteEntry(0xFF999999));
+        if (holdingDisk != 0xFF) {
+            drawTextAt(19, 2, functionNames[holdingDisk], getPaletteEntry(0xFF999999));
+        } else {
+            drawTextAt(19, 2, "NULL", getPaletteEntry(0xFF999999));
+        }
     }
 }
 
