@@ -24,7 +24,7 @@ uint8_t redrawMap;
 
 uint8_t needsToRedrawHUD;
 
-void drawGraphic(uint16_t x, uint8_t  y, const uint8_t *graphic) {
+void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t *graphic) {
     const uint8_t *ptr = graphic;
 
     while (*ptr) {
@@ -36,9 +36,17 @@ void drawGraphic(uint16_t x, uint8_t  y, const uint8_t *graphic) {
         const uint8_t *shape = ptr;
 
         for (c = 0; c < npoints - 1; ++c) {
-            drawLine(x + shape[2 * c], y + shape[(2 * c) + 1], x + shape[(2 * c) + 2], y + shape[(2 * c) + 3], 2);
+	  drawLine(x + ((dx * shape[(2 * c) + 0]) / 128),
+		   y + ((dy * shape[(2 * c) + 1]) / 128),
+		   x + ((dx * shape[(2 * c) + 2]) / 128),
+		   y + ((dy * shape[(2 * c) + 3]) / 128),
+		   2);
         }
-        drawLine(x + shape[2 * npoints - 2], y + shape[2 * npoints - 1], x + shape[0], y + shape[1], 2);
+        drawLine(x + ((dx * shape[2 * npoints - 2]) / 128),
+		 y + ((dy * shape[2 * npoints - 1]) / 128),
+		 x + ((dx * shape[0]) / 128),
+		 y + ((dy * shape[1]) / 128),
+		 2);
         ptr += 2 * npoints;
     }
 }

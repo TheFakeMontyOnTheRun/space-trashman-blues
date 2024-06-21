@@ -232,7 +232,7 @@ enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t opt
     return kResumeCurrentState;
 }
 
-void drawGraphic(uint16_t x, uint8_t  y, const uint8_t *graphic) {
+void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t *graphic) {
     const uint8_t *ptr = graphic;
     int buffer[6];
 
@@ -248,43 +248,32 @@ void drawGraphic(uint16_t x, uint8_t  y, const uint8_t *graphic) {
         int centerY = 0;
 
         if (npoints > 3) {
-            for (c = 0; c < npoints; ++c) {
-                centerX += shape[2 * c];
-                centerY += shape[(2 * c) + 1];
-            }
-
-            centerX /= npoints;
-            centerY /= npoints;
-
-            buffer[4] = x + centerX;
-            buffer[5] = y + centerY;
-
-            for (c = 0; c < npoints - 1; ++c) {
-
-                buffer[0] = x + shape[(2 * c) + 0];
-                buffer[1] = y + shape[(2 * c) + 1];
-                buffer[2] = x + shape[(2 * c) + 2];
-                buffer[3] = y + shape[(2 * c) + 3];
-
-                fillTriangle(&buffer[0], colour);
-            }
             ptr += 2 * npoints;
         } else if (npoints == 3) {
-            buffer[0] = x + shape[0];
-            buffer[1] = y + shape[1];
-            buffer[2] = x + shape[2];
-            buffer[3] = y + shape[3];
-            buffer[4] = x + shape[4];
-            buffer[5] = y + shape[5];
+  	  buffer[0] = x + ((dx * shape[0]) / 128);
+	  buffer[1] = y + ((dy * shape[1]) / 128);
+	  buffer[2] = x + ((dx * shape[2]) / 128);
+	  buffer[3] = y + ((dy * shape[3]) / 128);
+	  buffer[4] = x + ((dx * shape[4]) / 128);
+	  buffer[5] = y + ((dy * shape[5]) / 128);
 
             fillTriangle(&buffer[0], colour);
 
             ptr += 2 * npoints;
         } else if (npoints == 2) {
-            drawLine(x + shape[0], y + shape[1], x + shape[2], y + shape[3], colour);
+	  drawLine(x + ((dx * shape[0]) / 128),
+		   y + ((dy * shape[1]) / 128),
+		   x + ((dx * shape[2]) / 128),
+		   y + ((dy * shape[3]) / 128),
+		     colour);
             ptr += 2 * npoints;
         } else if (npoints == 1) {
-            fillRect(x + shape[0], y + shape[1], 1, 1, colour, FALSE);
+	  fillRect(x + ((dx * shape[0]) / 128),
+		   y + ((dy * shape[1]) / 128),
+		   1,
+		   1,
+		   colour,
+		   FALSE);
             ptr += 2 * npoints;
         }
     }

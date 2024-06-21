@@ -3465,8 +3465,8 @@ void MainMenu_repaintCallback(void) {
 #ifndef MONOCHROME_VECTORS
         fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF00FF00), 0);
 #endif
-        drawGraphic(0, 0, splashGraphics);
-        drawGraphic(XRES_FRAMEBUFFER / 2, 0, logoGraphics);
+        drawGraphic(0, 0, YRES_FRAMEBUFFER, YRES_FRAMEBUFFER, splashGraphics);
+        drawGraphic(XRES_FRAMEBUFFER / 2, 0, 160, 160, logoGraphics);
         playSound(MAIN_MENU_THEME);
     }
 
