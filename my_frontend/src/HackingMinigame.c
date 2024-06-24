@@ -46,17 +46,16 @@ void HackingScreen_repaintCallback(void) {
         clearScreen();
         needsToRedrawVisibleMeshes = 0;
         drawTextAt(1, 1, "Stack trace:", getPaletteEntry(0xFF999999));
-        drawTextAt((12 * 0), 11, " CPU0 ", getPaletteEntry(0xFF999999));
-        drawTextAt((12 * 1), 11, " CPU1 ", getPaletteEntry(0xFF999999));
-        drawTextAt((12 * 2), 11, " CPU2 ", getPaletteEntry(0xFF999999));
 
-        drawTextAt((12 * cursorPosition), 11, ">", getPaletteEntry(0xFF999999));
-        drawTextAt((12 * cursorPosition) + 5, 11, "<", getPaletteEntry(0xFF999999));
+        drawTextAt((12 * cursorPosition), 11, ">    <", getPaletteEntry(0xFF999999));
 
         drawLine(0, 80, XRES_FRAMEBUFFER - 1, 80, 2);
 
         for (pin = 0; pin < 3; ++pin) {
             uint8_t disk;
+
+            /* hack to save on some 30 bytes in the ROM size*/
+            drawTextAtWithMarginWithFiltering((12 * pin) + 1, 11, XRES_FRAMEBUFFER, "CPU-", getPaletteEntry(0xFF999999), '0' + pin);
 
             if (pin != 0) {
                 uint8_t pinX = (10 * (pin) ) * 8;

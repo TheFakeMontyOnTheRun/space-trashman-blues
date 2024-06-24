@@ -59,8 +59,6 @@ struct CellPattern {
 
 void clearGraphics(void);
 
-void clearTextScreen(void);
-
 void dropItem(void);
 
 void initMap(void);

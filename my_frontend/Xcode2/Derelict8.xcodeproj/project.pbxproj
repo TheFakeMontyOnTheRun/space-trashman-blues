@@ -383,6 +383,7 @@
 					"YRES_FRAMEBUFFER=192",
 					"XRES_FRAMEBUFFER=256",
 					MONOCHROME_VECTORS,
+					USE_OWN_MIN_MAX,
 				);
 				INFOPLIST_FILE = "Derelict-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -405,6 +406,7 @@
 					"YRES_FRAMEBUFFER=192",
 					"XRES_FRAMEBUFFER=256",
 					MONOCHROME_VECTORS,
+					USE_OWN_MIN_MAX,
 				);
 				INFOPLIST_FILE = "Derelict-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";

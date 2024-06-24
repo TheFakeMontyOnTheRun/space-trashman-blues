@@ -60,14 +60,14 @@ CGImageRef ref;
 
 
 void initHW(int argc, char** argv) {
-    textBuffer = (char*)calloc(TEXT_BUFFER_SIZE, 1);
-    messageLogBuffer = (char*)calloc(256, 1);
-    collisionMap = (uint8_t*)calloc(256, 1);
-    visMap = (enum EVisibility*)calloc(MAP_SIZE * MAP_SIZE, sizeof(enum EVisibility));
-    distances = (struct Vec2i*)calloc(2 * MAP_SIZE * MAP_SIZE, sizeof(struct Vec2i));
-    textures = (struct Texture*)calloc(TOTAL_TEXTURES, sizeof(struct Texture));
-    itemsInMap = (uint8_t*)calloc(MAP_SIZE * MAP_SIZE, sizeof(uint8_t*));
-    map = (uint8_t*)calloc(MAP_SIZE * MAP_SIZE, sizeof(uint8_t*));
+    textBuffer = (char*)allocMem(TEXT_BUFFER_SIZE, GENERAL_MEMORY, TRUE);
+    messageLogBuffer = (char*)allocMem(256, GENERAL_MEMORY, TRUE);
+    collisionMap = (uint8_t*)allocMem(256, GENERAL_MEMORY, TRUE);
+    visMap = (enum EVisibility*)allocMem(MAP_SIZE * MAP_SIZE * sizeof(enum EVisibility), GENERAL_MEMORY, TRUE);
+    distances = (struct Vec2i*)allocMem(2 * MAP_SIZE * MAP_SIZE * sizeof(struct Vec2i), GENERAL_MEMORY, TRUE);
+    textures = (struct Texture*)allocMem(TOTAL_TEXTURES * sizeof(struct Texture), GENERAL_MEMORY, TRUE);
+    itemsInMap = (uint8_t*)allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t*), GENERAL_MEMORY, TRUE);
+    map = (uint8_t*)allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t*), GENERAL_MEMORY, TRUE);
     
     NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent: @"base.pfs"];
     initFileReader([path UTF8String]);
@@ -160,14 +160,14 @@ void setMultiplier(CGSize size) {
 }
 
 void shutdownHW(void) {
-    free(textBuffer);
-    free(messageLogBuffer);
-    free(collisionMap);
-    free(visMap);
-    free(distances);
-    free(textures);
-    free(itemsInMap);
-    free(map);
+    disposeMem(textBuffer);
+    disposeMem(messageLogBuffer);
+    disposeMem(collisionMap);
+    disposeMem(visMap);
+    disposeMem(distances);
+    disposeMem(textures);
+    disposeMem(itemsInMap);
+    disposeMem(map);
     CGColorSpaceRelease(rgb);
 }
 
@@ -205,8 +205,8 @@ void shutdownHW(void) {
             ++bufferPtr;
         }
     }
-    
-    memcpy( previousFrame, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
+
+    memCopyToFrom( previousFrame, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
 
     CGContextRef context = UIGraphicsGetCurrentContext();
     

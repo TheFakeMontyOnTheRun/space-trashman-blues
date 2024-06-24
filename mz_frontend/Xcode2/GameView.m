@@ -88,7 +88,7 @@ void initHW(int argc, char** argv) {
     updateDirection = 0;
     
     mBufferedCommand = '.';
-    memset(framebuffer, 0, 128 * 128);
+    memFill(framebuffer, 0, 128 * 128);
 }
 
 

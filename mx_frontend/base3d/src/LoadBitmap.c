@@ -201,13 +201,13 @@ struct Bitmap *loadBitmap(const char *__restrict__ filename) {
     tmp = *ptr++;
     toReturn->height += tmp & 0xFF;
 
-    uint8_t* buffer = (uint8_t*)calloc(1, sizeInDisk);
+    uint8_t* buffer = (uint8_t*)allocMem(sizeInDisk, BITMAP_MEMORY, TRUE);
 
     memCopyToFrom((void*)buffer, (void*)ptr, sizeInDisk);
 
     size = toReturn->width * toReturn->height * sizeof(BitmapPixelFormat);
 
-    toReturn->data = (TexturePixelFormat*)calloc(1, size);
+    toReturn->data = (TexturePixelFormat*)allocMem(size, BITMAP_MEMORY, TRUE);
 
     int pixelIndex = 0;
 

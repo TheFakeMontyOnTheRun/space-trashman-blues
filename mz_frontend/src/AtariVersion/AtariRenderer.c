@@ -12,6 +12,7 @@
 #include <mint/sysbind.h>
 #include <mint/osbind.h>
 
+#include "Common.h"
 #include "AtariInt.h"
 #include "Enums.h"
 #include "Core.h"
@@ -39,12 +40,12 @@ void framebuffer_set_palette_entry(int index, int red, int green, int blue) {
 }
 
 void initHW(int argc, char** argv) {
-    framebuffer = (uint8_t *) calloc(1, 256 * 160);
+    framebuffer = (uint8_t *) allocMem(256 * 160, GENERAL_MEMORY, TRUE);
 
     physBase = Physbase();
     logBase = Logbase();
-    memset(logBase, 0, 32000);
-    memset(physBase, 0, 32000);
+    memFill(logBase, 0, 32000);
+    memFill(physBase, 0, 32000);
     Setscreen(-1, -1, 0);
 
     framebuffer_set_palette_entry(0, NORMALIZE(0x00), NORMALIZE(0x00), NORMALIZE(0x00));
@@ -76,7 +77,7 @@ void endFrame(void) {
     uint16_t *words = (uint16_t *) logBase;
 
     for (uint16_t y = 160; y; y--) {
-        memset(logBase + lineOffset, 0, 80);
+        memFill(logBase + lineOffset, 0, 80);
         for (uint16_t x = 0; x < 256; ++x) {
 
             uint8_t value = *index++;
@@ -239,11 +240,11 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
 }
 
 void clearScreen(void) {
-    memset(framebuffer, 0, 256 * 160);
+    memFill(framebuffer, 0, 256 * 160);
 }
 
 void clearGraphics(void) {
-    memset(framebuffer, 0, 256 * 160);
+    memFill(framebuffer, 0, 256 * 160);
 }
 
 void startFrame(int x, int y, int width, int height) {

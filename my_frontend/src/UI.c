@@ -24,6 +24,10 @@ uint8_t redrawMap;
 
 uint8_t needsToRedrawHUD;
 
+uint16_t scale2DVertex( uint16_t offset, uint16_t scale, const uint8_t *shape, uint16_t index) {
+    return offset + ((scale * shape[index]) / 128);
+}
+
 void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t *graphic) {
     const uint8_t *ptr = graphic;
 
@@ -36,17 +40,19 @@ void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t 
         const uint8_t *shape = ptr;
 
         for (c = 0; c < npoints - 1; ++c) {
-	  drawLine(x + ((dx * shape[(2 * c) + 0]) / 128),
-		   y + ((dy * shape[(2 * c) + 1]) / 128),
-		   x + ((dx * shape[(2 * c) + 2]) / 128),
-		   y + ((dy * shape[(2 * c) + 3]) / 128),
-		   2);
+            drawLine(scale2DVertex( x, dx, shape, (2 * c) + 0),
+                     scale2DVertex( y, dy, shape, (2 * c) + 1),
+                     scale2DVertex( x, dx, shape, (2 * c) + 2),
+                     scale2DVertex( y, dy, shape, (2 * c) + 3),
+                     2);
         }
-        drawLine(x + ((dx * shape[2 * npoints - 2]) / 128),
-		 y + ((dy * shape[2 * npoints - 1]) / 128),
-		 x + ((dx * shape[0]) / 128),
-		 y + ((dy * shape[1]) / 128),
-		 2);
+
+        drawLine(scale2DVertex( x, dx, shape, 2 * npoints - 2),
+                 scale2DVertex( y, dy, shape, 2 * npoints - 1),
+                 scale2DVertex( x, dx, shape, 0),
+                 scale2DVertex( y, dy, shape, 1),
+                 2);
+
         ptr += 2 * npoints;
     }
 }
@@ -60,7 +66,6 @@ void drawTextAtWithMargin(const int x, const int y, int margin, const char *text
 }
 
 void showMessage(const char *message) {
-    clearTextScreen();
     drawTextWindow(1, 16, (XRES_FRAMEBUFFER / 8) - 3, (YRES_FRAMEBUFFER / 8) - 18, "Press 2 to continue", message);
     waitForKey = 1;
 }

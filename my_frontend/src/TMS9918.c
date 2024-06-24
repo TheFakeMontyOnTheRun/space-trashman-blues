@@ -6,6 +6,7 @@
 
 #include <msx/gfx.h>
 
+#include "Common.h"
 #include "font.h"
 #include "Enums.h"
 
@@ -73,7 +74,7 @@ void setColour(uint8_t colour) {
 }
 
 void clearGraphics(void) {
-    memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
+    memFill(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
 void flush3DBuffer(void) {
@@ -268,15 +269,6 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
 
         vwrite(fontTop, map_pixel(dstX, dstY), 8);
         dstX += 8;
-    }
-}
-
-void clearTextScreen(void) {
-    uint8_t c, d;
-    for (c = 16; c < 24; ++c) {
-        for (d = 0; d < 32; ++d) {
-            drawTextAtWithMarginWithFiltering(d, c, 256, " ", 2,  ' ');
-        }
     }
 }
 

@@ -16,7 +16,7 @@
 #ifndef EMBEDDED_DATA
 #include "PackedFileReader.h"
 #endif
-extern int8_t map[32][32];
+extern int8_t map[MAP_SIZE][MAP_SIZE];
 
 extern int8_t stencilHigh[XRES];
 
@@ -182,9 +182,9 @@ void initMap(void) {
     roomItem = getRoom(playerLocation)->itemsPresent->next;
 
 #ifdef OPTIMIZATION_BLOCK_CELL
-    memset(map, BLOCK_CELL, MAP_SIZE_X * MAP_SIZE_Y);
+    memFill(map, BLOCK_CELL, MAP_SIZE_X * MAP_SIZE_Y);
 #else
-    memset(map, NEUTRAL_CELL, MAP_SIZE_X * MAP_SIZE_Y);
+    memFill(map, NEUTRAL_CELL, MAP_SIZE_X * MAP_SIZE_Y);
 #endif
     for (y = 0; y < MAP_SIZE_Y; ++y) {
         for (x = 0; x < MAP_SIZE_X; ++x) {

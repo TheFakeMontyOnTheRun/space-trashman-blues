@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 
+#include "Common.h"
 #include "Enums.h"
 #include "Core.h"
 #include "Renderer.h"
@@ -189,10 +190,6 @@ uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
     return ptr;
 }
 
-void clearTextScreen(void) {
-    fillRect(8, YRES + 8, XRES_FRAMEBUFFER - 8, YRES_FRAMEBUFFER -8, 0, 0);
-}
-
 void handleSystemEvents(void) {}
 
 enum ECommand getInput(void) {
@@ -260,11 +257,11 @@ enum ECommand getInput(void) {
 }
 
 void clearScreen(void) {
-    memset((unsigned char *) 0xC000, 0, (320 / 4) * 200);
+    memFill((unsigned char *) 0xC000, 0, (320 / 4) * 200);
 }
 
 void clearGraphics(void) {
-    memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
+    memFill(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
 void startFrame(int x, int y, int width, int height) {
@@ -278,7 +275,7 @@ void endFrame(void) {
     if (needsToRedrawVisibleMeshes) {
         for (uint8_t y = 0; y < BUFFER_SIZEY; ++y) {
             uint8_t *line = (unsigned char *) 0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048);
-            memcpy(line, buffer + (y * BUFFER_SIZEX), BUFFER_SIZEX);
+            memCopyToFrom(line, buffer + (y * BUFFER_SIZEX), BUFFER_SIZEX);
         }
         clearGraphics();
 

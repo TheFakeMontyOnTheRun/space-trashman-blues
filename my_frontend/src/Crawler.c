@@ -55,15 +55,15 @@ void HUD_refresh(void) {
         item = getItem(roomItem->item);
 
         if (strstr(item->name, "go-down")) {
-            drawTextAtWithMarginWithFiltering(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, "go down",  2, ' ');
+            drawTextAtWithMargin(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, "go down",  2);
         } else {
             if (strstr(item->name, "go-up")) {
-                drawTextAtWithMarginWithFiltering(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, "go up",  2, ' ');
+                drawTextAtWithMargin(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, "go up",  2);
             } else {
                 if (item->active) {
                     drawTextAt(1, YRES_TEXT - 6, "*", 2);
                 }
-                drawTextAtWithMarginWithFiltering(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, item->name,  2, ' ');
+                drawTextAtWithMargin(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, item->name,  2);
             }
         }
     } else {
@@ -76,7 +76,7 @@ void HUD_refresh(void) {
         if (item->active) {
             drawTextAt(1, YRES_TEXT - 3, "*", 1);
         }
-        drawTextAtWithMarginWithFiltering(2, YRES_TEXT - 3, (XRES_FRAMEBUFFER) / 2, item->name,  2, ' ');
+        drawTextAtWithMargin(2, YRES_TEXT - 3, (XRES_FRAMEBUFFER) / 2, item->name,  2);
     } else {
         drawTextAt(2, YRES_TEXT - 3, "Nothing", 2);
     }
@@ -101,14 +101,6 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
     prevZ = cameraZ;
 
     switch (cmd) {
-        case kCommandFire5:
-            nextItemInHand();
-            break;
-
-        case kCommandFire6:
-            nextItemInRoom();
-            break;
-
         case kCommandFire1:
             useItemInHand();
             break;
@@ -124,12 +116,20 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
                 redrawMap = needsToRedrawHUD = needsToRedrawVisibleMeshes = 1;
                 initMap();
             }
-
             break;
 
         case kCommandFire4:
             dropItem();
             break;
+
+        case kCommandFire5:
+            nextItemInHand();
+            break;
+
+        case kCommandFire6:
+            nextItemInRoom();
+            break;
+
         default:
             goto handle_directions;
     }

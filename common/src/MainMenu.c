@@ -24,22 +24,26 @@ typedef unsigned long size_t;
 #endif
 
 #ifdef EMIT_QUIT_OPTION
-const char *MainMenu_options[4] = {
+
+#define kMainMenuOptionsCount  4
+
+const char *MainMenu_options[kMainMenuOptionsCount] = {
         "Play game", "Credits", "Help", "Quit"};
 
-const enum EGameMenuState MainMenu_nextStateNavigation[4] = {
+const enum EGameMenuState MainMenu_nextStateNavigation[kMainMenuOptionsCount] = {
         kPlayGame, kCredits, kHelp,
         kQuit};
 
-const uint8_t kMainMenuOptionsCount = 4;
 #else
-const char *MainMenu_options[3] = {
+
+#define kMainMenuOptionsCount 3
+
+const char *MainMenu_options[kMainMenuOptionsCount] = {
         "Play game", "Credits", "Help"};
 
-const enum EGameMenuState MainMenu_nextStateNavigation[3] = {
+const enum EGameMenuState MainMenu_nextStateNavigation[kMainMenuOptionsCount] = {
         kPlayGame, kCredits, kHelp};
 
-const uint8_t kMainMenuOptionsCount = 3;
 #endif
 
 #ifndef MONOCHROME_VECTORS
@@ -3456,7 +3460,6 @@ static const uint8_t splashGraphics[] = {
 
 void MainMenu_initStateCallback(enum EGameMenuState tag) {
     (void)tag;
-    cursorPosition = 0;
 }
 
 void MainMenu_repaintCallback(void) {
@@ -3466,7 +3469,7 @@ void MainMenu_repaintCallback(void) {
         fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF00FF00), 0);
 #endif
         drawGraphic(0, 0, YRES_FRAMEBUFFER, YRES_FRAMEBUFFER, splashGraphics);
-        drawGraphic(XRES_FRAMEBUFFER / 2, 0, 160, 160, logoGraphics);
+        drawGraphic((XRES_FRAMEBUFFER / 2) + 8, 8, (XRES_FRAMEBUFFER / 2) - 16, (XRES_FRAMEBUFFER / 2) - 16, logoGraphics);
         playSound(MAIN_MENU_THEME);
     }
 

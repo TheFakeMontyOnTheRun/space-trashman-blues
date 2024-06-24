@@ -154,7 +154,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 }
 
 void clearGraphics(void) {
-    memset(framebuffer, 0, 128 * 128);
+    memFill(framebuffer, 0, 128 * 128);
 }
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {

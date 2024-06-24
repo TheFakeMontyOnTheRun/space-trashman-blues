@@ -189,7 +189,7 @@ void realPut(int x, int y, uint8_t value) {
 }
 
 void clearGraphics(void) {
-    memset(framebuffer, 0, 256 * 160);
+    memFill(framebuffer, 0, 256 * 160);
 }
 
 void clearScreen(void) {}
@@ -230,7 +230,8 @@ void handleSystemEvents(void) {
 
                 case SDLK_ESCAPE:
                 case SDLK_q:
-                    mBufferedCommand = 'l';
+                    SDL_Quit();
+                    exit(0);
                     break;
 
                 case SDLK_SPACE:
@@ -376,7 +377,7 @@ void initHW(int argc, char **argv) {
     mBufferedCommand = '.';
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
-    memset(framebuffer, 0, 256 * 160);
+    memFill(framebuffer, 0, 256 * 160);
     window =
             SDL_CreateWindow("Derelict 16-bits SDL2 test", SDL_WINDOWPOS_CENTERED,
                              SDL_WINDOWPOS_CENTERED, 512, 320, SDL_WINDOW_SHOWN);

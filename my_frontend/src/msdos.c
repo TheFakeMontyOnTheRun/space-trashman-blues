@@ -347,7 +347,7 @@ uint8_t *realPut(uint16_t x, uint8_t y, uint8_t value, uint8_t *ptr) {
 }
 
 void clearGraphics(void) {
-    memset(imageBuffer, 0, 128 * 32);
+    memFill(imageBuffer, 0, 128 * 32);
 }
 
 void initHW(int argc, char **argv) {
@@ -581,18 +581,9 @@ void endFrame(void) {
                 );
     }
 
-    memset(imageBuffer, 0, 128 * 32);
+    memFill(imageBuffer, 0, 128 * 32);
 }
 
-
-void clearTextScreen(void) {
-    int c, d;
-    for (c = 16; c < 24; ++c) {
-        for (d = 0; d < 40; ++d) {
-            drawTextAtWithMarginWithFiltering(d, c, 320, " ", 2, ' ');
-        }
-    }
-}
 
 void enterTextMode(void) {}
 

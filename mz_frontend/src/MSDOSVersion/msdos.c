@@ -126,7 +126,7 @@ void realPut(int x, int y, uint8_t value) {
 }
 
 void clearGraphics(void) {
-    memset(imageBuffer, 0, 256 * 160);
+    memFill(imageBuffer, 0, 256 * 160);
 }
 
 void initHW(int argc, char** argv) {

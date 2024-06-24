@@ -423,7 +423,7 @@ float clampf(float v0, float v1, float v) {
 
 struct Texture *makeTextureFrom(const char *filename) {
     struct Texture *toReturn =
-            (struct Texture *) calloc(1, sizeof(struct Texture));
+            (struct Texture *) allocMem(sizeof(struct Texture), BITMAP_MEMORY, TRUE);
 
     toReturn->raw = loadBitmap(filename);
 
@@ -929,9 +929,9 @@ void drawMesh(struct Mesh *mesh, const struct Vec3 center, enum EDirection rotat
 
     if (mesh->nativeBuffer == NULL) {
 
-        mesh->nativeVertexBuffer = calloc( 3 * 3 * count, sizeof(float));
-        mesh->nativeTexCoordBuffer = calloc( 2 * 3 * count, sizeof(float));
-        mesh->nativeIndicesBuffer = calloc( 3 * count, sizeof(unsigned short));
+        mesh->nativeVertexBuffer = allocMem( 3 * 3 * count * sizeof(float), GENERAL_MEMORY, TRUE);
+        mesh->nativeTexCoordBuffer = allocMem( 2 * 3 * count * sizeof(float), GENERAL_MEMORY, TRUE);
+        mesh->nativeIndicesBuffer = allocMem( 3 * count * sizeof(unsigned short), GENERAL_MEMORY, TRUE);
 
         float*  vP = mesh->nativeVertexBuffer;
         float* tP = mesh->nativeTexCoordBuffer;
@@ -985,7 +985,7 @@ void drawMesh(struct Mesh *mesh, const struct Vec3 center, enum EDirection rotat
             vertexData += 9;
         }
 
-        mesh->nativeBuffer = calloc(1, sizeof(struct VBORegister));
+        mesh->nativeBuffer = allocMem(sizeof(struct VBORegister), GENERAL_MEMORY, TRUE);
 
         *((struct VBORegister*)mesh->nativeBuffer) = submitVBO((float *) mesh->nativeVertexBuffer, mesh->nativeTexCoordBuffer, count * 3,
                                (unsigned short *) mesh->nativeIndicesBuffer, count * 3);

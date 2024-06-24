@@ -15,6 +15,7 @@
 #include <clib/graphics_protos.h>
 #include <proto/keymap.h>
 
+#include "Common.h"
 #include "AmigaInt.h"
 
 #include "Enums.h"
@@ -358,7 +359,7 @@ void realPut(int x, int y, uint8_t value) {
 }
 
 void clearGraphics(void) {
-    memset(framebuffer, 0, 256 * 160);
+    memFill(framebuffer, 0, 256 * 160);
 }
 
 void clearScreen(void) {
@@ -436,7 +437,7 @@ void graphicsPutPointArray(uint8_t *y128Values) {
 
 void initHW(int argc, char **argv) {
 
-    framebuffer = (uint8_t *) calloc(1, 256 * 160);
+    framebuffer = (uint8_t *) allocMem(256 * 160, GENERAL_MEMORY, TRUE);
 
     IntuitionBase =
             (struct IntuitionBase *) OpenLibrary("intuition.library", 0);

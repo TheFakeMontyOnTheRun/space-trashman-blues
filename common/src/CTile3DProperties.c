@@ -97,7 +97,7 @@ end:
         uint8_t len = *(bufferHead++);
 
         char* meshName = (char*)allocMem(len + 1, GENERAL_MEMORY, 1);
-        memcpy(meshName, bufferHead, len);
+        memCopyToFrom(meshName, (char*)bufferHead, len);
         mesh = (struct Mesh*)allocMem(sizeof(struct Mesh), GENERAL_MEMORY, 1);
         sprintf(&meshNameWithExtension[0], "%s.mdl", meshName);
         loadMesh(mesh, &meshNameWithExtension[0]);

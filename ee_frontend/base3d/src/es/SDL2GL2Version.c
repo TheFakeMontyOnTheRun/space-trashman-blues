@@ -33,7 +33,7 @@
 
 void enterFullScreenMode(void) {
     EmscriptenFullscreenStrategy s;
-    memset(&s, 0, sizeof(s));
+    memFill(&s, 0, sizeof(s));
     s.scaleMode = EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
     s.canvasResolutionScaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_NONE;
     s.filteringMode = EMSCRIPTEN_FULLSCREEN_FILTERING_DEFAULT;

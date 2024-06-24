@@ -122,8 +122,8 @@ void setupOPL2(int unused) {
             goto killaudio;
         }
 
-        memcpy(waveptr[c], audio.data, samples[c]);
-        free(audio.data);
+        memCopyToFrom(waveptr[c], audio.data, samples[c]);
+        disposeMem(audio.data);
     }
     return;
 

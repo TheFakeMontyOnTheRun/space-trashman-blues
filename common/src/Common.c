@@ -43,7 +43,7 @@
 
 
 #ifndef USE_CUSTOM_MEMORY_HANDLER
-
+#ifndef NO_DYNAMIC_MEMORY_ALLOC
 void *allocMem(size_t sizeInBytes, enum MemoryType type, uint8_t clearAfterAlloc) {
     /*
     For the general allocator, we're not worried about the type of memory. It all comes from the
@@ -60,7 +60,7 @@ void *allocMem(size_t sizeInBytes, enum MemoryType type, uint8_t clearAfterAlloc
     if (clearAfterAlloc) {
         memset(ptr, 0, sizeInBytes);
     }
-    
+
     (void)type;
 
     return ptr;
@@ -74,7 +74,7 @@ void disposeMem(void *ptr) {
 #endif
 
 }
-
+#endif
 void memCopyToFrom(void *dst, void *src, size_t sizeInBytes) {
     memcpy(dst, src, sizeInBytes);
 }

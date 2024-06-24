@@ -46,8 +46,6 @@ void CreditsScreen_repaintCallback(void) {
         }
     }
 
-
-
     drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - 7 - 4,
                           ((YRES_FRAMEBUFFER / 8) + 1) - (1) - 5,
                           7 + 2,

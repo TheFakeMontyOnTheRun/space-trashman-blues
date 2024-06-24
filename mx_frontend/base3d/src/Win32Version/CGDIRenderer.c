@@ -90,7 +90,7 @@ static HBITMAP Create8bppBitmap(HDC hdc, int width, int height, LPVOID pBits)
     uint32_t pixel;
 	void *Pixels;
 	HBITMAP hbmp;
-    BITMAPINFO *bmi = (BITMAPINFO *)malloc(sizeof(BITMAPINFOHEADER) + sizeof(RGBQUAD) * 256);
+    BITMAPINFO *bmi = (BITMAPINFO *)allocMem(sizeof(BITMAPINFOHEADER) + sizeof(RGBQUAD) * 256, GENERAL_MEMORY, 0);
     PBITMAPINFOHEADER bih;
 
 
@@ -110,7 +110,7 @@ static HBITMAP Create8bppBitmap(HDC hdc, int width, int height, LPVOID pBits)
 
 
 
-    memcpy( &bmi->bmiColors[0], &paletteRef[0], 256 * sizeof(RGBQUAD));
+    memCopyToFrom( &bmi->bmiColors[0], &paletteRef[0], 256 * sizeof(RGBQUAD));
 
 
     Pixels = NULL;
@@ -120,10 +120,10 @@ static HBITMAP Create8bppBitmap(HDC hdc, int width, int height, LPVOID pBits)
     {
         BYTE* pbBits = (BYTE*)pBits;
         BYTE *Pix = (BYTE *)Pixels;
-        memcpy(Pix, pbBits, width * height);
+        memCopyToFrom(Pix, pbBits, width * height);
     }
 
-    free(bmi);
+    disposeMem(bmi);
 
     return hbmp;
 }
@@ -157,7 +157,7 @@ static HBITMAP CreateBitmapFromPixels( HDC hDC, UINT uWidth, UINT uHeight, UINT 
     if ( !uWidth || !uHeight || !uBitsPerPixel )
         return hBitmap;
     lBmpSize = uWidth * uHeight * (uBitsPerPixel/8) ;
-	memset(&bmpInfo, 0, sizeof(bmpInfo));
+    memFill(&bmpInfo, 0, sizeof(bmpInfo));
     bmpInfo.bmiHeader.biBitCount = uBitsPerPixel;
     bmpInfo.bmiHeader.biHeight = uHeight;
     bmpInfo.bmiHeader.biWidth = uWidth;
@@ -172,7 +172,7 @@ static HBITMAP CreateBitmapFromPixels( HDC hDC, UINT uWidth, UINT uHeight, UINT 
     if ( !hBitmap )
         return hBitmap;
 
-    memcpy(pPixels, pBits, lBmpSize );
+    memCopyToFrom(pPixels, pBits, lBmpSize );
 
     return hBitmap;
 }
@@ -356,8 +356,8 @@ WindProcedure(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) {
 	
 
 	if ( !enableSmoothMovement || turnTarget == turnStep ) {
-		memcpy( slideBitmap, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
-		memcpy( previousFrame, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
+        memCopyToFrom( slideBitmap, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
+        memCopyToFrom( previousFrame, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
 	} else if ( turnStep < turnTarget ) {
 
 		for ( y = dirtyLineY0; y < dirtyLineY1; ++y ) {

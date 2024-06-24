@@ -24,6 +24,7 @@ typedef unsigned long size_t;
 #include "Engine.h"
 #include "Core.h"
 #include "UI.h"
+#include "PackedFileReader.h"
 
 int8_t cameraRotation = 0;
 

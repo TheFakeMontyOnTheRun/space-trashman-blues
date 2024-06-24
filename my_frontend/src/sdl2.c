@@ -13,6 +13,7 @@
 #include "font.h"
 
 #include "SDL.h"
+#include "Common.h"
 
 extern uint8_t firstFrameOnCurrentState;
 extern struct ObjectNode *focusedItem;
@@ -108,10 +109,6 @@ void graphicsPutPointArray(uint8_t *y128Values) {
     }
 }
 
-void clearTextScreen(void) {
-    fillRect(0, 129, 256, 192, 0, 0);
-}
-
 void enterTextMode(void) {
 }
 
@@ -143,7 +140,7 @@ void shutdownGraphics(void) {
 }
 
 void clearGraphics(void) {
-    memset(framebuffer, 0, 128 * 128);
+    memFill(framebuffer, 0, 128 * 128);
 }
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
@@ -242,10 +239,6 @@ enum ECommand getInput(void) {
                 case SDLK_KP_9:
                 case SDLK_6:
                     return kCommandFire6;
-
-                case SDLK_s:
-                    clearTextScreen();
-                    break;
 
                 case SDLK_LEFT:
                     return kCommandLeft;
