@@ -3859,7 +3859,7 @@ void MainMenu_repaintCallback(void) {
     if (firstFrameOnCurrentState) {
         clearScreen();
 #ifndef MONOCHROME_VECTORS
-        fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF00FF00), 0);
+        fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF73ADA6), 0);
 #endif
         drawGraphic(0, 0, YRES_FRAMEBUFFER, YRES_FRAMEBUFFER, splashGraphics);
         drawGraphic((XRES_FRAMEBUFFER / 2) + 8, 8, (XRES_FRAMEBUFFER / 2) - 16, (XRES_FRAMEBUFFER / 2) - 16, logoGraphics);
