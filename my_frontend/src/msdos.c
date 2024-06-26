@@ -416,6 +416,7 @@ enum ECommand getInput(void) {
         return kCommandNone;
     }
 
+    performAction();
 
     switch(toReturn) {
         case 'q':
