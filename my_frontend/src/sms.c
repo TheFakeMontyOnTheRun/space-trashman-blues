@@ -47,6 +47,8 @@ void handleSystemEvents(void) {}
 enum ECommand getInput(void) {
     int key = read_joypad1();
 
+    performAction();
+
     if (cooldown) {
         cooldown--;
     }
