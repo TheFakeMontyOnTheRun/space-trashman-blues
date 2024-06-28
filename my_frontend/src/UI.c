@@ -25,6 +25,96 @@ uint8_t redrawMap;
 
 uint8_t needsToRedrawHUD;
 
+static const uint8_t ending[] = {
+        4,
+#ifndef MONOCHROME_VECTORS
+        0, 0, 55929978,
+#endif
+        9, 41,
+        21, 33,
+        18, 66,
+        10, 71,
+        4,
+#ifndef MONOCHROME_VECTORS
+        0, 0, 55929978,
+#endif
+        10, 71,
+        11, 74,
+        20, 70,
+        18, 66,
+        5,
+#ifndef MONOCHROME_VECTORS
+        0, 0, 55929978,
+#endif
+        21, 33,
+        18, 66,
+        20, 70,
+        54, 79,
+        54, 49,
+        9,
+#ifndef MONOCHROME_VECTORS
+        0, 0, 55929978,
+#endif
+        12, 74,
+        20, 70,
+        54, 79,
+        69, 70,
+        97, 81,
+        69, 89,
+        37, 86,
+        45, 82,
+        45, 80,
+        4,
+#ifndef MONOCHROME_VECTORS
+        0, 0, 55929978,
+#endif
+        53, 49,
+        61, 49,
+        62, 75,
+        54, 79,
+        4,
+#ifndef MONOCHROME_VECTORS
+        0, 0, 55929978,
+#endif
+        61, 49,
+        62, 74,
+        69, 71,
+        66, 45,
+        4,
+#ifndef MONOCHROME_VECTORS
+        0, 0, 55929978,
+#endif
+        66, 45,
+        92, 57,
+        97, 81,
+        69, 71,
+        4,
+#ifndef MONOCHROME_VECTORS
+        0, 0, 55929978,
+#endif
+        37, 79,
+        38, 86,
+        45, 82,
+        45, 80,
+        4,
+#ifndef MONOCHROME_VECTORS
+        0, 0, 55929978,
+#endif
+        10, 43,
+        18, 38,
+        17, 57,
+        11, 60,
+        4,
+#ifndef MONOCHROME_VECTORS
+        0, 0, 55929978,
+#endif
+        22, 37,
+        51, 51,
+        51, 64,
+        21, 56,
+        0};
+
+
 uint16_t scale2DVertex( uint16_t offset, uint16_t scale, const uint8_t *shape, uint16_t index) {
     return offset + ((scale * shape[index]) / 128);
 }
@@ -113,27 +203,38 @@ void drawMap(void) {
 }
 
 void performAction(void) {
+    const char *msg = NULL;
     switch (getGameStatus()) {
         case kBadVictory:
-            showMessage("Victory! Too bad you didn't survive");
-            while (1);
+            msg = "Victory! Too bad you didn't survive";
+            break;
+
 
         case kBadGameOver:
-            showMessage("You're dead! And so are the\n"
-                        "other people on the path of\n"
-                        "destruction faulty reactor");
-            while (1);
+            msg = "You're dead! And so are the "
+                        "other people on the path of "
+                        "destruction faulty reactor";
+            break;
 
         case kGoodVictory:
-            showMessage("Victory! You managed to destroy the\nship and get out alive");
-            while (1);
+            msg = "Victory! You managed to destroy the ship and get out alive";
+            break;
 
         case kGoodGameOver:
-            showMessage("You failed! While you're alive\n"
-                        "you failed to prevent the worst\n"
-                        "scenario and now EVERYBODY is\n"
-                        "dead!)");
-            while (1);
+            msg = "You failed! While you're alive "
+                        "you failed to prevent the worst "
+                        "scenario and now EVERYBODY is "
+                        "dead!)";
+            break;
+    }
+
+    if (msg) {
+        uint8_t lines = countLines(msg) + 3;
+        clearScreen();
+        drawGraphic(0, 0, YRES_FRAMEBUFFER, YRES_FRAMEBUFFER, ending);
+        drawTextWindow( 0, (YRES / 8) + 1, (XRES_FRAMEBUFFER / 8) - 1, lines + 1, "", msg);
+
+        while (1);
     }
 }
 

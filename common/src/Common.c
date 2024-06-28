@@ -112,3 +112,23 @@ uint32_t toNativeEndianess(const uint32_t val) {
     return val2;
 }
 #endif
+
+
+int countLines(const char* text) {
+    int lines = 1;
+    int chars = 0;
+
+    while(*text) {
+        ++chars;
+
+        if ( (chars >= (XRES_FRAMEBUFFER / 8)) || *text == '\n') {
+            ++lines;
+            chars = 0;
+        }
+
+        ++text;
+    }
+
+
+    return lines;
+}
