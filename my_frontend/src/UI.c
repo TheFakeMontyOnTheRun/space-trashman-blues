@@ -9,6 +9,7 @@
 #include "Renderer.h"
 #include "Engine.h"
 #include "SoundSystem.h"
+#include "Common.h"
 
 extern uint8_t playerLocation;
 
@@ -66,7 +67,8 @@ void drawTextAtWithMargin(const int x, const int y, int margin, const char *text
 }
 
 void showMessage(const char *message) {
-    drawTextWindow(1, 16, (XRES_FRAMEBUFFER / 8) - 3, (YRES_FRAMEBUFFER / 8) - 18, "Press 2 to continue", message);
+    uint8_t lines = countLines(message) + 3;
+    drawTextWindow( 0, (YRES / 8) + 1, (XRES_FRAMEBUFFER / 8) - 1, lines + 1, "Press 2 to continue", message);
     waitForKey = 1;
 }
 

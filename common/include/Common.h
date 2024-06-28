@@ -61,6 +61,7 @@ uint8_t isBigEndian(void);
 uint32_t toNativeEndianess(const uint32_t val);
 #endif
 
+int countLines(const char* text);
 
 extern const char *mainText;
 extern char *textBuffer;
