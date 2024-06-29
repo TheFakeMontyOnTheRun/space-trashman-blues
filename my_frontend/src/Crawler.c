@@ -270,7 +270,11 @@ void Crawler_initStateCallback(enum EGameMenuState tag) {
     (void)tag;
     enteredFrom = 0;
     cameraRotation = 0;
-    initStation();
+
+    if (tag != kBackToGame) {
+        initStation();
+    }
+
     focusedItem = getPlayerItems();
     setErrorHandlerCallback(showMessage);
     setLoggerDelegate(showMessage);
