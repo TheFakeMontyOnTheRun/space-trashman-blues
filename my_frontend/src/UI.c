@@ -91,12 +91,6 @@ void drawMap(void) {
                (YRES_FRAMEBUFFER / 8) / 2 + 1,
                "Map");
 
-    for (y = 0; y < 12; ++y) {
-        for (x = 0; x < 12; ++x) {
-            drawTextAt(((XRES_FRAMEBUFFER / 8) / 2) + x + 2, 1 + y, " ", 0);
-        }
-    }
-
     for (y = 0; y < 32; ++y) {
         for (x = 0; x < 32; ++x) {
 
