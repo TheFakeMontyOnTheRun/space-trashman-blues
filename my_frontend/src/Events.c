@@ -134,6 +134,10 @@ void interactWithItemInRoom(void) {
         struct Item *item = getItem(focusedItem->item);
         if (itemToPick && item && item->useWithCallback) {
             item->useWithCallback(item, itemToPick);
+
+            if (!playerHasObject(item->name)) {
+                focusedItem = getPlayerItems();
+            }
         }
     }
 }
