@@ -1,7 +1,17 @@
 /*
    Created by Daniel Monteiro on 11/07/2023.
 */
+#ifdef WIN32
+#include "Win32Int.h"
+#else
+#ifndef SMD
 #include <stdint.h>
+#include <stdlib.h>
+#else
+#include <genesis.h>
+typedef unsigned long size_t;
+#endif
+#endif
 
 #include "Enums.h"
 #include "UI.h"
@@ -9,12 +19,14 @@
 #include "Renderer.h"
 #include "Engine.h"
 #include "SoundSystem.h"
+#include "Common.h"
+#include "MapWithCharKey.h"
+#include "FixP.h"
+#include "CTile3DProperties.h"
 
 extern uint8_t playerLocation;
 
 extern int8_t cursorPosition;
-
-extern const struct CellPattern patterns[127];
 
 extern int8_t map[32][32];
 
@@ -23,6 +35,8 @@ uint8_t waitForKey = 0;
 uint8_t redrawMap;
 
 uint8_t needsToRedrawHUD;
+
+extern struct MapWithCharKey tileProperties;
 
 void drawGraphic(int x, int y, int dx, int dy, const uint8_t *graphic) {
     const uint8_t *ptr = graphic;
@@ -65,8 +79,47 @@ void showMessage(const char *message) {
     waitForKey = 1;
 }
 
-void drawMap(void) {
+uint8_t isPositionAllowed(int8_t x, int8_t y) {
+    uint8_t pattern = map[y][x];
+    struct CTile3DProperties *prop =
+            (struct CTile3DProperties *) getFromMap(&tileProperties, pattern);
 
+    return prop->mBlockMovement;
+}
+
+
+void drawMap(void) {
+    uint8_t x, y;
+
+    if (!redrawMap) {
+        return;
+    }
+
+    if (playerLocation == 0) {
+        return;
+    }
+
+    redrawMap = 0;
+
+    drawWindow((XRES_FRAMEBUFFER / 8) / 2,
+               0,
+               (XRES_FRAMEBUFFER / 8) / 2 - 1,
+               (YRES_FRAMEBUFFER / 8) / 2 + 1,
+               "");
+
+    for (y = 0; y < 32; ++y) {
+        for (x = 0; x < 32; ++x) {
+
+            if (isPositionAllowed(x, y)) {
+                fillRect((XRES_FRAMEBUFFER / 2) + (x * 3),
+                         (y * 3),
+                         (XRES_FRAMEBUFFER / 2) + (x * 3) + 3,
+                         (y * 3) + 3,
+                         2,
+                         0);
+            }
+        }
+    }
 }
 
 void performAction(void) {

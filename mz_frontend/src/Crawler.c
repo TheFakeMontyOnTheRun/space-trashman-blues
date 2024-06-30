@@ -45,13 +45,10 @@ void HUD_refresh(void) {
     needsToRedrawHUD = 0;
 
     drawWindow(0,
-               (128 / 8),
+               (YRES / 8) + 1,
                (XRES_FRAMEBUFFER / 8) / 2,
-               (YRES_FRAMEBUFFER / 8) - 17,
-               "Status");
-
-    drawTextAt(1, YRES_TEXT - 7, "In room:", 2);
-    drawTextAt(1, YRES_TEXT - 4, "In hand:", 2);
+               5,
+               "In hand:");
 
     struct Item *item;
 

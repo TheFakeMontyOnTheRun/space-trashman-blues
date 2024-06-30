@@ -39,17 +39,6 @@ enum DIRECTION {
 
 #define STIPPLE_COLOUR_THRESHOLD 8
 
-
-/*  not rendered and blocks visibility */
-#define BLOCK_CELL '#'
-
-struct CellPattern {
-    uint8_t ceiling: 4;
-    uint8_t elementsMask: 4;
-    uint8_t geometryType: 7;
-    uint8_t blockMovement: 1;
-};
-
 #define getPaletteEntry(c) (( (c) - 0xFF000000 ) % 3)
 
 void clearGraphics(void);

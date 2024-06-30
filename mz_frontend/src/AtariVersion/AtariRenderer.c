@@ -276,6 +276,16 @@ void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) 
     }
 }
 
+void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, uint8_t stipple) {
+    int x, y;
+    for (y = y0; y < y1; ++y) {
+        for (x = x0; x < x1; ++x) {
+            realPut(x, y, colour);
+        }
+    }
+}
+
+
 void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text, const uint8_t fg,
                                        char charToReplaceHifenWith) {
 
