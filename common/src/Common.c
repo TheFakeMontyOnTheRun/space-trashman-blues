@@ -121,7 +121,11 @@ int countLines(const char* text) {
     while(*text) {
         ++chars;
 
-        if ( (chars >= (XRES_FRAMEBUFFER / 8)) || *text == '\n') {
+        if (
+#ifdef XRES_FRAMEBUFFER
+                (chars >= (XRES_FRAMEBUFFER / 8)) ||
+#endif
+                *text == '\n') {
             ++lines;
             chars = 0;
         }
