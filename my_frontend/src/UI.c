@@ -137,7 +137,11 @@ void performAction(void) {
         clearScreen();
         drawTextWindow( 0, (YRES / 8) + 1, (XRES_FRAMEBUFFER / 8) - 1, lines + 1, "", msg);
 
-        while (1);
+        while (1) {
+            if (soundDriver != kNoSound) {
+                soundTick();
+            }
+        }
     }
 }
 
