@@ -147,6 +147,10 @@ int loopTick(enum ECommand command) {
 
         tickMission(command);
 
+        if (crawlerGameState == kCrawlerGameFinished) {
+            return kCrawlerGameFinished;
+        }
+
         if (gameTicks != 0) {
             yCameraOffset = ((struct CTile3DProperties *) getFromMap(&tileProperties,
                                                                      LEVEL_MAP(x, z)))->mFloorHeight -

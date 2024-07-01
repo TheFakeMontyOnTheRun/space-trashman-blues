@@ -12,7 +12,8 @@ enum EDirection {
 enum CrawlerState {
     kCrawlerGameOver = -1,
     kCrawlerQuit = 0,
-    kCrawlerGameInProgress = 1
+    kCrawlerGameInProgress = 1,
+    kCrawlerGameFinished = 2
 };
 
 enum ECommand {

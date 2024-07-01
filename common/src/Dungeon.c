@@ -295,18 +295,22 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
 
         switch (getGameStatus()) {
             case kBadVictory:
+                gameSnapshot.should_continue = kCrawlerGameFinished;
                 enterState(kBadVictoryEpilogue);
                 return gameSnapshot;
 
             case kBadGameOver:
+                gameSnapshot.should_continue = kCrawlerGameFinished;
                 enterState(kBadGameOverEpilogue);
                 return gameSnapshot;
 
             case kGoodVictory:
+                gameSnapshot.should_continue = kCrawlerGameFinished;
                 enterState(kGoodVictoryEpilogue);
                 return gameSnapshot;
 
             case kGoodGameOver:
+                gameSnapshot.should_continue = kCrawlerGameFinished;
                 enterState(kGoodGameOverEpilogue);
                 return gameSnapshot;
             default:
