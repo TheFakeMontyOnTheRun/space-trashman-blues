@@ -420,7 +420,7 @@ void flipRenderer(void) {
 	rowBytes = ((*pixmap)->rowBytes & 0x3FFF);
 
 	for (c = 0; c < YRES_FRAMEBUFFER; ++c ) {
-		memcpy( baseAddr + offset, &stretchedBuffer[XRES_FRAMEBUFFER * c], XRES_FRAMEBUFFER);
+        memCopyToFrom( baseAddr + offset, &stretchedBuffer[XRES_FRAMEBUFFER * c], XRES_FRAMEBUFFER);
 		offset = offset + rowBytes;
 	}
 

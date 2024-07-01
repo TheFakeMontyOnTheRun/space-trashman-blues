@@ -70,8 +70,8 @@ void graphicsInit(void) {
 
     SetMode( MODE_4 | BG2_ON );		// screen mode & background to display
 
-	framebuffer = (uint8_t*)malloc(XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
-    memset(palette, 0, sizeof(uint16_t) * 256);
+	framebuffer = (uint8_t*)allocMem(XRES_FRAMEBUFFER * YRES_FRAMEBUFFER, GENERAL_MEMORY, FALSE);
+    memFill(palette, 0, sizeof(uint16_t) * 256);
 
     for (b = 0; b < 256; b += 16) {
         for (g = 0; g < 256; g += 8) {

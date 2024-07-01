@@ -37,6 +37,9 @@ void HackingScreen_initStateCallback(enum EGameMenuState tag) {
     (void)tag;
     cursorPosition = 1;
     needsToRedrawVisibleMeshes = 0;
+#ifdef PAGE_FLIP_ANIMATION
+    wasSmoothMovementPreviouslyEnabled = enableSmoothMovement;
+#endif
 
     initHackingMinigame();
 }

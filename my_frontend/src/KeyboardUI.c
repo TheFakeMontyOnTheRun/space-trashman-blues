@@ -19,12 +19,12 @@ extern struct ObjectNode *roomItem;
 extern uint8_t firstFrameOnCurrentState;
 
 const char *menuItems[] = {
-        "1) Use",
-        "2) Use with",
-        "3) Pick",
-        "4) Drop",
-        "5) Next(hand)",
-        "6) Next(room)",
+        "1)Use/Toggle",
+        "2)Use with",
+        "3)Pick/Use",
+        "4)Drop",
+        "5)Next(hand)",
+        "6)Next(room)",
 };
 
 void initKeyboardUI(void) {

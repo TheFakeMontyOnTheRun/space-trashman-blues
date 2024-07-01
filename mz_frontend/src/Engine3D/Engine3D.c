@@ -14,12 +14,10 @@
 #endif
 
 #ifndef SMD
-
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-
 #else
 #include <genesis.h>
 int puts( const char* str );
@@ -1067,7 +1065,7 @@ void pickItem(void) {
         struct Item *itemToPick = getItem(roomItem->item);
         if (itemToPick != NULL) {
 
-            if (!strcmp(itemToPick->name, "digital-safe")) {
+            if (!strcmp(itemToPick->name, "computer-terminal")) {
 
 #ifdef SUPPORTS_HACKING_MINIGAME
                 runHackingMinigame();
@@ -1470,7 +1468,7 @@ int main(int argc, char **argv) {
     initFileReader("base.pfs");
     init();
 
-    
+
 
 
     Crawler_initStateCallback(0);

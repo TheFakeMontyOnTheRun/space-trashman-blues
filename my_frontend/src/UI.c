@@ -9,6 +9,7 @@
 #include "Renderer.h"
 #include "Engine.h"
 #include "SoundSystem.h"
+#include "Common.h"
 
 extern uint8_t playerLocation;
 
@@ -24,7 +25,11 @@ uint8_t redrawMap;
 
 uint8_t needsToRedrawHUD;
 
-void drawGraphic(const uint8_t *graphic) {
+uint16_t scale2DVertex( uint16_t offset, uint16_t scale, const uint8_t *shape, uint16_t index) {
+    return offset + ((scale * shape[index]) / 128);
+}
+
+void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t *graphic) {
     const uint8_t *ptr = graphic;
 
     while (*ptr) {
@@ -36,20 +41,34 @@ void drawGraphic(const uint8_t *graphic) {
         const uint8_t *shape = ptr;
 
         for (c = 0; c < npoints - 1; ++c) {
-            drawLine(shape[2 * c], shape[(2 * c) + 1], shape[(2 * c) + 2], shape[(2 * c) + 3], 2);
+            drawLine(scale2DVertex( x, dx, shape, (2 * c) + 0),
+                     scale2DVertex( y, dy, shape, (2 * c) + 1),
+                     scale2DVertex( x, dx, shape, (2 * c) + 2),
+                     scale2DVertex( y, dy, shape, (2 * c) + 3),
+                     2);
         }
-        drawLine(shape[2 * npoints - 2], shape[2 * npoints - 1], shape[0], shape[1], 2);
+
+        drawLine(scale2DVertex( x, dx, shape, 2 * npoints - 2),
+                 scale2DVertex( y, dy, shape, 2 * npoints - 1),
+                 scale2DVertex( x, dx, shape, 0),
+                 scale2DVertex( y, dy, shape, 1),
+                 2);
+
         ptr += 2 * npoints;
     }
 }
 
 void drawTextAt(uint8_t _x, uint8_t y, const char *text, uint8_t colour) {
-    writeStrWithLimit(_x, y, text, (XRES_FRAMEBUFFER / 8), colour, 0);
+    drawTextAtWithMargin(_x, y, (XRES_FRAMEBUFFER), text, colour);
+}
+
+void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const uint8_t colour) {
+    drawTextAtWithMarginWithFiltering(x, y, margin, text, colour, '-');
 }
 
 void showMessage(const char *message) {
-    clearTextScreen();
-    drawTextWindow(1, 16, (XRES_FRAMEBUFFER / 8) - 3, (YRES_FRAMEBUFFER / 8) - 18, "", message);
+    uint8_t lines = countLines(message) + 3;
+    drawTextWindow( 0, (YRES / 8) + 1, (XRES_FRAMEBUFFER / 8) - 1, lines + 1, "Press 2 to continue", message);
     waitForKey = 1;
 }
 
@@ -72,12 +91,6 @@ void drawMap(void) {
                (YRES_FRAMEBUFFER / 8) / 2 + 1,
                "Map");
 
-    for (y = 0; y < 12; ++y) {
-        for (x = 0; x < 12; ++x) {
-            drawTextAt(((XRES_FRAMEBUFFER / 8) / 2) + x + 2, 1 + y, " ", 0);
-        }
-    }
-
     for (y = 0; y < 32; ++y) {
         for (x = 0; x < 32; ++x) {
 
@@ -94,27 +107,41 @@ void drawMap(void) {
 }
 
 void performAction(void) {
+    const char *msg = NULL;
     switch (getGameStatus()) {
         case kBadVictory:
-            showMessage("Victory! Too bad you didn't survive");
-            while (1);
+            msg = "Victory! Too bad you didn't survive";
+            break;
+
 
         case kBadGameOver:
-            showMessage("You're dead! And so are the\n"
-                        "other people on the path of\n"
-                        "destruction faulty reactor");
-            while (1);
+            msg = "You're dead! And so are the "
+                        "other people on the path of "
+                        "destruction faulty reactor";
+            break;
 
         case kGoodVictory:
-            showMessage("Victory! You managed to destroy the\nship and get out alive");
-            while (1);
+            msg = "Victory! You managed to destroy the ship and get out alive";
+            break;
 
         case kGoodGameOver:
-            showMessage("You failed! While you're alive\n"
-                        "you failed to prevent the worst\n"
-                        "scenario and now EVERYBODY is\n"
-                        "dead!)");
-            while (1);
+            msg = "You failed! While you're alive "
+                        "you failed to prevent the worst "
+                        "scenario and now EVERYBODY is "
+                        "dead!)";
+            break;
+    }
+
+    if (msg) {
+        uint8_t lines = countLines(msg) + 3;
+        clearScreen();
+        drawTextWindow( 0, (YRES / 8) + 1, (XRES_FRAMEBUFFER / 8) - 1, lines + 1, "", msg);
+
+        while (1) {
+            if (soundDriver != kNoSound) {
+                soundTick();
+            }
+        }
     }
 }
 
@@ -127,7 +154,7 @@ void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *titl
 
     for (c = 0; c < th; ++c) {
         for (d = 0; d < tw; ++d) {
-            writeStrWithLimit( tx + d, ty + c, " ", 320 / 8, 2, 0);
+            drawTextAtWithMarginWithFiltering( tx + d, ty + c, XRES_FRAMEBUFFER, " ", 2, ' ');
         }
     }
 
@@ -181,7 +208,7 @@ void
 drawTextWindow(const uint8_t x, const uint8_t y, const uint8_t dx, const uint8_t dy, const char *title,
                const char *content) {
     drawWindow(x, y, dx, dy, title);
-    writeStrWithLimit(x + 1, y + 2, content, x + dx - 1, 1, 0);
+    drawTextAtWithMargin(x + 1, y + 2, (x + dx - 1) * 8, content, 1);
 }
 
 enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t optionsCount, const enum ECommand cmd, enum EGameMenuState backState) {

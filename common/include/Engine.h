@@ -63,8 +63,6 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand, void* data);
 
 void HackingScreen_unloadStateCallback(enum EGameMenuState newState);
 
-int countLines(void);
-
 void enterState(enum EGameMenuState State);
 
 int loopTick(enum ECommand cmd);

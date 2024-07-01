@@ -38,7 +38,7 @@ void graphicsInit(void) {
     root = RootWindow(display, screen_num);
     visual = DefaultVisual(display, screen_num);
 
-    data = (char *) malloc(320 * 240 * 4);
+    data = (char *) allocMem(320 * 240 * 4, GENERAL_MEMORY, FALSE);
 
     img = XCreateImage(display, visual, DefaultDepth(display, screen_num), ZPixmap,
                        0, data, 320, 240, 32, 0);

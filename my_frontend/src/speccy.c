@@ -92,10 +92,6 @@ uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
     return NULL;
 }
 
-void clearTextScreen(void) {
-    clga(0, 128, 256, 192);
-}
-
 void handleSystemEvents(void) {}
 
 uint8_t inputCounter = 0;

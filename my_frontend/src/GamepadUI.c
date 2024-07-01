@@ -20,7 +20,6 @@ const char *menuItems[] = {
 };
 
 void initGamepadUI(void) {
-    cursorPosition = 0;
 }
 
 enum ECommand performActionJoypad(void) {

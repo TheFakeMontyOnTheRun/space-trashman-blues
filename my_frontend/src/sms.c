@@ -39,6 +39,7 @@ void initHW(int argc, char **argv) {
     initSN76489();
     cooldown = COOLDOWN_MAX;
     needsToRedrawVisibleMeshes = 0;
+    waitForKey = 0;
 }
 
 void handleSystemEvents(void) {}
@@ -46,16 +47,26 @@ void handleSystemEvents(void) {}
 enum ECommand getInput(void) {
     int key = read_joypad1();
 
+    performAction();
+
     if (cooldown) {
         cooldown--;
     }
 
     if (key & JOY_UP && !cooldown) {
+        if (waitForKey) {
+            return kCommandNone;
+        }
+
         cooldown = COOLDOWN_MAX;
         return kCommandUp;
     }
 
     if (key & JOY_LEFT && !cooldown) {
+        if (waitForKey) {
+            return kCommandNone;
+        }
+
         cooldown = COOLDOWN_MAX;
         if (key & JOY_FIREB) {
             return kCommandStrafeLeft;
@@ -65,6 +76,10 @@ enum ECommand getInput(void) {
     }
 
     if (key & JOY_RIGHT && !cooldown) {
+        if (waitForKey) {
+            return kCommandNone;
+        }
+
         cooldown = COOLDOWN_MAX;
         if (key & JOY_FIREB) {
             return kCommandStrafeRight;
@@ -74,19 +89,23 @@ enum ECommand getInput(void) {
     }
 
     if (key & JOY_DOWN && !cooldown) {
+        if (waitForKey) {
+            return kCommandNone;
+        }
+
         cooldown = COOLDOWN_MAX;
         return kCommandDown;
     }
 
     if ((key & JOY_FIREA) && !cooldown ) {
+
+        if (waitForKey) {
+            return kCommandNone;
+        }
+
         if (currentGameMenuState == kPlayGame) {
             playSound(3);
             cooldown = COOLDOWN_MAX;
-
-            if (waitForKey) {
-                waitForKey = 0;
-                return kCommandNone;
-            }
 
             return performActionJoypad();
         } else {
@@ -95,14 +114,15 @@ enum ECommand getInput(void) {
     }
 
     if ((key & JOY_FIREB) && !cooldown ) {
-        if (currentGameMenuState == kPlayGame) {
 
-            if (waitForKey) {
-                waitForKey = 0;
-                firstFrameOnCurrentState = 1;
-                needsToRedrawVisibleMeshes = 1;
-                return kCommandNone;
-            }
+        if (waitForKey) {
+            waitForKey = 0;
+            firstFrameOnCurrentState = 1;
+            needsToRedrawVisibleMeshes = 1;
+            return kCommandNone;
+        }
+
+        if (currentGameMenuState == kPlayGame) {
 
             cursorPosition = (cursorPosition + 1);
             playSound(2);

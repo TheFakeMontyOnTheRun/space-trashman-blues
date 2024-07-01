@@ -18,6 +18,8 @@ CFLAGS = \
         -pragma-export:CLIB_GENCON_CAPS=0 \
         -pragma-define:CLIB_FIRMWARE_KEYBOARD_CLICK=0 \
         -pragma-define:CRT_DISABLELOADER=1 \
+        -pragma-define:CLIB_DISABLE_MODE0=1 \
+        -pragma-define:CLIB_DISABLE_MODE2=1 \
         -Iinclude \
         -I../core/include \
         -I../common/include \
@@ -29,7 +31,9 @@ CFLAGS = \
         -DSUPPORTS_ROOM_TRANSITION_ANIMATION \
         -DRLE_COMPRESSED_MAPS \
         -DEMBEDDED_DATA \
-        -DMONOCHROME_VECTORS
+        -DMONOCHROME_VECTORS \
+        -DNO_DYNAMIC_MEMORY_ALLOC \
+        -DUSE_OWN_MIN_MAX
 
 TARGET = derelict.dsk
 

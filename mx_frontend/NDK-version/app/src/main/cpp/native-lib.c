@@ -152,7 +152,7 @@ Java_pt_b13h_spacetrashmanblues_DerelictJNI_getPixelsFromNative(JNIEnv *env, jcl
     menuTick(33);
     flipRenderer();
     jbyte *narr = (*env)->GetByteArrayElements(env, array, NULL);
-    memcpy(narr, &framebufferFinal[0], 320 * 240 * 4);
+    memCopyToFrom(narr, &framebufferFinal[0], 320 * 240 * 4);
 }
 
 int soundToPlay = -1;

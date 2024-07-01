@@ -51,16 +51,16 @@ drawWindowWithOptions(const int x,
         int isCursor = (selectedOption == c);
 
         if (isCursor) {
-            fillRect(x * 8 - 8,
-                     (y + 2 + c) * 8 - 8,
+            fillRect((x) * 8,
+                     (y + 2 + c) * 8,
                      dx * 8,
                      8,
                      getPaletteEntry(0xFF000000),
                      FALSE);
         }
 
-        drawTextAt(x,
-                   y + 1 + c,
+        drawTextAt(x + 1,
+                   y + 2 + c,
                    &options[c][0],
                    isCursor ? getPaletteEntry(0xFFFFFFFF) : getPaletteEntry(0xFF000000));
     }
@@ -69,13 +69,19 @@ drawWindowWithOptions(const int x,
 void
 drawWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title) {
 
-    fillRect((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
-    fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
-    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
-    fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
+    /* shadow */
+    fillRect((x + 1) * 8, (y + 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
 
+    /* background */
+    fillRect((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
+    /* frame */
+    drawRect((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
+    /* title tab */
+    fillRect((x) * 8, (y) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
+
+    /* title text */
     if (title != NULL) {
-        drawTextAt(x, y - 1, title, getPaletteEntry(0xFFFFFFFF));
+        drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
     }
 }
 
@@ -157,9 +163,8 @@ void redrawHUD(void) {
     struct ObjectNode *head;
     int c;
     struct Item *itemPtr;
-    drawTextAtWithMargin(1, 1, XRES, thisMissionName, getPaletteEntry(0xFFFFFFFF));
 
-    drawTextAt(1 + (XRES / 8), 1, " Map:", getPaletteEntry(0xFFFFFFFF));
+    drawTextAt((XRES / 8), 0, thisMissionName, getPaletteEntry(0xFFFFFFFF));
 
 #ifndef TILED_BITMAPS
     if (mapTopLevel != NULL) {
@@ -168,7 +173,7 @@ void redrawHUD(void) {
 #else
     if (mapTopLevel[0] != NULL) {
         for (c = 0; c < 8; ++c) {
-            drawBitmap(((c & 3) * 32), 8 + (c >> 2) * 32, mapTopLevel[c], 1);
+            drawBitmap(XRES + ((c & 3) * 32), 72 + (c >> 2) * 32, mapTopLevel[c], 1);
         }
     }
 #endif
@@ -188,9 +193,8 @@ void redrawHUD(void) {
 	        drawBitmapRaw(XRES + 8, 199 - 32 - 16 - 16, 32, 32,
 		itemSprites[itemPtr->index]->rotations[0], 1);
 	     */
-                drawTextAtWithMarginWithFiltering(2 + ((XRES) / 8), 23, XRES_FRAMEBUFFER, itemPtr->name,
-                                                  itemPtr->active ? getPaletteEntry(0xFFAAAAAA) : getPaletteEntry(
-                                                          0xFFFFFFFF), '\n');
+                drawTextAtWithMarginWithFiltering(((XRES) / 8), 22, XRES_FRAMEBUFFER, itemPtr->name,
+                                                  itemPtr->active ? getPaletteEntry(0xFFAAAAAA) : getPaletteEntry(0xFFFFFFFF), '\n');
             }
             ++line;
         }
@@ -228,7 +232,7 @@ enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t opt
     return kResumeCurrentState;
 }
 
-void drawGraphic(const uint8_t *graphic) {
+void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t *graphic) {
     const uint8_t *ptr = graphic;
     int buffer[6];
 
@@ -244,43 +248,32 @@ void drawGraphic(const uint8_t *graphic) {
         int centerY = 0;
 
         if (npoints > 3) {
-            for (c = 0; c < npoints; ++c) {
-                centerX += shape[2 * c];
-                centerY += shape[(2 * c) + 1];
-            }
-
-            centerX /= npoints;
-            centerY /= npoints;
-
-            buffer[4] = centerX;
-            buffer[5] = centerY;
-
-            for (c = 0; c < npoints - 1; ++c) {
-
-                buffer[0] = shape[(2 * c) + 0];
-                buffer[1] = shape[(2 * c) + 1];
-                buffer[2] = shape[(2 * c) + 2];
-                buffer[3] = shape[(2 * c) + 3];
-
-                fillTriangle(&buffer[0], colour);
-            }
             ptr += 2 * npoints;
         } else if (npoints == 3) {
-            buffer[0] = shape[0];
-            buffer[1] = shape[1];
-            buffer[2] = shape[2];
-            buffer[3] = shape[3];
-            buffer[4] = shape[4];
-            buffer[5] = shape[5];
+  	  buffer[0] = x + ((dx * shape[0]) / 128);
+	  buffer[1] = y + ((dy * shape[1]) / 128);
+	  buffer[2] = x + ((dx * shape[2]) / 128);
+	  buffer[3] = y + ((dy * shape[3]) / 128);
+	  buffer[4] = x + ((dx * shape[4]) / 128);
+	  buffer[5] = y + ((dy * shape[5]) / 128);
 
             fillTriangle(&buffer[0], colour);
 
             ptr += 2 * npoints;
         } else if (npoints == 2) {
-            drawLine(shape[0], shape[1], shape[2], shape[3], colour);
+	  drawLine(x + ((dx * shape[0]) / 128),
+		   y + ((dy * shape[1]) / 128),
+		   x + ((dx * shape[2]) / 128),
+		   y + ((dy * shape[3]) / 128),
+		     colour);
             ptr += 2 * npoints;
         } else if (npoints == 1) {
-            fillRect(shape[0], shape[1], 1, 1, colour, FALSE);
+	  fillRect(x + ((dx * shape[0]) / 128),
+		   y + ((dy * shape[1]) / 128),
+		   1,
+		   1,
+		   colour,
+		   FALSE);
             ptr += 2 * npoints;
         }
     }

@@ -397,8 +397,7 @@ void initGL(void) {
         GLint maxLength = 0;
         glGetShaderiv(vs, GL_INFO_LOG_LENGTH, &maxLength);
 
-        char *errorLog = (char *) malloc(maxLength);
-        memset(errorLog, 0, maxLength);
+        char *errorLog = (char *) allocMem(maxLength,  GENERAL_MEMORY, TRUE);
 
         glGetShaderInfoLog(vs, maxLength, &maxLength, errorLog);
 
@@ -417,7 +416,7 @@ void initGL(void) {
         glGetShaderiv(fs, GL_INFO_LOG_LENGTH, &maxLength);
 
         char *errorLog = (char *) malloc(maxLength);
-        memset(errorLog, 0, maxLength);
+        memFill(errorLog, 0, maxLength);
 
         glGetShaderInfoLog(fs, maxLength, &maxLength, errorLog);
 

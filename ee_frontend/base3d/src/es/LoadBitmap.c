@@ -28,7 +28,7 @@ struct Bitmap *loadBitmap(const char *filename) {
     struct StaticBuffer src = loadBinaryFileFromPath(filename);
 
     struct Bitmap *toReturn =
-            (struct Bitmap *) calloc(1, sizeof(struct Bitmap));
+            (struct Bitmap *) allocMem(sizeof(struct Bitmap), BITMAP_MEMORY, TRUE);
 
     size_t sizeInDisk = src.size - 4; //total size minus the header
 
@@ -47,11 +47,11 @@ struct Bitmap *loadBitmap(const char *filename) {
 
     size_t size = toReturn->width * toReturn->height * sizeof(BitmapPixelFormat);
 
-    uint8_t *buffer = (uint8_t *) calloc(1, sizeInDisk);
+    uint8_t *buffer = (uint8_t *) allocMem(sizeInDisk, BITMAP_MEMORY, TRUE);
 
     memCopyToFrom(buffer, ptr, sizeInDisk);
 
-    toReturn->data = (TexturePixelFormat *) calloc(1, size);
+    toReturn->data = (TexturePixelFormat *) allocMem(size, BITMAP_MEMORY, TRUE);
 
     uint8_t repetitions;
     int pixelIndex = 0;

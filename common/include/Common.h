@@ -43,20 +43,25 @@ struct StaticBuffer {
     size_t size;
 };
 
+#ifndef USE_CUSTOM_MEMORY_HANDLER
+#ifndef NO_DYNAMIC_MEMORY_ALLOC
 void *allocMem(size_t sizeInBytes, enum MemoryType type, uint8_t clearAfterAlloc);
 
 void disposeMem(void* ptr);
+#endif
 
 void memCopyToFrom(void* dst, void* src, size_t sizeInBytes);
 
 void memFill(void* dst, uint8_t val, size_t sizeInBytes);
+#endif
 
+#ifdef ENDIANESS_AWARE
 uint8_t isBigEndian(void);
 
-void initFileReader(const char *  dataFilePath);
-
 uint32_t toNativeEndianess(const uint32_t val);
+#endif
 
+int countLines(const char* text);
 
 extern const char *mainText;
 extern char *textBuffer;
@@ -70,6 +75,9 @@ extern size_t biggestOption;
 
 #define TEXT_BUFFER_SIZE (40 * 25)
 
+
+#ifndef USE_OWN_MIN_MAX
+
 #ifndef SMD
 #ifndef WIN32
 #ifndef LEAN_BUILD
@@ -77,6 +85,8 @@ extern size_t biggestOption;
 #define max(v1, v2) (( (v1) > (v2) ) ? (v1) : (v2) )
 #endif
 #endif
+#endif
+
 #endif
 
 #endif

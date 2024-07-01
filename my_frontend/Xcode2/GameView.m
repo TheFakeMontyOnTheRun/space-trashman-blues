@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#include "Common.h"
 #include "Enums.h"
 #include "UI.h"
 #include "Engine.h"
@@ -88,7 +89,7 @@ void initHW(int argc, char** argv) {
     updateDirection = 0;
     
     mBufferedCommand = '.';
-    memset(framebuffer, 0, 128 * 128);
+    memFill(framebuffer, 0, 128 * 128);
 }
 
 

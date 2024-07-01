@@ -97,8 +97,14 @@ void enterState(enum EGameMenuState newState) {
 #endif
     }
 
-    currentGameMenuState = newState;
     initStateCallback(newState);
+
+    if (newState == kBackToGame) {
+        newState = kPlayGame;
+    }
+
+    currentGameMenuState = newState;
+
     firstFrameOnCurrentState = 1;
 }
 

@@ -46,7 +46,7 @@ uint8_t isPositionAllowed(int8_t x, int8_t y) {
            && collisionMap[LEVEL_MAP(x, y)] != '1';
 }
 
-struct GameSnapshot dungeon_tick(const enum ECommand command) {
+struct GameSnapshot dungeonTick(const enum ECommand command) {
     int currentPlayerRoom;
     int cell;
     struct WorldPosition worldPos;
@@ -295,18 +295,22 @@ struct GameSnapshot dungeon_tick(const enum ECommand command) {
 
         switch (getGameStatus()) {
             case kBadVictory:
+                gameSnapshot.should_continue = kCrawlerGameFinished;
                 enterState(kBadVictoryEpilogue);
                 return gameSnapshot;
 
             case kBadGameOver:
+                gameSnapshot.should_continue = kCrawlerGameFinished;
                 enterState(kBadGameOverEpilogue);
                 return gameSnapshot;
 
             case kGoodVictory:
+                gameSnapshot.should_continue = kCrawlerGameFinished;
                 enterState(kGoodVictoryEpilogue);
                 return gameSnapshot;
 
             case kGoodGameOver:
+                gameSnapshot.should_continue = kCrawlerGameFinished;
                 enterState(kGoodGameOverEpilogue);
                 return gameSnapshot;
             default:

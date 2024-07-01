@@ -193,7 +193,7 @@ void useCloggedFlush(struct Item *item) {
     struct Item *highRankKeycard = getItemNamed("high-rank-keycard");
     (void)item;
 
-    if (highRankKeycard->roomId == 0) {
+    if (highRankKeycard->roomId == 0 && !playerHasObject("high-rank-keycard")) {
         defaultLogger("Found something among the\n...stuff...");
         addToRoom("wc", highRankKeycard);
     }

@@ -35,7 +35,7 @@
 #define FIXP_YRES intToFix(YRES)
 enum ECommand mTurnBuffer;
 
-uint16_t clippingY1 = YRES_FRAMEBUFFER;
+uint16_t clippingY1 = YRES_FRAMEBUFFER - 1;
 
 /*
     *         /|x1y0
@@ -149,8 +149,8 @@ void maskWall(
         ix = 0;
     }
 
-    if (limit > XRES) {
-        limit = XRES;
+    if (limit >= XRES) {
+        limit = XRES - 1;
     }
 
     for (; ix < limit; ++ix) {
@@ -172,7 +172,7 @@ void maskWall(
         }
 
         if (iY1 >= YRES) {
-            iY1 = YRES;
+            iY1 = YRES - 1;
             continue;
         }
 
@@ -316,8 +316,8 @@ void drawWall(FixP_t x0,
         ix = 0;
     }
 
-    if (limit > XRES) {
-        limit = XRES;
+    if (limit >= XRES) {
+        limit = XRES - 1;
     }
 
     for (; ix < limit; ++ix) {
@@ -352,7 +352,7 @@ void drawWall(FixP_t x0,
         iy = iY0;
 
         if (iY1 >= YRES) {
-            iY1 = YRES;
+            iY1 = YRES - 1;
         }
 
         if (iy < 0) {
@@ -530,7 +530,7 @@ void drawFrontWall(FixP_t x0,
     }
 
     if (limit > YRES) {
-        limit = YRES;
+        limit = YRES - 1;
     }
 
     for (; iy < limit; ++iy) {
@@ -570,7 +570,7 @@ void drawFrontWall(FixP_t x0,
         }
 
         if (iX1 >= XRES) {
-            iX1 = XRES;
+            iX1 = XRES - 1;
         }
 
         stipple = (((ix + iy) & 1)) ? 0xFFFFFFFF : 0;
@@ -690,8 +690,8 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
     x1 = upperX1;
     iy = y;
 
-    if (limit > YRES) {
-        limit = YRES;
+    if (limit >= YRES) {
+        limit = YRES - 1;
     }
 
     if (iy < 0) {
@@ -876,8 +876,8 @@ void drawFloor(FixP_t y0,
         iy = 0;
     }
 
-    if (limit > YRES) {
-        limit = YRES;
+    if (limit >= YRES) {
+        limit = YRES - 1;
     }
 
     for (; iy < limit; ++iy) {
@@ -922,7 +922,7 @@ void drawFloor(FixP_t y0,
         stipple = ((iX0 + iy) & 1) ? 0xFFFFFFFF : 0;
 
         if (iX1 >= XRES) {
-            iX1 = XRES;
+            iX1 = XRES - 1;
         }
 
         if (farEnoughForStipple == 2  || ( farEnoughForStipple == 1 && iy & 1) || (farEnoughForStipple == 3) ) {
@@ -1035,11 +1035,11 @@ void fillBottomFlat(const int *coords, FramebufferPixelFormat colour) {
     fX1 = x0;
 
     for (; y < yFinal; ++y) {
-        if (y >= YRES) {
+        if (y >= YRES_FRAMEBUFFER) {
             return;
         } else if (y >= 0) {
-            int iFX1 = max(min((XRES - 1), fixToInt(fX1)), 0);
-            int iFX0 = max(min((XRES - 1), fixToInt(fX0)), 0);
+            int iFX1 = max(min((XRES_FRAMEBUFFER - 1), fixToInt(fX1)), 0);
+            int iFX0 = max(min((XRES_FRAMEBUFFER - 1), fixToInt(fX0)), 0);
             FramebufferPixelFormat *destination = &framebuffer[(XRES_FRAMEBUFFER * y) + min(iFX0, iFX1)];
 
 #ifdef RGBA32_FRAMEBUFFER
@@ -1096,9 +1096,9 @@ void fillTopFlat(int *coords, FramebufferPixelFormat colour) {
     for (; y >= yFinal; --y) {
         if (y < 0) {
             return;
-        } else if (y < YRES) {
-            int iFX1 = max(min((XRES - 1), fixToInt(fX1)), 0);
-            int iFX0 = max(min((XRES - 1), fixToInt(fX0)), 0);
+        } else if (y < YRES_FRAMEBUFFER) {
+            int iFX1 = max(min((XRES_FRAMEBUFFER - 1), fixToInt(fX1)), 0);
+            int iFX0 = max(min((XRES_FRAMEBUFFER - 1), fixToInt(fX0)), 0);
             FramebufferPixelFormat *destination = &framebuffer[(XRES_FRAMEBUFFER * y) + min(iFX0, iFX1)];
 
 #ifdef RGBA32_FRAMEBUFFER
@@ -1306,7 +1306,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
                 texelLineY = fV1;
             }
 
-            if (y >= 0 && y <= YRES) {
+            if (y >= 0 && y < YRES) {
                 int xPos = iFX0;
 				const int shouldStippleLine = (farEnoughForStipple == 2) || (farEnoughForStipple == 1 && y & 1) || (farEnoughForStipple == 3);
                 stipple = ((xPos + y) & 1) ? 0xFFFFFFFF : 0;
@@ -1317,7 +1317,7 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
                     u = abs(fixToInt(texelLineX)) % NATIVE_TEXTURE_SIZE;
                     v = abs(fixToInt(texelLineY)) % NATIVE_TEXTURE_SIZE;
 
-                    if (xPos >= 0 && xPos <= XRES) {
+                    if (xPos >= 0 && xPos < XRES) {
                         if ((shouldStippleLine && stipple) || (farEnoughForStipple == 3 && (y & 1))) {
                             *destination = 0;
                         } else {
@@ -1474,7 +1474,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
                 texelLineY = fV1;
             }
 
-            if (y >= 0 && y <= YRES) {
+            if (y >= 0 && y < YRES) {
 
                 int xPos = iFX0;
 
@@ -1484,7 +1484,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
                     u = abs(fixToInt(texelLineX)) % NATIVE_TEXTURE_SIZE;
                     v = abs(fixToInt(texelLineY)) % NATIVE_TEXTURE_SIZE;
 
-                    if (xPos >= 0 && xPos <= XRES) {
+                    if (xPos >= 0 && xPos < XRES) {
                         if ((shouldStippleLine && stipple) || (farEnoughForStipple == 3 && (y & 1))) {
                             *destination = 0;
                         } else {
@@ -1676,7 +1676,9 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
     size_t fontWidth = defaultFont->width;
     BitmapPixelFormat *fontPixelData = defaultFont->data;
     size_t c;
+    size_t d;
     int32_t srcX, srcY;
+    uint8_t lastSpacePos = 0xFF;
 
     for (c = 0; c < len; ++c) {
         uint8_t ascii;
@@ -1695,9 +1697,8 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
         col = ascii & 31;
         letter = fontPixelData + (col * 8) + (fontWidth * (line * 8));
 
-
-        if (currentChar == '\n' || dstX >= margin) {
-            dstX = (x - 1) * 8;
+        if (currentChar == '\n' || dstX >= (margin)) {
+            dstX = x * 8;
             dstY += 8;
             continue;
         }
@@ -1707,8 +1708,19 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
         }
 
         if (currentChar == ' ') {
+            lastSpacePos = c;
             dstX += 8;
             continue;
+        } else {
+            if ((c - 1) == lastSpacePos) {
+                d = c;
+                while (d < len && text[d] != ' ') ++d;
+
+                if ((dstX + ((d - c ) * 8)) >= margin ) {
+                    dstX = x * 8;
+                    dstY += 8;
+                }
+            }
         }
 
         for (srcY = 0; srcY < 8; ++srcY) {

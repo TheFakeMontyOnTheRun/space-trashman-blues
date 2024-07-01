@@ -357,3 +357,25 @@ TEST_F(TestDerelict, cantUseKeyCard) {
     parseCommand("use", "hacked-keycard");
     ASSERT_FALSE(getItemNamed("hacked-keycard")->active);
 }
+
+/* regression for https://github.com/TheFakeMontyOnTheRun/space-trashman-blues/issues/153 */
+TEST_F(TestDerelict, cantUseCloggedFlushTwice) {
+    setPlayerLocation(getRoomIdByName("wc"));
+
+    ASSERT_FALSE(playerHasObject("high-rank-keycard"));
+    ASSERT_EQ(0, getItemNamed("high-rank-keycard")->roomId);
+
+    parseCommand("use", "clogged-flush");
+    ASSERT_NE(0, getItemNamed("high-rank-keycard")->roomId);
+    ASSERT_FALSE(playerHasObject("high-rank-keycard"));
+
+    parseCommand("pick", "high-rank-keycard");
+
+    parseCommand("use", "clogged-flush");
+    ASSERT_TRUE(playerHasObject("high-rank-keycard"));
+    ASSERT_EQ(0, getItemNamed("high-rank-keycard")->roomId);
+
+    parseCommand("use", "clogged-flush");
+    ASSERT_TRUE(playerHasObject("high-rank-keycard"));
+    ASSERT_EQ(0, getItemNamed("high-rank-keycard")->roomId);
+}

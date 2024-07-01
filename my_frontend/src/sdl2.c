@@ -13,6 +13,7 @@
 #include "font.h"
 
 #include "SDL.h"
+#include "Common.h"
 
 extern uint8_t firstFrameOnCurrentState;
 extern struct ObjectNode *focusedItem;
@@ -108,10 +109,6 @@ void graphicsPutPointArray(uint8_t *y128Values) {
     }
 }
 
-void clearTextScreen(void) {
-    fillRect(0, 129, 256, 192, 0, 0);
-}
-
 void enterTextMode(void) {
 }
 
@@ -143,7 +140,7 @@ void shutdownGraphics(void) {
 }
 
 void clearGraphics(void) {
-    memset(framebuffer, 0, 128 * 128);
+    memFill(framebuffer, 0, 128 * 128);
 }
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
@@ -209,12 +206,6 @@ enum ECommand getInput(void) {
             switch (event.key.keysym.sym) {
                 case SDLK_RETURN:
                 case SDLK_1:
-                    if (waitForKey) {
-                        waitForKey = 0;
-                        firstFrameOnCurrentState = 1;
-                        needsToRedrawVisibleMeshes = 1;
-                        return kCommandNone;
-                    }
                     return kCommandFire1;
 
                 case SDLK_ESCAPE:
@@ -225,6 +216,12 @@ enum ECommand getInput(void) {
 
                 case SDLK_KP_7:
                 case SDLK_2:
+                    if (waitForKey) {
+                        waitForKey = 0;
+                        firstFrameOnCurrentState = 1;
+                        needsToRedrawVisibleMeshes = 1;
+                        return kCommandNone;
+                    }
                     return kCommandFire2;
 
                 case SDLK_KP_8:
@@ -240,12 +237,8 @@ enum ECommand getInput(void) {
                     return kCommandFire5;
 
                 case SDLK_KP_9:
-                case SDLK_9:
+                case SDLK_6:
                     return kCommandFire6;
-
-                case SDLK_s:
-                    clearTextScreen();
-                    break;
 
                 case SDLK_LEFT:
                     return kCommandLeft;
@@ -276,60 +269,81 @@ enum ECommand getInput(void) {
     return kCommandNone;
 }
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
-    uint8_t len = strlen(text);
-    char *ptr = text;
-    uint8_t c = 0;
-    uint8_t x = _x;
 
-    for (; c < len && y < 64; ++c) {
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text, const uint8_t fg,
+                                       char charToReplaceHifenWith) {
 
-        char cha = *ptr;
+    size_t len = strlen(text);
+    int32_t dstX = x * 8;
+    int32_t dstY = y * 8;
 
-        if (x == limitX) {
-            ++y;
-            x = _x;
-        } else if (cha == '\n') {
-            ++y;
-            x = _x;
-            ++ptr;
+    size_t c;
+    size_t d;
+    uint8_t lastSpacePos = 0xFF;
+
+    for (c = 0; c < len; ++c) {
+
+        char currentChar = text[c];
+
+        if (currentChar == '-') {
+            currentChar = charToReplaceHifenWith;
+        }
+
+        if (currentChar == '\n' || dstX >= (margin)) {
+            dstX = x * 8;
+            dstY += 8;
             continue;
         }
 
-        if (cha >= 'a') {
-            if (cha <= 'z') {
-                cha = (cha - 'a') + 'A';
-            } else {
-                cha -= ('z' - 'a');
+        if (dstY >= YRES_FRAMEBUFFER) {
+            return;
+        }
+
+        if (currentChar == ' ') {
+            lastSpacePos = c;
+        } else {
+            if ((c - 1) == lastSpacePos) {
+                d = c;
+                while (d < len && text[d] != ' ') ++d;
+
+                if ((dstX + ((d - c ) * 8)) >= margin ) {
+                    dstX = x * 8;
+                    dstY += 8;
+                }
             }
         }
 
-        uint8_t *fontTop = &font[((cha - 32) << 3)];
 
+        if (currentChar >= 'a') {
+            if (currentChar <= 'z') {
+                currentChar = (currentChar - 'a') + 'A';
+            } else {
+                currentChar -= ('z' - 'a');
+            }
+        }
 
-        for (int d = 0; d < 8; ++d) {
+        uint8_t *fontTop = &font[((currentChar - 32) << 3)];
+
+        for (int f = 0; f < 8; ++f) {
             int e;
             uint8_t chunk = *fontTop;
 
             for (e = 0; e < 8; ++e) {
                 if (chunk & 1) {
-                    realPut(8 * x + (7 - e), 8 * y + (d), 1, NULL);
+                    realPut(dstX + (7 - e), dstY + (f), 1, NULL);
                 } else {
-                    realPut(8 * x + (7 - e), 8 * y + (d), 0, NULL);
+                    realPut(dstX + (7 - e), dstY + (f), 0, NULL);
                 }
                 chunk = chunk >> 1;
             }
 
-
             fontTop++;
         }
-
-        ++x;
-        ++ptr;
+        dstX += 8;
     }
 }
 
-void initHW(int, char **pString) {
+void initHW(int argc, char **pString) {
     initKeyboardUI();
 
     SDL_Init(SDL_INIT_EVERYTHING);

@@ -3,6 +3,7 @@
 */
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "Common.h"
 #include "Enums.h"
@@ -44,20 +45,29 @@ void HUD_refresh(void) {
                (YRES_FRAMEBUFFER / 8) - 17,
                "Status");
 
-    writeStrWithLimit(1, YRES_TEXT - 7, "In room:", 16, 2, 0);
-    writeStrWithLimit(1, YRES_TEXT - 4, "In hand:", 16, 2, 0);
+    drawTextAt(1, YRES_TEXT - 7, "In room:", 2);
+    drawTextAt(1, YRES_TEXT - 4, "In hand:", 2);
 
     struct Item *item;
 
     /* Display "In room" item */
     if (roomItem != NULL) {
         item = getItem(roomItem->item);
-        if (item->active) {
-            writeStrWithLimit(1, YRES_TEXT - 6, "*", 16, 2, 0);
+
+        if (strstr(item->name, "go-down")) {
+            drawTextAtWithMargin(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, "go down",  2);
+        } else {
+            if (strstr(item->name, "go-up")) {
+                drawTextAtWithMargin(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, "go up",  2);
+            } else {
+                if (item->active) {
+                    drawTextAt(1, YRES_TEXT - 6, "*", 2);
+                }
+                drawTextAtWithMargin(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, item->name,  2);
+            }
         }
-        writeStrWithLimit(2, YRES_TEXT - 6, item->name, 16, 2, 0);
     } else {
-        writeStrWithLimit(2, YRES_TEXT - 6, "Nothing", 16, 2, 0);
+        drawTextAt(2, YRES_TEXT - 6, "Nothing", 2);
     }
 
     /* Display "In hand" item */
@@ -66,9 +76,9 @@ void HUD_refresh(void) {
         if (item->active) {
             drawTextAt(1, YRES_TEXT - 3, "*", 1);
         }
-        writeStrWithLimit(2, YRES_TEXT - 3, item->name, 16, 2, 0);
+        drawTextAtWithMargin(2, YRES_TEXT - 3, (XRES_FRAMEBUFFER) / 2, item->name,  2);
     } else {
-        writeStrWithLimit(2, YRES_TEXT - 3, "Nothing", 16, 2, 0);
+        drawTextAt(2, YRES_TEXT - 3, "Nothing", 2);
     }
 }
 
@@ -91,14 +101,6 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
     prevZ = cameraZ;
 
     switch (cmd) {
-        case kCommandFire5:
-            nextItemInHand();
-            break;
-
-        case kCommandFire6:
-            nextItemInRoom();
-            break;
-
         case kCommandFire1:
             useItemInHand();
             break;
@@ -109,11 +111,25 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
 
         case kCommandFire3:
             pickItem();
+
+            if (playerLocation != previousLocation) {
+                redrawMap = needsToRedrawHUD = needsToRedrawVisibleMeshes = 1;
+                initMap();
+            }
             break;
 
         case kCommandFire4:
             dropItem();
             break;
+
+        case kCommandFire5:
+            nextItemInHand();
+            break;
+
+        case kCommandFire6:
+            nextItemInRoom();
+            break;
+
         default:
             goto handle_directions;
     }
@@ -254,7 +270,11 @@ void Crawler_initStateCallback(enum EGameMenuState tag) {
     (void)tag;
     enteredFrom = 0;
     cameraRotation = 0;
-    initStation();
+
+    if (tag != kBackToGame) {
+        initStation();
+    }
+
     focusedItem = getPlayerItems();
     setErrorHandlerCallback(showMessage);
     setLoggerDelegate(showMessage);
