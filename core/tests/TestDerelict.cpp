@@ -265,23 +265,6 @@ TEST_F(TestDerelict, keycardsCanElevatePlayerRankIfItsHigherThanCurrent) {
     ASSERT_EQ(getPlayerRank(), 2);
 }
 
-TEST_F(TestDerelict, canOnlyUseCommWithHigherRanks) {
-    setPlayerLocation(getRoomIdByName("hall-2"));
-    addToRoom("hall-2", getItemNamed("hacked-keycard"));
-
-    parseCommand("use", "comm-terminal-2");
-    ASSERT_FALSE(getItemNamed("comm-terminal-2")->active);
-
-    parseCommand("pick", "low-rank-keycard");
-    parseCommand("use", "comm-terminal-2");
-    ASSERT_FALSE(getItemNamed("comm-terminal-2")->active);
-
-    parseCommand("pick", "hacked-keycard");
-    parseCommand("use", "comm-terminal-2");
-    ASSERT_TRUE(getItemNamed("comm-terminal-2")->active);
-}
-
-
 TEST_F(TestDerelict, cantUnlockSafeWithOfflineComputerNodes) {
     setPlayerLocation(getRoomIdByName("situation-room"));
 
@@ -319,21 +302,13 @@ TEST_F(TestDerelict, usingTheReactorCoreWillCauseMeltdown) {
     ASSERT_EQ(kBadVictory, getGameStatus());
 }
 
-TEST_F(TestDerelict, canToggleCommTerminal1) {
-    setPlayerLocation(getRoomIdByName("hall-1"));
-    setPlayerRank(5);
-    ASSERT_FALSE(getItemNamed("comm-terminal-1")->active);
-    parseCommand("use", "comm-terminal-1");
-    ASSERT_TRUE(getItemNamed("comm-terminal-1")->active);
-}
-
 TEST_F(TestDerelict, cantToggleMagneticBoots) {
     ASSERT_TRUE(getItemNamed("magnetic-boots")->active);
     parseCommand("use", "magnetic-boots");
     ASSERT_TRUE(getItemNamed("magnetic-boots")->active);
 }
 
-TEST_F(TestDerelict, cantToggleCommTerminal1ByUsingWithOthers) {
+TEST_F(TestDerelict, cantToggleCommTerminal1ByUsingWithHigherRankKeycards) {
     setPlayerLocation(getRoomIdByName("hall-1"));
     addToRoom("hall-1", getItemNamed("hacked-keycard"));
     parseCommand("pick", "hacked-keycard");

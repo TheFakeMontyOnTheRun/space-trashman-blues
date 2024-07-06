@@ -93,7 +93,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     val llActions = findViewById<LinearLayout>(R.id.llActions)
                     val llDirections = findViewById<LinearLayout>(R.id.llDirections)
                     val llScreenControllers = findViewById<LinearLayout>(R.id.llScreenControllers)
-                    val btnItemInfo = findViewById<Button>(R.id.btnItemInfo)
                     val btnUp = findViewById<ImageButton>(R.id.btnUp)
                     val btnDown = findViewById<ImageButton>(R.id.btnDown)
                     val btnUse = findViewById<Button>(R.id.btnUse)
@@ -113,8 +112,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             llScreenControllers.visibility = View.VISIBLE
                         }
 
-
-                        btnItemInfo.setOnClickListener(this)
                         btnUp.setOnClickListener(this)
                         btnDown.setOnClickListener(this)
                         btnUse.setOnClickListener(this)
@@ -220,8 +217,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             R.id.btnUse -> toSend = 'z'
             R.id.btnUseWith -> toSend = 'x'
-            R.id.btnNextItem -> toSend = 'v'
-            R.id.btnItemInfo -> toSend = 'c'
+            R.id.btnNextItem -> toSend = 'c'
 
             R.id.btnStrafeLeft-> toSend = 'n'
             R.id.btnStrafeRight-> toSend = 'm'

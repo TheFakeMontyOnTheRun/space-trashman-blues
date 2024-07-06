@@ -213,11 +213,6 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
             }
                 break;
             case kCommandFire3: {
-                needsToRedrawHUD = TRUE;
-            }
-                break;
-
-            case kCommandFire4: {
                 struct ObjectNode *playerItems = getPlayerItems();
                 int index = 0;
 

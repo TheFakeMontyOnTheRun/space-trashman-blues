@@ -111,7 +111,7 @@ void graphicsPut(int16_t x, int16_t y, uint16_t colour) {
 }
 
 void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
-    if (y < 0) {
+    if (y < 0 || y > YRESMINUSONE) {
         return;
     }
 
@@ -127,12 +127,12 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
         _x0 = 0;
     }
 
-    if (_x1 >= 128) {
-        _x1 = 127;
+    if (_x1 > XRESMINUSONE) {
+        _x1 = XRESMINUSONE;
     }
 
     for (int x = _x0; x <= _x1; ++x) {
-        framebuffer[(256 * y) + x] = colour;
+        framebuffer[(XRES_FRAMEBUFFER * y) + x] = colour;
     }
 }
 
@@ -185,7 +185,7 @@ void realPut(int x, int y, uint8_t value) {
         y = 159;
     }
     assert( !(value < 0 || value >= 16));
-    framebuffer[(256 * y) + x] = value;
+    framebuffer[(XRES_FRAMEBUFFER * y) + x] = value;
 }
 
 void clearGraphics(void) {
