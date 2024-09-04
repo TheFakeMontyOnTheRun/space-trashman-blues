@@ -42,7 +42,7 @@ void enterState(enum EGameMenuState newState) {
     timeUntilNextState = MENU_ITEM_TIME_TO_BECOME_ACTIVE_MS;
     currentPresentationState = kWaitingForInput;
     cursorPosition = 0;
-    nextNavigationSelection = -1;
+    nextNavigationSelection = kResumeCurrentState;
     
     switch (newState) {
         default:
@@ -81,6 +81,7 @@ void enterState(enum EGameMenuState newState) {
             tickCallback = Crawler_tickCallback;
             unloadStateCallback = Crawler_unloadStateCallback;
             break;
+#ifdef SUPPORTS_HACKING_MINIGAME
         case kHackingGame: {
             initStateCallback = HackingScreen_initStateCallback;
             repaintCallback = HackingScreen_repaintCallback;
@@ -88,6 +89,7 @@ void enterState(enum EGameMenuState newState) {
             unloadStateCallback = HackingScreen_unloadStateCallback;
         }
             break;
+#endif
 #ifdef EMIT_QUIT_OPTION
         case kQuit:
             isRunning = FALSE;
@@ -95,8 +97,14 @@ void enterState(enum EGameMenuState newState) {
 #endif
     }
 
-    currentGameMenuState = newState;
     initStateCallback(newState);
+
+    if (newState == kBackToGame) {
+        newState = kPlayGame;
+    }
+
+    currentGameMenuState = newState;
+
     firstFrameOnCurrentState = 1;
 }
 
@@ -113,7 +121,7 @@ uint8_t menuTick(long delta_time) {
 
     input = getInput();
 
-    newState = tickCallback(input, delta_time);
+    newState = tickCallback(input, &delta_time);
     
 #ifdef EMIT_QUIT_OPTION
     if (input == kCommandQuit) {

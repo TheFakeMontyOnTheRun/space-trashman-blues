@@ -4,6 +4,10 @@ PACKAGER=packer
 
 CRUNCHER=../../tools/wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
 
+DISTILLER=distiller
+
+TRIGGER=trigger
+
 $(CRUNCHER):
 	mvn -q -f ../../tools/wobj-compiler/pom.xml clean compile package install
 

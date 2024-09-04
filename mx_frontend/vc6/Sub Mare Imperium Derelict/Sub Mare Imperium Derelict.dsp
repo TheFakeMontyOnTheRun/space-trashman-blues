@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /W3 /O2 /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /FD /c
+# ADD CPP /nologo /W3 /O2 /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /D "SUPPORTS_HACKING_MINIGAME" /D "PAGE_FLIP_ANIMATION" /D "INCLUDE_ITEM_DESCRIPTIONS" /D "ENDIANESS_AWARE" /D "EMIT_QUIT_OPTION" /D XRES_FRAMEBUFFER=320 /D YRES_FRAMEBUFFER=200 /FD /c
 # SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /D "SUPPORTS_HACKING_MINIGAME" /D "PAGE_FLIP_ANIMATION" /D "INCLUDE_ITEM_DESCRIPTIONS" /D "ENDIANESS_AWARE" /D "EMIT_QUIT_OPTION" /D XRES_FRAMEBUFFER=320 /D YRES_FRAMEBUFFER=200 /FD /GZ /c
 # SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -114,18 +114,6 @@ SOURCE=..\..\..\common\src\CreditsScreen.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\base3d\src\CRenderer.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\base3d\src\CRenderer_Rasterization.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\base3d\src\CRenderer_Tesselation.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\common\src\CTile3DProperties.c
 # End Source File
 # Begin Source File
@@ -162,6 +150,10 @@ SOURCE=..\..\..\common\src\Globals.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Common\Src\HackingMinigameRules.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\common\src\HackingScreen.c
 # End Source File
 # Begin Source File
@@ -195,11 +187,27 @@ SOURCE=..\..\..\common\src\MapWithCharKey.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Common\Src\Mesh.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\common\src\PackedFileReader.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\core\src\Parser.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Base3d\Src\Renderer.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Base3d\Src\RendererRasterization.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Base3d\Src\RendererTesselation.c
 # End Source File
 # Begin Source File
 

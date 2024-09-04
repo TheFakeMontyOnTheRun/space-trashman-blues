@@ -374,7 +374,7 @@ void drawRampAt(const struct Vec3 p0,
     if (tint == 0) {
         maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0, tint);
     } else {
-#ifndef AGS
+#ifndef FLOOR_TEXTURES_DONT_ROTATE
         drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(p0.mZ),
                   texture->rotations[cameraDirection], tint);
 #else
@@ -425,7 +425,7 @@ void drawFloorAt(const struct Vec3 center,
         if (tint == 0) {
             maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0, tint);
         } else {
-#ifndef AGS
+#ifndef FLOOR_TEXTURES_DONT_ROTATE
             drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
                       texture->rotations[cameraDirection], tint);
 #else
@@ -478,7 +478,7 @@ void drawCeilingAt(const struct Vec3 center,
         if (tint == 0) {
             maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0, tint);
         } else {
-#ifndef AGS
+#ifndef FLOOR_TEXTURES_DONT_ROTATE
             drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
                       texture->rotations[cameraDirection], tint);
 #else

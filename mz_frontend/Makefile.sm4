@@ -46,8 +46,13 @@ LIBS    += -u __modsi3 -u __divsi3 -u __mulsi3 -u __umodsi3 -u __udivsi3 -u __um
 
 # Any C or C++ standard should be fine here as long as GCC support it
 CCFLAGS  = -m68000 -Wall -Wextra -std=c99 -ffreestanding -fcommon -Ofast -Wno-unused-parameter -Wno-char-subscripts \
-            -DSMD -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DSUPPORTS_HACKING_MINIGAME -DTRACE_OBJECTS_OVER_FLOOR\
-            -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DENDIANESS_AWARE -DGAMEPAD -DUSE_FILLED_POLYS -DRLE_COMPRESSED_MAPS
+            -DSMD  -fomit-frame-pointer -fno-exceptions -ffast-math \
+                          -Iinclude -I../core/include -I../common/include -IEngine3D \
+                          -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DENDIANESS_AWARE -DXRES=128 -DYRES=128\
+                          -DENDIANESS_AWARE -DMONOCHROME_VECTORS -DEMBEDDED_DATA -DRLE_COMPRESSED_MAPS -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DSUPPORTS_HACKING_MINIGAME -DTRACE_OBJECTS_OVER_FLOOR -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DRES128X128 -Wall -Wextra -pedantic -Wunused-parameter -DXRES_FRAMEBUFFER=256 -DYRES_FRAMEBUFFER=160 -DENDIANESS_AWARE \
+                          -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DENDIANESS_AWARE \
+                          -Iinclude -I../common/include -I../core/include -I../common/include -IEngine3D -I../core/include \
+                          -I../common/include -I../core/include -Imenu/include -ISoundSystem -I../core/include -IEngine3D
 
 # Extra options set by debug or release target
 ASFLAGS  = -m68000 --register-prefix-optional
@@ -59,8 +64,28 @@ RESS  = $(wildcard res/*.res)
 SS    = $(wildcard src/*.s)
 
 OBJS  = $(RESS:.res=.o)
-OBJS += Engine3D/demo.o  ../common/src/FixP.o ../common/src/Globals.o ../common/src/CTile3DProperties.o ../common/src/MapWithCharKey.o MegaDriveVersion/megadrive.o Engine3D/HackingMinigame.o ../core/src/Core.o ../core/src/Derelict.o ../common/src/Common.o ../common/src/ArrayPackedFileReader.o
-
+OBJS += src/MegaDriveVersion/megadrive.o     src/RendererTesselation.o \
+                                         src/RendererRasterizer.o \
+                                         src/RendererScene.o \
+                                         ../common/src/HelpScreen.o \
+                                         ../common/src/MainMenu.o \
+                                         ../common/src/CreditsScreen.o \
+                                         ../common/src/HackingMinigameRules.o \
+                                         src/Main.o \
+                                         ../core/src/Derelict.o \
+                                         ../core/src/Core.o \
+                                         ../common/src/ArrayPackedFileReader.o \
+                                         ../common/src/NullMusic.o \
+                                         ../common/src/Common.o \
+                                         ../common/src/Engine.o \
+                                         ../common/src/CTile3DProperties.o \
+                                         ../common/src/MapWithCharKey.o \
+                                         src/HackingMinigame.o \
+                                         src/UI.o \
+                                         src/Events.o \
+                                         src/GamepadUI.o \
+                                         src/Crawler.o \
+                                         src/GameMenu.o
 OBJS += $(SS:.s=.o)
 
 ASMO  = $(RESS:.res=.o)

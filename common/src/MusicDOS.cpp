@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdlib.h>
 #include <conio.h>
 #include <dos.h>
@@ -167,7 +168,7 @@ void muteSound() {
     playMusic(7, "");
 }
 
-extern "C" void playSound(const int action) {
+extern "C" void playSound(const uint8_t action) {
     switch (action) {
         case STATE_CHANGE_SOUND:
             playMusic(action, "t300i12o2b20");

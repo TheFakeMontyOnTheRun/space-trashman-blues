@@ -3,6 +3,7 @@
 */
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "Common.h"
 #include "Enums.h"
@@ -15,8 +16,6 @@
 
 int8_t map[32][32];
 
-
-
 extern int8_t stencilHigh[XRES];
 extern struct ObjectNode *focusedItem;
 extern struct ObjectNode *roomItem;
@@ -27,39 +26,63 @@ extern int8_t cameraRotation;
 extern uint8_t enteredFrom;
 extern uint8_t playerLocation;
 
-uint8_t needs3dRefresh;
+uint8_t needsToRedrawVisibleMeshes;
 
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
 uint8_t roomTransitionAnimationStep = 0;
 #endif
 
 void HUD_refresh(void) {
-    writeStrWithLimit(1, YRES_TEXT - 7, "In room", 16, 2, 0);
-
-    if (roomItem != NULL) {
-        struct Item *item = getItem(roomItem->item);
-
-        if (item->active) {
-            writeStrWithLimit(1, YRES_TEXT - 6, "*", 16, 2, 0);
-        }
-
-        writeStrWithLimit(2, YRES_TEXT - 6, item->name, 16, 2, 0);
+    if (!needsToRedrawHUD) {
+        return;
     }
 
-    writeStrWithLimit(1, YRES_TEXT - 4, "In hand", 16, 2, 0);
+    needsToRedrawHUD = 0;
 
+    drawWindow(0,
+               (128 / 8),
+               (XRES_FRAMEBUFFER / 8) / 2,
+               (YRES_FRAMEBUFFER / 8) - 17,
+               "Status");
+
+    drawTextAt(1, YRES_TEXT - 7, "In room:", 2);
+    drawTextAt(1, YRES_TEXT - 4, "In hand:", 2);
+
+    struct Item *item;
+
+    /* Display "In room" item */
+    if (roomItem != NULL) {
+        item = getItem(roomItem->item);
+
+        if (strstr(item->name, "go-down")) {
+            drawTextAtWithMargin(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, "go down",  2);
+        } else {
+            if (strstr(item->name, "go-up")) {
+                drawTextAtWithMargin(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, "go up",  2);
+            } else {
+                if (item->active) {
+                    drawTextAt(1, YRES_TEXT - 6, "*", 2);
+                }
+                drawTextAtWithMargin(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, item->name,  2);
+            }
+        }
+    } else {
+        drawTextAt(2, YRES_TEXT - 6, "Nothing", 2);
+    }
+
+    /* Display "In hand" item */
     if (focusedItem != NULL) {
-        struct Item *item = getItem(focusedItem->item);
-
+        item = getItem(focusedItem->item);
         if (item->active) {
             drawTextAt(1, YRES_TEXT - 3, "*", 1);
         }
-
-        writeStrWithLimit(2, YRES_TEXT - 3, item->name, 16, 2, 0);
+        drawTextAtWithMargin(2, YRES_TEXT - 3, (XRES_FRAMEBUFFER) / 2, item->name,  2);
+    } else {
+        drawTextAt(2, YRES_TEXT - 3, "Nothing", 2);
     }
 }
 
-enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
+enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
     (void)data;
     uint8_t prevX;
     uint8_t prevZ;
@@ -69,7 +92,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
 
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
     if (roomTransitionAnimationStep) {
-        needs3dRefresh = 1;
+        needsToRedrawVisibleMeshes = 1;
         return kResumeCurrentState;
     }
 #endif
@@ -78,14 +101,6 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
     prevZ = cameraZ;
 
     switch (cmd) {
-        case kCommandFire5:
-            nextItemInHand();
-            break;
-
-        case kCommandFire6:
-            nextItemInRoom();
-            break;
-
         case kCommandFire1:
             useItemInHand();
             break;
@@ -96,19 +111,33 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, long data) {
 
         case kCommandFire3:
             pickItem();
+
+            if (playerLocation != previousLocation) {
+                redrawMap = needsToRedrawHUD = needsToRedrawVisibleMeshes = 1;
+                initMap();
+            }
             break;
 
         case kCommandFire4:
             dropItem();
             break;
+
+        case kCommandFire5:
+            nextItemInHand();
+            break;
+
+        case kCommandFire6:
+            nextItemInRoom();
+            break;
+
         default:
             goto handle_directions;
     }
     updateMapItems();
-    needs3dRefresh = 1;
+    needsToRedrawVisibleMeshes = 1;
 
     if (!waitForKey) {
-        HUD_refresh();
+        needsToRedrawHUD = 1;
     }
 
     return kResumeCurrentState;
@@ -137,7 +166,7 @@ handle_directions:
         case kCommandNone:
             return kResumeCurrentState;
     }
-    needs3dRefresh = 1;
+    needsToRedrawVisibleMeshes = 1;
     cameraRotation = getPlayerDirection();
     pos = getPlayerPosition();
 
@@ -196,10 +225,15 @@ void Crawler_repaintCallback(void) {
 
     if (firstFrameOnCurrentState) {
         clearScreen();
+        redrawMap = needsToRedrawHUD = 1;
         HUD_initialPaint();
     }
 
-    if (!needs3dRefresh) {
+    HUD_refresh();
+
+    drawMap();
+
+    if (!needsToRedrawVisibleMeshes) {
         return;
     }
 #ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
@@ -209,7 +243,7 @@ void Crawler_repaintCallback(void) {
         uint8_t val = 95 + (MAP_SIZE_Y - y);
 
         if (roomTransitionAnimationStep == 0) {
-            HUD_initialPaint();
+            redrawMap = needsToRedrawHUD = needsToRedrawVisibleMeshes = 1;
             clearGraphics();
             renderScene();
             return;
@@ -236,16 +270,20 @@ void Crawler_initStateCallback(enum EGameMenuState tag) {
     (void)tag;
     enteredFrom = 0;
     cameraRotation = 0;
-    initStation();
+
+    if (tag != kBackToGame) {
+        initStation();
+    }
+
     focusedItem = getPlayerItems();
     setErrorHandlerCallback(showMessage);
     setLoggerDelegate(showMessage);
     initMap();
-    needs3dRefresh = 1;
+    needsToRedrawVisibleMeshes = 1;
 }
 
 void Crawler_unloadStateCallback(enum EGameMenuState newState) {
     (void)newState;
-    needs3dRefresh = 0;
+    needsToRedrawVisibleMeshes = 0;
 }
 

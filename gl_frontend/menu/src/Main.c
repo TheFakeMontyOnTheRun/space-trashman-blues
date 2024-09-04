@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
             delta_time = 20;
         }
 
-        startFrame(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER);
+        startFrame(0, 0, XRES_SCREEN, YRES_SCREEN);
         isRunning = isRunning && menuTick(delta_time);
         endFrame();
         flipRenderer();

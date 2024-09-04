@@ -90,7 +90,6 @@ extern unsigned int uScaleUniformLocation;
 extern unsigned int uProjectionMatrixUniformLocation;
 extern unsigned int sTextureUniformLocation;
 extern unsigned int uModUniformLocation;
-extern unsigned int uFadeUniformLocation;
 
 extern t_mat4x4 viewMatrix;
 extern t_mat4x4 transformMatrix;
@@ -140,9 +139,6 @@ void renderVBOAt(struct Bitmap *bitmap,
         float b = ((tint & 0xFF0000) >> 16) * NORMALIZE_COLOUR;
         glUniform4f(uModUniformLocation, r, g, b, 1.0f);
     }
-
-    float vanishingFade = 1.0f - ( -z / 64.0f );
-    glUniform4f(uFadeUniformLocation, vanishingFade, vanishingFade, vanishingFade, vanishingFade);
 
     checkGLError("Setting tint");
 
@@ -427,7 +423,7 @@ float clampf(float v0, float v1, float v) {
 
 struct Texture *makeTextureFrom(const char *filename) {
     struct Texture *toReturn =
-            (struct Texture *) calloc(1, sizeof(struct Texture));
+            (struct Texture *) allocMem(sizeof(struct Texture), BITMAP_MEMORY, TRUE);
 
     toReturn->raw = loadBitmap(filename);
 
@@ -933,9 +929,9 @@ void drawMesh(struct Mesh *mesh, const struct Vec3 center, enum EDirection rotat
 
     if (mesh->nativeBuffer == NULL) {
 
-        mesh->nativeVertexBuffer = calloc( 3 * 3 * count, sizeof(float));
-        mesh->nativeTexCoordBuffer = calloc( 2 * 3 * count, sizeof(float));
-        mesh->nativeIndicesBuffer = calloc( 3 * count, sizeof(unsigned short));
+        mesh->nativeVertexBuffer = allocMem( 3 * 3 * count * sizeof(float), GENERAL_MEMORY, TRUE);
+        mesh->nativeTexCoordBuffer = allocMem( 2 * 3 * count * sizeof(float), GENERAL_MEMORY, TRUE);
+        mesh->nativeIndicesBuffer = allocMem( 3 * count * sizeof(unsigned short), GENERAL_MEMORY, TRUE);
 
         float*  vP = mesh->nativeVertexBuffer;
         float* tP = mesh->nativeTexCoordBuffer;
@@ -989,7 +985,7 @@ void drawMesh(struct Mesh *mesh, const struct Vec3 center, enum EDirection rotat
             vertexData += 9;
         }
 
-        mesh->nativeBuffer = calloc(1, sizeof(struct VBORegister));
+        mesh->nativeBuffer = allocMem(sizeof(struct VBORegister), GENERAL_MEMORY, TRUE);
 
         *((struct VBORegister*)mesh->nativeBuffer) = submitVBO((float *) mesh->nativeVertexBuffer, mesh->nativeTexCoordBuffer, count * 3,
                                (unsigned short *) mesh->nativeIndicesBuffer, count * 3);

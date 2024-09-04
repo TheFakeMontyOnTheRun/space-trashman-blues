@@ -11,10 +11,74 @@
 
 unsigned char imageBuffer[128 * 32];
 
-uint8_t updateDirection;
-
 enum ESoundDriver soundDriver = kPcSpeaker;
 extern uint8_t firstFrameOnCurrentState;
+extern enum EGameMenuState currentGameMenuState;
+
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
+extern uint8_t roomTransitionAnimationStep;
+#endif
+
+extern enum EDirection playerDirection;
+extern int8_t cameraX;
+extern int8_t cameraZ;
+
+char playerPositionSprite[4][8]={
+        {
+                0b00011000,
+                0b00111100,
+                0b01111110,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b00100000,
+                0b01100000,
+                0b11100000,
+                0b11100000,
+                0b01100000,
+                0b00100000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b01111110,
+                0b00111100,
+                0b00011000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b00000100,
+                0b00000110,
+                0b00000111,
+                0b00000111,
+                0b00000110,
+                0b00000100,
+                0b00000000,
+                0b00000000
+        },
+};
+
+void put_sprite_8(uint16_t x, uint8_t y, uint8_t *sprite, uint8_t colour) {
+
+    for(uint8_t c = 0; c < 8; ++c) {
+        uint8_t line = *sprite;
+        for (uint16_t d = 0; d < 8; ++d) {
+            if (line & 1) {
+                realPut( x + d, y + c, colour, NULL);
+            }
+            line = line >> 1;
+        }
+        ++sprite;
+    }
+}
 
 void shutdownGraphics(void) {
 }
@@ -283,7 +347,7 @@ uint8_t *realPut(uint16_t x, uint8_t y, uint8_t value, uint8_t *ptr) {
 }
 
 void clearGraphics(void) {
-    memset(imageBuffer, 0, 128 * 32);
+    memFill(imageBuffer, 0, 128 * 32);
 }
 
 void initHW(int argc, char **argv) {
@@ -297,7 +361,6 @@ void initHW(int argc, char **argv) {
             );
 
     initKeyboardUI();
-    updateDirection = 1;
     clearGraphics();
 }
 
@@ -333,32 +396,44 @@ enum ECommand getInput(void) {
             : "ax"
             );
 
+    if (currentGameMenuState == kPlayGame) {
+        put_sprite_8(
+                (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
+                (cameraZ * 3) + 10,
+                &playerPositionSprite[playerDirection][0],
+                0
+        );
+    }
+
+    if (waitForKey) {
+        if (toReturn == '2') {
+            waitForKey = 0;
+            firstFrameOnCurrentState = 1;
+            needsToRedrawVisibleMeshes = 1;
+            return kCommandNone;
+        }
+
+        return kCommandNone;
+    }
+
+    performAction();
+
     switch(toReturn) {
         case 'q':
-            updateDirection = 1;
             return kCommandLeft;
         case 'w':
             return kCommandUp;
         case 's':
             return kCommandDown;
         case 'e':
-            updateDirection = 1;
             return kCommandRight;
-        case 'a':
+        case 'z':
             return kCommandStrafeLeft;
-        case 'd':
+        case 'x':
             return kCommandStrafeRight;
         case 'l':
             return kCommandBack;
-
         case '1':
-            if (waitForKey) {
-                waitForKey = 0;
-                firstFrameOnCurrentState = 1;
-                needs3dRefresh = 1;
-                return kCommandNone;
-            }
-
             return kCommandFire1;
         case '2':
             return kCommandFire2;
@@ -377,28 +452,36 @@ enum ECommand getInput(void) {
     return kCommandNone;
 }
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
+void drawTextAtWithMarginWithFiltering(const int _x, const int _y, int limitX, const char *text, const uint8_t fg,
+                                       char charToReplaceHifenWith) {
 
     const char *ptr = text;
     uint16_t c = 0;
     uint16_t chary = 0;
-    uint16_t x = _x - 1;
+    uint16_t x = _x;
+    uint8_t y = _y;
     char cha = *ptr;
 
     for (; cha && y < 25; ++c) {
 
-        if (x == limitX) {
+        if (cha == '-') {
+            cha = charToReplaceHifenWith;
+        }
+
+        if (x >= (limitX / 8) || x >= (XRES_TEXT)) {
             ++y;
-            x = _x - 1;
+            x = _x + 1;
         } else if (cha == '\n') {
             ++y;
-            x = _x - 1;
+            x = _x + 1;
             ++ptr;
             cha = *ptr;
             continue;
         } else {
             ++x;
         }
+
+        uint8_t biosX = x - 1;
 
         asm volatile (
                 "movb $0x02, %%ah\n\t"
@@ -413,7 +496,7 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, 
                 "movb $0x03, %%bl\n"
                 "int  $0x10\n\t"
                 :
-                : "rm" (x), "rm" (y), "rm"(cha)
+                : "rm" (biosX), "rm" (y), "rm"(cha)
                 : "ax", "bx", "cx", "dx"
                 );
 
@@ -421,7 +504,6 @@ void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, 
         cha = *ptr;
     }
 }
-
 
 void startFrame(int x, int y, int width, int height) {
 
@@ -432,8 +514,17 @@ void endFrame(void) {
     uint16_t baseOffset = 0;
     uint16_t index = 0;
 
-    if (!needs3dRefresh) {
+    if (!needsToRedrawVisibleMeshes) {
         return;
+    }
+
+    if (currentGameMenuState == kPlayGame) {
+        put_sprite_8(
+                (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
+                (cameraZ * 3) + 10,
+                &playerPositionSprite[playerDirection][0],
+                1
+        );
     }
 
 /*
@@ -491,36 +582,9 @@ void endFrame(void) {
                 );
     }
 
-    if (updateDirection) {
-        updateDirection = 0;
-        switch (getPlayerDirection()) {
-            case 0:
-                writeStrWithLimit(12, 17, "N", 31, 2, 0);
-                break;
-            case 1:
-                writeStrWithLimit(12, 17, "E", 31, 2, 0);
-                break;
-            case 2:
-                writeStrWithLimit(12, 17, "S", 31, 2, 0);
-                break;
-            case 3:
-                writeStrWithLimit(12, 17, "W", 31, 2, 0);
-                break;
-        }
-    }
-
-    memset(imageBuffer, 0, 128 * 32);
+    memFill(imageBuffer, 0, 128 * 32);
 }
 
-
-void clearTextScreen(void) {
-    int c, d;
-    for (c = 16; c < 24; ++c) {
-        for (d = 0; d < 40; ++d) {
-            writeStrWithLimit(d, c, " ", 320 / 8, 2, 0);
-        }
-    }
-}
 
 void enterTextMode(void) {}
 
@@ -561,8 +625,4 @@ void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) 
             y0 += sy;
         }
     }
-}
-
-uint8_t getPaletteEntry(uint32_t colour) {
-    return colour & 3;
 }

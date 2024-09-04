@@ -72,7 +72,7 @@ void graphicsInit(void) {
     rmode = VIDEO_GetPreferredMode(NULL);
 
     gpfifo = memalign(32, DEFAULT_FIFO_SIZE);
-    memset(gpfifo, 0, DEFAULT_FIFO_SIZE);
+    memFill(gpfifo, 0, DEFAULT_FIFO_SIZE);
 
     frameBuffer[0] = SYS_AllocateFramebuffer(rmode);
     frameBuffer[1] = SYS_AllocateFramebuffer(rmode);
@@ -131,7 +131,7 @@ void graphicsInit(void) {
     GX_SetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GX_SetZCompLoc(GX_FALSE);
 
-    memset(&whiteTextureData[0], 0xFF, 32 * 32 * 4);
+    memFill(&whiteTextureData[0], 0xFF, 32 * 32 * 4);
 
     GX_InitTexObj(&whiteTextureObj, &whiteTextureData[0], 32, 32, GX_TF_RGBA8, GX_REPEAT, GX_REPEAT, GX_FALSE);
 }

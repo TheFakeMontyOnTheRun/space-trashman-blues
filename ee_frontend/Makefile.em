@@ -1,4 +1,4 @@
-CFLAGS = -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DENDIANESS_AWARE -DTILED_BITMAPS -DSDLGL  -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200 \
+CFLAGS = -DCLI_BUILD -DINCLUDE_ITEM_DESCRIPTIONS -DSUPPORTS_HACKING_MINIGAME -DENDIANESS_AWARE -DTILED_BITMAPS -DSDLGL  -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200 \
 	-Imenu/include                                       \
 	-ISoundSystem                                       \
 	-Ibase3d/include                                     \
@@ -52,7 +52,7 @@ $(TARGET):	$(OBJS)
 all:	$(TARGET)
 
 serve: $(TARGET)
-	python3 -m http.server
+	python3 -m http.server 5050
 
 dist: $(TARGET)
 	zip dist.zip index.html index.data index.js index.wasm

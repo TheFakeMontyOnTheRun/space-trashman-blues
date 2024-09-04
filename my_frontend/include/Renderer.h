@@ -55,9 +55,9 @@ struct CellPattern {
     uint8_t blockMovement: 1;
 };
 
-void clearGraphics(void);
+#define getPaletteEntry(c) (( (c) - 0xFF000000 ) % 3)
 
-void clearTextScreen(void);
+void clearGraphics(void);
 
 void dropItem(void);
 
@@ -109,7 +109,10 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple);
 
 void flush3DBuffer(void);
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg);
+void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const uint8_t colour);
+
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text, const uint8_t colour,
+                                       char charToReplaceHifenWith);
 
 uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr);
 
@@ -129,6 +132,6 @@ void repaintMapItems(void);
 
 uint8_t drawPattern(uint8_t _pattern, int8_t x0, int8_t x1, int8_t y);
 
-extern uint8_t needs3dRefresh;
+extern uint8_t needsToRedrawVisibleMeshes;
 
 #endif /* DERELICT8_RENDERER_H */

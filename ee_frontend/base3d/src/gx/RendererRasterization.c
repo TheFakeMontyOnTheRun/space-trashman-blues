@@ -161,58 +161,87 @@ void drawRepeatBitmap(
     }
 }
 
-void drawTextAt(const int _x, const int _y, const char *text, const FramebufferPixelFormat colour) {
+void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
+
+}
+
+void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour) {
+    drawTextAtWithMarginWithFiltering(x, y, margin, text, colour, '-');
+}
+
+void drawTextAt(const int x, const int y, const char *text, const FramebufferPixelFormat colour) {
+
+    drawTextAtWithMargin(x, y, (XRES_FRAMEBUFFER - 1), text, colour);
+}
+
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text,
+                                       const uint8_t colour, char charToReplaceHifenWith) {
 
     if (defaultFont == NULL) {
         defaultFont = loadBitmap("font.img");
     }
 
-    if (defaultFont->nativeBuffer == NULL || defaultFont->uploadId == -1) {
+    if (defaultFont->uploadId == -1) {
         submitBitmapToGPU(defaultFont);
     }
 
-    bindTexture(defaultFont);
     size_t len = strlen(text);
-    int32_t dstX = (_x - 1) * 8;
-    int32_t dstY = (_y - 1) * 8;
-    size_t c;
-    uint32_t ascii;
-    float line;
-    float col;
-
+    int32_t dstX = x * 8;
+    int32_t dstY = y * 8;
     float fontWidth = defaultFont->width;
-    float fontHeight = 32.0f; //defaultFont->height;
+    float fontHeight = defaultFont->height;
     float blockWidth = (8.0f / fontWidth) * 0.999f;
     float blockHeight = (8.0f / fontHeight) * 0.999f;
 
+    size_t c;
+    size_t d;
+    uint8_t lastSpacePos = 0xFF;
+
     for (c = 0; c < len; ++c) {
-        if (text[c] == '\n' || dstX >= XRES_FRAMEBUFFER) {
-            dstX = (_x - 1) * 8;
+        uint8_t ascii;
+        float line;
+        float col;
+
+        char currentChar = text[c];
+
+        if (currentChar == '-') {
+            currentChar = charToReplaceHifenWith;
+        }
+
+        if (currentChar == '\n' || dstX >= (margin)) {
+            dstX = x * 8;
             dstY += 8;
             continue;
         }
 
-        if (text[c] == ' ' || text[c] == '\r') {
-            dstX += 8;
-            continue;
+        if (dstY >= YRES_FRAMEBUFFER) {
+            return;
         }
 
-        ascii = text[c] - ' ';
+        if (currentChar == ' ') {
+            lastSpacePos = c;
+            dstX += 8;
+            continue;
+        } else {
+            if ((c - 1) == lastSpacePos) {
+                d = c;
+                while (d < len && text[d] != ' ') ++d;
+
+                if ((dstX + ((d - c ) * 8)) >= margin ) {
+                    dstX = x * 8;
+                    dstY += 8;
+                }
+            }
+        }
+
+        ascii = currentChar - ' ';
 
         line = (((float) ((ascii >> 5))) * blockHeight);
         col = (((ascii & 31)) * blockWidth);
 
-        drawBitmapRegion(dstX, dstY, 8, 8, colour, defaultFont, 1, col, col + blockWidth, line, line + blockHeight);
+        drawBitmapRegion(dstX, dstY, 8, 8, colour, defaultFont, 1, col, col + blockWidth, line,
+                         line + blockHeight);
 
         dstX += 8;
     }
-}
-
-void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *__restrict__ text,
-                                       const uint8_t colour, char charToReplaceHifenWith) {
-    drawTextAt(x, y, text, colour);
-}
-
-void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour) {
-    drawTextAt(x, y, text, colour);
 }

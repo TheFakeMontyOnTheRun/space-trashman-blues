@@ -13,6 +13,7 @@
 #include "TMS9918.h"
 #include "SN76489.h"
 #include "SoundSystem.h"
+#include "UI.h"
 
 #define COOLDOWN_MAX 0x1F
 
@@ -24,9 +25,7 @@ uint8_t cooldown;
 extern uint8_t firstFrameOnCurrentState;
 extern uint8_t waitForKey;
 
-uint8_t updateDirection;
-
-extern uint8_t cursorPosition;
+extern int8_t cursorPosition;
 
 enum ESoundDriver soundDriver = kSN76489;
 
@@ -39,8 +38,8 @@ void initHW(int argc, char **argv) {
     initTMS9918();
     initSN76489();
     cooldown = COOLDOWN_MAX;
-    updateDirection = 1;
-    needs3dRefresh = 0;
+    needsToRedrawVisibleMeshes = 0;
+    waitForKey = 0;
 }
 
 void handleSystemEvents(void) {}
@@ -48,51 +47,65 @@ void handleSystemEvents(void) {}
 enum ECommand getInput(void) {
     int key = read_joypad1();
 
+    performAction();
+
     if (cooldown) {
         cooldown--;
     }
 
     if (key & JOY_UP && !cooldown) {
+        if (waitForKey) {
+            return kCommandNone;
+        }
+
         cooldown = COOLDOWN_MAX;
         return kCommandUp;
     }
 
     if (key & JOY_LEFT && !cooldown) {
+        if (waitForKey) {
+            return kCommandNone;
+        }
+
         cooldown = COOLDOWN_MAX;
         if (key & JOY_FIREB) {
             return kCommandStrafeLeft;
         } else {
-            updateDirection = 1;
             return kCommandLeft;
         }
     }
 
     if (key & JOY_RIGHT && !cooldown) {
+        if (waitForKey) {
+            return kCommandNone;
+        }
+
         cooldown = COOLDOWN_MAX;
         if (key & JOY_FIREB) {
             return kCommandStrafeRight;
         } else {
-            updateDirection = 1;
             return kCommandRight;
         }
     }
 
     if (key & JOY_DOWN && !cooldown) {
+        if (waitForKey) {
+            return kCommandNone;
+        }
+
         cooldown = COOLDOWN_MAX;
         return kCommandDown;
     }
 
     if ((key & JOY_FIREA) && !cooldown ) {
+
+        if (waitForKey) {
+            return kCommandNone;
+        }
+
         if (currentGameMenuState == kPlayGame) {
             playSound(3);
             cooldown = COOLDOWN_MAX;
-
-            if (waitForKey) {
-                waitForKey = 0;
-                firstFrameOnCurrentState = 1;
-                needs3dRefresh = 1;
-                return kCommandNone;
-            }
 
             return performActionJoypad();
         } else {
@@ -101,7 +114,16 @@ enum ECommand getInput(void) {
     }
 
     if ((key & JOY_FIREB) && !cooldown ) {
+
+        if (waitForKey) {
+            waitForKey = 0;
+            firstFrameOnCurrentState = 1;
+            needsToRedrawVisibleMeshes = 1;
+            return kCommandNone;
+        }
+
         if (currentGameMenuState == kPlayGame) {
+
             cursorPosition = (cursorPosition + 1);
             playSound(2);
             if (cursorPosition >= 6) {
@@ -127,13 +149,8 @@ void startFrame(int x, int y, int width, int height) {
 }
 
 void endFrame(void) {
-    if (needs3dRefresh) {
-        needs3dRefresh = 0;
+    if (needsToRedrawVisibleMeshes) {
+        needsToRedrawVisibleMeshes = 0;
         flush3DBuffer();
-        if (updateDirection) {
-            char direction[8] = {'N', 0, 'E', 0, 'S', 0, 'W', 0};
-            updateDirection = 0;
-            writeStrWithLimit(12, 17, &direction[getPlayerDirection() * 2], 31, 2, 0);
-        }
     }
 }

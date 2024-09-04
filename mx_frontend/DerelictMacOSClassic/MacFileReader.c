@@ -99,7 +99,7 @@ uint8_t* readFully(char *filename) {
 	
 	assert(size);
 	
-	resultBuffer = (uint8_t*)calloc(1, size);
+	resultBuffer = (uint8_t*)allocMem(size, BITMAP_MEMORY, TRUE);
 	assert(resultBuffer);
 	
 	rewind( filePtr );
@@ -200,7 +200,7 @@ struct StaticBuffer loadBinaryFileFromPath(const char * __restrict__ path) {
     assert (fread(&size, 4, 1, mDataPack));
     size = toNativeEndianess(size);
     toReturn.size = size;
-    toReturn.data = (uint8_t *) malloc(size);
+    toReturn.data = (uint8_t *) allocMem(size, GENERAL_MEMORY, 0);
 
     assert (fread((void*)toReturn.data, sizeof(uint8_t), size, mDataPack));
     fclose(mDataPack);
@@ -257,5 +257,5 @@ FILE *openBinaryFileFromPath(const char * __restrict__ path) {
 }
 
 void disposeDiskBuffer(struct StaticBuffer buffer) {
-    free((void*)buffer.data);
+    disposeMem((void*)buffer.data);
 }

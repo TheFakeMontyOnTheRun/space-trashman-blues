@@ -33,7 +33,7 @@
 #define HUD_WIDTH (XRES_FRAMEBUFFER - XRES)
 #define FIXP_NATIVE_TEXTURE_SIZE  (intToFix(NATIVE_TEXTURE_SIZE))
 #define FIXP_YRES intToFix(YRES)
-char mTurnBuffer;
+enum ECommand mTurnBuffer;
 
 uint16_t clippingY1 = YRES_FRAMEBUFFER;
 

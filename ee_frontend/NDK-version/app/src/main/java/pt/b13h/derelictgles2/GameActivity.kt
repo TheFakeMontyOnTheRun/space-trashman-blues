@@ -135,21 +135,16 @@ class GameActivity : AppCompatActivity() {
                         }
 
                         findViewById<Button>(R.id.btnUse).setOnClickListener {
-                            DerelictJNI.sendCommand('x')
-                        }
-
-
-                        findViewById<Button>(R.id.btnUseWith).setOnClickListener {
                             DerelictJNI.sendCommand('z')
                         }
 
 
-                        findViewById<Button>(R.id.btnNextItem).setOnClickListener {
-                            DerelictJNI.sendCommand('v')
+                        findViewById<Button>(R.id.btnUseWith).setOnClickListener {
+                            DerelictJNI.sendCommand('x')
                         }
 
 
-                        findViewById<Button>(R.id.btnItemInfo).setOnClickListener {
+                        findViewById<Button>(R.id.btnNextItem).setOnClickListener {
                             DerelictJNI.sendCommand('c')
                         }
                     } else {

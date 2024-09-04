@@ -10,6 +10,7 @@
 #include <clib/dos_protos.h>
 #include <clib/graphics_protos.h>
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -47,7 +48,7 @@ extern struct GfxBase *GfxBase;
 
 int nextChannel = 0;
 
-void playSound(const int action) {
+void playSound(const uint8_t action) {
     nextChannel = (nextChannel + 1) % 4;
     /* Flush the previous sound to avoid overlapping */
     AbortIO((struct IORequest *) audioSink[nextChannel]);
@@ -121,8 +122,8 @@ void setupOPL2(int unused) {
             goto killaudio;
         }
 
-        memcpy(waveptr[c], audio.data, samples[c]);
-        free(audio.data);
+        memCopyToFrom(waveptr[c], audio.data, samples[c]);
+        disposeMem(audio.data);
     }
     return;
 

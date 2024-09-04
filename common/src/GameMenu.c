@@ -137,8 +137,8 @@ void GameMenu_repaintCallback(void) {
         drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, (YRES_FRAMEBUFFER / 8) - 5, GameMenu_StateTitle, textBuffer);
     }
 
-    drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - biggestOption - 3,
-                          ((YRES_FRAMEBUFFER / 8) + 1) - (optionsHeight / 8) - 3,
+    drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - biggestOption - 4,
+                          ((YRES_FRAMEBUFFER / 8) + 1) - (optionsHeight / 8) - 4,
                           biggestOption + 2,
                           (optionsHeight / 8) + 2,
                           GameMenu_StateTitle,
@@ -147,7 +147,7 @@ void GameMenu_repaintCallback(void) {
                           cursorPosition);
 }
 
-enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, long delta) {
+enum EGameMenuState GameMenu_tickCallback(enum ECommand cmd, void* data) {
 
     switch (cmd) {
         case kCommandBack:

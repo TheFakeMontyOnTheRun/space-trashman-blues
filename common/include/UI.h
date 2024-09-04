@@ -37,10 +37,12 @@ enum EGameMenuState handleCursor(const enum EGameMenuState* options,
 				 const enum ECommand cmd,
 				 enum EGameMenuState backState);
 
-void drawGraphic(const uint8_t *shapes);
+void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t *shapes);
 
 extern int8_t cursorPosition;
 
 void clearScreen(void);
+
+void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour);
 
 #endif /*UI_H*/

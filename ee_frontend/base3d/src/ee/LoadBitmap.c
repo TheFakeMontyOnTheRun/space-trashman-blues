@@ -84,7 +84,7 @@ void bindTexture(struct Bitmap *bitmap) {
 int submitBitmapToGPU(struct Bitmap *bitmap) {
 
 
-    bitmap->nativeBuffer = (texbuffer_t *) calloc(1, sizeof(texbuffer_t));
+    bitmap->nativeBuffer = (texbuffer_t *) allocMem(sizeof(texbuffer_t), BITMAP_MEMORY, TRUE);
     ((texbuffer_t *) bitmap->nativeBuffer)->width = bitmap->width;
     ((texbuffer_t *) bitmap->nativeBuffer)->psm = GS_PSM_32;
     ((texbuffer_t *) bitmap->nativeBuffer)->address = graph_vram_allocate(bitmap->width, bitmap->height, GS_PSM_32,
@@ -119,7 +119,7 @@ struct Bitmap *loadBitmap(const char *filename) {
     struct StaticBuffer src = loadBinaryFileFromPath(filename);
 
     struct Bitmap *toReturn =
-            (struct Bitmap *) calloc(1, sizeof(struct Bitmap));
+            (struct Bitmap *) allocMem(sizeof(struct Bitmap), BITMAP_MEMORY, TRUE);
 
     size_t sizeInDisk = src.size - 4; //total size minus the header
 
@@ -138,11 +138,11 @@ struct Bitmap *loadBitmap(const char *filename) {
 
     size_t size = toReturn->width * toReturn->height * sizeof(BitmapPixelFormat);
 
-    uint8_t *buffer = (uint8_t *) calloc(1, sizeInDisk);
+    uint8_t *buffer = (uint8_t *) allocMem(sizeInDisk, BITMAP_MEMORY, TRUE);
 
     memCopyToFrom(buffer, ptr, sizeInDisk);
 
-    toReturn->data = (TexturePixelFormat *) calloc(1, size);
+    toReturn->data = (TexturePixelFormat *) allocMem(size, BITMAP_MEMORY, TRUE);
 
     uint8_t repetitions;
     int pixelIndex = 0;
@@ -185,17 +185,3 @@ void releaseBitmap(struct Bitmap *ptr) {
     disposeMem(ptr->data);
     disposeMem(ptr);
 }
-
-FixP_t lerpFix(const FixP_t v0, const FixP_t v1, const FixP_t dt, const FixP_t total) {
-    FixP_t delta = (v1 - v0);
-    FixP_t progress = Div(dt, total);
-    FixP_t reach = Mul(delta, progress);
-
-    return (v0 + reach);
-}
-
-int lerpInt(const int v0, const int v1, const long t, const long total) {
-    return fixToInt(lerpFix(intToFix(v0), intToFix(v1), intToFix(t),
-                            intToFix(total)));
-}
-

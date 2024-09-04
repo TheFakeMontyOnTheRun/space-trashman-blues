@@ -117,7 +117,7 @@ float clampf(float v0, float v1, float v) {
 
 struct Texture *makeTextureFrom(const char *filename) {
     struct Texture *toReturn =
-            (struct Texture *) calloc(1, sizeof(struct Texture));
+            (struct Texture *) allocMem(sizeof(struct Texture), BITMAP_MEMORY, TRUE);
 
     toReturn->raw = loadBitmap(filename);
     submitBitmapToGPU(toReturn->raw);

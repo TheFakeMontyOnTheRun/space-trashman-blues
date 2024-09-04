@@ -198,15 +198,15 @@ void setMultiplier(CGSize size) {
 
 void shutdownHW(void) {
     CGColorSpaceRelease(rgb);
-    
-    free(textBuffer);
-    free(messageLogBuffer);
-    free(collisionMap);
-    free(visMap);
-    free(distances);
-    free(textures);
-    free(itemsInMap);
-    free(map);
+
+    disposeMem(textBuffer);
+    disposeMem(messageLogBuffer);
+    disposeMem(collisionMap);
+    disposeMem(visMap);
+    disposeMem(distances);
+    disposeMem(textures);
+    disposeMem(itemsInMap);
+    disposeMem(map);
 }
 
 
@@ -240,8 +240,8 @@ void shutdownHW(void) {
             ++bufferPtr;
         }
     }
-        
-    memcpy( previousFrame, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
+
+    memCopyToFrom( previousFrame, framebuffer, XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
 
     /*  MAC_OS_X_VERSION_10_10*/
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= 101000

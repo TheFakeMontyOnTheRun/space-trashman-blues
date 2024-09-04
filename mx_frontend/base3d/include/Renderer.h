@@ -16,15 +16,24 @@
 #define HALF_XRES 100
 #define HALF_YRES 100
 #endif
-
+/*
 #ifndef AGS
-#define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
+#define XRES_FRAMEBUFFER 320
+#define YRES_FRAMEBUFFER 200
 #else
-#define FIXP_DISTANCE_FOR_DARKNESS (intToFix(32))
+#define XRES_FRAMEBUFFER 240
+#define YRES_FRAMEBUFFER 160
 #endif
+*/
+
+#define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
 
 #define TOTAL_TEXTURES 16
+#ifndef RGBA32_FRAMEBUFFER
 #define TRANSPARENCY_COLOR 199
+#else
+#define TRANSPARENCY_COLOR 0
+#endif
 #define VISIBILITY_CONE_NARROWING 3
 #define MASK_LEFT 1
 #define MASK_FRONT 2
@@ -37,7 +46,11 @@
 #define ITEMS_IN_MAP(x, y) (itemsInMap[ ( (MAP_SIZE) * (y) ) + (x) ])
 
 typedef uint32_t OutputPixelFormat;
+#ifdef RGBA32_FRAMEBUFFER
+typedef uint32_t FramebufferPixelFormat;
+#else
 typedef uint8_t FramebufferPixelFormat;
+#endif
 typedef uint8_t UVCoord;
 
 struct Projection {
@@ -83,9 +96,7 @@ void enter2D(void);
 
 void enter3D(void);
 
-void computeLightning(void);
-
-void renderPageFlip(uint8_t *stretchedBuffer, uint8_t *currentFrame, uint8_t *prevFrame, int turnState, int turnTarget,
+void renderPageFlip(FramebufferPixelFormat *stretchedBuffer, FramebufferPixelFormat *currentFrame, FramebufferPixelFormat *prevFrame, int turnState, int turnTarget,
                     int scale200To240);
 
 void fillRect(
@@ -93,7 +104,9 @@ void fillRect(
         const size_t dx, const size_t dy,
         const FramebufferPixelFormat pixel, const uint8_t stipple);
 
-void drawMesh(const struct Mesh *mesh, const struct Vec3 at, enum EDirection rotation, FramebufferPixelFormat tint);
+
+void drawMesh(const struct Mesh *mesh, const struct Vec3 at, enum EDirection rotation,
+              FramebufferPixelFormat tint);
 
 void renderRoomTransition(void);
 
@@ -101,7 +114,7 @@ void drawMap(const struct CActor *current);
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour);
 
-void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text, const uint8_t colour,
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour,
                                        char charToReplaceHifenWith);
 
 void drawTextAt(const int x,
@@ -110,19 +123,23 @@ void drawTextAt(const int x,
                 const FramebufferPixelFormat colour);
 
 void drawFloorAt(const struct Vec3 center,
-                 const struct Texture *texture, enum EDirection rotation, FramebufferPixelFormat tint);
+                 const struct Texture *texture, enum EDirection rotation,
+                 FramebufferPixelFormat tint);
 
 void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
-                const struct Texture *texture, uint8_t rotation, uint8_t flipTexture, FramebufferPixelFormat tint);
+                const struct Texture *texture, uint8_t rotation, uint8_t flipTexture,
+                FramebufferPixelFormat tint);
 
 void drawCeilingAt(const struct Vec3 center,
-                   const struct Texture *texture, enum EDirection rotation, FramebufferPixelFormat tint);
+                   const struct Texture *texture, enum EDirection rotation,
+                   FramebufferPixelFormat tint);
 
 void drawLeftNear(const struct Vec3 center,
                   const FixP_t scale,
                   const struct Texture *texture,
                   const uint8_t mask,
-                  const uint8_t repeatedTexture, FramebufferPixelFormat tint);
+                  const uint8_t repeatedTexture,
+                  FramebufferPixelFormat tint);
 
 void drawRightNear(const struct Vec3 center,
                    const FixP_t scale,
@@ -176,7 +193,8 @@ void drawRect(const int x,
               const FramebufferPixelFormat pixel);
 
 
-void fillTriangle(int *coords, FramebufferPixelFormat colour, FramebufferPixelFormat tint);
+void fillTriangle(int *coords, FramebufferPixelFormat colour,
+                  FramebufferPixelFormat tint);
 
 void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z, FramebufferPixelFormat tint);
 
@@ -240,11 +258,13 @@ void maskFloor(
 
 int submitBitmapToGPU(struct Bitmap *bitmap);
 
-void initRenderer(void);
+void initGL(void);
 
 void startFrame(int x, int y, int width, int height);
 
 void endFrame(void);
+
+void computeLightning(void);
 
 extern struct MapWithCharKey occluders;
 extern struct MapWithCharKey enemySightBlockers;
@@ -253,11 +273,11 @@ extern int visibilityCached;
 extern int needsToRedrawVisibleMeshes;
 extern struct Bitmap *defaultFont;
 #ifndef AGS
-extern uint8_t framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
-extern uint8_t previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
-extern uint32_t palette[256];
+extern FramebufferPixelFormat framebuffer[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+extern FramebufferPixelFormat previousFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
+extern OutputPixelFormat palette[256];
 #else
-extern uint8_t *framebuffer;
+extern FramebufferPixelFormat *framebuffer;
 #endif
 extern enum EDirection cameraDirection;
 extern long gameTicks;
@@ -289,7 +309,7 @@ extern struct Bitmap *mapTopLevel;
 #endif
 extern int dirtyLineY0;
 extern int dirtyLineY1;
-extern char mTurnBuffer;
+extern enum ECommand mTurnBuffer;
 extern uint8_t *map;
 extern uint8_t *itemsInMap;
 extern FixP_t divLut[320];

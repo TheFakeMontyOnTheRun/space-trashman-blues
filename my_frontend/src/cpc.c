@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 
+#include "Common.h"
 #include "Enums.h"
 #include "Core.h"
 #include "Renderer.h"
@@ -12,13 +13,15 @@
 #include "UI.h"
 #include "font.h"
 
-uint8_t updateDirection;
-
 /* Sadly, I can't include conio.h - otherwise, I would get errors when building on OSX */
 int kbhit(void);
 int getch(void);
 extern uint8_t firstFrameOnCurrentState;
 enum ESoundDriver soundDriver = kAY38910;
+extern enum EGameMenuState currentGameMenuState;
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
+extern uint8_t roomTransitionAnimationStep;
+#endif
 
 /*  Required since we have our own memory allocator abstraction */
 uint16_t heap = 0;
@@ -30,6 +33,54 @@ uint16_t heap = 0;
 
 #define MARGIN_TEXT_SCREEN_LIMIT 40
 
+extern enum EDirection playerDirection;
+extern int8_t cameraX;
+extern int8_t cameraZ;
+
+
+char playerPositionSprite[4][8]={
+        {
+                0b00011000,
+                0b00111100,
+                0b01111110,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b00100000,
+                0b01100000,
+                0b11100000,
+                0b11100000,
+                0b01100000,
+                0b00100000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b01111110,
+                0b00111100,
+                0b00011000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000
+        },
+        {
+                0b00000100,
+                0b00000110,
+                0b00000111,
+                0b00000111,
+                0b00000110,
+                0b00000100,
+                0b00000000,
+                0b00000000
+        },
+};
+
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 
 void initHW(int argc, char **argv) {
@@ -37,79 +88,90 @@ void initHW(int argc, char **argv) {
     (void)argv;
     initAY38910();
     initKeyboardUI();
-    updateDirection = 1;
-    needs3dRefresh = 0;
+    needsToRedrawVisibleMeshes = 0;
+    waitForKey = 0;
 }
 
-void writeStrWithLimit(uint8_t _x, uint8_t y, const char *text, uint8_t limitX, uint8_t fg, uint8_t bg) {
-    (void)fg;
-    (void)bg;
-    uint8_t len = strlen(text);
-    const char *ptr = text;
-    uint8_t c = 0;
-    uint8_t x = _x;
+void put_sprite_8(uint16_t x, uint8_t y, uint8_t *sprite, uint8_t colour) {
 
-    uint8_t *lineBase = (unsigned char *) 0xC000 + ((((y * 8)) / 8) * 80) + ((((y * 8)) & 7) * 2048);
+    for(uint8_t c = 0; c < 8; ++c) {
+        uint8_t line = *sprite;
+        for (uint16_t d = 0; d < 8; ++d) {
+            if (line & 1) {
+                realPut( x + d, y + c, colour, NULL);
+            }
+            line = line >> 1;
+        }
+        ++sprite;
+    }
+}
 
-    for (; c < len && y < 64; ++c) {
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text, const uint8_t fg,
+                                       char charToReplaceHifenWith) {
+    size_t len = strlen(text);
+    uint16_t dstX = x * 8;
+    int8_t dstY = y * 8;
 
-        char cha = *ptr;
+    uint8_t c;
+    uint8_t d;
+    uint8_t lastSpacePos = 0xFF;
 
-        if (x == limitX) {
-            ++y;
-            lineBase = (unsigned char *) 0xC000 + ((((y * 8)) / 8) * 80) + ((((y * 8)) & 7) * 2048);
-            x = _x;
-        } else if (cha == '\n') {
-            ++y;
-            lineBase = (unsigned char *) 0xC000 + ((((y * 8)) / 8) * 80) + ((((y * 8)) & 7) * 2048);
-            x = _x;
-            ++ptr;
+    for (c = 0; c < len; ++c) {
+
+        char currentChar = text[c];
+
+        if (currentChar == '-') {
+            currentChar = charToReplaceHifenWith;
+        }
+
+        if (currentChar == '\n' || dstX >= (margin)) {
+            dstX = x * 8;
+            dstY += 8;
             continue;
         }
 
-        if (cha >= 'a') {
-            if (cha <= 'z') {
-                cha = (cha - 'a') + 'A';
-            } else {
-                cha -= ('z' - 'a');
+        if (dstY >= YRES_FRAMEBUFFER) {
+            return;
+        }
+
+        if (currentChar == ' ') {
+            lastSpacePos = c;
+        } else {
+            if ((c - 1) == lastSpacePos) {
+                d = c;
+                while (d < len && text[d] != ' ') ++d;
+
+                if ((dstX + ((d - c ) * 8)) >= margin ) {
+                    dstX = x * 8;
+                    dstY += 8;
+                }
             }
         }
 
-        uint8_t *fontTop = &font[((cha - 32) << 3)];
 
-        uint8_t *line = lineBase + 2 * x + 1;
+        if (currentChar >= 'a') {
+            if (currentChar <= 'z') {
+                currentChar = (currentChar - 'a') + 'A';
+            } else {
+                currentChar -= ('z' - 'a');
+            }
+        }
 
-        for (uint8_t d = 0; d < 8; ++d) {
+        uint8_t *fontTop = &font[((currentChar - 32) << 3)];
+
+        for (uint8_t f = 0; f < 8; ++f) {
             uint8_t e;
             uint8_t chunk = *fontTop;
-            uint8_t *pixel = line;
 
-            *pixel = 0;
-
-            for (e = 0; e < 4; ++e) {
-                if (chunk & 1) {
-                    *pixel |= (16 << e);
-                }
-                chunk = chunk >> 1;
-            }
-
-            --pixel;
-
-            *pixel = 0;
-
-            for (e = 0; e < 4; ++e) {
-                if (chunk & 1) {
-                    *pixel |= (16 << e);
-                }
+            for (e = 0; e < 8; ++e) {
+                realPut(dstX + (7 - e), dstY + (f), (chunk & 1), NULL);
                 chunk = chunk >> 1;
             }
 
             fontTop++;
-            line += 2048;
         }
 
-        ++x;
-        ++ptr;
+        dstX += 8;
     }
 }
 
@@ -128,15 +190,6 @@ uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
     return ptr;
 }
 
-void clearTextScreen(void) {
-    uint8_t c, d;
-    for (c = 16; c < 24; ++c) {
-        for (d = 0; d < 40; ++d) {
-            writeStrWithLimit(d, c, " ", 320 / 8, 2, 0);
-        }
-    }
-}
-
 void handleSystemEvents(void) {}
 
 enum ECommand getInput(void) {
@@ -145,11 +198,32 @@ enum ECommand getInput(void) {
         return kCommandNone;
     }
 
-    uint8_t input = getch();
+    if (currentGameMenuState == kPlayGame) {
+        put_sprite_8(
+                (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
+                (cameraZ * 3) + 10,
+                &playerPositionSprite[playerDirection][0],
+                0
+        );
+    }
+
 
     performAction();
 
-    switch (getch()) {
+    uint8_t toReturn = getch();
+
+    if (waitForKey) {
+        if (toReturn == '2') {
+            waitForKey = 0;
+            firstFrameOnCurrentState = 1;
+            needsToRedrawVisibleMeshes = 1;
+            return kCommandNone;
+        }
+
+        return kCommandNone;
+    }
+
+    switch (toReturn) {
         case 30:
         case 'w':
             return kCommandUp;
@@ -158,27 +232,15 @@ enum ECommand getInput(void) {
             return kCommandDown;
         case 29:
         case 'q':
-            updateDirection = 1;
             return kCommandLeft;
         case 28:
         case 'e':
-            updateDirection = 1;
             return kCommandRight;
         case 'z':
             return kCommandStrafeLeft;
         case 'x':
             return kCommandStrafeRight;
-        case 'm':
-            drawMap();
-            return '.';
         case '1':
-            if (waitForKey) {
-                waitForKey = 0;
-                firstFrameOnCurrentState = 1;
-                needs3dRefresh = 1;
-                return kCommandNone;
-            }
-
             return kCommandFire1;
         case '2':
             return kCommandFire2;
@@ -195,11 +257,11 @@ enum ECommand getInput(void) {
 }
 
 void clearScreen(void) {
-    memset((unsigned char *) 0xC000, 0, (320 / 4) * 200);
+    memFill((unsigned char *) 0xC000, 0, (320 / 4) * 200);
 }
 
 void clearGraphics(void) {
-    memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
+    memFill(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
 }
 
 void startFrame(int x, int y, int width, int height) {
@@ -210,19 +272,26 @@ void startFrame(int x, int y, int width, int height) {
 }
 
 void endFrame(void) {
-    if (needs3dRefresh) {
+    if (needsToRedrawVisibleMeshes) {
         for (uint8_t y = 0; y < BUFFER_SIZEY; ++y) {
             uint8_t *line = (unsigned char *) 0xC000 + ((y >> 3) * 80) + ((y & 7) * 2048);
-            memcpy(line, buffer + (y * BUFFER_SIZEX), BUFFER_SIZEX);
+            memCopyToFrom(line, buffer + (y * BUFFER_SIZEX), BUFFER_SIZEX);
         }
+        clearGraphics();
 
-        if (updateDirection) {
-            char direction[8] = {'N', 0, 'E', 0, 'S', 0, 'W', 0};
-            updateDirection = 0;
-            writeStrWithLimit(12, 17, &direction[getPlayerDirection() * 2], 31, 2, 0);
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
+        if (roomTransitionAnimationStep) {
+            return;
         }
-
-        memset(&buffer[0], 0, BUFFER_SIZEX * BUFFER_SIZEY);
+#endif
+        if (currentGameMenuState == kPlayGame) {
+            put_sprite_8(
+                    (XRES_FRAMEBUFFER / 2) + ((cameraX + 6) * 3) - 1,
+                    (cameraZ * 3) + 10,
+                    &playerPositionSprite[playerDirection][0],
+                    1
+            );
+        }
     }
 }
 
@@ -254,17 +323,6 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
             ptr += BUFFER_SIZEX;
         }
     }
-}
-
-uint8_t *graphicsPutAddr(uint8_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
-    (void)colour;
-    if (ptr == NULL) {
-        ptr = &buffer[(y * (BUFFER_SIZEX)) + (x / 4)]; /* skip to the line in pattern */
-    }
-
-    *ptr |= (8 >> (x & 3));
-
-    return ptr;
 }
 
 void graphicsPutPointArray(uint8_t *y128Values) {

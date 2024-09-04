@@ -4,6 +4,7 @@
 #include "Core.h"
 #include "Derelict.h"
 #include "Renderer.h"
+#include "Common.h"
 
 #ifdef MSDOS
 #include "Common.h"

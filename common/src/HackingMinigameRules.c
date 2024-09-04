@@ -1,7 +1,17 @@
 /*
   Created by Daniel Monteiro on 2023-11-04.
 */
+#ifdef WIN32
+#include "Win32Int.h"
+#else
+#ifndef SMD
 #include <stdint.h>
+#else
+#include <genesis.h>
+typedef unsigned long size_t;
+#endif
+#endif
+
 #include <string.h>
 
 #include "Common.h"
@@ -13,7 +23,7 @@ uint8_t pinTop[3];
 
 
 void initHackingMinigame(void) {
-    memset(&pins[0][0], 0xFF, sizeof(pins));
+    memFill(&pins[0][0], 0xFF, sizeof(pins));
     pins[0][0] = 4;
     pins[0][1] = 2;
     pins[0][2] = 1;

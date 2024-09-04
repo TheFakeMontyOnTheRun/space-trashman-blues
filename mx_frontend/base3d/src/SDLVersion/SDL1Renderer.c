@@ -20,15 +20,10 @@
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten/html5.h>
-#endif
 
-SDL_Surface *video;
-SDL_Surface *stretchedBuffer;
-
-#ifdef __EMSCRIPTEN__
 void enterFullScreenMode(void) {
     EmscriptenFullscreenStrategy s;
-    memset(&s, 0, sizeof(s));
+    memFill(&s, 0, sizeof(s));
     s.scaleMode = EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
     s.canvasResolutionScaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_NONE;
     s.filteringMode = EMSCRIPTEN_FULLSCREEN_FILTERING_DEFAULT;
@@ -36,6 +31,8 @@ void enterFullScreenMode(void) {
 }
 #endif
 
+SDL_Surface *video;
+SDL_Surface *stretchedBuffer;
 
 uint8_t getPaletteEntry(uint32_t origin) {
     uint8_t shade;

@@ -19,6 +19,7 @@ Created by Daniel Monteiro on 2019-07-26.
 #include <genesis.h>
 #endif
 
+#include "Enums.h"
 #include "Common.h"
 #include "Core.h"
 #include "Derelict.h"
@@ -192,7 +193,7 @@ void useCloggedFlush(struct Item *item) {
     struct Item *highRankKeycard = getItemNamed("high-rank-keycard");
     (void)item;
 
-    if (highRankKeycard->roomId == 0) {
+    if (highRankKeycard->roomId == 0 && !playerHasObject("high-rank-keycard")) {
         defaultLogger("Found something among the\n...stuff...");
         addToRoom("wc", highRankKeycard);
     }
@@ -211,14 +212,17 @@ void inspectItemWithHelmetCallback(struct Item *helmet, struct Item *item) {
 #endif
 }
 
-void useCommWithRank(struct Item *item) {
+void useKeycardWith(struct Item *item1, struct Item *item2) {
+    if (item2 == getItemNamed("comm-terminal-1") ||
+        item2 == getItemNamed("comm-terminal-2") ||
+        item2 == getItemNamed("comm-terminal-3")) {
 
-    if (getPlayerRank() <= 1) {
-        defaultLogger("Insufficient rank to access");
+        defaultLogger("Computer node rebooted");
+        item2->active = TRUE;
         return;
     }
-    defaultLogger("Computer node rebooted");
-    item->active = !item->active;
+
+    defaultLogger("Keycard can't be used with that");
 }
 
 /**
@@ -651,6 +655,7 @@ void initStation(void) {
             0,
 #endif
                       TRUE, 21, 9);
+    newItem->useWithCallback = useKeycardWith;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
 
@@ -689,7 +694,6 @@ void initStation(void) {
             200,
 #endif
                       FALSE, 7, 2);
-    newItem->useCallback = useCommWithRank;
     addToRoom("hall-1", newItem);
 
 
@@ -701,7 +705,6 @@ void initStation(void) {
             200,
 #endif
                       FALSE, 6, 2);
-    newItem->useCallback = useCommWithRank;
     addToRoom("hall-2", newItem);
 
 
@@ -713,7 +716,6 @@ void initStation(void) {
             200,
 #endif
                       FALSE, 7, 2);
-    newItem->useCallback = useCommWithRank;
     addToRoom("hall-3", newItem);
 
     /* Diaries */
@@ -811,6 +813,7 @@ void initStation(void) {
             0,
 #endif
                       TRUE, 23, 17);
+    newItem->useWithCallback = useKeycardWith;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
 

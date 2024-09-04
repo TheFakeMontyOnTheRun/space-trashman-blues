@@ -135,7 +135,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine, int nCmdShow)
 {
 
-        
+        int argc = 0;
+		char **argv = NULL;
 
         WNDCLASSEX WndCls;
         RECT window_rect = {0, 0, 640, 480};

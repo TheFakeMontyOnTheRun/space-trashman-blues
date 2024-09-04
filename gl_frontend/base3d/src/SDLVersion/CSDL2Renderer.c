@@ -27,7 +27,7 @@
 #ifdef __EMSCRIPTEN__
 void enterFullScreenMode(void) {
     EmscriptenFullscreenStrategy s;
-    memset(&s, 0, sizeof(s));
+    memFill(&s, 0, sizeof(s));
     s.scaleMode = EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
     s.canvasResolutionScaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_NONE;
     s.filteringMode = EMSCRIPTEN_FULLSCREEN_FILTERING_DEFAULT;
@@ -78,7 +78,6 @@ void handleSystemEvents(void) {
         }
 
         if (event.type == SDL_KEYUP) {
-            visibilityCached = FALSE;
             needsToRedrawVisibleMeshes = TRUE;
         }
 
@@ -176,7 +175,6 @@ void handleSystemEvents(void) {
                     break;
                 case SDLK_UP:
                     mBufferedCommand = kCommandUp;
-                    visibilityCached = FALSE;
                     break;
                 case SDLK_1:
                     enableSmoothMovement = TRUE;

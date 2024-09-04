@@ -10,7 +10,7 @@ struct GameSnapshot {
     struct Vec2i playerTarget;
 };
 
-struct GameSnapshot dungeon_tick(const enum ECommand cmd);
+struct GameSnapshot dungeonTick(const enum ECommand command);
 
 void dungeon_loadMap(
         const uint8_t *__restrict__ mapData,

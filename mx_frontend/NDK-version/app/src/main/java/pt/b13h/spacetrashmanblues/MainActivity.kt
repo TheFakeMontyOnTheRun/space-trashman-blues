@@ -14,12 +14,17 @@ import android.view.Display
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewManager
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import pt.b13h.derelictgles2.R
 import java.nio.ByteBuffer
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
+    private var imageView: ImageView? = null
     private var soundPool : SoundPool? = null
     private var presentation: Presentation? = null
     private var sounds = IntArray(8)
@@ -28,14 +33,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var running = false
 
     private fun initAudio() {
-        soundPool = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        soundPool =
             SoundPool.Builder().setAudioAttributes(AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_GAME)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .build()).build()
-        } else {
-            SoundPool(5, AudioManager.STREAM_MUSIC, 0 )
-        }
 
         sounds[0] = soundPool!!.load(this, R.raw.menu_move, 1)
         sounds[1] = soundPool!!.load(this, R.raw.menu_select, 1)
@@ -68,8 +70,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         if (savedInstanceState == null ) {
             DerelictJNI.initAssets(resources.assets)
         }
-
-        imageView.setImageBitmap(bitmap)
+        imageView = findViewById(R.id.imageView)
+        imageView?.setImageBitmap(bitmap)
     }
 
     override fun onDestroy() {
@@ -88,6 +90,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         Thread {
             while (running) {
                 runOnUiThread {
+                    val llActions = findViewById<LinearLayout>(R.id.llActions)
+                    val llDirections = findViewById<LinearLayout>(R.id.llDirections)
+                    val llScreenControllers = findViewById<LinearLayout>(R.id.llScreenControllers)
+                    val btnUp = findViewById<ImageButton>(R.id.btnUp)
+                    val btnDown = findViewById<ImageButton>(R.id.btnDown)
+                    val btnUse = findViewById<Button>(R.id.btnUse)
+                    val btnNextItem = findViewById<Button>(R.id.btnNextItem)
+                    val btnUseWith = findViewById<Button>(R.id.btnUseWith)
+                    val btnLeft = findViewById<ImageButton>(R.id.btnLeft)
+                    val btnRight = findViewById<ImageButton>(R.id.btnRight)
+                    val btnStrafeLeft = findViewById<ImageButton>(R.id.btnStrafeLeft)
+                    val btnStrafeRight = findViewById<ImageButton>(R.id.btnStrafeRight)
+
                     if (!(application as DerelictApplication).hasPhysicalController()) {
 
                         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -97,7 +112,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             llScreenControllers.visibility = View.VISIBLE
                         }
 
-                        btnItemInfo.setOnClickListener(this)
                         btnUp.setOnClickListener(this)
                         btnDown.setOnClickListener(this)
                         btnUse.setOnClickListener(this)
@@ -167,7 +181,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun redraw() {
         DerelictJNI.getPixelsFromNative(pixels)
         bitmap.copyPixelsFromBuffer(ByteBuffer.wrap(pixels))
-        imageView.invalidate()
+        imageView?.invalidate()
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
@@ -203,8 +217,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             R.id.btnUse -> toSend = 'z'
             R.id.btnUseWith -> toSend = 'x'
-            R.id.btnNextItem -> toSend = 'v'
-            R.id.btnItemInfo -> toSend = 'c'
+            R.id.btnNextItem -> toSend = 'c'
 
             R.id.btnStrafeLeft-> toSend = 'n'
             R.id.btnStrafeRight-> toSend = 'm'
@@ -233,7 +246,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun useSecondaryDisplayForGameplayPresentation(presentationDisplay: Display) {
 
-        (imageView.parent as ViewManager).removeView(imageView)
+        (imageView?.parent as ViewManager).removeView(imageView)
         presentation =
             GamePresentation(this, presentationDisplay, imageView)
 

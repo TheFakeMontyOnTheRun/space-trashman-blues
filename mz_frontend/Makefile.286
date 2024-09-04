@@ -1,19 +1,37 @@
 CFLAGS = -fomit-frame-pointer -fno-exceptions -ffast-math \
-        -I../core/include -I../common/include -IEngine3D \
-        -DMSDOS -DRES128X128 -DTRACE_OBJECTS_OVER_FLOOR -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DUSE_FILLED_POLYS \
-        -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DENDIANESS_AWARE
+        -Iinclude -I../core/include -I../common/include -IEngine3D \
+        -DMSDOS -DCLI_BUILD -DRES128X128 -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DENDIANESS_AWARE -DXRES=128 -DYRES=128\
+        -DSDLW -DENDIANESS_AWARE -DMONOCHROME_VECTORS -DEMBEDDED_DATA -DRLE_COMPRESSED_MAPS -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DSUPPORTS_HACKING_MINIGAME -DTRACE_OBJECTS_OVER_FLOOR -DCAN_PICK_OBJECT_AT_ANY_DISTANCE -DRES128X128 -Wall -Wextra -pedantic -Wunused-parameter -DXRES_FRAMEBUFFER=256 -DYRES_FRAMEBUFFER=160 -DENDIANESS_AWARE \
+        -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DSUPPORTS_ROOM_TRANSITION_ANIMATION -DENDIANESS_AWARE  -DUSE_OWN_MIN_MAX \
+        -Iinclude -I../common/include -I../core/include -I../common/include -IEngine3D -I../core/include \
+        -I../common/include -I../core/include -Imenu/include -ISoundSystem -I../core/include -IEngine3D
 
 CC = i386-pc-msdosdjgpp-gcc
 
-OBJS = Engine3D/demo.o MSDOSVersion/msdos.o \
-    ../core/src/Core.o \
+OBJS = \
+    src/MSDOSVersion/msdos.o \
+    src/RendererTesselation.o \
+    src/RendererRasterizer.o \
+    src/RendererScene.o \
+    ../common/src/HelpScreen.o \
+    ../common/src/MainMenu.o \
+    ../common/src/CreditsScreen.o \
+    ../common/src/HackingMinigameRules.o \
+    src/Main.o \
     ../core/src/Derelict.o \
+    ../core/src/Core.o \
     ../common/src/PackedFileReader.o \
+    ../common/src/NullMusic.o \
+    ../common/src/Common.o \
+    ../common/src/Engine.o \
     ../common/src/CTile3DProperties.o \
     ../common/src/MapWithCharKey.o \
-    ../common/src/FixP.o \
-    ../common/src/Globals.o \
-    ../common/src/Common.o
+    src/HackingMinigame.o \
+    src/UI.o \
+    src/Events.o \
+    src/KeyboardUI.o \
+    src/Crawler.o \
+    src/GameMenu.o
 
 TARGET = derelict.exe
 
@@ -23,7 +41,7 @@ $(TARGET):	$(OBJS)
 all:	$(TARGET)
 
 clean:
-	rm -f Engine3D/*.o
-	rm -f MSDOSVersion/*.o
+	rm -f src/*.o
+	rm -f src/MSDOSVersion/*.o
 	rm -f ../core/src/*.o
 	rm -f ../common/src/*.o
