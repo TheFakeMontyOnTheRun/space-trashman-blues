@@ -46,6 +46,7 @@ const enum EGameMenuState MainMenu_nextStateNavigation[kMainMenuOptionsCount] = 
 
 #endif
 
+#ifndef GB
 #ifndef MONOCHROME_VECTORS
 static const uint8_t logoGraphics[] = {
 3,
@@ -3375,10 +3376,7 @@ static const uint8_t splashGraphics[] = {
 45, 1,
 68, 1,
 0};
-
-
-
-
+#endif
 #endif
 
 void MainMenu_initStateCallback(enum EGameMenuState tag) {
@@ -3386,6 +3384,7 @@ void MainMenu_initStateCallback(enum EGameMenuState tag) {
 }
 
 void MainMenu_repaintCallback(void) {
+#ifndef GB
     if (firstFrameOnCurrentState) {
         clearScreen();
 #ifndef MONOCHROME_VECTORS
@@ -3395,7 +3394,7 @@ void MainMenu_repaintCallback(void) {
         drawGraphic((XRES_FRAMEBUFFER / 2) + 8, 8, (XRES_FRAMEBUFFER / 2) - 16, (XRES_FRAMEBUFFER / 2) - 16, logoGraphics);
         playSound(MAIN_MENU_THEME);
     }
-
+#endif
     drawWindowWithOptions(
             (XRES_FRAMEBUFFER / 8) - (int) 9 - 4,
             (YRES_FRAMEBUFFER / 8) - 4 - kMainMenuOptionsCount,

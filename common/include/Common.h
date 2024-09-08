@@ -18,7 +18,11 @@
 #include "Win32Int.h"
 #else
 #include <stdint.h>
+#ifndef GB
 #include <unistd.h>
+#else
+#include <stddef.h>
+#endif
 #endif
 #endif
 

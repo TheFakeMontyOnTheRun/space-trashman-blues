@@ -1,0 +1,47 @@
+CC = $(GBDK_HOME)bin/lcc -Wa-l -Wl-m -Wl-j
+
+CFLAGS = \
+	-DGB \
+        -Iinclude \
+        -I../core/include \
+        -I../common/include \
+        -DXRES_FRAMEBUFFER=64 \
+        -DYRES_FRAMEBUFFER=64 \
+        -DGAMEPAD \
+        -DCAN_PICK_OBJECT_AT_ANY_DISTANCE \
+        -DRLE_COMPRESSED_MAPS \
+        -DEMBEDDED_DATA \
+        -DMONOCHROME_VECTORS \
+        -DNO_DYNAMIC_MEMORY_ALLOC \
+        -DUSE_OWN_MIN_MAX
+
+TARGET = derelict.gb
+
+OBJS = \
+    src/Events.o \
+    src/RendererRasterizer.o \
+    src/RendererScene.o \
+    src/RendererTesselation.o \
+    src/Main.o \
+    src/gb.o \
+    src/UI.o \
+    src/Crawler.o \
+    src/GameMenu.o \
+    ../common/src/CreditsScreen.o \
+    ../common/src/MainMenu.o \
+    ../common/src/HelpScreen.o \
+    ../common/src/Engine.o \
+    ../common/src/NullMusic.o \
+    src/GamepadUI.o \
+    ../core/src/Core.o \
+    ../core/src/Derelict.o \
+    ../common/src/Common.o
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(LDFLAGS)
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+	rm -f *~

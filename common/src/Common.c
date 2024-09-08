@@ -31,7 +31,6 @@
 #else
 
 #include <stdint.h>
-#include <unistd.h>
 #include <string.h>
 
 #endif
