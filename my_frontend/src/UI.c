@@ -56,8 +56,8 @@ void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t 
 
         ptr += 2 * npoints;
     }
-#endif
 }
+#endif
 
 void drawTextAt(uint8_t _x, uint8_t y, const char *text, uint8_t colour) {
     drawTextAtWithMargin(_x, y, (XRES_FRAMEBUFFER), text, colour);
