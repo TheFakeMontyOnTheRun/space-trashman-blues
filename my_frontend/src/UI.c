@@ -24,7 +24,7 @@ uint8_t waitForKey = 0;
 uint8_t redrawMap;
 
 uint8_t needsToRedrawHUD;
-#ifdef GB
+
 uint16_t scale2DVertex( uint16_t offset, uint16_t scale, const uint8_t *shape, uint16_t index) {
     return offset + ((scale * shape[index]) / 128);
 }
@@ -57,7 +57,7 @@ void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t 
         ptr += 2 * npoints;
     }
 }
-#endif
+
 
 void drawTextAt(uint8_t _x, uint8_t y, const char *text, uint8_t colour) {
     drawTextAtWithMargin(_x, y, (XRES_FRAMEBUFFER), text, colour);
