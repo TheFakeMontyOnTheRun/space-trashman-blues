@@ -34,16 +34,17 @@ void initHW(int argc, char **argv) {
 
 void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text, const uint8_t fg,
                                        char charToReplaceHifenWith) {
-   
+    gotogxy(x, y);
+    gprint(text);
 }
 
 uint8_t *realPut(uint16_t x, uint8_t y, uint8_t colour, uint8_t *ptr) {
 
-    if (y > YRES ) {
+    if (y > YRES_FRAMEBUFFER ) {
         return;
     }
 
-    if (x > XRES ) {
+    if (x > XRES_FRAMEBUFFER ) {
         return;
     }
 
@@ -59,9 +60,18 @@ enum ECommand getInput(void) {
     int key = joypad();
     
     performAction();
+    
+    if(key & (J_UP|J_DOWN|J_LEFT|J_RIGHT|J_A | J_B)) {
+        clearScreen();
+        
+        if(key & J_A) {
+            return kCommandFire1;
+        }
 
-    if(key & (J_UP|J_DOWN|J_LEFT|J_RIGHT)) {
-        clearGraphics();
+        if(key & J_B) {
+            return kCommandFire2;
+        }
+
         if(key & J_UP) {
             return kCommandUp;
         }
@@ -82,7 +92,7 @@ enum ECommand getInput(void) {
 }
 
 void clearScreen(void) {
-    box( 0, 0, XRES, YRES, M_FILL);
+    box( 0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, M_FILL);
 }
 
 void clearGraphics(void) {
@@ -145,28 +155,5 @@ void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, 
 
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
-    int16_t dx = abs(x1 - x0);
-    int16_t sx = x0 < x1 ? 1 : -1;
-    int16_t dy = abs(y1 - y0);
-    int16_t sy = y0 < y1 ? 1 : -1;
-    int16_t err = (dx > dy ? dx : -dy) >> 1;
-    int16_t e2;
-
-    for (;;) {
-
-        if (x0 == x1 && y0 == y1) return;
-
-        realPut(x0, y0, colour, NULL);
-
-        e2 = err;
-
-        if (e2 > -dx) {
-            err -= dy;
-            x0 += sx;
-        }
-        if (e2 < dy) {
-            err += dx;
-            y0 += sy;
-        }
-    }
+    line(x0, y0, x1, y1);
 }

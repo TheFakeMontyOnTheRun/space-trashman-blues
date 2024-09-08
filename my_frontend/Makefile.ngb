@@ -5,8 +5,8 @@ CFLAGS = \
         -Iinclude \
         -I../core/include \
         -I../common/include \
-        -DXRES_FRAMEBUFFER=64 \
-        -DYRES_FRAMEBUFFER=64 \
+        -DXRES_FRAMEBUFFER=160 \
+        -DYRES_FRAMEBUFFER=144 \
         -DGAMEPAD \
         -DCAN_PICK_OBJECT_AT_ANY_DISTANCE \
         -DRLE_COMPRESSED_MAPS \
