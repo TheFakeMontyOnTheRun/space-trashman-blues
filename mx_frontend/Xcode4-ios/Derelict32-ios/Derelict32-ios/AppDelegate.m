@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 
 #import "ViewController.h"
+#import "TitleScreen.h"
 
 @implementation AppDelegate
 
@@ -22,14 +23,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-    // Override point for customization after application launch.
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController_iPhone" bundle:nil] autorelease];
-    } else {
-        self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController_iPad" bundle:nil] autorelease];
-    }
-    self.window.rootViewController = self.viewController;
-    [self.window makeKeyAndVisible];
+    
+    [ self changeScreen: SCREEN_TITLE ];
+
     return YES;
 }
 
@@ -59,5 +55,39 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+- (void) changeScreen: (int) screen {
+    
+    // Override point for customization after application launch.
+    
+    switch ( screen ) {
+        case SCREEN_TITLE:
+            if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+                self.viewController = [[[TitleScreen alloc] initWithNibName:@"TitleScreen_iPhone" bundle:nil] autorelease];
+            } else {
+                self.viewController = [[[TitleScreen alloc] initWithNibName:@"TitleScreen_iPad" bundle:nil] autorelease];
+            }
+            break;
+        case SCREEN_GAME:
+            
+            if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+                self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController_iPhone" bundle:nil] autorelease];
+            } else {
+                self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController_iPad" bundle:nil] autorelease];
+            }
+            
+            break;
+            
+        case SCREEN_OUTCOME:
+            
+            break;
+    }
+    
+    // Override point for customization after application launch.
+    self.window.rootViewController = self.viewController;
+    [self.window makeKeyAndVisible];
+    
+}
+
 
 @end

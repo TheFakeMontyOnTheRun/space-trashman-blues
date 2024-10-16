@@ -66,6 +66,10 @@
 		F1A987C42B9F3D80004DF107 /* Renderer.c in Sources */ = {isa = PBXBuildFile; fileRef = F1A987B62B9F3D80004DF107 /* Renderer.c */; };
 		F1A987C52B9F3D80004DF107 /* RendererRasterization.c in Sources */ = {isa = PBXBuildFile; fileRef = F1A987B72B9F3D80004DF107 /* RendererRasterization.c */; };
 		F1A987C62B9F3D80004DF107 /* RendererTesselation.c in Sources */ = {isa = PBXBuildFile; fileRef = F1A987B82B9F3D80004DF107 /* RendererTesselation.c */; };
+		F1ABCB6E2CBFE84F00BE051E /* TitleScreen_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1ABCB6A2CBFE84F00BE051E /* TitleScreen_iPad.xib */; };
+		F1ABCB6F2CBFE84F00BE051E /* TitleScreen_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1ABCB6B2CBFE84F00BE051E /* TitleScreen_iPhone.xib */; };
+		F1ABCB702CBFE84F00BE051E /* TitleScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = F1ABCB6D2CBFE84F00BE051E /* TitleScreen.m */; };
+		F1ABCB722CBFE8B400BE051E /* title_art.png in Resources */ = {isa = PBXBuildFile; fileRef = F1ABCB712CBFE8B400BE051E /* title_art.png */; };
 		F1B282BB2B9F940200635EC6 /* base.pfs in Resources */ = {isa = PBXBuildFile; fileRef = F1B282BA2B9F940200635EC6 /* base.pfs */; };
 /* End PBXBuildFile section */
 
@@ -156,6 +160,11 @@
 		F1A987B62B9F3D80004DF107 /* Renderer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Renderer.c; sourceTree = "<group>"; };
 		F1A987B72B9F3D80004DF107 /* RendererRasterization.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RendererRasterization.c; sourceTree = "<group>"; };
 		F1A987B82B9F3D80004DF107 /* RendererTesselation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RendererTesselation.c; sourceTree = "<group>"; };
+		F1ABCB6A2CBFE84F00BE051E /* TitleScreen_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TitleScreen_iPad.xib; sourceTree = "<group>"; };
+		F1ABCB6B2CBFE84F00BE051E /* TitleScreen_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TitleScreen_iPhone.xib; sourceTree = "<group>"; };
+		F1ABCB6C2CBFE84F00BE051E /* TitleScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleScreen.h; sourceTree = "<group>"; };
+		F1ABCB6D2CBFE84F00BE051E /* TitleScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleScreen.m; sourceTree = "<group>"; };
+		F1ABCB712CBFE8B400BE051E /* title_art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title_art.png; path = ../../../../art/title_art.png; sourceTree = "<group>"; };
 		F1B282BA2B9F940200635EC6 /* base.pfs */ = {isa = PBXFileReference; lastKnownFileType = file; name = base.pfs; path = ../../../base.pfs; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -208,9 +217,14 @@
 				F1A987092B9F3C8C004DF107 /* AppDelegate.m */,
 				F1A987112B9F3C8C004DF107 /* ViewController.h */,
 				F1A987122B9F3C8C004DF107 /* ViewController.m */,
+				F1ABCB712CBFE8B400BE051E /* title_art.png */,
 				F1A987142B9F3C8C004DF107 /* ViewController_iPhone.xib */,
 				F1A987172B9F3C8C004DF107 /* ViewController_iPad.xib */,
 				F1B282BA2B9F940200635EC6 /* base.pfs */,
+				F1ABCB6A2CBFE84F00BE051E /* TitleScreen_iPad.xib */,
+				F1ABCB6B2CBFE84F00BE051E /* TitleScreen_iPhone.xib */,
+				F1ABCB6C2CBFE84F00BE051E /* TitleScreen.h */,
+				F1ABCB6D2CBFE84F00BE051E /* TitleScreen.m */,
 				F1A987002B9F3C8C004DF107 /* Supporting Files */,
 			);
 			path = "Derelict32-ios";
@@ -437,6 +451,9 @@
 				F11598602CB5DF2F00CC5B3F /* strafe_left.png in Resources */,
 				F11598612CB5DF2F00CC5B3F /* strafe_right.png in Resources */,
 				F11598622CB5DF2F00CC5B3F /* up.png in Resources */,
+				F1ABCB6E2CBFE84F00BE051E /* TitleScreen_iPad.xib in Resources */,
+				F1ABCB6F2CBFE84F00BE051E /* TitleScreen_iPhone.xib in Resources */,
+				F1ABCB722CBFE8B400BE051E /* title_art.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,6 +495,7 @@
 				F1A987C42B9F3D80004DF107 /* Renderer.c in Sources */,
 				F1A987C52B9F3D80004DF107 /* RendererRasterization.c in Sources */,
 				F1A987C62B9F3D80004DF107 /* RendererTesselation.c in Sources */,
+				F1ABCB702CBFE84F00BE051E /* TitleScreen.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
