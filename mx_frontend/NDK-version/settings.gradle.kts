@@ -15,4 +15,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Sub Mare Imperium - Derelict (Software Renderer)"
 include(":app")
-include(":app")
