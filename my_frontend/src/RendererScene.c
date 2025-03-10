@@ -20,6 +20,7 @@ extern int8_t stencilHigh[XRES];
 
 extern uint8_t playerLocation;
 
+#ifndef SPECCY
 int8_t max(int8_t x1, int8_t x2) {
     return x1 > x2 ? x1 : x2;
 }
@@ -27,6 +28,7 @@ int8_t max(int8_t x1, int8_t x2) {
 int8_t min(int8_t x1, int8_t x2) {
     return x1 < x2 ? x1 : x2;
 }
+#endif
 
 /* all those refactors are due to a SDCC bug with very long functions */
 void renderScene(void) {

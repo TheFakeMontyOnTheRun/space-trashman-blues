@@ -52,9 +52,11 @@ const struct Projection projections[32] = {
         {60, -4},    /*	32	*/
 };
 
+#ifndef SPECCY
 int8_t max(int8_t x1, int8_t x2);
 
 int8_t min(int8_t x1, int8_t x2);
+#endif
 
 uint8_t drawWedge(int8_t x0, int8_t y0, int8_t z0, int8_t dX, int8_t dY, int8_t dZ, uint8_t elementMask, uint8_t type) {
 

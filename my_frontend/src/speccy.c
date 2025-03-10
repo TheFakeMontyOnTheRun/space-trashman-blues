@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <stdio.h>
+#include <conio.h>
 #include <games.h>
 #include <graphics.h>
 
@@ -201,6 +202,11 @@ void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, 
     }
 }
 
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text, const uint8_t fg,
+                                       char charToReplaceHifenWith) {
+    gotoxy(x * 2, y);
+    puts(text);
+}
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
     if (colour) {
