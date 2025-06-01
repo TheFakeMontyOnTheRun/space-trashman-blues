@@ -240,3 +240,4 @@ mx_frontend/index.html
 mx_frontend/index.js
 mx_frontend/index.wasm
 core/cmake-build-debug-coverage
+mx_frontend/doxysite
