@@ -19,7 +19,8 @@ CFLAGS = \
     -DSUPPORTS_HACKING_MINIGAME \
     -DENDIANESS_AWARE \
     -DMONOCHROME_VECTORS \
-    -DUSE_OWN_MIN_MAX
+    -DUSE_OWN_MIN_MAX \
+    -O2
 
 CC = ia16-elf-gcc
 STRIP = ia16-elf-strip
