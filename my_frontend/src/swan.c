@@ -114,6 +114,37 @@ void put_sprite_8(uint16_t x, uint8_t y, uint8_t *sprite, uint8_t colour) {
 void shutdownGraphics(void) {
 }
 
+static void vSet(uint8_t *ptr, uint8_t y0, uint8_t y1, uint8_t v, uint8_t stippleMask) {
+    if (stippleMask) {
+        for (uint8_t y = y0; y <= y1; y++, ptr += 2) {
+            *ptr |= v;
+            v ^= stippleMask;
+        }
+    } else {
+        for (uint8_t y = y0; y <= y1; y++, ptr += 2)
+            *ptr |= v;
+    }
+}
+
+static void vClear(uint8_t *ptr, uint8_t y0, uint8_t y1, uint8_t v, uint8_t stippleMask) {
+    if (stippleMask) {
+        for (uint8_t y = y0; y <= y1; y++, ptr += 2) {
+            *ptr &= ~v;
+            v ^= stippleMask;
+        }
+    } else {
+        for (uint8_t y = y0; y <= y1; y++, ptr += 2)
+            *ptr &= ~v;
+    }
+}
+
+static void vDraw(uint8_t *ptr, uint8_t y0, uint8_t y1, uint8_t colour, uint8_t v, uint8_t stippleMask) {
+    if (colour)
+        vSet(ptr, y0, y1, v, stippleMask);
+    else
+        vClear(ptr, y0, y1, v, stippleMask);
+}
+
 void vLine(uint8_t x, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
     uint8_t _y0 = y0;
     uint8_t _y1 = y1;
@@ -129,13 +160,53 @@ void vLine(uint8_t x, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
     uint8_t *ptr = &imageBuffer[(_y0 << 1) + ((x & 8) >> 3) + ((x & 240) * 16)];
     uint8_t v = 128 >> (x & 7);
+    vSet(ptr, _y0, _y1, v, shouldStipple ? v : 0);
+}
 
-    if (shouldStipple) {
-        for (uint8_t y = _y0; y <= _y1; y += 2, ptr += 4)
-            *ptr |= v;
-    } else {
-        for (uint8_t y = _y0; y <= _y1; y++, ptr += 2)
-            *ptr |= v;
+void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, uint8_t stipple) {
+    int x = x0;
+    uint8_t v;
+    uint8_t stippleMask = 0;
+
+    y1--;
+
+    // fill left side
+    if (x & 7) {
+        v = 0xFF >> (x0 & 7);
+        // left side == right side?
+        if ((x1 & ~7) == (x0 & ~7)) {
+            v &= 0xFF << (8 - (x1 & 7));
+        }
+        if (stipple) {
+            stippleMask = v;
+            v = (0x55 << (y0 & 1)) & stippleMask;
+        }
+        uint8_t *ptr = &tileData[(y0 << 1) + ((x & 8) >> 3) + ((x & 240) * WS_DISPLAY_HEIGHT_TILES)];
+        vDraw(ptr, y0, y1, colour, v, stippleMask);
+
+        x = (x + 7) & ~7;
+    }
+
+    // fill middle
+    v = 0xFF;
+    if (stipple) {
+        stippleMask = 0xFF;
+        v = (0x55 << (y0 & 1));
+    }
+    for (; x < (x1 & ~7); x += 8) {
+        uint8_t *ptr = &tileData[(y0 << 1) + ((x & 8) >> 3) + ((x & 240) * WS_DISPLAY_HEIGHT_TILES)];
+        vDraw(ptr, y0, y1, colour, v, stippleMask);
+    }
+
+    // fill right side
+    if (x < x1 && x1 & 7) {
+        v = 0xFF << (8 - (x1 & 7));
+        if (stipple) {
+            stippleMask = v;
+            v = (0x55 << (y0 & 1)) & stippleMask;
+        }
+        uint8_t *ptr = &tileData[(y0 << 1) + ((x & 8) >> 3) + ((x & 240) * WS_DISPLAY_HEIGHT_TILES)];
+        vDraw(ptr, y0, y1, colour, v, stippleMask);
     }
 }
 
@@ -433,27 +504,6 @@ void enterTextMode(void) {}
 
 void exitTextMode(void) {
     clearScreen();
-}
-
-void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, uint8_t stipple) {
-    int x, y;
-
-    for (x = x0; x < x1; ++x) {
-        uint8_t *ptr = &tileData[(y0 << 1) + ((x & 8) >> 3) + ((x & 240) * WS_DISPLAY_HEIGHT_TILES)];
-        uint8_t v = 128 >> (x & 7);
-
-        if (colour) {
-            for (y = y0; y < y1; ++y, ptr += 2) {
-                if (!stipple || ((x + y) & 1))
-                   *ptr |= v;
-            }
-        } else {
-            for (y = y0; y < y1; ++y, ptr += 2) {
-                if (!stipple || ((x + y) & 1))
-                   *ptr &= ~v;
-            }
-        }
-    }
 }
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
