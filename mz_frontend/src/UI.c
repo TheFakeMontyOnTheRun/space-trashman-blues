@@ -38,8 +38,8 @@ uint8_t needsToRedrawHUD;
 
 extern struct MapWithCharKey tileProperties;
 
-void drawGraphic(int x, int y, int dx, int dy, const uint8_t *graphic) {
-    const uint8_t *ptr = graphic;
+void drawGraphic(int x, int y, int dx, int dy, const uint8_t DATA_ADDRESS_SPACE *graphic) {
+    const uint8_t DATA_ADDRESS_SPACE *ptr = graphic;
 
     while (*ptr) {
         uint8_t c;
@@ -47,7 +47,7 @@ void drawGraphic(int x, int y, int dx, int dy, const uint8_t *graphic) {
 #ifndef MONOCHROME_VECTORS
         ptr += 3; /* skip colours */
 #endif
-        const uint8_t *shape = ptr;
+        const uint8_t DATA_ADDRESS_SPACE *shape = ptr;
 
         for (c = 0; c < npoints - 1; ++c) {
 	  drawLine(x + ((dx * shape[2 * c]) / 128),

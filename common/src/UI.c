@@ -232,8 +232,8 @@ enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t opt
     return kResumeCurrentState;
 }
 
-void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t *graphic) {
-    const uint8_t *ptr = graphic;
+void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t DATA_ADDRESS_SPACE *graphic) {
+    const uint8_t DATA_ADDRESS_SPACE *ptr = graphic;
     int buffer[6];
 
     while (*ptr) {
@@ -243,7 +243,7 @@ void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t 
         const uint8_t g = *ptr++;
         const uint8_t b = *ptr++;
         const FramebufferPixelFormat colour = getPaletteEntry( 0xFF000000 + (b << 16) + (g << 8) + r);
-        const uint8_t *shape = ptr;
+        const uint8_t DATA_ADDRESS_SPACE *shape = ptr;
         int centerX = 0;
         int centerY = 0;
 
