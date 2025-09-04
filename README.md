@@ -29,7 +29,7 @@ Download link: https://montyontherun.itch.io/sub-mare-imperium-derelict-64
 
 ![ ](derelict64.png)
 
-EE frontend - Derelict 128-bit (Sony Playstation 2)
+EE frontend - Derelict 128-bit (Sony Playstation 2, Gamecube, Wii, OSX/OpenGL Core Profile 3, Linux/OpenGL ES 2, iOS/OpenGL ES 2, Android/OpenGL ES 2)
 
 Download link: https://montyontherun.itch.io/derelict-128
 
