@@ -5,7 +5,7 @@ A 3D turn based adventure for various platforms; you're a hacker with a simple m
 
 [Read the docs](https://thefakemontyontherun.github.io/space-trashman-blues/) for more info on the tech and the status of the project!
 
-MY frontend - Derelict 8-bit (Sega Master System, MSX, IBM PC 5150 and Amstrad CPC 464+)
+MY frontend - Derelict 8-bit (Sega Master System, MSX, IBM PC 5150, Amstrad CPC 464+ and WonderSwan)
 
 Download link: https://montyontherun.itch.io/sub-mare-imperium-derelict-8-bit
 

@@ -1,0 +1,71 @@
+WONDERFUL_TOOLCHAIN ?= /opt/wonderful
+TARGET = wswan/small
+include $(WONDERFUL_TOOLCHAIN)/target/$(TARGET)/makedefs.mk
+
+LIBS            := -lwsx -lws -lc -lws
+LIBDIRS         := $(WF_ARCH_LIBDIRS)
+
+CFLAGS = \
+    -Wall \
+    -Wextra \
+    -Wno-unused-parameter \
+    -Wno-unused-variable \
+    -Iinclude \
+    -I../core/include \
+    -I../common/include \
+    -Isrc \
+    -DSWAN \
+    -DXRES_FRAMEBUFFER=224 \
+    -DYRES_FRAMEBUFFER=144 \
+    -DLEAN_BUILD \
+    -DCAN_PICK_OBJECT_AT_ANY_DISTANCE  \
+    -DSUPPORTS_ROOM_TRANSITION_ANIMATION \
+    -DSUPPORTS_HACKING_MINIGAME \
+    -DRLE_COMPRESSED_MAPS \
+    -DEMBEDDED_DATA \
+    -DMONOCHROME_VECTORS \
+    -DUSE_OWN_MIN_MAX \
+    $(WF_ARCH_CFLAGS) \
+    $(foreach path,$(LIBDIRS),-isystem $(path)/include) \
+    -ffunction-sections -fdata-sections -fno-common -O2
+
+LDFLAGS = \
+    $(WF_ARCH_LDFLAGS) $(LIBS) \
+    -T$(WF_LDSCRIPT) \
+    $(foreach path,$(LIBDIRS),-L$(path)/lib)
+
+OBJS = \
+    src/swan.o \
+    src/Events.o \
+    src/RendererRasterizer.o \
+    src/RendererScene.o \
+    src/RendererTesselation.o \
+    src/Main.o \
+    src/UI.o \
+    src/Crawler.o \
+    src/GameMenu.o \
+    ../common/src/CreditsScreen.o \
+    ../common/src/MainMenu.o \
+    ../common/src/HelpScreen.o \
+    ../common/src/Engine.o \
+    src/HackingMinigame.o \
+    src/GamepadUI.o \
+    ../core/src/Core.o \
+    ../core/src/Derelict.o \
+    ../common/src/MonotoneSpeaker.o \
+    ../common/src/HackingMinigameRules.o \
+    ../common/src/Common.o
+
+TARGET = derelict.ws
+
+$(TARGET): $(TARGET).stage1.elf
+	$(BUILDROM) -o $@ --output-elf $@.elf $<
+
+$(TARGET).stage1.elf:	$(OBJS)
+	$(CC) -r -o $(TARGET).stage1.elf $(OBJS) $(WF_CRT0) $(LDFLAGS)
+
+all:	$(TARGET)
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+	rm *~
