@@ -49,7 +49,7 @@ void HUD_refresh(void) {
     drawTextAt(1, YRES_TEXT - 4, "In hand:", 2);
 
     struct Item *item;
-
+#ifndef GB
     /* Display "In room" item */
     if (roomItem != NULL) {
         item = getItem(roomItem->item);
@@ -80,6 +80,7 @@ void HUD_refresh(void) {
     } else {
         drawTextAt(2, YRES_TEXT - 3, "Nothing", 2);
     }
+#endif
 }
 
 enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
@@ -222,7 +223,7 @@ handle_directions:
 }
 
 void Crawler_repaintCallback(void) {
-
+#ifndef GB
     if (firstFrameOnCurrentState) {
         clearScreen();
         redrawMap = needsToRedrawHUD = 1;
@@ -232,6 +233,7 @@ void Crawler_repaintCallback(void) {
     HUD_refresh();
 
     drawMap();
+#endif
 
     if (!needsToRedrawVisibleMeshes) {
         return;
