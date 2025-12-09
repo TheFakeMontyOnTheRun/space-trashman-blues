@@ -6,8 +6,9 @@
 #include "Core.h"
 #include "Enums.h"
 #include "Renderer.h"
-#include "map-data.h"
 #include "Engine.h"
+
+#include "map-data.h"
 
 #ifdef MSDOS
 #include "Common.h"
@@ -156,8 +157,8 @@ void nextItemInHand(void) {
 
 void initMap(void) {
     uint8_t x, y, c;
-    const uint8_t *head;
-    const uint8_t *headEnd;
+    const uint8_t DATA_ADDRESS_SPACE *head;
+    const uint8_t DATA_ADDRESS_SPACE *headEnd;
     uint8_t current = NEUTRAL_CELL;
 
     uint16_t offsetOnDataStrip = 0;

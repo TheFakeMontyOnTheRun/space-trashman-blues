@@ -5,8 +5,12 @@
 #ifndef DERELICT8_FONT_H
 #define DERELICT8_FONT_H
 
+#ifdef SWAN
+static const uint8_t DATA_ADDRESS_SPACE font[] = {
+#else
 /* Adding const here actually doubles the ROM size! */
 static uint8_t font[] = {
+#endif
         /*  ASCII table starting on SPACE. */
         /*  Being on line 32 is no accident. */
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 /*  space */

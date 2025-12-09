@@ -5,6 +5,8 @@
 #ifndef UI_H
 #define UI_H
 
+#include "Common.h"
+
 struct Bitmap; /* temporary - soon this will be refactored out */
 
 void drawMenuBackground(void);
@@ -37,7 +39,7 @@ enum EGameMenuState handleCursor(const enum EGameMenuState* options,
 				 const enum ECommand cmd,
 				 enum EGameMenuState backState);
 
-void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t *shapes);
+void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t DATA_ADDRESS_SPACE *shapes);
 
 extern int8_t cursorPosition;
 
