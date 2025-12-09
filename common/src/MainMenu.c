@@ -46,6 +46,7 @@ const enum EGameMenuState MainMenu_nextStateNavigation[kMainMenuOptionsCount] = 
 
 #endif
 
+#ifndef GB
 #ifndef MONOCHROME_VECTORS
 static const uint8_t DATA_ADDRESS_SPACE logoGraphics[] = {
 3,
@@ -1815,7 +1816,7 @@ static const uint8_t DATA_ADDRESS_SPACE logoGraphics[] = {
 
 
 #endif
-
+#endif
 
 
 static const uint8_t DATA_ADDRESS_SPACE splashGraphics[] = {
@@ -3375,10 +3376,6 @@ static const uint8_t DATA_ADDRESS_SPACE splashGraphics[] = {
 45, 1,
 68, 1,
 0};
-
-
-
-
 #endif
 
 void MainMenu_initStateCallback(enum EGameMenuState tag) {
@@ -3387,13 +3384,15 @@ void MainMenu_initStateCallback(enum EGameMenuState tag) {
 
 void MainMenu_repaintCallback(void) {
     if (firstFrameOnCurrentState) {
+#ifndef GB
         clearScreen();
 #ifndef MONOCHROME_VECTORS
         fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF73ADA6), 0);
 #endif
-        drawGraphic(0, 0, YRES_FRAMEBUFFER, YRES_FRAMEBUFFER, splashGraphics);
-        drawGraphic((XRES_FRAMEBUFFER / 2) + 8, 8, (XRES_FRAMEBUFFER / 2) - 16, (XRES_FRAMEBUFFER / 2) - 16, logoGraphics);
         playSound(MAIN_MENU_THEME);
+        drawGraphic((XRES_FRAMEBUFFER / 2) + 8, 8, (XRES_FRAMEBUFFER / 2) - 16, (XRES_FRAMEBUFFER / 2) - 16, logoGraphics);
+#endif
+        drawGraphic(0, 0, YRES_FRAMEBUFFER, YRES_FRAMEBUFFER, splashGraphics);
     }
 
     drawWindowWithOptions(
