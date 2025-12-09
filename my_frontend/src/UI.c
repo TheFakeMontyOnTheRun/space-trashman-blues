@@ -25,12 +25,12 @@ uint8_t redrawMap;
 
 uint8_t needsToRedrawHUD;
 
-uint16_t scale2DVertex( uint16_t offset, uint16_t scale, const uint8_t *shape, uint16_t index) {
+uint16_t scale2DVertex( uint16_t offset, uint16_t scale, const uint8_t DATA_ADDRESS_SPACE *shape, uint16_t index) {
     return offset + ((scale * shape[index]) / 128);
 }
 
-void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t *graphic) {
-    const uint8_t *ptr = graphic;
+void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t DATA_ADDRESS_SPACE *graphic) {
+    const uint8_t DATA_ADDRESS_SPACE *ptr = graphic;
 
     while (*ptr) {
         uint8_t c;
@@ -38,7 +38,7 @@ void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t 
 #ifndef MONOCHROME_VECTORS
         ptr += 3; /* skip colours */
 #endif
-        const uint8_t *shape = ptr;
+        const uint8_t DATA_ADDRESS_SPACE *shape = ptr;
 
         for (c = 0; c < npoints - 1; ++c) {
             drawLine(scale2DVertex( x, dx, shape, (2 * c) + 0),

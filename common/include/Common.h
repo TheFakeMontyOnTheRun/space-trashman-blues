@@ -1,6 +1,13 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#ifdef SWAN
+#include <stddef.h>
+#define DATA_ADDRESS_SPACE __far
+#else
+#define DATA_ADDRESS_SPACE
+#endif
+
 #ifdef __MWERKS__
 /* WHAT A HORRIBLE NIGHT TO HAVE A KLUDGE! */
 #define XRES_FRAMEBUFFER 320

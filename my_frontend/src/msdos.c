@@ -452,6 +452,8 @@ enum ECommand getInput(void) {
     return kCommandNone;
 }
 
+// internal compiler error: Max. number of generated reload insns per insn is achieved (90)
+__attribute__((optimize("-O0")))
 void drawTextAtWithMarginWithFiltering(const int _x, const int _y, int limitX, const char *text, const uint8_t fg,
                                        char charToReplaceHifenWith) {
 
