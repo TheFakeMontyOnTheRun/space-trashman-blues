@@ -5,6 +5,8 @@
 #ifndef DERELICT8_MENU_H
 #define DERELICT8_MENU_H
 
+#include "Common.h"
+
 void drawTextAt(uint8_t _x, uint8_t y, const char *text, uint8_t colour);
 
 void showMessage(const char *message);
@@ -25,7 +27,7 @@ drawWindowWithOptions(const uint8_t x,
                       const uint8_t optionsCount,
                       const uint8_t selectedOption);
 
-void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t *graphic);
+void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t DATA_ADDRESS_SPACE *graphic);
 
 void drawTextWindow(const uint8_t x, const uint8_t y, const uint8_t dx, const uint8_t dy, const char *title,
                     const char *content);

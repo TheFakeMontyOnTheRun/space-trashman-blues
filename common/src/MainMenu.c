@@ -47,7 +47,7 @@ const enum EGameMenuState MainMenu_nextStateNavigation[kMainMenuOptionsCount] = 
 #endif
 
 #ifndef MONOCHROME_VECTORS
-static const uint8_t logoGraphics[] = {
+static const uint8_t DATA_ADDRESS_SPACE logoGraphics[] = {
 3,
 #ifndef MONOCHROME_VECTORS
 128, 128, 0,
@@ -1647,7 +1647,7 @@ static const uint8_t logoGraphics[] = {
 0};
 
 #else
-static const uint8_t logoGraphics[] = {
+static const uint8_t DATA_ADDRESS_SPACE logoGraphics[] = {
         33,
 #ifndef MONOCHROME_VECTORS
         128, 128, 0,
@@ -1818,7 +1818,7 @@ static const uint8_t logoGraphics[] = {
 
 
 
-static const uint8_t splashGraphics[] = {
+static const uint8_t DATA_ADDRESS_SPACE splashGraphics[] = {
 #ifdef MONOCHROME_VECTORS
         4,
 #ifndef MONOCHROME_VECTORS

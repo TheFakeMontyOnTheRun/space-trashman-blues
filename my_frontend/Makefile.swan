@@ -1,32 +1,41 @@
+WONDERFUL_TOOLCHAIN ?= /opt/wonderful
+TARGET = wswan/small
+include $(WONDERFUL_TOOLCHAIN)/target/$(TARGET)/makedefs.mk
+
+LIBS            := -lwsx -lws -lc -lws
+LIBDIRS         := $(WF_ARCH_LIBDIRS)
+
 CFLAGS = \
     -Wall \
     -Wextra \
     -Wno-unused-parameter \
     -Wno-unused-variable \
-    -fomit-frame-pointer \
-    -fno-exceptions \
-    -ffast-math \
     -Iinclude \
     -I../core/include \
     -I../common/include \
     -Isrc \
-    -DXRES_FRAMEBUFFER=320 \
-    -DYRES_FRAMEBUFFER=200 \
-    -DMSDOS \
+    -DSWAN \
+    -DXRES_FRAMEBUFFER=224 \
+    -DYRES_FRAMEBUFFER=144 \
     -DLEAN_BUILD \
     -DCAN_PICK_OBJECT_AT_ANY_DISTANCE  \
     -DSUPPORTS_ROOM_TRANSITION_ANIMATION \
     -DSUPPORTS_HACKING_MINIGAME \
-    -DENDIANESS_AWARE \
+    -DRLE_COMPRESSED_MAPS \
+    -DEMBEDDED_DATA \
     -DMONOCHROME_VECTORS \
     -DUSE_OWN_MIN_MAX \
-    -O2
+    $(WF_ARCH_CFLAGS) \
+    $(foreach path,$(LIBDIRS),-isystem $(path)/include) \
+    -ffunction-sections -fdata-sections -fno-common -O2
 
-CC = ia16-elf-gcc
-STRIP = ia16-elf-strip
+LDFLAGS = \
+    $(WF_ARCH_LDFLAGS) $(LIBS) \
+    -T$(WF_LDSCRIPT) \
+    $(foreach path,$(LIBDIRS),-L$(path)/lib)
 
 OBJS = \
-    src/msdos.o \
+    src/swan.o \
     src/Events.o \
     src/RendererRasterizer.o \
     src/RendererScene.o \
@@ -40,18 +49,20 @@ OBJS = \
     ../common/src/HelpScreen.o \
     ../common/src/Engine.o \
     src/HackingMinigame.o \
-    src/KeyboardUI.o \
+    src/GamepadUI.o \
     ../core/src/Core.o \
     ../core/src/Derelict.o \
-    ../common/src/PackedFileReader.o \
     ../common/src/MonotoneSpeaker.o \
     ../common/src/HackingMinigameRules.o \
     ../common/src/Common.o
 
-TARGET = derelict.com
+TARGET = derelict.ws
 
-$(TARGET):	$(OBJS)
-	$(CC) -o $(TARGET) $(OBJS) $(LDFLAGS)
+$(TARGET): $(TARGET).stage1.elf
+	$(BUILDROM) -o $@ --output-elf $@.elf $<
+
+$(TARGET).stage1.elf:	$(OBJS)
+	$(CC) -r -o $(TARGET).stage1.elf $(OBJS) $(WF_CRT0) $(LDFLAGS)
 
 all:	$(TARGET)
 

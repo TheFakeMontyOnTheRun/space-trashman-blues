@@ -4,7 +4,7 @@ RLE_COMPRESSOR=./rlecompressor
 PACKAGER=packer
 
 datastrip_data: $(RLE_COMPRESSOR)
-	echo "const uint8_t data[] ={" > ../include/map-data.h
+	echo "const uint8_t DATA_ADDRESS_SPACE data[] ={" > ../include/map-data.h
 	echo "" > ./datastrip
 	$(RLE_COMPRESSOR) assets/01.txt >> ../include/map-data.h 2>>./datastrip
 	$(RLE_COMPRESSOR) assets/02.txt >> ../include/map-data.h 2>>./datastrip
@@ -31,7 +31,7 @@ datastrip_data: $(RLE_COMPRESSOR)
 	$(RLE_COMPRESSOR) assets/23.txt >> ../include/map-data.h 2>>./datastrip
 	echo " 0};\n" >> ../include/map-data.h
 #TODO: precalc absolute offsets
-	echo "const uint16_t dataPositions[] ={ 0,\n" >> ../include/map-data.h
+	echo "const uint16_t DATA_ADDRESS_SPACE dataPositions[] ={ 0,\n" >> ../include/map-data.h
 	cat ./datastrip >> ../include/map-data.h
 	echo " 0\n};" >> ../include/map-data.h
 	rm ./datastrip
