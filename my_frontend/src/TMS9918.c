@@ -69,6 +69,8 @@ extern uint8_t roomTransitionAnimationStep;
 
 uint8_t buffer[BUFFER_SIZEX * BUFFER_SIZEY];
 
+static const uint8_t bitMask[8] = {128, 64, 32, 16, 8, 4, 2, 1};
+
 void setColour(uint8_t colour) {
     (void) colour;
 }
@@ -124,7 +126,7 @@ void vLine(uint8_t x0, uint8_t y0, uint8_t y1, uint8_t shouldStipple) {
 
     uint8_t patternLine = (_y0 & 7); /* which line inside the pattern; */
     uint8_t *ptr = &buffer[((_y0 & ~7) << 4) + (x0 & ~7) + patternLine];
-    uint8_t shiftXAnd7 = 128 >> (x0 & 7);
+    uint8_t shiftXAnd7 = bitMask[x0 & 7];
 
     if (shouldStipple) {
         for (uint8_t y = _y0; y <= _y1; y += 2) {
@@ -162,7 +164,7 @@ void graphicsPutPointArray(uint8_t *y128Values) {
         uint8_t currByte = *ptr;
 
         while (1) {
-            currByte |= (128 >> (x & 7));
+            currByte |= bitMask[x & 7];
 
             if (x & 7) {
                 *ptr = currByte;
@@ -179,7 +181,7 @@ void graphicsPutPointArray(uint8_t *y128Values) {
                     *ptr = currByte;
                     goto next_point;
                 }
-                currByte |= (128 >> (x & 7));
+                currByte |= bitMask[x & 7];
             }
 
             *ptr = currByte;
@@ -195,7 +197,7 @@ void graphicsPutPointArray(uint8_t *y128Values) {
 
 
 void graphicsPut(uint8_t x, uint8_t y) {
-    buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)] |= (128 >> (x & 7));
+    buffer[((y & ~7) << 4) + (x & ~7) + (y & 7)] |= bitMask[x & 7];
 }
 
 void clearScreen(void) {

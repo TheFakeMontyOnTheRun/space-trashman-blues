@@ -59,7 +59,20 @@ enum ECommand getInput(void) {
         }
 
         cooldown = COOLDOWN_MAX;
-        return kCommandUp;
+        if (key & JOY_FIREB) {
+
+            cursorPosition = (cursorPosition - 1);
+            playSound(2);
+            if (cursorPosition < 0) {
+                cursorPosition = 0;
+            }
+
+            HUD_initialPaint();
+
+            return kCommandNone;
+        } else {
+            return kCommandUp;
+        }
     }
 
     if (key & JOY_LEFT && !cooldown) {
@@ -94,7 +107,20 @@ enum ECommand getInput(void) {
         }
 
         cooldown = COOLDOWN_MAX;
-        return kCommandDown;
+        if (key & JOY_FIREB) {
+
+            cursorPosition = (cursorPosition + 1);
+            playSound(2);
+            if (cursorPosition >= 6) {
+                cursorPosition = 5;
+            }
+
+            HUD_initialPaint();
+
+            return kCommandNone;
+        } else {
+            return kCommandDown;
+        }
     }
 
     if ((key & JOY_FIREA) && !cooldown ) {
@@ -123,14 +149,6 @@ enum ECommand getInput(void) {
         }
 
         if (currentGameMenuState == kPlayGame) {
-
-            cursorPosition = (cursorPosition + 1);
-            playSound(2);
-            if (cursorPosition >= 6) {
-                cursorPosition = 0;
-            }
-
-            HUD_initialPaint();
             cooldown = COOLDOWN_MAX;
             return kCommandNone;
         } else {

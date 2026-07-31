@@ -21,6 +21,12 @@ extern uint8_t firstFrameOnCurrentState;
 /*  Required since we have our own memory allocator abstraction */
 uint16_t heap = 0;
 
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text, const uint8_t fg,
+                                       char charToReplaceHifenWith)
+{
+
+}
+
 void initHW(int argc, char **argv) {
     (void)argc;
     (void)argv;
