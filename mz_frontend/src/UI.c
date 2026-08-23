@@ -107,16 +107,24 @@ void drawMap(void) {
                (YRES_FRAMEBUFFER / 8) / 2 + 1,
                "");
 
-    for (y = 0; y < 32; ++y) {
-        for (x = 0; x < 32; ++x) {
+    {
+        const uint16_t windowW = (((XRES_FRAMEBUFFER / 8) / 2) - 1) * 8;
+        const uint8_t windowH = (((YRES_FRAMEBUFFER / 8) / 2) + 1) * 8;
+        const uint8_t cell = (windowH - 2) / 32;
+        const uint16_t originX = (XRES_FRAMEBUFFER / 2) + ((windowW - (32 * cell)) / 2);
+        const uint8_t originY = (windowH - (32 * cell)) / 2;
 
-            if (isPositionAllowed(x, y)) {
-                fillRect((XRES_FRAMEBUFFER / 2) + (x * 3),
-                         (y * 3),
-                         (XRES_FRAMEBUFFER / 2) + (x * 3) + 3,
-                         (y * 3) + 3,
-                         2,
-                         0);
+        for (y = 0; y < 32; ++y) {
+            for (x = 0; x < 32; ++x) {
+
+                if (isPositionAllowed(x, y)) {
+                    fillRect(originX + (x * cell),
+                             originY + (y * cell),
+                             originX + (x * cell) + cell,
+                             originY + (y * cell) + cell,
+                             2,
+                             0);
+                }
             }
         }
     }

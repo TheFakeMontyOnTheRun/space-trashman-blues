@@ -403,7 +403,7 @@ void drawObjectAt(int16_t x0, int16_t z0) {
             }
 
             /* loop */
-            e2 = err << 2;
+            e2 = err * 2;
 
             if (e2 >= dy) {
                 err += dy; /* e_xy+e_x > 0 */
@@ -443,7 +443,7 @@ void drawObjectAt(int16_t x0, int16_t z0) {
                 graphicsPut(lineX0, y0, shouldStippleBorder);
             }
 
-            e2 = err << 2;
+            e2 = err * 2;
 
             if (e2 >= dy) {
                 err += dy; /* e_xy+e_x > 0 */
@@ -541,7 +541,7 @@ void drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int1
                 }
             }
 
-            lineE2 = lineErr << 2;
+            lineE2 = lineErr * 2;
 
             if (lineE2 >= lineDy) {
                 lineErr += lineDy;
@@ -583,7 +583,7 @@ void drawCubeAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dY, int1
                 }
             }
 
-            lineE2 = lineErr << 2;
+            lineE2 = lineErr * 2;
 
             if (lineE2 >= lineDy) {
                 lineErr += lineDy;
@@ -702,14 +702,14 @@ void drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ) {
             hLine(leftX0, rightX0, currentY0, shouldStipple);
         }
 
-        leftE2 = leftErr << 2;
+        leftE2 = leftErr * 2;
 
         if (leftE2 >= dy) {
             leftErr += dy;
             leftX0 += leftSx;
         }
 
-        rightE2 = rightErr << 2;
+        rightE2 = rightErr * 2;
 
         if (rightE2 >= dy) {
             rightErr += dy;

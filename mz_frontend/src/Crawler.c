@@ -56,17 +56,6 @@ void HUD_refresh(void) {
 
     struct Item *item;
 
-    /* Display "In room" item */
-    if (roomItem != NULL) {
-        item = getItem(roomItem->item);
-        if (item->active) {
-            drawTextAt(1, YRES_TEXT - 6, "*", 2);
-        }
-        drawTextAtWithMarginWithFiltering(2, YRES_TEXT - 6, (XRES_FRAMEBUFFER) / 2, item->name,  2, ' ');
-    } else {
-        drawTextAt(2, YRES_TEXT - 6, "Nothing", 2);
-    }
-
     /* Display "In hand" item */
     if (focusedItem != NULL) {
         item = getItem(focusedItem->item);
@@ -76,6 +65,19 @@ void HUD_refresh(void) {
         drawTextAtWithMarginWithFiltering(2, YRES_TEXT - 3, (XRES_FRAMEBUFFER) / 2, item->name,  2, ' ');
     } else {
         drawTextAt(2, YRES_TEXT - 3, "Nothing", 2);
+    }
+
+    /* Display "In room" item */
+    drawTextAt(1, YRES_TEXT - 2, "In room:", 1);
+
+    if (roomItem != NULL) {
+        item = getItem(roomItem->item);
+        if (item->active) {
+            drawTextAt(1, YRES_TEXT - 1, "*", 2);
+        }
+        drawTextAtWithMarginWithFiltering(2, YRES_TEXT - 1, (XRES_FRAMEBUFFER) / 2, item->name,  2, ' ');
+    } else {
+        drawTextAt(2, YRES_TEXT - 1, "Nothing", 2);
     }
 }
 

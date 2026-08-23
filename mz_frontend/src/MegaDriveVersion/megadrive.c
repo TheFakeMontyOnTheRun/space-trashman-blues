@@ -88,7 +88,7 @@ void graphicsPut(int16_t x, int16_t y, uint16_t colour) {
     }
 
     colour += (colour << 4); /* double the pixel */
-    BMP_setPixelFast(x, 16 + y, colour);
+    BMP_setPixelFast(x, y, colour);
 }
 
 void realPut(int x, int y, uint8_t colour) {
@@ -135,7 +135,7 @@ void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour) {
 
     colour += (colour << 4); /* double the pixel */
     for (int16_t y = y0; y < y1; ++y) {
-        BMP_setPixelFast(x0, 16 + y, colour);
+        BMP_setPixelFast(x0, y, colour);
     }
 }
 
@@ -164,7 +164,7 @@ void hLine(int16_t x0, int16_t x1, int16_t y, uint16_t colour) {
     colour += (colour << 4); /* double the pixel */
 
     for (int16_t x = _x0; x <= _x1; ++x) {
-        BMP_setPixelFast(x, 16 + y, colour);
+        BMP_setPixelFast(x, y, colour);
     }
 }
 
@@ -182,7 +182,7 @@ void clearScreen(void) {
 
 
 void clearTextScreen(void) {
-    for (int16_t c = 0; c < 23; ++c) {
+    for (int16_t c = 0; c < (screenHeight >> 3); ++c) {
         VDP_clearText(0, c, 256 / 8);
     }
     cooldown = COOLDOWN_MAX;
@@ -200,6 +200,7 @@ void initHW(int argc, char** argv) {
     /* create virtual 256x160 framebuffer */
     BMP_init(TRUE, BG_B, PAL0, 1);
     BMP_setBufferCopy(TRUE);
+    VDP_setTextPriority(1);
 
     PAL_setColor(0, RGB24_TO_VDPCOLOR(0x000000));
     PAL_setColor(1, RGB24_TO_VDPCOLOR(0x0000AA));
@@ -311,7 +312,7 @@ void drawTextAtWithMarginWithFiltering(const int _x, const int _y, int limitX, c
     textBuffer[1] = 0;
     char* str= text;
 
-    for (int16_t c = 0; c < len && y < 19; ++c) {
+    for (int16_t c = 0; c < len && y < ((screenHeight >> 3) - BMP_TILE_YOFFSET); ++c) {
 
         char cha = *str;
 
@@ -326,9 +327,9 @@ void drawTextAtWithMarginWithFiltering(const int _x, const int _y, int limitX, c
         }
 
         *charPtr = ' ';
-        VDP_drawText(charPtr, x, y);
+        VDP_drawText(charPtr, x, y + BMP_TILE_YOFFSET);
         *charPtr = cha;
-        VDP_drawText(charPtr, x, y);
+        VDP_drawText(charPtr, x, y + BMP_TILE_YOFFSET);
         ++x;
         ++str;
     }
