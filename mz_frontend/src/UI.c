@@ -105,7 +105,7 @@ void drawMap(void) {
                0,
                (XRES_FRAMEBUFFER / 8) / 2 - 1,
                (YRES_FRAMEBUFFER / 8) / 2 + 1,
-               "");
+               "Map");
 
     {
         const uint16_t windowW = (((XRES_FRAMEBUFFER / 8) / 2) - 1) * 8;
