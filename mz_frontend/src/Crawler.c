@@ -224,34 +224,38 @@ void Crawler_repaintCallback(void) {
         HUD_initialPaint();
     }
 
+    if (needsToRedrawVisibleMeshes) {
+#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
+        if (roomTransitionAnimationStep) {
+            roomTransitionAnimationStep = 0;
+            for (uint16_t y = 32; y >= 2; --y) {
+                clearGraphics();
+
+                vLine(y, y, 95 + (32 - y), 1);
+                vLine(95 + (32 - y), y, 95 + (32 - y), 1);
+
+                for (uint16_t x = y; x < (95 + (32 - y)); ++x) {
+                    graphicsPut(x, y, 7);
+                    graphicsPut(x, 95 + (32 - y), 7);
+
+                    //door opening
+                    vLine(x, y, 95 - 3 * (32 - y), 7);
+                }
+            }
+
+            redrawMap = 1;
+        } else
+#endif
+        {
+            renderScene();
+            needsToRedrawVisibleMeshes = 0;
+        }
+
+        needsToRedrawHUD = 1;
+    }
+
     HUD_refresh();
     drawMap();
-
-    if (!needsToRedrawVisibleMeshes) {
-        return;
-    }
-#ifdef SUPPORTS_ROOM_TRANSITION_ANIMATION
-    if (roomTransitionAnimationStep) {
-        roomTransitionAnimationStep = 0;
-        for (uint16_t y = 32; y >= 2; --y) {
-            clearGraphics();
-
-            vLine(y, y, 95 + (32 - y), 1);
-            vLine(95 + (32 - y), y, 95 + (32 - y), 1);
-
-            for (uint16_t x = y; x < (95 + (32 - y)); ++x) {
-                graphicsPut(x, y, 7);
-                graphicsPut(x, 95 + (32 - y), 7);
-
-                //door opening
-                vLine(x, y, 95 - 3 * (32 - y), 7);
-            }
-        }
-    } else
-#endif
-    {
-        renderScene();
-    }
 }
 
 void Crawler_initStateCallback(enum EGameMenuState tag) {
