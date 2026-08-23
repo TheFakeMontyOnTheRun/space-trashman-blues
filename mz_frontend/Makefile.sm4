@@ -95,18 +95,17 @@ ASMO += $(CS:%.c=asmout/%.s)
 all: release
 
 release: OPTIONS  = -O3 -fno-web -fno-gcse -fno-unit-at-a-time -fomit-frame-pointer
-release: OPTIONS += -fshort-enums -flto -fuse-linker-plugin
+release: OPTIONS += -flto -fuse-linker-plugin
 release: LIBS += -L$(MARSDEV)/m68k-elf/lib -lmd
 release: out.bin symbol.txt
 
 asm: OPTIONS  = -O3 -fno-web -fno-gcse -fno-unit-at-a-time -fomit-frame-pointer
-asm: OPTIONS += -fshort-enums
 asm: LIBS += -L$(MARSDEV)/m68k-elf/lib -lmd
 asm: asm-dir $(ASMO)
 
 # Gens-KMod, BlastEm and UMDK support GDB tracing, enabled by this target
-debug: OPTIONS = -g -Og -DDEBUG -DKDEBUG -fno-web -fno-gcse -fno-unit-at-a-time -fshort-enums
-debug: LIBS += -L$(MARSDEV)/m68k-elf/lib -lmd-debug
+debug: OPTIONS = -g -Og -DDEBUG -DKDEBUG -fno-web -fno-gcse -fno-unit-at-a-time
+debug: LIBS += -L$(MARSDEV)/m68k-elf/lib -lmd_debug
 debug: out.bin symbol.txt
 
 # Generates a symbol table that is very helpful in debugging crashes

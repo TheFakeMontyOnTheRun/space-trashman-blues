@@ -11,7 +11,8 @@
 #include <string.h>
 
 #else
-typedef unsigned int size_t;
+#include <genesis.h>
+#include <string.h>
 #define assert(x) x
 #define exit(x) /* x */
 #endif

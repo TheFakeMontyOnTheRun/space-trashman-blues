@@ -39,6 +39,10 @@ int main(int argc, char **argv) {
 int doMain(void) {
     int argc = 0;
     char **argv = NULL;
+#elif defined(SMD)
+int main(bool hardReset) {
+    int argc = 0;
+    char **argv = NULL;
 #else
 int main(int argc, char **argv) {
 #endif

@@ -1,4 +1,6 @@
+#ifndef SMD
 #include <time.h>
+#endif
 
 #ifdef AMIGA
 #include "AmigaInt.h"
@@ -6,7 +8,11 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+#ifndef SMD
 #include <stdint.h>
+#else
+#include <genesis.h>
+#endif
 #endif
 #endif
 

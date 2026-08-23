@@ -1,7 +1,15 @@
 /*
    Created by monty on 18-07-2023.
 */
+#ifdef WIN32
+#include "Win32Int.h"
+#else
+#ifndef SMD
 #include <stdint.h>
+#else
+#include <genesis.h>
+#endif
+#endif
 
 #include "Enums.h"
 #include "Renderer.h"

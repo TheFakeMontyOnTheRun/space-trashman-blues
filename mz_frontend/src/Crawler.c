@@ -1,8 +1,12 @@
 /*
    Created by monty on 01-10-2023.
 */
+#ifndef SMD
 #include <stdlib.h>
 #include <stdint.h>
+#else
+#include <genesis.h>
+#endif
 
 #include "Common.h"
 #include "Enums.h"

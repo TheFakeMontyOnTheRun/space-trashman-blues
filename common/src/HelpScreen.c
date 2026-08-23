@@ -1,10 +1,16 @@
 #ifdef WIN32
 #include "Win32Int.h"
 #else
+#ifndef SMD
 #include <stdint.h>
+#else
+#include <genesis.h>
+#endif
 #endif
 
+#ifndef SMD
 #include <stdlib.h>
+#endif
 
 #include "Common.h"
 #include "Enums.h"

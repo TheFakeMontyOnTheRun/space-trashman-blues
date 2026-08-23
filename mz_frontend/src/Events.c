@@ -10,7 +10,9 @@ typedef unsigned long size_t;
 #endif
 #endif
 
+#ifndef SMD
 #include <stddef.h>
+#endif
 #include <string.h>
 
 #include "Common.h"
@@ -20,6 +22,7 @@ typedef unsigned long size_t;
 #include "Renderer.h"
 #include "Engine.h"
 #include "PackedFileReader.h"
+#include "MapWithCharKey.h"
 #include "CTile3DProperties.h"
 
 extern int8_t map[32][32];
