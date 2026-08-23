@@ -690,17 +690,7 @@ void drawFloorAt(int16_t x0, int16_t y0, int16_t z0, int16_t dX, int16_t dZ) {
     int16_t rightE2;
 
     while (currentY0 != py0z1) {
-        if (leftX0 >= XRES) {
-            return;
-        }
-
-        if (rightX1 < 0) {
-            return;
-        }
-
-        if (IN_RANGE(0, XRESMINUSONE, leftX0) || IN_RANGE(0, XRESMINUSONE, rightX0)) {
-            hLine(leftX0, rightX0, currentY0, shouldStipple);
-        }
+        hLine(leftX0, rightX0, currentY0, shouldStipple);
 
         leftE2 = leftErr * 2;
 
