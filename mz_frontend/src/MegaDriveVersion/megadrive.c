@@ -83,10 +83,20 @@ void handleSystemEvents(void) {
 }
 
 void graphicsPut(int16_t x, int16_t y, uint16_t colour) {
-    BMP_setPixelFast(x, y, colour);
+    if (x < 0 || x > 127 || y < 0 || y > YRESMINUSONE) {
+        return;
+    }
+
+    colour += (colour << 4); /* double the pixel */
+    BMP_setPixelFast(x, 16 + y, colour);
 }
 
 void realPut(int x, int y, uint8_t colour) {
+    if (x < 0 || x >= XRES_FRAMEBUFFER || y < 0 || y >= YRES_FRAMEBUFFER) {
+        return;
+    }
+
+    colour += (colour << 4); /* double the pixel */
     BMP_setPixelFast(x, y, colour);
 }
 
@@ -101,10 +111,26 @@ void fillRect(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour, 
 
 void vLine(int16_t x0, int16_t y0, int16_t y1, uint16_t colour) {
 
+    if (x0 < 0 || x0 > 127) {
+        return;
+    }
+
     if (y0 > y1) {
         int16_t tmp = y0;
         y0 = y1;
         y1 = tmp;
+    }
+
+    if (y1 < 0 || y0 > YRESMINUSONE) {
+        return;
+    }
+
+    if (y0 < 0) {
+        y0 = 0;
+    }
+
+    if (y1 > YRES) {
+        y1 = YRES;
     }
 
     colour += (colour << 4); /* double the pixel */
