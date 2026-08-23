@@ -199,6 +199,7 @@ void initHW(int argc, char** argv) {
 
     /* create virtual 256x160 framebuffer */
     BMP_init(TRUE, BG_B, PAL0, 1);
+    BMP_setBufferCopy(TRUE);
 
     PAL_setColor(0, RGB24_TO_VDPCOLOR(0x000000));
     PAL_setColor(1, RGB24_TO_VDPCOLOR(0x0000AA));
@@ -223,7 +224,7 @@ void initHW(int argc, char** argv) {
 }
 
 void endFrame(void) {
-    BMP_flip(1);
+    BMP_flip(0);
 }
 
 enum ECommand getInput(void) {
