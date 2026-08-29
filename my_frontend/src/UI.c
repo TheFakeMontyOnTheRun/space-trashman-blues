@@ -58,6 +58,7 @@ void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t 
     }
 }
 
+
 void drawTextAt(uint8_t _x, uint8_t y, const char *text, uint8_t colour) {
     drawTextAtWithMargin(_x, y, (XRES_FRAMEBUFFER), text, colour);
 }
@@ -73,6 +74,7 @@ void showMessage(const char *message) {
 }
 
 void drawMap(void) {
+#ifndef GB
     uint8_t x, y;
 
     if (!redrawMap) {
@@ -104,9 +106,11 @@ void drawMap(void) {
             }
         }
     }
+#endif
 }
 
 void performAction(void) {
+#ifndef GB
     const char *msg = NULL;
     switch (getGameStatus()) {
         case kBadVictory:
@@ -143,9 +147,11 @@ void performAction(void) {
             }
         }
     }
+#endif
 }
 
 void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *title) {
+#ifndef GB
     uint16_t x0 = tx * 8;
     uint16_t x1 = (tx + tw) * 8;
     uint8_t y0 = ty * 8;
@@ -167,6 +173,7 @@ void drawWindow(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th, const char *titl
     drawLine(x1, y0, x1, y1, 2);
 
     drawTextAt(tx + 1, ty, title, 1);
+#endif
 }
 
 
